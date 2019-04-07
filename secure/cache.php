@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.2.15
+ * php version 7.0.33
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,16 +9,17 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require dirname(__DIR__) . '/secure/functions.php';
+require '/var/www/config.php';
+require 'functions.php';
 if (isset($_REQUEST['fetch'])) {
     echo $d[$_REQUEST['fetch']]['s'];
 } elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
     if ($_REQUEST['store']=='nas') {
         if ($d['lgtv']['s']=='On') {
             if ($_REQUEST['value']=='On') {
-                shell_exec('python3 lgtv.py -c send-message -a "NAS Opgestart" 192.168.2.27 > /dev/null 2>&1 &');
+                shell_exec('python3 lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip.' > /dev/null 2>&1 &');
             } elseif ($_REQUEST['value']=='Off') {
-                shell_exec('python3 lgtv.py -c send-message -a "NAS Uitgeschakeld" 192.168.2.27 > /dev/null 2>&1 &');
+                shell_exec('python3 lgtv.py -c send-message -a "NAS Uitgeschakeld" '.$lgtvip.' > /dev/null 2>&1 &');
             }
         }
     }

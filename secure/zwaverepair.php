@@ -2,7 +2,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.2.15
+ * php version 7.0.33
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -10,8 +10,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+require '/var/www/config.php';
 echo 'Healing Zwave network'.PHP_EOL;
-$domoticzurl='http://127.0.0.1:8080/';$zwaveidx=3;
+
 $nodes=json_decode(file_get_contents($domoticzurl.'json.htm?type=openzwavenodes&idx='.$zwaveidx), true);
 if (!empty($nodes['result'])) {
     foreach ($nodes['result'] as $node) {
