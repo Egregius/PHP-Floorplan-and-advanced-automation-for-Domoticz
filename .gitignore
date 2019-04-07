@@ -1,0 +1,11 @@
+*.mp4
+*.jpg
+adblock.txt
+hosts.txt
+client_secret.json
+homeegregius-6d02ff673a38.json
+service-account-credentials.json
+smoke/*
+logs/*
+.well-known/*
+pychromecast/*

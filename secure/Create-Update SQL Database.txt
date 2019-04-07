@@ -1,0 +1,155 @@
+-- phpMyAdmin SQL Dump
+-- version 4.7.5
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Apr 07, 2019 at 06:26 AM
+-- Server version: 10.1.37-MariaDB-0+deb9u1
+-- PHP Version: 7.0.33-0+deb9u3
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `domotica`
+--
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+CREATE DATABASE IF NOT EXISTS `domotica` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `domotica`;
+
+CREATE TABLE IF NOT EXISTS `alerts` (
+  `n` varchar(50) NOT NULL,
+  `t` int(11) NOT NULL,
+  PRIMARY KEY (`n`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `battery` (
+  `date` date NOT NULL,
+  `id` smallint(4) NOT NULL,
+  `value` tinyint(4) NOT NULL,
+  PRIMARY KEY (`date`,`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `batterydevices` (
+  `id` smallint(2) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `devices` (
+  `n` varchar(50) NOT NULL,
+  `i` smallint(6) DEFAULT NULL,
+  `s` varchar(500) DEFAULT NULL,
+  `t` int(11) DEFAULT NULL,
+  `m` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`n`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `log` (
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user` varchar(20) DEFAULT NULL,
+  `device` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `info` varchar(1000) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `regen` (
+  `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `buienradar` tinyint(4) NOT NULL,
+  `darksky` tinyint(4) NOT NULL,
+  `buien` tinyint(4) NOT NULL,
+  PRIMARY KEY (`stamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `temp` (
+  `stamp` datetime NOT NULL,
+  `buiten` float(3,1) DEFAULT NULL,
+  `living` float(3,1) DEFAULT NULL,
+  `badkamer` float(3,1) DEFAULT NULL,
+  `kamer` float(3,1) DEFAULT NULL,
+  `tobi` float(3,1) DEFAULT NULL,
+  `alex` float(3,1) DEFAULT NULL,
+  `zolder` float(3,1) DEFAULT NULL,
+  PRIMARY KEY (`stamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `temp_day` (
+  `stamp` datetime NOT NULL,
+  `alex_temp` float(3,1) DEFAULT NULL,
+  `living_temp` float(3,1) DEFAULT NULL,
+  `kamer_temp` float(3,1) DEFAULT NULL,
+  `badkamer_temp` float(3,1) DEFAULT NULL,
+  `tobi_temp` float(3,1) DEFAULT NULL,
+  `diepvries_temp` float(3,1) DEFAULT NULL,
+  `zolder_temp` float(3,1) DEFAULT NULL,
+  PRIMARY KEY (`stamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `temp_hour` (
+  `stamp` char(13) NOT NULL,
+  `buiten_min` float(3,1) NOT NULL,
+  `buiten_max` float(3,1) NOT NULL,
+  `buiten_avg` float(4,2) NOT NULL,
+  `living_min` float(3,1) NOT NULL,
+  `living_max` float(3,1) NOT NULL,
+  `living_avg` float(3,1) NOT NULL,
+  `badkamer_min` float(3,1) NOT NULL,
+  `badkamer_max` float(3,1) NOT NULL,
+  `badkamer_avg` float(3,1) NOT NULL,
+  `kamer_min` float(3,1) NOT NULL,
+  `kamer_max` float(3,1) NOT NULL,
+  `kamer_avg` float(3,1) NOT NULL,
+  `tobi_min` float(3,1) NOT NULL,
+  `tobi_max` float(3,1) NOT NULL,
+  `tobi_avg` float(3,1) NOT NULL,
+  `alex_min` float(3,1) NOT NULL,
+  `alex_max` float(3,1) NOT NULL,
+  `alex_avg` float(3,1) NOT NULL,
+  `zolder_min` float(3,1) NOT NULL,
+  `zolder_max` float(3,1) NOT NULL,
+  `zolder_avg` float(3,1) NOT NULL,
+  PRIMARY KEY (`stamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `temp_month` (
+  `stamp` date NOT NULL,
+  `alex_temp_min` float(3,1) DEFAULT NULL,
+  `alex_temp_avg` float(3,1) DEFAULT NULL,
+  `alex_temp_max` float(3,1) DEFAULT NULL,
+  `living_temp_min` float(3,1) DEFAULT NULL,
+  `living_temp_avg` float(3,1) DEFAULT NULL,
+  `living_temp_max` float(3,1) DEFAULT NULL,
+  `kamer_temp_min` float(3,1) DEFAULT NULL,
+  `kamer_temp_avg` float(3,1) DEFAULT NULL,
+  `kamer_temp_max` float(3,1) DEFAULT NULL,
+  `badkamer_temp_min` float(3,1) DEFAULT NULL,
+  `badkamer_temp_avg` float(3,1) DEFAULT NULL,
+  `badkamer_temp_max` float(3,1) DEFAULT NULL,
+  `tobi_temp_min` float(3,1) DEFAULT NULL,
+  `tobi_temp_avg` float(3,1) DEFAULT NULL,
+  `tobi_temp_max` float(3,1) DEFAULT NULL,
+  `diepvries_temp_min` float(3,1) DEFAULT NULL,
+  `diepvries_temp_avg` float(3,1) DEFAULT NULL,
+  `diepvries_temp_max` float(3,1) DEFAULT NULL,
+  `zolder_temp_min` float(3,1) DEFAULT NULL,
+  `zolder_temp_avg` float(3,1) DEFAULT NULL,
+  `zolder_temp_max` float(3,1) DEFAULT NULL,
+  PRIMARY KEY (`stamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `vDevices` (
+`n` varchar(50)
+,`i` smallint(6)
+,`s` varchar(500)
+,`m` varchar(500)
+,`t` varchar(19)
+);
+DROP TABLE IF EXISTS `vDevices`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`domotica`@`localhost` SQL SECURITY DEFINER VIEW `vDevices`  AS  select `devices`.`n` AS `n`,`devices`.`i` AS `i`,`devices`.`s` AS `s`,`devices`.`m` AS `m`,date_format(from_unixtime(`devices`.`t`),'%d-%m %H:%i:%s') AS `t` from `devices` order by date_format(from_unixtime(`devices`.`t`),'%d-%m %H:%i:%s') desc limit 0,500 ;
+COMMIT;
