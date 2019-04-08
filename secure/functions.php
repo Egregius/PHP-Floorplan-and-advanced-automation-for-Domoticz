@@ -483,27 +483,57 @@ function showTimestamp($name,$draai)
 {
     global $eendag,$d;
     if (past($name)<82800) {
-        echo '<div class="fix stamp z1 r'.$draai.' t'.$name.'">'.strftime("%k:%M", $d[$name]['t']).'</div>
-	';
+        echo '
+        <div class="fix stamp z1 r'.$draai.' t'.$name.'">
+            '.strftime("%k:%M", $d[$name]['t']).'
+        </div>';
     }
 }
 function Secured($name)
 {
-    echo '<div class="fix secured '.$name.'"></div>';
+    echo '
+            <div class="fix secured '.$name.'">
+            </div>';
 }
 function Motion($name)
 {
-    echo '<div class="fix motion '.$name.'"></div>';
+    echo '
+            <div class="fix motion '.$name.'">
+            </div>';
 }
 function Zwavecancelaction()
 {
     global $domoticzurl;
-    file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));
+    file_get_contents(
+        $domoticzurl.'/ozwcp/admpost.html',
+        false,
+        stream_context_create(
+            array(
+                'http'=>array(
+                    'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+                    'method'=>'POST',
+                    'content'=>http_build_query(
+                        array(
+                            'fun'=>'cancel'
+                        )
+                    ),
+                ),
+            )
+        )
+    );
 }
 function ZwaveCommand($node,$command)
 {
     global $domoticzurl;
-    $cm=array('AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');
+    $cm=array(
+        'AssignReturnRoute'=>'assrr',
+        'DeleteAllReturnRoutes'=>'delarr',
+        'NodeNeighbourUpdate'=>'reqnnu',
+        'RefreshNodeInformation'=>'refreshnode',
+        'RequestNetworkUpdate'=>'reqnu',
+        'HasNodeFailed'=>'hnf',
+        'Cancel'=>'cancel'
+    );
     $cm=$cm[$command];
     for ($k=1;$k<=5;$k++) {
         $result=file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));
