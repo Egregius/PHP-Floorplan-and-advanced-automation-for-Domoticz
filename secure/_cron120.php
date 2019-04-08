@@ -750,7 +750,12 @@ if ($d['auto']['s']==true) {
     ) {
         //if ($d['luifel']['m']==0) sl('luifel',((100-$maxluifel)));
         //telegram("Luifel ".$maxluifel." open: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
-    } elseif (($buien>$maxbuien||(($d['zon']['s']==0||$d['living_temp']['s']<19)&&$d['luifel']['m']==0))&&$d['luifel']['s']!=100) {
+    } elseif (($buien>$maxbuien
+        ||(($d['zon']['s']==0
+        ||$d['living_temp']['s']<19)
+        &&$d['luifel']['m']==0))
+        &&$d['luifel']['s']!=100
+    ) {
         sl('luifel', 100);
         //telegram('Luifel dicht __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel',true);
     }
