@@ -95,7 +95,7 @@ if ($home) {
 	    </div>
 	    <div class="fix" style="top:82px;left:0px">
 		<table>';
-	if (isset($_REQUEST['page'])) {
+    if (isset($_REQUEST['page'])) {
         $offset=$_REQUEST['page'];
     } else {
         $offset=0;
@@ -115,10 +115,10 @@ if ($home) {
             <td nowrap>'.substr($row['timestamp'], 8, 2).'-'.substr($row['timestamp'], 5, 2).'-'.substr($row['timestamp'], 0, 4).' '.substr($row['timestamp'], 10, 9).'</td>';
         if (!isset($device)) {
             echo '
-            <td nowrap>'.strtr($row['device'],$modes).'</td>';
+            <td nowrap>'.strtr($row['device'], $modes).'</td>';
         }
         echo '
-            <td nowrap>&nbsp;'.substr($row['status'],0,15).'&nbsp;</td>
+            <td nowrap>&nbsp;'.substr($row['status'], 0, 15).'&nbsp;</td>
             <td nowrap>&nbsp;'.$row['user'].'</td>
             <td nowrap>&nbsp;'.$row['info'].'</td>
         </tr>';

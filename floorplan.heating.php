@@ -54,13 +54,13 @@ if ($home) {
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);
-            lgsql($user,$_POST['Naam'].'_mode',$_POST['Actie']);
+            lgsql($user, $_POST['Naam'].'_mode', $_POST['Actie']);
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to Automatic');
         } else {
             store($_POST['Naam'].'_set', $_POST['Actie']);
-            lgsql($user,$_POST['Naam'].'_set',$_POST['Actie']);
+            lgsql($user, $_POST['Naam'].'_set', $_POST['Actie']);
             storemode($_POST['Naam'].'_set', 2);
-            lgsql($user,$_POST['Naam'].'_mode',2);
+            lgsql($user, $_POST['Naam'].'_mode', 2);
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to '.$_POST['Actie'].'°');
         }
         usleep(100000);
@@ -180,17 +180,17 @@ if ($home) {
             } else {
                 foreach ($items as $i) {
                     if (isset($_REQUEST['Rollerlevelon_x'])) {
-                               lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
-                               sl($i, 100, 'Roller');
-                               if ($d[$i]['m']==0) {
-                                   storemode($i, 1);
-                                }
+                        lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
+                        sl($i, 100, 'Roller');
+                        if ($d[$i]['m']==0) {
+                            storemode($i, 1);
+                        }
                     } elseif (isset($_REQUEST['Rollerleveloff_x'])) {
-                           lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
-                           sl($i, 0, 'Roller');
-                           if ($d[$i]['m']==0) {
-                              storemode($i, 1);
-                            }
+                        lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
+                        sl($i, 0, 'Roller');
+                        if ($d[$i]['m']==0) {
+                            storemode($i, 1);
+                        }
                     } else {
                         lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['Rollerlevel']);
                         sl($i, $_REQUEST['Rollerlevel'], 'Roller');

@@ -810,17 +810,17 @@ if ($home) {
     }
     echo '
     <div class="fix bose">
-        <a href=\'javascript:navigator_Go("floorplan.bose3.php");\'>
+        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
             <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
         </a>
     </div>
     <div class="fix bosebadkamer">
-        <a href=\'javascript:navigator_Go("floorplan.bose4.php");\'>
+        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=4");\'>
             <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt=""/>
         </a>
     </div>
     <div class="fix bosebuiten">
-        <a href=\'javascript:navigator_Go("floorplan.bose5.php");\'>
+        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=5");\'>
             <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt=""/>
         </a>
     </div>';

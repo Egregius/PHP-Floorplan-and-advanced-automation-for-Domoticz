@@ -303,7 +303,12 @@ if ($home) {
     echo '</div>';
 
     //Schakelaar('kerstboom','Kerstboom');
-    echo '<div class="fix bose"><a href=\'javascript:navigator_Go("floorplan.bose3.php");\'><img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/></a></div>';
+    echo '
+        <div class="fix bose">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
+                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
+            </a>
+        </div>';
 
     echo '<div class="fix blackmedia"><form method="POST">';
     if ($d['denon']['s']=='On') {

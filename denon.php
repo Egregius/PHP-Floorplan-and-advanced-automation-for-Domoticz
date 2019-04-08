@@ -136,16 +136,16 @@ if ($home) {
         echo '
 </div>
 <div class="box">';
-$delay=file_get_contents('http://192.168.2.6/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
-$delay=strafter($delay,"style='text-align:right;' value='");
-$delay=strbefore($delay,"'>");
-for ($x=0;$x<=200;$x++) {
-    if ($x==$delay) echo '
+        $delay=file_get_contents('http://192.168.2.6/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
+        $delay=strafter($delay, "style='text-align:right;' value='");
+        $delay=strbefore($delay, "'>");
+        for ($x=0;$x<=200;$x++) {
+            if ($x==$delay) echo '
         <button name="delay" value="'.$x.'" class="btn btna delay">'.$x.'</button>';
-    else echo '
+            else echo '
         <button name="delay" value="'.$x.'" class="btn delay">'.$x.'</button>';
-}
-echo '
+        }
+        echo '
 </form>
 <div class="box">
     <form action="/denonsetup.php"><input type="submit" class="btn b1" value="Setup"/></form>
@@ -165,7 +165,7 @@ function denon($cmd)
         }
     }
 }
-function denontcp($cmd,$x)
+function denontcp($cmd, $x)
 {
     $sleep=102000*$x;
     $socket=fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
@@ -180,15 +180,15 @@ function denontcp($cmd,$x)
         return false;
     }
 }
-function strafter($string,$substring)
+function strafter($string, $substring)
 {
-  $pos=strpos($string,$substring);
-  if ($pos===false)return '';
-  else return(substr($string,$pos+strlen($substring)));
+    $pos=strpos($string, $substring);
+    if ($pos===false)return '';
+    else return(substr($string, $pos+strlen($substring)));
 }
-function strbefore($string,$substring)
+function strbefore($string, $substring)
 {
-  $pos=strpos($string,$substring);
-  if ($pos===false)return '';
-  else return(substr($string,0,$pos));
+    $pos=strpos($string, $substring);
+    if ($pos===false)return '';
+    else return(substr($string, 0, $pos));
 }
