@@ -30,6 +30,14 @@ if ($home) {
 			.green{color:#000;}
 			.red{color:#FFF;}
 			.stamp{width:38px;text-align:center;font-size:120%;color:#888}
+			.fix{cursor:pointer;z-index:100;}
+			.poort{top:270px;left:404px;width:60px;height:114px;}
+			.achterdeur{}
+			.raamliving{
+			.raamtobi{
+			.raamalex{
+			.raamkamer{top:582px;left:413px;width:75px;height:50px;text-align:left;}
+			.deurbadkamer{top:417px;left:341px;width:65px!important;height:51px;}
 		</style>
 	</head>';
     if (isset($_REQUEST['name'])&&isset($_REQUEST['action'])) {
@@ -77,7 +85,7 @@ if ($home) {
     if ($d['poort']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=poort&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:270px;left:404px;width:60px;height:114px;" class="fix red">
+            <div class="fix red poort">
                 <br>
                 <br>
                 <br>
@@ -87,7 +95,7 @@ if ($home) {
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=poort&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:270px;left:404px;width:60px;height:114px;" class="fix green">
+            <div class="fix green poort">
                 <br>
                 <br>
                 <br>
@@ -99,7 +107,7 @@ if ($home) {
     if ($d['achterdeur']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=achterdeur&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:265px;left:80px;width:65px;height:45px;" class="fix red">
+            <div style="top:265px;left:80px;width:65px;height:45px;" class="fix red">
                 <br>
                 &nbsp;&nbsp;&nbsp;&nbsp;Open
             </div>
@@ -107,7 +115,7 @@ if ($home) {
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=achterdeur&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:265px;left:80px;width:65px;height:45px;" class="fix green">
+            <div style="top:265px;left:80px;width:65px;height:45px;" class="fix green">
                 <br>
                 &nbsp;&nbsp;&nbsp;&nbsp;Closed
             </div>
@@ -117,7 +125,7 @@ if ($home) {
     if ($d['raamliving']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamliving&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:40px;left:80px;width:65px;height:190px;" class="fix red">
+            <div style="top:40px;left:80px;width:65px;height:190px;" class="fix red">
                 <br>
                 <br>
                 <br>
@@ -130,7 +138,7 @@ if ($home) {
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamliving&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:40px;left:80px;width:65px;height:190px;" class="fix green">
+            <div style="top:40px;left:80px;width:65px;height:190px;" class="fix green">
                 <br>
                 <br>
                 <br>
@@ -145,41 +153,73 @@ if ($home) {
     if ($d['raamtobi']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamtobi&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:444px;left:80px;width:65px;height:50px;" class="fix red"><br>&nbsp;&nbsp;&nbsp;&nbsp;Open</div></a>';
+            <div style="top:444px;left:80px;width:65px;height:50px;" class="fix red">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Open
+            </div>
+        </a>';
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamtobi&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:444px;left:80px;width:65px;height:50px;" class="fix green"><br>&nbsp;&nbsp;&nbsp;&nbsp;Closed</div></a>';
+            <div style="top:444px;left:80px;width:65px;height:50px;" class="fix green">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Closed
+            </div>
+        </a>';
     }
 
     if ($d['raamalex']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamalex&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:564px;left:80px;width:65px;height:50px;" class="fix red"><br>&nbsp;&nbsp;&nbsp;&nbsp;Open</div></a>';
+            <div style="top:564px;left:80px;width:65px;height:50px;" class="fix red">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Open
+            </div>
+        </a>';
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamalex&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:564px;left:80px;width:65px;height:50px;" class="fix green"><br>&nbsp;&nbsp;&nbsp;&nbsp;Closed</div></a>';
+            <div style="top:564px;left:80px;width:65px;height:50px;" class="fix green">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Closed
+            </div>
+        </a>';
     }
 
     if ($d['raamkamer']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamkamer&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:582px;left:413px;width:75px;height:50px;text-align:left;" class="fix red"><br>&nbsp;&nbsp;Open</div></a>';
+            <div style="top:582px;left:413px;width:75px;height:50px;text-align:left;" class="fix red">
+                <br>
+                &nbsp;&nbsp;Open
+            </div>
+        </a>';
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamkamer&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:582px;left:413px;width:75px;height:50px;text-align:left;" class="fix green"><br>&nbsp;&nbsp;Closed</div></a>';
+            <div style="top:582px;left:413px;width:75px;height:50px;text-align:left;" class="fix green">
+                <br>
+                &nbsp;&nbsp;Closed
+            </div>
+        </a>';
     }
 
     if ($d['deurbadkamer']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=deurbadkamer&action=Off");\'>
-            <div style="cursor:pointer;z-index:100;top:417px;left:341px;width:65px;height:51px;" class="fix red"><br>&nbsp;&nbsp;&nbsp;&nbsp;Open</div></a>';
+            <div class="fix red deurbadkamer">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Open
+            </div>
+        </a>';
     } else {
         echo '
         <a href=\'javascript:navigator_Go("?name=deurbadkamer&action=On");\'>
-            <div style="cursor:pointer;z-index:100;top:417px;left:341px;width:65px;height:51px;" class="fix green"><br>&nbsp;&nbsp;&nbsp;&nbsp;Closed</div></a>';
+            <div class="fix green deurbadkamer">
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Closed
+            </div>
+        </a>';
     }
 
     echo '
