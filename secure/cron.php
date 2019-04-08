@@ -22,6 +22,7 @@ if (isset($_REQUEST['verwarming'])) {
 if (isset($_REQUEST['cron120'])) {
     $username='cron120';
     include '_cron120.php';
+    $username='gcal';
     include 'gcal/gcal.php';
 }
 if (isset($_REQUEST['cron10'])) {
@@ -33,12 +34,15 @@ if (isset($_REQUEST['cron60'])) {
     include '_cron60.php';
 }
 if (isset($_REQUEST['cron3600'])) {
+    $username='gcal';
     include 'gcal/gcal.php';
     //sleep(2);
     //include 'gcal/verlof.php';
     sleep(2);
+    $username='gcaltobibeitem';
     include 'gcal/tobibeitem.php';
     sleep(2);
+    $username='gcalmirom';
     include 'gcal/mirom.php';
     sleep(2);
     $username='cron3600';
