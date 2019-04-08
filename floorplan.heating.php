@@ -169,10 +169,12 @@ if ($home) {
             if (isset($_REQUEST['verdiepingmode'])) {
                   lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['verdiepingmode']);
                 foreach ($items as $i) {
-                    if ($_REQUEST['verdiepingmode']=='Manueel') {
-                        storemode($i, 1);
-                    } else {
-                        storemode($i, 0);
+                    if ($d[$i]['m']<2) {
+                        if ($_REQUEST['verdiepingmode']=='Manueel') {
+                            storemode($i, 1);
+                        } else {
+                            storemode($i, 0);
+                        }
                     }
                 }
             } else {
