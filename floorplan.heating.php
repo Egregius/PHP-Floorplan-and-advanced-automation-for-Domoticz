@@ -70,20 +70,26 @@ if ($home) {
     if (isset($_POST['Roller'])&&isset($_POST['Naam'])&&!isset($_POST['mode'])) {
         if (isset($_POST['Rollerlevelon_x'])) {
             sl($_POST['Naam'], 100, 'Roller');
-            storemode($_POST['Naam'], 1);
+            if ($d[$_POST['Naam']]['m']==0) {
+                storemode($_POST['Naam'], 1);
+            }
         } elseif (isset($_POST['Rollerleveloff_x'])) {
             if ($_POST['Naam']=='Rlivingzzz') {
                 sl($_POST['Naam'], 8, 'Roller');
             } else {
                 sl($_POST['Naam'], 0, 'Roller');
             }
-            storemode($_POST['Naam'], 1);
+            if ($d[$_POST['Naam']]['m']==0) {
+                storemode($_POST['Naam'], 1);
+            }
         } else {
             if ($_POST['Naam']=='Rlivingzzz'&&$_POST['Rollerlevel']<8) {
                 sl($_POST['Naam'], 8, 'Roller');
             }
             sl($_POST['Naam'], $_POST['Rollerlevel'], 'Roller');
-            storemode($_POST['Naam'], 1);
+            if ($d[$_POST['Naam']]['m']==0) {
+                storemode($_POST['Naam'], 1);
+            }
         }
         usleep($Usleep);
         header("Location: floorplan.heating.php");die("Redirecting to: floorplan.heating.php");
