@@ -55,9 +55,9 @@ if ($home) {
         </style>
 	</head>
 	<body>
-		<div class="fix" style="top:0px;left:0px;width:50px;">
-			<a href=\'javascript:navigator_Go("floorplan.history.php");\'>
-				<img src="/images/close.png" width="50px" height="50px"/>
+		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
+			<a href=\'javascript:navigator_Go("floorplan.history.php'.(isset($device)?'?device='.$device:'').'");\'>
+				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
 		</div>
 		<div class="fix" style="top:0px;right:0px;">
