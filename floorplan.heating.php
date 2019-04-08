@@ -93,7 +93,9 @@ if ($home) {
         } else {
             storemode($_POST['Naam'], 0);
         }
-        header("Location: floorplan.heating.php");die("Redirecting to: floorplan.heating.php");
+        usleep(100000);
+        header("Location: floorplan.heating.php");
+        die("Redirecting to: floorplan.heating.php");
     }
     if (isset($_REQUEST['Rollers'])) {
         $name=$_REQUEST['Rollers'];
@@ -299,7 +301,9 @@ if ($home) {
             } elseif ($_REQUEST['confirm']=='Gas/Elec') {
                 store('heating', 3);
             }
-            header("Location: floorplan.heating.php");die("Redirecting to: floorplan.heating.php");
+            usleep(100000);
+            header("Location: floorplan.heating.php");
+            die("Redirecting to: floorplan.heating.php");
         }
     }
     if (isset($_REQUEST['SetSetpoint'])) {
