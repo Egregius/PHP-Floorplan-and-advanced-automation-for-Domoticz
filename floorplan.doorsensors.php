@@ -33,11 +33,11 @@ if ($home) {
 			.fix{cursor:pointer;z-index:100;}
 			.dpoort{top:270px;left:404px;width:60px;height:114px;}
 			.dachterdeur{top:265px;left:80px;width:65px;height:45px;}
-			.draamliving{top:46px;left:80px;width:65px;height:164px;}
-			.draamtobi{top:444px;left:80px;width:65px;height:50px;}
-			.draamalex{top:564px;left:80px;width:65px;height:50px;}
-			.draamkamer{top:582px;left:413px;width:75px;height:50px;text-align:left;}
-			.ddeurbadkamer{top:417px;left:341px;width:65px!important;height:51px;}
+			.draamliving{top:46px;left:80px;width:65px;height:163px;}
+			.draamtobi{top:448px;left:80px;width:65px;height:44px;}
+			.draamalex{top:568px;left:80px;width:65px;height:44px;}
+			.draamkamer{top:584px;left:413px;width:75px;height:44px;text-align:left;}
+			.ddeurbadkamer{top:420px;left:341px;width:65px;height:46px;}
 		</style>
 	</head>';
     if (isset($_REQUEST['name'])&&isset($_REQUEST['action'])) {
