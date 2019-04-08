@@ -182,15 +182,21 @@ if ($home) {
                     if (isset($_REQUEST['Rollerlevelon_x'])) {
                                lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
                                sl($i, 100, 'Roller');
-                               storemode($i, 1);
+                               if ($d[$i]['m']==0) {
+                                   storemode($i, 1);
+                                }
                     } elseif (isset($_REQUEST['Rollerleveloff_x'])) {
                            lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
                            sl($i, 0, 'Roller');
-                           storemode($i, 1);
+                           if ($d[$i]['m']==0) {
+                              storemode($i, 1);
+                            }
                     } else {
                         lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['Rollerlevel']);
                         sl($i, $_REQUEST['Rollerlevel'], 'Roller');
-                        storemode($i, 1);
+                        if ($d[$i]['m']==0) {
+                            storemode($i, 1);
+                        }
                     }
                 }
             }
