@@ -592,6 +592,8 @@ if (TIME<=strtotime('11:00')) {
             shell_exec('./wakenas.sh');
         }
     }
+}
+if (TIME<=strtotime('0:04')) {
     store('gasvandaag', 0, null, true);
     store('watervandaag', 0, null, true);
 } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
