@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'secure/settings.php';
 if ($home) {
     error_reporting(E_ALL);ini_set("display_errors", "on");
-    $perpage=22;
+    $perpage=37;
     if (isset($_REQUEST['device'])) {
         $device=$_REQUEST['device'];
     }
