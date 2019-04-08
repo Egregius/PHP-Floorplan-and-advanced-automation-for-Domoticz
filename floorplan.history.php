@@ -46,7 +46,7 @@ if ($home) {
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}
-		    td{font-size:0.8em;}
+		    td{font-size:0.8em;text-align:left;}
 		    .fix{width:320px;padding:0}
 		    .btn{width:300px;}
 		    .btnd{width:236px;}
@@ -119,7 +119,7 @@ if ($home) {
         }
         echo '
             <td nowrap>&nbsp;'.$row['status'].'&nbsp;</td>
-            <td nowrap>&nbsp;'.$row['user'].'</td>
+
             <td nowrap>&nbsp;'.$row['info'].'</td>
         </tr>';
         @$count++;
