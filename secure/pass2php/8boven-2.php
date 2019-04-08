@@ -25,5 +25,7 @@ if ($status=='On') {
             sl($item, 0);
         }
     }
-    storemode($item, 1);
+    if ($d[$item]['m']==0) {
+        storemode($item, 1);
+    }
 }
