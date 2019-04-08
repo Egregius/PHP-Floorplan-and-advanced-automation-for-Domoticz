@@ -438,7 +438,7 @@ if ($difbadkamer<=-1) {
     }
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
-//lg('>>>>>>>>>> difzolder = '.$difzolder);
+lg('>>>>>>>>>> difzolder = '.$difzolder);
 
 if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
     sw(

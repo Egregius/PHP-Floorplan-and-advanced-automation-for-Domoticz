@@ -12,7 +12,6 @@
 $start=microtime(true);
 require 'secure/settings.php';
 if ($home) {
-    error_reporting(E_ALL);ini_set("display_errors", "on");
     session_start();
     $_SESSION['referer']='floorplan.media.php';
 
@@ -23,7 +22,7 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui"/>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>
 		<meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">

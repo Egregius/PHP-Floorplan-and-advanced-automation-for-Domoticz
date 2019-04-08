@@ -12,7 +12,6 @@
 $start=microtime(true);
 require 'secure/settings.php';
 if ($home) {
-    error_reporting(E_ALL);ini_set("display_errors", "on");
     $perpage=37;
     if (isset($_REQUEST['device'])) {
         $device=$_REQUEST['device'];
@@ -38,7 +37,7 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>

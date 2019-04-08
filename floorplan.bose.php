@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.2.15
+ * php version 7.0.33
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -12,13 +12,15 @@
 $start=microtime(true);
 require 'secure/settings.php';
 if ($home) {
-    error_reporting(E_ALL);
-    ini_set("display_errors", "on");
     session_start();
     if (!isset($_SESSION['referer'])) {
         $_SESSION['referer']='floorplan.php';
     }
-    $bose=3;//Living
+    if (isset($_REQUEST['ip'])) {
+        $bose=$_REQUEST['ip'];
+    } else {
+        $bose=3;//Living
+    }
     echo '<html><head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -26,7 +28,7 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui"/>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>
 		<meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">
