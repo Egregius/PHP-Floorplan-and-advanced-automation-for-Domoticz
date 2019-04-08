@@ -33,7 +33,6 @@ if (isset($_REQUEST['cron60'])) {
     include '_cron60.php';
 }
 if (isset($_REQUEST['cron3600'])) {
-    $username='cron3600';
     include 'gcal/gcal.php';
     //sleep(2);
     //include 'gcal/verlof.php';
@@ -42,6 +41,7 @@ if (isset($_REQUEST['cron3600'])) {
     sleep(2);
     include 'gcal/mirom.php';
     sleep(2);
+    $username='cron3600';
     include '_cron3600.php';
 }
 if (isset($_REQUEST['test'])) {

@@ -16,9 +16,20 @@ if ($home) {
     $perpage=22;
     if (isset($_REQUEST['device'])) {
         $device=$_REQUEST['device'];
-    } else {
-        $device='Weg';
     }
+    $modes=array(
+        'auto_mode'=>'DST',
+        'buiten_temp_mode'=>'buiten',
+        'civil_twilight_mode'=>'civil_twilight_mode',
+        'denon_mode'=>'denon input',
+        'elec_mode'=>'elec vandaag',
+        'gcal_mode'=>'gcal_mode',
+        'heating_mode'=>'bigdif',
+        'icon_mode'=>'humidity',
+        'max_mode'=>'max regen',
+        'wind_mode'=>'wind hist',
+        'zonvandaag_mode'=>'zonvandaag percent',
+    );
     echo '<html>
 	<head>
 		<title>Floorplan</title>
@@ -45,15 +56,28 @@ if ($home) {
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;">
+			<a href=\'javascript:navigator_Go("floorplan.history.php");\'>
+				<img src="/images/close.png" width="50px" height="50px"/>
+			</a>
+		</div>
+		<div class="fix" style="top:0px;right:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
-				<img src="/images/close.png" width="60px" height="60px"/>
+				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
 		</div>
 		<br>
 		<br>
 		<br>
-        <div class="fix" style="top:15px;left:76px">
-        <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$device.'</button>
+        <div class="fix" style="top:15px;left:76px">';
+
+    if (isset($device)) {
+        echo '
+        <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$device.'</button>';
+    } else {
+        echo '
+        <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >All</button>';
+    }
+    echo '
         </div>
         <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">
         <form method="GET">';
@@ -71,13 +95,16 @@ if ($home) {
 	    </div>
 	    <div class="fix" style="top:63px;left:0px">
 		<table>';
-	if (isset($_POST['page'])) {
-        $offset=$_POST['page'];
+	if (isset($_REQUEST['page'])) {
+        $offset=$_REQUEST['page'];
     } else {
         $offset=0;
     }
-
-    $sql="SELECT *  FROM `log` WHERE `device` = '$device' ORDER BY timestamp DESC LIMIT $offset,$perpage;";
+    if (isset($device)) {
+        $sql="SELECT *  FROM `log` WHERE `device` = '$device' ORDER BY timestamp DESC LIMIT $offset,$perpage;";
+    } else {
+        $sql="SELECT *  FROM `log` ORDER BY timestamp DESC LIMIT $offset,$perpage;";
+    }
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
     }
@@ -85,7 +112,12 @@ if ($home) {
         //print_r($row);
         echo '
         <tr>
-            <td nowrap>'.substr($row['timestamp'], 8, 2).'-'.substr($row['timestamp'], 5, 2).'-'.substr($row['timestamp'], 0, 4).' '.substr($row['timestamp'], 10, 9).'</td>
+            <td nowrap>'.substr($row['timestamp'], 8, 2).'-'.substr($row['timestamp'], 5, 2).'-'.substr($row['timestamp'], 0, 4).' '.substr($row['timestamp'], 10, 9).'</td>';
+        if (!isset($device)) {
+            echo '
+            <td nowrap>'.strtr($row['device'],$modes).'</td>';
+        }
+        echo '
             <td nowrap>&nbsp;'.$row['status'].'&nbsp;</td>
             <td nowrap>&nbsp;'.$row['user'].'</td>
             <td nowrap>&nbsp;'.$row['info'].'</td>
@@ -96,8 +128,11 @@ if ($home) {
     </table>';
     if (isset($count)&&($count>=$perpage||isset($_POST['page']))) {
         echo '
-        <form method="POST">
+        <form method="POST">';
+        if (isset($device)) {
+            echo '
             <input type="hidden" name="device" value="'.$device.'"/>';
+        }
         if ($offset==0&&$count==$perpage) {
             echo '
             <br>

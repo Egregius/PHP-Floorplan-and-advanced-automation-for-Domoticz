@@ -124,7 +124,9 @@ if ($d['Weg']['s']==0) {
             true
         );
         if (!empty($denonmain)) {
-            storemode('denon', $denonmain['InputFuncSelect']['value']);
+            if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
+                storemode('denon', $denonmain['InputFuncSelect']['value']);
+            }
         }
     }
 }

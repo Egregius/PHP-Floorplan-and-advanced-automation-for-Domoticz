@@ -677,4 +677,3 @@ echo $msg;
 if (strlen($msg)>=60) {
     lg(str_replace('__', ' | ', $msg));
 }
-?>

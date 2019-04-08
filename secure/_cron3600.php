@@ -94,14 +94,20 @@ $data=json_decode(
 );
 if (!empty($data)) {
     store('jaarteller', $data['jaarteller']);
-    storemode('zonvandaag', $data['zonpercent']);
+    if ($data['zonpercent']!=$d['zonvandaag']['m']) {
+        storemode('zonvandaag', $data['zonpercent']);
+    }
 }
 if (date('I', TIME) == 1) {
-    storemode('auto', true);
-    $d['auto']['m']=true;
+    if ($d['auto']['m']==false) {
+        storemode('auto', true);
+        $d['auto']['m']=true;
+    }
 } else {
-    storemode('auto', false);
-    $d['auto']['m']=false;
+    if ($d['auto']['m']==true) {
+        storemode('auto', false);
+        $d['auto']['m']=false;
+    }
 }
 $sunrise=json_decode(
     file_get_contents(
@@ -112,13 +118,17 @@ $sunrise=json_decode(
     true
 );
 if (isset($sunrise['results']['civil_twilight_begin'])) {
-    store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']));
-    storemode(
-        'civil_twilight',
-        strtotime(
-            $sunrise['results']['civil_twilight_end']
-        )
-    );
+    if (strtotime($sunrise['results']['civil_twilight_begin'])!=$d['civil_twilight']['s']) {
+        store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']));
+    }
+    if (strtotime($sunrise['results']['civil_twilight_end'])!=$d['civil_twilight']['m']) {
+        storemode(
+            'civil_twilight',
+            strtotime(
+                $sunrise['results']['civil_twilight_end']
+            )
+        );
+    }
     if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
         if ($d['zonop']['s']!=true) {
             store('zonop', true);
@@ -133,8 +143,12 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
             true
         );
         if (isset($uv['result'])) {
-            store('uv', $uv['result']['uv']);
-            storemode('uv', $uv['result']['uv_max']);
+            if ($uv['result']['uv']!=$d['uv']['s']) {
+                store('uv', $uv['result']['uv']);
+            }
+            if ($uv['result']['uv_max']!=$d['uv']['m']) {
+                storemode('uv', $uv['result']['uv_max']);
+            }
         }
     } else {
         if ($d['zonop']['s']!=false ) {

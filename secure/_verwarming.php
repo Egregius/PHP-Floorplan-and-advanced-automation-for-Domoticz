@@ -307,7 +307,9 @@ if ($d['heating']['s']==3) {
 } elseif ($d['brander']['s']=='On') {
     sw('brander', 'Off', false, 'Brander OFF, heating < 3');
 }
-storemode('heating', $bigdif);
+if ($bigdif!=$d['heating']['m']) {
+    storemode('heating', $bigdif);
+}
 
 if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deurbadkamer')>57 || $d['lichtbadkamer']['s']==0)) {
     ud('badkamer_set', 0, 10);
