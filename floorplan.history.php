@@ -118,8 +118,8 @@ if ($home) {
             <td nowrap>'.strtr($row['device'],$modes).'</td>';
         }
         echo '
-            <td nowrap>&nbsp;'.$row['status'].'&nbsp;</td>
-
+            <td nowrap>&nbsp;'.substr($row['status'],0,15).'&nbsp;</td>
+            <td nowrap>&nbsp;'.$row['user'].'</td>
             <td nowrap>&nbsp;'.$row['info'].'</td>
         </tr>';
         @$count++;
