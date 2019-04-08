@@ -55,7 +55,7 @@ if ($home) {
         </style>
 	</head>
 	<body>
-		<div class="fix" style="top:0px;left:0px;">
+		<div class="fix" style="top:0px;left:0px;width:50px;">
 			<a href=\'javascript:navigator_Go("floorplan.history.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
@@ -68,7 +68,7 @@ if ($home) {
 		<br>
 		<br>
 		<br>
-        <div class="fix" style="top:15px;left:76px">';
+        <div class="fix" style="top:52px;left:0px;">';
 
     if (isset($device)) {
         echo '
@@ -93,7 +93,7 @@ if ($home) {
         </div>
 		</form>
 	    </div>
-	    <div class="fix" style="top:63px;left:0px">
+	    <div class="fix" style="top:82px;left:0px">
 		<table>';
 	if (isset($_REQUEST['page'])) {
         $offset=$_REQUEST['page'];
