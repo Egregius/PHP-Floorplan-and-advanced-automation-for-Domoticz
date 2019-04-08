@@ -670,8 +670,6 @@ if ($d['auto']['s']==true) {
             convertToHours(past('regenpomp')).' rainpast='.$rainpast
         );
     }
-
-
     if (TIME>=strtotime('21:30')
         &&$d['zon']['s']==0
         &&past('zon')>1800
@@ -687,8 +685,6 @@ if ($d['auto']['s']==true) {
             telegram($msg);
         }
     }
-
-
     $zonopen=1500;
     $luifel=100-$d['luifel']['s'];
     $maxbuien=5;
