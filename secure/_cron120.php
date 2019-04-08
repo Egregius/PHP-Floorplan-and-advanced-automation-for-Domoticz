@@ -586,10 +586,9 @@ if (past('Weg')>14400
     telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
 
-if (TIME<=strtotime('0:04')) {
+if (TIME<=strtotime('11:00')) {
     if ($d['nas']['s']!='On') {
-        $aantal=file_get_contents($urlnas);
-        if ($aantal>0) {
+        if (file_get_contents($urlnas)>0) {
             shell_exec('./wakenas.sh');
         }
     }
