@@ -33,6 +33,7 @@ td{text-align:right;font-size:1.1em;}
 .tablesetpoints{width:99%;border-spacing:0;padding:0;margin:0;}
 .tablesetpoints tr{text-align:center;line-height:2;font-size:20px;}
 .bottom{position:fixed;bottom:0px;}
+.green{background:rgba(50,255,50,0.6);padding:1px 2px 1px 2px;}
 .red{background:rgba(255,50,50,0.6);padding:1px 2px 1px 2px;}
 .yellow{background:rgba(255,200,0,1);z-index:-10;}
 .stamp{width:38px;text-align:center;font-size:120%;}
