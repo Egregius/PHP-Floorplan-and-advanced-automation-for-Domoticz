@@ -127,6 +127,16 @@ function douchewarn($euro,$vol)
         bosevolume($cv, 4);
     }
 }
+/**
+ * Function waarschuwing
+ *
+ * Plays a sound on the Xiami doorbell and a regular doorbell
+ * and sents a telegram message
+ *
+ * @param string $msg Message to sent to telegram
+ *
+ * @return null
+ */
 function waarschuwing($msg)
 {
     global $d;
@@ -140,6 +150,15 @@ function waarschuwing($msg)
     sl('Xring', 0);
     die($msg);
 }
+/**
+ * Function past
+ *
+ * Calculates how long it's ago that this device was updated
+ *
+ * @param string $name Name of the device to check
+ *
+ * @return int
+ */
 function past($name)
 {
     global $d;

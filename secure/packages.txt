@@ -1,0 +1,20 @@
+rc  php-apcu                          5.1.8+4.0.11-1                                                     amd64        APC User Cache for PHP
+rc  php-apcu-bc                       1.0.3-2                                                            amd64        APCu Backwards Compatibility Module
+ii  php-common                        2:69+0~20190303094804.15+stretch~1.gbp0f7465                       all          Common files for PHP packages
+ii  php-pear                          1:1.10.8+submodules+notgz-1+0~20190219091011.9+stretch~1.gbp1a209a all          PEAR Base System
+ii  php7.0                            7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    all          server-side, HTML-embedded scripting language (metapackage)
+ii  php7.0-bcmath                     7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        Bcmath module for PHP
+ii  php7.0-cli                        7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        command-line interpreter for the PHP scripting language
+ii  php7.0-common                     7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        documentation, examples and common module for PHP
+ii  php7.0-curl                       7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        CURL module for PHP
+ii  php7.0-fpm                        7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        server-side, HTML-embedded scripting language (FPM-CGI binary)
+ii  php7.0-json                       7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        JSON module for PHP
+ii  php7.0-mbstring                   7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        MBSTRING module for PHP
+ii  php7.0-mcrypt                     7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        libmcrypt module for PHP
+ii  php7.0-mysql                      7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        MySQL module for PHP
+ii  php7.0-opcache                    7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        Zend OpCache module for PHP
+ii  php7.0-readline                   7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        readline module for PHP
+ii  php7.0-snmp                       7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        SNMP module for PHP
+ii  php7.0-soap                       7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        SOAP module for PHP
+ii  php7.0-sqlite3                    7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        SQLite3 module for PHP
+ii  php7.0-xml                        7.0.33-5+0~20190309015553.9+stretch~1.gbp4c6517                    amd64        DOM, SimpleXML, WDDX, XML, and XSL module for PHP
