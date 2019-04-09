@@ -1,0 +1,17 @@
+ii  libapache2-mod-php7.3             7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+ii  php-common                        2:69+0~20190303094804.15+stretch~1.gbp0f7465                       all          Common files for PHP packages
+ii  php-pear                          1:1.10.8+submodules+notgz-1+0~20190219091011.9+stretch~1.gbp1a209a all          PEAR Base System
+ii  php7.3                            7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    all          server-side, HTML-embedded scripting language (metapackage)
+ii  php7.3-bcmath                     7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        Bcmath module for PHP
+ii  php7.3-cli                        7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        command-line interpreter for the PHP scripting language
+ii  php7.3-common                     7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        documentation, examples and common module for PHP
+ii  php7.3-curl                       7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        CURL module for PHP
+ii  php7.3-fpm                        7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        server-side, HTML-embedded scripting language (FPM-CGI binary)
+ii  php7.3-json                       7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        JSON module for PHP
+ii  php7.3-mbstring                   7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        MBSTRING module for PHP
+ii  php7.3-mysql                      7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        MySQL module for PHP
+ii  php7.3-opcache                    7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        Zend OpCache module for PHP
+ii  php7.3-readline                   7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        readline module for PHP
+ii  php7.3-snmp                       7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        SNMP module for PHP
+ii  php7.3-sqlite3                    7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        SQLite3 module for PHP
+ii  php7.3-xml                        7.3.3-1+0~20190307202245.32+stretch~1.gbp32ebb2                    amd64        DOM, SimpleXML, WDDX, XML, and XSL module for PHP
