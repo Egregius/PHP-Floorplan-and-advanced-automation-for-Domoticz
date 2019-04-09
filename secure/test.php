@@ -15,7 +15,7 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-lgcommand('off');
+lgcommand('play');
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
