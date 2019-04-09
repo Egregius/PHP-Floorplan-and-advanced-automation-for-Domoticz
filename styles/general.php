@@ -23,7 +23,7 @@ input[type=submit]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 
-.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
+.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;/*padding:2px;*/margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
 .btn:hover{color:#000;background-color:#ffba00;cursor:pointer;}
 .btna{color:#000;background-color:#ffba00;}
 .clear{clear:both;}

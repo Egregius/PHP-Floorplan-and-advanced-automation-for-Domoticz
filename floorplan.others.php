@@ -19,9 +19,16 @@ if ($home) {
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui"/>
-		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+	if ($udevice=='iPhone') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+	} elseif ($udevice=='iPad') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+	}
+	echo '
+	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">

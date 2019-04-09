@@ -27,9 +27,16 @@ if ($home) {
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>
-		<meta name="msapplication-TileColor" content="#000000">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+	if ($udevice=='iPhone') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+	} elseif ($udevice=='iPad') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+	}
+	echo '
+	    <meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>

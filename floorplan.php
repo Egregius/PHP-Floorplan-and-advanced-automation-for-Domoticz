@@ -23,9 +23,16 @@ if ($home) {
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>
-		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+	if ($udevice=='iPhone') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+	} elseif ($udevice=='iPad') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+	}
+	echo '
+	    <link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
 		<style>
@@ -865,7 +872,7 @@ if ($home) {
     echo '<script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 			setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'3950':'14950').');
+            ($local===true?'950':'14950').');
 		</script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
