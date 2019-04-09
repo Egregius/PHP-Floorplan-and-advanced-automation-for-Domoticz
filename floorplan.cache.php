@@ -61,7 +61,12 @@ if ($home) {
         //print_r($row);
         echo '
         <tr>';
-        if ($row['n']=='max') {
+        if (endswith($row['n'], '_set')) {
+            echo '
+            <td nowrap>'.$row['n'].'</td>
+            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).' °C&nbsp;</td>
+            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).' </td>';
+        } elseif ($row['n']=='max') {
             echo '
             <td nowrap>'.$row['n'].'</td>
             <td nowrap>&nbsp;'.substr($row['s'], 0, 20).' °C&nbsp;</td>
