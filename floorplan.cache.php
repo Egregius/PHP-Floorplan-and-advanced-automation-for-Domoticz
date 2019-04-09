@@ -116,6 +116,16 @@ if ($home) {
             <td>UV</td>
             <td>Nu '.number_format($row['s'], 1, ',', '').'</td>
             <td>Max '.number_format($row['m'], 1, ',', '').'</td>';
+        } elseif ($row['n']=='zon') {
+            echo '
+            <td>Zon</td>
+            <td>'.number_format($row['s'], 0).' W</td>
+            <td></td>';
+        } elseif ($row['n']=='elec') {
+            echo '
+            <td>Elec</td>
+            <td>'.number_format($row['s'], 0).' W</td>
+            <td>'.number_format($row['m'], 1, ',', '').' kWh</td>';
         } elseif ($row['n']=='Weg') {
             echo '
             <td>Weg</td>';
