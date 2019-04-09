@@ -50,7 +50,7 @@ if ($home) {
         if ($d['denon']['s']=='On') {
             denon('PWON');
         } else {
-            sw('denon', 'On');//@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=33&switchcmd=On',false);
+            sw('denon', 'On');
         }
     } elseif (isset($_POST['delay'])) {
         $x=str_pad($_POST['delay'], 3, 0, STR_PAD_LEFT);
@@ -156,39 +156,4 @@ if ($home) {
         echo '<button name="poweron" value="poweron" class="btn b1">Power On</button>';
     }
     echo '</div></div></div></body></html>';
-}
-function denon($cmd)
-{
-    for ($x=1;$x<=10;$x++) {
-        if (denontcp($cmd, $x)) {
-            break;
-        }
-    }
-}
-function denontcp($cmd, $x)
-{
-    $sleep=102000*$x;
-    $socket=fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
-    if ($socket) {
-        fputs($socket, "$cmd\r\n");
-        fclose($socket);
-        usleep($sleep);
-        return true;
-    } else {
-        usleep($sleep);
-        echo 'sleeping '.$sleep.'<br>';
-        return false;
-    }
-}
-function strafter($string, $substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false)return '';
-    else return(substr($string, $pos+strlen($substring)));
-}
-function strbefore($string, $substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false)return '';
-    else return(substr($string, 0, $pos));
 }

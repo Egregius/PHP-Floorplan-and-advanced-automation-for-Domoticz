@@ -974,4 +974,38 @@ function bosepost($method,$xml,$ip=3,$log=false)
     usleep(10000);
     return $response;
 }
-?>
+function denon($cmd)
+{
+    for ($x=1;$x<=10;$x++) {
+        if (denontcp($cmd, $x)) {
+            break;
+        }
+    }
+}
+function denontcp($cmd, $x)
+{
+    $sleep=102000*$x;
+    $socket=fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
+    if ($socket) {
+        fputs($socket, "$cmd\r\n");
+        fclose($socket);
+        usleep($sleep);
+        return true;
+    } else {
+        usleep($sleep);
+        echo 'sleeping '.$sleep.'<br>';
+        return false;
+    }
+}
+function strafter($string, $substring)
+{
+    $pos=strpos($string, $substring);
+    if ($pos===false)return '';
+    else return(substr($string, $pos+strlen($substring)));
+}
+function strbefore($string, $substring)
+{
+    $pos=strpos($string, $substring);
+    if ($pos===false)return '';
+    else return(substr($string, 0, $pos));
+}

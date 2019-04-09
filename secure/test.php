@@ -15,9 +15,19 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$stmt=$db->query("SELECT count(timestamp) as count FROM `log`");
-$data=$stmt->fetch(PDO::FETCH_ASSOC);
-print_r($data['count']);
+$denonsec=json_decode(
+                    json_encode(
+                        simplexml_load_string(
+                            @file_get_contents(
+                                'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+                                false,
+                                $ctx
+                            )
+                        )
+                    ),
+                    true
+                );
+print_r($denonsec);
 
 /*---------------------------*/
 echo '</pre>';
@@ -27,24 +37,7 @@ unset($_COOKIE, $_GET, $_POST, $_FILES, $_SERVER, $start, $total, $users, $homes
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
-function strafter($string,$substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return $string;
-    } else {
-        return(substr($string, $pos+strlen($substring)));
-    }
-}
-function strbefore($string,$substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return $string;
-    } else {
-        return(substr($string, 0, $pos));
-    }
-}
+
 function Human_kb($bytes,$dec=2)
 {
     $size=array('kb','Mb','Gb');

@@ -126,6 +126,22 @@ if ($d['Weg']['s']==0) {
         if (!empty($denonmain)) {
             if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
                 storemode('denon', $denonmain['InputFuncSelect']['value']);
+                denon('Z2ON');
+            }
+            if ($denonmain['InputFuncSelect']['value']=='NVIDIA') {
+                $denonsec=json_decode(
+                    json_encode(
+                        simplexml_load_string(
+                            @file_get_contents(
+                                'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+                                false,
+                                $ctx
+                            )
+                        )
+                    ),
+                    true
+                );
+
             }
         }
     }
