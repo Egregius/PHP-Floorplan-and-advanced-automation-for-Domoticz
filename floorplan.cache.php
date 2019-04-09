@@ -64,21 +64,54 @@ if ($home) {
         if (endswith($row['n'], '_set')) {
             echo '
             <td nowrap>'.$row['n'].'</td>
-            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).' °C&nbsp;</td>
-            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).' </td>';
+            <td>'.$row['s'].' °C</td>';
+            if ($row['m']==0) {
+                echo '
+            <td>Auto</td>';
+            } else {
+                echo '
+            <td>Manueel</td>';
+            }
+        } elseif (endswith($row['n'], '_temp')) {
+            echo '
+            <td nowrap>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+            <td>'.$row['m'].'</td>';
+        } elseif (startswith($row['n'], 'R')) {
+            echo '
+            <td nowrap>'.$row['n'].'</td>
+            <td>'.$row['s'].'</td>';
+            if ($row['m']==0) {
+                echo '
+            <td>Auto</td>';
+            } else {
+                echo '
+            <td>Manueel</td>';
+            }
         } elseif ($row['n']=='max') {
             echo '
             <td nowrap>'.$row['n'].'</td>
-            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).' °C&nbsp;</td>
-            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).' % Regen</td>';
+            <td nowrap>'.number_format($row['s'], 1, ',', '').' °C</td>
+            <td nowrap>'.number_format($row['m']*100, 0).' % Regen</td>';
+        } elseif ($row['n']=='wind') {
+            echo '
+            <td nowrap>'.$row['n'].'</td>
+            <td nowrap>'.number_format($row['s'], 1, ',', '').' km/u</td>';
+            $hist=json_decode($row['m']);
+            echo '
+            <td nowrap>';
+            foreach ($hist as $i) {
+                echo number_format($i, 1, ',', '').' km/u<br>';
+            }
+            echo '</td>';
         } else {
             echo '
             <td nowrap>'.$row['n'].'</td>
-            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).'&nbsp;</td>
-            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).'</td>';
+            <td nowrap>'.substr($row['s'], 0, 20).'</td>
+            <td nowrap>'.substr($row['m'], 0, 20).'</td>';
         }
         echo '
-            <td nowrap>&nbsp;'.strftime("%d-%m %k:%M:%S",$row['t']).'</td>
+            <td nowrap>'.strftime("%d-%m %k:%M:%S", $row['t']).'</td>
         </tr>';
         @$count++;
     }
