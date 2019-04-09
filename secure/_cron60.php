@@ -128,20 +128,10 @@ if ($d['Weg']['s']==0) {
                 storemode('denon', $denonmain['InputFuncSelect']['value']);
                 denon('Z2ON');
             }
-            if ($denonmain['InputFuncSelect']['value']=='NVIDIA') {
-                $denonsec=json_decode(
-                    json_encode(
-                        simplexml_load_string(
-                            @file_get_contents(
-                                'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
-                                false,
-                                $ctx
-                            )
-                        )
-                    ),
-                    true
-                );
-
+            if ($denonmain['ZonePower']['value']=='ON') {
+                denon('Z2ON');
+            } else {
+                denon('Z2OFF');
             }
         }
     }

@@ -71,10 +71,10 @@ if (past('pirkeuken')>50
 ) {
     sw('keuken', 'Off');
 }
-/*
-if (ping('192.168.2.27')) {
+
+if (ping($lgtvip)) {
     sleep(3);
-    if (ping('192.168.2.27')) {
+    if (ping($lgtvip)) {
         if ($d['lgtv']['s']!='On'
             &&past('lgtv')>10
             &&$d['Weg']['s']==0
@@ -97,15 +97,15 @@ if (ping('192.168.2.27')) {
     }
 } else {
     sleep(1);
-    if (!ping('192.168.2.27')) {
+    if (!ping($lgtvip)) {
         sleep(1);
-        if (!ping('lgtv')) {
+        if (!ping($lgtvip)) {
             if ($d['lgtv']['s']!='Off'
                 &&past('lgtv')>120
             ) {
                 sw('lgtv', 'Off', true, 'LG TV Off _cron5');
             }
-            if ($d['denon']['s']!='Off'
+            /*if ($d['denon']['s']!='Off'
                 &&$d['denon']['m']=='TV'
                 &&past('lgtv')>120
                 &&past('denon')>300
@@ -117,7 +117,7 @@ if (ping('192.168.2.27')) {
                 &&past('nvidia')>120
             ) {
                 sw('nvidia', 'Off', true);
-            }
+            }*/
             if ($d['kristal']['s']!='Off'
                 &&past('lgtv')>120
                 &&past('kristal')>120
@@ -127,4 +127,3 @@ if (ping('192.168.2.27')) {
         }
     }
 }
-*/
