@@ -310,7 +310,7 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
         $check=true;
         foreach ($name as $i) {
             if ($i=='media') {
-                sw(array('lgtv','denon','tvled','kristal','nvidia'), $action, $check, $msg, $usleep);
+                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $check, $msg, $usleep);
             } elseif ($i=='lichtenbeneden') {
                 sw(array('garage','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur'), $action, $check, $msg, $usleep);
             } elseif ($i=='lichtenboven') {
