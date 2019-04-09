@@ -108,7 +108,7 @@ if ($home) {
             <td>'.number_format($row['m'], 1, ',', '').' % Ref</td>';
         } elseif ($row['n']=='max') {
             echo '
-            <td>'.$row['n'].'</td>
+            <td>Max voorspeld</td>
             <td>'.number_format($row['s'], 1, ',', '').' °C</td>
             <td>'.number_format($row['m']*100, 0).' % Regen</td>';
         } elseif ($row['n']=='wind') {
