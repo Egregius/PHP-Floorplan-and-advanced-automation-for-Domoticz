@@ -126,11 +126,22 @@ if ($d['Weg']['s']==0) {
         if (!empty($denonmain)) {
             if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
                 storemode('denon', $denonmain['InputFuncSelect']['value']);
-                denon('Z2ON');
             }
-            if ($denonmain['ZonePower']['value']=='ON') {
+            $denonsec=json_decode(
+                json_encode(
+                    simplexml_load_string(
+                        @file_get_contents(
+                            'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
+                            false,
+                            $ctx
+                        )
+                    )
+                ),
+                true
+            );
+            if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') {
                 denon('Z2ON');
-            } else {
+            } elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') {
                 denon('Z2OFF');
             }
         }

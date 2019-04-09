@@ -692,7 +692,7 @@ if ($d['auto']['s']==true) {
     $x=0;
     foreach ($windhist as $y) {
         $x=$y+$x;
-        $windhist=round($x/count($windhist), 2);
+        $windhist=round($x/4, 2);
     }
     if ($wind>=30) {
         $maxluifel=0;
