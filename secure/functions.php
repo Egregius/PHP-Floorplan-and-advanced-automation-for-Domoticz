@@ -351,7 +351,7 @@ function storemode($name,$mode,$time=false)
     } else {
         $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
     }
-    lgsql($username,$name.'_mode',$mode);
+    lgsql($username, $name.'_mode', $mode);
 }
 function alert($name,$msg,$ttl,$silent=true,$ios=false)
 {
@@ -369,7 +369,8 @@ function alert($name,$msg,$ttl,$silent=true,$ios=false)
 }
 function kodi($json)
 {
-    $ch=curl_init('http://192.168.2.7:1597/jsonrpc');
+    global $kodiurl;
+    $ch=curl_init($kodiurl.'/jsonrpc');
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -445,23 +446,27 @@ function thermostaat($name,$top,$left)
     } else {
         $centre='blue';
     }
-    /*if($name!='badkamer')*/echo '<a href=\'javascript:navigator_Go("floorplan.heating.php?SetSetpoint='.$name.'");\'>';
-    echo '	<div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;">
+    echo '
+        <a href=\'javascript:navigator_Go("floorplan.heating.php?SetSetpoint='.$name.'");\'>
+        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;">
 			<img src="/images/thermo'.$circle.$centre.'.png" class="i48"/>
 		<div class="fix center" style="top:32px;left:11px;width:26px;">';
     if ($mode>0) {
-        echo '<font size="2" color="#222">';
+        echo '
+            <font size="2" color="#222">';
     } else {
-        echo '<font size="2" color="#CCC">';
+        echo '
+            <font size="2" color="#CCC">';
     }
     echo number_format($stat, 1, ',', '').'</font></div>';
     if ($mode>0) {
-        echo '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;"></div>';
+        echo '
+            <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
+            </div>';
     }
-    echo '</div>';
-    if ($name!='badkamer') {
-        echo '</a>';
-    }
+    echo '
+        </div>
+    </a>';
 }
 function ud($name,$nvalue,$svalue,$check=false)
 {
@@ -536,7 +541,24 @@ function ZwaveCommand($node,$command)
     );
     $cm=$cm[$command];
     for ($k=1;$k<=5;$k++) {
-        $result=file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));
+        $result=file_get_contents(
+            $domoticzurl.'/ozwcp/admpost.html',
+            false,
+            stream_context_create(
+                array(
+                    'http'=>array(
+                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+                        'method'=>'POST',
+                        'content'=>http_build_query(
+                            array(
+                                'fun'=>$cm,
+                                'node'=>'node'.$node
+                                )
+                        ),
+                    ),
+                )
+            )
+        );
         if ($result=='OK') {
             break;
         }
@@ -805,7 +827,8 @@ function lgsql($user='',$device='',$status='',$info='')
     global $db;
     $db->query(
         "INSERT INTO log (user,device,status,info)
-        VALUES ('$user','$device','$status','$info');");
+        VALUES ('$user','$device','$status','$info');"
+    );
 }
 function logwrite($msg,$msg2=null)
 {
@@ -814,12 +837,24 @@ function logwrite($msg,$msg2=null)
     $mSecs=$time-floor($time);
     $mSecs=substr(number_format($mSecs, 3), 1);
     $fp=fopen('/var/log/domoticz.log', "a+");
-    fwrite($fp, sprintf("%s%s %s %s\n", date($dFormat), $mSecs, ' > '.$msg, $msg2));
+    fwrite(
+        $fp,
+        sprintf(
+            "%s%s %s %s\n",
+            date($dFormat),
+            $mSecs,
+            ' > '.$msg,
+            $msg2
+        )
+    );
     fclose($fp);
 }
 function fail2ban($ip)
 {
-    $time=microtime(true);$dFormat="Y-m-d H:i:s";$mSecs=$time-floor($time);$mSecs=substr(number_format($mSecs, 3), 1);
+    $time=microtime(true);
+    $dFormat="Y-m-d H:i:s";
+    $mSecs=$time-floor($time);
+    $mSecs=substr(number_format($mSecs, 3), 1);
     $fp=fopen('/var/log/home2ban.log', "a+");
     fwrite($fp, sprintf("%s %s\n", date($dFormat), $ip));
     fclose($fp);
