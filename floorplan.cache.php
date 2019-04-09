@@ -159,9 +159,15 @@ if ($home) {
             <td>'.substr($row['s'], 0, 20).'</td>
             <td>'.substr($row['m'], 0, 20).'</td>';
         }
-        echo '
+        if ($row['t']<TIME - (86400*7)) {
+            echo '
+            <td nowrap>'.strftime("%d-%m-%Y", $row['t']).'</td>
+        </tr>';
+        } else {
+            echo '
             <td nowrap>'.strftime("%d-%m %k:%M:%S", $row['t']).'</td>
         </tr>';
+        }
         @$count++;
     }
     echo '
