@@ -111,6 +111,27 @@ if ($home) {
             <td>Max voorspeld</td>
             <td>'.number_format($row['s'], 1, ',', '').' °C</td>
             <td>'.number_format($row['m']*100, 0).' % Regen</td>';
+        } elseif ($row['n']=='uv') {
+            echo '
+            <td>UV</td>
+            <td>Nu '.number_format($row['s'], 1, ',', '').'</td>
+            <td>Max '.number_format($row['m'], 1, ',', '').'</td>';
+        } elseif ($row['n']=='Weg') {
+            echo '
+            <td>Weg</td>';
+            if ($row['s']==0) {
+                echo '
+            <td>Thuis</td>';
+            } elseif ($row['s']==1) {
+                echo '
+            <td>Slapen</td>';
+            } elseif ($row['s']==2) {
+                echo '
+            <td>Weg</td>';
+            }
+            echo '
+            <td nowrap>Laatste beweging:<br>
+            '.strftime("%d-%m %k:%M:%S", $row['m']).'</td>';
         } elseif ($row['n']=='wind') {
             echo '
             <td>'.$row['n'].'</td>
