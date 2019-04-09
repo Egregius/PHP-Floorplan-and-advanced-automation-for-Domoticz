@@ -14,7 +14,7 @@ require 'secure/settings.php';
 if ($home) {
     session_start();
     $_SESSION['referer']='floorplan.media.php';
-
+    $ctx=stream_context_create(array('http'=>array('timeout'=>2)));
     echo '<html>
     <head>
 		<title>Media</title>
@@ -42,8 +42,6 @@ if ($home) {
 		</style>
 	</head>';
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
-
-
         if ($_POST['Naam']=='lgtv') {
             if ($_POST['Actie']=='On') {
                 shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
@@ -53,9 +51,9 @@ if ($home) {
         } else {
             sw($_POST['Naam'], $_POST['Actie']);
         }
-        /*usleep(100000);
+        usleep(100000);
         header("Location: floorplan.media.php");
-        die("Redirecting to: floorplan.media.php");*/
+        die("Redirecting to: floorplan.media.php");
     } elseif (isset($_POST['dimmer'])) {
         if (isset($_POST['dimlevelon_x'])) {
             sl($_POST['Naam'], 100);
@@ -85,7 +83,6 @@ if ($home) {
             ud('miniliving2l', 0, 'On');
         } elseif ($_POST['Scene']=='UIT') {
             if ($d['nvidia']['s']!='Off') {
-                   $ctx=stream_context_create(array('http'=>array('timeout'=>2)));
                    @kodi('{"jsonrpc":"2.0","id":1,"method":"System.Shutdown"}');
             }
             ud('miniliving4l', 0, 'On');
@@ -214,9 +211,8 @@ if ($home) {
 </html>';
         exit;
     }
-    $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
     if ($d['denon']['s']=='On') {
-        $denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.time, false, $ctx))), true);
+        $denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.time, false, $ctx))), true);
         if (!empty($denonmain)) {
             $denoninput=$denonmain['InputFuncSelect']['value'];
         } else {
@@ -298,8 +294,6 @@ if ($home) {
     dimmer('zithoek');
     dimmer('eettafel');
     schakelaar('jbl', 'Light');
-
-
     schakelaar('kristal', 'Light');
     if (past('kristal')<$eendag) {
         echo '
@@ -307,7 +301,6 @@ if ($home) {
             '.strftime("%k:%M", $d['kristal']['t']).'
         </div>';
     }
-
     schakelaar('bureel', 'Light');
     if (past('bureel')<$eendag) {
         echo '
@@ -315,12 +308,10 @@ if ($home) {
             '.strftime("%k:%M", $d['bureel']['t']).'
         </div>';
     }
-
     schakelaar('keuken', 'Light');
     schakelaar('wasbak', 'Light');
     schakelaar('kookplaat', 'Light');
     schakelaar('werkblad1', 'Light');
-
     schakelaar('denon', 'denon');
     if (past('denon')<$eendag) {
         echo '
@@ -328,7 +319,6 @@ if ($home) {
             '.strftime("%k:%M", $d['denon']['t']).'
         </div>';
     }
-
     if ($d['tv']['s']=='On') {
         schakelaar('lgtv', 'lgtv');
     } else {
@@ -340,7 +330,6 @@ if ($home) {
             '.strftime("%k:%M", $d['lgtv']['t']).'
         </div>';
     }
-
     schakelaar('nvidia', 'nvidia');
     if (past('nvidia')<$eendag) {
         echo '
@@ -348,7 +337,6 @@ if ($home) {
             '.strftime("%k:%M", $d['nvidia']['t']).'
         </div>';
     }
-
     if ($d['nas']['s']=='On') {
         echo '
         <div class="fix nas z1">
@@ -409,11 +397,10 @@ if ($home) {
         }
     }
     //echo '<pre><div align="left">';print_r($_REQUEST);echo '</div></pre>';
-
     if ($d['lgtv']['s']=='On') {
         $lgsource=trim(shell_exec('python3 secure/lgtv.py -c get-input 192.168.2.27'));
         if ($lgsource=='com.webos.app.hdmi2') {
-            $current=@json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
+            $current=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
             //print_r($current);
             if (isset($current['result']['item']['file'])) {
                 if (!empty($current['result']['item']['file'])) {
@@ -425,7 +412,7 @@ if ($home) {
                     } else {
                         echo '<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
                     }
-                    $properties=@json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
+                    $properties=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
                     if (!empty($properties['result'])) {
                         $prop=$properties['result'];
                         $point=$prop['time'];
@@ -492,7 +479,6 @@ if ($home) {
             }
         }
     }
-
     $pfsense=json_decode(@file_get_contents('http://192.168.2.254:44300/egregius.php'), true);
     echo '
                 </div>
