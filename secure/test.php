@@ -19,7 +19,7 @@ $denonsec=json_decode(
                     json_encode(
                         simplexml_load_string(
                             @file_get_contents(
-                                'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+                                'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
                                 false,
                                 $ctx
                             )
