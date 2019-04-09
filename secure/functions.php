@@ -358,6 +358,7 @@ function lgcommand($action)
         shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {
         echo shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
+        echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }
 function store($name,$status,$idx=null,$force=true)
@@ -714,7 +715,7 @@ function double($name,$action,$check=false,$comment='',$wait=2000000)
 
 function koekje($user,$expirytime)
 {
-    setcookie("HomeEgregius2", $user, $expirytime, '/');
+    setcookie($cookie, $user, $expirytime, '/');
 }
 function telegram($msg,$silent=true,$to=1)
 {

@@ -11,24 +11,21 @@
  **/
 require '/var/www/config.php';
 $silent=true;
-$type='text';
 $to=null;
 if (isset($_REQUEST['silent'])) {
     $silent=$_REQUEST['silent'];
 }
 if (isset($_REQUEST['text'])) {
-    $type='text';
     $content=str_replace('__', PHP_EOL, $_REQUEST['text']);
 }
 if (isset($_REQUEST['to'])) {
     $to=$_REQUEST['to'];
 }
 if (!empty($argv[1])&&!empty($argv[2])) {
-    $type=$argv[1];
     $content=$argv[2];
 }
 
-if (isset($type)&&isset($content)) {
+if (isset($content)) {
     $bot_url="https://api.telegram.org/bot".$telegrambot."/";
     $url=$bot_url."sendMessage?chat_id=".$telegramchatid1;$post_fields=array('chat_id'=>$telegramchatid1,'text'=>$content,'disable_notification'=>$silent);
     $ch=curl_init();

@@ -42,16 +42,21 @@ if ($home) {
 		</style>
 	</head>';
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
+
+
         if ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='On') {
             shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
         } elseif ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='Off') {
-            lgcommand('off');
+            echo 'yepsie';
+            echo telegram('lgtv off');
+            echo lgcommand('off');
+
         } else {
             sw($_POST['Naam'], $_POST['Actie']);
         }
-        usleep(100000);
+        /*usleep(100000);
         header("Location: floorplan.media.php");
-        die("Redirecting to: floorplan.media.php");
+        die("Redirecting to: floorplan.media.php");*/
     } elseif (isset($_POST['dimmer'])) {
         if (isset($_POST['dimlevelon_x'])) {
             sl($_POST['Naam'], 100);

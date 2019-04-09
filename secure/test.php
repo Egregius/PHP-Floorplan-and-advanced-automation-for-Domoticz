@@ -15,20 +15,7 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$denonsec=json_decode(
-                    json_encode(
-                        simplexml_load_string(
-                            @file_get_contents(
-                                'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
-                                false,
-                                $ctx
-                            )
-                        )
-                    ),
-                    true
-                );
-print_r($denonsec);
-
+lgcommand('off');
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
