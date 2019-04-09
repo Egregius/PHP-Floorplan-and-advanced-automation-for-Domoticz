@@ -60,11 +60,20 @@ if ($home) {
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         //print_r($row);
         echo '
-        <tr>
+        <tr>';
+        if ($row['n']=='max') {
+            echo '
             <td nowrap>'.$row['n'].'</td>
-            <td nowrap>&nbsp;'.substr($row['s'], 0, 25).'&nbsp;</td>
-            <td nowrap>&nbsp;'.$row['m'].'</td>
-            <td nowrap>&nbsp;'.$row['t'].'</td>
+            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).' °C&nbsp;</td>
+            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).' % Regen</td>';
+        } else {
+            echo '
+            <td nowrap>'.$row['n'].'</td>
+            <td nowrap>&nbsp;'.substr($row['s'], 0, 20).'&nbsp;</td>
+            <td nowrap>&nbsp;'.substr($row['m'], 0, 20).'</td>';
+        }
+        echo '
+            <td nowrap>&nbsp;'.strftime("%d-%m %k:%M:%S",$row['t']).'</td>
         </tr>';
         @$count++;
     }
