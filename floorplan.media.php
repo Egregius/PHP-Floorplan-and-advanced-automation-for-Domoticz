@@ -340,14 +340,25 @@ if ($home) {
     }
 
     if ($d['nas']['s']=='On') {
-        echo '<div class="fix nas z1"><a href=\'javascript:navigator_Go("?nas=sleep");\'><img src="images/nas_On.png" class="i48" alt=""/></a><br>';
+        echo '
+        <div class="fix nas z1">
+            <a href=\'javascript:navigator_Go("?nas=sleep");\'>
+                <img src="images/nas_On.png" class="i48" alt=""/>
+            </a>
+            <br>';
     } else {
-        echo '<div class="fix nas z1"><a href=\'javascript:navigator_Go("?nas=wake");\'><img src="images/nas_Off.png" class="i48" alt=""/></a><br>';
+        echo '
+        <div class="fix nas z1">
+            <a href=\'javascript:navigator_Go("?nas=wake");\'>
+                <img src="images/nas_Off.png" class="i48" alt=""/>
+            </a>
+            <br>';
     }
     if (past('nas')<$eendag) {
         echo strftime("%H:%M", $d['nas']['t']);
     }
-    echo '</div>';
+    echo '
+        </div>';
 
     //Schakelaar('kerstboom','Kerstboom');
     echo '
@@ -357,7 +368,9 @@ if ($home) {
             </a>
         </div>';
 
-    echo '<div class="fix blackmedia"><form method="POST">';
+    echo '
+        <div class="fix blackmedia">
+            <form method="POST">';
     if ($d['denon']['s']=='On') {
         if (!empty($denonmain)) {
             $cv=80+$denonmain['MasterVolume']['value'];
@@ -374,9 +387,11 @@ if ($home) {
                     }
                     if ($showvalue>=0) {
                         if ($k==$cv) {
-                            echo '<button type="submit" name="vol" value="'.$setvalue.'" class="btn volume btna">'.$showvalue.'</button>';
+                            echo '
+                <button type="submit" name="vol" value="'.$setvalue.'" class="btn volume btna">'.$showvalue.'</button>';
                         } else {
-                            echo '<button type="submit" name="vol" value="'.$setvalue.'" class="btn volume">'.$showvalue.'</button>';
+                            echo '
+                <button type="submit" name="vol" value="'.$setvalue.'" class="btn volume">'.$showvalue.'</button>';
                         }
                     }
                 }
@@ -469,10 +484,16 @@ if ($home) {
     }
 
     $pfsense=json_decode(@file_get_contents('http://192.168.2.254:44300/egregius.php'), true);
-    echo '</div></div></div>
-<div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3, ',', '.').' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'</div>';
+    echo '
+                </div>
+            </div>
+        </div>
+        <div class="fix floorplanstats">
+            '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3, ',', '.').' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
+        </div>';
 
-    echo '<script type="text/javascript">
+    echo '
+        <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 			setTimeout("window.location.href=window.location.href;",4875);
 		</script>';
