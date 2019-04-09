@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-date_default_timezone_set('Europe/Brussels');
 $zongarage=500;
 $zonkeuken=45;
 $zoninkom=5;
@@ -354,6 +353,7 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
 }
 function lgcommand($action)
 {
+    global $lgtvip,$lgtvmac;
     if ($action=='on'&&$d['lgtv']['s']!='On') {
         shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {

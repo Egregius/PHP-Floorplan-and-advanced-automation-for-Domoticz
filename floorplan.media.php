@@ -44,6 +44,8 @@ if ($home) {
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='On') {
             shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
+        } elseif ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='Off') {
+            lgcommand('off');
         } else {
             sw($_POST['Naam'], $_POST['Actie']);
         }
@@ -405,8 +407,8 @@ if ($home) {
     //echo '<pre><div align="left">';print_r($_REQUEST);echo '</div></pre>';
 
     if ($d['lgtv']['s']=='On') {
-        $lgsource=trim(shell_exec('python3 '.dirname(__DIR__) . 'secure/lgtv.py -c get-input 192.168.2.27'));
-        if ($lgsource=='com.webos.app.hdmi3') {
+        $lgsource=trim(shell_exec('python3 secure/lgtv.py -c get-input 192.168.2.27'));
+        if ($lgsource=='com.webos.app.hdmi2') {
             $current=@json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
             //print_r($current);
             if (isset($current['result']['item']['file'])) {

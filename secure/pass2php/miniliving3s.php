@@ -38,41 +38,4 @@ if ($d['denon']['s']=='On') {
         }
     }
 }
-/**
- * Function denon
- *
- * @param string $cmd command to sent to function denontcp
- *
- * @return null
- */
-function denon($cmd)
-{
-    for ($x=1;$x<=10;$x++) {
-        if (denontcp($cmd, $x)) {
-            break;
-        }
-    }
-}
-/**
- * Function denontcp: Store values in MySQL database as cache items.
- *
- * @param string $cmd command to sent
- * @param int    $x   Multiply usleep timeout
- *
- * @return boolean
- */
-function denontcp($cmd,$x)
-{
-    $sleep=102000*$x;
-    $socket=@fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
-    if ($socket) {
-        fputs($socket, "$cmd\r\n");
-        fclose($socket);
-        usleep($sleep);
-        return true;
-    } else {
-        usleep($sleep);
-        return false;
-    }
-}
 store('Weg', 0, null, true);

@@ -18,4 +18,4 @@ foreach ($items as $item) {
 }
 store('Weg', 0, null, true);
 sleep(10);
-sw('nvidia', 'Off');
+//sw('nvidia', 'Off');
