@@ -15,14 +15,15 @@ if ($home) {
     session_start();
     $_SESSION['referer']='floorplan.media.php';
 
-    echo '<html><head>
+    echo '<html>
+    <head>
 		<title>Media</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>
 		<meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">
@@ -38,8 +39,7 @@ if ($home) {
 	</head>';
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='On') {
-            //       sw('lgtv', 'On');
-            shell_exec('python3 secure/lgtv.py -c on -a a8:23:fe:81:9f:11 192.168.2.27');
+            shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
         } else {
             sw($_POST['Naam'], $_POST['Actie']);
         }
@@ -55,7 +55,7 @@ if ($home) {
             sl($_POST['Naam'], $_POST['dimlevel']);
             store('dimaction'.$_POST['Naam'], 0);
         }
-        usleep($Usleep);
+        usleep(100000);
         header("Location: floorplan.media.php");
         die("Redirecting to: floorplan.media.php");
     } elseif (isset($_REQUEST['nas'])) {
@@ -80,24 +80,24 @@ if ($home) {
             }
             ud('miniliving4l', 0, 'On');
         }
-        usleep($Usleep);
+        usleep(100000);
         header("Location: floorplan.media.php");
         die("Redirecting to: floorplan.media.php");
     } elseif (isset($_POST['vol'])) {
-        @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');
+        @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');
         usleep(120000);
     } elseif (isset($_POST['input'])) {
-        @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
+        @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
         storemode('denon', $_POST['input']);
         usleep(120000);
     } elseif (isset($_POST['surround'])) {
-        @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
+        @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
         usleep(120000);
     } elseif (isset($_POST['UpdateKodi'])) {
         $profile=$_POST['UpdateKodi'];
         //echo 'Wanted profile='.$profile.'<br/>';
         profile:
-        $loadedprofile=json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+        $loadedprofile=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
         //echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
         if ($loadedprofile['result']['label']!==$profile) {
             @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
@@ -116,7 +116,7 @@ if ($home) {
     } elseif (isset($_POST['CleanKodi'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
     } elseif (isset($_POST['PauseKodi'])) {
-        @file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+        @file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
     } elseif (isset($_POST['StopKodi'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
     } elseif (isset($_POST['bigbackward'])) {
@@ -137,14 +137,8 @@ if ($home) {
         } else {
             @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['subtitle'].'}}');
         }
-    } elseif (isset($_POST['cast'])) {
-        if ($_POST['cast']=='Pause') {
-            shell_exec('pychromecast/pause.py');
-        } else {
-            shell_exec('pychromecast/play.py');
-        }
     } elseif (isset($_POST['PowerOff'])) {
-        echo @kodi('{"jsonrpc":"2.0","id":1,"method":"System.Shutdown"}');
+        @kodi('{"jsonrpc":"2.0","id":1,"method":"System.Shutdown"}');
     } elseif (isset($_REQUEST['setdimmer'])) {
         $name=$_REQUEST['setdimmer'];
         $stat=$d[$name]['s'];
@@ -221,37 +215,76 @@ if ($home) {
     } else {
         $denoninput='UIT';
     }
-    echo '<body class="floorplan">
-	<div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.media.php");\'>'.strftime("%k:%M:%S", TIME).'</a></div>
-	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
-	<div class="fix" style="top:100px;left:0px;">
-		<form method="POST">';
+    echo '
+    <body class="floorplan">
+	    <div class="fix clock">
+	        <a href=\'javascript:navigator_Go("floorplan.media.php");\'>
+	            '.strftime("%k:%M:%S", TIME).'
+	        </a>
+	    </div>
+    	<div class="fix z1" style="top:5px;left:5px;">
+    	    <a href=\'javascript:navigator_Go("floorplan.php");\'>
+    	        <img src="/images/close.png" width="72px" height="72px"/>
+    	    </a>
+    	</div>
+	    <div class="fix" style="top:100px;left:0px;">
+		    <form method="POST">';
     $inputs=array('TUNER','UIT');
     if (!in_array($denoninput, $inputs)&&$denoninput!='') {
         $inputs[]=$denoninput;
     }
     foreach ($inputs as $input) {
         if ($denoninput==$input) {
-            echo '<input type="submit" name="Scene" value="'.$input.'" class="btn input btna"/><br/><br/>';
+            echo '
+                <input type="submit" name="Scene" value="'.$input.'" class="btn input btna"/>
+                <br/>
+                <br/>';
         } else {
             if ($input=='UIT') {
-                echo '<input type="submit" name="Scene" value="UIT" class="btn input" onclick="return confirm(\'Are you sure?\');"/><br/><br/>';
+                echo '
+                <input type="submit" name="Scene" value="UIT" class="btn input" onclick="return confirm(\'Are you sure?\');"/>
+                <br/>
+                <br/>';
             } else {
-                echo '<input type="submit" name="Scene" value="'.$input.'" class="btn input"/><br/><br/>';
+                echo '
+                <input type="submit" name="Scene" value="'.$input.'" class="btn input"/>
+                <br/>
+                <br/>';
             }
         }
     }
     echo '
-		</form>
-		<br/>
-		<a href=\'javascript:navigator_Go("denon.php");\'><img src="/images/denon.png" class="i48"/></a><br/><br/><br/>
-		<a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="/images/kodi.png" class="i48"/><br/>Films</a><br/><br/>
-		<a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="/images/kodi.png" class="i48"/><br/>Series</a><br/><br/>
-		<a href=\'javascript:navigator_Go("kodi.php");\'><img src="/images/kodi.png" class="i48"/><br/>Kodi<br/>Control</a><br/><br/>
-		';
+            </form>
+            <br/>
+            <a href=\'javascript:navigator_Go("denon.php");\'>
+                <img src="/images/denon.png" class="i48"/>
+            </a>
+            <br>
+            <br>
+            <br>
+            <a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'>
+                <img src="/images/kodi.png" class="i48"/>
+                <br>Films
+            </a>
+            <br>
+            <br>
+            <a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'>
+                <img src="/images/kodi.png" class="i48"/>
+                <br>
+                Series
+            </a>
+            <br>
+            <br>
+            <a href=\'javascript:navigator_Go("kodi.php");\'>
+                <img src="/images/kodi.png" class="i48"/>
+                <br>
+                Kodi<br>
+                Control
+            </a>
+            <br>
+            <br>';
     echo '
-	</div>
-	';
+	    </div>';
     Dimmer('zithoek');
     Dimmer('eettafel');
     Schakelaar('jbl', 'Light');
@@ -259,12 +292,18 @@ if ($home) {
 
     Schakelaar('kristal', 'Light');
     if (past('kristal')<$eendag) {
-        echo '<div class="fix z0 right" style="top:55px;left:154px;width:35px;">'.strftime("%k:%M", $d['kristal']['t']).'</div>';
+        echo '
+        <div class="fix z0 right" style="top:55px;left:154px;width:35px;">
+            '.strftime("%k:%M", $d['kristal']['t']).'
+        </div>';
     }
 
     Schakelaar('bureel', 'Light');
     if (past('bureel')<$eendag) {
-        echo '<div class="fix z0 right" style="top:55px;left:213px;width:35px;">'.strftime("%k:%M", $d['bureel']['t']).'</div>';
+        echo '
+        <div class="fix z0 right" style="top:55px;left:213px;width:35px;">
+            '.strftime("%k:%M", $d['bureel']['t']).'
+        </div>';
     }
 
     Schakelaar('keuken', 'Light');
@@ -274,7 +313,10 @@ if ($home) {
 
     Schakelaar('denon', 'denon');
     if (past('denon')<$eendag) {
-        echo '<div class="fix z0 right" style="top:116px;left:99px;width:35px;">'.strftime("%k:%M", $d['denon']['t']).'</div>';
+        echo '
+        <div class="fix z0 right" style="top:116px;left:99px;width:35px;">
+            '.strftime("%k:%M", $d['denon']['t']).'
+        </div>';
     }
 
     if ($d['tv']['s']=='On') {
@@ -283,12 +325,18 @@ if ($home) {
         Schakelaar('tv', 'TV');
     }
     if (past('lgtv')<$eendag) {
-        echo '<div class="fix z0 right" style="top:116px;left:175px;width:35px;">'.strftime("%k:%M", $d['lgtv']['t']).'</div>';
+        echo '
+        <div class="fix z0 right" style="top:116px;left:175px;width:35px;">
+            '.strftime("%k:%M", $d['lgtv']['t']).'
+        </div>';
     }
 
     Schakelaar('nvidia', 'nvidia');
     if (past('nvidia')<$eendag) {
-        echo '<div class="fix z0 right" style="top:116px;left:229px;width:35px;">'.strftime("%k:%M", $d['nvidia']['t']).'</div>';
+        echo '
+        <div class="fix z0 right" style="top:116px;left:229px;width:35px;">
+            '.strftime("%k:%M", $d['nvidia']['t']).'
+        </div>';
     }
 
     if ($d['nas']['s']=='On') {
