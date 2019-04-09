@@ -284,7 +284,7 @@ if ($d['Weg']['s']==2) {//Weg
     }
     $items=array(
         'garage',
-        'denon',
+        /*'denon',*/
         'bureel',
         'kristal',
         'terras',
@@ -352,7 +352,7 @@ if ($d['Weg']['s']==2) {//Weg
     $items=array(
         'hall',
         'bureel',
-        'denon',
+        /*'denon',*/
         'kristal',
         'garage',
         'terras',
@@ -428,13 +428,13 @@ if ($d['Weg']['s']==2) {//Weg
                 }
             }
         }
-        $uit=10800;
+        /*$uit=10800;
         if (past('pirliving')>$uit) {
             if ($d['denon']['s']=='On'||$d['lgtv']['s']=='On') {
                 ud('miniliving4l', 1, 'On');
                 lg('miniliving4l pressed omdat er al 3 uur geen beweging is');
             }
-        }
+        }*/
     }
     if (past('Xlight')>300&&$d['Xlight']['s']!='Off') {
         sw('Xlight', 'Off');
