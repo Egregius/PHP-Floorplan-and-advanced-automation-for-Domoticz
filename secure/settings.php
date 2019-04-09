@@ -9,8 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-error_reporting(E_ALL);
-ini_set("display_errors", "on");
 require '/var/www/config.php';
 require 'functions.php';
 require '/var/www/authentication.php';

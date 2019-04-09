@@ -26,6 +26,7 @@ if ($home) {
         'heating_mode'=>'bigdif',
         'icon_mode'=>'humidity',
         'max_mode'=>'max regen',
+        'Weg_mode'=>'Beweging',
         'wind_mode'=>'wind hist',
         'zonvandaag_mode'=>'zonvandaag percent',
     );

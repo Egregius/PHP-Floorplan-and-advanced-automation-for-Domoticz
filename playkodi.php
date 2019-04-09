@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require_once 'secure/settings.php';
+require 'secure/settings.php';
 $version=116;
 print_r($_REQUEST);
 //telegram(print_r($_REQUEST,true));
@@ -20,7 +20,7 @@ if (isset($_REQUEST['imdbid'])) {
             //telegram('grabfile data '.print_r($data,true));
             if (isset($data['id'])) {
                 store('playkodi', true);
-                shell_exec('python3 secure/lgtv.py -c send-message -a "Starting '.str_replace('nfs://192.168.2.10/volume1/files/', '', $data['file']).'" 192.168.2.27 > /dev/null 2>&1 &');
+                shell_exec('python3 secure/lgtv.py -c send-message -a "Starting '.str_replace('nfs://192.168.2.10/volume1/files/', '', $data['file']).'" '.$lgtvip.' > /dev/null 2>&1 &');
                 kodiplay($data['profile'], $data['mediatype'], $data['id'], $data['file']);
                 store('playkodi', false);
             }
@@ -102,24 +102,24 @@ function kodiplay($profile,$mediatype,$kodiid,$file)
     }
 
     if ($d['lgtv']['s']!='On') {
-        shell_exec('python3 secure/lgtv.py -c on -a a8:23:fe:81:9f:11 192.168.2.27 > /dev/null 2>&1 &');
+        shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
         sw('lgtv', 'On');
         sleep(2);
     }
     for ($k=1;$k<=1000;$k++) {
         if ($profile!='None') {
-            $loadedprofile=@json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+            $loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
             if ($profile!==$loadedprofile['result']['label']) {
                 $profilereply=@kodi('{"jsonrpc":"2.0","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}');
                 sleep(2);
             } else {
                 $startreply=@kodi('{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"'.$file.'"}}}');
                 //telegram('Startreply '.$startreply);
-                $info = @json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Get'.$mediatype.'Details","id":1,"params":['.$kodiid.',["resume"]]}', false, $ctx), true);
+                $info = @json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Get'.$mediatype.'Details","id":1,"params":['.$kodiid.',["resume"]]}', false, $ctx), true);
                 if (!empty($info['result'][$mediatype.'details']['resume']['position'])) {
                     $position=floor((($info['result'][$mediatype.'details']['resume']['position']-90)/$info['result'][$mediatype.'details']['resume']['total'])*100);
                     if ($position>0) {
-                        @file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.Seek","id":1,"params":[1,'.$position.']}', false, $ctx);
+                        @file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.Seek","id":1,"params":[1,'.$position.']}', false, $ctx);
                     }
                 }
                 break;
