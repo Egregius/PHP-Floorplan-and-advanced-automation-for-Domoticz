@@ -691,12 +691,12 @@ if ($home) {
 	</div>';
 
 
-    Dimmer('tobi');
-    Dimmer('zithoek');
-    Dimmer('eettafel');
-    Dimmer('kamer');
-    Dimmer('alex');
-    Dimmer('lichtbadkamer');
+    dimmer('tobi');
+    dimmer('zithoek');
+    dimmer('eettafel');
+    dimmer('kamer');
+    dimmer('alex');
+    dimmer('lichtbadkamer');
     //Schakelaar('tvled','Light');
     Schakelaar('kristal', 'Light');
     Schakelaar('bureel', 'Light');
@@ -736,7 +736,7 @@ if ($home) {
     Thermometer('tobi_temp');
     Thermometer('alex_temp');
     Thermometer('zolder_temp');
-    Blinds('zoldertrap');
+    blinds('zoldertrap');
     if ($d['Weg']['s']>0) {
         Secured('zliving');
         Secured('zkeuken');

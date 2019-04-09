@@ -132,7 +132,7 @@ function past($name)
         return 999999999;
     }
 }
-function Blinds($name)
+function blinds($name)
 {
     global $d;
     echo '
@@ -157,7 +157,7 @@ function Blinds($name)
 	</form>
 </div>';
 }
-function Dimmer($name)
+function dimmer($name)
 {
     global $page,$d;
     echo '

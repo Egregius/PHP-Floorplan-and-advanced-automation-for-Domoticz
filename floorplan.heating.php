@@ -441,7 +441,7 @@ session_start();
     Schakelaar('heater3', 'Fire');
     Schakelaar('heater4', 'Fire');
     //Thermometer('zolder_temp');
-    //Blinds('zoldertrap');
+    //blinds('zoldertrap');
     $Rluifel=$d['luifel']['s'];
     $Rliving=$d['Rliving']['s'];
     $Rbureel=$d['Rbureel']['s'];

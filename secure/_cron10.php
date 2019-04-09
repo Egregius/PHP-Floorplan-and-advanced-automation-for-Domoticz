@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP cron10
- * php version 7.2.15
+ * php version 7.0.33
  *
  * @category Home_Automation
  * @package  Pass2PHP

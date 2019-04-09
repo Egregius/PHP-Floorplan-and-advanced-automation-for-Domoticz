@@ -285,8 +285,8 @@ if ($home) {
             <br>';
     echo '
 	    </div>';
-    Dimmer('zithoek');
-    Dimmer('eettafel');
+    dimmer('zithoek');
+    dimmer('eettafel');
     Schakelaar('jbl', 'Light');
 
 
