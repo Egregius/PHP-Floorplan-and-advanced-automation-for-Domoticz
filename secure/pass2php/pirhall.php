@@ -18,5 +18,7 @@ if ($status=='On'&&$d['auto']['s']) {
         shell_exec('../ios.sh "Beweging Hall" > /dev/null 2>/dev/null &');
         telegram('Beweging hall om '.strftime("%k:%M:%S", TIME), false, 2);
     }
+
     storemode('Weg', TIME);
 }
+lgsql('pir','pirhall',$status);
