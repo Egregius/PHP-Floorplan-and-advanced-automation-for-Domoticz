@@ -23,7 +23,7 @@ td{text-align:right;font-size:1.1em;}
 .blackmedia{top:254px;left:79px;height:585px;width:410px;background-color:#000;}
 .picam1{top:127px;left:445px;}
 .picam2{top:538px;left:210px;}
-.volume{width:36.2px;height:60px;padding:2px 0px 0px 0px!important;}
+.volume{width:33px;height:60px;padding:2px 0px 0px 0px!important;margin:0;}
 .nas{top:120px;left:140px;}
 .leftbuttons{top:130px;left:0px;width:80px;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
