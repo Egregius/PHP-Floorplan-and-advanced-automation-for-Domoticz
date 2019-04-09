@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    include dirname(__DIR__) . '/secure/pass2php/minihall2s.php';
+    include 'pass2php/minihall2s.php';
 } else {
-    include dirname(__DIR__) . '/secure/pass2php/minihall4s.php';
+    include 'pass2php/minihall4s.php';
 }
