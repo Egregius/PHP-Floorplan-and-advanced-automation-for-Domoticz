@@ -101,10 +101,10 @@ session_start();
         header("Location: floorplan.heating.php");
         die("Redirecting to: floorplan.heating.php");
     }
-    if (isset($_REQUEST['Rollers'])) {
-        $name=$_REQUEST['Rollers'];
+    if (isset($_REQUEST['rollers'])) {
+        $name=$_REQUEST['rollers'];
         $stat=$d[$name]['s'];
-        echo '<div id="Luifel" class="fix dimmer" >
+        echo '<div id="luifel" class="fix dimmer" >
 		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==0) {
@@ -204,7 +204,7 @@ session_start();
             die("Redirecting to: floorplan.heating.php");
         } else {
             $name=$_REQUEST['verdieping'];
-            echo '<div id="Luifel" class="fix dimmer" >
+            echo '<div id="luifel" class="fix dimmer" >
 			<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 					<div class="fix z" style="top:15px;left:90px;">';
             echo '<h2>'.$name.'</h2>
@@ -242,10 +242,10 @@ session_start();
             exit;
         }
     }
-    if (isset($_REQUEST['Luifel'])) {
-        $name=$_REQUEST['Luifel'];
+    if (isset($_REQUEST['luifel'])) {
+        $name=$_REQUEST['luifel'];
         $stat=$d[$name]['s'];
-        echo '<div id="Luifel" class="fix dimmer" >
+        echo '<div id="luifel" class="fix dimmer" >
 		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==100) {
@@ -320,7 +320,7 @@ session_start();
     }
     if (isset($_REQUEST['SetSetpoint'])) {
         $name=$_REQUEST['SetSetpoint'];
-        echo '<div id="Luifel" class="fix dimmer" >
+        echo '<div id="luifel" class="fix dimmer" >
 		<form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
 					<input type="hidden" name="Setpoint" value="true" >
 					<h2>'.ucwords($name).'<br/><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
@@ -428,19 +428,19 @@ session_start();
         }
     }
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    Thermometer('buiten_temp');
-    Thermometer('living_temp');
-    Thermometer('badkamer_temp');
-    Thermometer('kamer_temp');
-    Thermometer('tobi_temp');
-    Thermometer('alex_temp');
-    Thermometer('zolder_temp');
-    Schakelaar('GroheRed', 'Plug');
-    Schakelaar('heater1', 'Fan');
-    Schakelaar('heater2', 'Fire');
-    Schakelaar('heater3', 'Fire');
-    Schakelaar('heater4', 'Fire');
-    //Thermometer('zolder_temp');
+    thermometer('buiten_temp');
+    thermometer('living_temp');
+    thermometer('badkamer_temp');
+    thermometer('kamer_temp');
+    thermometer('tobi_temp');
+    thermometer('alex_temp');
+    thermometer('zolder_temp');
+    schakelaar('GroheRed', 'Plug');
+    schakelaar('heater1', 'Fan');
+    schakelaar('heater2', 'Fire');
+    schakelaar('heater3', 'Fire');
+    schakelaar('heater4', 'Fire');
+    //thermometer('zolder_temp');
     //blinds('zoldertrap');
     $Rluifel=$d['luifel']['s'];
     $Rliving=$d['Rliving']['s'];
@@ -451,63 +451,63 @@ session_start();
     $Ralex=$d['Ralex']['s'];
     $RkamerL=$d['RkamerL']['s'];
     $RkamerR=$d['RkamerR']['s'];
-    Luifel('luifel', $Rluifel);
-    Rollers('Rliving', $Rliving);
-    Rollers('Rbureel', $Rbureel);
-    Rollers('RkeukenL', $RkeukenL);
-    Rollers('RkeukenR', $RkeukenR);
-    Rollers('Rtobi', $Rtobi);
-    Rollers('Ralex', $Ralex);
-    Rollers('RkamerL', $RkamerL);
-    Rollers('RkamerR', $RkamerR);
-    //Rollery('luifel',$Rluifel,20,65,220,'PL');
-    Rollery('Rliving', $Rliving, 46, 80, 165, 'P');
-    Rollery('Rbureel', $Rbureel, 0, 208, 43, 'L');
-    Rollery('RkeukenL', $RkeukenL, 128, 475, 44, 'P');
-    Rollery('RkeukenR', $RkeukenR, 179, 475, 44, 'P');
-    Rollery('Rtobi', $Rtobi, 448, 80, 44, 'P');
-    Rollery('Ralex', $Ralex, 568, 80, 44, 'P');
-    Rollery('RkamerL', $RkamerL, 529, 481, 44, 'P');
-    Rollery('RkamerR', $RkamerR, 586, 481, 44, 'P');
+    luifel('luifel', $Rluifel);
+    rollers('Rliving', $Rliving);
+    rollers('Rbureel', $Rbureel);
+    rollers('RkeukenL', $RkeukenL);
+    rollers('RkeukenR', $RkeukenR);
+    rollers('Rtobi', $Rtobi);
+    rollers('Ralex', $Ralex);
+    rollers('RkamerL', $RkamerL);
+    rollers('RkamerR', $RkamerR);
+    //rollery('luifel',$Rluifel,20,65,220,'PL');
+    rollery('Rliving', $Rliving, 46, 80, 165, 'P');
+    rollery('Rbureel', $Rbureel, 0, 208, 43, 'L');
+    rollery('RkeukenL', $RkeukenL, 128, 475, 44, 'P');
+    rollery('RkeukenR', $RkeukenR, 179, 475, 44, 'P');
+    rollery('Rtobi', $Rtobi, 448, 80, 44, 'P');
+    rollery('Ralex', $Ralex, 568, 80, 44, 'P');
+    rollery('RkamerL', $RkamerL, 529, 481, 44, 'P');
+    rollery('RkamerR', $RkamerR, 586, 481, 44, 'P');
     thermostaat('living', 140, 260);
     thermostaat('badkamer', 427, 375);
     thermostaat('tobi', 475, 143);
     thermostaat('alex', 567, 202);
     thermostaat('kamer', 551, 295);
     thermostaat('zolder', 670, 190);
-    Schakelaar('badkamervuur1', 'Fire');
-    Schakelaar('badkamervuur2', 'Fire');
-    Schakelaar('zoldervuur', 'Fire');
+    schakelaar('badkamervuur1', 'Fire');
+    schakelaar('badkamervuur2', 'Fire');
+    schakelaar('zoldervuur', 'Fire');
 
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);
     $Weg=$d['Weg']['s'];
     if ($d['Weg']['s']>0) {
-        Secured('zliving');
-        Secured('zkeuken');
-        Secured('zinkom');
-        Secured('zgarage');
+        secured('zliving');
+        secured('zkeuken');
+        secured('zinkom');
+        secured('zgarage');
     }
     if ($d['Weg']['s']==2) {
-        Secured('zhalla');
-        Secured('zhallb');
+        secured('zhalla');
+        secured('zhallb');
     }
     if ($d['pirliving']['s']=='On') {
-        Motion('zliving');
+        motion('zliving');
     }
     if ($d['pirkeuken']['s']=='On') {
-        Motion('zkeuken');
+        motion('zkeuken');
     }
     if ($d['pirinkom']['s']=='On') {
-        Motion('zinkom');
+        motion('zinkom');
     }
     if ($d['pirgarage']['s']=='On') {
-        Motion('zgarage');
+        motion('zgarage');
     }
     if ($d['pirhall']['s']=='On') {
-        Motion('zhalla');
-        Motion('zhallb');
+        motion('zhalla');
+        motion('zhallb');
     }
     showTimestamp('pirliving', 0);
     showTimestamp('pirkeuken', 0);

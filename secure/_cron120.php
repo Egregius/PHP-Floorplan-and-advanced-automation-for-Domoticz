@@ -716,16 +716,16 @@ if ($d['auto']['s']==true) {
         //if ($tluifel>3600&&$maxluifel<30) {storemode('luifel',1);$luifelauto=1;}
         //elseif ($tluifel>28800) {storemode('luifel',1);$luifelauto=1;}
     }
-    // if ($d['luifel']['m']==0) lg("Luifel: buien=$buien | wind=$wind $windhist | zon:".$d['zon']['s']." | living:".$d['living_temp']['s']." | Tluifel=$tluifel | Luifel:".$d['luifel']['s']." | maxluifel=$maxluifel");
+    // if ($d['luifel']['m']==0) lg("luifel: buien=$buien | wind=$wind $windhist | zon:".$d['zon']['s']." | living:".$d['living_temp']['s']." | Tluifel=$tluifel | luifel:".$d['luifel']['s']." | maxluifel=$maxluifel");
     if ($d['luifel']['s']>$maxluifel&&$d['luifel']['m']==0) {
         if ($maxluifel==0) {
             sl('luifel', 100);
         }
         //else sl('luifel',((100-$maxluifel)+1));
-        //telegram("Luifel ".$maxluifel." dicht: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
+        //telegram("luifel ".$maxluifel." dicht: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
     } elseif ($maxluifel==0&&$d['luifel']['m']==0&&$luifel>0) {
         sl('luifel', 100);
-        //telegram("Luifel volledig dicht: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
+        //telegram("luifel volledig dicht: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
     } elseif ($d['heating']['s']==2
         &&$luifel<$maxluifel
         &&$buien<$maxbuien
@@ -736,7 +736,7 @@ if ($d['auto']['s']==true) {
         &&TIME>strtotime("10:00")
     ) {
         //if ($d['luifel']['m']==0) sl('luifel',((100-$maxluifel)));
-        //telegram("Luifel ".$maxluifel." open: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
+        //telegram("luifel ".$maxluifel." open: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
     } elseif ($d['heating']['s']<2
         &&$luifel<$maxluifel
         &&$buien<$maxbuien
@@ -749,7 +749,7 @@ if ($d['auto']['s']==true) {
         &&TIME>strtotime("10:00")
     ) {
         //if ($d['luifel']['m']==0) sl('luifel',((100-$maxluifel)));
-        //telegram("Luifel ".$maxluifel." open: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
+        //telegram("luifel ".$maxluifel." open: __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel",true);
     } elseif (($buien>$maxbuien
         ||(($d['zon']['s']==0
         ||$d['living_temp']['s']<19)
@@ -757,7 +757,7 @@ if ($d['auto']['s']==true) {
         &&$d['luifel']['s']!=100
     ) {
         sl('luifel', 100);
-        //telegram('Luifel dicht __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel',true);
+        //telegram('luifel dicht __buien=$buien __wind=$wind $dir __zon:$d['zon']['s'] __living:$living_temp __Tluifel=$tluifel',true);
     }
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120

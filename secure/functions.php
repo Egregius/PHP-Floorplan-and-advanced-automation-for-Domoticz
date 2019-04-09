@@ -34,21 +34,12 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
     $d[$row['n']] = $row;
 }
 /**
- * Function resetmanuals: reset modes of devices set to manual.
+ * Function huisslapen
  *
- * @param string $option Name of the cache to store in the database
+ * Switches off everything that should be off while sleeping
  *
  * @return null
  */
-function resetmanuals($option='')
-{
-    if ($option=='Weg') {
-        huisweg();
-    } elseif ($option=='Slapen') {
-        huisslapen();
-    }
-    telegram('resetmanuals');
-}
 function huisslapen()
 {
     global $d,$boseipbuiten;
@@ -77,6 +68,13 @@ function huisslapen()
         }
     }
 }
+/**
+ * Function huisweg
+ *
+ * Switches off everything that should be off while not at home
+ *
+ * @return null
+ */
 function huisweg()
 {
     huisslapen();
@@ -85,6 +83,14 @@ function huisweg()
         storemode($i, 1);
     }
 }
+/**
+ * Function douche
+ *
+ * Calculates the gas and water consumption of the shower, sents a telegram
+ * and resets the gas and water counters
+ *
+ * @return null
+ */
 function douche()
 {
     global $d;
@@ -96,6 +102,17 @@ function douche()
     store('douche', 0);
     storemode('douche', 0);
 }
+/**
+ * Function douchewarn
+ *
+ * Calculates the gas and water consumption of the shower, sents a telegram
+ * and resets the gas and water counters
+ *
+ * @param int $euro current amount of shower costs
+ * @param int $vol  Volume of the notification sound
+ *
+ * @return null
+ */
 function douchewarn($euro,$vol)
 {
     global $boseipbadkamer;
@@ -189,7 +206,7 @@ function idx($name)
         return 0;
     }
 }
-function Schakelaar($name,$kind)
+function schakelaar($name,$kind)
 {
     global $d;
     echo '
@@ -206,7 +223,7 @@ function Schakelaar($name,$kind)
 		</form>
 	</div>';
 }
-function Schakelaar2($name,$kind)
+function schakelaar2($name,$kind)
 {
     global $eendag,$d;
     echo '<div class="fix z1 center '.$name.'" style="width:70px;">
@@ -378,7 +395,7 @@ function kodi($json)
     $result=curl_exec($ch);
     return $result;
 }
-function Thermometer($name)
+function thermometer($name)
 {
     global $d;
     $temp=$d[$name]['s'];
@@ -494,19 +511,19 @@ function showTimestamp($name,$draai)
         </div>';
     }
 }
-function Secured($name)
+function secured($name)
 {
     echo '
             <div class="fix secured '.$name.'">
             </div>';
 }
-function Motion($name)
+function motion($name)
 {
     echo '
             <div class="fix motion '.$name.'">
             </div>';
 }
-function Zwavecancelaction()
+function zwavecancelaction()
 {
     global $domoticzurl;
     file_get_contents(
@@ -527,7 +544,7 @@ function Zwavecancelaction()
         )
     );
 }
-function ZwaveCommand($node,$command)
+function zwaveCommand($node,$command)
 {
     global $domoticzurl;
     $cm=array(
@@ -565,7 +582,7 @@ function ZwaveCommand($node,$command)
         sleep(1);
     }return $result;
 }
-function ControllerBusy($retries)
+function controllerBusy($retries)
 {
     global $domoticzurl;
     for ($k=1;$k<=$retries;$k++) {
@@ -583,7 +600,7 @@ function ControllerBusy($retries)
             break;
         }
         if ($k==$retries) {
-            ZwaveCommand(1, 'Cancel');
+            zwaveCommand(1, 'Cancel');
             break;
         }
         sleep(1);
@@ -688,13 +705,13 @@ function telegram($msg,$silent=true,$to=1)
 '.$msg
     );
 }
-function Luifel($name,$stat)
+function luifel($name,$stat)
 {
     echo '
 	<form method="POST">
-		<a href=\'javascript:navigator_Go("floorplan.heating.php?Luifel='.$name.'");\'>
+		<a href=\'javascript:navigator_Go("floorplan.heating.php?luifel='.$name.'");\'>
 		<div class="fix z '.$name.'">
-			<input type="hidden" name="Luifel" value="'.$name.'"/>';
+			<input type="hidden" name="luifel" value="'.$name.'"/>';
     if ($stat==100) {
         echo '<input type="image" src="/images/arrowgreenup.png" class="i60"/>';
     } elseif ($stat==0) {
@@ -702,7 +719,7 @@ function Luifel($name,$stat)
     } else {
         echo'
 			<input type="image" src="/images/arrowdown.png" class="i60"/>
-			<div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?Luifel='.$name.'\';"><font size="5" color="#CCC">
+			<div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
 				'. (100 - $stat) .'</font>
 			</div>';
     }
@@ -711,14 +728,14 @@ function Luifel($name,$stat)
 		</a>
 	</form>';
 }
-function Rollers($name,$stat)
+function rollers($name,$stat)
 {
     global $d;
     echo '
 	<form method="POST">
-		<a href=\'javascript:navigator_Go("floorplan.heating.php?Rollers='.$name.'");\'>
+		<a href=\'javascript:navigator_Go("floorplan.heating.php?rollers='.$name.'");\'>
 		<div class="fix z '.$name.'">
-			<input type="hidden" name="Rollers" value="'.$name.'"/>';
+			<input type="hidden" name="rollers" value="'.$name.'"/>';
     if ($stat==100) {
         echo '<input type="image" src="/images/arrowgreendown.png" class="i60"/>';
     } elseif ($stat==0) {
@@ -726,7 +743,7 @@ function Rollers($name,$stat)
     } else {
         echo'
 				<input type="image" src="/images/circlegrey.png" class="i60"/>
-				<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?Rollers='.$name.'\';">';
+				<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">';
         if ($d[$name]['m']==2) {
             echo '<font size="5" color="#F00">';
         } elseif ($d[$name]['m']==1) {
@@ -747,7 +764,7 @@ function Rollers($name,$stat)
 		</a>
 	</form>';
 }
-function Rollery($name,$stat,$top,$left,$size,$rotation)
+function rollery($name,$stat,$top,$left,$size,$rotation)
 {
     $stat=100-$stat;
     if ($stat<100) {

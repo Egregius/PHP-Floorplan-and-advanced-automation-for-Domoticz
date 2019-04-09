@@ -320,14 +320,14 @@ if ($home) {
     } else {
         $Rup='arrowup';
     }
-    Rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-    Rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
-    Rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
-    Rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
-    Rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
-    Rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
-    Rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
-    Rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
+    rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
+    rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
+    rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
+    rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
+    rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
+    rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
+    rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
+    rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     echo '
 	    <div class="fix leftbuttons">
 		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
@@ -697,71 +697,71 @@ if ($home) {
     dimmer('kamer');
     dimmer('alex');
     dimmer('lichtbadkamer');
-    //Schakelaar('tvled','Light');
-    Schakelaar('kristal', 'Light');
-    Schakelaar('bureel', 'Light');
-    Schakelaar('inkom', 'Light');
-    Schakelaar('keuken', 'Light');
-    Schakelaar('wasbak', 'Light');
-    Schakelaar('kookplaat', 'Light');
-    Schakelaar('werkblad1', 'Light');
-    Schakelaar('voordeur', 'Light');
-    Schakelaar('hall', 'Light');
-    Schakelaar('garage', 'Light');
-    Schakelaar('zolderg', 'Light');
-    Schakelaar('terras', 'Light');
-    Schakelaar('tuin', 'Light');
-    Schakelaar('zolder', 'Light');
-    Schakelaar('wc', 'Light');
-    Schakelaar('bureeltobi', 'Plug');
-    Schakelaar('tvtobi', 'Plug');
-    Schakelaar('badkamervuur1', 'Fire');
-    Schakelaar('badkamervuur2', 'Fire');
-    Schakelaar('heater1', 'Fan');
-    Schakelaar('heater2', 'Fire');
-    Schakelaar('heater3', 'Fire');
-    Schakelaar('heater4', 'Fire');
-    Schakelaar('diepvries', 'Light');
+    //schakelaar('tvled','Light');
+    schakelaar('kristal', 'Light');
+    schakelaar('bureel', 'Light');
+    schakelaar('inkom', 'Light');
+    schakelaar('keuken', 'Light');
+    schakelaar('wasbak', 'Light');
+    schakelaar('kookplaat', 'Light');
+    schakelaar('werkblad1', 'Light');
+    schakelaar('voordeur', 'Light');
+    schakelaar('hall', 'Light');
+    schakelaar('garage', 'Light');
+    schakelaar('zolderg', 'Light');
+    schakelaar('terras', 'Light');
+    schakelaar('tuin', 'Light');
+    schakelaar('zolder', 'Light');
+    schakelaar('wc', 'Light');
+    schakelaar('bureeltobi', 'Plug');
+    schakelaar('tvtobi', 'Plug');
+    schakelaar('badkamervuur1', 'Fire');
+    schakelaar('badkamervuur2', 'Fire');
+    schakelaar('heater1', 'Fan');
+    schakelaar('heater2', 'Fire');
+    schakelaar('heater3', 'Fire');
+    schakelaar('heater4', 'Fire');
+    schakelaar('diepvries', 'Light');
     if ($d['Weg']['s']==0||$d['poortrf']['s']=='On') {
-        Schakelaar('poortrf', 'Alarm');
+        schakelaar('poortrf', 'Alarm');
     }
     if ($d['Xlight']['s']!='Off') {
-        Schakelaar('Xlight', 'Alarm');
+        schakelaar('Xlight', 'Alarm');
     }
-    Schakelaar('jbl', 'Light');
-    Thermometer('buiten_temp');
-    Thermometer('living_temp');
-    Thermometer('badkamer_temp');
-    Thermometer('kamer_temp');
-    Thermometer('tobi_temp');
-    Thermometer('alex_temp');
-    Thermometer('zolder_temp');
+    schakelaar('jbl', 'Light');
+    thermometer('buiten_temp');
+    thermometer('living_temp');
+    thermometer('badkamer_temp');
+    thermometer('kamer_temp');
+    thermometer('tobi_temp');
+    thermometer('alex_temp');
+    thermometer('zolder_temp');
     blinds('zoldertrap');
     if ($d['Weg']['s']>0) {
-        Secured('zliving');
-        Secured('zkeuken');
-        Secured('zinkom');
-        Secured('zgarage');
+        secured('zliving');
+        secured('zkeuken');
+        secured('zinkom');
+        secured('zgarage');
     }
     if ($d['Weg']['s']==2) {
-        Secured('zhalla');
-        Secured('zhallb');
+        secured('zhalla');
+        secured('zhallb');
     }
     if ($d['pirliving']['s']=='On') {
-        Motion('zliving');
+        motion('zliving');
     }
     if ($d['pirkeuken']['s']=='On') {
-        Motion('zkeuken');
+        motion('zkeuken');
     }
     if ($d['pirinkom']['s']=='On') {
-        Motion('zinkom');
+        motion('zinkom');
     }
     if ($d['pirgarage']['s']=='On') {
-        Motion('zgarage');
+        motion('zgarage');
     }
     if ($d['pirhall']['s']=='On') {
-        Motion('zhalla');
-        Motion('zhallb');
+        motion('zhalla');
+        motion('zhallb');
     }
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);

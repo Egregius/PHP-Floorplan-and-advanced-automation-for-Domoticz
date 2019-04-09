@@ -287,10 +287,10 @@ if ($home) {
 	    </div>';
     dimmer('zithoek');
     dimmer('eettafel');
-    Schakelaar('jbl', 'Light');
+    schakelaar('jbl', 'Light');
 
 
-    Schakelaar('kristal', 'Light');
+    schakelaar('kristal', 'Light');
     if (past('kristal')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:55px;left:154px;width:35px;">
@@ -298,7 +298,7 @@ if ($home) {
         </div>';
     }
 
-    Schakelaar('bureel', 'Light');
+    schakelaar('bureel', 'Light');
     if (past('bureel')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:55px;left:213px;width:35px;">
@@ -306,12 +306,12 @@ if ($home) {
         </div>';
     }
 
-    Schakelaar('keuken', 'Light');
-    Schakelaar('wasbak', 'Light');
-    Schakelaar('kookplaat', 'Light');
-    Schakelaar('werkblad1', 'Light');
+    schakelaar('keuken', 'Light');
+    schakelaar('wasbak', 'Light');
+    schakelaar('kookplaat', 'Light');
+    schakelaar('werkblad1', 'Light');
 
-    Schakelaar('denon', 'denon');
+    schakelaar('denon', 'denon');
     if (past('denon')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:116px;left:99px;width:35px;">
@@ -320,9 +320,9 @@ if ($home) {
     }
 
     if ($d['tv']['s']=='On') {
-        Schakelaar('lgtv', 'lgtv');
+        schakelaar('lgtv', 'lgtv');
     } else {
-        Schakelaar('tv', 'TV');
+        schakelaar('tv', 'TV');
     }
     if (past('lgtv')<$eendag) {
         echo '
@@ -331,7 +331,7 @@ if ($home) {
         </div>';
     }
 
-    Schakelaar('nvidia', 'nvidia');
+    schakelaar('nvidia', 'nvidia');
     if (past('nvidia')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:116px;left:229px;width:35px;">
@@ -360,7 +360,7 @@ if ($home) {
     echo '
         </div>';
 
-    //Schakelaar('kerstboom','Kerstboom');
+    //schakelaar('kerstboom','Kerstboom');
     echo '
         <div class="fix bose">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>

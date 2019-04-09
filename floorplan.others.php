@@ -70,21 +70,21 @@ if ($home) {
 	</div>
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    Rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-    Rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
-    Rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
-    Rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
-    Rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
-    Rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
-    Rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
-    Rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
-    Schakelaar2('auto', 'Alarm');
+    rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
+    rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
+    rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
+    rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
+    rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
+    rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
+    rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
+    rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
+    schakelaar2('auto', 'Alarm');
 
-    Schakelaar2('water', 'Light');
-    Schakelaar2('regenpomp', 'Light');
-    Schakelaar2('zwembadfilter', 'Light');
-    Schakelaar2('zwembadwarmte', 'Light');
-    Schakelaar2('dampkap', 'Light');
+    schakelaar2('water', 'Light');
+    schakelaar2('regenpomp', 'Light');
+    schakelaar2('zwembadfilter', 'Light');
+    schakelaar2('zwembadwarmte', 'Light');
+    schakelaar2('dampkap', 'Light');
 
     echo '
 <div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
@@ -97,30 +97,30 @@ if ($home) {
 ';
 
     if ($d['Weg']['s']>0) {
-        Secured('zliving');
-        Secured('zkeuken');
-        Secured('zinkom');
-        Secured('zgarage');
+        secured('zliving');
+        secured('zkeuken');
+        secured('zinkom');
+        secured('zgarage');
     }
     if ($d['Weg']['s']==2) {
-        Secured('zhalla');
-        Secured('zhallb');
+        secured('zhalla');
+        secured('zhallb');
     }
     if ($d['pirliving']['s']=='On') {
-        Motion('zliving');
+        motion('zliving');
     }
     if ($d['pirkeuken']['s']=='On') {
-        Motion('zkeuken');
+        motion('zkeuken');
     }
     if ($d['pirinkom']['s']=='On') {
-        Motion('zinkom');
+        motion('zinkom');
     }
     if ($d['pirgarage']['s']=='On') {
-        Motion('zgarage');
+        motion('zgarage');
     }
     if ($d['pirhall']['s']=='On') {
-        Motion('zhalla');
-        Motion('zhallb');
+        motion('zhalla');
+        motion('zhallb');
     }
     if ($d['poort']['s']=='Open') {
         echo '<div class="fix poort"></div>';

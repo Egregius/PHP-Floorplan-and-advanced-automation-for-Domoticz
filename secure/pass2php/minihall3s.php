@@ -15,5 +15,4 @@ if ($d['Weg']['s']!=0) {
 if ($d['hall']['s']=='Off') {
     sw('hall', 'On');
 }
-//resetmanuals('Thuis');
 resetsecurity();
