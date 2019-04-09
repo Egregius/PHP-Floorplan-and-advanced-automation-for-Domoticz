@@ -39,7 +39,7 @@ if ($home) {
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
-			<a href=\'javascript:navigator_Go("floorplan.history.php'.(isset($device)?'?device='.$device:'').'");\'>
+			<a href=\'javascript:navigator_Go("floorplan.cache.php");\'>
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
 		</div>
@@ -63,7 +63,7 @@ if ($home) {
         <tr>';
         if (endswith($row['n'], '_set')) {
             echo '
-            <td nowrap>'.$row['n'].'</td>
+            <td>'.$row['n'].'</td>
             <td>'.$row['s'].' °C</td>';
             if ($row['m']==0) {
                 echo '
@@ -73,13 +73,26 @@ if ($home) {
             <td>Manueel</td>';
             }
         } elseif (endswith($row['n'], '_temp')) {
-            echo '
-            <td nowrap>'.$row['n'].'</td>
+            if ($row['n']=='diepvries_temp') {
+                echo  '
+            <td>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+            <td>Set '.number_format($row['m'], 1, ',', '').' °C</td>';
+            } elseif ($row['n']=='buiten_temp') {
+                echo  '
+            <td>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+            <td>'.number_format($row['m'], 0, ',', '').' % Buien</td>';
+            } else {
+                echo '
+            <td>'.$row['n'].'</td>
             <td>'.number_format($row['s'], 1, ',', '').' °C</td>
             <td>'.$row['m'].'</td>';
+            }
+
         } elseif (startswith($row['n'], 'R')) {
             echo '
-            <td nowrap>'.$row['n'].'</td>
+            <td>'.$row['n'].'</td>
             <td>'.$row['s'].'</td>';
             if ($row['m']==0) {
                 echo '
@@ -88,27 +101,32 @@ if ($home) {
                 echo '
             <td>Manueel</td>';
             }
+        } elseif ($row['n']=='zonvandaag') {
+            echo '
+            <td>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' kWh</td>
+            <td>'.number_format($row['m'], 1, ',', '').' % Ref</td>';
         } elseif ($row['n']=='max') {
             echo '
-            <td nowrap>'.$row['n'].'</td>
-            <td nowrap>'.number_format($row['s'], 1, ',', '').' °C</td>
-            <td nowrap>'.number_format($row['m']*100, 0).' % Regen</td>';
+            <td>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+            <td>'.number_format($row['m']*100, 0).' % Regen</td>';
         } elseif ($row['n']=='wind') {
             echo '
-            <td nowrap>'.$row['n'].'</td>
-            <td nowrap>'.number_format($row['s'], 1, ',', '').' km/u</td>';
+            <td>'.$row['n'].'</td>
+            <td>'.number_format($row['s'], 1, ',', '').' km/u</td>';
             $hist=json_decode($row['m']);
             echo '
-            <td nowrap>';
+            <td>';
             foreach ($hist as $i) {
                 echo number_format($i, 1, ',', '').' km/u<br>';
             }
             echo '</td>';
         } else {
             echo '
-            <td nowrap>'.$row['n'].'</td>
-            <td nowrap>'.substr($row['s'], 0, 20).'</td>
-            <td nowrap>'.substr($row['m'], 0, 20).'</td>';
+            <td>'.$row['n'].'</td>
+            <td>'.substr($row['s'], 0, 20).'</td>
+            <td>'.substr($row['m'], 0, 20).'</td>';
         }
         echo '
             <td nowrap>'.strftime("%d-%m %k:%M:%S", $row['t']).'</td>
