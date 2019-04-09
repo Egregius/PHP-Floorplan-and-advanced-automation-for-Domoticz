@@ -9,6 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+require '/var/www/config.php';
+
 $zongarage=500;
 $zonkeuken=45;
 $zoninkom=5;
@@ -353,8 +355,8 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
 }
 function lgcommand($action)
 {
-    global $lgtvip,$lgtvmac;
-    if ($action=='on'&&$d['lgtv']['s']!='On') {
+    global $lgtvip, $lgtvmac;
+    if ($action=='on') {
         shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {
         echo shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
@@ -363,7 +365,7 @@ function lgcommand($action)
 }
 function store($name,$status,$idx=null,$force=true)
 {
-    global $db,$d;
+    global $db, $d;
     $time=TIME;
     if ($force==true) {
         if ($idx>0) {
@@ -381,7 +383,7 @@ function store($name,$status,$idx=null,$force=true)
 }
 function storemode($name,$mode,$time=false)
 {
-    global $db,$username;
+    global $db, $username;
     if ($time==true) {
         $time=TIME;
         $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");

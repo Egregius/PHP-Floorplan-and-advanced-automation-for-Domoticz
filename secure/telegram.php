@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require '/var/www/config.php';
+require_once '/var/www/config.php';
 $silent=true;
 $to=null;
 if (isset($_REQUEST['silent'])) {

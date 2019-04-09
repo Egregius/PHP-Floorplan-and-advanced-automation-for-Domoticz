@@ -44,13 +44,12 @@ if ($home) {
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
 
 
-        if ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='On') {
-            shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
-        } elseif ($_POST['Naam']=='lgtv'&&$_POST['Actie']=='Off') {
-            echo 'yepsie';
-            echo telegram('lgtv off');
-            echo lgcommand('off');
-
+        if ($_POST['Naam']=='lgtv') {
+            if ($_POST['Actie']=='On') {
+                shell_exec('python3 secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
+            } else {
+                shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
+            }
         } else {
             sw($_POST['Naam'], $_POST['Actie']);
         }
