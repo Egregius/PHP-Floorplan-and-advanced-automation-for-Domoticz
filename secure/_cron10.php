@@ -20,6 +20,7 @@ if ($d['pirgarage']['s']=='Off'
     sw('garageled', 'Off');
 } elseif ($d['pirgarage']['s']=='On'
     &&$d['garageled']['s']=='Off'
+    &&$d['garage']['s']=='Off'
     &&$d['auto']['s']
     &&$d['zon']['s']<$zongarage
 ) {

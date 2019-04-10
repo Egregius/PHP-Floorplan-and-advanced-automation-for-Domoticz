@@ -32,6 +32,20 @@ if ($home) {
 	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
+		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.js"></script>
+		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
+		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			var asInitVals = new Array();
+			$(document).ready(function() {
+				$(\'#table\').dataTable(
+				{
+					"bStateSave": true,
+					"bPaginate": false,
+					"order": [[1, "asc" ]]
+				});
+			});
+		</script>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style>
 		    html{width:320px!important;}
@@ -59,12 +73,13 @@ if ($home) {
 		<br>
 		<br>
 	    <div class="fix" style="top:82px;left:0px">
-		<table>';
+		<table id="table">';
     $sql="SELECT *  FROM `devices` ORDER BY t DESC";
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
     }
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        @$x++;
         //print_r($row);
         echo '
         <tr>';
@@ -206,6 +221,23 @@ if ($home) {
                 echo number_format($i, 1, ',', '').' km/u<br>';
             }
             echo '</td>';
+        } elseif ($row['n']=='auto') {
+            echo '
+            <td>'.$row['n'].'</td>';
+            if ($row['s']==0) {
+                echo '
+            <td>Lichten manueel</td>';
+            } elseif ($row['s']==1) {
+                echo '
+            <td>Lichten automatisch</td>';
+            }
+            if ($row['m']==0) {
+                echo '
+            <td>Wintertijd</td>';
+            } elseif ($row['m']==1) {
+                echo '
+            <td>Zomertijd</td>';
+            }
         } else {
             echo '
             <td>'.$row['n'].'</td>
@@ -225,6 +257,10 @@ if ($home) {
     }
     echo '
     </table>
+    <br>
+    <br>
+    '.$x.' variables<br>
+    <br>
     <script type="text/javascript">
         function navigator_Go(url) {window.location.assign(url);}
     </script>';

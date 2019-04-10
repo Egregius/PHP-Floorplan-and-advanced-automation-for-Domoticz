@@ -39,7 +39,7 @@ Water:
 2	1800
 3	7200
 
-auto              s = lichten auto
+auto              s = lichten auto          m = DST
 buiten_temp  s =  temp                  m = buien
 uv                 s =  uv                     m = max ux
 elec               s = moment              m = vandaag
