@@ -56,6 +56,7 @@ if ($home) {
 		    .btnd{width:236px;}
 		    .b4{max-width:155px!important;}
 		    .b3{max-width:320px!important;}
+		    tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;}
         </style>
 	</head>
 	<body>
@@ -75,7 +76,7 @@ if ($home) {
 	    <div class="fix" style="top:82px;left:0px">
 		<table  id="table" cellpadding="2" cellspacing="0">
 		    <thead>
-		        <tr>
+		        <tr class="border_bottom">
 		            <th>Name</th>
 		            <th>S</th>
 		            <th>M</th>
@@ -91,11 +92,11 @@ if ($home) {
         @$x++;
         //print_r($row);
         echo '
-        <tr>';
+        <tr class="border_bottom">';
         if (endswith($row['n'], '_set')) {
             echo '
             <td>'.$row['n'].'</td>
-            <td>'.$row['s'].' °C</td>';
+            <td>'.number_format($row['s'], 1, ',', '').' °C</td>';
             if ($row['m']==0) {
                 echo '
             <td>Auto</td>';
@@ -141,6 +142,16 @@ if ($home) {
                 echo '
             <td>Manueel</td>';
             }
+        } elseif (startswith($row['n'], '8')) {
+            echo '
+            <td>'.$row['n'].'</td>
+            <td></td>
+            <td></td>';
+        } elseif (startswith($row['n'], 'mini')) {
+            echo '
+            <td>'.$row['n'].'</td>
+            <td></td>
+            <td></td>';
         } elseif($row['n']=='luifel') {
             echo '
             <td>'.$row['n'].'</td>';
@@ -270,8 +281,8 @@ if ($home) {
         } elseif ($row['n']=='douche') {
             echo '
             <td>'.$row['n'].'</td>
-            <td>'.$row['s'].' gas</td>
-            <td>'.$row['m'].' water</td>';
+            <td>'.$row['s']*10 .' L gas</td>
+            <td>'.$row['m'].' L water</td>';
         } else {
             echo '
             <td>'.$row['n'].'</td>

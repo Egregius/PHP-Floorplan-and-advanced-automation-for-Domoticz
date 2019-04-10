@@ -9,10 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if (TIME>strtotime('6:00')) {
+if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
     storemode('Ralex', 0);
-}
-if ($status=='Open') {
     $d['raamalex']['s']='Open';
     $d['Ralex']['m']=0;
     include '_rolluiken.php';

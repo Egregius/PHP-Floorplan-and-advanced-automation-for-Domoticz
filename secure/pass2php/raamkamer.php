@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Open'&&TIME>strtotime('5:00')) {
+if ($status=='Open'&&TIME>strtotime('5:00')&&TIME<strtotime('21:00')) {
     storemode('RkamerL', 0);
     storemode('RkamerR', 0);
 }

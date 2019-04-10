@@ -79,7 +79,6 @@ foreach ($xml['Node'] as $node) {
                 }
             }
         }
-
     }
 }
 unset($xml);
@@ -151,9 +150,9 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
             }
         }
     } else {
-        if ($d['zonop']['s']!=false ) {
-            store('zonop', false);
-            $d['zonop']['s']=false;
+        if ($d['auto']['m']!=false ) {
+            storemode('auto', false);
+            $d['auto']['m']=false;
         }
     }
 }
