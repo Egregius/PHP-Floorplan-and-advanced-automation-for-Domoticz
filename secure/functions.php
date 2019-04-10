@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 require '/var/www/config.php';
+//define('TIME', $_SERVER['REQUEST_TIME']);
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt=$db->query("select n,i,s,t,m from devices;");
