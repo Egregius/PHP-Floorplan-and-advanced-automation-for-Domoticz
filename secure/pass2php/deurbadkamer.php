@@ -17,9 +17,9 @@ if ($status=='Open'&&$d['auto']['s']) {
             ${$i}=$d[$i]['s'];
         }
 
-        if (TIME>strtotime('5:00')&&TIME<strtotime('12:00')&&$lichtbadkamer<25&&$d['zon']['s']<200) {
+        if (TIME>strtotime('5:00')&&TIME<strtotime('12:00')&&$lichtbadkamer<25&&$d['zon']['s']<20) {
             sl('lichtbadkamer', 25);
-        } elseif ($lichtbadkamer<18&&$d['zon']['s']<200) {
+        } elseif ($lichtbadkamer<18&&$d['zon']['s']<20) {
             sl('lichtbadkamer', 18);
         }
         if ($bose3=='Off'&&$bose4=='Off') {

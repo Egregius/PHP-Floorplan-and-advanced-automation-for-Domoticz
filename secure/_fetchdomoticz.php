@@ -43,7 +43,13 @@ if ($domoticz) {
             } else {
                 $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
             }
-        } else {
+        } elseif ($name='achterdeur') {
+            if ($dom['Data']=='Open') {
+                $status='Closed';
+            } else {
+                $status='Open';
+            }
+        }else {
             $status=$dom['Data'];
         }
         store($name, $status, $idx, false);
