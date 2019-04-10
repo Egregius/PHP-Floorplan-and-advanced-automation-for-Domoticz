@@ -142,9 +142,13 @@ if ($d['Weg']['s']==0) {
                 ),
                 true
             );
-            if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') {
+            if ($denonmain['ZonePower']['value']=='ON'
+                &&$denonsec['Power']['value']=='OFF'
+            ) {
                 denon('Z2ON');
-            } elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') {
+            } elseif ($denonmain['ZonePower']['value']=='OFF'
+                &&$denonsec['Power']['value']=='ON'
+            ) {
                 denon('Z2OFF');
             }
         }

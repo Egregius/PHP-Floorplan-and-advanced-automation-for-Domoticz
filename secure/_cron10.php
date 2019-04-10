@@ -105,6 +105,9 @@ if (ping($lgtvip)) {
         ) {
             sw('nvidia', 'On');
         }
+        if (pingport($lgtvip,8090) {
+
+        }
     }
 } else {
     sleep(1);
