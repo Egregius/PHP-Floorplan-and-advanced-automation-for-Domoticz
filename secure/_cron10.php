@@ -105,9 +105,7 @@ if (ping($lgtvip)) {
         ) {
             sw('nvidia', 'On');
         }
-        if (pingport($lgtvip,8090) {
 
-        }
     }
 } else {
     sleep(1);
@@ -139,5 +137,12 @@ if (ping($lgtvip)) {
                 sw('kristal', 'Off', true);
             }
         }
+    }
+}
+if ($d['nvidia']['s']=='On') {
+    if (pingport($shieldip,9080)==1) {
+        storemode('nvidia','On');
+    } else {
+        storemode('nvidia','Off');
     }
 }
