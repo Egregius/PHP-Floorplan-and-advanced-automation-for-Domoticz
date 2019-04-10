@@ -13,7 +13,7 @@
 require '/var/www/config.php';
 echo 'Healing Zwave network'.PHP_EOL;
 
-$nodes=json_decode(file_get_contents($domoticzurl.'json.htm?type=openzwavenodes&idx='.$zwaveidx), true);
+$nodes=json_decode(file_get_contents($domoticzurl.'/json.htm?type=openzwavenodes&idx='.$zwaveidx), true);
 if (!empty($nodes['result'])) {
     foreach ($nodes['result'] as $node) {
         $idx=$node['NodeID'];$name=$node['Name'];$state=$node['State'];
@@ -38,7 +38,7 @@ function zwaveNodeNeighbourUpdate($node)
     global $domoticzurl;
     for ($k=1;$k<=5;$k++) {
         sleep(1);
-        $result=file_get_contents($domoticzurl.'ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'reqnnu','node'=>'node'.$node)),),)));
+        $result=file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'reqnnu','node'=>'node'.$node)),),)));
         if ($result=='OK') {
             break;
         }
@@ -51,7 +51,7 @@ function zwaveRefreshNode($node)
     global $domoticzurl;
     for ($k=1;$k<=5;$k++) {
         sleep(1);
-        $result=file_get_contents($domoticzurl.'ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'refreshnode','node'=>'node'.$node)),),)));
+        $result=file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'refreshnode','node'=>'node'.$node)),),)));
         if ($result=='OK') {
             break;
         }
@@ -62,14 +62,14 @@ function zwaveRefreshNode($node)
 function zwavecancelaction()
 {
     global $domoticzurl;
-    file_get_contents($domoticzurl.'ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));
+    file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));
 }
 function zwaveHasnodefailed($node)
 {
     global $domoticzurl;
     for ($k=1;$k<=5;$k++) {
         sleep(1);
-        $result=file_get_contents($domoticzurl.'ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'hnf','node'=>'node'.$node)),),)));
+        $result=file_get_contents($domoticzurl.'/ozwcp/admpost.html', false, stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'hnf','node'=>'node'.$node)),),)));
         if ($result=='OK') {
             break;
         }

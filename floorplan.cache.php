@@ -133,6 +133,23 @@ if ($home) {
             <td>Elec</td>
             <td>'.number_format($row['s'], 0).' W</td>
             <td>'.number_format($row['m'], 1, ',', '').' kWh</td>';
+        } elseif ($row['n']=='civil_twilight') {
+            echo '
+            <td>civil_twilight</td>
+            <td>'.strftime("%k:%M:%S", $row['s']).'</td>
+            <td>'.strftime("%k:%M:%S", $row['m']).'</td>';
+        } elseif ($row['n']=='gcal') {
+            echo '
+            <td>Gcal</td>';
+            if ($row['s']==1) {
+                echo '
+            <td>Tobi Beitem</td>';
+            } else {
+                echo '
+            <td>Tobi Rumbeke</td>';
+            }
+            echo '
+            <td>'.$row['m'].'</td>';
         } elseif ($row['n']=='Weg') {
             echo '
             <td>Weg</td>';
