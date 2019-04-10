@@ -852,11 +852,11 @@ if ($home) {
             <img src="images/Plug_Red.png" width="28px" height="auto" alt=""/>
         </div>';
     }
-
-    if ($d['Usage_bureeltobi']['s']>0) {
+    $tobi=explode(';', $d['kWh_bureeltobi']['s']);
+    if ($tobi[0]>0) {
         echo '
         <div class="fix bureeltobikwh z0">
-            '.round($d['Usage_bureeltobi']['s'], 0).'W
+            '.round($tobi[0], 0).'W
         </div>';
     }
     if ($d['zoldervuur']['s']=='On') {

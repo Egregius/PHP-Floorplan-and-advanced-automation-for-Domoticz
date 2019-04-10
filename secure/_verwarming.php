@@ -438,7 +438,7 @@ if ($difbadkamer<=-1) {
     }
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
-lg('>>>>>>>>>> difzolder = '.$difzolder);
+
 
 if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
     sw(
@@ -448,6 +448,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur1 ON dif = '.$difzolder.' was off for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<=-0.1 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>90 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
     sw(
         'zoldervuur',
@@ -456,6 +457,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur2 ON dif = '.$difzolder.' was off for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<= 0
     && $d['zoldervuur']['s']!="On"
     && past('zoldervuur')>180
@@ -470,6 +472,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur3 ON dif = '.$difzolder.' was off for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>= 0
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>30)
@@ -483,6 +486,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur4 OFF dif = '.$difzolder.' was on for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.3
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>120)
@@ -496,6 +500,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur5 OFF dif = '.$difzolder.' was on for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.5
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>180)
@@ -509,6 +514,7 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         'zoldervuur6 OFF dif = '.$difzolder.' was on for '.
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
+    lg('>>>>>>>>>> difzolder = '.$difzolder);
 }
 /**
  * Function setradiator: calculates the setpoint for the Danfoss thermostat valve

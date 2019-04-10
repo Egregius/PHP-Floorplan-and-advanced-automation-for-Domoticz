@@ -56,7 +56,7 @@ if ($home) {
 		    .btnd{width:236px;}
 		    .b4{max-width:155px!important;}
 		    .b3{max-width:320px!important;}
-		    tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;}
+		    tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
         </style>
 	</head>
 	<body>
@@ -89,7 +89,6 @@ if ($home) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
     }
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        @$x++;
         //print_r($row);
         echo '
         <tr class="border_bottom">';
@@ -298,14 +297,11 @@ if ($home) {
             <td nowrap>'.strftime("%d-%m %H:%M:%S", $row['t']).'</td>
         </tr>';
         }
-        @$count++;
     }
     echo '
         </tbody>
     </table>
     <br>
-    <br>
-    '.$x.' variables<br>
     <br>
     <script type="text/javascript">
         function navigator_Go(url) {window.location.assign(url);}
