@@ -127,6 +127,9 @@ if ($d['Weg']['s']==0) {
             if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
                 storemode('denon', $denonmain['InputFuncSelect']['value']);
             }
+            if ($denonmain['Power']['value']!=$d['denonpower']['s']) {
+                store('denonpower',$denonmain['Power']['value']);
+            }
             $denonsec=json_decode(
                 json_encode(
                     simplexml_load_string(

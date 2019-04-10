@@ -20,4 +20,3 @@ if ($status=="On"&&$d['auto']['s']) {
     }
     storemode('Weg', TIME);
 }
-lgsql('pir',$device,$status);
