@@ -13,6 +13,10 @@ require '/var/www/config.php';
 require 'functions.php';
 if (isset($_REQUEST['fetch'])) {
     echo $d[$_REQUEST['fetch']]['s'];
+} elseif (isset($_REQUEST['s'])) {
+    echo $d[$_REQUEST['s']]['s'];
+} if (isset($_REQUEST['m'])) {
+    echo $d[$_REQUEST['m']]['m'];
 } elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
     if ($_REQUEST['store']=='nas') {
         if ($d['lgtv']['s']=='On') {
