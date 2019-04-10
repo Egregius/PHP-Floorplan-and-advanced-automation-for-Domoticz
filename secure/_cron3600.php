@@ -329,6 +329,6 @@ $db->query("delete from regen where stamp < '$remove'");
 $stmt=$db->query("SELECT count(timestamp) as count FROM `log`");
 $data=$stmt->fetch(PDO::FETCH_ASSOC);
 lg('Count log = '.$data['count']);
-if ($data['count']>100000) {
+if ($data['count']>1000000) {
     $db->query("DELETE FROM `log` ORDER BY timestamp ASC LIMIT 1000");
 }
