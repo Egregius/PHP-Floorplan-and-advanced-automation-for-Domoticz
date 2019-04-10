@@ -280,7 +280,9 @@ function resetsecurity()
     global $d;
     $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
     foreach ($items as $i) {
-        if($d[$i]['s']!='Off') file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
+        if ($d[$i]['s']!='Off') {
+            file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
+        }
     }
     if ($d['sirene']['s']!='Group Off') {
         sw('sirene', 'Off');
@@ -378,11 +380,15 @@ function storemode($name,$mode,$time=false)
 function alert($name,$msg,$ttl,$silent=true,$ios=false)
 {
     global $db;
-    if ($ios) shell_exec('./ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
+    if ($ios) {
+        shell_exec('./ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
+    }
     $time=TIME;
     $stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
     $last=$stmt->fetch(PDO::FETCH_ASSOC);
-    if (isset($last['t'])) $last=$last['t'];
+    if (isset($last['t'])) {
+        $last=$last['t'];
+    }
     if ($last < $time-$ttl) {
         telegram($msg, $silent);
         lg('alert='.$last);
@@ -760,9 +766,13 @@ function rollers($name,$stat)
 				</div>';
     }
     if ($d[$name]['m']==2) {
-        echo '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
+        echo '
+        <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;">
+        </div>';
     } elseif ($d[$name]['m']==1) {
-        echo '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
+        echo '
+        <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;">
+        </div>';
     }
     echo '
 		</div>
@@ -986,12 +996,18 @@ function denontcp($cmd, $x)
 function strafter($string, $substring)
 {
     $pos=strpos($string, $substring);
-    if ($pos===false)return '';
-    else return(substr($string, $pos+strlen($substring)));
+    if ($pos===false) {
+        return '';
+    } else {
+        return(substr($string, $pos+strlen($substring)));
+    }
 }
 function strbefore($string, $substring)
 {
     $pos=strpos($string, $substring);
-    if ($pos===false)return '';
-    else return(substr($string, 0, $pos));
+    if ($pos===false) {
+        return '';
+    } else {
+        return(substr($string, 0, $pos));
+    }
 }

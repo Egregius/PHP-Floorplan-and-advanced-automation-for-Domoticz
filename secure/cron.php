@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-include '/var/www/config.php';
-require __DIR__ . '/functions.php';
+require '/var/www/config.php';
+require 'functions.php';
 if (isset($_REQUEST['rolluiken'])) {
     $username='rolluiken';
     include '_rolluiken.php';
