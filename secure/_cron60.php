@@ -337,15 +337,15 @@ if (TIME>$d['civil_twilight']['s']
     &&TIME<$d['civil_twilight']['m']
 ) {
     echo 'zonop';
-    if ($d['zonop']['s']!=true) {
-        store('zonop', true);
-        $d['zonop']['s']=true;
+    if ($d['auto']['m']!=true) {
+        storemode('auto', true);
+        $d['auto']['m']=true;
     }
 } else {
     echo 'zononder';
-    if ($d['zonop']['s']!=false ) {
-        store('zonop', false);
-        $d['zonop']['s']=false;
+    if ($d['auto']['m']!=false ) {
+        storemode('auto', false);
+        $d['auto']['m']=false;
     }
 }
 /*

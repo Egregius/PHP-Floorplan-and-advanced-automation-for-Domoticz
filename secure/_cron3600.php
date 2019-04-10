@@ -130,9 +130,9 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         );
     }
     if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
-        if ($d['zonop']['s']!=true) {
-            store('zonop', true);
-            $d['zonop']['s']=true;
+        if ($d['auto']['m']!=true) {
+            storemode('auto', true);
+            $d['auto']['m']=true;
         }
         $uv=json_decode(
             shell_exec(

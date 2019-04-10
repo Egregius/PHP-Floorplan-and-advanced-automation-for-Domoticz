@@ -141,6 +141,26 @@ if ($home) {
                 echo '
             <td>Manueel</td>';
             }
+        } elseif($row['n']=='luifel') {
+            echo '
+            <td>'.$row['n'].'</td>';
+            if ($row['s']==0) {
+                echo '
+            <td>Open</td>';
+            } elseif ($row['s']==100) {
+                echo '
+            <td>Gesloten</td>';
+            } else {
+                echo '
+            <td>'.$row['s'].' % Open</td>';
+            }
+            if ($row['m']==0) {
+                echo '
+            <td>Auto</td>';
+            } else {
+                echo '
+            <td>Manueel</td>';
+            }
         } elseif (in_array($row['n'], array('eettafel','zithoek','kamer','tobi','alex','lichtbadkamer'))) {
             echo '
             <td>'.$row['n'].'</td>';
@@ -179,7 +199,7 @@ if ($home) {
         } elseif ($row['n']=='zon') {
             echo '
             <td>Zon</td>
-            <td>'.number_format($row['s'], 0).' W</td>
+            <td>'.number_format($row['s'], 0, ',', '').' W</td>
             <td></td>';
         } elseif ($row['n']=='elec') {
             echo '
@@ -247,6 +267,11 @@ if ($home) {
                 echo '
             <td>Zomertijd</td>';
             }
+        } elseif ($row['n']=='douche') {
+            echo '
+            <td>'.$row['n'].'</td>
+            <td>'.$row['s'].' gas</td>
+            <td>'.$row['m'].' water</td>';
         } else {
             echo '
             <td>'.$row['n'].'</td>

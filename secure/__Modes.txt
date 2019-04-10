@@ -39,13 +39,12 @@ Water:
 2	1800
 3	7200
 
-auto              s = lichten auto          m = DST
+auto              s = lichten auto          m = zonop
 buiten_temp  s =  temp                  m = buien
 uv                 s =  uv                     m = max ux
 elec               s = moment              m = vandaag
 zonvandaag   s = kWh                    m = percent
 Weg              s = modus weg          m = timestamp beweging
-auto              s = modus lichten      m = DST
 max              s = temp                   m = regen
 gcal               s = Tobi Beitem         m = afval
 icon               s = icon                    m = humidity

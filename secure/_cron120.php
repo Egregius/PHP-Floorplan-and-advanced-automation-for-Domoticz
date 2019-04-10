@@ -447,18 +447,15 @@ if ($d['Weg']['s']==2) {//Weg
             ||$d['raamtobi']['s']=='Open'
             ||$d['raamalex']['s']=='Open')
         ) {
-            if (past('timeramen')>43190) {
-                telegram(
-                    'Ramen boven dicht doen, te warm buiten.
-                    Buiten = '.round($d['buiten_temp']['s'], 1).',
-                    kamer = '.$d['kamer_temp']['s'].',
-                    Tobi = '.$d['tobi_temp']['s'].',
-                    Alex = '.$d['alex_temp']['s'],
-                    false,
-                    2
-                );
-                store('timeramen', TIME);
-            }
+            alert(
+                'ramenboven',
+                'Ramen boven dicht doen, te warm buiten.
+                Buiten = '.round($d['buiten_temp']['s'], 1).',
+                kamer = '.$d['kamer_temp']['s'].',
+                Tobi = '.$d['tobi_temp']['s'].',
+                Alex = '.$d['alex_temp']['s'],
+                3600
+            );
         } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
             ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
             ||$d['buiten_temp']['s']<=$d['alex_temp']['s'])
@@ -466,18 +463,15 @@ if ($d['Weg']['s']==2) {//Weg
             ||$d['raamtobi']['s']=='Closed'
             ||$d['raamalex']['s']=='Closed')
         ) {
-            if (past('notify_ramen')>43190) {
-                telegram(
-                    'Ramen boven open doen, te warm binnen.
-                    Buiten = '.round($d['buiten_temp']['s'], 1).',
-                    kamer = '.$d['kamer_temp']['s'].',
-                    Tobi = '.$d['tobi_temp']['s'].',
-                    Alex = '.$d['alex_temp']['s'],
-                    false,
-                    2
-                );
-                store('notify_ramen', TIME);
-            }
+            alert(
+                'ramenboven',
+                'Ramen boven open doen, te warm binnen.
+                Buiten = '.round($d['buiten_temp']['s'], 1).',
+                kamer = '.$d['kamer_temp']['s'].',
+                Tobi = '.$d['tobi_temp']['s'].',
+                Alex = '.$d['alex_temp']['s'],
+                3600
+            );
         }
     } else {
         if (($d['buiten_temp']['s']>$d['kamer_temp']['s']
