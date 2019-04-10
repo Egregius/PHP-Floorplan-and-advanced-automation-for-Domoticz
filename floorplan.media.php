@@ -312,16 +312,16 @@ if ($home) {
     schakelaar('wasbak', 'Light');
     schakelaar('kookplaat', 'Light');
     schakelaar('werkblad1', 'Light');
-    if($d['denonpower']['s']=='ON') {
-        schakelaar('denonpower', 'denon');
-    } else {
-        schakelaar('denon', 'denon');
-    }
-    if (past('denon')<$eendag) {
+    if ($d['denonpower']['s']=='ON') {
         echo '
-        <div class="fix z0 right" style="top:116px;left:99px;width:35px;">
-            '.strftime("%k:%M", $d['denon']['t']).'
-        </div>';
+	<div class="fix denon z1">
+			<input type="image" src="/images/denon_On.png" id="denon"/>
+	</div>';
+    } else {
+        echo '
+	<div class="fix denon z1">
+			<input type="image" src="/images/denon_Off.png" id="denon"/>
+	</div>';
     }
     if ($d['tv']['s']=='On') {
         schakelaar('lgtv', 'lgtv');
@@ -334,12 +334,16 @@ if ($home) {
             '.strftime("%k:%M", $d['lgtv']['t']).'
         </div>';
     }
-    schakelaar('nvidia', 'nvidia');
-    if (past('nvidia')<$eendag) {
+    if ($d['nvidia']['m']=='On') {
         echo '
-        <div class="fix z0 right" style="top:116px;left:229px;width:35px;">
-            '.strftime("%k:%M", $d['nvidia']['t']).'
-        </div>';
+	<div class="fix nvidia z1">
+			<input type="image" src="/images/nvidia_On.png" id="nvidia"/>
+	</div>';
+    } else {
+        echo '
+	<div class="fix nvidia z1">
+			<input type="image" src="/images/nvidia_Off.png" id="nvidia"/>
+	</div>';
     }
     if ($d['nas']['s']=='On') {
         echo '
