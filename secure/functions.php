@@ -278,7 +278,7 @@ function sl($name,$level,$check=false)
 }
 function rgb($name,$hue,$level,$check=false)
 {
-    global $user,$d;
+    global $user,$d,$domoticzurl;
     lg(' (RGB) | '.$user.' =>	'.$name.'	'.$level);
     if ($d[$name]['i']>0) {
         if ($check==false) {
