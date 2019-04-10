@@ -11,7 +11,7 @@
  **/
 $deur=false;
 if ($status=='Open'&&$d['auto']['s']) {
-    if (past('8badkamer8')>10) {
+    if (past('8badkamer-8')>10) {
         $items=array('bose3','bose4','denon','lichtbadkamer','zon');
         foreach ($items as $i) {
             ${$i}=$d[$i]['s'];
@@ -65,7 +65,7 @@ if ($status=='Open'&&$d['auto']['s']) {
     }
     storemode('Weg', TIME);
 } else {
-    if (past('8badkamer8')>10) {
+    if (past('8badkamer-8')>10) {
         if (past('heating')>28800) {
             if (in_array(date('n'), array(4,5,9))) {
                 if ($d['buiten_temp']['s']<12) {
@@ -96,7 +96,7 @@ if ($status=='Open'&&$d['auto']['s']) {
         }
         $d['lichtbadkamer']['s']=25;
         $d['deurbadkamer']['s']='Closed';
-        $d['8badkamer7']['t']=0;
+        $d['8badkamer-7']['t']=0;
         $d['badkamervuur1']['t']=0;
         $d['badkamervuur2']['t']=0;
         require '_verwarming.php';

@@ -21,7 +21,7 @@ if ($d['badkamer_set']['s']>18) {
 douche();
 $d['lichtbadkamer']['s']=25;
 $d['deurbadkamer']['s']='Closed';
-$d['8badkamer7']['t']=0;
+$d['8badkamer-7']['t']=0;
 $d['badkamervuur1']['t']=0;
 $d['badkamervuur2']['t']=0;
 require '_verwarming.php';

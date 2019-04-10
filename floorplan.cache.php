@@ -42,7 +42,7 @@ if ($home) {
 				{
 					"bStateSave": true,
 					"bPaginate": false,
-					"order": [[1, "asc" ]]
+                    "ordering": false
 				});
 			});
 		</script>
@@ -73,7 +73,16 @@ if ($home) {
 		<br>
 		<br>
 	    <div class="fix" style="top:82px;left:0px">
-		<table id="table">';
+		<table  id="table" cellpadding="2" cellspacing="0">
+		    <thead>
+		        <tr>
+		            <th>Name</th>
+		            <th>S</th>
+		            <th>M</th>
+		            <th>Time</th>
+		        </tr>
+		    </thead>
+		    <tbody>';
     $sql="SELECT *  FROM `devices` ORDER BY t DESC";
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
@@ -244,18 +253,19 @@ if ($home) {
             <td>'.substr($row['s'], 0, 20).'</td>
             <td>'.substr($row['m'], 0, 20).'</td>';
         }
-        if ($row['t']<TIME - (86400*7)) {
+        if ($row['t']<TIME - (86400*7*4)) {
             echo '
             <td nowrap>'.strftime("%d-%m-%Y", $row['t']).'</td>
         </tr>';
         } else {
             echo '
-            <td nowrap>'.strftime("%d-%m %k:%M:%S", $row['t']).'</td>
+            <td nowrap>'.strftime("%d-%m %H:%M:%S", $row['t']).'</td>
         </tr>';
         }
         @$count++;
     }
     echo '
+        </tbody>
     </table>
     <br>
     <br>

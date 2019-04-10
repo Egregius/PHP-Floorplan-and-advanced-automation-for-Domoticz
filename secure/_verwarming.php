@@ -315,7 +315,7 @@ if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deu
     ud('badkamer_set', 0, 10);
     $d['badkamer_set']['s']=10.0;
 } elseif ($d['deurbadkamer']['s']=='Closed') {
-    $b7=past('8badkamer7');
+    $b7=past('8badkamer-7');
     if ($d['buiten_temp']['s']<21 && $d['lichtbadkamer']['s']>0 && $d['badkamer_set']['s']!=22.5 && ($b7>900 && $d['heating']['s']>=2 && (TIME>strtotime('5:00') && TIME<strtotime('10:00')))) {
         ud('badkamer_set', 0, 22.5);
         $d['badkamer_set']['s']=22.5;

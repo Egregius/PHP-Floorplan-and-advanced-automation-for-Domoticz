@@ -19,7 +19,7 @@ if ($status=='On') {
         }
         storemode('badkamer_set', 0);
         douche();
-        if (past('8badkamer8')>3) {
+        if (past('8badkamer-8')>3) {
             $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.4:8090/now_playing'))), true);
             if (!empty($nowplaying)) {
                 if (isset($nowplaying['@attributes']['source'])) {
