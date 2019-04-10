@@ -30,7 +30,9 @@ $optParams=array(
     'singleEvents'=>TRUE,
     'timeMin'=>$timeMin
 );
+//echo '<pre>';print_r($service);echo '</pre>';
 $results=$service->events->listEvents($calendarId, $optParams);
+//echo '<pre>';print_r($results);echo '</pre>';
 if (count($results->getItems())>0){
 	foreach($results->getItems() as $event){
 		//echo '<pre>';print_r($event);echo '</pre>';
@@ -97,7 +99,6 @@ if (count($results->getItems())>0){
 					    &&past($place)>300
 					) {
 						lg('GCal OK'.$place);
-
 						storemode($place,2);
 						sl($place,($d[$place]['s']+1));
 					}
