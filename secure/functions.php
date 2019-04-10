@@ -10,24 +10,6 @@
  * @link     https://egregius.be
  **/
 require '/var/www/config.php';
-
-$zongarage=500;
-$zonkeuken=45;
-$zoninkom=5;
-$zonmedia=15;
-//define('time', $_SERVER['REQUEST_TIME']);
-define('TIME', $_SERVER['REQUEST_TIME']);
-
-$timediff=0;
-$Usleep=80000;
-$authenticated=false;
-$home=false;
-$log=true;
-$offline=TIME-300;
-$eendag=TIME-82800;
-$page=basename($_SERVER['PHP_SELF']);
-$homes=array('Guy','Kirby','Tobi');
-
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt=$db->query("select n,i,s,t,m from devices;");

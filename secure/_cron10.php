@@ -13,17 +13,27 @@
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
     &&past('poort')>90
-    &&past('garage')>120
+    &&past('garageled')>120
+    &&$d['garageled']['s']=='On'
+    &&$d['auto']['s']
+) {
+    sw('garageled', 'Off');
+} elseif ($d['pirgarage']['s']=='On'
+    &&$d['garageled']['s']=='Off'
+    &&$d['auto']['s']
+    &&$d['zon']['s']<$zongarage
+) {
+    sw('garageled', 'On');
+}
+
+if ($d['pirgarage']['s']=='Off'
+    &&past('pirgarage')>120
+    &&past('poort')>90
+    &&past('garage')>240
     &&$d['garage']['s']=='On'
     &&$d['auto']['s']
 ) {
     sw('garage', 'Off');
-} elseif ($d['pirgarage']['s']=='On'
-    &&$d['garage']['s']=='Off'
-    &&$d['auto']['s']
-    &&$d['zon']['s']<$zongarage
-) {
-    sw('garage', 'On');
 }
 
 if ($d['pirinkom']['s']=='Off'

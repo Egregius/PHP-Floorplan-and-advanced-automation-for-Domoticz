@@ -10,8 +10,8 @@
  * @link     https://egregius.be
  **/
 if ($status=='On'&&$d['auto']['s']) {
-    if ($d['Weg']['s']==0&&($d['zon']['s']<$zongarage||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off') {
-        sw('garage', 'On');
+    if ($d['Weg']['s']==0&&($d['zon']['s']<$zongarage||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garageled']['s']=='Off') {
+        sw('garageled', 'On');
     }
     if ($d['Weg']['s']>0&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
         sw('sirene', 'On');

@@ -12,6 +12,12 @@
 if ($status=='Off') {
     if ($d['pirgarage']['s']!='Off') {
         store('pirgarage', 'Off');
-        ud('pirgarage', 0, 'Off');
+    }
+    if ($d['Weg']['s']==0&&($d['zon']['s']<$zongarage||TIME<strtotime('9:00')||TIME>strtotime('21:00'))&&$d['garageled']['s']=='Off') {
+        sw('garageled', 'On');
+    }
+} elseif ($status=='On') {
+    if ($d['garageled']['s']=='On') {
+        sw('garageled','Off');
     }
 }
