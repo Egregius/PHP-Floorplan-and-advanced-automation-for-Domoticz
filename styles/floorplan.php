@@ -68,8 +68,9 @@ td{text-align:right;font-size:1.1em;}
 .werkblad1{top:208px;left:434px;}#werkblad1{height:40px;width:auto;}
 .voordeur{top:59px;left:442px;}#voordeur{height:42px;width:auto;}
 .hall{top:410px;left:252px;}#hall{height:50px;width:auto;}
-.garage{top:305px;left:209px;}#garage{height:60px;width:auto;}
-.zolderg{top:315px;left:140px;}#zolderg{height:42px;width:auto;}
+.garage{top:305px;left:190px;}#garage{height:60px;width:auto;}
+.garageled{top:315px;left:268px;}#garageled{height:42px;width:auto;}
+.zolderg{top:315px;left:130px;}#zolderg{height:42px;width:auto;}
 .auto{top:312px;left:299px;}#auto{height:40px;width:auto;}
 .Weg{top:286px;left:410px;}#Weg{height:80px;width:auto;}
 .terras{top:7px;left:16px;}#terras{height:48px;width:auto;}
@@ -87,7 +88,7 @@ td{text-align:right;font-size:1.1em;}
 .bosebadkamer{top:472px;left:340px;}#bosebadkamer{height:50px;width:auto;}
 .bosebuiten{top:252px;left:104px;}#bosebuiten{height:50px;width:auto;}
 .GroheRed{top:186px;left:342px;}#GroheRed{height:16px;width:auto;}
-.poortrf{top:305px;left:310px;}#poortrf{height:60px;width:auto;}
+.poortrf{top:305px;left:318px;}#poortrf{height:60px;width:auto;}
 .Xlight{top:190px;left:330px;}#Xlight{height:80px;width:auto;}
 .frigokwh{top:256px;left:220px;text-align:right;}
 .diepvries{top:256px;left:175px;}#diepvries{height:16px;width:auto;}

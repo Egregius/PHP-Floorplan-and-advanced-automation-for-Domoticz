@@ -715,6 +715,7 @@ if ($home) {
     schakelaar('voordeur', 'Light');
     schakelaar('hall', 'Light');
     schakelaar('garage', 'Light');
+    schakelaar('garageled', 'Light');
     schakelaar('zolderg', 'Light');
     schakelaar('terras', 'Light');
     schakelaar('tuin', 'Light');
