@@ -18,7 +18,7 @@ if($home){
         $_SESSION['refreshrate']=$_REQUEST['refreshrate'];
     }
     if (!isset($_SESSION['refreshrate'])) {
-        $_SESSION['refreshrate']=8;
+        $_SESSION['refreshrate']=6;
         if($local===false&&$udevice=='iPhone')$_SESSION['refreshrate']=2;
     }
     if (isset($_POST['Record'])) {

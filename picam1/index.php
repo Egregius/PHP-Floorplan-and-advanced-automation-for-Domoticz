@@ -1,6 +1,16 @@
-<?php //voordeur-oprit
+<?php
+/**
+ * Pass2PHP
+ * php version 7.3.3-1
+ *
+ * @category Home_Automation
+ * @package  Pass2PHP
+ * @author   Guy Verschuere <guy@egregius.be>
+ * @license  GNU GPLv3
+ * @link     https://egregius.be
+ **/
 require('../secure/settings.php');
-if($home){
+if ($home) {
     //require(dirname(__FILE__) . '/config.php');
     echo '<html><head><title>Voordeur - Oprit</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -21,7 +31,7 @@ if($home){
             $refresh=1000/$_SESSION['refreshrate'];
             $refresh2=$refresh;
         } else {
-            $_SESSION['refreshrate']=8;
+            $_SESSION['refreshrate']=6;
             $refresh=1000/$_SESSION['refreshrate'];
             $refresh2=round(2000/$_SESSION['refreshrate']);
         }
