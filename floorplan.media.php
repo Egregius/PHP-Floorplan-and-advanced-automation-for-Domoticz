@@ -312,7 +312,11 @@ if ($home) {
     schakelaar('wasbak', 'Light');
     schakelaar('kookplaat', 'Light');
     schakelaar('werkblad1', 'Light');
-    schakelaar('denon', 'denon');
+    if($d['denonpower']['s']=='ON') {
+        schakelaar('denonpower', 'denon');
+    } else {
+        schakelaar('denon', 'denon');
+    }
     if (past('denon')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:116px;left:99px;width:35px;">

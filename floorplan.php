@@ -380,7 +380,7 @@ if ($home) {
     echo '
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
-    echo $d['denon']['s']=='On'?'On':'Off';
+    echo $d['denonpower']['s']=='ON'?'On':'Off';
     echo '.png" class="i70">
             </a>
             <br/>
@@ -400,7 +400,7 @@ if ($home) {
             <br/>
 		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
 		        <img src="/images/nvidia_';
-    echo $d['nvidia']['s']=='On'?'On':'Off';
+    echo $d['nvidia']['m']=='On'?'On':'Off';
     echo '.png" class="i48">
 		    </a>
 		    <br/>
