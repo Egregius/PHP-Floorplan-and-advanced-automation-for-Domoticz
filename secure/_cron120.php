@@ -760,7 +760,7 @@ if ($d['auto']['s']==true) {
     ) {
         double('poortrf', 'Off');
     }
-    if ($d['zonop']) {
+    if ($d['auto']['m']) {
         if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>75) {
             if ($d['jbl']['s']!='Off') {
                 sw('jbl', 'Off');

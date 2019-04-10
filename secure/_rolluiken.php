@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 $msg='Rolluiken__';
-$items=array(
+/*$items=array(
     'Rliving',
     'Rbureel',
     'RkeukenL',
@@ -24,7 +24,6 @@ $items=array(
     'raamtobi',
     'raamalex',
     'raamkamer',
-    'zonop',
     'buiten_temp',
     'living_temp',
     'tobi_temp',
@@ -48,7 +47,7 @@ $items=array(
 foreach ($items as $i) {
     ${'T'.$i}=past($i);
 }
-
+*/
 $boven=array(
     'Rtobi',
     'Ralex',
@@ -156,9 +155,9 @@ if ($d['heating']['s']>=2) {
             }
             foreach ($boven as $i) {
                 if ($i=='RkamerL'||$i=='RkamerR') {
-                    $temp=${substr($i, 1, -1).'_temp'};
+                    $temp=$d[substr($i, 1, -1).'_temp']['s'];
                 } else {
-                    $temp=${substr($i, 1).'_temp'};
+                    $temp=$d[substr($i, 1).'_temp']['s'];
                 }
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0);
