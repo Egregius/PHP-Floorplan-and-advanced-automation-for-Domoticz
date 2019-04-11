@@ -141,8 +141,12 @@ if (ping($lgtvip)) {
 }
 if ($d['nvidia']['s']=='On') {
     if (pingport($shieldip,9080)==1) {
-        storemode('nvidia', 'On');
+        if ($d['nvidia']['m']=='Off') {
+            storemode('nvidia', 'On');
+        }
     } else {
-        storemode('nvidia', 'Off');
+        if ($d['nvidia']['m']=='On') {
+            storemode('nvidia', 'Off');
+        }
     }
 }
