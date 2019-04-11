@@ -28,11 +28,15 @@ if (isset($_REQUEST['gpio'])) {
         }
     } elseif ($gpio==19) {
         if ($_REQUEST['action']=='on') {
-            store('poort', 'Closed');
+            if ($d['poort']['s']!='Closed') {
+                store('poort', 'Closed');
+            }
         } else {
-            store('poort', 'Open');
-            if ($d['Weg']['s']==0&&$d['zon']['s']<500&&$d['garage']['s']=='Off') {
-                sw('garage', 'On');
+            if ($d['poort']['s']!='Open') {
+                store('poort', 'Open');
+            }
+            if ($d['Weg']['s']==0&&$d['zon']['s']<100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
+                sw('garageled', 'On');
             } elseif ($d['Weg']>0&&$d['auto']['s']&&past('Weg')>178&&$d['poortrf']['s']=='Off') {
                 storemode('Weg', TIME);
                 sw('sirene', 'On');
