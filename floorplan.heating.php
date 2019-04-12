@@ -42,7 +42,10 @@ if ($home) {
 		</style>
 	</head>';
     //echo '<div class="fix z1" style="top:20px;left:100px;background-color:#000;text-align:left;font-size:15;padding:20px;z-index:1000;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    if (isset($_POST['Naam'])&&isset($_POST['Actie'])&&!isset($_POST['Setpoint'])) {
+    if (isset($_POST['Naam'])
+        &&isset($_POST['Actie'])
+        &&!isset($_POST['Setpoint'])
+    ) {
         sw($_POST['Naam'], $_POST['Actie']);
         usleep(80000);
         if ($_POST['Naam']=='GroheRed') {
@@ -71,7 +74,10 @@ if ($home) {
         header("Location: floorplan.heating.php");
         die("Redirecting to: floorplan.heating.php");
     }
-    if (isset($_POST['Roller'])&&isset($_POST['Naam'])&&!isset($_POST['mode'])) {
+    if (isset($_POST['Roller'])
+        &&isset($_POST['Naam'])
+        &&!isset($_POST['mode'])
+    ) {
         if (isset($_POST['Rollerlevelon_x'])) {
             sl($_POST['Naam'], 100, 'Roller');
             if ($d[$_POST['Naam']]['m']==0) {
@@ -96,8 +102,12 @@ if ($home) {
             }
         }
         usleep($Usleep);
-        header("Location: floorplan.heating.php");die("Redirecting to: floorplan.heating.php");
-    } elseif (isset($_POST['Roller'])&&isset($_POST['Naam'])&&isset($_POST['mode'])) {
+        header("Location: floorplan.heating.php");
+        die("Redirecting to: floorplan.heating.php");
+    } elseif (isset($_POST['Roller'])
+        &&isset($_POST['Naam'])
+        &&isset($_POST['mode'])
+    ) {
         if ($_POST['mode']=='Manueel') {
             storemode($_POST['Naam'], 1);
         } else {
@@ -230,6 +240,7 @@ if ($home) {
         } else {
             $name=$_REQUEST['verdieping'];
             echo '
+    <body>
         <div id="luifel" class="fix dimmer" >
 			<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 					<div class="fix z" style="top:15px;left:90px;">';
@@ -250,16 +261,19 @@ if ($home) {
 					<div class="fix z" style="top:210px;left:10px;">';
             $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
             foreach ($levels as $level) {
-                echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                echo '
+                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
+                            '.$level.'
+                        </button>';
             }
             echo '
-                    <br>
-                    <br>
-                    <br>';
+                        <br>
+                        <br>
+                        <br>';
             $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
             foreach ($levels as $level) {
                 echo '
-                    <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
             echo '
 					</div>
@@ -271,7 +285,9 @@ if ($home) {
 				</div>
 			</div>
 		</body>
-		<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
+		<script type="text/javascript">
+		    function navigator_Go(url){window.location.assign(url);}
+		</script>
 	</html>';
             exit;
         }
@@ -280,8 +296,9 @@ if ($home) {
         $name=$_REQUEST['luifel'];
         $stat=$d[$name]['s'];
         echo '
+    <body>
         <div id="luifel" class="fix dimmer" >
-		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
+		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==100) {
             echo '<h2>'.$name.' dicht</h2>';
@@ -289,8 +306,8 @@ if ($home) {
             echo '<h2>'.$name.' '.(100-$stat).'% Open</h2>';
         }
         echo '
-					<input type="hidden" name="Naam" value="'.$name.'">
-					<input type="hidden" name="Roller" value="true">
+					<input type="hidden" name="Naam" value="'.$name.'"/>
+					<input type="hidden" name="Roller" value="true"/>
 				</div>
 				<div class="fix z" style="top:100px;left:70px;">
 					<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreendown.png" class="i90"/>
@@ -305,14 +322,17 @@ if ($home) {
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
         $levels=array(0,25,30,32,34,36,38,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,64,66,68,70,75,95,96,97,98,99,100);
-
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
-                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.(100-$level).'</button>';
+                    <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">
+                        '.(100-$level).'
+                    </button>';
             } else {
                 echo '
-                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.(100-$level).'</button>';
+                    <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
+                        '.(100-$level).'
+                    </button>';
             }
         }
         echo '
@@ -332,7 +352,8 @@ if ($home) {
     if (isset($_REQUEST['heating'])) {
         if (!isset($_POST['confirm'])) {
             echo '
-		<div id="message" class="fix confirm">
+    <body>
+        <div id="message" class="fix confirm">
 			<form method="post">
 				<input type="hidden" name="heating" value="true"/>
 				<input type="submit" name="confirm" value="Gas/Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"/><br>
@@ -362,6 +383,7 @@ if ($home) {
     if (isset($_REQUEST['SetSetpoint'])) {
         $name=$_REQUEST['SetSetpoint'];
         echo '
+    <body>
         <div id="luifel" class="fix dimmer" >
 		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
                 <input type="hidden" name="Setpoint" value="true" >
@@ -440,7 +462,7 @@ if ($home) {
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
     echo $d['denonpower']['s']=='ON'?'On':'Off';
-    echo '.png" class="i70">
+    echo '.png" class="i70"/>
             </a>
             <br/>
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
@@ -454,7 +476,7 @@ if ($home) {
     } else {
         echo 'TV_Off';
     }
-    echo '.png" class="i60">
+    echo '.png" class="i60"/>
             </a>
             <br/>
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
