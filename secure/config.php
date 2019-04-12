@@ -15,6 +15,10 @@
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 date_default_timezone_set('Europe/Brussels');
+if (!defined('TIME')) {
+    define('TIME', $_SERVER['REQUEST_TIME']);
+}
+$page=basename($_SERVER['PHP_SELF']);
 
 $domoticzurl='http://127.0.0.1:8080';
 $denonurl='192.168.2.6';
@@ -45,3 +49,6 @@ $calendarIdMirom='dsjknfaia2dg8obe8eol046vm4@group.calendar.google.com';
 $calendarIdTobi='email@gmail.com';
 $calendarIdVerlof='otheremail@gmail.com';
 
+$telegrambot='123456789:ABCD-eFGhI-JKfMqICiJs8q9A_3YIr9irxI';
+$telegramchatid1=12345678;
+$telegramchatid2=23456789;
