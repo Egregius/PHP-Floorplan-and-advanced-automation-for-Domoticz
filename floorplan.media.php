@@ -406,7 +406,7 @@ if ($home) {
     }
     //echo '<pre><div align="left">';print_r($_REQUEST);echo '</div></pre>';
     if ($d['lgtv']['s']=='On') {
-        $lgsource=trim(shell_exec('python3 secure/lgtv.py -c get-input 192.168.2.27'));
+        $lgsource=trim(shell_exec('python3 secure/lgtv.py -c get-input '.$lgtvip));
         if ($lgsource=='com.webos.app.hdmi2') {
             $current=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
             //print_r($current);

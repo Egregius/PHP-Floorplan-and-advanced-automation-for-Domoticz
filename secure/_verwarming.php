@@ -412,9 +412,9 @@ if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deu
 }
 
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-if (isset($device)&&$device=='badkamer_temp') {
+//if (isset($device)&&$device=='badkamer_temp') {
     //lg('>>>>>>>>>> difbadkamer = '.$difbadkamer.' badkamer_temp='.$d['badkamer_temp']['s'].' badkamer_set='.$d['badkamer_set']['s']);
-}
+//}
 if ($difbadkamer<=-1) {
     if ($d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
         sw('badkamervuur1', 'On');
@@ -438,7 +438,6 @@ if ($difbadkamer<=-1) {
     }
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
-
 
 if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
     sw(

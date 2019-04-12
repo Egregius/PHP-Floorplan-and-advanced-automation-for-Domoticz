@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On'&&$d['auto']['s']) {
-    if ($d['Weg']['s']==0&&$d['denon']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
                 sw('keuken', 'On');

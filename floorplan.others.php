@@ -86,7 +86,9 @@ if ($home) {
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     schakelaar2('auto', 'Alarm');
-
+    schakelaar('tv', 'TV');
+    schakelaar('nvidia', 'nvidia');
+    schakelaar('denon', 'denon');
     schakelaar2('water', 'Light');
     schakelaar2('regenpomp', 'Light');
     schakelaar2('zwembadfilter', 'Light');
@@ -95,7 +97,7 @@ if ($home) {
 
     echo '
 <div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
-<div class="fix z1 center" style="top:100px;left:170px;">
+<div class="fix z1 center" style="top:20px;left:130px;">
 '.($d['gcal']['s']==true?'Tobi: Beitem':'Tobi: Rumbeke').'<br>
 </div>
 <div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>
