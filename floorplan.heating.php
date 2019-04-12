@@ -40,8 +40,7 @@ session_start();
 			.btn{font-size:25;padding:15px;width:100px;height:35px;}
 			.mode{font-size:25;padding:15px;width:155px;height:50px;}
 		</style>
-	</head>
-	<body>';
+	</head>';
     //echo '<div class="fix z1" style="top:20px;left:100px;background-color:#000;text-align:left;font-size:15;padding:20px;z-index:1000;"><pre>';print_r($_REQUEST);echo '</pre></div>';
     if (isset($_POST['Naam'])&&isset($_POST['Actie'])&&!isset($_POST['Setpoint'])) {
         sw($_POST['Naam'], $_POST['Actie']);
@@ -112,66 +111,73 @@ session_start();
         $name=$_REQUEST['rollers'];
         $stat=$d[$name]['s'];
         echo '
-    <div id="luifel" class="fix dimmer" >
-		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
-				<div class="fix z" style="top:15px;left:90px;">';
+    <body>
+        <div id="luifel" class="fix dimmer" >
+            <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
+                    <div class="fix z" style="top:15px;left:90px;">';
         if ($stat==0) {
-            echo '<h2>'.$name.' dicht</h2>';
+            echo '
+                        <h2>'.$name.' dicht</h2>';
         } else {
-            echo '<h2>'.$name.' '.$stat.'% Dicht</h2>';
+            echo '
+                        <h2>'.$name.' '.$stat.'% Dicht</h2>';
         }
         echo '
-					<input type="hidden" name="Naam" value="'.$name.'">
-					<input type="hidden" name="Roller" value="true">
-				</div>
-				<div class="fix z" style="top:100px;left:70px;">
-					<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90"/>
-				</div>
-				<div class="fix z" style="top:130px;left:200px;">
-					<input type="submit" name="mode" value ="';
+                        <input type="hidden" name="Naam" value="'.$name.'">
+                        <input type="hidden" name="Roller" value="true">
+                    </div>
+                    <div class="fix z" style="top:100px;left:70px;">
+                        <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90"/>
+                    </div>
+                    <div class="fix z" style="top:130px;left:200px;">
+                        <input type="submit" name="mode" value ="';
         echo $d[$name]['m']==0?'Manueel':'Auto';
         echo '" class="btn i90"/>
-				</div>
-				<div class="fix z" style="top:100px;left:330px;">
-					<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90"/>
-				</div>
-				<div class="fix z" style="top:210px;left:10px;">';
+                    </div>
+                    <div class="fix z" style="top:100px;left:330px;">
+                        <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90"/>
+                    </div>
+                    <div class="fix z" style="top:210px;left:10px;">';
         $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
-                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
+                        <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
             } else {
                 echo '
-                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
         }
         echo '
-                <br>
-                <br>
-                <br>';
+                        <br>
+                        <br>
+                        <br>';
         $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
-                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
+                        <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">
+                            '.$level.'
+                        </button>';
             } else {
                 echo '
-                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
+                            '.$level.'
+                        </button>';
             }
         }
             echo '
-				</div>
-			</form>
-			<div class="fix z" style="top:5px;left:5px;">
-			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px"/>
-			    </a>
-			</div>
-		</div>
-	</body>
-	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
-</html>';
+                    </div>
+                </form>
+                <div class="fix z" style="top:5px;left:5px;">
+                    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+                        <img src="/images/close.png" width="72px" height="72px"/>
+                    </a>
+                </div>
+            </div>
+        </body>
+        <script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
+    </html>';
         exit;
     }
     if (isset($_REQUEST['verdieping'])) {
@@ -273,7 +279,8 @@ session_start();
     if (isset($_REQUEST['luifel'])) {
         $name=$_REQUEST['luifel'];
         $stat=$d[$name]['s'];
-        echo '<div id="luifel" class="fix dimmer" >
+        echo '
+        <div id="luifel" class="fix dimmer" >
 		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==100) {
@@ -301,15 +308,21 @@ session_start();
 
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
-                echo '<button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.(100-$level).'</button>';
+                echo '
+                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.(100-$level).'</button>';
             } else {
-                echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.(100-$level).'</button>';
+                echo '
+                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.(100-$level).'</button>';
             }
         }
         echo '
 				</div>
 			</form>
-			<div class="fix z" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.heating.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px"/>
+			    </a>
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
@@ -348,17 +361,21 @@ session_start();
     }
     if (isset($_REQUEST['SetSetpoint'])) {
         $name=$_REQUEST['SetSetpoint'];
-        echo '<div id="luifel" class="fix dimmer" >
-		<form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
-					<input type="hidden" name="Setpoint" value="true" >
-					<h2>'.ucwords($name).'<br/><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
-					<div class="fix z" style="top:210px;left:10px;">';
+        echo '
+        <div id="luifel" class="fix dimmer" >
+		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
+                <input type="hidden" name="Setpoint" value="true" >
+                <h2>'.ucwords($name).'<br/><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
+                <div class="fix z" style="top:210px;left:10px;">';
         if ($d[$name.'_set']['m']==0) {
-            echo '<input type="submit" name="resetauto" value="Auto" class="dimlevel dimlevela" style="width:182px;">';
+            echo '
+                    <input type="submit" name="resetauto" value="Auto" class="dimlevel dimlevela" style="width:182px;">';
         } else {
-            echo '<input type="submit" name="resetauto" value="Auto" class="dimlevel" style="width:182px;">';
+            echo '
+                    <input type="submit" name="resetauto" value="Auto" class="dimlevel" style="width:182px;">';
         }
-        echo '		<input type="hidden" name="Naam" value="'.$name.'">';
+        echo '
+                    <input type="hidden" name="Naam" value="'.$name.'">';
         if ($name=='living'||$name=='badkamer') {
             $temps=array(15,15.5,16,16.5,17,17.5,18,18.5,19,19.2,19.5,19.7,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22);
         } elseif ($name=='zolder') {
@@ -377,44 +394,57 @@ session_start();
 					<input type="submit" name="Actie" value="'.$temp.'"/ class="dimlevel dimlevela">';
             } else {
                 echo '
-						<input type="submit" class="dimlevel" name="Actie" value="'.$temp.'"/>';
+					<input type="submit" class="dimlevel" name="Actie" value="'.$temp.'"/>';
             }
         }
         echo '
 					</div>
 				</form>
-			<div class="fix z" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.heating.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px"/>
+			    </a>
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
 </html>';
         exit;
     }
-    echo '<body class="floorplan">
-	<div class="fix clock">
-		<a href=\'javascript:navigator_Go("floorplan.heating.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
-	</div>
-	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
-	<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
-    <div class="fix leftbuttons">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+    echo '
+    <body class="floorplan">
+        <div class="fix clock">
+            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
+        </div>
+        <div class="fix z1" style="top:5px;left:5px;">
+            <a href=\'javascript:navigator_Go("floorplan.php");\'>
+                <img src="/images/close.png" width="72px" height="72px"/>
+            </a>
+        </div>
+        <div class="fix z1" style="top:290px;left:415px;">
+            <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'>
+                <img src="/images/close.png" width="72px" height="72px"/>
+            </a>
+        </div>
+        <div class="fix leftbuttons">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
     echo $d['denonpower']['s']=='ON'?'On':'Off';
     echo '.png" class="i70">
             </a>
             <br/>
-		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-		        <img src="/images/';
+            <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+                <img src="/images/';
     if ($d['tv']['s']=='On') {
         if ($d['lgtv']['s']=='On') {
             echo 'lgtv_On';
@@ -427,24 +457,29 @@ session_start();
     echo '.png" class="i60">
             </a>
             <br/>
-		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-		        <img src="/images/nvidia_';
+            <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+                <img src="/images/nvidia_';
     echo $d['nvidia']['m']=='On'?'On':'Off';
     echo '.png" class="i48">
-		    </a>
-		    <br/>
+            </a>
+            <br/>
         </div>
-	<div class="fix" style="top:290px;left:90px;width:300px">
-		<a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">Beneden</a>
-		<a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">Boven</a>
-	</div>
-	<div class="fix center zon">';
+        <div class="fix" style="top:290px;left:90px;width:300px">
+            <a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">
+                Beneden
+            </a>
+            <a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">
+                Boven
+            </a>
+        </div>
+        <div class="fix center zon">';
     echo '
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: '.$d['buiten_temp']['m'].'
             </a>
             <br>';
-    echo 'Hum:'.round($d['icon']['m'], 0).'%
+    echo '
+            Hum:'.round($d['icon']['m'], 0).'%
             <br>';
 
     echo number_format($d['wind']['s'], 1, ',', '').'km/u';
@@ -459,7 +494,8 @@ session_start();
             '.strftime("%k:%M", $d['civil_twilight']['m']).'
             <br>
             <br>';
-    echo 'UV: ';
+    echo '
+            UV: ';
     if ($d['uv']['s']<2) {
         echo '
             <font color="#99EE00">
