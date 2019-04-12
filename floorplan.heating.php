@@ -375,9 +375,25 @@ session_start();
 	</div>
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
 	<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
-	<div class="fix leftbuttons"><br><br><br><br><br><br><br><br><br>
-		<a href=\'javascript:navigator_Go("floorplan.media.php");\'><img src="/images/denon_';echo $d['denon']['s']=='On'?'On':'Off';echo '.png" class="i70"></a><br/>
-		<a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'><img src="/images/';
+    <div class="fix leftbuttons">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+            <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+                <img src="/images/denon_';
+    echo $d['denonpower']['s']=='ON'?'On':'Off';
+    echo '.png" class="i70">
+            </a>
+            <br/>
+		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+		        <img src="/images/';
     if ($d['tv']['s']=='On') {
         if ($d['lgtv']['s']=='On') {
             echo 'lgtv_On';
@@ -387,9 +403,16 @@ session_start();
     } else {
         echo 'TV_Off';
     }
-    echo '.png" class="i60"></a><br/>
-		<a href=\'javascript:navigator_Go("floorplan.media.php");\'><img src="/images/nvidia_';echo $d['nvidia']['s']=='On'?'On':'Off';echo '.png" class="i48"></a><br/>
-	</div>
+    echo '.png" class="i60">
+            </a>
+            <br/>
+		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+		        <img src="/images/nvidia_';
+    echo $d['nvidia']['m']=='On'?'On':'Off';
+    echo '.png" class="i48">
+		    </a>
+		    <br/>
+        </div>
 	<div class="fix" style="top:290px;left:90px;width:300px">
 		<a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">Beneden</a>
 		<a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">Boven</a>
