@@ -12,7 +12,7 @@
 $start=microtime(true);
 require 'secure/settings.php';
 if ($home) {
-session_start();
+    session_start();
     if (!isset($_SESSION['referer'])) {
         $_SESSION['referer']='floorplan.heating.php';
     }
@@ -24,14 +24,14 @@ session_start();
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
-	echo '
+    if ($udevice=='iPhone') {
+        echo '
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+    } elseif ($udevice=='iPad') {
+        echo '
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+    }
+    echo '
 	    <link rel="icon" type="image/png" href="images/heating.png"/>
 		<link rel="shortcut icon" href="images/heating.png"/>
 		<link rel="apple-touch-icon" href="images/heating.png"/>
@@ -543,7 +543,7 @@ session_start();
 
     echo '
 	    </div>';
-	if (!empty($d['icon']['s'])) {
+    if (!empty($d['icon']['s'])) {
         if ($udevice=='Mac') {
             echo '
         <div class="fix weather">
@@ -735,89 +735,94 @@ session_start();
 			        </td>
 			        <td width="65px">
                         <form method="POST">
-                            <input type="hidden" name="Schakel" value="true">';
+                            <input type="hidden" name="Schakel" value="true"/>';
     if ($d['brander']['s']=='Off') {
         echo '
-                            <input type="hidden" name="Actie" value="On">
-                            <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">';
+                            <input type="hidden" name="Actie" value="On"/>
+                            <input type="hidden" name="Naam" value="brander"/>
+                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>';
     } else {
         echo'
-                            <input type="hidden" name="Actie" value="Off">
-                            <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">';
+                            <input type="hidden" name="Actie" value="Off"/>
+                            <input type="hidden" name="Naam" value="brander"/>
+                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto"/>';
     }
     echo '
 	                    </form>
-				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">
-				    Brander<br>
-				    '.convertToHours(past('brander')).'
-				</td>
-			</tr>
-			<tr>';
+                    </td>
+                    <td align="left" height="60" width="80px" style="line-height:18px">
+                        Brander<br>
+                        '.convertToHours(past('brander')).'
+                    </td>
+                </tr>
+                <tr>';
     if ($d['heatingauto']['s']=='Off') {
         echo '
-			<td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>
-			<td width="65px">
-				<form method="POST">
-				<input type="hidden" name="Schakel" value="true">
-				<input type="hidden" name="Actie" value="On">
-				<input type="hidden" name="Naam" value="heatingauto">
-				<input type="image" src="images/Fire_Off.png" height="48px" width="auto">&nbsp;
-				</form>
-			</td>
-		';
+                    <td align="right" height="60" width="100px" style="line-height:18px">
+                        Manueel
+                    </td>
+                    <td width="65px">
+                        <form method="POST">
+                            <input type="hidden" name="Schakel" value="true"/>
+                            <input type="hidden" name="Actie" value="On"/>
+                            <input type="hidden" name="Naam" value="heatingauto"/>
+                            <input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>&nbsp;
+                        </form>
+                    </td>';
     } else {
         echo '
-			<td align="right" height="60" width="100px" style="line-height:18px">Automatisch</td>
-			<td width="65px">
-				<form method="POST">
-				<input type="hidden" name="Schakel" value="true">
-				<input type="hidden" name="Actie" value="Off">
-				<input type="hidden" name="Naam" value="heatingauto">
-				<input type="image" src="images/Fire_On.png" height="48px" width="auto">&nbsp;
-				</form>
-			</td>
-		';
+                    <td align="right" height="60" width="100px" style="line-height:18px">
+                        Automatisch
+                    </td>
+                    <td width="65px">
+                        <form method="POST">
+                            <input type="hidden" name="Schakel" value="true"/>
+                            <input type="hidden" name="Actie" value="Off"/>
+                            <input type="hidden" name="Naam" value="heatingauto"/>
+                            <input type="image" src="images/Fire_On.png" height="48px" width="auto"/>&nbsp;
+                        </form>
+                    </td>';
     }
     echo '
-			<td width="65px">
-				<form method="POST">
-					<input type="hidden" name="heating" value="true">';
+                    <td width="65px">
+                        <form method="POST">
+                            <input type="hidden" name="heating" value="true"/>';
     if ($d['heating']['s']==0) {
         echo '
-	&nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">
-				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">Neutral</td>';
+                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>
+                    </td>
+                    <td align="left" height="60" width="80px" style="line-height:18px">
+                        Neutral
+                    </td>';
     } elseif ($d['heating']['s']==1) {
         echo '
-	&nbsp;<input type="image" src="images/Cooling.png" height="48px" width="auto">
-				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">Cooling</td>';
+                        &nbsp;<input type="image" src="images/Cooling.png" height="48px" width="auto"/>
+                    </td>
+                    <td align="left" height="60" width="80px" style="line-height:18px">
+                        Cooling
+                    </td>';
     } elseif ($d['heating']['s']==2) {
         echo '
-	&nbsp;<input type="image" src="images/Elec.png" height="40px" width="auto">
-				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">Elec</td>';
+                        &nbsp;<input type="image" src="images/Elec.png" height="40px" width="auto"/>
+                    </td>
+                    <td align="left" height="60" width="80px" style="line-height:18px">
+                        Elec
+                    </td>';
     } elseif ($d['heating']['s']==3) {
         echo '
-	&nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">
-				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">Gas/Elec</td>';
+                        &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto"/>
+                    </td>
+                    <td align="left" height="60" width="80px" style="line-height:18px">
+                        Gas/Elec
+                    </td>';
     }
-
     echo '
-			</tr>
-			</form>
-		</table>';
-
-    echo '
-		<script type="text/javascript">
+                </tr>
+            </form>
+        </table>
+        <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
-			setTimeout("window.location.href=window.location.href;",';
-    echo $local===true?'3950':'15000';
-    echo ');
+			setTimeout("window.location.href=window.location.href;",'.($local===true?'3950':'15000').')
 		</script>';
 }
 function setpoint($name,$top,$left,$rotation)
@@ -836,4 +841,6 @@ function setpoint($name,$top,$left,$rotation)
     }
 }
 ?>
-</body></html>
+
+    </body>
+</html>
