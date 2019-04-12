@@ -663,72 +663,99 @@ session_start();
     showTimestamp('achterdeur', 270);
     showTimestamp('poort', 90);
     if ($d['poort']['s']=='Open') {
-        echo '<div class="fix poort"></div>';
+        echo '
+        <div class="fix poort">
+        </div>';
     }
     if ($d['achterdeur']['s']=='Open') {
-        echo '<div class="fix achterdeur"></div>';
+        echo '
+        <div class="fix achterdeur">
+        </div>';
     }
     if ($d['raamliving']['s']=='Open') {
-        echo '<div class="fix raamliving"></div>';
+        echo '
+        <div class="fix raamliving">
+        </div>';
     }
     if ($d['raamtobi']['s']=='Open') {
-        echo '<div class="fix raamtobi"></div>';
+        echo '
+        <div class="fix raamtobi">
+        </div>';
     }
     if ($d['raamalex']['s']=='Open') {
-        echo '<div class="fix raamalex"></div>';
+        echo '
+        <div class="fix raamalex">
+        </div>';
     }
     if ($d['raamkamer']['s']=='Open') {
-        echo '<div class="fix raamkamer"></div>';
+        echo '
+        <div class="fix raamkamer">
+        </div>';
     }
     if ($d['deurbadkamer']['s']=='Open') {
-        echo '<div class="fix deurbadkamer"></div>';
+        echo '
+        <div class="fix deurbadkamer">
+        </div>';
     }
     if ($d['raamhall']['s']=='Open') {
-        echo '<div class="fix raamhall"></div>
-';
+        echo '
+        <div class="fix raamhall">
+        </div>';
     }
-    echo '<div class="fix floorplanstats">'.$udevice.' | '.$ipaddress;
-    echo ' | '.number_format(((microtime(true)-$start)*1000), 3);
-    echo '</div>
-    </div></div><div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60"/></a></div>';
-    $bigdif=$d['heating']['m'];
-    echo '<div class="fix divsetpoints z">
-	<table class="tablesetpoints">
-		<tr>
-			<td align="right" height="60" width="100px"></td>
-			<td width="65px">';
-    if ($bigdif>0) {
-        echo '<font color="red">';
-    } elseif ($bigdif<0) {
-        echo '<font color="blue">';
-    } else {
-        echo '<font>';
-    }
-    echo number_format($bigdif, 1, ',', '').'
-			</font>
-			</td>
-		';
     echo '
-			<td width="65px">
-				<form method="POST">
-					<input type="hidden" name="Schakel" value="true">';
+        <div class="fix floorplanstats">
+            '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3).'
+        </div>
+        <div class="fix floorplan2icon">
+            <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
+                <img src="/images/plus.png" class="i60"/>
+            </a>
+        </div>';
+    $bigdif=$d['heating']['m'];
+    echo '
+        <div class="fix divsetpoints z">
+            <table class="tablesetpoints">
+                <tr>
+                    <td align="right" height="60" width="100px">
+                    </td>
+                    <td width="65px">';
+    if ($bigdif>0) {
+        echo '
+                        <font color="red">';
+    } elseif ($bigdif<0) {
+        echo '
+                        <font color="blue">';
+    } else {
+        echo '
+                        <font>';
+    }
+    echo '
+                            '.number_format($bigdif, 1, ',', '').'
+            			</font>
+			        </td>
+			        <td width="65px">
+                        <form method="POST">
+                            <input type="hidden" name="Schakel" value="true">';
     if ($d['brander']['s']=='Off') {
         echo '
-	<input type="hidden" name="Actie" value="On">
-	<input type="hidden" name="Naam" value="brander">
-	&nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">';
+                            <input type="hidden" name="Actie" value="On">
+                            <input type="hidden" name="Naam" value="brander">
+                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">';
     } else {
         echo'
-	<input type="hidden" name="Actie" value="Off">
-	<input type="hidden" name="Naam" value="brander">
-	&nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">';
+                            <input type="hidden" name="Actie" value="Off">
+                            <input type="hidden" name="Naam" value="brander">
+                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">';
     }
     echo '
-	</form>
+	                    </form>
 				</td>
-				<td align="left" height="60" width="80px" style="line-height:18px">Brander<br>'.convertToHours(past('brander')).'</td>
+				<td align="left" height="60" width="80px" style="line-height:18px">
+				    Brander<br>
+				    '.convertToHours(past('brander')).'
+				</td>
 			</tr>
-					<tr>';
+			<tr>';
     if ($d['heatingauto']['s']=='Off') {
         echo '
 			<td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>
@@ -797,11 +824,15 @@ function setpoint($name,$top,$left,$rotation)
 {
     global $d;
     if ($rotation==270) {
-        echo '<div class="fix stamp r270" style="top:'.$top.'px;left:'.$left.'px;text-align:right;">'.round($d[$name]['s'], 1).'</div>
-	';
+        echo '
+        <div class="fix stamp r270" style="top:'.$top.'px;left:'.$left.'px;text-align:right;">
+            '.round($d[$name]['s'], 1).'
+        </div>';
     } elseif ($rotation==90) {
-        echo '<div class="fix stamp r90" style="top:'.$top.'px;left:'.$left.'px;text-align:left;">'.round($d[$name]['s'], 1).'</div>
-	';
+        echo '
+        <div class="fix stamp r90" style="top:'.$top.'px;left:'.$left.'px;text-align:left;">
+            '.round($d[$name]['s'], 1).'
+        </div>';
     }
 }
 ?>
