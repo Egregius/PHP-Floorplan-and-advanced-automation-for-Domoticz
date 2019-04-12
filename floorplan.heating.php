@@ -111,7 +111,8 @@ session_start();
     if (isset($_REQUEST['rollers'])) {
         $name=$_REQUEST['rollers'];
         $stat=$d[$name]['s'];
-        echo '<div id="luifel" class="fix dimmer" >
+        echo '
+    <div id="luifel" class="fix dimmer" >
 		<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==0) {
@@ -138,24 +139,35 @@ session_start();
         $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
-                echo '<button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
+                echo '
+                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
             } else {
-                echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                echo '
+                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
         }
-        echo '<br><br><br>';
+        echo '
+                <br>
+                <br>
+                <br>';
         $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
-                echo '<button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
+                echo '
+                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
             } else {
-                echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                echo '
+                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
         }
             echo '
 				</div>
 			</form>
-			<div class="fix z" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.heating.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px"/>
+			    </a>
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
@@ -211,7 +223,8 @@ session_start();
             die("Redirecting to: floorplan.heating.php");
         } else {
             $name=$_REQUEST['verdieping'];
-            echo '<div id="luifel" class="fix dimmer" >
+            echo '
+        <div id="luifel" class="fix dimmer" >
 			<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 					<div class="fix z" style="top:15px;left:90px;">';
             echo '<h2>'.$name.'</h2>
@@ -233,15 +246,23 @@ session_start();
             foreach ($levels as $level) {
                 echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
-            echo '<br><br><br>';
+            echo '
+                    <br>
+                    <br>
+                    <br>';
             $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
             foreach ($levels as $level) {
-                echo '<button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
+                echo '
+                    <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
             echo '
 					</div>
 				</form>
-				<div class="fix z" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.heating.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
+				<div class="fix z" style="top:5px;left:5px;">
+				    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+				        <img src="/images/close.png" width="72px" height="72px"/>
+				    </a>
+				</div>
 			</div>
 		</body>
 		<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
@@ -417,44 +438,90 @@ session_start();
 		<a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">Beneden</a>
 		<a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">Boven</a>
 	</div>
-	<div class="fix center zon">
-		Verbruik:<br>';
-    if ($d['elec']['s']>5000) {
-        echo '
-		<font color="red">'.$d['elec']['s'].' W</font><br>';
-    } elseif ($d['elec']['s']>1000) {
-        echo '
-		<font color="orange">'.$d['elec']['s'].' W</font><br>';
-    } else {
-        echo '
-		'.$d['elec']['s'].' W<br>';
-    }
+	<div class="fix center zon">';
+    echo '
+            <a href=\'javascript:navigator_Go("regen.php");\'>
+                Buien: '.$d['buiten_temp']['m'].'
+            </a>
+            <br>';
+    echo 'Hum:'.round($d['icon']['m'], 0).'%
+            <br>';
 
-    if ($d['elec']['m']>13.7) {
+    echo number_format($d['wind']['s'], 1, ',', '').'km/u';
+
+    echo '
+            <br>
+            <br>
+            <img src="images/sunrise.png"/>
+            <br>
+            '.strftime("%k:%M", $d['civil_twilight']['s']).'
+            <br>
+            '.strftime("%k:%M", $d['civil_twilight']['m']).'
+            <br>
+            <br>';
+    echo 'UV: ';
+    if ($d['uv']['s']<2) {
         echo '
-		<font color="red">'.$d['elec']['m'].' kWh</font><br>';
-    } elseif ($d['elec']['m']>10) {
+            <font color="#99EE00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=2&&$d['uv']['s']<4) {
         echo '
-		<font color="orange">'.$d['elec']['m'].' kWh</font><br>';
-    } else {
-        echo $d['elec']['m'].'
-		kWh<br>';
+            <font color="#99CC00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=4&&$d['uv']['s']<6) {
+        echo '
+            <font color="#FFCC00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=6&&$d['uv']['s']<8) {
+        echo '
+            <font color="#FF6600">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=8) {
+        echo '
+            <font color="#FF2200">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    }
+    echo '
+            <br>max:';
+    if ($d['uv']['m']<2) {
+        echo '
+            <font color="#99EE00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=2&&$d['uv']['s']<4) {
+        echo '
+            <font color="#99CC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=4&&$d['uv']['s']<6) {
+        echo '
+            <font color="#FFCC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=6&&$d['uv']['s']<8) {
+        echo '
+            <font color="#FF6600">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=8) {
+        echo '
+            <font color="#FF2200">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
     }
 
     echo '
-		Zon:<br>
-		'.$d['zon']['s'].' W<br>
-		'.$d['zonvandaag']['s'].' kWh<br>';
-    if ($d['buiten_temp']['m']>0) {
-        echo '<a href=\'javascript:navigator_Go("regen.php");\'>Buien: '.$d['buiten_temp']['m'].'</a><br>';
-    }
-
-    echo '<br/><br/>'.strftime("%k:%M", $d['civil_twilight']['s']).'<br/>'.strftime("%k:%M", $d['civil_twilight']['m']).'</div>';
-    if (!empty($d['icon']['s'])) {
+	    </div>';
+	if (!empty($d['icon']['s'])) {
         if ($udevice=='Mac') {
-            echo '<div class="fix weather"><a href="https://darksky.net/details/50.893,3.1125/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" ><img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/></a></div>';
+            echo '
+        <div class="fix weather">
+            <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+            </a>
+        </div>';
         } else {
-            echo '<div class="fix weather"><a href=\'javascript:navigator_Go("https://darksky.net/details/50.893,3.1125/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'><img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/></a></div>';
+            echo '
+        <div class="fix weather">
+            <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+            </a>
+        </div>';
         }
     }
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
