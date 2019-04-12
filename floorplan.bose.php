@@ -21,21 +21,22 @@ if ($home) {
     } else {
         $bose=3;//Living
     }
-    echo '<html><head>
+    echo '<html>
+    <head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
-	echo '
+    if ($udevice=='iPhone') {
+        echo '
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+    } elseif ($udevice=='iPad') {
+        echo '
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+    }
+    echo '
 	    <meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">
@@ -54,6 +55,10 @@ if ($home) {
     if (isset($_REQUEST['power'])) {
         bosekey("POWER", 0, $bose);
         sw('bose'.$bose);
+        if ($bose==3) {
+            sw('bose4', 'Off');
+            sw('bose5', 'Off');
+        }
     } elseif (isset($_REQUEST['prev'])) {
         bosekey("PREV_TRACK", 0, $bose);
     } elseif (isset($_REQUEST['next'])) {
@@ -77,20 +82,30 @@ if ($home) {
 
 
     $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-    echo '<body>
-	<div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.bose'.$bose.'.php");\'>'.strftime("%k:%M:%S", TIME).'</a></div>
-	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("'.$_SESSION['referer'].'");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
-
-	';
+    echo '
+    <body>
+        <div class="fix clock">
+            <a href=\'javascript:navigator_Go("floorplan.bose'.$bose.'.php");\'>
+                '.strftime("%k:%M:%S", TIME).'
+            </a>
+        </div>
+        <div class="fix z1" style="top:5px;left:5px;">
+            <a href=\'javascript:navigator_Go("'.$_SESSION['referer'].'");\'>
+                <img src="/images/close.png" width="72px" height="72px"/>
+            </a>
+        </div>';
 
     $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
-            echo '<div class="fix blackmedia" >
-					<form method="POST">';
+            echo '
+        <div class="fix blackmedia" >
+			<form method="POST">';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
-                  echo '<h3>STANDBY</h3>';
-                  echo '<button type="submit" name="power" value="power" class="btn b1">Power</button>';
+                 echo '
+                <h3>STANDBY</h3>';
+                 echo '
+                <button type="submit" name="power" value="power" class="btn b1">Power</button>';
             } else {
 
                   $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
@@ -102,9 +117,11 @@ if ($home) {
                 foreach ($levels as $k) {
                     if ($k>=0&&$k<=80) {
                         if ($k==$cv) {
-                            echo '<button type="submit" name="volume" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
+                            echo '
+                <button type="submit" name="volume" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
                         } else {
-                            echo '<button type="submit" name="volume" value="'.$k.'" class="btn volume">'.$k.'</button>';
+                            echo '
+                <button type="submit" name="volume" value="'.$k.'" class="btn volume">'.$k.'</button>';
                         }
                     }
                 }
@@ -112,35 +129,49 @@ if ($home) {
                 $levels=array(-9,-8,-7,-6,-5,-4,-3,-2,-1,0);
                 foreach ($levels as $k) {
                     if ($k==$bass) {
-                        echo '<button type="submit" name="bass" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
+                        echo '
+                <button type="submit" name="bass" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
                     } else {
-                        echo '<button type="submit" name="bass" value="'.$k.'" class="btn volume">'.$k.'</button>';
+                        echo '
+                <button type="submit" name="bass" value="'.$k.'" class="btn volume">'.$k.'</button>';
                     }
                 }
 
                 if ($nowplaying['@attributes']['source']=='SPOTIFY') {
-                    echo '<h4>Spotify</h4>';
+                    echo '
+                <h4>Spotify</h4>';
                     if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
-                        echo '<h4>'.$nowplaying['artist'].'<br>';
+                        echo '
+                <h4>'.$nowplaying['artist'].'<br>';
                     }
                     if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
                         echo $nowplaying['track'];
                     }
-                    echo '</h4>';
+                    echo '
+                </h4>';
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
-					<img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/><br><br>
-					<button type="submit" name="prev" class="btn b2">Prev</button>
-					<button type="submit" name="next" class="btn b2">Next</button>
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/>
+                <br>
+                <br>
+                <button type="submit" name="prev" class="btn b2">Prev</button>
+                <button type="submit" name="next" class="btn b2">Next</button>
 					';
                     }
                 } elseif ($nowplaying['@attributes']['source']=='TUNEIN') {
-                    echo '<h4>Internet Radio</h4>';
-                    echo '<h4>'.$nowplaying['stationName'].'</h4>';
+                    echo '
+                <h4>Internet Radio</h4>';
+                    echo '
+                <h4>'.$nowplaying['stationName'].'</h4>';
                     echo $nowplaying['artist'];
-                    echo '<br><img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/><br><br>';
+                    echo '
+                <br>
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/>
+                <br>
+                <br>';
                 } else {
-                    echo '<h3>'.$nowplaying['@attributes']['source'].'</h3>';
+                    echo '
+                <h3>'.$nowplaying['@attributes']['source'].'</h3>';
                 }
 
                 //echo '<div style="text-align:left;"><pre>';print_r($nowplaying);echo '</pre></div>';
@@ -150,21 +181,26 @@ if ($home) {
                             $x=1;
                     foreach ($i as $j) {
                         //print_r($j);
-                        echo '<button type="submit" name="preset" class="btn b2" value="'.$j['@attributes']['id'].'">'.$j['@attributes']['id'].'. '.str_replace(', selected by Egregius', '', $j['ContentItem']['itemName']).'</button>';
+                        echo '
+                <button type="submit" name="preset" class="btn b2" value="'.$j['@attributes']['id'].'">'.$j['@attributes']['id'].'. '.str_replace(', selected by Egregius', '', $j['ContentItem']['itemName']).'</button>';
                         if ($x%2==0) {
                             echo '<br>';
                         }
                         $x++;
                     }
                 }
-                echo '<br><br><button type="submit" name="power" value="power" class="btn b1">Power</button>';
+                echo '
+                <br>
+                <br>
+                <button type="submit" name="power" value="power" class="btn b1">Power</button>';
             }
             echo '
-					</form>
-				</div>';
+            </form>
+        </div>';
         }
     }
-    echo '<script type="text/javascript">
+    echo '
+        <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 			setTimeout("window.location.href=window.location.href;",10000);
 		</script>';
@@ -183,4 +219,6 @@ function setStop()
     keyPress("STOP");
 }
 ?>
-</body></html>
+
+    </body>
+</html>

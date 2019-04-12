@@ -840,7 +840,7 @@ if ($home) {
             '.$d['diepvries_temp']['s'].'°C
         </div>'
      : '
-         <div id="diepvries z0" class="fix diepvries_temp">
+        <div id="diepvries z0" class="fix diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
         </div>';
 
@@ -870,20 +870,20 @@ if ($home) {
     }
     echo '
         </div>
-    </div>
-    <div class="fix floorplanstats">'.
-        $udevice.' | '.
-        $ipaddress.' | '.
-        number_format(((microtime(true)-$start)*1000), 3).'</div>';
-    echo '<script type="text/javascript">
-			function navigator_Go(url) {window.location.assign(url);}
-			setTimeout("window.location.href=window.location.href;",'.
+        <div class="fix floorplanstats">
+            '.$udevice.' | '.
+            $ipaddress.' | '.
+            number_format(((microtime(true)-$start)*1000), 3).'
+        </div>';
+    echo '
+        <script type="text/javascript">
+            function navigator_Go(url) {window.location.assign(url);}
+            setTimeout("window.location.href=window.location.href;",'.
             ($local===true?'3950':'14950').');
-		</script>';
+        </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
 
-        </div>
     </body>
 </html>
