@@ -156,49 +156,53 @@ function blinds($name)
 {
     global $d;
     echo '
-	<div class="fix z '.$name.'">
-		<form method="POST">
-			<input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
-			<input type="hidden" name="Naam" value="'.$name.'"/>
-			<input type="hidden" name="Actie" value="Off"/>';
+        <div class="fix z '.$name.'">
+            <form method="POST">
+                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
+                <input type="hidden" name="Naam" value="'.$name.'"/>
+                <input type="hidden" name="Actie" value="Off"/>';
     echo $d[$name]['s']=='Closed'
-    ?'<input type="image" src="/images/arrowgreenup.png" class="i48"/>'
-    :'<input type="image" src="/images/arrowup.png" class="i48"/>';
+    ?'
+                <input type="image" src="/images/arrowgreenup.png" class="i48"/>'
+    :'
+                <input type="image" src="/images/arrowup.png" class="i48"/>';
     echo '
-		</form><br/>
-	<form method="POST">
-		<input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
-		<input type="hidden" name="Naam" value="'.$name.'"/>
-		<input type="hidden" name="Actie" value="On"/>';
+            </form><br/>
+            <form method="POST">
+                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
+                <input type="hidden" name="Naam" value="'.$name.'"/>
+                <input type="hidden" name="Actie" value="On"/>';
     echo $d[$name]['s']=='Open'
-    ?'<input type="image" src="/images/arrowgreendown.png" class="i48"/>'
-    :'<input type="image" src="/images/arrowdown.png" class="i48"/>';
+    ?'
+                <input type="image" src="/images/arrowgreendown.png" class="i48"/>'
+    :'
+                <input type="image" src="/images/arrowdown.png" class="i48"/>';
     echo '
-	</form>
-</div>';
+            </form>
+        </div>';
 }
 function dimmer($name)
 {
     global $page,$d;
     echo '
-	<form method="POST">
-		<a href="'.$page.'?setdimmer='.$name.'">
-		<div class="fix z '.$name.'">
-			<input type="hidden" name="setdimmer" value="'.$name.'"/>';
+        <form method="POST">
+            <a href="'.$page.'?setdimmer='.$name.'">
+                <div class="fix z '.$name.'">
+                    <input type="hidden" name="setdimmer" value="'.$name.'"/>';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			<input type="image" src="/images/Light_Off.png" class="i70"/>';
+			        <input type="image" src="/images/Light_Off.png" class="i70"/>';
     } else {
         echo'
-			<input type="image" src="/images/Light_On.png" class="i70"/>
-			<div class="fix center dimmerlevel">
-				'.$d[$name]['s'].'
-			</div>';
+                    <input type="image" src="/images/Light_On.png" class="i70"/>
+                    <div class="fix center dimmerlevel">
+                        '.$d[$name]['s'].'
+                    </div>';
     }
     echo '
-		</div>
-		</a>
-	</form>';
+		        </div>
+            </a>
+        </form>';
 }
 function idx($name)
 {
@@ -213,18 +217,18 @@ function schakelaar($name,$kind)
 {
     global $d;
     echo '
-	<div class="fix '.preg_replace('/\s/', '', $name).' z1">
-		<form method="POST">
-			<input type="hidden" name="Naam" value="'.$name.'"/>';
+        <div class="fix '.preg_replace('/\s/', '', $name).' z1">
+            <form method="POST">
+                <input type="hidden" name="Naam" value="'.$name.'"/>';
     echo $d[$name]['s']=='Off'?'
-			<input type="hidden" name="Actie" value="On"/>
-			<input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'"/>'
+                <input type="hidden" name="Actie" value="On"/>
+                <input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'"/>'
     :'
-			<input type="hidden" name="Actie" value="Off">
-			<input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'"/>';
+                <input type="hidden" name="Actie" value="Off">
+                <input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'"/>';
     echo '
-		</form>
-	</div>';
+            </form>
+        </div>';
 }
 function schakelaar2($name,$kind)
 {
@@ -441,16 +445,16 @@ function thermometer($name)
         $dcolor='00F';
     }
     echo '
-	<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'>
-		<div class="fix '.$name.'" >
-			<div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
-			</div>
-			<img src="/images/temp.png" height="100px" width="auto"/>
-			<div class="fix center" style="top:73px;left:5px;width:30px;">
-				'.number_format($temp, 1, ',', '').'
-			</div>
-		</div>
-	</a>';
+        <a href=\'javascript:navigator_Go("temp.php?sensor=998");\'>
+            <div class="fix '.$name.'" >
+                <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
+                </div>
+                <img src="/images/temp.png" height="100px" width="auto"/>
+                <div class="fix center" style="top:73px;left:5px;width:30px;">
+                    '.number_format($temp, 1, ',', '').'
+                </div>
+            </div>
+        </a>';
 }
 function thermostaat($name,$top,$left)
 {

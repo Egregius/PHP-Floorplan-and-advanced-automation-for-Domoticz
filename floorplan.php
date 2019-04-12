@@ -24,14 +24,14 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-	    echo '
+    if ($udevice=='iPhone') {
+        echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-	    echo '
+    } elseif ($udevice=='iPad') {
+        echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
-	echo '
+    }
+    echo '
 	    <link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
@@ -206,7 +206,7 @@ if ($home) {
             sl($_POST['Naam'], $_POST['dimlevel']);
             storemode($_POST['Naam'], 0);
         }
-         usleep(100000);
+        usleep(100000);
         header("Location: floorplan.php");
         die("Redirecting to: floorplan.php");
     }
@@ -473,7 +473,7 @@ if ($home) {
     }
 
     echo '
-	</div>';
+	    </div>';
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -607,97 +607,100 @@ if ($home) {
         $zonvandaagcolor='#CCCCCC';
     }
     echo '
-	<div class="fix verbruik"><a href=\'javascript:navigator_Go("https://verbruik.egregius.be/dag.php?Guy=on");\'>
-		<table>
-			<tr>
-				<td>Elec:</td>
-				<td><font color="'.$verbruikcolor.'">'.$d['elec']['s'].' W</font></td>
-				<td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
-			</tr>';
+        <div class="fix verbruik">
+            <a href=\'javascript:navigator_Go("https://verbruik.egregius.be/dag.php?Guy=on");\'>
+            <table>
+                    <tr>
+                        <td>Elec:</td>
+                        <td><font color="'.$verbruikcolor.'">'.$d['elec']['s'].' W</font></td>
+                        <td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
+                    </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
         echo'
-			<tr>
-				<td>Zon:</td>
-				<td><font color="'.$zoncolor.'">'.$d['zon']['s'].' W</font></td>
-				<td><font color="'.$zonvandaagcolor.'"> '.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
-			</tr>';
+                    <tr>
+                        <td>Zon:</td>
+                        <td><font color="'.$zoncolor.'">'.$d['zon']['s'].' W</font></td>
+                        <td><font color="'.$zonvandaagcolor.'"> '.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
+                    </tr>';
     }
     echo '
-			<tr>
-				<td><font color="'.$gascolor.'">Gas:</font></td>
-				<td colspan=2><font color="'.$gasvandaagcolor.'">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
-			</tr>
-			<tr>
-				<td><font color="'.$watercolor.'">Water:</font></td>
-				<td colspan=2><font color="'.$watervandaagcolor.'">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
-			</tr>';
+                    <tr>
+                        <td><font color="'.$gascolor.'">Gas:</font></td>
+                        <td colspan=2><font color="'.$gasvandaagcolor.'">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
+                    </tr>
+                    <tr>
+                        <td><font color="'.$watercolor.'">Water:</font></td>
+                        <td colspan=2><font color="'.$watervandaagcolor.'">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
+                    </tr>';
     if ($d['douche']['s']>0||$d['douche']['m']>0) {
         echo '
-				<tr>
-					<td>D-gas</td>
-					<td>'.$d['douche']['s']*10 .' L</td>
-					<td>'.number_format(($d['douche']['s']*10*0.00065), 2, ',', '.').' €</td>
-				<tr>
-				<tr>
-					<td>D-water</td>
-					<td>'.$d['douche']['m'].' L</td>
-					<td>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
-				<tr>';
+                    <tr>
+                        <td>D-gas</td>
+                        <td>'.$d['douche']['s']*10 .' L</td>
+                        <td>'.number_format(($d['douche']['s']*10*0.00065), 2, ',', '.').' €</td>
+                    <tr>
+                    <tr>
+                        <td>D-water</td>
+                        <td>'.$d['douche']['m'].' L</td>
+                        <td>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
+                    <tr>';
     }
     echo '
-		</table></a>
-	</div>';
+		        </table>
+		    </a>
+	    </div>';
     if (!empty($d['gcal']['m'])) {
         echo '<div class="fix z0 afval">'.$d['gcal']['m'].'</div>';
     }
     if (!empty($d['icon']['s'])) {
         if ($udevice=='Mac') {
             echo '
-    <div class="fix weather">
-        <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-            <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
-        </a>
-    </div>';
+        <div class="fix weather">
+            <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+            </a>
+        </div>';
         } else {
             echo '
-    <div class="fix weather">
-        <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-            <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
-        </a>
-    </div>';
+        <div class="fix weather">
+            <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+            </a>
+        </div>';
         }
     }
     echo '
-	<div class="fix floorplan2icon">
-	    <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
-	        <img src="/images/plus.png" class="i60"/>
-	    </a>
-	</div>
-	<div class="fix picam1">
-	    <a href=\'javascript:navigator_Go("picam1/index.php");\'>
-	        <img src="/images/Camera.png" class="i48">
-	    </a>
-	</div>
-	<div class="fix picam2">
-	    <a href=\'javascript:navigator_Go("picam2/index.php");\'>
-	        <img src="/images/Camera.png" class="i48">
-	    </a>
-	</div>
-    <div class="fix weg">
-		<form method="POST">
-			<input type="hidden" name="Weg" value="true"/>';
+        <div class="fix floorplan2icon">
+            <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
+                <img src="/images/plus.png" class="i60"/>
+            </a>
+        </div>
+        <div class="fix picam1">
+            <a href=\'javascript:navigator_Go("picam1/index.php");\'>
+                <img src="/images/Camera.png" class="i48">
+            </a>
+        </div>
+        <div class="fix picam2">
+            <a href=\'javascript:navigator_Go("picam2/index.php");\'>
+                <img src="/images/Camera.png" class="i48">
+            </a>
+        </div>
+        <div class="fix weg">
+            <form method="POST">
+                <input type="hidden" name="Weg" value="true"/>';
     if ($d['Weg']['s']==0) {
-        echo '<input type="image" src="/images/Thuis.png" id="Weg"/>';
+        echo '
+                <input type="image" src="/images/Thuis.png" id="Weg"/>';
     } elseif ($d['Weg']['s']==1) {
-        echo '<input type="image" src="/images/Slapen.png" id="Weg"/>';
+        echo '
+                <input type="image" src="/images/Slapen.png" id="Weg"/>';
     } elseif ($d['Weg']['s']==2) {
-        echo '<input type="image" src="/images/Weg.png" id="Weg"/>';
+        echo '
+                <input type="image" src="/images/Weg.png" id="Weg"/>';
     }
         echo '
-		</form>
-	</div>';
-
-
+            </form>
+        </div>';
     dimmer('tobi');
     dimmer('zithoek');
     dimmer('eettafel');
@@ -817,29 +820,29 @@ if ($home) {
 ';
     }
     echo '
-    <div class="fix bose">
-        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
-            <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
-        </a>
-    </div>
-    <div class="fix bosebadkamer">
-        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=4");\'>
-            <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt=""/>
-        </a>
-    </div>
-    <div class="fix bosebuiten">
-        <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=5");\'>
-            <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt=""/>
-        </a>
-    </div>';
+        <div class="fix bose">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
+                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
+            </a>
+        </div>
+        <div class="fix bosebadkamer">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=4");\'>
+                <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt=""/>
+            </a>
+        </div>
+        <div class="fix bosebuiten">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=5");\'>
+                <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt=""/>
+            </a>
+        </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
-    <div id="diepvries z0" class="fix diepvries_temp red">
-        '.$d['diepvries_temp']['s'].'°C
-    </div>'
+        <div id="diepvries z0" class="fix diepvries_temp red">
+            '.$d['diepvries_temp']['s'].'°C
+        </div>'
      : '
-     <div id="diepvries z0" class="fix diepvries_temp">
-        '.$d['diepvries_temp']['s'].'°C
-    </div>';
+         <div id="diepvries z0" class="fix diepvries_temp">
+            '.$d['diepvries_temp']['s'].'°C
+        </div>';
 
     if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
         echo '
@@ -865,7 +868,9 @@ if ($home) {
             <img src="images/Fire_On.png" width="28px" height="auto" alt=""/>
         </div>';
     }
-    echo '</div></div>
+    echo '
+        </div>
+    </div>
     <div class="fix floorplanstats">'.
         $udevice.' | '.
         $ipaddress.' | '.
@@ -878,4 +883,7 @@ if ($home) {
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
-</body></html>
+
+        </div>
+    </body>
+</html>
