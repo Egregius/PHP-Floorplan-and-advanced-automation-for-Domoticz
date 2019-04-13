@@ -1,6 +1,7 @@
 <?php
-include('../secure/settings.php');
-require_once(dirname(__FILE__) . '/config.php');
+require '../secure/functions.php';
+require '../secure/authentication.php';
+require '/config.php';
 echo '<html><head>
 <title>'.TITLE_STRING.'</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -26,7 +27,6 @@ echo '<html><head>
 		setTimeout(\'window.location.href=window.location.href;\',900000);
 	</script>-->
 </head>';
-
 if($home===true) {
 	if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== false) {
 		echo '<img style="width:1200px;height:auto" id="mjpeg_dest" src="jpg.php">';
@@ -34,5 +34,5 @@ if($home===true) {
 	else echo '<img style="width:896px;height:auto" id="mjpeg_dest" src="jpg.php">';
 } else {
 	header("Location: index.php");
-	die("Redirecting to: index.php"); 
+	die("Redirecting to: index.php");
 }
