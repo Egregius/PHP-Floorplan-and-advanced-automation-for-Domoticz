@@ -9,7 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
     if ($user=='Guy') {

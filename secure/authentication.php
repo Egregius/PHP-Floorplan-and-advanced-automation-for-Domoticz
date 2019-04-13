@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.2.15
+ * php version 7.3.3-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -22,12 +22,8 @@ if (!isset($_SERVER['HTTP_USER_AGENT'])) {
 }
 if (substr($_SERVER['REMOTE_ADDR'], 0, 10)=='192.168.2.') {
     $local=true;
-    //header("Refresh:4");
-} elseif (substr($_SERVER['REMOTE_ADDR'], 0, 20)=='2a02:1811:c533:8f00:') {
-    $local=true;
 } else {
     $local=false;
-    //header("Refresh:15");
 }
 header("Expires: on, 01 Jan 1970 00:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -59,6 +55,7 @@ if (getenv('HTTP_CLIENT_IP')) {
     $ipaddress=getenv('REMOTE_ADDR');
 } else {
     $ipaddress='UNKNOWN';
+    die("IP ADDRESS UNKNOWN");
 }
 if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
     $subuser=$_REQUEST['username'];
@@ -135,9 +132,7 @@ if (isset($_COOKIE[$cookie])) {
     } elseif ($user=='Gast'&&$local==false) {
         die('Alleen te gebruiken op wifi');
     }
-} elseif (!in_array($page, array('playkodi.php'))) {
-    //if ($_SERVER['PHP_SELF']!='/index.php'){
-    //header("Location:/index.php");die("Redirecting to:/index.php");}
+} else {
     echo '
 <html>
     <head>

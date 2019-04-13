@@ -9,7 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require_once 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 $tail=new PHPTail(
     array(
     "Domoticz"=>"/var/log/domoticz.log",

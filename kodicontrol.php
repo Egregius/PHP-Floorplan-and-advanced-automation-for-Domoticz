@@ -9,7 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 if ($home===true) {
     //error_reporting(E_ALL);ini_set("display_errors", "on");
     $count=0;$ctx=stream_context_create(array('http'=>array('timeout' => 2)));

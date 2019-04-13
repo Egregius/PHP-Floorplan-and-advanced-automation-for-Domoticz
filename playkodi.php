@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/settings.php';
+require 'secure/functions.php';
 $version=116;
 print_r($_REQUEST);
 //telegram(print_r($_REQUEST,true));
