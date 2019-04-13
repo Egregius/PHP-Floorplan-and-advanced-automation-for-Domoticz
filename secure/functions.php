@@ -710,8 +710,8 @@ function double($name,$action,$check=false,$comment='',$wait=2000000)
 
 function koekje($user,$expirytime)
 {
-    global $cookie;
-    setcookie($cookie, $user, $expirytime, '/', null, true, true);
+    global $cookie,$domainname;
+    setcookie($cookie, $user, $expirytime, '/', $domainname, true, true);
 }
 function telegram($msg,$silent=true,$to=1)
 {
