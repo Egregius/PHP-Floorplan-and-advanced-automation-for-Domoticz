@@ -1,5 +1,6 @@
 <?php //Alex
-require('../secure/settings.php');
+require('../secure/functions.php');
+require('../secure/authentication.php');
 if($home){
     require(dirname(__FILE__) . '/config.php');
     echo '<html><head><title>'.TITLE_STRING.'</title>
