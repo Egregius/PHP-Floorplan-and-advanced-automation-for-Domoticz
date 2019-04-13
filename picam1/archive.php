@@ -1,9 +1,10 @@
 <style>pre{font-family:monospace,"courier new",courier,serif;font-size:1.0em;margin:2px;}</style>
 <script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 <?php
-include('../secure/settings.php');
-if($home===true) {
-require_once(dirname(__FILE__) . '/config.php');
+require '../secure/functions.php';
+require '../secure/authentication.php';
+require 'config.php';
+if ($home===true) {
 $day_bg_color="#222";
 $today_bg_color="#555";
 $weekday_bg_color="#444";
@@ -15,7 +16,8 @@ $today_year=date("Y");
 $week_m0=1;
 $week_d0=1;
 $week_number=1;
-function build_month_html($year, $month, $type)	{
+function build_month_html($year, $month, $type)
+{
 	global $day_bg_color,$today_bg_color,$weekday_bg_color,$monthname_bg_color,$link_color,$today_day,$today_month,$today_year,$week_m0,$week_d0,$week_number;
 	$archive_root = ARCHIVE_DIR;
 	$month_name_style = "style=\"font-size: 1.0em; background-color: $monthname_bg_color;\"";
@@ -34,7 +36,7 @@ function build_month_html($year, $month, $type)	{
 	else $month_html .= "<caption $month_name_style><a style=\"color: $link_color;\"href='javascript:navigator_Go(\"media-archive.php?type=$type&year=$year&label=$month_name&m0=$month&d0=1&m1=$month&d1=$month_days\");'>$month_name</a></caption>";
 	foreach ($weekday_names as $weekday) $month_html .= "<th $weekday_name_style ><pre>$weekday</pre></th>";
 	$month_html .= "<th $weekday_name_style><pre>  </pre></th></tr><tr>";
-	if ($day_of_week > 0) $month_html .= "<td $day_style colspan='$day_of_week'>&nbsp</td>"; 
+	if ($day_of_week > 0) $month_html .= "<td $day_style colspan='$day_of_week'>&nbsp</td>";
 	$n_week_links = 0;
 	for ($day = 1; $day <= $month_days; $day++)	{
 		$day_dir = str_pad($day, 2, "0", STR_PAD_LEFT);

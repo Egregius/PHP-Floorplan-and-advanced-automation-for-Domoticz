@@ -20,7 +20,7 @@
 <?php
 require '../secure/functions.php';
 require '../secure/authentication.php';
-require '/config.php';
+require 'config.php';
 if ($home===true) {
 function eng_filesize($bytes, $decimals = 1){$sz='BKMGTP';$factor=floor((strlen($bytes)-1)/3);return sprintf("%.{$decimals}f", $bytes / pow(1000, $factor)) . @$sz[$factor];}
 function media_dir_array_create($media_dir)	{

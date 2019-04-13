@@ -1,7 +1,7 @@
 <?php
 require '../secure/functions.php';
 require '../secure/authentication.php';
-require '/config.php';
+require 'config.php';
 echo '<html><head>
 <title>'.TITLE_STRING.'</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />

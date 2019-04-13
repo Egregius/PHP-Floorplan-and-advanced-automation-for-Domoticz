@@ -1,28 +1,37 @@
 <script>
-function scroll_to_selected() {document.getElementById("selected").scrollIntoView(true);}
-function select_all(source)	{
-	checkboxes = document.getElementsByName('file_list[]');
-	for (var c in checkboxes) {checkboxes[c].checked = source.checked;}
-	checkboxlist = document.getElementsByName('checkbox_list[]');
-	for (var c in checkboxlist)	{checkboxlist[c].checked = source.checked;}
-}
-function select_day(source, ymd){
-	checkboxes = document.getElementsByName('file_list[]');
-	for (var c in checkboxes) {
-		var val = checkboxes[c].value;
-		if (val.substring(0, 10)==ymd)
-			checkboxes[c].checked = source.checked;
-		}
-	}
-function navigator_Go(url) {window.location.assign(url);}
+    function scroll_to_selected() {document.getElementById("selected").scrollIntoView(true);}
+    function select_all(source)	{
+        checkboxes = document.getElementsByName('file_list[]');
+        for (var c in checkboxes) {checkboxes[c].checked = source.checked;}
+        checkboxlist = document.getElementsByName('checkbox_list[]');
+        for (var c in checkboxlist)	{checkboxlist[c].checked = source.checked;}
+    }
+    function select_day(source, ymd){
+        checkboxes = document.getElementsByName('file_list[]');
+        for (var c in checkboxes) {
+            var val = checkboxes[c].value;
+            if (val.substring(0, 10)==ymd)
+                checkboxes[c].checked = source.checked;
+            }
+        }
+    function navigator_Go(url) {window.location.assign(url);}
 </script>
-<style type="text/css">a.anchor {display: block; position: relative; top: -250px; visibility: hidden;}</style>
+<style type="text/css">
+    a.anchor {display: block; position: relative; top: -250px; visibility: hidden;}
+</style>
 <?php
-include('../secure/settings.php');
+require '../secure/functions.php';
+require '../secure/authentication.php';
+require 'config.php';
 if($home===true) {
-include(dirname(__FILE__) . '/config.php');
-function eng_filesize($bytes, $decimals = 1){$sz='BKMGTP';$factor=floor((strlen($bytes)-1)/3);return sprintf("%.{$decimals}f", $bytes / pow(1000, $factor)) . @$sz[$factor];}
-function media_dir_array_create($media_dir)	{
+function eng_filesize($bytes, $decimals = 1)
+{
+    $sz='BKMGTP';
+    $factor=floor((strlen($bytes)-1)/3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1000, $factor)) . @$sz[$factor];
+}
+function media_dir_array_create($media_dir)
+{
 	global	$archive_root, $media_mode, $media_type, $media_subdir;
 	$media_array = array();
 	$file_dir = "$media_dir/$media_subdir";
@@ -99,7 +108,7 @@ function media_array_create() {
 			}
 		}
 	else $media_array = media_dir_array_create($media_dir);
-	usort($media_array, create_function('$a, $b','return strcmp($a["mtime"], $b["mtime"]);'));
+	usort($media_array, function($a, $b) {return strcmp($a["mtime"], $b["mtime"]);});
 	krsort($media_array);
 	$media_array = array_values($media_array);
 	$media_array_size = count($media_array);
