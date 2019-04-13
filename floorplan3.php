@@ -13,7 +13,8 @@ if (isset($_REQUEST['autogetnzbs'])) {
     @file_get_contents('http://192.168.2.10/bash.php?script=getnzbs');
     die();
 }
-require 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 if ($home) {
     echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

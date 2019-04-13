@@ -10,4 +10,4 @@
  * @link     https://egregius.be
  **/
 require 'functions.php';
-require '/var/www/authentication.php';
+require 'authentication.php';

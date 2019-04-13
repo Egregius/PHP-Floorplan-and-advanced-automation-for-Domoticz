@@ -12,7 +12,8 @@
 $lat=50.8930154;
 $lon=3.1123163;
 $start=microtime(true);
-require 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 if ($home) {
     session_start();
     $_SESSION['referer']='floorplan.php';

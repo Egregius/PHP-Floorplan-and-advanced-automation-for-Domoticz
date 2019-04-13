@@ -10,7 +10,8 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-require 'secure/settings.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 if ($home) {
     session_start();
     if (!isset($_SESSION['referer'])) {
