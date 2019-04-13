@@ -1,5 +1,6 @@
 <?php //Alex
-require('../secure/settings.php');
+require '../secure/functions.php';
+require '../secure/authentication.php';
 if($home===true){
 	$boundary="PIderman";
 	header("Content-type: multipart/x-mixed-replace; boundary=$boundary");
@@ -12,7 +13,6 @@ if($home===true){
 	echo "--$boundary\r\n";
 	echo "Content-type: image/jpeg\r\n";
 	$fileContents=file_get_contents("http://192.168.2.12/mjpeg_read.php");
-	//$fileContents=@file_get_contents("http://[2a02:1811:c533:8f00::12]/mjpeg_read.php");
 	$fileLength=strlen($fileContents);
 	echo "Content-Length:".$fileLength."\r\n";
 	echo "\r\n";
