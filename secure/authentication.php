@@ -138,39 +138,59 @@ if (isset($_COOKIE[$cookie])) {
 } elseif (!in_array($page, array('playkodi.php'))) {
     //if ($_SERVER['PHP_SELF']!='/index.php'){
     //header("Location:/index.php");die("Redirecting to:/index.php");}
-    echo '<html><head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-	<meta name="HandheldFriendly" content="true" />
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
-	<link rel="icon" type="image/png" href="images/kodi.png"/>
-	<link rel="shortcut icon" href="images/kodi.png"/>
-	<link rel="apple-touch-startup-image" href="images/kodi.png"/>
-	<link rel="apple-touch-icon" href="images/kodi.png"/>
-	<title>Inloggen</title>
-	<style>
-	html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
-	body{padding:0;margin:0;background:#000;width:100%;height:100%;background-image:url(\'/images/_firework.jpg\');background-size:contain;background-repeat:no-repeat;background-attachment:fixed;background-position:center bottom;}
-
-	input[type=text]  {height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
-	input[type=password]{height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
-	input[type=submit]{height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
-	</style>
+    echo '
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
+        <link rel="icon" type="image/png" href="images/kodi.png"/>
+        <link rel="shortcut icon" href="images/kodi.png"/>
+        <link rel="apple-touch-startup-image" href="images/kodi.png"/>
+        <link rel="apple-touch-icon" href="images/kodi.png"/>
+        <title>Inloggen</title>
+        <style>
+            html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
+            body{padding:0;margin:0;background:#000;width:100%;height:100%;background-image:url(\'/images/_firework.jpg\');background-size:contain;background-repeat:no-repeat;background-attachment:fixed;background-position:center bottom;}
+            input[type=text]  {height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
+            input[type=password]{height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
+            input[type=submit]{height:35px;width:100%;cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;background-color:#444;color:#ccc;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
+        </style>
     </head>
 	<body>
 		<div style="position:fixed;top:10px;left:10px;">
-		<form method="POST">
-		<table>
-			<tr><td><input type="text" name="username" placeholder="Gebruikersnaam" size="50" maxlength="10"/></td></tr>
-			<tr><td><input type="password" name="password" placeholder="Wachtwoord" size="50" maxlength="20"/></td></tr>
-			<tr><td>&nbsp;</td></tr>
-			<tr><td>&nbsp;</td></tr>
-			<tr><td><input type="submit" value="Inloggen"/></td></tr>
-		</table>
-		</form>
+            <form method="POST">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="text" name="username" placeholder="Gebruikersnaam" size="50" maxlength="10"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="password" name="password" placeholder="Wachtwoord" size="50" maxlength="20"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Inloggen"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
 		</div>
-		</body>
-		</html>';
+	</body>
+</html>';
 }
-?>
