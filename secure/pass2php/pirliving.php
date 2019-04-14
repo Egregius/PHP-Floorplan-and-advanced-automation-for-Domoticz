@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On'&&$d['auto']['s']) {
-    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
                 sw('keuken', 'On');
@@ -30,7 +30,7 @@ if ($status=='On'&&$d['auto']['s']) {
         shell_exec('../ios.sh "Beweging Living" > /dev/null 2>/dev/null &');
         telegram('Beweging living om '.strftime("%k:%M:%S", TIME), false, 2);
     }
-    if ($d['Weg']['s']==0&&$d['denon']['s']=='Off'&&$d['bose3']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
+    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose3']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
         bosekey("POWER", 0, 3);
         sw('bose3', 'On');
         bosevolume(25, 3);
@@ -48,7 +48,7 @@ if ($status=='On'&&$d['auto']['s']) {
             }
             sleep(1);
         }
-    } elseif ($d['bose3']['s']=='On'&&$d['denon']['s']=='Off') {
+    } elseif ($d['bose3']['s']=='On'&&$d['denon']['s']=='OFF') {
         $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.3:8090/volume"))), true);
         if (isset($volume['actualvolume'])) {
             $cv=$volume['actualvolume'];

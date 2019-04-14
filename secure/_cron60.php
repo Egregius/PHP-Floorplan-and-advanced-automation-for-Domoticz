@@ -110,12 +110,32 @@ if ($d['Weg']['s']==0) {
             );
         }
     }
-    if ($d['denon']['s']=='On') {
-        $denonmain=json_decode(
+}
+if ($d['denon']['s']=='On') {
+    $denonmain=json_decode(
+        json_encode(
+            simplexml_load_string(
+                @file_get_contents(
+                    'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+                    false,
+                    $ctx
+                )
+            )
+        ),
+        true
+    );
+    if (!empty($denonmain)) {
+        if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
+            storemode('denon', $denonmain['InputFuncSelect']['value']);
+        }
+        if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) {
+            store('denonpower',$denonmain['ZonePower']['value']);
+        }
+        $denonsec=json_decode(
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+                        'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
                         false,
                         $ctx
                     )
@@ -123,38 +143,17 @@ if ($d['Weg']['s']==0) {
             ),
             true
         );
-        if (!empty($denonmain)) {
-            if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
-                storemode('denon', $denonmain['InputFuncSelect']['value']);
-            }
-            if ($denonmain['Power']['value']!=$d['denonpower']['s']) {
-                store('denonpower',$denonmain['Power']['value']);
-            }
-            $denonsec=json_decode(
-                json_encode(
-                    simplexml_load_string(
-                        @file_get_contents(
-                            'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
-                            false,
-                            $ctx
-                        )
-                    )
-                ),
-                true
-            );
-            if ($denonmain['ZonePower']['value']=='ON'
-                &&$denonsec['Power']['value']=='OFF'
-            ) {
-                denon('Z2ON');
-            } elseif ($denonmain['ZonePower']['value']=='OFF'
-                &&$denonsec['Power']['value']=='ON'
-            ) {
-                denon('Z2OFF');
-            }
+        if ($denonmain['ZonePower']['value']=='ON'
+            &&$denonsec['Power']['value']=='OFF'
+        ) {
+            denon('Z2ON');
+        } elseif ($denonmain['ZonePower']['value']=='OFF'
+            &&$denonsec['Power']['value']=='ON'
+        ) {
+            denon('Z2OFF');
         }
     }
 }
-
 if ($d['diepvries']['s']!='On'
     &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
     &&past('diepvries')>1780
