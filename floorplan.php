@@ -3,6 +3,9 @@
  * Pass2PHP
  * php version 7.3.3-1
  *
+ * This is the main floorplan.
+ * It handles all the lighting and shows status of heating and rollers.
+ *
  * @category Home_Automation
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>

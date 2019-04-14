@@ -3,6 +3,8 @@
  * Pass2PHP
  * php version 7.3.3-1
  *
+ * This flooplan handles everything that has to do with heating and rollers.
+ *
  * @category Home_Automation
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
@@ -64,12 +66,17 @@ if ($home) {
             storemode($_POST['Naam'].'_set', 0);
             lgsql($user, $_POST['Naam'].'_mode', $_POST['Actie']);
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to Automatic');
+            $d[$_POST['Naam'].'_set']['m']=0;
+            include 'secure/_verwarming.php';
         } else {
             store($_POST['Naam'].'_set', $_POST['Actie']);
             lgsql($user, $_POST['Naam'].'_set', $_POST['Actie']);
             storemode($_POST['Naam'].'_set', 2);
             lgsql($user, $_POST['Naam'].'_mode', 2);
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to '.$_POST['Actie'].'°');
+            $d[$_POST['Naam'].'_set']['s']=$_POST['Actie'];
+            $d[$_POST['Naam'].'_set']['m']=2;
+            include 'secure/_verwarming.php';
         }
         usleep(100000);
         header("Location: floorplan.heating.php");

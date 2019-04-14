@@ -3,6 +3,8 @@
  * Pass2PHP
  * php version 7.3.3-1
  *
+ * A small control interface for the Bose SoundTouch system
+ *
  * @category Home_Automation
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
