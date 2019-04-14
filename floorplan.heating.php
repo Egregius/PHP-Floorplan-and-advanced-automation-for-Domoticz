@@ -771,12 +771,12 @@ if ($home) {
         echo '
                             <input type="hidden" name="Actie" value="On">
                             <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">';
+                            &nbsp;<input type="image" src="images/Fire_Off.png">';
     } else {
         echo'
                             <input type="hidden" name="Actie" value="Off">
                             <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">';
+                            &nbsp;<input type="image" src="images/Fire_On.png">';
     }
     echo '
 	                    </form>
@@ -797,7 +797,7 @@ if ($home) {
                             <input type="hidden" name="Schakel" value="true">
                             <input type="hidden" name="Actie" value="On">
                             <input type="hidden" name="Naam" value="heatingauto">
-                            <input type="image" src="images/Fire_Off.png" height="48px" width="auto">&nbsp;
+                            <input type="image" src="images/Fire_Off.png">&nbsp;
                         </form>
                     </td>';
     } else {
@@ -810,7 +810,7 @@ if ($home) {
                             <input type="hidden" name="Schakel" value="true">
                             <input type="hidden" name="Actie" value="Off">
                             <input type="hidden" name="Naam" value="heatingauto">
-                            <input type="image" src="images/Fire_On.png" height="48px" width="auto">&nbsp;
+                            <input type="image" src="images/Fire_On.png">&nbsp;
                         </form>
                     </td>';
     }
@@ -820,28 +820,28 @@ if ($home) {
                             <input type="hidden" name="heating" value="true">';
     if ($d['heating']['s']==0) {
         echo '
-                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">
+                            &nbsp;<input type="image" src="images/Fire_Off.png">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Neutral
                     </td>';
     } elseif ($d['heating']['s']==1) {
         echo '
-                        &nbsp;<input type="image" src="images/Cooling.png" height="48px" width="auto">
+                        &nbsp;<input type="image" src="images/Cooling.png">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Cooling
                     </td>';
     } elseif ($d['heating']['s']==2) {
         echo '
-                        &nbsp;<input type="image" src="images/Elec.png" height="40px" width="auto">
+                        &nbsp;<input type="image" src="images/Elec.png">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Elec
                     </td>';
     } elseif ($d['heating']['s']==3) {
         echo '
-                        &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">
+                        &nbsp;<input type="image" src="images/Fire_On.png">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Gas/Elec

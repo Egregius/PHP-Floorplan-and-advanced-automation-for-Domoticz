@@ -493,14 +493,14 @@ function thermostaat($name,$top,$left)
         echo '
                 <font size="2" color="#CCC">';
     }
-    echo number_format($stat, 1, ',', '').'</font></div>';
+    echo number_format($stat, 1, ',', '').'</font>
+            </div>';
     if ($mode>0) {
         echo '
-                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
-                </div>';
+            <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
+            </div>';
     }
     echo '
-            </div>
         </div>';
 }
 function ud($name,$nvalue,$svalue,$check=false)
