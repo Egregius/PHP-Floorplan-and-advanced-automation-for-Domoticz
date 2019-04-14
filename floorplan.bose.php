@@ -24,31 +24,32 @@ if ($home) {
     } else {
         $bose=3;//Living
     }
-    echo '<html>
+    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
     <head>
 		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
     if ($udevice=='iPhone') {
         echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
     }
     echo '
 	    <meta name="msapplication-TileColor" content="#000000">
 		<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 		<meta name="theme-color" content="#000000">
-		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
-		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
-		<link rel="apple-touch-startup-image" href="images/domoticzphp450.png"/>
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
+		<link rel="icon" type="image/png" href="images/domoticzphp48.png">
+		<link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
-		<style>
+		<style type="text/css">
 			.btn{height:60px;}
 			.input{width:78px;}
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
@@ -94,7 +95,7 @@ if ($home) {
         </div>
         <div class="fix z1" style="top:5px;left:5px;">
             <a href=\'javascript:navigator_Go("'.$_SESSION['referer'].'");\'>
-                <img src="/images/close.png" width="72px" height="72px"/>
+                <img src="/images/close.png" width="72px" height="72px" alt="close">
             </a>
         </div>';
 
@@ -154,12 +155,11 @@ if ($home) {
                 </h4>';
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/>
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto">
                 <br>
                 <br>
                 <button type="submit" name="prev" class="btn b2">Prev</button>
-                <button type="submit" name="next" class="btn b2">Next</button>
-					';
+                <button type="submit" name="next" class="btn b2">Next</button>';
                     }
                 } elseif ($nowplaying['@attributes']['source']=='TUNEIN') {
                     echo '
