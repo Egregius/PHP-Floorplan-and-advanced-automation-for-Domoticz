@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('tobi', 18, 'sleep');
+    sl('tobi', 8, 'sleep');
     storemode('tobi', 1);
 }

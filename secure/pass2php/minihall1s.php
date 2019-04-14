@@ -29,5 +29,8 @@ if ($status=='On') {
     if ($d['Weg']['s']!=1) {
         store('Weg', 1);
     }
+    if ($d['kamer']['s']>5) {
+        sl('kamer', 5);
+    }
     huisslapen();
 }
