@@ -50,6 +50,40 @@ foreach ($items as $item) {
         }
     }
 }
+if ($d['kamer']['m']==2) {
+    $items=array('RkamerR','RkamerL');
+    if($d['kamer']['s']==9) {
+        foreach ($items as $i) {
+            if ($d[$i]>70) {
+                sl($i, 70);
+            }
+        }
+    } elseif($d['kamer']['s']==19) {
+        foreach ($items as $i) {
+            if ($d[$i]>55) {
+                sl($i, 55);
+            }
+        }
+    } elseif($d['kamer']['s']==29) {
+        foreach ($items as $i) {
+            if ($d[$i]>40) {
+                sl($i, 40);
+            }
+        }
+    } elseif($d['kamer']['s']==39) {
+        foreach ($items as $i) {
+            if ($d[$i]>26) {
+                sl($i, 26);
+            }
+        }
+    } elseif($d['kamer']['s']>=49) {
+        foreach ($items as $i) {
+            if ($d[$i]>0) {
+                sl($i, 0);
+            }
+        }
+    }
+}
 
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     $stamp=sprintf("%s", date("Y-m-d H:i"));

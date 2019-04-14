@@ -26,8 +26,8 @@ Luifel:
 
 Dimmers:
 0	Niks/Normaal
-1	Wake up
-2	Sleep
+1	Sleep
+2	Wake up
 
 Lichten:
 0	Automatisch
