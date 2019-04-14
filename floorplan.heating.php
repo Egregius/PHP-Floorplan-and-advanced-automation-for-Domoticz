@@ -821,6 +821,7 @@ if ($home) {
     if ($d['heating']['s']==0) {
         echo '
                             &nbsp;<input type="image" src="images/Fire_Off.png">
+                        </form>
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Neutral
@@ -828,6 +829,7 @@ if ($home) {
     } elseif ($d['heating']['s']==1) {
         echo '
                         &nbsp;<input type="image" src="images/Cooling.png">
+                        </form>
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Cooling
@@ -842,6 +844,7 @@ if ($home) {
     } elseif ($d['heating']['s']==3) {
         echo '
                         &nbsp;<input type="image" src="images/Fire_On.png">
+                        </form>
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Gas/Elec
@@ -849,8 +852,8 @@ if ($home) {
     }
     echo '
                 </tr>
-            </form>
         </table>
+        </div>
         <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 			setTimeout("window.location.href=window.location.href;",'.($local===true?'3950':'15000').')
