@@ -483,27 +483,25 @@ function thermostaat($name,$top,$left)
         $centre='blue';
     }
     echo '
-        <a href=\'javascript:navigator_Go("floorplan.heating.php?SetSetpoint='.$name.'");\'>
-            <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;">
-                <img src="/images/thermo'.$circle.$centre.'.png" class="i48">
-                <div class="fix center" style="top:32px;left:11px;width:26px;">';
+        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';">
+            <img src="/images/thermo'.$circle.$centre.'.png" class="i48" alt="">
+            <div class="fix center" style="top:32px;left:11px;width:26px;">';
     if ($mode>0) {
         echo '
-                    <font size="2" color="#222">';
+                <font size="2" color="#222">';
     } else {
         echo '
-                    <font size="2" color="#CCC">';
+                <font size="2" color="#CCC">';
     }
     echo number_format($stat, 1, ',', '').'</font></div>';
     if ($mode>0) {
         echo '
-                    <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
-                    </div>';
+                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
+                </div>';
     }
     echo '
-                </div>
             </div>
-        </a>';
+        </div>';
 }
 function ud($name,$nvalue,$svalue,$check=false)
 {
@@ -730,25 +728,23 @@ function luifel($name,$stat)
 {
     echo '
         <form method="POST" action="">
-            <a href=\'javascript:navigator_Go("floorplan.heating.php?luifel='.$name.'");\'>
-                <div class="fix z '.$name.'">
-                    <input type="hidden" name="luifel" value="'.$name.'">';
+            <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';">
+                <input type="hidden" name="luifel" value="'.$name.'">';
     if ($stat==100) {
         echo '
-                    <input type="image" src="/images/arrowgreenup.png" class="i60">';
+                <input type="image" src="/images/arrowgreenup.png" class="i60">';
     } elseif ($stat==0) {
         echo '
-                    <input type="image" src="/images/arrowgreendown.png" class="i60">';
+                <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } else {
         echo'
-                    <input type="image" src="/images/arrowdown.png" class="i60">
-                    <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
-                        '. (100 - $stat) .'</font>
-                    </div>';
+                <input type="image" src="/images/arrowdown.png" class="i60">
+                <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
+                    '. (100 - $stat) .'</font>
+                </div>';
     }
     echo '
-		        </div>
-            </a>
+		    </div>
         </form>';
 }
 function rollers($name,$stat)
@@ -756,46 +752,44 @@ function rollers($name,$stat)
     global $d;
     echo '
         <form method="POST" action="">
-            <a href=\'javascript:navigator_Go("floorplan.heating.php?rollers='.$name.'");\'>
-                <div class="fix z '.$name.'">
-                    <input type="hidden" name="rollers" value="'.$name.'">';
+            <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">
+                <input type="hidden" name="rollers" value="'.$name.'">';
     if ($stat==100) {
         echo '
-                    <input type="image" src="/images/arrowgreendown.png" class="i60">';
+                <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } elseif ($stat==0) {
         echo '
-                    <input type="image" src="/images/arrowgreenup.png" class="i60">';
+                <input type="image" src="/images/arrowgreenup.png" class="i60">';
     } else {
         echo'
-                    <input type="image" src="/images/circlegrey.png" class="i60">
-                    <div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">';
+                <input type="image" src="/images/circlegrey.png" class="i60">
+                <div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">';
         if ($d[$name]['m']==2) {
             echo '
-                        <font size="5" color="#F00">';
+                    <font size="5" color="#F00">';
         } elseif ($d[$name]['m']==1) {
             echo '
-                        <font size="5" color="#222">';
+                    <font size="5" color="#222">';
         } else {
             echo '
-                        <font size="5" color="#CCC">';
+                    <font size="5" color="#CCC">';
         }
         echo '
-                            '.$stat .'
-                        </font>
-    				</div>';
+                        '.$stat .'
+                    </font>
+                </div>';
     }
     if ($d[$name]['m']==2) {
         echo '
-                    <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;">
-                    </div>';
+                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;">
+                </div>';
     } elseif ($d[$name]['m']==1) {
         echo '
-                    <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;">
-                    </div>';
+                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;">
+                </div>';
     }
     echo '
-		        </div>
-		    </a>
+		    </div>
 	    </form>';
 }
 function rollery($name,$stat,$top,$left,$size,$rotation)

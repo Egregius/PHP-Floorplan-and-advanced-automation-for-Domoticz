@@ -23,24 +23,24 @@ if ($home) {
 <html>
 	<head>
 		<title>Heating</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
     if ($udevice=='iPhone') {
         echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
     }
     echo '
-	    <link rel="icon" type="image/png" href="images/heating.png"/>
-		<link rel="shortcut icon" href="images/heating.png"/>
-		<link rel="apple-touch-icon" href="images/heating.png"/>
+	    <link rel="icon" type="image/png" href="images/heating.png">
+		<link rel="shortcut icon" href="images/heating.png">
+		<link rel="apple-touch-icon" href="images/heating.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=5">
-		<style>
+		<style type="text/css">
 			.btn{font-size:25;padding:15px;width:100px;height:35px;}
 			.mode{font-size:25;padding:15px;width:155px;height:50px;}
 		</style>
@@ -146,7 +146,7 @@ if ($home) {
                         <input type="hidden" name="Roller" value="true">
                     </div>
                     <div class="fix z" style="top:100px;left:70px;">
-                        <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90"/>
+                        <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90" alt="">
                     </div>
                     <div class="fix z" style="top:130px;left:200px;">
                         <input type="submit" name="mode" value ="';
@@ -154,7 +154,7 @@ if ($home) {
         echo '" class="btn i90"/>
                     </div>
                     <div class="fix z" style="top:100px;left:330px;">
-                        <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90"/>
+                        <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90" alt="">
                     </div>
                     <div class="fix z" style="top:210px;left:10px;">';
         $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
@@ -190,7 +190,7 @@ if ($home) {
                 </form>
                 <div class="fix z" style="top:5px;left:5px;">
                     <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                        <img src="/images/close.png" width="72px" height="72px"/>
+                        <img src="/images/close.png" width="72px" height="72px" alt="">
                     </a>
                 </div>
             </div>
@@ -258,14 +258,14 @@ if ($home) {
 						<input type="hidden" name="confirm" value="true">
 					</div>
 					<div class="fix z" style="top:100px;left:40px;">
-						<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90"/>
+						<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90">
 					</div>
 					<div class="fix z" style="top:95px;left:160px;">
-						<input type="submit" name="verdiepingmode" value ="Manueel" class="btn mode"/><br>
-						<input type="submit" name="verdiepingmode" value ="Automatisch" class="btn mode"/>
+						<input type="submit" name="verdiepingmode" value ="Manueel" class="btn mode"><br>
+						<input type="submit" name="verdiepingmode" value ="Automatisch" class="btn mode">
 					</div>
 					<div class="fix z" style="top:100px;left:350px;">
-						<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90"/>
+						<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90">
 					</div>
 					<div class="fix z" style="top:210px;left:10px;">';
             $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
@@ -289,7 +289,7 @@ if ($home) {
 				</form>
 				<div class="fix z" style="top:5px;left:5px;">
 				    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-				        <img src="/images/close.png" width="72px" height="72px"/>
+				        <img src="/images/close.png" width="72px" height="72px" alt="Close">
 				    </a>
 				</div>
 			</div>
@@ -315,19 +315,19 @@ if ($home) {
             echo '<h2>'.$name.' '.(100-$stat).'% Open</h2>';
         }
         echo '
-					<input type="hidden" name="Naam" value="'.$name.'"/>
-					<input type="hidden" name="Roller" value="true"/>
+					<input type="hidden" name="Naam" value="'.$name.'">
+					<input type="hidden" name="Roller" value="true">
 				</div>
 				<div class="fix z" style="top:100px;left:70px;">
-					<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreendown.png" class="i90"/>
+					<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreendown.png" class="i90">
 				</div>
 				<div class="fix z" style="top:130px;left:200px;">
 					<input type="submit" name="mode" value ="';
         echo $d[$name]['m']==0?'Manueel':'Auto';
-        echo '" class="btn i90"/>
+        echo '" class="btn i90">
 				</div>
 				<div class="fix z" style="top:100px;left:330px;">
-					<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreenup.png" class="i90"/>
+					<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreenup.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
         $levels=array(0,25,30,32,34,36,38,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,64,66,68,70,75,95,96,97,98,99,100);
@@ -349,7 +349,7 @@ if ($home) {
 			</form>
 			<div class="fix z" style="top:5px;left:5px;">
 			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px"/>
+			        <img src="/images/close.png" width="72px" height="72px" alt="Close">
 			    </a>
 			</div>
 		</div>
@@ -363,12 +363,12 @@ if ($home) {
             echo '
     <body>
         <div id="message" class="fix confirm">
-			<form method="post">
-				<input type="hidden" name="heating" value="true"/>
-				<input type="submit" name="confirm" value="Gas/Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"/><br>
-				<input type="submit" name="confirm" value="Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"/><br>
-				<input type="submit" name="confirm" value="Neutral" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"/><br>
-				<input type="submit" name="confirm" value="Cooling" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"/>
+			<form method="POST" action="">
+				<input type="hidden" name="heating" value="true">
+				<input type="submit" name="confirm" value="Gas/Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+				<input type="submit" name="confirm" value="Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+				<input type="submit" name="confirm" value="Neutral" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+				<input type="submit" name="confirm" value="Cooling" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;">
 			</form>
 		</div>
 	</body>
@@ -396,7 +396,7 @@ if ($home) {
         <div id="luifel" class="fix dimmer" >
 		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
                 <input type="hidden" name="Setpoint" value="true" >
-                <h2>'.ucwords($name).'<br/><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
+                <h2>'.ucwords($name).'<br><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
                 <div class="fix z" style="top:210px;left:10px;">';
         if ($d[$name.'_set']['m']==0) {
             echo '
@@ -425,7 +425,7 @@ if ($home) {
 					<input type="submit" name="Actie" value="'.$temp.'"/ class="dimlevel dimlevela">';
             } else {
                 echo '
-					<input type="submit" class="dimlevel" name="Actie" value="'.$temp.'"/>';
+					<input type="submit" class="dimlevel" name="Actie" value="'.$temp.'">';
             }
         }
         echo '
@@ -433,7 +433,7 @@ if ($home) {
 				</form>
 			<div class="fix z" style="top:5px;left:5px;">
 			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px"/>
+			        <img src="/images/close.png" width="72px" height="72px" alt="Close">
 			    </a>
 			</div>
 		</div>
@@ -449,12 +449,12 @@ if ($home) {
         </div>
         <div class="fix z1" style="top:5px;left:5px;">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>
-                <img src="/images/close.png" width="72px" height="72px"/>
+                <img src="/images/close.png" width="72px" height="72px" alt="Close">
             </a>
         </div>
         <div class="fix z1" style="top:290px;left:415px;">
             <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'>
-                <img src="/images/close.png" width="72px" height="72px"/>
+                <img src="/images/close.png" width="72px" height="72px" alt="Close">
             </a>
         </div>
         <div class="fix leftbuttons">
@@ -471,9 +471,9 @@ if ($home) {
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
     echo $d['denonpower']['s']=='ON'?'On':'Off';
-    echo '.png" class="i70"/>
+    echo '.png" class="i70" alt="denon">
             </a>
-            <br/>
+            <br>
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/';
     if ($d['tv']['s']=='On') {
@@ -485,15 +485,15 @@ if ($home) {
     } else {
         echo 'TV_Off';
     }
-    echo '.png" class="i60"/>
+    echo '.png" class="i60" alt="tv">
             </a>
-            <br/>
+            <br>
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/nvidia_';
     echo $d['nvidia']['m']=='On'?'On':'Off';
-    echo '.png" class="i48">
+    echo '.png" class="i48" alt="nvidia">
             </a>
-            <br/>
+            <br>
         </div>
         <div class="fix" style="top:290px;left:90px;width:300px">
             <a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">
@@ -518,7 +518,7 @@ if ($home) {
     echo '
             <br>
             <br>
-            <img src="images/sunrise.png"/>
+            <img src="images/sunrise.png" alt="sunrise">
             <br>
             '.strftime("%k:%M", $d['civil_twilight']['s']).'
             <br>
@@ -579,14 +579,14 @@ if ($home) {
             echo '
         <div class="fix weather">
             <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
             </a>
         </div>';
         } else {
             echo '
         <div class="fix weather">
             <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
             </a>
         </div>';
         }
@@ -739,7 +739,7 @@ if ($home) {
         </div>
         <div class="fix floorplan2icon">
             <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
-                <img src="/images/plus.png" class="i60"/>
+                <img src="/images/plus.png" class="i60" alt="plus">
             </a>
         </div>';
     $bigdif=$d['heating']['m'];
@@ -765,18 +765,18 @@ if ($home) {
             			</font>
 			        </td>
 			        <td width="65px">
-                        <form method="POST">
-                            <input type="hidden" name="Schakel" value="true"/>';
+                        <form method="POST" action="">
+                            <input type="hidden" name="Schakel" value="true">';
     if ($d['brander']['s']=='Off') {
         echo '
-                            <input type="hidden" name="Actie" value="On"/>
-                            <input type="hidden" name="Naam" value="brander"/>
-                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>';
+                            <input type="hidden" name="Actie" value="On">
+                            <input type="hidden" name="Naam" value="brander">
+                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">';
     } else {
         echo'
-                            <input type="hidden" name="Actie" value="Off"/>
-                            <input type="hidden" name="Naam" value="brander"/>
-                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto"/>';
+                            <input type="hidden" name="Actie" value="Off">
+                            <input type="hidden" name="Naam" value="brander">
+                            &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">';
     }
     echo '
 	                    </form>
@@ -793,11 +793,11 @@ if ($home) {
                         Manueel
                     </td>
                     <td width="65px">
-                        <form method="POST">
-                            <input type="hidden" name="Schakel" value="true"/>
-                            <input type="hidden" name="Actie" value="On"/>
-                            <input type="hidden" name="Naam" value="heatingauto"/>
-                            <input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>&nbsp;
+                        <form method="POST" action="">
+                            <input type="hidden" name="Schakel" value="true">
+                            <input type="hidden" name="Actie" value="On">
+                            <input type="hidden" name="Naam" value="heatingauto">
+                            <input type="image" src="images/Fire_Off.png" height="48px" width="auto">&nbsp;
                         </form>
                     </td>';
     } else {
@@ -806,42 +806,42 @@ if ($home) {
                         Automatisch
                     </td>
                     <td width="65px">
-                        <form method="POST">
-                            <input type="hidden" name="Schakel" value="true"/>
-                            <input type="hidden" name="Actie" value="Off"/>
-                            <input type="hidden" name="Naam" value="heatingauto"/>
-                            <input type="image" src="images/Fire_On.png" height="48px" width="auto"/>&nbsp;
+                        <form method="POST" action="">
+                            <input type="hidden" name="Schakel" value="true">
+                            <input type="hidden" name="Actie" value="Off">
+                            <input type="hidden" name="Naam" value="heatingauto">
+                            <input type="image" src="images/Fire_On.png" height="48px" width="auto">&nbsp;
                         </form>
                     </td>';
     }
     echo '
                     <td width="65px">
-                        <form method="POST">
-                            <input type="hidden" name="heating" value="true"/>';
+                        <form method="POST" action="">
+                            <input type="hidden" name="heating" value="true">';
     if ($d['heating']['s']==0) {
         echo '
-                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto"/>
+                            &nbsp;<input type="image" src="images/Fire_Off.png" height="48px" width="auto">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Neutral
                     </td>';
     } elseif ($d['heating']['s']==1) {
         echo '
-                        &nbsp;<input type="image" src="images/Cooling.png" height="48px" width="auto"/>
+                        &nbsp;<input type="image" src="images/Cooling.png" height="48px" width="auto">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Cooling
                     </td>';
     } elseif ($d['heating']['s']==2) {
         echo '
-                        &nbsp;<input type="image" src="images/Elec.png" height="40px" width="auto"/>
+                        &nbsp;<input type="image" src="images/Elec.png" height="40px" width="auto">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Elec
                     </td>';
     } elseif ($d['heating']['s']==3) {
         echo '
-                        &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto"/>
+                        &nbsp;<input type="image" src="images/Fire_On.png" height="48px" width="auto">
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
                         Gas/Elec
