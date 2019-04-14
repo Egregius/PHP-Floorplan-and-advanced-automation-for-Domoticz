@@ -20,25 +20,25 @@ if ($home) {
 <html>
     <head>
 		<title>Media</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
 	if ($udevice=='iPhone') {
 	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
 	} elseif ($udevice=='iPad') {
 	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
 	}
 	echo '
-		<link rel="icon" type="image/png" href="images/media.png"/>
-		<link rel="shortcut icon" href="images/media.png"/>
-		<link rel="apple-touch-startup-image" href="images/media.png"/>
-		<link rel="apple-touch-icon" href="images/media.png"/>
+		<link rel="icon" type="image/png" href="images/media.png">
+		<link rel="shortcut icon" href="images/media.png">
+		<link rel="apple-touch-startup-image" href="images/media.png">
+		<link rel="apple-touch-icon" href="images/media.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=5">
-		<style>
+		<style type="text/css">
 			.btn{height:64px;}
 			.input{width:78px;}
 		</style>
@@ -104,15 +104,15 @@ if ($home) {
         usleep(120000);
     } elseif (isset($_POST['UpdateKodi'])) {
         $profile=$_POST['UpdateKodi'];
-        //echo 'Wanted profile='.$profile.'<br/>';
+        //echo 'Wanted profile='.$profile.'<br>';
         profile:
         $loadedprofile=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-        //echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
+        //echo 'loadedprofile='.$loadedprofile['result']['label'].'<br>';
         if ($loadedprofile['result']['label']!==$profile) {
             @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
             usleep(10000);
             $profilereply=@kodi('{"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}');
-            //echo 'profilereply='.$profilereply.'</pre><br/>';
+            //echo 'profilereply='.$profilereply.'</pre><br>';
             $count=$count + 1;
             if ($count>10) {
                 die('Die Endless loop');
@@ -165,17 +165,17 @@ if ($home) {
 					<input type="hidden" name="dimmer" value="true">
 				</div>
 				<div class="fix z" style="top:100px;left:30px;">
-					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90"/>
+					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90">
 				</div>
 				<div class="fix z" style="top:100px;left:150px;">
-					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90"/>';
+					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
         if ($dimaction==1) {
             echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
         }
         echo '
 				</div>
 				<div class="fix z" style="top:100px;left:265px;">
-					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px"/>';
+					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px">';
         if ($dimaction==2) {
             echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
         }
@@ -184,7 +184,7 @@ if ($home) {
 				</div>';
         echo '
 				<div class="fix z" style="top:100px;left:385px;">
-					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90"/>
+					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
 
@@ -200,13 +200,17 @@ if ($home) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '<input type="submit" name="dimlevel" value="'.$level.'"/ class="dimlevel dimlevela">';
             } else {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel"/>';
+                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel">';
             }
         }
         echo '
 				</div>
 			</form>
-			<div class="fix z" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.media.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.media.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px" alt="">
+			    </a>
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
@@ -232,11 +236,11 @@ if ($home) {
 	    </div>
     	<div class="fix z1" style="top:5px;left:5px;">
     	    <a href=\'javascript:navigator_Go("floorplan.php");\'>
-    	        <img src="/images/close.png" width="72px" height="72px"/>
+    	        <img src="/images/close.png" width="72px" height="72px" alt="">
     	    </a>
     	</div>
 	    <div class="fix" style="top:100px;left:0px;">
-		    <form method="POST">';
+		    <form method="POST" action="floorplan.media.php">';
     $inputs=array('TUNER','UIT');
     if (!in_array($denoninput, $inputs)&&$denoninput!='') {
         $inputs[]=$denoninput;
@@ -244,47 +248,47 @@ if ($home) {
     foreach ($inputs as $input) {
         if ($denoninput==$input) {
             echo '
-                <input type="submit" name="Scene" value="'.$input.'" class="btn input btna"/>
-                <br/>
-                <br/>';
+                <input type="submit" name="Scene" value="'.$input.'" class="btn input btna">
+                <br>
+                <br>';
         } else {
             if ($input=='UIT') {
                 echo '
-                <input type="submit" name="Scene" value="UIT" class="btn input" onclick="return confirm(\'Are you sure?\');"/>
-                <br/>
-                <br/>';
+                <input type="submit" name="Scene" value="UIT" class="btn input" onclick="return confirm(\'Are you sure?\');">
+                <br>
+                <br>';
             } else {
                 echo '
-                <input type="submit" name="Scene" value="'.$input.'" class="btn input"/>
-                <br/>
-                <br/>';
+                <input type="submit" name="Scene" value="'.$input.'" class="btn input">
+                <br>
+                <br>';
             }
         }
     }
     echo '
             </form>
-            <br/>
+            <br>
             <a href=\'javascript:navigator_Go("denon.php");\'>
-                <img src="/images/denon.png" class="i48"/>
+                <img src="/images/denon.png" class="i48" alt="">
             </a>
             <br>
             <br>
             <br>
             <a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'>
-                <img src="/images/kodi.png" class="i48"/>
+                <img src="/images/kodi.png" class="i48" alt="">
                 <br>Films
             </a>
             <br>
             <br>
             <a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'>
-                <img src="/images/kodi.png" class="i48"/>
+                <img src="/images/kodi.png" class="i48" alt="">
                 <br>
                 Series
             </a>
             <br>
             <br>
             <a href=\'javascript:navigator_Go("kodi.php");\'>
-                <img src="/images/kodi.png" class="i48"/>
+                <img src="/images/kodi.png" class="i48" alt="">
                 <br>
                 Kodi<br>
                 Control
@@ -317,12 +321,12 @@ if ($home) {
     if ($d['denonpower']['s']=='ON') {
         echo '
 	<div class="fix denon z1">
-			<input type="image" src="/images/denon_On.png" id="denon"/>
+			<input type="image" src="/images/denon_On.png" id="denon">
 	</div>';
     } else {
         echo '
 	<div class="fix denon z1">
-			<input type="image" src="/images/denon_Off.png" id="denon"/>
+			<input type="image" src="/images/denon_Off.png" id="denon">
 	</div>';
     }
     if ($d['tv']['s']=='On') {
@@ -339,26 +343,26 @@ if ($home) {
     if ($d['nvidia']['m']=='On') {
         echo '
 	<div class="fix nvidia z1">
-			<input type="image" src="/images/nvidia_On.png" id="nvidia"/>
+			<input type="image" src="/images/nvidia_On.png" id="nvidia">
 	</div>';
     } else {
         echo '
 	<div class="fix nvidia z1">
-			<input type="image" src="/images/nvidia_Off.png" id="nvidia"/>
+			<input type="image" src="/images/nvidia_Off.png" id="nvidia">
 	</div>';
     }
     if ($d['nas']['s']=='On') {
         echo '
         <div class="fix nas z1">
             <a href=\'javascript:navigator_Go("?nas=sleep");\'>
-                <img src="images/nas_On.png" class="i48" alt=""/>
+                <img src="images/nas_On.png" class="i48" alt="">
             </a>
             <br>';
     } else {
         echo '
         <div class="fix nas z1">
             <a href=\'javascript:navigator_Go("?nas=wake");\'>
-                <img src="images/nas_Off.png" class="i48" alt=""/>
+                <img src="images/nas_Off.png" class="i48" alt="">
             </a>
             <br>';
     }
@@ -372,13 +376,13 @@ if ($home) {
     echo '
         <div class="fix bose">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
-                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
+                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
             </a>
         </div>';
 
     echo '
         <div class="fix blackmedia">
-            <form method="POST">';
+            <form method="POST" action="floorplan.media.php">';
     if ($d['denon']['s']=='On') {
         if (!empty($denonmain)) {
             $cv=80+$denonmain['MasterVolume']['value'];
@@ -446,16 +450,16 @@ if ($home) {
 			  </tr>
 			  </table>';
                         echo $prop['speed']==1
-                        ?'<input type="submit" name="PauseKodi" value="Playing" class="btn b2"/>'
-                        :'<input type="submit" name="PauseKodi" value="Paused" class="btn b2"/>';
-                        echo '        <input type="submit" name="StopKodi" value="STOP" class="btn b2"/>
+                        ?'<input type="submit" name="PauseKodi" value="Playing" class="btn b2">'
+                        :'<input type="submit" name="PauseKodi" value="Paused" class="btn b2">';
+                        echo '        <input type="submit" name="StopKodi" value="STOP" class="btn b2">
 			  ';
                         if ($prop['speed']==1) {
                             echo '<br>
-				<input type="submit" name="bigbackward" value="<<" class="btn b4"/>
-				<input type="submit" name="smallbackward" value="<" class="btn b4"/>
-				<input type="submit" name="smallforward" value=">" class="btn b4"/>
-				<input type="submit" name="bigforward" value=">>" class="btn b4"/>
+				<input type="submit" name="bigbackward" value="<<" class="btn b4">
+				<input type="submit" name="smallbackward" value="<" class="btn b4">
+				<input type="submit" name="smallforward" value=">" class="btn b4">
+				<input type="submit" name="bigforward" value=">>" class="btn b4">
 				';
                         }
                         $stream=0;
@@ -465,7 +469,7 @@ if ($home) {
                             :'<button type="submit" name="audio" value="'.$audio['index'].'" class="btn b3">'.$audio['name'].'</button>';
                             $stream=$stream + 1;
                         }
-                        echo '<br/>';
+                        echo '<br>';
                         foreach ($prop['subtitles'] as $subtitle) {
                             echo $subtitle['index']===$prop['currentsubtitle']['index']
                             ?'<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b3">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>'
@@ -477,13 +481,13 @@ if ($home) {
 
 
                 } else {
-                    echo '<div class="box">Update Library:<br/>
-				  <input type="submit" name="UpdateKodi" value="Wij" class="btn b3"/>
-				  <input type="submit" name="UpdateKodi" value="Tobi" class="btn b3"/>
-				  <input type="submit" name="UpdateKodi" value="Alex" class="btn b3"/><br><br>
+                    echo '<div class="box">Update Library:<br>
+				  <input type="submit" name="UpdateKodi" value="Wij" class="btn b3">
+				  <input type="submit" name="UpdateKodi" value="Tobi" class="btn b3">
+				  <input type="submit" name="UpdateKodi" value="Alex" class="btn b3"><br><br>
 				  <br>
-				  <input type="submit" name="PowerOff" value="Power Off" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
-				  <input type="submit" name="PowerOn" value="Power On" class="btn b2"/><br>
+				  <input type="submit" name="PowerOff" value="Power Off" class="btn b2" onclick="return confirm(\'Are you sure?\');">
+				  <input type="submit" name="PowerOn" value="Power On" class="btn b2"><br>
 				</div>';
                 }
             }
@@ -493,6 +497,7 @@ if ($home) {
     echo '
                 </div>
             </div>
+            </form>
         </div>
         <div class="fix floorplanstats">
             '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3, ',', '.').' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
