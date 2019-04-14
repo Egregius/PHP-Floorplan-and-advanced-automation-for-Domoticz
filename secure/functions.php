@@ -162,9 +162,9 @@ function blinds($name)
                 <input type="hidden" name="Actie" value="Off"/>';
     echo $d[$name]['s']=='Closed'
     ?'
-                <input type="image" src="/images/arrowgreenup.png" class="i48"/>'
+                <input type="image" src="/images/arrowgreenup.png" class="i48" alt="Open">'
     :'
-                <input type="image" src="/images/arrowup.png" class="i48"/>';
+                <input type="image" src="/images/arrowup.png" class="i48" alt="Mixed">';
     echo '
             </form><br/>
             <form method="POST">
@@ -173,9 +173,9 @@ function blinds($name)
                 <input type="hidden" name="Actie" value="On"/>';
     echo $d[$name]['s']=='Open'
     ?'
-                <input type="image" src="/images/arrowgreendown.png" class="i48"/>'
+                <input type="image" src="/images/arrowgreendown.png" class="i48" alt="Closed">'
     :'
-                <input type="image" src="/images/arrowdown.png" class="i48"/>';
+                <input type="image" src="/images/arrowdown.png" class="i48" alt="Mixed">';
     echo '
             </form>
         </div>';

@@ -350,52 +350,52 @@ if ($home) {
     echo '
 	    <div class="fix leftbuttons">
 		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-		        <img src="/images/'.$Rup.'.png" class="i60"/>
+		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
 		    </a>
-		    <br/>';
+		    <br>';
     if ($d['heating']['s']==3) {
         echo '
             <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Fire_'.($d['brander']['s']=='On'?'On':'Off').'.png" class="i48">
+                <img src="/images/Fire_'.($d['brander']['s']=='On'?'On':'Off').'.png" class="i48" alt="Brander">
             </a>
-            <br/>
-            <br/>
-            <br/>
-            <br/>';
+            <br>
+            <br>
+            <br>
+            <br>';
     } elseif ($d['heating']['s']==2) {
         echo '
             <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Elec.png" height="40px" width="auto">
+                <img src="/images/Elec.png" height="40px" width="auto" alt="Elec">
             </a>
-            <br/>
-            <br/>
-            <br/>
-            <br/>';
+            <br>
+            <br>
+            <br>
+            <br>';
     } elseif ($d['heating']['s']==1) {
         echo '
             <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Cooling.png" class="i48">
+                <img src="/images/Cooling.png" class="i48" alt="Cooling">
             </a>
-            <br/>
-            <br/>
-            <br/>
-            <br/>';
+            <br>
+            <br>
+            <br>
+            <br>';
     } elseif ($d['heating']['s']==0) {
         echo '
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>';
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>';
     }
     echo '
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
     echo $d['denonpower']['s']=='ON'?'On':'Off';
-    echo '.png" class="i70">
+    echo '.png" class="i70" alt="denon">
             </a>
-            <br/>
+            <br>
 		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
 		        <img src="/images/';
     if ($d['tv']['s']=='On') {
@@ -407,15 +407,15 @@ if ($home) {
     } else {
         echo 'TV_Off';
     }
-    echo '.png" class="i60">
+    echo '.png" class="i60" alt="lgtv">
             </a>
-            <br/>
+            <br>
 		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
 		        <img src="/images/nvidia_';
     echo $d['nvidia']['m']=='On'?'On':'Off';
-    echo '.png" class="i48">
+    echo '.png" class="i48" alt="nvidia">
 		    </a>
-		    <br/>
+		    <br>
         </div>
         <div class="fix center zon">';
     echo '
@@ -431,7 +431,7 @@ if ($home) {
     echo '
             <br>
             <br>
-            <img src="images/sunrise.png"/>
+            <img src="images/sunrise.png" class="i20" alt="sunrise">
             <br>
             '.strftime("%k:%M", $d['civil_twilight']['s']).'
             <br>
@@ -669,14 +669,14 @@ if ($home) {
             echo '
         <div class="fix weather">
             <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
             </a>
         </div>';
         } else {
             echo '
         <div class="fix weather">
             <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png"/>
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
             </a>
         </div>';
         }
@@ -684,31 +684,31 @@ if ($home) {
     echo '
         <div class="fix floorplan2icon">
             <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
-                <img src="/images/plus.png" class="i60"/>
+                <img src="/images/plus.png" class="i60" alt="plus">
             </a>
         </div>
         <div class="fix picam1">
             <a href=\'javascript:navigator_Go("picam1/index.php");\'>
-                <img src="/images/Camera.png" class="i48">
+                <img src="/images/Camera.png" class="i48" alt="cam">
             </a>
         </div>
         <div class="fix picam2">
             <a href=\'javascript:navigator_Go("picam2/index.php");\'>
-                <img src="/images/Camera.png" class="i48">
+                <img src="/images/Camera.png" class="i48" alt="cam">
             </a>
         </div>
-        <div class="fix weg">
-            <form method="POST">
+        <div class="fix Weg">
+            <form action="floorplan.php" method="POST">
                 <input type="hidden" name="Weg" value="true"/>';
     if ($d['Weg']['s']==0) {
         echo '
-                <input type="image" src="/images/Thuis.png" id="Weg"/>';
+                <input type="image" src="/images/Thuis.png" id="Weg">';
     } elseif ($d['Weg']['s']==1) {
         echo '
-                <input type="image" src="/images/Slapen.png" id="Weg"/>';
+                <input type="image" src="/images/Slapen.png" id="Weg">';
     } elseif ($d['Weg']['s']==2) {
         echo '
-                <input type="image" src="/images/Weg.png" id="Weg"/>';
+                <input type="image" src="/images/Weg.png" id="Weg">';
     }
         echo '
             </form>
@@ -891,7 +891,7 @@ if ($home) {
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
             setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'3950':'14950').');
+            ($local===true?'9993950':'14950').');
         </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
