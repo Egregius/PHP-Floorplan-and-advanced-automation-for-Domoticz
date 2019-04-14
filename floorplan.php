@@ -619,50 +619,51 @@ if ($home) {
         $zonvandaagcolor='#CCCCCC';
     }
     echo '
-        <div class="fix verbruik">
-            <a href=\'javascript:navigator_Go("https://verbruik.egregius.be/dag.php?Guy=on");\'>
+        <div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';">
             <table>
-                    <tr>
-                        <td>Elec:</td>
-                        <td><font color="'.$verbruikcolor.'">'.$d['elec']['s'].' W</font></td>
-                        <td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
-                    </tr>';
+                <tr>
+                    <td>Elec:</td>
+                    <td><font color="'.$verbruikcolor.'">'.$d['elec']['s'].' W</font></td>
+                    <td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
+                </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
         echo'
-                    <tr>
-                        <td>Zon:</td>
-                        <td><font color="'.$zoncolor.'">'.$d['zon']['s'].' W</font></td>
-                        <td><font color="'.$zonvandaagcolor.'"> '.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
-                    </tr>';
+                <tr>
+                    <td>Zon:</td>
+                    <td><font color="'.$zoncolor.'">'.$d['zon']['s'].' W</font></td>
+                    <td><font color="'.$zonvandaagcolor.'"> '.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
+                </tr>';
     }
     echo '
-                    <tr>
-                        <td><font color="'.$gascolor.'">Gas:</font></td>
-                        <td colspan=2><font color="'.$gasvandaagcolor.'">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
-                    </tr>
-                    <tr>
-                        <td><font color="'.$watercolor.'">Water:</font></td>
-                        <td colspan=2><font color="'.$watervandaagcolor.'">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
-                    </tr>';
+                <tr>
+                    <td><font color="'.$gascolor.'">Gas:</font></td>
+                    <td colspan=2><font color="'.$gasvandaagcolor.'">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
+                </tr>
+                <tr>
+                    <td><font color="'.$watercolor.'">Water:</font></td>
+                    <td colspan=2><font color="'.$watervandaagcolor.'">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
+                </tr>';
     if ($d['douche']['s']>0||$d['douche']['m']>0) {
         echo '
-                    <tr>
-                        <td>D-gas</td>
-                        <td>'.$d['douche']['s']*10 .' L</td>
-                        <td>'.number_format(($d['douche']['s']*10*0.00065), 2, ',', '.').' €</td>
-                    <tr>
-                    <tr>
-                        <td>D-water</td>
-                        <td>'.$d['douche']['m'].' L</td>
-                        <td>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
-                    <tr>';
+                <tr>
+                    <td>D-gas</td>
+                    <td>'.$d['douche']['s']*10 .' L</td>
+                    <td>'.number_format(($d['douche']['s']*10*0.00065), 2, ',', '.').' €</td>
+                <tr>
+                <tr>
+                    <td>D-water</td>
+                    <td>'.$d['douche']['m'].' L</td>
+                    <td>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
+                <tr>';
     }
     echo '
-		        </table>
-		    </a>
+		    </table>
 	    </div>';
     if (!empty($d['gcal']['m'])) {
-        echo '<div class="fix z0 afval">'.$d['gcal']['m'].'</div>';
+        echo '
+        <div class="fix z0 afval">
+            '.$d['gcal']['m'].'
+        </div>';
     }
     if (!empty($d['icon']['s'])) {
         if ($udevice=='Mac') {
@@ -848,11 +849,11 @@ if ($home) {
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
-        <div id="diepvries z0" class="fix diepvries_temp red">
+        <div class="fix z0 diepvries_temp red">
             '.$d['diepvries_temp']['s'].'°C
         </div>'
      : '
-        <div id="diepvries z0" class="fix diepvries_temp">
+        <div class="fix z0 diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
         </div>';
 
@@ -881,7 +882,6 @@ if ($home) {
         </div>';
     }
     echo '
-        </div>
         <div class="fix floorplanstats">
             '.$udevice.' | '.
             $ipaddress.' | '.
@@ -891,7 +891,7 @@ if ($home) {
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
             setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'9993950':'14950').');
+            ($local===true?'3950':'14950').');
         </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}

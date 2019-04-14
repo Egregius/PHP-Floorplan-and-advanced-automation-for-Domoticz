@@ -185,22 +185,20 @@ function dimmer($name)
     global $page,$d;
     echo '
         <form method="POST" action="">
-            <a href="'.$page.'?setdimmer='.$name.'">
-                <div class="fix z '.$name.'">
-                    <input type="hidden" name="setdimmer" value="'.$name.'">';
+            <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
+                <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			        <input type="image" src="/images/Light_Off.png" class="i70">';
+			    <input type="image" src="/images/Light_Off.png" class="i70">';
     } else {
         echo'
-                    <input type="image" src="/images/Light_On.png" class="i70">
-                    <div class="fix center dimmerlevel">
-                        '.$d[$name]['s'].'
-                    </div>';
+                <input type="image" src="/images/Light_On.png" class="i70">
+                <div class="fix center dimmerlevel">
+                    '.$d[$name]['s'].'
+                </div>';
     }
     echo '
-		        </div>
-            </a>
+	        </div>
         </form>';
 }
 function idx($name)
@@ -453,16 +451,14 @@ function thermometer($name)
         $dcolor='00F';
     }
     echo '
-        <a href=\'javascript:navigator_Go("temp.php?sensor=998");\'>
-            <div class="fix '.$name.'" >
-                <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
-                </div>
-                <img src="/images/temp.png" height="100px" width="auto">
-                <div class="fix center" style="top:73px;left:5px;width:30px;">
-                    '.number_format($temp, 1, ',', '').'
-                </div>
+        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';">
+            <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
             </div>
-        </a>';
+            <img src="/images/temp.png" height="100px" width="auto" alt="'.$name.'">
+            <div class="fix center" style="top:73px;left:5px;width:30px;">
+                '.number_format($temp, 1, ',', '').'
+            </div>
+        </div>';
 }
 function thermostaat($name,$top,$left)
 {
