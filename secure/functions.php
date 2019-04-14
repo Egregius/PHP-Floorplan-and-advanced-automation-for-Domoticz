@@ -156,21 +156,21 @@ function blinds($name)
     global $d;
     echo '
         <div class="fix z '.$name.'">
-            <form method="POST">
-                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
-                <input type="hidden" name="Naam" value="'.$name.'"/>
-                <input type="hidden" name="Actie" value="Off"/>';
+            <form method="POST" action="">
+                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">
+                <input type="hidden" name="Naam" value="'.$name.'">
+                <input type="hidden" name="Actie" value="Off">';
     echo $d[$name]['s']=='Closed'
     ?'
                 <input type="image" src="/images/arrowgreenup.png" class="i48" alt="Open">'
     :'
                 <input type="image" src="/images/arrowup.png" class="i48" alt="Mixed">';
     echo '
-            </form><br/>
-            <form method="POST">
-                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'"/>
-                <input type="hidden" name="Naam" value="'.$name.'"/>
-                <input type="hidden" name="Actie" value="On"/>';
+            </form><br>
+            <form method="POST" action="">
+                <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">
+                <input type="hidden" name="Naam" value="'.$name.'">
+                <input type="hidden" name="Actie" value="On">';
     echo $d[$name]['s']=='Open'
     ?'
                 <input type="image" src="/images/arrowgreendown.png" class="i48" alt="Closed">'
@@ -184,16 +184,16 @@ function dimmer($name)
 {
     global $page,$d;
     echo '
-        <form method="POST">
+        <form method="POST" action="">
             <a href="'.$page.'?setdimmer='.$name.'">
                 <div class="fix z '.$name.'">
-                    <input type="hidden" name="setdimmer" value="'.$name.'"/>';
+                    <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			        <input type="image" src="/images/Light_Off.png" class="i70"/>';
+			        <input type="image" src="/images/Light_Off.png" class="i70">';
     } else {
         echo'
-                    <input type="image" src="/images/Light_On.png" class="i70"/>
+                    <input type="image" src="/images/Light_On.png" class="i70">
                     <div class="fix center dimmerlevel">
                         '.$d[$name]['s'].'
                     </div>';
@@ -217,14 +217,14 @@ function schakelaar($name,$kind)
     global $d;
     echo '
         <div class="fix '.preg_replace('/\s/', '', $name).' z1">
-            <form method="POST">
-                <input type="hidden" name="Naam" value="'.$name.'"/>';
+            <form method="POST" action="">
+                <input type="hidden" name="Naam" value="'.$name.'">';
     echo $d[$name]['s']=='Off'?'
-                <input type="hidden" name="Actie" value="On"/>
-                <input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'"/>'
+                <input type="hidden" name="Actie" value="On">
+                <input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'">'
     :'
                 <input type="hidden" name="Actie" value="Off">
-                <input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'"/>';
+                <input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'">';
     echo '
             </form>
         </div>';
@@ -232,19 +232,28 @@ function schakelaar($name,$kind)
 function schakelaar2($name,$kind)
 {
     global $eendag,$d;
-    echo '<div class="fix z1 center '.$name.'" style="width:70px;">
-	<form method="POST"><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
-    echo $d[$name]['s']=='Off'?'<input type="hidden" name="Actie" value="On">
-        <input type="hidden" name="Naam" value="'.$name.'">
-        <input type="image" src="/images/'.$kind.'_Off.png" class="i40"/>'
-                   :'<input type="hidden" name="Actie" value="Off">
-        <input type="hidden" name="Naam" value="'.$name.'">
-        <input type="image" src="/images/'.$kind.'_On.png" class="i40"/>';
-    echo '<br/>'.$name;
+    echo '
+        <div class="fix z1 center '.$name.'" style="width:70px;">
+        	<form method="POST" action=""><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
+    echo $d[$name]['s']=='Off'?'
+                <input type="hidden" name="Actie" value="On">
+                <input type="hidden" name="Naam" value="'.$name.'">
+                <input type="image" src="/images/'.$kind.'_Off.png" class="i40">'
+                   :'
+                <input type="hidden" name="Actie" value="Off">
+                <input type="hidden" name="Naam" value="'.$name.'">
+                <input type="image" src="/images/'.$kind.'_On.png" class="i40">';
+    echo '
+                <br>'.$name;
     if ($d[$name]['t']>$eendag) {
-        echo '<div class="fix center" style="top:52px;left:0px;width:70px;">'.strftime("%H:%M", $d[$name]['t']).'</div>';
+        echo '
+                <div class="fix center" style="top:52px;left:0px;width:70px;">
+                    '.strftime("%H:%M", $d[$name]['t']).'
+                </div>';
     }
-    echo '</form></div>';
+    echo '
+            </form>
+        </div>';
 }
 function sl($name,$level,$check=false)
 {
@@ -448,7 +457,7 @@ function thermometer($name)
             <div class="fix '.$name.'" >
                 <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
                 </div>
-                <img src="/images/temp.png" height="100px" width="auto"/>
+                <img src="/images/temp.png" height="100px" width="auto">
                 <div class="fix center" style="top:73px;left:5px;width:30px;">
                     '.number_format($temp, 1, ',', '').'
                 </div>
@@ -480,7 +489,7 @@ function thermostaat($name,$top,$left)
     echo '
         <a href=\'javascript:navigator_Go("floorplan.heating.php?SetSetpoint='.$name.'");\'>
             <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;">
-                <img src="/images/thermo'.$circle.$centre.'.png" class="i48"/>
+                <img src="/images/thermo'.$circle.$centre.'.png" class="i48">
                 <div class="fix center" style="top:32px;left:11px;width:26px;">';
     if ($mode>0) {
         echo '
@@ -724,19 +733,19 @@ function telegram($msg,$silent=true,$to=1)
 function luifel($name,$stat)
 {
     echo '
-        <form method="POST">
+        <form method="POST" action="">
             <a href=\'javascript:navigator_Go("floorplan.heating.php?luifel='.$name.'");\'>
                 <div class="fix z '.$name.'">
-                    <input type="hidden" name="luifel" value="'.$name.'"/>';
+                    <input type="hidden" name="luifel" value="'.$name.'">';
     if ($stat==100) {
         echo '
-                    <input type="image" src="/images/arrowgreenup.png" class="i60"/>';
+                    <input type="image" src="/images/arrowgreenup.png" class="i60">';
     } elseif ($stat==0) {
         echo '
-                    <input type="image" src="/images/arrowgreendown.png" class="i60"/>';
+                    <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } else {
         echo'
-                    <input type="image" src="/images/arrowdown.png" class="i60"/>
+                    <input type="image" src="/images/arrowdown.png" class="i60">
                     <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
                         '. (100 - $stat) .'</font>
                     </div>';
@@ -750,19 +759,19 @@ function rollers($name,$stat)
 {
     global $d;
     echo '
-        <form method="POST">
+        <form method="POST" action="">
             <a href=\'javascript:navigator_Go("floorplan.heating.php?rollers='.$name.'");\'>
                 <div class="fix z '.$name.'">
-                    <input type="hidden" name="rollers" value="'.$name.'"/>';
+                    <input type="hidden" name="rollers" value="'.$name.'">';
     if ($stat==100) {
         echo '
-                    <input type="image" src="/images/arrowgreendown.png" class="i60"/>';
+                    <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } elseif ($stat==0) {
         echo '
-                    <input type="image" src="/images/arrowgreenup.png" class="i60"/>';
+                    <input type="image" src="/images/arrowgreenup.png" class="i60">';
     } else {
         echo'
-                    <input type="image" src="/images/circlegrey.png" class="i60"/>
+                    <input type="image" src="/images/circlegrey.png" class="i60">
                     <div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">';
         if ($d[$name]['m']==2) {
             echo '

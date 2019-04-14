@@ -80,9 +80,9 @@ if ($home) {
 			<h2>Raam Living open!<h2>
 			<br><br>
 			<form action="floorplan.php" method="post">
-				<input type="hidden" name="Weg" value="true"/>
-				<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-				<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+				<input type="hidden" name="Weg" value="true">
+				<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+				<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
 			</form>
 		</div>
 	</body>
@@ -98,9 +98,9 @@ if ($home) {
             <h2>Achterdeur open!<h2>
             <br><br>
             <form action="floorplan.php" method="post">
-                <input type="hidden" name="Weg" value="true"/>
-                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+                <input type="hidden" name="Weg" value="true">
+                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
             </form>
         </div>
     </body>
@@ -116,9 +116,9 @@ if ($home) {
             <h2>Poort open!<h2>
             <br><br>
             <form action="floorplan.php" method="post">
-                <input type="hidden" name="Weg" value="true"/>
-                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+                <input type="hidden" name="Weg" value="true">
+                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
             </form>
         </div>
     </body>
@@ -129,7 +129,7 @@ if ($home) {
     <body>
         <div id="message" class="fix confirm">
             <form action="floorplan.php" method="post">
-                <input type="hidden" name="Weg" value="true"/>
+                <input type="hidden" name="Weg" value="true">
                 <button name="Action" value="2" class="btn huge3">Weg</button>
                 <button name="Action" value="1" class="btn huge3">Slapen</button>
                 <button name="Action" value="0" class="btn huge3">Thuis</button>
@@ -153,14 +153,14 @@ if ($home) {
                 }
                     echo '<body><div id="message" class="fix confirm">
 				<form method="post">
-					<input type="hidden" name="Actie" value="On"/>
-					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'"/>
-					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2"/>
+					<input type="hidden" name="Actie" value="On">
+					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'">
+					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2">
 				</form>
 				<form method="post">
-					<input type="hidden" name="Actie" value="Off"/>
-					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'"/>
-					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2"/>
+					<input type="hidden" name="Actie" value="Off">
+					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'">
+					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2">
 				</form>
 			</div>
 			</body>
@@ -181,8 +181,8 @@ if ($home) {
             } else {
                 echo '<body><div id="message" class="fix confirm">
 			<form method="post" action="floorplan.php">
-					<input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2"/>
-					<input type="submit" name="confirm" value="Annuleer" class="btn huge2"/>
+					<input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2">
+					<input type="submit" name="confirm" value="Annuleer" class="btn huge2">
 				</form>
 			</div>
 			</body>
@@ -239,17 +239,17 @@ if ($home) {
 					<input type="hidden" name="dimmer" value="true">
 				</div>
 				<div class="fix z" style="top:100px;left:30px;">
-					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90"/>
+					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90">
 				</div>
 				<div class="fix z" style="top:100px;left:150px;">
-					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90"/>';
+					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
         if ($dimaction==1) {
             echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
         }
         echo '
 				</div>
 				<div class="fix z" style="top:100px;left:265px;">
-					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px"/>';
+					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px">';
         if ($dimaction==2) {
             echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
         }
@@ -259,7 +259,7 @@ if ($home) {
         if ($name=='alex') {
             echo '
 					<div class="fix z" style="top:10px;left:265px;">
-						<input type="image" name="dimwake3u" value="100" src="images/Wakeup.png" style="height:90px;width:90px"/>
+						<input type="image" name="dimwake3u" value="100" src="images/Wakeup.png" style="height:90px;width:90px">
 						<div class="fix" style="top:39px;left:25px;font-size:3em;z-index:-10;" >3u</div>';
             if ($dimaction==3) {
                 echo '
@@ -273,7 +273,7 @@ if ($home) {
         }
         echo '
 				<div class="fix z" style="top:100px;left:385px;">
-					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90"/>
+					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
 
@@ -293,7 +293,7 @@ if ($home) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '<input type="submit" name="dimlevel" value="'.$level.'"/ class="dimlevel dimlevela">';
             } else {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel"/>';
+                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel">';
             }
         }
         echo '
@@ -301,7 +301,7 @@ if ($home) {
 			</form>
 			<div class="fix z" style="top:5px;left:5px;">
 			    <a href=\'javascript:navigator_Go("floorplan.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px"/>
+			        <img src="/images/close.png" width="72px" height="72px">
 			    </a>
 			</div>
 		</div>
@@ -699,7 +699,7 @@ if ($home) {
         </div>
         <div class="fix Weg">
             <form action="floorplan.php" method="POST">
-                <input type="hidden" name="Weg" value="true"/>';
+                <input type="hidden" name="Weg" value="true">';
     if ($d['Weg']['s']==0) {
         echo '
                 <input type="image" src="/images/Thuis.png" id="Weg">';
@@ -834,17 +834,17 @@ if ($home) {
     echo '
         <div class="fix bose">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
-                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt=""/>
+                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
             </a>
         </div>
         <div class="fix bosebadkamer">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=4");\'>
-                <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt=""/>
+                <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt="">
             </a>
         </div>
         <div class="fix bosebuiten">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=5");\'>
-                <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt=""/>
+                <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
@@ -859,12 +859,12 @@ if ($home) {
     if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
         echo '
         <div class="fix z0 GroheRed">
-            <img src="images/Plug_On.png" width="28px" height="auto" alt=""/>
+            <img src="images/Plug_On.png" width="28px" height="auto" alt="">
         </div>';
     } elseif ($d['Usage_grohered']['s']>10) {
         echo '
         <div class="fix z0 GroheRed">
-            <img src="images/Plug_Red.png" width="28px" height="auto" alt=""/>
+            <img src="images/Plug_Red.png" width="28px" height="auto" alt="">
         </div>';
     }
     $tobi=explode(';', $d['kWh_bureeltobi']['s']);
@@ -877,7 +877,7 @@ if ($home) {
     if ($d['zoldervuur']['s']=='On') {
         echo '
         <div class="fix z0 zoldervuur2">
-            <img src="images/Fire_On.png" width="28px" height="auto" alt=""/>
+            <img src="images/Fire_On.png" width="28px" height="auto" alt="">
         </div>';
     }
     echo '
