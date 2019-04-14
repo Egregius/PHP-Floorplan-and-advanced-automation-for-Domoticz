@@ -20,26 +20,27 @@ require 'secure/authentication.php';
 if ($home) {
     session_start();
     $_SESSION['referer']='floorplan.php';
-    echo '<html>
+    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 	<head>
 		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
     if ($udevice=='iPhone') {
         echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
     }
     echo '
-	    <link rel="shortcut icon" href="images/domoticzphp48.png"/>
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
+	    <link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
-		<style>
+		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
 	</head>';
@@ -72,63 +73,70 @@ if ($home) {
         } else {
             if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
                 echo '
-	<body><div id="message" class="fix dimmer" >
-				<br><br>
-				<h2>Warning:</h2>
-				<h2>Raam Living open!<h2>
-				<br><br>
-				<form action="floorplan.php" method="post">
-					<input type="hidden" name="Weg" value="true"/>
-					<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-					<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
-				</form>
-			</div>
-			</body>
-		</html>';
+	<body>
+	    <div id="message" class="fix dimmer" >
+			<br><br>
+			<h2>Warning:</h2>
+			<h2>Raam Living open!<h2>
+			<br><br>
+			<form action="floorplan.php" method="post">
+				<input type="hidden" name="Weg" value="true"/>
+				<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
+				<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+			</form>
+		</div>
+	</body>
+</html>';
                 exit;
             }
             if ($d['achterdeur']['s']=='Open'&&!isset($_REQUEST['continue'])) {
-                echo '<div id="message" class="fix dimmer" >
-				<br><br>
-				<h2>Warning:</h2>
-				<h2>Achterdeur open!<h2>
-				<br><br>
-				<form action="floorplan.php" method="post">
-					<input type="hidden" name="Weg" value="true"/>
-					<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-					<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
-				</form>
-			</div>
-			</body>
-		</html>';
+                echo '
+    <body>
+        <div id="message" class="fix dimmer" >
+            <br><br>
+            <h2>Warning:</h2>
+            <h2>Achterdeur open!<h2>
+            <br><br>
+            <form action="floorplan.php" method="post">
+                <input type="hidden" name="Weg" value="true"/>
+                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
+                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+            </form>
+        </div>
+    </body>
+</html>';
                 exit;
             }
             if ($d['poort']['s']=='Open'&&!isset($_REQUEST['continue'])) {
-                echo '<body><div id="message" class="fix dimmer" >
-				<br><br>
-				<h2>Warning:</h2>
-				<h2>Poort open!<h2>
-				<br><br>
-				<form action="floorplan.php" method="post">
-					<input type="hidden" name="Weg" value="true"/>
-					<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
-					<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
-				</form>
-			</div>
-			</body>
-		</html>';
+                echo '
+    <body>
+        <div id="message" class="fix dimmer" >
+            <br><br>
+            <h2>Warning:</h2>
+            <h2>Poort open!<h2>
+            <br><br>
+            <form action="floorplan.php" method="post">
+                <input type="hidden" name="Weg" value="true"/>
+                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"/><br>
+                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;"/>
+            </form>
+        </div>
+    </body>
+</html>';
                 exit;
             }
-            echo '<body><div id="message" class="fix confirm">
-				<form method="post">
-					<input type="hidden" name="Weg" value="true"/>
-					<button name="Action" value="2" class="btn huge3">Weg</button>
-					<button name="Action" value="1" class="btn huge3">Slapen</button>
-					<button name="Action" value="0" class="btn huge3">Thuis</button>
-				</form>
-			</div>
-			</body>
-		</html>';
+            echo '
+    <body>
+        <div id="message" class="fix confirm">
+            <form action="floorplan.php" method="post">
+                <input type="hidden" name="Weg" value="true"/>
+                <button name="Action" value="2" class="btn huge3">Weg</button>
+                <button name="Action" value="1" class="btn huge3">Slapen</button>
+                <button name="Action" value="0" class="btn huge3">Thuis</button>
+            </form>
+        </div>
+    </body>
+</html>';
             exit;
         }
     }

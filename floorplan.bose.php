@@ -104,7 +104,7 @@ if ($home) {
         if (isset($nowplaying['@attributes']['source'])) {
             echo '
         <div class="fix blackmedia" >
-			<form method="POST">';
+			<form method="POST" action="floorplan.bose.php">';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
                  echo '
                 <h3>STANDBY</h3>';
@@ -155,7 +155,7 @@ if ($home) {
                 </h4>';
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto">
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art">
                 <br>
                 <br>
                 <button type="submit" name="prev" class="btn b2">Prev</button>
@@ -169,7 +169,7 @@ if ($home) {
                     echo $nowplaying['artist'];
                     echo '
                 <br>
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto"/>
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art">
                 <br>
                 <br>';
                 } else {
