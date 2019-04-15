@@ -209,13 +209,15 @@ if ($home) {
             //print_r($_REQUEST);
             //print_r($items);
             if (isset($_REQUEST['verdiepingmode'])) {
-                  lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['verdiepingmode']);
+                lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['verdiepingmode']);
                 foreach ($items as $i) {
                     if ($d[$i]['m']<2) {
                         if ($_REQUEST['verdiepingmode']=='Manueel') {
                             storemode($i, 1);
+                            $d[$i]['m']=1;
                         } else {
                             storemode($i, 0);
+                            $d[$i]['m']=0;
                         }
                     }
                 }
@@ -226,22 +228,26 @@ if ($home) {
                         sl($i, 100, 'Roller');
                         if ($d[$i]['m']==0) {
                             storemode($i, 1);
+                            $d[$i]['m']=1;
                         }
                     } elseif (isset($_REQUEST['Rollerleveloff_x'])) {
                         lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
                         sl($i, 0, 'Roller');
                         if ($d[$i]['m']==0) {
                             storemode($i, 1);
+                            $d[$i]['m']=1;
                         }
                     } else {
                         lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['Rollerlevel']);
                         sl($i, $_REQUEST['Rollerlevel'], 'Roller');
                         if ($d[$i]['m']==0) {
                             storemode($i, 1);
+                            $d[$i]['m']=1;
                         }
                     }
                 }
             }
+            include 'secure/_rolluiken.php';
             //echo '</pre></div>';
             usleep(100000);
             header("Location: floorplan.heating.php");
@@ -377,13 +383,18 @@ if ($home) {
         } elseif (isset($_POST['confirm'])) {
             if ($_REQUEST['confirm']=='Cooling') {
                 store('heating', 1);
+                $d['heating']['s']=1;
             } elseif ($_REQUEST['confirm']=='Neutral') {
                 store('heating', 0);
+                $d['heating']['s']=0;
             } elseif ($_REQUEST['confirm']=='Elec') {
                 store('heating', 2);
+                $d['heating']['s']=2;
             } elseif ($_REQUEST['confirm']=='Gas/Elec') {
                 store('heating', 3);
+                $d['heating']['s']=3;
             }
+            include 'secure/_verwarming.php';
             usleep(100000);
             header("Location: floorplan.heating.php");
             die("Redirecting to: floorplan.heating.php");
