@@ -32,23 +32,36 @@ if ($home===true) {
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="/manifests/kodi.json">
     <script type="text/javascript">
-       setTimeout(\'window.location.href=window.location.href;\', 4950);
-       function navigator_Go(url) {window.location.assign(url);}
+        setTimeout(\'window.location.href=window.location.href;\', 4950);
+        function navigator_Go(url) {window.location.assign(url);}
     </script>
     <link href="/styles/kodi.php" rel="stylesheet" type="text/css"/>
-  </head>
-  <body>
-      <div class="content">
-      <div class="navbar">
-        <form action="/floorplan.media.php"><input type="submit" class="btn b7" value="Plan"/></form>
-        <form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
-        <form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
-        <form action="https://films.egregius.be/films.php"><input type="submit" class="btn b7" value="Films"/></form>
-        <form action="https://films.egregius.be/tobi.php"><input type="submit" class="btn b7" value="Tobi"/></form>
-        <form action="https://films.egregius.be/alex.php"><input type="submit" class="btn b7" value="Alex"/></form>
-        <form action="https://films.egregius.be/series.php"><input type="submit" class="btn b7" value="Series"/></form>
-        </div>
-        <div class="box title">
+    </head>
+    <body>
+        <div class="content">
+            <div class="navbar">
+                <form action="/floorplan.media.php">
+                    <input type="submit" class="btn b7" value="Plan"/>
+                </form>
+                <form action="/denon.php">
+                    <input type="submit" class="btn b7" value="Denon"/>
+                </form>
+                <form action="/kodi.php">
+                    <input type="submit" class="btn btna b7" value="Kodi"/>
+                </form>
+                <form action="https://films.egregius.be/films.php">
+                    <input type="submit" class="btn b7" value="Films"/>
+                </form>
+                <form action="https://films.egregius.be/tobi.php">
+                    <input type="submit" class="btn b7" value="Tobi"/>
+                </form>
+                <form action="https://films.egregius.be/alex.php">
+                    <input type="submit" class="btn b7" value="Alex"/>
+                </form>
+                <form action="https://films.egregius.be/series.php">
+                    <input type="submit" class="btn b7" value="Series"/>
+                </form>
+            </div>
             <form method="POST">';
     if (isset($_POST['mediauit'])) {
         ud('miniliving4l', 0, 'On');
@@ -87,7 +100,8 @@ if ($home===true) {
     } elseif (isset($_POST['bigforward'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
     } elseif (isset($_POST['PowerOff'])) {
-        @file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx='.idx('nvidia').'&switchcmd=Off', false, $ctx);
+        sw('nvidia', 'Off');
+        //@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx='.idx('nvidia').'&switchcmd=Off', false, $ctx);
     } elseif (isset($_POST['PowerOn'])) {
         @file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx='.idx('nvidia').'&switchcmd=On', false, $ctx);
     } elseif (isset($_POST['TVKodi'])) {
@@ -145,16 +159,18 @@ if ($home===true) {
     $current=json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
     if (isset($current['result']['item']['file'])) {
         if (!empty($current['result']['item']['file'])) {
+            echo '
+                <div class="box title">';
             $item=$current['result']['item'];
             //print_r($item);
             if ($item['episode']>0) {
                 echo '
-                <h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1>';
+                    <h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1>';
                 echo '
-                <h1>'.$item['label'].'</h1>';
+                    <h1>'.$item['label'].'</h1>';
             } else {
                 echo '
-                <a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
+                    <a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
             }
             $properties=json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
             //echo '<pre>';print_r($properties);echo '</pre>';
@@ -170,122 +186,116 @@ if ($home===true) {
                 $total['seconds']<10?$totaltime.='0'.$total['seconds']:$totaltime.=$total['seconds'];
                 if ($udevice=='iPad') {
                     echo '
-                    <table align="center">
-                        <tr>
-                            <td>Passed</td>
-                            <td><h2>'.$passedtime.'</h2></td>
-                            <td>Runtime</td><td><h2>'.$totaltime.'</h2></td>
-                            <td>Remaining</td>
-                            <td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
-                            <td>End at</td>
-                            <td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
-                        </tr>
-                    </table>
-                </div>';
+                        <table align="center">
+                            <tr>
+                                <td>Passed</td>
+                                <td><h2>'.$passedtime.'</h2></td>
+                                <td>Runtime</td><td><h2>'.$totaltime.'</h2></td>
+                                <td>Remaining</td>
+                                <td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
+                                <td>End at</td>
+                                <td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
+                            </tr>
+                        </table>
+                    </div>';
                 } else {
                     echo '
-                    <table align="center">
-                        <tr>
-                            <td>Passed</td>
-                            <td><h2>'.$passedtime.'</h2></td>
-                            <td>Runtime</td><td><h2>'.$totaltime.'</h2></td>
-                        </tr>
-                        <tr>
-                            <td>Remaining</td>
-                            <td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
-                            <td>End at</td>
-                            <td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
-                        </tr>
-                    </table>
-                </div>';
+                        <table align="center">
+                            <tr>
+                                <td>Passed</td>
+                                <td><h2>'.$passedtime.'</h2></td>
+                                <td>Runtime</td><td><h2>'.$totaltime.'</h2></td>
+                            </tr>
+                            <tr>
+                                <td>Remaining</td>
+                                <td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
+                                <td>End at</td>
+                                <td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
+                            </tr>
+                        </table>
+                    </div>';
                 }
                 echo '
-                <div class="box controls">';
+                    <div class="box controls">';
                 echo $prop['speed']==1
                  ?'
-                    <input type="submit" name="PauseKodi" value="Playing" class="btn b2"/>'
+                        <input type="submit" name="PauseKodi" value="Playing" class="btn b2"/>'
                  :'
-                    <input type="submit" name="PauseKodi" value="Paused" class="btn b2"/>';
+                        <input type="submit" name="PauseKodi" value="Paused" class="btn b2"/>';
                 echo '
-                    <input type="submit" name="StopKodi" value="STOP" class="btn b2"/>';
+                        <input type="submit" name="StopKodi" value="STOP" class="btn b2"/>';
                 if ($prop['speed']==1) {
                     echo '
-                    <br>
-                    <input type="submit" name="bigbackward" value="<<" class="btn b4"/>
-                    <input type="submit" name="smallbackward" value="<" class="btn b4"/>
-                    <input type="submit" name="smallforward" value=">" class="btn b4"/>
-                    <input type="submit" name="bigforward" value=">>" class="btn b4"/>';
+                        <br>
+                        <input type="submit" name="bigbackward" value="<<" class="btn b4"/>
+                        <input type="submit" name="smallbackward" value="<" class="btn b4"/>
+                        <input type="submit" name="smallforward" value=">" class="btn b4"/>
+                        <input type="submit" name="bigforward" value=">>" class="btn b4"/>';
                 }
                 echo '
-                </div>';
+                    </div>';
                 echo '
-                <div class="box audios">';
+                    <div class="box audios">';
                 $stream=0;
                 foreach ($prop['audiostreams'] as $audio) {
                     echo $audio['index']===$prop['currentaudiostream']['index']
                     ?'
-                    <button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b2">'.$audio['name'].'</button>'
+                        <button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b2">'.$audio['name'].'</button>'
                     :'
-                    <button type="submit" name="audio" value="'.$audio['index'].'" class="btn b2">'.$audio['name'].'</button>';
+                        <button type="submit" name="audio" value="'.$audio['index'].'" class="btn b2">'.$audio['name'].'</button>';
                     $stream=$stream + 1;
                 }
                 echo '
-                </div>
-                <div class="box subs">';
+                    </div>
+                    <div class="box subs">';
                 foreach ($prop['subtitles'] as $subtitle) {
                     echo $subtitle['index']===$prop['currentsubtitle']['index']
                     ?'
-                    <button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>'
+                        <button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>'
                     :'
-                    <button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>';
+                        <button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>';
                 }
                 echo '
-                    <br>
-                    <button type="submit" name="subtitle" value="enable" class="btn b2">Enable</button><button type="submit" name="subtitle" value="disable" class="btn b2">Disable</button>';
+                        <br>
+                        <button type="submit" name="subtitle" value="enable" class="btn b2">Enable</button><button type="submit" name="subtitle" value="disable" class="btn b2">Disable</button>';
             } else {
                 echo '
+                    </div>
                 </div>
-            </div>
-            <div class="box audios red">
-                No Audio
-            </div>
-            <div class="box subs"></div>';
+                <div class="box audios red">
+                    No Audio
+                </div>
+                <div class="box subs"></div>';
             }
             echo '
-            </div>';
-        } else {
-            echo '
-            </div>
-            <div class="box controls">a</div>
-            <div class="box audios">b</div>
-            <div class="box subs">c</div>';
+             </div>';
         }
     } else {
         echo '
-            </div>
-            <div class="box controls">aa</div>
-            <div class="box audios">bb</div>
-            <div class="box subs">cc</div>';
+                </div>';
     }
-    echo '<div class="box">
-		  <input type="submit" name="kodicontrol" value="kodicontrol" class="btn b1"/><br>
-          <input type="submit" name="VolumeDOWN" value="Down" class="btn b3"/>
-          <input type="submit" name="Denon" value="Denon" class="btn b3"/>
-          <input type="submit" name="VolumeUP" value="Up" class="btn b3"/>
-        </div>';
-    echo '<div class="box">Update Library:<br/>
-          <input type="submit" name="UpdateKodi" value="Wij" class="btn b3"/>
-          <input type="submit" name="UpdateKodi" value="Tobi" class="btn b3"/>
-          <input type="submit" name="UpdateKodi" value="Alex" class="btn b3"/>
-        </div>';
-    echo '<div class="box">
-          <input type="submit" name="PowerOn" value="Shield On" class="btn b2"/>
-          <input type="submit" name="TVKodi" value="TV Kodi" class="btn b2"/>
-          <input type="submit" name="PowerOff" value="Shield Off" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
-
-          <input type="submit" name="mediauit" value="Media uit" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
+    echo '
+                <div class="box">
+                    <input type="submit" name="kodicontrol" value="kodicontrol" class="btn b1"/><br>
+                    <input type="submit" name="VolumeDOWN" value="Down" class="btn b3"/>
+                    <input type="submit" name="Denon" value="Denon" class="btn b3"/>
+                    <input type="submit" name="VolumeUP" value="Up" class="btn b3"/>
+                </div>
+                <div class="box">Update Library:<br/>
+                    <input type="submit" name="UpdateKodi" value="Wij" class="btn b3"/>
+                    <input type="submit" name="UpdateKodi" value="Tobi" class="btn b3"/>
+                    <input type="submit" name="UpdateKodi" value="Alex" class="btn b3"/>
+                </div>
+                <div class="box">
+                    <input type="submit" name="PowerOn" value="Shield On" class="btn b2"/>
+                    <input type="submit" name="TVKodi" value="TV Kodi" class="btn b2"/>
+                    <input type="submit" name="PowerOff" value="Shield Off" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
+                    <input type="submit" name="mediauit" value="Media uit" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
+                </div>
+            </form>
         </div>
-    </div>';
+    </body>
+</html>';
 } else {
     header("Location: index.php");
     die("Redirecting to: index.php");
