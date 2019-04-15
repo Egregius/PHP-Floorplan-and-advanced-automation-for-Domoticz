@@ -72,7 +72,7 @@ if ($d['kamer_set']['m']!=2) {
         if (TIME<strtotime('4:00')) {
             $Setkamer=15.0;
         } elseif (TIME>strtotime('21:00')) {
-            $Setkamer=15.2;
+            $Setkamer=15.0;
         }
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
@@ -87,7 +87,7 @@ if ($d['tobi_set']['m']!=2) {
         $Settobi=10;
         if ($d['gcal']['s']) {
             if (TIME<strtotime('4:30') || TIME>strtotime('19:10')) {
-                $Settobi=15.5;
+                $Settobi=15.0;
             }
         }
     }
@@ -103,9 +103,9 @@ if ($d['alex_set']['m']!=2) {
     if ($d['buiten_temp']['s']<16 && $d['max']['s']<15 && $d['raamalex']['s']=='Closed' && $d['heating']['s']>=2 && (past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=10;
         if (TIME<strtotime('4:30')) {
-            $Setalex=15.5;
+            $Setalex=15.0;
         } elseif (TIME>strtotime('19:00')) {
-            $Setalex=15.9;
+            $Setalex=15.5;
         }
     }
     if ($d['alex_set']['s']!=$Setalex) {
