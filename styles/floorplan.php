@@ -42,7 +42,7 @@ td{text-align:right;font-size:1.1em;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
 .huge2{width:100%;height:48%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
-.afval{top:370px;left:80;padding:0;width:332px;font-size:1.7em;textalign:center;}
+.afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
 .dimmer{top:0px;left:0px;height:735px;width:390px;padding:50px;background:#111;z-index:1000;}
 .dimmerlevel{top:20px;left:25px;width:19px;color:#333;font-size:90%;}
@@ -96,7 +96,7 @@ td{text-align:right;font-size:1.1em;}
 .floorplan2icon{top:776px;left:9px;}
 .auto{top:280px;left:235px;}
 .meldingen{top:280px;left:350px;}
-.verbruik{top:660px;left:260px;width:240px;}
+.verbruik{top:660px;left:290px;width:200px;background-color:#F00}
 .GroheRed{top:136px;left:342px;}
 .zoldervuur{top:670px;left:140px;}
 .zoldervuur2{top:783px;left:455px;}

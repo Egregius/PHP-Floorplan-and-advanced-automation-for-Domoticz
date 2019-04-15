@@ -426,10 +426,10 @@ if ($home) {
             $temps=array(10,10.5,11,11.5,12,12.5,13,13.5,14,14.2,14.5,14.7,15,15.1,15.2,15.3,15.4,15.5,15.6,15.7,15.8,15.9,16,16.1,16.2,16.3,16.4,16.5,16.6,16.7,16.8,16.9,17,17.1,17.2,17.3,17.4,17.5,17.6,17.7,17.8,17.9,18);
         }
         if (!in_array($d[$name.'_set']['s'], $temps)) {
-            $temps[]=$stat;
+            $temps[]=$d[$name.'_set']['s'];
         }
         asort($temps);
-        $temps=array_slice($temps, 0, 43);
+        $temps=array_slice($temps, 0, 33);
         foreach ($temps as $temp) {
             if ($d[$name.'_set']['s']==$temp) {
                 echo '
