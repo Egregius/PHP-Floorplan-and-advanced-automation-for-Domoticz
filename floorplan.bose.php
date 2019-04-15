@@ -104,7 +104,8 @@ if ($home) {
         if (isset($nowplaying['@attributes']['source'])) {
             echo '
         <div class="fix blackmedia" >
-			<form method="POST" action="floorplan.bose.php">';
+			<form method="POST" action="floorplan.bose.php">
+			    <input type="hidden" name="ip" value="'.$bose.'">';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
                  echo '
                 <h3>STANDBY</h3>';
