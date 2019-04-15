@@ -96,7 +96,7 @@ td{text-align:right;font-size:1.1em;}
 .floorplan2icon{top:776px;left:9px;}
 .auto{top:280px;left:235px;}
 .meldingen{top:280px;left:350px;}
-.verbruik{top:660px;left:290px;width:200px;background-color:#F00}
+.verbruik{top:652px;left:290px;width:200px;}
 .GroheRed{top:136px;left:342px;}
 .zoldervuur{top:670px;left:140px;}
 .zoldervuur2{top:783px;left:455px;}

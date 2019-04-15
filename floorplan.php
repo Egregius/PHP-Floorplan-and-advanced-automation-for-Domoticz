@@ -631,7 +631,7 @@ if ($home) {
                 <tr>
                     <td>Zon:</td>
                     <td><font color="'.$zoncolor.'">'.$d['zon']['s'].' W</font></td>
-                    <td><font color="'.$zonvandaagcolor.'"> '.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
+                    <td><font color="'.$zonvandaagcolor.'">'.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
                 </tr>';
     }
     echo '

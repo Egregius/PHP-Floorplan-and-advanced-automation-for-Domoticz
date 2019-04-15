@@ -10,44 +10,6 @@
  * @link     https://egregius.be
  **/
 $msg='Rolluiken__';
-/*$items=array(
-    'Rliving',
-    'Rbureel',
-    'RkeukenL',
-    'RkeukenR',
-    'Rtobi',
-    'Ralex',
-    'RkamerL',
-    'RkamerR',
-    'luifel',
-    'raamliving',
-    'raamtobi',
-    'raamalex',
-    'raamkamer',
-    'buiten_temp',
-    'living_temp',
-    'tobi_temp',
-    'alex_temp',
-    'kamer_temp'
-);
-foreach ($items as $i) {
-    ${$i}=$d[$i]['s'];
-}
-
-$items=array(
-    'Rliving',
-    'Rbureel',
-    'RkeukenL',
-    'RkeukenR',
-    'Rtobi',
-    'Ralex',
-    'RkamerL',
-    'RkamerR'
-);
-foreach ($items as $i) {
-    ${'T'.$i}=past($i);
-}
-*/
 $boven=array(
     'Rtobi',
     'Ralex',
@@ -315,7 +277,18 @@ if ($d['heating']['s']>=2) {
     if ($d['Weg']['s']==0) {
         $msg.='Thuis__';
         if ($dag=='nacht') {
-
+            foreach ($benedena as $i) {
+                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                    sl($i, 100);
+                    $msg.=$i.' Dicht__';
+                }
+            }
+            foreach ($boven as $i) {
+                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                    sl($i, 100);
+                    $msg.=$i.' Dicht__';
+                }
+            }
         } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
@@ -364,6 +337,18 @@ if ($d['heating']['s']>=2) {
         }
     } elseif ($d['Weg']['s']==1) {
         $msg.='Slapen__';
+        foreach ($benedena as $i) {
+            if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                sl($i, 100);
+                $msg.=$i.' Dicht__';
+            }
+        }
+        foreach ($boven as $i) {
+            if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                sl($i, 100);
+                $msg.=$i.' Dicht__';
+            }
+        }
     } elseif ($d['Weg']['s']==2) {
         $msg.='Weg__';
         if ($dag=='nacht') {
@@ -672,7 +657,7 @@ if ($d['heating']['s']>=2) {
         }
     }
 }
-echo $msg;
+echo str_replace('__', ' | ', $msg);
 if (strlen($msg)>=60) {
     lg(str_replace('__', ' | ', $msg));
 }
