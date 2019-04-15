@@ -9,24 +9,33 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+error_reporting(E_ALL);
+ini_set("display_errors", "on");
 require 'secure/functions.php';
+echo 'Playkodi';
 $version=116;
 print_r($_REQUEST);
+telegram('Play kodi executed');
+echo 'ok';
 telegram(print_r($_REQUEST,true));
 if (isset($_REQUEST['imdbid'])) {
     if (strlen($_REQUEST['imdbid'])>5) {
         if ($d['playkodi']['s']!=true) {
+            echo $_REQUEST['imdbid'];
             $data=grabfile($_REQUEST['imdbid']);
+            print_r($data);
             telegram('grabfile data '.print_r($data,true));
             if (isset($data['id'])) {
                 store('playkodi', true);
-                shell_exec('python3 secure/lgtv.py -c send-message -a "Starting '.str_replace('nfs://192.168.2.10/volume1/files/', '', $data['file']).'" '.$lgtvip.' > /dev/null 2>&1 &');
+                shell_exec('python3 secure/lgtv.py -c send-message -a "Starting '.str_replace('nfs://'.$nasip.'/volume1/files/', '', $data['file']).'" '.$lgtvip.' > /dev/null 2>&1 &');
                 kodiplay($data['profile'], $data['mediatype'], $data['id'], $data['file']);
                 store('playkodi', false);
             }
         }
     }
 }
+sleep(5);
+store('playkodi', false);
 function grabfile($id)
 {
     global $version;
