@@ -12,12 +12,12 @@
 require 'secure/functions.php';
 $version=116;
 print_r($_REQUEST);
-//telegram(print_r($_REQUEST,true));
+telegram(print_r($_REQUEST,true));
 if (isset($_REQUEST['imdbid'])) {
     if (strlen($_REQUEST['imdbid'])>5) {
         if ($d['playkodi']['s']!=true) {
             $data=grabfile($_REQUEST['imdbid']);
-            //telegram('grabfile data '.print_r($data,true));
+            telegram('grabfile data '.print_r($data,true));
             if (isset($data['id'])) {
                 store('playkodi', true);
                 shell_exec('python3 secure/lgtv.py -c send-message -a "Starting '.str_replace('nfs://192.168.2.10/volume1/files/', '', $data['file']).'" '.$lgtvip.' > /dev/null 2>&1 &');
@@ -114,7 +114,7 @@ function kodiplay($profile,$mediatype,$kodiid,$file)
                 sleep(2);
             } else {
                 $startreply=@kodi('{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"'.$file.'"}}}');
-                //telegram('Startreply '.$startreply);
+                telegram('Startreply '.$startreply);
                 $info = @json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Get'.$mediatype.'Details","id":1,"params":['.$kodiid.',["resume"]]}', false, $ctx), true);
                 if (!empty($info['result'][$mediatype.'details']['resume']['position'])) {
                     $position=floor((($info['result'][$mediatype.'details']['resume']['position']-90)/$info['result'][$mediatype.'details']['resume']['total'])*100);
