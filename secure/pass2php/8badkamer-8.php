@@ -32,8 +32,8 @@ if ($status=='On') {
                             echo $cv.'<br>';
                             bosevolume($cv, 4);
                             usleep($usleep);
-                            $cv=$cv-2;
-                            if ($cv<=2) {
+                            $cv=$cv-3;
+                            if ($cv<=3) {
                                 break;
                             }
                         }
