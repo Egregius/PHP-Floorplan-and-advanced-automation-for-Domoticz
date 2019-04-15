@@ -101,9 +101,8 @@ if ($home===true) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
     } elseif (isset($_POST['PowerOff'])) {
         sw('nvidia', 'Off');
-        //@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx='.idx('nvidia').'&switchcmd=Off', false, $ctx);
     } elseif (isset($_POST['PowerOn'])) {
-        @file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx='.idx('nvidia').'&switchcmd=On', false, $ctx);
+        sw('nvidia', 'On');
     } elseif (isset($_POST['TVKodi'])) {
         if ($d['lgtv']['s']!='On') {
             sw('lgtv', 'On');
@@ -128,7 +127,7 @@ if ($home===true) {
         header("Location: ../kodicontrol.php");
         die("Redirecting to: ../kodicontrol.php");
     } elseif (isset($_POST['VolumeDOWN'])) {
-        $denonmain=@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
+        $denonmain=@simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
         $denonmain=@json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
         if ($denonmain) {
             $denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
@@ -138,10 +137,10 @@ if ($home===true) {
             }if ($setvalue<-80) {
                 $setvalue=-80;
             }
-            file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
+            file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
         }
     } elseif (isset($_POST['VolumeUP'])) {
-        $denonmain=simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
+        $denonmain=simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
         $denonmain=json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
         if ($denonmain) {
             $denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
@@ -152,11 +151,11 @@ if ($home===true) {
             if ($setvalue<-80) {
                 $setvalue=-80;
             }
-            file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
+            file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
         }
     }
 
-    $current=json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
+    $current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
     if (isset($current['result']['item']['file'])) {
         if (!empty($current['result']['item']['file'])) {
             echo '
