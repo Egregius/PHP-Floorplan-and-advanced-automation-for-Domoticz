@@ -49,16 +49,16 @@ if ($home===true) {
                 <form action="/kodi.php">
                     <input type="submit" class="btn btna b7" value="Kodi"/>
                 </form>
-                <form action="https://films.egregius.be/films.php">
+                <form action="'.$urlfilms.'/films.php">
                     <input type="submit" class="btn b7" value="Films"/>
                 </form>
-                <form action="https://films.egregius.be/tobi.php">
+                <form action="'.$urlfilms.'/tobi.php">
                     <input type="submit" class="btn b7" value="Tobi"/>
                 </form>
-                <form action="https://films.egregius.be/alex.php">
+                <form action="'.$urlfilms.'/alex.php">
                     <input type="submit" class="btn b7" value="Alex"/>
                 </form>
-                <form action="https://films.egregius.be/series.php">
+                <form action="'.$urlfilms.'/series.php">
                     <input type="submit" class="btn b7" value="Series"/>
                 </form>
             </div>
@@ -69,12 +69,12 @@ if ($home===true) {
     if (isset($_POST['UpdateKodi'])) {
         $profile=$_POST['UpdateKodi'];echo 'Wanted profile='.$profile.'<br/>';
         profile:
-        $loadedprofile=@json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+        $loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
         echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
         if ($loadedprofile['result']['label']!==$profile) {
             kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
             usleep(10000);
-            $profilereply=@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
+            $profilereply=@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
             echo 'profilereply='.$profilereply.'</pre><br/>';
             $count=$count + 1;
             if ($count>10) {
@@ -88,7 +88,7 @@ if ($home===true) {
     } elseif (isset($_POST['CleanKodi'])) {
         kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
     } elseif (isset($_POST['PauseKodi'])) {
-        @file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+        @file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
     } elseif (isset($_POST['StopKodi'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
     } elseif (isset($_POST['bigbackward'])) {
@@ -154,7 +154,6 @@ if ($home===true) {
             file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
         }
     }
-
     $current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
     if (isset($current['result']['item']['file'])) {
         if (!empty($current['result']['item']['file'])) {
@@ -171,7 +170,7 @@ if ($home===true) {
                 echo '
                     <a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
             }
-            $properties=json_decode(@file_get_contents('http://192.168.2.7:1597/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
+            $properties=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
             //echo '<pre>';print_r($properties);echo '</pre>';
             if (!empty($properties['result'])) {
                 $prop=$properties['result'];
