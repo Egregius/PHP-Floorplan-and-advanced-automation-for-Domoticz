@@ -52,31 +52,19 @@ foreach ($items as $item) {
 }
 if ($d['kamer']['m']==2) {
     $items=array('RkamerR','RkamerL');
-    if($d['kamer']['s']==9) {
+    if($d['kamer']['s']==7) {
         foreach ($items as $i) {
             if ($d[$i]>70) {
-                sl($i, 70);
+                sl($i, 65);
             }
         }
-    } elseif($d['kamer']['s']==19) {
+    } elseif($d['kamer']['s']==14) {
         foreach ($items as $i) {
             if ($d[$i]>55) {
-                sl($i, 55);
+                sl($i, 30);
             }
         }
-    } elseif($d['kamer']['s']==29) {
-        foreach ($items as $i) {
-            if ($d[$i]>40) {
-                sl($i, 40);
-            }
-        }
-    } elseif($d['kamer']['s']==39) {
-        foreach ($items as $i) {
-            if ($d[$i]>26) {
-                sl($i, 26);
-            }
-        }
-    } elseif($d['kamer']['s']>=49) {
+    } elseif($d['kamer']['s']>=21) {
         foreach ($items as $i) {
             if ($d[$i]>0) {
                 sl($i, 0);
