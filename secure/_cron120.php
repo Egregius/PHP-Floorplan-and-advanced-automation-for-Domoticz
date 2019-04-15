@@ -446,6 +446,9 @@ if ($d['Weg']['s']==2) {//Weg
             &&($d['raamkamer']['s']=='Open'
             ||$d['raamtobi']['s']=='Open'
             ||$d['raamalex']['s']=='Open')
+            &&($d['kamer_temp']['s']>17
+            ||$d['tobi_temp']['s']>17
+            ||$d['alex_temp']['s']>17)
         ) {
             alert(
                 'ramenboven',
@@ -462,6 +465,9 @@ if ($d['Weg']['s']==2) {//Weg
             &&($d['raamkamer']['s']=='Closed'
             ||$d['raamtobi']['s']=='Closed'
             ||$d['raamalex']['s']=='Closed')
+            &&($d['kamer_temp']['s']>17
+            ||$d['tobi_temp']['s']>17
+            ||$d['alex_temp']['s']>17)
         ) {
             alert(
                 'ramenboven',
@@ -478,16 +484,36 @@ if ($d['Weg']['s']==2) {//Weg
             &&$d['buiten_temp']['s']>$d['tobi_temp']['s']
             &&$d['buiten_temp']['s']>$d['alex_temp']['s'])
             &&$d['buiten_temp']['s']>22
-            &&($d['kamer_temp']['s']>20
-            ||$d['tobi_temp']['s']>20
-            ||$d['alex_temp']['s']>20)
+            &&($d['kamer_temp']['s']>19
+            ||$d['tobi_temp']['s']>19
+            ||$d['alex_temp']['s']>19)
             &&($d['raamkamer']['s']=='Open'
             ||$d['raamtobi']['s']=='Open'
             ||$d['raamalex']['s']=='Open')
         ) {
+            alert(
+                'ramenboven',
+                'Ramen boven dicht doen, te warm buiten.
+                Buiten = '.round($d['buiten_temp']['s'], 1).',
+                kamer = '.$d['kamer_temp']['s'].',
+                Tobi = '.$d['tobi_temp']['s'].',
+                Alex = '.$d['alex_temp']['s'],
+                false,
+                2
+            );
+        } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
+            ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
+            ||$d['buiten_temp']['s']<=$d['alex_temp']['s'])
+            &&($d['kamer_temp']['s']>19
+            ||$d['tobi_temp']['s']>19
+            ||$d['alex_temp']['s']>19)
+            &&($d['raamkamer']['s']=='Closed'
+            ||$d['raamtobi']['s']=='Closed'
+            ||$d['raamalex']['s']=='Closed')
+        ) {
             if ((int)past('timeramen')>43190) {
                 telegram(
-                    'Ramen boven dicht doen, te warm buiten.
+                    'Ramen boven open doen, te warm binnen.
                     Buiten = '.round($d['buiten_temp']['s'], 1).',
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
@@ -496,28 +522,6 @@ if ($d['Weg']['s']==2) {//Weg
                     2
                 );
                 store('notify_ramen', TIME);
-            } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
-                ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
-                ||$d['buiten_temp']['s']<=$d['alex_temp']['s'])
-                &&($d['kamer_temp']['s']>20
-                ||$d['tobi_temp']['s']>20
-                ||$d['alex_temp']['s']>20)
-                &&($d['raamkamer']['s']=='Closed'
-                ||$d['raamtobi']['s']=='Closed'
-                ||$d['raamalex']['s']=='Closed')
-            ) {
-                if ((int)past('timeramen')>43190) {
-                    telegram(
-                        'Ramen boven open doen, te warm binnen.
-                        Buiten = '.round($d['buiten_temp']['s'], 1).',
-                        kamer = '.$d['kamer_temp']['s'].',
-                        Tobi = '.$d['tobi_temp']['s'].',
-                        Alex = '.$d['alex_temp']['s'],
-                        false,
-                        2
-                    );
-                    store('notify_ramen', TIME);
-                }
             }
         }
     }

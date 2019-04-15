@@ -15,7 +15,7 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-echo file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false);
+echo kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
