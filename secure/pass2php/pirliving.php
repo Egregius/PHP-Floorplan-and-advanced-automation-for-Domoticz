@@ -48,7 +48,7 @@ if ($status=='On'&&$d['auto']['s']) {
             }
             sleep(1);
         }
-    } elseif ($d['bose3']['s']=='On'&&$d['denon']['s']=='OFF') {
+    } elseif ($d['bose3']['s']=='On'&&$d['denonpower']['s']=='OFF') {
         $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.3:8090/volume"))), true);
         if (isset($volume['actualvolume'])) {
             $cv=$volume['actualvolume'];
