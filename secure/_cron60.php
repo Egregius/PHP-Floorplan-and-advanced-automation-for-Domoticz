@@ -348,6 +348,20 @@ if ($d['auto']['s']) {
     ) {
         sl('kamer', 0);
     }
+    if ($d['tobi']['s']>0
+        &&$d['Zon']['s']>0
+        &&$d['Rtobi']['s']==0
+        &&past('tobi')>900
+    ) {
+        storemode('tobi', 2);
+    }
+    if ($d['alex']['s']>0
+        &&$d['Zon']['s']>0
+        &&$d['Ralex']['s']==0
+        &&past('alex')>900
+    ) {
+        storemode('tobi', 2);
+    }
 }
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
