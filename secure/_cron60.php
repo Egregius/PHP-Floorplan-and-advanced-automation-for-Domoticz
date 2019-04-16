@@ -340,6 +340,14 @@ if ($d['auto']['s']) {
     }
     //End Bose
 
+    if ($d['kamer']['s']>0
+        &&$d['Zon']['s']>0
+        &&$d['RkamerL']['s']==0
+        &&$d['RkamerR']['s']==0
+        &&past('kamer')>900
+    ) {
+        sl('kamer', 0);
+    }
 }
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
