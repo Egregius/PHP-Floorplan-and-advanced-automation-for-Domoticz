@@ -9,3 +9,4 @@ smoke/*
 logs/*
 .well-known/*
 pychromecast/*
+secure/phpmyadmin/tmp/twig/*
