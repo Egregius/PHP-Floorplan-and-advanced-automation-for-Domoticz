@@ -34,9 +34,12 @@ if ($home) {
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<style type="text/css">
+		    .btn{width:100%;height:60px;}
+		</style>
 	</head>
 	<body>
-		<div class="fix" style="top:5px;left:5px;">
+		<div class="fix" style="top:0px;left:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="72px" height="72px"/>
 			</a>
@@ -45,24 +48,27 @@ if ($home) {
 		<br>
 		<br>';
     $devices=@json_decode(@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getplandevices&idx=4', true, $ctx), true);
-
-
+    if (!isset($_REQUEST['idx'])) {
+        $_REQUEST['idx']=1958;
+    }
     foreach ($devices['result'] as $d) {
-        if (isset($_REQUEST['idx'])&&$_REQUEST['idx']==$d['devidx']) {
+        if ($_REQUEST['idx']==$d['devidx']) {
             echo '
-            <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d['Name'].'</button>';
+            <div class="fix" style="top:35px;left:75px;width:245px;">
+                <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d['Name'].'</button>
+            </div>';
         }
     }
     echo '
         <form method="GET">
             <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">';
     foreach ($devices['result'] as $d) {
-        if (isset($_REQUEST['idx'])&&$_REQUEST['idx']==$d['devidx']) {
+        if ($_REQUEST['idx']==$d['devidx']) {
             echo '
-				<button name="device" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+				<button name="idx" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
         } else {
             echo '
-			    <button name="device" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+			    <button name="idx" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
         }
     }
     echo '
@@ -74,7 +80,8 @@ if ($home) {
         $idx=$devices['result'][0]['devidx'];
     }
     echo '
-		<table>';
+		<div style="margin-top:40px">
+		    <table>';
     $ctx=stream_context_create(array('http'=>array('timeout' => 2)));
     $datas=@json_decode(@file_get_contents('http://127.0.0.1:8080/json.htm?type=lightlog&idx='.$idx, true, $ctx), true);
     //print_r($datas);
@@ -104,6 +111,7 @@ if ($home) {
     }
     echo '
 		</table>
+		</div>
 		<div class="fix" style="top:0px;left:204px;width:60px;font-size:2em"><a href="?idx='.$idx.'">'.convertToHours($totalon).'</a></div>
 		<script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
