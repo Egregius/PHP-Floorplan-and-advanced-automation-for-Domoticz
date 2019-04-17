@@ -11,11 +11,14 @@
  **/
 if ($status=='On') {
     sw('lichtbadkamer', 'Off');
-    if ($d['auto']['s']) {
+    if ($d['auto']['s']==true) {
         if ((TIME>strtotime('5:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('10:00')-($d['auto']['m']==true?3600:0))&&$d['Weg']['s']==1) {
             sw('hall', 'On');
         } elseif ($d['zon']['s']<20&&$d['Weg']['s']==0) {
             sw('hall', 'On');
+        }
+        if (TIME>strtotime('20:00')&&$d['Weg']['s']==2&&$d['kamer']['s']==5) {
+            storemode('kamer', 1);
         }
         storemode('badkamer_set', 0);
         douche();

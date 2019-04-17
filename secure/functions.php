@@ -26,7 +26,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 function huisslapen()
 {
     global $d,$boseipbuiten;
-    sw(array('slapen'), 'Off', true, 'huisslapen', 250000);
+    sw(array('slapen'), 'Off', true, 'huisslapen', 500000);
     $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
         storemode($i, 0);
@@ -346,7 +346,6 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
     if ($usleep>0) {
         usleep($usleep);
     }
-
 }
 function lgcommand($action)
 {
