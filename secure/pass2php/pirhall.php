@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On'&&$d['auto']['s']) {
+if ($status=='On'&&$d['auto']['s']=='On') {
     if ($d['Weg']['s']==0&&$d['hall']['s']=='Off'&&(TIME<strtotime('7:00')||$d['zon']['s']<$zoninkom)) {
         sw('hall', 'On');
     }

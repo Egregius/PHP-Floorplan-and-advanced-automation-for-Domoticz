@@ -197,7 +197,7 @@ if ($d['diepvries']['s']!='On'
     );
 }
 
-if ($d['auto']['s']) {
+if ($d['auto']['s']=='On') {
     if ((    ($d['garage']['s']=='On'
         &&past('garage')>180)
         ||($d['pirgarage']['s']=='On'

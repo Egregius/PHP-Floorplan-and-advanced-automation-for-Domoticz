@@ -216,7 +216,7 @@ if ($d['GroheRed']['s']=='On') {
             sw('GroheRed', 'On');
     }
 }
-if ($d['auto']['s']&&past('Weg')>300) {
+if ($d['auto']['s']=='On'&&past('Weg')>300) {
     $items=array(
         'living_temp',
         'kamer_temp',
@@ -565,9 +565,9 @@ checkport('192.168.2.15',80);
 checkport('192.168.2.224',80);
 checkport('192.168.2.9',8080);
 */
-if ($d['auto']['s']==false) {
+if ($d['auto']['s']=='On') {
     if (past('auto')>10795) {
-        store('auto', true);
+        sw('auto', 'On');
     }
 }
 if (past('Weg')>14400
@@ -627,7 +627,7 @@ if ($d['zwembadwarmte']['s']=='On') {
     if (past('zwembadwarmte')>86398)sw('zwembadwarmte','Off');
     if ($zwembadfilter=='Off')sw('zwembadfilter','On');
 }*/
-if ($d['auto']['s']==true) {
+if ($d['auto']['s']=='On') {
     $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
