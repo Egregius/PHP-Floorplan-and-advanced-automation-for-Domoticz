@@ -45,22 +45,28 @@ if ($home) {
 		<br>
 		<br>';
     $devices=@json_decode(@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getplandevices&idx=4', true, $ctx), true);
-    echo '
-		<form method="GET">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<select name="idx" class="btn" onchange="this.form.submit()" >';
+
 
     foreach ($devices['result'] as $d) {
         if (isset($_REQUEST['idx'])&&$_REQUEST['idx']==$d['devidx']) {
             echo '
-				<option value="'.$d['devidx'].'" selected>'.$d['Name'].'</option>';
-        } else {
-            echo '
-			<option value="'.$d['devidx'].'">'.$d['Name'].'</option>';
+            <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d['Name'].'</button>';
         }
     }
     echo '
-			</select>
+        <form method="GET">
+            <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">';
+    foreach ($devices['result'] as $d) {
+        if (isset($_REQUEST['idx'])&&$_REQUEST['idx']==$d['devidx']) {
+            echo '
+				<button name="device" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+        } else {
+            echo '
+			    <button name="device" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+        }
+    }
+    echo '
+            </div>
 		</form>';
     if (isset($_REQUEST['idx'])) {
         $idx=$_REQUEST['idx'];
@@ -101,6 +107,7 @@ if ($home) {
 		<div class="fix" style="top:0px;left:204px;width:60px;font-size:2em"><a href="?idx='.$idx.'">'.convertToHours($totalon).'</a></div>
 		<script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
+		    function toggle_visibility(id){var e=document.getElementById(id);if(e.style.display==\'inherit\') e.style.display=\'none\';else e.style.display=\'inherit\';}
 		</script>';
 }
 ?>
