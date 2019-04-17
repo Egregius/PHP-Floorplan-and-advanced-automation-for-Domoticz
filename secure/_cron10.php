@@ -15,13 +15,13 @@ if ($d['pirgarage']['s']=='Off'
     &&past('poort')>90
     &&past('garageled')>120
     &&$d['garageled']['s']=='On'
-    &&$d['auto']['s']
+    &&$d['auto']['s']=='On'
 ) {
     sw('garageled', 'Off');
 } elseif ($d['pirgarage']['s']=='On'
     &&$d['garageled']['s']=='Off'
     &&$d['garage']['s']=='Off'
-    &&$d['auto']['s']
+    &&$d['auto']['s']=='On'
     &&$d['zon']['s']<$zongarage
 ) {
     sw('garageled', 'On');
@@ -32,7 +32,7 @@ if ($d['pirgarage']['s']=='Off'
     &&past('poort')>90
     &&past('garage')>240
     &&$d['garage']['s']=='On'
-    &&$d['auto']['s']
+    &&$d['auto']['s']=='On'
 ) {
     sw('garage', 'Off');
 }
@@ -43,7 +43,7 @@ if ($d['pirinkom']['s']=='Off'
     &&past('pirhall')>50
     &&past('inkom')>80
     &&past('hall')>80
-    &&$d['auto']['s']
+    &&$d['auto']['s']=='On'
 ) {
     if ($d['inkom']['s']=='On') {
         sw('inkom', 'Off');
@@ -54,7 +54,7 @@ if ($d['pirinkom']['s']=='Off'
 } else {
     if ($d['pirinkom']['s']=='On'
         &&$d['zon']['s']<$zoninkom
-        &&$d['auto']['s']
+        &&$d['auto']['s']=='On'
     ) {
         if ($d['inkom']['s']=='Off') {
             sw('inkom', 'On');
@@ -62,7 +62,7 @@ if ($d['pirinkom']['s']=='Off'
     }
     if ($d['pirhall']['s']=='On'
         &&$d['zon']['s']<$zoninkom
-        &&$d['auto']['s']
+        &&$d['auto']['s']=='On'
     ) {
         if ($d['hall']['s']=='Off'
             &&$d['Weg']['s']==0
@@ -78,7 +78,7 @@ if (past('pirkeuken')>50
     &&$d['keuken']['s']=='On'
     &&$d['kookplaat']['s']=='Off'
     &&$d['werkblad1']['s']=='Off'
-    &&$d['auto']['s']
+    &&$d['auto']['s']=='On'
 ) {
     sw('keuken', 'Off');
 }
