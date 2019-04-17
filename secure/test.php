@@ -15,7 +15,9 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-echo kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
+douchewarn($euro, 60);
+
+
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

@@ -366,7 +366,7 @@ if ($d['auto']['s']=='On') {
         &&$d['Rbureel']['s']==0
         &&$d['Rliving']['s']==0
         &&$d['zon']['s']>100
-        &&past('eettafel')>1800
+        &&past('eettafel')>3600
     ) {
         sl('eettafel', 0);
     }

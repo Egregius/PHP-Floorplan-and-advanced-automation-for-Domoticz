@@ -39,7 +39,7 @@ if (isset($_REQUEST['gpio'])) {
             if ($d['poort']['s']!='Open') {
                 store('poort', 'Open');
             }
-            if ($d['Weg']['s']==0&&$d['zon']['s']<100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
+            if ($d['Weg']['s']==0&&$d['zon']['s']<100&&$d['auto']['s']=='On'&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
                 sw('garageled', 'On');
             } elseif ($d['Weg']>0&&$d['auto']['s']&&past('Weg')>178&&$d['poortrf']['s']=='Off') {
                 storemode('Weg', TIME);
@@ -54,7 +54,7 @@ if (isset($_REQUEST['gpio'])) {
     } else {
         die('Unknown');
     }
-    if ($gpio==20||$gpio==21&&($d['gasvandaag']['t']>TIME-60&&$d['watervandaag']['t']>TIME-60)) {
+    if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&$d['gasvandaag']['t']>TIME-90&&$d['watervandaag']['t']>TIME-90)) {
         $douchegas=$d['douche']['s']*10;
         $douchewater=$d['douche']['m']*1;
         $euro=($douchegas*0.00065)+($douchewater*0.0055);

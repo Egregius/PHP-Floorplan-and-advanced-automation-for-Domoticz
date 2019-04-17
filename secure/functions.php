@@ -50,6 +50,9 @@ function huisslapen()
             }
         }
     }
+    if ($d['auto']['s']=='Off') {
+        sw('auto', 'On');
+    }
 }
 /**
  * Function huisweg
