@@ -118,15 +118,24 @@ if ($home) {
     }
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         //print_r($row);
+        $name=strtr($row['device'], $modes);
+        $status=$row['status'];
+        if (endsWith($name, '_temp')) {
+            $status=number_format($status, 1, ',', '').' °C';
+        } elseif ($name='humidity') {
+            $status=$status.' %';
+        } else {
+            $status=substr($row['status'], 0, 15);
+        }
         echo '
         <tr>
             <td nowrap>'.substr($row['timestamp'], 8, 2).'-'.substr($row['timestamp'], 5, 2).'-'.substr($row['timestamp'], 0, 4).' '.substr($row['timestamp'], 10, 9).'</td>';
         if (!isset($device)) {
             echo '
-            <td nowrap>'.strtr($row['device'], $modes).'</td>';
+            <td nowrap>'.$name.'</td>';
         }
         echo '
-            <td nowrap>&nbsp;'.substr($row['status'], 0, 15).'&nbsp;</td>
+            <td nowrap>&nbsp;'.$status.'&nbsp;</td>
             <td nowrap>&nbsp;'.$row['user'].'</td>
             <td nowrap>&nbsp;'.$row['info'].'</td>
         </tr>';
