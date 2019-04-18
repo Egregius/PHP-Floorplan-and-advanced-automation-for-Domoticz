@@ -16,14 +16,14 @@ require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
 $since=strftime("%F", time()-86400);
-$sql="SELECT device, min(status) as min, max(status) as max  FROM log WHERE (device = 'living_temp' OR device = 'alex_temp') AND timestamp > '$since' GROUP BY device;";
-if (!$result=$db->query($sql)) {
-    die('There was an error running the query ['.$sql.' - '.$db->error.']');
-}
+$sql="SELECT device, min(status) as min, max(status) as max  FROM log WHERE (device = 'buiten_temp' OR device = 'humidity') AND timestamp > '$since' GROUP BY device;";
+$result=$db->query($sql) ;
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     $data[$row['device']]['min']=$row['min'];
     $data[$row['device']]['max']=$row['max'];
 }
+//telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
+
 print_r($data);
 /*---------------------------*/
 echo '</pre>';
