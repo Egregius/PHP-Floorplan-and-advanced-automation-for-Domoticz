@@ -122,7 +122,13 @@ if ($home) {
         $status=$row['status'];
         if (endsWith($name, '_temp')) {
             $status=number_format($status, 1, ',', '').' °C';
-        } elseif ($name='humidity') {
+        } elseif (endsWith($name, 'Z')) {
+            $status=number_format($status, 1, ',', '').' °C';
+        } elseif ($name=='bigdif') {
+            $status=number_format($status, 1, ',', '').' °C';
+        } elseif ($name=='elec vandaag') {
+            $status=number_format($status, 1, ',', '').' kWh';
+        } elseif ($name=='humidity') {
             $status=$status.' %';
         } else {
             $status=substr($row['status'], 0, 15);
