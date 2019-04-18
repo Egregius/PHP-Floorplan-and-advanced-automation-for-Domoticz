@@ -15,8 +15,13 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-douchewarn($euro, 60);
-
+$sql="SELECT *  FROM `log` WHERE `device` = 'buiten' ORDER BY timestamp DESC ;";
+if (!$result=$db->query($sql)) {
+    die('There was an error running the query ['.$sql.' - '.$db->error.']');
+}
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+    print_r($row);
+}
 
 /*---------------------------*/
 echo '</pre>';
