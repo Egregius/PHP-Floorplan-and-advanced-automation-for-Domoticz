@@ -389,11 +389,11 @@ function storemode($name,$mode,$time=false)
     }
     lgsql($username, $name.'_mode', $mode);
 }
-function alert($name,$msg,$ttl,$silent=true,$ios=false)
+function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 {
     global $db;
     if ($ios) {
-        shell_exec('./ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
+        shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
     }
     $time=TIME;
     $stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
@@ -402,7 +402,7 @@ function alert($name,$msg,$ttl,$silent=true,$ios=false)
         $last=$last['t'];
     }
     if ($last < $time-$ttl) {
-        telegram($msg, $silent);
+        telegram($msg, $silent, $to);
         lg('alert='.$last);
         $db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
     }

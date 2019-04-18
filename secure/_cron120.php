@@ -457,7 +457,10 @@ if ($d['Weg']['s']==2) {//Weg
                 kamer = '.$d['kamer_temp']['s'].',
                 Tobi = '.$d['tobi_temp']['s'].',
                 Alex = '.$d['alex_temp']['s'],
-                3600
+                3600,
+                false,
+                2,
+                false
             );
         } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
             ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
@@ -476,7 +479,10 @@ if ($d['Weg']['s']==2) {//Weg
                 kamer = '.$d['kamer_temp']['s'].',
                 Tobi = '.$d['tobi_temp']['s'].',
                 Alex = '.$d['alex_temp']['s'],
-                3600
+                3600,
+                false,
+                2,
+                false
             );
         }
     } else {
@@ -498,8 +504,10 @@ if ($d['Weg']['s']==2) {//Weg
                 kamer = '.$d['kamer_temp']['s'].',
                 Tobi = '.$d['tobi_temp']['s'].',
                 Alex = '.$d['alex_temp']['s'],
+                3600,
                 false,
-                2
+                2,
+                false
             );
         } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
             ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
@@ -511,18 +519,18 @@ if ($d['Weg']['s']==2) {//Weg
             ||$d['raamtobi']['s']=='Closed'
             ||$d['raamalex']['s']=='Closed')
         ) {
-            if ((int)past('timeramen')>43190) {
-                telegram(
-                    'Ramen boven open doen, te warm binnen.
-                    Buiten = '.round($d['buiten_temp']['s'], 1).',
-                    kamer = '.$d['kamer_temp']['s'].',
-                    Tobi = '.$d['tobi_temp']['s'].',
-                    Alex = '.$d['alex_temp']['s'],
-                    false,
-                    2
-                );
-                store('notify_ramen', TIME);
-            }
+            alert(
+                'ramenboven',
+                'Ramen boven open doen, te warm binnen.
+                Buiten = '.round($d['buiten_temp']['s'], 1).',
+                kamer = '.$d['kamer_temp']['s'].',
+                Tobi = '.$d['tobi_temp']['s'].',
+                Alex = '.$d['alex_temp']['s'],
+                3600,
+                false,
+                2,
+                false
+            );
         }
     }
 }
@@ -680,7 +688,7 @@ if ($d['auto']['s']=='On') {
         if ($rainpast<1000&&$maxrain<0.5) {
             sw('water', 'On');
             storemode('water', 300);
-            telegram($msg);
+            telegram($msg, 2);
         }
     }
     $zonopen=1500;

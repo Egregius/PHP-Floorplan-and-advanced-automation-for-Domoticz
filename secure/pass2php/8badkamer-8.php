@@ -17,10 +17,16 @@ if ($status=='On') {
         } elseif ($d['zon']['s']<20&&$d['Weg']['s']==0) {
             sw('hall', 'On');
         }
-        if (TIME>strtotime('20:00')&&$d['Weg']['s']==2&&$d['kamer']['s']==5) {
+        if (TIME>strtotime('20:00')&&$d['Weg']['s']==2&&$d['kamer']['s']>0) {
+            telegram('Kamer op slapen gezet');
             storemode('kamer', 1);
         }
         storemode('badkamer_set', 0);
+        $d['badkamer_set']['s']=10;
+        $d['badkamer_set']['m']=0;
+        $d['badkamervuur1']['t']=0;
+        $d['badkamervuur2']['t']=0;
+        include '_verwarming.php';
         douche();
         if (past('8badkamer-8')>3) {
             $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.4:8090/now_playing'))), true);

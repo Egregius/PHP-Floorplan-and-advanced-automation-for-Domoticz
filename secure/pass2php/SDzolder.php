@@ -11,8 +11,7 @@
  **/
 if ($status=='On') {
     $msg='Rook gedecteerd op zolder!';
-    shell_exec("../ios.sh '$msg' > /dev/null 2>/dev/null &");
-    telegram($msg, false, 2);
+    alert($device, $msg, 300, false, 2, true);
     $items=array('Ralex','Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel');
     foreach ($items as $i) {
         sl($i, 0, true);
