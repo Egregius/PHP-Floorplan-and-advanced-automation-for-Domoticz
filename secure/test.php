@@ -15,14 +15,16 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$sql="SELECT *  FROM `log` WHERE `device` = 'buiten' ORDER BY timestamp DESC ;";
+$since=strftime("%F", time()-86400);
+$sql="SELECT device, min(status) as min, max(status) as max  FROM log WHERE (device = 'living_temp' OR device = 'alex_temp') AND timestamp > '$since' GROUP BY device;";
 if (!$result=$db->query($sql)) {
     die('There was an error running the query ['.$sql.' - '.$db->error.']');
 }
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    print_r($row);
+    $data[$row['device']]['min']=$row['min'];
+    $data[$row['device']]['max']=$row['max'];
 }
-
+print_r($data);
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
