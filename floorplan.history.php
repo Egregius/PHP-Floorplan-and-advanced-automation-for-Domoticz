@@ -80,6 +80,7 @@ if ($home) {
 			<form method="GET" id="filter" action="floorplan.history.php">
 			    <label class="container">Translate
                     <input type="checkbox" name="Translate" onChange="this.form.submit()" >
+                    <button type="submit" name="Transalate">TEST</button>
                     <span class="checkmark"></span>
                 </label>
 			</form>

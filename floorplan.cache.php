@@ -67,9 +67,9 @@ if ($home) {
 			</a>
 		</div>
 		<div class="fix" style="top:0px;left:70px;height:50px;width:50px;>
-			<form method="GET">
-                    <input type="checkbox" name="Translate" onclick="this.form.submit();" >
-			</form>
+			<a href=\'javascript:navigator_Go("floorplan.cache.php?realstatus");\'>
+			    Real status
+			</a>
 		</div>
 		<div class="fix" style="top:0px;right:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.others.php");\'>
