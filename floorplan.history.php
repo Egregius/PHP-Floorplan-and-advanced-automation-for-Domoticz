@@ -78,12 +78,12 @@ if ($home) {
 		</div>';
 	if (isset($_REQUEST['realstatus'])) {
 	    echo '
-		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php\';">
+		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php'.(isset($_REQUEST['page'])?'?page='.$_REQUEST['page']:'').'\';">
 			Real status
 		</div>';
 	} else {
 	    echo '
-		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php?realstatus\';">
+		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php?realstatus'.(isset($_REQUEST['page'])?'&page='.$_REQUEST['page']:'').'\';">
 			Nice status
 		</div>';
 	}
@@ -123,8 +123,8 @@ if ($home) {
 	    </div>
 	    <div class="fix" style="top:82px;left:0px">
 		<table>';
-    if (isset($_REQUEST['page'])) {
-        $offset=$_REQUEST['page'];
+    if (isset($_REQUEST['start'])) {
+        $offset=$_REQUEST['start'];
     } else {
         $offset=0;
     }
@@ -171,9 +171,9 @@ if ($home) {
     }
     echo '
     </table>';
-    if (isset($count)&&($count>=$perpage||isset($_POST['page']))) {
+    if (isset($count)&&($count>=$perpage||isset($_POST['start']))) {
         echo '
-        <form method="POST">';
+        <form method="GET">';
         if (isset($device)) {
             echo '
             <input type="hidden" name="device" value="'.$device.'"/>';
@@ -181,16 +181,16 @@ if ($home) {
         if ($offset==0&&$count==$perpage) {
             echo '
             <br>
-            <button type="submit" name="page" value="'.($offset+$perpage).'" class="btn b3" >Next</button>';
+            <button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b3" >Next</button>';
         } elseif ($offset>0&&$count<$perpage) {
             echo '
             <br>
-            <button type="submit" name="page" value="'.($offset-$perpage).'" class="btn b3" >Prev</button>';
+            <button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b3" >Prev</button>';
         } else {
             echo '
             <br>
-            <button type="submit" name="page" value="'.($offset-$perpage).'" class="btn b4" >Prev</button>
-            <button type="submit" name="page" value="'.($offset+$perpage).'" class="btn b4" >Next</button>';
+            <button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b4" >Prev</button>
+            <button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b4" >Next</button>';
         }
         echo '
         </form>
