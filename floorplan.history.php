@@ -60,6 +60,14 @@ if ($home) {
 		    .btnd{width:236px;}
 		    .b4{max-width:155px!important;}
 		    .b3{max-width:320px!important;}
+            .container {display: block;position: relative;padding-left: 35px;margin-bottom: 12px;cursor: pointer;font-size: 22px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+            .container input {position: absolute;opacity: 0;cursor: pointer;height: 0;width: 0;}
+            .checkmark {position: absolute;top: 0;left: 0;height: 35px;width: 35px;background-color: #eee;}
+            .container:hover input ~ .checkmark {background-color: #ccc;}
+            .container input:checked ~ .checkmark {background-color: #2196F3;}
+            .checkmark:after {content: "";position: absolute;display: none;}
+            .container input:checked ~ .checkmark:after {display: block;}
+            .container .checkmark:after {left: 14px;top: 5px;width: 5px;height: 20px;border: solid white;border-width: 0 3px 3px 0;-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);}
         </style>
 	</head>
 	<body>
@@ -68,11 +76,11 @@ if ($home) {
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
 		</div>
-		<div class="fix" style="top:0px;left:100px;height:50px;width:50px;>
-			<form method="GET" action="floorplan.history.php">
-			    <label class="container">One
-                  <input type="checkbox" name="realvalues" checked="checked">
-                  <span class="checkmark"></span>
+		<div class="fix" style="top:0px;left:70px;height:50px;width:50px;>
+			<form method="GET" id="filter" action="floorplan.history.php">
+			    <label class="container">Translate
+                    <input type="checkbox" name="Translate" onChange="this.form.submit()" >
+                    <span class="checkmark"></span>
                 </label>
 			</form>
 		</div>
@@ -96,7 +104,7 @@ if ($home) {
     echo '
         </div>
         <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">
-        <form method="GET">';
+        <form method="GET" id="filter" action="floorplan.history.php">';
     $sql="SELECT DISTINCT device FROM log ORDER BY device ASC;";
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
@@ -128,18 +136,20 @@ if ($home) {
         //print_r($row);
         $name=strtr($row['device'], $modes);
         $status=$row['status'];
-        if (endsWith($name, '_temp')) {
-            $status=number_format($status, 1, ',', '').' °C';
-        } elseif (endsWith($name, 'Z')) {
-            $status=number_format($status, 1, ',', '').' °C';
-        } elseif ($name=='bigdif') {
-            $status=number_format($status, 1, ',', '').' °C';
-        } elseif ($name=='elec vandaag') {
-            $status=number_format($status, 1, ',', '').' kWh';
-        } elseif ($name=='humidity') {
-            $status=$status.' %';
-        } else {
-            $status=substr($row['status'], 0, 15);
+        if (isset($_REQUEST['Transalate'])) {
+            if (endsWith($name, '_temp')) {
+                $status=number_format($status, 1, ',', '').' °C';
+            } elseif (endsWith($name, 'Z')) {
+                $status=number_format($status, 1, ',', '').' °C';
+            } elseif ($name=='bigdif') {
+                $status=number_format($status, 1, ',', '').' °C';
+            } elseif ($name=='elec vandaag') {
+                $status=number_format($status, 1, ',', '').' kWh';
+            } elseif ($name=='humidity') {
+                $status=$status.' %';
+            } else {
+                $status=substr($row['status'], 0, 15);
+            }
         }
         echo '
         <tr>
