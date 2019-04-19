@@ -75,16 +75,19 @@ if ($home) {
 			<a href=\'javascript:navigator_Go("floorplan.history.php'.(isset($device)?'?device='.$device:'').'");\'>
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
-		</div>
-		<div class="fix" style="top:0px;left:70px;height:50px;width:50px;>
-			<form method="GET" id="filter" action="floorplan.history.php">
-			    <label class="container">Translate
-                    <input type="checkbox" name="Translate" onChange="this.form.submit()" >
-                    <button type="submit" name="Transalate">TEST</button>
-                    <span class="checkmark"></span>
-                </label>
-			</form>
-		</div>
+		</div>';
+	if (isset($_REQUEST['realstatus'])) {
+	    echo '
+		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php\';">
+			Real status
+		</div>';
+	} else {
+	    echo '
+		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php?realstatus\';">
+			Nice status
+		</div>';
+	}
+	echo '
 		<div class="fix" style="top:0px;right:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.others.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
@@ -137,7 +140,7 @@ if ($home) {
         //print_r($row);
         $name=strtr($row['device'], $modes);
         $status=$row['status'];
-        if (isset($_REQUEST['Transalate'])) {
+        if (isset($_REQUEST['realstatus'])) {
             if (endsWith($name, '_temp')) {
                 $status=number_format($status, 1, ',', '').' °C';
             } elseif (endsWith($name, 'Z')) {
