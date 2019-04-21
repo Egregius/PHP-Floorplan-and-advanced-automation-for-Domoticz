@@ -11,4 +11,5 @@
  **/
 if ($status=='On') {
     storemode('kamer', 1);
+    resetsecurity();
 }

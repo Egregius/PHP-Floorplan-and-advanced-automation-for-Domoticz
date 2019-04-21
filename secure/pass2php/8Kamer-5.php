@@ -14,4 +14,5 @@ if ($status=='On') {
     if ($d[$item]['s']<100) {
         sl($item, 100);
     }
+    resetsecurity();
 }

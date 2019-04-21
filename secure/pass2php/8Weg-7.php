@@ -11,4 +11,5 @@
  **/
 if ($status=='On') {
     sw('poortrf', 'Off');
+    resetsecurity();
 }

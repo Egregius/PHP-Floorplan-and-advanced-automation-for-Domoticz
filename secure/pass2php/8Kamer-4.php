@@ -19,4 +19,5 @@ if ($status=='On') {
         }
         sl('kamer', $new);
     }
+    resetsecurity();
 }

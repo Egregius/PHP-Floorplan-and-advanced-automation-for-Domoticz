@@ -13,7 +13,5 @@ if ($status=='On') {
     store('Weg', 0);
     sw('poortrf', 'On');
     lgsql('Remote','Weg','Thuis');
-    if ($d['sirene']['s']!='Group Off') {
-        double('sirene', 'Off');
-    }
+    resetsecurity();
 }

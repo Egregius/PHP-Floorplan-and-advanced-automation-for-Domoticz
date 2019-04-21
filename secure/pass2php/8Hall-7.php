@@ -12,4 +12,5 @@
 if ($status=='On') {
     sl('tobi', 8, 'sleep');
     storemode('tobi', 1);
+    resetsecurity();
 }

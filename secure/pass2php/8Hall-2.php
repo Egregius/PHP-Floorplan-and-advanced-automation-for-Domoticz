@@ -12,4 +12,5 @@
 if ($d['raamhall']['s']=='Closed') {
     sw('zoldertrap', 'Off', false, ' Omhoog');
     store('Weg', 0, null, true);
+    resetsecurity();
 }

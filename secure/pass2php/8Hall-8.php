@@ -12,4 +12,5 @@
 if ($status=='On') {
     sl('alex', 8, 'sleep');
     storemode('alex', 1);
+    resetsecurity();
 }
