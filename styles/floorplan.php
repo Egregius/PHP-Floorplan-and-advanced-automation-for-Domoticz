@@ -55,9 +55,9 @@ td{text-align:right;font-size:1.1em;}
 .eettafel{top:140px;left:245px;}
 .zithoek{top:140px;left:110px;}
 .kamer{top:547px;left:330px;}
-.tobi{top:432px;left:132px;}
-.alex{top:555px;left:132px;}
-.lichtbadkamer{top:418px;left:375px;}
+.tobi{top:432px;left:135px;}
+.alex{top:555px;left:135px;}
+.lichtbadkamer{top:418px;left:378px;}
 .terras{top:7px;left:16px;}
 .tvled{top:7px;left:87px;}#tvled{height:50px;width:auto;}
 .kristal{top:7px;left:147px;}#kristal{height:50px;width:auto;}

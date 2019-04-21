@@ -714,12 +714,12 @@ if ($home) {
         echo '
             </form>
         </div>';
-    dimmer('tobi');
+    dimmer('tobi','i60');
     dimmer('zithoek');
     dimmer('eettafel');
-    dimmer('kamer');
-    dimmer('alex');
-    dimmer('lichtbadkamer');
+    dimmer('kamer','i60');
+    dimmer('alex','i60');
+    dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
     //schakelaar('tvled','Light');
     schakelaar('kristal', 'Light');
