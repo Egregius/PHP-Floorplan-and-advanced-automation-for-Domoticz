@@ -15,9 +15,28 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-for ($x=100;$x==100;$x--) {
-    echo $x.' > '.floor($x*0.9).'<br>';
-    $x=floor($x*0.9);
+$x=100;
+$y=1;
+while (true) {
+    $new=floor($x*0.65);
+    echo $y.'-'.$x.' > '.$new.'<br>';
+    $x=$new;
+    if ($x==0) {
+        break;
+    }
+    $y++;
+}
+echo '<hr>';
+$x=1;
+$y=1;
+while (true) {
+    $new=ceil($x*1.51);
+    echo $y.'-'.$x.' > '.$new.'<br>';
+    $x=$new;
+    if ($x>=100) {
+        break;
+    }
+    $y++;
 }
 //telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
 
