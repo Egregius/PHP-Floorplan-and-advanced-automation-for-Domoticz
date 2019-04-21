@@ -183,7 +183,7 @@ function blinds($name)
             </form>
         </div>';
 }
-function dimmer($name)
+function dimmer($name,$class='i70')
 {
     global $page,$d;
     echo '
@@ -192,10 +192,10 @@ function dimmer($name)
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/Light_Off.png" class="i70">';
+			    <input type="image" src="/images/Light_Off.png" class="'.$class.'">';
     } else {
         echo'
-                <input type="image" src="/images/Light_On.png" class="i70">
+                <input type="image" src="/images/Light_On.png" class="'.$class.'">
                 <div class="fix center dimmerlevel">
                     '.$d[$name]['s'].'
                 </div>';

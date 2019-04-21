@@ -58,6 +58,7 @@ td{text-align:right;font-size:1.1em;}
 .tobi{top:432px;left:132px;}
 .alex{top:555px;left:132px;}
 .lichtbadkamer{top:418px;left:375px;}
+.terras{top:7px;left:16px;}
 .tvled{top:7px;left:87px;}#tvled{height:50px;width:auto;}
 .kristal{top:7px;left:147px;}#kristal{height:50px;width:auto;}
 .bureel{top:7px;left:207px;}#bureel{height:50px;width:auto;}
@@ -73,7 +74,6 @@ td{text-align:right;font-size:1.1em;}
 .zolderg{top:315px;left:130px;}#zolderg{height:42px;width:auto;}
 .auto{top:312px;left:299px;}#auto{height:40px;width:auto;}
 .Weg{top:286px;left:410px;}#Weg{height:80px;width:auto;}
-.terras{top:7px;left:16px;}#terras{height:48px;width:auto;}
 .tuin{top:66px;left:16px;}#tuin{height:48px;width:auto;}
 .zolder{top:690px;left:210px;}#zolder{height:48px;width:auto;}
 .wc{top:11px;left:412px;}#wc{height:28px;width:auto;}

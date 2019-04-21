@@ -720,6 +720,7 @@ if ($home) {
     dimmer('kamer');
     dimmer('alex');
     dimmer('lichtbadkamer');
+    dimmer('terras','i48');
     //schakelaar('tvled','Light');
     schakelaar('kristal', 'Light');
     schakelaar('bureel', 'Light');
@@ -733,7 +734,6 @@ if ($home) {
     schakelaar('garage', 'Light');
     schakelaar('garageled', 'Light');
     schakelaar('zolderg', 'Light');
-    schakelaar('terras', 'Light');
     schakelaar('tuin', 'Light');
     schakelaar('zolder', 'Light');
     schakelaar('wc', 'Light');
