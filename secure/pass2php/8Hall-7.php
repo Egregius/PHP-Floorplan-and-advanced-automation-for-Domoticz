@@ -9,3 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($status=='On') {
+    sl('tobi', 8, 'sleep');
+    storemode('tobi', 1);
+}

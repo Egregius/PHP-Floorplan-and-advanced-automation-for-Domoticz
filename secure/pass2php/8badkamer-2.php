@@ -9,7 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sl('lichtbadkamer', 26);
-douche();
-store('deurbadkamer', 'Closed');
-resetsecurity();
+if ($status=='On') {
+    sl('lichtbadkamer', 26);
+    douche();
+    store('deurbadkamer', 'Closed');
+    resetsecurity();
+}

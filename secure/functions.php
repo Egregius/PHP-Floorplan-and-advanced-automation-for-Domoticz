@@ -291,14 +291,14 @@ function rgb($name,$hue,$level,$check=false)
 function resetsecurity()
 {
     global $d;
+    if ($d['sirene']['s']!='Group Off') {
+        sw('sirene', 'Off');
+    }
     $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
     foreach ($items as $i) {
         if ($d[$i]['s']!='Off') {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
         }
-    }
-    if ($d['sirene']['s']!='Group Off') {
-        sw('sirene', 'Off');
     }
 }
 function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)

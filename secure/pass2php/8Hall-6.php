@@ -9,3 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($d['raamhall']['s']=='Closed') {
+    sw('zoldertrap', 'On', false, ' Omlaag');
+    store('Weg', 0, null, true);
+}

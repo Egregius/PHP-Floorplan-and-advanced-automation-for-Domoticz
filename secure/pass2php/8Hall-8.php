@@ -9,3 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($status=='On') {
+    sl('alex', 8, 'sleep');
+    storemode('alex', 1);
+}
