@@ -10,5 +10,8 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-
+    $item='RkamerL';
+    if ($d[$item]['s']<100) {
+        sl($item, 100);
+    }
 }
