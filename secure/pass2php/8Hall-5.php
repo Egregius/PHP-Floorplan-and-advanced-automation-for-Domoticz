@@ -9,3 +9,10 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($d['Weg']['s']!=0) {
+    store('Weg', 0, null, true);
+}
+if ($d['hall']['s']=='Off') {
+    sw('hall', 'On');
+}
+resetsecurity();
