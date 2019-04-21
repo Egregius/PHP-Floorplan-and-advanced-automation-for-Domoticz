@@ -26,6 +26,7 @@ if (in_array(
             'kamer',
             'tobi',
             'alex',
+            'terras',
             'lichtbadkamer',
             'Xvol',
             'Rliving',
