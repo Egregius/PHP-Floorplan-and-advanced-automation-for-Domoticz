@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-
+    sl('kamer', floor($d['kamer']['s']*0.9));
 }

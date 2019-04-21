@@ -15,16 +15,12 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$since=strftime("%F", time()-86400);
-$sql="SELECT device, min(status) as min, max(status) as max  FROM log WHERE (device = 'buiten_temp' OR device = 'humidity') AND timestamp > '$since' GROUP BY device;";
-$result=$db->query($sql) ;
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    $data[$row['device']]['min']=$row['min'];
-    $data[$row['device']]['max']=$row['max'];
+for ($x=100;$x==100;$x--) {
+    echo $x.' > '.floor($x*0.9).'<br>';
+    $x=floor($x*0.9);
 }
 //telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
 
-print_r($data);
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
