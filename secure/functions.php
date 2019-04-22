@@ -196,7 +196,7 @@ function dimmer($name,$class='i70')
     } else {
         echo'
                 <input type="image" src="/images/Light_On.png" class="'.$class.'">
-                <div class="fix center dimmerlevel">
+                <div class="fix center dimmerlevel '.$class.'">
                     '.$d[$name]['s'].'
                 </div>';
     }
