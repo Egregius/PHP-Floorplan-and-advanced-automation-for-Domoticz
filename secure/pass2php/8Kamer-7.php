@@ -9,22 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    if ($d['badkamer_set']['s']>18) {
-        store('badkamer_set', 10);
-        $d['badkamer_set']['s']=10;
-    } else {
-        store('deurbadkamer', 'Closed');
-        store('badkamer_set', 22.5);
-        $d['badkamer_set']['s']=22.5;
-        $d['deurbadkamer']['s']='Closed';
-    }
-    douche();
-    $d['lichtbadkamer']['s']=25;
-    $d['deurbadkamer']['s']='Closed';
-    $d['8badkamer-7']['t']=0;
-    $d['badkamervuur1']['t']=0;
-    $d['badkamervuur2']['t']=0;
-    require '_verwarming.php';
-    resetsecurity();
-}
+require 'pass2php/8badkamer-7.php';

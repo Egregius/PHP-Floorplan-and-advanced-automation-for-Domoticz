@@ -370,6 +370,14 @@ if ($d['auto']['s']=='On') {
     ) {
         sl('eettafel', 0);
     }
+    if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
+        if ($d['tuin']['s']=='On') {
+            sw('tuin', 'Off');
+        }
+        if ($d['terras']['s']>0) {
+            sl('terras', 0);
+        }
+    }
 }
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
