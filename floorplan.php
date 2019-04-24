@@ -419,6 +419,7 @@ if ($home) {
         </div>
         <div class="fix center zon">';
     echo '
+            Max:
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: '.$d['buiten_temp']['m'].'
             </a>
