@@ -103,7 +103,7 @@ if ($home) {
 </div>
 <div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>
 <div class="fix z1 center" style="top:600px;left:200px;"><a href=\'javascript:navigator_Go("floorplan.history.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>History</a></div>
-<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>
+<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>
 <div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>
 ';
 
