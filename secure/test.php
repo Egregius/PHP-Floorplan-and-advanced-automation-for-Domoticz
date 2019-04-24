@@ -15,29 +15,10 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$x=100;
-$y=1;
-while (true) {
-    $new=floor($x*0.65);
-    echo $y.'-'.$x.' > '.$new.'<br>';
-    $x=$new;
-    if ($x==0) {
-        break;
-    }
-    $y++;
-}
-echo '<hr>';
-$x=1;
-$y=1;
-while (true) {
-    $new=ceil($x*1.51);
-    echo $y.'-'.$x.' > '.$new.'<br>';
-    $x=$new;
-    if ($x>=100) {
-        break;
-    }
-    $y++;
-}
+echo '|';
+echo trim(' dit is een test ');
+echo '|';
+
 //telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
 
 /*---------------------------*/
