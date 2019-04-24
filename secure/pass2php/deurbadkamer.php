@@ -66,7 +66,7 @@ if ($status=='Open'&&$d['auto']['s']) {
     storemode('Weg', TIME);
 } else {
     if (past('8badkamer-8')>10) {
-        if (past('heating')>28800) {
+        if (past('heating')>28800&&$d['heatingauto']['s']=='On') {
             if (in_array(date('n'), array(4,5,9))) {
                 if ($d['buiten_temp']['s']<12) {
                     sw('heating', 3);
