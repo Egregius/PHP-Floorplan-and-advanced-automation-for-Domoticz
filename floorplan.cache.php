@@ -114,7 +114,7 @@ if ($home) {
             if (endswith($row['n'], '_set')) {
                 echo '
                 <td>'.$row['n'].'</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>';
+                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>';
                 if ($row['m']==0) {
                     echo '
                 <td>Auto</td>';
@@ -125,23 +125,23 @@ if ($home) {
             } elseif (endswith($row['n'], 'Z')) {
                 echo '
                 <td>'.$row['n'].'</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td></td>';
             } elseif (endswith($row['n'], '_temp')) {
                 if ($row['n']=='diepvries_temp') {
                     echo  '
                 <td>'.$row['n'].'</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td>Set '.number_format($row['m'], 1, ',', '').' °C</td>';
                 } elseif ($row['n']=='buiten_temp') {
                     echo  '
                 <td>'.$row['n'].'</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td>'.number_format($row['m'], 0, ',', '').' % Buien</td>';
                 } else {
                     echo '
                 <td>'.$row['n'].'</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td>'.$row['m'].'</td>';
                 }
 
@@ -223,7 +223,7 @@ if ($home) {
             } elseif ($row['n']=='max') {
                 echo '
                 <td>Max voorspeld</td>
-                <td>'.number_format($row['s'], 1, ',', '').' °C</td>
+                <td></td>
                 <td>'.number_format($row['m']*100, 0).' % Regen</td>';
             } elseif ($row['n']=='uv') {
                 echo '
@@ -233,18 +233,23 @@ if ($home) {
             } elseif ($row['n']=='zon') {
                 echo '
                 <td>Zon</td>
-                <td>'.number_format($row['s'], 0, ',', '').' W</td>
+                <td class="right">'.number_format($row['s'], 0, ',', '').' W</td>
                 <td></td>';
             } elseif ($row['n']=='elec') {
                 echo '
                 <td>Elec</td>
-                <td>'.number_format($row['s'], 0).' W</td>
-                <td>'.number_format($row['m'], 1, ',', '').' kWh</td>';
+                <td class="right">'.number_format($row['s'], 0).' W</td>
+                <td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
             } elseif ($row['n']=='civil_twilight') {
                 echo '
                 <td>civil_twilight</td>
                 <td>'.strftime("%k:%M:%S", $row['s']).'</td>
                 <td>'.strftime("%k:%M:%S", $row['m']).'</td>';
+            } elseif ($row['n']=='icon') {
+                echo '
+                <td>icon</td>
+                <td><img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon"></td>
+                <td>'.$row['m'].'% Humidity</td>';
             } elseif ($row['n']=='gcal') {
                 echo '
                 <td>Gcal</td>';
@@ -306,6 +311,11 @@ if ($home) {
                 <td>'.$row['n'].'</td>
                 <td>'.$row['s']*10 .' L gas</td>
                 <td>'.$row['m'].' L water</td>';
+            } elseif ($row['n']=='minmaxtemp') {
+                echo '
+                <td>Temp < 6u</td>
+                <td>min '.number_format($row['s'], 1, ',', '') .' °C</td>
+                <td>max '.number_format($row['m'], 1, ',', '').' °C</td>';
             } else {
                 echo '
                 <td>'.$row['n'].'</td>
