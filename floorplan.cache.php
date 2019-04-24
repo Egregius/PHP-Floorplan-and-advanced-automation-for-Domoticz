@@ -161,9 +161,12 @@ if ($home) {
                 if ($row['m']==0) {
                     echo '
                 <td>Auto</td>';
-                } else {
+                } elseif ($row['m']==1) {
                     echo '
                 <td>Manueel</td>';
+                } elseif ($row['m']==2) {
+                    echo '
+                <td>Slapen</td>';
                 }
             } elseif (startswith($row['n'], '8')) {
                 echo '
@@ -316,6 +319,26 @@ if ($home) {
                 <td>Temp < 6u</td>
                 <td>min '.number_format($row['s'], 1, ',', '') .' °C</td>
                 <td>max '.number_format($row['m'], 1, ',', '').' °C</td>';
+            } elseif ($row['n']=='heating') {
+                echo '
+                <td>Heating</td>
+                <td>';
+                if ($row['s']==0) {
+                    echo 'Neutral';
+                } elseif ($row['s']==1) {
+                    echo 'Cooling';
+                } elseif ($row['s']==2) {
+                    echo 'Elec';
+                } elseif ($row['s']==3) {
+                    echo 'Gas/Elec';
+                }
+                echo '</td>
+                <td>Big diff '.number_format($row['m'], 1, ',', '').' °C</td>';
+            } elseif ($row['n']=='jaarteller') {
+                echo '
+                <td>Teller jaar</td>
+                <td>'.number_format($row['s'], 2, ',', '').' kWh/dag</td>
+                <td></td>';
             } else {
                 echo '
                 <td>'.$row['n'].'</td>

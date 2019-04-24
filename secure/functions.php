@@ -64,9 +64,9 @@ function huisslapen()
 function huisweg()
 {
     huisslapen();
-    $items=array('modeRtobi','modeRalex','modeRkamerL','modeRkamerR');
+    $items=array('Rtobi','Ralex','RkamerL','RkamerR');
     foreach ($items as $i) {
-        storemode($i, 1);
+        storemode($i, 0);
     }
 }
 /**
