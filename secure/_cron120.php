@@ -14,6 +14,7 @@ $prevbuien=(float)$d['buiten_temp']['m'];
 $wind=$prevwind;
 
 $maxtemp=1;
+$mintemp=100;
 $maxrain=-1;
 $ds=@json_decode(
     @file_get_contents(
@@ -57,12 +58,16 @@ if (isset($ds['currently'])) {
                 if ($i['temperature']>$maxtemp) {
                     $maxtemp=$i['temperature'];
                 }
+                if ($i['temperature']<$mintemp) {
+                    $mintemp=$i['temperature'];
+                }
             }
             if ($i['precipIntensity']>$maxrain) {
                 $maxrain=$i['precipIntensity'];
             }
         }
-        store('max', $maxtemp);
+        store('minmaxtemp', $mintemp);
+        storemode('minmaxtemp', $maxtemp);
         storemode('max', $maxrain);
     }
 }

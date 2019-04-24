@@ -15,9 +15,13 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-echo '|';
-echo trim(' dit is een test ');
-echo '|';
+$ds=@json_decode(
+    @file_get_contents(
+        'https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si'
+    ),
+    true
+);
+print_r($ds);
 
 //telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
 
