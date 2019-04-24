@@ -434,9 +434,9 @@ if ($home) {
             <br>
             <img src="images/sunrise.png" class="i20" alt="sunrise">
             <br>
-            '.strftime("%k:%M", $d['civil_twilight']['s']).'
+            <small>&#x21e7;</small> '.strftime("%k:%M", $d['civil_twilight']['s']).'
             <br>
-            '.strftime("%k:%M", $d['civil_twilight']['m']).'
+            <small>&#x21e9;</small> '.strftime("%k:%M", $d['civil_twilight']['m']).'
             <br>
             <br>';
     echo 'UV: ';

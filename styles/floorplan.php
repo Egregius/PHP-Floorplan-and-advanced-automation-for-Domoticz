@@ -121,7 +121,7 @@ td{text-align:right;font-size:1.1em;}
 .tpirhall{top:403px;left:215px;}
 
 .buiten_temp{top:450px;left:20px;}
-.zon{top:610px;left:0px;width:80px;text-align:center;}
+.zon{top:590px;left:0px;width:80px;text-align:center;}
 .weather{top:550px;left:14px;}
 .floorplanstats{top:810px;left:80px;width:410px;}
 .smokes{top:604px;left:239px;}

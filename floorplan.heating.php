@@ -516,6 +516,7 @@ if ($home) {
         </div>
         <div class="fix center zon">';
     echo '
+            Max: '.number_format($d['max']['s'], 1, ',', '').'°C<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: '.$d['buiten_temp']['m'].'
             </a>
@@ -531,9 +532,9 @@ if ($home) {
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>
-            '.strftime("%k:%M", $d['civil_twilight']['s']).'
+            <small>&#x21e7;</small> '.strftime("%k:%M", $d['civil_twilight']['s']).'
             <br>
-            '.strftime("%k:%M", $d['civil_twilight']['m']).'
+            <small>&#x21e9;</small> '.strftime("%k:%M", $d['civil_twilight']['m']).'
             <br>
             <br>';
     echo '

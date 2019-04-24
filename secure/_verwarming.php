@@ -21,7 +21,7 @@ Heating:
 2   Elec
 3   Gas/Elec
 */
-if ($d['heatingauto']['s']=='On'&&past('heating')>28800) {
+if ($d['heatingauto']['s']=='On'&&past('heating')>3600) {
     if ($d['buiten_temp']['s']<12&&$d['max']['s']<12) {
         store('heating', 3);//Gas/Elec
         $d['heating']['s']=3;
@@ -29,11 +29,11 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>28800) {
         store('heating', 2);//Elec
         $d['heating']['s']=2;
     } elseif ($d['buiten_temp']['s']>20||$d['max']['s']>21) {
-        store('heating', 0);//Cooling
-        $d['heating']['s']=0;
-    } else {
-        store('heating', 1);//Neutral
+        store('heating', 1);//Cooling
         $d['heating']['s']=1;
+    } else {
+        store('heating', 0);//Neutral
+        $d['heating']['s']=0;
     }
 }
 
