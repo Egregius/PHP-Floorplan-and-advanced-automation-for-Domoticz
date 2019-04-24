@@ -127,6 +127,16 @@ if (isset($d['buiten_temp']['s'])
 } elseif (isset($dstemp)) {
     $d['buiten_temp']['s']=$dstemp;
 }
+if (isset($ds['hourly']['data'])) {
+    if ($d['buiten_temp']['s']>$maxtemp) {
+        $maxtemp=$d['buiten_temp']['s'];
+        storemode('minmaxtemp', $maxtemp);
+    }
+    if ($d['buiten_temp']['s']<$mintemp) {
+        $mintemp=$d['buiten_temp']['s'];
+        store('minmaxtemp', $mintemp);
+    }
+}
 store('buiten_temp', $d['buiten_temp']['s']);
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {

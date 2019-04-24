@@ -516,7 +516,8 @@ if ($home) {
         </div>
         <div class="fix center zon">';
     echo '
-            Max: '.number_format($d['max']['s'], 1, ',', '').'°C<br>
+            <small>&#x21e7;</small> '.number_format($d['minmaxtemp']['m'], 1, ',', '').'°C<br>
+            <small>&#x21e9;</small> '.number_format($d['minmaxtemp']['s'], 1, ',', '').'°C<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: '.$d['buiten_temp']['m'].'
             </a>
