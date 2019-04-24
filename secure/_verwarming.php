@@ -23,16 +23,16 @@ Heating:
 */
 if ($d['heatingauto']['s']=='On'&&past('heating')>28800) {
     if ($d['buiten_temp']['s']<12&&$d['max']['s']<12) {
-        sw('heating', 3);//Gas/Elec
+        store('heating', 3);//Gas/Elec
         $d['heating']['s']=3;
     } elseif ($d['buiten_temp']['s']<15&&$d['max']['s']<16) {
-        sw('heating', 2);//Elec
+        store('heating', 2);//Elec
         $d['heating']['s']=2;
     } elseif ($d['buiten_temp']['s']>20||$d['max']['s']>21) {
-        sw('heating', 0);//Cooling
+        store('heating', 0);//Cooling
         $d['heating']['s']=0;
     } else {
-        sw('heating', 1);//Neutral
+        store('heating', 1);//Neutral
         $d['heating']['s']=1;
     }
 }
@@ -392,14 +392,14 @@ $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
     //lg('>>>>>>>>>> difbadkamer = '.$difbadkamer.' badkamer_temp='.$d['badkamer_temp']['s'].' badkamer_set='.$d['badkamer_set']['s']);
 //}
 if ($difbadkamer<=-1) {
-    if ($d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
+    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
         sw('badkamervuur1', 'On');
     }
-    if ($d['badkamervuur2']['s']!='On' && past('badkamervuur2')>30 && $d['lichtbadkamer']['s']>0 && $d['elec']['s']<6800) {
+    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On' && past('badkamervuur2')>30 && $d['lichtbadkamer']['s']>0 && $d['elec']['s']<6800) {
         sw('badkamervuur2', 'On');
     }
 } elseif ($difbadkamer<= 0) {
-    if ($d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
+    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
         sw('badkamervuur1', 'On');
     }
     if (($d['badkamervuur2']['s']!='Off' && past('badkamervuur2')>30) || $d['elec']['s']>7500) {

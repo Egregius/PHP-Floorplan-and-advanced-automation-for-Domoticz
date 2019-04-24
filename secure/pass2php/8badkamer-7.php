@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    if ($d['badkamer_set']['s']>18) {
+    if ($d['badkamer_set']['s']>=22) {
         store('badkamer_set', 10);
         $d['badkamer_set']['s']=10;
     } else {
