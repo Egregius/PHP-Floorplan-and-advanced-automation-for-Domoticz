@@ -66,34 +66,6 @@ if ($status=='Open'&&$d['auto']['s']) {
     storemode('Weg', TIME);
 } else {
     if (past('8badkamer-8')>10) {
-        if (past('heating')>28800&&$d['heatingauto']['s']=='On') {
-            if (in_array(date('n'), array(4,5,9))) {
-                if ($d['buiten_temp']['s']<12) {
-                    sw('heating', 3);
-                    $d['heating']['s']=3;
-                } else {
-                    sw('heating', 2);
-                    $d['heating']['s']=2;
-                }
-                store('heatingauto', 'Off');
-                $d['heatingauto']['s']='Off';
-            } elseif (in_array(date('n'), array(11,12,1,2,3))) {
-                if ($d['buiten_temp']['s']<12) {
-                    sw('heating', 3);
-                    $d['heating']['s']=3;
-                } else {
-                    sw('heating', 2);
-                    $d['heating']['s']=2;
-                }
-                store('heatingauto', 'On');
-                $d['heatingauto']['s']='On';
-            } elseif (in_array(date('n'), array(6,7,8))) {
-                store('heating', 1);
-                $d['heating']['s']=1;
-                store('heatingauto', 'Off');
-                $d['heatingauto']['s']='Off';
-            }
-        }
         $d['lichtbadkamer']['s']=25;
         $d['deurbadkamer']['s']='Closed';
         $d['8badkamer-7']['t']=0;

@@ -21,45 +21,21 @@ Heating:
 2   Elec
 3   Gas/Elec
 */
-if ($d['heatingauto']['s']=='On') {
-    lg('heatingauto On');
-    echo 'On';
-    if (past('heating')>14400) {
-        if (in_array(date('n'), array(4,5,9))) {
-            if ($d['buiten_temp']['s']<12&&$d['heating']['s']!=3) {
-                store('heating', 3);
-                $d['heating']['s']=3;
-            } elseif ($d['heating']['s']!=2) {
-                store('heating', 2);
-                $d['heating']['s']=2;
-            }
-            if (past('heatingauto')>14400&&$d['heatingauto']['s']!='Off') {
-                store('heatingauto', 'Off');
-                $d['heatingauto']['s']='Off';
-            }
-        } elseif (in_array(date('n'), array(11,12,1,2,3))) {
-            if ($d['buiten_temp']['s']<12&&$d['heating']['s']!=3) {
-                store('heating', 3);
-                $d['heating']['s']=3;
-            } elseif ($d['heating']['s']!=2) {
-                store('heating', 2);
-                $d['heating']['s']=2;
-            }
-            if (past('heatingauto')>14400&&$d['heatingauto']['s']!='Off') {
-                store('heatingauto', 'Off');
-                $d['heatingauto']['s']='Off';
-            }
-        } elseif (in_array(date('n'), array(6,7,8))) {
-            store('heating', 1);
-            $d['heating']['s']=1;
-            if (past('heatingauto')>14400&&$d['heatingauto']['s']!='Off') {
-                store('heatingauto', 'Off');
-                $d['heatingauto']['s']='Off';
-            }
-        }
+if ($d['heatingauto']['s']=='On'&&past('heating')>28800) {
+    if ($d['buiten_temp']['s']<12&&$d['max']['s']<12) {
+        sw('heating', 3);//Gas/Elec
+        $d['heating']['s']=3;
+    } elseif ($d['buiten_temp']['s']<15&&$d['max']['s']<16) {
+        sw('heating', 2);//Elec
+        $d['heating']['s']=2;
+    } elseif ($d['buiten_temp']['s']>20||$d['max']['s']>21) {
+        sw('heating', 0);//Cooling
+        $d['heating']['s']=0;
+    } else {
+        sw('heating', 1);//Neutral
+        $d['heating']['s']=1;
     }
 }
-
 
 $Setkamer=4;
 if ($d['kamer_set']['m']!=2) {

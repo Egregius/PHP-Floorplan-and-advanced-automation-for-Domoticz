@@ -53,7 +53,7 @@ if (isset($ds['currently'])) {
     }
     if (isset($ds['hourly']['data'])) {
         foreach ($ds['hourly']['data'] as $i) {
-            if ($i['time']>TIME&&$i['time']<TIME+3600*3) {
+            if ($i['time']>TIME&&$i['time']<TIME+3600*6) {
                 if ($i['temperature']>$maxtemp) {
                     $maxtemp=$i['temperature'];
                 }
