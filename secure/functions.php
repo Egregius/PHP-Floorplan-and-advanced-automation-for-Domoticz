@@ -339,6 +339,7 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
             }
         } else {
             store($name, $action);
+            lgsql($user, $name, $action);
         }
         if ($name=='denon') {
             if ($action=='Off') {
@@ -362,9 +363,9 @@ function lgcommand($action)
 }
 function store($name,$status,$idx=null,$force=true)
 {
-    global $db, $d;
+    global $db, $d, $username;
     $time=TIME;
-    if ($force==true) {
+    if ($force==true||$d[$name]['s']!=$status) {
         if ($idx>0) {
             $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
         } else {
@@ -377,6 +378,7 @@ function store($name,$status,$idx=null,$force=true)
             $db->query("INSERT INTO devices (n,s) VALUES ('$name','$status') ON DUPLICATE KEY UPDATE s='$status';");
         }
     }
+    lgsql($username, $name, $status);
 }
 function storemode($name,$mode,$time=false)
 {
