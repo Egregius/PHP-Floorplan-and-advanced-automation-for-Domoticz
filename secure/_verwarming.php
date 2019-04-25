@@ -25,10 +25,10 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
         store('heating', 1);//Cooling
         $d['heating']['s']=1;
-    } elseif ($d['buiten_temp']['s']<15&&$d['minmaxtemp']['m']<16) {
+    } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
         store('heating', 2);//Elec
         $d['heating']['s']=2;
-    } elseif (($d['buiten_temp']['s']<12&&$d['minmaxtemp']['m']<12)||$d['minmaxtemp']['s']<5) {
+    } elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<5) {
         store('heating', 3);//Gas/Elec
         $d['heating']['s']=3;
     }  else {
