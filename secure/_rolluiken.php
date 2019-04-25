@@ -288,18 +288,6 @@ if ($d['heating']['s']>=2) {
     if ($d['Weg']['s']==0) {
         $msg.='Thuis__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
-                    $msg.=$i.' Dicht__';
-                }
-            }
-            foreach ($boven as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
-                    $msg.=$i.' Dicht__';
-                }
-            }
         } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
@@ -499,31 +487,19 @@ if ($d['heating']['s']>=2) {
     if ($d['Weg']['s']==0) {
         $msg.='Thuis__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
-                    $msg.=$i.' Dicht__';
-                }
-            }
-            foreach ($boven as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
-                    $msg.=$i.' Dicht__';
-                }
-            }
         } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
+                if ($d['Rliving']['m']==0
+                    && $d['Rliving']['s']==0
+                    && $TRliving>120
+                ) {
+                    sl('Rliving', 0);$msg.='Rliving open__';
+                }
                 foreach ($beneden as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {
                         sl($i, 27);$msg.=$i.' half open__';
                     }
-                }
-                if ($d['Rliving']['m']==0
-                    && $d['Rliving']['s']==0 >0
-                    && $TRliving>$kwartier
-                ) {
-                    sl('Rliving', 0);$msg.='Rliving open__';
                 }
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
@@ -565,6 +541,18 @@ if ($d['heating']['s']>=2) {
     } elseif ($d['Weg']['s']==2) {
         $msg.='Weg__';
         if ($dag=='nacht') {
+            foreach ($benedena as $i) {
+                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                    sl($i, 100);
+                    $msg.=$i.' Dicht__';
+                }
+            }
+            foreach ($boven as $i) {
+                if ($d[$i]['m']==0 && $d[$i]['s']<70) {
+                    sl($i, 100);
+                    $msg.=$i.' Dicht__';
+                }
+            }
         } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
