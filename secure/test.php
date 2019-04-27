@@ -23,13 +23,50 @@ $ds=@json_decode(
 );
 print_r($ds);
 
-//telegram('Temperature last 24 hours: min='.$data['buiten_temp']['min'].', max='.$data['buiten_temp']['max'].'. Humidity: min='.$data['humidity']['min'].', max='.$data['humidity']['min'].'.');
 
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
-unset($_COOKIE, $_GET, $_POST, $_FILES, $_SERVER, $start, $total, $users, $homes, $telegrambot, $smappeeclient_id, $smappeeclient_secret, $smappeeusername, $smappeepassword, $smappeeserviceLocationId, $LogFile, $cookie, $telegramchatid, $telegramchatid2, $smappeeip, $authenticated, $zongarage, $zonkeuken, $zoninkom, $zonmedia, $Usleep, $eendag, $Weg, $home, $log, $offline, $page, $udevice, $local, $user, $ipaddress, $timediff);
+unset(
+    $_COOKIE,
+    $_GET,
+    $_POST,
+    $_FILES,
+    $_SERVER,
+    $start,
+    $total,
+    $users,
+    $homes,
+    $telegrambot,
+    $smappeeclient_id,
+    $smappeeclient_secret,
+    $smappeeusername,
+    $smappeepassword,
+    $smappeeserviceLocationId,
+    $LogFile,
+    $cookie,
+    $telegramchatid,
+    $telegramchatid2,
+    $smappeeip,
+    $authenticated,
+    $zongarage,
+    $zonkeuken,
+    $zoninkom,
+    $zonmedia,
+    $Usleep,
+    $eendag,
+    $Weg,
+    $home,
+    $log,
+    $offline,
+    $page,
+    $udevice,
+    $local,
+    $user,
+    $ipaddress,
+    $timediff
+);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
