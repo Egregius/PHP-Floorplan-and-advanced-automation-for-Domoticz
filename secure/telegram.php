@@ -27,9 +27,18 @@ if (!empty($argv[1])&&!empty($argv[2])) {
 
 if (isset($content)) {
     $bot_url="https://api.telegram.org/bot".$telegrambot."/";
-    $url=$bot_url."sendMessage?chat_id=".$telegramchatid1;$post_fields=array('chat_id'=>$telegramchatid1,'text'=>$content,'disable_notification'=>$silent);
+    $url=$bot_url."sendMessage?chat_id=".$telegramchatid1;
+    $post_fields=array(
+        'chat_id'=>$telegramchatid1,
+        'text'=>$content,
+        'disable_notification'=>$silent
+    );
     $ch=curl_init();
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:multipart/form-data"));
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array("Content-Type:multipart/form-data")
+    );
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
@@ -42,9 +51,18 @@ if (isset($content)) {
         sleep($x*2);
     }
     if ($to=='2') {
-        $url=$bot_url."sendMessage?chat_id=".$telegramchatid2;$post_fields=array('chat_id'=>$telegramchatid2,'text'=>$content,'disable_notification'=>$silent);
+        $url=$bot_url."sendMessage?chat_id=".$telegramchatid2;
+        $post_fields=array(
+            'chat_id'=>$telegramchatid2,
+            'text'=>$content,
+            'disable_notification'=>$silent
+        );
         $ch=curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:multipart/form-data"));
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array("Content-Type:multipart/form-data")
+        );
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);

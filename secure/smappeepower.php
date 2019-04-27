@@ -59,7 +59,7 @@ if (!empty($smappee['report'])) {
 }
 /**
  * Function telegram
- * Cancels the current action on the controller
+ * Sends a message to telegram
  *
  * @param string  $msg    Message to sent
  * @param boolean $silent If true deactivates the notification sound
@@ -76,7 +76,13 @@ function telegram($msg,$silent=true,$to=1)
 }
 /**
  * Function alert
- * Cancels the current action on the controller
+ * Sends a message to telegram but checks when last message is sent
+ *
+ * @param string  $name   id of the alert
+ * @param string  $msg    Message to sent
+ * @param int     $ttl    minimum seconds between 2 alerts
+ * @param boolean $silent If true deactivates the notification sound
+ * @param boolean $ios    If true also send to iOS
  *
  * @return null
  */

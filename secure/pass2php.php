@@ -39,7 +39,7 @@ if (in_array(
             'Ralex',
             'luifel'
         )
-    )
+)
 ) {
     if ($status=='Off'||$status=='Open') {
         store($device, 0);
@@ -63,6 +63,6 @@ if (in_array(
 } else {
     store($device, $status);
 }
-lgsql('Domoticz',$device,$status);
+lgsql('Domoticz', $device, $status);
 //lg($device.' = '.$status);
-@include 'pass2php/'.$device.'.php';
+@require 'pass2php/'.$device.'.php';
