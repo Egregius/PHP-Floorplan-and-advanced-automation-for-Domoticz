@@ -190,49 +190,111 @@ if ($d['Weg']['s']==0) {
         $difheater2=0;
         $difheater3=-0.2;
         $difheater4=-0.4;
-        if ($difliving>$difheater2 && $d['heater1']['s']!='Off' && past('heater1')>90 && past('heater2')>90) {
+        if ($difliving>$difheater2
+            && $d['heater1']['s']!='Off'
+            && past('heater1')>90
+            && past('heater2')>90
+        ) {
             sw('heater1', 'Off');
         }
-        if ($difliving<$difheater2 && $d['heater2']['s']!='On' && past('heater2')>90) {
+        if ($difliving<$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>90
+        ) {
             sw('heater2', 'On');
-        } elseif ($difliving==$difheater2 && $d['heater2']['s']!='On' && past('heater2')>180 && $d['elec']['s']<8000) {
+        } elseif ($difliving==$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>180
+            && $d['elec']['s']<8000
+        ) {
             sw('heater2', 'On');
-        } elseif ($difliving>=$difheater2 && $d['heater2']['s']!='Off' && past('heater2')>90 || $d['elec']['s']>8500) {
+        } elseif ($difliving>=$difheater2
+            && $d['heater2']['s']!='Off'
+            && past('heater2')>90
+            || $d['elec']['s']>8500
+        ) {
             sw('heater2', 'Off');
         }
-        if ($difliving<=$difheater3 && $d['heater3']['s']!='On' && past('heater3')>90 && $d['elec']['s']<7000) {
+        if ($difliving<=$difheater3
+            && $d['heater3']['s']!='On'
+            && past('heater3')>90
+            && $d['elec']['s']<7000
+        ) {
             sw('heater3', 'On');
-        } elseif ($difliving>=$difheater3 && $d['heater3']['s']!='Off' && past('heater3')>30 || $d['elec']['s']>8000) {
+        } elseif ($difliving>=$difheater3
+            && $d['heater3']['s']!='Off'
+            && past('heater3')>30
+            || $d['elec']['s']>8000
+        ) {
             sw('heater3', 'Off');
         }
-        if ($difliving<=$difheater4 && $d['heater4']['s']!='On' && past('heater4')>90 && $d['elec']['s']<6000) {
+        if ($difliving<=$difheater4
+            && $d['heater4']['s']!='On'
+            && past('heater4')>90
+            && $d['elec']['s']<6000
+        ) {
             sw('heater4', 'On');
-        } elseif ($difliving>=$difheater4 && $d['heater4']['s']!='Off' && past('heater4')>30 || $d['elec']['s']>7000) {
+        } elseif ($difliving>=$difheater4
+            && $d['heater4']['s']!='Off'
+            && past('heater4')>30
+            || $d['elec']['s']>7000
+        ) {
             sw('heater4', 'Off');
         }
-        //if(round($Setliving+(5*$jaarteller),1)<$Setliving)$living_set=round($Setliving+(5*$jaarteller),1);
     } elseif ($d['heating']['s']==3) {//gas/elec
         $difheater2=-0.3;
         $difheater3=-0.6;
         $difheater4=-1.0;
-        if ($difliving>$difheater2 && $d['heater1']['s']!='Off' && past('heater1')>90 && past('heater2')>90) {
+        if ($difliving>$difheater2
+            && $d['heater1']['s']!='Off'
+            && past('heater1')>90
+            && past('heater2')>90
+        ) {
             sw('heater1', 'Off');
         }
-        if ($difliving<$difheater2 && $d['heater2']['s']!='On' && past('heater2')>90 && $d['elec']['s']<8000) {
+        if ($difliving<$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>90
+            && $d['elec']['s']<8000
+        ) {
             sw('heater2', 'On');
-        } elseif ($difliving==$difheater2 && $d['heater2']['s']!='On' && past('heater2')>180 && $d['elec']['s']<8000) {
+        } elseif ($difliving==$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>180
+            && $d['elec']['s']<8000
+        ) {
             sw('heater2', 'On');
-        } elseif ($difliving>=$difheater2 && $d['heater2']['s']!='Off' && past('heater2')>90 || $d['elec']['s']>8500) {
+        } elseif ($difliving>=$difheater2
+            && $d['heater2']['s']!='Off'
+            && past('heater2')>90
+            || $d['elec']['s']>8500
+        ) {
             sw('heater2', 'Off');
         }
-        if ($difliving<$difheater3 && $d['heater3']['s']!='On' && past('heater3')>90 && $d['elec']['s']<7000) {
+        if ($difliving<$difheater3
+            && $d['heater3']['s']!='On'
+            && past('heater3')>90
+            && $d['elec']['s']<7000
+        ) {
             sw('heater3', 'On');
-        } elseif ($difliving>=$difheater3 && $d['heater3']['s']!='Off' && past('heater3')>30 || $d['elec']['s']>8000) {
+        } elseif ($difliving>=$difheater3
+            && $d['heater3']['s']!='Off'
+            && past('heater3')>30
+            || $d['elec']['s']>8000
+        ) {
             sw('heater3', 'Off');
         }
-        if ($difliving<$difheater4 && $d['heater4']['s']!='On' && past('heater4')>90 && $d['elec']['s']<6000) {
+        if ($difliving<$difheater4
+            && $d['heater4']['s']!='On'
+            && past('heater4')>90
+            && $d['elec']['s']<6000
+        ) {
             sw('heater4', 'On');
-        } elseif ($difliving>=$difheater4 && $d['heater4']['s']!='Off' && past('heater4')>30 || $d['elec']['s']>7000) {
+        } elseif ($difliving>=$difheater4
+            && $d['heater4']['s']!='Off'
+            && past('heater4')>30
+            || $d['elec']['s']>7000
+        ) {
             sw('heater4', 'Off');
         }
     } elseif ($d['heating']['s']==1) {
@@ -273,12 +335,27 @@ if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
 }
 $kamers=array('tobi','alex','kamer');
 foreach ($kamers as $kamer) {
-    if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1) && ${'dif'.$kamer}<=0.2) {
-        ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
+    if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)
+        && ${'dif'.$kamer}<=0.2
+    ) {
+        ${'RSet'.$kamer}=setradiator(
+            $kamer,
+            ${'dif'.$kamer},
+            true,
+            $d[$kamer.'_set']['s']
+        );
     } else {
-        ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
+        ${'RSet'.$kamer}=setradiator(
+            $kamer,
+            ${'dif'.$kamer},
+            false,
+            $d[$kamer.'_set']['s']
+        );
     }
-    if (TIME>=strtotime('15:00') && ${'RSet'.$kamer}<15 && $d['raam'.$kamer]['s']!='Open') {
+    if (TIME>=strtotime('15:00')
+        && ${'RSet'.$kamer}<15
+        && $d['raam'.$kamer]['s']!='Open'
+    ) {
         if ($kamer!='tobi') {
             if ($d[$kamer.'_temp']['s']<15) {
                 ${'RSet'.$kamer}=18.0;
@@ -304,18 +381,78 @@ foreach ($kamers as $kamer) {
 }
 //lg('bigdif='.$bigdif.'|brander='.$brander.'|timebrander='.past('brander'));
 if ($d['heating']['s']==3) {
-    if ($bigdif<=-0.2     && $d['brander']['s']=="Off" && past('brander')>180) {
-        sw('brander', 'On', false, 'brander ON dif = '.$bigdif.' was off for '.convertToHours(past('brander')));
-    } elseif ($bigdif<=-0.1     && $d['brander']['s']=="Off" && past('brander')>300) {
-        sw('brander', 'On', false, 'brander ON dif = '.$bigdif.' was off for '.convertToHours(past('brander')));
-    } elseif ($bigdif<= 0       && $d['brander']['s']=="Off" && past('brander')>600) {
-        sw('brander', 'On', false, 'brander ON dif = '.$bigdif.' was off for '.convertToHours(past('brander')));
-    } elseif ($bigdif>= 0       && $d['brander']['s']=="On" && past('brander')>180) {
-        sw('brander', 'Off', false, 'brander OFF dif = '.$bigdif.' was on for '.convertToHours(past('brander')));
-    } elseif ($bigdif>=-0.1     && $d['brander']['s']=="On" && past('brander')>300) {
-        sw('brander', 'Off', false, 'brander OFF dif = '.$bigdif.' was on for '.convertToHours(past('brander')));
-    } elseif ($bigdif>=-0.2     && $d['brander']['s']=="On" && past('brander')>900) {
-        sw('brander', 'Off', false, 'brander OFF dif = '.$bigdif.' was on for '.convertToHours(past('brander')));
+    if ($bigdif<=-0.2
+        && $d['brander']['s']=="Off"
+        && past('brander')>180
+    ) {
+        sw(
+            'brander',
+            'On',
+            false,
+            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
+                past('brander')
+            )
+        );
+    } elseif ($bigdif<=-0.1
+        && $d['brander']['s']=="Off"
+        && past('brander')>300
+    ) {
+        sw(
+            'brander',
+            'On',
+            false,
+            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
+                past('brander')
+            )
+        );
+    } elseif ($bigdif<= 0
+        && $d['brander']['s']=="Off"
+        && past('brander')>600
+    ) {
+        sw(
+            'brander',
+            'On',
+            false,
+            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
+                past('brander')
+            )
+        );
+    } elseif ($bigdif>= 0
+        && $d['brander']['s']=="On"
+        && past('brander')>180
+    ) {
+        sw(
+            'brander',
+            'Off',
+            false,
+            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
+                past('brander')
+            )
+        );
+    } elseif ($bigdif>=-0.1
+        && $d['brander']['s']=="On"
+        && past('brander')>300
+    ) {
+        sw(
+            'brander',
+            'Off',
+            false,
+            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
+                past('brander')
+            )
+        );
+    } elseif ($bigdif>=-0.2
+        && $d['brander']['s']=="On"
+        && past('brander')>900
+    ) {
+        sw(
+            'brander',
+            'Off',
+            false,
+            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
+                past('brander')
+            )
+        );
     }
 } elseif ($d['brander']['s']=='On') {
     sw('brander', 'Off', false, 'Brander OFF, heating < 3');
@@ -324,7 +461,11 @@ if ($bigdif!=$d['heating']['m']) {
     storemode('heating', $bigdif);
 }
 
-if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deurbadkamer')>57 || $d['lichtbadkamer']['s']==0)) {
+if ($d['deurbadkamer']['s']=='Open'
+    && $d['badkamer_set']['s']!=10
+    && (past('deurbadkamer')>57
+    || $d['lichtbadkamer']['s']==0)
+) {
     store('badkamer_set', 10);
     $d['badkamer_set']['s']=10.0;
 } elseif ($d['deurbadkamer']['s']=='Closed') {
@@ -333,10 +474,21 @@ if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deu
     if ($b7b<$b7) {
         $b7=$b7b;
     }
-    if ($d['buiten_temp']['s']<21 && $d['lichtbadkamer']['s']>0 && $d['badkamer_set']['s']!=22.5 && ($b7>900 && $d['heating']['s']>=2 && (TIME>strtotime('5:00') && TIME<strtotime('10:00')))) {
+    if ($d['buiten_temp']['s']<21
+        && $d['lichtbadkamer']['s']>0
+        && $d['badkamer_set']['s']!=22.5
+        && ($b7>900
+        && $d['heating']['s']>=2
+        && (TIME>strtotime('5:00')
+        && TIME<strtotime('10:00')))
+    ) {
         store('badkamer_set', 22.5);
         $d['badkamer_set']['s']=22.5;
-    } elseif ($b7>900 && $d['lichtbadkamer']['s']==0 && $d['buiten_temp']['s']<21 && $d['Weg']['s']<2) {
+    } elseif ($b7>900
+        && $d['lichtbadkamer']['s']==0
+        && $d['buiten_temp']['s']<21
+        && $d['Weg']['s']<2
+    ) {
         if (TIME>=strtotime('6:00') && TIME<=strtotime('6:30')) {
             $x=20;
             if ($d['badkamer_set']['s']!=$x) {
@@ -419,7 +571,12 @@ if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deu
             store('badkamer_set', 10);
             $d['badkamer_set']['s']=10.0;
         }
-    } elseif ($b7>900 && ($d['lichtbadkamer']['s']==0 && $d['badkamer_set']['s']!=10) || ($d['Weg']['s']==2 && $d['badkamer_set']['s']!=10)) {
+    } elseif ($b7>900
+        && ($d['lichtbadkamer']['s']==0
+        && $d['badkamer_set']['s']!=10)
+        || ($d['Weg']['s']==2
+        && $d['badkamer_set']['s']!=10)
+    ) {
         store('badkamer_set', 10);
         $d['badkamer_set']['s']=10.0;
     } elseif ($d['lichtbadkamer']['s']==0 && $d['badkamer_set']['s']!=10) {
@@ -427,36 +584,60 @@ if ($d['deurbadkamer']['s']=='Open' && $d['badkamer_set']['s']!=10 && (past('deu
         $d['badkamer_set']['s']=10.0;
     }
 }
-
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-//if (isset($device)&&$device=='badkamer_temp') {
-    //lg('>>>>>>>>>> difbadkamer = '.$difbadkamer.' badkamer_temp='.$d['badkamer_temp']['s'].' badkamer_set='.$d['badkamer_set']['s']);
-//}
 if ($difbadkamer<=-1) {
-    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
+    if ($d['deurbadkamer']['s']=='Closed'
+        && $d['badkamervuur1']['s']!='On'
+        && past('badkamervuur1')>30
+        && $d['elec']['s']<7200
+    ) {
         sw('badkamervuur1', 'On');
     }
-    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On' && past('badkamervuur2')>30 && $d['lichtbadkamer']['s']>0 && $d['elec']['s']<6800) {
+    if ($d['deurbadkamer']['s']=='Closed'
+        && $d['badkamervuur2']['s']!='On'
+        && past('badkamervuur2')>30
+        && $d['lichtbadkamer']['s']>0
+        && $d['elec']['s']<6800
+    ) {
         sw('badkamervuur2', 'On');
     }
 } elseif ($difbadkamer<= 0) {
-    if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On' && past('badkamervuur1')>30 && $d['elec']['s']<7200) {
+    if ($d['deurbadkamer']['s']=='Closed'
+        && $d['badkamervuur1']['s']!='On'
+        && past('badkamervuur1')>30
+        && $d['elec']['s']<7200
+    ) {
         sw('badkamervuur1', 'On');
     }
-    if (($d['badkamervuur2']['s']!='Off' && past('badkamervuur2')>30) || $d['elec']['s']>7500) {
+    if (($d['badkamervuur2']['s']!='Off'
+        && past('badkamervuur2')>30)
+        || $d['elec']['s']>7500
+    ) {
         sw('badkamervuur2', 'Off');
     }
 } else {
-    if (($d['badkamervuur2']['s']!='Off' && past('badkamervuur2')>30) || $d['elec']['s']>7500) {
+    if (($d['badkamervuur2']['s']!='Off'
+        && past('badkamervuur2')>30)
+        || $d['elec']['s']>7500
+    ) {
         sw('badkamervuur2', 'Off');
     }
-    if (($d['badkamervuur1']['s']!='Off' && past('badkamervuur1')>30) || $d['elec']['s']>8200) {
+    if (($d['badkamervuur1']['s']!='Off'
+        && past('badkamervuur1')>30)
+        || $d['elec']['s']>8200
+    ) {
         sw('badkamervuur1', 'Off');
     }
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
-if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
+if ($difzolder<=-0.2
+    && $d['zoldervuur']['s']!="On"
+    && past('zoldervuur')>30
+    && $d['elec']['s']<4800
+    && $d['heating']['s']>=2
+    && $d['Weg']['s']==0
+) {
     sw(
         'zoldervuur',
         'On',
@@ -465,7 +646,13 @@ if ($difzolder<=-0.2 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>30 && 
         convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif ($difzolder<=-0.1 && $d['zoldervuur']['s']!="On" && past('zoldervuur')>90 && $d['elec']['s']<4800 && $d['heating']['s']>=2 && $d['Weg']['s']==0) {
+} elseif ($difzolder<=-0.1
+    && $d['zoldervuur']['s']!="On"
+    && past('zoldervuur')>90
+    && $d['elec']['s']<4800
+    && $d['heating']['s']>=2
+    && $d['Weg']['s']==0
+) {
     sw(
         'zoldervuur',
         'On',

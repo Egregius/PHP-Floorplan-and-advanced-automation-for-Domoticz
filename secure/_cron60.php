@@ -52,19 +52,19 @@ foreach ($items as $item) {
 }
 if ($d['kamer']['m']==2) {
     $items=array('RkamerR','RkamerL');
-    if($d['kamer']['s']==7) {
+    if ($d['kamer']['s']==7) {
         foreach ($items as $i) {
             if ($d[$i]['s']>70) {
                 sl($i, 65);
             }
         }
-    } elseif($d['kamer']['s']==14) {
+    } elseif ($d['kamer']['s']==14) {
         foreach ($items as $i) {
             if ($d[$i]['s']>55) {
                 sl($i, 30);
             }
         }
-    } elseif($d['kamer']['s']>=21) {
+    } elseif ($d['kamer']['s']>=21) {
         foreach ($items as $i) {
             if ($d[$i]['s']>0) {
                 sl($i, 0);
@@ -151,7 +151,7 @@ if ($d['denon']['s']=='On') {
             storemode('denon', $denonmain['InputFuncSelect']['value']);
         }
         if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) {
-            store('denonpower',$denonmain['ZonePower']['value']);
+            store('denonpower', $denonmain['ZonePower']['value']);
         }
         $denonsec=json_decode(
             json_encode(
