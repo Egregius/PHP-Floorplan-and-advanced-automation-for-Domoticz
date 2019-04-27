@@ -9,7 +9,12 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=devices&used=true'), true);
+$domoticz=json_decode(
+    file_get_contents(
+        $domoticzurl.'/json.htm?type=devices&used=true'
+    ),
+    true
+);
 if ($domoticz) {
     foreach ($domoticz['result'] as $dom) {
         $name=$dom['Name'];

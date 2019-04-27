@@ -728,7 +728,7 @@ if ($d['auto']['s']=='On') {
     } else {
         $maxluifel=60;
     }
-    $maxluifel=0;
+    $maxluifel=0;//Put in remark to activate sunscreen
     //$dir=$d['winddir']['s'];
     //if ($dir=='East')$maxluifel=round($maxluifel*0.8,0);
     //elseif ($dir=='East')$maxluifel=round($maxluifel*0.8,0);
