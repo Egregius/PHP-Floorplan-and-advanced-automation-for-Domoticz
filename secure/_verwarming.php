@@ -23,23 +23,27 @@ Heating:
 */
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
+        echo 'Cooling';
         if ($d['heating']['s']!=1) {
-            store('heating', 1);//Cooling
+            store('heating', 1);
             $d['heating']['s']=1;
         }
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
+        echo 'Elec';
         if ($d['heating']['s']!=2) {
-            store('heating', 2);//Elec
+            store('heating', 2);
             $d['heating']['s']=2;
         }
     } elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<5) {
+        echo 'Gas/Elec';
         if ($d['heating']['s']!=3) {
-            store('heating', 3);//Gas/Elec
+            store('heating', 3);
             $d['heating']['s']=3;
         }
     }  else {
+        echo 'Neutral';
         if ($d['heating']['s']!=0) {
-            store('heating', 0);//Neutral
+            store('heating', 0);
             $d['heating']['s']=0;
         }
     }
