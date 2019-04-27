@@ -9,24 +9,25 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-/*
-Weg:
-0	Thuis
-1	Slapen
-2	Weg
 
-Heating:
-0   Neutral
-1   Cooling
-2   Elec
-3   Gas/Elec
-*/
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
+    echo 'buiten_temp-s = '.$d['buiten_temp']['s'].'<br>';
+    echo 'minmaxtemp-s = '.$d['minmaxtemp']['s'].'<br>';
+    echo 'minmaxtemp-m = '.$d['minmaxtemp']['m'].'<br>';
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
         echo 'Cooling';
         if ($d['heating']['s']!=1) {
             store('heating', 1);
             $d['heating']['s']=1;
+        }
+    } elseif ($d['buiten_temp']['s']<12
+        ||$d['minmaxtemp']['m']<12
+        ||$d['minmaxtemp']['s']<5
+    ) {
+        echo 'Gas/Elec';
+        if ($d['heating']['s']!=3) {
+            store('heating', 3);
+            $d['heating']['s']=3;
         }
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
         echo 'Elec';
@@ -34,13 +35,7 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
             store('heating', 2);
             $d['heating']['s']=2;
         }
-    } elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<5) {
-        echo 'Gas/Elec';
-        if ($d['heating']['s']!=3) {
-            store('heating', 3);
-            $d['heating']['s']=3;
-        }
-    }  else {
+    } else {
         echo 'Neutral';
         if ($d['heating']['s']!=0) {
             store('heating', 0);
@@ -51,7 +46,12 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
 
 $Setkamer=4;
 if ($d['kamer_set']['m']!=2) {
-    if ($d['buiten_temp']['s']<14 && $d['minmaxtemp']['m']<15 && $d['raamkamer']['s']=='Closed'  && $d['heating']['s']>=2 && (past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+    if ($d['buiten_temp']['s']<14
+        && $d['minmaxtemp']['m']<15
+        && $d['raamkamer']['s']=='Closed'
+        && $d['heating']['s']>=2
+        && (past('raamkamer')>7198 || TIME>strtotime('21:00'))
+    ) {
         $Setkamer=10;
         if (TIME<strtotime('4:00')) {
             $Setkamer=15.0;
@@ -67,7 +67,12 @@ if ($d['kamer_set']['m']!=2) {
 
 $Settobi=4;
 if ($d['tobi_set']['m']!=2) {
-    if ($d['buiten_temp']['s']<14 && $d['minmaxtemp']['m']<15 && $d['raamtobi']['s']=='Closed' && $d['heating']['s']>=2 && (past('raamtobi')>7198 || TIME>strtotime('20:00'))) {
+    if ($d['buiten_temp']['s']<14
+        && $d['minmaxtemp']['m']<15
+        && $d['raamtobi']['s']=='Closed'
+        && $d['heating']['s']>=2
+        && (past('raamtobi')>7198 || TIME>strtotime('20:00'))
+    ) {
         $Settobi=10;
         if ($d['gcal']['s']) {
             if (TIME<strtotime('4:30') || TIME>strtotime('19:10')) {
@@ -84,7 +89,12 @@ if ($d['tobi_set']['m']!=2) {
 
 $Setalex=4;
 if ($d['alex_set']['m']!=2) {
-    if ($d['buiten_temp']['s']<16 && $d['minmaxtemp']['m']<15 && $d['raamalex']['s']=='Closed' && $d['heating']['s']>=2 && (past('raamalex')>1800 || TIME>strtotime('19:00'))) {
+    if ($d['buiten_temp']['s']<16
+        && $d['minmaxtemp']['m']<15
+        && $d['raamalex']['s']=='Closed'
+        && $d['heating']['s']>=2
+        && (past('raamalex')>1800 || TIME>strtotime('19:00'))
+    ) {
         $Setalex=10;
         if (TIME<strtotime('4:30')) {
             $Setalex=15.0;
@@ -101,7 +111,11 @@ if ($d['alex_set']['m']!=2) {
 
 $Setliving=16;
 if ($d['living_set']['m']!=2) {
-    if ($d['buiten_temp']['s']<20 && $d['minmaxtemp']['m']<20 && $d['heating']['s']>=2 && $d['raamliving']['s']=='Closed') {
+    if ($d['buiten_temp']['s']<20
+        && $d['minmaxtemp']['m']<20
+        && $d['heating']['s']>=2
+        && $d['raamliving']['s']=='Closed'
+    ) {
         $Setliving=17;
         if ($d['Weg']['s']==0) {
             if (TIME>=strtotime('5:00') && TIME<strtotime('18:45')) {
@@ -123,7 +137,10 @@ if ($d['living_set']['m']!=2) {
             }
         }
         if ($Setliving>=20.0) {
-            if (TIME>=strtotime('11:00') && $d['zon']['s']>3000 && $d['buiten_temp']['s']>15) {
+            if (TIME>=strtotime('11:00')
+                && $d['zon']['s']>3000
+                && $d['buiten_temp']['s']>15
+            ) {
                 $Setliving=19.5;
             } elseif ($d['zon']['s']<2000) {
                 $Setliving=20.5;
@@ -140,7 +157,10 @@ $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;
 $xxkamers=array();
 foreach ($kamers as $kamer) {
-    ${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'], 1);
+    ${'dif'.$kamer}=number_format(
+        $d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],
+        1
+    );
     if (${'dif'.$kamer}>9.9) {
         ${'dif'.$kamer}=9.9;
     }
@@ -240,7 +260,16 @@ if ($d['Weg']['s']==0) {
     }
 }
 if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
-    if($difliving<$difheater2+0.1)lg('heater | Living Set = '.$Setliving.' | Living temp = '.$living_temp.' | Diff living = '.round($difliving,2).' | Verbruik = '.$d['elec']['s'].' | Jaarteller = '.round($d['jaarteller']['s'],3).' | kamers = '.$xxxkamers);
+    if ($difliving<$difheater2+0.1) {
+        lg(
+            'heater | Living Set = '.$Setliving
+            .' | Living temp = '.$living_temp
+            .' | Diff living = '.round($difliving, 2)
+            .' | Verbruik = '.$d['elec']['s']
+            .' | Jaarteller = '.round($d['jaarteller']['s'], 3)
+            .' | kamers = '.$xxxkamers
+        );
+    }
 }
 $kamers=array('tobi','alex','kamer');
 foreach ($kamers as $kamer) {
