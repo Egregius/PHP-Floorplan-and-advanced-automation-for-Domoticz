@@ -656,21 +656,21 @@ if ($d['auto']['s']=='On') {
         $rainpast=$row['buien'];
     }
     if ($rainpast>64000) {
-        $pomppauze=300;
+        $pomppauze=3000;
     } elseif ($rainpast>32000) {
-        $pomppauze=600;
+        $pomppauze=6000;
     } elseif ($rainpast>16000) {
-        $pomppauze=1200;
+        $pomppauze=12000;
     } elseif ($rainpast>8000) {
-        $pomppauze=2400;
+        $pomppauze=24000;
     } elseif ($rainpast>4000) {
-        $pomppauze=3600;
+        $pomppauze=36000;
     } elseif ($rainpast>2000) {
-        $pomppauze=7200;
+        $pomppauze=72000;
     } elseif ($rainpast>1000) {
-        $pomppauze=10800;
+        $pomppauze=108000;
     } else {
-        $pomppauze=21600;
+        $pomppauze=86400*7;
     }
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
         sw(
