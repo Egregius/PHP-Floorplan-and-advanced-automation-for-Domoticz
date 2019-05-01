@@ -824,10 +824,10 @@ if ($home) {
     if ($d['raamhall']['s']=='Open') {
         echo '<div class="fix raamhall"></div>';
     }
-    if ($d['deurinkom']['s']=='Closed') {
+    if ($d['deurinkom']['s']=='Open') {
         echo '<div class="fix deurinkom"></div>';
     }
-    if ($d['deurgarage']['s']=='Closed') {
+    if ($d['deurgarage']['s']=='Open') {
         echo '<div class="fix deurgarage"></div>';
     }
     if ($d['deurbadkamer']['s']=='Open') {
