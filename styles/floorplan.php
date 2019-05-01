@@ -139,6 +139,8 @@ td{text-align:right;font-size:1.1em;}
 .deurbadkamer{top:421px;left:341px;width:7px;height:46px;background:rgba(255,0,0,1);z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
 .tachterdeur{top:278px;left:74px;}
 .tpoort{top:315px;left:376px;}
+.deurinkom{top:58px;left:337px;width:8px;height:30px;background:rgba(0,255,0,1);z-index:-10;}
+.deurgarage{top:248px;left:341px;width:46px;height:8px;background:rgba(255,0,0,1);z-index:-10;}
 
 /* Ramen */
 .traamliving{top:72px;left:75px;}

@@ -807,28 +807,28 @@ if ($home) {
 ';
     }
     if ($d['achterdeur']['s']=='Open') {
-        echo '<div class="fix achterdeur"></div>
-';
+        echo '<div class="fix achterdeur"></div>';
     }
     if ($d['raamliving']['s']=='Open') {
-        echo '<div class="fix raamliving"></div>
-';
+        echo '<div class="fix raamliving"></div>';
     }
     if ($d['raamtobi']['s']=='Open') {
-        echo '<div class="fix raamtobi"></div>
-';
+        echo '<div class="fix raamtobi"></div>';
     }
     if ($d['raamalex']['s']=='Open') {
-        echo '<div class="fix raamalex"></div>
-';
+        echo '<div class="fix raamalex"></div>';
     }
     if ($d['raamkamer']['s']=='Open') {
-        echo '<div class="fix raamkamer"></div>
-';
+        echo '<div class="fix raamkamer"></div>';
     }
     if ($d['raamhall']['s']=='Open') {
-        echo '<div class="fix raamhall"></div>
-';
+        echo '<div class="fix raamhall"></div>';
+    }
+    if ($d['deurinkom']['s']=='Closed') {
+        echo '<div class="fix deurinkom"></div>';
+    }
+    if ($d['deurgarage']['s']=='Closed') {
+        echo '<div class="fix deurgarage"></div>';
     }
     if ($d['deurbadkamer']['s']=='Open') {
         echo '<div class="fix deurbadkamer"></div>
