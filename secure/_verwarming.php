@@ -117,8 +117,6 @@ if ($d['living_set']['m']!=2) {
         && $d['raamliving']['s']=='Closed'
         && $d['deurinkom']['s']=='Closed'
         && $d['deurgarage']['s']=='Closed'
-        && past('deurinkom')>60
-        && past('deurgarage')>60
     ) {
         $Setliving=17;
         if ($d['Weg']['s']==0) {
@@ -153,7 +151,7 @@ if ($d['living_set']['m']!=2) {
     }
     if ($d['living_set']['s']!=$Setliving
         && past('deurinkom')>60
-        && && past('deurgarage')>60
+        && past('deurgarage')>60
     ) {
         store('living_set', $Setliving);
         $living_set=$Setliving;
