@@ -82,7 +82,27 @@ if (past('pirkeuken')>50
 ) {
     sw('keuken', 'Off');
 }
-
+if ($d['GroheRed']['s']=='On') {
+    if ($d['wasbak']['s']=='Off'
+        &&$d['kookplaat']['s']=='Off'
+        &&past('GroheRed')>110
+        &&$d['GroheRed']['m']==0
+    ) {
+        sw('GroheRed', 'Off');
+    }
+    if (past('GroheRed')>900) {
+        sw('GroheRed', 'Off');
+        storemode('GroheRed', 0);
+    }
+} else {
+    if (past('GroheRed')>120
+        &&(
+        ($d['wasbak']['s']=='On'&&past('wasbak')>10)
+        ||($d['kookplaat']['s']=='On'&&past('kookplaat')>10))
+    ) {
+            sw('GroheRed', 'On');
+    }
+}
 if (ping($lgtvip)) {
     sleep(3);
     if (ping($lgtvip)) {

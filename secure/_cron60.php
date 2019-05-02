@@ -132,27 +132,6 @@ if ($d['Weg']['s']==0) {
             );
         }
     }
-    if ($d['GroheRed']['s']=='On') {
-        if ($d['wasbak']['s']=='Off'
-            &&$d['kookplaat']['s']=='Off'
-            &&past('GroheRed')>110
-            &&$d['GroheRed']['m']==0
-        ) {
-            sw('GroheRed', 'Off');
-        }
-        if (past('GroheRed')>900) {
-            sw('GroheRed', 'Off');
-            storemode('GroheRed', 0);
-        }
-    } else {
-        if (past('GroheRed')>120
-            &&(
-            ||($d['wasbak']['s']=='On'&&past('wasbak')>30)
-            ||($d['kookplaat']['s']=='On'&&past('kookplaat')>30))
-        ) {
-                sw('GroheRed', 'On');
-        }
-    }
 }
 if ($d['denon']['s']=='On') {
     $denonmain=json_decode(
