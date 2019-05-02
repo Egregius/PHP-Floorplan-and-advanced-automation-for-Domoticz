@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('alex', 8, 'sleep');
-    storemode('alex', 1);
+    sl('tobi', 8, 'sleep');
+    storemode('tobi', 1);
     resetsecurity();
 }
