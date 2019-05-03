@@ -68,7 +68,7 @@ if ($home) {
     } elseif (isset($_POST['Water2uur'])) {
         storemode('water', 7200);
         double('water', 'On');
-    } elseif (isset($_POST['fetchdomoticz'])) {
+    } elseif (isset($_REQUEST['fetchdomoticz'])) {
         include __DIR__ . '/secure/_fetchdomoticz.php';
     }
 
