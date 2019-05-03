@@ -229,7 +229,11 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-
+    if ($d['wc']['s']=='On'
+        && past('wc')>300
+    ) {
+        sw('wc', 'Off');
+    }
     //Bose
     if ($d['pirliving']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'

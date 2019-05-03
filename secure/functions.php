@@ -310,7 +310,7 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
             if ($i=='media') {
                 sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $check, $msg, $usleep);
             } elseif ($i=='lichtenbeneden') {
-                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur'), $action, $check, $msg, $usleep);
+                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action, $check, $msg, $usleep);
             } elseif ($i=='lichtenboven') {
                 sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action, $check, $msg, $usleep);
             } elseif ($i=='slapen') {
