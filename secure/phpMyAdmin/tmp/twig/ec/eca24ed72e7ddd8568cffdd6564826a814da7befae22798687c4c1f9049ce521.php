@@ -101,6 +101,6 @@ class __TwigTemplate_2085733cd7f9e5b7a9ba81f271844a305344980fdb4e5262d0a671c5d29
 
     public function getSourceContext()
     {
-        return new Source("", "dropdown.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/dropdown.twig");
+        return new Source("", "dropdown.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/dropdown.twig");
     }
 }

@@ -84,6 +84,6 @@ class __TwigTemplate_c4a45b5a660e9e2bb24de7d11371c778c56cbd96c5658b3abc1ef17fc70
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/path.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/navigation/tree/path.twig");
+        return new Source("", "navigation/tree/path.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/navigation/tree/path.twig");
     }
 }

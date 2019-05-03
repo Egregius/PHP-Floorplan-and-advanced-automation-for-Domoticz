@@ -59,6 +59,6 @@ class __TwigTemplate_5cb7914b383b698dffbe5234a22ae4eacf5328527ca92b883a98e72e34b
 
     public function getSourceContext()
     {
-        return new Source("", "login/footer.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/login/footer.twig");
+        return new Source("", "login/footer.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/login/footer.twig");
     }
 }
