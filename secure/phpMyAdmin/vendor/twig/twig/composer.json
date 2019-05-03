@@ -23,11 +23,9 @@
             "role": "Project Founder"
         }
     ],
-    "support": {
-        "forum": "https://groups.google.com/forum/#!forum/twig-users"
-    },
     "require": {
-        "php": ">=5.4.0",
+        "php": "^7.0",
+        "symfony/polyfill-mbstring": "^1.3",
         "symfony/polyfill-ctype": "^1.8"
     },
     "require-dev": {
@@ -43,9 +41,14 @@
             "Twig\\" : "src/"
         }
     },
+    "autoload-dev": {
+        "psr-0" : {
+            "Twig_Tests_" : "test/"
+        }
+    },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.37-dev"
+            "dev-master": "2.9-dev"
         }
     }
 }

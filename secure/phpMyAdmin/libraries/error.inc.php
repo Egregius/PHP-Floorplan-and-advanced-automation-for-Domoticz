@@ -5,6 +5,8 @@
  *
  * @package PhpMyAdmin
  */
+declare(strict_types=1);
+
 use PhpMyAdmin\Sanitize;
 
 if (! defined('PHPMYADMIN')) {
@@ -19,12 +21,11 @@ if (! defined('TESTSUITE')) {
 <!DOCTYPE HTML>
 <html lang="<?php echo $lang; ?>" dir="<?php echo $dir; ?>">
 <head>
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>phpMyAdmin</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <style type="text/css">
-    <!--
     html {
         padding: 0;
         margin: 0;
@@ -50,7 +51,6 @@ if (! defined('TESTSUITE')) {
         border: 0.1em solid red;
         background-color: #ffeeee;
     }
-    //-->
     </style>
 </head>
 <body>
