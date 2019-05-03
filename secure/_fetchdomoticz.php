@@ -58,5 +58,6 @@ if ($domoticz) {
             $status=$dom['Data'];
         }
         store($name, $status, $idx, false);
+        echo $idx.' '.$name.' = '.$status.'<br>';
     }
 }
