@@ -802,37 +802,18 @@ if ($home) {
     showTimestamp('raamalex', 270);
     showTimestamp('raamkamer', 90);
     showTimestamp('deurbadkamer', 90);
-    if ($d['poort']['s']=='Open') {
-        echo '<div class="fix poort"></div>
-';
-    }
-    if ($d['achterdeur']['s']=='Open') {
-        echo '<div class="fix achterdeur"></div>';
-    }
-    if ($d['raamliving']['s']=='Open') {
-        echo '<div class="fix raamliving"></div>';
-    }
-    if ($d['raamtobi']['s']=='Open') {
-        echo '<div class="fix raamtobi"></div>';
-    }
+    showTimestamp('deurinkom', 90);
+    showTimestamp('deurgarage', 0);
+    contact('poort');
+    contact('achterdeur');
+    contact('raamliving');
+    contact('raamtobi');
     contact('raamalex');
-
-    if ($d['raamkamer']['s']=='Open') {
-        echo '<div class="fix raamkamer"></div>';
-    }
-    if ($d['raamhall']['s']=='Open') {
-        echo '<div class="fix raamhall"></div>';
-    }
-    if ($d['deurinkom']['s']=='Open') {
-        echo '<div class="fix deurinkom"></div>';
-    }
-    if ($d['deurgarage']['s']=='Open') {
-        echo '<div class="fix deurgarage"></div>';
-    }
-    if ($d['deurbadkamer']['s']=='Open') {
-        echo '<div class="fix deurbadkamer"></div>
-';
-    }
+    contact('raamkamer');
+    contact('raamhall');
+    contact('deurinkom');
+    contact('deurgarage');
+    contact('deurbadkamer');
     echo '
         <div class="fix bose">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
