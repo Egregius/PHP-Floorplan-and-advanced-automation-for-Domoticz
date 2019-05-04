@@ -464,6 +464,13 @@ function thermometer($name)
             </div>
         </div>';
 }
+function contact($name)
+{
+    global $d;
+    if ($d[$name]['s']=='Open') {
+        echo '<div class="fix '.$name.'"></div>';
+    }
+}
 function thermostaat($name,$top,$left)
 {
     global $d;

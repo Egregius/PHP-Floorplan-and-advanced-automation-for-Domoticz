@@ -815,9 +815,8 @@ if ($home) {
     if ($d['raamtobi']['s']=='Open') {
         echo '<div class="fix raamtobi"></div>';
     }
-    if ($d['raamalex']['s']=='Open') {
-        echo '<div class="fix raamalex"></div>';
-    }
+    contact('raamalex');
+
     if ($d['raamkamer']['s']=='Open') {
         echo '<div class="fix raamkamer"></div>';
     }
