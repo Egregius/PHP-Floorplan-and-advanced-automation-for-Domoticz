@@ -761,10 +761,10 @@ if ($d['auto']['s']=='On') {
         &&past('poortrf')>120
         &&$d['poortrf']['s']=='On'
     ) {
-        double('poortrf', 'Off');
+        sw('poortrf', 'Off');
     }
     if ($d['auto']['m']) {
-        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>75) {
+        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
             if ($d['jbl']['s']!='Off') {
                 sw('jbl', 'Off');
             }

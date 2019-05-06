@@ -290,6 +290,28 @@ if ($d['auto']['s']=='On') {
             bosekey("POWER", 0, 3);
         }
     }
+    if (past('deurbadkamer')>3600
+        && $d['bose4']['s']=='0n'
+    ) {
+        $status=json_decode(
+            json_encode(
+                simplexml_load_string(
+                    @file_get_contents(
+                        "http://192.168.2.4:8090/now_playing"
+                    )
+                )
+            ),
+            true
+        );
+        if (!empty($status)) {
+            if (isset($status['@attributes']['source'])) {
+                if ($status['@attributes']['source']!='STANDBY') {
+                    sw('bose4', 'Off');
+                    bosekey("POWER", 0, 4);
+                }
+            }
+        }
+    }
     if ($d['garage']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'
         &&past('pirgarage')>90
@@ -370,7 +392,7 @@ if ($d['auto']['s']=='On') {
         &&$d['Rbureel']['s']==0
         &&$d['Rliving']['s']==0
         &&$d['zon']['s']>100
-        &&past('eettafel')>3600
+        &&past('eettafel')>2700
     ) {
         sl('eettafel', 0);
     }
