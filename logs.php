@@ -31,10 +31,8 @@ require 'secure/authentication.php';
         <div class="fix box box1" style="top:120px;left:0px;width:100%">
             <a href="javascript:navigator_Go('log.php#Domoticz');" class="btn b2">Domoticz</a>
             <a href="javascript:navigator_Go('log.php#www access');" class="btn b2">www access</a>
-            <a href="javascript:navigator_Go('log.php#atreboot');" class="btn b2">atreboot</a>
             <a href="javascript:navigator_Go('log.php#www error');" class="btn b2">www error</a>
             <a href="javascript:navigator_Go('log.php#Fail2Ban');" class="btn b2">Fail2Ban</a>
-            <a href="javascript:navigator_Go('log.php#Clean Telegram');" class="btn b2">Clean Telegram</a>
         </div>
         <div class="clear">
         </div>
