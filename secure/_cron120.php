@@ -712,23 +712,16 @@ if ($d['auto']['s']=='On') {
     } else {
         $maxluifel=60;
     }
-<<<<<<< HEAD
-    $maxluifel=0;//Put in remark to activate sunscreen
-    $wind=round($wind, 1);
-    $tluifel=past('luifel');
-    lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
-
-=======
 //    $maxluifel=0;//Put in remark to activate sunscreen
     $wind=round($wind, 1);
     lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
     if ($d['luifel']['m']==0) {
-        if (past('luifel')>3600&&$maxluifel<30) {
+        if (past('luifel')>3600&&$maxluifel>50) {
             storemode('luifel', 1);
-            $luifelauto=1;
+            $d['luifel']['m']=1;
         } elseif (past('luifel')>28800) {
             storemode('luifel', 1);
-            $luifelauto=1;
+            $d['luifel']['m']=1;
         }
     }
     if ($d['luifel']['s']>$maxluifel&&$d['luifel']['m']==0) {
@@ -773,7 +766,6 @@ if ($d['auto']['s']=='On') {
     ) {
         sl('luifel', 100);
     }
->>>>>>> 01bc99d5077501b1aba5728665835b8e9a99a909
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120
         &&past('poortrf')>120
