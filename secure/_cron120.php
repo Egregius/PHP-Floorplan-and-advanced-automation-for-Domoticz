@@ -712,7 +712,7 @@ if ($d['auto']['s']=='On') {
     } else {
         $maxluifel=60;
     }
-    $maxluifel=0;//Put in remark to activate sunscreen
+//    $maxluifel=0;//Put in remark to activate sunscreen
     $wind=round($wind, 1);
     lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
     if ($d['luifel']['m']==0) {
