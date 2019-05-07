@@ -678,7 +678,6 @@ if ($d['auto']['s']=='On') {
         }
     }
     $zonopen=1500;
-    $luifel=100-$d['luifel']['s'];
     $maxbuien=5;
     $living_temp=$d['living_temp']['s'];
     $x=0;
