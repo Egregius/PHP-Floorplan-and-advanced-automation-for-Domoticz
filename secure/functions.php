@@ -741,17 +741,17 @@ function luifel($name,$stat)
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';">
                 <input type="hidden" name="luifel" value="'.$name.'">';
-    if ($stat==100) {
+    if ($stat==00) {
         echo '
                 <input type="image" src="/images/arrowgreenup.png" class="i60">';
-    } elseif ($stat==0) {
+    } elseif ($stat==100) {
         echo '
                 <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } else {
         echo'
                 <input type="image" src="/images/arrowdown.png" class="i60">
                 <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
-                    '. (100 - $stat) .'</font>
+                    '.$stat.'</font>
                 </div>';
     }
     echo '

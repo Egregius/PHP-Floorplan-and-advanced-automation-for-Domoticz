@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * This flooplan handles everything that has to do with heating and rollers.
  *
@@ -315,10 +315,10 @@ if ($home) {
         <div id="luifel" class="fix dimmer" >
 		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
-        if ($stat==100) {
+        if ($stat==0) {
             echo '<h2>'.$name.' dicht</h2>';
         } else {
-            echo '<h2>'.$name.' '.(100-$stat).'% Open</h2>';
+            echo '<h2>'.$name.' '.$stat.'% Open</h2>';
         }
         echo '
 					<input type="hidden" name="Naam" value="'.$name.'">
@@ -341,12 +341,12 @@ if ($home) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
                     <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">
-                        '.(100-$level).'
+                        '.$level.'
                     </button>';
             } else {
                 echo '
                     <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
-                        '.(100-$level).'
+                        '.$level.'
                     </button>';
             }
         }
