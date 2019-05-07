@@ -699,22 +699,38 @@ if ($d['auto']['s']=='On') {
         $x=$y+$x;
         $windhist=round($x/4, 2);
     }
-    if ($wind>=30) {
-        $maxluifel=0;
-    } elseif ($wind>=25) {
-        $maxluifel=28;
-    } elseif ($wind>=20) {
-        $maxluifel=36;
-    } elseif ($wind>=15) {
-        $maxluifel=44;
-    } elseif ($wind>=10) {
-        $maxluifel=52;
+    if ($d['heating']['s']==0) { //Neutral
+        if ($wind>=30) {
+            $maxluifel=0;
+        } elseif ($wind>=25) {
+            $maxluifel=25;
+        } elseif ($wind>=20) {
+            $maxluifel=30;
+        } elseif ($wind>=15) {
+            $maxluifel=35;
+        } elseif ($wind>=10) {
+            $maxluifel=40;
+        } else {
+            $maxluifel=40;
+        }
+    } elseif ($d['heating']['s']==1) { //Cooling
+        if ($wind>=30) {
+            $maxluifel=0;
+        } elseif ($wind>=25) {
+            $maxluifel=28;
+        } elseif ($wind>=20) {
+            $maxluifel=36;
+        } elseif ($wind>=15) {
+            $maxluifel=44;
+        } elseif ($wind>=10) {
+            $maxluifel=52;
+        } else {
+            $maxluifel=60;
+        }
     } else {
-        $maxluifel=60;
+        $maxluifel=0;
     }
-//    $maxluifel=0;//Put in remark to activate sunscreen
     $wind=round($wind, 1);
-    lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
     if ($d['luifel']['m']==0) {
         if (past('luifel')>3600&&$maxluifel>50) {
             storemode('luifel', 1);
@@ -725,15 +741,9 @@ if ($d['auto']['s']=='On') {
         }
     }
     if ($d['luifel']['s']>$maxluifel&&$d['luifel']['m']==0) {
-        if ($maxluifel==0) {
-            sl('luifel', 100);
-        } else {
-            sl('luifel', (100-$maxluifel));
-        }
-    } elseif ($maxluifel==0&&$d['luifel']['m']==0&&$luifel>0) {
-        sl('luifel', 100);
+        sl('luifel', $maxluifel);
     } elseif ($d['heating']['s']==2
-        &&$luifel<$maxluifel
+        &&$d['luifel']['s']<$maxluifel
         &&$buien<$maxbuien
         &&$d['zon']['s']>$zonopen
         &&$d['luifel']['m']==0
@@ -742,10 +752,10 @@ if ($d['auto']['s']=='On') {
         &&TIME>strtotime("10:00")
     ) {
         if ($d['luifel']['m']==0) {
-            sl('luifel', (100-$maxluifel));
+            sl('luifel', $maxluifel);
         }
     } elseif ($d['heating']['s']<2
-        &&$luifel<$maxluifel
+        &&$d['luifel']['s']<$maxluifel
         &&$buien<$maxbuien
         &&$living_temp>22
         &&$d['buiten_temp']['s']>17
@@ -756,15 +766,15 @@ if ($d['auto']['s']=='On') {
         &&TIME>strtotime("10:00")
     ) {
         if ($d['luifel']['m']==0) {
-            sl('luifel', (100-$maxluifel));
+            sl('luifel', $maxluifel);
         }
     } elseif (($buien>$maxbuien
         ||(($d['zon']['s']==0
         ||$d['living_temp']['s']<19)
         &&$d['luifel']['m']==0))
-        &&$d['luifel']['s']!=100
+        &&$d['luifel']['s']>0
     ) {
-        sl('luifel', 100);
+        sl('luifel', 0);
     }
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120

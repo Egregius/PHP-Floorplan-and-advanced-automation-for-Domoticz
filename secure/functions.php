@@ -737,6 +737,7 @@ function telegram($msg,$silent=true,$to=1)
 }
 function luifel($name,$stat)
 {
+    global $d;
     echo '
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';">
@@ -752,6 +753,11 @@ function luifel($name,$stat)
                 <input type="image" src="/images/arrowdown.png" class="i60">
                 <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
                     '.$stat.'</font>
+                </div>';
+    }
+    if ($d[$name]['m']==1) {
+        echo '
+                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;">
                 </div>';
     }
     echo '
