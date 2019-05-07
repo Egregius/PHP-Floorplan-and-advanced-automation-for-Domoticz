@@ -10,10 +10,19 @@
  * @link     https://egregius.be
  **/
 lg('script 4 L');
-$items=array('lgtv','tvled','kristal');
-foreach ($items as $item) {
-    if ($d[$item]['s']!='Off') {
-        sw($item, 'Off');
+if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
+    $items=array('tv','denon','nvidia');
+    foreach ($items as $item) {
+        if ($d[$item]['s']!='On') {
+            sw($item, 'On');
+        }
+    }
+} else {
+    $items=array('lgtv','tvled','kristal');
+    foreach ($items as $item) {
+        if ($d[$item]['s']!='Off') {
+            sw($item, 'Off');
+        }
     }
 }
 store('Weg', 0, null, true);
