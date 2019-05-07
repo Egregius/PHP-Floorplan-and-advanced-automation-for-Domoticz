@@ -628,6 +628,20 @@ if ($d['zwembadwarmte']['s']=='On') {
     if ($zwembadfilter=='Off')sw('zwembadfilter','On');
 }*/
 if ($d['auto']['s']=='On') {
+    if ($d['lgtv']['s']=='Off') {
+        if (past('lgtv')>600) {
+            if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='OFF'&&past('denon')>600) {
+                sw('denon', 'Off');
+            }
+            if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
+                sw('nvidia', 'Off');
+            }
+            if ($d['tv']['s']=='On'&&past('lgtv')>3600) {
+                sw('tv', 'Off');
+            }
+        }
+    }
+
     $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
@@ -698,11 +712,68 @@ if ($d['auto']['s']=='On') {
     } else {
         $maxluifel=60;
     }
+<<<<<<< HEAD
     $maxluifel=0;//Put in remark to activate sunscreen
     $wind=round($wind, 1);
     $tluifel=past('luifel');
     lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
 
+=======
+//    $maxluifel=0;//Put in remark to activate sunscreen
+    $wind=round($wind, 1);
+    lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
+    if ($d['luifel']['m']==0) {
+        if (past('luifel')>3600&&$maxluifel<30) {
+            storemode('luifel', 1);
+            $luifelauto=1;
+        } elseif (past('luifel')>28800) {
+            storemode('luifel', 1);
+            $luifelauto=1;
+        }
+    }
+    if ($d['luifel']['s']>$maxluifel&&$d['luifel']['m']==0) {
+        if ($maxluifel==0) {
+            sl('luifel', 100);
+        } else {
+            sl('luifel', (100-$maxluifel));
+        }
+    } elseif ($maxluifel==0&&$d['luifel']['m']==0&&$luifel>0) {
+        sl('luifel', 100);
+    } elseif ($d['heating']['s']==2
+        &&$luifel<$maxluifel
+        &&$buien<$maxbuien
+        &&$d['zon']['s']>$zonopen
+        &&$d['luifel']['m']==0
+        &&past('luifel')>600
+        &&$wind<$windhist
+        &&TIME>strtotime("10:00")
+    ) {
+        if ($d['luifel']['m']==0) {
+            sl('luifel', (100-$maxluifel));
+        }
+    } elseif ($d['heating']['s']<2
+        &&$luifel<$maxluifel
+        &&$buien<$maxbuien
+        &&$living_temp>22
+        &&$d['buiten_temp']['s']>17
+        &&$d['zon']['s']>$zonopen
+        &&$d['luifel']['m']==0
+        &&past('luifel')>600
+        &&$wind<$windhist
+        &&TIME>strtotime("10:00")
+    ) {
+        if ($d['luifel']['m']==0) {
+            sl('luifel', (100-$maxluifel));
+        }
+    } elseif (($buien>$maxbuien
+        ||(($d['zon']['s']==0
+        ||$d['living_temp']['s']<19)
+        &&$d['luifel']['m']==0))
+        &&$d['luifel']['s']!=100
+    ) {
+        sl('luifel', 100);
+    }
+>>>>>>> 01bc99d5077501b1aba5728665835b8e9a99a909
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120
         &&past('poortrf')>120

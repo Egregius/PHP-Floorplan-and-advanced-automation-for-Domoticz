@@ -36,7 +36,7 @@ td{text-align:right;font-size:1.1em;}
 .green{background:rgba(50,255,50,0.6);padding:1px 2px 1px 2px;}
 .red{background:rgba(255,50,50,0.6);padding:1px 2px 1px 2px;}
 .yellow{background:rgba(255,200,0,1);z-index:-10;}
-.stamp{width:38px;text-align:center;font-size:120%;}
+.stamp{width:38px;text-align:center;font-size:100%;}
 .secured{background:repeating-linear-gradient(135deg,rgba(255,0,0,0),rgba(255,0,0,0) 7px,rgba(255,0,0,0) 8px,rgba(255,0,0,0.6) 15px);z-index:-1000;}
 .motion{background:rgba(255,0,0,0.4);z-index:-100;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
@@ -138,6 +138,8 @@ td{text-align:right;font-size:1.1em;}
 .achterdeur{top:264px;left:81px;width:30px;height:48px;background:rgba(255,0,0,1);z-index:-10;}
 .deurbadkamer{top:421px;left:341px;width:7px;height:46px;background:rgba(255,0,0,1);z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
 .tachterdeur{top:278px;left:74px;}
+.tdeurinkom{top:67px;left:324px;}
+.tdeurgarage{top:244px;left:344px;}
 .tpoort{top:315px;left:376px;}
 .deurinkom{top:56px;left:338px;width:7px;height:46px;background:rgba(255,0,0,1);z-index:-10;}
 .deurgarage{top:248px;left:341px;width:46px;height:8px;background:rgba(255,0,0,1);z-index:-10;}

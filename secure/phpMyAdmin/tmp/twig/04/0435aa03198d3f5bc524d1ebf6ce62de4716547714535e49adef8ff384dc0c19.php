@@ -69,6 +69,6 @@ class __TwigTemplate_a74e55c0e0119a9455b85a9c1f8daf6e751d14171c698195abb885c55db
 
     public function getSourceContext()
     {
-        return new Source("", "filter.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/filter.twig");
+        return new Source("", "filter.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/filter.twig");
     }
 }
