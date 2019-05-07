@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -328,12 +328,12 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
             $msg=' (SWITCH) | '.$user.' => '.$name.' => '.$action;
         }
         if ($d[$name]['i']>0) {
+            lg($msg);
+            lgsql($user, $name, $action);
             if ($check==false) {
-                lg($msg.' check=false');
                 file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
             } else {
                 if ($d[$name]['s']!=$action) {
-                    lg($msg.' check=true');
                     file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
                 }
             }

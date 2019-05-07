@@ -63,6 +63,6 @@ if (in_array(
 } else {
     store($device, $status);
 }
-lgsql('Domoticz', $device, $status);
+//lgsql('Domoticz', $device, $status);
 //lg($device.' = '.$status);
 @require 'pass2php/'.$device.'.php';
