@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -36,8 +36,7 @@ if (in_array(
             'RkamerL',
             'RkamerR',
             'Rtobi',
-            'Ralex',
-            'luifel'
+            'Ralex'
         )
 )
 ) {
@@ -53,6 +52,15 @@ if (in_array(
     $status=explode(';', $status);
     $status=$status[0];
     store($device, $status);
+} elseif ($device=='luifel') {
+    if ($status=='Open') {
+        store($device, 100);
+    } elseif ($status=='Closed') {
+        store($device, 0);
+    } else {
+        $status=100-filter_var($status, FILTER_SANITIZE_NUMBER_INT);
+        store($device, $status);
+    }
 } elseif ($device=='achterdeur') {
     if ($status=='Open') {
         $status='Closed';

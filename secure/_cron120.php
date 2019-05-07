@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP functions
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -700,62 +700,10 @@ if ($d['auto']['s']=='On') {
         $maxluifel=60;
     }
     $maxluifel=0;//Put in remark to activate sunscreen
-    //$dir=$d['winddir']['s'];
-    //if ($dir=='East')$maxluifel=round($maxluifel*0.8,0);
-    //elseif ($dir=='East')$maxluifel=round($maxluifel*0.8,0);
     $wind=round($wind, 1);
     $tluifel=past('luifel');
-    if ($d['luifel']['m']==0) {
-        if ($tluifel>3600&&$maxluifel<30) {
-            storemode('luifel', 1);
-            $luifelauto=1;
-        } elseif ($tluifel>28800) {
-            storemode('luifel', 1);
-            $luifelauto=1;
-        }
-    }
-    if ($d['luifel']['s']>$maxluifel&&$d['luifel']['m']==0) {
-        if ($maxluifel==0) {
-            sl('luifel', 100);
-        } else {
-            sl('luifel', (100-$maxluifel));
-        }
-    } elseif ($maxluifel==0&&$d['luifel']['m']==0&&$luifel>0) {
-        sl('luifel', 100);
-    } elseif ($d['heating']['s']==2
-        &&$luifel<$maxluifel
-        &&$buien<$maxbuien
-        &&$d['zon']['s']>$zonopen
-        &&$d['luifel']['m']==0
-        &&$tluifel>600
-        &&$wind<$windhist
-        &&TIME>strtotime("10:00")
-    ) {
-        if ($d['luifel']['m']==0) {
-            sl('luifel', (100-$maxluifel));
-        }
-    } elseif ($d['heating']['s']<2
-        &&$luifel<$maxluifel
-        &&$buien<$maxbuien
-        &&$living_temp>22
-        &&$d['buiten_temp']['s']>17
-        &&$d['zon']['s']>$zonopen
-        &&$d['luifel']['m']==0
-        &&$tluifel>600
-        &&$wind<$windhist
-        &&TIME>strtotime("10:00")
-    ) {
-        if ($d['luifel']['m']==0) {
-            sl('luifel', (100-$maxluifel));
-        }
-    } elseif (($buien>$maxbuien
-        ||(($d['zon']['s']==0
-        ||$d['living_temp']['s']<19)
-        &&$d['luifel']['m']==0))
-        &&$d['luifel']['s']!=100
-    ) {
-        sl('luifel', 100);
-    }
+    lg('Luifel = '.$d['luifel']['s'].', maxluifel= '.$maxluifel);
+
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120
         &&past('poortrf')>120
