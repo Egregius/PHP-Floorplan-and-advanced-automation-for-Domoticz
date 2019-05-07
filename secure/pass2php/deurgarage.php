@@ -13,6 +13,13 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
     if ($d['Weg']['s']==0&&($d['zon']['s']<$zongarage||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
         sw('garageled', 'On');
     }
+    if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<$zonkeuken||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+        sw('keuken', 'On');
+    } elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<$zonkeuken||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+        if ($d['tv']['s']=='On'||$d['jbl']['s']=='On') {
+            sw('keuken', 'On');
+        }
+    }
     if ($d['Weg']['s']>0&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
         sw('sirene', 'On');
         shell_exec('../ios.sh "Deur garage open" > /dev/null 2>/dev/null &');

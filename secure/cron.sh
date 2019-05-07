@@ -1,4 +1,15 @@
 #!/bin/bash
+
+: '
+crontab -e
+# m h  dom mon dow   command
+* * * * * /usr/bin/nice -n20 /var/www/html/secure/cron.sh >/dev/null 2>&1
+*/2 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron120" >/dev/null 2>&1
+0 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron3600" >/dev/null 2>&1
+0 0 * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cleandomoticzdb.php" >/dev/null 2>&1
+1 0 * * * /usr/bin/nice -n20 /var/www/_SQLBackup/sqldaily.sh >dev/null 2>&1
+'
+
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then

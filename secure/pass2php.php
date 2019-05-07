@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -63,6 +63,6 @@ if (in_array(
 } else {
     store($device, $status);
 }
-lgsql('Domoticz', $device, $status);
+//lgsql('Domoticz', $device, $status);
 //lg($device.' = '.$status);
 @require 'pass2php/'.$device.'.php';

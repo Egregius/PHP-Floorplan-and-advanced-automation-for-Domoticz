@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -328,12 +328,12 @@ function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
             $msg=' (SWITCH) | '.$user.' => '.$name.' => '.$action;
         }
         if ($d[$name]['i']>0) {
+            lg($msg);
+            lgsql($user, $name, $action);
             if ($check==false) {
-                lg($msg.' check=false');
                 file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
             } else {
                 if ($d[$name]['s']!=$action) {
-                    lg($msg.' check=true');
                     file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
                 }
             }
@@ -463,6 +463,13 @@ function thermometer($name)
                 '.number_format($temp, 1, ',', '').'
             </div>
         </div>';
+}
+function contact($name)
+{
+    global $d;
+    if ($d[$name]['s']=='Open') {
+        echo '<div class="fix '.$name.'"></div>';
+    }
 }
 function thermostaat($name,$top,$left)
 {
@@ -734,17 +741,17 @@ function luifel($name,$stat)
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';">
                 <input type="hidden" name="luifel" value="'.$name.'">';
-    if ($stat==100) {
+    if ($stat==00) {
         echo '
                 <input type="image" src="/images/arrowgreenup.png" class="i60">';
-    } elseif ($stat==0) {
+    } elseif ($stat==100) {
         echo '
                 <input type="image" src="/images/arrowgreendown.png" class="i60">';
     } else {
         echo'
                 <input type="image" src="/images/arrowdown.png" class="i60">
                 <div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';"><font size="5" color="#CCC">
-                    '. (100 - $stat) .'</font>
+                    '.$stat.'</font>
                 </div>';
     }
     echo '
