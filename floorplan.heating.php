@@ -626,7 +626,6 @@ if ($home) {
     rollers('Ralex', $d['Ralex']['s']);
     rollers('RkamerL', $d['RkamerL']['s']);
     rollers('RkamerR', $d['RkamerR']['s']);
-    rollery('luifel',$d['luifel']['s'],20,65,220,'PL');
     rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
     rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
     rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
@@ -644,11 +643,9 @@ if ($home) {
     schakelaar('badkamervuur1', 'Fire');
     schakelaar('badkamervuur2', 'Fire');
     schakelaar('zoldervuur', 'Fire');
-
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);
-    $Weg=$d['Weg']['s'];
     if ($d['Weg']['s']>0) {
         secured('zliving');
         secured('zkeuken');
