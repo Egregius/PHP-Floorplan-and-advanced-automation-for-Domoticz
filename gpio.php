@@ -18,7 +18,7 @@ if (isset($_REQUEST['gpio'])) {
     $gpio=$_REQUEST['gpio'];
     if ($gpio==20) {
         store('gasvandaag', $d['gasvandaag']['s']+1);
-        if ($d['lichtbadkamer']['s']>0&&$d['gasvandaag']['t']>TIME-60&&$d['watervandaag']['t']>TIME-60) {
+        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['s']+1;
             store('douche', $data);
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
@@ -26,7 +26,7 @@ if (isset($_REQUEST['gpio'])) {
         }
     } elseif ($gpio==21) {
         store('watervandaag', $d['watervandaag']['s']+1);
-        if ($d['lichtbadkamer']['s']>0&&$d['gasvandaag']['t']>TIME-60&&$d['watervandaag']['t']>TIME-60) {
+        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['m']+1;
             storemode('douche', $data);
         }
@@ -54,7 +54,7 @@ if (isset($_REQUEST['gpio'])) {
     } else {
         die('Unknown');
     }
-    if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&$d['gasvandaag']['t']>TIME-90&&$d['watervandaag']['t']>TIME-90)) {
+    if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<90&&past('watervandaag')<-90)) {
         $douchegas=$d['douche']['s']*10;
         $douchewater=$d['douche']['m']*1;
         $euro=($douchegas*0.00065)+($douchewater*0.0055);

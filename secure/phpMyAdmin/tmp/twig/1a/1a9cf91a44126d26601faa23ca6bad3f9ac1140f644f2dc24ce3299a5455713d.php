@@ -61,6 +61,6 @@ class __TwigTemplate_f7fd453972d632dc46c6c6ac898eebac2ce5e5a864b62351db4d79b954c
 
     public function getSourceContext()
     {
-        return new Source("", "fk_checkbox.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/fk_checkbox.twig");
+        return new Source("", "fk_checkbox.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/fk_checkbox.twig");
     }
 }

@@ -93,6 +93,6 @@ class __TwigTemplate_f5f17051a2f08737e945c1185c8dfe35b63ab28f56a1fe3aeb939610dff
 
     public function getSourceContext()
     {
-        return new Source("", "database/create_table.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/database/create_table.twig");
+        return new Source("", "database/create_table.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/database/create_table.twig");
     }
 }
