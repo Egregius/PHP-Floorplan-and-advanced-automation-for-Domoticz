@@ -68,7 +68,7 @@ else
 		if [ "$STATUS3" == "OK" ] ; then
 			exit
 		else
-			shutdown -r now
+echo			shutdown -r now
 		fi
 	fi
 fi
