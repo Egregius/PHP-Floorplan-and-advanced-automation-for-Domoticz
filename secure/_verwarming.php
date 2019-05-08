@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-
+//lg('               __verwarming__');
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
     echo 'buiten_temp-s = '.$d['buiten_temp']['s'].'<br>';
     echo 'minmaxtemp-s = '.$d['minmaxtemp']['s'].'<br>';

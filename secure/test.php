@@ -15,6 +15,7 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
+lg('test');
 for ($x=1;$x<=10;$x++) {
     file_get_contents('https://www.domoticz.com/forum/viewtopic.php?f=64&t=12343');
 }

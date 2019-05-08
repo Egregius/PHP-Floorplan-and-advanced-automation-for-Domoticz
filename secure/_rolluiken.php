@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+//lg('               __rolluiken__');
 $msg='Rolluiken__';
 $boven=array(
     'Rtobi',

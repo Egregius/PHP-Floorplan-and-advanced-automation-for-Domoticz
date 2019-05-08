@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+//lg('               __CRON60__');
 $items=array('eettafel','zithoek','tobi','kamer','alex');
 foreach ($items as $item) {
     if ($d[$item]['s']!=0) {

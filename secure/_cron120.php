@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+//lg('               __CRON120__');
 $prevwind=(float)$d['wind']['s'];
 $prevbuien=(float)$d['buiten_temp']['m'];
 $wind=$prevwind;
