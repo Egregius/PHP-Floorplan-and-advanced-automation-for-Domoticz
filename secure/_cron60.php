@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 //lg('               __CRON60__');
+$user='cron60';
 $items=array('eettafel','zithoek','tobi','kamer','alex');
 foreach ($items as $item) {
     if ($d[$item]['s']!=0) {

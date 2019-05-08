@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 //lg('               __CRON10__');
+$user='cron10';
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
     &&past('poort')>90
