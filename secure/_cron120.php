@@ -851,5 +851,3 @@ if (!empty($objauth)) {
     }
     curl_close($chconsumption);
 }
-
-shell_exec('/var/www/html/secure/cleandisk.sh');
