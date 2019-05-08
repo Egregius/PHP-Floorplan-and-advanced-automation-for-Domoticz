@@ -87,6 +87,6 @@ class __TwigTemplate_e5f4627bfde499fe71a8f778436fb29a36a48c89cdcab18853ad4fa9fcd
 
     public function getSourceContext()
     {
-        return new Source("", "div_for_slider_effect.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/div_for_slider_effect.twig");
+        return new Source("", "div_for_slider_effect.twig", "/var/www/html/secure/phpMyAdmin/templates/div_for_slider_effect.twig");
     }
 }

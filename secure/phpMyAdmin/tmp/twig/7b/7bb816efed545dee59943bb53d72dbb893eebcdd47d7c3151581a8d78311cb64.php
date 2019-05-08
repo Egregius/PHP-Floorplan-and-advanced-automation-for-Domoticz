@@ -92,6 +92,6 @@ class __TwigTemplate_e0f1e009b016f1c9845f2a132e6101f0ab75427d987a316be0cd06bd975
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/table_navigation_button.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/results/table_navigation_button.twig");
+        return new Source("", "display/results/table_navigation_button.twig", "/var/www/html/secure/phpMyAdmin/templates/display/results/table_navigation_button.twig");
     }
 }

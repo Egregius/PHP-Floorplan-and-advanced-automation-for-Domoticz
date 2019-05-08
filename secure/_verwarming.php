@@ -195,6 +195,7 @@ if ($d['Weg']['s']==0) {
         $difheater2=0;
         $difheater3=-0.2;
         $difheater4=-0.4;
+        lg('difliving='.$difliving.' - difheater2 = '.$difheater2);
         if ($difliving>$difheater2
             && $d['heater1']['s']!='Off'
             && past('heater1')>90

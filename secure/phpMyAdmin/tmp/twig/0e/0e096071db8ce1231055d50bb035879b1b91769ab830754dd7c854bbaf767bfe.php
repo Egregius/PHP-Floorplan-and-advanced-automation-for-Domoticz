@@ -79,6 +79,6 @@ class __TwigTemplate_0ce891f554882e35e144a09bce4d730e4fd3a17edaf4981870b26d95c9a
 
     public function getSourceContext()
     {
-        return new Source("", "select_all.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/select_all.twig");
+        return new Source("", "select_all.twig", "/var/www/html/secure/phpMyAdmin/templates/select_all.twig");
     }
 }

@@ -113,6 +113,6 @@ class __TwigTemplate_ceb748b025cf193acac629d849a77f04a885da84fc4544fc2e87648db10
 
     public function getSourceContext()
     {
-        return new Source("", "sql/bookmark.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/sql/bookmark.twig");
+        return new Source("", "sql/bookmark.twig", "/var/www/html/secure/phpMyAdmin/templates/sql/bookmark.twig");
     }
 }

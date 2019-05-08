@@ -74,6 +74,6 @@ class __TwigTemplate_0d8a5c589128dc92c5df7f97ad6f373bf2a0f9815c49e6d7c528694dcce
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/data_for_resetting_column_order.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/display/results/data_for_resetting_column_order.twig");
+        return new Source("", "display/results/data_for_resetting_column_order.twig", "/var/www/html/secure/phpMyAdmin/templates/display/results/data_for_resetting_column_order.twig");
     }
 }

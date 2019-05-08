@@ -83,6 +83,6 @@ class __TwigTemplate_3eb0631cfe429ae0203d1375b6e8ea7d7bbcaf93b96c9e597c07fab8f0f
 
     public function getSourceContext()
     {
-        return new Source("", "display/results/sort_by_key.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/display/results/sort_by_key.twig");
+        return new Source("", "display/results/sort_by_key.twig", "/var/www/html/secure/phpMyAdmin/templates/display/results/sort_by_key.twig");
     }
 }
