@@ -157,8 +157,9 @@ if ($wind!=$prevwind) {
 }
 
 $windhist=json_decode($d['wind']['m']);
-$windhist[]=$wind;
+$windhist[]=round($wind, 3);
 $windhist=array_slice($windhist, -4);
+echo json_encode($windhist).'<hr>';
 storemode('wind', json_encode($windhist));
 $msg='Buiten temperaturen : ';
 if (isset($dstemp)) {
