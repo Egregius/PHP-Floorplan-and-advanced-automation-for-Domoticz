@@ -811,7 +811,7 @@ $chauth = curl_init(
 curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
 curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
-curl_setopt($chauth, CURLOPT_VERBOSE, 1);
+curl_setopt($chauth, CURLOPT_VERBOSE, 0);
 curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
 $objauth=json_decode(curl_exec($chauth));
@@ -833,7 +833,7 @@ if (!empty($objauth)) {
     );
     curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($chconsumption, CURLOPT_VERBOSE, 1);
+    curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
     curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
     $data=json_decode(curl_exec($chconsumption), true);
@@ -852,4 +852,4 @@ if (!empty($objauth)) {
     curl_close($chconsumption);
 }
 
-shell_exec('cleandisk.sh');
+shell_exec('/var/www/html/secure/cleandisk.sh');
