@@ -57,11 +57,24 @@ if ($home) {
 	</head>';
 
     if (isset($_REQUEST['power'])) {
-        bosekey("POWER", 0, $bose);
-        sw('bose'.$bose);
-        if ($bose==3) {
-            sw('bose4', 'Off');
-            sw('bose5', 'Off');
+        if ($_REQUEST['power']=='poweron') {
+            if ($bose==3) {
+                bosekey("POWER", 0, $bose);
+                sw('bose3', 'On');
+            } elseif ($bose==4) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.3"><member ipaddress="192.168.2.4">C4F312F65070</member></zone>', 3);
+                sw('bose4', 'On');
+            } elseif ($bose==5) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.3"><member ipaddress="192.168.2.5">C4F312DCE637</member></zone>', 3);
+                sw('bose5', 'On');
+            }
+        } else {
+            bosekey("POWER", 0, $bose);
+            sw('bose'.$bose);
+            if ($bose==3) {
+                sw('bose4', 'Off');
+                sw('bose5', 'Off');
+            }
         }
     } elseif (isset($_REQUEST['prev'])) {
         bosekey("PREV_TRACK", 0, $bose);
@@ -110,7 +123,7 @@ if ($home) {
                  echo '
                 <h3>STANDBY</h3>';
                  echo '
-                <button type="submit" name="power" value="power" class="btn b1">Power</button>';
+                <button type="submit" name="power" value="poweron" class="btn b1">Power</button>';
             } else {
 
                   $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
@@ -196,7 +209,7 @@ if ($home) {
                 echo '
                 <br>
                 <br>
-                <button type="submit" name="power" value="power" class="btn b1">Power</button>';
+                <button type="submit" name="power" value="poweroff" class="btn b1">Power</button>';
             }
             echo '
             </form>

@@ -26,7 +26,7 @@ if [ "$STATUS" == "OK" ] ; then
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php" >/dev/null 2>&1 &
 	sleep 4.998
 	#15
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php?verwarming" >/dev/null 2>&1 &
 	sleep 4.999
 	#20
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
@@ -47,7 +47,7 @@ if [ "$STATUS" == "OK" ] ; then
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php" >/dev/null 2>&1 &
 	sleep 4.998
 	#45
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/smappeepower.php?verwarming" >/dev/null 2>&1 &
 	sleep 4.999
 	#50
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
