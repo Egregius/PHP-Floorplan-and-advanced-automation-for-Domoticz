@@ -12,7 +12,6 @@
 if ($status=='On') {
     sl('lichtbadkamer', 26);
     douche();
-    store('deurbadkamer', 'Closed');
     resetsecurity();
     if ($bose3=='Off'&&$bose4=='Off') {
         bosekey("POWER", 0, 3);

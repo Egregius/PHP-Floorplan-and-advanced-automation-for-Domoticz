@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    if ($d['badkamer_set']['s']>=22) {
+if ($status=='On'&&past('8badkamer-7')>5) {
+    if ($d['badkamervuur1']['s']=='On') {
         store('badkamer_set', 10);
         $d['badkamer_set']['s']=10;
     } else {
