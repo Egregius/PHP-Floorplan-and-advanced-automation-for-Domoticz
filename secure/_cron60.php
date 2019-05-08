@@ -448,8 +448,9 @@ if (pingport('diskstation',1598)==1){
     if ($check>0)store('check_diskstation_1598',$check);
     if ($check>=3&&$d['nas']['s']!='Off')store('nas','Off');
 }*/
+$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
 $relay=new SimpleXMLElement(
-    file_get_contents('http://192.168.2.224/status.xml')
+    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
 );
 if (!empty($relay)) {
     if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
