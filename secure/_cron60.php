@@ -453,24 +453,24 @@ $relay=new SimpleXMLElement(
 );
 if (!empty($relay)) {
     if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
-        sw('heater1', 'On');
+        store('heater1', 'On');
     } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
-        sw('heater1', 'Off');
+        store('heater1', 'Off');
     }
     if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
-        sw('heater2', 'On');
+        store('heater2', 'On');
     } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
-        sw('heater2', 'Off');
+        store('heater2', 'Off');
     }
     if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
-        sw('heater3', 'On');
+        store('heater3', 'On');
     } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
-        sw('heater3', 'Off');
+        store('heater3', 'Off');
     }
     if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
-        sw('heater4', 'On');
+        store('heater4', 'On');
     } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
-        sw('heater4', 'Off');
+        store('heater4', 'Off');
     }
 }
 ping('192.168.2.3');
