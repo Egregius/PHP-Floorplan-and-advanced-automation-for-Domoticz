@@ -103,6 +103,6 @@ class __TwigTemplate_ff141ab342c9f0f927c7ffeb293eb5d8b57d116a6f76cc1eb6827cf8286
 
     public function getSourceContext()
     {
-        return new Source("", "list/unordered.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/list/unordered.twig");
+        return new Source("", "list/unordered.twig", "/var/www/html/secure/phpMyAdmin/templates/list/unordered.twig");
     }
 }

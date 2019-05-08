@@ -95,6 +95,6 @@ $context["bookmark"], "getDatabase", [], "method", false, false, false, 15)]]]))
 
     public function getSourceContext()
     {
-        return new Source("", "console/bookmark_content.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/console/bookmark_content.twig");
+        return new Source("", "console/bookmark_content.twig", "/var/www/html/secure/phpMyAdmin/templates/console/bookmark_content.twig");
     }
 }

@@ -256,6 +256,6 @@ $context["record"]) && is_array($__internal_d7fc55f1a54b629533d60b43063289db62e6
 
     public function getSourceContext()
     {
-        return new Source("", "console/display.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/console/display.twig");
+        return new Source("", "console/display.twig", "/var/www/html/secure/phpMyAdmin/templates/console/display.twig");
     }
 }

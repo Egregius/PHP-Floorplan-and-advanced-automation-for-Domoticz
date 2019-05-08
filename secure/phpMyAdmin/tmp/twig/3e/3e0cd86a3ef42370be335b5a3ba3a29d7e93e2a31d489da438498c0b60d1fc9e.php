@@ -63,6 +63,6 @@ if (typeof configScriptLoaded !== \"undefined\" && configInlineParams) loadInlin
 
     public function getSourceContext()
     {
-        return new Source("", "javascript/display.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/javascript/display.twig");
+        return new Source("", "javascript/display.twig", "/var/www/html/secure/phpMyAdmin/templates/javascript/display.twig");
     }
 }

@@ -82,6 +82,6 @@ class __TwigTemplate_c53c0957d98c0b90cee2748a636844265102747730f319ec5454613e777
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/fieldset_bottom.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/config/form_display/fieldset_bottom.twig");
+        return new Source("", "config/form_display/fieldset_bottom.twig", "/var/www/html/secure/phpMyAdmin/templates/config/form_display/fieldset_bottom.twig");
     }
 }

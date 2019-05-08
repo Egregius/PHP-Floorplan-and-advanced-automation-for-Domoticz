@@ -48,6 +48,6 @@ class __TwigTemplate_f693ea5b759cf4902e9c05a316ce83250259780cc68509b620ad69b4bad
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/tabs_bottom.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/config/form_display/tabs_bottom.twig");
+        return new Source("", "config/form_display/tabs_bottom.twig", "/var/www/html/secure/phpMyAdmin/templates/config/form_display/tabs_bottom.twig");
     }
 }

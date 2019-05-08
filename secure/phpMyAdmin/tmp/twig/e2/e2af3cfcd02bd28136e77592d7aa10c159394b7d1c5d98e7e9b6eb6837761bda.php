@@ -102,6 +102,6 @@ class __TwigTemplate_3d74c552cef4e4bd59bfb3b5ae564bf3ad9b62689aaf2621870ba03b009
 
     public function getSourceContext()
     {
-        return new Source("", "footer.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/footer.twig");
+        return new Source("", "footer.twig", "/var/www/html/secure/phpMyAdmin/templates/footer.twig");
     }
 }

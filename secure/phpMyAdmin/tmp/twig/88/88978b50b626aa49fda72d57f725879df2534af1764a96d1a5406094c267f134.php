@@ -477,6 +477,6 @@ class __TwigTemplate_8f532ee05a2836b15130b65e2fe7f6c81523e6e0b09f40d7a8f6a5de924
 
     public function getSourceContext()
     {
-        return new Source("", "home/index.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/home/index.twig");
+        return new Source("", "home/index.twig", "/var/www/html/secure/phpMyAdmin/templates/home/index.twig");
     }
 }
