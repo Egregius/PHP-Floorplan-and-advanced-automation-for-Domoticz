@@ -55,25 +55,41 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 	</head>';
-
+/*
+<zone master="587A6260C5B2">
+<member ipaddress="192.168.2.101">587A6260C5B2</member>  Living
+<member ipaddress="192.168.2.102">304511BC3CA5</member>  Badkamer
+<member ipaddress="192.168.2.103">C4F312F65070</member>   Kamer
+<member ipaddress="192.168.2.104">C4F312DCE637</member>   Garage
+<member ipaddress="192.168.2.105">587A628BB5C0</member>  Buiten
+</zone>
+*/
     if (isset($_REQUEST['power'])) {
         if ($_REQUEST['power']=='poweron') {
-            if ($bose==3) {
+            if ($bose==101) {
                 bosekey("POWER", 0, $bose);
-                sw('bose3', 'On');
-            } elseif ($bose==4) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.3"><member ipaddress="192.168.2.4">C4F312F65070</member></zone>', 3);
-                sw('bose4', 'On');
-            } elseif ($bose==5) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.3"><member ipaddress="192.168.2.5">C4F312DCE637</member></zone>', 3);
-                sw('bose5', 'On');
+                sw('bose101', 'On');
+            } elseif ($bose==102) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>', 3);
+                sw('bose102', 'On');
+            } elseif ($bose==103) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>', 3);
+                sw('bose103', 'On');
+            } elseif ($bose==104) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+                sw('bose104', 'On');
+            } elseif ($bose==105) {
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>', 3);
+                sw('bose105', 'On');
             }
         } else {
             bosekey("POWER", 0, $bose);
             sw('bose'.$bose);
-            if ($bose==3) {
-                sw('bose4', 'Off');
-                sw('bose5', 'Off');
+            if ($bose==101) {
+                sw('bose102', 'Off');
+                sw('bose103', 'Off');
+                sw('bose104', 'Off');
+                sw('bose105', 'Off');
             }
         }
     } elseif (isset($_REQUEST['prev'])) {
