@@ -816,18 +816,18 @@ if ($home) {
     contact('deurbadkamer');
     echo '
         <div class="fix bose">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
-                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=101");\'>
+                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
             </a>
         </div>
         <div class="fix bosebadkamer">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=4");\'>
-                <img src="images/Bose_'.($d['bose4']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt="">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=102");\'>
+                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt="">
             </a>
         </div>
-        <div class="fix bosebuiten">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=5");\'>
-                <img src="images/Bose_'.($d['bose5']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
+        <div class="fix bosegarage">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=104");\'>
+                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '

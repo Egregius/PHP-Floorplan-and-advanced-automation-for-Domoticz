@@ -22,7 +22,7 @@ if ($home) {
     if (isset($_REQUEST['ip'])) {
         $bose=$_REQUEST['ip'];
     } else {
-        $bose=3;//Living
+        $bose=101;//Living
     }
     echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
