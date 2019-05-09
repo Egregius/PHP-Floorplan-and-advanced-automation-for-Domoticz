@@ -70,16 +70,16 @@ if ($home) {
                 bosekey("POWER", 0, $bose);
                 sw('bose101', 'On');
             } elseif ($bose==102) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>', 3);
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>', 101);
                 sw('bose102', 'On');
             } elseif ($bose==103) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>', 3);
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>', 101);
                 sw('bose103', 'On');
             } elseif ($bose==104) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 101);
                 sw('bose104', 'On');
             } elseif ($bose==105) {
-                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>', 3);
+                bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>', 101);
                 sw('bose105', 'On');
             }
         } else {
@@ -108,7 +108,7 @@ if ($home) {
     echo '
     <body>
         <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.bose'.$bose.'.php");\'>
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>
                 '.strftime("%k:%M:%S", TIME).'
             </a>
         </div>

@@ -28,7 +28,7 @@ if ($status=='On'&&$d['auto']['s']=='On') {
             } else {
                 bosevolume(25, 101);
             }
-            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 101);
             if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
                 bosevolume(35, 104);
             } else {
@@ -50,7 +50,7 @@ if ($status=='On'&&$d['auto']['s']=='On') {
             }
         } elseif ($d['bose104']['s']=='Off') {
             sw('bose104', 'On');
-            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 101);
             if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
                 bosevolume(35, 104);
             } else {

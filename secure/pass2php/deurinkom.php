@@ -43,7 +43,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
                 if (isset($nowplaying['@attributes']['source'])) {
                     if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
                         if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
-                            bosekey("NEXT_TRACK", 0, 3);
+                            bosekey("NEXT_TRACK", 0, 101);
                             break;
                         }
                     }

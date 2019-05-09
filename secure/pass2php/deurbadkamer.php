@@ -18,7 +18,7 @@ if ($status=='Open'&&$d['auto']['s']) {
             sl('lichtbadkamer', 18);
         }
         if ($d['bose101']['s']=='Off'&&$d['bose102']['s']=='Off') {
-            bosekey("POWER", 0, 3);
+            bosekey("POWER", 0, 101);
             sw('bose101', 'On');
             sw('bose102', 'On');
             if ($d['denonpower']['s']=='ON'||$Weg>0) {
@@ -27,7 +27,7 @@ if ($status=='Open'&&$d['auto']['s']) {
                 bosevolume(25, 101);
             }
             $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">C4F312F65070</member></zone>';
-            bosepost('setZone', $xml, 3);
+            bosepost('setZone', $xml, 101);
             if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
                 bosevolume(35, 102);
             } else {
@@ -50,7 +50,7 @@ if ($status=='Open'&&$d['auto']['s']) {
         } elseif ($bose102=='Off') {
             sw('bose102', 'On');
             $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">C4F312F65070</member></zone>';
-            bosepost('setZone', $xml, 3);
+            bosepost('setZone', $xml, 101);
             if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
                 bosevolume(35, 102);
             } else {
