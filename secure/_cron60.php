@@ -396,7 +396,7 @@ if ($d['auto']['s']=='On') {
         &&$d['Ralex']['s']==0
         &&past('alex')>900
     ) {
-        storemode('tobi', 2);
+        storemode('alex', 2);
     }
     if ($d['eettafel']['s']>0
         &&$d['Rbureel']['s']==0
