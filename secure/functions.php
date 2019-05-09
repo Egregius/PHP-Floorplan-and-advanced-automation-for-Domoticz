@@ -933,19 +933,19 @@ function endswith($string,$test)
     }
     return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
-function bosekey($key,$sleep=100000,$ip=3)
+function bosekey($key,$sleep=100000,$ip=101)
 {
     $xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
     echo bosepost("key", $xml, $ip, true);
     $xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
     echo bosepost("key", $xml, $ip);
 }
-function bosevolume($vol,$ip=3)
+function bosevolume($vol,$ip=101)
 {
     $vol=1*$vol;
     $xml="<volume>$vol</volume>";
     bosepost("volume", $xml, $ip, true);
-    if ($ip==3) {
+    if ($ip==101) {
         if ($vol>50) {
             bosebass(0, $ip);
         } elseif ($vol>40) {
@@ -961,7 +961,7 @@ function bosevolume($vol,$ip=3)
         }
     }
 }
-function bosebass($bass,$ip=201)
+function bosebass($bass,$ip=101)
 {
     $bass=1*$bass;
     $xml="<bass>$bass</bass>";

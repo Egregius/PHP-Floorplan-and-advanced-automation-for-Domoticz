@@ -199,14 +199,14 @@ if ($d['Weg']['s']==0) {
         lg ('difliving='.$difliving.' - difheater2 = '.$difheater2.' -  1='.$d['heater1']['s'].' 2='.$d['heater2']['s'].'   3='.$d['heater3']['s'].'    4='.$d['heater4']['s']);
         if ($difliving>$difheater2
             && $d['heater1']['s']!='Off'
-            && past('heater1')>9
-            && past('heater2')>9
+            && past('heater1')>90
+            && past('heater2')>90
         ) {
             sw('heater1', 'Off', false, 1);
         }
         if ($difliving<$difheater2
             && $d['heater2']['s']!='On'
-            && past('heater2')>9
+            && past('heater2')>90
         ) {
             if ($d['heater1']['s']!='On') {
                 sw('heater1', 'On', false, 2);
@@ -216,40 +216,40 @@ if ($d['Weg']['s']==0) {
             lg('111');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
-            && past('heater2')>18
+            && past('heater2')>180
             && $d['elec']['s']<8000
         ) {
             sw('heater2', 'On', false, 4);
             lg('222');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
-            && past('heater2')>9
+            && past('heater2')>90
             || $d['elec']['s']>8500
         ) {
             sw('heater2', 'Off', false, 5);
         }
         if ($difliving<=$difheater3
             && $d['heater3']['s']!='On'
-            && past('heater3')>9
+            && past('heater3')>90
             && $d['elec']['s']<7000
         ) {
             sw('heater3', 'On');
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
-            && past('heater3')>3
+            && past('heater3')>30
             || $d['elec']['s']>8000
         ) {
             sw('heater3', 'Off', false, 6);
         }
         if ($difliving<=$difheater4
             && $d['heater4']['s']!='On'
-            && past('heater4')>9
+            && past('heater4')>90
             && $d['elec']['s']<6000
         ) {
             sw('heater4', 'On', false, 7);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
-            && past('heater4')>3
+            && past('heater4')>30
             || $d['elec']['s']>7000
         ) {
             sw('heater4', 'Off', false, 8);
@@ -260,54 +260,54 @@ if ($d['Weg']['s']==0) {
         $difheater4=-1.0;
         if ($difliving>$difheater2
             && $d['heater1']['s']!='Off'
-            && past('heater1')>9
-            && past('heater2')>9
+            && past('heater1')>90
+            && past('heater2')>90
         ) {
             sw('heater1', 'Off', false, 9);
         }
         if ($difliving<$difheater2
             && $d['heater2']['s']!='On'
-            && past('heater2')>9
+            && past('heater2')>90
             && $d['elec']['s']<8000
         ) {
             sw('heater2', 'On', false, 10);
             lg('333');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
-            && past('heater2')>18
+            && past('heater2')>180
             && $d['elec']['s']<8000
         ) {
             sw('heater2', 'On', false, 11);
             lg('444');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
-            && past('heater2')>9
+            && past('heater2')>90
             || $d['elec']['s']>8500
         ) {
             sw('heater2', 'Off', false, 12);
         }
         if ($difliving<$difheater3
             && $d['heater3']['s']!='On'
-            && past('heater3')>9
+            && past('heater3')>90
             && $d['elec']['s']<7000
         ) {
             sw('heater3', 'On', false, 13);
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
-            && past('heater3')>3
+            && past('heater3')>30
             || $d['elec']['s']>8000
         ) {
             sw('heater3', 'Off', false, 14);
         }
         if ($difliving<$difheater4
             && $d['heater4']['s']!='On'
-            && past('heater4')>9
+            && past('heater4')>90
             && $d['elec']['s']<6000
         ) {
             sw('heater4', 'On', false, 15);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
-            && past('heater4')>3
+            && past('heater4')>30
             || $d['elec']['s']>7000
         ) {
             sw('heater4', 'Off', false, 16);

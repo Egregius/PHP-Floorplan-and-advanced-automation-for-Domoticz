@@ -825,9 +825,19 @@ if ($home) {
                 <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt="">
             </a>
         </div>
+        <div class="fix bosekamer">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=103");\'>
+                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bosekamer" alt="">
+            </a>
+        </div>
         <div class="fix bosegarage">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=104");\'>
-                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
+                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bosegarage" alt="">
+            </a>
+        </div>
+        <div class="fix bosebuiten">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=105");\'>
+                <img src="images/Bose_'.($d['bose105']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
@@ -873,7 +883,7 @@ if ($home) {
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
             setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'3950':'14950').');
+            ($local===true?'950':'14950').');
         </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}

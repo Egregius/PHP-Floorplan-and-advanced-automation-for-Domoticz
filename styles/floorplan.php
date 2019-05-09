@@ -85,8 +85,10 @@ td{text-align:right;font-size:1.1em;}
 .badkamervuur2{top:403px;left:360px;}#badkamervuur2{height:24px;width:auto;}
 .jbl{top:218px;left:267px;}#jbl{height:30px;width:auto;}
 .bose{top:197px;left:185px;}#bose{height:60px;width:auto;}
+.bosekamer{top:600px;left:280px;}#bosekamer{height:50px;width:auto;}
 .bosebadkamer{top:472px;left:340px;}#bosebadkamer{height:50px;width:auto;}
-.bosebuiten{top:252px;left:104px;}#bosebuiten{height:50px;width:auto;}
+.bosegarage{top:252px;left:104px;}#bosegarage{height:50px;width:auto;}
+.bosebuiten{top:230px;left:14px;}#bosebuiten{height:50px;width:auto;}
 .GroheRed{top:186px;left:342px;}#GroheRed{height:16px;width:auto;}
 .poortrf{top:305px;left:318px;}#poortrf{height:60px;width:auto;}
 .Xlight{top:190px;left:330px;}#Xlight{height:80px;width:auto;}
