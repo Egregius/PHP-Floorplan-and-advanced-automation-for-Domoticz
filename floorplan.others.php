@@ -87,9 +87,10 @@ if ($home) {
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     schakelaar2('auto', 'Alarm');
-    schakelaar2('tv', 'TV');
-    schakelaar2('nvidia', 'nvidia');
-    schakelaar2('denon', 'denon');
+    schakelaar2('tv', 'Light');
+    schakelaar2('nvidia', 'Light');
+    schakelaar2('denon', 'Light');
+    schakelaar2('bosesoundlink', 'Light');
     schakelaar2('water', 'Light');
     schakelaar2('regenpomp', 'Light');
     schakelaar2('zwembadfilter', 'Light');
