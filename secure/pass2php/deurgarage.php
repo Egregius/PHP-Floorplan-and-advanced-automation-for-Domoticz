@@ -54,6 +54,44 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
                 }
             }
         }
+        if ($d['bose101']['s']=='Off'&&$d['bose104']['s']=='Off') {
+            bosekey("POWER", 0, 101);
+            sw('bose101', 'On');
+            sw('bose104', 'On');
+            if ($d['denonpower']['s']=='ON') {
+                bosevolume(0, 101);
+            } else {
+                bosevolume(25, 101);
+            }
+            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+            if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
+                bosevolume(35, 104);
+            } else {
+                bosevolume(22, 104);
+            }
+            for ($x=1;$x<=10;$x++) {
+                $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+                if (!empty($nowplaying)) {
+                    if (isset($nowplaying['@attributes']['source'])) {
+                        if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+                            if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+                                bosekey("NEXT_TRACK", 0, 3);
+                                break;
+                            }
+                        }
+                    }
+                }
+                sleep(1);
+            }
+        } elseif ($d['bose104']['s']=='Off') {
+            sw('bose104', 'On');
+            bosepost('setZone', '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>', 3);
+            if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
+                bosevolume(35, 104);
+            } else {
+                bosevolume(18, 104);
+            }
+        }
     }
     storemode('Weg', TIME);
 }

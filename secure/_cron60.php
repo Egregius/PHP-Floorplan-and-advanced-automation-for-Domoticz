@@ -239,19 +239,23 @@ if ($d['auto']['s']=='On') {
     //Bose
     if ($d['pirliving']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'
-        &&past('bose3')>90
-        &&past('bose4')>90
-        &&past('bose5')>90
-        &&$d['bose3']['s']=='On'
-        &&$d['bose4']['s']=='Off'
-        &&$d['bose5']['s']=='Off'
+        &&past('bose101')>90
+        &&past('bose102')>90
+        &&past('bose103')>90
+        &&past('bose104')>90
+        &&past('bose105')>90
+        &&$d['bose101']['s']=='On'
+        &&$d['bose102']['s']=='Off'
+        &&$d['bose103']['s']=='Off'
+        &&$d['bose104']['s']=='Off'
+        &&$d['bose105']['s']=='Off'
         &&$d['Weg']['s']>0
     ) {
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.2.3:8090/now_playing"
+                        "http://192.168.2.101:8090/now_playing"
                     )
                 )
             ),
@@ -260,8 +264,8 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose3', 'Off');
-                    bosekey("POWER", 0, 3);
+                    sw('bose101', 'Off');
+                    bosekey("POWER", 0, 101);
                 }
             }
         }
@@ -269,18 +273,22 @@ if ($d['auto']['s']=='On') {
         &&$d['pirgarage']['s']=='Off'
         &&past('pirliving')>90
         &&past('pirgarage')>90
-        &&past('bose3')>90
-        &&past('bose4')>90
-        &&past('bose5')>90
-        &&$d['bose3']['s']=='On'
-        &&$d['bose4']['s']=='Off'
-        &&$d['bose5']['s']=='Off'
+        &&past('bose101')>90
+        &&past('bose102')>90
+        &&past('bose103')>90
+        &&past('bose104')>90
+        &&past('bose105')>90
+        &&$d['bose101']['s']=='On'
+        &&$d['bose102']['s']=='Off'
+        &&$d['bose103']['s']=='Off'
+        &&$d['bose104']['s']=='Off'
+        &&$d['bose105']['s']=='Off'
     ) {
         $volume=json_decode(
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.2.3:8090/volume"
+                        "http://192.168.2.101:8090/volume"
                     )
                 )
             ),
@@ -288,18 +296,18 @@ if ($d['auto']['s']=='On') {
         );
         $cv=$volume['actualvolume'];
         if ($cv==0) {
-            sw('bose3', 'Off');
-            bosekey("POWER", 0, 3);
+            sw('bose101', 'Off');
+            bosekey("POWER", 0, 101);
         }
     }
     if (past('deurbadkamer')>3600
-        && $d['bose4']['s']=='0n'
+        && $d['bose102']['s']=='0n'
     ) {
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.2.4:8090/now_playing"
+                        "http://192.168.2.102:8090/now_playing"
                     )
                 )
             ),
@@ -308,8 +316,8 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose4', 'Off');
-                    bosekey("POWER", 0, 4);
+                    sw('bose102', 'Off');
+                    bosekey("POWER", 0, 102);
                 }
             }
         }
@@ -319,13 +327,13 @@ if ($d['auto']['s']=='On') {
         &&past('pirgarage')>90
         &&$d['poort']['s']=='Closed'
         &&$d['achterdeur']['s']=='Closed'
-        &&$d['bose5']['s']=='On'
+        &&$d['bose104']['s']=='On'
     ) {
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.2.5:8090/now_playing"
+                        "http://192.168.2.104:8090/now_playing"
                     )
                 )
             ),
@@ -334,13 +342,13 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose5', 'Off');
-                    bosekey("POWER", 0, 5);
+                    sw('bose104', 'Off');
+                    bosekey("POWER", 0, 104);
                 }
             }
         }
     }
-    $items=array(3,4,5);
+    $items=array(101,102,103,104,105);
     foreach ($items as $i) {
         $status=json_decode(
             json_encode(
