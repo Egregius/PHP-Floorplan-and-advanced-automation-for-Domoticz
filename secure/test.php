@@ -15,8 +15,7 @@ require 'functions.php';
 //ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-lg('test');
-shell_exec('cleandisk.sh');
+shell_exec('python3 lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip.' > /dev/null 2>&1 &');
 
 /*---------------------------*/
 echo '</pre>';
