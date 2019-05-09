@@ -639,7 +639,7 @@ if ($d['auto']['s']=='On') {
             if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
                 sw('nvidia', 'Off');
             }
-            if ($d['tv']['s']=='On'&&past('lgtv')>3600) {
+            if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) {
                 sw('tv', 'Off');
             }
         }

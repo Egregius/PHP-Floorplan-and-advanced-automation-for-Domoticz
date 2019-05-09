@@ -18,7 +18,11 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
         }
     }
 } else {
-    $items=array('lgtv','tvled','kristal');
+    if ($d['lgtv']['s']=='On') {
+        lgcommand('off');
+        sleep(2);
+    }
+    $items=array('lgtv','bosesoundlink','kristal');
     foreach ($items as $item) {
         if ($d[$item]['s']!='Off') {
             sw($item, 'Off');

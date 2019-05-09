@@ -56,6 +56,13 @@ if ($home) {
         usleep(100000);
         header("Location: floorplan.media.php");
         die("Redirecting to: floorplan.media.php");
+    } elseif (isset($_POST['PowerOn'])) {
+        $items=array('tv','denon','nvidia');
+        foreach ($items as $item) {
+            if ($d[$item]['s']!='On') {
+                sw($item, 'On');
+            }
+        }
     } elseif (isset($_POST['dimmer'])) {
         if (isset($_POST['dimlevelon_x'])) {
             sl($_POST['Naam'], 100);
@@ -375,14 +382,20 @@ if ($home) {
     //schakelaar('kerstboom','Kerstboom');
     echo '
         <div class="fix bose">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=3");\'>
-                <img src="images/Bose_'.($d['bose3']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=101");\'>
+                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
             </a>
         </div>';
 
     echo '
         <div class="fix blackmedia">
             <form method="POST" action="floorplan.media.php">';
+    if ($d['denon']['s']=='Off'||$d['tv']['s']=='Off'||$d['nvidia']['s']=='Off') {
+        echo '
+                <br>
+                <br>
+                <button type="submit" class="btn b1" name="PowerOn">Power On</button>';
+    }
     if ($d['denon']['s']=='On') {
         if (!empty($denonmain)) {
             $cv=80+$denonmain['MasterVolume']['value'];
