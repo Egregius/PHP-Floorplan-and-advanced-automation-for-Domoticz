@@ -245,10 +245,6 @@ if ($d['auto']['s']=='On') {
         &&past('bose104')>90
         &&past('bose105')>90
         &&$d['bose101']['s']=='On'
-        &&$d['bose102']['s']=='Off'
-        &&$d['bose103']['s']=='Off'
-        &&$d['bose104']['s']=='Off'
-        &&$d['bose105']['s']=='Off'
         &&$d['Weg']['s']>0
     ) {
         $status=json_decode(
@@ -264,8 +260,12 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose101', 'Off');
                     bosekey("POWER", 0, 101);
+                    sw('bose101', 'Off');
+                    sw('bose102', 'Off');
+                    sw('bose103', 'Off');
+                    sw('bose104', 'Off');
+                    sw('bose105', 'Off');
                 }
             }
         }
