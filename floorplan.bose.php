@@ -102,17 +102,7 @@ if ($home) {
         bosevolume($_REQUEST['volume'], $bose);
     } elseif (isset($_REQUEST['bass'])) {
         bosebass($_REQUEST['bass'], $bose);
-    } elseif (isset($_REQUEST['stopbadkamer'])) {
-        bosezone();
-    } elseif (isset($_REQUEST['stopbuiten'])) {
-        bosezone();
-    } elseif (isset($_REQUEST['addbadkamer'])) {
-        bosezone();
-    } elseif (isset($_REQUEST['addbuiten'])) {
-        bosezone();
     }
-
-
 
     $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
     echo '

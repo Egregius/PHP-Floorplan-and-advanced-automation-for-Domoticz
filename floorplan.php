@@ -883,7 +883,7 @@ if ($home) {
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
             setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'950':'14950').');
+            ($local===true?'3950':'14950').');
         </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}

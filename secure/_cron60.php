@@ -456,6 +456,18 @@ if (pingport('diskstation',1598)==1){
     if ($check>0)store('check_diskstation_1598',$check);
     if ($check>=3&&$d['nas']['s']!='Off')store('nas','Off');
 }*/
+
+ping('192.168.2.101');
+ping('192.168.2.102');
+ping('192.168.2.103');
+ping('192.168.2.104');
+ping('192.168.2.11');
+ping('192.168.2.12');
+ping('192.168.2.13');
+ping('192.168.2.14');
+ping('192.168.2.15');
+ping('192.168.2.224');
+
 $ctx=stream_context_create(array('http'=>array('timeout' =>15)));
 $relay=new SimpleXMLElement(
     @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
@@ -482,13 +494,3 @@ if (!empty($relay)) {
         store('heater4', 'Off');
     }
 }
-ping('192.168.2.3');
-ping('192.168.2.4');
-ping('192.168.2.5');
-ping('192.168.2.9');
-ping('192.168.2.11');
-ping('192.168.2.12');
-ping('192.168.2.13');
-ping('192.168.2.14');
-ping('192.168.2.15');
-ping('192.168.2.224');
