@@ -33,12 +33,12 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
         $d['pirliving']['t']=TIME;
         include '_rolluiken.php';
     }
-    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose3']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
-        bosekey("POWER", 0, 3);
-        sw('bose3', 'On');
-        bosevolume(25, 3);
+    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
+        bosekey("POWER", 0, 101);
+        sw('bose101', 'On');
+        bosevolume(25, 101);
         for ($x=1;$x<=10;$x++) {
-            $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.3:8090/now_playing"))), true);
+            $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
             if (!empty($nowplaying)) {
                 if (isset($nowplaying['@attributes']['source'])) {
                     if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
@@ -51,13 +51,13 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
             }
             sleep(1);
         }
-    } elseif ($d['bose3']['s']=='On'&&$d['denonpower']['s']=='OFF') {
-        $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.3:8090/volume"))), true);
+    } elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
+        $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
         if (isset($volume['actualvolume'])) {
             $cv=$volume['actualvolume'];
             //lg('Boseliving volume = '.$cv);
             if ($cv<10) {
-                bosevolume(10, 3);
+                bosevolume(10, 101);
             }
         }
     }
