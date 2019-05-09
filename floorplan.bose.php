@@ -84,7 +84,7 @@ if ($home) {
             }
         } else {
             bosekey("POWER", 0, $bose);
-            sw('bose'.$bose);
+            sw('bose'.$bose, 'Off');
             if ($bose==101) {
                 sw('bose102', 'Off');
                 sw('bose103', 'Off');
@@ -123,7 +123,7 @@ if ($home) {
         if (isset($nowplaying['@attributes']['source'])) {
             echo '
         <div class="fix blackmedia" >
-			<form method="POST" action="floorplan.bose.php">
+			<form method="GET" action="floorplan.bose.php">
 			    <input type="hidden" name="ip" value="'.$bose.'">';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
                  echo '

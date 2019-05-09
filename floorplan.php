@@ -827,7 +827,7 @@ if ($home) {
         </div>
         <div class="fix bosekamer">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=103");\'>
-                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bosekamer" alt="">
+                <img src="images/Bose_'.($d['bose103']['s']=='On'?'On':'Off').'.png" id="bosekamer" alt="">
             </a>
         </div>
         <div class="fix bosegarage">
