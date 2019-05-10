@@ -10,13 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=="On"&&$d['auto']['s']=='On') {
-    if ($d['Weg']['s']==0&&$d['inkom']['s']=='Off'&&$d['zon']['s']<$zoninkom) {
-        sw('inkom', 'On');
-    }
-    if ($d['Weg']['s']>0&&$d['Weg']['m']>TIME-178) {
-        sw('sirene', 'On');
-        shell_exec('../ios.sh "Beweging Inkom" > /dev/null 2>/dev/null &');
-        telegram('Beweging inkom om '.strftime("%k:%M:%S", TIME), false, 2);
-    }
-    storemode('Weg', TIME);
+    finkom();
+    sirene('Beweging inkom');
 }

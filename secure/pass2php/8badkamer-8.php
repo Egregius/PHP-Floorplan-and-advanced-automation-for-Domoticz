@@ -14,49 +14,7 @@ if ($status=='On') {
     if ($d['auto']['s']==true) {
         if ((TIME>strtotime('5:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('10:00')-($d['auto']['m']==true?3600:0))&&$d['Weg']['s']==1) {
             sw('hall', 'On');
-            if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-                if ($d['zon']['s']==0) {
-                    if ($d['keuken']['s']=='Off') {
-                        sw('keuken', 'On');
-                    }
-                    if ($d['bureel']['s']=='Off') {
-                        sw('bureel', 'On');
-                    }
-                    if ($d['jbl']['s']=='Off') {
-                        sw('jbl', 'On');
-                    }
-                }
-                $d['pirliving']['t']=TIME;
-                include '_rolluiken.php';
-            }
-            if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
-                bosekey("POWER", 0, 101);
-                sw('bose101', 'On');
-                bosevolume(25, 101);
-                for ($x=1;$x<=10;$x++) {
-                    $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-                    if (!empty($nowplaying)) {
-                        if (isset($nowplaying['@attributes']['source'])) {
-                            if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-                                if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
-                                    bosekey("NEXT_TRACK", 0, 101);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    sleep(1);
-                }
-            } elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
-                $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
-                if (isset($volume['actualvolume'])) {
-                    $cv=$volume['actualvolume'];
-                    //lg('Boseliving volume = '.$cv);
-                    if ($cv<10) {
-                        bosevolume(10, 101);
-                    }
-                }
-            }
+            fliving();
         } elseif ($d['zon']['s']<20&&$d['Weg']['s']==0) {
             sw('hall', 'On');
         }

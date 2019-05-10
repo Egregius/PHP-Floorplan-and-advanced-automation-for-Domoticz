@@ -11,9 +11,5 @@
  **/
 if ($status=='On'&&$d['auto']['s']=='On') {
     fliving();
-    if ($d['Weg']['s']>0&&$d['Weg']['m']>TIME-178) {
-        sw('sirene', 'On');
-        shell_exec('../ios.sh "Beweging Living" > /dev/null 2>/dev/null &');
-        telegram('Beweging living om '.strftime("%k:%M:%S", TIME), false, 2);
-    }
+    sirene('Beweging living');
 }
