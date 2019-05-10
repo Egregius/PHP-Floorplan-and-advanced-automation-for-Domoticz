@@ -209,11 +209,6 @@ $db->query(
     VALUES
         ('$newbuien','$dsbuien','$buien');"
 );
-
-
-
-
-
 if ($d['voordeur']['s']=='On'&&past('voordeur')>598) {
     sw('voordeur', 'Off');
 }
