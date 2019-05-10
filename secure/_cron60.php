@@ -327,6 +327,7 @@ if ($d['auto']['s']=='On') {
         &&past('pirgarage')>90
         &&past('bose104')>90
         &&$d['poort']['s']=='Closed'
+        &&$d['deurgarage']['s']=='Closed'
         &&$d['achterdeur']['s']=='Closed'
         &&$d['bose104']['s']=='On'
     ) {
