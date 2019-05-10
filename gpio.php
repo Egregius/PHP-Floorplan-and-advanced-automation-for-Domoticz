@@ -32,21 +32,11 @@ if (isset($_REQUEST['gpio'])) {
         }
     } elseif ($gpio==19) {
         if ($_REQUEST['action']=='on') {
-            if ($d['poort']['s']!='Closed') {
-                store('poort', 'Closed');
-            }
+            store('poort', 'Closed');
         } else {
-            if ($d['poort']['s']!='Open') {
-                store('poort', 'Open');
-            }
-            if ($d['Weg']['s']==0&&$d['zon']['s']<100&&$d['auto']['s']=='On'&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
-                sw('garageled', 'On');
-            } elseif ($d['Weg']>0&&$d['auto']['s']&&past('Weg')>178&&$d['poortrf']['s']=='Off') {
-                storemode('Weg', TIME);
-                sw('sirene', 'On');
-                shell_exec('secure/ios.sh "Poort open" > /dev/null 2>/dev/null &');
-                telegram('Poort open om '.strftime("%k:%M:%S", TIME), false, 2);
-            }
+            store('poort', 'Open');
+            fgarage();
+            sirene('Poort open');
             if ($d['dampkap']['s']=='On') {
                 sw('dampkap', 'Off');
             }

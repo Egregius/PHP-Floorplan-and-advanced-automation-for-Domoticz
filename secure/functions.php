@@ -314,7 +314,7 @@ function resetsecurity()
         }
     }
 }
-function sw($name,$action='Toggle',$check=false,$msg='',$usleep=0)
+function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
 {
     global $user,$d,$domoticzurl;
     if (is_array($name)) {
@@ -384,13 +384,13 @@ function store($name,$status,$idx=null,$force=true)
         } else {
             $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
         }
-    } else {
+    } /*else {
         if ($idx>0) {
             $db->query("INSERT INTO devices (n,i,s) VALUES ('$name','$idx','$status') ON DUPLICATE KEY UPDATE s='$status',i='$idx';");
         } else {
             $db->query("INSERT INTO devices (n,s) VALUES ('$name','$status') ON DUPLICATE KEY UPDATE s='$status';");
         }
-    }
+    }*/
     lgsql($username, $name, $status);
 }
 function storemode($name,$mode,$time=false)
@@ -1145,14 +1145,14 @@ function fliving()
             }
         }
         $d['pirliving']['t']=TIME;
+        bosezone(101);
         include '_rolluiken.php';
     }
-    bosezone(101);
 }
 function fgarage()
 {
     global $d;
-    if ($d['Weg']['s']==0&&($d['zon']['s']<$zongarage||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
+    if ($d['Weg']['s']==0&&($d['zon']['s']<500||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
         sw('garageled', 'On');
     }
     bosezone(104);
