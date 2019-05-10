@@ -10,11 +10,16 @@
  * @link     https://egregius.be
  **/
 require '/var/www/config.php';
-$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$stmt=$db->query("select n,i,s,t,m from devices;");
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-    $d[$row['n']] = $row;
+$d=fetchdata();
+function fetchdata()
+{
+    $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $stmt=$db->query("select n,i,s,t,m from devices;");
+    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+        $d[$row['n']] = $row;
+    }
+    return $d;
 }
 /**
  * Function huisslapen
@@ -976,14 +981,9 @@ function bosepreset($pre,$ip=3)
     echo $ip;
     bosekey("PRESET_$pre", 0, $ip, true);
 }
-function bosezone($func,$master,$ipslave,$macslave,$ip)
+function bosezone($ip)
 {
-    $xml="<zone master=\"$master\">
-	<member ipaddress=\"$ipslave\">$macslave</member>
-</zone>";
-    echo 'zone<br>';
-    echo htmlentities($xml);
-    echo bosepost($func, $xml, $ip, true);
+
 }
 function bosepost($method,$xml,$ip=3,$log=false)
 {
