@@ -991,7 +991,7 @@ function bosepreset($pre,$ip=3)
 }
 function bosezone($ip)
 {
-    global $d;
+    $d=fetchdata();
     if ($d['Weg']['s']==0) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
             bosekey("POWER", 0, 101);
@@ -1021,14 +1021,15 @@ function bosezone($ip)
             }
         }
         if ($ip>101) {
+            sw('bose'.$ip, 'On');
             if ($ip==102) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">C4F312DCE637</member></zone>';
+                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
             } elseif ($ip==103) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312DCE637</member></zone>';
+                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
             } elseif ($ip==104) {
                 $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
             } elseif ($ip==105) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">C4F312DCE637</member></zone>';
+                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
             }
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
                 bosekey("POWER", 0, 101);
@@ -1051,7 +1052,7 @@ function bosezone($ip)
                         if (isset($nowplaying['@attributes']['source'])) {
                             if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
                                 if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
-                                    bosekey("NEXT_TRACK", 0, 3);
+                                    bosekey("NEXT_TRACK", 0, 101);
                                     break;
                                 }
                             }
@@ -1059,8 +1060,8 @@ function bosezone($ip)
                     }
                     sleep(1);
                 }
-            } elseif ($d['bose104']['s']=='Off') {
-                sw('bose104', 'On');
+            } elseif ($d['bose'.$ip]['s']=='Off') {
+                sw('bose'.$ip, 'On');
                 bosepost('setZone', $xml, 101);
                 if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
                     bosevolume(35, $ip);
@@ -1073,6 +1074,7 @@ function bosezone($ip)
 }
 function bosepost($method,$xml,$ip=3,$log=false)
 {
+    global $user;
     $ch=curl_init("http://192.168.2.$ip:8090/$method");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -1081,7 +1083,7 @@ function bosepost($method,$xml,$ip=3,$log=false)
     $response=curl_exec($ch);
     curl_close($ch);
     if ($log) {
-        lg('Bose '.$ip.' '.$method.' '.$xml);
+        lg($user.' >> Bose '.$ip.' '.$method.' '.$xml);
     }
     usleep(10000);
     return $response;

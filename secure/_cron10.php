@@ -54,7 +54,7 @@ if ($d['pirinkom']['s']=='Off'
     }
 } else {
     if ($d['pirinkom']['s']=='On'
-        &&$d['zon']['s']<$zoninkom
+        &&$d['zon']['s']<10
         &&$d['auto']['s']=='On'
     ) {
         if ($d['inkom']['s']=='Off') {
@@ -62,7 +62,7 @@ if ($d['pirinkom']['s']=='Off'
         }
     }
     if ($d['pirhall']['s']=='On'
-        &&$d['zon']['s']<$zoninkom
+        &&$d['zon']['s']==0
         &&$d['auto']['s']=='On'
     ) {
         if ($d['hall']['s']=='Off'
