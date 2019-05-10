@@ -19,12 +19,6 @@ if (isset($_REQUEST['verwarming'])) {
     $username='verwarming';
     include '_verwarming.php';
 }
-if (isset($_REQUEST['cron120'])) {
-    $username='cron120';
-    include '_cron120.php';
-    $username='gcal';
-    include 'gcal/gcal.php';
-}
 if (isset($_REQUEST['cron10'])) {
     $username='cron10';
     include '_cron10.php';
@@ -32,6 +26,24 @@ if (isset($_REQUEST['cron10'])) {
 if (isset($_REQUEST['cron60'])) {
     $username='cron60';
     include '_cron60.php';
+}
+if (isset($_REQUEST['cron120'])) {
+    $username='cron120';
+    include '_cron120.php';
+    $username='gcal';
+    include 'gcal/gcal.php';
+}
+if (isset($_REQUEST['cron180'])) {
+    $username='cron180';
+    include '_cron180.php';
+}
+if (isset($_REQUEST['cron240'])) {
+    $username='cron240';
+    include '_cron240.php';
+}
+if (isset($_REQUEST['cron300'])) {
+    $username='cron300';
+    include '_cron300.php';
 }
 if (isset($_REQUEST['cron3600'])) {
     $username='gcal';
