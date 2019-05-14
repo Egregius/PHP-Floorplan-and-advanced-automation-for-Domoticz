@@ -1197,11 +1197,20 @@ function fhall()
 }
 function sirene($msg)
 {
-    global $d;
-    if ($d['Weg']['s']>0&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
-        sw('sirene', 'On');
-        shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
-        telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+    global $d,$device;
+    $boven=array('pirhall');
+    if (in_array($device, $boven)) {
+        if ($d['Weg']['s']==2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
+            sw('sirene', 'On');
+            shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
+            telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+        }
+    } else {
+        if ($d['Weg']['s']>=1&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
+            sw('sirene', 'On');
+            shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
+            telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+        }
     }
     storemode('Weg', TIME);
 }
