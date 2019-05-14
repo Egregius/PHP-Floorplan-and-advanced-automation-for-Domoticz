@@ -3,12 +3,17 @@
   "name": "Floorplan",
   "icons": [
     {
-      "src": "launcher-icon-4x.png",
-      "sizes": "192x192",
+      "src": "images/domoticzphp48.png",
+      "sizes": "48x48",
       "type": "image/png"
     }
   ],
-  "start_url": "/index.php",
-  "display": "standalone",
+  "serviceworker": {
+      "src": "/floorplan.php",
+      "scope": "/floorplan.php",
+      "update_via_cache": "none"
+    },
+  "start_url": "/floorplan.php",
+  "display": "fullscreen",
   "orientation": "portrait"
 }
