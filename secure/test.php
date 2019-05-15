@@ -15,7 +15,23 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-print_r($_REQUEST);
+  echo '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Test</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">
+	    <link rel="manifest" href="/manifest.json">
+	    <link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">';
+
+		print_r($_REQUEST);
 
 /*---------------------------*/
 echo '</pre>';

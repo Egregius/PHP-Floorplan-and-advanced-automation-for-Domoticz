@@ -67,23 +67,15 @@ if ($home) {
                 $db->query("UPDATE devices set t='0' WHERE n='heating';");
                 if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
                     sw('poortrf', 'On');
-                    //header("Location: floorplan.php");
-                    //die("Redirecting to: floorplan.php");
                 }
                 lgsql($user, 'Weg', 'Thuis');
                 resetsecurity();
-                //header("Location: floorplan.php");
-                //die("Redirecting to: floorplan.php");
             } elseif ($_REQUEST['Action']==1) {
                 lgsql($user, 'Weg', 'Slapen');
                   huisslapen();
-                  header("Location: floorplan.php");
-                  die("Redirecting to: floorplan.php");
             } elseif ($_REQUEST['Action']==2) {
                 lgsql($user, 'Weg', 'Weg');
                   huisweg();
-                  header("Location: floorplan.php");
-                  die("Redirecting to: floorplan.php");
             }
         } else {
             if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
@@ -183,16 +175,11 @@ if ($home) {
                     exit;
             } elseif (isset($_REQUEST['confirm'])) {
                   sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-                  usleep(100000);
-                  header("Location: floorplan.php");
-                  die("Redirecting to: floorplan.php");
             }
         } elseif ($_REQUEST['Naam']=='zoldertrap') {
 
             if ($d['raamhall']['s']=='Closed') {
                 sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-                header("Location: floorplan.php");
-                die("Redirecting to: floorplan.php");
             } else {
                 echo '<body><div id="message" class="fix confirm">
 			<form method="post" action="floorplan.php">
@@ -206,9 +193,6 @@ if ($home) {
             }
         } elseif (!in_array($_REQUEST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
             sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-            usleep(100000);
-            header("Location: floorplan.php");
-            die("Redirecting to: floorplan.php");
         }
     } elseif (isset($_REQUEST['dimmer'])) {
         if (isset($_REQUEST['luifelauto'])) {
@@ -233,9 +217,6 @@ if ($home) {
             sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
             storemode($_REQUEST['Naam'], 0);
         }
-        usleep(100000);
-        header("Location: floorplan.php");
-        die("Redirecting to: floorplan.php");
     }
     if (isset($_REQUEST['setdimmer'])) {
         $name=$_REQUEST['setdimmer'];
@@ -328,7 +309,6 @@ if ($home) {
     echo '
 	<body class="floorplan">
 	    <div id="ajax"></div>';
-	    print_r($_REQUEST);
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
