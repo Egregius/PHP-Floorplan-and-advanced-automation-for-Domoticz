@@ -581,6 +581,6 @@ if ($home) {
         <div class="fix floorplanstats">
             '.$udevice.' | '.
             $ipaddress.' | '.
-            number_format(((microtime(true)-$start)*1000), 3).'
+            number_format(((microtime(true)-$start)*1000), 3, ',', '').'
         </div>';
 }

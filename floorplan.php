@@ -39,16 +39,16 @@ if ($home) {
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 timestamp();
                 setInterval(timestamp, '.($local===true?'2950':'9950').');
             });
-
+            function navigator_Go(url) {window.location.assign(url);}
             function timestamp() {
                 $.ajax({
                     url: \'/ajaxfloorplan.php\',
@@ -327,12 +327,7 @@ if ($home) {
     }
     echo '
 	<body class="floorplan">
-	    <div id="ajax"></div>
-        ';
-    echo '
-        <script type="text/javascript">
-            function navigator_Go(url) {window.location.assign(url);}
-        </script>';
+	    <div id="ajax"></div>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>

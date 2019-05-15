@@ -296,9 +296,7 @@ if ($home) {
         </div>';
     }
     echo '
-        <div class="fix floorplanstats">
-            '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3).'
-        </div>
+
         <div class="fix floorplan2icon">
             <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
                 <img src="/images/plus.png" class="i60" alt="plus">
@@ -415,6 +413,9 @@ if ($home) {
     echo '
                 </tr>
         </table>
+        </div>
+        <div class="fix floorplanstats">
+            '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3, ',', '').'
         </div>';
 }
 function setpoint($name,$top,$left,$rotation)
