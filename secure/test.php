@@ -1,3 +1,26 @@
+<html>
+	<head>
+		<title>Floorplan</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<script type='text/javascript' src='/scripts/jQuery.js'></script>
+        <script type='text/javascript'>
+            $(document).ready(function() {
+                setInterval(timestamp, 1000);
+            });
+
+            function timestamp() {
+                $.ajax({
+                    url: '/ajax.php',
+                    success: function(data) {
+                        $('#timestamp').html(data);
+                    },
+                });
+            }
+        </script>
 <?php
 /**
  * Pass2PHP
@@ -13,9 +36,11 @@ $start=microtime(true);
 require 'functions.php';
 //error_reporting(E_ALL);
 //ini_set("display_errors", "on");
-echo '<pre>';
+//echo '<pre>';
 /*-------------------------------------------------*/
-shell_exec('python3 lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip.' > /dev/null 2>&1 &');
+echo "
+
+<div id='timestamp'></div>";
 
 /*---------------------------*/
 echo '</pre>';
