@@ -50,10 +50,10 @@ if ($home) {
 		</style>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                timestamp();
-                setInterval(timestamp, '.($local===true?'2950':'9950').');
+                ajax();
+                setInterval(ajax, '.($local===true?'2950':'9950').');
             });
-            function timestamp() {
+            function ajax() {
                 $.ajax({
                     url: \'/ajaxfloorplan.heating.php\',
                     success: function(data) {

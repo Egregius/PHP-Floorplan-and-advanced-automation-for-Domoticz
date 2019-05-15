@@ -45,11 +45,11 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                timestamp();
-                setInterval(timestamp, '.($local===true?'2950':'9950').');
+                ajax();
+                setInterval(ajax, '.($local===true?'2950':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
-            function timestamp() {
+            function ajax() {
                 $.ajax({
                     url: \'/ajaxfloorplan.php\',
                     success: function(data) {

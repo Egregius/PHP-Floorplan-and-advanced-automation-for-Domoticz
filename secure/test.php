@@ -29,7 +29,9 @@ echo '<pre>';
 	    <link rel="manifest" href="/manifest.json">
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">';
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
+	</head>
+	<body>';
 
 		print_r($_REQUEST);
 
