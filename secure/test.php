@@ -15,9 +15,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-echo "
-
-<div id='timestamp'></div>";
+print_r($_REQUEST);
 
 /*---------------------------*/
 echo '</pre>';
