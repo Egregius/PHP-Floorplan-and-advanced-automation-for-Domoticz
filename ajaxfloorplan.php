@@ -1,11 +1,25 @@
 <?php
+/**
+ * Pass2PHP
+ * php version 7.3.4-2
+ *
+ * This is the main floorplan.
+ * It handles all the lighting and shows status of heating and rollers.
+ *
+ * @category Home_Automation
+ * @package  Pass2PHP
+ * @author   Guy Verschuere <guy@egregius.be>
+ * @license  GNU GPLv3
+ * @link     https://egregius.be
+ **/
 $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
-echo '<div class="fix clock">
+if ($home) {
+    echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
-if ($d['Rliving']['s']==100
+    if ($d['Rliving']['s']==100
         &&$d['Rbureel']['s']==100
         &&$d['RkeukenL']['s']==100
         &&$d['RkeukenR']['s']==100
@@ -37,7 +51,7 @@ if ($d['Rliving']['s']==100
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-     echo '
+    echo '
 	    <div class="fix leftbuttons">
 		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
 		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
@@ -569,3 +583,4 @@ if ($d['Rliving']['s']==100
             $ipaddress.' | '.
             number_format(((microtime(true)-$start)*1000), 3).'
         </div>';
+}

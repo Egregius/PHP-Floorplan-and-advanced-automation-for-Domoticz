@@ -1,31 +1,7 @@
-<html>
-	<head>
-		<title>Test</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<script type='text/javascript' src='/scripts/jQuery.js'></script>
-        <script type='text/javascript'>
-            $(document).ready(function() {
-                timestamp();
-                setInterval(timestamp, 3000);
-            });
-
-            function timestamp() {
-                $.ajax({
-                    url: '/ajax.php',
-                    success: function(data) {
-                        $('#timestamp').html(data);
-                    },
-                });
-            }
-        </script>
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -35,9 +11,9 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-//error_reporting(E_ALL);
-//ini_set("display_errors", "on");
-//echo '<pre>';
+error_reporting(E_ALL);
+ini_set("display_errors", "on");
+echo '<pre>';
 /*-------------------------------------------------*/
 echo "
 
