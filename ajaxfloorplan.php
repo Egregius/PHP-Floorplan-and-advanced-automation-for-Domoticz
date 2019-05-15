@@ -1,5 +1,6 @@
 <?php
-include 'secure/functions.php';
+require 'secure/functions.php';
+require 'secure/authentication.php';
 echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
         </div>';

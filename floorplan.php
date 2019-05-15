@@ -48,7 +48,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 timestamp();
-                setInterval(timestamp, 1000);
+                setInterval(timestamp, '.($local===true?'1950':'9950').');
             });
 
             function timestamp() {
@@ -343,8 +343,6 @@ if ($home) {
     echo '
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
-            setTimeout("window.location.href=window.location.href;",'.
-            ($local===true?'3950':'14950').');
         </script>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}

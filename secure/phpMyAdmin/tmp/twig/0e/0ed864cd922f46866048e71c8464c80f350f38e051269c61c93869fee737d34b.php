@@ -148,6 +148,6 @@ class __TwigTemplate_9d766695fad63da538433b2275bf7b2844c71bbe8bcb589ff6784a1fc73
 
     public function getSourceContext()
     {
-        return new Source("", "server/status/base.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/server/status/base.twig");
+        return new Source("", "server/status/base.twig", "/var/www/html/secure/phpMyAdmin/templates/server/status/base.twig");
     }
 }
