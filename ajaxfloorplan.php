@@ -1,4 +1,5 @@
 <?php
+$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 echo '<div class="fix clock">
@@ -562,3 +563,9 @@ if ($d['Rliving']['s']==100
             <img src="images/Fire_On.png" width="28px" height="auto" alt="">
         </div>';
     }
+    echo '
+        <div class="fix floorplanstats">
+            '.$udevice.' | '.
+            $ipaddress.' | '.
+            number_format(((microtime(true)-$start)*1000), 3).'
+        </div>';

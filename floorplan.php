@@ -12,15 +12,13 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$lat=50.8930154;
-$lon=3.1123163;
-$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
     session_start();
     $_SESSION['referer']='floorplan.php';
-    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    echo '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<title>Floorplan</title>
@@ -48,7 +46,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 timestamp();
-                setInterval(timestamp, '.($local===true?'1950':'9950').');
+                setInterval(timestamp, '.($local===true?'2950':'9950').');
             });
 
             function timestamp() {
@@ -331,15 +329,6 @@ if ($home) {
 	<body class="floorplan">
 	    <div id="ajax"></div>
         ';
-
-
-
-    echo '
-        <div class="fix floorplanstats">
-            '.$udevice.' | '.
-            $ipaddress.' | '.
-            number_format(((microtime(true)-$start)*1000), 3).'
-        </div>';
     echo '
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
