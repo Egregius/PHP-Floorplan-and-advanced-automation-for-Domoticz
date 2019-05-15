@@ -67,13 +67,13 @@ if ($home) {
                 $db->query("UPDATE devices set t='0' WHERE n='heating';");
                 if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
                     sw('poortrf', 'On');
-                    header("Location: floorplan.php");
-                    die("Redirecting to: floorplan.php");
+                    //header("Location: floorplan.php");
+                    //die("Redirecting to: floorplan.php");
                 }
                 lgsql($user, 'Weg', 'Thuis');
                 resetsecurity();
-                header("Location: floorplan.php");
-                die("Redirecting to: floorplan.php");
+                //header("Location: floorplan.php");
+                //die("Redirecting to: floorplan.php");
             } elseif ($_REQUEST['Action']==1) {
                 lgsql($user, 'Weg', 'Slapen');
                   huisslapen();
@@ -130,7 +130,7 @@ if ($home) {
             <h2>Warning:</h2>
             <h2>Poort open!<h2>
             <br><br>
-            <form action="floorplan.php" method="post">
+            <form action="floorplan.php" method="GET">
                 <input type="hidden" name="Weg" value="true">
                 <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
                 <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
@@ -143,7 +143,7 @@ if ($home) {
             echo '
     <body>
         <div id="message" class="fix confirm">
-            <form action="floorplan.php" method="post">
+            <form action="floorplan.php" method="GET">
                 <input type="hidden" name="Weg" value="true">
                 <button name="Action" value="2" class="btn huge3">Weg</button>
                 <button name="Action" value="1" class="btn huge3">Slapen</button>
@@ -155,10 +155,10 @@ if ($home) {
             exit;
         }
     }
-    if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
-        if (in_array($_POST['Naam'], array('bureeltobi','weg','slapen'))) {
-            if (!isset($_POST['confirm'])) {
-                switch($_POST['Naam']){
+    if (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
+        if (in_array($_REQUEST['Naam'], array('bureeltobi','weg','slapen'))) {
+            if (!isset($_REQUEST['confirm'])) {
+                switch($_REQUEST['Naam']){
                 case 'weg':$txtoff='Thuis';$txton='Weg';
                     break;
                 case 'slapen':$txtoff='Wakker';$txton='Slapen';
@@ -169,28 +169,28 @@ if ($home) {
                     echo '<body><div id="message" class="fix confirm">
 				<form method="post">
 					<input type="hidden" name="Actie" value="On">
-					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'">
+					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
 					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2">
 				</form>
 				<form method="post">
 					<input type="hidden" name="Actie" value="Off">
-					<input type="hidden" name="Naam" value="'.$_POST['Naam'].'">
+					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
 					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2">
 				</form>
 			</div>
 			</body>
 		</html>';
                     exit;
-            } elseif (isset($_POST['confirm'])) {
-                  sw($_POST['Naam'], $_POST['Actie']);
+            } elseif (isset($_REQUEST['confirm'])) {
+                  sw($_REQUEST['Naam'], $_REQUEST['Actie']);
                   usleep(100000);
                   header("Location: floorplan.php");
                   die("Redirecting to: floorplan.php");
             }
-        } elseif ($_POST['Naam']=='zoldertrap') {
+        } elseif ($_REQUEST['Naam']=='zoldertrap') {
 
             if ($d['raamhall']['s']=='Closed') {
-                sw($_POST['Naam'], $_POST['Actie']);
+                sw($_REQUEST['Naam'], $_REQUEST['Actie']);
                 header("Location: floorplan.php");
                 die("Redirecting to: floorplan.php");
             } else {
@@ -204,34 +204,34 @@ if ($home) {
 		</html>';
                 exit;
             }
-        } elseif (!in_array($_POST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
-            sw($_POST['Naam'], $_POST['Actie']);
+        } elseif (!in_array($_REQUEST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
+            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
             usleep(100000);
             header("Location: floorplan.php");
             die("Redirecting to: floorplan.php");
         }
-    } elseif (isset($_POST['dimmer'])) {
-        if (isset($_POST['luifelauto'])) {
+    } elseif (isset($_REQUEST['dimmer'])) {
+        if (isset($_REQUEST['luifelauto'])) {
             storemode('dimactionluifel', 1);
-        } elseif (isset($_POST['dimlevelon_x'])) {
-            sl($_POST['Naam'], 100);
-            storemode($_POST['Naam'], 0);
-        } elseif (isset($_POST['dimleveloff_x'])) {
-            sl($_POST['Naam'], 0);
-            storemode($_POST['Naam'], 0);
-        } elseif (isset($_POST['dimsleep_x'])) {
-            lg('=> '.$user.' => activated dimmer sleep for '.$_POST['Naam']);
-            storemode($_POST['Naam'], 1);
-        } elseif (isset($_POST['dimwake_x'])) {
-            lg('=> '.$user.' => activated dimmer wake for '.$_POST['Naam']);
-            sl($_POST['Naam'], $_POST['dimwakelevel']+2);
-            storemode($_POST['Naam'], 2);
-        } elseif (isset($_POST['dimwake3u_x'])) {
-            lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_POST['Naam']);
-            storemode($_POST['Naam'], 3);
+        } elseif (isset($_REQUEST['dimlevelon_x'])) {
+            sl($_REQUEST['Naam'], 100);
+            storemode($_REQUEST['Naam'], 0);
+        } elseif (isset($_REQUEST['dimleveloff_x'])) {
+            sl($_REQUEST['Naam'], 0);
+            storemode($_REQUEST['Naam'], 0);
+        } elseif (isset($_REQUEST['dimsleep_x'])) {
+            lg('=> '.$user.' => activated dimmer sleep for '.$_REQUEST['Naam']);
+            storemode($_REQUEST['Naam'], 1);
+        } elseif (isset($_REQUEST['dimwake_x'])) {
+            lg('=> '.$user.' => activated dimmer wake for '.$_REQUEST['Naam']);
+            sl($_REQUEST['Naam'], $_REQUEST['dimwakelevel']+2);
+            storemode($_REQUEST['Naam'], 2);
+        } elseif (isset($_REQUEST['dimwake3u_x'])) {
+            lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_REQUEST['Naam']);
+            storemode($_REQUEST['Naam'], 3);
         } else {
-            sl($_POST['Naam'], $_POST['dimlevel']);
-            storemode($_POST['Naam'], 0);
+            sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
+            storemode($_REQUEST['Naam'], 0);
         }
         usleep(100000);
         header("Location: floorplan.php");
@@ -328,6 +328,7 @@ if ($home) {
     echo '
 	<body class="floorplan">
 	    <div id="ajax"></div>';
+	    print_r($_REQUEST);
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>

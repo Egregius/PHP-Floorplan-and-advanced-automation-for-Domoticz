@@ -405,7 +405,7 @@ if ($home) {
             </a>
         </div>
         <div class="fix Weg">
-            <form action="floorplan.php" method="POST">
+            <form action="floorplan.php" method="GET">
                 <input type="hidden" name="Weg" value="true">';
     if ($d['Weg']['s']==0) {
         echo '
