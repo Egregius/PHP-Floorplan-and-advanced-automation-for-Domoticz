@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP verwarming
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -643,6 +643,13 @@ if ($difbadkamer<=-1) {
     ) {
         sw('badkamervuur1', 'Off');
     }
+}
+if ($d['minmaxtemp']['m']>19) {
+    if ($d['zolder_set']['s']>4) {
+        $d['zolder_set']['s']=4;
+        store('zolder_set', 4);
+    }
+
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
