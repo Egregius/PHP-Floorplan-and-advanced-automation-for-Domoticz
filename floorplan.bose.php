@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * A small control interface for the Bose SoundTouch system
  *
@@ -15,7 +15,6 @@ $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
-    session_start();
     if (!isset($_SESSION['referer'])) {
         $_SESSION['referer']='floorplan.php';
     }

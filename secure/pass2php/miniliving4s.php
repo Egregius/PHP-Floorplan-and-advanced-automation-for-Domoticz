@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -17,11 +17,11 @@ if ($d['denonpower']['s']=='ON') {
     denon('MVUP');
     denon('MVUP');
 } else {
-    $nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.3:8090/now_playing'))), true);
+    $nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
             if ($nowplaying['@attributes']['source']!='STANDBY') {
-                $volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.3:8090/volume'))), true);
+                $volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
                 $cv=$volume['actualvolume'];
                 if ($cv>80) {
                     exit;
