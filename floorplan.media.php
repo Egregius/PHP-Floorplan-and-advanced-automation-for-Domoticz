@@ -13,8 +13,6 @@ $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
-    session_start();
-    $_SESSION['referer']='floorplan.media.php';
     $ctx=stream_context_create(array('http'=>array('timeout'=>2)));
     echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+session_start();
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     die('No user agent specified');
 } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) {
@@ -70,8 +71,13 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
                 koekje($subuser, TIME+31536000);
             }
             telegram('HOME '.$subuser.' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
-            header("Location:/index.php");
-            die("Redirecting to:/index.php");
+            if (!empty($_SESSION['referer'])) {
+                header("Location:/".$_SESSION['referer']);
+                die("Redirecting to:/".$_SESSION['referer']);
+            } else {
+                header("Location:/index.php");
+                die("Redirecting to:/index.php");
+            }
         } else {
             fail2ban($ipaddress.' FAILED wrong password');
             $msg="HOME Failed login attempt (Wrong password): ";

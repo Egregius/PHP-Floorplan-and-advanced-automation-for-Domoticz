@@ -15,10 +15,6 @@ $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
-    session_start();
-    if (!isset($_SESSION['referer'])) {
-        $_SESSION['referer']='floorplan.heating.php';
-    }
     echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
