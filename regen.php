@@ -21,7 +21,6 @@ if ($home===true) {
     if (isset($_REQUEST['sensor'])) {
         $sensor=$_REQUEST['sensor'];
     }
-    session_start();
     if (isset($_REQUEST['f_startdate'])) {
         $_SESSION['f_startdate']=$_REQUEST['f_startdate'];
     }
@@ -100,14 +99,6 @@ if ($home===true) {
 			    <input type="submit" class="btn btna b3" value="Regen"/>
 			</form>';
     }
-    //  if($udevice!='iPad') echo '<br>';
-    echo '
-            <form method="GET">
-                <input type="date" class="btn datum" name="f_startdate" value="'.$f_startdate.'" onchange="this.form.submit()"/>
-                <input type="date" class="btn datum" name="f_enddate" value="'.$f_enddate.'" onchange="this.form.submit()"/>
-                <input type="hidden" name="r_startdate" value="'.$r_startdate.'"/>
-                <input type="hidden" name="r_enddate" value="'.$r_enddate.'"/>
-            </form>';
     $db=new mysqli('localhost', 'domotica', 'domotica', 'domotica');
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
