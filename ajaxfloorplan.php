@@ -571,6 +571,8 @@ if ($home) {
             '.round($tobi[0], 0).'W
         </div>';
     }
+    echo '
+            <div class="fix z0 zoldervuur2">'.$d['IN1']['s'].'</div>';
     if ($d['zoldervuur']['s']=='On') {
         echo '
         <div class="fix z0 zoldervuur2">
