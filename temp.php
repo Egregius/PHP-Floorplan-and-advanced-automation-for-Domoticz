@@ -77,10 +77,7 @@ if ($home===true) {
     //  if ($udevice!='iPad') echo '<br>';
     echo '<form method="GET">
 			<input type="hidden" name="sensor" value="'.$sensor.'"/>
-			<input type="date" class="btn datum" name="f_startdate" value="'.$f_startdate.'" onchange="this.form.submit()"/>
-			<input type="date" class="btn datum" name="f_enddate" value="'.$f_enddate.'" onchange="this.form.submit()"/>
-			<input type="hidden" name="r_startdate" value="'.$r_startdate.'"/>
-			<input type="hidden" name="r_enddate" value="'.$r_enddate.'"/>
+
 			</form>';
     if ($udevice=="Mac") {
         echo '<a href="tempbig.php" target="popup" class="btn" onclick="window.open(this.href,\'Tempbig\',\'left=0,top=0,width=507,height=848,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no\').focus(); return false;">Big</a>
