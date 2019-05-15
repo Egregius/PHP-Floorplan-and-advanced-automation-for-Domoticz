@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Floorplan</title>
+		<title>Test</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
@@ -9,7 +9,8 @@
 		<script type='text/javascript' src='/scripts/jQuery.js'></script>
         <script type='text/javascript'>
             $(document).ready(function() {
-                setInterval(timestamp, 1000);
+                timestamp();
+                setInterval(timestamp, 3000);
             });
 
             function timestamp() {

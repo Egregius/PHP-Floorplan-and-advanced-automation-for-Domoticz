@@ -41,9 +41,25 @@ if ($home) {
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
+		<script type=\'text/javascript\'>
+            $(document).ready(function() {
+                timestamp();
+                setInterval(timestamp, 3000);
+            });
+
+            function timestamp() {
+                $.ajax({
+                    url: \'/ajax.php\',
+                    success: function(data) {
+                        $(\'#timestamp\').html(data);
+                    },
+                });
+            }
+        </script>
 	</head>';
     if (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
@@ -75,6 +91,7 @@ if ($home) {
             if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
                 echo '
 	<body>
+	    <div id="timestamp"></div>
 	    <div id="message" class="fix dimmer" >
 			<br><br>
 			<h2>Warning:</h2>
