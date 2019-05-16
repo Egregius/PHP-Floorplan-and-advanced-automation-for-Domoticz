@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -11,9 +11,7 @@
  **/
 require '../secure/functions.php';
 require '../secure/authentication.php';
-
 if ($home) {
-    //require(dirname(__FILE__) . '/config.php');
     echo '<html><head><title>Voordeur - Oprit</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="HandheldFriendly" content="true"/>
