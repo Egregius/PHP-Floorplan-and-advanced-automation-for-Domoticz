@@ -30,10 +30,40 @@ echo '<pre>';
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type=\'text/javascript\'>
+            $(document).ready(function() {
+                ajax();
+                setInterval(ajax, 1000);
+            });
+            function navigator_Go(url) {window.location.assign(url);}
+            function ajax() {
+                $.ajax({
+                    url: \'/ajax.php\',
+                    success: function(data) {
+                        $(\'#ajax\').html(data);
+                    },
+                });
+            }
+
+            var jsonData = JSON.parse(ajax());
+            for (var i = 0; i < jsonData.counters.length; i++) {
+                var counter = jsonData.counters[i];
+                console.log(counter.counter_name);
+            }
+
+            var obj = JSON.parse(\'{ "name":"John", "age":30, "city":"New York"}\');
+
+        </script>
 	</head>
 	<body>';
+echo '<div id="ajax"></div>';
+echo '<p id="demo"></p>
 
-		print_r($_REQUEST);
+<script>
+document.getElementById("demo").innerHTML = obj.name + ", " + obj.age;
+</script>';
+
 
 /*---------------------------*/
 echo '</pre>';
