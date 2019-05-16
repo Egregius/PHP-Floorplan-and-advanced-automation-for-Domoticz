@@ -24,19 +24,7 @@ if ($home) {
     <meta name="mobile-web-app-capable" content="yes"/>
     <link href="/styles/picam1.php" rel="stylesheet" type="text/css"/>
     </head><body>';
-    if(isset($_REQUEST['refreshrate']))$_SESSION['refreshrate']=$_REQUEST['refreshrate'];
-    if(!isset($_SESSION['refreshrate'])){
-        if ($local===false&&$udevice=='iPhone') {
-            $_SESSION['refreshrate']=1;
-            $refresh=1000/$_SESSION['refreshrate'];
-            $refresh2=$refresh;
-        } else {
-            $_SESSION['refreshrate']=6;
-            $refresh=1000/$_SESSION['refreshrate'];
-            $refresh2=round(2000/$_SESSION['refreshrate']);
-        }
-    }
-    echo '<pre><br><br>';print_r($_SESSION);echo '</pre>';
+    $refresh=1000/4;
     if(isset($_POST['Record'])){
         file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
         file_get_contents("http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055");
@@ -54,14 +42,6 @@ if ($home) {
           <input type="submit" value="Record" name="Record" class="btn b7"/>
           <input type="submit" value="Foto" name="Foto" class="btn b7"/>
           <input type="submit" value="Licht" name="Licht" class="btn b7"/>
-          <select name="refreshrate" class="btn b7" onchange="this.form.submit()" >';
-          $items=array(0.5,1,2,3,4,5,6,7,8);
-          foreach ($items as $i) {
-            echo '
-            <option value="'.$i.'" '.($_SESSION['refreshrate']==$i?'selected':'').'>'.$i.' fr/ sec</option>';
-        }
-        echo '
-        </select>
         </form>
         <form method="POST" action="media-archive.php">
             <input type="hidden" name="type" value="videos"/>
@@ -91,7 +71,7 @@ if ($home) {
         window.setInterval(function()
         {
             document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php?random="+new Date().getTime();
-        }, '.$refresh2 .');
+        }, '.$refresh .');
         </script>
         </body></html>
     ';

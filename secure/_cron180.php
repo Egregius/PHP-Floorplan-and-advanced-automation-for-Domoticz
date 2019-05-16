@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg('               __CRON180__');
+//lg('               __CRON180__');
