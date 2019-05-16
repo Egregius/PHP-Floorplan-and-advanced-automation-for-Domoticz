@@ -51,9 +51,13 @@ $local=true;
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
 
-                                if (type=="On/Off") {
-                                    $("#form").blur(function(){
-                                        $("#name").attr("src", "value.png");
+                                if (type=="Light") {
+                                    if (value=="On") {
+                                        $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                        $(\'#action\' + name).val("Off");
+                                    } else if (value=="Off") {
+                                        $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                        $(\'#action\' + name).val("On");
                                     }
                                     console.log("Type=" + type + " | Name=" + name + " | Value=" + value + " | Time=" + time + " | Mode=" + mode);
                                 } else if (type=="thermometer") {
@@ -76,7 +80,7 @@ echo '
         ';
 schakelaar('wc', 'Light');
 
-
+print_r($_REQUEST);
 
 /*---------------------------*/
 echo '</pre>';
