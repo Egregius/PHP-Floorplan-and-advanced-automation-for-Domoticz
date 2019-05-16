@@ -14,7 +14,6 @@
  **/
 $fetch=true;
 require 'secure/functions.php';
-$d=fetchdata();
 require 'secure/authentication.php';
 if ($home) {
     echo '

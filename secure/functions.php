@@ -12,6 +12,7 @@
 require '/var/www/config.php';
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$d=fetchdata();
 /**
  * Function fetchdata
  *
@@ -22,7 +23,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 function fetchdata()
 {
     global $db;
-    $stmt=$db->query("SELECT n,i,s,t,m FROM devices;");
+    $stmt=$db->query("select n,i,s,t,m from devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$row['n']] = $row;
     }
@@ -1061,7 +1062,6 @@ function bosezone($ip)
                 }
             } elseif ($d['bose'.$ip]['s']=='Off') {
                 sw('bose'.$ip, 'On');
-                usleep(100000);
                 bosepost('setZone', $xml, 101);
                 if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
                     bosevolume(35, $ip);

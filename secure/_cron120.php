@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP functions
- * php version 7.3.4-2
+ * php version 7.3.5-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -611,14 +611,14 @@ if ($d['auto']['s']=='On') {
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
     }
-    if ($rainpast>100000) {
+    if ($rainpast>64000) {
         $pomppauze=43200;
-    } elseif ($rainpast>50000) {
+    } elseif ($rainpast>32000) {
         $pomppauze=86400;
-    } elseif ($rainpast>25000) {
+    } elseif ($rainpast>16000) {
         $pomppauze=86400*2;
     } else {
-        $pomppauze=86400*28*365;
+        $pomppauze=86400*28;
     }
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
         sw(
@@ -643,7 +643,6 @@ if ($d['auto']['s']=='On') {
     }
     if (TIME>=strtotime('21:30')
         &&$d['zon']['s']==0
-        &&$d['achterdeur']['s']=='Closed'
         &&past('zon')>1800
         &&past('water')>72000
     ) {

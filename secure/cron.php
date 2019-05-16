@@ -11,7 +11,6 @@
  **/
 require '/var/www/config.php';
 require 'functions.php';
-$d=fetchdata();
 if (isset($_REQUEST['rolluiken'])) {
     $username='rolluiken';
     include '_rolluiken.php';

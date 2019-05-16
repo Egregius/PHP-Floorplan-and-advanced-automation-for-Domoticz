@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg('               __CRON300__');
+lg('               __CRON300__');
 if ($d['auto']['s']=='On'&&past('Weg')>300) {
     $items=array(
         'living_temp',
