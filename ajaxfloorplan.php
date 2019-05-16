@@ -19,8 +19,6 @@ if ($home) {
     echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
-
-
     rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
     rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
     rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
@@ -29,7 +27,6 @@ if ($home) {
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -203,8 +200,6 @@ if ($home) {
     echo '
 		    </table>
 	    </div>';
-
-
     dimmer('tobi','i60');
     dimmer('zithoek');
     dimmer('eettafel');
@@ -212,7 +207,6 @@ if ($home) {
     dimmer('alex','i60');
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
-    //schakelaar('tvled','Light');
     schakelaar('kristal', 'Light');
     schakelaar('bureel', 'Light');
     schakelaar('inkom', 'Light');
@@ -330,7 +324,6 @@ if ($home) {
         <div class="fix z0 diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
         </div>';
-
     if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
         echo '
         <div class="fix z0 GroheRed">
