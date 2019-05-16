@@ -45,7 +45,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'2950':'9950').');
+                setInterval(ajax, '.($local===true?'1950':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -63,7 +63,7 @@ if ($home) {
             store('Weg', $_REQUEST['Action']);
 
             if ($_REQUEST['Action']==0) {
-                $db->query("UPDATE devices set t='0' WHERE n='heating';");
+                $db->query("UPDATE devices set t='1' WHERE n='heating';");
                 if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
                     sw('poortrf', 'On');
                 }

@@ -65,6 +65,6 @@ class __TwigTemplate_042ec509b4b350ffb839bde36ffc9c872a941b7c848a1f58dd5f8949019
 
     public function getSourceContext()
     {
-        return new Source("", "config/form_display/group_header.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/config/form_display/group_header.twig");
+        return new Source("", "config/form_display/group_header.twig", "/var/www/html/secure/phpMyAdmin/templates/config/form_display/group_header.twig");
     }
 }

@@ -13,9 +13,13 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-require 'secure/functions.php';
-require 'secure/authentication.php';
-if ($home) {
-    echo json_encode(fetchdata(TIME-600));
-}
+    $t=time()-600;
+    $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $stmt=$db->query("SELECT n,i,s,t,m FROM devices WHERE t > $t;");
+    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+        $d[$row['n']] = $row;
+    }
+    echo json_encode($d);
+
 echo number_format(((microtime(true)-$start)*1000), 3, ',', '');

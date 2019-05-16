@@ -12,9 +12,6 @@
 require '/var/www/config.php';
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-if (isset($fetch)) {
-    $d=fetchdata();
-}
 /**
  * Function fetchdata
  *

@@ -13,8 +13,8 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-$fetch=true;
 require 'secure/functions.php';
+$d=fetchdata();
 require 'secure/authentication.php';
 if ($home) {
     echo '<div class="fix clock">
