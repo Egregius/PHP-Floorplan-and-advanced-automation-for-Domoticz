@@ -234,10 +234,10 @@ function schakelaar($name,$kind)
             <form method="POST" action="" id="form">
                 <input type="hidden" name="Naam" value="'.$name.'">';
     echo $d[$name]['s']=='Off'?'
-                <input type="hidden" name="Actie" value="On">
+                <input type="hidden" name="Actie" value="On" id="action'.$name.'">
                 <input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'">'
     :'
-                <input type="hidden" name="Actie" value="Off">
+                <input type="hidden" name="Actie" value="Off" id="action'.$name.'">
                 <input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'">';
     echo '
             </form>
