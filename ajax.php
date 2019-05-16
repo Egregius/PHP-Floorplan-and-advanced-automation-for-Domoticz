@@ -15,7 +15,8 @@
 $t=time()-2;
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$stmt=$db->query("SELECT n,i,s,t,m FROM devices WHERE t >= $t;");
+$stmt=$db->query("SELECT n,i,s,t,m,dt FROM devices WHERE t >= $t;");
+$d=array();
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
     $d[$row['n']] = $row;
 }

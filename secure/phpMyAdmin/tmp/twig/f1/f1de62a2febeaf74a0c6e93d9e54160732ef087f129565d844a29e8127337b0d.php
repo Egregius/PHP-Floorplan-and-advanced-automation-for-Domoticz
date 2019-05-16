@@ -302,6 +302,6 @@ class __TwigTemplate_d23636ef1e1d4b65e659c35a0d0e794faeac48ad872b50c31082b1b804a
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/table_fields_definitions.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/table_fields_definitions.twig");
+        return new Source("", "columns_definitions/table_fields_definitions.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/table_fields_definitions.twig");
     }
 }

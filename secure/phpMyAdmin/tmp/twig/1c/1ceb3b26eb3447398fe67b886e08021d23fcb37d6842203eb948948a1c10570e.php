@@ -149,6 +149,6 @@ class __TwigTemplate_be0fdfd5c7b1de6002ab8039130746ad949c2db8227be12745a8724aef2
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/column_name.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/column_name.twig");
+        return new Source("", "columns_definitions/column_name.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/column_name.twig");
     }
 }

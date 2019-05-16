@@ -97,6 +97,6 @@ class __TwigTemplate_2b3d699f5cfac6d2bab700c790e2c2a2dec6dae49b111c3b927be3edcaf
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/move_column.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/move_column.twig");
+        return new Source("", "columns_definitions/move_column.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/move_column.twig");
     }
 }

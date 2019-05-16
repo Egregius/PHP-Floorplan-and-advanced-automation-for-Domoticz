@@ -46,9 +46,11 @@ $local=true;
                         for (var device in data) {
                             if (data.hasOwnProperty(device)) {
                                 var name = data[device][\'n\'];
-                                console.log(name + " -> " + data[device][\'s\'] + " -> " + data[device][\'t\'] + " -> " + data[device][\'m\']);
-
-                                $(\'#name\').html(data);
+                                var value = data[device][\'s\'];
+                                var time = data[device][\'t\'];
+                                var mode = data[device][\'m\'];
+                                console.log(name + " -> " + value + " -> " + time + " -> " + mode);
+                                document.getElementById(name).innerHTML = value;
                             }
                         }
                     },

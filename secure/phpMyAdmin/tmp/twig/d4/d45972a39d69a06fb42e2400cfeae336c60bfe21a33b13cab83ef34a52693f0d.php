@@ -70,6 +70,6 @@ class __TwigTemplate_06f8b0bfe742b9ed33c4d2d26ecade838ae6e9ed8f6ebc2847e0d0a1a01
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/column_auto_increment.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/column_auto_increment.twig");
+        return new Source("", "columns_definitions/column_auto_increment.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/column_auto_increment.twig");
     }
 }

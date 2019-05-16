@@ -84,6 +84,6 @@ class __TwigTemplate_ecbfca257b370ae3b5e209903b3b09e1397c7cbae251318700395663be7
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/column_length.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/column_length.twig");
+        return new Source("", "columns_definitions/column_length.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/column_length.twig");
     }
 }

@@ -128,6 +128,6 @@ class __TwigTemplate_0083f321aae015c10fa1667a4b4d1cdb8dd3e859620261ad0ed6bfade77
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/column_default.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/column_default.twig");
+        return new Source("", "columns_definitions/column_default.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/column_default.twig");
     }
 }

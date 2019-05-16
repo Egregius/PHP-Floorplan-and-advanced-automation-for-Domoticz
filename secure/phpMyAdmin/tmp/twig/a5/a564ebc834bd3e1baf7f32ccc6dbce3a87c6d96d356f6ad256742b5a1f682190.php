@@ -71,6 +71,6 @@ class __TwigTemplate_7104613a785ae80023f542aafa4878585a210dcbf7729c3d7cf8724d79a
 
     public function getSourceContext()
     {
-        return new Source("", "columns_definitions/column_null.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/columns_definitions/column_null.twig");
+        return new Source("", "columns_definitions/column_null.twig", "/var/www/html/secure/phpMyAdmin/templates/columns_definitions/column_null.twig");
     }
 }
