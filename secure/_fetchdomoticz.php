@@ -17,7 +17,6 @@ $domoticz=json_decode(
 );
 if ($domoticz) {
     foreach ($domoticz['result'] as $dom) {
-        $type=null;
         $name=$dom['Name'];
         $idx=$dom['idx'];
         if (isset($dom['SwitchType'])) {
@@ -25,6 +24,7 @@ if ($domoticz) {
         } else {
             $switchtype='none';
         }
+        $type=$switchtype;
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
             $type='thermometer';

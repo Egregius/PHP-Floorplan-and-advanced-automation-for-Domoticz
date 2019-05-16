@@ -49,8 +49,13 @@ $local=true;
                                 var value = data[device][\'s\'];
                                 var time = data[device][\'t\'];
                                 var mode = data[device][\'m\'];
-                                console.log(name + " -> " + value + " -> " + time + " -> " + mode);
-                                document.getElementById(name).innerHTML = value;
+                                var type = data[device][\'dt\'];
+                                console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                                if(type=="On/Off") {
+
+                                } else {
+                                    document.getElementById(name).innerHTML = value;
+                                }
                             }
                         }
                     },
