@@ -51,8 +51,12 @@ $local=true;
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
                                 console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
-                                if(type=="On/Off") {
-
+                                if (type=="On/Off") {
+                                    $(\'#name\').each(function() {
+                                        var text = $(this).text();
+                                        $(this).text(text.replace(\'On\', \'Off\'));
+                                    });
+                                } else if (type=="thermometer") {
                                 } else {
                                     document.getElementById(name).innerHTML = value;
                                 }
