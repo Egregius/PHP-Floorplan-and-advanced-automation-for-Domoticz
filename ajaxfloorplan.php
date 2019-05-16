@@ -19,29 +19,7 @@ if ($home) {
     echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
-    if ($d['Rliving']['s']==100
-        &&$d['Rbureel']['s']==100
-        &&$d['RkeukenL']['s']==100
-        &&$d['RkeukenR']['s']==100
-        &&$d['Rtobi']['s']==100
-        &&$d['Ralex']['s']==100
-        &&$d['RkamerL']['s']==100
-        &&$d['RkamerR']['s']==100
-    ) {
-        $Rup='arrowgreendown';
-    } elseif ($d['Rliving']['s']==0
-        &&$d['Rbureel']['s']==0
-        &&$d['RkeukenL']['s']==0
-        &&$d['RkeukenR']['s']==0
-        &&$d['Rtobi']['s']==0
-        &&$d['Ralex']['s']==0
-        &&$d['RkamerL']['s']==0
-        &&$d['RkamerR']['s']==0
-    ) {
-        $Rup='arrowgreenup';
-    } else {
-        $Rup='arrowup';
-    }
+
 
     rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
     rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
@@ -51,147 +29,7 @@ if ($home) {
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
     rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-    echo '
-	    <div class="fix leftbuttons">
-		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
-		    </a>
-		    <br>';
-    if ($d['heating']['s']==3) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Fire_'.($d['brander']['s']=='On'?'On':'Off').'.png" class="i48" alt="Brander">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==2) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Elec.png" height="40px" width="auto" alt="Elec">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==1) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Cooling.png" class="i48" alt="Cooling">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==0) {
-        echo '
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>';
-    }
-    echo '
-            <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-                <img src="/images/denon_';
-    echo $d['denonpower']['s']=='ON'?'On':'Off';
-    echo '.png" class="i70" alt="denon">
-            </a>
-            <br>
-		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-		        <img src="/images/';
-    if ($d['tv']['s']=='On') {
-        if ($d['lgtv']['s']=='On') {
-            echo 'lgtv_On';
-        } else {
-            echo 'lgtv_Off';
-        }
-    } else {
-        echo 'TV_Off';
-    }
-    echo '.png" class="i60" alt="lgtv">
-            </a>
-            <br>
-		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-		        <img src="/images/nvidia_';
-    echo $d['nvidia']['m']=='On'?'On':'Off';
-    echo '.png" class="i48" alt="nvidia">
-		    </a>
-		    <br>
-        </div>
-        <div class="fix center zon">';
-    echo '
-            <small>&#x21e7;</small> '.number_format($d['minmaxtemp']['m'], 1, ',', '').'°C<br>
-            <small>&#x21e9;</small> '.number_format($d['minmaxtemp']['s'], 1, ',', '').'°C<br>
-            <a href=\'javascript:navigator_Go("regen.php");\'>
-                Buien: '.$d['buiten_temp']['m'].'
-            </a>
-            <br>';
-    echo 'Hum:'.round($d['icon']['m'], 0).'%
-            <br>';
 
-    echo number_format($d['wind']['s'], 1, ',', '').'km/u';
-
-    echo '
-            <br>
-            <br>
-            <img src="images/sunrise.png" class="i20" alt="sunrise">
-            <br>
-            <small>&#x21e7;</small> '.strftime("%k:%M", $d['civil_twilight']['s']).'
-            <br>
-            <small>&#x21e9;</small> '.strftime("%k:%M", $d['civil_twilight']['m']).'
-            <br>
-            <br>';
-    echo 'UV: ';
-    if ($d['uv']['s']<2) {
-        echo '
-            <font color="#99EE00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
-            </font>';
-    } elseif ($d['uv']['s']>=2&&$d['uv']['s']<4) {
-        echo '
-            <font color="#99CC00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
-            </font>';
-    } elseif ($d['uv']['s']>=4&&$d['uv']['s']<6) {
-        echo '
-            <font color="#FFCC00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
-            </font>';
-    } elseif ($d['uv']['s']>=6&&$d['uv']['s']<8) {
-        echo '
-            <font color="#FF6600">
-                '.number_format($d['uv']['s'], 1, ',', '').'
-            </font>';
-    } elseif ($d['uv']['s']>=8) {
-        echo '
-            <font color="#FF2200">
-                '.number_format($d['uv']['s'], 1, ',', '').'
-            </font>';
-    }
-    echo '
-            <br>max:';
-    if ($d['uv']['m']<2) {
-        echo '
-            <font color="#99EE00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
-    } elseif ($d['uv']['m']>=2&&$d['uv']['s']<4) {
-        echo '
-            <font color="#99CC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
-    } elseif ($d['uv']['m']>=4&&$d['uv']['s']<6) {
-        echo '
-            <font color="#FFCC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
-    } elseif ($d['uv']['m']>=6&&$d['uv']['s']<8) {
-        echo '
-            <font color="#FF6600">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
-    } elseif ($d['uv']['m']>=8) {
-        echo '
-            <font color="#FF2200">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
-    }
-
-    echo '
-	    </div>';
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -365,61 +203,8 @@ if ($home) {
     echo '
 		    </table>
 	    </div>';
-    if (!empty($d['gcal']['m'])) {
-        echo '
-        <div class="fix z0 afval">
-            '.$d['gcal']['m'].'
-        </div>';
-    }
-    if (!empty($d['icon']['s'])) {
-        if ($udevice=='Mac') {
-            echo '
-        <div class="fix weather">
-            <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
-            </a>
-        </div>';
-        } else {
-            echo '
-        <div class="fix weather">
-            <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
-            </a>
-        </div>';
-        }
-    }
-    echo '
-        <div class="fix floorplan2icon">
-            <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
-                <img src="/images/plus.png" class="i60" alt="plus">
-            </a>
-        </div>
-        <div class="fix picam1">
-            <a href=\'javascript:navigator_Go("picam1/index.php");\'>
-                <img src="/images/Camera.png" class="i48" alt="cam">
-            </a>
-        </div>
-        <div class="fix picam2">
-            <a href=\'javascript:navigator_Go("picam2/index.php");\'>
-                <img src="/images/Camera.png" class="i48" alt="cam">
-            </a>
-        </div>
-        <div class="fix Weg">
-            <form action="floorplan.php" method="GET">
-                <input type="hidden" name="Weg" value="true">';
-    if ($d['Weg']['s']==0) {
-        echo '
-                <input type="image" src="/images/Thuis.png" id="Weg">';
-    } elseif ($d['Weg']['s']==1) {
-        echo '
-                <input type="image" src="/images/Slapen.png" id="Weg">';
-    } elseif ($d['Weg']['s']==2) {
-        echo '
-                <input type="image" src="/images/Weg.png" id="Weg">';
-    }
-        echo '
-            </form>
-        </div>';
+
+
     dimmer('tobi','i60');
     dimmer('zithoek');
     dimmer('eettafel');
@@ -459,13 +244,6 @@ if ($home) {
         schakelaar('Xlight', 'Alarm');
     }
     schakelaar('jbl', 'Light');
-    thermometer('buiten_temp');
-    thermometer('living_temp');
-    thermometer('badkamer_temp');
-    thermometer('kamer_temp');
-    thermometer('tobi_temp');
-    thermometer('alex_temp');
-    thermometer('zolder_temp');
     blinds('zoldertrap');
     if ($d['Weg']['s']>0) {
         secured('zliving');
