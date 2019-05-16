@@ -52,17 +52,12 @@ echo '<pre>';
                 console.log(counter.counter_name);
             }
 
-            var obj = JSON.parse(\'{ "name":"John", "age":30, "city":"New York"}\');
-
         </script>
 	</head>
 	<body>';
 echo '<div id="ajax"></div>';
-echo '<p id="demo"></p>
 
-<script>
-document.getElementById("demo").innerHTML = obj.name + ", " + obj.age;
-</script>';
+';
 
 
 /*---------------------------*/
