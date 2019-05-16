@@ -47,7 +47,7 @@ if (isset($_REQUEST['gpio'])) {
     if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<90&&past('watervandaag')<-90)) {
         $douchegas=$d['douche']['s']*10;
         $douchewater=$d['douche']['m']*1;
-        $euro=($douchegas*0.00065)+($douchewater*0.0055);
+        $euro=($douchegas*0.0004)+($douchewater*0.0055);
         lg('Douche = '.round($euro*100));
         if ($euro>0&&round($euro*100)%450==0) {
             douchewarn($euro, 85);

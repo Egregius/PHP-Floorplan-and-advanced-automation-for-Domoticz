@@ -189,7 +189,7 @@ if ($home) {
                 <tr>
                     <td>D-gas</td>
                     <td>'.$d['douche']['s']*10 .' L</td>
-                    <td>'.number_format(($d['douche']['s']*10*0.00065), 2, ',', '.').' €</td>
+                    <td>'.number_format(($d['douche']['s']*10*0.0004), 2, ',', '.').' €</td>
                 <tr>
                 <tr>
                     <td>D-water</td>
