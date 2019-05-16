@@ -17,6 +17,7 @@ $domoticz=json_decode(
 );
 if ($domoticz) {
     foreach ($domoticz['result'] as $dom) {
+        $type=null;
         $name=$dom['Name'];
         $idx=$dom['idx'];
         if (isset($dom['SwitchType'])) {
@@ -26,12 +27,15 @@ if ($domoticz) {
         }
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
+            $type='thermometer';
         } elseif ($dom['Type']=='Temp + Humidity') {
             $status=$dom['Temp'];
+            $type='thermometer';
         } elseif ($dom['TypeImg']=='current') {
             $status=str_replace(' Watt', '', $dom['Data']);
         } elseif ($name=='luifel') {
             $status=str_replace('%', '', $dom['Level']);
+            $type='luifel';
         } elseif ($switchtype=='Dimmer') {
             if ($dom['Data']=='Off') {
                 $status=0;
@@ -40,6 +44,7 @@ if ($domoticz) {
             } else {
                 $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
             }
+            $type='dimmer';
         } elseif ($switchtype=='Blinds Percentage') {
             if ($dom['Data']=='Open') {
                 $status=0;
@@ -48,6 +53,7 @@ if ($domoticz) {
             } else {
                 $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
             }
+            $type='rollers';
         } elseif ($name=='achterdeur') {
             if ($dom['Data']=='Open') {
                 $status='Closed';
@@ -57,7 +63,8 @@ if ($domoticz) {
         } else {
             $status=$dom['Data'];
         }
-        store($name, $status, $idx, false);
+        $time=TIME;
+        $db->query("INSERT INTO devices (n,i,s,t,dt) VALUES ('$name','$idx','$status','$time','$type') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time',dt='$type';");
         echo $idx.' '.$name.' = '.$status.'<br>';
     }
 }

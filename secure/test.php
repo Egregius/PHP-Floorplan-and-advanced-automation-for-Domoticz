@@ -63,7 +63,7 @@ echo '
         <div id="elec">ELEC</div>
         <div id="zon">ZON</div>
         ';
-
+schakelaar('wc', 'Light');
 
 
 
