@@ -26,6 +26,7 @@ if($home){
         </form>
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b5"/>
+          <input type="submit" value="Foto" name="Foto" class="btn b5"/>
           <input type="submit" value="Refresh" name="Refresh" class="btn b5"/>
         </form>
         </div>
@@ -37,7 +38,7 @@ if($home){
         window.setInterval(function()
         {
             document.getElementById(\'mjpeg_destalex\').src = "jpg.php?random="+new Date().getTime();
-        }, '. 1000/2.');
+        }, '. 1000/2 .');
     </script></body></html>
     ';
 }
