@@ -50,15 +50,17 @@ $local=true;
                                 var time = data[device][\'t\'];
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
-                                console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+
                                 if (type=="On/Off") {
-                                    $(\'#name\').each(function() {
-                                        var text = $(this).text();
-                                        $(this).text(text.replace(\'On\', \'Off\'));
-                                    });
+                                    $("#form").blur(function(){
+                                        $("#name").attr("src", "value.png");
+                                    }
+                                    console.log("Type=" + type + " | Name=" + name + " | Value=" + value + " | Time=" + time + " | Mode=" + mode);
                                 } else if (type=="thermometer") {
-                                } else {
+                                } else if (type=="elec"){
                                     document.getElementById(name).innerHTML = value;
+                                } else {
+                                    console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 }
                             }
                         }

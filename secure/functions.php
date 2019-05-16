@@ -231,7 +231,7 @@ function schakelaar($name,$kind)
     global $d;
     echo '
         <div class="fix '.preg_replace('/\s/', '', $name).' z1">
-            <form method="POST" action="">
+            <form method="POST" action="" id="form">
                 <input type="hidden" name="Naam" value="'.$name.'">';
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">
@@ -374,7 +374,7 @@ function lgcommand($action)
         echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }
-function store($name,$status,$idx=null,$force=true)
+function store($name,$status,$idx=null,$force=true,$type=null)
 {
     global $db, $d, $username;
     $time=TIME;
