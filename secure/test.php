@@ -35,7 +35,7 @@ $local=true;
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                 setInterval(ajax, '.($local===true?'1950':'9950').');
+                 setInterval(ajax, '.($local===true?'50':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
