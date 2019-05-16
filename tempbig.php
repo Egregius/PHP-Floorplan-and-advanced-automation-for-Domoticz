@@ -21,7 +21,6 @@ if ($home===true) {
     if (isset($_REQUEST['sensor'])) {
         $sensor=$_REQUEST['sensor'];
     }
-    session_start();
     if (isset($_REQUEST['f_startdate'])) {
         $_SESSION['f_startdate']=$_REQUEST['f_startdate'];
     }

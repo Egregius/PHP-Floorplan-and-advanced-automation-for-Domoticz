@@ -40,24 +40,20 @@ echo '<pre>';
             function ajax() {
                 $.ajax({
                     url: \'/ajax.php\',
+                    dataType : \'json\',
                     success: function(data) {
-                        $(\'#ajax\').html(data);
+                        for(var item in data) {
+                          console.log(data + item);
+                        }
                     },
                 });
             }
-
-            var jsonData = JSON.parse(ajax());
-            for (var i = 0; i < jsonData.counters.length; i++) {
-                var counter = jsonData.counters[i];
-                console.log(counter.counter_name);
-            }
-
         </script>
 	</head>
 	<body>';
 echo '<div id="ajax"></div>';
 
-';
+
 
 
 /*---------------------------*/
