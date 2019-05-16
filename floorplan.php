@@ -12,6 +12,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+$fetch=true;
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {

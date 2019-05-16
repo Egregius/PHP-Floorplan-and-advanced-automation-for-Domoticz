@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 require '/var/www/config.php';
+$fetch=true;
 require 'functions.php';
 if (isset($_REQUEST['rolluiken'])) {
     $username='rolluiken';

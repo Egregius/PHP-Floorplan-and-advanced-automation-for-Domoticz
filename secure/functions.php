@@ -12,7 +12,9 @@
 require '/var/www/config.php';
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$d=fetchdata();
+if (isset($fetch)) {
+    $d=fetchdata();
+}
 /**
  * Function fetchdata
  *
@@ -20,10 +22,10 @@ $d=fetchdata();
  *
  * @return array $d
  */
-function fetchdata()
+function fetchdata($t=0)
 {
     global $db;
-    $stmt=$db->query("select n,i,s,t,m from devices;");
+    $stmt=$db->query("SELECT n,i,s,t,m FROM devices WHERE t > $t;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$row['n']] = $row;
     }
