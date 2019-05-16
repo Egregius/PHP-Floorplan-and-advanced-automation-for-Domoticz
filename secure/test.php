@@ -41,12 +41,9 @@ echo '<pre>';
                     url: \'/ajax.php\',
                     dataType : \'json\',
                     success: function(data) {
-                        for(var item in data) {
-                            console.log(item + " = ");
-                            console.log(data);
-                            $(\'#item\').html(item);
-                            for(value in item) {
-                                console.log(item + value[0] + item[1]);
+                        for (var device in data) {
+                            if (data.hasOwnProperty(device)) {
+                                console.log(device + " -> " + data[device]);
                             }
                         }
                     },
