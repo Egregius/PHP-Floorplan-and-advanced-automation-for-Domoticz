@@ -19,10 +19,10 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
  *
  * @return array $d
  */
-function fetchdata($t=0)
+function fetchdata()
 {
     global $db;
-    $stmt=$db->query("SELECT n,i,s,t,m FROM devices WHERE t > $t;");
+    $stmt=$db->query("SELECT n,i,s,t,m FROM devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$row['n']] = $row;
     }
