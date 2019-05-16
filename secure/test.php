@@ -15,6 +15,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
+$local=true;
   echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -34,6 +35,7 @@ echo '<pre>';
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
+                 setInterval(ajax, '.($local===true?'1950':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -43,7 +45,10 @@ echo '<pre>';
                     success: function(data) {
                         for (var device in data) {
                             if (data.hasOwnProperty(device)) {
-                                console.log(device + " -> " + data[device]);
+                                var name = data[device][\'n\'];
+                                console.log(name + " -> " + data[device][\'s\'] + " -> " + data[device][\'t\'] + " -> " + data[device][\'m\']);
+
+                                $(\'#name\').html(data);
                             }
                         }
                     },
@@ -53,8 +58,8 @@ echo '<pre>';
 	</head>
 	<body>';
 echo '
-        <div id="elec"></div>
-        <div id="zon"></div>
+        <div id="elec">ELEC</div>
+        <div id="zon">ZON</div>
         ';
 
 
