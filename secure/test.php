@@ -34,7 +34,6 @@ echo '<pre>';
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, 1000);
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -43,7 +42,12 @@ echo '<pre>';
                     dataType : \'json\',
                     success: function(data) {
                         for(var item in data) {
-                          console.log(data + item);
+                            console.log(item + " = ");
+                            console.log(data);
+                            $(\'#item\').html(item);
+                            for(value in item) {
+                                console.log(item + value[0] + item[1]);
+                            }
                         }
                     },
                 });
@@ -51,7 +55,10 @@ echo '<pre>';
         </script>
 	</head>
 	<body>';
-echo '<div id="ajax"></div>';
+echo '
+        <div id="elec"></div>
+        <div id="zon"></div>
+        ';
 
 
 

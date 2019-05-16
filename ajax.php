@@ -12,7 +12,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$t=time()-10;
+$t=time()-5;
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt=$db->query("SELECT n,i,s,t,m FROM devices WHERE t > $t;");
