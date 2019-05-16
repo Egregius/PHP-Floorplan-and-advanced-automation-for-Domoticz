@@ -36,13 +36,13 @@ if ($home) {
             $refresh2=round(2000/$_SESSION['refreshrate']);
         }
     }
-
+    echo '<pre><br><br>';print_r($_SESSION);echo '</pre>';
     if(isset($_POST['Record'])){
-        file_get_contents("http://192.168.2.211/fifo_command.php?cmd=record%20on%205%2055");
-        file_get_contents("http://192.168.2.213/fifo_command.php?cmd=record%20on%205%2055");
+        file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
+        file_get_contents("http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055");
     }elseif(isset($_POST['Foto'])){
-        shell_exec('curl -s "http://192.168.2.211/telegram.php?snapshot=true" &');
-        shell_exec('curl -s "http://192.168.2.213/telegram.php?snapshot=true" &');
+        shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
+        shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" &');
     }elseif(isset($_POST['Licht'])){
         sw('voordeur');
     }
