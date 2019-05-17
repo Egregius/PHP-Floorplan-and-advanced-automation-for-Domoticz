@@ -207,21 +207,21 @@ if ($home) {
     dimmer('alex','i60');
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
-    schakelaar('kristal', 'Light');
-    schakelaar('bureel', 'Light');
-    schakelaar('inkom', 'Light');
-    schakelaar('keuken', 'Light');
-    schakelaar('wasbak', 'Light');
-    schakelaar('kookplaat', 'Light');
-    schakelaar('werkblad1', 'Light');
-    schakelaar('voordeur', 'Light');
-    schakelaar('hall', 'Light');
-    schakelaar('garage', 'Light');
-    schakelaar('garageled', 'Light');
-    schakelaar('zolderg', 'Light');
-    schakelaar('tuin', 'Light');
-    schakelaar('zolder', 'Light');
-    schakelaar('wc', 'Light');
+    schakelaar('kristal');
+    schakelaar('bureel');
+    schakelaar('inkom');
+    schakelaar('keuken');
+    schakelaar('wasbak');
+    schakelaar('kookplaat');
+    schakelaar('werkblad1');
+    schakelaar('voordeur');
+    schakelaar('hall');
+    schakelaar('garage');
+    schakelaar('garageled');
+    schakelaar('zolderg');
+    schakelaar('tuin');
+    schakelaar('zolder');
+    schakelaar('wc');
     schakelaar('bureeltobi', 'Plug');
     schakelaar('tvtobi', 'Plug');
     schakelaar('badkamervuur1', 'Fire');
@@ -230,14 +230,14 @@ if ($home) {
     schakelaar('heater2', 'Fire');
     schakelaar('heater3', 'Fire');
     schakelaar('heater4', 'Fire');
-    schakelaar('diepvries', 'Light');
+    schakelaar('diepvries');
     if ($d['Weg']['s']==0||$d['poortrf']['s']=='On') {
         schakelaar('poortrf', 'Alarm');
     }
     if ($d['Xlight']['s']!='Off') {
         schakelaar('Xlight', 'Alarm');
     }
-    schakelaar('jbl', 'Light');
+    schakelaar('jbl');
     blinds('zoldertrap');
     if ($d['Weg']['s']>0) {
         secured('zliving');

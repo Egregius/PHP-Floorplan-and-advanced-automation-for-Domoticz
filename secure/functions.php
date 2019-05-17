@@ -23,7 +23,7 @@ $d=fetchdata();
 function fetchdata()
 {
     global $db;
-    $stmt=$db->query("select n,i,s,t,m from devices;");
+    $stmt=$db->query("select n,i,s,t,m,dt from devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$row['n']] = $row;
     }
@@ -262,10 +262,10 @@ function dimmer($name,$class='i70')
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/Light_Off.png" class="'.$class.'">';
+			    <input type="image" src="/images/light_Off.png" class="'.$class.'">';
     } else {
         echo'
-                <input type="image" src="/images/Light_On.png" class="'.$class.'">
+                <input type="image" src="/images/light_On.png" class="'.$class.'">
                 <div class="fix center dimmerlevel '.$class.'">
                     '.$d[$name]['s'].'
                 </div>';
@@ -283,7 +283,7 @@ function idx($name)
         return 0;
     }
 }
-function schakelaar($name,$kind)
+function schakelaar($name)
 {
     global $d;
     echo '
@@ -292,10 +292,10 @@ function schakelaar($name,$kind)
                 <input type="hidden" name="Naam" value="'.$name.'">';
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On" id="action'.$name.'">
-                <input type="image" src="/images/'.$kind.'_Off.png" id="'.$name.'">'
+                <input type="image" src="/images/'.$d[$name]['dt'].'_Off.png" id="'.$name.'">'
     :'
                 <input type="hidden" name="Actie" value="Off" id="action'.$name.'">
-                <input type="image" src="/images/'.$kind.'_On.png" id="'.$name.'">';
+                <input type="image" src="/images/'.$d[$name]['dt'].'_On.png" id="'.$name.'">';
     echo '
             </form>
         </div>';
