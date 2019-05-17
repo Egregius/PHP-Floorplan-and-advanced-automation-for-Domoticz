@@ -184,5 +184,6 @@ td{text-align:right;font-size:1.1em;}
 .zkeuken{top:115px;left:345px;width:129px;height:133px;}
 .zinkom{top:51px;left:345px;width:129px;height:56px;}
 .zgarage{top:256px;left:89px;width:315px;height:139px;}
+.zhall{top:403px;left:214px;width:127px;height:66px;}
 .zhalla{top:403px;left:214px;width:127px;height:66px;}
 .zhallb{top:469px;left:214px;width:44px;height:66px;}

@@ -249,20 +249,11 @@ if ($home) {
         secured('zhalla');
         secured('zhallb');
     }
-    if ($d['pirliving']['s']=='On') {
-        motion('zliving');
-    }
-    if ($d['pirkeuken']['s']=='On') {
-        motion('zkeuken');
-    }
-    if ($d['pirinkom']['s']=='On') {
-        motion('zinkom');
-    }
+    motion('living');
+    motion('keuken');
+    motion('inkom');
     motion('garage');
-    if ($d['pirhall']['s']=='On') {
-        motion('zhalla');
-        motion('zhallb');
-    }
+    motion('hall');
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);
     showTimestamp('pirliving', 0);
@@ -315,11 +306,11 @@ if ($home) {
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
-        <div class="fix z0 diepvries_temp red">
+        <div class="fix z0 diepvries_temp red" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
         </div>'
      : '
-        <div class="fix z0 diepvries_temp">
+        <div class="fix z0 diepvries_temp" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
         </div>';
     if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
