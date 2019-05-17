@@ -14,6 +14,7 @@
  **/
 $fetch=true;
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '
@@ -488,23 +489,7 @@ if ($home) {
             '.$d['gcal']['m'].'
         </div>';
     }
-    if (!empty($d['icon']['s'])) {
-        if ($udevice=='Mac') {
-            echo '
-        <div class="fix weather">
-            <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
-            </a>
-        </div>';
-        } else {
-            echo '
-        <div class="fix weather">
-            <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
-            </a>
-        </div>';
-        }
-    }
+
     echo '
         <div class="fix floorplan2icon">
             <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
@@ -538,6 +523,7 @@ if ($home) {
             </form>
         </div>';
     echo '<div id="ajaxinit"></div>';
+    sidebar();
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
