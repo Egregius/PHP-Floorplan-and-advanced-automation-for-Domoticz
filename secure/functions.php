@@ -61,8 +61,8 @@ function ajax()
                                 var type = data[device][\'dt\'];
 
                                 if (name=="time") {
-                                    document.getElementById(name).innerHTML = value;
-                                } else if (type=="Light") {
+                                    document.getElementById("clock").innerHTML = time;
+                                } else if (type=="light") {
                                     if (value=="On") {
                                         $(\'#\' + name).attr("src", "/images/Light_On.png");
                                         $(\'#action\' + name).val("Off");
