@@ -293,8 +293,9 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
-                if ($d['Rliving']['m']==0  && $Rliving>0 && $TRliving>$kwartier) {
-                    sl('Rliving', 0);$msg.='Rliving open__';
+                if ($d['Rliving']['m']==0  && $d['Rliving']['s']>0 && past('Rliving')>900) {
+                    sl('Rliving', 0);
+                    $msg.='Rliving open__';
                 }
                 foreach ($beneden as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {

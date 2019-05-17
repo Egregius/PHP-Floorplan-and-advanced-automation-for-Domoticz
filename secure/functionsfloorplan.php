@@ -67,6 +67,14 @@ function ajax()
                                     try {
                                         document.getElementById(name).innerHTML = value + " W";
                                     } catch {}
+                                } else if (name=="zon"){
+                                    try {
+                                        document.getElementById(name).innerHTML = value;
+                                    } catch {}
+                                } else if (name=="zonvandaag"){
+                                    try {
+                                        document.getElementById(name).innerHTML = value;
+                                    } catch {}
                                 } else if (type=="light") {
                                     try {
                                         if (value=="On") {

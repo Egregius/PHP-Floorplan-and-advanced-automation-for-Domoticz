@@ -155,7 +155,7 @@ if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
     $wind=$dswind;
 }
 if ($wind!=$prevwind) {
-    store('wind', $wind);
+    store('wind', round($wind, 2));
 }
 
 $windhist=json_decode($d['wind']['m']);
