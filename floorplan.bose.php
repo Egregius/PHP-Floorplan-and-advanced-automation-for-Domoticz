@@ -50,7 +50,7 @@ if ($home) {
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style type="text/css">
-			.btn{height:60px;}
+			.btn{height:60px;margin:1px;}
 			.input{width:78px;}
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
@@ -151,6 +151,7 @@ if ($home) {
                 echo '</div>';
                 echo '<br>';
                 $levels=array(-9,-8,-7,-6,-5,-4,-3,-2,-1,0);
+                echo '<div id="bass">';
                 foreach ($levels as $k) {
                     if ($k==$bass) {
                         echo '
@@ -160,7 +161,7 @@ if ($home) {
                 <button type="submit" name="bass" value="'.$k.'" class="btn volume">'.$k.'</button>';
                     }
                 }
-
+                echo '</div>';
                 if ($nowplaying['@attributes']['source']=='SPOTIFY') {
                     echo '
                 <h4>Spotify</h4>';
