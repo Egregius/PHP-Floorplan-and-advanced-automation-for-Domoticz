@@ -128,6 +128,7 @@ function ajax()
                                     try {
                                         if (value==0) {
                                             $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                            document.getElementById("level" + name).innerHTML = "";
                                         } else {
                                             $(\'#\' + name).attr("src", "/images/Light_On.png");
                                             document.getElementById("level" + name).innerHTML = value;
