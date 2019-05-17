@@ -248,8 +248,15 @@ function ajaxbose($ip)
                         });
                         document.getElementById("bass").innerHTML = html;
                         document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
+                        if (data["nowplaying"]["@attributes"]["source"]=="SPOTIFY") {
+                            document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
+                            document.getElementById("track").innerHTML = data["nowplaying"]["track"];
+                        } else if (data["nowplaying"]["@attributes"]["source"]=="TUNEIN") {
+                            document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
+                            document.getElementById("track").innerHTML = data["nowplaying"]["track"];
+                        }
 
-                        console.log(data["nowplaying"]["@attributes"]["source"]);
+                        console.log(data["nowplaying"]["artist"]);
                     }
                 })
             }

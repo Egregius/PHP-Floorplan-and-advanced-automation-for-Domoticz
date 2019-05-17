@@ -168,13 +168,12 @@ if ($home) {
                 <h4 id="source">Spotify</h4>';
                     if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
                         echo '
-                <h4 id="artist">'.$nowplaying['artist'].'<br>';
+                <h4 id="artist">'.$nowplaying['artist'].'</h4><br>';
                     }
                     if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-                        echo $nowplaying['track'];
+                        echo '<span id="track">'.$nowplaying['track'].'</span>';
                     }
-                    echo '
-                </h4>';
+
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
                 <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
@@ -188,7 +187,7 @@ if ($home) {
                 <h4  id="source">Internet Radio</h4>';
                     echo '
                 <h4 id="artist">'.$nowplaying['stationName'].'</h4>';
-                    echo $nowplaying['artist'];
+                    echo '<span id="track">'.$nowplaying['artist'].'</span>';
                     echo '
                 <br>
                 <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
