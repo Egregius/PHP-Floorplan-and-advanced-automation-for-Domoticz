@@ -40,7 +40,11 @@ function ajax()
                                 var type = data[device][\'dt\'];
                                 if (name=="time") {
                                     try {
-                                        document.getElementById("clock").innerHTML = time;
+                                        var date = new Date(time*1000);
+                                        var hours = date.getHours();
+                                        var minutes = "0" + date.getMinutes();
+                                        var seconds = "0" + date.getSeconds();
+                                        document.getElementById("clock").innerHTML = hours + \':\' + minutes.substr(-2) + \':\' + seconds.substr(-2);
                                     } catch {}
                                 } else if (name=="minmaxtemp") {
                                     try {
