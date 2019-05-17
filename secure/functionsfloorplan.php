@@ -24,7 +24,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'250':'1900').');
+                setInterval(ajax, '.($local===true?'333':'950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -74,6 +74,14 @@ function ajax()
                                 } else if (name=="zonvandaag"){
                                     try {
                                         document.getElementById(name).innerHTML = value;
+                                    } catch {}
+                                } else if (name=="gasvandaag"){
+                                    try {
+                                        document.getElementById(name).innerHTML = value / 100;
+                                    } catch {}
+                                } else if (name=="watervandaag"){
+                                    try {
+                                        document.getElementById(name).innerHTML = value / 1000;
                                     } catch {}
                                 } else if (type=="light") {
                                     try {

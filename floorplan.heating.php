@@ -83,7 +83,7 @@ if ($home) {
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);
-            lgsql($user, $_POST['Naam'].'_mode', $_POST['Actie']);
+            lgsql($user, $_POST['Naam'].'_mode', 'reset auto');
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to Automatic');
             $d[$_POST['Naam'].'_set']['m']=0;
             include 'secure/_verwarming.php';

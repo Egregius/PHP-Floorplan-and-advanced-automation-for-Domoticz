@@ -165,24 +165,24 @@ if ($home) {
                 <tr>
                     <td>Elec:</td>
                     <td><font color="'.$verbruikcolor.'" id="elec">'.$d['elec']['s'].' W</font></td>
-                    <td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
+                    <td><font color="'.$vandaagcolor.'" id="elecvandaag">'.$d['elec']['m'].' kWh</font></td>
                 </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
         echo'
                 <tr>
                     <td>Zon:</td>
-                    <td><font color="'.$zoncolor.'"><span id="zon">'.$d['zon']['s'].'</span> W</font></td>
-                    <td><font color="'.$zonvandaagcolor.'"><span id="zonvandaag">'.number_format($d['zonvandaag']['s'], 1, ',', '.').'</span> kWh</font></td>
+                    <td><font color="'.$zoncolor.'" id="zon">'.$d['zon']['s'].' W</font></td>
+                    <td><font color="'.$zonvandaagcolor.'" id="zonvandaag">'.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
                 </tr>';
     }
     echo '
                 <tr>
                     <td><font color="'.$gascolor.'">Gas:</font></td>
-                    <td colspan=2><font color="'.$gasvandaagcolor.'">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
+                    <td colspan=2><font color="'.$gasvandaagcolor.'" id="gasvandaag">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
                 </tr>
                 <tr>
                     <td><font color="'.$watercolor.'">Water:</font></td>
-                    <td colspan=2><font color="'.$watervandaagcolor.'">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
+                    <td colspan=2><font color="'.$watervandaagcolor.'" id="watervandaag">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
                 </tr>';
     if ($d['douche']['s']>0||$d['douche']['m']>0) {
         echo '

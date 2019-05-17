@@ -645,7 +645,7 @@ function bosepreset($pre,$ip=3)
 function bosezone($ip)
 {
     $d=fetchdata();
-    if ($d['Weg']['s']==0) {
+    if ($d['Weg']['s']<=1) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
             bosekey("POWER", 0, 101);
             sw('bose101', 'On');
