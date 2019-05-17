@@ -67,11 +67,17 @@ function ajax()
                                     document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
                                 } else if (type=="light") {
                                     if (value=="On") {
-                                        $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                        $(\'#\' + name).attr("src", "/images/light_On.png");
                                         $(\'#action\' + name).val("Off");
                                     } else if (value=="Off") {
-                                        $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                        $(\'#\' + name).attr("src", "/images/light_Off.png");
                                         $(\'#action\' + name).val("On");
+                                    }
+                                } else if (type=="bose") {
+                                    if (value=="On") {
+                                        $(\'#\' + name).attr("src", "/images/Bose_On.png");
+                                    } else if (value=="Off") {
+                                        $(\'#\' + name).attr("src", "/images/Bose_Off.png");
                                     }
                                 } else if (type=="dimmer") {
                                      if (value==0) {
@@ -87,6 +93,10 @@ function ajax()
                                     } else {
                                         element.classList.remove("motion");
                                     }
+                                    var date = new Date(time*1000);
+                                    var hours = date.getHours();
+                                    var minutes = "0" + date.getMinutes();
+                                    document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
                                 } else if (type=="contact") {
                                     var element = document.getElementById(name);
                                     if (value=="Open") {
@@ -94,6 +104,10 @@ function ajax()
                                     } else {
                                         element.classList.remove("red");
                                     }
+                                    var date = new Date(time*1000);
+                                    var hours = date.getHours();
+                                    var minutes = "0" + date.getMinutes();
+                                    document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
                                 } else if (type=="thermometer") {
                                      if (name=="diepvries_temp") {
                                         document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";

@@ -282,27 +282,27 @@ if ($home) {
     echo '
         <div class="fix bose">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=101");\'>
-                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
+                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose101" alt="">
             </a>
         </div>
         <div class="fix bosebadkamer">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=102");\'>
-                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bosebadkamer" alt="">
+                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bose102" alt="">
             </a>
         </div>
         <div class="fix bosekamer">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=103");\'>
-                <img src="images/Bose_'.($d['bose103']['s']=='On'?'On':'Off').'.png" id="bosekamer" alt="">
+                <img src="images/Bose_'.($d['bose103']['s']=='On'?'On':'Off').'.png" id="bose103" alt="">
             </a>
         </div>
         <div class="fix bosegarage">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=104");\'>
-                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bosegarage" alt="">
+                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bose104" alt="">
             </a>
         </div>
         <div class="fix bosebuiten">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=105");\'>
-                <img src="images/Bose_'.($d['bose105']['s']=='On'?'On':'Off').'.png" id="bosebuiten" alt="">
+                <img src="images/Bose_'.($d['bose105']['s']=='On'?'On':'Off').'.png" id="bose105" alt="">
             </a>
         </div>';
     echo $d['diepvries_temp']['s'] > -15 ? '
