@@ -98,8 +98,6 @@ if ($home) {
         } elseif ($_REQUEST['nas']=='wake') {
             shell_exec('secure/wakenas.sh');
         }
-        header("Location: floorplan.media.php");
-        die("Redirecting to: floorplan.media.php");
     } elseif (isset($_POST['Scene'])) {
         if ($_POST['Scene']=='TUNER') {
             ud('miniliving1s', 0, 'On');
@@ -113,9 +111,6 @@ if ($home) {
             }
             ud('miniliving4l', 0, 'On');
         }
-        usleep(100000);
-        header("Location: floorplan.media.php");
-        die("Redirecting to: floorplan.media.php");
     } elseif (isset($_POST['vol'])) {
         @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');
         usleep(120000);
