@@ -226,7 +226,6 @@ function ajax()
                         }
                     },
                 });
-                console.log("timestamp = " + $LastUpdateTime);
             }
         </script>';
 }

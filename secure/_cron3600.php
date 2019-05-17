@@ -143,10 +143,10 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         );
         if (isset($uv['result'])) {
             if ($uv['result']['uv']!=$d['uv']['s']) {
-                store('uv', $uv['result']['uv']);
+                store('uv', round($uv['result']['uv'], 1));
             }
             if ($uv['result']['uv_max']!=$d['uv']['m']) {
-                storemode('uv', $uv['result']['uv_max']);
+                storemode('uv', round($uv['result']['uv_max'], 1));
             }
         }
     } else {
