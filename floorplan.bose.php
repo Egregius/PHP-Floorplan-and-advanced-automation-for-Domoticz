@@ -107,7 +107,7 @@ if ($home) {
     echo '
     <body>
         <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="clock">
                 '.strftime("%k:%M:%S", TIME).'
             </a>
         </div>

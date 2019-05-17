@@ -219,13 +219,9 @@ function ajaxbose($ip)
                     url: \'/ajaxfloorplan.bose.php?ip='.$ip.'\',
                     dataType : \'json\',
                     success: function(data) {
-                        for (var type in data) {
-
-                            var volume = data["volume"]["actualvolume"];
-                            document.getElementById("volume").innerHTML = "<button type="submit" name="volume" value="'.$k.'" class="btn volume btna">'.$k.'</button>
-                            ";
-                            console.log(data["volume"]["actualvolume"]);
-                        }
+                        var volume = data["volume"]["actualvolume"];
+                        document.getElementById("volume").innerHTML = "<button type=\"submit\" name=\"volume\" value=\"" + (volume - 10) + "\" class=\"btn volume\">" + (volume - 10) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 7) + "\" class=\"btn volume\">" + (volume - 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 4) + "\" class=\"btn volume\">" + (volume - 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 2) + "\" class=\"btn volume\">" + (volume - 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 1) + "\" class=\"btn volume\">" + (volume - 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + volume + "\" class=\"btn volume btna\">" + volume + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 1) + "\" class=\"btn volume\">" + (volume + 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 2) + "\" class=\"btn volume\">" + (volume + 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 4) + "\" class=\"btn volume\">" + (volume + 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 7) + "\" class=\"btn volume\">" + (volume + 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 10) + "\" class=\"btn volume\">" + (volume + 10) + "</button>";
+                        console.log(data["volume"]["actualvolume"]);
                     }
                 })
             }
