@@ -264,9 +264,6 @@ if ($home) {
             }
             include 'secure/_rolluiken.php';
             //echo '</pre></div>';
-            usleep(100000);
-            header("Location: floorplan.heating.php");
-            die("Redirecting to: floorplan.heating.php");
         } else {
             $name=$_REQUEST['verdieping'];
             echo '
@@ -410,9 +407,6 @@ if ($home) {
                 $d['heating']['s']=3;
             }
             include 'secure/_verwarming.php';
-            usleep(100000);
-            header("Location: floorplan.heating.php");
-            die("Redirecting to: floorplan.heating.php");
         }
     }
     if (isset($_REQUEST['SetSetpoint'])) {

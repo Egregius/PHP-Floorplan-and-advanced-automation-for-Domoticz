@@ -92,46 +92,14 @@ if ($home) {
     showTimestamp('RkamerR', 90);
     showTimestamp('achterdeur', 270);
     showTimestamp('poort', 90);
-    if ($d['poort']['s']=='Open') {
-        echo '
-        <div class="fix poort">
-        </div>';
-    }
-    if ($d['achterdeur']['s']=='Open') {
-        echo '
-        <div class="fix achterdeur">
-        </div>';
-    }
-    if ($d['raamliving']['s']=='Open') {
-        echo '
-        <div class="fix raamliving">
-        </div>';
-    }
-    if ($d['raamtobi']['s']=='Open') {
-        echo '
-        <div class="fix raamtobi">
-        </div>';
-    }
-    if ($d['raamalex']['s']=='Open') {
-        echo '
-        <div class="fix raamalex">
-        </div>';
-    }
-    if ($d['raamkamer']['s']=='Open') {
-        echo '
-        <div class="fix raamkamer">
-        </div>';
-    }
-    if ($d['deurbadkamer']['s']=='Open') {
-        echo '
-        <div class="fix deurbadkamer">
-        </div>';
-    }
-    if ($d['raamhall']['s']=='Open') {
-        echo '
-        <div class="fix raamhall">
-        </div>';
-    }
+    contact('poort');
+    contact('achterdeur');
+    contact('raamliving');
+    contact('raamtobi');
+    contact('raamalex');
+    contact('raamkamer');
+    contact('deurbadkamer');
+    contact('raamhall');
     echo '
 
         <div class="fix floorplan2icon">
