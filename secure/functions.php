@@ -44,7 +44,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'100':'1000').');
+                setInterval(ajax, '.($local===true?'500':'1000').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -77,6 +77,7 @@ function ajax()
                                         $(\'#\' + name).attr("src", "/images/Light_On.png");
                                         document.getElementById("level" + name).innerHTML = value;
                                      }
+                                } else if (type=="pir") {
                                 } else if (type=="thermometer") {
                                     document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                 } else if (type=="elec"){
@@ -625,9 +626,16 @@ function secured($name)
 }
 function motion($name)
 {
-    echo '
-        <div class="fix motion '.$name.'">
+    global $d;
+    if ($d[$name]['s']=='On') {
+        echo '
+        <div class="fix motion z'.$name.' z0">
         </div>';
+    } else {
+        echo '
+        <div class="fix z'.$name.' z0">
+        </div>';
+    }
 }
 function zwavecancelaction()
 {

@@ -139,7 +139,7 @@ if (isset($ds['hourly']['data'])) {
         store('minmaxtemp', $mintemp);
     }
 }
-store('buiten_temp', $d['buiten_temp']['s']);
+store('buiten_temp', round($d['buiten_temp']['s'],1));
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
     $wind=($prevwind+$owwind+$dswind)/3;
