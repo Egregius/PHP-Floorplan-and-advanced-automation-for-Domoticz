@@ -139,7 +139,7 @@ td{text-align:right;font-size:1.1em;}
 
 /* Deuren */
 .red{background:rgba(255,0,0,1);}
-.poort{top:262px;left:404px;width:25px;height:128px;z-index:-10;}
+.poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}
 .achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
 .deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
 .tachterdeur{top:278px;left:74px;}
@@ -157,7 +157,7 @@ td{text-align:right;font-size:1.1em;}
 .raamliving{top:46px;left:87px;width:12px;height:165px;z-index:-10;}
 .raamtobi{top:448px;left:87px;width:12px;height:44px;z-index:-10;}
 .raamalex{top:568px;left:87px;width:12px;height:44px;z-index:-10;}
-.raamkamer{top:586px;left:469px;width:12px;height:44px;z-index:-10;}
+.raamkamer{top:586px;left:465px;width:12px;height:44px;z-index:-10;}
 .raamhall{top:403px;left:214px;width:50px;height:12px;z-index:-10;}
 
 /* Thermometers */
