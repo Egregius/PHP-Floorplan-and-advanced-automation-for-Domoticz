@@ -168,12 +168,12 @@ if ($home) {
         echo '
                             <input type="hidden" name="Actie" value="On">
                             <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_Off.png">';
+                            &nbsp;<input type="image" src="images/fire_Off.png">';
     } else {
         echo'
                             <input type="hidden" name="Actie" value="Off">
                             <input type="hidden" name="Naam" value="brander">
-                            &nbsp;<input type="image" src="images/Fire_On.png">';
+                            &nbsp;<input type="image" src="images/fire_On.png">';
     }
     echo '
 	                    </form>
@@ -194,7 +194,7 @@ if ($home) {
                             <input type="hidden" name="Schakel" value="true">
                             <input type="hidden" name="Actie" value="On">
                             <input type="hidden" name="Naam" value="heatingauto">
-                            <input type="image" src="images/Fire_Off.png">&nbsp;
+                            <input type="image" src="images/fire_Off.png">&nbsp;
                         </form>
                     </td>';
     } else {
@@ -207,7 +207,7 @@ if ($home) {
                             <input type="hidden" name="Schakel" value="true">
                             <input type="hidden" name="Actie" value="Off">
                             <input type="hidden" name="Naam" value="heatingauto">
-                            <input type="image" src="images/Fire_On.png">&nbsp;
+                            <input type="image" src="images/fire_On.png">&nbsp;
                         </form>
                     </td>';
     }
@@ -217,7 +217,7 @@ if ($home) {
                             <input type="hidden" name="heating" value="true">';
     if ($d['heating']['s']==0) {
         echo '
-                            &nbsp;<input type="image" src="images/Fire_Off.png">
+                            &nbsp;<input type="image" src="images/fire_Off.png">
                         </form>
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">
@@ -240,7 +240,7 @@ if ($home) {
                     </td>';
     } elseif ($d['heating']['s']==3) {
         echo '
-                        &nbsp;<input type="image" src="images/Fire_On.png">
+                        &nbsp;<input type="image" src="images/fire_On.png">
                         </form>
                     </td>
                     <td align="left" height="60" width="80px" style="line-height:18px">

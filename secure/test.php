@@ -31,15 +31,10 @@ $local=true;
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">';
-    ajax();
 	echo '
 	</head>
 	<body>';
-echo '
-        <div id="elec">ELEC</div>
-        <div id="zon">ZON</div>
-        ';
-schakelaar('wc', 'Light');
+telegram('test');
 
 print_r($_REQUEST);
 
