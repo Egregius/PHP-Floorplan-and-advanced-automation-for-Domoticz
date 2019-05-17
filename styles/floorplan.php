@@ -137,26 +137,27 @@ td{text-align:right;font-size:1.1em;}
 .nas{top:70px;left:280px;}
 
 /* Deuren */
-.poort{top:262px;left:404px;width:25px;height:128px;background:rgba(255,0,0,1);z-index:-10;}
-.achterdeur{top:264px;left:81px;width:30px;height:48px;background:rgba(255,0,0,1);z-index:-10;}
-.deurbadkamer{top:421px;left:341px;width:7px;height:46px;background:rgba(255,0,0,1);z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
+.red{background:rgba(255,0,0,1);}
+.poort{top:262px;left:404px;width:25px;height:128px;z-index:-10;}
+.achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
+.deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
 .tachterdeur{top:278px;left:74px;}
 .tdeurinkom{top:67px;left:324px;}
 .tdeurgarage{top:244px;left:344px;}
 .tpoort{top:315px;left:376px;}
-.deurinkom{top:56px;left:338px;width:7px;height:46px;background:rgba(255,0,0,1);z-index:-10;}
-.deurgarage{top:248px;left:341px;width:46px;height:8px;background:rgba(255,0,0,1);z-index:-10;}
+.deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}
+.deurgarage{top:248px;left:341px;width:46px;height:8px;z-index:-10;}
 
 /* Ramen */
 .traamliving{top:72px;left:75px;}
 .traamtobi{top:462px;left:75px;}
 .traamalex{top:581px;left:75px;}
 .traamkamer{top:598px;left:455px;}
-.raamliving{top:46px;left:87px;width:12px;height:165px;background:rgba(255,0,0,1);z-index:-10;}
-.raamtobi{top:448px;left:87px;width:12px;height:44px;background:rgba(255,0,0,1);z-index:-10;}
-.raamalex{top:568px;left:87px;width:12px;height:44px;background:rgba(255,0,0,1);z-index:-10;}
-.raamkamer{top:586px;left:469px;width:12px;height:44px;background:rgba(255,0,0,1);z-index:-10;}
-.raamhall{top:403px;left:214px;width:50px;height:12px;background:rgba(255,0,0,1);z-index:-10;}
+.raamliving{top:46px;left:87px;width:12px;height:165px;z-index:-10;}
+.raamtobi{top:448px;left:87px;width:12px;height:44px;z-index:-10;}
+.raamalex{top:568px;left:87px;width:12px;height:44px;z-index:-10;}
+.raamkamer{top:586px;left:469px;width:12px;height:44px;z-index:-10;}
+.raamhall{top:403px;left:214px;width:50px;height:12px;z-index:-10;}
 
 /* Thermometers */
 .living_temp{top:95px;left:193px;}

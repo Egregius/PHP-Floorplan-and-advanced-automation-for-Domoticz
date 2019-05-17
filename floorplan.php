@@ -37,7 +37,7 @@ if ($home) {
 	    <link rel="manifest" href="/manifest.json">
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=4">
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>

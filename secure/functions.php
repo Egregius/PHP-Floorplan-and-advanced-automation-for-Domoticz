@@ -84,6 +84,13 @@ function ajax()
                                     } else {
                                         element.classList.remove("motion");
                                     }
+                                } else if (type=="contact") {
+                                    var element = document.getElementById(name);
+                                    if (value=="Open") {
+                                        element.classList.add("red");
+                                    } else {
+                                        element.classList.remove("red");
+                                    }
                                 } else if (type=="thermometer") {
                                     document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                 } else if (type=="elec"){
@@ -552,7 +559,11 @@ function contact($name)
 {
     global $d;
     if ($d[$name]['s']=='Open') {
-        echo '<div class="fix '.$name.'"></div>';
+        echo '
+            <div class="fix red '.$name.'" id="'.$name.'"></div>';
+    } else {
+        echo '
+            <div class="fix '.$name.'" id="'.$name.'"></div>';
     }
 }
 function thermostaat($name,$top,$left)
