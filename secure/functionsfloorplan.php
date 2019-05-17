@@ -247,13 +247,17 @@ function ajaxbose($ip)
                             }
                         });
                         document.getElementById("bass").innerHTML = html;
-                        document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
+
                         if (data["nowplaying"]["@attributes"]["source"]=="SPOTIFY") {
+                            document.getElementById("source").innerHTML = "Spotify";
                             document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
                             document.getElementById("track").innerHTML = data["nowplaying"]["track"];
                         } else if (data["nowplaying"]["@attributes"]["source"]=="TUNEIN") {
-                            document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
-                            document.getElementById("track").innerHTML = data["nowplaying"]["track"];
+                            document.getElementById("source").innerHTML = "Internet Radio";
+                            document.getElementById("artist").innerHTML = data["nowplaying"]["track"];
+                            document.getElementById("track").innerHTML = data["nowplaying"]["artist"];
+                        } else {
+                            document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
                         }
 
                         console.log(data["nowplaying"]["artist"]);
