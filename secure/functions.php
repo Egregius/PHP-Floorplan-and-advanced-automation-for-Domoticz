@@ -78,7 +78,7 @@ function ajax()
                                         document.getElementById("level" + name).innerHTML = value;
                                      }
                                 } else if (type=="thermometer") {
-
+                                    document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                 } else if (type=="elec"){
                                     document.getElementById(name).innerHTML = value + " W";
                                 } else {
@@ -536,7 +536,7 @@ function thermometer($name)
             <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
             </div>
             <img src="/images/temp.png" height="100px" width="auto" alt="'.$name.'">
-            <div class="fix center" style="top:73px;left:5px;width:30px;">
+            <div class="fix center" style="top:73px;left:5px;width:30px;" id="'.$name.'">
                 '.number_format($temp, 1, ',', '').'
             </div>
         </div>';
