@@ -100,13 +100,6 @@ if ($home) {
     contact('raamkamer');
     contact('deurbadkamer');
     contact('raamhall');
-    echo '
-
-        <div class="fix floorplan2icon">
-            <a href=\'javascript:navigator_Go("floorplan.others.php");\'>
-                <img src="/images/plus.png" class="i60" alt="plus">
-            </a>
-        </div>';
     $bigdif=$d['heating']['m'];
     echo '
         <div class="fix divsetpoints z">

@@ -483,7 +483,6 @@ if ($home) {
             </a>
         </div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-
     thermometer('living_temp');
     thermometer('badkamer_temp');
     thermometer('kamer_temp');

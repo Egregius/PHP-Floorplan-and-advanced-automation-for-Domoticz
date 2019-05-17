@@ -641,7 +641,7 @@ function bose($ip)
 {
     global $d;
     echo '
-        <div class="fix bose'.$ip.'">
+        <div class="fix bose'.$ip.'" id="bosediv'.$ip.'">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
                 <img src="images/Bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
             </a>
@@ -668,9 +668,15 @@ function sidebar()
         }
     }
     thermometer('buiten_temp');
-    bose(105);
+    if ($d['bose105']['m']=='Online') {
+        bose(105);
+    } else {
+        echo '
+        <div class="fix bose105" id="bosediv105">
+        </div>';
+    }
     echo '
-            <div class="fix mediabuttons">
+        <div class="fix mediabuttons">
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
                 <img src="/images/denon_';
     echo $d['denonpower']['s']=='ON'?'On':'Off';
@@ -697,8 +703,8 @@ function sidebar()
     echo '.png" class="i48" alt="nvidia">
 		    </a>
 		    <br>
-		    </div>
-            <div class="fix center zon">
+        </div>
+        <div class="fix center zon">
             <small>&#x21e7;</small><span id="maxtemp">'.number_format($d['minmaxtemp']['m'], 1, ',', '').'</span>°C<br>
             <small>&#x21e9;</small><span id="mintemp">'.number_format($d['minmaxtemp']['s'], 1, ',', '').'</span>°C<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
