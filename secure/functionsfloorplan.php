@@ -27,8 +27,9 @@ function ajax()
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
+                var timestamp = 1;
                 $.ajax({
-                    url: \'/ajax.php\',
+                    url: \'/ajax.php?timestamp=\'+timestamp,
                     dataType : \'json\',
                     success: function(data) {
                         for (var device in data) {
@@ -39,6 +40,7 @@ function ajax()
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
                                 if (name=="time") {
+                                    var timestamp = time;
                                     try {
                                         var date = new Date(time*1000);
                                         var hours = date.getHours();
