@@ -232,10 +232,10 @@ if ($home) {
     schakelaar('heater4', 'Fire');
     schakelaar('diepvries');
     if ($d['Weg']['s']==0||$d['poortrf']['s']=='On') {
-        schakelaar('poortrf', 'Alarm');
+        schakelaar('poortrf');
     }
     if ($d['Xlight']['s']!='Off') {
-        schakelaar('Xlight', 'Alarm');
+        schakelaar('Xlight');
     }
     schakelaar('jbl');
     blinds('zoldertrap');
