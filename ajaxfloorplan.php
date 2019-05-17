@@ -177,11 +177,11 @@ if ($home) {
     }
     echo '
                 <tr>
-                    <td><font color="'.$gascolor.'">Gas:</font></td>
+                    <td><font color="'.$gascolor.'" id="gas">Gas:</font></td>
                     <td colspan=2><font color="'.$gasvandaagcolor.'" id="gasvandaag">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
                 </tr>
                 <tr>
-                    <td><font color="'.$watercolor.'">Water:</font></td>
+                    <td><font color="'.$watercolor.'" id="water">Water:</font></td>
                     <td colspan=2><font color="'.$watervandaagcolor.'" id="watervandaag">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
                 </tr>';
     if ($d['douche']['s']>0||$d['douche']['m']>0) {

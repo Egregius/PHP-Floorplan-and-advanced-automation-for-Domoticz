@@ -24,7 +24,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'333':'950').');
+                setInterval(ajax, '.($local===true?'200':'800').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
