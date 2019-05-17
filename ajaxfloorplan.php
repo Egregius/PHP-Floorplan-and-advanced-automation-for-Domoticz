@@ -17,7 +17,7 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '<div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
+            <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
     rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
     rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
@@ -164,7 +164,7 @@ if ($home) {
             <table>
                 <tr>
                     <td>Elec:</td>
-                    <td><font color="'.$verbruikcolor.'">'.$d['elec']['s'].' W</font></td>
+                    <td><font color="'.$verbruikcolor.'" id="elec">'.$d['elec']['s'].' W</font></td>
                     <td><font color="'.$vandaagcolor.'">'.$d['elec']['m'].' kWh</font></td>
                 </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {

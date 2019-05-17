@@ -60,7 +60,9 @@ function ajax()
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
 
-                                if (type=="Light") {
+                                if (name=="time") {
+                                    document.getElementById(name).innerHTML = value;
+                                } else if (type=="Light") {
                                     if (value=="On") {
                                         $(\'#\' + name).attr("src", "/images/Light_On.png");
                                         $(\'#action\' + name).val("Off");
@@ -73,7 +75,7 @@ function ajax()
                                 } else if (type=="thermometer") {
 
                                 } else if (type=="elec"){
-                                    document.getElementById(name).innerHTML = value;
+                                    document.getElementById(name).innerHTML = value + " W";
                                 } else {
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 }
