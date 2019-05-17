@@ -26,10 +26,11 @@ function ajax()
                 setInterval(ajax, '.($local===true?'200':'800').');
             });
             function navigator_Go(url) {window.location.assign(url);}
+            var $LastUpdateTime = parseInt('.(TIME-(3600*4)).');
             function ajax() {
                 var timestamp = 1;
                 $.ajax({
-                    url: \'/ajax.php?timestamp=\'+timestamp,
+                    url: \'/ajax.php?timestamp=\'+$LastUpdateTime,
                     dataType : \'json\',
                     success: function(data) {
                         for (var device in data) {
@@ -40,7 +41,7 @@ function ajax()
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
                                 if (name=="time") {
-                                    var timestamp = time;
+                                    $LastUpdateTime = parseInt(time);
                                     try {
                                         var date = new Date(time*1000);
                                         var hours = date.getHours();
@@ -167,10 +168,10 @@ function ajax()
                                 } else if (type=="dimmer") {
                                     try {
                                         if (value==0) {
-                                            $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                            $(\'#\' + name).attr("src", "/images/light_Off.png");
                                             document.getElementById("level" + name).innerHTML = "";
                                         } else {
-                                            $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                            $(\'#\' + name).attr("src", "/images/light_On.png");
                                             document.getElementById("level" + name).innerHTML = value;
                                         }
                                     } catch {}
@@ -225,6 +226,7 @@ function ajax()
                         }
                     },
                 });
+                console.log("timestamp = " + $LastUpdateTime);
             }
         </script>';
 }
