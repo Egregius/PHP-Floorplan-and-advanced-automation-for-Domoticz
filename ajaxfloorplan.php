@@ -296,7 +296,7 @@ if ($home) {
     if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
         echo '
         <div class="fix z0 GroheRed">
-            <img src="images/Plug_On.png" width="28px" height="auto" alt="">
+            <img src="images/plug_On.png" width="28px" height="auto" alt="">
         </div>';
     } elseif ($d['Usage_grohered']['s']>10) {
         echo '

@@ -83,7 +83,7 @@ function ajax()
                                     } catch {}
                                 } else if (name=="gasvandaag"){
                                     try {
-                                        var item = value / 100;
+                                        var item = pad(value / 100, 4);
                                         document.getElementById(name).innerHTML = item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
                                     } catch {}
                                 } else if (name=="watervandaag"){
@@ -236,6 +236,10 @@ function ajax()
                         }
                     },
                 });
+            }
+            function pad(n, length) {
+                var len = length - (\'\'+n).length;
+                return (len > 0 ? new Array(++len).join(\'0\') : \'\') + n
             }
         </script>';
 }
