@@ -259,7 +259,7 @@ function ajaxbose($ip)
                         } else {
                             document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
                         }
-
+                        $(\'#art\').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
                         console.log(data["nowplaying"]["artist"]);
                     }
                 })

@@ -190,7 +190,9 @@ if ($home) {
                     echo '<span id="track">'.$nowplaying['artist'].'</span>';
                     echo '
                 <br>
+                <div>
                 <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
+                </div>
                 <br>
                 <br>';
                 } else {
