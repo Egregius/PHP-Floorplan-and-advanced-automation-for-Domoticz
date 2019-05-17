@@ -224,12 +224,12 @@ if ($home) {
     schakelaar('wc');
     schakelaar('bureeltobi');
     schakelaar('tvtobi');
-    schakelaar('badkamervuur1', 'Fire');
-    schakelaar('badkamervuur2', 'Fire');
-    schakelaar('heater1', 'Fan');
-    schakelaar('heater2', 'Fire');
-    schakelaar('heater3', 'Fire');
-    schakelaar('heater4', 'Fire');
+    schakelaar('badkamervuur1');
+    schakelaar('badkamervuur2');
+    schakelaar('heater1');
+    schakelaar('heater2');
+    schakelaar('heater3');
+    schakelaar('heater4');
     schakelaar('diepvries');
     if ($d['Weg']['s']==0||$d['poortrf']['s']=='On') {
         schakelaar('poortrf');

@@ -18,7 +18,7 @@ $d['time']['s']=null;
 $d['time']['t']=strftime("%k:%M:%S", $t);
 $d['time']['m']=null;
 $d['time']['dt']=null;
-//$t=$t-1;
+$t=$t-1;
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt=$db->query("SELECT n,i,s,t,m,dt FROM devices WHERE t >= $t;");
