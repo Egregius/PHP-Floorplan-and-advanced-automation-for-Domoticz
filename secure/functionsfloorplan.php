@@ -112,6 +112,16 @@ function ajax()
                                             $(\'#action\' + name).val("On");
                                         }
                                     } catch {}
+                                } else if (type=="plug") {
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/plug_On.png");
+                                            $(\'#action\' + name).val("Off");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/plug_Off.png");
+                                            $(\'#action\' + name).val("On");
+                                        }
+                                    } catch {}
                                 } else if (type=="fire") {
                                     try {
                                         if (value=="On") {

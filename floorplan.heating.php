@@ -77,8 +77,6 @@ if ($home) {
                 storemode('GroheRed', 0);
             }
         }
-        header("Location: floorplan.heating.php");
-        die("Redirecting to: floorplan.heating.php");
     }
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
@@ -125,9 +123,6 @@ if ($home) {
                 storemode($_POST['Naam'], 1);
             }
         }
-        usleep($Usleep);
-        header("Location: floorplan.heating.php");
-        die("Redirecting to: floorplan.heating.php");
     } elseif (isset($_POST['Roller'])
         &&isset($_POST['Naam'])
         &&isset($_POST['mode'])
@@ -137,9 +132,6 @@ if ($home) {
         } else {
             storemode($_POST['Naam'], 0);
         }
-        usleep(100000);
-        header("Location: floorplan.heating.php");
-        die("Redirecting to: floorplan.heating.php");
     }
     if (isset($_REQUEST['rollers'])) {
         $name=$_REQUEST['rollers'];
