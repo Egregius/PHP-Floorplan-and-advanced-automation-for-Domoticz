@@ -54,9 +54,7 @@ if ($home) {
 			.input{width:78px;}
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>';
-	ajaxbose($bose);
-	echo '
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 	</head>';
 /*
 <zone master="587A6260C5B2">
@@ -120,6 +118,7 @@ if ($home) {
     $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
+            ajaxbose($bose);
             echo '
         <div class="fix blackmedia" >
 			<form method="GET" action="floorplan.bose.php">
@@ -226,7 +225,7 @@ if ($home) {
     echo '
         <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
-			setTimeout("window.location.href=window.location.href;",60000);
+			/*setTimeout("window.location.href=window.location.href;",60000);*/
 		</script>';
 }
 

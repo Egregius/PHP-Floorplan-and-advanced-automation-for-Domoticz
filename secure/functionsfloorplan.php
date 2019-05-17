@@ -219,9 +219,15 @@ function ajaxbose($ip)
                     url: \'/ajaxfloorplan.bose.php?ip='.$ip.'\',
                     dataType : \'json\',
                     success: function(data) {
-                        var volume = data["volume"]["actualvolume"];
+                        let volume = parseInt(data["volume"]["actualvolume"], 10);
+                        let bass = parseInt(data["bass"]["actualbass"], 10);
+                        var date = new Date(data["time"]*1000);
+                        var hours = date.getHours();
+                        var minutes = "0" + date.getMinutes();
+                        var seconds = "0" + date.getSeconds();
+                        document.getElementById("clock").innerHTML = hours + \':\' + minutes.substr(-2) + \':\' + seconds.substr(-2);
                         document.getElementById("volume").innerHTML = "<button type=\"submit\" name=\"volume\" value=\"" + (volume - 10) + "\" class=\"btn volume\">" + (volume - 10) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 7) + "\" class=\"btn volume\">" + (volume - 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 4) + "\" class=\"btn volume\">" + (volume - 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 2) + "\" class=\"btn volume\">" + (volume - 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 1) + "\" class=\"btn volume\">" + (volume - 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + volume + "\" class=\"btn volume btna\">" + volume + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 1) + "\" class=\"btn volume\">" + (volume + 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 2) + "\" class=\"btn volume\">" + (volume + 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 4) + "\" class=\"btn volume\">" + (volume + 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 7) + "\" class=\"btn volume\">" + (volume + 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 10) + "\" class=\"btn volume\">" + (volume + 10) + "</button>";
-                        console.log(data["volume"]["actualvolume"]);
+                        console.log(data["bass"]["actualbass"]);
                     }
                 })
             }
