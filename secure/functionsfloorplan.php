@@ -53,6 +53,16 @@ function ajax()
                                     try {
                                         document.getElementById("wind").innerHTML = value.toString().replace(/[.]/, ",");
                                     } catch {}
+                                } else if (name=="icon") {
+                                    try {
+                                        document.getElementById("hum").innerHTML = mode;
+                                        $(\'#icon\').attr("src", "https://openweathermap.org/img/w/" + value + ".png");
+                                    } catch {}
+                                } else if (name=="uv") {
+                                    try {
+                                        document.getElementById("uv").innerHTML = value;
+                                        document.getElementById("uvmax").innerHTML = mode;
+                                    } catch {}
                                 } else if (name=="elec"){
                                     try {
                                         document.getElementById(name).innerHTML = value + " W";
@@ -136,6 +146,8 @@ function ajax()
                                     try {
                                         document.getElementById(name).innerHTML = value;
                                     } catch {}
+                                } else if (type=="rollers") {
+                                        setTimeout(ajaxinit, 1000);
                                 } else {
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 }
@@ -596,46 +608,46 @@ function sidebar()
     if ($d['uv']['s']<2) {
         echo '
             <font color="#99EE00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
+                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
             </font>';
     } elseif ($d['uv']['s']>=2&&$d['uv']['s']<4) {
         echo '
             <font color="#99CC00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
+                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
             </font>';
     } elseif ($d['uv']['s']>=4&&$d['uv']['s']<6) {
         echo '
             <font color="#FFCC00">
-                '.number_format($d['uv']['s'], 1, ',', '').'
+                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
             </font>';
     } elseif ($d['uv']['s']>=6&&$d['uv']['s']<8) {
         echo '
             <font color="#FF6600">
-                '.number_format($d['uv']['s'], 1, ',', '').'
+                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
             </font>';
     } elseif ($d['uv']['s']>=8) {
         echo '
             <font color="#FF2200">
-                '.number_format($d['uv']['s'], 1, ',', '').'
+                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
             </font>';
     }
     echo '
             <br>max:';
     if ($d['uv']['m']<2) {
         echo '
-            <font color="#99EE00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+            <font color="#99EE00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
     } elseif ($d['uv']['m']>=2&&$d['uv']['s']<4) {
         echo '
-            <font color="#99CC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+            <font color="#99CC00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
     } elseif ($d['uv']['m']>=4&&$d['uv']['s']<6) {
         echo '
-            <font color="#FFCC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+            <font color="#FFCC00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
     } elseif ($d['uv']['m']>=6&&$d['uv']['s']<8) {
         echo '
-            <font color="#FF6600">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+            <font color="#FF6600"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
     } elseif ($d['uv']['m']>=8) {
         echo '
-            <font color="#FF2200">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+            <font color="#FF2200"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
     }
 
     echo '
