@@ -44,7 +44,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'50':'1000').');
+                setInterval(ajax, '.($local===true?'100':'1000').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -77,7 +77,6 @@ function ajax()
                                         $(\'#\' + name).attr("src", "/images/Light_On.png");
                                         document.getElementById("level" + name).innerHTML = value;
                                      }
-                                    console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 } else if (type=="thermometer") {
 
                                 } else if (type=="elec"){
