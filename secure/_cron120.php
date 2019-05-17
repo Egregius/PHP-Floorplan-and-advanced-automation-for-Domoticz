@@ -68,8 +68,8 @@ if (isset($ds['currently'])) {
                 $maxrain=$i['precipIntensity'];
             }
         }
-        store('minmaxtemp', $mintemp);
-        storemode('minmaxtemp', $maxtemp);
+        store('minmaxtemp', round($mintemp, 1));
+        storemode('minmaxtemp', round($maxtemp, 1));
         storemode('max', $maxrain);
     }
 }

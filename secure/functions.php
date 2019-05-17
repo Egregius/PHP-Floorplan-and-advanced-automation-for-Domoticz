@@ -62,6 +62,9 @@ function ajax()
 
                                 if (name=="time") {
                                     document.getElementById("clock").innerHTML = time;
+                                } else if (name=="minmaxtemp") {
+                                    document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");
+                                    document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
                                 } else if (type=="light") {
                                     if (value=="On") {
                                         $(\'#\' + name).attr("src", "/images/Light_On.png");
@@ -92,7 +95,11 @@ function ajax()
                                         element.classList.remove("red");
                                     }
                                 } else if (type=="thermometer") {
-                                    document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                     if (name=="diepvries_temp") {
+                                        document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";
+                                     } else {
+                                        document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                    }
                                 } else if (type=="elec"){
                                     document.getElementById(name).innerHTML = value + " W";
                                 } else {
