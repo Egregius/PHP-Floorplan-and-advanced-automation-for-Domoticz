@@ -64,7 +64,8 @@ function ajax()
                                     } catch {}
                                 } else if (name=="elec"){
                                     try {
-                                        document.getElementById(name).innerHTML = value + " W";
+                                        document.getElementById("elec").innerHTML = value + " W";
+                                        document.getElementById("elecvandaag").innerHTML = mode.toString().replace(/[.]/, ",") + " kWh";
                                     } catch {}
                                 } else if (name=="zon"){
                                     try {
@@ -72,7 +73,7 @@ function ajax()
                                     } catch {}
                                 } else if (name=="zonvandaag"){
                                     try {
-                                        document.getElementById(name).innerHTML = value;
+                                        document.getElementById(name).innerHTML = value + " kWh";
                                     } catch {}
                                 } else if (name=="gasvandaag"){
                                     try {

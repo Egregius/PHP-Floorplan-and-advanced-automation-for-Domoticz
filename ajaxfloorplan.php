@@ -165,7 +165,7 @@ if ($home) {
                 <tr>
                     <td>Elec:</td>
                     <td><font color="'.$verbruikcolor.'" id="elec">'.$d['elec']['s'].' W</font></td>
-                    <td><font color="'.$vandaagcolor.'" id="elecvandaag">'.$d['elec']['m'].' kWh</font></td>
+                    <td><font color="'.$vandaagcolor.'" id="elecvandaag">'.number_format($d['elec']['m'], 1, ',', '').' kWh</font></td>
                 </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
         echo'
