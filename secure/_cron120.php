@@ -132,11 +132,11 @@ if (isset($d['buiten_temp']['s'])
 if (isset($ds['hourly']['data'])) {
     if ($d['buiten_temp']['s']>$maxtemp) {
         $maxtemp=$d['buiten_temp']['s'];
-        storemode('minmaxtemp', $maxtemp);
+        storemode('minmaxtemp', round($maxtemp, 1));
     }
     if ($d['buiten_temp']['s']<$mintemp) {
         $mintemp=$d['buiten_temp']['s'];
-        store('minmaxtemp', $mintemp);
+        store('minmaxtemp', round($mintemp, 1));
     }
 }
 store('buiten_temp', round($d['buiten_temp']['s'],1));
