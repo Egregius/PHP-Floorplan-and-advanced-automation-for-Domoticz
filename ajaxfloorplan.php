@@ -188,13 +188,13 @@ if ($home) {
         echo '
                 <tr>
                     <td>D-gas</td>
-                    <td>'.$d['douche']['s']*10 .' L</td>
-                    <td>'.number_format(($d['douche']['s']*10*0.0004), 2, ',', '.').' €</td>
+                    <td id="douchegas">'.$d['douche']['s']*10 .' L</td>
+                    <td id="douchegaseuro>'.number_format(($d['douche']['s']*10*0.0004), 2, ',', '.').' €</td>
                 <tr>
                 <tr>
                     <td>D-water</td>
-                    <td>'.$d['douche']['m'].' L</td>
-                    <td>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
+                    <td id="douchewater">'.$d['douche']['m'].' L</td>
+                    <td id="douchewatereuro>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
                 <tr>';
     }
     echo '

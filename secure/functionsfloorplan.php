@@ -69,7 +69,7 @@ function ajax()
                                     } catch {}
                                 } else if (name=="zon"){
                                     try {
-                                        document.getElementById(name).innerHTML = value;
+                                        document.getElementById(name).innerHTML = value + " W";
                                     } catch {}
                                 } else if (name=="zonvandaag"){
                                     try {
@@ -77,11 +77,13 @@ function ajax()
                                     } catch {}
                                 } else if (name=="gasvandaag"){
                                     try {
-                                        document.getElementById(name).innerHTML = value / 100;
+                                        var item = value / 100;
+                                        document.getElementById(name).innerHTML = item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
                                     } catch {}
                                 } else if (name=="watervandaag"){
                                     try {
-                                        document.getElementById(name).innerHTML = value / 1000;
+                                        var item = value / 1000;
+                                        document.getElementById(name).innerHTML = item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
                                     } catch {}
                                 } else if (type=="light") {
                                     try {
