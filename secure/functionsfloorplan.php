@@ -224,7 +224,6 @@ function ajaxbose($ip)
                         var minutes = "0" + date.getMinutes();
                         var seconds = "0" + date.getSeconds();
                         document.getElementById("clock").innerHTML = hours + \':\' + minutes.substr(-2) + \':\' + seconds.substr(-2);
-
                         let volume = parseInt(data["volume"]["actualvolume"], 10);
                         var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
                         var html = "<br><br>";
@@ -237,7 +236,6 @@ function ajaxbose($ip)
                             }
                         });
                         document.getElementById("volume").innerHTML = html;
-
                         let bass = parseInt(data["bass"]["actualbass"], 10);
                         var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1];
                         var html = "";
@@ -249,6 +247,9 @@ function ajaxbose($ip)
                             }
                         });
                         document.getElementById("bass").innerHTML = html;
+                        document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
+
+                        console.log(data["nowplaying"]["@attributes"]["source"]);
                     }
                 })
             }

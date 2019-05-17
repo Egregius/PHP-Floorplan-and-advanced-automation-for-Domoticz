@@ -50,7 +50,8 @@ if ($home) {
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style type="text/css">
-			.btn{height:60px;margin:3px;}
+			.btn{height:48px;margin:3px;}
+			.b2{margin:1px;}
 			.input{width:78px;}
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
