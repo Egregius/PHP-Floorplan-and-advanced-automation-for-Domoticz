@@ -50,7 +50,7 @@ if ($home) {
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style type="text/css">
-			.btn{height:60px;margin:1px;}
+			.btn{height:60px;margin:3px;}
 			.input{width:78px;}
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
@@ -136,7 +136,7 @@ if ($home) {
                   $bass=$bass['actualbass'];
                   $cv=$volume['actualvolume'];
                   $levels=array($cv-10,$cv-7,$cv-4,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+4,$cv+7);
-                echo '<div id="volume">';
+                echo '<div id="volume"><br><br>';
                 foreach ($levels as $k) {
                     if ($k>=0&&$k<=80) {
                         if ($k==$cv) {

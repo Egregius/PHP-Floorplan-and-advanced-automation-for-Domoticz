@@ -226,25 +226,28 @@ function ajaxbose($ip)
                         document.getElementById("clock").innerHTML = hours + \':\' + minutes.substr(-2) + \':\' + seconds.substr(-2);
 
                         let volume = parseInt(data["volume"]["actualvolume"], 10);
-                        var levels = [Math.sign(-10), -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                        var html = "";
-                        for (var level in levels) {
-                            html += level;
-                        }
-                        console.log(html);
-                        document.getElementById("volume").innerHTML = "<button type=\"submit\" name=\"volume\" value=\"" + (volume - 10) + "\" class=\"btn volume\"> " + (volume - 10) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 7) + "\" class=\"btn volume\">" + (volume - 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 4) + "\" class=\"btn volume\">" + (volume - 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 2) + "\" class=\"btn volume\">" + (volume - 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume - 1) + "\" class=\"btn volume\">" + (volume - 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + volume + "\" class=\"btn volume btna\">" + volume + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 1) + "\" class=\"btn volume\">" + (volume + 1) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 2) + "\" class=\"btn volume\">" + (volume + 2) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 4) + "\" class=\"btn volume\">" + (volume + 4) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 7) + "\" class=\"btn volume\">" + (volume + 7) + "</button><button type=\"submit\" name=\"volume\" value=\"" + (volume + 10) + "\" class=\"btn volume\">" + (volume + 10) + "</button>";
+                        var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                        var html = "<br><br>";
+                        levels.forEach(function(level) {
+                            let newlevel = volume + level;
+                            if (level==0) {
+                                html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\">" + newlevel + "</button>";
+                            } else {
+                                html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
+                            }
+                        });
+                        document.getElementById("volume").innerHTML = html;
 
                         let bass = parseInt(data["bass"]["actualbass"], 10);
-                        var levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                        var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1];
                         var html = "";
-                        for (var level in levels) {
-                            var level = - level;
+                        levels.forEach(function(level) {
                             if (level==bass) {
                                 html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\">" + level + "</button>";
                             } else {
                                 html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
                             }
-                        }
+                        });
                         document.getElementById("bass").innerHTML = html;
                     }
                 })
