@@ -15,7 +15,7 @@ $smappee=json_decode(
     ),
     true
 );
-lg('        ___SMAPPEE___');
+//lg('        ___SMAPPEE___');
 if (!empty($smappee['report'])) {
     preg_match_all(
         "/ activePower=(\\d*.\\d*)/",
