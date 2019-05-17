@@ -63,8 +63,10 @@ function ajax()
                                 if (name=="time") {
                                     document.getElementById("clock").innerHTML = time;
                                 } else if (name=="minmaxtemp") {
-                                    document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");
-                                    document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
+                                    try {
+                                        document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");
+                                        document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
+                                    } catch {}
                                 } else if (type=="light") {
                                     if (value=="On") {
                                         $(\'#\' + name).attr("src", "/images/light_On.png");
@@ -109,13 +111,21 @@ function ajax()
                                     var minutes = "0" + date.getMinutes();
                                     document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
                                 } else if (type=="thermometer") {
-                                     if (name=="diepvries_temp") {
-                                        document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";
-                                     } else {
-                                        document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
-                                    }
+                                     try {
+                                         if (name=="diepvries_temp") {
+                                            document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";
+                                         } else {
+                                            document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                        }
+                                    } catch {}
+                                } else if (type=="thermostaat") {
+                                    document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                 } else if (type=="elec"){
-                                    document.getElementById(name).innerHTML = value + " W";
+                                    try {
+                                        document.getElementById(name).innerHTML = value + " W";
+                                    }
+                                    catch {
+                                    }
                                 } else {
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 }
@@ -620,7 +630,7 @@ function thermostaat($name,$top,$left)
         echo '
                 <font size="2" color="#CCC">';
     }
-    echo number_format($stat, 1, ',', '').'</font>
+    echo '<span id="'.$name.'_set">'.number_format($stat, 1, ',', '').'</span></font>
             </div>';
     if ($mode>0) {
         echo '
