@@ -199,32 +199,14 @@ function ajax()
 }
 function ajaxdenon()
 {
-    echo '
-        <script type=\'text/javascript\'>
-            $(document).ready(function() {
-                ajax();
-                setInterval(ajax, 1000);
-            });
-            function navigator_Go(url) {window.location.assign(url);}
-            function ajax() {
-                $.ajax({
-                    url: \'/ajax.php\',
-                    dataType : \'json\',
-                    success: function(data) {
-                        for (var device in data) {
-                            if (data.hasOwnProperty(device)) {
-                            }
-                        }
-                    }
-                })
-            }
-        </script>';
+
 }
 function ajaxkodi()
 {
 }
 function ajaxbose($ip)
 {
+    $k=10;
     echo '
         <script type=\'text/javascript\'>
             $(document).ready(function() {
@@ -237,9 +219,12 @@ function ajaxbose($ip)
                     url: \'/ajaxfloorplan.bose.php?ip='.$ip.'\',
                     dataType : \'json\',
                     success: function(data) {
-                        for (var device in data) {
-                            if (data.hasOwnProperty(device)) {
-                            }
+                        for (var type in data) {
+
+                            var volume = data["volume"]["actualvolume"];
+                            document.getElementById("volume").innerHTML = "<button type="submit" name="volume" value="'.$k.'" class="btn volume btna">'.$k.'</button>
+                            ";
+                            console.log(data["volume"]["actualvolume"]);
                         }
                     }
                 })

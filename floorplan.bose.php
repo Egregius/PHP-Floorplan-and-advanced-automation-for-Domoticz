@@ -137,6 +137,7 @@ if ($home) {
                   $bass=$bass['actualbass'];
                   $cv=$volume['actualvolume'];
                   $levels=array($cv-10,$cv-7,$cv-4,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+4,$cv+7);
+                echo '<div id="volume">';
                 foreach ($levels as $k) {
                     if ($k>=0&&$k<=80) {
                         if ($k==$cv) {
@@ -148,6 +149,7 @@ if ($home) {
                         }
                     }
                 }
+                echo '</div>';
                 echo '<br>';
                 $levels=array(-9,-8,-7,-6,-5,-4,-3,-2,-1,0);
                 foreach ($levels as $k) {
