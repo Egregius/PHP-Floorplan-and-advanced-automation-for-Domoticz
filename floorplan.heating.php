@@ -48,7 +48,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajaxinit();
-                /*setInterval(ajaxinit, 30000);*/
+                setInterval(ajaxinit, 60000);
             });
             function ajaxinit() {
                 $.ajax({

@@ -198,6 +198,7 @@ function blinds($name)
 function dimmer($name,$class='i70')
 {
     global $page,$d;
+    $page=str_replace('ajax', '', $page);
     echo '
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
@@ -211,7 +212,7 @@ function dimmer($name,$class='i70')
         echo'
                 <input type="image" src="/images/light_On.png" class="'.$class.'" id="'.$name.'">
                 <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
-                    '.$d[$name]['s'].'
+                    <a href=\'javascript:navigator_Go('.$page.'?setdimmer='.$name.');\'><font color="#000">'.$d[$name]['s'].'</font></a>
                 </div>';
     }
     echo '
