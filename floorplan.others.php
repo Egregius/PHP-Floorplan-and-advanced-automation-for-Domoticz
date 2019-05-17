@@ -11,6 +11,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     error_reporting(E_ALL);ini_set("display_errors", "on");
@@ -86,16 +87,16 @@ if ($home) {
     rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
     rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
     rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
-    schakelaar2('auto', 'Alarm');
-    schakelaar2('tv', 'Light');
-    schakelaar2('nvidia', 'Light');
-    schakelaar2('denon', 'Light');
-    schakelaar2('bosesoundlink', 'Light');
-    schakelaar2('water', 'Light');
-    schakelaar2('regenpomp', 'Light');
-    schakelaar2('zwembadfilter', 'Light');
-    schakelaar2('zwembadwarmte', 'Light');
-    schakelaar2('dampkap', 'Light');
+    schakelaar2('auto');
+    schakelaar2('tv');
+    schakelaar2('nvidia');
+    schakelaar2('denon');
+    schakelaar2('bosesoundlink');
+    schakelaar2('water');
+    schakelaar2('regenpomp');
+    schakelaar2('zwembadfilter');
+    schakelaar2('zwembadwarmte');
+    schakelaar2('dampkap');
 
     echo '
 <div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
@@ -118,22 +119,10 @@ if ($home) {
         secured('zhalla');
         secured('zhallb');
     }
-    if ($d['pirliving']['s']=='On') {
-        motion('zliving');
-    }
-    if ($d['pirkeuken']['s']=='On') {
-        motion('zkeuken');
-    }
-    if ($d['pirinkom']['s']=='On') {
-        motion('zinkom');
-    }
-    if ($d['pirgarage']['s']=='On') {
-        motion('zgarage');
-    }
-    if ($d['pirhall']['s']=='On') {
-        motion('zhalla');
-        motion('zhallb');
-    }
+    motion('living');
+    motion('keuken');
+    motion('inkom');
+    motion('hall');
     if ($d['poort']['s']=='Open') {
         echo '<div class="fix poort"></div>';
     }
@@ -202,7 +191,7 @@ if ($home) {
 <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 			setTimeout("window.location.href=window.location.href;",';
-    echo $local===true?'4950':'15000';
+    echo $local===true?'14950':'15000';
     echo ');
 		</script>';
 }

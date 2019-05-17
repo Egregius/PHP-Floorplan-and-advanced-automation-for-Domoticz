@@ -67,22 +67,11 @@ if ($home) {
         secured('zhalla');
         secured('zhallb');
     }
-    if ($d['pirliving']['s']=='On') {
-        motion('zliving');
-    }
-    if ($d['pirkeuken']['s']=='On') {
-        motion('zkeuken');
-    }
-    if ($d['pirinkom']['s']=='On') {
-        motion('zinkom');
-    }
-    if ($d['pirgarage']['s']=='On') {
-        motion('zgarage');
-    }
-    if ($d['pirhall']['s']=='On') {
-        motion('zhalla');
-        motion('zhallb');
-    }
+    motion('living');
+    motion('keuken');
+    motion('inkom');
+    motion('garage');
+    motion('hall');
     showTimestamp('pirliving', 0);
     showTimestamp('pirkeuken', 0);
     showTimestamp('pirgarage', 0);

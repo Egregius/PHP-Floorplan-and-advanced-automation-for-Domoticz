@@ -116,6 +116,16 @@ function ajax()
                                             $(\'#action\' + name).val("On");
                                         }
                                     } catch {}
+                                } else if (type=="alarm") {
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/alarm_On.png");
+                                            $(\'#action\' + name).val("Off");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/alarm_Off.png");
+                                            $(\'#action\' + name).val("On");
+                                        }
+                                    } catch {}
                                 } else if (type=="bose") {
                                     try {
                                         if (value=="On") {
@@ -258,7 +268,7 @@ function schakelaar($name)
             </form>
         </div>';
 }
-function schakelaar2($name,$kind)
+function schakelaar2($name)
 {
     global $eendag,$d;
     echo '
@@ -267,11 +277,11 @@ function schakelaar2($name,$kind)
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">
                 <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$kind.'_Off.png" class="i40">'
+                <input type="image" src="/images/'.$d[$name]['dt'].'_Off.png" class="i40">'
                    :'
                 <input type="hidden" name="Actie" value="Off">
                 <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$kind.'_On.png" class="i40">';
+                <input type="image" src="/images/'.$d[$name]['dt'].'_On.png" class="i40">';
     echo '
                 <br>'.$name;
     if ($d[$name]['t']>$eendag) {
@@ -604,7 +614,7 @@ function sidebar()
             echo 'lgtv_Off';
         }
     } else {
-        echo 'TV_Off';
+        echo 'tv_Off';
     }
     echo '.png" class="i60" alt="lgtv">
             </a>
