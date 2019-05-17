@@ -44,7 +44,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'500':'9950').');
+                setInterval(ajax, '.($local===true?'490':'1000').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -70,8 +70,13 @@ function ajax()
                                         $(\'#\' + name).attr("src", "/images/Light_Off.png");
                                         $(\'#action\' + name).val("On");
                                     }
-                                    console.log("Type=" + type + " | Name=" + name + " | Value=" + value + " | Time=" + time + " | Mode=" + mode);
+                                } else if (type=="dimmer") {
+                                     if (value==0) {
 
+                                     } else {
+
+                                     }
+                                    console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 } else if (type=="thermometer") {
 
                                 } else if (type=="elec"){
@@ -262,11 +267,11 @@ function dimmer($name,$class='i70')
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0|$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/light_Off.png" class="'.$class.'">';
+			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="'.$name.'">';
     } else {
         echo'
-                <input type="image" src="/images/light_On.png" class="'.$class.'">
-                <div class="fix center dimmerlevel '.$class.'">
+                <input type="image" src="/images/light_On.png" class="'.$class.'" id="'.$name.'">
+                <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
                     '.$d[$name]['s'].'
                 </div>';
     }
