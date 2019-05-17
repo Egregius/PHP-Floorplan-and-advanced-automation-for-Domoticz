@@ -366,11 +366,11 @@ if ($d['auto']['s']=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     if ($d['bose'.$i]['s']!='Off') {
-                        sw('bose'.$i, 'Off');
+                        store('bose'.$i, 'Off');
                     }
                 } else {
                     if ($d['bose'.$i]['s']!='On') {
-                        sw('bose'.$i, 'On');
+                        store('bose'.$i, 'On');
                     }
                 }
             }

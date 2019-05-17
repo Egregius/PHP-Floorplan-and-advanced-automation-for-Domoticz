@@ -144,17 +144,15 @@ function ajax()
                                                 var html = "Online";
                                                 if (value=="On") {
                                                     var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";
-                                                    var html = "OnlineON";
                                                 } else {
                                                     var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";
-                                                    var html = "OnlineELSE";
                                                 }
                                             } else if (mode=="Offline") {
-                                                var html = "Offline";
+                                                var html = "";
                                             }
                                             document.getElementById("bosediv105").innerHTML = html;
-                                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                         }
+                                        console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                         if (value=="On") {
                                             $(\'#\' + name).attr("src", "/images/Bose_On.png");
                                         } else if (value=="Off") {
