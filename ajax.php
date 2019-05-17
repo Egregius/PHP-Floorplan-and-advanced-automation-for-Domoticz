@@ -3,8 +3,7 @@
  * Pass2PHP
  * php version 7.3.4-2
  *
- * This is the main floorplan.
- * It handles all the lighting and shows status of heating and rollers.
+ * This file gives the status of the devices changed in the last 2 seconds in json format.
  *
  * @category Home_Automation
  * @package  Pass2PHP
