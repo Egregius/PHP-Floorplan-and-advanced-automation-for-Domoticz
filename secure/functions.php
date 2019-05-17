@@ -637,8 +637,12 @@ function showTimestamp($name,$draai)
     global $eendag,$d;
     if (past($name)<82800) {
         echo '
-        <div class="fix stamp z1 r'.$draai.' t'.$name.'">
+        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'">
             '.strftime("%k:%M", $d[$name]['t']).'
+        </div>';
+    } else {
+        echo '
+        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'">
         </div>';
     }
 }
@@ -918,9 +922,10 @@ function rollers($name,$stat)
 		    </div>
 	    </form>';
 }
-function rollery($name,$stat,$top,$left,$size,$rotation)
+function rollery($name,$top,$left,$size,$rotation)
 {
-    $stat=100-$stat;
+    global $d;
+    $stat=100-$d[$name]['s'];
     if ($stat<100) {
         $perc=($stat/100)*0.7;
     } else {

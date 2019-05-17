@@ -19,14 +19,14 @@ if ($home) {
     echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
-    rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
-    rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
-    rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
-    rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
-    rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
-    rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
-    rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
-    rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
+    rollery('Rbureel', 0, 208, 43, 'L');
+    rollery('RkeukenL', 128, 475, 44, 'P');
+    rollery('RkeukenR', 179, 475, 44, 'P');
+    rollery('Rtobi', 448, 80, 44, 'P');
+    rollery('Ralex', 568, 80, 44, 'P');
+    rollery('RkamerL', 529, 481, 44, 'P');
+    rollery('RkamerR', 586, 481, 44, 'P');
+    rollery('Rliving', 46, 80, 165, 'P');
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
