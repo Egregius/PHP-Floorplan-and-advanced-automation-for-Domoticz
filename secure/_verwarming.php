@@ -391,7 +391,7 @@ foreach ($kamers as $kamer) {
     }
     if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
         //store('Tset'.$kamer.'Z',TIME);
-        ud($kamer.'Z', 0, ${'RSet'.$kamer});
+        ud($kamer.'Z', 0, ${'RSet'.$kamer}.'.0');
     }
 }
 //lg('bigdif='.$bigdif.'|brander='.$brander.'|timebrander='.past('brander'));
@@ -763,5 +763,5 @@ function setradiator($name,$dif,$koudst=false,$set=14)
     } elseif ($setpoint<4) {
         $setpoint=4.0;
     }
-    return round($setpoint, 0).".0";
+    return round($setpoint, 0);
 }

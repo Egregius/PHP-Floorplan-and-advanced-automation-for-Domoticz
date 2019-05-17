@@ -130,9 +130,13 @@ function ajax()
                                             document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                         }
                                     } catch {}
-                                } else if (type=="thermostaat"||type=="setpoint") {
+                                } else if (type=="thermostaat") {
                                     try {
                                         document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                    } catch {}
+                                } else if (type=="setpoint") {
+                                    try {
+                                        document.getElementById(name).innerHTML = value;
                                     } catch {}
                                 } else if (type=="elec"){
                                     try {
