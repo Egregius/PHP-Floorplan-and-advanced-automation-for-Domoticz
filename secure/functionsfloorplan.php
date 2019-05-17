@@ -116,6 +116,16 @@ function ajax()
                                             $(\'#action\' + name).val("On");
                                         }
                                     } catch {}
+                                } else if (type=="fan") {
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/fab_On.png");
+                                            $(\'#action\' + name).val("Off");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/fan_Off.png");
+                                            $(\'#action\' + name).val("On");
+                                        }
+                                    } catch {}
                                 } else if (type=="alarm") {
                                     try {
                                         if (value=="On") {
@@ -128,24 +138,25 @@ function ajax()
                                     } catch {}
                                 } else if (type=="bose") {
                                     try {
+                                        if (name=="bose105") {
+                                            if (mode=="Online") {
+                                                if (value=="On") {
+                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                                } else {
+                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                                }
+                                            } else {
+                                                var html = "";
+                                            }
+                                            document.getElementById("bosediv105").innerHTML = html;
+                                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                                        }
                                         if (value=="On") {
                                             $(\'#\' + name).attr("src", "/images/Bose_On.png");
                                         } else if (value=="Off") {
                                             $(\'#\' + name).attr("src", "/images/Bose_Off.png");
                                         }
                                     } catch {}
-                                    if (name=="bose105") {
-                                        if (mode=="Online") {
-                                            if (value=="Off") {
-                                                var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>"
-                                            } else {
-                                                var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>"
-                                            }
-                                        } else {
-                                            var html = "";
-                                        }
-                                        document.getElementById("bosediv105").innerHTML = html;
-                                    }
                                 } else if (type=="dimmer") {
                                     try {
                                         if (value==0) {
