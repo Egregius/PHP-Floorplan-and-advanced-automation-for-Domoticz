@@ -35,7 +35,7 @@ if (isset($_POST['logout'])) {
     if (isset($_POST['username'])) {
         $user=$_POST['username'];
     }
-    setcookie($cookie, null, TIME-86400, '/');
+    setcookie($cookie, $user, TIME-86400, '/', $domainname, true, true);
     telegram('Home: '.$user.' logged out', true);
     header("Location:/index.php");
     die("Redirecting to:/index.php");
