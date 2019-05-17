@@ -21,7 +21,7 @@ if [ "$STATUS" == "OK" ] ; then
 	echo OK
 	#0
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?rolluiken&cron60&cron10&verwarming" >/dev/null 2>&1 &
-	sleep 3.609
+	sleep 9.609
 	#10
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming" >/dev/null 2>&1 &
 	sleep 9.998

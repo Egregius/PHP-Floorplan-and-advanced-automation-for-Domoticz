@@ -134,6 +134,18 @@ function ajax()
                                             $(\'#\' + name).attr("src", "/images/Bose_Off.png");
                                         }
                                     } catch {}
+                                    if (name=="bose105") {
+                                        if (mode=="Online") {
+                                            if (value=="Off") {
+                                                var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                            } else {
+                                                var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                            }
+                                        } else {
+                                            var html = "";
+                                        }
+                                        document.getElementById("bosediv105").innerHTML = html;
+                                    }
                                 } else if (type=="dimmer") {
                                     try {
                                         if (value==0) {
