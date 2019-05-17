@@ -44,7 +44,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'500':'1000').');
+                setInterval(ajax, '.($local===true?'1500':'1900').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -78,6 +78,11 @@ function ajax()
                                         document.getElementById("level" + name).innerHTML = value;
                                      }
                                 } else if (type=="pir") {
+                                    if (value=="On") {
+                                        document.getElementById(\'#pir\' + name).classList.add("motion");
+                                    } else {
+                                        document.getElementById(\'#pir\' + name).classList.remove("motion");
+                                    }
                                 } else if (type=="thermometer") {
                                     document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                 } else if (type=="elec"){
@@ -627,13 +632,15 @@ function secured($name)
 function motion($name)
 {
     global $d;
-    if ($d[$name]['s']=='On') {
+    if ($d['pir'.$name]['s']=='On') {
         echo '
-        <div class="fix motion z'.$name.' z0">
+        <div class="fix motion z'.$name.' z0" id="pir'.$name.'">
+            <br>BEWEGING
         </div>';
     } else {
         echo '
-        <div class="fix z'.$name.' z0">
+        <div class="fix z'.$name.' z0" id="pir'.$name.'">
+            <br>GEEN BEWEGING
         </div>';
     }
 }

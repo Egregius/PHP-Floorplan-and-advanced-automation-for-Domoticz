@@ -258,9 +258,7 @@ if ($home) {
     if ($d['pirinkom']['s']=='On') {
         motion('zinkom');
     }
-    if ($d['pirgarage']['s']=='On') {
-        motion('zgarage');
-    }
+    motion('garage');
     if ($d['pirhall']['s']=='On') {
         motion('zhalla');
         motion('zhallb');
