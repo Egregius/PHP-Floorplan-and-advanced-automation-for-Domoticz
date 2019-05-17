@@ -26,6 +26,7 @@ td{text-align:right;font-size:1.1em;}
 .volume{width:33px;height:60px;padding:2px 0px 0px 0px!important;margin:0;}
 .nas{top:120px;left:140px;}
 .leftbuttons{top:130px;left:0px;width:80px;}
+.mediabuttons{top:290px;left:0px;width:80px;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander{width:99%;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander tr, .brander td{text-align:right;line-height:1.2;font-size:16px;margin-bottom:-30px;}

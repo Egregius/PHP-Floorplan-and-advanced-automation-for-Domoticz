@@ -49,6 +49,14 @@ function ajax()
                                         document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");
                                         document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
                                     } catch {}
+                                } else if (name=="wind") {
+                                    try {
+                                        document.getElementById("wind").innerHTML = value.toString().replace(/[.]/, ",");
+                                    } catch {}
+                                } else if (name=="elec"){
+                                    try {
+                                        document.getElementById(name).innerHTML = value + " W";
+                                    } catch {}
                                 } else if (type=="light") {
                                     try {
                                         if (value=="On") {
@@ -56,6 +64,16 @@ function ajax()
                                             $(\'#action\' + name).val("Off");
                                         } else if (value=="Off") {
                                             $(\'#\' + name).attr("src", "/images/light_Off.png");
+                                            $(\'#action\' + name).val("On");
+                                        }
+                                    } catch {}
+                                } else if (type=="fire") {
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/fire_On.png");
+                                            $(\'#action\' + name).val("Off");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/fire_Off.png");
                                             $(\'#action\' + name).val("On");
                                         }
                                     } catch {}
@@ -117,10 +135,6 @@ function ajax()
                                 } else if (type=="setpoint") {
                                     try {
                                         document.getElementById(name).innerHTML = value;
-                                    } catch {}
-                                } else if (type=="elec"){
-                                    try {
-                                        document.getElementById(name).innerHTML = value + " W";
                                     } catch {}
                                 } else {
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
@@ -516,14 +530,14 @@ function sidebar()
             echo '
         <div class="fix weather">
             <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
             </a>
         </div>';
         } else {
             echo '
         <div class="fix weather">
             <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon">
+                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
             </a>
         </div>';
         }
@@ -557,32 +571,27 @@ function sidebar()
     echo $d['nvidia']['m']=='On'?'On':'Off';
     echo '.png" class="i48" alt="nvidia">
 		    </a>
-		    <br>';
-    echo '
+		    <br>
+		    </div>
             <div class="fix center zon">
-            <small>&#x21e7;</small> '.number_format($d['minmaxtemp']['m'], 1, ',', '').'°C<br>
-            <small>&#x21e9;</small> '.number_format($d['minmaxtemp']['s'], 1, ',', '').'°C<br>
+            <small>&#x21e7;</small><span id="maxtemp">'.number_format($d['minmaxtemp']['m'], 1, ',', '').'</span>°C<br>
+            <small>&#x21e9;</small><span id="mintemp">'.number_format($d['minmaxtemp']['s'], 1, ',', '').'</span>°C<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
-                Buien: '.$d['buiten_temp']['m'].'
+                Buien: <span id="buien">'.$d['buiten_temp']['m'].'</span>
             </a>
-            <br>';
-    echo '
-            Hum:'.round($d['icon']['m'], 0).'%
-            <br>';
+            <br>
+            Hum:<span id="hum">'.round($d['icon']['m'], 0).'</span>%
+            <br><span id="wind">'.number_format($d['wind']['s'], 1, ',', '').'</span>km/u
 
-    echo number_format($d['wind']['s'], 1, ',', '').'km/u';
-
-    echo '
             <br>
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>
-            <small>&#x21e7;</small> '.strftime("%k:%M", $d['civil_twilight']['s']).'
+            <small>&#x21e7;</small><span id="zonop">'.strftime("%k:%M", $d['civil_twilight']['s']).'</span>
             <br>
-            <small>&#x21e9;</small> '.strftime("%k:%M", $d['civil_twilight']['m']).'
+            <small>&#x21e9;</small><span id="zononder">'.strftime("%k:%M", $d['civil_twilight']['m']).'</span>
             <br>
-            <br>';
-    echo '
+            <br>
             UV: ';
     if ($d['uv']['s']<2) {
         echo '

@@ -97,9 +97,6 @@ if ($home) {
             $d[$_POST['Naam'].'_set']['m']=2;
             include 'secure/_verwarming.php';
         }
-        usleep(100000);
-        header("Location: floorplan.heating.php");
-        die("Redirecting to: floorplan.heating.php");
     }
     if (isset($_POST['Roller'])
         &&isset($_POST['Naam'])
