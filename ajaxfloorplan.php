@@ -222,6 +222,8 @@ if ($home) {
     schakelaar('tuin');
     schakelaar('zolder');
     schakelaar('wc');
+    schakelaar('IN1');
+    schakelaar('IN2');
     schakelaar('bureeltobi');
     schakelaar('tvtobi');
     schakelaar('badkamervuur1');

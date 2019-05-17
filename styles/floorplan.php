@@ -78,6 +78,8 @@ td{text-align:right;font-size:1.1em;}
 .tuin{top:66px;left:16px;}#tuin{height:48px;width:auto;}
 .zolder{top:690px;left:210px;}#zolder{height:48px;width:auto;}
 .wc{top:11px;left:412px;}#wc{height:28px;width:auto;}
+.IN1{top:711px;left:90px;}#IN1{height:28px;width:auto;}
+.IN2{top:711px;left:90px;}#IN2{height:28px;width:auto;}
 .bureeltobi{top:798px;left:375px;}#bureeltobi{height:28px;width:auto;}
 .tvtobi{top:798px;left:152px;}#tvtobi{height:28px;width:auto;}
 .bureeltobikwh{top:811px;left:420px;text-align:left;min-width:60px;}
