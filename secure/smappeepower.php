@@ -15,6 +15,7 @@ $smappee=json_decode(
     ),
     true
 );
+lg('        ___SMAPPEE___');
 if (!empty($smappee['report'])) {
     preg_match_all(
         "/ activePower=(\\d*.\\d*)/",
@@ -105,4 +106,14 @@ function alert($name,$msg,$ttl,$silent=true,$ios=false)
             ON DUPLICATE KEY UPDATE t='$time';"
         );
     }
+}
+function lg($msg)
+{
+    $fp=fopen('/var/log/domoticz.log', "a+");
+    $time=microtime(true);
+    $dFormat="Y-m-d H:i:s";
+    $mSecs=$time-floor($time);
+    $mSecs=substr(number_format($mSecs, 3), 1);
+    fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+    fclose($fp);
 }

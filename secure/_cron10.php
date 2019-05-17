@@ -172,11 +172,14 @@ if ($d['nvidia']['s']=='On') {
     }
 }
 if (ping('192.168.2.105')) {
-    if ($d['bose105']['m']=='Offline') {
+    lg('bose105 ping ok');
+    if ($d['bose105']['m']!='Online') {
         storemode('bose105', 'Online');
+        lg('bose105 Online');
     }
 } else {
-    if ($d['bose105']['m']=='Online') {
+    if ($d['bose105']['m']!='Offline') {
         storemode('bose105', 'Offline');
+        lg('bose105 Offline');
     }
 }
