@@ -30,6 +30,61 @@ function fetchdata()
     return $d;
 }
 /**
+ * Function ajax
+ *
+ * Echo's the ajax javascript for the floorplans
+ *
+ * @return string
+ */
+function ajax()
+{
+    global $local;
+    echo '
+        <script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type=\'text/javascript\'>
+            $(document).ready(function() {
+                ajax();
+                setInterval(ajax, '.($local===true?'500':'9950').');
+            });
+            function navigator_Go(url) {window.location.assign(url);}
+            function ajax() {
+                $.ajax({
+                    url: \'/ajax.php\',
+                    dataType : \'json\',
+                    success: function(data) {
+                        for (var device in data) {
+                            if (data.hasOwnProperty(device)) {
+                                var name = data[device][\'n\'];
+                                var value = data[device][\'s\'];
+                                var time = data[device][\'t\'];
+                                var mode = data[device][\'m\'];
+                                var type = data[device][\'dt\'];
+
+                                if (type=="Light") {
+                                    if (value=="On") {
+                                        $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                        $(\'#action\' + name).val("Off");
+                                    } else if (value=="Off") {
+                                        $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                        $(\'#action\' + name).val("On");
+                                    }
+                                    console.log("Type=" + type + " | Name=" + name + " | Value=" + value + " | Time=" + time + " | Mode=" + mode);
+
+                                } else if (type=="thermometer") {
+
+                                } else if (type=="elec"){
+                                    document.getElementById(name).innerHTML = value;
+                                } else {
+                                    console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                                }
+                            }
+                        }
+                    },
+                });
+            }
+        </script>';
+}
+/**
  * Function huisslapen
  *
  * Switches off everything that should be off while sleeping

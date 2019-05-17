@@ -44,19 +44,21 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                ajax();
-                setInterval(ajax, '.($local===true?'1950':'9950').');
+                ajaxinit();
+                setInterval(ajaxinit, '.($local===true?'9950':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
-            function ajax() {
+            function ajaxinit() {
                 $.ajax({
                     url: \'/ajaxfloorplan.php\',
                     success: function(data) {
-                        $(\'#ajax\').html(data);
+                        $(\'#ajaxinit\').html(data);
                     },
                 });
             }
-        </script>
+        </script>';
+    ajax();
+    echo '
 	</head>';
     if (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
@@ -535,7 +537,7 @@ if ($home) {
         echo '
             </form>
         </div>';
-    echo '<div id="ajax"></div>';
+    echo '<div id="ajaxinit"></div>';
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
