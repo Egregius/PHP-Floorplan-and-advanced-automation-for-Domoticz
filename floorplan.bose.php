@@ -136,13 +136,13 @@ if ($home) {
                   //echo '<div style="text-align:left;"><pre>';print_r($bass);echo '</pre></div>';
                   $bass=$bass['actualbass'];
                   $cv=$volume['actualvolume'];
-                  $levels=array($cv-10,$cv-7,$cv-4,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+4,$cv+7);
+                  $levels=array($cv-10,$cv-7,$cv-4,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+4,$cv+7,$cv+10);
                 echo '<div id="volume"><br><br>';
                 foreach ($levels as $k) {
                     if ($k>=0&&$k<=80) {
                         if ($k==$cv) {
                             echo '
-                <button type="submit" name="volume" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
+                <button type="submit" name="volume" value="'.$k.'" class="btn volume btna" id="currentvolume">'.$k.'</button>';
                         } else {
                             echo '
                 <button type="submit" name="volume" value="'.$k.'" class="btn volume">'.$k.'</button>';
@@ -156,7 +156,7 @@ if ($home) {
                 foreach ($levels as $k) {
                     if ($k==$bass) {
                         echo '
-                <button type="submit" name="bass" value="'.$k.'" class="btn volume btna">'.$k.'</button>';
+                <button type="submit" name="bass" value="'.$k.'" class="btn volume btna" id="currentbass">'.$k.'</button>';
                     } else {
                         echo '
                 <button type="submit" name="bass" value="'.$k.'" class="btn volume">'.$k.'</button>';
@@ -176,8 +176,8 @@ if ($home) {
 
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
+                <br><br>
                 <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
-                <br>
                 <br>
                 <button type="submit" name="prev" class="btn b2">Prev</button>
                 <button type="submit" name="next" class="btn b2">Next</button>';
@@ -190,9 +190,7 @@ if ($home) {
                     echo '<span id="track">'.$nowplaying['artist'].'</span>';
                     echo '
                 <br>
-                <div>
                 <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
-                </div>
                 <br>
                 <br>';
                 } else {

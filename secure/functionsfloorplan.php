@@ -225,29 +225,34 @@ function ajaxbose($ip)
                         var seconds = "0" + date.getSeconds();
                         document.getElementById("clock").innerHTML = hours + \':\' + minutes.substr(-2) + \':\' + seconds.substr(-2);
                         let volume = parseInt(data["volume"]["actualvolume"], 10);
-                        var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                        var html = "<br><br>";
-                        levels.forEach(function(level) {
-                            let newlevel = volume + level;
-                            if (level==0) {
-                                html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\">" + newlevel + "</button>";
-                            } else {
-                                html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
-                            }
-                        });
-                        document.getElementById("volume").innerHTML = html;
+                        if ($(\'#currentvolume\').text()!=volume) {
+                            var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                            var html = "<br><br>";
+                            levels.forEach(function(level) {
+                                let newlevel = volume + level;
+                                if (level==0) {
+                                    html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\" id=\"currentvolume\">" + newlevel + "</button>";
+                                } else {
+                                    html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
+                                }
+                            });
+                            document.getElementById("volume").innerHTML = html;
+                            console.log("volume");
+                        }
                         let bass = parseInt(data["bass"]["actualbass"], 10);
-                        var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1];
-                        var html = "";
-                        levels.forEach(function(level) {
-                            if (level==bass) {
-                                html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\">" + level + "</button>";
-                            } else {
-                                html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
-                            }
-                        });
-                        document.getElementById("bass").innerHTML = html;
-
+                        if ($(\'#currentbass\').text()!=bass) {
+                            var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+                            var html = "";
+                            levels.forEach(function(level) {
+                                if (level==bass) {
+                                    html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\" id=\"currentbass\">" + level + "</button>";
+                                } else {
+                                    html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
+                                }
+                            });
+                            document.getElementById("bass").innerHTML = html;
+                            console.log("bass");
+                        }
                         if (data["nowplaying"]["@attributes"]["source"]=="SPOTIFY") {
                             document.getElementById("source").innerHTML = "Spotify";
                             document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
@@ -260,7 +265,6 @@ function ajaxbose($ip)
                             document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
                         }
                         $(\'#art\').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
-                        console.log(data["nowplaying"]["artist"]);
                     }
                 })
             }
