@@ -44,7 +44,7 @@ function ajax()
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'490':'1000').');
+                setInterval(ajax, '.($local===true?'50':'1000').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajax() {
@@ -72,9 +72,10 @@ function ajax()
                                     }
                                 } else if (type=="dimmer") {
                                      if (value==0) {
-
+                                        $(\'#\' + name).attr("src", "/images/Light_Off.png");
                                      } else {
-
+                                        $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                        document.getElementById("level" + name).innerHTML = value;
                                      }
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 } else if (type=="thermometer") {
@@ -265,9 +266,11 @@ function dimmer($name,$class='i70')
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
-    if ($d[$name]['s']==0|$d[$name]['s']=='') {
+    if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="'.$name.'">';
+			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="'.$name.'">
+			    <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
+                </div>';
     } else {
         echo'
                 <input type="image" src="/images/light_On.png" class="'.$class.'" id="'.$name.'">
