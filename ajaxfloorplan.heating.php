@@ -22,11 +22,11 @@ if ($home) {
         </div>';
 
 
-    schakelaar('GroheRed', 'Plug');
-    schakelaar('heater1', 'Fan');
-    schakelaar('heater2', 'Fire');
-    schakelaar('heater3', 'Fire');
-    schakelaar('heater4', 'Fire');
+    schakelaar('GroheRed');
+    schakelaar('heater1');
+    schakelaar('heater2');
+    schakelaar('heater3');
+    schakelaar('heater4');
     luifel('luifel', $d['luifel']['s']);
     rollers('Rliving', $d['Rliving']['s']);
     rollers('Rbureel', $d['Rbureel']['s']);
@@ -50,9 +50,9 @@ if ($home) {
     thermostaat('alex', 567, 202);
     thermostaat('kamer', 551, 295);
     thermostaat('zolder', 670, 190);
-    schakelaar('badkamervuur1', 'Fire');
-    schakelaar('badkamervuur2', 'Fire');
-    schakelaar('zoldervuur', 'Fire');
+    schakelaar('badkamervuur1');
+    schakelaar('badkamervuur2');
+    schakelaar('zoldervuur');
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);

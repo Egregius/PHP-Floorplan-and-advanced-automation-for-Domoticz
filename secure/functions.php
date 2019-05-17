@@ -61,55 +61,67 @@ function ajax()
                                 var type = data[device][\'dt\'];
 
                                 if (name=="time") {
-                                    document.getElementById("clock").innerHTML = time;
+                                    try {
+                                        document.getElementById("clock").innerHTML = time;
+                                    } catch {}
                                 } else if (name=="minmaxtemp") {
                                     try {
                                         document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");
                                         document.getElementById("maxtemp").innerHTML = mode.toString().replace(/[.]/, ",");
                                     } catch {}
                                 } else if (type=="light") {
-                                    if (value=="On") {
-                                        $(\'#\' + name).attr("src", "/images/light_On.png");
-                                        $(\'#action\' + name).val("Off");
-                                    } else if (value=="Off") {
-                                        $(\'#\' + name).attr("src", "/images/light_Off.png");
-                                        $(\'#action\' + name).val("On");
-                                    }
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/light_On.png");
+                                            $(\'#action\' + name).val("Off");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/light_Off.png");
+                                            $(\'#action\' + name).val("On");
+                                        }
+                                    } catch {}
                                 } else if (type=="bose") {
-                                    if (value=="On") {
-                                        $(\'#\' + name).attr("src", "/images/Bose_On.png");
-                                    } else if (value=="Off") {
-                                        $(\'#\' + name).attr("src", "/images/Bose_Off.png");
-                                    }
+                                    try {
+                                        if (value=="On") {
+                                            $(\'#\' + name).attr("src", "/images/Bose_On.png");
+                                        } else if (value=="Off") {
+                                            $(\'#\' + name).attr("src", "/images/Bose_Off.png");
+                                        }
+                                    } catch {}
                                 } else if (type=="dimmer") {
-                                     if (value==0) {
-                                        $(\'#\' + name).attr("src", "/images/Light_Off.png");
-                                     } else {
-                                        $(\'#\' + name).attr("src", "/images/Light_On.png");
-                                        document.getElementById("level" + name).innerHTML = value;
-                                     }
+                                    try {
+                                        if (value==0) {
+                                            $(\'#\' + name).attr("src", "/images/Light_Off.png");
+                                        } else {
+                                            $(\'#\' + name).attr("src", "/images/Light_On.png");
+                                            document.getElementById("level" + name).innerHTML = value;
+                                        }
+                                    } catch {}
                                 } else if (type=="pir") {
-                                    var element = document.getElementById(name);
-                                    if (value=="On") {
-                                        element.classList.add("motion");
-                                    } else {
-                                        element.classList.remove("motion");
-                                    }
-                                    var date = new Date(time*1000);
-                                    var hours = date.getHours();
-                                    var minutes = "0" + date.getMinutes();
-                                    document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
+                                    try {
+                                        var element = document.getElementById(name);
+                                        if (value=="On") {
+                                            element.classList.add("motion");
+                                        } else {
+                                            element.classList.remove("motion");
+                                        }
+                                        var date = new Date(time*1000);
+                                        var hours = date.getHours();
+                                        var minutes = "0" + date.getMinutes();
+                                        document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
+                                    } catch {}
                                 } else if (type=="contact") {
-                                    var element = document.getElementById(name);
-                                    if (value=="Open") {
-                                        element.classList.add("red");
-                                    } else {
-                                        element.classList.remove("red");
-                                    }
-                                    var date = new Date(time*1000);
-                                    var hours = date.getHours();
-                                    var minutes = "0" + date.getMinutes();
-                                    document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
+                                    try {
+                                        var element = document.getElementById(name);
+                                        if (value=="Open") {
+                                            element.classList.add("red");
+                                        } else {
+                                            element.classList.remove("red");
+                                        }
+                                        var date = new Date(time*1000);
+                                        var hours = date.getHours();
+                                        var minutes = "0" + date.getMinutes();
+                                        document.getElementById("t" + name).innerHTML = hours + \':\' + minutes.substr(-2);
+                                    } catch {}
                                 } else if (type=="thermometer") {
                                      try {
                                          if (name=="diepvries_temp") {
@@ -118,14 +130,14 @@ function ajax()
                                             document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                                         }
                                     } catch {}
-                                } else if (type=="thermostaat") {
-                                    document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                } else if (type=="thermostaat"||type=="setpoint") {
+                                    try {
+                                        document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                    } catch {}
                                 } else if (type=="elec"){
                                     try {
                                         document.getElementById(name).innerHTML = value + " W";
-                                    }
-                                    catch {
-                                    }
+                                    } catch {}
                                 } else {
                                     console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                                 }
