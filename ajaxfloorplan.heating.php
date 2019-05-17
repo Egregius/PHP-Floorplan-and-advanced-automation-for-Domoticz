@@ -14,6 +14,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '

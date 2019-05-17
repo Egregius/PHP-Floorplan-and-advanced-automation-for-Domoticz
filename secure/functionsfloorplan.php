@@ -528,4 +528,107 @@ function sidebar()
         </div>';
         }
     }
+    thermometer('buiten_temp');
+    bose(105);
+    echo '
+            <div class="fix mediabuttons">
+            <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+                <img src="/images/denon_';
+    echo $d['denonpower']['s']=='ON'?'On':'Off';
+    echo '.png" class="i70" alt="denon">
+            </a>
+            <br>
+		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+		        <img src="/images/';
+    if ($d['tv']['s']=='On') {
+        if ($d['lgtv']['s']=='On') {
+            echo 'lgtv_On';
+        } else {
+            echo 'lgtv_Off';
+        }
+    } else {
+        echo 'TV_Off';
+    }
+    echo '.png" class="i60" alt="lgtv">
+            </a>
+            <br>
+		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
+		        <img src="/images/nvidia_';
+    echo $d['nvidia']['m']=='On'?'On':'Off';
+    echo '.png" class="i48" alt="nvidia">
+		    </a>
+		    <br>';
+    echo '
+            <div class="fix center zon">
+            <small>&#x21e7;</small> '.number_format($d['minmaxtemp']['m'], 1, ',', '').'°C<br>
+            <small>&#x21e9;</small> '.number_format($d['minmaxtemp']['s'], 1, ',', '').'°C<br>
+            <a href=\'javascript:navigator_Go("regen.php");\'>
+                Buien: '.$d['buiten_temp']['m'].'
+            </a>
+            <br>';
+    echo '
+            Hum:'.round($d['icon']['m'], 0).'%
+            <br>';
+
+    echo number_format($d['wind']['s'], 1, ',', '').'km/u';
+
+    echo '
+            <br>
+            <br>
+            <img src="images/sunrise.png" alt="sunrise">
+            <br>
+            <small>&#x21e7;</small> '.strftime("%k:%M", $d['civil_twilight']['s']).'
+            <br>
+            <small>&#x21e9;</small> '.strftime("%k:%M", $d['civil_twilight']['m']).'
+            <br>
+            <br>';
+    echo '
+            UV: ';
+    if ($d['uv']['s']<2) {
+        echo '
+            <font color="#99EE00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=2&&$d['uv']['s']<4) {
+        echo '
+            <font color="#99CC00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=4&&$d['uv']['s']<6) {
+        echo '
+            <font color="#FFCC00">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=6&&$d['uv']['s']<8) {
+        echo '
+            <font color="#FF6600">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    } elseif ($d['uv']['s']>=8) {
+        echo '
+            <font color="#FF2200">
+                '.number_format($d['uv']['s'], 1, ',', '').'
+            </font>';
+    }
+    echo '
+            <br>max:';
+    if ($d['uv']['m']<2) {
+        echo '
+            <font color="#99EE00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=2&&$d['uv']['s']<4) {
+        echo '
+            <font color="#99CC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=4&&$d['uv']['s']<6) {
+        echo '
+            <font color="#FFCC00">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=6&&$d['uv']['s']<8) {
+        echo '
+            <font color="#FF6600">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    } elseif ($d['uv']['m']>=8) {
+        echo '
+            <font color="#FF2200">'.number_format($d['uv']['m'], 1, ',', '').'</font>';
+    }
+
+    echo '
+	    </div>';
 }

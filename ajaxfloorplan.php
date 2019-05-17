@@ -283,7 +283,6 @@ if ($home) {
     bose(102);
     bose(103);
     bose(104);
-    bose(105);
     echo $d['diepvries_temp']['s'] > -15 ? '
         <div class="fix z0 diepvries_temp red" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
