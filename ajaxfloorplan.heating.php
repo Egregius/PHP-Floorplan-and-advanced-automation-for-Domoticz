@@ -18,7 +18,7 @@ require 'secure/authentication.php';
 if ($home) {
     echo '
         <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
+            <a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
 
 

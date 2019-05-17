@@ -12,7 +12,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
@@ -279,32 +278,11 @@ if ($home) {
     contact('deurinkom');
     contact('deurgarage');
     contact('deurbadkamer');
-    echo '
-        <div class="fix bose">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=101");\'>
-                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose101" alt="">
-            </a>
-        </div>
-        <div class="fix bosebadkamer">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=102");\'>
-                <img src="images/Bose_'.($d['bose102']['s']=='On'?'On':'Off').'.png" id="bose102" alt="">
-            </a>
-        </div>
-        <div class="fix bosekamer">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=103");\'>
-                <img src="images/Bose_'.($d['bose103']['s']=='On'?'On':'Off').'.png" id="bose103" alt="">
-            </a>
-        </div>
-        <div class="fix bosegarage">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=104");\'>
-                <img src="images/Bose_'.($d['bose104']['s']=='On'?'On':'Off').'.png" id="bose104" alt="">
-            </a>
-        </div>
-        <div class="fix bosebuiten">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=105");\'>
-                <img src="images/Bose_'.($d['bose105']['s']=='On'?'On':'Off').'.png" id="bose105" alt="">
-            </a>
-        </div>';
+    bose(101);
+    bose(102);
+    bose(103);
+    bose(104);
+    bose(105);
     echo $d['diepvries_temp']['s'] > -15 ? '
         <div class="fix z0 diepvries_temp red" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
@@ -330,6 +308,10 @@ if ($home) {
         <div class="fix bureeltobikwh z0">
             '.round($tobi[0], 0).'W
         </div>';
+    } else {
+        echo '
+        <div class="fix bureeltobikwh z0">
+        </div>';
     }
 //    echo '<div class="fix z0" style="top:800px;left:100px">'.$d['IN1']['s'].' - '.$d['IN2']['s'].'</div>';
     if ($d['zoldervuur']['s']=='On') {
@@ -341,7 +323,6 @@ if ($home) {
     echo '
         <div class="fix floorplanstats">
             '.$udevice.' | '.
-            $ipaddress.' | '.
-            number_format(((microtime(true)-$start)*1000), 3, ',', '').'
+            $ipaddress.'
         </div>';
 }

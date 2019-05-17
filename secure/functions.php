@@ -1089,6 +1089,16 @@ function bosevolume($vol,$ip=101)
         }
     }
 }
+function bose($ip)
+{
+    global $d;
+    echo '
+        <div class="fix bose'.$ip.'">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
+                <img src="images/Bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
+            </a>
+        </div>';
+}
 function bosebass($bass,$ip=101)
 {
     $bass=1*$bass;

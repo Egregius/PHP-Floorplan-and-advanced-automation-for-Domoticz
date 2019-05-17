@@ -46,19 +46,21 @@ if ($home) {
 		</style>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                ajax();
-                setInterval(ajax, '.($local===true?'2950':'9950').');
+                ajaxinit();
+                /*setInterval(ajaxinit, 30000);*/
             });
-            function ajax() {
+            function ajaxinit() {
                 $.ajax({
                     url: \'/ajaxfloorplan.heating.php\',
                     success: function(data) {
-                        $(\'#ajax\').html(data);
+                        $(\'#ajaxinit\').html(data);
                     },
                 });
             }
             function navigator_Go(url) {window.location.assign(url);}
-        </script>
+        </script>';
+    ajax();
+    echo '
 	</head>';
     //echo '<div class="fix z1" style="top:20px;left:100px;background-color:#000;text-align:left;font-size:15;padding:20px;z-index:1000;"><pre>';print_r($_REQUEST);echo '</pre></div>';
     if (isset($_POST['Naam'])
@@ -625,7 +627,7 @@ if ($home) {
     thermometer('alex_temp');
     thermometer('zolder_temp');
     echo '
-        <div id="ajax"></div>';
+        <div id="ajaxinit"></div>';
 }
 
 ?>

@@ -87,8 +87,8 @@ td{text-align:right;font-size:1.1em;}
 .bose101{top:197px;left:185px;}#bose101{height:60px;width:auto;}
 .bose103{top:600px;left:280px;}#bose103{height:50px;width:auto;}
 .bose102{top:472px;left:340px;}#bose102{height:50px;width:auto;}
-.bosegarage{top:252px;left:104px;}#bosegarage{height:50px;width:auto;}
-.bosebuiten{top:230px;left:14px;}#bosebuiten{height:50px;width:auto;}
+.bose104{top:252px;left:104px;}#bose104{height:50px;width:auto;}
+.bose105{top:230px;left:14px;}#bose105{height:50px;width:auto;}
 .GroheRed{top:186px;left:342px;}#GroheRed{height:16px;width:auto;}
 .poortrf{top:305px;left:318px;}#poortrf{height:60px;width:auto;}
 .Xlight{top:190px;left:330px;}#Xlight{height:80px;width:auto;}
