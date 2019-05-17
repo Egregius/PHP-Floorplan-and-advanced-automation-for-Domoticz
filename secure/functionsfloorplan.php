@@ -20,7 +20,6 @@ function ajax()
 {
     global $local;
     echo '
-        <script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
@@ -195,6 +194,55 @@ function ajax()
                         }
                     },
                 });
+            }
+        </script>';
+}
+function ajaxdenon()
+{
+    echo '
+        <script type=\'text/javascript\'>
+            $(document).ready(function() {
+                ajax();
+                setInterval(ajax, 1000);
+            });
+            function navigator_Go(url) {window.location.assign(url);}
+            function ajax() {
+                $.ajax({
+                    url: \'/ajax.php\',
+                    dataType : \'json\',
+                    success: function(data) {
+                        for (var device in data) {
+                            if (data.hasOwnProperty(device)) {
+                            }
+                        }
+                    }
+                })
+            }
+        </script>';
+}
+function ajaxkodi()
+{
+}
+function ajaxbose($ip)
+{
+    echo '
+        <script type=\'text/javascript\'>
+            $(document).ready(function() {
+                ajax();
+                setInterval(ajax, 500);
+            });
+            function navigator_Go(url) {window.location.assign(url);}
+            function ajax() {
+                $.ajax({
+                    url: \'/ajaxfloorplan.bose.php?ip='.$ip.'\',
+                    dataType : \'json\',
+                    success: function(data) {
+                        for (var device in data) {
+                            if (data.hasOwnProperty(device)) {
+                            }
+                        }
+                    }
+                })
             }
         </script>';
 }
