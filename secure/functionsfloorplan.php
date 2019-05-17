@@ -119,7 +119,7 @@ function ajax()
                                 } else if (type=="fan") {
                                     try {
                                         if (value=="On") {
-                                            $(\'#\' + name).attr("src", "/images/fab_On.png");
+                                            $(\'#\' + name).attr("src", "/images/fan_On.png");
                                             $(\'#action\' + name).val("Off");
                                         } else if (value=="Off") {
                                             $(\'#\' + name).attr("src", "/images/fan_Off.png");
@@ -139,14 +139,18 @@ function ajax()
                                 } else if (type=="bose") {
                                     try {
                                         if (name=="bose105") {
+                                            var html = "watisdathier";
                                             if (mode=="Online") {
+                                                var html = "Online";
                                                 if (value=="On") {
-                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";
+                                                    var html = "OnlineON";
                                                 } else {
-                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>"
+                                                    var html = "<a href=\'javascript:navigator_Go(\"floorplan.bose.php?ip=105\");\'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";
+                                                    var html = "OnlineELSE";
                                                 }
-                                            } else {
-                                                var html = "";
+                                            } else if (mode=="Offline") {
+                                                var html = "Offline";
                                             }
                                             document.getElementById("bosediv105").innerHTML = html;
                                             console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
