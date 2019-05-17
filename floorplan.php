@@ -237,7 +237,7 @@ if ($home) {
 					<input type="hidden" name="dimmer" value="true">
 				</div>
 				<div class="fix z" style="top:100px;left:30px;">
-					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90">
+					<input type="image" name="dimleveloff" value ="0" src="images/light_Off.png" class="i90">
 				</div>
 				<div class="fix z" style="top:100px;left:150px;">
 					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
@@ -271,7 +271,7 @@ if ($home) {
         }
         echo '
 				<div class="fix z" style="top:100px;left:385px;">
-					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90">
+					<input type="image" name="dimlevelon" value ="100" src="images/light_On.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
 

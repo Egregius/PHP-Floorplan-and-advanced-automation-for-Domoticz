@@ -14,6 +14,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     if ($d['denon']['s']=='On') {
@@ -128,9 +129,9 @@ if ($home) {
 	</div>';
     }
     if ($d['tv']['s']=='On') {
-        schakelaar('lgtv', 'lgtv');
+        schakelaar('lgtv');
     } else {
-        schakelaar('tv', 'TV');
+        schakelaar('tv');
     }
     if (past('lgtv')<$eendag) {
         echo '
@@ -172,9 +173,9 @@ if ($home) {
 
     //schakelaar('kerstboom','Kerstboom');
     echo '
-        <div class="fix bose">
+        <div class="fix bose101">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip=101");\'>
-                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose" alt="">
+                <img src="images/Bose_'.($d['bose101']['s']=='On'?'On':'Off').'.png" id="bose101" alt="">
             </a>
         </div>';
 
