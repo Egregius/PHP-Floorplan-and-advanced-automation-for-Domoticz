@@ -85,6 +85,17 @@ function ajax()
                                         var item = value / 1000;
                                         document.getElementById(name).innerHTML = item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
                                     } catch {}
+                                } else if (name=="douche"){
+                                    try {
+                                        var douchegas = value * 10;
+                                        var douchewater = mode;
+                                        var douchegaseuro = douchegas * 10 * 0.0004;
+                                        var douchewatereuro = douchewatereuro * 0.005;
+                                        document.getElementById(\'douchegas\').innerHTML = douchegas + " L";
+                                        document.getElementById(\'douchegaseuro\').innerHTML = douchegaseuro + " L";
+                                        document.getElementById(\'douchewater\').innerHTML = douchewater + " L";
+                                        document.getElementById(\'douchewatereuro\').innerHTML = douchewatereuro + " L";
+                                    } catch {}
                                 } else if (type=="light") {
                                     try {
                                         if (value=="On") {

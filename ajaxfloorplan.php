@@ -194,7 +194,7 @@ if ($home) {
                 <tr>
                     <td>D-water</td>
                     <td id="douchewater">'.$d['douche']['m'].' L</td>
-                    <td id="douchewatereuro>'.number_format(($d['douche']['m']*0.0055), 2, ',', '.').' €</td>
+                    <td id="douchewatereuro>'.number_format(($d['douche']['m']*0.005), 2, ',', '.').' €</td>
                 <tr>';
     }
     echo '
