@@ -164,10 +164,10 @@ if ($home) {
                 echo '</div>';
                 if ($nowplaying['@attributes']['source']=='SPOTIFY') {
                     echo '
-                <h4>Spotify</h4>';
+                <h4 id="source">Spotify</h4>';
                     if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
                         echo '
-                <h4>'.$nowplaying['artist'].'<br>';
+                <h4 id="artist">'.$nowplaying['artist'].'<br>';
                     }
                     if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
                         echo $nowplaying['track'];
@@ -176,7 +176,7 @@ if ($home) {
                 </h4>';
                     if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
                         echo '
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art">
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
                 <br>
                 <br>
                 <button type="submit" name="prev" class="btn b2">Prev</button>
@@ -184,13 +184,13 @@ if ($home) {
                     }
                 } elseif ($nowplaying['@attributes']['source']=='TUNEIN') {
                     echo '
-                <h4>Internet Radio</h4>';
+                <h4  id="source">Internet Radio</h4>';
                     echo '
-                <h4>'.$nowplaying['stationName'].'</h4>';
+                <h4 id="artist">'.$nowplaying['stationName'].'</h4>';
                     echo $nowplaying['artist'];
                     echo '
                 <br>
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art">
+                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
                 <br>
                 <br>';
                 } else {
