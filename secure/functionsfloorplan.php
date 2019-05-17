@@ -38,7 +38,6 @@ function ajax()
                                 var time = data[device][\'t\'];
                                 var mode = data[device][\'m\'];
                                 var type = data[device][\'dt\'];
-
                                 if (name=="time") {
                                     try {
                                         document.getElementById("clock").innerHTML = time;

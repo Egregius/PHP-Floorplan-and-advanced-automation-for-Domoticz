@@ -301,11 +301,11 @@ function store($name,$status,$idx=null,$force=true,$type=null)
     }*/
     lgsql($username, $name, $status);
 }
-function storemode($name,$mode,$time=false)
+function storemode($name,$mode,$time=0)
 {
     global $db, $username;
-    if ($time==true) {
-        $time=TIME;
+    if ($time>0) {
+        $time=TIME+$time;
         $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
     } else {
         $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
