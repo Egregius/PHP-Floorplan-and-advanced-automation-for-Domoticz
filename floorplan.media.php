@@ -11,6 +11,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $ctx=stream_context_create(array('http'=>array('timeout'=>2)));
@@ -43,19 +44,21 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                ajax();
+                ajaxinit();
                 setInterval(ajax, '.($local===true?'2950':'9950').');
             });
             function navigator_Go(url) {window.location.assign(url);}
-            function ajax() {
+            function ajaxinit() {
                 $.ajax({
                     url: \'/ajaxfloorplan.media.php\',
                     success: function(data) {
-                        $(\'#ajax\').html(data);
+                        $(\'#ajaxinit\').html(data);
                     },
                 });
             }
-        </script>
+        </script>';
+    ajax();
+    echo '
 	</head>';
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv') {
@@ -241,7 +244,7 @@ if ($home) {
 
     echo '
     <body class="floorplan">
-        <div id="ajax"></div>';
+        <div id="ajaxinit"></div>';
 }
 
 //else{header("Location: index.php");die("Redirecting to: index.php");}

@@ -28,7 +28,7 @@ if ($home) {
         $denoninput='UIT';
     }
     echo '
-        <div class="fix clock">
+        <div class="fix clock" id="clock">
 	        <a href=\'javascript:navigator_Go("floorplan.media.php");\'>
 	            '.strftime("%k:%M:%S", TIME).'
 	        </a>
