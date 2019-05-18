@@ -27,22 +27,6 @@ function ajax()
             });
         </script>';
 }
-function ajaxdenon()
-{
-
-}
-function ajaxkodi()
-{
-}
-function ajaxbose($ip)
-{
-    $k=10;
-    echo '
-        <script type=\'text/javascript\'>
-
-
-        </script>';
-}
 function blinds($name)
 {
     global $d;

@@ -60,7 +60,7 @@ if ($home) {
 		<script type="text/javascript">
 		    $(document).ready(function() {
                 ajaxbose('.$bose.');
-                setInterval( function() { ajaxbose(1'.$bose.'); }, 500 );
+                setInterval( function() { ajaxbose('.$bose.'); }, 500 );
             });
         </script>
 	</head>';
@@ -126,7 +126,6 @@ if ($home) {
     $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
-            ajaxbose($bose);
             echo '
         <div class="fix blackmedia" >
 			<form method="GET" action="floorplan.bose.php">

@@ -1,7 +1,6 @@
 function navigator_Go(url) {window.location.assign(url);}
 var $LastUpdateTime = parseInt(0);
 function ajax() {
-    var timestamp = 1;
     $.ajax({
         url: '/ajax.php?timestamp='+$LastUpdateTime,
         dataType : 'json',
@@ -201,7 +200,7 @@ function ajax() {
                             document.getElementById(name).innerHTML = value;
                         } catch {}
                     } else if (type=="rollers") {
-                            setTimeout(ajaxinit, 1000);
+                            /*setTimeout(ajaxinit, 1000);*/
                     } else {
                         console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                     }
@@ -211,59 +210,57 @@ function ajax() {
     });
 }
 function ajaxbose($ip) {
-                $.ajax({
-                    url: '/ajaxfloorplan.bose.php?ip=' + $ip,
-                    dataType : 'json',
-                    success: function(data) {
-                        var date = new Date(data["time"]*1000);
-                        var hours = date.getHours();
-                        var minutes = "0" + date.getMinutes();
-                        var seconds = "0" + date.getSeconds();
-                        document.getElementById("clock").innerHTML = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-                        let volume = parseInt(data["volume"]["actualvolume"], 10);
-                        if ($('#currentvolume').text()!=volume) {
-                            var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                            var html = "<br><br>";
-                            levels.forEach(function(level) {
-                                let newlevel = volume + level;
-                                if (level==0) {
-                                    html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\" id=\"currentvolume\">" + newlevel + "</button>";
-                                } else {
-                                    html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
-                                }
-                            });
-                            document.getElementById("volume").innerHTML = html;
-                            console.log("volume");
-                        }
-                        let bass = parseInt(data["bass"]["actualbass"], 10);
-                        if ($('#currentbass').text()!=bass) {
-                            var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
-                            var html = "";
-                            levels.forEach(function(level) {
-                                if (level==bass) {
-                                    html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\" id=\"currentbass\">" + level + "</button>";
-                                } else {
-                                    html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
-                                }
-                            });
-                            document.getElementById("bass").innerHTML = html;
-                            console.log("bass");
-                        }
-                        if (data["nowplaying"]["@attributes"]["source"]=="SPOTIFY") {
-                            document.getElementById("source").innerHTML = "Spotify";
-                            document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
-                            document.getElementById("track").innerHTML = data["nowplaying"]["track"];
-                        } else if (data["nowplaying"]["@attributes"]["source"]=="TUNEIN") {
-                            document.getElementById("source").innerHTML = "Internet Radio";
-                            document.getElementById("artist").innerHTML = data["nowplaying"]["track"];
-                            document.getElementById("track").innerHTML = data["nowplaying"]["artist"];
-                        } else {
-                            document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
-                        }
-                        $('#art').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
+    $.ajax({
+        url: '/ajaxfloorplan.bose.php?ip=' + $ip,
+        dataType : 'json',
+        success: function(data) {
+            var date = new Date(data["time"]*1000);
+            var hours = date.getHours();
+            var minutes = "0" + date.getMinutes();
+            var seconds = "0" + date.getSeconds();
+            document.getElementById("clock").innerHTML = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            let volume = parseInt(data["volume"]["actualvolume"], 10);
+            if ($('#currentvolume').text()!=volume) {
+                var levels = [-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                var html = "<br><br>";
+                levels.forEach(function(level) {
+                    let newlevel = volume + level;
+                    if (level==0) {
+                        html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\" id=\"currentvolume\">" + newlevel + "</button>";
+                    } else {
+                        html += "<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
                     }
-                })
+                });
+                document.getElementById("volume").innerHTML = html;
             }
+            let bass = parseInt(data["bass"]["actualbass"], 10);
+            if ($('#currentbass').text()!=bass) {
+                var levels = [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+                var html = "";
+                levels.forEach(function(level) {
+                    if (level==bass) {
+                        html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\" id=\"currentbass\">" + level + "</button>";
+                    } else {
+                        html += "<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
+                    }
+                });
+                document.getElementById("bass").innerHTML = html;
+            }
+            if (data["nowplaying"]["@attributes"]["source"]=="SPOTIFY") {
+                document.getElementById("source").innerHTML = "Spotify";
+                document.getElementById("artist").innerHTML = data["nowplaying"]["artist"];
+                document.getElementById("track").innerHTML = data["nowplaying"]["track"];
+            } else if (data["nowplaying"]["@attributes"]["source"]=="TUNEIN") {
+                document.getElementById("source").innerHTML = "Internet Radio";
+                document.getElementById("artist").innerHTML = data["nowplaying"]["track"];
+                document.getElementById("track").innerHTML = data["nowplaying"]["artist"];
+            } else {
+                document.getElementById("source").innerHTML = data["nowplaying"]["@attributes"]["source"];
+            }
+            $('#art').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
+        }
+    })
+}
 function pad(n, length) {
     var len = length - (''+n).length;
     return (len > 0 ? new Array(++len).join('0') : '') + n
