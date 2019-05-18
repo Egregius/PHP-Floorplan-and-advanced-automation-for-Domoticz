@@ -213,13 +213,7 @@ function showTimestamp($name,$draai)
 function secured($name)
 {
     echo '
-        <div class="fix '.$name.'" id="'.$name.'">
-        </div>';
-}
-function motion($name)
-{
-    echo '
-        <div class="fix z'.$name.' z0" id="pir'.$name.'">
+        <div class="fix '.$name.' z0" id="'.$name.'">
         </div>';
 }
 function luifel($name,$stat)

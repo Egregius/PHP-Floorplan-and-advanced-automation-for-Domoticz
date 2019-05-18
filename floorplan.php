@@ -646,11 +646,6 @@ if ($home) {
     secured('zgarage');
     secured('zhalla');
     secured('zhallb');
-    motion('living');
-    motion('keuken');
-    motion('inkom');
-    motion('garage');
-    motion('hall');
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);
     showTimestamp('pirliving', 0);

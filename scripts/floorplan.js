@@ -24,9 +24,26 @@ function ajax() {
                     } else if (name=="Weg") {
                         try {
                             if (value==0) {
-                                document.getElementById("zliving").classList.add("secured");
+                                document.getElementById("zliving").classList.remove("secured");
+                                document.getElementById("zkeuken").classList.remove("secured");
+                                document.getElementById("zgarage").classList.remove("secured");
+                                document.getElementById("zinkom").classList.remove("secured");
+                                document.getElementById("zhalla").classList.remove("secured");
+                                document.getElementById("zhallb").classList.remove("secured");
                             } else if (value==1) {
+                                document.getElementById("zliving").classList.add("secured");
+                                document.getElementById("zkeuken").classList.add("secured");
+                                document.getElementById("zgarage").classList.add("secured");
+                                document.getElementById("zinkom").classList.add("secured");
+                                document.getElementById("zhalla").classList.remove("secured");
+                                document.getElementById("zhallb").classList.remove("secured");
                             } else if (value==2) {
+                                document.getElementById("zliving").classList.add("secured");
+                                document.getElementById("zkeuken").classList.add("secured");
+                                document.getElementById("zgarage").classList.add("secured");
+                                document.getElementById("zinkom").classList.add("secured");
+                                document.getElementById("zhalla").classList.add("secured");
+                                document.getElementById("zhallb").classList.add("secured");
                             }
                         } catch {}
                     } else if (name=="minmaxtemp") {
@@ -187,16 +204,27 @@ function ajax() {
                         } catch {}
                     } else if (type=="pir") {
                         try {
-                            var element = document.getElementById(name);
-                            if (value=="On") {
-                                element.classList.add("motion");
+                            var name = name.toString().replace("pir", "")
+                            var element = document.getElementById("z" + name);
+                            if (name=="hall") {
+                                if (value=="On") {
+                                    document.getElementById("z" + name + "a").classList.add("motion");
+                                    document.getElementById("z" + name + "b").classList.add("motion");
+                                } else {
+                                    document.getElementById("z" + name + "a").classList.remove("motion");
+                                    document.getElementById("z" + name + "b").classList.remove("motion");
+                                }
                             } else {
-                                element.classList.remove("motion");
+                                if (value=="On") {
+                                    element.classList.add("motion");
+                                } else {
+                                    element.classList.remove("motion");
+                                }
                             }
                             var date = new Date(time*1000);
                             var hours = date.getHours();
                             var minutes = "0" + date.getMinutes();
-                            document.getElementById("t" + name).innerHTML = hours + ':' + minutes.substr(-2);
+                            document.getElementById("tpir" + name).innerHTML = hours + ':' + minutes.substr(-2);
                         } catch {}
                     } else if (type=="contact") {
                         try {
