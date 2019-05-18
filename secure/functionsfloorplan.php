@@ -213,7 +213,7 @@ function showTimestamp($name,$draai)
 function secured($name)
 {
     echo '
-        <div class="fix secured '.$name.'">
+        <div class="fix '.$name.'" id="'.$name.'">
         </div>';
 }
 function motion($name)

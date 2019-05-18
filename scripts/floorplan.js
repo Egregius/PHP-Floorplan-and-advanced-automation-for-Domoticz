@@ -21,6 +21,14 @@ function ajax() {
                             var seconds = "0" + date.getSeconds();
                             document.getElementById("clock").innerHTML = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                         } catch {}
+                    } else if (name=="Weg") {
+                        try {
+                            if (value==0) {
+                                document.getElementById("zliving").classList.add("secured");
+                            } else if (value==1) {
+                            } else if (value==2) {
+                            }
+                        } catch {}
                     } else if (name=="minmaxtemp") {
                         try {
                             document.getElementById("mintemp").innerHTML = value.toString().replace(/[.]/, ",");

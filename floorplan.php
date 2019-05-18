@@ -640,16 +640,12 @@ if ($home) {
     }
     schakelaar('jbl');
     blinds('zoldertrap');
-    if ($d['Weg']['s']>0) {
-        secured('zliving');
-        secured('zkeuken');
-        secured('zinkom');
-        secured('zgarage');
-    }
-    if ($d['Weg']['s']==2) {
-        secured('zhalla');
-        secured('zhallb');
-    }
+    secured('zliving');
+    secured('zkeuken');
+    secured('zinkom');
+    secured('zgarage');
+    secured('zhalla');
+    secured('zhallb');
     motion('living');
     motion('keuken');
     motion('inkom');
