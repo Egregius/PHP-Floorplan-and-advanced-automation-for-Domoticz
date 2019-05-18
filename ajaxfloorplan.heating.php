@@ -57,21 +57,12 @@ if ($home) {
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);
-    if ($d['Weg']['s']>0) {
-        secured('zliving');
-        secured('zkeuken');
-        secured('zinkom');
-        secured('zgarage');
-    }
-    if ($d['Weg']['s']==2) {
-        secured('zhalla');
-        secured('zhallb');
-    }
-    motion('living');
-    motion('keuken');
-    motion('inkom');
-    motion('garage');
-    motion('hall');
+    secured('zliving');
+    secured('zkeuken');
+    secured('zinkom');
+    secured('zgarage');
+    secured('zhalla');
+    secured('zhallb');
     showTimestamp('pirliving', 0);
     showTimestamp('pirkeuken', 0);
     showTimestamp('pirgarage', 0);
