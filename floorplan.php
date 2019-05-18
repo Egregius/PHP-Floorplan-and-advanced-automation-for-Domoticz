@@ -43,10 +43,13 @@ if ($home) {
 			.water{top:200px;left:218px;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajaxinit();
                 setInterval(ajaxinit, 120000);
+                ajax();
+                setInterval(ajax, '.($local===true?'200':'800').');
             });
             function navigator_Go(url) {window.location.assign(url);}
             function ajaxinit() {
@@ -57,9 +60,7 @@ if ($home) {
                     },
                 });
             }
-        </script>';
-    ajax();
-    echo '
+        </script>
 	</head>';
     if (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {

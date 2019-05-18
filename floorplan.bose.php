@@ -56,6 +56,13 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js"></script>
+		<script type="text/javascript">
+		    $(document).ready(function() {
+                ajaxbose('.$bose.');
+                setInterval( function() { ajaxbose(1'.$bose.'); }, 500 );
+            });
+        </script>
 	</head>';
 /*
 <zone master="587A6260C5B2">
