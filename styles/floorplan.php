@@ -64,7 +64,7 @@ td{text-align:right;font-size:1.1em;}
 .kristal{top:7px;left:147px;}#kristal{height:50px;width:auto;}
 .bureel{top:7px;left:207px;}#bureel{height:50px;width:auto;}
 .inkom{top:51px;left:349px;}#inkom{height:50px;width:auto;}
-.keuken{top:159px;left:390px;}
+.keuken{top:159px;left:390px;}#keuken{height:50px;width:auto;}
 .wasbak{top:145px;left:345px;}#wasbak{height:40px;width:auto;}
 .kookplaat{top:115px;left:386px;}#kookplaat{height:40px;width:auto;}
 .werkblad1{top:208px;left:434px;}#werkblad1{height:40px;width:auto;}
@@ -76,7 +76,7 @@ td{text-align:right;font-size:1.1em;}
 .auto{top:312px;left:299px;}#auto{height:40px;width:auto;}
 .Weg{top:286px;left:410px;}#Weg{height:80px;width:auto;}
 .tuin{top:66px;left:16px;}#tuin{height:48px;width:auto;}
-.zolder{top:690px;left:210px;}#zolder{height:48px;width:auto;}
+.zolder{top:690px;left:210px;}#zolder{height:48px;width:48px;}
 .wc{top:11px;left:412px;}#wc{height:28px;width:auto;}
 .IN1{top:800px;left:90px;}#IN1{height:28px;width:auto;}
 .IN2{top:800px;left:120px;}#IN2{height:28px;width:auto;}

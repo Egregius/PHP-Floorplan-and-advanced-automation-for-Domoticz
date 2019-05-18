@@ -80,53 +80,69 @@ function ajax() {
                             html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
                                 html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/light_On.png">';
+                                html += '<input type="image" src="/images/light_On.png" id="' + name + '">';
                             } else if (value=="Off") {
                                 html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/light_Off.png">';
+                                html += '<input type="image" src="/images/light_Off.png" id="' + name + '">';
                             }
                             html += '</form>';
                             document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="plug") {
                         try {
+                            var html = '<form method="POST" action="" id="form">';
+                            html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
-                                $('#' + name).attr("src", "/images/plug_On.png");
-                                $('#action' + name).val("Off");
+                                html += '<input type="hidden" name="Actie" value="Off">';
+                                html += '<input type="image" src="/images/plug_On.png" id="' + name + '">';
                             } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/plug_Off.png");
-                                $('#action' + name).val("On");
+                                html += '<input type="hidden" name="Actie" value="On">';
+                                html += '<input type="image" src="/images/plug_Off.png" id="' + name + '">';
                             }
+                            html += '</form>';
+                            document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="fire") {
                         try {
+                            var html = '<form method="POST" action="" id="form">';
+                            html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
-                                $('#' + name).attr("src", "/images/fire_On.png");
-                                $('#action' + name).val("Off");
+                                html += '<input type="hidden" name="Actie" value="Off">';
+                                html += '<input type="image" src="/images/fire_On.png" id="' + name + '">';
                             } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/fire_Off.png");
-                                $('#action' + name).val("On");
+                                html += '<input type="hidden" name="Actie" value="On">';
+                                html += '<input type="image" src="/images/fire_Off.png" id="' + name + '">';
                             }
+                            html += '</form>';
+                            document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="fan") {
-                        try {
+                       try {
+                            var html = '<form method="POST" action="" id="form">';
+                            html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
-                                $('#' + name).attr("src", "/images/fan_On.png");
-                                $('#action' + name).val("Off");
+                                html += '<input type="hidden" name="Actie" value="Off">';
+                                html += '<input type="image" src="/images/fan_On.png" id="' + name + '">';
                             } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/fan_Off.png");
-                                $('#action' + name).val("On");
+                                html += '<input type="hidden" name="Actie" value="On">';
+                                html += '<input type="image" src="/images/fan_Off.png" id="' + name + '">';
                             }
+                            html += '</form>';
+                            document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="alarm") {
                         try {
+                            var html = '<form method="POST" action="" id="form">';
+                            html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
-                                $('#' + name).attr("src", "/images/alarm_On.png");
-                                $('#action' + name).val("Off");
+                                html += '<input type="hidden" name="Actie" value="Off">';
+                                html += '<input type="image" src="/images/alarm_On.png" id="' + name + '">';
                             } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/alarm_Off.png");
-                                $('#action' + name).val("On");
+                                html += '<input type="hidden" name="Actie" value="On">';
+                                html += '<input type="image" src="/images/alarm_Off.png" id="' + name + '">';
                             }
+                            html += '</form>';
+                            document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="bose") {
                         try {
