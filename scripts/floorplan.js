@@ -76,13 +76,17 @@ function ajax() {
                         } catch {}
                     } else if (type=="light") {
                         try {
+                            var html = '<form method="POST" action="" id="form">';
+                            html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
-                                $('#' + name).attr("src", "/images/light_On.png");
-                                $('#action' + name).val("Off");
+                                html += '<input type="hidden" name="Actie" value="Off">';
+                                html += '<input type="image" src="/images/light_On.png">';
                             } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/light_Off.png");
-                                $('#action' + name).val("On");
+                                html += '<input type="hidden" name="Actie" value="On">';
+                                html += '<input type="image" src="/images/light_Off.png">';
                             }
+                            html += '</form>';
+                            document.getElementById(name).innerHTML = html;
                         } catch {}
                     } else if (type=="plug") {
                         try {

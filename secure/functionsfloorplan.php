@@ -84,17 +84,7 @@ function schakelaar($name)
 {
     global $d;
     echo '
-        <div class="fix '.preg_replace('/\s/', '', $name).' z1">
-            <form method="POST" action="" id="form">
-                <input type="hidden" name="Naam" value="'.$name.'">';
-    echo $d[$name]['s']=='Off'?'
-                <input type="hidden" name="Actie" value="On" id="action'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['dt'].'_Off.png" id="'.$name.'">'
-    :'
-                <input type="hidden" name="Actie" value="Off" id="action'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['dt'].'_On.png" id="'.$name.'">';
-    echo '
-            </form>
+        <div class="fix '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'">
         </div>';
 }
 function schakelaar2($name)

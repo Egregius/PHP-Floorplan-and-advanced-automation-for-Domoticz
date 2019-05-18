@@ -6,12 +6,12 @@ h3{font-size:24px;}
 h4{font-size:18px;}
 .center{text-align:center;}
 .fix{position:absolute;}
-.i20{width:20px;height:auto;}
-.i40{width:40px;height:auto;}
-.i48{width:48px;height:auto;}
-.i60{width:60px;height:auto;}
-.i70{width:70px;height:auto;}
-.i90{width:90px;height:auto;}
+.i20{width:20px;height:20px;}
+.i40{width:40px;height:40px;}
+.i48{width:48px;height:48px;}
+.i60{width:60px;height:60px;}
+.i70{width:70px;height:70px;}
+.i90{width:90px;height:90px;}
 .r0{transform:rotate(0deg);-webkit-transform:rotate(0deg);}
 .r90{transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 .r270{transform:rotate(270deg);-webkit-transform:rotate(270deg);}
@@ -64,7 +64,7 @@ td{text-align:right;font-size:1.1em;}
 .kristal{top:7px;left:147px;}#kristal{height:50px;width:auto;}
 .bureel{top:7px;left:207px;}#bureel{height:50px;width:auto;}
 .inkom{top:51px;left:349px;}#inkom{height:50px;width:auto;}
-.keuken{top:159px;left:390px;}#keuken{height:50px;width:auto;}
+.keuken{top:159px;left:390px;}
 .wasbak{top:145px;left:345px;}#wasbak{height:40px;width:auto;}
 .kookplaat{top:115px;left:386px;}#kookplaat{height:40px;width:auto;}
 .werkblad1{top:208px;left:434px;}#werkblad1{height:40px;width:auto;}
