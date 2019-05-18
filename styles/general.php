@@ -3,7 +3,8 @@ header("Content-type:text/css;charset:UTF-8");
 header("Cache-Control:must-revalidate");
 //header("Expires:".gmdate("D, d M Y H:i:s",time()+259200)." GMT");//3 dagen
 //header("Expires:".gmdate("D, d M Y H:i:s",time()+7200)." GMT");//2 uur
-header("Expires:".gmdate("D, d M Y H:i:s",time()+1)." GMT");//Direct
+header("Expires:".gmdate("D, d M Y H:i:s",time()+3600)." GMT");//1 uur
+//header("Expires:".gmdate("D, d M Y H:i:s",time()+1)." GMT");//Direct
 if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
 else $udevice='other';

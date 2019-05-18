@@ -158,14 +158,8 @@ function thermometer($name)
 }
 function contact($name)
 {
-    global $d;
-    if ($d[$name]['s']=='Open') {
-        echo '
-            <div class="fix red '.$name.'" id="'.$name.'"></div>';
-    } else {
-        echo '
+    echo '
             <div class="fix '.$name.'" id="'.$name.'"></div>';
-    }
 }
 function thermostaat($name,$top,$left)
 {
@@ -212,17 +206,9 @@ function thermostaat($name,$top,$left)
 }
 function showTimestamp($name,$draai)
 {
-    global $eendag,$d;
-    if (past($name)<82800) {
-        echo '
-        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'">
-            '.strftime("%k:%M", $d[$name]['t']).'
-        </div>';
-    } else {
-        echo '
+    echo '
         <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'">
         </div>';
-    }
 }
 function secured($name)
 {
@@ -232,16 +218,9 @@ function secured($name)
 }
 function motion($name)
 {
-    global $d;
-    if ($d['pir'.$name]['s']=='On') {
-        echo '
-        <div class="fix motion z'.$name.' z0" id="pir'.$name.'">
-        </div>';
-    } else {
-        echo '
+    echo '
         <div class="fix z'.$name.' z0" id="pir'.$name.'">
         </div>';
-    }
 }
 function luifel($name,$stat)
 {
