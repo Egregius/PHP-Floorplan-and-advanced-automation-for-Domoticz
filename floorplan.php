@@ -47,7 +47,6 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajaxinit();
-                setInterval(ajaxinit, 120000);
                 ajax();
                 setInterval(ajax, '.($local===true?'200':'800').');
             });

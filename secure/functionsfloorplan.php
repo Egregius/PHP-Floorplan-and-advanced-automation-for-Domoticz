@@ -82,7 +82,6 @@ function dimmer($name,$class='i70')
 }
 function schakelaar($name)
 {
-    global $d;
     echo '
         <div class="fix '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'">
         </div>';
