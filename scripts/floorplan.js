@@ -4,11 +4,11 @@ function ajax() {
     $.ajax({
         url: '/ajax.php?timestamp='+$LastUpdateTime,
         dataType : 'json',
-        success: function(data) {
-            for (var device in data) {
-                if (data.hasOwnProperty(device)) {
-                    var name = data[device]['n'];
-                    var time = data[device]['t'];
+        success: function(d) {
+            for (var device in d) {
+                if (d.hasOwnProperty(device)) {
+                    var name = d[device]['n'];
+                    var time = d[device]['t'];
                     if (name=="time") {
                         $LastUpdateTime = parseInt(time);
                         try {
@@ -19,10 +19,10 @@ function ajax() {
                             document.getElementById("clock").innerHTML = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                         } catch {}
                     } else {
-                        var value = data[device]['s'];
-                        var mode = data[device]['m'];
-                        var type = data[device]['dt'];
-                        var icon = data[device]['icon'];
+                        var value = d[device]['s'];
+                        var mode = d[device]['m'];
+                        var type = d[device]['dt'];
+                        var icon = d[device]['icon'];
                         if (name=="Weg") {
                             try {
                                 if (value==0) {
@@ -91,11 +91,14 @@ function ajax() {
                         } else if (name=="elec"){
                             try {
                                 html = "<td>Elec:</td><td>" + value + " W</td><td>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
-                                document.getElementById("trelec").innerHTML = html;
+                                var elem = document.getElementById("trelec");
+                                elem.innerHTML = html;
                             } catch {}
                         } else if (name=="zon"||name=="zonvandaag"){
-                            html = "<td>Zon:</td><td>" + data['zon']['s'] + " W</td><td>" + data['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
-                            document.getElementById("trzon").innerHTML = html;
+                            html = "<td>Zon:</td><td>" + d['zon']['s'] + " W</td><td>" + d['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
+                            var elem = document.getElementById("trzon");
+                            elem.innerHTML = html;
+                            elem.style.color = "#FF0000";
                             try {
                                 document.getElementById(name).innerHTML = value + " W";
                             } catch {}
@@ -304,7 +307,7 @@ function ajax() {
                             } catch {}
                         } else if (type=="thermostaat") {
                             try {
-                                var dif=data[name.toString().replace("_set", "_temp")]['s']-value;
+                                var dif=d[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts = icon.split(",");
                                 if (dif > 0.2) {
                                     var circle = "hot";
