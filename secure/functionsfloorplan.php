@@ -50,6 +50,8 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
+        <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'"></div>';
+    /*echo '
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
@@ -67,7 +69,7 @@ function dimmer($name,$class='i70')
     }
     echo '
 	        </div>
-        </form>';
+        </form>';*/
 }
 function schakelaar($name)
 {
