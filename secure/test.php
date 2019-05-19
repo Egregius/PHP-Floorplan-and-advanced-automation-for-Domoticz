@@ -15,28 +15,40 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$local=true;
-  echo '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<title>Test</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">
-	    <link rel="manifest" href="/manifest.json">
-	    <link rel="shortcut icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">';
-	echo '
-	</head>
-	<body>';
-telegram('test');
-
-print_r($_REQUEST);
+echo '
+    <style>
+        .fontred{color:#FF0000;}
+        .fontdarkorange{color:#FF4400;}
+        .fontorange{color:#FF8800;}
+        .fontlightorange{color:#FFAA00;}
+        .fontdarkyellow{color:#FFCC00;}
+        .fontyellow{color:#FFFF00;}
+        .fontgrey{color:#CCCCCC;}
+        tr{background-color:#000;}
+    </style>
+    <table>
+        <tr class="fontred">
+            <td>FF0000</td>
+        </tr>
+        <tr class="fontdarkorange">
+            <td>FF4400</td>
+        </tr>
+        <tr class="fontorange">
+            <td>FF8800</td>
+        </tr>
+        <tr class="fontlightorange">
+            <td>FFAA00</td>
+        </tr>
+        <tr class="fontdarkyellow">
+            <td>FFCC00</td>
+        </tr>
+        <tr class="fontyellow">
+            <td>FFFF00</td>
+        </tr>
+        <tr class="fontgrey">
+            <td>CCCCCC</td>
+        </tr>
+    </table>';
 
 /*---------------------------*/
 echo '</pre>';
