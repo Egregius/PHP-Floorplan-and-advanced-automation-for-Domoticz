@@ -136,13 +136,7 @@ function thermometer($name)
         $dcolor='00F';
     }
     echo '
-        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';">
-            <div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">
-            </div>
-            <img src="/images/temp.png" height="100px" width="auto" alt="'.$name.'">
-            <div class="fix center" style="top:73px;left:5px;width:30px;" id="'.$name.'">
-                '.number_format($temp, 1, ',', '').'
-            </div>
+        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'">
         </div>';
 }
 function contact($name)
@@ -351,7 +345,7 @@ function bose($ip)
     echo '
         <div class="fix bose'.$ip.'" id="bosediv'.$ip.'">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
-                <img src="images/Bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
+                <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
             </a>
         </div>';
 }

@@ -114,6 +114,28 @@ function ajax() {
                             html += '</form>';
                             document.getElementById(name).innerHTML = html;
                         } catch {}
+                    } else if (type=="bose") {
+                        try {
+                            if (name=="bose105") {
+                                if (mode=="Online") {
+                                    var html = "Online";
+                                    if (value=="On") {
+                                        var html = "<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";
+                                    } else {
+                                        var html = "<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";
+                                    }
+                                } else if (mode=="Offline") {
+                                    var html = "";
+                                }
+                                document.getElementById("bosediv105").innerHTML = html;
+                            }
+                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                            if (value=="On") {
+                                $('#' + name).attr("src", "/images/bose_On.png");
+                            } else if (value=="Off") {
+                                $('#' + name).attr("src", "/images/bose_Off.png");
+                            }
+                        } catch {}
                     } else if (type=="dimmer") {
                         try {
                             if (value==0) {
@@ -166,7 +188,13 @@ function ajax() {
                              if (name=="diepvries_temp") {
                                 document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";
                              } else {
-                                document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                var html = '<div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">';
+                                html + = '</div>'
+                                html + = '<img src="/images/temp.png" height="100px" width="auto" alt="'.$name.'">';
+                                html + = '<div class="fix center" style="top:73px;left:5px;width:30px;">';
+                                html + = '    '.number_format($temp, 1, ',', '').'';
+                                html + = '</div>';
+                                document.getElementById(name).innerHTML = html;
                             }
                         } catch {}
                     } else if (type=="thermostaat") {
