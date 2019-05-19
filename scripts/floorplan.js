@@ -90,15 +90,38 @@ function ajax() {
                             } catch {}
                         } else if (name=="elec"){
                             try {
-                                html = "<td>Elec:</td><td>" + value + " W</td><td>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
-                                var elem = document.getElementById("trelec");
-                                elem.innerHTML = html;
+                                html = "<td>Elec:</td><td id='elec'>" + value + " W</td><td id='elecvandaag'>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
+                                document.getElementById("trelec").innerHTML = html;
+                                if (value > 6000) {
+                                    document.getElementById("elec").style.color = "#FF0000";
+                                } else if (value > 5000) {
+                                    document.getElementById("elec").style.color = "#FF4400";
+                                } else if (value > 4000) {
+                                    document.getElementById("elec").style.color = "#FF8800";
+                                } else if (value > 3000) {
+                                    document.getElementById("elec").style.color = "#FFAA00";
+                                } else if (value > 2000) {
+                                    document.getElementById("elec").style.color = "#FFCC00";
+                                } else if (value > 1000) {
+                                    document.getElementById("elec").style.color = "#FFFF00";
+                                }
+                                if (mode > 20) {
+                                    document.getElementById("elecvandaag").style.color = "#FF0000";
+                                } else if (mode > 18) {
+                                    document.getElementById("elecvandaag").style.color = "#FF4400";
+                                } else if (mode > 16) {
+                                    document.getElementById("elecvandaag").style.color = "#FF8800";
+                                } else if (mode > 14) {
+                                    document.getElementById("elecvandaag").style.color = "#FFAA00";
+                                } else if (mode > 12) {
+                                    document.getElementById("elecvandaag").style.color = "#FFCC00";
+                                } else if (mode > 10) {
+                                    document.getElementById("elecvandaag").style.color = "#FFFF00";
+                                }
                             } catch {}
                         } else if (name=="zon"||name=="zonvandaag"){
-                            html = "<td>Zon:</td><td>" + d['zon']['s'] + " W</td><td>" + d['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
-                            var elem = document.getElementById("trzon");
-                            elem.innerHTML = html;
-                            elem.style.color = "#FF0000";
+                            html = "<td>Zon:</td><td id='zon'>" + d['zon']['s'] + " W</td><td id='zonvandaag'>" + d['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
+                            document.getElementById("trzon").innerHTML = html;
                             try {
                                 document.getElementById(name).innerHTML = value + " W";
                             } catch {}
