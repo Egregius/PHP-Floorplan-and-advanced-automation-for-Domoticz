@@ -154,7 +154,12 @@ function luifel($name,$stat)
 		    </div>
         </form>';
 }
-function rollers($name,$stat)
+function rollers($name)
+{
+    echo '
+        <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="'.$name.'"></div>';
+}
+function rollersold($name,$stat)
 {
     global $d;
     echo '

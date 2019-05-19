@@ -264,6 +264,7 @@ function ajax() {
                                 }
                             } catch {}
                         } else if (type=="thermostaat") {
+                            try {
                                 var dif=data[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts = icon.split(",");
                                 if (dif > 0.2) {
@@ -293,18 +294,22 @@ function ajax() {
                                 } else {
                                     html += '<font size="2" color="#CCC">' + value.toString().replace(/[.]/, ",") + '</font></div>';
                                 }
-
-                                console.log('thermostaat' + name);
-                                console.log(html);
                                 document.getElementById(name).innerHTML = html;
+                            } catch {}
                         } else if (type=="setpoint") {
                             try {
                                 document.getElementById(name).innerHTML = value;
                             } catch {}
                         } else if (type=="rollers") {
-                                /*setTimeout(ajaxinit, 1000);*/
+
+                                var html = '<form method="POST" action="">';
+                                html += '<input type="hidden" name="rollers" value="' + name + '">';
+                                console.log(html);
+                                document.getElementById(name).innerHTML = html;
+                                console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+
                         } else {
-                            /*console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);*/
+                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                         }
                     }
                 }

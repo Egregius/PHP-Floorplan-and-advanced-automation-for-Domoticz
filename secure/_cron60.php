@@ -70,6 +70,7 @@ if ($d['kamer']['m']==2) {
         foreach ($items as $i) {
             if ($d[$i]['s']>0) {
                 sl($i, 0);
+                storemode($i, 0);
             }
         }
     }
