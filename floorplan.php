@@ -417,14 +417,6 @@ if ($home) {
     echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
-    rollery('Rbureel', 0, 208, 43, 'L');
-    rollery('RkeukenL', 128, 475, 44, 'P');
-    rollery('RkeukenR', 179, 475, 44, 'P');
-    rollery('Rtobi', 448, 80, 44, 'P');
-    rollery('Ralex', 568, 80, 44, 'P');
-    rollery('RkamerL', 529, 481, 44, 'P');
-    rollery('RkamerR', 586, 481, 44, 'P');
-    rollery('Rliving', 46, 80, 165, 'P');
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -631,12 +623,8 @@ if ($home) {
     schakelaar('heater3');
     schakelaar('heater4');
     schakelaar('diepvries');
-    if ($d['Weg']['s']==0||$d['poortrf']['s']=='On') {
-        schakelaar('poortrf');
-    }
-    if ($d['Xlight']['s']!='Off') {
-        schakelaar('Xlight');
-    }
+    schakelaar('poortrf');
+//    if ($d['Xlight']['s']!='Off') {schakelaar('Xlight');}
     schakelaar('jbl');
     blinds('zoldertrap');
     secured('zliving');
@@ -645,6 +633,16 @@ if ($home) {
     secured('zgarage');
     secured('zhalla');
     secured('zhallb');
+
+    rollery('Ralex', 568, 80, 44, 'P');
+    rollery('Rbureel', 0, 208, 43, 'L');
+    rollery('RkamerL', 529, 481, 44, 'P');
+    rollery('RkamerR', 586, 481, 44, 'P');
+    rollery('RkeukenL', 128, 475, 44, 'P');
+    rollery('RkeukenR', 179, 475, 44, 'P');
+    rollery('Rliving', 46, 80, 165, 'P');
+    rollery('Rtobi', 448, 80, 44, 'P');
+
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);
     showTimestamp('pirliving', 0);

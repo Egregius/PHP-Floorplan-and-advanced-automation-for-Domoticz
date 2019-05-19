@@ -223,6 +223,11 @@ function ajax() {
                                 document.getElementById(name).innerHTML = html;
                             }
                         } catch {}
+                    } else if (type=="rollers") {
+                        try {
+                            var opts = icon.split(",");
+                            console.log(opts);
+                        } catch {}
                     } else if (type=="thermostaat") {
                         try {
                             document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
@@ -234,7 +239,7 @@ function ajax() {
                     } else if (type=="rollers") {
                             /*setTimeout(ajaxinit, 1000);*/
                     } else {
-                        console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                        /*console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);*/
                     }
                 }
             }
