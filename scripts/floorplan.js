@@ -63,30 +63,29 @@ function ajax() {
                                 $('#icon').attr("src", "https://openweathermap.org/img/w/" + value + ".png");
                             } catch {}
                         } else if (name=="uv") {
-                            if (value < 2) {
-                                html = '<font color="#99EE00">UV: ' + value + '</font>';
-                            } else if (value < 4) {
-                                html = '<font color="#99CC00">UV: ' + value + '</font>';
-                            } else if (value < 6) {
-                                html = '<font color="#FFCC00">UV: ' + value + '</font>';
-                            } else if (value < 8) {
-                                html = '<font color="#FF6600">UV: ' + value + '</font>';
-                            } else {
-                                html = '<font color="#FF2200">UV: ' + value + '</font>';
-                            }
-                            if (mode < 2) {
-                                html += '<br><font color="#99EE00">max: ' + mode + '</font>';
-                            } else if (mode < 4) {
-                                html += '<br><font color="#99CC00">max: ' + mode + '</font>';
-                            } else if (mode < 6) {
-                                html += '<br><font color="#FFCC00">max: ' + mode + '</font>';
-                            } else if (mode < 8) {
-                                html += '<br><font color="#FF6600">max: ' + mode + '</font>';
-                            } else {
-                                html += '<br><font color="#FF2200">max: ' + mode + '</font>';
-                            }
-
                             try {
+                                if (value < 2) {
+                                    html = '<font color="#99EE00">UV: ' + value + '</font>';
+                                } else if (value < 4) {
+                                    html = '<font color="#99CC00">UV: ' + value + '</font>';
+                                } else if (value < 6) {
+                                    html = '<font color="#FFCC00">UV: ' + value + '</font>';
+                                } else if (value < 8) {
+                                    html = '<font color="#FF6600">UV: ' + value + '</font>';
+                                } else {
+                                    html = '<font color="#FF2200">UV: ' + value + '</font>';
+                                }
+                                if (mode < 2) {
+                                    html += '<br><font color="#99EE00">max: ' + mode + '</font>';
+                                } else if (mode < 4) {
+                                    html += '<br><font color="#99CC00">max: ' + mode + '</font>';
+                                } else if (mode < 6) {
+                                    html += '<br><font color="#FFCC00">max: ' + mode + '</font>';
+                                } else if (mode < 8) {
+                                    html += '<br><font color="#FF6600">max: ' + mode + '</font>';
+                                } else {
+                                    html += '<br><font color="#FF2200">max: ' + mode + '</font>';
+                                }
                                 document.getElementById("uv").innerHTML = html;
                             } catch {}
                         } else if (name=="elec"){

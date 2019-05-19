@@ -304,7 +304,89 @@ if ($home) {
     echo '
 	<body class="floorplan">
 	    ';
-     if ($d['Rliving']['s']==100
+    dimmer('tobi','i60');
+    dimmer('zithoek');
+    dimmer('eettafel');
+    dimmer('kamer','i60');
+    dimmer('alex','i60');
+    dimmer('lichtbadkamer','i60');
+    dimmer('terras','i48');
+    schakelaar('kristal');
+    schakelaar('bureel');
+    schakelaar('inkom');
+    schakelaar('keuken');
+    schakelaar('wasbak');
+    schakelaar('kookplaat');
+    schakelaar('werkblad1');
+    schakelaar('voordeur');
+    schakelaar('hall');
+    schakelaar('garage');
+    schakelaar('garageled');
+    schakelaar('zolderg');
+    schakelaar('tuin');
+    schakelaar('zolder');
+    schakelaar('wc');
+    schakelaar('IN1');
+    schakelaar('IN2');
+    schakelaar('bureeltobi');
+    schakelaar('tvtobi');
+    schakelaar('badkamervuur1');
+    schakelaar('badkamervuur2');
+    schakelaar('heater1');
+    schakelaar('heater2');
+    schakelaar('heater3');
+    schakelaar('heater4');
+    schakelaar('diepvries');
+    schakelaar('poortrf');
+//    if ($d['Xlight']['s']!='Off') {schakelaar('Xlight');}
+    schakelaar('jbl');
+    blinds('zoldertrap');
+    secured('zliving');
+    secured('zkeuken');
+    secured('zinkom');
+    secured('zgarage');
+    secured('zhalla');
+    secured('zhallb');
+
+    rollery('Ralex');
+    rollery('Rbureel');
+    rollery('RkamerL');
+    rollery('RkamerR');
+    rollery('RkeukenL');
+    rollery('RkeukenR');
+    rollery('Rliving');
+    rollery('Rtobi');
+
+    showTimestamp('belknop', 270);
+    showTimestamp('pirgarage', 0);
+    showTimestamp('pirliving', 0);
+    showTimestamp('pirkeuken', 0);
+    showTimestamp('pirinkom', 0);
+    showTimestamp('pirhall', 0);
+    showTimestamp('achterdeur', 270);
+    showTimestamp('poort', 90);
+    showTimestamp('raamliving', 270);
+    showTimestamp('raamtobi', 270);
+    showTimestamp('raamalex', 270);
+    showTimestamp('raamkamer', 90);
+    showTimestamp('deurbadkamer', 90);
+    showTimestamp('deurinkom', 90);
+    showTimestamp('deurgarage', 0);
+    contact('poort');
+    contact('achterdeur');
+    contact('raamliving');
+    contact('raamtobi');
+    contact('raamalex');
+    contact('raamkamer');
+    contact('raamhall');
+    contact('deurinkom');
+    contact('deurgarage');
+    contact('deurbadkamer');
+    bose(101);
+    bose(102);
+    bose(103);
+    bose(104);
+    if ($d['Rliving']['s']==100
         &&$d['Rbureel']['s']==100
         &&$d['RkeukenL']['s']==100
         &&$d['RkeukenR']['s']==100
@@ -583,98 +665,17 @@ if ($home) {
                     <td>D-gas</td>
                     <td id="douchegas">'.$d['douche']['s']*10 .' L</td>
                     <td id="douchegaseuro>'.number_format(($d['douche']['s']*10*0.0004), 2, ',', '.').' €</td>
-                <tr>
+                </tr>
                 <tr>
                     <td>D-water</td>
                     <td id="douchewater">'.$d['douche']['m'].' L</td>
                     <td id="douchewatereuro>'.number_format(($d['douche']['m']*0.005), 2, ',', '.').' €</td>
-                <tr>';
+                </tr>';
     }
     echo '
 		    </table>
 	    </div>';
-    dimmer('tobi','i60');
-    dimmer('zithoek');
-    dimmer('eettafel');
-    dimmer('kamer','i60');
-    dimmer('alex','i60');
-    dimmer('lichtbadkamer','i60');
-    dimmer('terras','i48');
-    schakelaar('kristal');
-    schakelaar('bureel');
-    schakelaar('inkom');
-    schakelaar('keuken');
-    schakelaar('wasbak');
-    schakelaar('kookplaat');
-    schakelaar('werkblad1');
-    schakelaar('voordeur');
-    schakelaar('hall');
-    schakelaar('garage');
-    schakelaar('garageled');
-    schakelaar('zolderg');
-    schakelaar('tuin');
-    schakelaar('zolder');
-    schakelaar('wc');
-    schakelaar('IN1');
-    schakelaar('IN2');
-    schakelaar('bureeltobi');
-    schakelaar('tvtobi');
-    schakelaar('badkamervuur1');
-    schakelaar('badkamervuur2');
-    schakelaar('heater1');
-    schakelaar('heater2');
-    schakelaar('heater3');
-    schakelaar('heater4');
-    schakelaar('diepvries');
-    schakelaar('poortrf');
-//    if ($d['Xlight']['s']!='Off') {schakelaar('Xlight');}
-    schakelaar('jbl');
-    blinds('zoldertrap');
-    secured('zliving');
-    secured('zkeuken');
-    secured('zinkom');
-    secured('zgarage');
-    secured('zhalla');
-    secured('zhallb');
 
-    rollery('Ralex');
-    rollery('Rbureel');
-    rollery('RkamerL');
-    rollery('RkamerR');
-    rollery('RkeukenL');
-    rollery('RkeukenR');
-    rollery('Rliving');
-    rollery('Rtobi');
-
-    showTimestamp('belknop', 270);
-    showTimestamp('pirgarage', 0);
-    showTimestamp('pirliving', 0);
-    showTimestamp('pirkeuken', 0);
-    showTimestamp('pirinkom', 0);
-    showTimestamp('pirhall', 0);
-    showTimestamp('achterdeur', 270);
-    showTimestamp('poort', 90);
-    showTimestamp('raamliving', 270);
-    showTimestamp('raamtobi', 270);
-    showTimestamp('raamalex', 270);
-    showTimestamp('raamkamer', 90);
-    showTimestamp('deurbadkamer', 90);
-    showTimestamp('deurinkom', 90);
-    showTimestamp('deurgarage', 0);
-    contact('poort');
-    contact('achterdeur');
-    contact('raamliving');
-    contact('raamtobi');
-    contact('raamalex');
-    contact('raamkamer');
-    contact('raamhall');
-    contact('deurinkom');
-    contact('deurgarage');
-    contact('deurbadkamer');
-    bose(101);
-    bose(102);
-    bose(103);
-    bose(104);
     echo $d['diepvries_temp']['s'] > -15 ? '
         <div class="fix z0 diepvries_temp red" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
@@ -715,6 +716,7 @@ if ($home) {
     echo '
         <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();
+
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
