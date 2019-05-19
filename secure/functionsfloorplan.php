@@ -246,7 +246,6 @@ function rollery($name,$top,$left,$size,$rotation)
     if ($rotation=='P') {
         if ($stat==0) {
             $nsize=0;
-            $top=$top;
         } elseif ($stat>0) {
             $nsize=($size*$perc)+5;
             if ($nsize>$size) {
@@ -265,7 +264,6 @@ function rollery($name,$top,$left,$size,$rotation)
     } elseif ($rotation=='PL') {
         if ($stat==100) {
             $nsize=0;
-            $top=$top;
         } elseif ($stat>0) {
             $nsize=($size*$perc)+5;
             if ($nsize>$size) {
