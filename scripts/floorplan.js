@@ -12,6 +12,7 @@ function ajax() {
                     var time = data[device]['t'];
                     var mode = data[device]['m'];
                     var type = data[device]['dt'];
+                    var icon = data[device]['icon'];
                     if (name=="time") {
                         $LastUpdateTime = parseInt(time);
                         try {
@@ -99,98 +100,19 @@ function ajax() {
                             document.getElementById('douchewater').innerHTML = douchewater + " L";
                             document.getElementById('douchewatereuro').innerHTML = douchewatereuro + " L";
                         } catch {}
-                    } else if (type=="light") {
+                    } else if (type=="switch") {
                         try {
                             var html = '<form method="POST" action="" id="form">';
                             html += '<input type="hidden" name="Naam" value="' + name + '">';
                             if (value=="On") {
                                 html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/light_On.png" id="' + name + '">';
+                                html += '<input type="image" src="/images/' + icon + '_On.png" id="' + name + '">';
                             } else if (value=="Off") {
                                 html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/light_Off.png" id="' + name + '">';
+                                html += '<input type="image" src="/images/' + icon + '_Off.png" id="' + name + '">';
                             }
                             html += '</form>';
                             document.getElementById(name).innerHTML = html;
-                        } catch {}
-                    } else if (type=="plug") {
-                        try {
-                            var html = '<form method="POST" action="" id="form">';
-                            html += '<input type="hidden" name="Naam" value="' + name + '">';
-                            if (value=="On") {
-                                html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/plug_On.png" id="' + name + '">';
-                            } else if (value=="Off") {
-                                html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/plug_Off.png" id="' + name + '">';
-                            }
-                            html += '</form>';
-                            document.getElementById(name).innerHTML = html;
-                        } catch {}
-                    } else if (type=="fire") {
-                        try {
-                            var html = '<form method="POST" action="" id="form">';
-                            html += '<input type="hidden" name="Naam" value="' + name + '">';
-                            if (value=="On") {
-                                html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/fire_On.png" id="' + name + '">';
-                            } else if (value=="Off") {
-                                html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/fire_Off.png" id="' + name + '">';
-                            }
-                            html += '</form>';
-                            document.getElementById(name).innerHTML = html;
-                        } catch {}
-                    } else if (type=="fan") {
-                       try {
-                            var html = '<form method="POST" action="" id="form">';
-                            html += '<input type="hidden" name="Naam" value="' + name + '">';
-                            if (value=="On") {
-                                html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/fan_On.png" id="' + name + '">';
-                            } else if (value=="Off") {
-                                html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/fan_Off.png" id="' + name + '">';
-                            }
-                            html += '</form>';
-                            document.getElementById(name).innerHTML = html;
-                        } catch {}
-                    } else if (type=="alarm") {
-                        try {
-                            var html = '<form method="POST" action="" id="form">';
-                            html += '<input type="hidden" name="Naam" value="' + name + '">';
-                            if (value=="On") {
-                                html += '<input type="hidden" name="Actie" value="Off">';
-                                html += '<input type="image" src="/images/alarm_On.png" id="' + name + '">';
-                            } else if (value=="Off") {
-                                html += '<input type="hidden" name="Actie" value="On">';
-                                html += '<input type="image" src="/images/alarm_Off.png" id="' + name + '">';
-                            }
-                            html += '</form>';
-                            document.getElementById(name).innerHTML = html;
-                        } catch {}
-                    } else if (type=="bose") {
-                        try {
-                            if (name=="bose105") {
-                                var html = "watisdathier";
-                                if (mode=="Online") {
-                                    var html = "Online";
-                                    if (value=="On") {
-                                        var html = "<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/Bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";
-                                    } else {
-                                        var html = "<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/Bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";
-                                    }
-                                } else if (mode=="Offline") {
-                                    var html = "";
-                                }
-                                document.getElementById("bosediv105").innerHTML = html;
-                            }
-                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
-                            if (value=="On") {
-                                $('#' + name).attr("src", "/images/Bose_On.png");
-                            } else if (value=="Off") {
-                                $('#' + name).attr("src", "/images/Bose_Off.png");
-                            }
                         } catch {}
                     } else if (type=="dimmer") {
                         try {
