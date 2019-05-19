@@ -155,14 +155,15 @@ function ajax(){
                                 var douchegas=value * 10;
                                 var douchewater=mode;
                                 var douchegaseuro=douchegas * 10 * 0.0004;
-                                var douchewatereuro=douchewatereuro * 0.005;
-                                html="<td>D-gas:</td><td>" + douchegas + " L</td><td>" + douchegaseuro.toString().replace(/[.]/, ",") + " €</td>";
-                                document.getElementById("trdgas").innerHTML=html;
-
-                                document.getElementById('douchegas').innerHTML=douchegas + " L";
-                                document.getElementById('douchegaseuro').innerHTML=douchegaseuro + " L";
-                                document.getElementById('douchewater').innerHTML=douchewater + " L";
-                                document.getElementById('douchewatereuro').innerHTML=douchewatereuro + " L";
+                                var douchewatereuro=douchewater * 0.005;
+                                if(value>0){
+                                    html="<td>D-gas:</td><td>" + douchegas + " L</td><td>" + douchegaseuro.toString().replace(/[.]/, ",") + " €</td>";
+                                    document.getElementById("trdgas").innerHTML=html;
+                                }
+                                if(mode>0){
+                                    html="<td>D-water:</td><td>" + douchewater + " L</td><td>" + douchewatereuro.toString().replace(/[.]/, ",") + " €</td>";
+                                    document.getElementById("trdwater").innerHTML=html;
+                                }
                             } catch {}
                         }else if(type=="switch"){
                             try {

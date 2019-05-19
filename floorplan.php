@@ -534,7 +534,6 @@ if ($home) {
         <div class="fix bureeltobikwh z0">
         </div>';
     }
-//    echo '<div class="fix z0" style="top:800px;left:100px">'.$d['IN1']['s'].' - '.$d['IN2']['s'].'</div>';
     if ($d['zoldervuur']['s']=='On') {
         echo '
         <div class="fix z0 zoldervuur2">
@@ -553,7 +552,8 @@ if ($home) {
                 <tr id="trwater"></tr>
                 <tr id="trdgas"></tr>
                 <tr id="trdwater"></tr>
-            </table>';
+            </table>
+        </div>';
     /*
     $items=array('gas','water');
     foreach ($items as $i) {
@@ -573,161 +573,7 @@ if ($home) {
             ${$i.'color'}='#CCCCCC';
         }
     }
-    if ($d['elec']['s']>6000) {
-        $verbruikcolor='#FF0000';
-    } elseif ($d['elec']['s']>5000) {
-        $verbruikcolor='#FF4400';
-    } elseif ($d['elec']['s']>4000) {
-        $verbruikcolor='#FF8800';
-    } elseif ($d['elec']['s']>3000) {
-        $verbruikcolor='#FFAA00';
-    } elseif ($d['elec']['s']>2000) {
-        $verbruikcolor='#FFCC00';
-    } elseif ($d['elec']['s']>1000) {
-        $verbruikcolor='#FFFF00';
-    } else {
-        $verbruikcolor='#CCCCCC';
-    }
-
-    if ($d['elec']['m']>20) {
-        $vandaagcolor='#FF0000';
-    } elseif ($d['elec']['m']>18) {
-        $vandaagcolor='#FF4400';
-    } elseif ($d['elec']['m']>16) {
-        $vandaagcolor='#FF8800';
-    } elseif ($d['elec']['m']>14) {
-        $vandaagcolor='#FFAA00';
-    } elseif ($d['elec']['m']>12) {
-        $vandaagcolor='#FFCC00';
-    } elseif ($d['elec']['m']>10) {
-        $vandaagcolor='#FFFF00';
-    } else {
-        $vandaagcolor='#CCCCCC';
-    }
-
-    if ($d['gasvandaag']['s']>700) {
-        $gasvandaagcolor='#FF0000';
-    } elseif ($d['gasvandaag']['s']>600) {
-        $gasvandaagcolor='#FF4400';
-    } elseif ($d['gasvandaag']['s']>500) {
-        $gasvandaagcolor='#FF8800';
-    } elseif ($d['gasvandaag']['s']>400) {
-        $gasvandaagcolor='#FFAA00';
-    } elseif ($d['gasvandaag']['s']>300) {
-        $gasvandaagcolor='#FFCC00';
-    } elseif ($d['gasvandaag']['s']>200) {
-        $gasvandaagcolor='#FFFF00';
-    } else {
-        $gasvandaagcolor='#CCCCCC';
-    }
-
-    if ($d['watervandaag']['s']>1000) {
-        $watervandaagcolor='#FF0000';
-    } elseif ($d['watervandaag']['s']>750) {
-        $watervandaagcolor='#FF4400';
-    } elseif ($d['watervandaag']['s']>500) {
-        $watervandaagcolor='#FF8800';
-    } elseif ($d['watervandaag']['s']>400) {
-        $watervandaagcolor='#FFAA00';
-    } elseif ($d['watervandaag']['s']>300) {
-        $watervandaagcolor='#FFCC00';
-    } elseif ($d['watervandaag']['s']>200) {
-        $watervandaagcolor='#FFFF00';
-    } else {
-        $watervandaagcolor='#CCCCCC';
-    }
-
-    if ($d['zon']['s']>3500) {
-        $zoncolor='#00FF00';
-    } elseif ($d['zon']['s']>3000) {
-        $zoncolor='#33FF00';
-    } elseif ($d['zon']['s']>2700) {
-        $zoncolor='#66FF00';
-    } elseif ($d['zon']['s']>2400) {
-        $zoncolor='#99FF00';
-    } elseif ($d['zon']['s']>2100) {
-        $zoncolor='#CCFF00';
-    } elseif ($d['zon']['s']>1800) {
-        $zoncolor='#EEFF00';
-    } elseif ($d['zon']['s']>1500) {
-        $zoncolor='#FFFF33';
-    } elseif ($d['zon']['s']>1200) {
-        $zoncolor='#FFFF66';
-    } elseif ($d['zon']['s']>900) {
-        $zoncolor='#FFFF99';
-    } elseif ($d['zon']['s']>600) {
-        $zoncolor='#FFFFCC';
-    } elseif ($d['zon']['s']>300) {
-        $zoncolor='#EEEECC';
-    } else {
-        $zoncolor='#CCCCCC';
-    }
-    if ($d['zonvandaag']['m']>=120) {
-        $zonvandaagcolor='#00FF00';
-    } elseif ($d['zonvandaag']['m']>=110) {
-        $zonvandaagcolor='#33FF00';
-    } elseif ($d['zonvandaag']['m']>=100) {
-        $zonvandaagcolor='#66FF00';
-    } elseif ($d['zonvandaag']['m']>=90) {
-        $zonvandaagcolor='#99FF00';
-    } elseif ($d['zonvandaag']['m']>=80) {
-        $zonvandaagcolor='#CCFF00';
-    } elseif ($d['zonvandaag']['m']>=70) {
-        $zonvandaagcolor='#EEFF00';
-    } elseif ($d['zonvandaag']['m']>=60) {
-        $zonvandaagcolor='#FFFF33';
-    } elseif ($d['zonvandaag']['m']>=50) {
-        $zonvandaagcolor='#FFFF66';
-    } elseif ($d['zonvandaag']['m']>=40) {
-        $zonvandaagcolor='#FFFF99';
-    } elseif ($d['zonvandaag']['m']>=30) {
-        $zonvandaagcolor='#FFFFCC';
-    } elseif ($d['zonvandaag']['m']>=20) {
-        $zonvandaagcolor='#EEEECC';
-    } else {
-        $zonvandaagcolor='#CCCCCC';
-    }
-    echo '
-        <div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';">
-            <table>
-                <tr id="trelec">
-                    <td>Elec:</td>
-                    <td><font color="'.$verbruikcolor.'" id="elec">'.$d['elec']['s'].' W</font></td>
-                    <td><font color="'.$vandaagcolor.'" id="elecvandaag">'.number_format($d['elec']['m'], 1, ',', '').' kWh</font></td>
-                </tr>';
-    if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
-        echo'
-                <tr id=>
-                    <td>Zon:</td>
-                    <td><font color="'.$zoncolor.'" id="zon">'.$d['zon']['s'].' W</font></td>
-                    <td><font color="'.$zonvandaagcolor.'" id="zonvandaag">'.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
-                </tr>';
-    }
-    echo '
-                <tr id="trgas">
-                    <td><font color="'.$gascolor.'" id="gas">Gas:</font></td>
-                    <td colspan=2><font color="'.$gasvandaagcolor.'" id="gasvandaag">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
-                </tr>
-                <tr>
-                    <td><font color="'.$watercolor.'" id="verbrwater">Water:</font></td>
-                    <td colspan=2><font color="'.$watervandaagcolor.'" id="watervandaag">'.number_format($d['watervandaag']['s']/1000, 3, ',', '.').' m<sup>3</sup></font></td>
-                </tr>';
-    if ($d['douche']['s']>0||$d['douche']['m']>0) {
-        echo '
-                <tr>
-                    <td>D-gas</td>
-                    <td id="douchegas">'.$d['douche']['s']*10 .' L</td>
-                    <td id="douchegaseuro>'.number_format(($d['douche']['s']*10*0.0004), 2, ',', '.').' €</td>
-                </tr>
-                <tr>
-                    <td>D-water</td>
-                    <td id="douchewater">'.$d['douche']['m'].' L</td>
-                    <td id="douchewatereuro>'.number_format(($d['douche']['m']*0.005), 2, ',', '.').' €</td>
-                </tr>';
-    }
-    echo '
-		    </table>
-	    </div>';*/
+    */
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
