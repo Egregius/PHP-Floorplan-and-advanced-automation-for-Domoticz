@@ -35,6 +35,14 @@ if ($home) {
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js"></script>
+		<script type=\'text/javascript\'>
+            $(document).ready(function() {
+                ajax();
+                setInterval(ajax, '.($local===true?'300':'1500').');
+            });
+            function navigator_Go(url) {window.location.assign(url);}
+        </script>
 	</head>
 	<body>';
     if (isset($_POST['Setpoint'])) {
@@ -110,41 +118,21 @@ if ($home) {
 <div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>
 ';
 
-    if ($d['Weg']['s']>0) {
-        secured('zliving');
-        secured('zkeuken');
-        secured('zinkom');
-        secured('zgarage');
-    }
-    if ($d['Weg']['s']==2) {
-        secured('zhalla');
-        secured('zhallb');
-    }
-    motion('living');
-    motion('keuken');
-    motion('inkom');
-    motion('hall');
-    if ($d['poort']['s']=='Open') {
-        echo '<div class="fix poort"></div>';
-    }
-    if ($d['achterdeur']['s']=='Open') {
-        echo '<div class="fix achterdeur"></div>';
-    }
-    if ($d['raamliving']['s']=='Open') {
-        echo '<div class="fix raamliving"></div>';
-    }
-    if ($d['raamtobi']['s']=='Open') {
-        echo '<div class="fix raamtobi"></div>';
-    }
-    if ($d['raamalex']['s']=='Open') {
-        echo '<div class="fix raamalex"></div>';
-    }
-    if ($d['raamkamer']['s']=='Open') {
-        echo '<div class="fix raamkamer"></div>';
-    }
-    if ($d['deurbadkamer']['s']=='Open') {
-        echo '<div class="fix deurbadkamer"></div>';
-    }
+    secured('zliving');
+    secured('zkeuken');
+    secured('zinkom');
+    secured('zgarage');
+    secured('zhalla');
+    secured('zhallb');
+    contact('poort');
+    contact('achterdeur');
+    contact('raamliving');
+    contact('raamtobi');
+    contact('raamalex');
+    contact('raamkamer');
+    contact('deurbadkamer');
+    contact('deurgarage');
+    contact('deurinkom');
 
     echo '<div class="fix blackmedia">
 <form method="POST">
