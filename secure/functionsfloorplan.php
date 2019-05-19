@@ -159,21 +159,6 @@ function rollers($name)
     echo '
         <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
 }
-function rollersold($name,$stat)
-{
-    if ($d[$name]['m']==2) {
-        echo '
-                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;">
-                </div>';
-    } elseif ($d[$name]['m']==1) {
-        echo '
-                <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;">
-                </div>';
-    }
-    echo '
-		    </div>
-	    </form>';
-}
 function rollery($name)
 {
     echo '
@@ -265,52 +250,6 @@ function sidebar()
             <small>&#x21e9;</small><span id="zononder">'.strftime("%k:%M", $d['civil_twilight']['m']).'</span>
             <br>
             <br>
-            UV: ';
-    if ($d['uv']['s']<2) {
-        echo '
-            <font color="#99EE00">
-                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
-            </font>';
-    } elseif ($d['uv']['s']>=2&&$d['uv']['s']<4) {
-        echo '
-            <font color="#99CC00">
-                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
-            </font>';
-    } elseif ($d['uv']['s']>=4&&$d['uv']['s']<6) {
-        echo '
-            <font color="#FFCC00">
-                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
-            </font>';
-    } elseif ($d['uv']['s']>=6&&$d['uv']['s']<8) {
-        echo '
-            <font color="#FF6600">
-                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
-            </font>';
-    } elseif ($d['uv']['s']>=8) {
-        echo '
-            <font color="#FF2200">
-                <span id="uv">'.number_format($d['uv']['s'], 1, ',', '').'</span>
-            </font>';
-    }
-    echo '
-            <br>max:';
-    if ($d['uv']['m']<2) {
-        echo '
-            <font color="#99EE00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
-    } elseif ($d['uv']['m']>=2&&$d['uv']['s']<4) {
-        echo '
-            <font color="#99CC00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
-    } elseif ($d['uv']['m']>=4&&$d['uv']['s']<6) {
-        echo '
-            <font color="#FFCC00"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
-    } elseif ($d['uv']['m']>=6&&$d['uv']['s']<8) {
-        echo '
-            <font color="#FF6600"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
-    } elseif ($d['uv']['m']>=8) {
-        echo '
-            <font color="#FF2200"><span id="uvmax">'.number_format($d['uv']['m'], 1, ',', '').'</span></font>';
-    }
-
-    echo '
+            <div id="uv"></div>
 	    </div>';
 }

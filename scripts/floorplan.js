@@ -63,9 +63,19 @@ function ajax() {
                                 $('#icon').attr("src", "https://openweathermap.org/img/w/" + value + ".png");
                             } catch {}
                         } else if (name=="uv") {
+                            if (value < 2) {
+                                html = '<font color="#99EE00">UV: ' + value + '</font>';
+                            } else if (value < 4) {
+                                html = '<font color="#99CC00">UV: ' + value + '</font>';
+                            } else if (value < 6) {
+                                html = '<font color="#FFCC00">UV: ' + value + '</font>';
+                            } else if (value < 8) {
+                                html = '<font color="#FF6600">UV: ' + value + '</font>';
+                            } else {
+                                html = '<font color="#FF2200">UV: ' + value + '</font>';
+                            }
                             try {
-                                document.getElementById("uv").innerHTML = value;
-                                document.getElementById("uvmax").innerHTML = mode;
+                                document.getElementById("uv").innerHTML = html;
                             } catch {}
                         } else if (name=="elec"){
                             try {
@@ -225,12 +235,6 @@ function ajax() {
                             } catch {}
                         } else if (type=="rollers") {
                             try {
-                                /*
-                                opts[0] = top
-                                opts[1] = left
-                                opts[2] = size
-                                opts[3] = rotation
-                                */
                                 var opts = icon.split(",");
                                 var stat = 100 - value;
                                 if (stat < 100) {
@@ -287,9 +291,7 @@ function ajax() {
                                     html += '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
                                 }
                                 html += '</div></form>';
-                                console.log(html);
                                 document.getElementById('R' + name).innerHTML = html;
-
                             } catch {}
                         } else if (type=="thermostaat") {
                             try {
