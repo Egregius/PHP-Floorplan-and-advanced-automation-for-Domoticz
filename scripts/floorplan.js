@@ -74,6 +74,18 @@ function ajax() {
                             } else {
                                 html = '<font color="#FF2200">UV: ' + value + '</font>';
                             }
+                            if (mode < 2) {
+                                html += '<br><font color="#99EE00">max: ' + mode + '</font>';
+                            } else if (mode < 4) {
+                                html += '<br><font color="#99CC00">max: ' + mode + '</font>';
+                            } else if (mode < 6) {
+                                html += '<br><font color="#FFCC00">max: ' + mode + '</font>';
+                            } else if (mode < 8) {
+                                html += '<br><font color="#FF6600">max: ' + mode + '</font>';
+                            } else {
+                                html += '<br><font color="#FF2200">max: ' + mode + '</font>';
+                            }
+
                             try {
                                 document.getElementById("uv").innerHTML = html;
                             } catch {}
