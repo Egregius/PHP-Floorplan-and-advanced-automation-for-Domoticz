@@ -225,8 +225,37 @@ function ajax() {
                         } catch {}
                     } else if (type=="rollers") {
                         try {
+                            /*
+                            opts[0] = top
+                            opts[1] = left
+                            opts[2] = size
+                            opts[3] = rotation
+                            */
                             var opts = icon.split(",");
-                            console.log(opts);
+                            var stat = 100 - value;
+                            if (stat < 100) {
+                                var perc = (stat/100)*0.7;
+                            } else {
+                                var perc = 1;
+                            }
+                            if (opts[3]=="P") {
+                                if (stat==0) {
+                                    var nsize = 0;
+                                } else if (stat > 0) {
+                                    var nsize = (opts[2]*perc)+8;
+                                    if (nsize > opts[2]) {
+                                        nsize = opts[2];
+                                    }
+                                    var top = opts[0] + (opts[2]-nsize);
+                                } else {
+                                    var nsize = opts[2];
+                                }
+                                html = '<div class="fix yellow" style';
+
+
+
+
+
                         } catch {}
                     } else if (type=="thermostaat") {
                         try {

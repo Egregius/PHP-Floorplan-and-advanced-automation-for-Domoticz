@@ -234,7 +234,11 @@ function rollers($name,$stat)
 		    </div>
 	    </form>';
 }
-function rollery($name,$top,$left,$size,$rotation)
+function rollery($name)
+{
+    echo '<div class="fix" id="'.$name.'"></div>';
+}
+function rolleryold($name,$top,$left,$size,$rotation)
 {
     global $d;
     $stat=100-$d[$name]['s'];
@@ -260,24 +264,6 @@ function rollery($name,$top,$left,$size,$rotation)
                 $top.'px;left:'.
                 $left.'px;width:7px;height:'.
                 $nsize.'px;">
-        </div>';
-    } elseif ($rotation=='PL') {
-        if ($stat==100) {
-            $nsize=0;
-        } elseif ($stat>0) {
-            $nsize=($size*$perc)+5;
-            if ($nsize>$size) {
-                $nsize=$size;
-            }
-            $top=$top+($size-$nsize);
-        } else {
-            $nsize=$size;
-        }
-        echo '
-        <div class="fix yellow" style="top:'.
-            $top.'px;left:'.
-            $left.'px;width:7px;height:'.
-            $nsize.'px;">
         </div>';
     } elseif ($rotation=='L') {
         if ($stat==0) {
