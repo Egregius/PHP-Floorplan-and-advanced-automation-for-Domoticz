@@ -41,7 +41,6 @@ if ($home) {
                 ajax();
                 setInterval(ajax, '.($local===true?'300':'1500').');
             });
-            function navigator_Go(url) {window.location.assign(url);}
         </script>
 	</head>
 	<body>';
@@ -62,9 +61,6 @@ if ($home) {
                 storemode('water', 300);
             }
         }
-        usleep(80000);
-        header("Location: floorplan.others.php");
-        die("Redirecting to: floorplan.others.php");
     } elseif (isset($_POST['RestartDomoticz'])) {
         shell_exec('service domoticz.sh restart &');
     } elseif (isset($_POST['RestartServer'])) {
@@ -84,7 +80,7 @@ if ($home) {
 
     echo '<body class="floorplan">
 	<div class="fix clock">
-		<a href=\'javascript:navigator_Go("floorplan.others.php");\'>'.strftime("%k:%M:%S", TIME).'</a>
+		<a href=\'javascript:navigator_Go("floorplan.others.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
 	</div>
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
@@ -106,18 +102,6 @@ if ($home) {
     schakelaar2('zwembadfilter');
     schakelaar2('zwembadwarmte');
     schakelaar2('dampkap');
-
-    echo '
-<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
-<div class="fix z1 center" style="top:20px;left:130px;">
-'.($d['gcal']['s']==true?'Tobi: Beitem':'Tobi: Rumbeke').'<br>
-</div>
-<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>
-<div class="fix z1 center" style="top:600px;left:200px;"><a href=\'javascript:navigator_Go("floorplan.history.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>History</a></div>
-<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>
-<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>
-';
-
     secured('zliving');
     secured('zkeuken');
     secured('zinkom');
@@ -133,8 +117,16 @@ if ($home) {
     contact('deurbadkamer');
     contact('deurgarage');
     contact('deurinkom');
-
-    echo '<div class="fix blackmedia">
+    echo '
+<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
+<div class="fix z1 center" style="top:20px;left:130px;">
+'.($d['gcal']['s']==true?'Tobi: Beitem':'Tobi: Rumbeke').'<br>
+</div>
+<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>
+<div class="fix z1 center" style="top:600px;left:200px;"><a href=\'javascript:navigator_Go("floorplan.history.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>History</a></div>
+<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>
+<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>
+<div class="fix blackmedia">
 <form method="POST">
 <div class="fix" style="top:230px;left:0px;width:400px">';
     if ($d['water']['s']=='On') {
@@ -172,17 +164,8 @@ if ($home) {
 	</form>
 	<br/>
 	<br/>
-</div></div>';
-
-    echo '<div class="fix floorplanstats">'.$udevice.' | '.$ipaddress;
-    echo ' | '.number_format(((microtime(true)-$start)*1000), 3);
-    echo '</div>
-<script type="text/javascript">
-			function navigator_Go(url) {window.location.assign(url);}
-			setTimeout("window.location.href=window.location.href;",';
-    echo $local===true?'14950':'15000';
-    echo ');
-		</script>';
+</div></div>
+<div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
 }
 ?>
     </body>

@@ -40,25 +40,15 @@ if ($home) {
 		<style type="text/css">
 			.btn{font-size:25;padding:15px;width:100px;height:35px;}
 			.mode{font-size:25;padding:15px;width:155px;height:50px;}
-		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
-                ajaxinit();
-                setInterval(ajaxinit, 60000);
+                ajax();
+                setInterval(ajax, '.($local===true?'300':'1500').');
             });
-            function ajaxinit() {
-                $.ajax({
-                    url: \'/ajaxfloorplan.heating.php\',
-                    success: function(data) {
-                        $(\'#ajaxinit\').html(data);
-                    },
-                });
-            }
-            function navigator_Go(url) {window.location.assign(url);}
         </script>';
     ajax();
     echo '
@@ -450,7 +440,6 @@ if ($home) {
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
 </html>';
         exit;
     }

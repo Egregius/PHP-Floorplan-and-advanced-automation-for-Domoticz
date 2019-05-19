@@ -49,7 +49,6 @@ if ($home) {
                 ajax();
                 setInterval(ajax, '.($local===true?'300':'1500').');
             });
-            function navigator_Go(url) {window.location.assign(url);}
         </script>
 	</head>';
     if (isset($_REQUEST['Weg'])) {
@@ -713,10 +712,7 @@ if ($home) {
         </div>';
     }
     echo '
-        <div class="fix floorplanstats">
-            '.$udevice.' | '.
-            $ipaddress.'
-        </div>';
+        <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
