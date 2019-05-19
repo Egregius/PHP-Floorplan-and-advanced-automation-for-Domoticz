@@ -70,7 +70,7 @@ if ($home===true) {
 			<form action="/regen.php"><input type="submit" class="btn b5" value="Regen"/></form>';
     } else {
         echo '<body style="width:100%">
-			<form action="'.$_SESSION['referer'].'"><input type="submit" class="btn b3" value="Plan"/></form>
+			<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 			<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 			<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
     }

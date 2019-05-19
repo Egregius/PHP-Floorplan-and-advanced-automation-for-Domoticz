@@ -188,12 +188,38 @@ function ajax() {
                              if (name=="diepvries_temp") {
                                 document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",") + "°C";
                              } else {
-                                var html = '<div class="fix tmpbg" style="top:'.number_format($top, 0).'px;left:8px;height:'.number_format($hoogte, 0).'px;background:linear-gradient(to bottom, #'.$tcolor.', #'.$dcolor.');">';
-                                html + = '</div>'
-                                html + = '<img src="/images/temp.png" height="100px" width="auto" alt="'.$name.'">';
-                                html + = '<div class="fix center" style="top:73px;left:5px;width:30px;">';
-                                html + = '    '.number_format($temp, 1, ',', '').'';
-                                html + = '</div>';
+                                var hoogte = value * 3;
+                                if (hoogte > 88) {
+                                    hoogte = 88;
+                                } else if (hoogte < 20) {
+                                    hoogte = 20;
+                                }
+                                var top = 91 - hoogte;
+                                if (value >= 22) {
+                                    var tcolor = "F00";
+                                    var dcolor = "55F";
+                                } else if (value >= 20) {
+                                    var tcolor = "D12";
+                                    var dcolor = "44F";
+                                } else if (value >= 18) {
+                                    var tcolor = "B24";
+                                    var dcolor = "33F";
+                                } else if (value >= 15) {
+                                    var tcolor = "93B";
+                                    var dcolor = "22F";
+                                } else if (value >= 10) {
+                                    var tcolor = "64D";
+                                    var dcolor = "11F";
+                                } else {
+                                    var tcolor = "55F";
+                                    var dcolor = "00F";
+                                }
+                                var html = '<div class="fix tmpbg" style="top:' + top + 'px;left:8px;height:' + hoogte + 'px;background:linear-gradient(to bottom, #' + tcolor + ', #' + dcolor +');">';
+                                html += '</div>'
+                                html += '<img src="/images/temp.png" height="100px" width="auto" alt="' + name + '">';
+                                html += '<div class="fix center" style="top:73px;left:5px;width:30px;">';
+                                html += value.toString().replace(/[.]/, ",");
+                                html += '</div>';
                                 document.getElementById(name).innerHTML = html;
                             }
                         } catch {}

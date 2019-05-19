@@ -103,46 +103,11 @@ function schakelaar2($name)
 }
 function thermometer($name)
 {
-    global $d;
-    $temp=$d[$name]['s'];
-    $hoogte=$temp*3;
-    if ($hoogte>88) {
-        $hoogte=88;
-    } elseif ($hoogte<20) {
-        $hoogte=20;
-    }
-    $top=88-$hoogte;
-    if ($top<0) {
-        $top=0;
-    }
-    $top=$top+5;
-    if ($temp>=22) {
-        $tcolor='F00';
-        $dcolor='55F';
-    } elseif ($temp>=20) {
-        $tcolor='D12';
-        $dcolor='44F';
-    } elseif ($temp>=18) {
-        $tcolor='B24';
-        $dcolor='33F';
-    } elseif ($temp>=15) {
-        $tcolor='93B';
-        $dcolor='22F';
-    } elseif ($temp>=10) {
-        $tcolor='64D';
-        $dcolor='11F';
-    } else {
-        $tcolor='55F';
-        $dcolor='00F';
-    }
-    echo '
-        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'">
-        </div>';
+    echo '<div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
 }
 function contact($name)
 {
-    echo '
-            <div class="fix '.$name.'" id="'.$name.'"></div>';
+    echo '<div class="fix '.$name.'" id="'.$name.'"></div>';
 }
 function thermostaat($name,$top,$left)
 {
@@ -189,15 +154,11 @@ function thermostaat($name,$top,$left)
 }
 function showTimestamp($name,$draai)
 {
-    echo '
-        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'">
-        </div>';
+    echo '<div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'"></div>';
 }
 function secured($name)
 {
-    echo '
-        <div class="fix '.$name.' z0" id="'.$name.'">
-        </div>';
+    echo '<div class="fix '.$name.' z0" id="'.$name.'"></div>';
 }
 function luifel($name,$stat)
 {
