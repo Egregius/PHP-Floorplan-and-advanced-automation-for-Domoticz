@@ -42,7 +42,7 @@ if ($home) {
 			.input{width:78px;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();

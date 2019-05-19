@@ -35,7 +35,7 @@ if ($home) {
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
