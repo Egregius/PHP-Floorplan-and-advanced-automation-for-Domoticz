@@ -11,6 +11,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     error_reporting(E_ALL);ini_set("display_errors", "on");
@@ -67,13 +68,11 @@ if ($home) {
                 storemode('Ralex', 0);
             }
         }
-        usleep(120000);
-        header("Location: floorplan.doorsensors.php");die("Redirecting to: floorplan.doorsensors.php");
     }
     echo '
     <body class="floorplan">
         <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'>
+            <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\' id="clock">
                 '.strftime("%k:%M:%S", TIME).'
             </a>
         </div>

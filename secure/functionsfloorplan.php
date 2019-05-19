@@ -16,17 +16,6 @@
  *
  * @return string
  */
-function ajax()
-{
-    global $local;
-    echo '
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                ajax();
-                setInterval(ajax, '.($local===true?'200':'800').');
-            });
-        </script>';
-}
 function blinds($name)
 {
     global $d;
