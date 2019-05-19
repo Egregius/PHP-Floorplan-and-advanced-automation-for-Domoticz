@@ -262,6 +262,34 @@ function ajax() {
                                     elem.style.width = nsize+'px';
                                     elem.style.height = '7px';
                                 }
+
+                                var html = '<form method="POST" action="">';
+                                html += '<input type="hidden" name="rollers" value="' + name + '">';
+                                if (value==100) {
+                                    html += '<input type="image" src="/images/arrowgreendown.png" class="i60">';
+                                } else if (value==0) {
+                                    html += '<input type="image" src="/images/arrowgreenup.png" class="i60">';
+                                } else {
+                                    html += '<input type="image" src="/images/circlegrey.png" class="i60">';
+                                    html += '<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers=' + name + '\';">';
+                                    if (mode == 2) {
+                                        html += '<font size="5" color="#F00">';
+                                    } else if (mode == 1) {
+                                        html += '<font size="5" color="#222">';
+                                    } else {
+                                        html += '<font size="5" color="#CCC">';
+                                    }
+                                    html += value + '</font></div>';
+                                }
+                                if (mode == 2) {
+                                    html += '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
+                                } else if (mode == 1) {
+                                    html += '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
+                                }
+                                html += '</div></form>';
+                                console.log(html);
+                                document.getElementById('R' + name).innerHTML = html;
+
                             } catch {}
                         } else if (type=="thermostaat") {
                             try {
@@ -300,16 +328,8 @@ function ajax() {
                             try {
                                 document.getElementById(name).innerHTML = value;
                             } catch {}
-                        } else if (type=="rollers") {
-
-                                var html = '<form method="POST" action="">';
-                                html += '<input type="hidden" name="rollers" value="' + name + '">';
-                                console.log(html);
-                                document.getElementById(name).innerHTML = html;
-                                console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
-
                         } else {
-                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                            //console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                         }
                     }
                 }

@@ -157,40 +157,10 @@ function luifel($name,$stat)
 function rollers($name)
 {
     echo '
-        <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="'.$name.'"></div>';
+        <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
 }
 function rollersold($name,$stat)
 {
-    global $d;
-    echo '
-        <form method="POST" action="">
-            <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">
-                <input type="hidden" name="rollers" value="'.$name.'">';
-    if ($stat==100) {
-        echo '
-                <input type="image" src="/images/arrowgreendown.png" class="i60">';
-    } elseif ($stat==0) {
-        echo '
-                <input type="image" src="/images/arrowgreenup.png" class="i60">';
-    } else {
-        echo'
-                <input type="image" src="/images/circlegrey.png" class="i60">
-                <div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';">';
-        if ($d[$name]['m']==2) {
-            echo '
-                    <font size="5" color="#F00">';
-        } elseif ($d[$name]['m']==1) {
-            echo '
-                    <font size="5" color="#222">';
-        } else {
-            echo '
-                    <font size="5" color="#CCC">';
-        }
-        echo '
-                        '.$stat .'
-                    </font>
-                </div>';
-    }
     if ($d[$name]['m']==2) {
         echo '
                 <div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;">
