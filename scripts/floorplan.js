@@ -90,16 +90,14 @@ function ajax() {
                             } catch {}
                         } else if (name=="elec"){
                             try {
-                                document.getElementById("elec").innerHTML = value + " W";
-                                document.getElementById("elecvandaag").innerHTML = mode.toString().replace(/[.]/, ",") + " kWh";
+                                html = "<td>Elec:</td><td>" + value + " W</td><td>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
+                                document.getElementById("trelec").innerHTML = html;
                             } catch {}
-                        } else if (name=="zon"){
+                        } else if (name=="zon"||name=="zonvandaag"){
+                            html = "<td>Zon:</td><td>" + data['zon']['s'] + " W</td><td>" + data['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
+                            document.getElementById("trzon").innerHTML = html;
                             try {
                                 document.getElementById(name).innerHTML = value + " W";
-                            } catch {}
-                        } else if (name=="zonvandaag"){
-                            try {
-                                document.getElementById(name).innerHTML = value + " kWh";
                             } catch {}
                         } else if (name=="gasvandaag"){
                             try {

@@ -550,6 +550,7 @@ if ($home) {
                 <tr id="trelec"></tr>
                 <tr id="trzon"></tr>
                 <tr id="trgas"></tr>
+                <tr id="trwater"></tr>
                 <tr id="trdgas"></tr>
                 <tr id="trdwater"></tr>
             </table>';
