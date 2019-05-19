@@ -637,14 +637,14 @@ if ($home) {
     secured('zhalla');
     secured('zhallb');
 
-    rollery('Ralex', 568, 80, 44, 'P');
-    rollery('Rbureel', 0, 208, 43, 'L');
-    rollery('RkamerL', 529, 481, 44, 'P');
-    rollery('RkamerR', 586, 481, 44, 'P');
-    rollery('RkeukenL', 128, 475, 44, 'P');
-    rollery('RkeukenR', 179, 475, 44, 'P');
-    rollery('Rliving', 46, 80, 165, 'P');
-    rollery('Rtobi', 448, 80, 44, 'P');
+    rollery('Ralex');
+    rollery('Rbureel');
+    rollery('RkamerL');
+    rollery('RkamerR');
+    rollery('RkeukenL');
+    rollery('RkeukenR');
+    rollery('Rliving');
+    rollery('Rtobi');
 
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);

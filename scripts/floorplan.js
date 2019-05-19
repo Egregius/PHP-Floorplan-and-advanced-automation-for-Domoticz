@@ -265,6 +265,8 @@ function ajax() {
                             } catch {}
                         } else if (type=="thermostaat") {
                             try {
+                                console.log(data[name.toString().replace("_set", "_temp")]['s']);
+
                                 document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
                             } catch {}
                         } else if (type=="setpoint") {

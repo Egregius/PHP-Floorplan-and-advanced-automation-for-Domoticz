@@ -325,6 +325,10 @@ if ($home) {
     schakelaar('wasbak', 'Light');
     schakelaar('kookplaat', 'Light');
     schakelaar('werkblad1', 'Light');
+    rollery('Rbureel');
+    rollery('RkeukenL');
+    rollery('RkeukenR');
+    rollery('Rliving');
     if ($d['denonpower']['s']=='ON') {
         echo '
 	<div class="fix denon z1">

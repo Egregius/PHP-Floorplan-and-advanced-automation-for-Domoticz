@@ -84,14 +84,14 @@ if ($home) {
 	</div>
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    rollery('Rliving', $d['Rliving']['s'], 46, 80, 165, 'P');
-    rollery('Rbureel', $d['Rbureel']['s'], 0, 208, 43, 'L');
-    rollery('RkeukenL', $d['RkeukenL']['s'], 128, 475, 44, 'P');
-    rollery('RkeukenR', $d['RkeukenR']['s'], 179, 475, 44, 'P');
-    rollery('Rtobi', $d['Rtobi']['s'], 448, 80, 44, 'P');
-    rollery('Ralex', $d['Ralex']['s'], 568, 80, 44, 'P');
-    rollery('RkamerL', $d['RkamerL']['s'], 529, 481, 44, 'P');
-    rollery('RkamerR', $d['RkamerR']['s'], 586, 481, 44, 'P');
+    rollery('Ralex');
+    rollery('Rbureel');
+    rollery('RkamerL');
+    rollery('RkamerR');
+    rollery('RkeukenL');
+    rollery('RkeukenR');
+    rollery('Rliving');
+    rollery('Rtobi');
     schakelaar2('auto');
     schakelaar2('tv');
     schakelaar2('nvidia');
