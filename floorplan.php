@@ -502,6 +502,48 @@ if ($home) {
     echo '<div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
+
+
+    echo $d['diepvries_temp']['s'] > -15 ? '
+        <div class="fix z0 diepvries_temp red" id="diepvries_temp">
+            '.$d['diepvries_temp']['s'].'°C
+        </div>'
+     : '
+        <div class="fix z0 diepvries_temp" id="diepvries_temp">
+            '.$d['diepvries_temp']['s'].'°C
+        </div>';
+    if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
+        echo '
+        <div class="fix z0 GroheRed">
+            <img src="images/plug_On.png" width="28px" height="auto" alt="">
+        </div>';
+    } elseif ($d['Usage_grohered']['s']>10) {
+        echo '
+        <div class="fix z0 GroheRed">
+            <img src="images/plug_Red.png" width="28px" height="auto" alt="">
+        </div>';
+    }
+    $tobi=explode(';', $d['kWh_bureeltobi']['s']);
+    if ($tobi[0]>0) {
+        echo '
+        <div class="fix bureeltobikwh z0">
+            '.round($tobi[0], 0).'W
+        </div>';
+    } else {
+        echo '
+        <div class="fix bureeltobikwh z0">
+        </div>';
+    }
+//    echo '<div class="fix z0" style="top:800px;left:100px">'.$d['IN1']['s'].' - '.$d['IN2']['s'].'</div>';
+    if ($d['zoldervuur']['s']=='On') {
+        echo '
+        <div class="fix z0 zoldervuur2">
+            <img src="images/Fire_On.png" width="28px" height="auto" alt="">
+        </div>';
+    }
+    echo '
+        <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
+    sidebar();
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -675,48 +717,6 @@ if ($home) {
     echo '
 		    </table>
 	    </div>';
-
-    echo $d['diepvries_temp']['s'] > -15 ? '
-        <div class="fix z0 diepvries_temp red" id="diepvries_temp">
-            '.$d['diepvries_temp']['s'].'°C
-        </div>'
-     : '
-        <div class="fix z0 diepvries_temp" id="diepvries_temp">
-            '.$d['diepvries_temp']['s'].'°C
-        </div>';
-    if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
-        echo '
-        <div class="fix z0 GroheRed">
-            <img src="images/plug_On.png" width="28px" height="auto" alt="">
-        </div>';
-    } elseif ($d['Usage_grohered']['s']>10) {
-        echo '
-        <div class="fix z0 GroheRed">
-            <img src="images/plug_Red.png" width="28px" height="auto" alt="">
-        </div>';
-    }
-    $tobi=explode(';', $d['kWh_bureeltobi']['s']);
-    if ($tobi[0]>0) {
-        echo '
-        <div class="fix bureeltobikwh z0">
-            '.round($tobi[0], 0).'W
-        </div>';
-    } else {
-        echo '
-        <div class="fix bureeltobikwh z0">
-        </div>';
-    }
-//    echo '<div class="fix z0" style="top:800px;left:100px">'.$d['IN1']['s'].' - '.$d['IN2']['s'].'</div>';
-    if ($d['zoldervuur']['s']=='On') {
-        echo '
-        <div class="fix z0 zoldervuur2">
-            <img src="images/Fire_On.png" width="28px" height="auto" alt="">
-        </div>';
-    }
-    echo '
-        <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
-    sidebar();
-
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
