@@ -265,9 +265,30 @@ function ajax() {
                             } catch {}
                         } else if (type=="thermostaat") {
                             try {
-                                console.log(data[name.toString().replace("_set", "_temp")]['s']);
-
-                                document.getElementById(name).innerHTML = value.toString().replace(/[.]/, ",");
+                                var dif=data[name.toString().replace("_set", "_temp")]['s']-value;
+                                var opts = icon.split(",");
+                                if (dif > 0.2) {
+                                    var circle = "hot";
+                                } else if (dif < 0) {
+                                    var circle = "cold";
+                                } else {
+                                    var circle = "grey";
+                                }
+                                if (value > 20.5) {
+                                    var centre = "red";
+                                } else if (value > 19) {
+                                    var centre = "orange";
+                                } else if (value > 14) {
+                                    var centre = "grey";
+                                } else {
+                                    var centre = "blue";
+                                }
+                                var elem = document.getElementById(name);
+                                elem.style.top = opts[0]+'px';
+                                elem.style.left = opts[1]+'px';
+                                var html = '<img src="/images/thermo' + circle + center + '.png" class="i48" alt="">';
+                                console.log(dif);
+                                document.getElementById(name).innerHTML = html;
                             } catch {}
                         } else if (type=="setpoint") {
                             try {

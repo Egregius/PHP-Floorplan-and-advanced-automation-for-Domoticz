@@ -133,8 +133,8 @@ function thermostaat($name,$top,$left)
         $centre='blue';
     }
     echo '
-        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';">
-            <img src="/images/thermo'.$circle.$centre.'.png" class="i48" alt="">
+        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';" id="'.$name.'">
+
             <div class="fix center" style="top:32px;left:11px;width:26px;">';
     if ($mode>0) {
         echo '
@@ -143,7 +143,7 @@ function thermostaat($name,$top,$left)
         echo '
                 <font size="2" color="#CCC">';
     }
-    echo '<span id="'.$name.'_set">'.number_format($stat, 1, ',', '').'</span></font>
+    echo '</font>
             </div>';
     if ($mode>0) {
         echo '
