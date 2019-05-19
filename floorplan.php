@@ -183,6 +183,9 @@ if ($home) {
 		</html>';
                 exit;
             }
+        } elseif($_REQUEST['Naam']=='poortrf') {
+            store('Weg', 0);
+            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
         } elseif (!in_array($_REQUEST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
             sw($_REQUEST['Naam'], $_REQUEST['Actie']);
         }
