@@ -81,17 +81,17 @@ function ajax(){
                                 html="<td>Elec:</td><td id='elec'>" + value + " W</td><td id='elecvandaag'>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
                                 document.getElementById("trelec").innerHTML=html;
                                 if(value>6000){document.getElementById("elec").style.color="#FF0000";}
-                               else if(value>5000){document.getElementById("elec").style.color="#FF4400";}
-                               else if(value>4000){document.getElementById("elec").style.color="#FF8800";}
-                               else if(value>3000){document.getElementById("elec").style.color="#FFAA00";}
-                               else if(value>2000){document.getElementById("elec").style.color="#FFCC00";}
-                               else if(value>1000){document.getElementById("elec").style.color="#FFFF00";}
+                                else if(value>5000){document.getElementById("elec").style.color="#FF4400";}
+                                else if(value>4000){document.getElementById("elec").style.color="#FF8800";}
+                                else if(value>3000){document.getElementById("elec").style.color="#FFAA00";}
+                                else if(value>2000){document.getElementById("elec").style.color="#FFCC00";}
+                                else if(value>1000){document.getElementById("elec").style.color="#FFFF00";}
                                 if(mode>20){document.getElementById("elecvandaag").style.color="#FF0000";}
-                               else if(mode>18){document.getElementById("elecvandaag").style.color="#FF4400"; }
-                               else if(mode>16){document.getElementById("elecvandaag").style.color="#FF8800";}
-                               else if(mode>14){document.getElementById("elecvandaag").style.color="#FFAA00";}
-                               else if(mode>12){document.getElementById("elecvandaag").style.color="#FFCC00";}
-                               else if(mode>10){document.getElementById("elecvandaag").style.color="#FFFF00";}
+                                else if(mode>18){document.getElementById("elecvandaag").style.color="#FF4400"; }
+                                else if(mode>16){document.getElementById("elecvandaag").style.color="#FF8800";}
+                                else if(mode>14){document.getElementById("elecvandaag").style.color="#FFAA00";}
+                                else if(mode>12){document.getElementById("elecvandaag").style.color="#FFCC00";}
+                                else if(mode>10){document.getElementById("elecvandaag").style.color="#FFFF00";}
                             } catch {}
                         }else if(name=="zon"||name=="zonvandaag"){
                             try {
@@ -124,13 +124,31 @@ function ajax(){
                             } catch {}
                         }else if(name=="gasvandaag"){
                             try {
-                                var item=pad(value / 100, 4);
-                                document.getElementById(name).innerHTML=item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
+                                if(value>0){
+                                    var item=pad(value / 100, 4);
+                                    html='<td>Gas:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    document.getElementById("trgas").innerHTML=html;
+                                    if(value>700){document.getElementById("trgas").style.color="#FF0000";}
+                                    else if(value>600){document.getElementById("trgas").style.color="#FF4400";}
+                                    else if(value>500){document.getElementById("trgas").style.color="#FF8800";}
+                                    else if(value>400){document.getElementById("trgas").style.color="#FFAA00";}
+                                    else if(value>300){document.getElementById("trgas").style.color="#FFCC00";}
+                                    else if(value>200){document.getElementById("trgas").style.color="#FFFF00";}
+                                }
                             } catch {}
                         }else if(name=="watervandaag"){
                             try {
-                                var item=value / 1000;
-                                document.getElementById(name).innerHTML=item.toString().replace(/[.]/, ",") + " m<sup>3</sup>";
+                                if(value>0){
+                                    var item=value / 1000;
+                                    html='<td>Water:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    document.getElementById("trwater").innerHTML=html;
+                                    if(value>1000){document.getElementById("trwater").style.color="#FF0000";}
+                                    else if(value>750){document.getElementById("trwater").style.color="#FF4400";}
+                                    else if(value>500){document.getElementById("trwater").style.color="#FF8800";}
+                                    else if(value>400){document.getElementById("trwater").style.color="#FFAA00";}
+                                    else if(value>300){document.getElementById("trwater").style.color="#FFCC00";}
+                                    else if(value>200){document.getElementById("trwater").style.color="#FFFF00";}
+                                }
                             } catch {}
                         }else if(name=="douche"){
                             try {
@@ -138,6 +156,9 @@ function ajax(){
                                 var douchewater=mode;
                                 var douchegaseuro=douchegas * 10 * 0.0004;
                                 var douchewatereuro=douchewatereuro * 0.005;
+                                html="<td>D-gas:</td><td>" + douchegas + " L</td><td>" + douchegaseuro.toString().replace(/[.]/, ",") + " €</td>";
+                                document.getElementById("trdgas").innerHTML=html;
+
                                 document.getElementById('douchegas').innerHTML=douchegas + " L";
                                 document.getElementById('douchegaseuro').innerHTML=douchegaseuro + " L";
                                 document.getElementById('douchewater').innerHTML=douchewater + " L";
