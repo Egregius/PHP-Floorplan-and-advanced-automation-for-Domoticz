@@ -72,8 +72,7 @@ function dimmer($name,$class='i70')
 function schakelaar($name)
 {
     echo '
-        <div class="fix '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'">
-        </div>';
+        <div class="fix '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'"></div>';
 }
 function schakelaar2($name)
 {
@@ -103,11 +102,13 @@ function schakelaar2($name)
 }
 function thermometer($name)
 {
-    echo '<div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
+    echo '
+            <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
 }
 function contact($name)
 {
-    echo '<div class="fix '.$name.'" id="'.$name.'"></div>';
+    echo '
+        <div class="fix '.$name.'" id="'.$name.'"></div>';
 }
 function thermostaat($name,$top,$left)
 {
@@ -154,11 +155,13 @@ function thermostaat($name,$top,$left)
 }
 function showTimestamp($name,$draai)
 {
-    echo '<div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'"></div>';
+    echo '
+        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'"></div>';
 }
 function secured($name)
 {
-    echo '<div class="fix '.$name.' z0" id="'.$name.'"></div>';
+    echo '
+        <div class="fix '.$name.' z0" id="'.$name.'"></div>';
 }
 function luifel($name,$stat)
 {
@@ -236,7 +239,8 @@ function rollers($name,$stat)
 }
 function rollery($name)
 {
-    echo '<div class="fix" id="'.$name.'"></div>';
+    echo '
+        <div class="fix yellow" id="'.$name.'"></div>';
 }
 function rolleryold($name,$top,$left,$size,$rotation)
 {

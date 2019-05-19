@@ -129,7 +129,6 @@ function ajax() {
                                 }
                                 document.getElementById("bosediv105").innerHTML = html;
                             }
-                            console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
                             if (value=="On") {
                                 $('#' + name).attr("src", "/images/bose_On.png");
                             } else if (value=="Off") {
@@ -238,9 +237,12 @@ function ajax() {
                             } else {
                                 var perc = 1;
                             }
+                            var elem = document.getElementById(name);
+
                             if (opts[3]=="P") {
                                 if (stat==0) {
                                     var nsize = 0;
+                                    elem.classList.remove("yellow");
                                 } else if (stat > 0) {
                                     var nsize = (opts[2]*perc)+8;
                                     if (nsize > opts[2]) {
@@ -250,7 +252,11 @@ function ajax() {
                                 } else {
                                     var nsize = opts[2];
                                 }
-                                html = '<div class="fix yellow" style';
+                                elem.style.top = opts[0];
+                                elem.style.left = opts[1];
+                                elem.style.width = '150px';
+                                elem.style.height = '150px';
+                            }
 
 
 
