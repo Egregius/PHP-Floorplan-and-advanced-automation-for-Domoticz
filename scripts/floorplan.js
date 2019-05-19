@@ -95,20 +95,32 @@ function ajax(){
                             } catch {}
                         }else if(name=="zon"||name=="zonvandaag"){
                             try {
-                                html="<td>Zon:</td><td id='zon'>" + d['zon']['s'] + " W</td><td id='zonvandaag'>" + d['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
-                                document.getElementById("trzon").innerHTML=html;
-                                if(d['zon']['s']>3500){document.getElementById("zon").style.color="#00FF00";}
-                                else if(d['zon']['s']>3000){document.getElementById("zon").style.color="#33FF00";}
-                                else if(d['zon']['s']>2700){document.getElementById("zon").style.color="#66FF00";}
-                                else if(d['zon']['s']>2400){document.getElementById("zon").style.color="#99FF00";}
-                                else if(d['zon']['s']>2100){document.getElementById("zon").style.color="#CCFF00";}
-                                else if(d['zon']['s']>1800){document.getElementById("zon").style.color="#EEFF00";}
-                                else if(d['zon']['s']>1500){document.getElementById("zon").style.color="#FFFF33";}
-                                else if(d['zon']['s']>1200){document.getElementById("zon").style.color="#FFFF66";}
-                                else if(d['zon']['s']>900){document.getElementById("zon").style.color="#FFFF99";}
-                                else if(d['zon']['s']>600){document.getElementById("zon").style.color="#FFFFCC";}
-                                else if(d['zon']['s']>300){document.getElementById("zon").style.color="#EEEECC";}
-                                document.getElementById(name).innerHTML=value + " W";
+                                if(d['zon']['s']>0||d['zonvandaag']['s']){
+                                    html="<td>Zon:</td><td id='zon'>" + d['zon']['s'] + " W</td><td id='zonvandaag'>" + d['zonvandaag']['s'].toString().replace(/[.]/, ",") + " kWh</td>";
+                                    document.getElementById("trzon").innerHTML=html;
+                                    if(d['zon']['s']>3500){document.getElementById("zon").style.color="#00FF00";}
+                                    else if(d['zon']['s']>3000){document.getElementById("zon").style.color="#33FF00";}
+                                    else if(d['zon']['s']>2700){document.getElementById("zon").style.color="#66FF00";}
+                                    else if(d['zon']['s']>2400){document.getElementById("zon").style.color="#99FF00";}
+                                    else if(d['zon']['s']>2100){document.getElementById("zon").style.color="#CCFF00";}
+                                    else if(d['zon']['s']>1800){document.getElementById("zon").style.color="#EEFF00";}
+                                    else if(d['zon']['s']>1500){document.getElementById("zon").style.color="#FFFF33";}
+                                    else if(d['zon']['s']>1200){document.getElementById("zon").style.color="#FFFF66";}
+                                    else if(d['zon']['s']>900){document.getElementById("zon").style.color="#FFFF99";}
+                                    else if(d['zon']['s']>600){document.getElementById("zon").style.color="#FFFFCC";}
+                                    else if(d['zon']['s']>300){document.getElementById("zon").style.color="#EEEECC";}
+                                    if(d['zonvandaag']['m']>120){document.getElementById("zonvandaag").style.color="#00FF00";}
+                                    else if(d['zonvandaag']['m']>110){document.getElementById("zonvandaag").style.color="#33FF00";}
+                                    else if(d['zonvandaag']['m']>100){document.getElementById("zonvandaag").style.color="#66FF00";}
+                                    else if(d['zonvandaag']['m']>90){document.getElementById("zonvandaag").style.color="#99FF00";}
+                                    else if(d['zonvandaag']['m']>80){document.getElementById("zonvandaag").style.color="#CCFF00";}
+                                    else if(d['zonvandaag']['m']>70){document.getElementById("zonvandaag").style.color="#EEFF00";}
+                                    else if(d['zonvandaag']['m']>60){document.getElementById("zonvandaag").style.color="#FFFF33";}
+                                    else if(d['zonvandaag']['m']>50){document.getElementById("zonvandaag").style.color="#FFFF66";}
+                                    else if(d['zonvandaag']['m']>40){document.getElementById("zonvandaag").style.color="#FFFF99";}
+                                    else if(d['zonvandaag']['m']>30){document.getElementById("zonvandaag").style.color="#FFFFCC";}
+                                    else if(d['zonvandaag']['m']>20){document.getElementById("zonvandaag").style.color="#EEEECC";}
+                                }
                             } catch {}
                         }else if(name=="gasvandaag"){
                             try {
