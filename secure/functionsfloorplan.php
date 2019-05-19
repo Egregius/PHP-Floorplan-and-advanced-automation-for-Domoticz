@@ -242,52 +242,6 @@ function rollery($name)
     echo '
         <div class="fix yellow" id="'.$name.'"></div>';
 }
-function rolleryold($name,$top,$left,$size,$rotation)
-{
-    global $d;
-    $stat=100-$d[$name]['s'];
-    if ($stat<100) {
-        $perc=($stat/100)*0.7;
-    } else {
-        $perc=1;
-    }
-    if ($rotation=='P') {
-        if ($stat==0) {
-            $nsize=0;
-        } elseif ($stat>0) {
-            $nsize=($size*$perc)+5;
-            if ($nsize>$size) {
-                $nsize=$size;
-            }
-            $top=$top+($size-$nsize);
-        } else {
-            $nsize=$size;
-        }
-        echo '
-        <div class="fix yellow" style="top:'.
-                $top.'px;left:'.
-                $left.'px;width:7px;height:'.
-                $nsize.'px;">
-        </div>';
-    } elseif ($rotation=='L') {
-        if ($stat==0) {
-            $nsize=0;
-        } elseif ($stat>0) {
-            $nsize=($size*$perc)+5;
-            if ($nsize>$size) {
-                $nsize=$size;
-            }
-        } else {
-            $nsize=$size;
-        }
-        echo '
-        <div class="fix yellow" style="top:'.
-            $top.'px;left:'.
-            $left.'px;width:'.
-            $nsize.'px;height:7px;">
-        </div>';
-    }
-}
 function bose($ip)
 {
     global $d;
