@@ -544,6 +544,16 @@ if ($home) {
     echo '
         <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();
+    echo '
+        <div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik">
+            <table>
+                <tr id="trelec"></tr>
+                <tr id="trzon"></tr>
+                <tr id="trgas"></tr>
+                <tr id="trdgas"></tr>
+                <tr id="trdwater"></tr>
+            </table>';
+    /*
     $items=array('gas','water');
     foreach ($items as $i) {
         if (past($i.'vandaag')<15) {
@@ -679,21 +689,21 @@ if ($home) {
     echo '
         <div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';">
             <table>
-                <tr>
+                <tr id="trelec">
                     <td>Elec:</td>
                     <td><font color="'.$verbruikcolor.'" id="elec">'.$d['elec']['s'].' W</font></td>
                     <td><font color="'.$vandaagcolor.'" id="elecvandaag">'.number_format($d['elec']['m'], 1, ',', '').' kWh</font></td>
                 </tr>';
     if ($d['zon']['s']>0||$d['zonvandaag']['s']>0) {
         echo'
-                <tr>
+                <tr id=>
                     <td>Zon:</td>
                     <td><font color="'.$zoncolor.'" id="zon">'.$d['zon']['s'].' W</font></td>
                     <td><font color="'.$zonvandaagcolor.'" id="zonvandaag">'.number_format($d['zonvandaag']['s'], 1, ',', '.').' kWh</font></td>
                 </tr>';
     }
     echo '
-                <tr>
+                <tr id="trgas">
                     <td><font color="'.$gascolor.'" id="gas">Gas:</font></td>
                     <td colspan=2><font color="'.$gasvandaagcolor.'" id="gasvandaag">'.number_format($d['gasvandaag']['s']/100, 3, ',', '.').' m<sup>3</sup></font></td>
                 </tr>
@@ -716,7 +726,7 @@ if ($home) {
     }
     echo '
 		    </table>
-	    </div>';
+	    </div>';*/
 }
 //else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
