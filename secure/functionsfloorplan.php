@@ -112,46 +112,8 @@ function contact($name)
 }
 function thermostaat($name,$top,$left)
 {
-    global $d;
-    $stat=$d[$name.'_set']['s'];
-    $dif=$d[$name.'_temp']['s']-$stat;
-    $mode=$d[$name.'_set']['m'];
-    if ($dif>0.2) {
-        $circle='hot';
-    } elseif ($dif<0) {
-        $circle='cold';
-    } else {
-        $circle='grey';
-    }
-    if ($stat>20.5) {
-        $centre='red';
-    } elseif ($stat>19) {
-        $centre='orange';
-    } elseif ($stat>13) {
-        $centre='grey';
-    } else {
-        $centre='blue';
-    }
     echo '
-        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';" id="'.$name.'">
-
-            <div class="fix center" style="top:32px;left:11px;width:26px;">';
-    if ($mode>0) {
-        echo '
-                <font size="2" color="#222">';
-    } else {
-        echo '
-                <font size="2" color="#CCC">';
-    }
-    echo '</font>
-            </div>';
-    if ($mode>0) {
-        echo '
-            <div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;">
-            </div>';
-    }
-    echo '
-        </div>';
+        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';" id="'.$name.'_set"></div>';
 }
 function showTimestamp($name,$draai)
 {

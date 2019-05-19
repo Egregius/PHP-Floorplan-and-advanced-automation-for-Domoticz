@@ -264,7 +264,6 @@ function ajax() {
                                 }
                             } catch {}
                         } else if (type=="thermostaat") {
-                            try {
                                 var dif=data[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts = icon.split(",");
                                 if (dif > 0.2) {
@@ -275,21 +274,29 @@ function ajax() {
                                     var circle = "grey";
                                 }
                                 if (value > 20.5) {
-                                    var centre = "red";
+                                    var center = "red";
                                 } else if (value > 19) {
-                                    var centre = "orange";
+                                    var center = "orange";
                                 } else if (value > 14) {
-                                    var centre = "grey";
+                                    var center = "grey";
                                 } else {
-                                    var centre = "blue";
+                                    var center = "blue";
                                 }
                                 var elem = document.getElementById(name);
                                 elem.style.top = opts[0]+'px';
                                 elem.style.left = opts[1]+'px';
                                 var html = '<img src="/images/thermo' + circle + center + '.png" class="i48" alt="">';
-                                console.log(dif);
+                                html += '<div class="fix center" style="top:32px;left:11px;width:26px;">';
+                                if (mode > 0) {
+                                    html += '<font size="2" color="#222">' + value.toString().replace(/[.]/, ",") + '</font></div>';
+                                    html += '<div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;"></div>';
+                                } else {
+                                    html += '<font size="2" color="#CCC">' + value.toString().replace(/[.]/, ",") + '</font></div>';
+                                }
+
+                                console.log('thermostaat' + name);
+                                console.log(html);
                                 document.getElementById(name).innerHTML = html;
-                            } catch {}
                         } else if (type=="setpoint") {
                             try {
                                 document.getElementById(name).innerHTML = value;
