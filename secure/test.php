@@ -26,8 +26,16 @@ echo '
         .fontgrey{color:#CCCCCC;}
         tr{background-color:#000;}
     </style>
+    <script type="text/javascript" src="/scripts/jQuery.js"></script>
+    <script type=\'text/javascript\'>
+            $(document).ready(function() {
+                var elem = document.getElementById("fontred");
+                elem.style.color = "#FF0000";
+                console.log("ok");
+            });
+    </script>
     <table>
-        <tr class="fontred">
+        <tr id="fontred">
             <td>FF0000</td>
         </tr>
         <tr class="fontdarkorange">
