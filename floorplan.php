@@ -416,7 +416,8 @@ if ($home) {
 		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
 		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
 		    </a>
-		    <br>';
+		    <br>
+		    <div id="heating" onclick="javascript:navigator_Go("floorplan.heating.php");"></div>';
     if ($d['heating']['s']==3) {
         echo '
             <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>

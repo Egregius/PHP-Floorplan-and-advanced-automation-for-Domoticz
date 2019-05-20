@@ -184,6 +184,10 @@ function ajax(){
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                             } catch {}
+                        }else if(name=="heating"){
+                            if(value==0)html='';
+                            else if(value==1)html='<img src="/images/Cooling.png" class="i48" alt="Cooling">';
+                            document.getElementById("heating").innerHTML=html;
                         }else if(type=="switch"){
                             try {
                                 if(name=="bureeltobi"||name=="poortrf"||name=="Weg"){
