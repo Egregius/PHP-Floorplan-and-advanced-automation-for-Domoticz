@@ -191,12 +191,15 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="heating"){
-                            if(value==0)html='';
-                            else if(value==1)html='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
-                            else if(value==2)html='<img src="/images/Elec.png" class="i40" alt="Elec">';
+                            if(d['Rliving']['s']==0&&d['Rbureel']['s']==0&&d['RkeukenL']['s']==0&&d['RkeukenR']['s']==0&&d['RkamerL']['s']==0&&d['RkamerR']['s']==0&&d['Rtobi']['s']==0&&d['Ralex']['s']==0)html='<img src="/images/arrowgreenup.png" class="i60" alt="Open">';
+                            else if(d['Rliving']['s']==100&&d['Rbureel']['s']==100&&d['RkeukenL']['s']==100&&d['RkeukenR']['s']==100&&d['RkamerL']['s']==100&&d['RkamerR']['s']==100&&d['Rtobi']['s']==100&&d['Ralex']['s']==100)html='<img src="/images/arrowgreendown.png" class="i60" alt="Open">';
+                            else html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
+                            if(value==0)html+='';
+                            else if(value==1)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
+                            else if(value==2)html+='<img src="/images/Elec.png" class="i40" alt="Elec">';
                             else if(value==3){
-                                if(d['brander']['s']=='On')html='<img src="/images/fire_On.png" class="i40" alt="Gas">';
-                                else html='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
+                                if(d['brander']['s']=='On')html+='<img src="/images/fire_On.png" class="i40" alt="Gas">';
+                                else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
                             }
                             document.getElementById("heating").innerHTML=html;
                         }else if(type=="switch"){

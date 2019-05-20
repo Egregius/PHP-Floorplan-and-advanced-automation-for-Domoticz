@@ -387,37 +387,8 @@ if ($home) {
     bose(102);
     bose(103);
     bose(104);
-    if ($d['Rliving']['s']==100
-        &&$d['Rbureel']['s']==100
-        &&$d['RkeukenL']['s']==100
-        &&$d['RkeukenR']['s']==100
-        &&$d['Rtobi']['s']==100
-        &&$d['Ralex']['s']==100
-        &&$d['RkamerL']['s']==100
-        &&$d['RkamerR']['s']==100
-    ) {
-        $Rup='arrowgreendown';
-    } elseif ($d['Rliving']['s']==0
-        &&$d['Rbureel']['s']==0
-        &&$d['RkeukenL']['s']==0
-        &&$d['RkeukenR']['s']==0
-        &&$d['Rtobi']['s']==0
-        &&$d['Ralex']['s']==0
-        &&$d['RkamerL']['s']==0
-        &&$d['RkamerR']['s']==0
-    ) {
-        $Rup='arrowgreenup';
-    } else {
-        $Rup='arrowup';
-    }
     echo '
-	    <div class="fix leftbuttons">
-		    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
-		    </a>
-		    <br>
-		    <div id="heating" onclick="javascript:navigator_Go("floorplan.heating.php");"></div>
-        </div>';
+	    <div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
     thermometer('living_temp');
     thermometer('badkamer_temp');
     thermometer('kamer_temp');
