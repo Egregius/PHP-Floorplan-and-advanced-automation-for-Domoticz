@@ -203,6 +203,17 @@ function ajax(){
                                 }
                                 document.getElementById("heating").innerHTML=html;
                             } catch {}
+                        }else if(name=="belknop"){
+                            try {
+                                if(time>($LastUpdateTime-82800)){
+                                    var date=new Date(time*1000);
+                                    var hours=date.getHours();
+                                    var minutes="0"+date.getMinutes();
+                                    document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
+                                }else{
+                                    document.getElementById("t"+name).innerHTML="";
+                                }
+                            } catch {}
                         }else if(type=="switch"){
                             try {
                                 if(name=="bureeltobi"||name=="poortrf"){
@@ -363,9 +374,18 @@ function ajax(){
                                 else if(mode == 1){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';}
                                 html+='</div></form>';
                                 document.getElementById('R'+name).innerHTML=html;
+
+                                if(time>($LastUpdateTime-82800)){
+                                    var date=new Date(time*1000);
+                                    var hours=date.getHours();
+                                    var minutes="0"+date.getMinutes();
+                                    document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
+                                }else{
+                                    document.getElementById("t"+name).innerHTML="";
+                                }
                             } catch {}
                         }else if(type=="thermostaat"){
-                           // try {
+                            try {
                                 var dif=d[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts=icon.split(",");
                                 if(dif>0.2){var circle="hot";}
@@ -387,7 +407,7 @@ function ajax(){
                                     html+='<font size="2" color="#CCC">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                 }
                                 document.getElementById(name).innerHTML=html;
-                            //} catch {}
+                            } catch {}
                         }else if(type=="setpoint"){
                             try {
                                 document.getElementById(name).innerHTML=value;
