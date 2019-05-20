@@ -27,6 +27,12 @@ function ajax(){
                         var icon=d[device]['icon'];
                         if(name=="Weg"){
                             try {
+                                html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';
+                                if(value==0)html+='<input type="image" src="/images/Thuis.png" id="Weg">';
+                                else if(value==1)html+='<input type="image" src="/images/Slapen.png" id="Weg">';
+                                else if(value==2)html+='<input type="image" src="/images/Weg.png" id="Weg">';
+                                html+='</form>';
+                                document.getElementById('Weg').innerHTML=html;
                                 if(value==0){
                                     document.getElementById("zliving").classList.remove("secured");
                                     document.getElementById("zkeuken").classList.remove("secured");
@@ -195,7 +201,7 @@ function ajax(){
                             document.getElementById("heating").innerHTML=html;
                         }else if(type=="switch"){
                             try {
-                                if(name=="bureeltobi"||name=="poortrf"||name=="Weg"){
+                                if(name=="bureeltobi"||name=="poortrf"){
                                     var html='<form method="POST" action="" id="form">';
                                     html+='<input type="hidden" name="Naam" value="' + name + '">';
                                     if(value=="On"){

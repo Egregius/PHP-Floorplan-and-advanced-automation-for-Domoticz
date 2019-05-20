@@ -304,8 +304,7 @@ if ($home) {
         exit;
     }
     echo '
-	<body class="floorplan">
-	    ';
+	<body class="floorplan">';
     dimmer('tobi','i60');
     dimmer('zithoek');
     dimmer('eettafel');
@@ -328,8 +327,8 @@ if ($home) {
     schakelaar('tuin');
     schakelaar('zolder');
     schakelaar('wc');
-    schakelaar('IN1');
-    schakelaar('IN2');
+    //schakelaar('IN1');
+    //schakelaar('IN2');
     schakelaar('bureeltobi');
     schakelaar('tvtobi');
     schakelaar('badkamervuur1');
@@ -448,23 +447,8 @@ if ($home) {
                 <img src="/images/Camera.png" class="i48" alt="cam">
             </a>
         </div>
-        <div class="fix Weg">
-            <form action="floorplan.php" method="GET">
-                <input type="hidden" name="Weg" value="true">';
-    if ($d['Weg']['s']==0) {
-        echo '
-                <input type="image" src="/images/Thuis.png" id="Weg">';
-    } elseif ($d['Weg']['s']==1) {
-        echo '
-                <input type="image" src="/images/Slapen.png" id="Weg">';
-    } elseif ($d['Weg']['s']==2) {
-        echo '
-                <input type="image" src="/images/Weg.png" id="Weg">';
-    }
-        echo '
-            </form>
-        </div>';
-    echo '<div class="fix clock">
+        <div class="fix Weg" id="Weg"></div>
+        <div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
         </div>';
 
