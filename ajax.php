@@ -24,7 +24,14 @@ if (isset($_REQUEST['timestamp'])) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            $d[$row['n']] = $row;
+            if (!empty($row['i']))$d[$row['n']]['i']=$row['i'];
+
+           /* if (!empty($row['icon'])) {
+                $d[$row['n']] = $row;
+            } else {
+                unset($row['icon']);
+                $d[$row['n']] = $row;
+            }*/
         }
         echo json_encode($d);
     }
