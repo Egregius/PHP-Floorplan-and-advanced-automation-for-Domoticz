@@ -417,7 +417,7 @@ function ajaxbose(device,command,action){
         url: '/ajaxcontrol.php?device='+$device+'&command='+command+'&action='+action,
         dataType : 'json',
         success: function(data){
-
+            console.log(data);
         }
     })
 }

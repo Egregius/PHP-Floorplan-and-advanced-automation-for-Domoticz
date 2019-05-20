@@ -11,11 +11,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&&&isset($_REQUEST['action'])) {
+if (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
     require '/var/www/config.php';
     require 'secure/authentication.php';
     require 'secure/functions.php';
     if ($home==true) {
-
+        lg('ajaxcontrol='.print_r($_REQUEST, true));
     }
 }
