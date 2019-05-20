@@ -47,7 +47,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'30':'1500').');
+                setInterval(ajax, '.($local===true?'500':'2000').');
             });
         </script>
 	</head>';
@@ -519,28 +519,7 @@ if ($home) {
                 <tr id="trdwater"></tr>
             </table>
         </div>';
-    /*
-    $items=array('gas','water');
-    foreach ($items as $i) {
-        if (past($i.'vandaag')<15) {
-            ${$i.'color'}='#FF0000';
-        } elseif (past($i.'vandaag')<30) {
-            ${$i.'color'}='#FF4400';
-        } elseif (past($i.'vandaag')<60) {
-            ${$i.'color'}='#FF8800';
-        } elseif (past($i.'vandaag')<90) {
-            ${$i.'color'}='#FFAA00';
-        } elseif (past($i.'vandaag')<120) {
-            ${$i.'color'}='#FFCC00';
-        } elseif (past($i.'vandaag')<600) {
-            ${$i.'color'}='#FFFF00';
-        } else {
-            ${$i.'color'}='#CCCCCC';
-        }
-    }
-    */
 }
-//else {header("Location: index.php");die("Redirecting to: index.php");}
 ?>
 
     </body>
