@@ -4,6 +4,7 @@ function ajax(){
     $.ajax({
         url: '/ajax.php?timestamp='+$LastUpdateTime,
         dataType : 'json',
+        async: true,
         success: function(d){
             for (var device in d){
                 if(d.hasOwnProperty(device)){
@@ -18,12 +19,6 @@ function ajax(){
                             seconds="0" + date.getSeconds();
                             document.getElementById("clock").innerHTML=hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                         } catch {}
-                        /*if(d['gasvandaag']['t']>1000){document.getElementById("tdgas").style.color="#FF0000";}
-                        else if(value>750){document.getElementById("tdgas").style.color="#FF4400";}
-                        else if(value>500){document.getElementById("tdgas").style.color="#FF8800";}
-                        else if(value>400){document.getElementById("tdgas").style.color="#FFAA00";}
-                        else if(value>300){document.getElementById("tdgas").style.color="#FFCC00";}
-                        else if(value>200){document.getElementById("tdgas").style.color="#FFFF00";}*/
                     }else{
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
@@ -362,7 +357,7 @@ function ajax(){
                     }
                 }
             }
-        },
+        }
     });
 }
 function ajaxbose($ip){
@@ -414,6 +409,15 @@ function ajaxbose($ip){
                 document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
             }
             $('#art').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
+        }
+    })
+}
+function ajaxbose(device,command,action){
+    $.ajax({
+        url: '/ajaxcontrol.php?device='+$device+'&command='+command+'&action='+action,
+        dataType : 'json',
+        success: function(data){
+
         }
     })
 }
