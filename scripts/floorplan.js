@@ -7,17 +7,23 @@ function ajax(){
         success: function(d){
             for (var device in d){
                 if(d.hasOwnProperty(device)){
-                    var name=d[device]['n'];
-                    var time=d[device]['t'];
+                    name=d[device]['n'];
+                    time=d[device]['t'];
                     if(name=="time"){
                         $LastUpdateTime=parseInt(time);
                         try {
-                            var date=new Date(time*1000);
-                            var hours=date.getHours();
-                            var minutes="0" + date.getMinutes();
-                            var seconds="0" + date.getSeconds();
+                            date=new Date(time*1000);
+                            hours=date.getHours();
+                            minutes="0" + date.getMinutes();
+                            seconds="0" + date.getSeconds();
                             document.getElementById("clock").innerHTML=hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                         } catch {}
+                        /*if(d['gasvandaag']['t']>1000){document.getElementById("tdgas").style.color="#FF0000";}
+                        else if(value>750){document.getElementById("tdgas").style.color="#FF4400";}
+                        else if(value>500){document.getElementById("tdgas").style.color="#FF8800";}
+                        else if(value>400){document.getElementById("tdgas").style.color="#FFAA00";}
+                        else if(value>300){document.getElementById("tdgas").style.color="#FFCC00";}
+                        else if(value>200){document.getElementById("tdgas").style.color="#FFFF00";}*/
                     }else{
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
@@ -127,7 +133,7 @@ function ajax(){
                             try {
                                 if(value>0){
                                     item=parseFloat(Math.round((value/100)*100)/100).toFixed(3);
-                                    html='<td>Gas:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    html='<td id="tdgas">Gas:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
                                     document.getElementById("trgas").innerHTML=html;
                                     if(value>700){document.getElementById("trgas").style.color="#FF0000";}
                                     else if(value>600){document.getElementById("trgas").style.color="#FF4400";}
@@ -141,7 +147,7 @@ function ajax(){
                             try {
                                 if(value>0){
                                     var item=value / 1000;
-                                    html='<td>Water:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    html='<td id="tdwater">Water:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
                                     document.getElementById("trwater").innerHTML=html;
                                     if(value>1000){document.getElementById("trwater").style.color="#FF0000";}
                                     else if(value>750){document.getElementById("trwater").style.color="#FF4400";}
@@ -257,33 +263,17 @@ function ajax(){
                                  if(name=="diepvries_temp"){
                                     document.getElementById(name).innerHTML=value.toString().replace(/[.]/, ",") + "°C";
                                  }else{
-                                    var hoogte=value * 3;
-                                    if(hoogte>88){
-                                        hoogte=88;
-                                    }else if(hoogte<20){
-                                        hoogte=20;
-                                    }
-                                    var top=91 - hoogte;
-                                    if(value >= 22){
-                                        var tcolor="F00";
-                                        var dcolor="55F";
-                                    }else if(value >= 20){
-                                        var tcolor="D12";
-                                        var dcolor="44F";
-                                    }else if(value >= 18){
-                                        var tcolor="B24";
-                                        var dcolor="33F";
-                                    }else if(value >= 15){
-                                        var tcolor="93B";
-                                        var dcolor="22F";
-                                    }else if(value >= 10){
-                                        var tcolor="64D";
-                                        var dcolor="11F";
-                                    }else{
-                                        var tcolor="55F";
-                                        var dcolor="00F";
-                                    }
-                                    var html='<div class="fix tmpbg" style="top:' + top + 'px;left:8px;height:' + hoogte + 'px;background:linear-gradient(to bottom, #' + tcolor + ', #' + dcolor +');">';
+                                    hoogte=value * 3;
+                                    if(hoogte>88)hoogte=88;
+                                    else if(hoogte<20)hoogte=20;
+                                    top=91 - hoogte;
+                                    if(value >= 22){tcolor="F00";dcolor="55F";}
+                                    else if(value >= 20){tcolor="D12";dcolor="44F";}
+                                    else if(value >= 18){tcolor="B24";dcolor="33F";}
+                                    else if(value >= 15){tcolor="93B";dcolor="22F";}
+                                    else if(value >= 10){tcolor="64D";dcolor="11F";}
+                                    else{tcolor="55F";dcolor="00F";}
+                                    html='<div class="fix tmpbg" style="top:' + top + 'px;left:8px;height:' + hoogte + 'px;background:linear-gradient(to bottom, #' + tcolor + ', #' + dcolor +');">';
                                     html+='</div>'
                                     html+='<img src="/images/temp.png" height="100px" width="auto" alt="' + name + '">';
                                     html+='<div class="fix center" style="top:73px;left:5px;width:30px;">';
