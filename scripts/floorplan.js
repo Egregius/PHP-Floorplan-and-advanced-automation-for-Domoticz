@@ -8,7 +8,7 @@ function ajax(){
         success: function(d){
             for (var device in d){
                 if(d.hasOwnProperty(device)){
-                    name=d[device]['n'];
+                    name=device;
                     time=d[device]['t'];
                     if(name=="time"){
                         $LastUpdateTime=parseInt(time);
