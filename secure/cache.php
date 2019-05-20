@@ -11,6 +11,7 @@
  **/
 require '/var/www/config.php';
 require 'functions.php';
+$d=fetchdata();
 if (isset($_REQUEST['fetch'])) {
     echo $d[$_REQUEST['fetch']]['s'];
 } elseif (isset($_REQUEST['s'])) {
