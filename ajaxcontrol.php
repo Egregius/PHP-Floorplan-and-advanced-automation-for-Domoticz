@@ -11,11 +11,14 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
-    require '/var/www/config.php';
-    require 'secure/authentication.php';
-    require 'secure/functions.php';
-    if ($home==true) {
+require 'secure/functions.php';
+require 'secure/functionsfloorplan.php';
+require 'secure/authentication.php';
+echo '<br><br><br><br><br><br>'.$_COOKIE[$cookie];
+if ($home) {
+    if (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
+        $d=fetchdata();
+
         lg('ajaxcontrol='.print_r($_REQUEST, true));
     }
 }

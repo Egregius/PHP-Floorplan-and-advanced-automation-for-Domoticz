@@ -136,6 +136,12 @@ function ajax(){
                                     else if(value>400){document.getElementById("trgas").style.color="#FFAA00";}
                                     else if(value>300){document.getElementById("trgas").style.color="#FFCC00";}
                                     else if(value>200){document.getElementById("trgas").style.color="#FFFF00";}
+                                    if(time>$LastUpdateTime-15){document.getElementById("tdgas").style.color="#FF0000";}
+                                    else if(time>$LastUpdateTime-30){document.getElementById("tdgas").style.color="#FF4400";}
+                                    else if(time>$LastUpdateTime-60){document.getElementById("tdgas").style.color="#FF8800";}
+                                    else if(time>$LastUpdateTime-90){document.getElementById("tdgas").style.color="#FFAA00";}
+                                    else if(time>$LastUpdateTime-300){document.getElementById("tdgas").style.color="#FFCC00";}
+                                    else if(time>$LastUpdateTime-600){document.getElementById("tdgas").style.color="#FFFF00";}
                                 }
                             } catch {}
                         }else if(name=="watervandaag"){
@@ -150,6 +156,12 @@ function ajax(){
                                     else if(value>400){document.getElementById("trwater").style.color="#FFAA00";}
                                     else if(value>300){document.getElementById("trwater").style.color="#FFCC00";}
                                     else if(value>200){document.getElementById("trwater").style.color="#FFFF00";}
+                                    if(time>$LastUpdateTime-15){document.getElementById("tdwater").style.color="#FF0000";}
+                                    else if(time>$LastUpdateTime-30){document.getElementById("tdwater").style.color="#FF4400";}
+                                    else if(time>$LastUpdateTime-60){document.getElementById("tdwater").style.color="#FF8800";}
+                                    else if(time>$LastUpdateTime-90){document.getElementById("tdwater").style.color="#FFAA00";}
+                                    else if(time>$LastUpdateTime-300){document.getElementById("tdwater").style.color="#FFCC00";}
+                                    else if(time>$LastUpdateTime-600){document.getElementById("tdwater").style.color="#FFFF00";}
                                 }
                             } catch {}
                         }else if(name=="douche"){
