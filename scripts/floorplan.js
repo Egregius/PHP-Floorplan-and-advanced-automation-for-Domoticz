@@ -214,6 +214,8 @@ function ajax(){
                                     document.getElementById("t"+name).innerHTML="";
                                 }
                             } catch {}
+                        }else if(name=="gcal"){
+                            document.getElementById("gcal").innerHTML=mode;
                         }else if(type=="switch"){
                             try {
                                 if(name=="bureeltobi"||name=="poortrf"){
@@ -308,7 +310,9 @@ function ajax(){
                         }else if(type=="thermometer"){
                              try {
                                  if(name=="diepvries_temp"){
-                                    document.getElementById(name).innerHTML=value.toString().replace(/[.]/, ",")+"°C";
+                                    var elem=document.getElementById(name);
+                                    elem.innerHTML=value.toString().replace(/[.]/, ",")+"°C";
+                                    if(value>-15)elem.style.color="#F00";
                                  }else{
                                     hoogte=value * 3;
                                     if(hoogte>88)hoogte=88;
