@@ -12,7 +12,7 @@ function ajax(){
                     time=d[device]['t'];
                     if(name=="time"){
                         $LastUpdateTime=parseInt(time);
-                        try {
+                        try{
                             date=new Date(time*1000);
                             hours=date.getHours();
                             minutes="0"+date.getMinutes();
@@ -25,7 +25,7 @@ function ajax(){
                         var type=d[device]['dt'];
                         var icon=d[device]['icon'];
                         if(name=="Weg"){
-                            try {
+                            try{
                                 html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';
                                 if(value==0)html+='<input type="image" src="/images/Thuis.png" id="Weg">';
                                 else if(value==1)html+='<input type="image" src="/images/Slapen.png" id="Weg">';
@@ -56,21 +56,21 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="minmaxtemp"){
-                            try {
+                            try{
                                 document.getElementById("mintemp").innerHTML=value.toString().replace(/[.]/, ",");
                                 document.getElementById("maxtemp").innerHTML=mode.toString().replace(/[.]/, ",");
                             } catch {}
                         }else if(name=="wind"){
-                            try {
+                            try{
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
                             } catch {}
                         }else if(name=="icon"){
-                            try {
+                            try{
                                 document.getElementById("hum").innerHTML=mode;
                                 $('#icon').attr("src", "https://openweathermap.org/img/w/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){
-                            try {
+                            try{
                                 if(value<2){html='<font color="#99EE00">UV: '+value+'</font>';}
                                else if(value<4){html='<font color="#99CC00">UV: '+value+'</font>';}
                                else if(value<6){html='<font color="#FFCC00">UV: '+value+'</font>';}
@@ -84,7 +84,7 @@ function ajax(){
                                 document.getElementById("uv").innerHTML=html;
                             } catch {}
                         }else if(name=="elec"){
-                            try {
+                            try{
                                 html="<td>Elec:</td><td id='elec'>"+value+" W</td><td id='elecvandaag'>"+mode.toString().replace(/[.]/, ",")+" kWh</td>";
                                 document.getElementById("trelec").innerHTML=html;
                                 if(value>6000){document.getElementById("elec").style.color="#FF0000";}
@@ -101,7 +101,7 @@ function ajax(){
                                 else if(mode>10){document.getElementById("elecvandaag").style.color="#FFFF00";}
                             } catch {}
                         }else if(name=="zon"||name=="zonvandaag"){
-                            try {
+                            try{
                                 if(d['zon']['s']>0||d['zonvandaag']['s']){
                                     zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
                                     html="<td>Zon:</td><td id='zon'>"+d['zon']['s']+" W</td><td id='zonvandaag'>"+zonvandaag.toString().replace(/[.]/, ",")+" kWh</td>";
@@ -131,7 +131,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="gasvandaag"){
-                            try {
+                            try{
                                 if(value>0){
                                     item=parseFloat(Math.round((value/100)*100)/100).toFixed(3);
                                     html='<td id="tdgas">Gas:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
@@ -151,7 +151,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="watervandaag"){
-                            try {
+                            try{
                                 if(value>0){
                                     var item=value / 1000;
                                     html='<td id="tdwater">Water:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
@@ -171,7 +171,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="douche"){
-                            try {
+                            try{
                                 var douchegas=value * 10;
                                 var douchewater=mode;
                                 var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
@@ -190,7 +190,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="heating"){
-                            try {
+                            try{
                                 if(d['Rliving']['s']==0&&d['Rbureel']['s']==0&&d['RkeukenL']['s']==0&&d['RkeukenR']['s']==0&&d['RkamerL']['s']==0&&d['RkamerR']['s']==0&&d['Rtobi']['s']==0&&d['Ralex']['s']==0)html='<img src="/images/arrowgreenup.png" class="i60" alt="Open">';
                                 else if(d['Rliving']['s']==100&&d['Rbureel']['s']==100&&d['RkeukenL']['s']==100&&d['RkeukenR']['s']==100&&d['RkamerL']['s']==100&&d['RkamerR']['s']==100&&d['Rtobi']['s']==100&&d['Ralex']['s']==100)html='<img src="/images/arrowgreendown.png" class="i60" alt="Open">';
                                 else html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
@@ -204,7 +204,7 @@ function ajax(){
                                 document.getElementById("heating").innerHTML=html;
                             } catch {}
                         }else if(name=="belknop"){
-                            try {
+                            try{
                                 if(time>($LastUpdateTime-82800)){
                                     var date=new Date(time*1000);
                                     var hours=date.getHours();
@@ -215,32 +215,25 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="gcal"){
-                            document.getElementById("gcal").innerHTML=mode;
+                            try{
+                                document.getElementById("gcal").innerHTML=mode;
+                            } catch {}
                         }else if(type=="switch"){
-                            try {
+                            try{
                                 if(name=="bureeltobi"||name=="poortrf"){
-                                    var html='<form method="POST" action="" id="form">';
-                                    html+='<input type="hidden" name="Naam" value="'+name+'">';
-                                    if(value=="On"){
-                                        html+='<input type="hidden" name="Actie" value="Off">';
-                                        html+='<input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
-                                    }else if(value=="Off"){
-                                        html+='<input type="hidden" name="Actie" value="On">';
-                                        html+='<input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
-                                    }
+                                    var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
+                                    if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
+                                    else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
                                     html+='</form>';
                                     document.getElementById(name).innerHTML=html;
                                 }else{
-                                    if(value=="On"){
-                                        html='<img src="/images/'+icon+'_On.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'Off\')"/>';
-                                    }else if(value=="Off"){
-                                        html='<img src="/images/'+icon+'_Off.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'On\')""/>';
-                                    }
+                                    if(value=="On")html='<img src="/images/'+icon+'_On.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'Off\')"/>';
+                                   else if(value=="Off")html='<img src="/images/'+icon+'_Off.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'On\')""/>';
                                     document.getElementById(name).innerHTML=html;
                                 }
                             } catch {}
                         }else if(type=="bose"){
-                            try {
+                            try{
                                 if(name=="bose105"){
                                     if(mode=="Online"){
                                         var html="Online";
@@ -253,7 +246,7 @@ function ajax(){
                                else if(value=="Off"){$('#'+name).attr("src", "/images/bose_Off.png");}
                             } catch {}
                         }else if(type=="dimmer"){
-                            try {
+                            try{
                                 if(value==0){
                                     $('#'+name).attr("src", "/images/light_Off.png");
                                     document.getElementById("level"+name).innerHTML="";
@@ -263,7 +256,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="pir"){
-                            try {
+                            try{
                                 var name=name.toString().replace("pir", "")
                                 var element=document.getElementById("z"+name);
                                 if(name=="hall"){
@@ -291,7 +284,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="contact"){
-                            try {
+                            try{
                                 var element=document.getElementById(name);
                                 if(value=="Open"){
                                     element.classList.add("red");
@@ -308,7 +301,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="thermometer"){
-                             try {
+                             try{
                                  if(name=="diepvries_temp"){
                                     var elem=document.getElementById(name);
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"°C";
@@ -334,7 +327,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="rollers"){
-                            try {
+                            try{
                                 var opts=icon.split(",");
                                 var stat=100 - value;
                                 if(stat<100){var perc=(stat/100)*0.7;}
@@ -389,7 +382,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="thermostaat"){
-                            try {
+                            try{
                                 var dif=d[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts=icon.split(",");
                                 if(dif>0.2){var circle="hot";}
@@ -413,7 +406,7 @@ function ajax(){
                                 document.getElementById(name).innerHTML=html;
                             } catch {}
                         }else if(type=="setpoint"){
-                            try {
+                            try{
                                 document.getElementById(name).innerHTML=value;
                             } catch {}
                         }else{
