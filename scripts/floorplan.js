@@ -226,10 +226,14 @@ function ajax(){
                                         element.classList.remove("motion");
                                     }
                                 }
-                                var date=new Date(time*1000);
-                                var hours=date.getHours();
-                                var minutes="0" + date.getMinutes();
-                                document.getElementById("tpir" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                if(time>($LastUpdateTime-82800)){
+                                    var date=new Date(time*1000);
+                                    var hours=date.getHours();
+                                    var minutes="0" + date.getMinutes();
+                                    document.getElementById("tpir" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                }else{
+                                    document.getElementById("tpir" + name).innerHTML="";
+                                }
                             } catch {}
                         }else if(type=="contact"){
                             try {
@@ -239,10 +243,14 @@ function ajax(){
                                 }else{
                                     element.classList.remove("red");
                                 }
-                                var date=new Date(time*1000);
-                                var hours=date.getHours();
-                                var minutes="0" + date.getMinutes();
-                                document.getElementById("t" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                if(time>($LastUpdateTime-82800)){
+                                    var date=new Date(time*1000);
+                                    var hours=date.getHours();
+                                    var minutes="0" + date.getMinutes();
+                                    document.getElementById("t" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                }else{
+                                    document.getElementById("t" + name).innerHTML="";
+                                }
                             } catch {}
                         }else if(type=="thermometer"){
                              try {
@@ -422,4 +430,9 @@ function ajaxbose($ip){
 function pad(n, length){
     var len=length - (''+n).length;
     return (len>0 ? new Array(++len).join('0') : '') + n
+}
+function toggle_visibility(id){
+    var e=document.getElementById(id);
+    if(e.style.display=='inherit') e.style.display='none';
+    else e.style.display='inherit';
 }

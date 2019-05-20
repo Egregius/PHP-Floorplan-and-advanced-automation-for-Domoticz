@@ -11,7 +11,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
@@ -56,7 +55,7 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
 		<script type="text/javascript">
 		    $(document).ready(function() {
                 ajaxbose('.$bose.');
@@ -229,11 +228,6 @@ if ($home) {
         </div>';
         }
     }
-    echo '
-        <script type="text/javascript">
-			function navigator_Go(url) {window.location.assign(url);}
-			/*setTimeout("window.location.href=window.location.href;",60000);*/
-		</script>';
 }
 
 function setShuffle()

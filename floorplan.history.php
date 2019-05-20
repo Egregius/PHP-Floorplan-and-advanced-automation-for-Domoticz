@@ -13,6 +13,7 @@ $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
+    $d=fetchdata();
     $perpage=37;
     if (isset($_REQUEST['device'])) {
         $device=$_REQUEST['device'];
@@ -202,8 +203,5 @@ if ($home) {
 		</script>';
 }
 ?>
-<script>
-    function toggle_visibility(id){var e=document.getElementById(id);if(e.style.display=='inherit') e.style.display='none';else e.style.display='inherit';}
-</script>
     </body>
 </html>

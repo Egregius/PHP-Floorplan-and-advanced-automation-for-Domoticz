@@ -11,11 +11,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
+    $d=fetchdata();
     echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>

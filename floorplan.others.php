@@ -9,11 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$start=microtime(true);
 require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
+    $d=fetchdata();
     error_reporting(E_ALL);ini_set("display_errors", "on");
     echo '<html><head>
 		<title>Floorplan</title>

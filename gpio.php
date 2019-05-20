@@ -15,6 +15,7 @@
  **/
 if (isset($_REQUEST['gpio'])) {
     include 'secure/functions.php';
+    $d=fetchdata();
     $gpio=$_REQUEST['gpio'];
     if ($gpio==20) {
         store('gasvandaag', $d['gasvandaag']['s']+1);
