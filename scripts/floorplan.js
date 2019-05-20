@@ -365,7 +365,7 @@ function ajax(){
                                 document.getElementById('R'+name).innerHTML=html;
                             } catch {}
                         }else if(type=="thermostaat"){
-                            try {
+                           // try {
                                 var dif=d[name.toString().replace("_set", "_temp")]['s']-value;
                                 var opts=icon.split(",");
                                 if(dif>0.2){var circle="hot";}
@@ -387,7 +387,7 @@ function ajax(){
                                     html+='<font size="2" color="#CCC">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                 }
                                 document.getElementById(name).innerHTML=html;
-                            } catch {}
+                            //} catch {}
                         }else if(type=="setpoint"){
                             try {
                                 document.getElementById(name).innerHTML=value;

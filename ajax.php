@@ -24,7 +24,7 @@ if (isset($_REQUEST['timestamp'])) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            //$d[$row['n']]['n'] = $row['n'];
+            $d[$row['n']]['n'] = $row['n'];
             if(!empty($row['i']))$d[$row['n']]['i'] = $row['i'];
             $d[$row['n']]['s'] = $row['s'];
             $d[$row['n']]['t'] = $row['t'];
