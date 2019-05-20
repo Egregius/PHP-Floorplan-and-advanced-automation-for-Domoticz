@@ -48,9 +48,9 @@ if ($home) {
                 ajax();
                 setInterval(ajax, '.($local===true?'300':'1500').');
             });
-        </script>';
-    echo '
+        </script>
 	</head>';
+	requestdimmer();
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv') {
             if ($_POST['Actie']=='On') {
