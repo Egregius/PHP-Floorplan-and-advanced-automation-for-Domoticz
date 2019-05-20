@@ -201,9 +201,9 @@ function ajax(){
                         }*/else if(type=="switch"){
                             try {
                                 if(value=="On"){
-                                    html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',sw,Off)"/>';
+                                    html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'Off\')"/>';
                                 }else if(value=="Off"){
-                                    html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',sw,On)""/>';
+                                    html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'On\')""/>';
                                 }
                                 document.getElementById(name).innerHTML=html;
                             } catch {}
@@ -435,8 +435,9 @@ function ajaxbose($ip){
     })
 }
 function ajaxcontrol(idx,command,action){
+    console.log(idx,command,action);
     $.ajax({
-        url: '/ajaxcontrol.php?idx='+$idx+'&command='+command+'&action='+action,
+        url: '/ajaxcontrol.php?idx='+idx+'&command='+command+'&action='+action,
         dataType : 'json',
         async: true,
         success: function(data){
