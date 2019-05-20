@@ -226,10 +226,7 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
 {
     global $user,$d,$domoticzurl;
 
-    if (is_numeric($name)) {
-        lg('switch '.$name);
-        file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$name.'&switchcmd='.$action);
-    } elseif (is_array($name)) {
+    if (is_array($name)) {
         $check=true;
         foreach ($name as $i) {
             if ($i=='media') {

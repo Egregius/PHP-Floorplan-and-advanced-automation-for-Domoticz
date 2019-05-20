@@ -15,14 +15,13 @@ function ajax(){
                         try {
                             date=new Date(time*1000);
                             hours=date.getHours();
-                            minutes="0" + date.getMinutes();
-                            seconds="0" + date.getSeconds();
-                            document.getElementById("clock").innerHTML=hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                            minutes="0"+date.getMinutes();
+                            seconds="0"+date.getSeconds();
+                            document.getElementById("clock").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
                     }else{
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
-                        var idx=d[device]['i'];
                         var type=d[device]['dt'];
                         var icon=d[device]['icon'];
                         if(name=="Weg"){
@@ -68,25 +67,25 @@ function ajax(){
                         }else if(name=="icon"){
                             try {
                                 document.getElementById("hum").innerHTML=mode;
-                                $('#icon').attr("src", "https://openweathermap.org/img/w/" + value + ".png");
+                                $('#icon').attr("src", "https://openweathermap.org/img/w/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){
                             try {
-                                if(value<2){html='<font color="#99EE00">UV: ' + value + '</font>';}
-                               else if(value<4){html='<font color="#99CC00">UV: ' + value + '</font>';}
-                               else if(value<6){html='<font color="#FFCC00">UV: ' + value + '</font>';}
-                               else if(value<8){html='<font color="#FF6600">UV: ' + value + '</font>';}
-                                else{html='<font color="#FF2200">UV: ' + value + '</font>';}
-                                if(mode<2){html+='<br><font color="#99EE00">max: ' + mode + '</font>';}
-                               else if(mode<4){html+='<br><font color="#99CC00">max: ' + mode + '</font>';}
-                               else if(mode<6){html+='<br><font color="#FFCC00">max: ' + mode + '</font>';}
-                               else if(mode<8){html+='<br><font color="#FF6600">max: ' + mode + '</font>';}
-                                else{html+='<br><font color="#FF2200">max: ' + mode + '</font>';}
+                                if(value<2){html='<font color="#99EE00">UV: '+value+'</font>';}
+                               else if(value<4){html='<font color="#99CC00">UV: '+value+'</font>';}
+                               else if(value<6){html='<font color="#FFCC00">UV: '+value+'</font>';}
+                               else if(value<8){html='<font color="#FF6600">UV: '+value+'</font>';}
+                                else{html='<font color="#FF2200">UV: '+value+'</font>';}
+                                if(mode<2){html+='<br><font color="#99EE00">max: '+mode+'</font>';}
+                               else if(mode<4){html+='<br><font color="#99CC00">max: '+mode+'</font>';}
+                               else if(mode<6){html+='<br><font color="#FFCC00">max: '+mode+'</font>';}
+                               else if(mode<8){html+='<br><font color="#FF6600">max: '+mode+'</font>';}
+                                else{html+='<br><font color="#FF2200">max: '+mode+'</font>';}
                                 document.getElementById("uv").innerHTML=html;
                             } catch {}
                         }else if(name=="elec"){
                             try {
-                                html="<td>Elec:</td><td id='elec'>" + value + " W</td><td id='elecvandaag'>" + mode.toString().replace(/[.]/, ",") + " kWh</td>";
+                                html="<td>Elec:</td><td id='elec'>"+value+" W</td><td id='elecvandaag'>"+mode.toString().replace(/[.]/, ",")+" kWh</td>";
                                 document.getElementById("trelec").innerHTML=html;
                                 if(value>6000){document.getElementById("elec").style.color="#FF0000";}
                                 else if(value>5000){document.getElementById("elec").style.color="#FF4400";}
@@ -105,7 +104,7 @@ function ajax(){
                             try {
                                 if(d['zon']['s']>0||d['zonvandaag']['s']){
                                     zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
-                                    html="<td>Zon:</td><td id='zon'>" + d['zon']['s'] + " W</td><td id='zonvandaag'>" + zonvandaag.toString().replace(/[.]/, ",") + " kWh</td>";
+                                    html="<td>Zon:</td><td id='zon'>"+d['zon']['s']+" W</td><td id='zonvandaag'>"+zonvandaag.toString().replace(/[.]/, ",")+" kWh</td>";
                                     document.getElementById("trzon").innerHTML=html;
                                     if(d['zon']['s']>3500){document.getElementById("zon").style.color="#00FF00";}
                                     else if(d['zon']['s']>3000){document.getElementById("zon").style.color="#33FF00";}
@@ -135,7 +134,7 @@ function ajax(){
                             try {
                                 if(value>0){
                                     item=parseFloat(Math.round((value/100)*100)/100).toFixed(3);
-                                    html='<td id="tdgas">Gas:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    html='<td id="tdgas">Gas:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
                                     document.getElementById("trgas").innerHTML=html;
                                     if(value>700){document.getElementById("trgas").style.color="#FF0000";}
                                     else if(value>600){document.getElementById("trgas").style.color="#FF4400";}
@@ -155,7 +154,7 @@ function ajax(){
                             try {
                                 if(value>0){
                                     var item=value / 1000;
-                                    html='<td id="tdwater">Water:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
+                                    html='<td id="tdwater">Water:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
                                     document.getElementById("trwater").innerHTML=html;
                                     if(value>1000){document.getElementById("trwater").style.color="#FF0000";}
                                     else if(value>750){document.getElementById("trwater").style.color="#FF4400";}
@@ -178,13 +177,13 @@ function ajax(){
                                 var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
                                 var douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
                                 if(value>0){
-                                    html="<td>D-gas:</td><td>" + douchegas + " L</td><td>" + douchegaseuro.toString().replace(/[.]/, ",") + " €</td>";
+                                    html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" €</td>";
                                     document.getElementById("trdgas").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                                 if(mode>0){
-                                    html="<td>D-water:</td><td>" + douchewater + " L</td><td>" + douchewatereuro.toString().replace(/[.]/, ",") + " €</td>";
+                                    html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" €</td>";
                                     document.getElementById("trdwater").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
@@ -208,21 +207,21 @@ function ajax(){
                             try {
                                 if(name=="bureeltobi"||name=="poortrf"){
                                     var html='<form method="POST" action="" id="form">';
-                                    html+='<input type="hidden" name="Naam" value="' + name + '">';
+                                    html+='<input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On"){
                                         html+='<input type="hidden" name="Actie" value="Off">';
-                                        html+='<input type="image" src="/images/' + icon + '_On.png" id="' + name + '">';
+                                        html+='<input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     }else if(value=="Off"){
                                         html+='<input type="hidden" name="Actie" value="On">';
-                                        html+='<input type="image" src="/images/' + icon + '_Off.png" id="' + name + '">';
+                                        html+='<input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
                                     }
                                     html+='</form>';
                                     document.getElementById(name).innerHTML=html;
                                 }else{
                                     if(value=="On"){
-                                        html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'Off\')"/>';
+                                        html='<img src="/images/'+icon+'_On.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'Off\')"/>';
                                     }else if(value=="Off"){
-                                        html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'On\')""/>';
+                                        html='<img src="/images/'+icon+'_Off.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'On\')""/>';
                                     }
                                     document.getElementById(name).innerHTML=html;
                                 }
@@ -237,30 +236,30 @@ function ajax(){
                                     }else if(mode=="Offline"){var html="";}
                                     document.getElementById("bosediv105").innerHTML=html;
                                 }
-                                if(value=="On"){$('#' + name).attr("src", "/images/bose_On.png");}
-                               else if(value=="Off"){$('#' + name).attr("src", "/images/bose_Off.png");}
+                                if(value=="On"){$('#'+name).attr("src", "/images/bose_On.png");}
+                               else if(value=="Off"){$('#'+name).attr("src", "/images/bose_Off.png");}
                             } catch {}
                         }else if(type=="dimmer"){
                             try {
                                 if(value==0){
-                                    $('#' + name).attr("src", "/images/light_Off.png");
-                                    document.getElementById("level" + name).innerHTML="";
+                                    $('#'+name).attr("src", "/images/light_Off.png");
+                                    document.getElementById("level"+name).innerHTML="";
                                 }else{
-                                    $('#' + name).attr("src", "/images/light_On.png");
-                                    document.getElementById("level" + name).innerHTML=value;
+                                    $('#'+name).attr("src", "/images/light_On.png");
+                                    document.getElementById("level"+name).innerHTML=value;
                                 }
                             } catch {}
                         }else if(type=="pir"){
                             try {
                                 var name=name.toString().replace("pir", "")
-                                var element=document.getElementById("z" + name);
+                                var element=document.getElementById("z"+name);
                                 if(name=="hall"){
                                     if(value=="On"){
-                                        document.getElementById("z" + name + "a").classList.add("motion");
-                                        document.getElementById("z" + name + "b").classList.add("motion");
+                                        document.getElementById("z"+name+"a").classList.add("motion");
+                                        document.getElementById("z"+name+"b").classList.add("motion");
                                     }else{
-                                        document.getElementById("z" + name + "a").classList.remove("motion");
-                                        document.getElementById("z" + name + "b").classList.remove("motion");
+                                        document.getElementById("z"+name+"a").classList.remove("motion");
+                                        document.getElementById("z"+name+"b").classList.remove("motion");
                                     }
                                 }else{
                                     if(value=="On"){
@@ -272,10 +271,10 @@ function ajax(){
                                 if(time>($LastUpdateTime-82800)){
                                     var date=new Date(time*1000);
                                     var hours=date.getHours();
-                                    var minutes="0" + date.getMinutes();
-                                    document.getElementById("tpir" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                    var minutes="0"+date.getMinutes();
+                                    document.getElementById("tpir"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
-                                    document.getElementById("tpir" + name).innerHTML="";
+                                    document.getElementById("tpir"+name).innerHTML="";
                                 }
                             } catch {}
                         }else if(type=="contact"){
@@ -289,16 +288,16 @@ function ajax(){
                                 if(time>($LastUpdateTime-82800)){
                                     var date=new Date(time*1000);
                                     var hours=date.getHours();
-                                    var minutes="0" + date.getMinutes();
-                                    document.getElementById("t" + name).innerHTML=hours + ':' + minutes.substr(-2);
+                                    var minutes="0"+date.getMinutes();
+                                    document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
-                                    document.getElementById("t" + name).innerHTML="";
+                                    document.getElementById("t"+name).innerHTML="";
                                 }
                             } catch {}
                         }else if(type=="thermometer"){
                              try {
                                  if(name=="diepvries_temp"){
-                                    document.getElementById(name).innerHTML=value.toString().replace(/[.]/, ",") + "°C";
+                                    document.getElementById(name).innerHTML=value.toString().replace(/[.]/, ",")+"°C";
                                  }else{
                                     hoogte=value * 3;
                                     if(hoogte>88)hoogte=88;
@@ -310,9 +309,9 @@ function ajax(){
                                     else if(value >= 15){tcolor="93B";dcolor="22F";}
                                     else if(value >= 10){tcolor="64D";dcolor="11F";}
                                     else{tcolor="55F";dcolor="00F";}
-                                    html='<div class="fix tmpbg" style="top:' + top + 'px;left:8px;height:' + hoogte + 'px;background:linear-gradient(to bottom, #' + tcolor + ', #' + dcolor +');">';
+                                    html='<div class="fix tmpbg" style="top:'+top+'px;left:8px;height:'+hoogte+'px;background:linear-gradient(to bottom, #'+tcolor+', #'+dcolor +');">';
                                     html+='</div>'
-                                    html+='<img src="/images/temp.png" height="100px" width="auto" alt="' + name + '">';
+                                    html+='<img src="/images/temp.png" height="100px" width="auto" alt="'+name+'">';
                                     html+='<div class="fix center" style="top:73px;left:5px;width:30px;">';
                                     html+=value.toString().replace(/[.]/, ",");
                                     html+='</div>';
@@ -332,7 +331,7 @@ function ajax(){
                                 }else if(stat>0){
                                     var nsize=(opts[2]*perc)+8;
                                     if(nsize>opts[2]){nsize=opts[2];}
-                                    var top=opts[0] + (opts[2]-nsize);
+                                    var top=opts[0]+(opts[2]-nsize);
                                 }else{var nsize=opts[2];}
                                 if(opts[3]=="P"){
                                     elem.style.top=opts[0]+'px';
@@ -347,23 +346,23 @@ function ajax(){
                                 }
 
                                 var html='<form method="POST" action="">';
-                                html+='<input type="hidden" name="rollers" value="' + name + '">';
+                                html+='<input type="hidden" name="rollers" value="'+name+'">';
                                 if(value==100){
                                     html+='<input type="image" src="/images/arrowgreendown.png" class="i60">';
                                 }else if(value==0){
                                     html+='<input type="image" src="/images/arrowgreenup.png" class="i60">';
                                 }else{
                                     html+='<input type="image" src="/images/circlegrey.png" class="i60">';
-                                    html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers=' + name + '\';">';
+                                    html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='+name+'\';">';
                                     if(mode == 2){html+='<font size="5" color="#F00">';}
                                     else if(mode == 1){html+='<font size="5" color="#222">';}
                                     else{html+='<font size="5" color="#CCC">';}
-                                    html+=value + '</font></div>';
+                                    html+=value+'</font></div>';
                                 }
                                 if(mode == 2){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';}
                                 else if(mode == 1){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';}
                                 html+='</div></form>';
-                                document.getElementById('R' + name).innerHTML=html;
+                                document.getElementById('R'+name).innerHTML=html;
                             } catch {}
                         }else if(type=="thermostaat"){
                             try {
@@ -379,13 +378,13 @@ function ajax(){
                                 var elem=document.getElementById(name);
                                 elem.style.top=opts[0]+'px';
                                 elem.style.left=opts[1]+'px';
-                                var html='<img src="/images/thermo' + circle + center + '.png" class="i48" alt="">';
+                                var html='<img src="/images/thermo'+circle+center+'.png" class="i48" alt="">';
                                 html+='<div class="fix center" style="top:32px;left:11px;width:26px;">';
                                 if(mode>0){
-                                    html+='<font size="2" color="#222">' + value.toString().replace(/[.]/, ",") + '</font></div>';
+                                    html+='<font size="2" color="#222">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                     html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;"></div>';
                                 }else{
-                                    html+='<font size="2" color="#CCC">' + value.toString().replace(/[.]/, ",") + '</font></div>';
+                                    html+='<font size="2" color="#CCC">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                 }
                                 document.getElementById(name).innerHTML=html;
                             } catch {}
@@ -394,7 +393,7 @@ function ajax(){
                                 document.getElementById(name).innerHTML=value;
                             } catch {}
                         }else{
-                            //console.log(type + " -> " + name + " -> " + value + " -> " + time + " -> " + mode);
+                            //console.log(type+" -> "+name+" -> "+value+" -> "+time+" -> "+mode);
                         }
                     }
                 }
@@ -404,24 +403,24 @@ function ajax(){
 }
 function ajaxbose($ip){
     $.ajax({
-        url: '/ajaxfloorplan.bose.php?ip=' + $ip,
+        url: '/ajaxfloorplan.bose.php?ip='+$ip,
         dataType : 'json',
         success: function(data){
             var date=new Date(data["time"]*1000);
             var hours=date.getHours();
-            var minutes="0" + date.getMinutes();
-            var seconds="0" + date.getSeconds();
-            document.getElementById("clock").innerHTML=hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            var minutes="0"+date.getMinutes();
+            var seconds="0"+date.getSeconds();
+            document.getElementById("clock").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
             let volume=parseInt(data["volume"]["actualvolume"], 10);
             if($('#currentvolume').text()!=volume){
                 var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
                 var html="<br><br>";
                 levels.forEach(function(level){
-                    let newlevel=volume + level;
+                    let newlevel=volume+level;
                     if(level==0){
-                        html+="<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume btna\" id=\"currentvolume\">" + newlevel + "</button>";
+                        html+="<button type=\"submit\" name=\"volume\" value=\""+newlevel+"\" class=\"btn volume btna\" id=\"currentvolume\">"+newlevel+"</button>";
                     }else{
-                        html+="<button type=\"submit\" name=\"volume\" value=\"" + newlevel + "\" class=\"btn volume\">" + newlevel + "</button>";
+                        html+="<button type=\"submit\" name=\"volume\" value=\""+newlevel+"\" class=\"btn volume\">"+newlevel+"</button>";
                     }
                 });
                 document.getElementById("volume").innerHTML=html;
@@ -432,9 +431,9 @@ function ajaxbose($ip){
                 var html="";
                 levels.forEach(function(level){
                     if(level==bass){
-                        html+="<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume btna\" id=\"currentbass\">" + level + "</button>";
+                        html+="<button type=\"submit\" name=\"bass\" value=\""+level+"\" class=\"btn volume btna\" id=\"currentbass\">"+level+"</button>";
                     }else{
-                        html+="<button type=\"submit\" name=\"bass\" value=\"" + level + "\" class=\"btn volume\">" + level + "</button>";
+                        html+="<button type=\"submit\" name=\"bass\" value=\""+level+"\" class=\"btn volume\">"+level+"</button>";
                     }
                 });
                 document.getElementById("bass").innerHTML=html;
@@ -454,10 +453,10 @@ function ajaxbose($ip){
         }
     })
 }
-function ajaxcontrol(idx,command,action){
-    console.log(idx,command,action);
+function ajaxcontrol(device,command,action){
+    console.log(device,command,action);
     $.ajax({
-        url: '/ajaxcontrol.php?idx='+idx+'&command='+command+'&action='+action,
+        url: '/ajaxcontrol.php?device='+device+'&command='+command+'&action='+action,
         dataType : 'json',
         async: true,
         success: function(data){
@@ -467,7 +466,7 @@ function ajaxcontrol(idx,command,action){
 }
 function pad(n, length){
     var len=length - (''+n).length;
-    return (len>0 ? new Array(++len).join('0') : '') + n
+    return (len>0 ? new Array(++len).join('0') : '')+n
 }
 function toggle_visibility(id){
     var e=document.getElementById(id);
