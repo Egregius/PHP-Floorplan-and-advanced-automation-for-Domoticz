@@ -186,7 +186,12 @@ function ajax(){
                             } catch {}
                         }else if(name=="heating"){
                             if(value==0)html='';
-                            else if(value==1)html='<img src="/images/Cooling.png" class="i48" alt="Cooling">';
+                            else if(value==1)html='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
+                            else if(value==2)html='<img src="/images/Elec.png" class="i40" alt="Elec">';
+                            else if(value==3){
+                                if(d['brander']['s']=='On')html='<img src="/images/fire_On.png" class="i40" alt="Gas">';
+                                else html='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
+                            }
                             document.getElementById("heating").innerHTML=html;
                         }else if(type=="switch"){
                             try {

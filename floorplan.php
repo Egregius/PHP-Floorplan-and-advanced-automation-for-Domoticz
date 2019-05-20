@@ -417,45 +417,7 @@ if ($home) {
 		        <img src="/images/'.$Rup.'.png" class="i60" alt="Open">
 		    </a>
 		    <br>
-		    <div id="heating" onclick="javascript:navigator_Go("floorplan.heating.php");"></div>';
-    if ($d['heating']['s']==3) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Fire_'.($d['brander']['s']=='On'?'On':'Off').'.png" class="i48" alt="Brander">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==2) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Elec.png" height="40px" width="auto" alt="Elec">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==1) {
-        echo '
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                <img src="/images/Cooling.png" class="i48" alt="Cooling">
-            </a>
-            <br>
-            <br>
-            <br>
-            <br>';
-    } elseif ($d['heating']['s']==0) {
-        echo '
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>';
-    }
-
-    echo '
+		    <div id="heating" onclick="javascript:navigator_Go("floorplan.heating.php");"></div>
         </div>';
     thermometer('living_temp');
     thermometer('badkamer_temp');
