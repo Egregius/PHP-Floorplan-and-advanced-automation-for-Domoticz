@@ -517,7 +517,7 @@ if ($home) {
             </form>
         </div>
         <div class="fix floorplanstats">
-            '.$udevice.' | '.$ipaddress.' | '.number_format(((microtime(true)-$start)*1000), 3, ',', '.').' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
+            '.$udevice.' | '.$ipaddress.' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
         </div>';
 }
 function human_filesize($bytes,$dec=2)
