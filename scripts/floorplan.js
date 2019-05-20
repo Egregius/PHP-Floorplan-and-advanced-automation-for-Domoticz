@@ -184,28 +184,28 @@ function ajax(){
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                             } catch {}
-                        }/*else if(type=="switch"){
+                        }else if(type=="switch"){
                             try {
-                                var html='<form method="POST" action="" id="form">';
-                                html+='<input type="hidden" name="Naam" value="' + name + '">';
-                                if(value=="On"){
-                                    html+='<input type="hidden" name="Actie" value="Off">';
-                                    html+='<input type="image" src="/images/' + icon + '_On.png" id="' + name + '">';
-                                }else if(value=="Off"){
-                                    html+='<input type="hidden" name="Actie" value="On">';
-                                    html+='<input type="image" src="/images/' + icon + '_Off.png" id="' + name + '">';
+                                if(name=="bureeltobi"||name=="poortrf"||name=="Weg"){
+                                    var html='<form method="POST" action="" id="form">';
+                                    html+='<input type="hidden" name="Naam" value="' + name + '">';
+                                    if(value=="On"){
+                                        html+='<input type="hidden" name="Actie" value="Off">';
+                                        html+='<input type="image" src="/images/' + icon + '_On.png" id="' + name + '">';
+                                    }else if(value=="Off"){
+                                        html+='<input type="hidden" name="Actie" value="On">';
+                                        html+='<input type="image" src="/images/' + icon + '_Off.png" id="' + name + '">';
+                                    }
+                                    html+='</form>';
+                                    document.getElementById(name).innerHTML=html;
+                                }else{
+                                    if(value=="On"){
+                                        html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'Off\')"/>';
+                                    }else if(value=="Off"){
+                                        html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'On\')""/>';
+                                    }
+                                    document.getElementById(name).innerHTML=html;
                                 }
-                                html+='</form>';
-                                document.getElementById(name).innerHTML=html;
-                            } catch {}
-                        }*/else if(type=="switch"){
-                            try {
-                                if(value=="On"){
-                                    html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'Off\')"/>';
-                                }else if(value=="Off"){
-                                    html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',\'sw\',\'On\')""/>';
-                                }
-                                document.getElementById(name).innerHTML=html;
                             } catch {}
                         }else if(type=="bose"){
                             try {
