@@ -304,7 +304,8 @@ if ($home) {
         exit;
     }
     echo '
-	<body class="floorplan">';
+	<body class="floorplan">
+	    <div id="placeholder"></div>';
     dimmer('tobi','i60');
     dimmer('zithoek');
     dimmer('eettafel');
