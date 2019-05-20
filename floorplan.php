@@ -403,12 +403,8 @@ if ($home) {
                 <img src="/images/plus.png" class="i60" alt="plus">
             </a>
         </div>
-        <div class="fix" id="picam1"></div>
-        <div class="fix picam2">
-            <a href=\'javascript:navigator_Go("picam2/index.php");\'>
-                <img src="/images/Camera.png" class="i48" alt="cam">
-            </a>
-        </div>
+        <div class="fix picam1" id="picam1"></div>
+        <div class="fix picam2" id="picam2"></div>
         <div class="fix Weg" id="Weg"></div>
         <div class="fix clock">
             <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a>

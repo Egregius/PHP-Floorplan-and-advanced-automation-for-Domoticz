@@ -489,10 +489,8 @@ function ajaxcontrol(device,command,action){
     })
 }
 function floorplan(){
-    var elem=document.getElementById("picam1");
-    elem.innerHTML='<a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
-    elem.style.top=127;
-    elem.style.left=445;
+    document.getElementById("picam1").innerHTML='<a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
+    document.getElementById("picam2").innerHTML='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
 }
 function pad(n, length){
     var len=length - (''+n).length;
