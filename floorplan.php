@@ -47,7 +47,7 @@ if ($home) {
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 ajax();
-                setInterval(ajax, '.($local===true?'300':'1500').');
+                setInterval(ajax, '.($local===true?'30':'1500').');
             });
         </script>
 	</head>';
