@@ -23,7 +23,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 function fetchdata()
 {
     global $db;
-    $stmt=$db->query("select n,i,s,t,m,dt from devices;");
+    $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$row['n']] = $row;
     }

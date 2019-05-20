@@ -83,11 +83,11 @@ function schakelaar2($name)
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">
                 <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['dt'].'_Off.png" class="i40">'
+                <input type="image" src="/images/'.$d[$name]['icon'].'_Off.png" class="i40">'
                    :'
                 <input type="hidden" name="Actie" value="Off">
                 <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['dt'].'_On.png" class="i40">';
+                <input type="image" src="/images/'.$d[$name]['icon'].'_On.png" class="i40">';
     echo '
                 <br>'.$name;
     if ($d[$name]['t']>$eendag) {
@@ -103,7 +103,7 @@ function schakelaar2($name)
 function thermometer($name)
 {
     echo '
-            <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
+        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
 }
 function contact($name)
 {
