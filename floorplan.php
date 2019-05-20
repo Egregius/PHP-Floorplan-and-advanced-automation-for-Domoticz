@@ -84,7 +84,6 @@ if ($home) {
                   sw($_REQUEST['Naam'], $_REQUEST['Actie']);
             }
         } elseif ($_REQUEST['Naam']=='zoldertrap') {
-
             if ($d['raamhall']['s']=='Closed') {
                 sw($_REQUEST['Naam'], $_REQUEST['Actie']);
             } else {
@@ -105,29 +104,6 @@ if ($home) {
             sw($_REQUEST['Naam'], $_REQUEST['Actie']);
         } elseif (!in_array($_REQUEST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
             sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-        }
-    } elseif (isset($_REQUEST['dimmer'])) {
-        if (isset($_REQUEST['luifelauto'])) {
-            storemode('dimactionluifel', 1);
-        } elseif (isset($_REQUEST['dimlevelon_x'])) {
-            sl($_REQUEST['Naam'], 100);
-            storemode($_REQUEST['Naam'], 0);
-        } elseif (isset($_REQUEST['dimleveloff_x'])) {
-            sl($_REQUEST['Naam'], 0);
-            storemode($_REQUEST['Naam'], 0);
-        } elseif (isset($_REQUEST['dimsleep_x'])) {
-            lg('=> '.$user.' => activated dimmer sleep for '.$_REQUEST['Naam']);
-            storemode($_REQUEST['Naam'], 1);
-        } elseif (isset($_REQUEST['dimwake_x'])) {
-            lg('=> '.$user.' => activated dimmer wake for '.$_REQUEST['Naam']);
-            sl($_REQUEST['Naam'], $_REQUEST['dimwakelevel']+2);
-            storemode($_REQUEST['Naam'], 2);
-        } elseif (isset($_REQUEST['dimwake3u_x'])) {
-            lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_REQUEST['Naam']);
-            storemode($_REQUEST['Naam'], 3);
-        } else {
-            sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
-            storemode($_REQUEST['Naam'], 0);
         }
     }
 

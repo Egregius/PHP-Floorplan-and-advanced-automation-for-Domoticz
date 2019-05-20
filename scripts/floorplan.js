@@ -71,34 +71,34 @@ function ajax(){
                             } catch {}
                         }else if(name=="uv"){
                             try{
-                                if(value<2){html='<font color="#99EE00">UV: '+value+'</font>';}
-                               else if(value<4){html='<font color="#99CC00">UV: '+value+'</font>';}
-                               else if(value<6){html='<font color="#FFCC00">UV: '+value+'</font>';}
-                               else if(value<8){html='<font color="#FF6600">UV: '+value+'</font>';}
-                                else{html='<font color="#FF2200">UV: '+value+'</font>';}
-                                if(mode<2){html+='<br><font color="#99EE00">max: '+mode+'</font>';}
-                               else if(mode<4){html+='<br><font color="#99CC00">max: '+mode+'</font>';}
-                               else if(mode<6){html+='<br><font color="#FFCC00">max: '+mode+'</font>';}
-                               else if(mode<8){html+='<br><font color="#FF6600">max: '+mode+'</font>';}
-                                else{html+='<br><font color="#FF2200">max: '+mode+'</font>';}
+                                if(value<2)html='<font color="#99EE00">UV: '+value+'</font>';
+                               else if(value<4)html='<font color="#99CC00">UV: '+value+'</font>';
+                               else if(value<6)html='<font color="#FFCC00">UV: '+value+'</font>';
+                               else if(value<8)html='<font color="#FF6600">UV: '+value+'</font>';
+                                else html='<font color="#FF2200">UV: '+value+'</font>';
+                                if(mode<2)html+='<br><font color="#99EE00">max: '+mode+'</font>';
+                               else if(mode<4)html+='<br><font color="#99CC00">max: '+mode+'</font>';
+                               else if(mode<6)html+='<br><font color="#FFCC00">max: '+mode+'</font>';
+                               else if(mode<8)html+='<br><font color="#FF6600">max: '+mode+'</font>';
+                                else html+='<br><font color="#FF2200">max: '+mode+'</font>';
                                 document.getElementById("uv").innerHTML=html;
                             } catch {}
                         }else if(name=="elec"){
                             try{
                                 html="<td>Elec:</td><td id='elec'>"+value+" W</td><td id='elecvandaag'>"+mode.toString().replace(/[.]/, ",")+" kWh</td>";
                                 document.getElementById("trelec").innerHTML=html;
-                                if(value>6000){document.getElementById("elec").style.color="#FF0000";}
-                                else if(value>5000){document.getElementById("elec").style.color="#FF4400";}
-                                else if(value>4000){document.getElementById("elec").style.color="#FF8800";}
-                                else if(value>3000){document.getElementById("elec").style.color="#FFAA00";}
-                                else if(value>2000){document.getElementById("elec").style.color="#FFCC00";}
-                                else if(value>1000){document.getElementById("elec").style.color="#FFFF00";}
-                                if(mode>20){document.getElementById("elecvandaag").style.color="#FF0000";}
-                                else if(mode>18){document.getElementById("elecvandaag").style.color="#FF4400"; }
-                                else if(mode>16){document.getElementById("elecvandaag").style.color="#FF8800";}
-                                else if(mode>14){document.getElementById("elecvandaag").style.color="#FFAA00";}
-                                else if(mode>12){document.getElementById("elecvandaag").style.color="#FFCC00";}
-                                else if(mode>10){document.getElementById("elecvandaag").style.color="#FFFF00";}
+                                if(value>6000)document.getElementById("elec").style.color="#FF0000";
+                                else if(value>5000)document.getElementById("elec").style.color="#FF4400";
+                                else if(value>4000)document.getElementById("elec").style.color="#FF8800";
+                                else if(value>3000)document.getElementById("elec").style.color="#FFAA00";
+                                else if(value>2000)document.getElementById("elec").style.color="#FFCC00";
+                                else if(value>1000)document.getElementById("elec").style.color="#FFFF00";
+                                if(mode>20)document.getElementById("elecvandaag").style.color="#FF0000";
+                                else if(mode>18)document.getElementById("elecvandaag").style.color="#FF4400";
+                                else if(mode>16)document.getElementById("elecvandaag").style.color="#FF8800";
+                                else if(mode>14)document.getElementById("elecvandaag").style.color="#FFAA00";
+                                else if(mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
+                                else if(mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
                             } catch {}
                         }else if(name=="zon"||name=="zonvandaag"){
                             try{
@@ -106,28 +106,28 @@ function ajax(){
                                     zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
                                     html="<td>Zon:</td><td id='zon'>"+d['zon']['s']+" W</td><td id='zonvandaag'>"+zonvandaag.toString().replace(/[.]/, ",")+" kWh</td>";
                                     document.getElementById("trzon").innerHTML=html;
-                                    if(d['zon']['s']>3500){document.getElementById("zon").style.color="#00FF00";}
-                                    else if(d['zon']['s']>3000){document.getElementById("zon").style.color="#33FF00";}
-                                    else if(d['zon']['s']>2700){document.getElementById("zon").style.color="#66FF00";}
-                                    else if(d['zon']['s']>2400){document.getElementById("zon").style.color="#99FF00";}
-                                    else if(d['zon']['s']>2100){document.getElementById("zon").style.color="#CCFF00";}
-                                    else if(d['zon']['s']>1800){document.getElementById("zon").style.color="#EEFF00";}
-                                    else if(d['zon']['s']>1500){document.getElementById("zon").style.color="#FFFF33";}
-                                    else if(d['zon']['s']>1200){document.getElementById("zon").style.color="#FFFF66";}
-                                    else if(d['zon']['s']>900){document.getElementById("zon").style.color="#FFFF99";}
-                                    else if(d['zon']['s']>600){document.getElementById("zon").style.color="#FFFFCC";}
-                                    else if(d['zon']['s']>300){document.getElementById("zon").style.color="#EEEECC";}
-                                    if(d['zonvandaag']['m']>120){document.getElementById("zonvandaag").style.color="#00FF00";}
-                                    else if(d['zonvandaag']['m']>110){document.getElementById("zonvandaag").style.color="#33FF00";}
-                                    else if(d['zonvandaag']['m']>100){document.getElementById("zonvandaag").style.color="#66FF00";}
-                                    else if(d['zonvandaag']['m']>90){document.getElementById("zonvandaag").style.color="#99FF00";}
-                                    else if(d['zonvandaag']['m']>80){document.getElementById("zonvandaag").style.color="#CCFF00";}
-                                    else if(d['zonvandaag']['m']>70){document.getElementById("zonvandaag").style.color="#EEFF00";}
-                                    else if(d['zonvandaag']['m']>60){document.getElementById("zonvandaag").style.color="#FFFF33";}
-                                    else if(d['zonvandaag']['m']>50){document.getElementById("zonvandaag").style.color="#FFFF66";}
-                                    else if(d['zonvandaag']['m']>40){document.getElementById("zonvandaag").style.color="#FFFF99";}
-                                    else if(d['zonvandaag']['m']>30){document.getElementById("zonvandaag").style.color="#FFFFCC";}
-                                    else if(d['zonvandaag']['m']>20){document.getElementById("zonvandaag").style.color="#EEEECC";}
+                                    if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
+                                    else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
+                                    else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
+                                    else if(d['zon']['s']>2400)document.getElementById("zon").style.color="#99FF00";
+                                    else if(d['zon']['s']>2100)document.getElementById("zon").style.color="#CCFF00";
+                                    else if(d['zon']['s']>1800)document.getElementById("zon").style.color="#EEFF00";
+                                    else if(d['zon']['s']>1500)document.getElementById("zon").style.color="#FFFF33";
+                                    else if(d['zon']['s']>1200)document.getElementById("zon").style.color="#FFFF66";
+                                    else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
+                                    else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
+                                    else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
+                                    if(d['zonvandaag']['m']>120)document.getElementById("zonvandaag").style.color="#00FF00";
+                                    else if(d['zonvandaag']['m']>110)document.getElementById("zonvandaag").style.color="#33FF00";
+                                    else if(d['zonvandaag']['m']>100)document.getElementById("zonvandaag").style.color="#66FF00";
+                                    else if(d['zonvandaag']['m']>90)document.getElementById("zonvandaag").style.color="#99FF00";
+                                    else if(d['zonvandaag']['m']>80)document.getElementById("zonvandaag").style.color="#CCFF00";
+                                    else if(d['zonvandaag']['m']>70)document.getElementById("zonvandaag").style.color="#EEFF00";
+                                    else if(d['zonvandaag']['m']>60)document.getElementById("zonvandaag").style.color="#FFFF33";
+                                    else if(d['zonvandaag']['m']>50)document.getElementById("zonvandaag").style.color="#FFFF66";
+                                    else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
+                                    else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
+                                    else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
                                 }
                             } catch {}
                         }else if(name=="gasvandaag"){
@@ -136,18 +136,18 @@ function ajax(){
                                     item=parseFloat(Math.round((value/100)*100)/100).toFixed(3);
                                     html='<td id="tdgas">Gas:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
                                     document.getElementById("trgas").innerHTML=html;
-                                    if(value>700){document.getElementById("trgas").style.color="#FF0000";}
-                                    else if(value>600){document.getElementById("trgas").style.color="#FF4400";}
-                                    else if(value>500){document.getElementById("trgas").style.color="#FF8800";}
-                                    else if(value>400){document.getElementById("trgas").style.color="#FFAA00";}
-                                    else if(value>300){document.getElementById("trgas").style.color="#FFCC00";}
-                                    else if(value>200){document.getElementById("trgas").style.color="#FFFF00";}
-                                    if(time>$LastUpdateTime-15){document.getElementById("tdgas").style.color="#FF0000";}
-                                    else if(time>$LastUpdateTime-30){document.getElementById("tdgas").style.color="#FF4400";}
-                                    else if(time>$LastUpdateTime-60){document.getElementById("tdgas").style.color="#FF8800";}
-                                    else if(time>$LastUpdateTime-90){document.getElementById("tdgas").style.color="#FFAA00";}
-                                    else if(time>$LastUpdateTime-300){document.getElementById("tdgas").style.color="#FFCC00";}
-                                    else if(time>$LastUpdateTime-600){document.getElementById("tdgas").style.color="#FFFF00";}
+                                    if(value>700)document.getElementById("trgas").style.color="#FF0000";
+                                    else if(value>600)document.getElementById("trgas").style.color="#FF4400";
+                                    else if(value>500)document.getElementById("trgas").style.color="#FF8800";
+                                    else if(value>400)document.getElementById("trgas").style.color="#FFAA00";
+                                    else if(value>300)document.getElementById("trgas").style.color="#FFCC00";
+                                    else if(value>200)document.getElementById("trgas").style.color="#FFFF00";
+                                    if(time>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
+                                    else if(time>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
+                                    else if(time>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
+                                    else if(time>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
+                                    else if(time>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
+                                    else if(time>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
                                 }
                             } catch {}
                         }else if(name=="watervandaag"){
@@ -156,18 +156,18 @@ function ajax(){
                                     var item=value / 1000;
                                     html='<td id="tdwater">Water:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
                                     document.getElementById("trwater").innerHTML=html;
-                                    if(value>1000){document.getElementById("trwater").style.color="#FF0000";}
-                                    else if(value>750){document.getElementById("trwater").style.color="#FF4400";}
-                                    else if(value>500){document.getElementById("trwater").style.color="#FF8800";}
-                                    else if(value>400){document.getElementById("trwater").style.color="#FFAA00";}
-                                    else if(value>300){document.getElementById("trwater").style.color="#FFCC00";}
-                                    else if(value>200){document.getElementById("trwater").style.color="#FFFF00";}
-                                    if(time>$LastUpdateTime-15){document.getElementById("tdwater").style.color="#FF0000";}
-                                    else if(time>$LastUpdateTime-30){document.getElementById("tdwater").style.color="#FF4400";}
-                                    else if(time>$LastUpdateTime-60){document.getElementById("tdwater").style.color="#FF8800";}
-                                    else if(time>$LastUpdateTime-90){document.getElementById("tdwater").style.color="#FFAA00";}
-                                    else if(time>$LastUpdateTime-300){document.getElementById("tdwater").style.color="#FFCC00";}
-                                    else if(time>$LastUpdateTime-600){document.getElementById("tdwater").style.color="#FFFF00";}
+                                    if(value>1000)document.getElementById("trwater").style.color="#FF0000";
+                                    else if(value>750)document.getElementById("trwater").style.color="#FF4400";
+                                    else if(value>500)document.getElementById("trwater").style.color="#FF8800";
+                                    else if(value>400)document.getElementById("trwater").style.color="#FFAA00";
+                                    else if(value>300)document.getElementById("trwater").style.color="#FFCC00";
+                                    else if(value>200)document.getElementById("trwater").style.color="#FFFF00";
+                                    if(time>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
+                                    else if(time>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
+                                    else if(time>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
+                                    else if(time>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
+                                    else if(time>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
+                                    else if(time>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
                                 }
                             } catch {}
                         }else if(name=="douche"){

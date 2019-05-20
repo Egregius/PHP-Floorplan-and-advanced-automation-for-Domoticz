@@ -68,15 +68,6 @@ if ($home) {
                 sw($item, 'On');
             }
         }
-    } elseif (isset($_POST['dimmer'])) {
-        if (isset($_POST['dimlevelon_x'])) {
-            sl($_POST['Naam'], 100);
-        } elseif (isset($_POST['dimleveloff_x'])) {
-            sl($_POST['Naam'], 0);
-        } else {
-            sl($_POST['Naam'], $_POST['dimlevel']);
-            store('dimaction'.$_POST['Naam'], 0);
-        }
     } elseif (isset($_REQUEST['nas'])) {
         if ($_REQUEST['nas']=='sleep') {
             shell_exec('secure/sleepnas.sh');
@@ -108,15 +99,12 @@ if ($home) {
         usleep(120000);
     } elseif (isset($_POST['UpdateKodi'])) {
         $profile=$_POST['UpdateKodi'];
-        //echo 'Wanted profile='.$profile.'<br>';
         profile:
         $loadedprofile=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-        //echo 'loadedprofile='.$loadedprofile['result']['label'].'<br>';
         if ($loadedprofile['result']['label']!==$profile) {
             @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
             usleep(10000);
             $profilereply=@kodi('{"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}');
-            //echo 'profilereply='.$profilereply.'</pre><br>';
             $count=$count + 1;
             if ($count>10) {
                 die('Die Endless loop');
