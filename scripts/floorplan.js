@@ -96,9 +96,7 @@ function ajax(){
                         }else if(name=="zon"||name=="zonvandaag"){
                             try {
                                 if(d['zon']['s']>0||d['zonvandaag']['s']){
-                                    //zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']).toFixed(2));
-                                    test=1;
-                                    zonvandaag=parseFloat(Math.round(test*100)/100).toFixed(2);
+                                    zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
                                     html="<td>Zon:</td><td id='zon'>" + d['zon']['s'] + " W</td><td id='zonvandaag'>" + zonvandaag.toString().replace(/[.]/, ",") + " kWh</td>";
                                     document.getElementById("trzon").innerHTML=html;
                                     if(d['zon']['s']>3500){document.getElementById("zon").style.color="#00FF00";}
@@ -128,7 +126,7 @@ function ajax(){
                         }else if(name=="gasvandaag"){
                             try {
                                 if(value>0){
-                                    var item=pad(value / 100, 4);
+                                    item=parseFloat(Math.round((value/100)*100)/100).toFixed(3);
                                     html='<td>Gas:</td><td colspan="2">' + item.toString().replace(/[.]/, ",") + ' m<sup>3</sup>';
                                     document.getElementById("trgas").innerHTML=html;
                                     if(value>700){document.getElementById("trgas").style.color="#FF0000";}
@@ -157,15 +155,19 @@ function ajax(){
                             try {
                                 var douchegas=value * 10;
                                 var douchewater=mode;
-                                var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004).toFixed(2));
-                                var douchewatereuro=parseFloat(Math.round(douchewater * 0.005).toFixed(2));
+                                var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
+                                var douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
                                 if(value>0){
                                     html="<td>D-gas:</td><td>" + douchegas + " L</td><td>" + douchegaseuro.toString().replace(/[.]/, ",") + " €</td>";
                                     document.getElementById("trdgas").innerHTML=html;
+                                }else{
+                                    document.getElementById("trdgas").innerHTML="";
                                 }
                                 if(mode>0){
                                     html="<td>D-water:</td><td>" + douchewater + " L</td><td>" + douchewatereuro.toString().replace(/[.]/, ",") + " €</td>";
                                     document.getElementById("trdwater").innerHTML=html;
+                                }else{
+                                    document.getElementById("trdgas").innerHTML="";
                                 }
                             } catch {}
                         }else if(type=="switch"){

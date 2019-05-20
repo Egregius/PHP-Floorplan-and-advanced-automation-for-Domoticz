@@ -19,6 +19,7 @@ if (endswith($device, '_Temperature')) {
 } elseif (endswith($device, '_Utility')) {
     die('Nothing to do');
 }
+$d=fetchdata();
 if (in_array(
     $device, array(
             'eettafel',
