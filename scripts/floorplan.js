@@ -240,6 +240,7 @@ function ajax(){
                             } catch {}
                         }else if(type=="dimmer"){
                             html='<img src="/images/light_Off.png" class="'+icon+'" id="'+name+'"><div class="fix center dimmerlevel '+icon+'" id="level'+name+'">'+value+'</div>';
+                            html+='<div id="dimmer'+name+'" class="dimmer" style="display:none">TEST</div>';
                             document.getElementById(name).innerHTML=html;
 
 

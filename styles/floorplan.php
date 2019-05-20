@@ -61,7 +61,7 @@ td{text-align:right;font-size:1.1em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
 .afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
-.dimmer{top:0px;left:0px;height:735px;width:390px;padding:50px;background:#111;z-index:1000;}
+.dimmer{position:fixed;top:0px;left:0px;height:735px;width:390px;padding:50px;background:#111;z-index:1000;}
 .dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
 .dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}
 .dimlevela{background-color:#ffba00;color:#000;}

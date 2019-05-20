@@ -50,7 +50,7 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
-        <div class="fix z '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'" onclick="toggle_visibility(\'dimmer\''.$name.'\')"></div>';
+        <div class="fix z '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'" onclick="toggle_visibility(\'dimmer'.$name.'\')"></div>';
     /*echo '
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
