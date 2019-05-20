@@ -239,7 +239,11 @@ function ajax(){
                                else if(value=="Off"){$('#' + name).attr("src", "/images/bose_Off.png");}
                             } catch {}
                         }else if(type=="dimmer"){
-                            try {
+                            html='<img src="/images/light_Off.png" class="'+icon+'" id="'+name+'"><div class="fix center dimmerlevel '+icon+'" id="level'+name+'">'+value+'</div>';
+                            document.getElementById(name).innerHTML=html;
+
+
+                            /*try {
                                 if(value==0){
                                     $('#' + name).attr("src", "/images/light_Off.png");
                                     document.getElementById("level" + name).innerHTML="";
@@ -247,7 +251,7 @@ function ajax(){
                                     $('#' + name).attr("src", "/images/light_On.png");
                                     document.getElementById("level" + name).innerHTML=value;
                                 }
-                            } catch {}
+                            } catch {}*/
                         }else if(type=="pir"){
                             try {
                                 var name=name.toString().replace("pir", "")

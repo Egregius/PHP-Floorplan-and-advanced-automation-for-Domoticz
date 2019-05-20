@@ -50,24 +50,26 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
+        <div class="fix z '.preg_replace('/\s/', '', $name).' z1 i48" id="'.$name.'" onclick="toggle_visibility(\'dimmer\''.$name.'\')"></div>';
+    /*echo '
         <form method="POST" action="">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="'.$name.'">
+			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="img'.$name.'">
 			    <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
                 </div>';
     } else {
         echo'
-                <input type="image" src="/images/light_On.png" class="'.$class.'" id="'.$name.'">
+                <input type="image" src="/images/light_On.png" class="'.$class.'" id="img'.$name.'">
                 <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
                     <a href=\'javascript:navigator_Go('.$page.'?setdimmer='.$name.');\'><font color="#000">'.$d[$name]['s'].'</font></a>
                 </div>';
     }
     echo '
 	        </div>
-        </form>';
+        </form>';*/
 }
 function schakelaar($name)
 {
