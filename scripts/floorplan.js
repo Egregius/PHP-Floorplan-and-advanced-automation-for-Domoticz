@@ -488,6 +488,12 @@ function ajaxcontrol(device,command,action){
         }
     })
 }
+function floorplan(){
+    var elem=document.getElementById("picam1");
+    elem.innerHTML='<a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
+    elem.style.top=127;
+    elem.style.left=445;
+}
 function pad(n, length){
     var len=length - (''+n).length;
     return (len>0 ? new Array(++len).join('0') : '')+n

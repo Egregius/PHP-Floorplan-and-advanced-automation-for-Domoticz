@@ -46,6 +46,7 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
+                floorplan();
                 ajax();
                 setInterval(ajax, '.($local===true?'500':'2000').');
             });
@@ -402,11 +403,7 @@ if ($home) {
                 <img src="/images/plus.png" class="i60" alt="plus">
             </a>
         </div>
-        <div class="fix picam1">
-            <a href=\'javascript:navigator_Go("picam1/index.php");\'>
-                <img src="/images/Camera.png" class="i48" alt="cam">
-            </a>
-        </div>
+        <div class="fix" id="picam1"></div>
         <div class="fix picam2">
             <a href=\'javascript:navigator_Go("picam2/index.php");\'>
                 <img src="/images/Camera.png" class="i48" alt="cam">
@@ -414,7 +411,7 @@ if ($home) {
         </div>
         <div class="fix Weg" id="Weg"></div>
         <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
+            <a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a>
         </div>
         <div class="fix z0 diepvries_temp" id="diepvries_temp">
             '.$d['diepvries_temp']['s'].'°C
