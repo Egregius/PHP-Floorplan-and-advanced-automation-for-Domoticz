@@ -12,13 +12,11 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 echo '<br><br><br><br><br><br>'.$_COOKIE[$cookie];
 if ($home) {
-    if (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
-        $d=fetchdata();
-
+    if (isset($_REQUEST['idx'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
+        call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action']);
         lg('ajaxcontrol='.print_r($_REQUEST, true));
     }
 }

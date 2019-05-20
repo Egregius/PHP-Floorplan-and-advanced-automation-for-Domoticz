@@ -22,6 +22,7 @@ function ajax(){
                     }else{
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
+                        var idx=d[device]['i'];
                         var type=d[device]['dt'];
                         var icon=d[device]['icon'];
                         if(name=="Weg"){
@@ -183,7 +184,7 @@ function ajax(){
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                             } catch {}
-                        }else if(type=="switch"){
+                        }/*else if(type=="switch"){
                             try {
                                 var html='<form method="POST" action="" id="form">';
                                 html+='<input type="hidden" name="Naam" value="' + name + '">';
@@ -195,6 +196,15 @@ function ajax(){
                                     html+='<input type="image" src="/images/' + icon + '_Off.png" id="' + name + '">';
                                 }
                                 html+='</form>';
+                                document.getElementById(name).innerHTML=html;
+                            } catch {}
+                        }*/else if(type=="switch"){
+                            try {
+                                if(value=="On"){
+                                    html='<img src="/images/' + icon + '_On.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',sw,Off)"/>';
+                                }else if(value=="Off"){
+                                    html='<img src="/images/' + icon + '_Off.png" id="' + name + '" onclick="ajaxcontrol(' + idx + ',sw,On)""/>';
+                                }
                                 document.getElementById(name).innerHTML=html;
                             } catch {}
                         }else if(type=="bose"){
@@ -424,10 +434,11 @@ function ajaxbose($ip){
         }
     })
 }
-function ajaxbose(device,command,action){
+function ajaxcontrol(idx,command,action){
     $.ajax({
-        url: '/ajaxcontrol.php?device='+$device+'&command='+command+'&action='+action,
+        url: '/ajaxcontrol.php?idx='+$idx+'&command='+command+'&action='+action,
         dataType : 'json',
+        async: true,
         success: function(data){
             console.log(data);
         }
