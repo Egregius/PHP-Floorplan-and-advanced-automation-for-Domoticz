@@ -19,7 +19,7 @@ if ($home) {
         $_SESSION['referer']='floorplan.php';
     }
     if (isset($_REQUEST['ip'])) {
-        $bose=$_REQUEST['ip'];
+        $bose=str_replace('bose', '', $_REQUEST['ip']);
     } else {
         $bose=101;//Living
     }
@@ -47,7 +47,7 @@ if ($home) {
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
 		<style type="text/css">
 			.btn{height:48px;margin:3px;}
 			.b2{margin:1px;}
@@ -111,9 +111,8 @@ if ($home) {
     $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
     echo '
     <body>
-        <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="clock">
-                '.strftime("%k:%M:%S", TIME).'
+        <div class="fix" id="clock">
+            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time">
             </a>
         </div>
         <div class="fix z1" style="top:5px;left:5px;">
