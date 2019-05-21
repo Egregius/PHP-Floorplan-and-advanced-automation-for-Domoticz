@@ -59,7 +59,7 @@ td{text-align:right;font-size:1.1em;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
 .huge2{width:100%;height:48%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
-.afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
+#afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
 .dimmer{position:fixed;top:0px;left:0px;height:735px;width:390px;padding:50px;background:#111;z-index:100000;}
 .dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
@@ -69,13 +69,13 @@ td{text-align:right;font-size:1.1em;}
 .floorplan{cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;font-size:80%;font-family:Arial;padding:0px;text-align:center;background:#000;background-image:url(/images/HomeZw.png);background-repeat:no-repeat;background-position:-4px -15px;height:848px;width:486px;padding-top:0px;margin:0 auto;}
 .confirm{top:0px;left:0px;height:100%;width:100%;padding:0px;background:#000;z-index:1000;}
 
-.eettafel{top:140px;left:245px;}
-.zithoek{top:140px;left:110px;}
-.kamer{top:547px;left:330px;}
-.tobi{top:432px;left:135px;}
-.alex{top:555px;left:135px;}
-.lichtbadkamer{top:418px;left:378px;}
-.terras{top:7px;left:16px;}
+#eettafel{top:140px;left:245px;}
+#zithoek{top:140px;left:110px;}
+#kamer{top:547px;left:330px;}
+#tobi{top:432px;left:135px;}
+#alex{top:555px;left:135px;}
+#lichtbadkamer{top:418px;left:378px;}
+#terras{top:7px;left:16px;}
 #tvled{top:7px;left:87px;height:50px;width:auto;}
 #kristal{top:7px;left:147px;height:50px;width:auto;}
 #bureel{top:7px;left:207px;height:50px;width:auto;}
@@ -111,17 +111,17 @@ td{text-align:right;font-size:1.1em;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
-.floorplan2icon{top:776px;left:9px;}
-.auto{top:280px;left:235px;}
-.meldingen{top:280px;left:350px;}
-.verbruik{top:652px;left:290px;width:200px;}
-.zoldervuur{top:670px;left:140px;}
-.zoldervuur2{top:783px;left:455px;}
-.water{top:100px;left:0px;}
-.regenpomp{top:180px;left:0px;}
-.zwembadfilter{top:260px;left:0px;}
-.zwembadwarmte{top:340px;left:0px;}
-.dampkap{top:280px;left:110px;}
+#floorplan2icon{top:776px;left:9px;}
+#auto{top:280px;left:235px;}
+#meldingen{top:280px;left:350px;}
+#verbruik{top:652px;left:290px;width:200px;}
+#zoldervuur{top:670px;left:140px;}
+#zoldervuur2{top:783px;left:455px;}
+#water{top:100px;left:0px;}
+#regenpomp{top:180px;left:0px;}
+#zwembadfilter{top:260px;left:0px;}
+#zwembadwarmte{top:340px;left:0px;}
+#dampkap{top:280px;left:110px;}
 .sirene{top:30px;left:200px;}
 .sd{top:30px;left:200px;}
 #heater1{top:226px;left:90px;height:18px;width:auto;}
@@ -183,22 +183,21 @@ td{text-align:right;font-size:1.1em;}
 #diepvries_temp{top:256px;left:191px;}
 
 /* Rollers */
-.luifel{top:140px;left:5px;}.tluifel{top:140px;left:5px;}
-.Rliving{top:97px;left:90px;}.tRliving{top:217px;left:68px;}
-.Rbureel{top:5px;left:195px;}.tRbureel{top:-2px;left:170px;}
-.RkeukenL{top:116px;left:405px;}.tRkeukenL{top:102px;left:456px;}
-.RkeukenR{top:186px;left:405px;}.tRkeukenR{top:229px;left:456px;}
-.Rtobi{top:404px;left:137px;}.tRtobi{top:510px;left:68px;}
-.Ralex{top:560px;left:137px;}.tRalex{top:620px;left:68px;}
-.RkamerL{top:512px;left:350px;}.tRkamerL{top:504px;left:462px;}
-.RkamerR{top:580px;left:350px;}.tRkamerR{top:638px;left:462px;}
-.zoldertrap{top:670px;left:145px;}.tzoldertrap{top:675px;left:170px;}
+#luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
+#Rliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;}
+#Rbureel{top:5px;left:195px;}#tRbureel{top:-2px;left:170px;}
+#RkeukenL{top:116px;left:405px;}#tRkeukenL{top:102px;left:456px;}
+#RkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;}
+#Rtobi{top:404px;left:137px;}#tRtobi{top:510px;left:68px;}
+#Ralex{top:560px;left:137px;}#tRalex{top:620px;left:68px;}
+#RkamerL{top:512px;left:350px;}#tRkamerL{top:504px;left:462px;}
+#RkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;}
+#zoldertrap{top:670px;left:145px;}#tzoldertrap{top:675px;left:170px;}
 
 /* Zones */
-.zliving{top:51px;left:89px;width:249px;height:197px;}
-.zkeuken{top:115px;left:345px;width:129px;height:133px;}
-.zinkom{top:51px;left:345px;width:129px;height:56px;}
-.zgarage{top:256px;left:89px;width:315px;height:139px;}
-.zhall{top:403px;left:214px;width:127px;height:66px;}
-.zhalla{top:403px;left:214px;width:127px;height:66px;}
-.zhallb{top:469px;left:214px;width:44px;height:66px;}
+#zliving{top:51px;left:89px;width:249px;height:197px;}
+#zkeuken{top:115px;left:345px;width:129px;height:133px;}
+#zinkom{top:51px;left:345px;width:129px;height:56px;}
+#zgarage{top:256px;left:89px;width:315px;height:139px;}
+#zhalla{top:403px;left:214px;width:127px;height:66px;}
+#zhallb{top:469px;left:214px;width:44px;height:66px;}

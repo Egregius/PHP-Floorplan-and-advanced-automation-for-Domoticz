@@ -50,7 +50,7 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
-        <form method="POST" action="">
+        <form method="POST" action="" id="'.$name.'">
             <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
@@ -103,7 +103,7 @@ function schakelaar2($name)
 function thermometer($name)
 {
     echo '
-        <div class="fix '.$name.'" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
+        <div class="fix" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
 }
 function contact($name)
 {

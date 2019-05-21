@@ -126,7 +126,7 @@ if ($home) {
     thermometer('alex_temp');
     thermometer('zolder_temp');
     echo '
-        <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
+        <div class="fix" id="floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();
 
 }
