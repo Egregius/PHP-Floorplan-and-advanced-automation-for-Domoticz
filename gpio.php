@@ -29,7 +29,7 @@ if (isset($_REQUEST['gpio'])) {
         store('watervandaag', $d['watervandaag']['s']+1);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['m']+1;
-            storemode('douche', $data);
+            storemode('douche', $data, 1);
         }
     } elseif ($gpio==19) {
         if ($_REQUEST['action']=='on') {

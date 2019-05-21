@@ -190,10 +190,8 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="heating"){
-                            try{
-                                if(d['Rliving']['s']==0&&d['Rbureel']['s']==0&&d['RkeukenL']['s']==0&&d['RkeukenR']['s']==0&&d['RkamerL']['s']==0&&d['RkamerR']['s']==0&&d['Rtobi']['s']==0&&d['Ralex']['s']==0)html='<img src="/images/arrowgreenup.png" class="i60" alt="Open">';
-                                else if(d['Rliving']['s']==100&&d['Rbureel']['s']==100&&d['RkeukenL']['s']==100&&d['RkeukenR']['s']==100&&d['RkamerL']['s']==100&&d['RkamerR']['s']==100&&d['Rtobi']['s']==100&&d['Ralex']['s']==100)html='<img src="/images/arrowgreendown.png" class="i60" alt="Open">';
-                                else html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
+                            //try{
+                               html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
                                 if(value==0)html+='';
                                 else if(value==1)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
                                 else if(value==2)html+='<img src="/images/Elec.png" class="i40" alt="Elec">';
@@ -202,7 +200,7 @@ function ajax(){
                                     else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
                                 }
                                 document.getElementById("heating").innerHTML=html;
-                            } catch {}
+                           // } catch {}
                         }else if(name=="belknop"){
                             try{
                                 if(time>($LastUpdateTime-82800)){
@@ -216,7 +214,8 @@ function ajax(){
                             } catch {}
                         }else if(name=="gcal"){
                             try{
-                                document.getElementById("gcal").innerHTML=mode;
+                                if (typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
+                                else document.getElementById("gcal").innerHTML='';
                             } catch {}
                         }else if(type=="switch"){
                             try{
