@@ -396,7 +396,7 @@ function ajax(){
                                 if(mode == 2){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';}
                                 else if(mode == 1){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';}
                                 html+='</div></form>';
-                                document.getElementById(name).innerHTML=html;
+                                document.getElementById('R'+name).innerHTML=html;
 
                                 if(time>($LastUpdateTime-82800)){
                                     var date=new Date(time*1000);
