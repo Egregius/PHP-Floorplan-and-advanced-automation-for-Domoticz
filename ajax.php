@@ -19,6 +19,7 @@ if (isset($_REQUEST['timestamp'])) {
         $d=array();
         $d['time']['n']='time';
         $d['time']['t']=$t;
+        $d['ip']=$ipaddress;
         $t=$_REQUEST['timestamp'];
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
