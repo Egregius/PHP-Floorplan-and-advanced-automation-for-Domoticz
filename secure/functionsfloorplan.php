@@ -254,6 +254,7 @@ function sidebar()
 	    </div>';
 }
 function requestdimmer(){
+    global $d,$user;
     if (isset($_REQUEST['setdimmer'])) {
         $name=$_REQUEST['setdimmer'];
         $stat=$d[$name]['s'];
@@ -368,6 +369,7 @@ function requestdimmer(){
 }
 function requestweg()
 {
+    global $db,$d,$user;
     if (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
             store('Weg', $_REQUEST['Action']);
