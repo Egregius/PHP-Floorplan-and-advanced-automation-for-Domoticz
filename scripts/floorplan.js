@@ -19,11 +19,10 @@ function ajax(){
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
                     }else if(name=="ip"){
-                        //console.log(d['ip']);
-                        document.getElementById("ip").innerHTML=d['ip'];
                         var previp = localStorage.getItem("ip");
-                        if(previp!=$d['ip']){
+                        if(previp!=d['ip']){
                             localStorage.setItem("ip", d['ip']);
+                            setTimeout('window.location.href=window.location.href;', 0);
                         }
                     }else{
                         var value=d[device]['s'];
