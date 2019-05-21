@@ -484,6 +484,9 @@ function ajaxcontrol(device,command,action){
 function floorplan(){
     document.getElementById("picam1").innerHTML='<a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
     document.getElementById("picam2").innerHTML='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
+    html='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html+='<div class="fix bureel z1 i48" id="bureel"></div>';
+    document.getElementById("placeholder").innerHTML=html;
 }
 function pad(n, length){
     var len=length - (''+n).length;

@@ -246,6 +246,10 @@ if ($d['auto']['s']=='On') {
         &&past('bose104')>90
         &&past('bose105')>90
         &&$d['bose101']['s']=='On'
+        &&$d['bose102']['s']=='Off'
+        &&$d['bose103']['s']=='Off'
+        &&$d['bose104']['s']=='Off'
+        &&$d['bose105']['s']=='Off'
         &&$d['Weg']['s']>0
     ) {
         $status=json_decode(

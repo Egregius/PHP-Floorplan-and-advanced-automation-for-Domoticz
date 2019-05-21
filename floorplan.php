@@ -117,7 +117,7 @@ if ($home) {
     dimmer('alex','i60');
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
-    schakelaar('kristal');
+    //schakelaar('kristal');
     schakelaar('bureel');
     schakelaar('inkom');
     schakelaar('keuken');
