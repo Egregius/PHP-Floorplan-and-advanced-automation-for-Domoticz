@@ -128,7 +128,7 @@ function bose($ip)
     echo '
         <div class="fix" id="bose'.$ip.'">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
-                <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
+                <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" alt="">
             </a>
         </div>';
 }

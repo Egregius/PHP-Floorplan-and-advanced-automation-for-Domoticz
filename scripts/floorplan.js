@@ -183,13 +183,13 @@ function ajax(){
                                 var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
                                 var douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
                                 if(value>0){
-                                    html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" â‚¬</td>";
+                                    html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" Û</td>";
                                     document.getElementById("trdgas").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                                 if(mode>0){
-                                    html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" â‚¬</td>";
+                                    html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" Û</td>";
                                     document.getElementById("trdwater").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
@@ -281,11 +281,15 @@ function ajax(){
                                 if(name=="bose105"){
                                     if(mode=="Online"){
                                         var html="Online";
-                                        if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
-                                        else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip=105\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
+                                        if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
+                                        else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
                                     }else if(mode=="Offline"){var html="";}
-                                    document.getElementById("bosediv105").innerHTML=html;
+                                }else{
+                                    if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\""+name+"\" alt=\"bose\"></a>";}
+                                    else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\""+name+"\" alt=\"bose\"></a>";}
                                 }
+                                document.getElementById(name).innerHTML=html;
+
                                 if(value=="On"){$('#'+name).attr("src", "/images/bose_On.png");}
                                else if(value=="Off"){$('#'+name).attr("src", "/images/bose_Off.png");}
                             } catch {}
@@ -348,7 +352,7 @@ function ajax(){
                              try{
                                  if(name=="diepvries_temp"){
                                     var elem=document.getElementById(name);
-                                    elem.innerHTML=value.toString().replace(/[.]/, ",")+"Â°C";
+                                    elem.innerHTML=value.toString().replace(/[.]/, ",")+"¡C";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
                                     hoogte=value * 3;
