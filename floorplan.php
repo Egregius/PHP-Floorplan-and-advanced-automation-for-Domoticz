@@ -188,12 +188,7 @@ if ($home) {
         <div class="fix bureeltobikwh z0">
         </div>';
     }
-    if ($d['zoldervuur']['s']=='On') {
-        echo '
-        <div class="fix z0 zoldervuur2">
-            <img src="images/Fire_On.png" width="28px" height="auto" alt="">
-        </div>';
-    }
+
     echo '
         <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();

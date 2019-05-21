@@ -212,9 +212,22 @@ function ajax(){
                                     document.getElementById("t"+name).innerHTML="";
                                 }
                             } catch {}
+                        }else if(name=="zoldervuur"){
+                            try{
+                                if(value=="On")html='<img src="images/Fire_On.png" width="28px" height="auto" alt="">';
+                                else html='';
+                                document.getElementById("zoldervuur2").innerHTML=html;
+                            } catch{}
+                        }else if(name=="Usage_grohered"){
+                            try{
+                                if(value==0)html="";
+                                else if(value>0&&value<11)html='<img src="images/plug_On.png" width="28px" height="auto" alt="">';
+                                else html='<img src="images/plug_Red.png" width="28px" height="auto" alt="">';
+                                document.getElementById("GroheRed").innerHTML=html;
+                            } catch{}
                         }else if(name=="gcal"){
                             try{
-                                if (typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
+                                if(typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
                                 else document.getElementById("gcal").innerHTML='';
                             } catch {}
                         }else if(type=="switch"){
@@ -517,6 +530,8 @@ function floorplan(){
     html+='<div class="fix yellow" id="RkamerR"></div>';
     html+='<div class="fix yellow" id="Rtobi"></div>';
     html+='<div class="fix yellow" id="Ralex"></div>';
+    html+='<div class="fix z0 zoldervuur2"></div>';
+    html+='<div class="fix z0 GroheRed"></div>';
    document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanmedia(){
