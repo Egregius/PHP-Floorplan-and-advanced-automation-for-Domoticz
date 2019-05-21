@@ -9,21 +9,28 @@ function ajax(){
             for (var device in d){
                 if(d.hasOwnProperty(device)){
                     name=device;
-                    time=d[device]['t'];
-                    if(name=="time"){
-                        $LastUpdateTime=parseInt(time);
+                    if(name=="t"){
+                        $LastUpdateTime=parseInt(d['t']);
                         try{
-                            date=new Date(time*1000);
+                            date=new Date(d['t']*1000);
                             hours=date.getHours();
                             minutes="0"+date.getMinutes();
                             seconds="0"+date.getSeconds();
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
+                    }else if(name=="ip"){
+                        //console.log(d['ip']);
+                        document.getElementById("ip").innerHTML=d['ip'];
+                        var previp = localStorage.getItem("ip");
+                        if(previp!=$d['ip']){
+                            localStorage.setItem("ip", d['ip']);
+                        }
                     }else{
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
                         var type=d[device]['dt'];
                         var icon=d[device]['ic'];
+                        var time=d[device]['t'];
                         if(name=="Weg"){
                             try{
                                 html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';

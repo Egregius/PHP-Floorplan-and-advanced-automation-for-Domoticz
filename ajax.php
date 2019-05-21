@@ -17,8 +17,7 @@ if (isset($_REQUEST['timestamp'])) {
     if ($home==true) {
         $t=time();
         $d=array();
-        $d['time']['n']='time';
-        $d['time']['t']=$t;
+        $d['t']=$t;
         $d['ip']=$ipaddress;
         $t=$_REQUEST['timestamp'];
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');

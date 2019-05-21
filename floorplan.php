@@ -21,7 +21,8 @@ if ($home) {
 	handlerequest();
     echo '
 	<body class="floorplan">
-	    <div id="placeholder"></div>';
+	    <div id="placeholder"></div>
+	    <div id="ip"></div>';
 	sidebar();
     dimmer('tobi','i60');
     dimmer('zithoek');
