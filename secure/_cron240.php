@@ -53,7 +53,7 @@ if ($d['heating']['s']>=2) {
             kamer = '.$d['kamer_temp']['s'].',
             Tobi = '.$d['tobi_temp']['s'].',
             Alex = '.$d['alex_temp']['s'],
-            3600,
+            7200,
             false,
             2,
             false
@@ -75,7 +75,7 @@ if ($d['heating']['s']>=2) {
             kamer = '.$d['kamer_temp']['s'].',
             Tobi = '.$d['tobi_temp']['s'].',
             Alex = '.$d['alex_temp']['s'],
-            3600,
+            7200,
             false,
             2,
             false
@@ -100,7 +100,7 @@ if ($d['heating']['s']>=2) {
             kamer = '.$d['kamer_temp']['s'].',
             Tobi = '.$d['tobi_temp']['s'].',
             Alex = '.$d['alex_temp']['s'],
-            3600,
+            7200,
             false,
             2,
             false
@@ -122,7 +122,7 @@ if ($d['heating']['s']>=2) {
             kamer = '.$d['kamer_temp']['s'].',
             Tobi = '.$d['tobi_temp']['s'].',
             Alex = '.$d['alex_temp']['s'],
-            3600,
+            7200,
             false,
             2,
             false
