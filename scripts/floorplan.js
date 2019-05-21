@@ -494,9 +494,15 @@ function ajaxcontrol(device,command,action){
     })
 }
 function floorplan(){
-    document.getElementById("picam1").innerHTML='<a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
-    document.getElementById("picam2").innerHTML='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
-    html='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html='<div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
+    html+='<div class="fix z0 afval" id="gcal"></div>';
+    html+='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+    html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
+    html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
+    html+='<div class="fix Weg" id="Weg"></div>';
+    html+='<div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a></div>';
+    html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
+    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
     html+='<div class="fix bureel z1 i48" id="bureel"></div>';
     html+='<div class="fix inkom z1 i48" id="inkom"></div>';
     html+='<div class="fix keuken z1 i48" id="keuken"></div>';
@@ -532,6 +538,7 @@ function floorplan(){
     html+='<div class="fix yellow" id="Ralex"></div>';
     html+='<div class="fix z0 zoldervuur2"></div>';
     html+='<div class="fix z0 GroheRed"></div>';
+    html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
    document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanmedia(){

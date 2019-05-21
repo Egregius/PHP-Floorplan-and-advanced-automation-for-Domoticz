@@ -160,23 +160,7 @@ if ($home) {
     thermometer('tobi_temp');
     thermometer('alex_temp');
     thermometer('zolder_temp');
-    echo '
-        <div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>
-        <div class="fix z0 afval" id="gcal"></div>
-        <div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>
-        <div class="fix picam1" id="picam1"></div>
-        <div class="fix picam2" id="picam2"></div>
-        <div class="fix Weg" id="Weg"></div>
-        <div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a></div>
-        <div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
 
- if ($d['Usage_grohered']['s']>1&&$d['Usage_grohered']['s']<10) {
-        echo '
-        <div class="fix z0 GroheRed"><img src="images/plug_On.png" width="28px" height="auto" alt=""></div>';
-    } elseif ($d['Usage_grohered']['s']>10) {
-        echo '
-        <div class="fix z0 GroheRed"><img src="images/plug_Red.png" width="28px" height="auto" alt=""></div>';
-    }
     $tobi=explode(';', $d['kWh_bureeltobi']['s']);
     if ($tobi[0]>0) {
         echo '
