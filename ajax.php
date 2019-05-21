@@ -24,13 +24,13 @@ if (isset($_REQUEST['timestamp'])) {
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE `dt` IS NOT NULL AND t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            $d[$row['n']]['n'] = $row['n'];
-            if(!empty($row['i']))$d[$row['n']]['i'] = $row['i'];
+            //$d[$row['n']]['n'] = $row['n'];
             $d[$row['n']]['s'] = $row['s'];
             $d[$row['n']]['t'] = $row['t'];
+            if(!empty($row['i']))$d[$row['n']]['i'] = $row['i'];
             if(!empty($row['m']))$d[$row['n']]['m'] = $row['m'];
             if(!empty($row['dt']))$d[$row['n']]['dt'] = $row['dt'];
-            if(!empty($row['icon']))$d[$row['n']]['icon'] = $row['icon'];
+            if(!empty($row['ic']))$d[$row['n']]['icon'] = $row['icon'];
         }
         echo json_encode($d);
     }

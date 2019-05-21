@@ -23,7 +23,7 @@ function ajax(){
                         var value=d[device]['s'];
                         var mode=d[device]['m'];
                         var type=d[device]['dt'];
-                        var icon=d[device]['icon'];
+                        var icon=d[device]['ic'];
                         if(name=="Weg"){
                             try{
                                 html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';
