@@ -227,7 +227,18 @@ function ajax(){
                             } catch{}
                         }else if(name=="kWh_bureeltobi"){
                             try{
-
+                                elem=value.split(";");
+                                item=parseFloat(Math.round((elem[0]/100)*100)/100).toFixed(0);
+                                if(item>0)html=item+" W"
+                                else html="";
+                                document.getElementById("bureeltobikwh").innerHTML=html;
+                                if(item>700)document.getElementById("bureeltobikwh").style.color="#FF0000";
+                                else if(item>600)document.getElementById("bureeltobikwh").style.color="#FF4400";
+                                else if(item>500)document.getElementById("bureeltobikwh").style.color="#FF8800";
+                                else if(item>400)document.getElementById("bureeltobikwh").style.color="#FFAA00";
+                                else if(item>300)document.getElementById("bureeltobikwh").style.color="#FFCC00";
+                                else if(item>200)document.getElementById("bureeltobikwh").style.color="#FFFF00";
+                            } catch{}
                         }else if(name=="gcal"){
                             try{
                                 if(typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
@@ -505,7 +516,7 @@ function floorplan(){
     html+='<div class="fix Weg" id="Weg"></div>';
     html+='<div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a></div>';
     html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
-    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html+='<div class="fix z1 i48" id="kristal"></div>';
     html+='<div class="fix bureel z1 i48" id="bureel"></div>';
     html+='<div class="fix inkom z1 i48" id="inkom"></div>';
     html+='<div class="fix keuken z1 i48" id="keuken"></div>';
@@ -542,6 +553,7 @@ function floorplan(){
     html+='<div class="fix z0 zoldervuur2" id="zoldervuur2"></div>';
     html+='<div class="fix z0 GroheRed" id="GroheRed"></div>';
     html+='<div class="fix bureeltobikwh z0" id="bureeltobikwh"></div>';
+    html+='<div class="fix zliving z0" id="zliving"></div>';
     html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
    document.getElementById("placeholder").innerHTML=html;
 }

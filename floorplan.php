@@ -125,18 +125,6 @@ if ($home) {
     thermometer('tobi_temp');
     thermometer('alex_temp');
     thermometer('zolder_temp');
-
-    $tobi=explode(';', $d['kWh_bureeltobi']['s']);
-    if ($tobi[0]>0) {
-        echo '
-        <div class="fix bureeltobikwh z0">
-            '.round($tobi[0], 0).'W
-        </div>';
-    } else {
-        echo '
-        <div class="fix bureeltobikwh z0"></div>';
-    }
-
     echo '
         <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();

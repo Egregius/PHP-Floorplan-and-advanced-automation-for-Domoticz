@@ -77,7 +77,7 @@ td{text-align:right;font-size:1.1em;}
 .lichtbadkamer{top:418px;left:378px;}
 .terras{top:7px;left:16px;}
 .tvled{top:7px;left:87px;}#tvled{height:50px;width:auto;}
-.kristal{top:7px;left:147px;}#kristal{height:50px;width:auto;}
+#kristal{top:7px;left:147px;height:50px;width:auto;}
 .bureel{top:7px;left:207px;}#bureel{height:50px;width:auto;}
 .inkom{top:51px;left:349px;}#inkom{height:50px;width:auto;}
 .keuken{top:159px;left:390px;}#keuken{height:50px;width:auto;}
