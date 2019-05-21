@@ -304,12 +304,12 @@ if ($home) {
     }
     if ($d['denonpower']['s']=='ON') {
         echo '
-	<div class="fix denon z1">
+	<div class="fix z1" id="denon">
 			<input type="image" src="/images/denon_On.png" id="denon">
 	</div>';
     } else {
         echo '
-	<div class="fix denon z1">
+	<div class="fix z1" id="denon">
 			<input type="image" src="/images/denon_Off.png" id="denon">
 	</div>';
     }
@@ -337,16 +337,16 @@ if ($home) {
     }
     if ($d['nas']['s']=='On') {
         echo '
-        <div class="fix nas z1">
+        <div class="fix z1" id="nas">
             <a href=\'javascript:navigator_Go("?nas=sleep");\'>
-                <img src="images/nas_On.png" class="i48" alt="">
+                <img src="images/nas_On.png" class="i48" alt="" id="nas">
             </a>
             <br>';
     } else {
         echo '
-        <div class="fix nas z1">
+        <div class="fix z1" id="nas">
             <a href=\'javascript:navigator_Go("?nas=wake");\'>
-                <img src="images/nas_Off.png" class="i48" alt="">
+                <img src="images/nas_Off.png" class="i48" alt="" id="nas">
             </a>
             <br>';
     }

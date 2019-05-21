@@ -40,7 +40,6 @@ td{text-align:right;font-size:1.1em;}
 .picam1{top:127px;left:445px;}
 .picam2{top:538px;left:210px;}
 .volume{width:33px;height:60px;padding:2px 0px 0px 0px!important;margin:0;}
-.nas{top:120px;left:140px;}
 .leftbuttons{top:130px;left:0px;width:80px;}
 .mediabuttons{top:290px;left:0px;width:80px;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
@@ -74,6 +73,7 @@ td{text-align:right;font-size:1.1em;}
 .zon{top:590px;left:0px;width:80px;text-align:center;}
 .weather{top:550px;left:14px;}
 
+#nas{top:120px;left:140px;}
 #eettafel{top:140px;left:245px;}
 #zithoek{top:140px;left:110px;}
 #kamer{top:547px;left:330px;}

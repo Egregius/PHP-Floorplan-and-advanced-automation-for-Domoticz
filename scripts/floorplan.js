@@ -559,6 +559,7 @@ function floorplan(){
     html+='<div class="fix z0" id="zgarage"></div>';
     html+='<div class="fix z0" id="zhalla"></div>';
     html+='<div class="fix z0" id="zhallb"></div>';
+    html+='<div class="fix" id="poort"></div>';
     html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
@@ -606,6 +607,12 @@ function floorplanmedia(){
     html+='<div class="fix yellow" id="RkeukenL"></div>';
     html+='<div class="fix yellow" id="RkeukenR"></div>';
     html+='<div class="fix yellow" id="Rliving"></div>';
+    html+='<div class="fix z0" id="zliving"></div>';
+    html+='<div class="fix z0" id="zkeuken"></div>';
+    html+='<div class="fix z0" id="zinkom"></div>';
+    html+='<div class="fix z0" id="zgarage"></div>';
+    html+='<div class="fix z0" id="zhalla"></div>';
+    html+='<div class="fix z0" id="zhallb"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function pad(n, length){
