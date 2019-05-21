@@ -17,41 +17,7 @@ require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
-    echo '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-    if ($udevice=='iPhone') {
-        echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
-    } elseif ($udevice=='iPad') {
-        echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-    }
-    echo '
-	    <link rel="manifest" href="/manifest.json">
-	    <link rel="shortcut icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=4">
-		<style type="text/css">
-			.water{top:200px;left:218px;}
-		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                floorplan();
-                ajax();
-                setInterval(ajax, '.($local===true?'500':'2000').');
-            });
-        </script>
-	</head>';
+    createheader('floorplan');
 	requestdimmer();
     requestweg();
     if (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
@@ -117,7 +83,6 @@ if ($home) {
     dimmer('alex','i60');
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
-
     blinds('zoldertrap');
     secured('zliving');
     secured('zkeuken');
@@ -169,24 +134,13 @@ if ($home) {
         </div>';
     } else {
         echo '
-        <div class="fix bureeltobikwh z0">
-        </div>';
+        <div class="fix bureeltobikwh z0"></div>';
     }
 
     echo '
         <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     sidebar();
-    echo '
-        <div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik">
-            <table>
-                <tr id="trelec"></tr>
-                <tr id="trzon"></tr>
-                <tr id="trgas"></tr>
-                <tr id="trwater"></tr>
-                <tr id="trdgas"></tr>
-                <tr id="trdwater"></tr>
-            </table>
-        </div>';
+
 }
 ?>
 
