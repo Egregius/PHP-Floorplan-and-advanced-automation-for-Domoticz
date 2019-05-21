@@ -30,7 +30,7 @@ if (isset($_REQUEST['timestamp'])) {
             if(!empty($row['i']))$d[$row['n']]['i'] = $row['i'];
             if(!empty($row['m']))$d[$row['n']]['m'] = $row['m'];
             if(!empty($row['dt']))$d[$row['n']]['dt'] = $row['dt'];
-            if(!empty($row['ic']))$d[$row['n']]['icon'] = $row['icon'];
+            if(!empty($row['icon']))$d[$row['n']]['ic'] = $row['icon'];
         }
         echo json_encode($d);
     }
