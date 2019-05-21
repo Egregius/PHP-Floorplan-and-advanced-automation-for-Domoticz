@@ -189,8 +189,8 @@ function sidebar()
 		    <br>
         </div>
         <div class="fix center zon">
-            <small>&#x21e7;</small><span id="maxtemp">'.number_format($d['minmaxtemp']['m'], 1, ',', '').'</span>°C<br>
-            <small>&#x21e9;</small><span id="mintemp">'.number_format($d['minmaxtemp']['s'], 1, ',', '').'</span>°C<br>
+            <small>&#x21e7;</small><span id="maxtemp">'.number_format($d['minmaxtemp']['m'], 1, ',', '').'</span>&#8451;<br>
+            <small>&#x21e9;</small><span id="mintemp">'.number_format($d['minmaxtemp']['s'], 1, ',', '').'</span>&#8451;<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: <span id="buien">'.$d['buiten_temp']['m'].'</span>
             </a>
@@ -464,7 +464,7 @@ function handlerequest(){
         }
     }
 }
-function createheader($page,$ajax=100,$ajaxremote=2000)
+function createheader($page,$ajax=200,$ajaxremote=2000)
 {
     global $udevice,$floorplanjs,$local;
     echo '

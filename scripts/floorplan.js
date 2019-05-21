@@ -352,7 +352,7 @@ function ajax(){
                              try{
                                  if(name=="diepvries_temp"){
                                     var elem=document.getElementById(name);
-                                    elem.innerHTML=value.toString().replace(/[.]/, ",")+"¡C";
+                                    elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
                                     hoogte=value * 3;
