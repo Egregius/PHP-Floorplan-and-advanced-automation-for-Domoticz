@@ -16,42 +16,7 @@ require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
-    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<title>Heating</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-    if ($udevice=='iPhone') {
-        echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
-    } elseif ($udevice=='iPad') {
-        echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-    }
-    echo '
-	    <link rel="icon" type="image/png" href="images/heating.png">
-		<link rel="shortcut icon" href="images/heating.png">
-		<link rel="apple-touch-icon" href="images/heating.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=5">
-		<style type="text/css">
-			.btn{font-size:25;padding:15px;width:100px;height:35px;}
-			.mode{font-size:25;padding:15px;width:155px;height:50px;}
-			.water{top:200px;left:218px;}
-		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                ajax();
-                setInterval(ajax, '.($local===true?'300':'1500').');
-            });
-        </script>';
-    echo '
-	</head>';
+    createheader('floorplanheating');
     if (isset($_POST['Naam'])
         &&isset($_POST['Actie'])
         &&!isset($_POST['Setpoint'])
@@ -439,6 +404,8 @@ if ($home) {
     }
     echo '
     <body class="floorplan">
+        <div id="placeholder"></div>
+
         <div class="fix z1" style="top:5px;left:5px;">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>
                 <img src="/images/close.png" width="72px" height="72px" alt="Close">
@@ -532,10 +499,7 @@ if ($home) {
     contact('raamkamer');
     contact('deurbadkamer');
     contact('raamhall');
-    echo '
-        <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
-        </div>';
+
     $bigdif=$d['heating']['m'];
     echo '
         <div class="fix divsetpoints z">
@@ -648,7 +612,7 @@ if ($home) {
                 </tr>
         </table>
         </div>
-        <div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
+        <div class="fix" id="floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
     echo '
         <div id="ajaxinit"></div>';
     sidebar();

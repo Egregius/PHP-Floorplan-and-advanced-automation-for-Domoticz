@@ -14,36 +14,8 @@ require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
-    error_reporting(E_ALL);ini_set("display_errors", "on");
-    echo '<html><head>
-		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
-	echo '
-	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
-		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                ajax();
-                setInterval(ajax, '.($local===true?'300':'1500').');
-            });
-        </script>
-	</head>
-	<body>';
+    createheader('floorplanothers');
+
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);
@@ -79,6 +51,7 @@ if ($home) {
     }
 
     echo '<body class="floorplan">
+    <div id="placeholder"></div>
 	<div class="fix clock">
 		<a href=\'javascript:navigator_Go("floorplan.others.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
 	</div>

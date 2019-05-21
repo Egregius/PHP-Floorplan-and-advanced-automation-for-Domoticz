@@ -84,12 +84,6 @@ if ($home) {
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
     blinds('zoldertrap');
-    secured('zliving');
-    secured('zkeuken');
-    secured('zinkom');
-    secured('zgarage');
-    secured('zhalla');
-    secured('zhallb');
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);
     showTimestamp('pirliving', 0);

@@ -514,7 +514,6 @@ function floorplan(){
     html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix Weg" id="Weg"></div>';
-    html+='<div class="fix clock" id="clock"></div>';
     html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
     html+='<div class="fix z1 i48" id="kristal"></div>';
     html+='<div class="fix z1 i48" id="bureel"></div>';
@@ -554,8 +553,40 @@ function floorplan(){
     html+='<div class="fix z0" id="GroheRed"></div>';
     html+='<div class="fix z0" id="bureeltobikwh"></div>';
     html+='<div class="fix z0" id="zliving"></div>';
+    html+='<div class="fix z0" id="zkeuken"></div>';
+    html+='<div class="fix z0" id="zinkom"></div>';
+    html+='<div class="fix z0" id="zgarage"></div>';
+    html+='<div class="fix z0" id="zhalla"></div>';
+    html+='<div class="fix z0" id="zhallb"></div>';
     html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
-   document.getElementById("placeholder").innerHTML=html;
+    document.getElementById("placeholder").innerHTML=html;
+}
+function floorplanheating(){
+    html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+    html+='<div class="fix clock" id="clock"></div>';
+    html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
+    html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
+    html+='<div class="fix z1 i48" id="heater1"></div>';
+    html+='<div class="fix z1 i48" id="heater2"></div>';
+    html+='<div class="fix z1 i48" id="heater3"></div>';
+    html+='<div class="fix z1 i48" id="heater4"></div>';
+    html+='<div class="fix yellow" id="Rbureel"></div>';
+    html+='<div class="fix yellow" id="RkeukenL"></div>';
+    html+='<div class="fix yellow" id="RkeukenR"></div>';
+    html+='<div class="fix yellow" id="Rliving"></div>';
+    html+='<div class="fix yellow" id="RkamerL"></div>';
+    html+='<div class="fix yellow" id="RkamerR"></div>';
+    html+='<div class="fix yellow" id="Rtobi"></div>';
+    html+='<div class="fix yellow" id="Ralex"></div>';
+    html+='<div class="fix z0" id="zliving"></div>';
+    html+='<div class="fix z0" id="zkeuken"></div>';
+    html+='<div class="fix z0" id="zinkom"></div>';
+    html+='<div class="fix z0" id="zgarage"></div>';
+    html+='<div class="fix z0" id="zhalla"></div>';
+    html+='<div class="fix z0" id="zhallb"></div>';
+    document.getElementById("placeholder").innerHTML=html;
+}
+function floorplanothers(){
 }
 function floorplanmedia(){
     html='<div class="fix jbl z1 i48" id="jbl"></div>';
