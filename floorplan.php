@@ -125,14 +125,6 @@ if ($home) {
     secured('zgarage');
     secured('zhalla');
     secured('zhallb');
-    rollery('Ralex');
-    rollery('Rbureel');
-    rollery('RkamerL');
-    rollery('RkamerR');
-    rollery('RkeukenL');
-    rollery('RkeukenR');
-    rollery('Rliving');
-    rollery('Rtobi');
     showTimestamp('belknop', 270);
     showTimestamp('pirgarage', 0);
     showTimestamp('pirliving', 0);

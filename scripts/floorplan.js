@@ -510,7 +510,15 @@ function floorplan(){
     html+='<div class="fix diepvries z1 i48" id="diepvries"></div>';
     html+='<div class="fix poortrf z1 i48" id="poortrf"></div>';
     html+='<div class="fix jbl z1 i48" id="jbl"></div>';
-    document.getElementById("placeholder").innerHTML=html;
+    html+='<div class="fix yellow" id="Rbureel"></div>';
+    html+='<div class="fix yellow" id="RkeukenL"></div>';
+    html+='<div class="fix yellow" id="RkeukenR"></div>';
+    html+='<div class="fix yellow" id="Rliving"></div>';
+    html+='<div class="fix yellow" id="RkamerL"></div>';
+    html+='<div class="fix yellow" id="RkamerR"></div>';
+    html+='<div class="fix yellow" id="Rtobi"></div>';
+    html+='<div class="fix yellow" id="Ralex"></div>';
+   document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanmedia(){
     html='<div class="fix jbl z1 i48" id="jbl"></div>';
@@ -521,6 +529,10 @@ function floorplanmedia(){
     html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
     html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
     html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html+='<div class="fix yellow" id="Rbureel"></div>';
+    html+='<div class="fix yellow" id="RkeukenL"></div>';
+    html+='<div class="fix yellow" id="RkeukenR"></div>';
+    html+='<div class="fix yellow" id="Rliving"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function pad(n, length){

@@ -213,7 +213,7 @@ if ($home) {
 
     echo '
     <body class="floorplan">
-        <div id="ajaxinit"></div>';
+        <div id="placeholder"></div>';
     if ($d['denon']['s']=='On') {
         $denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.time, false, $ctx))), true);
         if (!empty($denonmain)) {
@@ -295,29 +295,18 @@ if ($home) {
 	    </div>';
     dimmer('zithoek');
     dimmer('eettafel');
-    //schakelaar('jbl', 'Light');
-    schakelaar('kristal', 'Light');
     if (past('kristal')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:55px;left:154px;width:35px;">
             '.strftime("%k:%M", $d['kristal']['t']).'
         </div>';
     }
-    schakelaar('bureel', 'Light');
     if (past('bureel')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:55px;left:213px;width:35px;">
             '.strftime("%k:%M", $d['bureel']['t']).'
         </div>';
     }
-    schakelaar('keuken', 'Light');
-    schakelaar('wasbak', 'Light');
-    schakelaar('kookplaat', 'Light');
-    schakelaar('werkblad1', 'Light');
-    rollery('Rbureel');
-    rollery('RkeukenL');
-    rollery('RkeukenR');
-    rollery('Rliving');
     if ($d['denonpower']['s']=='ON') {
         echo '
 	<div class="fix denon z1">
