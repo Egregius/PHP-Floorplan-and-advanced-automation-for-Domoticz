@@ -83,7 +83,7 @@ function ajax(){
                                 else html+='<br><font color="#FF2200">max: '+mode+'</font>';
                                 document.getElementById("uv").innerHTML=html;
                             } catch {}
-                        }else if(name=="elec"){
+                        }else if(name=="el"){
                             try{
                                 html="<td>Elec:</td><td id='elec'>"+value+" W</td><td id='elecvandaag'>"+mode.toString().replace(/[.]/, ",")+" kWh</td>";
                                 document.getElementById("trelec").innerHTML=html;

@@ -11,9 +11,7 @@
  **/
 if ($status=='On') {
     $item='RkamerR';
-    if ($d[$item]['s']<40) {
-        sl($item, 40);
-    } elseif ($d[$item]['s']<70) {
+    if ($d[$item]['s']<70) {
         sl($item, 70);
     } elseif ($d[$item]['s']<85) {
         sl($item, 85);

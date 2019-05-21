@@ -46,7 +46,7 @@ if (!empty($smappee['report'])) {
         if (!empty($matches[1][2])) {
             $consumption=round($matches[1][2], 0);
             $result = $db->query(
-                "UPDATE devices SET s='$consumption',t='$time' WHERE n='elec';"
+                "UPDATE devices SET s='$consumption',t='$time' WHERE n='el';"
             ) or trigger_error($db->error);
             if ($consumption>8000) {
                 alert('Power', 'Power usage: '.$consumption.' W!', 120, false);
