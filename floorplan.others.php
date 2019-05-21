@@ -52,9 +52,7 @@ if ($home) {
 
     echo '<body class="floorplan">
     <div id="placeholder"></div>
-	<div class="fix clock">
-		<a href=\'javascript:navigator_Go("floorplan.others.php");\' id="clock">'.strftime("%k:%M:%S", TIME).'</a>
-	</div>
+
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
     rollery('Ralex');

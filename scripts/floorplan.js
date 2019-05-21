@@ -17,7 +17,7 @@ function ajax(){
                             hours=date.getHours();
                             minutes="0"+date.getMinutes();
                             seconds="0"+date.getSeconds();
-                            document.getElementById("clock").innerHTML='<a href=\'javascript:navigator_Go("floorplan.php");\' >'+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2)+'</a>';
+                            document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
                     }else{
                         var value=d[device]['s'];
@@ -190,7 +190,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(name=="heating"){
-                            //try{
+                            try{
                                html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
                                 if(value==0)html+='';
                                 else if(value==1)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
@@ -200,7 +200,7 @@ function ajax(){
                                     else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
                                 }
                                 document.getElementById("heating").innerHTML=html;
-                           // } catch {}
+                           } catch {}
                         }else if(name=="belknop"){
                             try{
                                 if(time>($LastUpdateTime-82800)){
@@ -396,7 +396,7 @@ function ajax(){
                                 if(mode == 2){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';}
                                 else if(mode == 1){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';}
                                 html+='</div></form>';
-                                document.getElementById('R'+name).innerHTML=html;
+                                document.getElementById(name).innerHTML=html;
 
                                 if(time>($LastUpdateTime-82800)){
                                     var date=new Date(time*1000);
@@ -509,6 +509,7 @@ function ajaxcontrol(device,command,action){
 }
 function floorplan(){
     html='<div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
+    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time"></a></div>';
     html+='<div class="fix z0 afval" id="gcal"></div>';
     html+='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
     html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
@@ -563,7 +564,7 @@ function floorplan(){
 }
 function floorplanheating(){
     html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
-    html+='<div class="fix clock" id="clock"></div>';
+    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="time"></a></div>';
     html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
     html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
     html+='<div class="fix z1 i48" id="heater1"></div>';
@@ -587,9 +588,13 @@ function floorplanheating(){
     document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanothers(){
+    html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.others.php");\' id="time"></a></div>';
+    document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanmedia(){
     html='<div class="fix jbl z1 i48" id="jbl"></div>';
+    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.media.php");\' id="time"></a></div>';
     html+='<div class="fix kristal z1 i48" id="kristal"></div>';
     html+='<div class="fix bureel z1 i48" id="bureel"></div>';
     html+='<div class="fix keuken z1 i48" id="keuken"></div>';

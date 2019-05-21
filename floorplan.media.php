@@ -225,11 +225,6 @@ if ($home) {
         $denoninput='UIT';
     }
     echo '
-        <div class="fix clock">
-	        <a href=\'javascript:navigator_Go("floorplan.media.php");\' id="clock">
-	            '.strftime("%k:%M:%S", TIME).'
-	        </a>
-	    </div>
     	<div class="fix z1" style="top:5px;left:5px;">
     	    <a href=\'javascript:navigator_Go("floorplan.php");\'>
     	        <img src="/images/close.png" width="72px" height="72px" alt="">
@@ -483,7 +478,7 @@ if ($home) {
             </div>
             </form>
         </div>
-        <div class="fix floorplanstats">
+        <div class="fix" id="floorplanstats">
             '.$udevice.' | '.$ipaddress.' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
         </div>';
 }
