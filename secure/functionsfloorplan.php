@@ -118,7 +118,7 @@ function thermostaat($name,$top,$left)
 function showTimestamp($name,$draai)
 {
     echo '
-        <div class="fix stamp z1 r'.$draai.' t'.$name.'" id="t'.$name.'"></div>';
+        <div class="fix stamp z1 r'.$draai.' id="t'.$name.'"></div>';
 }
 function secured($name)
 {
@@ -168,7 +168,7 @@ function bose($ip)
 {
     global $d;
     echo '
-        <div class="fix bose'.$ip.'" id="bosediv'.$ip.'">
+        <div class="fix bose'.$ip.'" id="bose'.$ip.'">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
                 <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
             </a>
