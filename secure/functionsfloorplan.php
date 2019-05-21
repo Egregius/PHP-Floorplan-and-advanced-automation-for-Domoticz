@@ -323,7 +323,7 @@ function handlerequest(){
             storemode($_REQUEST['Naam'], 0);
         }
     }
-    if (isset($_REQUEST['Weg'])) {
+    elseif (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
             store('Weg', $_REQUEST['Action']);
 
@@ -411,7 +411,7 @@ function handlerequest(){
             exit;
         }
     }
-    if (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
+    elseif (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
         if (in_array($_REQUEST['Naam'], array('bureeltobi','weg','slapen'))) {
             if (!isset($_REQUEST['confirm'])) {
                 switch($_REQUEST['Naam']){
@@ -464,7 +464,7 @@ function handlerequest(){
         }
     }
 }
-function createheader($page,$ajax=500,$ajaxremote=2000)
+function createheader($page,$ajax=100,$ajaxremote=2000)
 {
     global $udevice,$floorplanjs,$local;
     echo '
