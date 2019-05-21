@@ -225,6 +225,9 @@ function ajax(){
                                 else html='<img src="images/plug_Red.png" width="28px" height="auto" alt="">';
                                 document.getElementById("GroheRed").innerHTML=html;
                             } catch{}
+                        }else if(name=="kWh_bureeltobi"){
+                            try{
+
                         }else if(name=="gcal"){
                             try{
                                 if(typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
@@ -536,8 +539,9 @@ function floorplan(){
     html+='<div class="fix yellow" id="RkamerR"></div>';
     html+='<div class="fix yellow" id="Rtobi"></div>';
     html+='<div class="fix yellow" id="Ralex"></div>';
-    html+='<div class="fix z0 zoldervuur2"></div>';
-    html+='<div class="fix z0 GroheRed"></div>';
+    html+='<div class="fix z0 zoldervuur2" id="zoldervuur2"></div>';
+    html+='<div class="fix z0 GroheRed" id="GroheRed"></div>';
+    html+='<div class="fix bureeltobikwh z0" id="bureeltobikwh"></div>';
     html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
    document.getElementById("placeholder").innerHTML=html;
 }
