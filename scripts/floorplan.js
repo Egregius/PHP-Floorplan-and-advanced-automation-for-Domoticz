@@ -246,11 +246,17 @@ function ajax(){
                             } catch {}
                         }else if(type=="switch"){
                             try{
-                                if(name=="dampkap"||name=="water"||name=="regenpomp"||name=="zwembadfilter"||name=="zwembadwarmte"||name=="auto"||name=="bosesoundlink"){
+                                if(name=="dampkap"||name=="water"||name=="regenpomp"||name=="zwembadfilter"||name=="zwembadwarmte"||name=="auto"||name=="bosesoundlink"||name=="denon"||name=="tv"||name=="lgtv"||name=="nvidia"){
                                     var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
                                     html+='<br>'+name+'</form>';
+                                    if(time>($LastUpdateTime-82800)){
+                                        var date=new Date(time*1000);
+                                        var hours=date.getHours();
+                                        var minutes="0"+date.getMinutes();
+                                        html+='<br>'+hours+':'+minutes.substr(-2);
+                                    }
                                     document.getElementById(name).innerHTML=html;
                                 }else if(name=="bureeltobi"||name=="poortrf"){
                                     var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
@@ -622,6 +628,16 @@ function floorplanheating(){
 function floorplanothers(){
     html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
     html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.others.php");\' id="time"></a></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="auto"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="tv"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="nvidia"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="bosesoundlink"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="denon"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="water"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="regenpomp"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="zwembadfilter"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="zwembadwarmte"></div>';
+    html+='<div class="fix z1 i48" style="width:70px;" id="dampkap"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanmedia(){

@@ -69,37 +69,7 @@ function dimmer($name,$class='i70')
 	        </div>
         </form>';
 }
-function schakelaar($name)
-{
-    echo '
-        <div class="fix z1 i48" id="'.$name.'"></div>';
-}
-function schakelaar2($name)
-{
-    global $eendag,$d;
-    echo '
-        <div class="fix z1 center" style="width:70px;" id="'.$name.'">
-        	<form method="POST" action=""><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
-    echo $d[$name]['s']=='Off'?'
-                <input type="hidden" name="Actie" value="On">
-                <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['icon'].'_Off.png" class="i40">'
-                   :'
-                <input type="hidden" name="Actie" value="Off">
-                <input type="hidden" name="Naam" value="'.$name.'">
-                <input type="image" src="/images/'.$d[$name]['icon'].'_On.png" class="i40">';
-    echo '
-                <br>'.$name;
-    if ($d[$name]['t']>$eendag) {
-        echo '
-                <div class="fix center" style="top:52px;left:0px;width:70px;">
-                    '.strftime("%H:%M", $d[$name]['t']).'
-                </div>';
-    }
-    echo '
-            </form>
-        </div>';
-}
+
 function thermometer($name)
 {
     echo '
@@ -518,7 +488,7 @@ function createheader($page,$ajax=500,$ajaxremote=2000)
 	    <link rel="manifest" href="/manifest.json">
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=4">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>

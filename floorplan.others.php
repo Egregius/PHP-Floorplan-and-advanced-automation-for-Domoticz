@@ -55,16 +55,7 @@ if ($home) {
 
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    schakelaar2('auto');
-    schakelaar2('tv');
-    schakelaar2('nvidia');
-    schakelaar2('denon');
-    schakelaar2('bosesoundlink');
-    schakelaar2('water');
-    schakelaar2('regenpomp');
-    schakelaar2('zwembadfilter');
-    schakelaar2('zwembadwarmte');
-    schakelaar2('dampkap');
+
     echo '
 <div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
 <div class="fix z1 center" style="top:20px;left:130px;">
