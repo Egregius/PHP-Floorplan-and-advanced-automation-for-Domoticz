@@ -486,6 +486,41 @@ function floorplan(){
     document.getElementById("picam2").innerHTML='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
     html='<div class="fix kristal z1 i48" id="kristal"></div>';
     html+='<div class="fix bureel z1 i48" id="bureel"></div>';
+    html+='<div class="fix inkom z1 i48" id="inkom"></div>';
+    html+='<div class="fix keuken z1 i48" id="keuken"></div>';
+    html+='<div class="fix wasbak z1 i48" id="wasbak"></div>';
+    html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
+    html+='<div class="fix voordeur z1 i48" id="voordeur"></div>';
+    html+='<div class="fix hall z1 i48" id="hall"></div>';
+    html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
+    html+='<div class="fix garage z1 i48" id="garage"></div>';
+    html+='<div class="fix garageled z1 i48" id="garageled"></div>';
+    html+='<div class="fix zolderg z1 i48" id="zolderg"></div>';
+    html+='<div class="fix tuin z1 i48" id="tuin"></div>';
+    html+='<div class="fix zolder z1 i48" id="zolder"></div>';
+    html+='<div class="fix wc z1 i48" id="wc"></div>';
+    html+='<div class="fix bureeltobi z1 i48" id="bureeltobi"></div>';
+    html+='<div class="fix tvtobi z1 i48" id="tvtobi"></div>';
+    html+='<div class="fix badkamervuur1 z1 i48" id="badkamervuur1"></div>';
+    html+='<div class="fix badkamervuur2 z1 i48" id="badkamervuur2"></div>';
+    html+='<div class="fix heater1 z1 i48" id="heater1"></div>';
+    html+='<div class="fix heater2 z1 i48" id="heater2"></div>';
+    html+='<div class="fix heater3 z1 i48" id="heater3"></div>';
+    html+='<div class="fix heater4 z1 i48" id="heater4"></div>';
+    html+='<div class="fix diepvries z1 i48" id="diepvries"></div>';
+    html+='<div class="fix poortrf z1 i48" id="poortrf"></div>';
+    html+='<div class="fix jbl z1 i48" id="jbl"></div>';
+    document.getElementById("placeholder").innerHTML=html;
+}
+function floorplanmedia(){
+    html='<div class="fix jbl z1 i48" id="jbl"></div>';
+    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html+='<div class="fix bureel z1 i48" id="bureel"></div>';
+    html+='<div class="fix keuken z1 i48" id="keuken"></div>';
+    html+='<div class="fix wasbak z1 i48" id="wasbak"></div>';
+    html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
+    html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
+    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function pad(n, length){

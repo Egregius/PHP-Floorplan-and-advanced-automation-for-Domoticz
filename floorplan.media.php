@@ -45,6 +45,7 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
+                floorplanmedia();
                 ajax();
                 setInterval(ajax, '.($local===true?'300':'1500').');
             });
@@ -294,7 +295,7 @@ if ($home) {
 	    </div>';
     dimmer('zithoek');
     dimmer('eettafel');
-    schakelaar('jbl', 'Light');
+    //schakelaar('jbl', 'Light');
     schakelaar('kristal', 'Light');
     if (past('kristal')<$eendag) {
         echo '
