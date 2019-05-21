@@ -17,6 +17,7 @@ require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
     createheader('floorplanheating');
+    handlerequest();
     if (isset($_POST['Naam'])
         &&isset($_POST['Actie'])
         &&!isset($_POST['Setpoint'])
@@ -431,11 +432,6 @@ if ($home) {
     thermometer('tobi_temp');
     thermometer('alex_temp');
     thermometer('zolder_temp');
-    schakelaar('GroheRed');
-    schakelaar('heater1');
-    schakelaar('heater2');
-    schakelaar('heater3');
-    schakelaar('heater4');
     luifel('luifel', $d['luifel']['s']);
     rollers('Rliving', $d['Rliving']['s']);
     rollers('Rbureel', $d['Rbureel']['s']);
@@ -445,32 +441,15 @@ if ($home) {
     rollers('Ralex', $d['Ralex']['s']);
     rollers('RkamerL', $d['RkamerL']['s']);
     rollers('RkamerR', $d['RkamerR']['s']);
-    rollery('Ralex');
-    rollery('Rbureel');
-    rollery('RkamerL');
-    rollery('RkamerR');
-    rollery('RkeukenL');
-    rollery('RkeukenR');
-    rollery('Rliving');
-    rollery('Rtobi');
     thermostaat('living', 140, 260);
     thermostaat('badkamer', 427, 375);
     thermostaat('tobi', 475, 143);
     thermostaat('alex', 567, 202);
     thermostaat('kamer', 551, 295);
     thermostaat('zolder', 670, 190);
-    schakelaar('badkamervuur1');
-    schakelaar('badkamervuur2');
-    schakelaar('zoldervuur');
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);
-    secured('zliving');
-    secured('zkeuken');
-    secured('zinkom');
-    secured('zgarage');
-    secured('zhalla');
-    secured('zhallb');
     showTimestamp('pirliving', 0);
     showTimestamp('pirkeuken', 0);
     showTimestamp('pirgarage', 0);
@@ -491,14 +470,6 @@ if ($home) {
     showTimestamp('RkamerR', 90);
     showTimestamp('achterdeur', 270);
     showTimestamp('poort', 90);
-    contact('poort');
-    contact('achterdeur');
-    contact('raamliving');
-    contact('raamtobi');
-    contact('raamalex');
-    contact('raamkamer');
-    contact('deurbadkamer');
-    contact('raamhall');
 
     $bigdif=$d['heating']['m'];
     echo '

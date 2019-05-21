@@ -78,7 +78,7 @@ function schakelaar2($name)
 {
     global $eendag,$d;
     echo '
-        <div class="fix z1 center" style="width:70px;" id="'.$name.'">
+        <div class="fix z1 center" id="'.$name.'">
         	<form method="POST" action=""><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">
@@ -105,11 +105,7 @@ function thermometer($name)
     echo '
         <div class="fix" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
 }
-function contact($name)
-{
-    echo '
-        <div class="fix" id="'.$name.'"></div>';
-}
+
 function thermostaat($name,$top,$left)
 {
     echo '
@@ -155,11 +151,7 @@ function rollers($name)
     echo '
         <div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
 }
-function rollery($name)
-{
-    echo '
-        <div class="fix yellow" id="'.$name.'"></div>';
-}
+
 function bose($ip)
 {
     global $d;

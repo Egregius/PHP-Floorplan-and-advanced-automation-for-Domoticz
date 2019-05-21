@@ -15,7 +15,7 @@ require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
     createheader('floorplanothers');
-
+    handlerequest();
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);
@@ -55,14 +55,6 @@ if ($home) {
 
 	<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px"/></a></div>';
     //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
-    rollery('Ralex');
-    rollery('Rbureel');
-    rollery('RkamerL');
-    rollery('RkamerR');
-    rollery('RkeukenL');
-    rollery('RkeukenR');
-    rollery('Rliving');
-    rollery('Rtobi');
     schakelaar2('auto');
     schakelaar2('tv');
     schakelaar2('nvidia');
@@ -73,21 +65,6 @@ if ($home) {
     schakelaar2('zwembadfilter');
     schakelaar2('zwembadwarmte');
     schakelaar2('dampkap');
-    secured('zliving');
-    secured('zkeuken');
-    secured('zinkom');
-    secured('zgarage');
-    secured('zhalla');
-    secured('zhallb');
-    contact('poort');
-    contact('achterdeur');
-    contact('raamliving');
-    contact('raamtobi');
-    contact('raamalex');
-    contact('raamkamer');
-    contact('deurbadkamer');
-    contact('deurgarage');
-    contact('deurinkom');
     echo '
 <div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div>
 <div class="fix z1 center" style="top:20px;left:130px;">

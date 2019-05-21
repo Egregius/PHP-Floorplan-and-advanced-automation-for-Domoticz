@@ -51,7 +51,7 @@ if ($home) {
             });
         </script>
 	</head>';
-	requestdimmer();
+	handlerequest();
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv') {
             if ($_POST['Actie']=='On') {

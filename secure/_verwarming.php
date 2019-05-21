@@ -12,11 +12,7 @@
 //lg('               __verwarming__');
 $user='verwarming';
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
-    echo 'buiten_temp-s = '.$d['buiten_temp']['s'].'<br>';
-    echo 'minmaxtemp-s = '.$d['minmaxtemp']['s'].'<br>';
-    echo 'minmaxtemp-m = '.$d['minmaxtemp']['m'].'<br>';
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
-        echo 'Cooling';
         if ($d['heating']['s']!=1) {
             store('heating', 1);
             $d['heating']['s']=1;
@@ -25,19 +21,16 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
         ||$d['minmaxtemp']['m']<12
         ||$d['minmaxtemp']['s']<5
     ) {
-        echo 'Gas/Elec';
         if ($d['heating']['s']!=3) {
             store('heating', 3);
             $d['heating']['s']=3;
         }
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
-        echo 'Elec';
         if ($d['heating']['s']!=2) {
             store('heating', 2);
             $d['heating']['s']=2;
         }
     } else {
-        echo 'Neutral';
         if ($d['heating']['s']!=0) {
             store('heating', 0);
             $d['heating']['s']=0;

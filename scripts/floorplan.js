@@ -560,6 +560,18 @@ function floorplan(){
     html+='<div class="fix z0" id="zhalla"></div>';
     html+='<div class="fix z0" id="zhallb"></div>';
     html+='<div class="fix" id="poort"></div>';
+    html+='<div class="fix" id="achterdeur"></div>';
+    html+='<div class="fix" id="raamliving"></div>';
+    html+='<div class="fix" id="raamtobi"></div>';
+    html+='<div class="fix" id="raamalex"></div>';
+    html+='<div class="fix" id="raamkamer"></div>';
+    html+='<div class="fix" id="deurbadkamer"></div>';
+    html+='<div class="fix" id="deurinkom"></div>';
+    html+='<div class="fix" id="deurgarage"></div>';
+    html+='<div class="fix" id="deurwc"></div>';
+    html+='<div class="fix" id="deurkamer"></div>';
+    html+='<div class="fix" id="deurtobi"></div>';
+    html+='<div class="fix" id="deuralex"></div>';
     html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
@@ -586,6 +598,19 @@ function floorplanheating(){
     html+='<div class="fix z0" id="zgarage"></div>';
     html+='<div class="fix z0" id="zhalla"></div>';
     html+='<div class="fix z0" id="zhallb"></div>';
+    html+='<div class="fix" id="poort"></div>';
+    html+='<div class="fix" id="achterdeur"></div>';
+    html+='<div class="fix" id="raamliving"></div>';
+    html+='<div class="fix" id="raamtobi"></div>';
+    html+='<div class="fix" id="raamalex"></div>';
+    html+='<div class="fix" id="raamkamer"></div>';
+    html+='<div class="fix" id="deurbadkamer"></div>';
+    html+='<div class="fix" id="deurinkom"></div>';
+    html+='<div class="fix" id="deurgarage"></div>';
+    html+='<div class="fix" id="deurwc"></div>';
+    html+='<div class="fix" id="deurkamer"></div>';
+    html+='<div class="fix" id="deurtobi"></div>';
+    html+='<div class="fix" id="deuralex"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanothers(){
@@ -613,6 +638,10 @@ function floorplanmedia(){
     html+='<div class="fix z0" id="zgarage"></div>';
     html+='<div class="fix z0" id="zhalla"></div>';
     html+='<div class="fix z0" id="zhallb"></div>';
+    html+='<div class="fix" id="raamliving"></div>';
+    html+='<div class="fix" id="deurinkom"></div>';
+    html+='<div class="fix" id="deurgarage"></div>';
+    html+='<div class="fix" id="deurwc"></div>';
     document.getElementById("placeholder").innerHTML=html;
 }
 function pad(n, length){

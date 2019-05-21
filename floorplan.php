@@ -46,16 +46,6 @@ if ($home) {
     showTimestamp('deurbadkamer', 90);
     showTimestamp('deurinkom', 90);
     showTimestamp('deurgarage', 0);
-    contact('poort');
-    contact('achterdeur');
-    contact('raamliving');
-    contact('raamtobi');
-    contact('raamalex');
-    contact('raamkamer');
-    contact('raamhall');
-    contact('deurinkom');
-    contact('deurgarage');
-    contact('deurbadkamer');
     bose(101);
     bose(102);
     bose(103);
