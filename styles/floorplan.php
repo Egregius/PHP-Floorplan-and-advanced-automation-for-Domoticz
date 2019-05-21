@@ -65,9 +65,14 @@ td{text-align:right;font-size:1.1em;}
 .dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
 .dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}
 .dimlevela{background-color:#ffba00;color:#000;}
-.clock{top:5px;left:266px;width:142px;text-align:center;font-size:33px;font-weight:500;color:#CCC;}
+#clock{top:5px;left:266px;width:142px;text-align:center;font-size:33px;font-weight:500;color:#CCC;}
 .floorplan{cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;font-size:80%;font-family:Arial;padding:0px;text-align:center;background:#000;background-image:url(/images/HomeZw.png);background-repeat:no-repeat;background-position:-4px -15px;height:848px;width:486px;padding-top:0px;margin:0 auto;}
 .confirm{top:0px;left:0px;height:100%;width:100%;padding:0px;background:#000;z-index:1000;}
+.floorplan2icon{top:776px;left:9px;}
+.sirene{top:30px;left:200px;}
+.sd{top:30px;left:200px;}
+.zon{top:590px;left:0px;width:80px;text-align:center;}
+.weather{top:550px;left:14px;}
 
 #eettafel{top:140px;left:245px;}
 #zithoek{top:140px;left:110px;}
@@ -111,7 +116,6 @@ td{text-align:right;font-size:1.1em;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
-#floorplan2icon{top:776px;left:9px;}
 #auto{top:280px;left:235px;}
 #meldingen{top:280px;left:350px;}
 #verbruik{top:652px;left:290px;width:200px;}
@@ -122,8 +126,6 @@ td{text-align:right;font-size:1.1em;}
 #zwembadfilter{top:260px;left:0px;}
 #zwembadwarmte{top:340px;left:0px;}
 #dampkap{top:280px;left:110px;}
-.sirene{top:30px;left:200px;}
-.sd{top:30px;left:200px;}
 #heater1{top:226px;left:90px;height:18px;width:auto;}
 #heater2{top:223px;left:106px;height:22px;width:auto;}
 #heater3{top:223px;left:123px;height:22px;width:auto;}
@@ -138,8 +140,6 @@ td{text-align:right;font-size:1.1em;}
 #tpirhall{top:403px;left:215px;}
 
 #buiten_temp{top:450px;left:20px;}
-#zon{top:590px;left:0px;width:80px;text-align:center;}
-#weather{top:550px;left:14px;}
 #floorplanstats{top:810px;left:80px;width:410px;}
 
 /* Media */
@@ -154,7 +154,7 @@ td{text-align:right;font-size:1.1em;}
 .red{background:rgba(255,0,0,1);}
 #poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}
 #achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
-#deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}.tdeurbadkamer{top:435px;left:329px;}
+#deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;}
 #tachterdeur{top:280px;left:70px;}
 #tdeurinkom{top:70px;left:324px;}
 #tdeurgarage{top:244px;left:344px;}

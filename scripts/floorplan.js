@@ -17,7 +17,7 @@ function ajax(){
                             hours=date.getHours();
                             minutes="0"+date.getMinutes();
                             seconds="0"+date.getSeconds();
-                            document.getElementById("clock").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+                            document.getElementById("clock").innerHTML='<a href=\'javascript:navigator_Go("floorplan.php");\' >'+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2)+'</a>';
                         } catch {}
                     }else{
                         var value=d[device]['s'];
@@ -514,7 +514,7 @@ function floorplan(){
     html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix Weg" id="Weg"></div>';
-    html+='<div class="fix clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="clock"></a></div>';
+    html+='<div class="fix clock" id="clock"></div>';
     html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
     html+='<div class="fix z1 i48" id="kristal"></div>';
     html+='<div class="fix z1 i48" id="bureel"></div>';

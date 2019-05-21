@@ -20,7 +20,7 @@ function blinds($name)
 {
     global $d;
     echo '
-        <div class="fix z '.$name.'">
+        <div class="fix z" id='.$name.'>
             <form method="POST" action="">
                 <input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">
                 <input type="hidden" name="Naam" value="'.$name.'">
@@ -50,8 +50,8 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
-        <form method="POST" action="" id="'.$name.'">
-            <div class="fix z '.$name.'" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';">
+        <form method="POST" action="">
+            <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
@@ -72,13 +72,13 @@ function dimmer($name,$class='i70')
 function schakelaar($name)
 {
     echo '
-        <div class="fix '.$name.' z1 i48" id="'.$name.'"></div>';
+        <div class="fix z1 i48" id="'.$name.'"></div>';
 }
 function schakelaar2($name)
 {
     global $eendag,$d;
     echo '
-        <div class="fix z1 center '.$name.'" style="width:70px;">
+        <div class="fix z1 center" style="width:70px;" id="'.$name.'">
         	<form method="POST" action=""><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">
@@ -108,7 +108,7 @@ function thermometer($name)
 function contact($name)
 {
     echo '
-        <div class="fix '.$name.'" id="'.$name.'"></div>';
+        <div class="fix" id="'.$name.'"></div>';
 }
 function thermostaat($name,$top,$left)
 {
@@ -118,19 +118,19 @@ function thermostaat($name,$top,$left)
 function showTimestamp($name,$draai)
 {
     echo '
-        <div class="fix stamp z1 r'.$draai.' id="t'.$name.'"></div>';
+        <div class="fix stamp z1 r'.$draai.'" id="t'.$name.'"></div>';
 }
 function secured($name)
 {
     echo '
-        <div class="fix '.$name.' z0" id="'.$name.'"></div>';
+        <div class="fix z0" id="'.$name.'"></div>';
 }
 function luifel($name,$stat)
 {
     global $d;
     echo '
         <form method="POST" action="">
-            <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';">
+            <div class="fix z" onclick="location.href=\'floorplan.heating.php?luifel='.$name.'\';" id="'.$name.'">
                 <input type="hidden" name="luifel" value="'.$name.'">';
     if ($stat==00) {
         echo '
@@ -157,7 +157,7 @@ function luifel($name,$stat)
 function rollers($name)
 {
     echo '
-        <div class="fix z '.$name.'" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
+        <div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
 }
 function rollery($name)
 {
@@ -168,7 +168,7 @@ function bose($ip)
 {
     global $d;
     echo '
-        <div class="fix bose'.$ip.'" id="bose'.$ip.'">
+        <div class="fix" id="bose'.$ip.'">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
                 <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" id="bose'.$ip.'" alt="">
             </a>
@@ -199,8 +199,7 @@ function sidebar()
         bose(105);
     } else {
         echo '
-        <div class="fix bose105" id="bosediv105">
-        </div>';
+        <div class="fix" id="bosediv105"></div>';
     }
     echo '
         <div class="fix mediabuttons">
