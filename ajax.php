@@ -22,7 +22,7 @@ if (isset($_REQUEST['timestamp'])) {
         $t=$_REQUEST['timestamp'];
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
+        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE `dt` IS NOT NULL AND t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['n'] = $row['n'];
             if(!empty($row['i']))$d[$row['n']]['i'] = $row['i'];
