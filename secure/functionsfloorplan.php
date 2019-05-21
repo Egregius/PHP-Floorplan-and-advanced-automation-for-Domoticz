@@ -78,7 +78,7 @@ function schakelaar2($name)
 {
     global $eendag,$d;
     echo '
-        <div class="fix z1 center" id="'.$name.'">
+        <div class="fix z1 center" style="width:70px;" id="'.$name.'">
         	<form method="POST" action=""><input type="hidden" name="Schakel" value="'.$d[$name]['i'].'">';
     echo $d[$name]['s']=='Off'?'
                 <input type="hidden" name="Actie" value="On">

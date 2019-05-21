@@ -246,7 +246,13 @@ function ajax(){
                             } catch {}
                         }else if(type=="switch"){
                             try{
-                                if(name=="bureeltobi"||name=="poortrf"){
+                                if(name=="dampkap"||name=="water"||name=="regenpomp"||name=="zwembadfilter"||name=="zwembadwarmte"||name=="auto"||name=="bosesoundlink"){
+                                    var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
+                                    if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
+                                    else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
+                                    html+='<br>'+name+'</form>';
+                                    document.getElementById(name).innerHTML=html;
+                                }else if(name=="bureeltobi"||name=="poortrf"){
                                     var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';

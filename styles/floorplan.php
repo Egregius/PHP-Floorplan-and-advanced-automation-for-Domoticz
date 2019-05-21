@@ -116,16 +116,16 @@ td{text-align:right;font-size:1.1em;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
-#auto{top:280px;left:235px;}
-#meldingen{top:280px;left:350px;}
-#verbruik{top:652px;left:290px;width:200px;}
-#zoldervuur{top:670px;left:140px;}
-#zoldervuur2{top:783px;left:455px;}
-#water{top:100px;left:0px;}
-#regenpomp{top:180px;left:0px;}
-#zwembadfilter{top:260px;left:0px;}
-#zwembadwarmte{top:340px;left:0px;}
-#dampkap{top:280px;left:110px;}
+#auto{top:280px;left:235px;height:48px;width:auto;}
+#meldingen{top:280px;left:350px;height:48px;width:auto;}
+#verbruik{top:652px;left:290px;width:200px;height:48px;width:auto;}
+#zoldervuur{top:670px;left:140px;height:48px;width:auto;}
+#zoldervuur2{top:783px;left:455px;height:48px;width:auto;}
+#water{top:100px;left:0px;height:48px;width:auto;}
+#regenpomp{top:180px;left:0px;height:48px;width:auto;}
+#zwembadfilter{top:260px;left:0px;height:48px;width:auto;}
+#zwembadwarmte{top:340px;left:0px;height:48px;width:auto;}
+#dampkap{top:280px;left:110px;height:48px;width:auto;}
 #heater1{top:226px;left:90px;height:18px;width:auto;}
 #heater2{top:223px;left:106px;height:22px;width:auto;}
 #heater3{top:223px;left:123px;height:22px;width:auto;}
@@ -147,7 +147,7 @@ td{text-align:right;font-size:1.1em;}
 #tv{top:70px;left:168px;}
 #lgtv{top:70px;left:168px;}
 #nvidia{top:70px;left:219px;}
-#bosesoundlink{top:70px;left:280px;}
+#bosesoundlink{top:70px;left:280px;height:48px;width:auto;}
 #nas{top:70px;left:280px;}
 
 /* Deuren */

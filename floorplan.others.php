@@ -105,15 +105,14 @@ if ($home) {
 </div>
 </div>
 </form>
-<div class="fix z1 bottom" style="left:0px">
+<div class="fix z1 bottom" style="right:0px">
 	<form method="POST">
 		<input type="hidden" name="username" value="'.$user.'"/>
 		<input type="submit" name="logout" value="Logout" class="btn" style="padding:0px;margin:0px;width:90px;height:35px;"/>
 	</form>
 	<br/>
 	<br/>
-</div></div>
-<div class="fix floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
+</div></div>';
 }
 ?>
     </body>
