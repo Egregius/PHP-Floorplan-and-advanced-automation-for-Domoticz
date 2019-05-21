@@ -326,12 +326,12 @@ if ($home) {
     }
     if ($d['nvidia']['m']=='On') {
         echo '
-	<div class="fix nvidia z1">
+	<div class="fix z1" id="nvidia">
 			<input type="image" src="/images/nvidia_On.png" id="nvidia">
 	</div>';
     } else {
         echo '
-	<div class="fix nvidia z1">
+	<div class="fix z1" id="nvidia">
 			<input type="image" src="/images/nvidia_Off.png" id="nvidia">
 	</div>';
     }
