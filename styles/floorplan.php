@@ -73,7 +73,7 @@ td{text-align:right;font-size:1.1em;}
 .sirene{top:30px;left:200px;}
 .sd{top:30px;left:200px;}
 .zon{top:586px;left:0px;width:80px;text-align:center;}
-.weather{top:550px;left:14px;}
+.weather{top:542px;left:15px;}
 
 #nas{top:120px;left:140px;}
 #eettafel{top:140px;left:245px;}

@@ -135,22 +135,20 @@ function bose($ip)
 function sidebar()
 {
     global $d,$udevice,$lat,$lon;
-    if (!empty($d['icon']['s'])) {
-        if ($udevice=='Mac') {
-            echo '
-        <div class="fix weather">
-            <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
-            </a>
-        </div>';
-        } else {
-            echo '
-        <div class="fix weather">
-            <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-                <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
-            </a>
-        </div>';
-        }
+    if ($udevice=='Mac') {
+        echo '
+    <div class="fix weather">
+        <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
+            <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
+        </a>
+    </div>';
+    } else {
+        echo '
+    <div class="fix weather">
+        <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
+            <img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon" id="icon">
+        </a>
+    </div>';
     }
     thermometer('buiten_temp');
     if ($d['bose105']['m']=='Online') {

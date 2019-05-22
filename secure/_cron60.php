@@ -209,7 +209,7 @@ if ($d['auto']['s']=='On') {
         }
     }
     if ($d['wc']['s']=='On'
-        && past('wc')>420
+        && past('wc')>480
     ) {
         sw('wc', 'Off');
     }
