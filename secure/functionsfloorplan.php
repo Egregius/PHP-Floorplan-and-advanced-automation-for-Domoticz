@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require "php-html-css-js-minifier.php";
 /**
  * Function ajax
  *
@@ -240,7 +239,7 @@ function createheader($page,$ajax=200,$ajaxremote=2000)
 			.water{top:200px;left:218px;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplan.php?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 '.$page.'();
