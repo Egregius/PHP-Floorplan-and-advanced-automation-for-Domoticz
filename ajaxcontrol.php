@@ -19,6 +19,7 @@ if ($home) {
         $d=fetchdata();
         call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action']);
     } elseif (isset($_REQUEST['bose'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
+        lg($_REQUEST, true);
         if ($_REQUEST['command']=='volume') {
             bosevolume($_REQUEST['action'], $_REQUEST['bose']);
         } elseif ($_REQUEST['command']=='bass') {
