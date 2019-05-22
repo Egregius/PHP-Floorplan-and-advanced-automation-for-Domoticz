@@ -13,40 +13,12 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
-    if (!isset($_REQUEST['referrer'])) {
-        $_REQUEST['referrer']='floorplan.php';
-    }
-    if ($user=='Guy') {
-        error_reporting(E_ALL);
-        ini_set("display_errors", "on");
-    }
     $sensor=998;
     if (isset($_REQUEST['sensor'])) {
         $sensor=$_REQUEST['sensor'];
     }
-    if (isset($_REQUEST['f_startdate'])) {
-        $_SESSION['f_startdate']=$_REQUEST['f_startdate'];
-    }
-    if (isset($_REQUEST['f_enddate'])) {
-        $_SESSION['f_enddate']=$_REQUEST['f_enddate'];
-    }
-    if (!isset($_SESSION['f_startdate'])) {
-        $_SESSION['f_startdate']=date("Y-m-d", TIME);
-    }
-    if (!isset($_SESSION['f_enddate'])) {
-        $_SESSION['f_enddate']=date("Y-m-d", TIME);
-    }
-    if (isset($_REQUEST['clear'])) {
-        $_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-        $_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-    }
-    if ($_SESSION['f_startdate']>$_SESSION['f_enddate']) {
-        $_SESSION['f_enddate']=$_SESSION['f_startdate'];
-    }
-    $f_startdate=$_SESSION['f_startdate'];
-    $f_enddate=$_SESSION['f_enddate'];
-    $r_startdate=date("Y-m-d", TIME);
-    $r_enddate=date("Y-m-d", TIME);
+    $f_startdate=date("Y-m-d", TIME);
+    $f_enddate=date("Y-m-d", TIME);
     $week=date("Y-m-d", TIME-86400*6);
     echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -65,7 +37,7 @@ if ($home===true) {
 		</head>';
     if ($udevice=='iPad') {
         echo '<body style="width:800px">
-		<form action="'.$_SESSION['referer'].'"><input type="submit" class="btn b5" value="Plan"/></form>
+		<form action="floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
 			<form action="/temp.php"><input type="submit" class="btn btna b5" value="Temperaturen"/></form>
 			<form action="/regen.php"><input type="submit" class="btn b5" value="Regen"/></form>';
     } else {
@@ -79,31 +51,25 @@ if ($home===true) {
         die('Unable to connect to database ['.$db->connect_error.']');
     }
     switch($sensor){
-    case 147:$setpoint=12;$radiator=179;$sensornaam='living';
+    case 147:$sensornaam='living';
         break;
-    case 246:$setpoint=13;$radiator=13;$sensornaam='badkamer';
+    case 246:$sensornaam='badkamer';
         break;
-    case 278:$setpoint=14;$radiator=181;$sensornaam='kamer';
+    case 278:$sensornaam='kamer';
         break;
-    case 356:$setpoint=15;$radiator=183;$sensornaam='tobi';
+    case 356:$sensornaam='tobi';
         break;
-    case 293:$setpoint=0;$radiator=0;$sensornaam='zolder';
+    case 293:$sensornaam='zolder';
         break;
-    case 244:$setpoint=16;$radiator=203;$sensornaam='alex';
+    case 244:$sensornaam='alex';
         break;
-    case 998:$setpoint=998;$radiator=998;$sensornaam='binnen';
+    case 998:$sensornaam='binnen';
         break;
-    case 999:$setpoint=999;$radiator=999;$sensornaam='alles';
+    case 999:$sensornaam='alles';
         break;
-    default:$setpoint=0;$radiator=0;$sensornaam='buiten';
+    default:$sensornaam='buiten';
         break;
     }
-    $eendag=TIME-86400;
-    $eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
-    $eenweek=TIME-86400*7;
-    $eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
-    $eenmaand=TIME-86400*31;
-    $eenmaandstr=strftime("%Y-%m-%d %H:%M:%S", $eenmaand);
     $sensor=$sensornaam;
     $living='#FF1111';
     $badkamer='#6666FF';
