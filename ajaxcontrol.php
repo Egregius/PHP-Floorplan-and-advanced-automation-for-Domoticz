@@ -23,6 +23,22 @@ if ($home) {
             bosevolume($_REQUEST['action'], $_REQUEST['bose']);
         } elseif ($_REQUEST['command']=='bass') {
             bosebass($_REQUEST['action'], $_REQUEST['bose']);
+        } elseif ($_REQUEST['command']=='preset') {
+            bosepreset($_REQUEST['action'], $_REQUEST['bose']);
+        } elseif ($_REQUEST['command']=='skip') {
+            if ($_REQUEST['action']=='prev') {
+                bosekey("PREV_TRACK", 0, $bose);
+            } elseif ($_REQUEST['action']=='next') {
+                bosekey("NEXT_TRACK", 0, $bose);
+            }
+        } elseif ($_REQUEST['command']=='power') {
+                if ($_REQUEST['action']=='On') {
+                    bosekey("POWER", 0, $_REQUEST['bose']);
+                    sw('bose'.$_REQUEST['bose'], 'On');
+                } elseif ($_REQUEST['action']=='Off') {
+                    bosekey("POWER", 0, $_REQUEST['bose']);
+                    sw('bose'.$_REQUEST['bose'], 'Off');
+                }
         }
     }
 }

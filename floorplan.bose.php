@@ -139,15 +139,18 @@ if ($home) {
                  echo '
                 <h3>STANDBY</h3>';
                  echo '
-                <button type="submit" name="power" value="poweron" class="btn b1">Power</button>';
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'on\')"/>Power On</button>';
             } else {
+                echo '
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'prev\')"/>Prev</button>
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'next\')"/>Next</button>';
                 $presets=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/presets"))), true);
                 foreach ($presets as $i) {
                             $x=1;
                     foreach ($i as $j) {
                         //print_r($j);
                         echo '
-                <button type="submit" name="preset" class="btn b2" value="'.$j['@attributes']['id'].'">'.$j['@attributes']['id'].'. '.str_replace(', selected by Egregius', '', $j['ContentItem']['itemName']).'</button>';
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'preset\',\''.$j['@attributes']['id'].'\')"/>'.str_replace(', selected by Egregius', '', $j['ContentItem']['itemName']).'</button>';
                         if ($x%2==0) {
                             echo '<br>';
                         }
@@ -157,7 +160,7 @@ if ($home) {
                 echo '
                 <br>
                 <br>
-                <button type="submit" name="power" value="poweroff" class="btn b1">Power</button>';
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'off\')"/>Power Off</button>';
             }
             echo '
         </div>';
