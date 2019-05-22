@@ -1,6 +1,6 @@
 <?php
 include "general.php";
-$css="
+$css='
 html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
 body{margin:0 auto;}form,table{display:inline;margin:0px;padding:0px;}
@@ -62,11 +62,11 @@ input[type=submit]{color:#ccc;background-color:#555;display:inline-block;margin-
 .i70{width:70px;height:auto;}
 .i90{width:90px;height:auto;}
 
-/* CAMERA's */
+/* CAMERA\'s */
 .camera{top:100px;left:0px;width:100%;}
 .camera1{top:100px;left:0px;width:50%;}
 .camera2{top:100px;left:50%;width:50%;}
-";
+';
 if ($udevice=='other') {
     $css.="
 .camerai{width:auto;height:960px;}
