@@ -496,9 +496,9 @@ function ajaxbose($ip){
                 levels.forEach(function(level){
                     let newlevel=volume+level;
                     if(level==0){
-                        html+='<button name="volume" value="'+newlevel+'" class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                        html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                     }else{
-                        html+='<button name="volume" value="'+newlevel+'" class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                        html+='<button class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                     }
                 });
                 document.getElementById("volume").innerHTML=html;
@@ -509,9 +509,9 @@ function ajaxbose($ip){
                 var html="";
                 levels.forEach(function(level){
                     if(level==bass){
-                        html+="<button type=\"submit\" name=\"bass\" value=\""+level+"\" class=\"btn volume btna\" id=\"currentbass\">"+level+"</button>";
+                        html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
                     }else{
-                        html+="<button type=\"submit\" name=\"bass\" value=\""+level+"\" class=\"btn volume\">"+level+"</button>";
+                        html+='<button class="btn volume " onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
                     }
                 });
                 document.getElementById("bass").innerHTML=html;
