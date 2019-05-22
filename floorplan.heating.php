@@ -257,7 +257,7 @@ if ($home) {
 					<input type="hidden" name="Roller" value="true">
 				</div>
 				<div class="fix z" style="top:100px;left:70px;">
-					<input type="image" name="Rollerleveloff" value ="100" src="images/arrowgreendown.png" class="i90">
+					<input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90">
 				</div>
 				<div class="fix z" style="top:130px;left:200px;">
 					<input type="submit" name="mode" value ="';
@@ -265,7 +265,7 @@ if ($home) {
         echo '" class="btn i90">
 				</div>
 				<div class="fix z" style="top:100px;left:330px;">
-					<input type="image" name="Rollerlevelon" value ="0" src="images/arrowgreenup.png" class="i90">
+					<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
         $levels=array(5,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,95);
