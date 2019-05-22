@@ -36,12 +36,13 @@ if ($home) {
     }
     echo '<div class="navbar" role="navigation">
         <form method="POST" action="../floorplan.php">
-          <input type="submit" value="Plan" class="btn b6" />
+          <input type="submit" value="Plan" class="btn b7" />
         </form>
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b7"/>
-          <input type="submit" value="Foto" name="Foto" class="btn b7"/>
+          <input type="submit" value="Foto" name="Foto" class="btn b8"/>
           <input type="submit" value="Licht" name="Licht" class="btn b7"/>
+          <input type="submit" value="Refresh" name="Refresh" class="btn b7"/>
         </form>
         <form method="POST" action="media-archive.php">
             <input type="hidden" name="type" value="videos"/>
@@ -54,10 +55,10 @@ if ($home) {
         </form>
         </div>
         <div class="fix camera1">
-            <a href=""><img class="camerai" id="mjpeg_destvoordeur" src="jpg.php"/></a>
+            <img class="camerai" id="mjpeg_destvoordeur" src="jpg.php"/>
         </div>
         <div class="fix camera2">
-            <a href=""><img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/></a>
+            <img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
         </div>
         <script type="text/javascript">
         function navigator_Go(url) {window.location.assign(url);}

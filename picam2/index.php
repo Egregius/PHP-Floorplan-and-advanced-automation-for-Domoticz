@@ -22,7 +22,7 @@ if($home){
     }
     echo '<div class="navbar" role="navigation">
             <form method="POST" action="../floorplan.php">
-          <input type="submit" value="Plan" class="btn b5"/>
+          <input type="submit" value="Plan" class="btn b3"/>
         </form>
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b5"/>
@@ -31,7 +31,7 @@ if($home){
         </form>
         </div>
         <div class="fix camera">
-            <a href=""><img class="camerai" id="mjpeg_destalex" src="jpg.php"/></a>
+            <img class="camerai" id="mjpeg_destalex" src="jpg.php"/>
         </div>
         <script type="text/javascript">
         function navigator_Go(url) {window.location.assign(url);}

@@ -80,10 +80,11 @@ function ajax(){
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
                             } catch {}
                         }else if(name=="icon"){
-                            try{
+                           // try{
                                 document.getElementById("hum").innerHTML=mode;
                                 $('#icon').attr("src", "https://openweathermap.org/img/w/"+value+".png");
-                            } catch {}
+                                console.log(value);
+                           // } catch {}
                         }else if(name=="uv"){
                             try{
                                 if(value<2)html='<font color="#99EE00">UV: '+value+'</font>';

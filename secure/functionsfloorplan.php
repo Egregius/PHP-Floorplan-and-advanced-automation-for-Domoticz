@@ -206,7 +206,6 @@ function sidebar()
             <br>
             <small>&#x21e9;</small><span id="zononder"></span>
             <br>
-            <br>
             <div id="uv"></div>
 	    </div>';
 }

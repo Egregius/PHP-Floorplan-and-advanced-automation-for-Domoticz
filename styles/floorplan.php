@@ -43,7 +43,7 @@ td{text-align:right;font-size:1.1em;}
 .picam2{top:538px;left:210px;}
 .volume{width:33px;height:60px;padding:2px 0px 0px 0px!important;margin:0;}
 .leftbuttons{top:130px;left:0px;width:80px;}
-.mediabuttons{top:290px;left:0px;width:80px;}
+.mediabuttons{top:288px;left:0px;width:80px;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander{width:99%;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander tr, .brander td{text-align:right;line-height:1.2;font-size:16px;margin-bottom:-30px;}
@@ -72,7 +72,7 @@ td{text-align:right;font-size:1.1em;}
 .floorplan2icon{top:776px;left:9px;}
 .sirene{top:30px;left:200px;}
 .sd{top:30px;left:200px;}
-.zon{top:590px;left:0px;width:80px;text-align:center;}
+.zon{top:586px;left:0px;width:80px;text-align:center;}
 .weather{top:550px;left:14px;}
 
 #nas{top:120px;left:140px;}
@@ -114,7 +114,7 @@ td{text-align:right;font-size:1.1em;}
 #bose102{top:472px;left:344px;height:auto;width:50px;}
 #bose103{top:605px;left:280px;height:auto;width:50px;}
 #bose104{top:255px;left:100px;height:auto;width:50px;}
-#bose105{top:230px;left:14px;height:auto;width:auto;}
+#bose105{top:228px;left:14px;height:auto;width:auto;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
