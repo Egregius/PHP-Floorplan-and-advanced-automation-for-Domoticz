@@ -581,7 +581,7 @@ function floorplan(){
     html+='<div class="fix z0" id="zgarage"></div>';
     html+='<div class="fix z0" id="zhalla"></div>';
     html+='<div class="fix z0" id="zhallb"></div>';
-    html+='<div class="fix" id="poort"></div>';
+    html+='<div class="fix" id="poortrf"></div>';
     html+='<div class="fix" id="achterdeur"></div>';
     html+='<div class="fix" id="raamliving"></div>';
     html+='<div class="fix" id="raamtobi"></div>';

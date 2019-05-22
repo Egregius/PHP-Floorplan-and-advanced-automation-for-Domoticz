@@ -211,7 +211,47 @@ function sidebar()
             <div id="uv"></div>
 	    </div>';
 }
-function handlerequest(){
+function createheader($page,$ajax=200,$ajaxremote=2000)
+{
+    global $udevice,$floorplanjs,$local;
+    echo '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Floorplan</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+    if ($udevice=='iPhone') {
+        echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
+    } elseif ($udevice=='iPad') {
+        echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
+    }
+    echo '
+	    <link rel="manifest" href="/manifest.json">
+	    <link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
+		<style type="text/css">
+			.water{top:200px;left:218px;}
+		</style>
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
+		<script type=\'text/javascript\'>
+            $(document).ready(function() {
+                '.$page.'();
+                ajax();
+                setInterval(ajax, '.($local===true?$ajax:$ajaxremote).');
+            });
+        </script>
+	</head>';
+}
+function handlerequest()
+{
     global $db,$d,$user;
     if (isset($_REQUEST['setdimmer'])) {
         $name=$_REQUEST['setdimmer'];
@@ -323,8 +363,58 @@ function handlerequest(){
             sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
             storemode($_REQUEST['Naam'], 0);
         }
-    }
-    elseif (isset($_REQUEST['Weg'])) {
+    } elseif (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
+        if (in_array($_REQUEST['Naam'], array('bureeltobi','Weg','slapen'))) {
+            if (!isset($_REQUEST['confirm'])) {
+                switch($_REQUEST['Naam']){
+                case 'weg':$txtoff='Thuiss';$txton='Wegs';
+                    break;
+                case 'slapen':$txtoff='Wakkers';$txton='Slapens';
+                    break;
+                case 'bureeltobi':$txtoff='Uit';$txton='Aan';
+                    break;
+                }
+                    echo '<body><div id="message" class="fix confirm">
+				<form method="post">
+					<input type="hidden" name="Actie" value="On">
+					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
+					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2">
+				</form>
+				<form method="post">
+					<input type="hidden" name="Actie" value="Off">
+					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
+					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2">
+				</form>
+			</div>
+			</body>
+		</html>';
+                    exit;
+            } elseif (isset($_REQUEST['confirm'])) {
+                  sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+            }
+        } elseif ($_REQUEST['Naam']=='zoldertrap') {
+            if ($d['raamhall']['s']=='Closed') {
+                sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+            } else {
+                echo '<body><div id="message" class="fix confirm">
+			<form method="post" action="floorplan.php">
+					<input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2">
+					<input type="submit" name="confirm" value="Annuleer" class="btn huge2">
+				</form>
+			</div>
+			</body>
+		</html>';
+                exit;
+            }
+        } elseif ($_REQUEST['Naam']=='poortrf') {
+            if ($_REQUEST['Actie']=='On') {
+                store('Weg', 0);
+            }
+            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+        } else {
+            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+        }
+    } elseif (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
             store('Weg', $_REQUEST['Action']);
 
@@ -412,95 +502,4 @@ function handlerequest(){
             exit;
         }
     }
-    elseif (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
-        if (in_array($_REQUEST['Naam'], array('bureeltobi','weg','slapen'))) {
-            if (!isset($_REQUEST['confirm'])) {
-                switch($_REQUEST['Naam']){
-                case 'weg':$txtoff='Thuis';$txton='Weg';
-                    break;
-                case 'slapen':$txtoff='Wakker';$txton='Slapen';
-                    break;
-                case 'bureeltobi':$txtoff='Uit';$txton='Aan';
-                    break;
-                }
-                    echo '<body><div id="message" class="fix confirm">
-				<form method="post">
-					<input type="hidden" name="Actie" value="On">
-					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
-					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2">
-				</form>
-				<form method="post">
-					<input type="hidden" name="Actie" value="Off">
-					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
-					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2">
-				</form>
-			</div>
-			</body>
-		</html>';
-                    exit;
-            } elseif (isset($_REQUEST['confirm'])) {
-                  sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-            }
-        } elseif ($_REQUEST['Naam']=='zoldertrap') {
-            if ($d['raamhall']['s']=='Closed') {
-                sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-            } else {
-                echo '<body><div id="message" class="fix confirm">
-			<form method="post" action="floorplan.php">
-					<input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2">
-					<input type="submit" name="confirm" value="Annuleer" class="btn huge2">
-				</form>
-			</div>
-			</body>
-		</html>';
-                exit;
-            }
-        } elseif ($_REQUEST['Naam']=='poortrf') {
-            if ($_REQUEST['Actie']=='On') {
-                store('Weg', 0);
-            }
-            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-        } elseif (!in_array($_REQUEST['Naam'], array('radioluisteren','tvkijken','kodikijken'))) {
-            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-        }
-    }
-}
-function createheader($page,$ajax=200,$ajaxremote=2000)
-{
-    global $udevice,$floorplanjs,$local;
-    echo '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-    if ($udevice=='iPhone') {
-        echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
-    } elseif ($udevice=='iPad') {
-        echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-    }
-    echo '
-	    <link rel="manifest" href="/manifest.json">
-	    <link rel="shortcut icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
-		<style type="text/css">
-			.water{top:200px;left:218px;}
-		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                '.$page.'();
-                ajax();
-                setInterval(ajax, '.($local===true?$ajax:$ajaxremote).');
-            });
-        </script>
-	</head>';
 }
