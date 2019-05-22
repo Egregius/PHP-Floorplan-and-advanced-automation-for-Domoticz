@@ -1,11 +1,14 @@
-<?php include "general.php";?>
+<?php
+include "general.php";
+$css="
 input[type=submit]{cursor:pointer;-webkit-appearance:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
 .clear{clear:both;}.isotope:after{content:'';display:block;clear:both;}
 .grid{position:relative;clear:both;width:calc(100%-20px);}
 .grid:after {content: '';display: block;clear: both;}
 form{display:inline;margin:0px;padding:0px;}
-
-<?php if($udevice=='other'){ ?>
+";
+if ($udevice=='other') {
+    $css.="
 h1{font-size:2.2em;margin:5px;padding:0px;}
 h2{font-size:1.4em;margin:0px;padding:0px;}
 .navbar{position: fixed;top:0px;left:0px;min-height:38px;width:100%;padding:0px;z-index:10;background-color:#111;}
@@ -18,8 +21,9 @@ h2{font-size:1.4em;margin:0px;padding:0px;}
 .input{width:23.3%;max-width:300px;}
 .level{width:11.3%;max-width:105px;}
 .surround{width:45%;max-width:300px;}
-
-<?php }elseif($udevice=='iPhone'){ ?>
+";
+} elseif ($udevice=='iPhone') {
+    $css.="
 h1{font-size:2.5em;margin:0px;padding:0px;}
 h2{font-size:1.8em;margin:0px;padding:0px;}
 .navbar{position: fixed;top:0px;left:0px;float:left;min-height:38px;width:100%;padding:0px;z-index:10;background-color:#111;}
@@ -32,8 +36,9 @@ h2{font-size:1.8em;margin:0px;padding:0px;}
 .input{width:142px;}
 .level{width:64px;}
 .surround{width:120px;}
-
-<?php }elseif($udevice=='iPad'){ ?>
+";
+} elseif ($udevice=='iPad') {
+    $css.="
 @media only screen and (orientation: portrait) {
 	h1{font-size:4em;margin:5px;padding:0px;}
 	h2{font-size:2em;margin:0px;padding:0px;}
@@ -66,5 +71,9 @@ h2{font-size:1.8em;margin:0px;padding:0px;}
 	.input{width:496px;}
 	.level{width:135px;}
 	.surround{width:494px;}
+}";
 }
-<?php } ?>
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);

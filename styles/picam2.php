@@ -1,4 +1,6 @@
-<?php include "general.php";?>
+<?php
+include "general.php";
+$css="
 
 html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
@@ -65,21 +67,26 @@ input[type=submit]{color:#ccc;background-color:#555;display:inline-block;margin-
 .camera{top:100px;left:0px;width:100%;}
 .camera1{top:100px;left:0px;width:50%;}
 .camera2{top:100px;left:50%;width:50%;}
-
-<?php if($udevice=='other'){ ?>
+";
+if ($udevice=='other') {
+    $css.="
 .camerai{width:auto;height:960px;}
-
-<?php }elseif($udevice=='iPhone'){ ?>
+";
+} elseif ($udevice=='iPhone') {
+    $css.="
 .camerai{width:auto;height:960px;}
-
-<?php }elseif($udevice=='iPad'){ ?>
-
+";
+} elseif ($udevice=='iPad') {
+    $css="
 @media only screen and (orientation: portrait) {
-.camerai{width:100%;height:auto;}
-
+    .camerai{width:100%;height:auto;}
 }
 @media only screen and (orientation: landscape) {
-.camerai{width:100%;height:auto;}
-
+    .camerai{width:100%;height:auto;}
 }
-<?php } ?>
+";
+}
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);

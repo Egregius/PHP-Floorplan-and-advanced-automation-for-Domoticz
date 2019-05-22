@@ -1,5 +1,6 @@
-<?php include "general.php";?>
-
+<?php
+include "general.php";
+$css="
 h2{font-size:36px;}
 
 .fix{position:absolute;}
@@ -7,10 +8,13 @@ h2{font-size:36px;}
 .z1{z-index:100;}
 .i48{width:55px;height:auto;}
 .box{left:0px;width:80px;background:#222;padding-top:10px; border:thin #666}
-
-<?php if($udevice=='other'){ ?>
+";
+if ($udevice=='other') {
+    $css.="
 .datum{width:185px;height:36px;}
-<?php }elseif($udevice=='iPad'){ ?>
+";
+} elseif ($udevice=='iPad') {
+    $css.="
 @media only screen and (orientation: portrait) {
 .datum{width:151px;height:28px;}
 .btn{height:28px;font-size:1em;}
@@ -18,7 +22,9 @@ h2{font-size:36px;}
 @media only screen and (orientation: landscape) {
 
 }
-<?php }elseif($udevice=='iPhone'){ ?>
+";
+} elseif ($udevice=='iPhone') {
+    $css.="
 @media only screen and (orientation: portrait) {
 .datum{width:151px;height:28px;}
 .btn{height:28px;font-size:1em;}
@@ -26,4 +32,9 @@ h2{font-size:36px;}
 @media only screen and (orientation: landscape) {
 .datum{width:170px;height:36px;}
 }
-<?php } ?>
+";
+}
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);
