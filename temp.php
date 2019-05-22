@@ -74,15 +74,6 @@ if ($home===true) {
 			<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 			<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
     }
-    //  if ($udevice!='iPad') echo '<br>';
-    echo '<form method="GET">
-			<input type="hidden" name="sensor" value="'.$sensor.'"/>
-
-			</form>';
-    if ($udevice=="Mac") {
-        echo '<a href="tempbig.php" target="popup" class="btn" onclick="window.open(this.href,\'Tempbig\',\'left=0,top=0,width=507,height=848,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no\').focus(); return false;">Big</a>
-';
-    }
     $db=new mysqli('localhost', 'domotica', 'domotica', 'domotica');
     if ($db->connect_errno>0) {
         die('Unable to connect to database ['.$db->connect_error.']');

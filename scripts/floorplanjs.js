@@ -66,6 +66,15 @@ function ajax(){
                                 document.getElementById("mintemp").innerHTML=value.toString().replace(/[.]/, ",");
                                 document.getElementById("maxtemp").innerHTML=mode.toString().replace(/[.]/, ",");
                             } catch {}
+                        }else if(name=="civil_twilight"){
+                            date=new Date(value*1000);
+                            hours=date.getHours();
+                            minutes="0"+date.getMinutes();
+                            document.getElementById("zonop").innerHTML=' '+hours+':'+minutes.substr(-2);
+                            date=new Date(mode*1000);
+                            hours=date.getHours();
+                            minutes="0"+date.getMinutes();
+                            document.getElementById("zononder").innerHTML=' '+hours+':'+minutes.substr(-2);
                         }else if(name=="wind"){
                             try{
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
@@ -372,6 +381,10 @@ function ajax(){
                                     html+=value.toString().replace(/[.]/, ",");
                                     html+='</div>';
                                     document.getElementById(name).innerHTML=html;
+                                    if(name=="buiten_temp"){
+                                        if(typeof mode !== 'undefined')document.getElementById('buien').innerHTML=mode;
+                                        else document.getElementById('buien').innerHTML=0;
+                                    }
                                 }
                             } catch {}
                         }else if(type=="rollers"){

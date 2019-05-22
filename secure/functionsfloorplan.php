@@ -73,7 +73,7 @@ function dimmer($name,$class='i70')
 function thermometer($name)
 {
     echo '
-        <div class="fix" onclick="location.href=\'temp.php?sensor=998\';" id="'.$name.'"></div>';
+        <div class="fix" onclick="location.href=\'temp.php\';" id="'.$name.'"></div>';
 }
 
 function thermostaat($name,$top,$left)
@@ -189,22 +189,22 @@ function sidebar()
 		    <br>
         </div>
         <div class="fix center zon">
-            <small>&#x21e7;</small><span id="maxtemp">'.number_format($d['minmaxtemp']['m'], 1, ',', '').'</span>&#8451;<br>
-            <small>&#x21e9;</small><span id="mintemp">'.number_format($d['minmaxtemp']['s'], 1, ',', '').'</span>&#8451;<br>
+            <small>&#x21e7;</small><span id="maxtemp"></span>&#8451;<br>
+            <small>&#x21e9;</small><span id="mintemp"></span>&#8451;<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
-                Buien: <span id="buien">'.$d['buiten_temp']['m'].'</span>
+                Buien: <span id="buien"></span>
             </a>
             <br>
-            Hum:<span id="hum">'.round($d['icon']['m'], 0).'</span>%
-            <br><span id="wind">'.number_format($d['wind']['s'], 1, ',', '').'</span>km/u
+            Hum:<span id="hum"></span>%
+            <br><span id="wind"></span>km/u
 
             <br>
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>
-            <small>&#x21e7;</small><span id="zonop">'.strftime("%k:%M", $d['civil_twilight']['s']).'</span>
+            <small>&#x21e7;</small><span id="zonop"></span>
             <br>
-            <small>&#x21e9;</small><span id="zononder">'.strftime("%k:%M", $d['civil_twilight']['m']).'</span>
+            <small>&#x21e9;</small><span id="zononder"></span>
             <br>
             <br>
             <div id="uv"></div>
@@ -239,7 +239,7 @@ function createheader($page,$ajax=200,$ajaxremote=2000)
 			.water{top:200px;left:218px;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.php?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 '.$page.'();
