@@ -19,7 +19,7 @@ if ($home) {
         $d=fetchdata();
         call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action']);
     } elseif (isset($_REQUEST['bose'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
-        lg($_REQUEST, true);
+        lg($_REQUEST['bose'].$_REQUEST['command'].$_REQUEST['action']);
         if ($_REQUEST['command']=='volume') {
             bosevolume($_REQUEST['action'], $_REQUEST['bose']);
         } elseif ($_REQUEST['command']=='bass') {
@@ -28,13 +28,13 @@ if ($home) {
             bosepreset($_REQUEST['action'], $_REQUEST['bose']);
         } elseif ($_REQUEST['command']=='skip') {
             if ($_REQUEST['action']=='prev') {
-                bosekey("PREV_TRACK", 0, $bose);
+                bosekey("PREV_TRACK", 0, $_REQUEST['bose']);
             } elseif ($_REQUEST['action']=='next') {
-                bosekey("NEXT_TRACK", 0, $bose);
+                bosekey("NEXT_TRACK", 0, $_REQUEST['bose']);
             }
         } elseif ($_REQUEST['command']=='power') {
                 if ($_REQUEST['action']=='On') {
-                    bosekey("POWER", 0, $_REQUEST['bose']);
+                    bosezone($_REQUEST['bose']);
                     sw('bose'.$_REQUEST['bose'], 'On');
                 } elseif ($_REQUEST['action']=='Off') {
                     bosekey("POWER", 0, $_REQUEST['bose']);

@@ -23,7 +23,7 @@ if (!empty($smappee['report'])) {
         $matches
     );
     if (!empty($matches[1][1])) {
-        $time=time();
+        $time=time()+1;
         $db=new PDO(
             "mysql:host=localhost;dbname=domotica;",
             'domotica',

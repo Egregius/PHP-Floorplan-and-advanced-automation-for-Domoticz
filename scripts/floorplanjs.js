@@ -116,8 +116,8 @@ function ajax(){
                                 else if(mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
                             } catch {}
                         }else if(name=="zon"||name=="zonvandaag"){
-                            try{
-                                if(d['zon']['s']>0||d['zonvandaag']['s']){
+                            //try{
+                                if(d['zon']['s']>0||d['zonvandaag']['s']>0){
                                     zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
                                     html="<td>Zon:</td><td id='zon'>"+d['zon']['s']+" W</td><td id='zonvandaag'>"+zonvandaag.toString().replace(/[.]/, ",")+" kWh</td>";
                                     document.getElementById("trzon").innerHTML=html;
@@ -144,7 +144,7 @@ function ajax(){
                                     else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
                                     else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
                                 }
-                            } catch {}
+                            //} catch {}
                         }else if(name=="gasvandaag"){
                             try{
                                 if(value>0){

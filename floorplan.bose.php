@@ -139,7 +139,7 @@ if ($home) {
                  echo '
                 <h3>STANDBY</h3>';
                  echo '
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'on\')"/>Power On</button>';
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'On\')"/>Power On</button>';
             } else {
                 echo '
                 <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'prev\')"/>Prev</button>
@@ -160,7 +160,7 @@ if ($home) {
                 echo '
                 <br>
                 <br>
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'off\')"/>Power Off</button>';
+                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'Off\')"/>Power Off</button>';
             }
             echo '
         </div>';
