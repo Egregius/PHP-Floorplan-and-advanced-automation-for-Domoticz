@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+require "php-html-css-js-minifier.php";
 /**
  * Function ajax
  *
