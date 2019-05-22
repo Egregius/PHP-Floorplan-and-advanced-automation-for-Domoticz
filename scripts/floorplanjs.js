@@ -561,6 +561,8 @@ function floorplan(){
     html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix Weg" id="Weg"></div>';
     html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
+    html+='<div class="fix z1 i48" id="IN1"></div>';
+    html+='<div class="fix z1 i48" id="IN2"></div>';
     html+='<div class="fix z1 i48" id="kristal"></div>';
     html+='<div class="fix z1 i48" id="bureel"></div>';
     html+='<div class="fix z1 i48" id="inkom"></div>';
