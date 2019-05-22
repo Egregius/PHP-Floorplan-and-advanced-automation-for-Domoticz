@@ -1,5 +1,4 @@
 <?php
-require "/var/www/html/secure/php-html-css-js-minifier.php";
 header("Content-type:text/css;charset:UTF-8");
 //header("Cache-Control:must-revalidate");
 header("Expires:".gmdate("D, d M Y H:i:s",time()+259200)." GMT");//3 dagen
@@ -49,4 +48,7 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .b8{width:1500px;max-width:12%}
 .b9{width:1500px;max-width:10%}
 .b10{width:1500px;max-width:10%}";
-echo minify_css($css);
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);

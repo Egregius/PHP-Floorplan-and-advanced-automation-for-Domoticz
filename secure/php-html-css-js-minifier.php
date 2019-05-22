@@ -296,21 +296,3 @@ function fn_minify_js_union($input) {
         '[$1]', '{$1}'
     ], $input);
 }
-
-
-/**
- * Backward Compatibility
- * ----------------------
- */
-
-function minify_css(...$lot) {
-    return fn_minify_css(...$lot);
-}
-
-function minify_html(...$lot) {
-    return fn_minify_html(...$lot);
-}
-
-function minify_js(...$lot) {
-    return fn_minify_js(...$lot);
-}
