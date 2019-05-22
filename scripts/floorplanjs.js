@@ -80,11 +80,10 @@ function ajax(){
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
                             } catch {}
                         }else if(name=="icon"){
-                           // try{
+                            try{
                                 document.getElementById("hum").innerHTML=mode;
                                 $('#icon').attr("src", "https://openweathermap.org/img/w/"+value+".png");
-                                console.log(value);
-                           // } catch {}
+                            } catch {}
                         }else if(name=="uv"){
                             try{
                                 if(value<2)html='<font color="#99EE00">UV: '+value+'</font>';
@@ -289,6 +288,7 @@ function ajax(){
                         }else if(type=="bose"){
                             try{
                                 if(name=="bose105"){
+                                    console.log(name+value+mode);
                                     if(mode=="Online"){
                                         var html="Online";
                                         if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}

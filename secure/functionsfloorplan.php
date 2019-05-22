@@ -139,14 +139,14 @@ function sidebar()
         echo '
     <div class="fix weather">
         <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-            <img src="" alt="icon" id="icon">
+            <img src="https://openweathermap.org/img/w/03n.png" alt="icon" id="icon">
         </a>
     </div>';
     } else {
         echo '
     <div class="fix weather">
         <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-            <img src="" alt="icon" id="icon">
+            <img src="https://openweathermap.org/img/w/03n.png" alt="icon" id="icon">
         </a>
     </div>';
     }
@@ -155,7 +155,7 @@ function sidebar()
         bose(105);
     } else {
         echo '
-        <div class="fix" id="bosediv105"></div>';
+        <div class="fix" id="bose105"></div>';
     }
     echo '
         <div class="fix mediabuttons">
