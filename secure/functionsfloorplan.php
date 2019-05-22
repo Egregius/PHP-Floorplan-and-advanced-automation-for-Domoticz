@@ -253,6 +253,7 @@ function handlerequest()
 {
     global $db,$d,$user;
     if (isset($_REQUEST['setdimmer'])) {
+        if (!isset($d)) $d=fetchdata();
         $name=$_REQUEST['setdimmer'];
         $stat=$d[$name]['s'];
         $dimaction=$d[$name]['m'];

@@ -20,8 +20,7 @@ if ($home) {
 	handlerequest();
     echo '
 	<body class="floorplan">
-	    <div id="placeholder"></div>
-	    <div id="ip"></div>';
+	    <div id="placeholder"></div>';
 	sidebar();
     dimmer('tobi','i60');
     dimmer('zithoek');
@@ -56,8 +55,6 @@ if ($home) {
     thermometer('tobi_temp');
     thermometer('alex_temp');
     thermometer('zolder_temp');
-
-
 }
 ?>
 

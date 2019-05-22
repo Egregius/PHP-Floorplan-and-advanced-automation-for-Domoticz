@@ -110,11 +110,11 @@ td{text-align:right;font-size:1.1em;}
 #badkamervuur1{top:403px;left:346px;height:24px;width:auto;}
 #badkamervuur2{top:403px;left:360px;height:24px;width:auto;}
 #jbl{top:218px;left:267px;height:30px;width:auto;}
-#bose101{top:197px;left:185px;height:60px;width:auto;}
-#bose102{top:472px;left:340px;height:50px;width:auto;}
-#bose103{top:600px;left:280px;height:50px;width:auto;}
-#bose104{top:252px;left:104px;height:50px;width:auto;}
-#bose105{top:230px;left:14px;height:50px;width:auto;}
+#bose101{top:203px;left:185px;height:auto;width:60px;}
+#bose102{top:472px;left:344px;height:auto;width:50px;}
+#bose103{top:605px;left:280px;height:auto;width:50px;}
+#bose104{top:255px;left:100px;height:auto;width:50px;}
+#bose105{top:230px;left:14px;height:auto;width:auto;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
