@@ -115,12 +115,9 @@ function ajax(){
                                 else if(mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
                                 else if(mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
                             } catch {}
-                        }else if(name=="zon"||name=="zonvandaag"){
+                        }else if(name=="zon"){
                             //try{
-                                if(d['zon']['s']>0||d['zonvandaag']['s']>0){
-                                    zonvandaag=parseFloat(Math.round(d['zonvandaag']['s']*10)/10).toFixed(1);
-                                    html="<td>Zon:</td><td id='zon'>"+d['zon']['s']+" W</td><td id='zonvandaag'>"+zonvandaag.toString().replace(/[.]/, ",")+" kWh</td>";
-                                    document.getElementById("trzon").innerHTML=html;
+                                    document.getElementById("zon").innerHTML=value+" W";
                                     if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
                                     else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
                                     else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
@@ -132,6 +129,9 @@ function ajax(){
                                     else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
                                     else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
                                     else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
+                        }else if(name=="zonvandaag"){
+                                    zonvandaag=parseFloat(Math.round(value*10)/10).toFixed(1);
+                                    document.getElementById("zonvandaag").innerHTML=zonvandaag.toString().replace(/[.]/, ",")+" kWh";
                                     if(d['zonvandaag']['m']>120)document.getElementById("zonvandaag").style.color="#00FF00";
                                     else if(d['zonvandaag']['m']>110)document.getElementById("zonvandaag").style.color="#33FF00";
                                     else if(d['zonvandaag']['m']>100)document.getElementById("zonvandaag").style.color="#66FF00";
@@ -143,7 +143,6 @@ function ajax(){
                                     else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
                                     else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
                                     else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
-                                }
                             //} catch {}
                         }else if(name=="gasvandaag"){
                             try{
@@ -618,8 +617,7 @@ function floorplan(){
     html+='<div class="fix" id="deurkamer"></div>';
     html+='<div class="fix" id="deurtobi"></div>';
     html+='<div class="fix" id="deuralex"></div>';
-    html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';
-    document.getElementById("placeholder").innerHTML=html;
+    html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';    document.getElementById("placeholder").innerHTML=html;
 }
 function floorplanheating(){
     html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
