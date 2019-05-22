@@ -55,7 +55,7 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.php?v='.$floorplanjs.'"></script>
 		<script type="text/javascript">
 		    $(document).ready(function() {
                 ajaxbose('.$bose.');
