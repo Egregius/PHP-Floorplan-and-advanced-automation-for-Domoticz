@@ -1,7 +1,6 @@
 <?php
 include "general.php";
 $css="
-
 html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
 body{margin:0 auto;}form,table{display:inline;margin:0px;padding:0px;}

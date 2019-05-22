@@ -1,4 +1,6 @@
-<?php include "general.php";?>
+<?php
+include "general.php";
+$css="
 body{font-family: sans-serif;}
 .grid{}
 .grid:after{content:''; display:block;clear:both;}
@@ -11,21 +13,26 @@ h2{font-size:16px; font-weight:800;padding:5px 0px 5px 0px; margin:0px; text-ali
 .b2{width:1500px;max-width:47%;padding:8px 0px !important;}
 .b3{width:1500px;max-width:30.5%;padding:8px 0px !important;}
 .b4{width:1500px;max-width:22%;padding:8px 0px !important;}
-
-<?php if($udevice=='other'){ ?>
+";
+if ($udevice=='other') {
+    $css.="
 body{background-image:url('/images/_firework.jpg');background-size:contain;background-repeat: no-repeat;background-attachment: fixed;background-position: center bottom; }
 .grid-sizer,
 .grid-item{width:19.3%;padding:0px 2px 2px 2px;}
 .btn{height:20px;font-size:1.1em;}
 .home{height:19px;font-size:1.1em;border:1px solid #800;}
 .logout{position:absolute;bottom:0px;right:0px;}
-<?php }elseif($udevice=='iPhone'){ ?>
+";
+} elseif ($udevice=='iPhone') {
+    $css.="
 .grid-sizer,
 .grid-item{width:99.5%;padding:0px 2px 2px 2px;}
 .btn{height:24px;font-size:1.4em;}
 .home{height:23px;font-size:1.4em;border:1px solid #800;}
 .logout{position:absolute;bottom:0px;right:0px;}
-<?php }elseif($udevice=='iPad'){ ?>
+";
+} elseif ($udevice=='iPad') {
+    $css.="
 .btn{height:30px;font-size:1.4em;}
 .home{height:30px;box-shadow:0px 0px 0px 1px #700 inset;}
 .logout{position:absolute;bottom:0px;right:0px;}
@@ -37,4 +44,9 @@ body{background-image:url('/images/_firework.jpg');background-size:contain;backg
 .grid-sizer,
 .grid-item{width:32.5%;padding:0px 2px 2px 2px;margin-bottom: 10px;}
 }
-<?php } ?>
+";
+}
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);
