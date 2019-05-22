@@ -603,9 +603,9 @@ function endswith($string,$test)
 function bosekey($key,$sleep=100000,$ip=101)
 {
     $xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
-    echo bosepost("key", $xml, $ip, true);
+    bosepost("key", $xml, $ip, true);
     $xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
-    echo bosepost("key", $xml, $ip);
+    bosepost("key", $xml, $ip);
 }
 function bosevolume($vol,$ip=101)
 {
@@ -640,7 +640,6 @@ function bosepreset($pre,$ip=3)
     if ($pre<1||$pre>6) {
         return;
     }
-    echo $ip;
     bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip)

@@ -128,85 +128,20 @@ if ($home) {
         <div class="fix blackmedia" >
 			<form method="GET" action="floorplan.bose.php">
 			    <input type="hidden" name="ip" value="'.$bose.'">
+			    <div style="height:180px;"><img height="160px" width="auto" alt="Art" id="art"></div>
 			    <h4 id="source"></h4>
 			    <h4 id="artist"></h4>
-			    <span id="track"></span>';
+			    <span id="track"></span><br>
+			    <div id="volume"></div>
+			    <div id="bass"></div>
+			    <br>
+			    <br>';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
                  echo '
                 <h3>STANDBY</h3>';
                  echo '
                 <button type="submit" name="power" value="poweron" class="btn b1">Power</button>';
             } else {
-
-                  $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
-                  $bass=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);
-                  //echo '<div style="text-align:left;"><pre>';print_r($bass);echo '</pre></div>';
-                  $bass=$bass['actualbass'];
-                  $cv=$volume['actualvolume'];
-                  $levels=array($cv-10,$cv-7,$cv-4,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+4,$cv+7,$cv+10);
-                echo '<div id="volume"><br><br>';
-                foreach ($levels as $k) {
-                    if ($k>=0&&$k<=80) {
-                        if ($k==$cv) {
-                            echo '
-                <button type="submit" name="volume" value="'.$k.'" class="btn volume btna" id="currentvolume">'.$k.'</button>';
-                        } else {
-                            echo '
-                <button type="submit" name="volume" value="'.$k.'" class="btn volume">'.$k.'</button>';
-                        }
-                    }
-                }
-                echo '</div>';
-                echo '<br>';
-                $levels=array(-9,-8,-7,-6,-5,-4,-3,-2,-1,0);
-                echo '<div id="bass">';
-                foreach ($levels as $k) {
-                    if ($k==$bass) {
-                        echo '
-                <button type="submit" name="bass" value="'.$k.'" class="btn volume btna" id="currentbass">'.$k.'</button>';
-                    } else {
-                        echo '
-                <button type="submit" name="bass" value="'.$k.'" class="btn volume">'.$k.'</button>';
-                    }
-                }
-                echo '</div>';
-                if ($nowplaying['@attributes']['source']=='SPOTIFY') {
-                    echo '
-                <h4 id="source">Spotify</h4>';
-                    if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
-                        echo '
-                <h4 id="artist">'.$nowplaying['artist'].'</h4><br>';
-                    }
-                    if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-                        echo '<span id="track">'.$nowplaying['track'].'</span>';
-                    }
-
-                    if (isset($nowplaying['art'])&&!is_array($nowplaying['art'])) {
-                        echo '
-                <br><br>
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
-                <br>
-                <button type="submit" name="prev" class="btn b2">Prev</button>
-                <button type="submit" name="next" class="btn b2">Next</button>';
-                    }
-                } elseif ($nowplaying['@attributes']['source']=='TUNEIN') {
-                    echo '
-                <h4  id="source">Internet Radio</h4>';
-                    echo '
-                <h4 id="artist">'.$nowplaying['stationName'].'</h4>';
-                    echo '<span id="track">'.$nowplaying['artist'].'</span>';
-                    echo '
-                <br>
-                <img src="'.str_replace('http://', 'https://', $nowplaying['art']).'" height="160px" width="auto" alt="Art" id="art">
-                <br>
-                <br>';
-                } else {
-                    echo '
-                <h3>'.$nowplaying['@attributes']['source'].'</h3>';
-                }
-
-                //echo '<div style="text-align:left;"><pre>';print_r($nowplaying);echo '</pre></div>';
-
                 $presets=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/presets"))), true);
                 foreach ($presets as $i) {
                             $x=1;
