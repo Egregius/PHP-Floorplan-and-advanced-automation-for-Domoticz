@@ -75,6 +75,7 @@ td{text-align:right;font-size:1.1em;}
 .zon{top:586px;left:0px;width:80px;text-align:center;}
 .weather{top:542px;left:15px;}
 
+#gcal{top:378px;left:88px;width:318px;font-size:1.1em;}
 #nas{top:120px;left:140px;}
 #eettafel{top:140px;left:245px;}
 #zithoek{top:140px;left:110px;}

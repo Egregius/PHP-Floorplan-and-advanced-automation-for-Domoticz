@@ -211,7 +211,7 @@ function rgb($name,$hue,$level,$check=false)
 }
 function resetsecurity()
 {
-    global $d;
+    global $d,$domoticzurl;
     if ($d['sirene']['s']!='Group Off') {
         sw('sirene', 'Off');
     }
