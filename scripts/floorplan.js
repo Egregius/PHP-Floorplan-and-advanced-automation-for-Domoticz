@@ -296,10 +296,10 @@ function ajax(){
                         }else if(type=="dimmer"){
                             try{
                                 if(value==0){
-                                    $('#'+name).attr("src", "/images/light_Off.png");
+                                    $('#img'+name).attr("src", "/images/light_Off.png");
                                     document.getElementById("level"+name).innerHTML="";
                                 }else{
-                                    $('#'+name).attr("src", "/images/light_On.png");
+                                    $('#img'+name).attr("src", "/images/light_On.png");
                                     document.getElementById("level"+name).innerHTML=value;
                                 }
                             } catch {}

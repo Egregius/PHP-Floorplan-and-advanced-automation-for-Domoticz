@@ -55,12 +55,12 @@ function dimmer($name,$class='i70')
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
-			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="'.$name.'">
+			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="img'.$name.'">
 			    <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
                 </div>';
     } else {
         echo'
-                <input type="image" src="/images/light_On.png" class="'.$class.'" id="'.$name.'">
+                <input type="image" src="/images/light_On.png" class="'.$class.'" id="img'.$name.'">
                 <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
                     <a href=\'javascript:navigator_Go('.$page.'?setdimmer='.$name.');\'><font color="#000">'.$d[$name]['s'].'</font></a>
                 </div>';
