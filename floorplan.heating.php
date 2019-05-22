@@ -118,7 +118,11 @@ if ($home) {
                         <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90" alt="">
                     </div>
                     <div class="fix z" style="top:210px;left:10px;">';
-        $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
+        $levels=array(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99);
+        if (!in_array($stat, $levels)) {
+            $levels[]=$stat;
+            sort($levels);
+        }
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
@@ -129,24 +133,6 @@ if ($home) {
             }
         }
         echo '
-                        <br>
-                        <br>
-                        <br>';
-        $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
-        foreach ($levels as $level) {
-            if ($stat!='Off'&&$stat==$level) {
-                echo '
-                        <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">
-                            '.$level.'
-                        </button>';
-            } else {
-                echo '
-                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
-                            '.$level.'
-                        </button>';
-            }
-        }
-            echo '
                     </div>
                 </form>
                 <div class="fix z" style="top:5px;left:5px;">
@@ -232,21 +218,12 @@ if ($home) {
 						<input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90">
 					</div>
 					<div class="fix z" style="top:210px;left:10px;">';
-            $levels=array(0,15,20,25,30,35,40,45,50,55,60,70,80,85,100);
+            $levels=array(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99);
             foreach ($levels as $level) {
                 echo '
                         <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
                             '.$level.'
                         </button>';
-            }
-            echo '
-                        <br>
-                        <br>
-                        <br>';
-            $levels=array(21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59,61,62,63,64,65,66,67,68,69,71,72,73,74,75,76,77,79,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99);
-            foreach ($levels as $level) {
-                echo '
-                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
             }
             echo '
 					</div>
@@ -291,7 +268,11 @@ if ($home) {
 					<input type="image" name="Rollerlevelon" value ="0" src="images/arrowgreenup.png" class="i90">
 				</div>
 				<div class="fix z" style="top:210px;left:10px;">';
-        $levels=array(0,25,30,32,34,36,38,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,62,64,66,68,70,75,95,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100);
+        $levels=array(5,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,95);
+        if (!in_array($stat, $levels)) {
+            $levels[]=$stat;
+            sort($levels);
+        }
         foreach ($levels as $level) {
             if ($stat!='Off'&&$stat==$level) {
                 echo '
@@ -406,7 +387,6 @@ if ($home) {
     echo '
     <body class="floorplan">
         <div id="placeholder"></div>
-
         <div class="fix z1" style="top:5px;left:5px;">
             <a href=\'javascript:navigator_Go("floorplan.php");\'>
                 <img src="/images/close.png" width="72px" height="72px" alt="Close">
@@ -425,7 +405,6 @@ if ($home) {
                 Boven
             </a>
         </div>';
-    //echo '<div class="fix" style="top:242px;left:100px;"><pre>';print_r($_REQUEST);echo '</pre></div>';
     thermometer('living_temp');
     thermometer('badkamer_temp');
     thermometer('kamer_temp');
@@ -582,10 +561,7 @@ if ($home) {
     echo '
                 </tr>
         </table>
-        </div>
-        <div class="fix" id="floorplanstats">'.$udevice.' | '.$ipaddress.'</div>';
-    echo '
-        <div id="ajaxinit"></div>';
+        </div>';
     sidebar();
 }
 function setpoint($name,$top,$left,$rotation)
