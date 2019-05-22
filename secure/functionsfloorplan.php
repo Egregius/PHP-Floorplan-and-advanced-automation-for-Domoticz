@@ -191,12 +191,7 @@ function sidebar()
             <small>&#x21e9;</small><span id="mintemp"></span>&#8451;<br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: <span id="buien"></span>
-            </a>
-            <br>
-            Hum:<span id="hum"></span>%
-            <br><span id="wind"></span>km/u
-
-            <br>
+            </a><br>Hum:<span id="hum"></span>%<br><span id="wind"></span>km/u<br>
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>
@@ -413,6 +408,7 @@ function handlerequest()
         if (isset($_REQUEST['Action'])) {
             store('Weg', $_REQUEST['Action']);
             if ($_REQUEST['Action']==0) {
+                $d=fetchdata();
                 $db->query("UPDATE devices set t='1' WHERE n='heating';");
                 if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
                     sw('poortrf', 'On');
@@ -421,10 +417,10 @@ function handlerequest()
                 resetsecurity();
             } elseif ($_REQUEST['Action']==1) {
                 lgsql($user, 'Weg', 'Slapen');
-                  huisslapen();
+                huisslapen();
             } elseif ($_REQUEST['Action']==2) {
                 lgsql($user, 'Weg', 'Weg');
-                  huisweg();
+                huisweg();
             }
         } else {
             if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
