@@ -397,6 +397,12 @@ function handlerequest()
 		</html>';
                 exit;
             }
+        } elseif ($_REQUEST['Naam']=='luifel') {
+            if (isset($_REQUEST['Rollerlevelon.x'])) {
+                sl('luifel', 0);
+            } elseif (isset($_REQUEST['Rollerleveloff.x'])) {
+                sl('luifel', 100);
+            }
         } elseif ($_REQUEST['Naam']=='poortrf') {
             if ($_REQUEST['Actie']=='On') {
                 store('Weg', 0);

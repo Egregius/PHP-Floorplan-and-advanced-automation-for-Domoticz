@@ -92,7 +92,7 @@ if ($home) {
         $stat=$d[$name]['s'];
         echo '
     <body>
-        <div id="luifel" class="fix dimmer" >
+        <div class="fix dimmer" >
             <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
                     <div class="fix z" style="top:15px;left:90px;">';
         if ($stat==0) {
@@ -214,7 +214,7 @@ if ($home) {
             $name=$_REQUEST['verdieping'];
             echo '
     <body>
-        <div id="luifel" class="fix dimmer" >
+        <div class="fix dimmer" >
 			<form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 					<div class="fix z" style="top:15px;left:90px;">';
             echo '<h2>'.$name.'</h2>
@@ -267,7 +267,7 @@ if ($home) {
         $stat=$d[$name]['s'];
         echo '
     <body>
-        <div id="luifel" class="fix dimmer" >
+        <div class="fix dimmer" >
 		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
 				<div class="fix z" style="top:15px;left:90px;">';
         if ($stat==0) {
@@ -355,7 +355,7 @@ if ($home) {
         $name=$_REQUEST['SetSetpoint'];
         echo '
     <body>
-        <div id="luifel" class="fix dimmer" >
+        <div class="fix dimmer" >
 		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
                 <input type="hidden" name="Setpoint" value="true" >
                 <h2>'.ucwords($name).'<br><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
