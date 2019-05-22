@@ -8,7 +8,7 @@ header("Expires:".gmdate("D, d M Y H:i:s",time()+259200)." GMT");//3 dagen
 if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
 else $udevice='other';
-?>
+$css="
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}
 .navbar{position:fixed;top:0px;left:0px;width:100%;padding:2px 0px 2px 0px;z-index:100;background-color:#111;}
@@ -47,4 +47,8 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .b7{width:1500px;max-width:13.2%}
 .b8{width:1500px;max-width:12%}
 .b9{width:1500px;max-width:10%}
-.b10{width:1500px;max-width:10%}
+.b10{width:1500px;max-width:10%}";
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);

@@ -1,4 +1,6 @@
-<?php include "general.php";?>
+<?php
+include "general.php";
+$css="
 html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
 h2{font-size:36px;}
@@ -200,4 +202,8 @@ td{text-align:right;font-size:1.1em;}
 #zinkom{top:51px;left:345px;width:129px;height:56px;}
 #zgarage{top:256px;left:89px;width:315px;height:139px;}
 #zhalla{top:403px;left:214px;width:127px;height:66px;}
-#zhallb{top:469px;left:214px;width:44px;height:66px;}
+#zhallb{top:469px;left:214px;width:44px;height:66px;}";
+$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+$css = str_replace(': ', ':', $css);
+$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+echo($css);
