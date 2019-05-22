@@ -55,7 +55,7 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.php?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
 		<script type="text/javascript">
 		    $(document).ready(function() {
                 ajaxbose('.$bose.');
@@ -116,7 +116,7 @@ if ($home) {
             </a>
         </div>
         <div class="fix z1" style="top:5px;left:5px;">
-            <a href=\'javascript:navigator_Go("'.$_SESSION['referer'].'");\'>
+            <a href=\'javascript:navigator_Go("floorplan.php");\'>
                 <img src="/images/close.png" width="72px" height="72px" alt="close">
             </a>
         </div>';
@@ -127,7 +127,10 @@ if ($home) {
             echo '
         <div class="fix blackmedia" >
 			<form method="GET" action="floorplan.bose.php">
-			    <input type="hidden" name="ip" value="'.$bose.'">';
+			    <input type="hidden" name="ip" value="'.$bose.'">
+			    <h4 id="source"></h4>
+			    <h4 id="artist"></h4>
+			    <span id="track"></span>';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
                  echo '
                 <h3>STANDBY</h3>';
