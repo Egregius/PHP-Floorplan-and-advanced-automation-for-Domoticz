@@ -126,7 +126,6 @@ if ($home) {
         if (isset($nowplaying['@attributes']['source'])) {
             echo '
         <div class="fix blackmedia" >
-			<form method="GET" action="floorplan.bose.php">
 			    <input type="hidden" name="ip" value="'.$bose.'">
 			    <div style="height:180px;"><img height="160px" width="auto" alt="Art" id="art"></div>
 			    <h4 id="source"></h4>
@@ -161,7 +160,6 @@ if ($home) {
                 <button type="submit" name="power" value="poweroff" class="btn b1">Power</button>';
             }
             echo '
-            </form>
         </div>';
         }
     }

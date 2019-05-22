@@ -299,7 +299,6 @@ function ajax(){
                                     else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\""+name+"\" alt=\"bose\"></a>";}
                                 }
                                 document.getElementById(name).innerHTML=html;
-
                                 if(value=="On"){$('#'+name).attr("src", "/images/bose_On.png");}
                                else if(value=="Off"){$('#'+name).attr("src", "/images/bose_Off.png");}
                             } catch {}
@@ -489,7 +488,7 @@ function ajaxbose($ip){
             var hours=date.getHours();
             var minutes="0"+date.getMinutes();
             var seconds="0"+date.getSeconds();
-            document.getElementById("clock").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+            document.getElementById("time").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
             let volume=parseInt(data["volume"]["actualvolume"], 10);
             if($('#currentvolume').text()!=volume){
                 var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
@@ -497,9 +496,9 @@ function ajaxbose($ip){
                 levels.forEach(function(level){
                     let newlevel=volume+level;
                     if(level==0){
-                        html+="<button type=\"submit\" name=\"volume\" value=\""+newlevel+"\" class=\"btn volume btna\" id=\"currentvolume\">"+newlevel+"</button>";
+                        html+="<button name=\"volume\" value=\""+newlevel+"\" class=\"btn volume btna\" id=\"currentvolume\" onclick=\"ajaxcontrolbose("+$ip+",\"volume\","+newlevel+")\">"+newlevel+"</button>";
                     }else{
-                        html+="<button type=\"submit\" name=\"volume\" value=\""+newlevel+"\" class=\"btn volume\">"+newlevel+"</button>";
+                        html+="<button name=\"volume\" value=\""+newlevel+"\" class=\"btn volume\" onclick=\"ajaxcontrolbose("+$ip+",\"volume\","+newlevel+")\">"+newlevel+"</button>";
                     }
                 });
                 document.getElementById("volume").innerHTML=html;
@@ -536,6 +535,17 @@ function ajaxcontrol(device,command,action){
     console.log(device,command,action);
     $.ajax({
         url: '/ajaxcontrol.php?device='+device+'&command='+command+'&action='+action,
+        dataType : 'json',
+        async: true,
+        success: function(data){
+            console.log(data);
+        }
+    })
+}
+function ajaxcontrolbose(ip,command,action){
+    console.log(ip,command,action);
+    $.ajax({
+        url: '/ajaxcontrol.php?bose='+ip+'&command='+command+'&action='+action,
         dataType : 'json',
         async: true,
         success: function(data){
