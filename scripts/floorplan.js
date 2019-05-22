@@ -264,7 +264,7 @@ function ajax(){
                                         html+='<br>'+hours+':'+minutes.substr(-2);
                                     }
                                     document.getElementById(name).innerHTML=html;
-                                }else if(name=="bureeltobi"||name=="poortrf"){
+                                }else if(name=="bureeltobi"){
                                     var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';

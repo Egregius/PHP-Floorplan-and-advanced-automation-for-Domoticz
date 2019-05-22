@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
+    store('Weg', 0);
     for ($k=1;$k<=60;$k++) {
         file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20off');
         if ($http_response_header[0]=='HTTP/1.1 200 OK') {

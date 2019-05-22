@@ -364,26 +364,18 @@ function handlerequest()
             storemode($_REQUEST['Naam'], 0);
         }
     } elseif (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
-        if (in_array($_REQUEST['Naam'], array('bureeltobi','Weg','slapen'))) {
+        if ($_REQUEST['Naam']=='bureeltobi') {
             if (!isset($_REQUEST['confirm'])) {
-                switch($_REQUEST['Naam']){
-                case 'weg':$txtoff='Thuiss';$txton='Wegs';
-                    break;
-                case 'slapen':$txtoff='Wakkers';$txton='Slapens';
-                    break;
-                case 'bureeltobi':$txtoff='Uit';$txton='Aan';
-                    break;
-                }
                     echo '<body><div id="message" class="fix confirm">
 				<form method="post">
 					<input type="hidden" name="Actie" value="On">
-					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
-					<input type="submit" name="confirm" value="'.$txton.'" class="btn huge2">
+					<input type="hidden" name="Naam" value="bureeltobi">
+					<input type="submit" name="confirm" value="Aan" class="btn huge2">
 				</form>
 				<form method="post">
 					<input type="hidden" name="Actie" value="Off">
-					<input type="hidden" name="Naam" value="'.$_REQUEST['Naam'].'">
-					<input type="submit" name="confirm" value="'.$txtoff.'" class="btn huge2">
+					<input type="hidden" name="Naam" value="bureeltobu">
+					<input type="submit" name="confirm" value="Uit" class="btn huge2">
 				</form>
 			</div>
 			</body>
@@ -417,7 +409,6 @@ function handlerequest()
     } elseif (isset($_REQUEST['Weg'])) {
         if (isset($_REQUEST['Action'])) {
             store('Weg', $_REQUEST['Action']);
-
             if ($_REQUEST['Action']==0) {
                 $db->query("UPDATE devices set t='1' WHERE n='heating';");
                 if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
