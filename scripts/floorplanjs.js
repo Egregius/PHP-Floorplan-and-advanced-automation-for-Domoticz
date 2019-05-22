@@ -496,9 +496,9 @@ function ajaxbose($ip){
                 levels.forEach(function(level){
                     let newlevel=volume+level;
                     if(level==0){
-                        html+="<button name=\"volume\" value=\""+newlevel+"\" class=\"btn volume btna\" id=\"currentvolume\" onclick=\"ajaxcontrolbose("+$ip+",\"volume\","+newlevel+")\">"+newlevel+"</button>";
+                        html+='<button name="volume" value="'+newlevel+'" class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                     }else{
-                        html+="<button name=\"volume\" value=\""+newlevel+"\" class=\"btn volume\" onclick=\"ajaxcontrolbose("+$ip+",\"volume\","+newlevel+")\">"+newlevel+"</button>";
+                        html+='<button name="volume" value="'+newlevel+'" class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                     }
                 });
                 document.getElementById("volume").innerHTML=html;
