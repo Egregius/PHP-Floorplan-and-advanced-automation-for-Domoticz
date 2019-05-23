@@ -191,13 +191,13 @@ function ajax(){
                                 var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
                                 var douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
                                 if(value>0){
-                                    html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" Û</td>";
+                                    html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" &#8364;</td>";
                                     document.getElementById("trdgas").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
                                 }
                                 if(mode>0){
-                                    html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" Û</td>";
+                                    html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" &#8364;</td>";
                                     document.getElementById("trdwater").innerHTML=html;
                                 }else{
                                     document.getElementById("trdgas").innerHTML="";
@@ -561,8 +561,8 @@ function floorplan(){
     html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
     html+='<div class="fix Weg" id="Weg"></div>';
     html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
-    html+='<div class="fix z1 i48" id="IN1"></div>';
-    html+='<div class="fix z1 i48" id="IN2"></div>';
+    html+='<div class="fix z1 i48" id="regenputleeg"></div>';
+    html+='<div class="fix z1 i48" id="regenputvol"></div>';
     html+='<div class="fix z1 i48" id="kristal"></div>';
     html+='<div class="fix z1 i48" id="bureel"></div>';
     html+='<div class="fix z1 i48" id="inkom"></div>';

@@ -102,8 +102,8 @@ td{text-align:right;font-size:1.1em;}
 #tuin{top:66px;left:16px;height:48px;width:auto;}
 #zolder{top:690px;left:210px;height:48px;width:48px;}
 #wc{top:11px;left:412px;height:28px;width:auto;}
-#IN1{top:800px;left:90px;height:28px;width:auto;}
-#IN2{top:800px;left:120px;height:28px;width:auto;}
+#regenputleeg{top:800px;left:90px;height:28px;width:auto;}
+#regenputvol{top:800px;left:120px;height:28px;width:auto;}
 #bureeltobi{top:798px;left:375px;height:28px;width:auto;}
 #tvtobi{top:798px;left:152px;height:28px;width:auto;}
 #bureeltobikwh{top:811px;left:420px;text-align:left;min-width:60px;}
