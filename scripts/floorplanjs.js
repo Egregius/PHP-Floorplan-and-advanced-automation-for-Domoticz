@@ -303,7 +303,7 @@ function ajax(){
                             } catch {}
                         }else if(type=="dimmer"){
                             try{
-                                if(value==0){
+                                if(value==0||value=="Off"){
                                     $('#img'+name).attr("src", "/images/light_Off.png");
                                     document.getElementById("level"+name).innerHTML="";
                                 }else{
