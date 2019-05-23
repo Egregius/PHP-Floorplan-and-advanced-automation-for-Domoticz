@@ -241,17 +241,19 @@ function ajax(){
                             } catch{}
                         }else if(name=="kWh_bureeltobi"){
                             try{
+
                                 elem=value.split(";");
-                                item=parseFloat(Math.round((elem[0]/100)*100)/100).toFixed(0);
+                                item=parseInt(Math.round(elem[0]));
+                                console.log(item);
                                 if(item>0)html=item+" W"
-                                else html="";
+                                else html=" W";
                                 document.getElementById("bureeltobikwh").innerHTML=html;
-                                if(item>700)document.getElementById("bureeltobikwh").style.color="#FF0000";
-                                else if(item>600)document.getElementById("bureeltobikwh").style.color="#FF4400";
-                                else if(item>500)document.getElementById("bureeltobikwh").style.color="#FF8800";
-                                else if(item>400)document.getElementById("bureeltobikwh").style.color="#FFAA00";
-                                else if(item>300)document.getElementById("bureeltobikwh").style.color="#FFCC00";
-                                else if(item>200)document.getElementById("bureeltobikwh").style.color="#FFFF00";
+                                if(item>600)document.getElementById("bureeltobikwh").style.color="#FF0000";
+                                else if(item>500)document.getElementById("bureeltobikwh").style.color="#FF4400";
+                                else if(item>400)document.getElementById("bureeltobikwh").style.color="#FF8800";
+                                else if(item>300)document.getElementById("bureeltobikwh").style.color="#FFAA00";
+                                else if(item>200)document.getElementById("bureeltobikwh").style.color="#FFCC00";
+                                else if(item>100)document.getElementById("bureeltobikwh").style.color="#FFFF00";
                             } catch{}
                         }else if(name=="gcal"){
                             try{
@@ -287,7 +289,6 @@ function ajax(){
                         }else if(type=="bose"){
                             try{
                                 if(name=="bose105"){
-                                    console.log(name+value+mode);
                                     if(mode=="Online"){
                                         var html="Online";
                                         if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
