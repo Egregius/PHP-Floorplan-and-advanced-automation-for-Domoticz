@@ -333,6 +333,7 @@ function handlerequest()
 </html>';
         exit;
     } elseif (isset($_REQUEST['dimmer'])) {
+        if (!isset($d)) $d=fetchdata();
         if (isset($_REQUEST['luifelauto'])) {
             storemode('dimactionluifel', 1);
         } elseif (isset($_REQUEST['dimlevelon_x'])) {
