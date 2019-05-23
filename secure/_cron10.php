@@ -138,7 +138,7 @@ if (ping($lgtvip)) {
             ) {
                 sw('lgtv', 'Off', true, 'LG TV Off _cron5');
             }
-            /*if ($d['denon']['s']!='Off'
+            if ($d['denon']['s']!='Off'
                 &&$d['denon']['m']=='TV'
                 &&past('lgtv')>120
                 &&past('denon')>300
@@ -150,7 +150,7 @@ if (ping($lgtvip)) {
                 &&past('nvidia')>120
             ) {
                 sw('nvidia', 'Off', true);
-            }*/
+            }
             if ($d['kristal']['s']!='Off'
                 &&past('lgtv')>120
                 &&past('kristal')>120

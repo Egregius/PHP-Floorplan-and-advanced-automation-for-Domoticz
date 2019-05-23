@@ -147,11 +147,11 @@ td{text-align:right;font-size:1.1em;}
 
 /* Media */
 #denon{top:77px;left:87px;}
-#tv{top:70px;left:160px;}
-#lgtv{top:70px;left:204px;}
-#nvidia{top:70px;left:240px;}
+#tv{top:70px;left:168px;}
+#lgtv{top:70px;left:168px;}
+#nvidia{top:70px;left:219px;}
 #bosesoundlink{top:70px;left:280px;height:48px;width:auto;}
-#nas{top:70px;left:300px;}
+#nas{top:70px;left:280px;}
 
 /* Deuren */
 .red{background:rgba(255,0,0,1);}

@@ -688,7 +688,6 @@ function floorplanmedia(){
     html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
     html+='<div class="fix kristal z1 i48" id="kristal"></div>';
     html+='<div class="fix lgtv z1 i48" id="lgtv"></div>';
-    html+='<div class="fix tv z1 i48" id="tv"></div>';
     html+='<div class="fix yellow" id="Rbureel"></div>';
     html+='<div class="fix yellow" id="RkeukenL"></div>';
     html+='<div class="fix yellow" id="RkeukenR"></div>';
