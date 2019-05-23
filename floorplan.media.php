@@ -14,43 +14,8 @@ require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
+    createheader('floorplanmedia');
     $ctx=stream_context_create(array('http'=>array('timeout'=>2)));
-    echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-		<title>Media</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
-	} elseif ($udevice=='iPad') {
-	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-	}
-	echo '
-		<link rel="icon" type="image/png" href="images/media.png">
-		<link rel="shortcut icon" href="images/media.png">
-		<link rel="apple-touch-startup-image" href="images/media.png">
-		<link rel="apple-touch-icon" href="images/media.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=5">
-		<style type="text/css">
-			.btn{height:64px;}
-			.input{width:78px;}
-		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplan.js?v='.$floorplanjs.'"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                floorplanmedia();
-                ajax();
-                setInterval(ajax, '.($local===true?'300':'1500').');
-            });
-        </script>
-	</head>';
 	handlerequest();
     if (isset($_POST['Naam'])&&!isset($_POST['dimmer'])) {
         if ($_POST['Naam']=='lgtv') {
@@ -312,11 +277,6 @@ if ($home) {
 	<div class="fix z1" id="denon">
 			<input type="image" src="/images/denon_Off.png" id="denon">
 	</div>';
-    }
-    if ($d['tv']['s']=='On') {
-        schakelaar('lgtv');
-    } else {
-        schakelaar('tv');
     }
     if (past('lgtv')<$eendag) {
         echo '

@@ -67,14 +67,16 @@ function ajax(){
                                 document.getElementById("maxtemp").innerHTML=mode.toString().replace(/[.]/, ",");
                             } catch {}
                         }else if(name=="civil_twilight"){
-                            date=new Date(value*1000);
-                            hours=date.getHours();
-                            minutes="0"+date.getMinutes();
-                            document.getElementById("zonop").innerHTML=' '+hours+':'+minutes.substr(-2);
-                            date=new Date(mode*1000);
-                            hours=date.getHours();
-                            minutes="0"+date.getMinutes();
-                            document.getElementById("zononder").innerHTML=' '+hours+':'+minutes.substr(-2);
+                            try {
+                                date=new Date(value*1000);
+                                hours=date.getHours();
+                                minutes="0"+date.getMinutes();
+                                document.getElementById("zonop").innerHTML=' '+hours+':'+minutes.substr(-2);
+                                date=new Date(mode*1000);
+                                hours=date.getHours();
+                                minutes="0"+date.getMinutes();
+                                document.getElementById("zononder").innerHTML=' '+hours+':'+minutes.substr(-2);
+                            } catch{}
                         }else if(name=="wind"){
                             try{
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
@@ -685,6 +687,8 @@ function floorplanmedia(){
     html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
     html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
     html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+    html+='<div class="fix lgtv z1 i48" id="lgtv"></div>';
+    html+='<div class="fix tv z1 i48" id="tv"></div>';
     html+='<div class="fix yellow" id="Rbureel"></div>';
     html+='<div class="fix yellow" id="RkeukenL"></div>';
     html+='<div class="fix yellow" id="RkeukenR"></div>';
