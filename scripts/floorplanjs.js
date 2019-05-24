@@ -521,7 +521,7 @@ function ajaxbose($ip){
                     document.getElementById("bass").innerHTML=html;
                 }
                 if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-                    document.getElementById("source").innerHTML="Spotify";
+                    if(document.getElementById("source").innerHTML!=html)document.getElementById("source").innerHTML="Spotify";
                     document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
                     document.getElementById("track").innerHTML=data["nowplaying"]["track"];
                 }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
@@ -542,7 +542,7 @@ function ajaxbose($ip){
                 html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'5\')"/>Love ballads</button>';
                 html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'6\')"/>A mix</button>';
                 html+='<br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')"/>Power Off</button>';
-                document.getElementById("power").innerHTML=html;
+                if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
             }else{
                 document.getElementById("source").innerHTML="";
                 document.getElementById("artist").innerHTML="";
