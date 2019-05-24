@@ -56,6 +56,29 @@ if ($d['auto']['s']=='On') {
                 );
             }
         }
+            if ($d['living_temp']['s']>22
+        &&$d['brander']['s']=='On'
+    ) {
+        alert(
+            'livingtemp',
+            'Te warm in living, '.$living_temp.
+            ' °C. Controleer verwarming',
+            3600,
+            false
+        );
+    }
+    if (TIME>strtotime('16:00')) {
+        if ($d['raamalex']['s']=='Open'
+            &&$d['alex_temp']['s']<14
+        ) {
+            alert(
+                'raamalex',
+                'Raam Alex dicht doen, '.$alex_temp.' °C.',
+                1800,
+                false
+            );
+        }
+    }
     }
     if ($d['Weg']['s']<=1) {//Thuis of slapen
 
