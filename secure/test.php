@@ -15,6 +15,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
+phpinfo();
 echo '
     <style>
         .fontred{color:#FF0000;}
