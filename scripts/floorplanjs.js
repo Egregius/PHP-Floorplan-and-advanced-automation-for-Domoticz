@@ -118,34 +118,36 @@ function ajax(){
                                 else if(mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
                             } catch {}
                         }else if(name=="zon"){
-                            //try{
-                                    document.getElementById("zon").innerHTML=value+" W";
-                                    if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
-                                    else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
-                                    else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
-                                    else if(d['zon']['s']>2400)document.getElementById("zon").style.color="#99FF00";
-                                    else if(d['zon']['s']>2100)document.getElementById("zon").style.color="#CCFF00";
-                                    else if(d['zon']['s']>1800)document.getElementById("zon").style.color="#EEFF00";
-                                    else if(d['zon']['s']>1500)document.getElementById("zon").style.color="#FFFF33";
-                                    else if(d['zon']['s']>1200)document.getElementById("zon").style.color="#FFFF66";
-                                    else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
-                                    else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
-                                    else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
+                            try{
+                                document.getElementById("zon").innerHTML=value+" W";
+                                if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
+                                else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
+                                else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
+                                else if(d['zon']['s']>2400)document.getElementById("zon").style.color="#99FF00";
+                                else if(d['zon']['s']>2100)document.getElementById("zon").style.color="#CCFF00";
+                                else if(d['zon']['s']>1800)document.getElementById("zon").style.color="#EEFF00";
+                                else if(d['zon']['s']>1500)document.getElementById("zon").style.color="#FFFF33";
+                                else if(d['zon']['s']>1200)document.getElementById("zon").style.color="#FFFF66";
+                                else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
+                                else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
+                                else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
+                            } catch {}
                         }else if(name=="zonvandaag"){
-                                    zonvandaag=parseFloat(Math.round(value*10)/10).toFixed(1);
-                                    document.getElementById("zonvandaag").innerHTML=zonvandaag.toString().replace(/[.]/, ",")+" kWh";
-                                    if(d['zonvandaag']['m']>120)document.getElementById("zonvandaag").style.color="#00FF00";
-                                    else if(d['zonvandaag']['m']>110)document.getElementById("zonvandaag").style.color="#33FF00";
-                                    else if(d['zonvandaag']['m']>100)document.getElementById("zonvandaag").style.color="#66FF00";
-                                    else if(d['zonvandaag']['m']>90)document.getElementById("zonvandaag").style.color="#99FF00";
-                                    else if(d['zonvandaag']['m']>80)document.getElementById("zonvandaag").style.color="#CCFF00";
-                                    else if(d['zonvandaag']['m']>70)document.getElementById("zonvandaag").style.color="#EEFF00";
-                                    else if(d['zonvandaag']['m']>60)document.getElementById("zonvandaag").style.color="#FFFF33";
-                                    else if(d['zonvandaag']['m']>50)document.getElementById("zonvandaag").style.color="#FFFF66";
-                                    else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
-                                    else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
-                                    else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
-                            //} catch {}
+                            try{
+                                zonvandaag=parseFloat(Math.round(value*10)/10).toFixed(1);
+                                document.getElementById("zonvandaag").innerHTML=zonvandaag.toString().replace(/[.]/, ",")+" kWh";
+                                if(d['zonvandaag']['m']>120)document.getElementById("zonvandaag").style.color="#00FF00";
+                                else if(d['zonvandaag']['m']>110)document.getElementById("zonvandaag").style.color="#33FF00";
+                                else if(d['zonvandaag']['m']>100)document.getElementById("zonvandaag").style.color="#66FF00";
+                                else if(d['zonvandaag']['m']>90)document.getElementById("zonvandaag").style.color="#99FF00";
+                                else if(d['zonvandaag']['m']>80)document.getElementById("zonvandaag").style.color="#CCFF00";
+                                else if(d['zonvandaag']['m']>70)document.getElementById("zonvandaag").style.color="#EEFF00";
+                                else if(d['zonvandaag']['m']>60)document.getElementById("zonvandaag").style.color="#FFFF33";
+                                else if(d['zonvandaag']['m']>50)document.getElementById("zonvandaag").style.color="#FFFF66";
+                                else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
+                                else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
+                                else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
+                            } catch {}
                         }else if(name=="gasvandaag"){
                             try{
                                 if(value>0){
@@ -246,7 +248,6 @@ function ajax(){
 
                                 elem=value.split(";");
                                 item=parseInt(Math.round(elem[0]));
-                                console.log(item);
                                 if(item>0)html=item+" W"
                                 else html="";
                                 document.getElementById("bureeltobikwh").innerHTML=html;
