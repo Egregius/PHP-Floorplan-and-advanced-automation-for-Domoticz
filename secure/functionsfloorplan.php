@@ -244,6 +244,8 @@ function createheader($page,$ajax=200,$ajaxremote=2000)
 function handlerequest()
 {
     global $db,$d,$user;
+
+/*--------------------- OUDE HANDLE ---------------------------------------------------*/
     if (isset($_REQUEST['setdimmer'])) {
         if (!isset($d)) $d=fetchdata();
         $name=$_REQUEST['setdimmer'];

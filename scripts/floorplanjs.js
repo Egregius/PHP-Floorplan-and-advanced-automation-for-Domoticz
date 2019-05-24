@@ -615,6 +615,7 @@ function floorplan(){
     html+='<div class="fix" id="raamtobi"></div>';
     html+='<div class="fix" id="raamalex"></div>';
     html+='<div class="fix" id="raamkamer"></div>';
+    html+='<div class="fix" id="raamhall"></div>';
     html+='<div class="fix" id="deurbadkamer"></div>';
     html+='<div class="fix" id="deurinkom"></div>';
     html+='<div class="fix" id="deurgarage"></div>';
@@ -653,6 +654,7 @@ function floorplanheating(){
     html+='<div class="fix" id="raamtobi"></div>';
     html+='<div class="fix" id="raamalex"></div>';
     html+='<div class="fix" id="raamkamer"></div>';
+    html+='<div class="fix" id="raamhall"></div>';
     html+='<div class="fix" id="deurbadkamer"></div>';
     html+='<div class="fix" id="deurinkom"></div>';
     html+='<div class="fix" id="deurgarage"></div>';
