@@ -738,6 +738,6 @@ $context["database"], "name", [], "any", false, false, false, 223)]);
 
     public function getSourceContext()
     {
-        return new Source("", "server/databases/index.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/server/databases/index.twig");
+        return new Source("", "server/databases/index.twig", "/var/www/html/secure/phpMyAdmin/templates/server/databases/index.twig");
     }
 }

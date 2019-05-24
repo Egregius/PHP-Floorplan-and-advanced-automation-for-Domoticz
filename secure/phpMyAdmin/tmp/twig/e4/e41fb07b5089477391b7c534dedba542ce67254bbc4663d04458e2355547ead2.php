@@ -339,6 +339,6 @@ $context["version"]) && is_array($__internal_887a873a4dc3cf8bd4f99c487b4c7727999
 
     public function getSourceContext()
     {
-        return new Source("", "table/tracking/main.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/table/tracking/main.twig");
+        return new Source("", "table/tracking/main.twig", "/var/www/html/secure/phpMyAdmin/templates/table/tracking/main.twig");
     }
 }

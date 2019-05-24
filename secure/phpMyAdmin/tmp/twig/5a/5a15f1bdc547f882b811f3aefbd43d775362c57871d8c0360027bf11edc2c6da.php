@@ -104,6 +104,6 @@ class __TwigTemplate_f474a933b1e20723f52bdaaa8a2c2c8cb9a9258ef9c471ae72a826988cf
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_format.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/export/options_format.twig");
+        return new Source("", "display/export/options_format.twig", "/var/www/html/secure/phpMyAdmin/templates/display/export/options_format.twig");
     }
 }

@@ -106,6 +106,6 @@ class __TwigTemplate_69773a4a217bd75534af42cbbdcb988a543cbef67f0a77e16ac012b80d0
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_output_compression.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/export/options_output_compression.twig");
+        return new Source("", "display/export/options_output_compression.twig", "/var/www/html/secure/phpMyAdmin/templates/display/export/options_output_compression.twig");
     }
 }

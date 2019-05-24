@@ -62,6 +62,6 @@ class __TwigTemplate_bcee1f8f0fbaa3f0bbb83171bc57b37731599dba3eb9dc491b309e0c668
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/format_dropdown.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/export/format_dropdown.twig");
+        return new Source("", "display/export/format_dropdown.twig", "/var/www/html/secure/phpMyAdmin/templates/display/export/format_dropdown.twig");
     }
 }

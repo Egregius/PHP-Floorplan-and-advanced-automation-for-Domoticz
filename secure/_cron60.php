@@ -11,7 +11,18 @@
  **/
 //lg('               __CRON60__');
 $user='cron60';
-
+if ($d['auto']['s']=='On') {
+    if ($d['Weg']['s']==0){//Thuis
+    }
+    if ($d['Weg']['s']<=1) {//Thuis of slapen
+    }
+    if ($d['Weg']['s']==1) {//Slapen
+    }
+    if ($d['Weg']['s']>=1) {//Slapen of weg
+    }
+    if ($d['Weg']['s']==2) {//Weg
+    }
+}
 /*--------------------- OUDE CRON ---------------------------------------------------*/
 $items=array('eettafel','zithoek','tobi','kamer','alex');
 foreach ($items as $item) {

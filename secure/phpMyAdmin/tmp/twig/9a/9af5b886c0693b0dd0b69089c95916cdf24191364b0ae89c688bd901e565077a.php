@@ -131,6 +131,6 @@ class __TwigTemplate_1c71d1acfe543eb77c2b9ee706f94fa9177718f61bc037640c411cefbc7
 
     public function getSourceContext()
     {
-        return new Source("", "export/alias_add.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/export/alias_add.twig");
+        return new Source("", "export/alias_add.twig", "/var/www/html/secure/phpMyAdmin/templates/export/alias_add.twig");
     }
 }

@@ -76,6 +76,6 @@ class __TwigTemplate_63ee7f5f731c05d021ec961eea82d1c844377e1896c5d9c4c5d46278dd4
 
     public function getSourceContext()
     {
-        return new Source("", "export/alias_item.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/export/alias_item.twig");
+        return new Source("", "export/alias_item.twig", "/var/www/html/secure/phpMyAdmin/templates/export/alias_item.twig");
     }
 }

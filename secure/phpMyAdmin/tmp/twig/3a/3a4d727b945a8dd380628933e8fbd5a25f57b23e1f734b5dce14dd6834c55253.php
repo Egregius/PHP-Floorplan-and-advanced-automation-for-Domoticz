@@ -78,6 +78,6 @@ class __TwigTemplate_b393993d0ba21128e1bda6ed16a9bc564c6a68ca2640473e06d8d679b9f
 
     public function getSourceContext()
     {
-        return new Source("", "server/privileges/add_user_fieldset.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/server/privileges/add_user_fieldset.twig");
+        return new Source("", "server/privileges/add_user_fieldset.twig", "/var/www/html/secure/phpMyAdmin/templates/server/privileges/add_user_fieldset.twig");
     }
 }

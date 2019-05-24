@@ -211,6 +211,6 @@ class __TwigTemplate_b2144a32cbae2fd9e145256d470a07016bb4f9c1978d0e2c744ab7a37ad
 
     public function getSourceContext()
     {
-        return new Source("", "create_tracking_version.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/create_tracking_version.twig");
+        return new Source("", "create_tracking_version.twig", "/var/www/html/secure/phpMyAdmin/templates/create_tracking_version.twig");
     }
 }

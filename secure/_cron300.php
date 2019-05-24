@@ -102,7 +102,7 @@ if (!empty($objauth)) {
     $data=json_decode(curl_exec($chconsumption), true);
     if (!empty($data['consumptions'])) {
         $vv=$data['consumptions'][0]['consumption']/1000;
-        storemode('elec', round($vv, 1));
+        storemode('el', round($vv, 1));
         $zonvandaag=$data['consumptions'][0]['solar']/1000;
         store('zonvandaag', round($zonvandaag, 1));
         $gas=$d['gasvandaag']['s']/100;

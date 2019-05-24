@@ -64,6 +64,6 @@ class __TwigTemplate_31c6bb1a49efd26fd04ca57efd923f5123fdd2c26d26a2b6152f58e22a2
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/options_output_radio.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/export/options_output_radio.twig");
+        return new Source("", "display/export/options_output_radio.twig", "/var/www/html/secure/phpMyAdmin/templates/display/export/options_output_radio.twig");
     }
 }

@@ -88,6 +88,6 @@ class __TwigTemplate_337804fd08d764c9f2c23a554d4381faceff970435b9566e13482bf6b55
 
     public function getSourceContext()
     {
-        return new Source("", "display/export/method.twig", "/home/files/phpmyadmin/release/phpMyAdmin-5.0+snapshot/templates/display/export/method.twig");
+        return new Source("", "display/export/method.twig", "/var/www/html/secure/phpMyAdmin/templates/display/export/method.twig");
     }
 }
