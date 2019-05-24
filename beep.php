@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
+$d=fetchdata();
 if ($d['Weg']['s']>0) {
     die('Slapen of niet thuis');
 }

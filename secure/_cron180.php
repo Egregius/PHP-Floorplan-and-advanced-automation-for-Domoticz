@@ -10,8 +10,15 @@
  * @link     https://egregius.be
  **/
 //lg('               __CRON180__');
-if ($d['bose103']['s']=='On'&&(TIME>=strtotime('22:00')||TIME<=strtotime('6:00')) {
-    $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.103:8090/now_playing'))), true);
+if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
+    $nowplaying=json_decode(
+        json_encode(
+            simplexml_load_string(
+                file_get_contents('http://192.168.2.103:8090/now_playing')
+            )
+        ),
+        true
+    );
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
             if ($nowplaying['@attributes']['source']!='STANDBY') {
