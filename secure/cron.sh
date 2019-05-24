@@ -5,11 +5,6 @@ crontab -e
 # m h  dom mon dow   command
 * * * * * /usr/bin/nice -n20 /var/www/html/secure/cron.sh >/dev/null 2>&1
 * * * * * /usr/bin/nice -n20 /var/www/html/secure/cronsmappee.sh >/dev/null 2>&1
-*/2 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron120" >/dev/null 2>&1
-*/3 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron180" >/dev/null 2>&1
-*/4 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron240" >/dev/null 2>&1
-*/5 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron300" >/dev/null 2>&1
-0 * * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cron.php?cron3600" >/dev/null 2>&1
 0 0 * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cleandomoticzdb.php" >/dev/null 2>&1
 1 0 * * * /usr/bin/nice -n20 /var/www/_SQLBackup/sqldaily.sh >/dev/null 2>&1
 */5 * * * * /usr/bin/nice -n20 /var/www/html/secure/cleandisk.sh >/dev/null 2>&1
@@ -32,6 +27,9 @@ if [ "$STATUS" == "OK" ] ; then
     fi
     if [ $(($MINUTE%5)) -eq 0 ] ; then
         CRON="$CRON&cron300"
+    fi
+    if [ $MINUTE -eq 0 ] ; then
+        CRON="$CRON&cron3600"
     fi
 	echo OK
 	#0
