@@ -210,40 +210,40 @@ if ($d['Weg']['s']==0) {
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>180
-            && $d['elec']['s']<8000
+            && $d['el']['s']<8000
         ) {
             sw('heater2', 'On', false, 4);
             lg('222');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
             && past('heater2')>90
-            || $d['elec']['s']>8500
+            || $d['el']['s']>8500
         ) {
             sw('heater2', 'Off', false, 5);
         }
         if ($difliving<=$difheater3
             && $d['heater3']['s']!='On'
             && past('heater3')>90
-            && $d['elec']['s']<7000
+            && $d['el']['s']<7000
         ) {
             sw('heater3', 'On');
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
             && past('heater3')>30
-            || $d['elec']['s']>8000
+            || $d['el']['s']>8000
         ) {
             sw('heater3', 'Off', false, 6);
         }
         if ($difliving<=$difheater4
             && $d['heater4']['s']!='On'
             && past('heater4')>90
-            && $d['elec']['s']<6000
+            && $d['el']['s']<6000
         ) {
             sw('heater4', 'On', false, 7);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
             && past('heater4')>30
-            || $d['elec']['s']>7000
+            || $d['el']['s']>7000
         ) {
             sw('heater4', 'Off', false, 8);
         }
@@ -261,47 +261,47 @@ if ($d['Weg']['s']==0) {
         if ($difliving<$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>90
-            && $d['elec']['s']<8000
+            && $d['el']['s']<8000
         ) {
             sw('heater2', 'On', false, 10);
             lg('333');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>180
-            && $d['elec']['s']<8000
+            && $d['el']['s']<8000
         ) {
             sw('heater2', 'On', false, 11);
             lg('444');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
             && past('heater2')>90
-            || $d['elec']['s']>8500
+            || $d['el']['s']>8500
         ) {
             sw('heater2', 'Off', false, 12);
         }
         if ($difliving<$difheater3
             && $d['heater3']['s']!='On'
             && past('heater3')>90
-            && $d['elec']['s']<7000
+            && $d['el']['s']<7000
         ) {
             sw('heater3', 'On', false, 13);
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
             && past('heater3')>30
-            || $d['elec']['s']>8000
+            || $d['el']['s']>8000
         ) {
             sw('heater3', 'Off', false, 14);
         }
         if ($difliving<$difheater4
             && $d['heater4']['s']!='On'
             && past('heater4')>90
-            && $d['elec']['s']<6000
+            && $d['el']['s']<6000
         ) {
             sw('heater4', 'On', false, 15);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
             && past('heater4')>30
-            || $d['elec']['s']>7000
+            || $d['el']['s']>7000
         ) {
             sw('heater4', 'Off', false, 16);
         }
@@ -335,7 +335,7 @@ if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
             'heater | Living Set = '.$Setliving
             .' | Living temp = '.$living_temp
             .' | Diff living = '.round($difliving, 2)
-            .' | Verbruik = '.$d['elec']['s']
+            .' | Verbruik = '.$d['el']['s']
             .' | Jaarteller = '.round($d['jaarteller']['s'], 3)
             .' | kamers = '.$xxxkamers
         );
@@ -597,7 +597,7 @@ if ($difbadkamer<=-1) {
     if ($d['deurbadkamer']['s']=='Closed'
         && $d['badkamervuur1']['s']!='On'
         && past('badkamervuur1')>30
-        && $d['elec']['s']<7200
+        && $d['el']['s']<7200
     ) {
         sw('badkamervuur1', 'On');
     }
@@ -605,7 +605,7 @@ if ($difbadkamer<=-1) {
         && $d['badkamervuur2']['s']!='On'
         && past('badkamervuur2')>30
         && $d['lichtbadkamer']['s']>0
-        && $d['elec']['s']<6800
+        && $d['el']['s']<6800
     ) {
         sw('badkamervuur2', 'On');
     }
@@ -613,26 +613,26 @@ if ($difbadkamer<=-1) {
     if ($d['deurbadkamer']['s']=='Closed'
         && $d['badkamervuur1']['s']!='On'
         && past('badkamervuur1')>30
-        && $d['elec']['s']<7200
+        && $d['el']['s']<7200
     ) {
         sw('badkamervuur1', 'On');
     }
     if (($d['badkamervuur2']['s']!='Off'
         && past('badkamervuur2')>30)
-        || $d['elec']['s']>7500
+        || $d['el']['s']>7500
     ) {
         sw('badkamervuur2', 'Off');
     }
 } else {
     if (($d['badkamervuur2']['s']!='Off'
         && past('badkamervuur2')>30)
-        || $d['elec']['s']>7500
+        || $d['el']['s']>7500
     ) {
         sw('badkamervuur2', 'Off');
     }
     if (($d['badkamervuur1']['s']!='Off'
         && past('badkamervuur1')>30)
-        || $d['elec']['s']>8200
+        || $d['el']['s']>8200
     ) {
         sw('badkamervuur1', 'Off');
     }
@@ -649,7 +649,7 @@ $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 if ($difzolder<=-0.2
     && $d['zoldervuur']['s']!="On"
     && past('zoldervuur')>30
-    && $d['elec']['s']<4800
+    && $d['el']['s']<4800
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
@@ -658,13 +658,13 @@ if ($difzolder<=-0.2
         'On',
         false,
         'zoldervuur1 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<=-0.1
     && $d['zoldervuur']['s']!="On"
     && past('zoldervuur')>90
-    && $d['elec']['s']<4800
+    && $d['el']['s']<4800
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
@@ -673,13 +673,13 @@ if ($difzolder<=-0.2
         'On',
         false,
         'zoldervuur2 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<= 0
     && $d['zoldervuur']['s']!="On"
     && past('zoldervuur')>180
-    && $d['elec']['s']<4800
+    && $d['el']['s']<4800
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
@@ -688,49 +688,49 @@ if ($difzolder<=-0.2
         'On',
         false,
         'zoldervuur3 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>= 0
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>30)
     || ($d['zoldervuur']['s']!="Off"
-    && ($d['elec']['s']>6600 || $d['Weg']['s']>0))
+    && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
     sw(
         'zoldervuur',
         'Off',
         false,
         'zoldervuur4 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.3
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>120)
     || ($d['zoldervuur']['s']!="Off"
-    && ($d['elec']['s']>6600 || $d['Weg']['s']>0))
+    && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
     sw(
         'zoldervuur',
         'Off',
         false,
         'zoldervuur5 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.5
     && $d['zoldervuur']['s']!="Off"
     && past('zoldervuur')>180)
     || ($d['zoldervuur']['s']!="Off"
-    && ($d['elec']['s']>6600 || $d['Weg']['s']>0))
+    && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
     sw(
         'zoldervuur',
         'Off',
         false,
         'zoldervuur6 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['elec']['s']
+        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
     );
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 }
