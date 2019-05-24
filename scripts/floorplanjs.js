@@ -493,7 +493,7 @@ function ajaxbose($ip){
             var seconds="0"+date.getSeconds();
             document.getElementById("time").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
             try{
-            if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
+                if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
                     let volume=parseInt(data["volume"]["actualvolume"], 10);
                     var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
                     html="<br>";
@@ -505,11 +505,7 @@ function ajaxbose($ip){
                             html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
                         }
                     });
-                    if(document.getElementById("volume").innerHTML!=html){
-                        console.log(document.getElementById("volume").innerHTML);
-                        console.log(html);
-                        document.getElementById("volume").innerHTML=html;
-                    }
+                    if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
                     let bass=parseInt(data["bass"]["actualbass"], 10);
                     var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
                     html="<br>";
