@@ -533,7 +533,10 @@ function ajaxbose($ip){
                 }
                 html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
                 document.getElementById("art").innerHTML=html;
-                html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')"/>Power Off</button>';
+                html='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'prev\')"/>Prev</button>';
+                html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'next\')"/>Next</button>';
+                html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')"/>Trance, Techno and Retro</button>';
+                html+='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')"/>Power Off</button>';
                 document.getElementById("power").innerHTML=html;
             }else{
                 html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';

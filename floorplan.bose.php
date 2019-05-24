@@ -90,9 +90,7 @@ if ($home) {
             if ($nowplaying['@attributes']['source']=='STANDBY') {
 
             } else {
-                echo '
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'prev\')"/>Prev</button>
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'next\')"/>Next</button>';
+
                 $presets=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/presets"))), true);
                 foreach ($presets as $i) {
                             $x=1;
