@@ -18,5 +18,8 @@ if ($status!="Open") {
     if ($d['dampkap']['s']=='On') {
         sw('dampkap', 'Off');
     }
+    if ($d['bose105']['m']=='Online') {
+        sw('dampkap', 'Off');
+    }
     //telegram('Achterdeur toe om '.strftime("%k:%M:%S", TIME));
 }
