@@ -63,15 +63,6 @@ if ($home) {
             });
         </script>
 	</head>';
-/*
-<zone master="587A6260C5B2">
-<member ipaddress="192.168.2.101">587A6260C5B2</member>  Living
-<member ipaddress="192.168.2.102">304511BC3CA5</member>  Badkamer
-<member ipaddress="192.168.2.103">C4F312F65070</member>   Kamer
-<member ipaddress="192.168.2.104">C4F312DCE637</member>   Garage
-<member ipaddress="192.168.2.105">587A628BB5C0</member>  Buiten
-</zone>
-*/
     if (isset($_REQUEST['power'])) {
         if ($_REQUEST['power']=='poweron') {
             if ($bose==101) {

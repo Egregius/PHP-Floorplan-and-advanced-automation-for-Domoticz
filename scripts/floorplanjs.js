@@ -519,17 +519,18 @@ function ajaxbose($ip){
                 });
                 document.getElementById("bass").innerHTML=html;
             }
-            if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-                document.getElementById("source").innerHTML="Spotify";
-                document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
-                document.getElementById("track").innerHTML=data["nowplaying"]["track"];
-            }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
-                document.getElementById("source").innerHTML="Internet Radio";
-                document.getElementById("artist").innerHTML=data["nowplaying"]["track"];
-                document.getElementById("track").innerHTML=data["nowplaying"]["artist"];
-            }else{
-                document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
-            }
+            if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
+                if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
+                    document.getElementById("source").innerHTML="Spotify";
+                    document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
+                    document.getElementById("track").innerHTML=data["nowplaying"]["track"];
+                }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
+                    document.getElementById("source").innerHTML="Internet Radio";
+                    document.getElementById("artist").innerHTML=data["nowplaying"]["track"];
+                    document.getElementById("track").innerHTML=data["nowplaying"]["artist"];
+                }else{
+                    document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
+                }
             $('#art').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
         }
     })
