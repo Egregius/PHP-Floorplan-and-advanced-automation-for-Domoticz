@@ -521,9 +521,11 @@ function ajaxbose($ip){
                     document.getElementById("bass").innerHTML=html;
                 }
                 if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
+                    console.log(document.getElementById("source").innerHTML);
                     if(document.getElementById("source").innerHTML!=html)document.getElementById("source").innerHTML="Spotify";
                     document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
                     document.getElementById("track").innerHTML=data["nowplaying"]["track"];
+                    console.log(document.getElementById("source").innerHTML);
                 }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
                     document.getElementById("source").innerHTML="Internet Radio";
                     document.getElementById("artist").innerHTML=data["nowplaying"]["track"];
