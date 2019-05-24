@@ -535,15 +535,15 @@ function ajaxbose($ip){
                     html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
                     elem=document.getElementById("art");
                     if(elem.innerHTML!=html)elem.innerHTML=html;
-                    html='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'prev\')"/>Prev</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'next\')"/>Next</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')"/>Trance, Techno and Retro</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'2\')"/>Tiësto</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'3\')"/>MNM</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'4\')"/>Happy Music</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'5\')"/>Love ballads</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'6\')"/>A mix</button>';
-                    html+='<br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')"/>Power Off</button>';
+                    html='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'prev\')">Prev</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'next\')">Next</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')">Trance, Techno and Retro</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'2\')">Tiësto</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'3\')">MNM</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'4\')">Happy Music</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'5\')">Love ballads</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'6\')">A mix</button>';
+                    html+='<br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')">Power Off</button>';
                     if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
                 }else{
                     document.getElementById("source").innerHTML="";
@@ -552,8 +552,10 @@ function ajaxbose($ip){
                     document.getElementById("art").innerHTML="";
                     document.getElementById("volume").innerHTML="";
                     document.getElementById("bass").innerHTML="";
-                    html='<button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';
-                    if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
+                    html='<button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')">Power On</button>';
+                    if(document.getElementById("power").textContent!=html)document.getElementById("power").innerHTML=html;
+                    console.log("inner="+document.getElementById("power").innerHTML);
+                    console.log("html= "+html);
                 }
             } catch{}
         }
