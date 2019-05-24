@@ -14,11 +14,8 @@ require 'secure/authentication.php';
 $tail=new PHPTail(
     array(
     "Domoticz"=>"/var/log/domoticz.log",
-    "www access"=>"/var/log/apache2/access.log",
-    "www error"=>"/var/log/apache2/error.log",
-    "atreboot"=>"/var/log/atrebootlog.log",
+    "www error"=>"/var/log/apache2/phperror.log",
     "Fail2Ban"=>"/var/log/fail2ban.log",
-    "Clean Telegram"=>"/var/log/cleantelegram.log",
     )
 );
 if (isset($_GET['ajax'])) {
