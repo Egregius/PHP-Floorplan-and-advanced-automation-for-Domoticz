@@ -183,8 +183,75 @@ if ($d['auto']['s']=='On') {
 
     }
     if ($d['Weg']['s']==2) {//Weg
+        $uit=600;
+        $items=array('pirgarage','pirkeuken','pirliving','pirinkom','pirhall');
+        foreach ($items as $item) {
+            if ($d[$item]['s']!='Off') {
+                ud($item, 0, 'Off');
+                lg($item.' uitgeschakeld omdat we weg zijn');
+            }
+        }
+        $items=array(
+            'garage',
+            /*'denon',*/
+            'bureel',
+            'kristal',
+            'terras',
+            'tuin',
+            'voordeur',
+            'hall',
+            'inkom',
+            'keuken',
+            'werkblad1',
+            'wasbak',
+            'kookplaat',
+            'badkamervuur2',
+            'badkamervuur1',
+            'zolderg',
+            'Xlight'
+        );
+        foreach ($items as $item) {
+            if ($d[$item]['s']!='Off') {
+                if (past($item)>$uit) {
+                    sw($item, 'Off');
+                    lg($item.' uitgeschakeld omdat we weg zijn');
+                }
+            }
+        }
+        $items=array(
+            'eettafel',
+            'zithoek',
+            'kamer',
+            'tobi',
+            'alex',
+            'lichtbadkamer'
+        );
+        foreach ($items as $item) {
+            if ($d[$item]['s']>0) {
+                if (past($item)>$uit) {
+                    sl($item, 0);
+                    lg($item.' uitgeschakeld omdat we weg zijn');
+                }
+            }
+        }
+        $items=array(
+            'Rliving',
+            'Rbureel',
+            'RkeukenL',
+            'RkeukenR',
+            'RkamerL',
+            'RkamerR',
+            'Rtobi',
+            'Ralex'
+        );
+        foreach ($items as $i) {
+            if ($d[$i]['m']&&past($i)>21600) {
+                storemode($i, 0);
+            }
+        }
 
-    }
+
+        }
     //Altijd
     if (past('diepvries_temp')>7200) {
         alert(

@@ -14,7 +14,6 @@ $user='cron120';
 $prevwind=(float)$d['wind']['s'];
 $prevbuien=(float)$d['buiten_temp']['m'];
 $wind=$prevwind;
-
 $maxtemp=1;
 $mintemp=100;
 $maxrain=-1;
