@@ -115,7 +115,7 @@ td{text-align:right;font-size:1.1em;}
 #bose102{top:472px;left:344px;height:auto;width:50px;}
 #bose103{top:605px;left:280px;height:auto;width:50px;}
 #bose104{top:255px;left:100px;height:auto;width:50px;}
-#bose105{top:228px;left:14px;height:auto;width:auto;}
+#bose105{top:228px;left:8px;height:auto;width:auto;}
 #GroheRed{top:186px;left:342px;height:16px;width:auto;}
 #poortrf{top:305px;left:318px;height:60px;width:auto;}
 #diepvries{top:256px;left:175px;height:16px;width:auto;}
