@@ -12,6 +12,61 @@
 $user='cron60';
 if ($d['auto']['s']=='On') {
     if ($d['Weg']['s']==0){//Thuis
+        if ($d['pirkeuken']['s']=='Off') {
+            $uit=300;
+            if (past('pirkeuken')>$uit) {
+                $items=array('keuken','wasbak','kookplaat','werkblad1');
+                foreach ($items as $item) {
+                    if ($d[$item]['s']!='Off') {
+                        if (past($item)>$uit) {
+                            sw($item, 'Off');
+                        }
+                    }
+                }
+            }
+        }
+        if ($d['pirliving']['s']=='Off') {
+            $uit=7200;
+            if (past('pirliving')>$uit) {
+                $items=array('bureel');
+                foreach ($items as $item) {
+                    if ($d[$item]['s']!='Off') {
+                        if (past($item)>$uit) {
+                            sw($item, 'Off');
+                        }
+                    }
+                }
+                $items=array('eettafel','zithoek');
+                foreach ($items as $item) {
+                    if ($d[$item]['s']>0) {
+                        if (past($item)>$uit) {
+                            sl($item, 0);
+                        }
+                    }
+                }
+            }
+            $uit=10800;
+            if (past('pirliving')>$uit) {
+                $items=array('tvled','kristal','jbl');
+                foreach ($items as $item) {
+                    if ($d[$item]['s']!='Off') {
+                        if (past($item)>$uit) {
+                            sw($item, 'Off');
+                        }
+                    }
+                }
+            }
+            /*$uit=10800;
+            if (past('pirliving')>$uit) {
+                if ($d['denon']['s']=='On'||$d['lgtv']['s']=='On') {
+                    ud('miniliving4l', 1, 'On');
+                    lg('miniliving4l pressed omdat er al 3 uur geen beweging is');
+                }
+            }*/
+        }
+        if (past('Xlight')>300&&$d['Xlight']['s']!='Off') {
+            sw('Xlight', 'Off');
+        }
         $items=array(
             'living_temp',
             'kamer_temp',
@@ -177,7 +232,48 @@ if ($d['auto']['s']=='On') {
 
     }
     if ($d['Weg']['s']==1) {//Slapen
-
+        $uit=600;
+        $items=array('pirgarage','pirkeuken','pirliving','pirinkom');
+        foreach ($items as $item) {
+            if ($d[$item]['s']!='Off') {
+                ud($item, 0, 'Off');
+                lg($item.' uitgeschakeld omdat we slapen');
+            }
+        }
+        $items=array(
+            'hall',
+            'bureel',
+            /*'denon',*/
+            'kristal',
+            'garage',
+            'terras',
+            'tuin',
+            'voordeur',
+            'keuken',
+            'werkblad1',
+            'wasbak',
+            'kookplaat',
+            'zolderg',
+            'dampkap',
+            'Xlight'
+        );
+        foreach ($items as $item) {
+            if ($d[$item]['s']!='Off') {
+                if (past($item)>$uit) {
+                    sw($item, 'Off');
+                    lg($item.' uitgeschakeld omdat we slapen');
+                }
+            }
+        }
+        $items=array('eettafel','zithoek');
+        foreach ($items as $item) {
+            if ($d[$item]['s']>0) {
+                if (past($item)>$uit) {
+                    sl($item, 0);
+                    lg($item.' uitgeschakeld omdat we slapen');
+                }
+            }
+        }
     }
     if ($d['Weg']['s']>=1) {//Slapen of weg
 
@@ -255,13 +351,83 @@ if ($d['auto']['s']=='On') {
     //Altijd
     if (past('diepvries_temp')>7200) {
         alert(
-            'diepvriestemp',
-            'Diepvries temp not updated since '.
-            strftime("%k:%M:%S", $d['diepvries_temp']['t']),
-            7200
-        );
+                'diepvriestemp',
+                'Diepvries temp not updated since '.
+                strftime("%k:%M:%S", $d['diepvries_temp']['t']),
+                7200
+            );
+        }
+        if ($d['voordeur']['s']=='On'&&past('voordeur')>598) {
+        sw('voordeur', 'Off');
     }
-        $timefrom=TIME-86400;
+
+    if (past('deurbadkamer')>1200&&past('lichtbadkamer')>600) {
+        if ($d['lichtbadkamer']['s']>0) {
+            $new=round($d['lichtbadkamer']['s'] * 0.85, 0);
+            if ($new<15) {
+                $new=0;
+            }
+            sl('lichtbadkamer', $new);
+        }
+    }
+    $items=array('living_set','badkamer_set','kamer_set','tobi_set','alex_set');
+    foreach ($items as $i) {
+        if ($d[$i]['m']!=0&&past($i)>7200) {
+            storemode($i, 0);
+        }
+    }
+    $items=array(
+        'Rliving',
+        'Rbureel',
+        'RkeukenL',
+        'RkeukenR',
+        'RkamerL',
+        'RkamerR',
+        'Rtobi',
+        'Ralex'
+    );
+    foreach ($items as $i) {
+        if ($d[$i]['m']==1&&past($i)>21600) {
+            storemode($i, 0);
+        }
+    }
+        if ($d['auto']['s']!='On') {
+        if (past('auto')>10795) {
+            sw('auto', 'On');
+        }
+    }
+    if (past('Weg')>14400
+        && $d['Weg']['s']==0
+        && $d['Weg']['m']<TIME-14400
+    ) {
+        store('Weg', 1);
+        telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
+    } elseif (past('Weg')>36000
+        && $d['Weg']['s']==1
+        && $d['Weg']['m']<TIME-36000
+    ) {
+        store('Weg', 2);
+        telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
+    }
+
+    if (TIME<=strtotime('11:00')) {
+        if ($d['nas']['s']!='On') {
+            if (file_get_contents($urlnas)>0) {
+                shell_exec('./wakenas.sh');
+            }
+        }
+    }
+    if (TIME<=strtotime('0:02')) {
+        store('gasvandaag', 0, null, true);
+        store('watervandaag', 0, null, true);
+    } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
+        $items=array('RkamerL','RkamerR','Rtobi','Ralex');
+        foreach ($items as $i) {
+            storemode($i, 0);
+        }
+    }
+    //SMAPPEE
+    $timefrom=TIME-86400;
     $chauth = curl_init(
         'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
         $smappeeclient_id.'&client_secret='.
@@ -313,6 +479,10 @@ if ($d['auto']['s']=='On') {
         curl_close($chconsumption);
     }
 }
+
+
+
+
 /*--------------------- OUDE CRON ---------------------------------------------------*/
 $items=array('eettafel','zithoek','tobi','kamer','alex');
 foreach ($items as $item) {
