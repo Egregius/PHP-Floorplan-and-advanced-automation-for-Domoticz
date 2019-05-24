@@ -62,45 +62,7 @@ if ($home) {
                 setInterval( function() { ajaxbose('.$bose.'); }, 500 );
             });
         </script>
-	</head>';
-    if (isset($_REQUEST['power'])) {
-        if ($_REQUEST['power']=='poweron') {
-            if ($bose==101) {
-                bosekey("POWER", 0, $bose);
-                sw('bose101', 'On');
-            } elseif ($bose==102) {
-                bosezone(102);
-            } elseif ($bose==103) {
-                bosezone(103);
-            } elseif ($bose==104) {
-                bosezone(104);
-            } elseif ($bose==105) {
-                bosezone(105);
-            }
-        } else {
-            bosekey("POWER", 0, $bose);
-            sw('bose'.$bose, 'Off');
-            if ($bose==101) {
-                sw('bose102', 'Off');
-                sw('bose103', 'Off');
-                sw('bose104', 'Off');
-                sw('bose105', 'Off');
-            }
-        }
-    } elseif (isset($_REQUEST['prev'])) {
-        bosekey("PREV_TRACK", 0, $bose);
-    } elseif (isset($_REQUEST['next'])) {
-        bosekey("NEXT_TRACK", 0, $bose);
-    } elseif (isset($_REQUEST['preset'])) {
-        bosepreset($_REQUEST['preset'], $bose);
-    } elseif (isset($_REQUEST['volume'])) {
-        bosevolume($_REQUEST['volume'], $bose);
-    } elseif (isset($_REQUEST['bass'])) {
-        bosebass($_REQUEST['bass'], $bose);
-    }
-
-    $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-    echo '
+	</head>
     <body>
         <div class="fix" id="clock">
             <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time">
@@ -111,14 +73,13 @@ if ($home) {
                 <img src="/images/close.png" width="72px" height="72px" alt="close">
             </a>
         </div>';
-
     $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
             echo '
         <div class="fix blackmedia" >
 			    <input type="hidden" name="ip" value="'.$bose.'">
-			    <div style="height:180px;"><img height="160px" width="auto" alt="Art" id="art"></div>
+			    <div style="height:180px;" id="art"></div>
 			    <h4 id="source"></h4>
 			    <h4 id="artist"></h4>
 			    <span id="track"></span><br>

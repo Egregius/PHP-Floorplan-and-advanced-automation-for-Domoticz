@@ -531,7 +531,9 @@ function ajaxbose($ip){
                 }else{
                     document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
                 }
-            $('#art').attr("src", data["nowplaying"]["art"].toString().replace("http", "https"));
+                html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
+                document.getElementById("art").innerHTML=html;
+            }
         }
     })
 }
