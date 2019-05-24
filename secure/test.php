@@ -11,15 +11,9 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-error_reporting(E_ALL);
-ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
-    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-        $rainpast=$row['buien'];
-    }
-
+phpinfo();
 
 /*---------------------------*/
 echo '</pre>';
