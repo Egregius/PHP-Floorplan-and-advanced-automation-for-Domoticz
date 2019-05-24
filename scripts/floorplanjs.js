@@ -248,7 +248,7 @@ function ajax(){
                                 item=parseInt(Math.round(elem[0]));
                                 console.log(item);
                                 if(item>0)html=item+" W"
-                                else html=" W";
+                                else html="";
                                 document.getElementById("bureeltobikwh").innerHTML=html;
                                 if(item>600)document.getElementById("bureeltobikwh").style.color="#FF0000";
                                 else if(item>500)document.getElementById("bureeltobikwh").style.color="#FF4400";
