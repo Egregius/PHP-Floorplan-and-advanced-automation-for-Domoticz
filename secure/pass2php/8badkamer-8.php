@@ -12,7 +12,7 @@
 if ($status=='On') {
     sw('lichtbadkamer', 'Off');
     if ($d['auto']['s']=='On') {
-        if ((TIME>strtotime('5:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('10:00')-($d['auto']['m']==true?3600:0))&&$d['Weg']['s']==1) {
+        if (TIME>strtotime('5:00')&&TIME<strtotime('10:00')&&$d['Weg']['s']==1) {
             sw('hall', 'On');
             fliving();
         } elseif ($d['zon']['s']<20&&$d['Weg']['s']==0) {

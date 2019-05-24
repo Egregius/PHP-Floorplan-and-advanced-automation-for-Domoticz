@@ -22,7 +22,14 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
     if (!empty($nowplaying)) {
         if (isset($nowplaying['@attributes']['source'])) {
             if ($nowplaying['@attributes']['source']!='STANDBY') {
-                $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.103:8090/volume"))), true);
+                $volume=json_decode(
+                    json_encode(
+                        simplexml_load_string(
+                            file_get_contents("http://192.168.2.103:8090/volume")
+                        )
+                    ),
+                    true
+                );
                 $cv=$volume['actualvolume']-1;
                 if ($cv==0) {
                     bosekey("POWER", 0, 103);
