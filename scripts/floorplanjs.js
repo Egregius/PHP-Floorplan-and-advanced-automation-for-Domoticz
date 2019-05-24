@@ -497,13 +497,13 @@ function ajaxbose($ip){
                     let volume=parseInt(data["volume"]["actualvolume"], 10);
                     if($('#currentvolume').text()!=volume){
                         var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                        var html="<br><br>";
+                        html="<br>";
                         levels.forEach(function(level){
                             let newlevel=volume+level;
                             if(level==0){
-                                html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                                html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                             }else{
-                                html+='<button class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                                html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
                             }
                         });
                         document.getElementById("volume").innerHTML=html;
@@ -511,12 +511,12 @@ function ajaxbose($ip){
                     let bass=parseInt(data["bass"]["actualbass"], 10);
                     if($('#currentbass').text()!=bass){
                         var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
-                        var html="";
+                        html="<br>";
                         levels.forEach(function(level){
                             if(level==bass){
-                                html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
+                                html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')"/>'+level+'</button>';
                             }else{
-                                html+='<button class="btn volume " onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
+                                html+='<button class="btn volume " onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')"/>'+level+'</button>';
                             }
                         });
                         document.getElementById("bass").innerHTML=html;
@@ -537,12 +537,12 @@ function ajaxbose($ip){
                     if(elem.innerHTML!=html)elem.innerHTML=html;
                     html='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'prev\')">Prev</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'next\')">Next</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')">Trance, Techno and Retro</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'2\')">Tiësto</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'3\')">MNM</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'4\')">Happy Music</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'5\')">Love ballads</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'6\')">A mix</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'1\')">Trance, Techno and Retro</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'2\')">Tiësto</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'3\')">MNM</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'4\')">Happy Music</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'5\')">Love ballads</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'preset\',\'6\')">A mix</button>';
                     html+='<br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')">Power Off</button>';
                     if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
                 }else{
@@ -552,10 +552,12 @@ function ajaxbose($ip){
                     document.getElementById("art").innerHTML="";
                     document.getElementById("volume").innerHTML="";
                     document.getElementById("bass").innerHTML="";
-                    html='<button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')">Power On</button>';
-                    if(document.getElementById("power").textContent!=html)document.getElementById("power").innerHTML=html;
-                    console.log("inner="+document.getElementById("power").innerHTML);
-                    console.log("html= "+html);
+                    html='<button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Power On</button>';
+                    if(document.getElementById("power").textContent!=html){
+                        document.getElementById("power").innerHTML=html;
+                        console.log(document.getElementById("power").innerHTML);
+                        console.log(html);
+                    }
                 }
             } catch{}
         }
