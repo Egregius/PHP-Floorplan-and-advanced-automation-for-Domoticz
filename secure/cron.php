@@ -47,6 +47,14 @@ if (isset($_REQUEST['cron180'])) {
     include 'gcal/mirom.php';
     sleep(2);
 }
+if (isset($_REQUEST['cron240'])) {
+    $username='cron240';
+    include '_cron240.php';
+}
+if (isset($_REQUEST['cron300'])) {
+    $username='cron300';
+    include '_cron300.php';
+}
 if (isset($_REQUEST['cron3600'])) {
     $username='cron3600';
     include '_cron3600.php';

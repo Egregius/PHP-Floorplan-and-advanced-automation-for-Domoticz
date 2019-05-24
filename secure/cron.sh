@@ -19,26 +19,23 @@ DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.h
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then
     MINUTE=$(date +"%M")
-    MINUTE=2
     CRON=""
     echo $MINUTE
     if [ $(($MINUTE%2)) -eq 0 ] ; then
-        CRON="$CRON&CRON120"
-        echo "gedeeld door 2 $CRON"
+        CRON="$CRON&cron120"
     fi
     if [ $(($MINUTE%3)) -eq 0 ] ; then
-        echo "gedeeld door 3 $CRON"
+        CRON="$CRON&cron180"
     fi
     if [ $(($MINUTE%4)) -eq 0 ] ; then
-        echo "gedeeld door 4 $CRON"
+        CRON="$CRON&cron240"
     fi
     if [ $(($MINUTE%5)) -eq 0 ] ; then
-        echo "gedeeld door 5 $CRON"
+        CRON="$CRON&cron300"
     fi
-    exit
 	echo OK
 	#0
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?rolluiken&cron60&cron10&verwarming" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?rolluiken&cron60&cron10&verwarming$CRON" >/dev/null 2>&1 &
 	sleep 8.859
 	#10
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming" >/dev/null 2>&1 &
