@@ -84,23 +84,7 @@ if ($home) {
 			    <br>
 			    <br>
                 <div id="power"></div>
-        </div>';
-}
-
-
-function setShuffle()
-{
-    keyPress("SHUFFLE_ON");
-}
-function setNextTrack()
-{
-    keyPress("NEXT_TRACK");
-}
-function setStop()
-{
-    keyPress("STOP");
-}
-?>
-
+        </div>
     </body>
-</html>
+</html>';
+}
