@@ -52,7 +52,18 @@ if ($status=='On') {
                     }
                 }
             }
+            if ($d['Weg']['s']==1) {
+                $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+                if (!empty($nowplaying)) {
+                    if (isset($nowplaying['@attributes']['source'])) {
+                        if ($nowplaying['@attributes']['source']!='STANDBY') {
+                            bosekey("POWER", 0, 101);
+                            sw('bose101', 'Off', true);
+                        }
+                    }
+                }
+            }
         }
     }
-    resetsecurity();
 }
+resetsecurity();

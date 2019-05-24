@@ -212,7 +212,7 @@ function rgb($name,$hue,$level,$check=false)
 function resetsecurity()
 {
     global $d,$domoticzurl;
-    if ($d['sirene']['s']!='Group Off') {
+    if ($d['sirene']['s']!='Off') {
         sw('sirene', 'Off');
     }
     $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
