@@ -11,12 +11,18 @@
  **/
 if ($status=='On') {
     $item='RkamerR';
-    if ($d[$item]['s']<70) {
-        sl($item, 70);
-    } elseif ($d[$item]['s']<85) {
-        sl($item, 85);
-    } elseif ($d[$item]['s']<100) {
-        sl($item, 100);
+    if ($d['raamkamer']['s']=='Open') {
+        if ($d[$item]['s']<70) {
+            sl($item, 70);
+        } elseif ($d[$item]['s']<85) {
+            sl($item, 85);
+        } elseif ($d[$item]['s']<100) {
+            sl($item, 100);
+        }
+    } else {
+        if ($d[$item]['s']<100) {
+            sl($item, 100);
+        }
     }
     resetsecurity();
 }
