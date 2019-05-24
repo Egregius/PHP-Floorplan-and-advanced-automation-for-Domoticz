@@ -426,6 +426,66 @@ if ($d['auto']['s']=='On') {
             storemode($i, 0);
         }
     }
+    if ($d['lgtv']['s']=='Off') {
+        if (past('lgtv')>600) {
+            if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='OFF'&&past('denon')>600) {
+                sw('denon', 'Off');
+            }
+            if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
+                sw('nvidia', 'Off');
+            }
+            if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) {
+                sw('tv', 'Off');
+            }
+        }
+    }
+    /*
+    if ($d['zwembadfilter']['s']=='On') {
+        if (past('zwembadfilter')>10700
+            &&TIME>strtotime("16:00")
+            &&$d['zwembadwarmte']['s']=='Off'
+            &&$d['buiten_temp']['s']<27
+        ) {
+            sw('zwembadfilter','Off');
+        }
+    }else{
+        if (
+            (
+                    past('zwembadfilter')>10700
+                    &&    TIME>strtotime("13:00")
+                    &&    TIME<strtotime("16:00")
+                )
+                ||
+                (
+                    past('zwembadfilter')>10700
+                    &&    $d['buiten_temp']['s']>27
+                )
+            )sw('zwembadfilter','On');
+    }
+    if ($d['zwembadwarmte']['s']=='On') {
+        if (past('zwembadwarmte')>86398)sw('zwembadwarmte','Off');
+        if ($zwembadfilter=='Off')sw('zwembadfilter','On');
+    }*/
+    if ($d['poort']['s']=='Closed'
+        &&past('poort')>120
+        &&past('poortrf')>120
+        &&$d['poortrf']['s']=='On'
+    ) {
+        sw('poortrf', 'Off');
+    }
+    if ($d['auto']['m']) {
+        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
+            if ($d['jbl']['s']!='Off') {
+                sw('jbl', 'Off');
+            }
+            if ($d['bureel']['s']!='Off') {
+                sw('bureel', 'Off');
+            }
+            if ($d['kristal']['s']!='Off') {
+                sw('kristal', 'Off');
+            }
+        }
+    }
     //SMAPPEE
     $timefrom=TIME-86400;
     $chauth = curl_init(

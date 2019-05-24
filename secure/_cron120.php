@@ -218,84 +218,10 @@ checkport('192.168.2.15',80);
 checkport('192.168.2.224',80);
 checkport('192.168.2.9',8080);
 */
-if ($d['auto']['s']=='On') {
-    if (past('auto')>10795) {
-        sw('auto', 'On');
-    }
-}
-if (past('Weg')>14400
-    && $d['Weg']['s']==0
-    && $d['Weg']['m']<TIME-14400
-) {
-    store('Weg', 1);
-    telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
-} elseif (past('Weg')>36000
-    && $d['Weg']['s']==1
-    && $d['Weg']['m']<TIME-36000
-) {
-    store('Weg', 2);
-    telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
-}
 
-if (TIME<=strtotime('11:00')) {
-    if ($d['nas']['s']!='On') {
-        if (file_get_contents($urlnas)>0) {
-            shell_exec('./wakenas.sh');
-        }
-    }
-}
-if (TIME<=strtotime('0:02')) {
-    store('gasvandaag', 0, null, true);
-    store('watervandaag', 0, null, true);
-} elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
-    $items=array('RkamerL','RkamerR','Rtobi','Ralex');
-    foreach ($items as $i) {
-        storemode($i, 0);
-    }
-}
-/*
-if ($d['zwembadfilter']['s']=='On') {
-    if (past('zwembadfilter')>10700
-        &&TIME>strtotime("16:00")
-        &&$d['zwembadwarmte']['s']=='Off'
-        &&$d['buiten_temp']['s']<27
-    ) {
-        sw('zwembadfilter','Off');
-    }
-}else{
-    if (
-        (
-                past('zwembadfilter')>10700
-                &&    TIME>strtotime("13:00")
-                &&    TIME<strtotime("16:00")
-            )
-            ||
-            (
-                past('zwembadfilter')>10700
-                &&    $d['buiten_temp']['s']>27
-            )
-        )sw('zwembadfilter','On');
-}
-if ($d['zwembadwarmte']['s']=='On') {
-    if (past('zwembadwarmte')>86398)sw('zwembadwarmte','Off');
-    if ($zwembadfilter=='Off')sw('zwembadfilter','On');
-}*/
 if ($d['auto']['s']=='On') {
-    if ($d['lgtv']['s']=='Off') {
-        if (past('lgtv')>600) {
-            if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='OFF'&&past('denon')>600) {
-                sw('denon', 'Off');
-            }
-            if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
-                sw('nvidia', 'Off');
-            }
-            if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) {
-                sw('tv', 'Off');
-            }
-        }
-    }
     $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
@@ -429,25 +355,5 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         &&$d['luifel']['s']>0
     ) {
         sl('luifel', 0);
-    }
-    if ($d['poort']['s']=='Closed'
-        &&past('poort')>120
-        &&past('poortrf')>120
-        &&$d['poortrf']['s']=='On'
-    ) {
-        sw('poortrf', 'Off');
-    }
-    if ($d['auto']['m']) {
-        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
-            if ($d['jbl']['s']!='Off') {
-                sw('jbl', 'Off');
-            }
-            if ($d['bureel']['s']!='Off') {
-                sw('bureel', 'Off');
-            }
-            if ($d['kristal']['s']!='Off') {
-                sw('kristal', 'Off');
-            }
-        }
     }
 }

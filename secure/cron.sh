@@ -18,6 +18,9 @@ crontab -e
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then
+    MINUTE=date +"%M"
+    echo MINUTE
+    exit
 	echo OK
 	#0
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?rolluiken&cron60&cron10&verwarming" >/dev/null 2>&1 &
