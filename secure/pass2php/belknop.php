@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On'&&$d['auto']['s']&&past('belknop')>10) {
+/*if ($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>10) {
     //shell_exec('../ios.sh "Deurbel" > /dev/null 2>/dev/null &');
     shell_exec('../boseplayinfo.sh "Deurbel" > /dev/null 2>/dev/null &');
     if ($d['lgtv']['s']=='On') {
@@ -31,5 +31,7 @@ if ($status=='On'&&$d['auto']['s']&&past('belknop')>10) {
         rgb('Xlight', 360, 100);
     }
     telegram('Deurbel', true, 2);
+    sleep(2);
     sl('Xvol', 5);
-}
+}*/
+echo shell_exec('../boseplayinfo.sh "Deurbel" > /dev/null 2>/dev/null &');
