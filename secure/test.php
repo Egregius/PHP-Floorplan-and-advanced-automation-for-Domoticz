@@ -13,8 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-phpinfo();sdsd
-
+shell_exec('../boseplayinfo.sh "Deurbel" > /dev/null 2>/dev/null &');
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
