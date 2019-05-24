@@ -492,34 +492,34 @@ function ajaxbose($ip){
             var minutes="0"+date.getMinutes();
             var seconds="0"+date.getSeconds();
             document.getElementById("time").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-            let volume=parseInt(data["volume"]["actualvolume"], 10);
-            if($('#currentvolume').text()!=volume){
-                var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                var html="<br><br>";
-                levels.forEach(function(level){
-                    let newlevel=volume+level;
-                    if(level==0){
-                        html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
-                    }else{
-                        html+='<button class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
-                    }
-                });
-                document.getElementById("volume").innerHTML=html;
-            }
-            let bass=parseInt(data["bass"]["actualbass"], 10);
-            if($('#currentbass').text()!=bass){
-                var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
-                var html="";
-                levels.forEach(function(level){
-                    if(level==bass){
-                        html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
-                    }else{
-                        html+='<button class="btn volume " onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
-                    }
-                });
-                document.getElementById("bass").innerHTML=html;
-            }
             if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
+                let volume=parseInt(data["volume"]["actualvolume"], 10);
+                if($('#currentvolume').text()!=volume){
+                    var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                    var html="<br><br>";
+                    levels.forEach(function(level){
+                        let newlevel=volume+level;
+                        if(level==0){
+                            html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                        }else{
+                            html+='<button class="btn volume" onclick="ajaxcontrolbose(\''+$ip+'\',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
+                        }
+                    });
+                    document.getElementById("volume").innerHTML=html;
+                }
+                let bass=parseInt(data["bass"]["actualbass"], 10);
+                if($('#currentbass').text()!=bass){
+                    var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+                    var html="";
+                    levels.forEach(function(level){
+                        if(level==bass){
+                            html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
+                        }else{
+                            html+='<button class="btn volume " onclick="ajaxcontrolbose(\''+$ip+'\',\'bass\',\''+level+'\')"/>'+level+'</button>';
+                        }
+                    });
+                    document.getElementById("bass").innerHTML=html;
+                }
                 if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
                     document.getElementById("source").innerHTML="Spotify";
                     document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
@@ -533,6 +533,11 @@ function ajaxbose($ip){
                 }
                 html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
                 document.getElementById("art").innerHTML=html;
+                html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')"/>Power Off</button>';
+                document.getElementById("power").innerHTML=html;
+            }else{
+                html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';
+                document.getElementById("power").innerHTML=html;
             }
         }
     })

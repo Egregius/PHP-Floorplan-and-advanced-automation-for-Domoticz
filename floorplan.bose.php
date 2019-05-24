@@ -88,10 +88,7 @@ if ($home) {
 			    <br>
 			    <br>';
             if ($nowplaying['@attributes']['source']=='STANDBY') {
-                 echo '
-                <h3>STANDBY</h3>';
-                 echo '
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'On\')"/>Power On</button>';
+
             } else {
                 echo '
                 <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'skip\',\'prev\')"/>Prev</button>
@@ -111,10 +108,10 @@ if ($home) {
                 }
                 echo '
                 <br>
-                <br>
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'power\',\'Off\')"/>Power Off</button>';
+                <br>';
             }
             echo '
+                <div id="power"></div>
         </div>';
         }
     }
