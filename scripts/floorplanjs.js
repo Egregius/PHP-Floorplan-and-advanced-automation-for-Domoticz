@@ -521,20 +521,18 @@ function ajaxbose($ip){
                     document.getElementById("bass").innerHTML=html;
                 }
                 if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-                    console.log(document.getElementById("source").innerHTML);
-                    if(document.getElementById("source").innerHTML!=html)document.getElementById("source").innerHTML="Spotify";
-                    document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
-                    document.getElementById("track").innerHTML=data["nowplaying"]["track"];
-                    console.log(document.getElementById("source").innerHTML);
+                    if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
+                    if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
+                    if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
                 }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
-                    document.getElementById("source").innerHTML="Internet Radio";
-                    document.getElementById("artist").innerHTML=data["nowplaying"]["track"];
-                    document.getElementById("track").innerHTML=data["nowplaying"]["artist"];
+                    if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
+                    if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
+                    if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
                 }else{
                     document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
                 }
                 html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
-                document.getElementById("art").innerHTML=html;
+                if(document.getElementById("art").innerHTML!=html)document.getElementById("art").innerHTML=html;
                 html='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'prev\')"/>Prev</button>';
                 html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'next\')"/>Next</button>';
                 html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')"/>Trance, Techno and Retro</button>';
@@ -551,7 +549,7 @@ function ajaxbose($ip){
                 document.getElementById("track").innerHTML="";
                 document.getElementById("art").innerHTML=""
                 html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';
-                document.getElementById("power").innerHTML=html;
+                if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
             }
         }
     })
