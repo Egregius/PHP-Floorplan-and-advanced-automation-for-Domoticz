@@ -495,32 +495,32 @@ function ajaxbose($ip){
             try{
             if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
                     let volume=parseInt(data["volume"]["actualvolume"], 10);
-                    if($('#currentvolume').text()!=volume){
-                        var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                        html="<br>";
-                        levels.forEach(function(level){
-                            let newlevel=volume+level;
-                            if(level==0){
-                                html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
-                            }else{
-                                html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')"/>'+newlevel+'</button>';
-                            }
-                        });
+                    var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                    html="<br>";
+                    levels.forEach(function(level){
+                        let newlevel=volume+level;
+                        if(level==0){
+                            html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        }else{
+                            html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        }
+                    });
+                    if(document.getElementById("volume").innerHTML!=html){
+                        console.log(document.getElementById("volume").innerHTML);
+                        console.log(html);
                         document.getElementById("volume").innerHTML=html;
                     }
                     let bass=parseInt(data["bass"]["actualbass"], 10);
-                    if($('#currentbass').text()!=bass){
-                        var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
-                        html="<br>";
-                        levels.forEach(function(level){
-                            if(level==bass){
-                                html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')"/>'+level+'</button>';
-                            }else{
-                                html+='<button class="btn volume " onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')"/>'+level+'</button>';
-                            }
-                        });
-                        document.getElementById("bass").innerHTML=html;
-                    }
+                    var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+                    html="<br>";
+                    levels.forEach(function(level){
+                        if(level==bass){
+                            html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                        }else{
+                            html+='<button class="btn volume " onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                        }
+                    });
+                    if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
                     if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
                         if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
                         if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
@@ -532,7 +532,7 @@ function ajaxbose($ip){
                     }else{
                         document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
                     }
-                    html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
+                    html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art">';
                     elem=document.getElementById("art");
                     if(elem.innerHTML!=html)elem.innerHTML=html;
                     html='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'prev\')">Prev</button>';
