@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg('               __CRON180__');
 if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
     $nowplaying=json_decode(
         json_encode(
@@ -31,7 +30,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
                     true
                 );
                 $cv=$volume['actualvolume']-1;
-                if ($cv==0) {
+                if ($cv>=5) {
                     bosekey("POWER", 0, 103);
                     sw('bose103', 'Off', true);
                 } else {
