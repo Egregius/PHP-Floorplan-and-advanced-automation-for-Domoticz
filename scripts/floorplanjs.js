@@ -202,7 +202,7 @@ function ajax(){
                                     html="<td>D-water:</td><td>"+douchewater+" L</td><td>"+douchewatereuro.toString().replace(/[.]/, ",")+" &#8364;</td>";
                                     document.getElementById("trdwater").innerHTML=html;
                                 }else{
-                                    document.getElementById("trdgas").innerHTML="";
+                                    document.getElementById("trdwater").innerHTML="";
                                 }
                             } catch {}
                         }else if(name=="heating"){

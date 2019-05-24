@@ -15,49 +15,11 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 echo '<pre>';
 /*-------------------------------------------------*/
-phpinfo();
-echo '
-    <style>
-        .fontred{color:#FF0000;}
-        .fontdarkorange{color:#FF4400;}
-        .fontorange{color:#FF8800;}
-        .fontlightorange{color:#FFAA00;}
-        .fontdarkyellow{color:#FFCC00;}
-        .fontyellow{color:#FFFF00;}
-        .fontgrey{color:#CCCCCC;}
-        tr{background-color:#000;}
-    </style>
-    <script type="text/javascript" src="/scripts/jQuery.js"></script>
-    <script type=\'text/javascript\'>
-            $(document).ready(function() {
-                var elem = document.getElementById("fontred");
-                elem.style.color = "#FF0000";
-                console.log("ok");
-            });
-    </script>
-    <table>
-        <tr id="fontred">
-            <td>FF0000</td>
-        </tr>
-        <tr class="fontdarkorange">
-            <td>FF4400</td>
-        </tr>
-        <tr class="fontorange">
-            <td>FF8800</td>
-        </tr>
-        <tr class="fontlightorange">
-            <td>FFAA00</td>
-        </tr>
-        <tr class="fontdarkyellow">
-            <td>FFCC00</td>
-        </tr>
-        <tr class="fontyellow">
-            <td>FFFF00</td>
-        </tr>
-        <tr class="fontgrey">
-            <td>CCCCCC</td>
-        </tr>
-    </table>';
+$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
+    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+        $rainpast=$row['buien'];
+    }
+
 
 /*---------------------------*/
 echo '</pre>';
