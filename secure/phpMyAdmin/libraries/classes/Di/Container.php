@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin\Di
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Di;
 
 use Psr\Container\ContainerInterface;
@@ -21,7 +19,7 @@ class Container implements ContainerInterface
     /**
      * @var Item[] $content
      */
-    protected $content = [];
+    protected $content = array();
 
     /**
      * @var Container
@@ -54,9 +52,9 @@ class Container implements ContainerInterface
      *
      * @return mixed
      */
-    public function get($name, array $params = [])
+    public function get($name, array $params = array())
     {
-        if (! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new NotFoundException("No entry was found for $name identifier.");
         }
 
@@ -140,7 +138,7 @@ class Container implements ContainerInterface
      */
     public function service($name, $service = null)
     {
-        if (! isset($service)) {
+        if (!isset($service)) {
             $service = $name;
         }
         $this->content[$name] = new ServiceItem($this, $service);
@@ -156,7 +154,7 @@ class Container implements ContainerInterface
      */
     public function factory($name, $factory = null)
     {
-        if (! isset($factory)) {
+        if (!isset($factory)) {
             $factory = $name;
         }
         $this->content[$name] = new FactoryItem($this, $factory);
@@ -183,7 +181,7 @@ class Container implements ContainerInterface
      */
     public static function getDefaultContainer()
     {
-        if (! isset(static::$defaultContainer)) {
+        if (!isset(static::$defaultContainer)) {
             static::$defaultContainer = new Container();
         }
         return static::$defaultContainer;

@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin\Di
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Di;
 
 use Psr\Container\NotFoundExceptionInterface;

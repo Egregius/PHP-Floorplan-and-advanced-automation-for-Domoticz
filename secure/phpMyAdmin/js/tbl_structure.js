@@ -297,12 +297,14 @@ AJAX.registerOnload('tbl_structure.js', function () {
             var $this = $(this);
             var $form = $this.find('form');
             var serialized = $form.serialize();
+
             // check if any columns were moved at all
             if (serialized === $form.data('serialized-unmoved')) {
                 PMA_ajaxRemoveMessage($msgbox);
                 $this.dialog('close');
                 return;
             }
+
             $.post($form.prop('action'), serialized + PMA_commonParams.get('arg_separator') + 'ajax_request=true', function (data) {
                 if (data.success === false) {
                     PMA_ajaxRemoveMessage($msgbox);
@@ -345,11 +347,6 @@ AJAX.registerOnload('tbl_structure.js', function () {
                 }
             });
         };
-        button_options[PMA_messages.strPreviewSQL] = function () {
-            // Function for Previewing SQL
-            var $form = $('#move_column_form');
-            PMA_previewSQL($form);
-        };
         button_options[PMA_messages.strCancel] = function () {
             $(this).dialog('close');
         };
@@ -363,13 +360,13 @@ AJAX.registerOnload('tbl_structure.js', function () {
 
         $('#tablestructure').find('tbody tr').each(function () {
             var col_name = $(this).find('input:checkbox').eq(0).val();
-            var hidden_input = $('<input>')
+            var hidden_input = $('<input/>')
                 .prop({
                     name: 'move_columns[]',
                     type: 'hidden'
                 })
                 .val(col_name);
-            columns[columns.length] = $('<li></li>')
+            columns[columns.length] = $('<li/>')
                 .addClass('placeholderDrag')
                 .text(col_name)
                 .append(hidden_input);
@@ -453,10 +450,10 @@ AJAX.registerOnload('tbl_structure.js', function () {
         var $link = $(this);
         var question = PMA_messages.strRemovePartitioningWarning;
         $link.PMA_confirm(question, $link.attr('href'), function (url) {
-            var params = getJSConfirmCommonParam({
+            var params = {
                 'ajax_request' : true,
                 'ajax_page_request' : true
-            }, $link.getPostData());
+            };
             PMA_ajaxShowMessage();
             AJAX.source = $link;
             $.post(url, params, AJAX.responseHandler);
@@ -487,16 +484,16 @@ AJAX.registerOnload('tbl_structure.js', function () {
     var tableRows = $('.central_columns');
     $.each(tableRows, function (index, item) {
         if ($(item).hasClass('add_button')) {
-            $(item).on('click', function () {
+            $(item).click(function () {
                 $('input:checkbox').prop('checked', false);
                 $('#checkbox_row_' + (index + 1)).prop('checked', true);
-                $('button[value=add_to_central_columns]').trigger('click');
+                $('button[value=add_to_central_columns]').click();
             });
         } else {
-            $(item).on('click', function () {
+            $(item).click(function () {
                 $('input:checkbox').prop('checked', false);
                 $('#checkbox_row_' + (index + 1)).prop('checked', true);
-                $('button[value=remove_from_central_columns]').trigger('click');
+                $('button[value=remove_from_central_columns]').click();
             });
         }
     });

@@ -5,30 +5,26 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
-use PhpMyAdmin\Controllers\Server\PluginsController;
+use PhpMyAdmin\Controllers\Server\ServerPluginsController;
 use PhpMyAdmin\Di\Container;
 use PhpMyAdmin\Response;
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-}
-
-require_once ROOT_PATH . 'libraries/common.inc.php';
+require_once 'libraries/common.inc.php';
 
 $container = Container::getDefaultContainer();
-$container->factory(PluginsController::class);
-$container->set(Response::class, Response::getInstance());
-$container->alias('response', Response::class);
-
-/** @var PluginsController $controller */
-$controller = $container->get(
-    PluginsController::class,
-    []
+$container->factory(
+    'PhpMyAdmin\Controllers\Server\ServerPluginsController'
 );
+$container->alias(
+    'ServerPluginsController',
+    'PhpMyAdmin\Controllers\Server\ServerPluginsController'
+);
+$container->set('PhpMyAdmin\Response', Response::getInstance());
+$container->alias('response', 'PhpMyAdmin\Response');
 
-/** @var Response $response */
-$response = $container->get(Response::class);
-
-$response->addHTML($controller->index());
+/** @var ServerPluginsController $controller */
+$controller = $container->get(
+    'ServerPluginsController', array()
+);
+$controller->indexAction();

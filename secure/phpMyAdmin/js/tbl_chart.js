@@ -264,7 +264,7 @@ AJAX.registerOnload('tbl_chart.js', function () {
     });
 
     // handle chart type changes
-    $('input[name="chartType"]').on('click', function () {
+    $('input[name="chartType"]').click(function () {
         var type = currentSettings.type = $(this).val();
         if (type === 'bar' || type === 'column' || type === 'area') {
             $('span.barStacked').show();
@@ -277,7 +277,7 @@ AJAX.registerOnload('tbl_chart.js', function () {
     });
 
     // handle chosing alternative data format
-    $('input[name="chkAlternative"]').on('click', function () {
+    $('input[name="chkAlternative"]').click(function () {
         var $seriesColumn = $('select[name="chartSeriesColumn"]');
         var $valueColumn  = $('select[name="chartValueColumn"]');
         var $chartSeries  = $('select[name="chartSeries"]');
@@ -298,7 +298,7 @@ AJAX.registerOnload('tbl_chart.js', function () {
     });
 
     // handle stacking for bar, column and area charts
-    $('input[name="barStacked"]').on('click', function () {
+    $('input[name="barStacked"]').click(function () {
         if ($(this).is(':checked')) {
             $.extend(true, currentSettings, { stackSeries : true });
         } else {
@@ -312,7 +312,7 @@ AJAX.registerOnload('tbl_chart.js', function () {
         .focus(function () {
             temp_chart_title = $(this).val();
         })
-        .on('keyup', function () {
+        .keyup(function () {
             currentSettings.title = $('input[name="chartTitle"]').val();
             drawChart();
         })
@@ -323,37 +323,37 @@ AJAX.registerOnload('tbl_chart.js', function () {
         });
 
     // handle changing the x-axis
-    $('select[name="chartXAxis"]').on('change', function () {
+    $('select[name="chartXAxis"]').change(function () {
         onXAxisChange();
         drawChart();
     });
 
     // handle changing the selected data series
-    $('select[name="chartSeries"]').on('change', function () {
+    $('select[name="chartSeries"]').change(function () {
         onDataSeriesChange();
         drawChart();
     });
 
     // handle changing the series column
-    $('select[name="chartSeriesColumn"]').on('change', function () {
+    $('select[name="chartSeriesColumn"]').change(function () {
         currentSettings.seriesColumn = parseInt($(this).val(), 10);
         drawChart();
     });
 
     // handle changing the value column
-    $('select[name="chartValueColumn"]').on('change', function () {
+    $('select[name="chartValueColumn"]').change(function () {
         currentSettings.valueColumn = parseInt($(this).val(), 10);
         drawChart();
     });
 
     // handle manual changes to the chart x-axis labels
-    $('input[name="xaxis_label"]').on('keyup', function () {
+    $('input[name="xaxis_label"]').keyup(function () {
         currentSettings.xaxisLabel = $(this).val();
         drawChart();
     });
 
     // handle manual changes to the chart y-axis labels
-    $('input[name="yaxis_label"]').on('keyup', function () {
+    $('input[name="yaxis_label"]').keyup(function () {
         currentSettings.yaxisLabel = $(this).val();
         drawChart();
     });

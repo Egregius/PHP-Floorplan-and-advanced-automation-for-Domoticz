@@ -5,29 +5,22 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 use PhpMyAdmin\Message;
 use PhpMyAdmin\TwoFactor;
 use PhpMyAdmin\Template;
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-}
-
 /**
  * Gets some core libraries and displays a top message if required
  */
-require_once ROOT_PATH . 'libraries/common.inc.php';
+require_once 'libraries/common.inc.php';
 
-require ROOT_PATH . 'libraries/user_preferences.inc.php';
+require 'libraries/user_preferences.inc.php';
 
-$template = new Template();
 $two_factor = new TwoFactor($GLOBALS['cfg']['Server']['user']);
 
 if (isset($_POST['2fa_remove'])) {
     if (! $two_factor->check(true)) {
-        echo $template->render('preferences/two_factor/confirm', [
+        echo Template::get('prefs_twofactor_confirm')->render([
             'form' => $two_factor->render(),
         ]);
         exit;
@@ -37,7 +30,7 @@ if (isset($_POST['2fa_remove'])) {
     }
 } elseif (isset($_POST['2fa_configure'])) {
     if (! $two_factor->configure($_POST['2fa_configure'])) {
-        echo $template->render('preferences/two_factor/configure', [
+        echo Template::get('prefs_twofactor_configure')->render([
             'form' => $two_factor->setup(),
             'configure' => $_POST['2fa_configure'],
         ]);
@@ -48,7 +41,7 @@ if (isset($_POST['2fa_remove'])) {
 }
 
 $backend = $two_factor->backend;
-echo $template->render('preferences/two_factor/main', [
+echo Template::get('prefs_twofactor')->render([
     'enabled' => $two_factor->writable,
     'num_backends' => count($two_factor->available),
     'backend_id' => $backend::$id,

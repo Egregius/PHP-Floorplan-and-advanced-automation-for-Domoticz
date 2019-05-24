@@ -571,6 +571,6 @@ class __TwigTemplate_715af10b219c7e58446ae2c61a4a4ebcb4311f76c7486c1ca8adb979bd6
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/structure_table_row.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/database/structure/structure_table_row.twig");
+        return new Twig_Source("", "database/structure/structure_table_row.twig", "/var/www/html/secure/phpMyAdmin/templates/database/structure/structure_table_row.twig");
     }
 }

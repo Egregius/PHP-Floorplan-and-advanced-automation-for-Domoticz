@@ -5,12 +5,9 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Plugins\Schema;
 
 use PhpMyAdmin\DatabaseInterface;
-use PhpMyAdmin\Font;
 use PhpMyAdmin\Index;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Util;
@@ -33,45 +30,33 @@ abstract class TableStats
     protected $showKeys;
     protected $tableDimension;
     public $displayfield;
-    public $fields = [];
-    public $primary = [];
-    public $x;
-    public $y;
+    public $fields = array();
+    public $primary = array();
+    public $x, $y;
     public $width = 0;
     public $heightCell = 0;
     protected $offline;
 
     /**
-     * @var Relation
+     * @var Relation $relation
      */
     protected $relation;
 
     /**
-     * @var Font
-     */
-    protected $font;
-
-    /**
      * Constructor
      *
-     * @param Pdf\Pdf|Svg\Svg|Eps\Eps|Dia\Dia|Pdf\Pdf $diagram        schema diagram
-     * @param string                                  $db             current db name
-     * @param integer                                 $pageNumber     current page number (from the
-     *                                                                $cfg['Servers'][$i]['table_coords'] table)
-     * @param string                                  $tableName      table name
-     * @param boolean                                 $showKeys       whether to display keys or not
-     * @param boolean                                 $tableDimension whether to display table position or not
-     * @param boolean                                 $offline        whether the coordinates are sent
-     *                                                                from the browser
+     * @param object  $diagram        schema diagram
+     * @param string  $db             current db name
+     * @param integer $pageNumber     current page number (from the
+     *                                $cfg['Servers'][$i]['table_coords'] table)
+     * @param string  $tableName      table name
+     * @param boolean $showKeys       whether to display keys or not
+     * @param boolean $tableDimension whether to display table position or not
+     * @param boolean $offline        whether the coordinates are sent
+     *                                from the browser
      */
     public function __construct(
-        $diagram,
-        $db,
-        $pageNumber,
-        $tableName,
-        $showKeys,
-        $tableDimension,
-        $offline
+        $diagram, $db, $pageNumber, $tableName, $showKeys, $tableDimension, $offline
     ) {
         $this->diagram    = $diagram;
         $this->db         = $db;
@@ -83,8 +68,7 @@ abstract class TableStats
 
         $this->offline    = $offline;
 
-        $this->relation = new Relation($GLOBALS['dbi']);
-        $this->font = new Font();
+        $this->relation = new Relation();
 
         // checks whether the table exists
         // and loads fields
@@ -116,7 +100,7 @@ abstract class TableStats
 
         if ($this->showKeys) {
             $indexes = Index::getFromTable($this->tableName, $this->db);
-            $all_columns = [];
+            $all_columns = array();
             foreach ($indexes as $index) {
                 $all_columns = array_merge(
                     $all_columns,
@@ -137,7 +121,7 @@ abstract class TableStats
      * @return void
      * @abstract
      */
-    abstract protected function showMissingTableError();
+    protected abstract function showMissingTableError();
 
     /**
      * Loads coordinates of a table

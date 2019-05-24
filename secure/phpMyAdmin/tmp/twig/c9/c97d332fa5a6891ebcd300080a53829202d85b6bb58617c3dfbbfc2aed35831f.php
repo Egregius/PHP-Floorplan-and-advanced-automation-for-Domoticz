@@ -61,6 +61,6 @@ class __TwigTemplate_40c6a375d3c42146c0154cc768e20a1bfbc352086b5000fe8122b5599b0
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/print_view_data_dictionary_link.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/database/structure/print_view_data_dictionary_link.twig");
+        return new Twig_Source("", "database/structure/print_view_data_dictionary_link.twig", "/var/www/html/secure/phpMyAdmin/templates/database/structure/print_view_data_dictionary_link.twig");
     }
 }

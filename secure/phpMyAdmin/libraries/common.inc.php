@@ -30,7 +30,6 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
 use PhpMyAdmin\Config;
 use PhpMyAdmin\Core;
@@ -39,6 +38,7 @@ use PhpMyAdmin\ErrorHandler;
 use PhpMyAdmin\LanguageManager;
 use PhpMyAdmin\Logging;
 use PhpMyAdmin\Message;
+use PhpMyAdmin\Plugins\AuthenticationPlugin;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Session;
 use PhpMyAdmin\ThemeManager;
@@ -56,9 +56,9 @@ if (getcwd() == dirname(__FILE__)) {
  * Minimum PHP version; can't call Core::fatalError() which uses a
  * PHP 5 function, so cannot easily localize this message.
  */
-if (version_compare(PHP_VERSION, '7.1.3', 'lt')) {
+if (version_compare(PHP_VERSION, '5.5.0', 'lt')) {
     die(
-        'PHP 7.1.3+ is required. <br> Currently installed version is: '
+        'PHP 5.5+ is required. <br /> Currently installed version is: '
         . phpversion()
     );
 }
@@ -71,14 +71,19 @@ define('PHPMYADMIN', true);
 /**
  * Load vendor configuration.
  */
-require_once ROOT_PATH . 'libraries/vendor_config.php';
+require_once './libraries/vendor_config.php';
+
+/**
+ * Load hash polyfill.
+ */
+require_once './libraries/hash.lib.php';
 
 /**
  * Activate autoloader
  */
 if (! @is_readable(AUTOLOAD_FILE)) {
     die(
-        'File <tt>' . AUTOLOAD_FILE . '</tt> missing or not readable. <br>'
+        'File <tt>' . AUTOLOAD_FILE . '</tt> missing or not readable. <br />'
         . 'Most likely you did not run Composer to '
         . '<a href="https://docs.phpmyadmin.net/en/latest/setup.html#installing-from-git">install library files</a>.'
     );
@@ -123,9 +128,7 @@ $GLOBALS['PMA_Config'] = new Config(CONFIG_FILE);
 /**
  * include session handling after the globals, to prevent overwriting
  */
-if (! defined('PMA_NO_SESSION')) {
-    Session::setUp($GLOBALS['PMA_Config'], $GLOBALS['error_handler']);
-}
+Session::setUp($GLOBALS['PMA_Config'], $GLOBALS['error_handler']);
 
 /**
  * init some variables LABEL_variables_init
@@ -135,7 +138,7 @@ if (! defined('PMA_NO_SESSION')) {
  * holds parameters to be passed to next page
  * @global array $GLOBALS['url_params']
  */
-$GLOBALS['url_params'] = [];
+$GLOBALS['url_params'] = array();
 
 /**
  * holds page that should be displayed
@@ -143,7 +146,7 @@ $GLOBALS['url_params'] = [];
  */
 $GLOBALS['goto'] = '';
 // Security fix: disallow accessing serious server files via "?goto="
-if (isset($_REQUEST['goto']) && Core::checkPageValidity($_REQUEST['goto'])) {
+if (Core::checkPageValidity($_REQUEST['goto'])) {
     $GLOBALS['goto'] = $_REQUEST['goto'];
     $GLOBALS['url_params']['goto'] = $_REQUEST['goto'];
 } else {
@@ -154,7 +157,7 @@ if (isset($_REQUEST['goto']) && Core::checkPageValidity($_REQUEST['goto'])) {
  * returning page
  * @global string $GLOBALS['back']
  */
-if (isset($_REQUEST['back']) && Core::checkPageValidity($_REQUEST['back'])) {
+if (Core::checkPageValidity($_REQUEST['back'])) {
     $GLOBALS['back'] = $_REQUEST['back'];
 } else {
     unset($_REQUEST['back'], $_GET['back'], $_POST['back'], $_COOKIE['back']);
@@ -200,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          * We don't allow any POST operation parameters if the token is mismatched
          * or is not provided
          */
-        $whitelist = ['ajax_request'];
+        $whitelist = array('ajax_request');
         PhpMyAdmin\Sanitize::removeRequestVars($whitelist);
     }
 }
@@ -222,7 +225,7 @@ Core::setGlobalDbOrTable('table');
  * Store currently selected recent table.
  * Affect $GLOBALS['db'] and $GLOBALS['table']
  */
-if (isset($_REQUEST['selected_recent_table']) && Core::isValid($_REQUEST['selected_recent_table'])) {
+if (Core::isValid($_REQUEST['selected_recent_table'])) {
     $recent_table = json_decode($_REQUEST['selected_recent_table'], true);
 
     $GLOBALS['db']
@@ -294,8 +297,6 @@ $GLOBALS['PMA_Config']->enableBc();
 
 ThemeManager::initializeTheme();
 
-$GLOBALS['dbi'] = null;
-
 if (! defined('PMA_MINIMUM_COMMON')) {
     /**
      * save some settings in cookies
@@ -306,6 +307,7 @@ if (! defined('PMA_MINIMUM_COMMON')) {
     ThemeManager::getInstance()->setThemeCookie();
 
     if (! empty($cfg['Server'])) {
+
         /**
          * Loads the proper database interface for this server
          */
@@ -389,19 +391,17 @@ if (! defined('PMA_MINIMUM_COMMON')) {
         if ($GLOBALS['dbi']->getVersion() < $cfg['MysqlMinVersion']['internal']) {
             Core::fatalError(
                 __('You should upgrade to %s %s or later.'),
-                [
-                    'MySQL',
-                    $cfg['MysqlMinVersion']['human'],
-                ]
+                array('MySQL', $cfg['MysqlMinVersion']['human'])
             );
         }
 
         // Sets the default delimiter (if specified).
-        if (! empty($_REQUEST['sql_delimiter'])) {
+        if (!empty($_REQUEST['sql_delimiter'])) {
             PhpMyAdmin\SqlParser\Lexer::$DEFAULT_DELIMITER = $_REQUEST['sql_delimiter'];
         }
 
         // TODO: Set SQL modes too.
+
     } else { // end server connecting
         $response = Response::getInstance();
         $response->getHeader()->disableMenuAndConsole();

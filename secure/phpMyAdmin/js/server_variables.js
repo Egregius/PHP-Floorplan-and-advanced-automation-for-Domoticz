@@ -37,7 +37,7 @@ AJAX.registerOnload('server_variables.js', function () {
         $cell.addClass('edit'); // variable is being edited
         $myEditLink.remove(); // remove edit link
 
-        $mySaveLink.on('click', function () {
+        $mySaveLink.click(function () {
             var $msgbox = PMA_ajaxShowMessage(PMA_messages.strProcessingRequest);
             $.post($(this).attr('href'), {
                 ajax_request: true,
@@ -63,7 +63,7 @@ AJAX.registerOnload('server_variables.js', function () {
             return false;
         });
 
-        $myCancelLink.on('click', function () {
+        $myCancelLink.click(function () {
             $valueCell.html($valueCell.data('content'));
             $cell.removeClass('edit').html($myEditLink);
             return false;
@@ -75,14 +75,14 @@ AJAX.registerOnload('server_variables.js', function () {
             varName: varName
         }, function (data) {
             if (typeof data !== 'undefined' && data.success === true) {
-                var $links = $('<div></div>')
+                var $links = $('<div />')
                     .append($myCancelLink)
                     .append('&nbsp;&nbsp;&nbsp;')
                     .append($mySaveLink);
-                var $editor = $('<div></div>', { 'class': 'serverVariableEditor' })
+                var $editor = $('<div />', { 'class': 'serverVariableEditor' })
                     .append(
-                        $('<div></div>').append(
-                            $('<input>', { type: 'text' }).val(data.message)
+                        $('<div/>').append(
+                            $('<input />', { type: 'text' }).val(data.message)
                         )
                     );
                     // Save and replace content
@@ -95,7 +95,7 @@ AJAX.registerOnload('server_variables.js', function () {
                     .html($editor)
                     .find('input')
                     .focus()
-                    .on('keydown', function (event) { // Keyboard shortcuts
+                    .keydown(function (event) { // Keyboard shortcuts
                         if (event.keyCode === 13) { // Enter key
                             $mySaveLink.trigger('click');
                         } else if (event.keyCode === 27) { // Escape key

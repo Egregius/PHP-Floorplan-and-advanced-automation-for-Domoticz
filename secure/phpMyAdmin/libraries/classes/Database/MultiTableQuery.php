@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Database;
 
 use PhpMyAdmin\DatabaseInterface;
@@ -54,11 +52,6 @@ class MultiTableQuery
     private $tables;
 
     /**
-     * @var Template
-     */
-    public $template;
-
-    /**
      * Constructor
      *
      * @param DatabaseInterface $dbi                DatabaseInterface instance
@@ -74,8 +67,6 @@ class MultiTableQuery
         $this->db = $dbName;
         $this->defaultNoOfColumns = $defaultNoOfColumns;
 
-        $this->template = new Template();
-
         $this->tables = $this->dbi->getTables($this->db);
     }
 
@@ -87,13 +78,13 @@ class MultiTableQuery
     public function getFormHtml()
     {
         $tables = [];
-        foreach ($this->tables as $table) {
+        foreach($this->tables as $table) {
             $tables[$table]['hash'] = md5($table);
             $tables[$table]['columns'] = array_keys(
                 $this->dbi->getColumns($this->db, $table)
             );
         }
-        return $this->template->render('database/multi_table_query/form', [
+        return Template::get('database/multi_table_query/form')->render([
             'db' => $this->db,
             'tables' => $tables,
             'default_no_of_columns' => $this->defaultNoOfColumns,

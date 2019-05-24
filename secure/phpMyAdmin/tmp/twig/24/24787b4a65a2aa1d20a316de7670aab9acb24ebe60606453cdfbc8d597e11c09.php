@@ -196,6 +196,6 @@ class __TwigTemplate_7fe3e2c32b1b425f882f84b976b08966ba89ac17289b6badfaea672fcf2
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "prefs_twofactor.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/prefs_twofactor.twig");
+        return new Twig_Source("", "prefs_twofactor.twig", "/var/www/html/secure/phpMyAdmin/templates/prefs_twofactor.twig");
     }
 }

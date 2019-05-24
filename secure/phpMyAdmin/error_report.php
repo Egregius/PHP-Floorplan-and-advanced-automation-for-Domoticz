@@ -5,22 +5,16 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 use PhpMyAdmin\ErrorReport;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\UserPreferences;
 use PhpMyAdmin\Utils\HttpRequest;
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-}
+require_once 'libraries/common.inc.php';
 
-require_once ROOT_PATH . 'libraries/common.inc.php';
-
-if (! isset($_POST['exception_type'])
-    || ! in_array($_POST['exception_type'], ['js', 'php'])
+if (!isset($_POST['exception_type'])
+    ||!in_array($_POST['exception_type'], array('js', 'php'))
 ) {
     die('Oops, something went wrong!!');
 }
@@ -43,7 +37,7 @@ if (isset($_POST['send_error_report'])
         if (isset($_SESSION['prev_error_subm_time'])
             && isset($_SESSION['error_subm_count'])
             && $_SESSION['error_subm_count'] >= 3
-            && ($_SESSION['prev_error_subm_time'] - time()) <= 3000
+            && ($_SESSION['prev_error_subm_time']-time()) <= 3000
         ) {
             $_SESSION['error_subm_count'] = 0;
             $_SESSION['prev_errors'] = '';
@@ -51,9 +45,9 @@ if (isset($_POST['send_error_report'])
         } else {
             $_SESSION['prev_error_subm_time'] = time();
             $_SESSION['error_subm_count'] = (
-                isset($_SESSION['error_subm_count'])
-                    ? ($_SESSION['error_subm_count'] + 1)
-                    : 0
+                (isset($_SESSION['error_subm_count']))
+                    ? ($_SESSION['error_subm_count']+1)
+                    : (0)
             );
         }
     }
@@ -65,7 +59,7 @@ if (isset($_POST['send_error_report'])
             $success = false;
         } else {
             $decoded_response = json_decode($server_response, true);
-            $success = ! empty($decoded_response) ?
+            $success = !empty($decoded_response) ?
                 $decoded_response["success"] : false;
         }
 
@@ -131,9 +125,11 @@ if (isset($_POST['send_error_report'])
     }
 } elseif (! empty($_POST['get_settings'])) {
     $response->addJSON('report_setting', $GLOBALS['cfg']['SendErrorReports']);
-} elseif ($_POST['exception_type'] == 'js') {
-    $response->addHTML($errorReport->getForm());
 } else {
-    // clear previous errors & save new ones.
-    $GLOBALS['error_handler']->savePreviousErrors();
+    if ($_POST['exception_type'] == 'js') {
+        $response->addHTML($errorReport->getForm());
+    } else {
+        // clear previous errors & save new ones.
+        $GLOBALS['error_handler']->savePreviousErrors();
+    }
 }

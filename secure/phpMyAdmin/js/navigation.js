@@ -309,20 +309,19 @@ $(function () {
      */
     $(document).on('click', '#pma_navigation_reload', function (event) {
         event.preventDefault();
-
-        // Find the loading symbol and show it
-        var $icon_throbber_src = $('#pma_navigation').find('.throbber');
-        $icon_throbber_src.show();
-        // TODO Why is a loading symbol both hidden, and invisible?
-        $icon_throbber_src.css('visibility', '');
-
-        // Callback to be used to hide the loading symbol when done reloading
-        function hideNav () {
-            $icon_throbber_src.hide();
-        }
-
-        // Reload the navigation
-        PMA_reloadNavigation(hideNav);
+        // reload icon object
+        var $icon = $(this).find('img');
+        // source of the hidden throbber icon
+        var icon_throbber_src = $('#pma_navigation').find('.throbber').attr('src');
+        // source of the reload icon
+        var icon_reload_src = $icon.attr('src');
+        // replace the source of the reload icon with the one for throbber
+        $icon.attr('src', icon_throbber_src);
+        PMA_reloadNavigation();
+        // after one second, put back the reload icon
+        setTimeout(function () {
+            $icon.attr('src', icon_reload_src);
+        }, 1000);
     });
 
     $(document).on('change', '#navi_db_select',  function (event) {
@@ -342,7 +341,7 @@ $(function () {
         $('#pma_navigation_tree').find('a.expander').each(function () {
             var $icon = $(this).find('img');
             if ($icon.is('.ic_b_minus')) {
-                $(this).trigger('click');
+                $(this).click();
             }
         });
     });
@@ -551,7 +550,7 @@ $(function () {
                 buttonOptions[PMA_messages.strClose] = function () {
                     $(this).dialog('close');
                 };
-                $('<div></div>')
+                $('<div/>')
                     .attr('id', 'unhideNavItemDialog')
                     .append(data.message)
                     .dialog({
@@ -574,8 +573,6 @@ $(function () {
     $(document).on('click', 'a.unhideNavItem.ajax', function (event) {
         event.preventDefault();
         var $tr = $(this).parents('tr');
-        var $hidden_table_count = $tr.parents('tbody').children().length;
-        var $hide_dialog_box = $tr.closest('div.ui-dialog');
         var $msg = PMA_ajaxShowMessage();
         var argSep = PMA_commonParams.get('arg_separator');
         var params = $(this).getPostData();
@@ -588,9 +585,6 @@ $(function () {
                 PMA_ajaxRemoveMessage($msg);
                 if (typeof data !== 'undefined' && data.success === true) {
                     $tr.remove();
-                    if ($hidden_table_count === 1) {
-                        $hide_dialog_box.remove();
-                    }
                     PMA_reloadNavigation();
                 } else {
                     PMA_ajaxShowMessage(data.error);
@@ -660,7 +654,6 @@ $(function () {
         } else {
             // If the user is different
             navTreeStateUpdate();
-            PMA_reloadNavigation();
         }
     }
 });
@@ -690,7 +683,7 @@ function expandTreeNode ($expandElem, callback) {
             .first()
             .clone()
             .css({ visibility: 'visible', display: 'block' })
-            .on('click', false);
+            .click(false);
         $icon.hide();
         $throbber.insertBefore($icon);
 
@@ -703,7 +696,7 @@ function expandTreeNode ($expandElem, callback) {
                 if ($destination.find('ul > li').length === 1) {
                     $destination.find('ul > li')
                         .find('a.expander.container')
-                        .trigger('click');
+                        .click();
                 }
                 if (callback && typeof callback === 'function') {
                     callback.call();
@@ -752,9 +745,6 @@ function scrollToView ($element, $forceToTop) {
 function PMA_showCurrentNavigation () {
     var db = PMA_commonParams.get('db');
     var table = PMA_commonParams.get('table');
-
-    var autoexpand = $('#pma_navigation_tree').hasClass('autoexpand');
-
     $('#pma_navigation_tree')
         .find('li.selected')
         .removeClass('selected');
@@ -781,44 +771,22 @@ function PMA_showCurrentNavigation () {
                 handleTableOrDb(table, $('#pma_navigation_tree_content'));
             }
         } else if ($dbItem) {
-            fullExpand(table, $dbItem);
+            var $expander = $dbItem.children('div:first').children('a.expander');
+            // if not loaded or loaded but collapsed
+            if (! $expander.hasClass('loaded') ||
+                $expander.find('img').is('.ic_b_plus')
+            ) {
+                expandTreeNode($expander, function () {
+                    handleTableOrDb(table, $dbItem);
+                });
+            } else {
+                handleTableOrDb(table, $dbItem);
+            }
         }
     } else if ($('#navi_db_select').length && $('#navi_db_select').val()) {
         $('#navi_db_select').val('').hide().trigger('change');
-    } else if (autoexpand && $('#pma_navigation_tree_content > ul > li.database').length === 1) {
-        // automatically expand the list if there is only single database
-
-        // find the name of the database
-        var dbItemName = '';
-
-        $('#pma_navigation_tree_content > ul > li.database').children('a').each(function () {
-            var name = $(this).text();
-            if (!dbItemName && name.trim()) { // if the name is not empty, it is the desired element
-                dbItemName = name;
-            }
-        });
-
-        var $dbItem = findLoadedItem(
-            $('#pma_navigation_tree').find('> div'), dbItemName, 'database', !table
-        );
-
-        fullExpand(table, $dbItem);
     }
     PMA_showFullName($('#pma_navigation_tree'));
-
-    function fullExpand (table, $dbItem) {
-        var $expander = $dbItem.children('div:first').children('a.expander');
-        // if not loaded or loaded but collapsed
-        if (! $expander.hasClass('loaded') ||
-            $expander.find('img').is('.ic_b_plus')
-        ) {
-            expandTreeNode($expander, function () {
-                handleTableOrDb(table, $dbItem);
-            });
-        } else {
-            handleTableOrDb(table, $dbItem);
-        }
-    }
 
     function handleTableOrDb (table, $dbItem) {
         if (table) {
@@ -866,7 +834,7 @@ function PMA_showCurrentNavigation () {
                             $(this)
                                 .children('div:first')
                                 .children('a.expander')
-                                .trigger('click');
+                                .click();
                         }
                     });
                     ret = $li;
@@ -1307,12 +1275,9 @@ var ResizeHandler = function () {
         var $nav_tree   = $('#pma_navigation_tree');
         var $nav_header = $('#pma_navigation_header');
         var $nav_tree_content = $('#pma_navigation_tree_content');
-        var height = ($nav.height() - $nav_header.height());
-
-        height = height > 50 ? height : 800; // keep min. height
-        $nav_tree.height(height);
+        $nav_tree.height($nav.height() - $nav_header.height());
         if ($nav_tree_content.length > 0) {
-            $nav_tree_content.height(height - $nav_tree_content.position().top);
+            $nav_tree_content.height($nav_tree.height() - $nav_tree_content.position().top);
         } else {
             // TODO: in fast filter search response there is no #pma_navigation_tree_content, needs to be added in php
             $nav_tree.css({
@@ -1658,7 +1623,7 @@ PMA_fastFilter.filter.prototype.restore = function (focus) {
  * @return void
  */
 function PMA_showFullName ($containerELem) {
-    $containerELem.find('.hover_show_full').on('mouseenter', function () {
+    $containerELem.find('.hover_show_full').mouseenter(function () {
         /** mouseenter */
         var $this = $(this);
         var thisOffset = $this.offset();
@@ -1675,7 +1640,7 @@ function PMA_showFullName ($containerELem) {
                     /** mouseleave */
                     $(this).addClass('hide')
                         .removeClass('hovering');
-                }).on('mouseenter', function () {
+                }).mouseenter(function () {
                     /** mouseenter */
                     $(this).addClass('hovering');
                 });

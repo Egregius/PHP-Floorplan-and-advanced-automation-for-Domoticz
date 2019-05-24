@@ -6,8 +6,6 @@
  * @package    PhpMyAdmin-Transformations
  * @subpackage SQL
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Plugins\Transformations\Output;
 
 use PhpMyAdmin\Response;
@@ -27,7 +25,7 @@ class Text_Plain_Sql extends SQLTransformationsPlugin
      */
     public function __construct()
     {
-        if (! empty($GLOBALS['cfg']['CodemirrorEnable'])) {
+        if (!empty($GLOBALS['cfg']['CodemirrorEnable'])) {
             $response = Response::getInstance();
             $scripts = $response->getHeader()
                 ->getScripts();

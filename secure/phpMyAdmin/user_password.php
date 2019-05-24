@@ -6,51 +6,31 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
-use PhpMyAdmin\DatabaseInterface;
-use PhpMyAdmin\Di\Container;
 use PhpMyAdmin\Display\ChangePassword;
 use PhpMyAdmin\Message;
-use PhpMyAdmin\Server\Privileges;
-use PhpMyAdmin\Relation;
-use PhpMyAdmin\RelationCleanup;
 use PhpMyAdmin\Response;
-use PhpMyAdmin\Template;
 use PhpMyAdmin\UserPassword;
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-}
+/**
+ * Gets some core libraries
+ */
+require_once './libraries/common.inc.php';
 
-require_once ROOT_PATH . 'libraries/common.inc.php';
-
-$container = Container::getDefaultContainer();
-$container->set(Response::class, Response::getInstance());
-
-/** @var Response $response */
-$response = $container->get(Response::class);
-
-/** @var DatabaseInterface $dbi */
-$dbi = $container->get(DatabaseInterface::class);
-
-$header = $response->getHeader();
-$scripts = $header->getScripts();
+$response = Response::getInstance();
+$header   = $response->getHeader();
+$scripts  = $header->getScripts();
 $scripts->addFile('server_privileges.js');
 $scripts->addFile('vendor/zxcvbn.js');
 
-$template = new Template();
-$relation = new Relation($dbi);
-$relationCleanup = new RelationCleanup($dbi, $relation);
-$serverPrivileges = new Privileges($template, $dbi, $relation, $relationCleanup);
-$userPassword = new UserPassword($serverPrivileges);
+$userPassword = new UserPassword();
 
 /**
  * Displays an error message and exits if the user isn't allowed to use this
  * script
  */
 if (! $GLOBALS['cfg']['ShowChgPassword']) {
-    $GLOBALS['cfg']['ShowChgPassword'] = $dbi->selectDb('mysql');
+    $GLOBALS['cfg']['ShowChgPassword'] = $GLOBALS['dbi']->selectDb('mysql');
 }
 if ($cfg['Server']['auth_type'] == 'config' || ! $cfg['ShowChgPassword']) {
     Message::error(

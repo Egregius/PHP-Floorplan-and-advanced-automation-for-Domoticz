@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin\Di
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Di;
 
 /**
@@ -24,7 +22,7 @@ class FactoryItem extends ReflectorItem
      *
      * @return mixed
      */
-    public function get(array $params = [])
+    public function get(array $params = array())
     {
         return $this->invoke($params);
     }

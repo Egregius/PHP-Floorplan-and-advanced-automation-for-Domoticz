@@ -52,6 +52,6 @@ class __TwigTemplate_8c01198d2689d10f7c62999c9007999f33ea95260d976dd369d10b58802
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/browse_table.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/database/structure/browse_table.twig");
+        return new Twig_Source("", "database/structure/browse_table.twig", "/var/www/html/secure/phpMyAdmin/templates/database/structure/browse_table.twig");
     }
 }

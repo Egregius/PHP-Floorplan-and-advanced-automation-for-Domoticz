@@ -5,13 +5,10 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Plugins;
 
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Message;
-use PhpMyAdmin\Template;
 use PhpMyAdmin\TwoFactor;
 
 /**
@@ -20,8 +17,6 @@ use PhpMyAdmin\TwoFactor;
  * This is basic implementation which does no
  * additional authentication, subclasses are expected
  * to implement this.
- *
- * @package PhpMyAdmin
  */
 class TwoFactorPlugin
 {
@@ -51,11 +46,6 @@ class TwoFactorPlugin
     protected $_message;
 
     /**
-     * @var Template
-     */
-    public $template;
-
-    /**
      * Creates object
      *
      * @param TwoFactor $twofactor TwoFactor instance
@@ -65,7 +55,6 @@ class TwoFactorPlugin
         $this->_twofactor = $twofactor;
         $this->_provided = false;
         $this->_message = '';
-        $this->template = new Template();
     }
 
     /**
@@ -76,7 +65,7 @@ class TwoFactorPlugin
     public function getError()
     {
         if ($this->_provided) {
-            if (! empty($this->_message)) {
+            if (!empty($this->_message)) {
                 return Message::rawError(
                     sprintf(__('Two-factor authentication failed: %s'), $this->_message)
                 )->getDisplay();
@@ -135,7 +124,7 @@ class TwoFactorPlugin
      */
     public static function getName()
     {
-        return __('No Two-Factor Authentication');
+        return __('No Two-Factor');
     }
 
     /**
@@ -159,12 +148,11 @@ class TwoFactorPlugin
      */
     public function getAppId($return_url)
     {
-        /** @var \PhpMyAdmin\Config $PMA_Config */
         global $PMA_Config;
 
         $url = $PMA_Config->get('PmaAbsoluteUri');
         $parsed = [];
-        if (! empty($url)) {
+        if (!empty($url)) {
             $parsed = parse_url($url);
         }
         if (empty($parsed['scheme'])) {
@@ -174,7 +162,7 @@ class TwoFactorPlugin
             $parsed['host'] = Core::getenv('HTTP_HOST');
         }
         if ($return_url) {
-            return $parsed['scheme'] . '://' . $parsed['host'] . (! empty($parsed['port']) ? ':' . $parsed['port'] : '');
+            return $parsed['scheme'] . '://' . $parsed['host'] . (!empty($parsed['port']) ? ':' . $parsed['port'] : '');
         } else {
             return $parsed['host'];
         }

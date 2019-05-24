@@ -38,10 +38,6 @@ $(document).ready(function () {
         }
     });
     $(document).on('keydown', function (e) {
-        // disable the shortcuts when session has timed out.
-        if ($('#modalOverlay').length > 0) {
-            return;
-        }
         if (e.ctrlKey && e.altKey && e.keyCode === keyC) {
             PMA_console.toggle();
         }

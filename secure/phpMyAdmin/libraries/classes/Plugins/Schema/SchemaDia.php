@@ -6,8 +6,6 @@
  * @package    PhpMyAdmin-Schema
  * @subpackage Dia
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Plugins\Schema;
 
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyMainGroup;
@@ -62,10 +60,10 @@ class SchemaDia extends SchemaPlugin
             __('Orientation')
         );
         $leaf->setValues(
-            [
+            array(
                 'L' => __('Landscape'),
                 'P' => __('Portrait'),
-            ]
+            )
         );
         $specificOptions->addProperty($leaf);
 

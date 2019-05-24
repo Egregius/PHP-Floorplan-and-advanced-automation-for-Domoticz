@@ -180,6 +180,6 @@ class __TwigTemplate_1c11872dbb3f7136a5b574bd352712369d02f78b07942902a2d42e82799
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/check_all_tables.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/database/structure/check_all_tables.twig");
+        return new Twig_Source("", "database/structure/check_all_tables.twig", "/var/www/html/secure/phpMyAdmin/templates/database/structure/check_all_tables.twig");
     }
 }

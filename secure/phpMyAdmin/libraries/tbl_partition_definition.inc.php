@@ -5,20 +5,18 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
 use PhpMyAdmin\Core;
 
-if (! isset($partitionDetails)) {
-    $partitionDetails = [];
+if (!isset($partitionDetails)) {
+
+    $partitionDetails = array();
 
     // Extract some partitioning and subpartitioning parameters from the request
-    $partitionParams = [
-        'partition_by',
-        'partition_expr',
-        'subpartition_by',
-        'subpartition_expr',
-    ];
+    $partitionParams = array(
+        'partition_by', 'partition_expr',
+        'subpartition_by', 'subpartition_expr',
+    );
     foreach ($partitionParams as $partitionParam) {
         $partitionDetails[$partitionParam] = isset($_POST[$partitionParam])
             ? $_POST[$partitionParam] : '';
@@ -60,7 +58,7 @@ if (! isset($partitionDetails)) {
     if ($partition_count > 1) {
         $partitions = isset($_POST['partitions'])
             ? $_POST['partitions']
-            : [];
+            : array();
 
         // Remove details of the additional partitions
         // when number of partitions have been reduced
@@ -68,7 +66,7 @@ if (! isset($partitionDetails)) {
 
         for ($i = 0; $i < $partition_count; $i++) {
             if (! isset($partitions[$i])) { // Newly added partition
-                $partitions[$i] = [
+                $partitions[$i] = array(
                     'name' => 'p' . $i,
                     'value_type' => '',
                     'value' => '',
@@ -80,7 +78,7 @@ if (! isset($partitionDetails)) {
                     'min_rows' => '',
                     'tablespace' => '',
                     'node_group' => '',
-                ];
+                );
             }
 
             $partition =& $partitions[$i];
@@ -108,7 +106,7 @@ if (! isset($partitionDetails)) {
                 $partition['subpartition_count'] = $subpartition_count;
 
                 if (! isset($partition['subpartitions'])) {
-                    $partition['subpartitions'] = [];
+                    $partition['subpartitions'] = array();
                 }
                 $subpartitions =& $partition['subpartitions'];
 
@@ -118,7 +116,7 @@ if (! isset($partitionDetails)) {
 
                 for ($j = 0; $j < $subpartition_count; $j++) {
                     if (! isset($subpartitions[$j])) { // Newly added subpartition
-                        $subpartitions[$j] = [
+                        $subpartitions[$j] = array(
                             'name' => $partition['name'] . '_s' . $j,
                             'engine' => '',
                             'comment' => '',
@@ -128,7 +126,7 @@ if (! isset($partitionDetails)) {
                             'min_rows' => '',
                             'tablespace' => '',
                             'node_group' => '',
-                        ];
+                        );
                     }
 
                     $subpartition =& $subpartitions[$j];

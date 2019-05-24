@@ -70,6 +70,6 @@ class __TwigTemplate_0207a60a0129387ad4ebb8f3b5fbc0644f5006428610f6e90067baae6dd
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/additional_fields.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/display/results/additional_fields.twig");
+        return new Twig_Source("", "display/results/additional_fields.twig", "/var/www/html/secure/phpMyAdmin/templates/display/results/additional_fields.twig");
     }
 }

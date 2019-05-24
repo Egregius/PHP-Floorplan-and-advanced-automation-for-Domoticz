@@ -93,6 +93,6 @@ class __TwigTemplate_cd5e4f0b2c770fe14380b590c2ac6ec9f8a3a54e8bb2f252c470ae30b28
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "dropdown.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/dropdown.twig");
+        return new Twig_Source("", "dropdown.twig", "/var/www/html/secure/phpMyAdmin/templates/dropdown.twig");
     }
 }

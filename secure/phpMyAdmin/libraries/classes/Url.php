@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin;
 
 /**
@@ -32,11 +30,8 @@ class Url
      *
      * @access  public
      */
-    public static function getHiddenInputs(
-        $db = '',
-        $table = '',
-        $indent = 0,
-        $skip = []
+    public static function getHiddenInputs($db = '', $table = '',
+        $indent = 0, $skip = array()
     ) {
         if (is_array($db)) {
             $params  =& $db;
@@ -45,11 +40,11 @@ class Url
             $indent  =& $_indent;
             $skip    =& $_skip;
         } else {
-            $params = [];
-            if (strlen((string) $db) > 0) {
+            $params = array();
+            if (strlen($db) > 0) {
                 $params['db'] = $db;
             }
-            if (strlen((string) $table) > 0) {
+            if (strlen($table) > 0) {
                 $params['table'] = $table;
             }
         }
@@ -96,25 +91,24 @@ class Url
      * echo Url::getHiddenFields($values);
      *
      * // produces:
-     * <input type="hidden" name="aaa" Value="aaa">
-     * <input type="hidden" name="bbb[0]" Value="bbb_0">
-     * <input type="hidden" name="bbb[1]" Value="bbb_1">
-     * <input type="hidden" name="ccc[a]" Value="ccc_a">
-     * <input type="hidden" name="ccc[b]" Value="ccc_b">
+     * <input type="hidden" name="aaa" Value="aaa" />
+     * <input type="hidden" name="bbb[0]" Value="bbb_0" />
+     * <input type="hidden" name="bbb[1]" Value="bbb_1" />
+     * <input type="hidden" name="ccc[a]" Value="ccc_a" />
+     * <input type="hidden" name="ccc[b]" Value="ccc_b" />
      * </code>
      *
-     * @param array  $values   hidden values
-     * @param string $pre      prefix
-     * @param bool   $is_token if token already added in hidden input field
+     * @param array  $values hidden values
+     * @param string $pre    prefix
      *
      * @return string form fields of type hidden
      */
-    public static function getHiddenFields(array $values, $pre = '', $is_token = false)
+    public static function getHiddenFields(array $values, $pre = '')
     {
         $fields = '';
 
         /* Always include token in plain forms */
-        if ($is_token === false) {
+        if ($pre === '') {
             $values['token'] = $_SESSION[' PMA_token '];
         }
 
@@ -124,13 +118,13 @@ class Url
             }
 
             if (is_array($value)) {
-                $fields .= Url::getHiddenFields($value, $name, true);
+                $fields .= Url::getHiddenFields($value, $name);
             } else {
                 // do not generate an ending "\n" because
                 // Url::getHiddenInputs() is sometimes called
                 // from a JS document.write()
-                $fields .= '<input type="hidden" name="' . htmlspecialchars((string) $name)
-                    . '" value="' . htmlspecialchars((string) $value) . '">';
+                $fields .= '<input type="hidden" name="' . htmlspecialchars($name)
+                    . '" value="' . htmlspecialchars($value) . '" />';
             }
         }
 
@@ -166,7 +160,7 @@ class Url
      * @return string   string with URL parameters
      * @access  public
      */
-    public static function getCommon($params = [], $divider = '?')
+    public static function getCommon($params = array(), $divider = '?')
     {
         return htmlspecialchars(
             Url::getCommonRaw($params, $divider)
@@ -202,7 +196,7 @@ class Url
      * @return string   string with URL parameters
      * @access  public
      */
-    public static function getCommonRaw($params = [], $divider = '?')
+    public static function getCommonRaw($params = array(), $divider = '?')
     {
         $separator = Url::getArgSeparator();
 
@@ -219,7 +213,7 @@ class Url
             $params['lang'] = $GLOBALS['lang'];
         }
 
-        $query = http_build_query($params, '', $separator);
+        $query = http_build_query($params, null, $separator);
 
         if ($divider != '?' || strlen($query) > 0) {
             return $divider . $query;
@@ -235,7 +229,7 @@ class Url
      * we do not use arg_separator.output to avoid problems with &amp; and &
      *
      * @param string $encode whether to encode separator or not,
-     *                       currently 'none' or 'html'
+     * currently 'none' or 'html'
      *
      * @return string  character used for separating url parts usually ; or &
      * @access  public
@@ -262,12 +256,12 @@ class Url
         }
 
         switch ($encode) {
-            case 'html':
-                return $html_separator;
-            case 'text':
-            case 'none':
-            default:
-                return $separator;
+        case 'html':
+            return $html_separator;
+        case 'text' :
+        case 'none' :
+        default :
+            return $separator;
         }
     }
 }

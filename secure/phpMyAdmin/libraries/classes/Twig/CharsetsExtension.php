@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin\Twig
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Twig;
 
 use Twig\Extension\AbstractExtension;
@@ -26,21 +24,21 @@ class CharsetsExtension extends AbstractExtension
      */
     public function getFunctions()
     {
-        return [
+        return array(
             new TwigFunction(
-                'get_collation_descr',
+                'Charsets_getCollationDescr',
                 'PhpMyAdmin\Charsets::getCollationDescr'
             ),
             new TwigFunction(
-                'get_charset_dropdown_box',
+                'Charsets_getCharsetDropdownBox',
                 'PhpMyAdmin\Charsets::getCharsetDropdownBox',
-                ['is_safe' => ['html']]
+                array('is_safe' => array('html'))
             ),
             new TwigFunction(
-                'get_collation_dropdown_box',
+                'Charsets_getCollationDropdownBox',
                 'PhpMyAdmin\Charsets::getCollationDropdownBox',
-                ['is_safe' => ['html']]
+                array('is_safe' => array('html'))
             ),
-        ];
+        );
     }
 }

@@ -5,39 +5,38 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
-use PhpMyAdmin\Controllers\Table\GisVisualizationController;
+use PhpMyAdmin\Controllers\Table\TableGisVisualizationController;
 use PhpMyAdmin\Di\Container;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Util;
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
-}
-
-require_once ROOT_PATH . 'libraries/common.inc.php';
+require_once 'libraries/common.inc.php';
 
 $container = Container::getDefaultContainer();
-$container->factory(GisVisualizationController::class);
+$container->factory(
+    'PhpMyAdmin\Controllers\Table\TableGisVisualizationController'
+);
+$container->alias(
+    'TableGisVisualizationController',
+    'PhpMyAdmin\Controllers\Table\TableGisVisualizationController'
+);
 $container->set('PhpMyAdmin\Response', Response::getInstance());
 $container->alias('response', 'PhpMyAdmin\Response');
 
 /* Define dependencies for the concerned controller */
-$dependency_definitions = [
+$dependency_definitions = array(
     "sql_query" => &$GLOBALS['sql_query'],
     "url_params" => &$GLOBALS['url_params'],
     "goto" => Util::getScriptNameForOption(
-        $GLOBALS['cfg']['DefaultTabDatabase'],
-        'database'
+        $GLOBALS['cfg']['DefaultTabDatabase'], 'database'
     ),
     "back" => 'sql.php',
-    "visualizationSettings" => [],
-];
+    "visualizationSettings" => array()
+);
 
-/** @var GisVisualizationController $controller */
+/** @var TableGisVisualizationController $controller */
 $controller = $container->get(
-    GisVisualizationController::class,
-    $dependency_definitions
+    'TableGisVisualizationController', $dependency_definitions
 );
 $controller->indexAction();

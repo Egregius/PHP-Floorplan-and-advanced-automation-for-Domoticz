@@ -5,7 +5,6 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins;
 
@@ -47,7 +46,7 @@ abstract class SchemaPlugin
      *
      * @return void
      */
-    abstract protected function setProperties();
+    protected abstract function setProperties();
 
     /**
      * Exports the schema into the specified format.
@@ -56,7 +55,7 @@ abstract class SchemaPlugin
      *
      * @return bool Whether it succeeded
      */
-    abstract public function exportSchema($db);
+    public abstract function exportSchema($db);
 
     /**
      * Adds export options common to all plugins.
@@ -80,7 +79,7 @@ abstract class SchemaPlugin
      */
     protected function getPaperSizeArray()
     {
-        $ret = [];
+        $ret = array();
         foreach ($GLOBALS['cfg']['PDFPageSizes'] as $val) {
             $ret[$val] = $val;
         }

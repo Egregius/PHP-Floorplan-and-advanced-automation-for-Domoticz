@@ -118,11 +118,6 @@ AJAX.registerOnload('db_multi_table_query.js', function () {
 
     $('#submit_query').on('click', function () {
         var query = editor.getDoc().getValue();
-        // Verifying that the query is not empty
-        if (query === '') {
-            PMA_ajaxShowMessage(PMA_messages.strEmptyQuery, false, 'error');
-            return;
-        }
         var data = {
             'db': $('#db_name').val(),
             'sql_query': query,
@@ -146,7 +141,7 @@ AJAX.registerOnload('db_multi_table_query.js', function () {
                     });
                 });
                 $('#sql_results').html($results_dom);
-                $('#page_content').find('a').first().trigger('click');
+                $('#page_content').find('a').first().click();
             }
         });
     });

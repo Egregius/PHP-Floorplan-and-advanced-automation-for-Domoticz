@@ -68,6 +68,6 @@ class __TwigTemplate_c6067c916052ae5fd6b2141665fa053625d37a256488b41c4402e17230b
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/multi_row_operations_form.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/display/results/multi_row_operations_form.twig");
+        return new Twig_Source("", "display/results/multi_row_operations_form.twig", "/var/www/html/secure/phpMyAdmin/templates/display/results/multi_row_operations_form.twig");
     }
 }

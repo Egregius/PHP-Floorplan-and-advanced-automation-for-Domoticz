@@ -5,9 +5,12 @@
  *
  * @package PhpMyAdmin
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin;
+
+use PhpMyAdmin\Message;
+use PhpMyAdmin\Relation;
+use PhpMyAdmin\Response;
+use PhpMyAdmin\Util;
 
 /**
  * Saved searches managing
@@ -53,7 +56,7 @@ class SavedSearches
     private $_criterias = null;
 
     /**
-     * @var Relation
+     * @var Relation $relation
      */
     private $relation;
 
@@ -65,7 +68,7 @@ class SavedSearches
     public function __construct(array $config)
     {
         $this->setConfig($config);
-        $this->relation = new Relation($GLOBALS['dbi']);
+        $this->relation = new Relation();
     }
 
     /**
@@ -77,7 +80,7 @@ class SavedSearches
      */
     public function setId($searchId)
     {
-        $searchId = (int) $searchId;
+        $searchId = (int)$searchId;
         if (empty($searchId)) {
             $searchId = null;
         }
@@ -157,7 +160,7 @@ class SavedSearches
             return $this;
         }
 
-        $aListFieldsToGet = [
+        $aListFieldsToGet = array(
             'criteriaColumn',
             'criteriaSort',
             'criteriaShow',
@@ -165,10 +168,10 @@ class SavedSearches
             'criteriaAndOrRow',
             'criteriaAndOrColumn',
             'rows',
-            'TableList',
-        ];
+            'TableList'
+        );
 
-        $data = [];
+        $data = array();
 
         $data['criteriaColumnCount'] = count($criterias['criteriaColumn']);
 
@@ -179,7 +182,7 @@ class SavedSearches
         }
 
         /* Limit amount of rows */
-        if (! isset($data['rows'])) {
+        if (!isset($data['rows'])) {
             $data['rows'] = 0;
         } else {
             $data['rows'] = min(
@@ -290,13 +293,13 @@ class SavedSearches
 
         //If it's an insert.
         if (null === $this->getId()) {
-            $wheres = [
+            $wheres = array(
                 "search_name = '" . $GLOBALS['dbi']->escapeString($this->getSearchName())
                 . "'"
-            ];
+            );
             $existingSearches = $this->getList($wheres);
 
-            if (! empty($existingSearches)) {
+            if (!empty($existingSearches)) {
                 $message = Message::error(
                     __('An entry with this name already exists.')
                 );
@@ -317,7 +320,7 @@ class SavedSearches
                 . "')";
 
             $result = (bool) $this->relation->queryAsControlUser($sqlQuery);
-            if (! $result) {
+            if (!$result) {
                 return false;
             }
 
@@ -327,13 +330,13 @@ class SavedSearches
         }
 
         //Else, it's an update.
-        $wheres = [
+        $wheres = array(
             "id != " . $this->getId(),
-            "search_name = '" . $GLOBALS['dbi']->escapeString($this->getSearchName()) . "'",
-        ];
+            "search_name = '" . $GLOBALS['dbi']->escapeString($this->getSearchName()) . "'"
+        );
         $existingSearches = $this->getList($wheres);
 
-        if (! empty($existingSearches)) {
+        if (!empty($existingSearches)) {
             $message = Message::error(
                 __('An entry with this name already exists.')
             );
@@ -430,12 +433,12 @@ class SavedSearches
      *
      * @return array List of saved searches or empty array on failure
      */
-    public function getList(array $wheres = [])
+    public function getList(array $wheres = array())
     {
         if (null == $this->getUsername()
             || null == $this->getDbname()
         ) {
-            return [];
+            return array();
         }
 
         $savedSearchesTbl = Util::backquote($this->_config['cfgRelation']['db'])
@@ -455,7 +458,7 @@ class SavedSearches
 
         $resList = $this->relation->queryAsControlUser($sqlQuery);
 
-        $list = [];
+        $list = array();
         while ($oneResult = $GLOBALS['dbi']->fetchArray($resList)) {
             $list[$oneResult['id']] = $oneResult['search_name'];
         }

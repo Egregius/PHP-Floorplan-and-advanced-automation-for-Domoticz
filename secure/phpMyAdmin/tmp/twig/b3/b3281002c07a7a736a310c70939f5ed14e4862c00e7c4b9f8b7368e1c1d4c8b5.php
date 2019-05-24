@@ -40,6 +40,6 @@ class __TwigTemplate_2dcede64c0a5ab44e16e1ff7e0e50d407d17cc2cfc7a663126dd4bb854f
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "config/form_display/form_bottom.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/config/form_display/form_bottom.twig");
+        return new Twig_Source("", "config/form_display/form_bottom.twig", "/var/www/html/secure/phpMyAdmin/templates/config/form_display/form_bottom.twig");
     }
 }

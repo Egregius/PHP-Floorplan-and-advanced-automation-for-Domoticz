@@ -6,8 +6,6 @@
  * @package    PhpMyAdmin-Schema
  * @subpackage EPS
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Plugins\Schema;
 
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
@@ -70,10 +68,10 @@ class SchemaEps extends SchemaPlugin
             __('Orientation')
         );
         $leaf->setValues(
-            [
+            array(
                 'L' => __('Landscape'),
                 'P' => __('Portrait'),
-            ]
+            )
         );
         $specificOptions->addProperty($leaf);
 

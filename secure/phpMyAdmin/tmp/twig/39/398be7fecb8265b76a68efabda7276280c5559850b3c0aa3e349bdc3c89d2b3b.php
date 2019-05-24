@@ -98,6 +98,6 @@ class __TwigTemplate_6db613c1e38ad768179ff130ac79582f616fa9872e40e03d4fd3316f0e2
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "config/form_display/fieldset_top.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/config/form_display/fieldset_top.twig");
+        return new Twig_Source("", "config/form_display/fieldset_top.twig", "/var/www/html/secure/phpMyAdmin/templates/config/form_display/fieldset_top.twig");
     }
 }

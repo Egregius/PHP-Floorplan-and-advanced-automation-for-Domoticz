@@ -79,6 +79,6 @@ class __TwigTemplate_a65dedd1bcb72d4ad4ff6553634b61987cfc606be47d3a752daef03f334
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "radio_fields.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/radio_fields.twig");
+        return new Twig_Source("", "radio_fields.twig", "/var/www/html/secure/phpMyAdmin/templates/radio_fields.twig");
     }
 }

@@ -72,6 +72,6 @@ class __TwigTemplate_ae5da259643594f5d69fa137655a6b89a2838019ce39006ff92ba5f8843
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "checkbox.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/checkbox.twig");
+        return new Twig_Source("", "checkbox.twig", "/var/www/html/secure/phpMyAdmin/templates/checkbox.twig");
     }
 }

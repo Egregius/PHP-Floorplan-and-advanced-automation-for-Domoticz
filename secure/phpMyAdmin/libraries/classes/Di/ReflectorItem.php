@@ -5,8 +5,6 @@
  *
  * @package PhpMyAdmin\Di
  */
-declare(strict_types=1);
-
 namespace PhpMyAdmin\Di;
 
 /**
@@ -20,10 +18,7 @@ abstract class ReflectorItem implements Item
     /** @var Container */
     private $_container;
 
-    /**
-     * A \Reflector
-     * @var \ReflectionClass|\ReflectionMethod|\ReflectionFunction
-     */
+    /** @var \Reflector */
     private $_reflector;
 
     /**
@@ -31,7 +26,6 @@ abstract class ReflectorItem implements Item
      *
      * @param Container $container  Container
      * @param mixed     $definition Definition
-     * @throws \ReflectionException
      */
     public function __construct(Container $container, $definition)
     {
@@ -44,11 +38,10 @@ abstract class ReflectorItem implements Item
      *
      * @param array $params Parameters
      * @return mixed
-     * @throws ContainerException
      */
-    protected function invoke(array $params = [])
+    protected function invoke(array $params = array())
     {
-        $args = [];
+        $args = array();
         $reflector = $this->_reflector;
         if ($reflector instanceof \ReflectionClass) {
             $constructor = $reflector->getConstructor();
@@ -79,12 +72,11 @@ abstract class ReflectorItem implements Item
      * @param \ReflectionParameter[] $required Arguments
      * @param array                  $params   Parameters
      *
-     * @return array
-     * @throws ContainerException
+*@return array
      */
-    private function _resolveArgs($required, array $params = [])
+    private function _resolveArgs($required, array $params = array())
     {
-        $args = [];
+        $args = array();
         foreach ($required as $param) {
             $name = $param->getName();
             $type = $param->getClass();
@@ -119,7 +111,6 @@ abstract class ReflectorItem implements Item
      * @param mixed $definition Definition
      *
      * @return \Reflector
-     * @throws \ReflectionException
      */
     private static function _resolveReflector($definition)
     {
@@ -129,7 +120,7 @@ abstract class ReflectorItem implements Item
         if (is_string($definition)) {
             $definition = explode('::', $definition);
         }
-        if (! isset($definition[1])) {
+        if (!isset($definition[1])) {
             return new \ReflectionClass($definition[0]);
         }
         return new \ReflectionMethod($definition[0], $definition[1]);

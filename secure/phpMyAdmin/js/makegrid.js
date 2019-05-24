@@ -433,11 +433,11 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     g.showMarkHint = true;
                 }
                 if (g.showSortHint && g.sortHint) {
-                    text += text.length > 0 ? '<br>' : '';
+                    text += text.length > 0 ? '<br />' : '';
                     text += '- ' + g.sortHint;
                 }
                 if (g.showMultiSortHint && g.strMultiSortHint) {
-                    text += text.length > 0 ? '<br>' : '';
+                    text += text.length > 0 ? '<br />' : '';
                     text += '- ' + g.strMultiSortHint;
                 }
                 if (g.showMarkHint &&
@@ -446,11 +446,11 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     g.showReorderHint &&
                     g.reorderHint
                 ) {
-                    text += text.length > 0 ? '<br>' : '';
+                    text += text.length > 0 ? '<br />' : '';
                     text += '- ' + g.reorderHint;
-                    text += text.length > 0 ? '<br>' : '';
+                    text += text.length > 0 ? '<br />' : '';
                     text += '- ' + g.markHint;
-                    text += text.length > 0 ? '<br>' : '';
+                    text += text.length > 0 ? '<br />' : '';
                     text += '- ' + g.copyHint;
                 }
             }
@@ -823,16 +823,9 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                             $checkbox.prop('checked', false);
                         });
                     }
-                    // if some text is written in textbox automatically unmark the null checkbox and if it is emptied again mark the checkbox.
-                    $(g.cEdit).find('.edit_box').on('input', function () {
-                        if ($(g.cEdit).find('.edit_box').val() !== '') {
-                            $checkbox.prop('checked', false);
-                        } else {
-                            $checkbox.prop('checked', true);
-                        }
-                    });
+
                     // if null checkbox is clicked empty the corresponding select/editor.
-                    $checkbox.on('click', function () {
+                    $checkbox.click(function () {
                         if ($td.is('.enum')) {
                             $editArea.find('select').val('');
                         } else if ($td.is('.set')) {
@@ -894,7 +887,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                         // hide the value next to 'Browse foreign values' link
                         $editArea.find('span.curr_value').hide();
                         // handle update for new values selected from new window
-                        $editArea.find('span.curr_value').on('change', function () {
+                        $editArea.find('span.curr_value').change(function () {
                             $(g.cEdit).find('.edit_box').val($(this).text());
                         });
                     }); // end $.post()
@@ -1005,6 +998,16 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                             if (typeof data !== 'undefined' && data.success === true) {
                                 $td.data('original_data', data.value);
                                 $(g.cEdit).find('.edit_box').val(data.value);
+                                $editArea.append('<textarea rows="15"></textarea>');
+                                $editArea.find('textarea').val(data.value);
+                                $editArea.on('keyup', 'textarea', function () {
+                                    $(g.cEdit).find('.edit_box').val($(this).val());
+                                });
+                                $(g.cEdit).on('keyup', '.edit_box', function () {
+                                    $editArea.find('textarea').val($(this).val());
+                                });
+                                $editArea.append('<div class="cell_edit_hint">' + g.cellEditHint + '</div>');
+                                $editArea.show();
                             } else {
                                 PMA_ajaxShowMessage(data.error, false);
                             }
@@ -1080,7 +1083,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     $(g.cEdit).append(datepicker_div);
 
                     // cancel any click on the datepicker element
-                    $editArea.find('> *').on('click', function (e) {
+                    $editArea.find('> *').click(function (e) {
                         e.stopPropagation();
                     });
 
@@ -1541,7 +1544,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
             $firstRowCols.each(function () {
                 var cb = document.createElement('div'); // column border
                 $(cb).addClass('colborder')
-                    .on('mousedown', function (e) {
+                    .mousedown(function (e) {
                         g.dragStartRsz(e, this);
                     });
                 $(g.cRsz).append(cb);
@@ -1589,13 +1592,13 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
 
             // register events
             $(g.t).find('th.draggable')
-                .on('mousedown', function (e) {
+                .mousedown(function (e) {
                     $(g.o).addClass('turnOffSelect');
                     if (g.visibleHeadersCount > 1) {
                         g.dragStartReorder(e, this);
                     }
                 })
-                .on('mouseenter', function () {
+                .mouseenter(function () {
                     if (g.visibleHeadersCount > 1) {
                         $(this).css('cursor', 'move');
                     } else {
@@ -1610,12 +1613,12 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                 })
                 .dblclick(function (e) {
                     e.preventDefault();
-                    $('<div></div>')
+                    $('<div/>')
                         .prop('title', PMA_messages.strColNameCopyTitle)
                         .addClass('modal-copy')
                         .text(PMA_messages.strColNameCopyText)
                         .append(
-                            $('<input>')
+                            $('<input/>')
                                 .prop('readonly', true)
                                 .val($(this).data('column'))
                         )
@@ -1630,7 +1633,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     e.stopPropagation();
                 });
             // restore column order when the restore button is clicked
-            $(g.o).find('div.restore_column').on('click', function () {
+            $(g.o).find('div.restore_column').click(function () {
                 g.restoreColOrder();
             });
 
@@ -1697,7 +1700,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     var cd = document.createElement('div'); // column drop-down arrow
                     var pos = $th.position();
                     $(cd).addClass('coldrop')
-                        .on('click', function () {
+                        .click(function () {
                             if (g.cList.style.display === 'none') {
                                 g.showColList(this);
                             } else {
@@ -1721,31 +1724,31 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     var currHeader = $firstRowCols[i];
                     var listElmt = document.createElement('div');
                     $(listElmt).text($(currHeader).text())
-                        .prepend('<input type="checkbox" ' + (g.colVisib[i] ? 'checked="checked" ' : '') + '>');
+                        .prepend('<input type="checkbox" ' + (g.colVisib[i] ? 'checked="checked" ' : '') + '/>');
                     $listDiv.append(listElmt);
                     // add event on click
-                    $(listElmt).on('click', tempClick);
+                    $(listElmt).click(tempClick);
                 }
                 // add "show all column" button
                 var showAll = document.createElement('div');
                 $(showAll).addClass('showAllColBtn')
                     .text(g.showAllColText);
                 $(g.cList).append(showAll);
-                $(showAll).on('click', function () {
+                $(showAll).click(function () {
                     g.showAllColumns();
                 });
                 // prepend "show all column" button at top if the list is too long
                 if ($firstRowCols.length > 10) {
                     var clone = showAll.cloneNode(true);
                     $(g.cList).prepend(clone);
-                    $(clone).on('click', function () {
+                    $(clone).click(function () {
                         g.showAllColumns();
                     });
                 }
             }
 
             // hide column visibility list if we move outside the list
-            $(g.t).find('td, th.draggable').on('mouseenter', function () {
+            $(g.t).find('td, th.draggable').mouseenter(function () {
                 g.hideColList();
             });
 
@@ -1966,12 +1969,12 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
 
             // adjust g.cEditStd
             g.cEditStd.className = 'cEdit';
-            $(g.cEditStd).html('<input class="edit_box" rows="1"><div class="edit_area"></div>');
+            $(g.cEditStd).html('<input class="edit_box" rows="1" /><div class="edit_area" />');
             $(g.cEditStd).hide();
 
             // adjust g.cEdit
             g.cEditTextarea.className = 'cEdit';
-            $(g.cEditTextarea).html('<textarea class="edit_box" rows="1"></textarea><div class="edit_area"></div>');
+            $(g.cEditTextarea).html('<textarea class="edit_box" rows="1" ></textarea><div class="edit_area" />');
             $(g.cEditTextarea).hide();
 
             // assign cell editing hint
@@ -1986,7 +1989,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
 
             // register events
             $(g.t).find('td.data.click1')
-                .on('click', function (e) {
+                .click(function (e) {
                     startGridEditing(e, this);
                     // prevent default action when clicking on "link" in a table
                     if ($(e.target).is('.grid_edit a')) {
@@ -1995,7 +1998,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                 });
 
             $(g.t).find('td.data.click2')
-                .on('click', function (e) {
+                .click(function (e) {
                     var $cell = $(this);
                     // In the case of relational link, We want single click on the link
                     // to goto the link and double click to start grid-editing.
@@ -2049,7 +2052,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     g.saveOrPostEditedCell();
                 }
             });
-            $(g.cEditStd).on('keydown', function (e) {
+            $(g.cEditStd).keydown(function (e) {
                 if (!g.isEditCellTextEditable) {
                     // prevent text editing
                     e.preventDefault();
@@ -2068,13 +2071,13 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                     g.saveOrPostEditedCell();
                 }
             });
-            $(g.cEditTextarea).on('keydown', function (e) {
+            $(g.cEditTextarea).keydown(function (e) {
                 if (!g.isEditCellTextEditable) {
                     // prevent text editing
                     e.preventDefault();
                 }
             });
-            $('html').on('click', function (e) {
+            $('html').click(function (e) {
                 // hide edit cell if the click is not fromDat edit area
                 if ($(e.target).parents().index($(g.cEdit)) === -1 &&
                     !$(e.target).parents('.ui-datepicker-header').length &&
@@ -2083,13 +2086,13 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
                 ) {
                     g.hideEditCell();
                 }
-            }).on('keydown', function (e) {
+            }).keydown(function (e) {
                 if (e.which === 27 && g.isCellEditActive) {
                     // cancel on pressing "Esc"
                     g.hideEditCell(true);
                 }
             });
-            $(g.o).find('div.save_edited').on('click', function () {
+            $(g.o).find('div.save_edited').click(function () {
                 g.hideEditCell();
                 g.postEditedCell();
             });
@@ -2128,7 +2131,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
 
     // wrap remaining cells, except actions cell, with span
     $(t).find('th, td:not(:has(span))')
-        .wrapInner('<span></span>');
+        .wrapInner('<span />');
 
     // create grid elements
     g.gDiv = document.createElement('div');     // create global div
@@ -2209,7 +2212,7 @@ function PMA_makegrid (t, enableResize, enableReorder, enableVisib, enableGridEd
 
     // register events for hint tooltip (anchors inside draggable th)
     $(t).find('th.draggable a')
-        .on('mouseenter', function () {
+        .mouseenter(function () {
             g.showSortHint = true;
             g.showMultiSortHint = true;
             $(t).find('th.draggable').tooltip('option', {

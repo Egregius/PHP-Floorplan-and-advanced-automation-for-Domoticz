@@ -73,6 +73,6 @@ class __TwigTemplate_f959e4e2295ae2e24e2cbc35e3dd95b0be1cace68063671874236277c9e
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "navigation/logo.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/navigation/logo.twig");
+        return new Twig_Source("", "navigation/logo.twig", "/var/www/html/secure/phpMyAdmin/templates/navigation/logo.twig");
     }
 }

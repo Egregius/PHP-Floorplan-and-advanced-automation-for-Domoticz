@@ -87,6 +87,6 @@ $context["bookmark"], "getDatabase", [], "method")]]]);
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "console/bookmark_content.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/console/bookmark_content.twig");
+        return new Twig_Source("", "console/bookmark_content.twig", "/var/www/html/secure/phpMyAdmin/templates/console/bookmark_content.twig");
     }
 }

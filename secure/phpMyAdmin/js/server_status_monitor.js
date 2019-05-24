@@ -26,13 +26,13 @@ AJAX.registerTeardown('server_status_monitor.js', function () {
  * Popup behaviour
  */
 AJAX.registerOnload('server_status_monitor.js', function () {
-    $('<div></div>')
+    $('<div />')
         .attr('id', 'emptyDialog')
         .appendTo('#page_content');
     $('#addChartDialog')
         .appendTo('#page_content');
 
-    $('a.popupLink').on('click', function () {
+    $('a.popupLink').click(function () {
         var $link = $(this);
         $('div.' + $link.attr('href').substr(1))
             .show()
@@ -41,7 +41,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
         return false;
     });
-    $('body').on('click', function (event) {
+    $('body').click(function (event) {
         $('div.openedPopup').each(function () {
             var $cnt = $(this);
             var pos = $cnt.offset();
@@ -371,7 +371,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         defaultChartGrid.c5 = presetCharts.swap;
     }
 
-    $('a[href="#rearrangeCharts"], a[href="#endChartEditMode"]').on('click', function (event) {
+    $('a[href="#rearrangeCharts"], a[href="#endChartEditMode"]').click(function (event) {
         event.preventDefault();
         editMode = !editMode;
         if ($(this).attr('href') === '#endChartEditMode') {
@@ -400,7 +400,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
     });
 
     // global settings
-    $('div.popupContent select[name="chartColumns"]').on('change', function () {
+    $('div.popupContent select[name="chartColumns"]').change(function () {
         monitorSettings.columns = parseInt(this.value, 10);
 
         calculateChartSize();
@@ -466,7 +466,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         saveMonitor(); // Save settings
     });
 
-    $('div.popupContent select[name="gridChartRefresh"]').on('change', function () {
+    $('div.popupContent select[name="gridChartRefresh"]').change(function () {
         monitorSettings.gridRefresh = parseInt(this.value, 10) * 1000;
         clearTimeout(runtime.refreshTimeout);
 
@@ -482,7 +482,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         saveMonitor(); // Save settings
     });
 
-    $('a[href="#addNewChart"]').on('click', function (event) {
+    $('a[href="#addNewChart"]').click(function (event) {
         event.preventDefault();
         var dlgButtons = { };
 
@@ -524,23 +524,23 @@ AJAX.registerOnload('server_status_monitor.js', function () {
             $.each(presetCharts, function (key, value) {
                 $presetList.append('<option value="' + key + '">' + value.title + '</option>');
             });
-            $presetList.on('change', function () {
+            $presetList.change(function () {
                 $('input[name="chartTitle"]').val(
                     $presetList.find(':selected').text()
                 );
                 $('#chartPreset').prop('checked', true);
             });
-            $('#chartPreset').on('click', function () {
+            $('#chartPreset').click(function () {
                 $('input[name="chartTitle"]').val(
                     $presetList.find(':selected').text()
                 );
             });
-            $('#chartStatusVar').on('click', function () {
+            $('#chartStatusVar').click(function () {
                 $('input[name="chartTitle"]').val(
                     $('#chartSeries').find(':selected').text().replace(/_/g, ' ')
                 );
             });
-            $('#chartSeries').on('change', function () {
+            $('#chartSeries').change(function () {
                 $('input[name="chartTitle"]').val(
                     $('#chartSeries').find(':selected').text().replace(/_/g, ' ')
                 );
@@ -558,16 +558,14 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         return false;
     });
 
-    $('a[href="#exportMonitorConfig"]').on('click', function (event) {
+    $('a[href="#exportMonitorConfig"]').click(function (event) {
         event.preventDefault();
         var gridCopy = {};
         $.each(runtime.charts, function (key, elem) {
             gridCopy[key] = {};
             gridCopy[key].nodes = elem.nodes;
-            gridCopy[key].series = elem.series;
             gridCopy[key].settings = elem.settings;
             gridCopy[key].title = elem.title;
-            gridCopy[key].maxYLabel = elem.maxYLabel;
         });
         var exportData = {
             monitorCharts: gridCopy,
@@ -575,28 +573,15 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         };
 
         var blob = new Blob([JSON.stringify(exportData)], { type: 'application/octet-stream' });
-        var url = null;
-        var fileName = 'monitor-config.json';
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, fileName);
-        } else {
-            url = URL.createObjectURL(blob);
-            window.location.href = url;
-        }
-        setTimeout(function () {
-            // For some browsers it is necessary to delay revoking the ObjectURL
-            if (url !== null) {
-                window.URL.revokeObjectURL(url);
-            }
-            url = undefined;
-            blob = undefined;
-        }, 100);
+        var url = window.URL.createObjectURL(blob);
+        window.location.href = url;
+        window.URL.revokeObjectURL(url);
     });
 
-    $('a[href="#importMonitorConfig"]').on('click', function (event) {
+    $('a[href="#importMonitorConfig"]').click(function (event) {
         event.preventDefault();
         $('#emptyDialog').dialog({ title: PMA_messages.strImportDialogTitle });
-        $('#emptyDialog').html(PMA_messages.strImportDialogMessage + ':<br><form>' +
+        $('#emptyDialog').html(PMA_messages.strImportDialogMessage + ':<br/><form>' +
             '<input type="file" name="file" id="import_file"> </form>');
 
         var dlgBtns = {};
@@ -610,7 +595,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
             };
             reader.onload = function (e) {
                 var data = e.target.result;
-                var json = null;
+
                 // Try loading config
                 try {
                     json = JSON.parse(data);
@@ -629,12 +614,11 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
                 // If json ok, try applying config
                 try {
-                    if (isStorageSupported('localStorage')) {
-                        window.localStorage.monitorCharts = JSON.stringify(json.monitorCharts);
-                        window.localStorage.monitorSettings = JSON.stringify(json.monitorSettings);
-                    }
+                    window.localStorage.monitorCharts = JSON.stringify(json.monitorCharts);
+                    window.localStorage.monitorSettings = JSON.stringify(json.monitorSettings);
                     rebuildGrid();
                 } catch (err) {
+                    console.log(err);
                     alert(PMA_messages.strFailedBuildingGrid);
                     // If an exception is thrown, load default again
                     if (isStorageSupported('localStorage')) {
@@ -660,7 +644,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         });
     });
 
-    $('a[href="#clearMonitorConfig"]').on('click', function (event) {
+    $('a[href="#clearMonitorConfig"]').click(function (event) {
         event.preventDefault();
         if (isStorageSupported('localStorage')) {
             window.localStorage.removeItem('monitorCharts');
@@ -671,7 +655,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         rebuildGrid();
     });
 
-    $('a[href="#pauseCharts"]').on('click', function (event) {
+    $('a[href="#pauseCharts"]').click(function (event) {
         event.preventDefault();
         runtime.redrawCharts = ! runtime.redrawCharts;
         if (! runtime.redrawCharts) {
@@ -686,7 +670,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         return false;
     });
 
-    $('a[href="#monitorInstructionsDialog"]').on('click', function (event) {
+    $('a[href="#monitorInstructionsDialog"]').click(function (event) {
         event.preventDefault();
 
         var $dialog = $('#monitorInstructionsDialog');
@@ -731,26 +715,26 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                         msg = PMA_messages.strBothLogOff;
                     }
 
-                    str = '<b>' + PMA_messages.strCurrentSettings + '</b><br><div class="smallIndent">';
-                    str += icon + msg + '<br>';
+                    str = '<b>' + PMA_messages.strCurrentSettings + '</b><br/><div class="smallIndent">';
+                    str += icon + msg + '<br />';
 
                     if (logVars.log_output !== 'TABLE') {
-                        str += PMA_getImage('s_error') + ' ' + PMA_messages.strLogOutNotTable + '<br>';
+                        str += PMA_getImage('s_error') + ' ' + PMA_messages.strLogOutNotTable + '<br />';
                     } else {
-                        str += PMA_getImage('s_success') + ' ' + PMA_messages.strLogOutIsTable + '<br>';
+                        str += PMA_getImage('s_success') + ' ' + PMA_messages.strLogOutIsTable + '<br />';
                     }
 
                     if (logVars.slow_query_log === 'ON') {
                         if (logVars.long_query_time > 2) {
                             str += PMA_getImage('s_attention') + ' ';
                             str += PMA_sprintf(PMA_messages.strSmallerLongQueryTimeAdvice, logVars.long_query_time);
-                            str += '<br>';
+                            str += '<br />';
                         }
 
                         if (logVars.long_query_time < 2) {
                             str += PMA_getImage('s_success') + ' ';
                             str += PMA_sprintf(PMA_messages.strLongQueryTimeSet, logVars.long_query_time);
-                            str += '<br>';
+                            str += '<br />';
                         }
                     }
 
@@ -759,7 +743,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                     if (is_superuser) {
                         str += '<p></p><b>' + PMA_messages.strChangeSettings + '</b>';
                         str += '<div class="smallIndent">';
-                        str += PMA_messages.strSettingsAppliedGlobal + '<br>';
+                        str += PMA_messages.strSettingsAppliedGlobal + '<br/>';
 
                         var varValue = 'TABLE';
                         if (logVars.log_output === 'TABLE') {
@@ -768,26 +752,26 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
                         str += '- <a class="set" href="#log_output-' + varValue + '">';
                         str += PMA_sprintf(PMA_messages.strSetLogOutput, varValue);
-                        str += ' </a><br>';
+                        str += ' </a><br />';
 
                         if (logVars.general_log !== 'ON') {
                             str += '- <a class="set" href="#general_log-ON">';
                             str += PMA_sprintf(PMA_messages.strEnableVar, 'general_log');
-                            str += ' </a><br>';
+                            str += ' </a><br />';
                         } else {
                             str += '- <a class="set" href="#general_log-OFF">';
                             str += PMA_sprintf(PMA_messages.strDisableVar, 'general_log');
-                            str += ' </a><br>';
+                            str += ' </a><br />';
                         }
 
                         if (logVars.slow_query_log !== 'ON') {
                             str += '- <a class="set" href="#slow_query_log-ON">';
                             str +=  PMA_sprintf(PMA_messages.strEnableVar, 'slow_query_log');
-                            str += ' </a><br>';
+                            str += ' </a><br />';
                         } else {
                             str += '- <a class="set" href="#slow_query_log-OFF">';
                             str +=  PMA_sprintf(PMA_messages.strDisableVar, 'slow_query_log');
-                            str += ' </a><br>';
+                            str += ' </a><br />';
                         }
 
                         varValue = 5;
@@ -797,9 +781,9 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
                         str += '- <a class="set" href="#long_query_time-' + varValue + '">';
                         str += PMA_sprintf(PMA_messages.setSetLongQueryTime, varValue);
-                        str += ' </a><br>';
+                        str += ' </a><br />';
                     } else {
-                        str += PMA_messages.strNoSuperUser + '<br>';
+                        str += PMA_messages.strNoSuperUser + '<br/>';
                     }
 
                     str += '</div>';
@@ -810,7 +794,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
                     $dialog.find('div.ajaxContent').html(str);
                     $dialog.find('img.ajaxIcon').hide();
-                    $dialog.find('a.set').on('click', function () {
+                    $dialog.find('a.set').click(function () {
                         var nameValue = $(this).attr('href').split('-');
                         loadLogVars({ varName: nameValue[0].substr(1), varValue: nameValue[1] });
                         $dialog.find('img.ajaxIcon').show();
@@ -825,7 +809,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         return false;
     });
 
-    $('input[name="chartType"]').on('change', function () {
+    $('input[name="chartType"]').change(function () {
         $('#chartVariableSettings').toggle(this.checked && this.value === 'variable');
         var title = $('input[name="chartTitle"]').val();
         if (title === PMA_messages.strChartTitle ||
@@ -837,21 +821,21 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         }
     });
 
-    $('input[name="useDivisor"]').on('change', function () {
+    $('input[name="useDivisor"]').change(function () {
         $('span.divisorInput').toggle(this.checked);
     });
 
-    $('input[name="useUnit"]').on('change', function () {
+    $('input[name="useUnit"]').change(function () {
         $('span.unitInput').toggle(this.checked);
     });
 
-    $('select[name="varChartList"]').on('change', function () {
+    $('select[name="varChartList"]').change(function () {
         if (this.selectedIndex !== 0) {
             $('#variableInput').val(this.value);
         }
     });
 
-    $('a[href="#kibDivisor"]').on('click', function (event) {
+    $('a[href="#kibDivisor"]').click(function (event) {
         event.preventDefault();
         $('input[name="valueDivisor"]').val(1024);
         $('input[name="valueUnit"]').val(PMA_messages.strKiB);
@@ -860,7 +844,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         return false;
     });
 
-    $('a[href="#mibDivisor"]').on('click', function (event) {
+    $('a[href="#mibDivisor"]').click(function (event) {
         event.preventDefault();
         $('input[name="valueDivisor"]').val(1024 * 1024);
         $('input[name="valueUnit"]').val(PMA_messages.strMiB);
@@ -869,14 +853,14 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         return false;
     });
 
-    $('a[href="#submitClearSeries"]').on('click', function (event) {
+    $('a[href="#submitClearSeries"]').click(function (event) {
         event.preventDefault();
         $('#seriesPreview').html('<i>' + PMA_messages.strNone + '</i>');
         newChart = null;
         $('#clearSeriesLink').hide();
     });
 
-    $('a[href="#submitAddSeries"]').on('click', function (event) {
+    $('a[href="#submitAddSeries"]').click(function (event) {
         event.preventDefault();
         if ($('#variableInput').val() === '') {
             return false;
@@ -918,7 +902,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
             label: $('#variableInput').val().replace(/_/g, ' ')
         };
         newChart.series.push(newSeries);
-        $('#seriesPreview').append('- ' + escapeHtml(newSeries.label + str) + '<br>');
+        $('#seriesPreview').append('- ' + escapeHtml(newSeries.label + str) + '<br/>');
         newChart.nodes.push(serie);
         $('#variableInput').val('');
         $('input[name="differentialValue"]').prop('checked', true);
@@ -1172,12 +1156,13 @@ AJAX.registerOnload('server_status_monitor.js', function () {
         var tempTooltipContentEditor = function (str, seriesIndex, pointIndex, plot) {
             var j;
             // TODO: move style to theme CSS
-            var tooltipHtml = '<div id="tooltip_editor">';
+            var tooltipHtml = '<div style="font-size:12px;background-color:#FFFFFF;' +
+                'opacity:0.95;filter:alpha(opacity=95);padding:5px;">';
             // x value i.e. time
             var timeValue = str.split(',')[0];
             var seriesValue;
             tooltipHtml += 'Time: ' + timeValue;
-            tooltipHtml += '<span id="tooltip_font">';
+            tooltipHtml += '<span style="font-weight:bold;">';
             // Add y values to the tooltip per series
             for (j in plot.series) {
                 // get y value if present
@@ -1196,7 +1181,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                     // using format string
                     seriesValue = PMA_sprintf(plot.series[0]._yaxis.tickOptions.formatString, seriesValue);
                 }
-                tooltipHtml += '<br><span style="color:' + seriesColor + '">' +
+                tooltipHtml += '<br /><span style="color:' + seriesColor + '">' +
                     seriesLabel + ': ' + seriesValue + '</span>';
             }
             tooltipHtml += '</span></div>';
@@ -1217,10 +1202,10 @@ AJAX.registerOnload('server_status_monitor.js', function () {
             chartObj.chart.series[i].data.shift();
         }
 
-        var $legend = $('<div></div>').css('padding', '0.5em');
+        var $legend = $('<div />').css('padding', '0.5em');
         for (i in chartObj.chart.series) {
             $legend.append(
-                $('<div></div>').append(
+                $('<div />').append(
                     $('<div>').css({
                         width: '1em',
                         height: '1em',
@@ -1251,7 +1236,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
             if ($('#selection_box').length) {
                 $('#selection_box').remove();
             }
-            var selectionBox = $('<div id="selection_box" >');
+            var selectionBox = $('<div id="selection_box" style="z-index:1000;height:205px;position:absolute;background-color:#87CEEB;opacity:0.4;filter:alpha(opacity=40);pointer-events:none;">');
             $(document.body).append(selectionBox);
             selectionStartX = ev.pageX;
             selectionStartY = ev.pageY;
@@ -1648,7 +1633,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                     if (key === 'Total') {
                         key = '<b>' + key + '</b>';
                     }
-                    $('#emptyDialog').append(key + ': ' + value + '<br>');
+                    $('#emptyDialog').append(key + ': ' + value + '<br/>');
                 });
 
                 /* Add filter options if more than a bunch of rows there to filter */
@@ -1658,24 +1643,24 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                         '    <legend>' + PMA_messages.strFiltersForLogTable + '</legend>' +
                         '    <div class="formelement">' +
                         '        <label for="filterQueryText">' + PMA_messages.strFilterByWordRegexp + '</label>' +
-                        '        <input name="filterQueryText" type="text" id="filter_query_text">' +
+                        '        <input name="filterQueryText" type="text" id="filterQueryText" style="vertical-align: baseline;" />' +
                         '    </div>' +
                         ((logData.numRows > 250) ? ' <div class="formelement"><button name="startFilterQueryText" id="startFilterQueryText">' + PMA_messages.strFilter + '</button></div>' : '') +
                         '    <div class="formelement">' +
-                        '       <input type="checkbox" id="noWHEREData" name="noWHEREData" value="1"> ' +
+                        '       <input type="checkbox" id="noWHEREData" name="noWHEREData" value="1" /> ' +
                         '       <label for="noWHEREData"> ' + PMA_messages.strIgnoreWhereAndGroup + '</label>' +
                         '   </div' +
                         '</fieldset>'
                     );
 
-                    $('#noWHEREData').on('change', function () {
+                    $('#noWHEREData').change(function () {
                         filterQueries(true);
                     });
 
                     if (logData.numRows > 250) {
-                        $('#startFilterQueryText').on('click', filterQueries);
+                        $('#startFilterQueryText').click(filterQueries);
                     } else {
-                        $('#filterQueryText').on('keyup', filterQueries);
+                        $('#filterQueryText').keyup(filterQueries);
                     }
                 }
 
@@ -1912,7 +1897,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                 // Assuming the query column is the second last
                 if (j === cols.length - 2 && rows[i][cols[j]].match(/^SELECT/i)) {
                     $tRow.append($tCell = $('<td class="linkElem">' + formatValue(cols[j], rows[i][cols[j]]) + '</td>'));
-                    $tCell.on('click', openQueryAnalyzer);
+                    $tCell.click(openQueryAnalyzer);
                 } else {
                     $tRow.append('<td>' + formatValue(cols[j], rows[i][cols[j]]) + '</td>');
                 }
@@ -2054,7 +2039,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
                 if (key === 'Extra') {
                     value = value.replace(/(using (temporary|filesort))/gi, '<span class="attention">$1</span>');
                 }
-                explain += key + ': ' + value + '<br>';
+                explain += key + ': ' + value + '<br />';
             };
 
             for (i = 0, l = data.explain.length; i < l; i++) {
@@ -2067,7 +2052,7 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
             $('#queryAnalyzerDialog').find('div.placeHolder td.explain').append(explain);
 
-            $('#queryAnalyzerDialog').find('div.placeHolder a[href*="#showExplain"]').on('click', function () {
+            $('#queryAnalyzerDialog').find('div.placeHolder a[href*="#showExplain"]').click(function () {
                 var id = $(this).attr('href').split('-')[1];
                 $(this).parent().find('div[class*="explain"]').hide();
                 $(this).parent().find('div[class*="explain-' + id + '"]').show();
@@ -2107,16 +2092,16 @@ AJAX.registerOnload('server_status_monitor.js', function () {
 
                 $('#queryAnalyzerDialog').find('div.placeHolder td.chart').append(
                     '<b>' + PMA_messages.strProfilingResults + ' ' + $('#profiling_docu').html() + '</b> ' +
-                    '(<a href="#showNums">' + PMA_messages.strTable + '</a>, <a href="#showChart">' + PMA_messages.strChart + '</a>)<br>' +
+                    '(<a href="#showNums">' + PMA_messages.strTable + '</a>, <a href="#showChart">' + PMA_messages.strChart + '</a>)<br/>' +
                     numberTable + ' <div id="queryProfiling"></div>');
 
-                $('#queryAnalyzerDialog').find('div.placeHolder a[href="#showNums"]').on('click', function () {
+                $('#queryAnalyzerDialog').find('div.placeHolder a[href="#showNums"]').click(function () {
                     $('#queryAnalyzerDialog').find('#queryProfiling').hide();
                     $('#queryAnalyzerDialog').find('table.queryNums').show();
                     return false;
                 });
 
-                $('#queryAnalyzerDialog').find('div.placeHolder a[href="#showChart"]').on('click', function () {
+                $('#queryAnalyzerDialog').find('div.placeHolder a[href="#showChart"]').click(function () {
                     $('#queryAnalyzerDialog').find('#queryProfiling').show();
                     $('#queryAnalyzerDialog').find('table.queryNums').hide();
                     return false;

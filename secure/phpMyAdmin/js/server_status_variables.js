@@ -23,17 +23,17 @@ AJAX.registerOnload('server_status_variables.js', function () {
     var text = ''; // Holds filter text
 
     /* 3 Filtering functions */
-    $('#filterAlert').on('change', function () {
+    $('#filterAlert').change(function () {
         alertFilter = this.checked;
         filterVariables();
     });
 
-    $('#filterCategory').on('change', function () {
+    $('#filterCategory').change(function () {
         categoryFilter = $(this).val();
         filterVariables();
     });
 
-    $('#dontFormat').on('change', function () {
+    $('#dontFormat').change(function () {
         // Hiding the table while changing values speeds up the process a lot
         $('#serverstatusvariables').hide();
         $('#serverstatusvariables').find('td.value span.original').toggle(this.checked);
@@ -41,7 +41,7 @@ AJAX.registerOnload('server_status_variables.js', function () {
         $('#serverstatusvariables').show();
     }).trigger('change');
 
-    $('#filterText').on('keyup', function (e) {
+    $('#filterText').keyup(function (e) {
         var word = $(this).val().replace(/_/g, ' ');
         if (word.length === 0) {
             textFilter = null;

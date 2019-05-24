@@ -78,6 +78,6 @@ class __TwigTemplate_adb3a68995d5d55ceeea4340099678c367ceecb10df9b27045e26ace1bd
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "console/toolbar.twig", "/var/www/home.egregius.be/secure/phpMyAdmin/templates/console/toolbar.twig");
+        return new Twig_Source("", "console/toolbar.twig", "/var/www/html/secure/phpMyAdmin/templates/console/toolbar.twig");
     }
 }
