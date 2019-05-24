@@ -535,8 +535,8 @@ function ajaxbose($ip){
                     html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art" />';
                     elem=document.getElementById("art");
                     if(elem.innerHTML!=html)elem.innerHTML=html;
-                    html='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'prev\')"/>Prev</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'skip\',\'next\')"/>Next</button>';
+                    html='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'prev\')"/>Prev</button>';
+                    html+='<button class="btn b2" onclick="ajaxcontrolbose(101,\'skip\',\'next\')"/>Next</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'1\')"/>Trance, Techno and Retro</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'2\')"/>Tiësto</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose(\'101\',\'preset\',\'3\')"/>MNM</button>';
@@ -552,7 +552,7 @@ function ajaxbose($ip){
                     document.getElementById("art").innerHTML="";
                     document.getElementById("volume").innerHTML="";
                     document.getElementById("bass").innerHTML="";
-                    html='<button class="btn b2" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';
+                    html='<button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'On\')"/>Power On</button>';
                     if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
                 }
             } catch{}
