@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-phpinfo();
+phpinfo();sdsd
 
 /*---------------------------*/
 echo '</pre>';
