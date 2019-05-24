@@ -72,11 +72,7 @@ if ($home) {
             <a href=\'javascript:navigator_Go("floorplan.php");\'>
                 <img src="/images/close.png" width="72px" height="72px" alt="close">
             </a>
-        </div>';
-    $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
-    if (!empty($nowplaying)) {
-        if (isset($nowplaying['@attributes']['source'])) {
-            echo '
+        </div>
         <div class="fix blackmedia" >
 			    <input type="hidden" name="ip" value="'.$bose.'">
 			    <div style="height:180px;" id="art"></div>
@@ -86,34 +82,11 @@ if ($home) {
 			    <div id="volume"></div>
 			    <div id="bass"></div>
 			    <br>
-			    <br>';
-            if ($nowplaying['@attributes']['source']=='STANDBY') {
-
-            } else {
-
-                $presets=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/presets"))), true);
-                foreach ($presets as $i) {
-                            $x=1;
-                    foreach ($i as $j) {
-                        //print_r($j);
-                        echo '
-                <button class="btn b2" onclick="ajaxcontrolbose(\''.$bose.'\',\'preset\',\''.$j['@attributes']['id'].'\')"/>'.str_replace(', selected by Egregius', '', $j['ContentItem']['itemName']).'</button>';
-                        if ($x%2==0) {
-                            echo '<br>';
-                        }
-                        $x++;
-                    }
-                }
-                echo '
-                <br>
-                <br>';
-            }
-            echo '
+			    <br>
                 <div id="power"></div>
         </div>';
-        }
-    }
 }
+
 
 function setShuffle()
 {
