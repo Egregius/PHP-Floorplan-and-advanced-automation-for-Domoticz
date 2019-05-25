@@ -274,12 +274,10 @@ function setpoint($name,$top,$left,$rotation)
     if ($rotation==270) {
         echo '
         <div class="fix stamp r270" style="top:'.$top.'px;left:'.$left.'px;text-align:right;" id="'.$name.'">
-            '.round($d[$name]['s'], 1).'
         </div>';
     } elseif ($rotation==90) {
         echo '
         <div class="fix stamp r90" style="top:'.$top.'px;left:'.$left.'px;text-align:left;" id="'.$name.'">
-            '.round($d[$name]['s'], 1).'
         </div>';
     }
 }
