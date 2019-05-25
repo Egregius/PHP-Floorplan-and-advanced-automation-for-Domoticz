@@ -92,12 +92,6 @@ if ($home) {
     <body class="floorplan">
         <div id="placeholder"></div>';
     luifel('luifel', $d['luifel']['s']);
-    thermostaat('living', 140, 260);
-    thermostaat('badkamer', 427, 375);
-    thermostaat('tobi', 475, 143);
-    thermostaat('alex', 567, 202);
-    thermostaat('kamer', 551, 295);
-    thermostaat('zolder', 670, 190);
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);

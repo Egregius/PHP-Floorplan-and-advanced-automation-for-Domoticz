@@ -749,6 +749,12 @@ function floorplanheating(){
         html+='<div class="fix stamp" id="tRkamerR"></div>';
         html+='<div class="fix stamp" id="tachterdeur"></div>';
         html+='<div class="fix stamp" id="tpoort"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=living\';" id="living_set"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=badkamer\';" id="badkamer_set"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=tobi\';" id="tobi_set"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=alex\';" id="alex_set"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=kamer\';" id="kamer_set"></div>';
+        html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=zolder\';" id="zolder_set"></div>';
         document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }

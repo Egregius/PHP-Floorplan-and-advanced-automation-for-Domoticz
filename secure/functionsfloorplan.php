@@ -69,12 +69,6 @@ function dimmer($name,$class='i70')
 	        </div>
         </form>';
 }
-
-function thermostaat($name,$top,$left)
-{
-    echo '
-        <div class="fix z1" style="top:'.$top.'px;left:'.$left.'px;" onclick="location.href=\'floorplan.heating.php?SetSetpoint='.$name.'\';" id="'.$name.'_set"></div>';
-}
 function luifel($name,$stat)
 {
     global $d;
