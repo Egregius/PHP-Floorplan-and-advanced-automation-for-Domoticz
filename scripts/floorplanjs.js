@@ -403,7 +403,7 @@ function ajax(){
                                     elem.classList.remove("yellow");
                                 }else if(stat>0){
                                     nsize=(opts[2]*perc)+8;
-                                    if(nsize>opts[2]){nsize=opts[2];}
+                                    if(nsize>opts[2])nsize=opts[2];
                                     top=opts[0]+(opts[2]-nsize);
                                 }else{nsize=opts[2];}
                                 if(opts[3]=="P"){
@@ -417,6 +417,7 @@ function ajax(){
                                     elem.style.width=nsize+'px';
                                     elem.style.height='7px';
                                 }
+                                console.log(name+" opts0="+opts[0]+" opts1="+opts[1]+" opts2="+opts[2]+" nsize="+nsize+" top="+top);
                                 html='<form method="POST" action="">';
                                 html+='<input type="hidden" name="rollers" value="'+name+'">';
                                 if(value==100){
@@ -468,9 +469,7 @@ function ajax(){
                                 }else{
                                     html+='<font size="2" color="#CCC">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                 }
-                                console.log(name+" = "+value+" "+mode);
                                 document.getElementById(name).innerHTML=html;
-                                console.log(html);
                             } catch {}
                         }else if(type=="setpoint"){
                             try{
