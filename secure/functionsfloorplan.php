@@ -334,12 +334,14 @@ function handledimmer()
         lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_REQUEST['Naam']);
         storemode($_REQUEST['Naam'], 3);
     } else {
+        lg('dimmer');
         sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
         storemode($_REQUEST['Naam'], 0);
     }
 }
 function handleweg()
 {
+    global $db;
     if (isset($_REQUEST['Action'])) {
         store('Weg', $_REQUEST['Action']);
         if ($_REQUEST['Action']==0) {

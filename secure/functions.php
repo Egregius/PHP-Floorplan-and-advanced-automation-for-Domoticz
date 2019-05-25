@@ -180,6 +180,7 @@ function idx($name)
 function sl($name,$level,$check=false)
 {
     global $user,$d,$domoticzurl;
+    if(!isset($d))$d=fetchdata();
     lg(' (SETLEVEL) | '.$user.' =>	'.$name.'	'.$level);
     if ($d[$name]['i']>0) {
         if ($check==false) {
