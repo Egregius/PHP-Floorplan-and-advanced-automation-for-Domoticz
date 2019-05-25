@@ -106,19 +106,12 @@ if ($home) {
     showTimestamp('pirgarage', 0);
     showTimestamp('pirinkom', 0);
     showTimestamp('pirhall', 0);
-    showTimestamp('raamliving', 270);
-    showTimestamp('raamtobi', 270);
-    showTimestamp('raamalex', 270);
     showTimestamp('deurbadkamer', 90);
-    showTimestamp('Rliving', 270);
     showTimestamp('Rbureel', 0);
     showTimestamp('RkeukenL', 90);
     showTimestamp('RkeukenR', 90);
-    showTimestamp('Rtobi', 270);
-    showTimestamp('Ralex', 270);
     showTimestamp('RkamerL', 90);
     showTimestamp('RkamerR', 90);
-    showTimestamp('achterdeur', 270);
     showTimestamp('poort', 90);
 
     $bigdif=$d['heating']['m'];

@@ -711,7 +711,25 @@ function floorplanheating(){
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Ralex\';" id="RRalex"></div>';
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerL\';" id="RRkamerL"></div>';
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerR\';" id="RRkamerR"></div>';
-        html+='<div class="fix stamp z1" id="traamkamer"></div>';
+        html+='<div class="fix stamp z1" id="tpirliving"></div>';
+        html+='<div class="fix stamp z1" id="tpirkeuken"></div>';
+        html+='<div class="fix stamp z1" id="tpirgarage"></div>';
+        html+='<div class="fix stamp z1" id="tpirinkom"></div>';
+        html+='<div class="fix stamp z1" id="tpirhall"></div>';
+        html+='<div class="fix stamp z1" id="traamliving"></div>';
+        html+='<div class="fix stamp z1" id="traamtobi"></div>';
+        html+='<div class="fix stamp z1" id="traamalex"></div>';
+        html+='<div class="fix stamp z1" id="tdeurbadkamer"></div>';
+        html+='<div class="fix stamp z1" id="tRliving"></div>';
+        html+='<div class="fix stamp z1" id="tRbureel"></div>';
+        html+='<div class="fix stamp z1" id="tRkeukenL"></div>';
+        html+='<div class="fix stamp z1" id="tRkeukenR"></div>';
+        html+='<div class="fix stamp z1" id="tRtobi"></div>';
+        html+='<div class="fix stamp z1" id="tRalex"></div>';
+        html+='<div class="fix stamp z1" id="tRkamerL"></div>';
+        html+='<div class="fix stamp z1" id="tRkamerR"></div>';
+        html+='<div class="fix stamp z1" id="tachterdeur"></div>';
+        html+='<div class="fix stamp z1" id="poort"></div>';
         document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }
