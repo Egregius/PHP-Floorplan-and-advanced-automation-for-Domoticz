@@ -404,10 +404,10 @@ function ajax(){
                                 }else if(stat>0){
                                     nsize=(opts[2]*perc)+8;
                                     if(nsize>opts[2])nsize=opts[2];
-                                    top=opts[0]+(opts[2]-nsize);
+                                    top=+opts[0] + +opts[2]-nsize;
                                 }else{nsize=opts[2];}
                                 if(opts[3]=="P"){
-                                    elem.style.top=opts[0]+'px';
+                                    elem.style.top=top+'px';
                                     elem.style.left=opts[1]+'px';
                                     elem.style.width='7px';
                                     elem.style.height=nsize+'px';
