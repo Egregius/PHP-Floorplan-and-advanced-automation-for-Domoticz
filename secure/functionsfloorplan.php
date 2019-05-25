@@ -102,11 +102,7 @@ function bose($ip)
 {
     global $d;
     echo '
-        <div class="fix" id="bose'.$ip.'">
-            <a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$ip.'");\'>
-                <img src="images/bose_'.($d['bose'.$ip]['s']=='On'?'On':'Off').'.png" alt="">
-            </a>
-        </div>';
+        <div class="fix" id="bose'.$ip.'"></div>';
 }
 function sidebar()
 {
@@ -125,12 +121,6 @@ function sidebar()
             <img src="https://openweathermap.org/img/w/03n.png" alt="icon" id="icon">
         </a>
     </div>';
-    }
-    if ($d['bose105']['m']=='Online') {
-        bose(105);
-    } else {
-        echo '
-        <div class="fix" id="bose105"></div>';
     }
     echo '
         <div class="fix mediabuttons">

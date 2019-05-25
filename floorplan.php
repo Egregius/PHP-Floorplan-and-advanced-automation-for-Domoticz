@@ -30,10 +30,6 @@ if ($home) {
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
     blinds('zoldertrap');
-    bose(101);
-    bose(102);
-    bose(103);
-    bose(104);
 }
 ?>
 

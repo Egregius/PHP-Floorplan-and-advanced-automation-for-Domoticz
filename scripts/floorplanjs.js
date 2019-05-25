@@ -671,6 +671,11 @@ function floorplan(){
         html+='<div class="fix stamp" id="tRkamerR"></div>';
         html+='<div class="fix stamp" id="tachterdeur"></div>';
         html+='<div class="fix stamp" id="tpoort"></div>';
+        html+='<div class="fix" id="bose101"></div>';
+        html+='<div class="fix" id="bose102"></div>';
+        html+='<div class="fix" id="bose103"></div>';
+        html+='<div class="fix" id="bose104"></div>';
+        html+='<div class="fix" id="bose105"></div>';
         html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';    document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }
@@ -736,6 +741,7 @@ function floorplanheating(){
         html+='<div class="fix stamp" id="tpirinkom"></div>';
         html+='<div class="fix stamp" id="tpirhall"></div>';
         html+='<div class="fix stamp" id="traamliving"></div>';
+        html+='<div class="fix stamp" id="traamkamer"></div>';
         html+='<div class="fix stamp" id="traamtobi"></div>';
         html+='<div class="fix stamp" id="traamalex"></div>';
         html+='<div class="fix stamp" id="tdeurbadkamer"></div>';
