@@ -79,6 +79,7 @@ td{text-align:right;font-size:1.1em;}
 #gcal{top:378px;left:88px;width:318px;font-size:1.1em;}
 #nas{top:120px;left:140px;}
 #eettafel{top:140px;left:245px;}
+#ledluifel{top:870px;left:90px;}
 #zithoek{top:140px;left:110px;}
 #kamer{top:547px;left:330px;}
 #tobi{top:432px;left:135px;}

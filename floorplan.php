@@ -29,6 +29,7 @@ if ($home) {
     dimmer('alex','i60');
     dimmer('lichtbadkamer','i60');
     dimmer('terras','i48');
+    dimmer('ledluifel','i48');
     blinds('zoldertrap');
 }
 ?>
