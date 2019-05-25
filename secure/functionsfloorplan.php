@@ -603,3 +603,155 @@ function handleverdieping()
         exit;
     }
 }
+function handleluifel()
+{
+    global $d;
+    if (!isset($d)) {
+        $d=fetchdata();
+    }
+    $name=$_REQUEST['luifel'];
+    $stat=$d[$name]['s'];
+    echo '
+<body>
+    <div class="fix dimmer" >
+        <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
+            <div class="fix z" style="top:15px;left:90px;">';
+    if ($stat==0) {
+        echo '<h2>'.$name.' dicht</h2>';
+    } else {
+        echo '<h2>'.$name.' '.$stat.'% Open</h2>';
+    }
+    echo '
+                <input type="hidden" name="Naam" value="'.$name.'">
+                <input type="hidden" name="Roller" value="true">
+            </div>
+            <div class="fix z" style="top:100px;left:70px;">
+                <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90">
+            </div>
+            <div class="fix z" style="top:130px;left:200px;">
+                <input type="submit" name="mode" value ="';
+    echo $d[$name]['m']==0?'Manueel':'Auto';
+    echo '" class="btn i90">
+            </div>
+            <div class="fix z" style="top:100px;left:330px;">
+                <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90">
+            </div>
+            <div class="fix z" style="top:210px;left:10px;">';
+    $levels=array(5,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,95);
+    if (!in_array($stat, $levels)) {
+        $levels[]=$stat;
+        sort($levels);
+    }
+    foreach ($levels as $level) {
+        if ($stat!='Off'&&$stat==$level) {
+            echo '
+                <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">
+                    '.$level.'
+                </button>';
+        } else {
+            echo '
+                <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
+                    '.$level.'
+                </button>';
+        }
+    }
+    echo '
+            </div>
+        </form>
+        <div class="fix z" style="top:5px;left:5px;">
+            <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+                <img src="/images/close.png" width="72px" height="72px" alt="Close">
+            </a>
+        </div>
+    </div>
+</body>
+</html>';
+    exit;
+}
+function handleheating()
+{
+    if (!isset($_POST['confirm'])) {
+        echo '
+<body>
+    <div id="message" class="fix confirm">
+        <form method="POST" action="">
+            <input type="hidden" name="heating" value="true">
+            <input type="submit" name="confirm" value="Gas/Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+            <input type="submit" name="confirm" value="Elec" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+            <input type="submit" name="confirm" value="Neutral" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;"><br>
+            <input type="submit" name="confirm" value="Cooling" class="btn" style="width:100%;height:24%;margin:1% 0px 1% 0px;font-size:5em;">
+        </form>
+    </div>
+</body>
+</html>';
+        exit;
+    } elseif (isset($_POST['confirm'])) {
+        if ($_REQUEST['confirm']=='Cooling') {
+            store('heating', 1);
+            $d['heating']['s']=1;
+        } elseif ($_REQUEST['confirm']=='Neutral') {
+            store('heating', 0);
+            $d['heating']['s']=0;
+        } elseif ($_REQUEST['confirm']=='Elec') {
+            store('heating', 2);
+            $d['heating']['s']=2;
+        } elseif ($_REQUEST['confirm']=='Gas/Elec') {
+            store('heating', 3);
+            $d['heating']['s']=3;
+        }
+        include 'secure/_verwarming.php';
+    }
+}
+function handlesetsetpoint()
+{
+    $name=$_REQUEST['SetSetpoint'];
+    echo '
+    <body>
+        <div class="fix dimmer" >
+		    <form method="POST" action="floorplan.heating.php" oninput="level.value = Actie.valueAsNumber">
+                <input type="hidden" name="Setpoint" value="true" >
+                <h2>'.ucwords($name).'<br><big><bold>'.number_format($d[$name.'_temp']['s'], 1, ",", "").'°C</bold></big></h2>
+                <div class="fix z" style="top:210px;left:10px;">';
+    if ($d[$name.'_set']['m']==0) {
+        echo '
+                    <input type="submit" name="resetauto" value="Auto" class="dimlevel dimlevela" style="width:182px;">';
+    } else {
+        echo '
+                    <input type="submit" name="resetauto" value="Auto" class="dimlevel" style="width:182px;">';
+    }
+    echo '
+                    <input type="hidden" name="Naam" value="'.$name.'">';
+    if ($name=='living'||$name=='badkamer') {
+        $temps=array(15,15.5,16,16.5,17,17.5,18,18.5,19,19.2,19.5,19.7,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22);
+    } elseif ($name=='zolder') {
+        $temps=array(4,7,8,9,10,11,12,13,14,15,16,16.5,17,17.5,18,18.5,19,19.5,19.6,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5);
+    } else {
+        $temps=array(10,10.5,11,11.5,12,12.5,13,13.5,14,14.2,14.5,14.7,15,15.1,15.2,15.3,15.4,15.5,15.6,15.7,15.8,15.9,16,16.1,16.2,16.3,16.4,16.5,16.6,16.7,16.8,16.9,17,17.1,17.2,17.3,17.4,17.5,17.6,17.7,17.8,17.9,18);
+    }
+    if (!in_array($d[$name.'_set']['s'], $temps)) {
+        $temps[]=$d[$name.'_set']['s'];
+    }
+    asort($temps);
+    $temps=array_slice($temps, 0, 33);
+    foreach ($temps as $temp) {
+        if ($d[$name.'_set']['s']==$temp) {
+            echo '
+					<input type="submit" name="Actie" value="'.$temp.'"/ class="dimlevel dimlevela">';
+        } else {
+            echo '
+					<input type="submit" class="dimlevel" name="Actie" value="'.$temp.'">';
+        }
+    }
+    echo '
+					</div>
+				</form>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px" alt="Close">
+			    </a>
+			</div>
+		</div>
+	</body>
+</html>';
+        exit;
+}
