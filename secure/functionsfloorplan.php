@@ -110,12 +110,6 @@ function luifel($name,$stat)
 		    </div>
         </form>';
 }
-function rollers($name)
-{
-    echo '
-        <div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers='.$name.'\';" id="R'.$name.'"></div>';
-}
-
 function bose($ip)
 {
     global $d;
@@ -195,7 +189,7 @@ function sidebar()
             <div id="uv"></div>
 	    </div>';
 }
-function createheader($page,$ajax=200,$ajaxremote=2000)
+function createheader($page,$ajax=250,$ajaxremote=2000)
 {
     global $udevice,$floorplanjs,$local;
     echo '

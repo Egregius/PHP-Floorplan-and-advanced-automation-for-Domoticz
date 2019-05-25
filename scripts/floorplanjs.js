@@ -417,7 +417,6 @@ function ajax(){
                                     elem.style.width=nsize+'px';
                                     elem.style.height='7px';
                                 }
-                                console.log(name+" opts0="+opts[0]+" opts1="+opts[1]+" opts2="+opts[2]+" nsize="+nsize+" top="+top);
                                 html='<form method="POST" action="">';
                                 html+='<input type="hidden" name="rollers" value="'+name+'">';
                                 if(value==100){
