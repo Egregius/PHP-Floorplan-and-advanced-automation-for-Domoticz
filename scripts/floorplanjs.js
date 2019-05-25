@@ -19,9 +19,9 @@ function ajax(){
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
                     }else if(name=="ip"){
-                        previp = localStorage.getItem("ip");
+                        previp = sessionStorage.getItem("ip");
                         if(previp!=d['ip']){
-                            localStorage.setItem("ip", d['ip']);
+                            sessionStorage.setItem("ip", d['ip']);
                             setTimeout('window.location.href=window.location.href;', 0);
                         }
                     }else{
@@ -367,7 +367,7 @@ function ajax(){
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
-                                    localStorage.setItem(name, value);
+                                    sessionStorage.setItem(name, value);
                                     var hoogte=value * 3;
                                     if(hoogte>88)hoogte=88;
                                     else if(hoogte<20)hoogte=20;
@@ -448,7 +448,7 @@ function ajax(){
                         }else if(type=="thermostaat"){
                             //try{
 
-                                temp=localStorage.getItem(name.toString().replace("_set", "_temp"));
+                                temp=sessionStorage.getItem(name.toString().replace("_set", "_temp"));
                                 dif=temp-value;
                                 opts=icon.split(",");
                                 if(dif>0.2)circle="hot";
