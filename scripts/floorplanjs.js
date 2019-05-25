@@ -1,5 +1,5 @@
 function navigator_Go(url){window.location.assign(url);}
-var $LastUpdateTime=parseInt(0);
+$LastUpdateTime=parseInt(0);
 function ajax(){
     $.ajax({
         url: '/ajax.php?timestamp='+$LastUpdateTime,
@@ -335,9 +335,9 @@ function ajax(){
                                     }
                                 }
                                 if(time>($LastUpdateTime-82800)){
-                                    var date=new Date(time*1000);
-                                    var hours=date.getHours();
-                                    var minutes="0"+date.getMinutes();
+                                    date=new Date(time*1000);
+                                    hours=date.getHours();
+                                    minutes="0"+date.getMinutes();
                                     document.getElementById("tpir"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
                                     document.getElementById("tpir"+name).innerHTML="";
@@ -345,16 +345,16 @@ function ajax(){
                             } catch {}
                         }else if(type=="contact"){
                             try{
-                                var element=document.getElementById(name);
+                                element=document.getElementById(name);
                                 if(value=="Open"){
                                     element.classList.add("red");
                                 }else{
                                     element.classList.remove("red");
                                 }
                                 if(time>($LastUpdateTime-82800)){
-                                    var date=new Date(time*1000);
-                                    var hours=date.getHours();
-                                    var minutes="0"+date.getMinutes();
+                                    date=new Date(time*1000);
+                                    hours=date.getHours();
+                                    minutes="0"+date.getMinutes();
                                     document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
@@ -363,7 +363,7 @@ function ajax(){
                         }else if(type=="thermometer"){
                              try{
                                  if(name=="diepvries_temp"){
-                                    var elem=document.getElementById(name);
+                                    elem=document.getElementById(name);
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
@@ -417,7 +417,7 @@ function ajax(){
                                     elem.style.height='7px';
                                 }
 
-                                var html='<form method="POST" action="">';
+                                html='<form method="POST" action="">';
                                 html+='<input type="hidden" name="rollers" value="'+name+'">';
                                 if(value==100){
                                     html+='<input type="image" src="/images/arrowgreendown.png" class="i60">';
@@ -437,9 +437,9 @@ function ajax(){
                                 document.getElementById('R'+name).innerHTML=html;
 
                                 if(time>($LastUpdateTime-82800)){
-                                    var date=new Date(time*1000);
-                                    var hours=date.getHours();
-                                    var minutes="0"+date.getMinutes();
+                                    date=new Date(time*1000);
+                                    hours=date.getHours();
+                                    minutes="0"+date.getMinutes();
                                     document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
@@ -447,20 +447,19 @@ function ajax(){
                             } catch {}
                         }else if(type=="thermostaat"){
                             try{
-                                console.log(name+" = "+value+" "+mode);
-                                var dif=d[name.toString().replace("_set", "_temp")]['s']-value;
-                                var opts=icon.split(",");
-                                if(dif>0.2){var circle="hot";}
-                                else if(dif<0){var circle="cold";}
-                                else{var circle="grey";}
-                                if(value>20.5){var center="red";}
-                                else if(value>19){var center="orange";}
-                                else if(value>14){var center="grey";}
-                                else{var center="blue";}
-                                var elem=document.getElementById(name);
+                                dif=d[name.toString().replace("_set", "_temp")]['s']-value;
+                                opts=icon.split(",");
+                                if(dif>0.2)circle="hot";
+                                else if(dif<0)circle="cold";
+                                else circle="grey";
+                                if(value>20.5)center="red";
+                                else if(value>19)center="orange";
+                                else if(value>14)center="grey";
+                                else center="blue";
+                                elem=document.getElementById(name);
                                 elem.style.top=opts[0]+'px';
                                 elem.style.left=opts[1]+'px';
-                                var html='<img src="/images/thermo'+circle+center+'.png" class="i48" alt="">';
+                                html='<img src="/images/thermo'+circle+center+'.png" class="i48" alt="">';
                                 html+='<div class="fix center" style="top:32px;left:11px;width:26px;">';
                                 if(mode>0){
                                     html+='<font size="2" color="#222">'+value.toString().replace(/[.]/, ",")+'</font></div>';
@@ -468,6 +467,7 @@ function ajax(){
                                 }else{
                                     html+='<font size="2" color="#CCC">'+value.toString().replace(/[.]/, ",")+'</font></div>';
                                 }
+                                console.log(name+" = "+value+" "+mode);
                                 document.getElementById(name).innerHTML=html;
                                 console.log(html);
                             } catch {}
