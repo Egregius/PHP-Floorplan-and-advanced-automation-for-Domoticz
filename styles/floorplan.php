@@ -158,18 +158,18 @@ td{text-align:right;font-size:1.1em;}
 .red{background:rgba(255,0,0,1);}
 #poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}
 #achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
-#deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;}
-#tachterdeur{top:280px;left:70px;}
+#deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tdeurinkom{top:70px;left:324px;}
 #tdeurgarage{top:244px;left:344px;}
-#tpoort{top:315px;left:376px;}
+#tpoort{top:315px;left:376px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}
 #deurgarage{top:248px;left:341px;width:46px;height:8px;z-index:-10;}
 
 /* Ramen */
-#traamliving{top:72px;left:75px;}
-#traamtobi{top:462px;left:75px;}
-#traamalex{top:581px;left:75px;}
+#traamliving{top:72px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#traamtobi{top:462px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#traamalex{top:581px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #traamkamer{top:598px;left:455px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #raamliving{top:46px;left:87px;width:11px;height:165px;z-index:-10;}
 #raamtobi{top:448px;left:87px;width:11px;height:42px;z-index:-10;}
@@ -188,14 +188,14 @@ td{text-align:right;font-size:1.1em;}
 
 /* Rollers */
 #luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
-#RRliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;}
+#RRliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #RRbureel{top:5px;left:195px;}#tRbureel{top:-2px;left:170px;}
-#RRkeukenL{top:116px;left:405px;}#tRkeukenL{top:102px;left:456px;}
-#RRkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;}
-#RRtobi{top:404px;left:137px;}#tRtobi{top:510px;left:68px;}
-#RRalex{top:560px;left:137px;}#tRalex{top:620px;left:68px;}
-#RRkamerL{top:512px;left:350px;}#tRkamerL{top:504px;left:462px;}
-#RRkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;}
+#RRkeukenL{top:116px;left:405px;}#tRkeukenL{top:102px;left:456px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#RRkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#RRtobi{top:404px;left:137px;}#tRtobi{top:510px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#RRalex{top:560px;left:137px;}#tRalex{top:620px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#RRkamerL{top:512px;left:350px;}#tRkamerL{top:504px;left:462px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#RRkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #zoldertrap{top:670px;left:145px;}#tzoldertrap{top:675px;left:170px;}
 
 /* Zones */

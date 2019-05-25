@@ -101,19 +101,6 @@ if ($home) {
     setpoint('alexZ', 555, 76, 270);
     setpoint('tobiZ', 415, 76, 270);
     setpoint('kamerZ', 523, 455, 90);
-    showTimestamp('pirliving', 0);
-    showTimestamp('pirkeuken', 0);
-    showTimestamp('pirgarage', 0);
-    showTimestamp('pirinkom', 0);
-    showTimestamp('pirhall', 0);
-    showTimestamp('deurbadkamer', 90);
-    showTimestamp('Rbureel', 0);
-    showTimestamp('RkeukenL', 90);
-    showTimestamp('RkeukenR', 90);
-    showTimestamp('RkamerL', 90);
-    showTimestamp('RkamerR', 90);
-    showTimestamp('poort', 90);
-
     $bigdif=$d['heating']['m'];
     echo '
         <div class="fix divsetpoints z">
