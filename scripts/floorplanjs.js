@@ -749,6 +749,9 @@ function floorplanheating(){
         html+='<div class="fix stamp" id="tRkamerR"></div>';
         html+='<div class="fix stamp" id="tachterdeur"></div>';
         html+='<div class="fix stamp" id="tpoort"></div>';
+        html+='<div class="fix stamp" id="kamerZ"></div>';
+        html+='<div class="fix stamp" id="tobiZ"></div>';
+        html+='<div class="fix stamp" id="alexZ"></div>';
         html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=living\';" id="living_set"></div>';
         html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=badkamer\';" id="badkamer_set"></div>';
         html+='<div class="fix z1" onclick="location.href=\'floorplan.heating.php?SetSetpoint=tobi\';" id="tobi_set"></div>';

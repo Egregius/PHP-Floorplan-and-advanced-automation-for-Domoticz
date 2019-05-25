@@ -204,7 +204,13 @@ td{text-align:right;font-size:1.1em;}
 #zinkom{top:51px;left:345px;width:129px;height:56px;}
 #zgarage{top:256px;left:89px;width:315px;height:139px;}
 #zhalla{top:403px;left:214px;width:127px;height:66px;}
-#zhallb{top:469px;left:214px;width:44px;height:66px;}";
+#zhallb{top:469px;left:214px;width:44px;height:66px;}
+
+/* Setpoints */
+#kamerZ{top:523px;left:455px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#tobiZ{top:415px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#alexZ{top:555px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+";
 $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
 $css = str_replace(': ', ':', $css);
 $css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);

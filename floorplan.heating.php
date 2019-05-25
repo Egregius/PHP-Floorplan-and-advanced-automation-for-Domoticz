@@ -92,9 +92,6 @@ if ($home) {
     <body class="floorplan">
         <div id="placeholder"></div>';
     luifel('luifel', $d['luifel']['s']);
-    setpoint('alexZ', 555, 76, 270);
-    setpoint('tobiZ', 415, 76, 270);
-    setpoint('kamerZ', 523, 455, 90);
     $bigdif=$d['heating']['m'];
     echo '
         <div class="fix divsetpoints z">
@@ -208,19 +205,6 @@ if ($home) {
         </table>
         </div>';
     sidebar();
-}
-function setpoint($name,$top,$left,$rotation)
-{
-    global $d;
-    if ($rotation==270) {
-        echo '
-        <div class="fix stamp r270" style="top:'.$top.'px;left:'.$left.'px;text-align:right;" id="'.$name.'">
-        </div>';
-    } elseif ($rotation==90) {
-        echo '
-        <div class="fix stamp r90" style="top:'.$top.'px;left:'.$left.'px;text-align:left;" id="'.$name.'">
-        </div>';
-    }
 }
 ?>
 
