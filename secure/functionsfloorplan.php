@@ -247,93 +247,8 @@ function handlerequest()
 
 /*--------------------- OUDE HANDLE ---------------------------------------------------*/
     if (isset($_REQUEST['setdimmer'])) {
-        if (!isset($d)) $d=fetchdata();
-        $name=$_REQUEST['setdimmer'];
-        $stat=$d[$name]['s'];
-        $dimaction=$d[$name]['m'];
-        echo '<div id="D'.$name.'" class="fix dimmer" >
-		<form method="POST" action="floorplan.php" oninput="level.value = dimlevel.valueAsNumber">
-				<div class="fix z" style="top:15px;left:90px;">';
-        if ($stat=='Off') {
-            echo '<h2>'.ucwords($name).': Off</h2>';
-        } else {
-            echo '<h2>'.ucwords($name).': '.$stat.'%</h2>';
-        }
-        echo '
-					<input type="hidden" name="Naam" value="'.$name.'">
-					<input type="hidden" name="dimmer" value="true">
-				</div>
-				<div class="fix z" style="top:100px;left:30px;">
-					<input type="image" name="dimleveloff" value ="0" src="images/light_Off.png" class="i90">
-				</div>
-				<div class="fix z" style="top:100px;left:150px;">
-					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
-        if ($dimaction==1) {
-            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-        }
-        echo '
-				</div>
-				<div class="fix z" style="top:100px;left:265px;">
-					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px">';
-        if ($dimaction==2) {
-            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-        }
-        echo '
-					<input type="hidden" name="dimwakelevel" value="'.$stat.'">
-				</div>';
-        if ($name=='alex') {
-            echo '
-					<div class="fix z" style="top:10px;left:265px;">
-						<input type="image" name="dimwake3u" value="100" src="images/Wakeup.png" style="height:90px;width:90px">
-						<div class="fix" style="top:39px;left:25px;font-size:3em;z-index:-10;" >3u</div>';
-            if ($dimaction==3) {
-                echo '
-        <div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-                echo '
-        <div class="fix" style="top:32px;left:95px;z-index:-100;font-size:2em;">'.strftime("%k:%M", $d['alex']['t']+10800).'</div>';
-            }
-            echo '
-						<input type="hidden" name="dimwakelevel" value="'.$stat.'">
-					</div>';
-        }
-        echo '
-				<div class="fix z" style="top:100px;left:385px;">
-					<input type="image" name="dimlevelon" value ="100" src="images/light_On.png" class="i90">
-				</div>
-				<div class="fix z" style="top:210px;left:10px;">';
+        handlesetdimmer();
 
-        if ($name=='lichtbadkamer') {
-            $levels=array(18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86);
-        } else {
-            $levels=array(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,35,40,45,50,55,60,65,70,75,80,85,90,95,100);
-        }
-        if ($stat!=0&&$stat!=100) {
-            if (!in_array($stat, $levels)) {
-                $levels[]=$stat;
-            }
-        }
-        asort($levels);
-        $levels=array_slice($levels, 0, 35);
-        foreach ($levels as $level) {
-            if ($stat!='Off'&&$stat==$level) {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'"/ class="dimlevel dimlevela">';
-            } else {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel">';
-            }
-        }
-        echo '
-				</div>
-			</form>
-			<div class="fix z" style="top:5px;left:5px;">
-			    <a href=\'javascript:navigator_Go("floorplan.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px">
-			    </a>
-			</div>
-		</div>
-	</body>
-	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
-</html>';
-        exit;
     } elseif (isset($_REQUEST['dimmer'])) {
         if (!isset($d)) $d=fetchdata();
         if (isset($_REQUEST['luifelauto'])) {
@@ -495,4 +410,94 @@ function handlerequest()
             exit;
         }
     }
+}
+function handlesetdimmer()
+{
+    if (!isset($d)) $d=fetchdata();
+        $name=$_REQUEST['setdimmer'];
+        $stat=$d[$name]['s'];
+        $dimaction=$d[$name]['m'];
+        echo '<div id="D'.$name.'" class="fix dimmer" >
+		<form method="POST" action="floorplan.php" oninput="level.value = dimlevel.valueAsNumber">
+				<div class="fix z" style="top:15px;left:90px;">';
+        if ($stat=='Off') {
+            echo '<h2>'.ucwords($name).': Off</h2>';
+        } else {
+            echo '<h2>'.ucwords($name).': '.$stat.'%</h2>';
+        }
+        echo '
+					<input type="hidden" name="Naam" value="'.$name.'">
+					<input type="hidden" name="dimmer" value="true">
+				</div>
+				<div class="fix z" style="top:100px;left:30px;">
+					<input type="image" name="dimleveloff" value ="0" src="images/light_Off.png" class="i90">
+				</div>
+				<div class="fix z" style="top:100px;left:150px;">
+					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
+        if ($dimaction==1) {
+            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+        }
+        echo '
+				</div>
+				<div class="fix z" style="top:100px;left:265px;">
+					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px">';
+        if ($dimaction==2) {
+            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+        }
+        echo '
+					<input type="hidden" name="dimwakelevel" value="'.$stat.'">
+				</div>';
+        if ($name=='alex') {
+            echo '
+					<div class="fix z" style="top:10px;left:265px;">
+						<input type="image" name="dimwake3u" value="100" src="images/Wakeup.png" style="height:90px;width:90px">
+						<div class="fix" style="top:39px;left:25px;font-size:3em;z-index:-10;" >3u</div>';
+            if ($dimaction==3) {
+                echo '
+        <div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+                echo '
+        <div class="fix" style="top:32px;left:95px;z-index:-100;font-size:2em;">'.strftime("%k:%M", $d['alex']['t']+10800).'</div>';
+            }
+            echo '
+						<input type="hidden" name="dimwakelevel" value="'.$stat.'">
+					</div>';
+        }
+        echo '
+				<div class="fix z" style="top:100px;left:385px;">
+					<input type="image" name="dimlevelon" value ="100" src="images/light_On.png" class="i90">
+				</div>
+				<div class="fix z" style="top:210px;left:10px;">';
+
+        if ($name=='lichtbadkamer') {
+            $levels=array(18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86);
+        } else {
+            $levels=array(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,35,40,45,50,55,60,65,70,75,80,85,90,95,100);
+        }
+        if ($stat!=0&&$stat!=100) {
+            if (!in_array($stat, $levels)) {
+                $levels[]=$stat;
+            }
+        }
+        asort($levels);
+        $levels=array_slice($levels, 0, 35);
+        foreach ($levels as $level) {
+            if ($stat!='Off'&&$stat==$level) {
+                echo '<input type="submit" name="dimlevel" value="'.$level.'"/ class="dimlevel dimlevela">';
+            } else {
+                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel">';
+            }
+        }
+        echo '
+				</div>
+			</form>
+			<div class="fix z" style="top:5px;left:5px;">
+			    <a href=\'javascript:navigator_Go("floorplan.php");\'>
+			        <img src="/images/close.png" width="72px" height="72px">
+			    </a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
+</html>';
+        exit;
 }

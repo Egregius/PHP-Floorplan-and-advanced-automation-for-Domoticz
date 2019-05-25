@@ -229,10 +229,12 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-    if ($d['Weg']['s']<=1) {//Thuis of slapen
+    /* -------------------------------------------- THUIS OF SLAPEN --------------*/
+    if ($d['Weg']['s']<=1) {
 
     }
-    if ($d['Weg']['s']==1) {//Slapen
+    /* -------------------------------------------- SLAPEN --------------------------*/
+    if ($d['Weg']['s']==1) {
         $uit=600;
         $items=array('pirgarage','pirkeuken','pirliving','pirinkom');
         foreach ($items as $item) {
@@ -276,10 +278,11 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-    if ($d['Weg']['s']>=1) {//Slapen of weg
-
+    /* -------------------------------------------- SLAPEN OF WEG ---------------*/
+    if ($d['Weg']['s']>=1) {
     }
-    if ($d['Weg']['s']==2) {//Weg
+    /* -------------------------------------------- WEG ----------------------------*/
+    if ($d['Weg']['s']==2) {
         $uit=600;
         $items=array('pirgarage','pirkeuken','pirliving','pirinkom','pirhall');
         foreach ($items as $item) {
@@ -349,7 +352,7 @@ if ($d['auto']['s']=='On') {
 
 
         }
-    //Altijd
+    /* -------------------------------------------- ALTIJD ----------------------------*/
     if (past('diepvries_temp')>7200) {
         alert(
                 'diepvriestemp',
