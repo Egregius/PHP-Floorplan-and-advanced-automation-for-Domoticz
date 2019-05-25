@@ -90,33 +90,8 @@ if ($home) {
     }
     echo '
     <body class="floorplan">
-        <div id="placeholder"></div>
-        <div class="fix z1" style="top:5px;left:5px;">
-            <a href=\'javascript:navigator_Go("floorplan.php");\'>
-                <img src="/images/close.png" width="72px" height="72px" alt="Close">
-            </a>
-        </div>
-        <div class="fix z1" style="top:290px;left:415px;">
-            <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'>
-                <img src="/images/close.png" width="72px" height="72px" alt="Close">
-            </a>
-        </div>
-        <div class="fix" style="top:290px;left:90px;width:300px">
-            <a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">
-                Beneden
-            </a>
-            <a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">
-                Boven
-            </a>
-        </div>';
+        <div id="placeholder"></div>';
     luifel('luifel', $d['luifel']['s']);
-    rollers('Rbureel', $d['Rbureel']['s']);
-    rollers('RkeukenL', $d['RkeukenL']['s']);
-    rollers('RkeukenR', $d['RkeukenR']['s']);
-    rollers('Rtobi', $d['Rtobi']['s']);
-    rollers('Ralex', $d['Ralex']['s']);
-    rollers('RkamerL', $d['RkamerL']['s']);
-    rollers('RkamerR', $d['RkamerR']['s']);
     thermostaat('living', 140, 260);
     thermostaat('badkamer', 427, 375);
     thermostaat('tobi', 475, 143);

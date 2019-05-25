@@ -660,6 +660,9 @@ function floorplanheating(){
     try{
         html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
         html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="time"></a></div>';
+        html+='<div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
+        html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
+        html+='<div class="fix" style="top:290px;left:90px;width:300px"><a href=\'javascript:navigator_Go("?verdieping=beneden");\' class="btn">Beneden</a><a href=\'javascript:navigator_Go("?verdieping=boven");\' class="btn">Boven</a></div>';
         html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
         html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
         html+='<div class="fix z1 i48" id="heater1"></div>';
