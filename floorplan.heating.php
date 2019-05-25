@@ -109,14 +109,7 @@ if ($home) {
                 Boven
             </a>
         </div>';
-    thermometer('living_temp');
-    thermometer('badkamer_temp');
-    thermometer('kamer_temp');
-    thermometer('tobi_temp');
-    thermometer('alex_temp');
-    thermometer('zolder_temp');
     luifel('luifel', $d['luifel']['s']);
-    rollers('Rliving', $d['Rliving']['s']);
     rollers('Rbureel', $d['Rbureel']['s']);
     rollers('RkeukenL', $d['RkeukenL']['s']);
     rollers('RkeukenR', $d['RkeukenR']['s']);

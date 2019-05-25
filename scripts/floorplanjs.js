@@ -652,6 +652,7 @@ function floorplan(){
         html+='<div class="fix" onclick="location.href=\'temp.php\';" id="tobi_temp"></div>';
         html+='<div class="fix" onclick="location.href=\'temp.php\';" id="alex_temp"></div>';
         html+='<div class="fix" onclick="location.href=\'temp.php\';" id="zolder_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="buiten_temp"></div>';
         html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';    document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }
@@ -693,6 +694,21 @@ function floorplanheating(){
         html+='<div class="fix" id="deurkamer"></div>';
         html+='<div class="fix" id="deurtobi"></div>';
         html+='<div class="fix" id="deuralex"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="living_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="badkamer_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="kamer_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="tobi_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="alex_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="zolder_temp"></div>';
+        html+='<div class="fix" onclick="location.href=\'temp.php\';" id="buiten_temp"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Rliving\';" id="RRliving"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Rbureel\';" id="RRbureel"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkeukenL\';" id="RRkeukenL"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkeukenR\';" id="RRkeukenR"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Rtobi\';" id="RRtobi"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Ralex\';" id="RRalex"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerL\';" id="RRkamerL"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerR\';" id="RRkamerR"></div>';
         document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }

@@ -70,12 +70,6 @@ function dimmer($name,$class='i70')
         </form>';
 }
 
-function thermometer($name)
-{
-    echo '
-        <div class="fix" onclick="location.href=\'temp.php\';" id="'.$name.'"></div>';
-}
-
 function thermostaat($name,$top,$left)
 {
     echo '
@@ -150,7 +144,6 @@ function sidebar()
         </a>
     </div>';
     }
-    thermometer('buiten_temp');
     if ($d['bose105']['m']=='Online') {
         bose(105);
     } else {
