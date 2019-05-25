@@ -49,12 +49,6 @@ if ($home) {
     bose(102);
     bose(103);
     bose(104);
-    thermometer('living_temp');
-    thermometer('badkamer_temp');
-    thermometer('kamer_temp');
-    thermometer('tobi_temp');
-    thermometer('alex_temp');
-    thermometer('zolder_temp');
 }
 ?>
 

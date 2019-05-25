@@ -32,29 +32,19 @@ $benedena=array(
 
 if ($d['heating']['s']>=2) {
     $msg.='Heating__';
-    if (TIME<strtotime('6:00')
-        ||TIME>=strtotime('22:00')
-    ) {
+    if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
     }
-    if (TIME>=strtotime('6:00')
-        &&TIME<strtotime('8:30')
-    ) {
+    if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
         $dag='ochtend';
     }
-    if (TIME>=strtotime('8:30')
-        &&TIME<strtotime('12:30')
-    ) {
+    if (TIME>=strtotime('8:30')&&TIME<strtotime('12:30')) {
         $dag='AM';
     }
-    if (TIME>=strtotime('12:30')
-        &&TIME<strtotime('17:00')
-    ) {
+    if (TIME>=strtotime('12:30')&&TIME<strtotime('17:00')) {
         $dag='PM';
     }
-    if (TIME>=strtotime('17:00')
-        &&TIME<strtotime('22:00')
-    ) {
+    if (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
         $dag='avond';
     }
     $msg.=$dag.'__';

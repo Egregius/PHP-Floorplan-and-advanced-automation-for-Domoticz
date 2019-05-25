@@ -30,7 +30,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
                     true
                 );
                 $cv=$volume['actualvolume']-1;
-                if ($cv>=5) {
+                if ($cv<=5) {
                     bosekey("POWER", 0, 103);
                     sw('bose103', 'Off', true);
                 } else {
