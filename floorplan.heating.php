@@ -74,63 +74,7 @@ if ($home) {
         }
     }
     if (isset($_REQUEST['rollers'])) {
-        $name=$_REQUEST['rollers'];
-        $stat=$d[$name]['s'];
-        echo '
-    <body>
-        <div class="fix dimmer" >
-            <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
-                    <div class="fix z" style="top:15px;left:90px;">';
-        if ($stat==0) {
-            echo '
-                        <h2>'.$name.' dicht</h2>';
-        } else {
-            echo '
-                        <h2>'.$name.' '.$stat.'% Dicht</h2>';
-        }
-        echo '
-                        <input type="hidden" name="Naam" value="'.$name.'">
-                        <input type="hidden" name="Roller" value="true">
-                    </div>
-                    <div class="fix z" style="top:100px;left:70px;">
-                        <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90" alt="">
-                    </div>
-                    <div class="fix z" style="top:130px;left:200px;">
-                        <input type="submit" name="mode" value ="';
-        echo $d[$name]['m']==0?'Manueel':'Auto';
-        echo '" class="btn i90"/>
-                    </div>
-                    <div class="fix z" style="top:100px;left:330px;">
-                        <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90" alt="">
-                    </div>
-                    <div class="fix z" style="top:210px;left:10px;">';
-        $levels=array(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99);
-        if (!in_array($stat, $levels)) {
-            $levels[]=$stat;
-            sort($levels);
-        }
-        foreach ($levels as $level) {
-            if ($stat!='Off'&&$stat==$level) {
-                echo '
-                        <button name="Rollerlevel" value="'. $level.'" class="dimlevel dimlevela">'.$level.'</button>';
-            } else {
-                echo '
-                        <button name="Rollerlevel" value="'.$level.'" class="dimlevel">'.$level.'</button>';
-            }
-        }
-        echo '
-                    </div>
-                </form>
-                <div class="fix z" style="top:5px;left:5px;">
-                    <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
-                        <img src="/images/close.png" width="72px" height="72px" alt="">
-                    </a>
-                </div>
-            </div>
-        </body>
-        <script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
-    </html>';
-        exit;
+        handlerollers();
     }
     if (isset($_REQUEST['verdieping'])) {
         handleverdieping();
