@@ -367,6 +367,7 @@ function ajax(){
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
+                                    localStorage.setItem(name, value);
                                     var hoogte=value * 3;
                                     if(hoogte>88)hoogte=88;
                                     else if(hoogte<20)hoogte=20;
@@ -445,8 +446,10 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="thermostaat"){
-                            try{
-                                dif=d[name.toString().replace("_set", "_temp")]['s']-value;
+                            //try{
+
+                                temp=localStorage.getItem(name.toString().replace("_set", "_temp"));
+                                dif=temp-value;
                                 opts=icon.split(",");
                                 if(dif>0.2)circle="hot";
                                 else if(dif<0)circle="cold";
@@ -469,7 +472,7 @@ function ajax(){
                                 console.log(name+" = "+value+" "+mode);
                                 document.getElementById(name).innerHTML=html;
                                 console.log(html);
-                            } catch {}
+                            //} catch {}
                         }else if(type=="setpoint"){
                             try{
                                 document.getElementById(name).innerHTML=value;
