@@ -76,7 +76,7 @@ function ajax(){
                                 hours=date.getHours();
                                 minutes="0"+date.getMinutes();
                                 document.getElementById("zononder").innerHTML=' '+hours+':'+minutes.substr(-2);
-                            } catch{}
+                            }catch{}
                         }else if(name=="wind"){
                             try{
                                 document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
@@ -235,14 +235,14 @@ function ajax(){
                                 if(value=="On")html='<img src="images/Fire_On.png" width="28px" height="auto" alt="">';
                                 else html='';
                                 document.getElementById("zoldervuur2").innerHTML=html;
-                            } catch{}
+                            }catch{}
                         }else if(name=="Usage_grohered"){
                             try{
                                 if(value==0)html="";
                                 else if(value>0&&value<11)html='<img src="images/plug_On.png" width="28px" height="auto" alt="">';
                                 else html='<img src="images/plug_Red.png" width="28px" height="auto" alt="">';
                                 document.getElementById("GroheRed").innerHTML=html;
-                            } catch{}
+                            }catch{}
                         }else if(name=="kWh_bureeltobi"){
                             try{
 
@@ -257,7 +257,7 @@ function ajax(){
                                 else if(item>300)document.getElementById("bureeltobikwh").style.color="#FFAA00";
                                 else if(item>200)document.getElementById("bureeltobikwh").style.color="#FFCC00";
                                 else if(item>100)document.getElementById("bureeltobikwh").style.color="#FFFF00";
-                            } catch{}
+                            }catch{}
                         }else if(name=="gcal"){
                             try{
                                 if(typeof mode !== 'undefined')document.getElementById("gcal").innerHTML=mode;
@@ -555,7 +555,7 @@ function ajaxbose($ip){
                         console.log(html);
                     }
                 }
-            } catch{}
+            }catch{}
         }
     })
 }
@@ -582,155 +582,163 @@ function ajaxcontrolbose(ip,command,action){
     })
 }
 function floorplan(){
-    html='<div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
-    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time"></a></div>';
-    html+='<div class="fix z0 afval" id="gcal"></div>';
-    html+='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
-    html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
-    html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
-    html+='<div class="fix Weg" id="Weg"></div>';
-    html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
-    html+='<div class="fix z1 i48" id="regenputleeg"></div>';
-    html+='<div class="fix z1 i48" id="regenputvol"></div>';
-    html+='<div class="fix z1 i48" id="kristal"></div>';
-    html+='<div class="fix z1 i48" id="bureel"></div>';
-    html+='<div class="fix z1 i48" id="inkom"></div>';
-    html+='<div class="fix z1 i48" id="keuken"></div>';
-    html+='<div class="fix z1 i48" id="wasbak"></div>';
-    html+='<div class="fix z1 i48" id="kookplaat"></div>';
-    html+='<div class="fix z1 i48" id="voordeur"></div>';
-    html+='<div class="fix z1 i48" id="hall"></div>';
-    html+='<div class="fix z1 i48" id="werkblad1"></div>';
-    html+='<div class="fix z1 i48" id="garage"></div>';
-    html+='<div class="fix z1 i48" id="garageled"></div>';
-    html+='<div class="fix z1 i48" id="zolderg"></div>';
-    html+='<div class="fix z1 i48" id="tuin"></div>';
-    html+='<div class="fix z1 i48" id="zolder"></div>';
-    html+='<div class="fix z1 i48" id="wc"></div>';
-    html+='<div class="fix z1 i48" id="bureeltobi"></div>';
-    html+='<div class="fix z1 i48" id="tvtobi"></div>';
-    html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
-    html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
-    html+='<div class="fix z1 i48" id="heater1"></div>';
-    html+='<div class="fix z1 i48" id="heater2"></div>';
-    html+='<div class="fix z1 i48" id="heater3"></div>';
-    html+='<div class="fix z1 i48" id="heater4"></div>';
-    html+='<div class="fix z1 i48" id="diepvries"></div>';
-    html+='<div class="fix z1 i48" id="poortrf"></div>';
-    html+='<div class="fix z1 i48" id="jbl"></div>';
-    html+='<div class="fix yellow" id="Rbureel"></div>';
-    html+='<div class="fix yellow" id="RkeukenL"></div>';
-    html+='<div class="fix yellow" id="RkeukenR"></div>';
-    html+='<div class="fix yellow" id="Rliving"></div>';
-    html+='<div class="fix yellow" id="RkamerL"></div>';
-    html+='<div class="fix yellow" id="RkamerR"></div>';
-    html+='<div class="fix yellow" id="Rtobi"></div>';
-    html+='<div class="fix yellow" id="Ralex"></div>';
-    html+='<div class="fix z0" id="zoldervuur2"></div>';
-    html+='<div class="fix z0" id="GroheRed"></div>';
-    html+='<div class="fix z0" id="bureeltobikwh"></div>';
-    html+='<div class="fix z0" id="zliving"></div>';
-    html+='<div class="fix z0" id="zkeuken"></div>';
-    html+='<div class="fix z0" id="zinkom"></div>';
-    html+='<div class="fix z0" id="zgarage"></div>';
-    html+='<div class="fix z0" id="zhalla"></div>';
-    html+='<div class="fix z0" id="zhallb"></div>';
-    html+='<div class="fix" id="poortrf"></div>';
-    html+='<div class="fix" id="achterdeur"></div>';
-    html+='<div class="fix" id="raamliving"></div>';
-    html+='<div class="fix" id="raamtobi"></div>';
-    html+='<div class="fix" id="raamalex"></div>';
-    html+='<div class="fix" id="raamkamer"></div>';
-    html+='<div class="fix" id="raamhall"></div>';
-    html+='<div class="fix" id="deurbadkamer"></div>';
-    html+='<div class="fix" id="deurinkom"></div>';
-    html+='<div class="fix" id="deurgarage"></div>';
-    html+='<div class="fix" id="deurwc"></div>';
-    html+='<div class="fix" id="deurkamer"></div>';
-    html+='<div class="fix" id="deurtobi"></div>';
-    html+='<div class="fix" id="deuralex"></div>';
-    html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';    document.getElementById("placeholder").innerHTML=html;
+    try{
+        html='<div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
+        html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time"></a></div>';
+        html+='<div class="fix z0 afval" id="gcal"></div>';
+        html+='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+        html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
+        html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
+        html+='<div class="fix Weg" id="Weg"></div>';
+        html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
+        html+='<div class="fix z1 i48" id="regenputleeg"></div>';
+        html+='<div class="fix z1 i48" id="regenputvol"></div>';
+        html+='<div class="fix z1 i48" id="kristal"></div>';
+        html+='<div class="fix z1 i48" id="bureel"></div>';
+        html+='<div class="fix z1 i48" id="inkom"></div>';
+        html+='<div class="fix z1 i48" id="keuken"></div>';
+        html+='<div class="fix z1 i48" id="wasbak"></div>';
+        html+='<div class="fix z1 i48" id="kookplaat"></div>';
+        html+='<div class="fix z1 i48" id="voordeur"></div>';
+        html+='<div class="fix z1 i48" id="hall"></div>';
+        html+='<div class="fix z1 i48" id="werkblad1"></div>';
+        html+='<div class="fix z1 i48" id="garage"></div>';
+        html+='<div class="fix z1 i48" id="garageled"></div>';
+        html+='<div class="fix z1 i48" id="zolderg"></div>';
+        html+='<div class="fix z1 i48" id="tuin"></div>';
+        html+='<div class="fix z1 i48" id="zolder"></div>';
+        html+='<div class="fix z1 i48" id="wc"></div>';
+        html+='<div class="fix z1 i48" id="bureeltobi"></div>';
+        html+='<div class="fix z1 i48" id="tvtobi"></div>';
+        html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
+        html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
+        html+='<div class="fix z1 i48" id="heater1"></div>';
+        html+='<div class="fix z1 i48" id="heater2"></div>';
+        html+='<div class="fix z1 i48" id="heater3"></div>';
+        html+='<div class="fix z1 i48" id="heater4"></div>';
+        html+='<div class="fix z1 i48" id="diepvries"></div>';
+        html+='<div class="fix z1 i48" id="poortrf"></div>';
+        html+='<div class="fix z1 i48" id="jbl"></div>';
+        html+='<div class="fix yellow" id="Rbureel"></div>';
+        html+='<div class="fix yellow" id="RkeukenL"></div>';
+        html+='<div class="fix yellow" id="RkeukenR"></div>';
+        html+='<div class="fix yellow" id="Rliving"></div>';
+        html+='<div class="fix yellow" id="RkamerL"></div>';
+        html+='<div class="fix yellow" id="RkamerR"></div>';
+        html+='<div class="fix yellow" id="Rtobi"></div>';
+        html+='<div class="fix yellow" id="Ralex"></div>';
+        html+='<div class="fix z0" id="zoldervuur2"></div>';
+        html+='<div class="fix z0" id="GroheRed"></div>';
+        html+='<div class="fix z0" id="bureeltobikwh"></div>';
+        html+='<div class="fix z0" id="zliving"></div>';
+        html+='<div class="fix z0" id="zkeuken"></div>';
+        html+='<div class="fix z0" id="zinkom"></div>';
+        html+='<div class="fix z0" id="zgarage"></div>';
+        html+='<div class="fix z0" id="zhalla"></div>';
+        html+='<div class="fix z0" id="zhallb"></div>';
+        html+='<div class="fix" id="poortrf"></div>';
+        html+='<div class="fix" id="achterdeur"></div>';
+        html+='<div class="fix" id="raamliving"></div>';
+        html+='<div class="fix" id="raamtobi"></div>';
+        html+='<div class="fix" id="raamalex"></div>';
+        html+='<div class="fix" id="raamkamer"></div>';
+        html+='<div class="fix" id="raamhall"></div>';
+        html+='<div class="fix" id="deurbadkamer"></div>';
+        html+='<div class="fix" id="deurinkom"></div>';
+        html+='<div class="fix" id="deurgarage"></div>';
+        html+='<div class="fix" id="deurwc"></div>';
+        html+='<div class="fix" id="deurkamer"></div>';
+        html+='<div class="fix" id="deurtobi"></div>';
+        html+='<div class="fix" id="deuralex"></div>';
+        html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr></table></div>';    document.getElementById("placeholder").innerHTML=html;
+    }catch{}
 }
 function floorplanheating(){
-    html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
-    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="time"></a></div>';
-    html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
-    html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
-    html+='<div class="fix z1 i48" id="heater1"></div>';
-    html+='<div class="fix z1 i48" id="heater2"></div>';
-    html+='<div class="fix z1 i48" id="heater3"></div>';
-    html+='<div class="fix z1 i48" id="heater4"></div>';
-    html+='<div class="fix yellow" id="Rbureel"></div>';
-    html+='<div class="fix yellow" id="RkeukenL"></div>';
-    html+='<div class="fix yellow" id="RkeukenR"></div>';
-    html+='<div class="fix yellow" id="Rliving"></div>';
-    html+='<div class="fix yellow" id="RkamerL"></div>';
-    html+='<div class="fix yellow" id="RkamerR"></div>';
-    html+='<div class="fix yellow" id="Rtobi"></div>';
-    html+='<div class="fix yellow" id="Ralex"></div>';
-    html+='<div class="fix z0" id="zliving"></div>';
-    html+='<div class="fix z0" id="zkeuken"></div>';
-    html+='<div class="fix z0" id="zinkom"></div>';
-    html+='<div class="fix z0" id="zgarage"></div>';
-    html+='<div class="fix z0" id="zhalla"></div>';
-    html+='<div class="fix z0" id="zhallb"></div>';
-    html+='<div class="fix" id="poort"></div>';
-    html+='<div class="fix" id="achterdeur"></div>';
-    html+='<div class="fix" id="raamliving"></div>';
-    html+='<div class="fix" id="raamtobi"></div>';
-    html+='<div class="fix" id="raamalex"></div>';
-    html+='<div class="fix" id="raamkamer"></div>';
-    html+='<div class="fix" id="raamhall"></div>';
-    html+='<div class="fix" id="deurbadkamer"></div>';
-    html+='<div class="fix" id="deurinkom"></div>';
-    html+='<div class="fix" id="deurgarage"></div>';
-    html+='<div class="fix" id="deurwc"></div>';
-    html+='<div class="fix" id="deurkamer"></div>';
-    html+='<div class="fix" id="deurtobi"></div>';
-    html+='<div class="fix" id="deuralex"></div>';
-    document.getElementById("placeholder").innerHTML=html;
+    try{
+        html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+        html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.heating.php");\' id="time"></a></div>';
+        html+='<div class="fix z1 i48" id="badkamervuur1"></div>';
+        html+='<div class="fix z1 i48" id="badkamervuur2"></div>';
+        html+='<div class="fix z1 i48" id="heater1"></div>';
+        html+='<div class="fix z1 i48" id="heater2"></div>';
+        html+='<div class="fix z1 i48" id="heater3"></div>';
+        html+='<div class="fix z1 i48" id="heater4"></div>';
+        html+='<div class="fix yellow" id="Rbureel"></div>';
+        html+='<div class="fix yellow" id="RkeukenL"></div>';
+        html+='<div class="fix yellow" id="RkeukenR"></div>';
+        html+='<div class="fix yellow" id="Rliving"></div>';
+        html+='<div class="fix yellow" id="RkamerL"></div>';
+        html+='<div class="fix yellow" id="RkamerR"></div>';
+        html+='<div class="fix yellow" id="Rtobi"></div>';
+        html+='<div class="fix yellow" id="Ralex"></div>';
+        html+='<div class="fix z0" id="zliving"></div>';
+        html+='<div class="fix z0" id="zkeuken"></div>';
+        html+='<div class="fix z0" id="zinkom"></div>';
+        html+='<div class="fix z0" id="zgarage"></div>';
+        html+='<div class="fix z0" id="zhalla"></div>';
+        html+='<div class="fix z0" id="zhallb"></div>';
+        html+='<div class="fix" id="poort"></div>';
+        html+='<div class="fix" id="achterdeur"></div>';
+        html+='<div class="fix" id="raamliving"></div>';
+        html+='<div class="fix" id="raamtobi"></div>';
+        html+='<div class="fix" id="raamalex"></div>';
+        html+='<div class="fix" id="raamkamer"></div>';
+        html+='<div class="fix" id="raamhall"></div>';
+        html+='<div class="fix" id="deurbadkamer"></div>';
+        html+='<div class="fix" id="deurinkom"></div>';
+        html+='<div class="fix" id="deurgarage"></div>';
+        html+='<div class="fix" id="deurwc"></div>';
+        html+='<div class="fix" id="deurkamer"></div>';
+        html+='<div class="fix" id="deurtobi"></div>';
+        html+='<div class="fix" id="deuralex"></div>';
+        document.getElementById("placeholder").innerHTML=html;
+    }catch{}
 }
 function floorplanothers(){
-    html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
-    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.others.php");\' id="time"></a></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="auto"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="tv"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="nvidia"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="bosesoundlink"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="denon"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="water"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="regenpomp"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="zwembadfilter"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="zwembadwarmte"></div>';
-    html+='<div class="fix z1 i48" style="width:70px;" id="dampkap"></div>';
-    document.getElementById("placeholder").innerHTML=html;
+    try{
+        html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+        html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.others.php");\' id="time"></a></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="auto"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="tv"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="nvidia"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="bosesoundlink"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="denon"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="water"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="regenpomp"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="zwembadfilter"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="zwembadwarmte"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="dampkap"></div>';
+        document.getElementById("placeholder").innerHTML=html;
+    }catch{}
 }
 function floorplanmedia(){
-    html='<div class="fix jbl z1 i48" id="jbl"></div>';
-    html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.media.php");\' id="time"></a></div>';
-    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
-    html+='<div class="fix bureel z1 i48" id="bureel"></div>';
-    html+='<div class="fix keuken z1 i48" id="keuken"></div>';
-    html+='<div class="fix wasbak z1 i48" id="wasbak"></div>';
-    html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
-    html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
-    html+='<div class="fix kristal z1 i48" id="kristal"></div>';
-    html+='<div class="fix lgtv z1 i48" id="lgtv"></div>';
-    html+='<div class="fix yellow" id="Rbureel"></div>';
-    html+='<div class="fix yellow" id="RkeukenL"></div>';
-    html+='<div class="fix yellow" id="RkeukenR"></div>';
-    html+='<div class="fix yellow" id="Rliving"></div>';
-    html+='<div class="fix z0" id="zliving"></div>';
-    html+='<div class="fix z0" id="zkeuken"></div>';
-    html+='<div class="fix z0" id="zinkom"></div>';
-    html+='<div class="fix z0" id="zgarage"></div>';
-    html+='<div class="fix z0" id="zhalla"></div>';
-    html+='<div class="fix z0" id="zhallb"></div>';
-    html+='<div class="fix" id="raamliving"></div>';
-    html+='<div class="fix" id="deurinkom"></div>';
-    html+='<div class="fix" id="deurgarage"></div>';
-    html+='<div class="fix" id="deurwc"></div>';
-    document.getElementById("placeholder").innerHTML=html;
+    try{
+        html='<div class="fix jbl z1 i48" id="jbl"></div>';
+        html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.media.php");\' id="time"></a></div>';
+        html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+        html+='<div class="fix bureel z1 i48" id="bureel"></div>';
+        html+='<div class="fix keuken z1 i48" id="keuken"></div>';
+        html+='<div class="fix wasbak z1 i48" id="wasbak"></div>';
+        html+='<div class="fix kookplaat z1 i48" id="kookplaat"></div>';
+        html+='<div class="fix werkblad1 z1 i48" id="werkblad1"></div>';
+        html+='<div class="fix kristal z1 i48" id="kristal"></div>';
+        html+='<div class="fix lgtv z1 i48" id="lgtv"></div>';
+        html+='<div class="fix yellow" id="Rbureel"></div>';
+        html+='<div class="fix yellow" id="RkeukenL"></div>';
+        html+='<div class="fix yellow" id="RkeukenR"></div>';
+        html+='<div class="fix yellow" id="Rliving"></div>';
+        html+='<div class="fix z0" id="zliving"></div>';
+        html+='<div class="fix z0" id="zkeuken"></div>';
+        html+='<div class="fix z0" id="zinkom"></div>';
+        html+='<div class="fix z0" id="zgarage"></div>';
+        html+='<div class="fix z0" id="zhalla"></div>';
+        html+='<div class="fix z0" id="zhallb"></div>';
+        html+='<div class="fix" id="raamliving"></div>';
+        html+='<div class="fix" id="deurinkom"></div>';
+        html+='<div class="fix" id="deurgarage"></div>';
+        html+='<div class="fix" id="deurwc"></div>';
+        document.getElementById("placeholder").innerHTML=html;
+    }catch{}
 }
 function pad(n, length){
     var len=length - (''+n).length;

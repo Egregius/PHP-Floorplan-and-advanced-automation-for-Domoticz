@@ -11,7 +11,8 @@
  **/
 $user='cron60';
 if ($d['auto']['s']=='On') {
-    if ($d['Weg']['s']==0){//Thuis
+    /* -------------------------------------------- THUIS ----------------------------*/
+    if ($d['Weg']['s']==0){
         if ($d['pirkeuken']['s']=='Off') {
             $uit=300;
             if (past('pirkeuken')>$uit) {
