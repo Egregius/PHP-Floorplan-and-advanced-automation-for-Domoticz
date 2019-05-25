@@ -510,6 +510,13 @@ function handlenaam()
         sw($_REQUEST['Naam'], $_REQUEST['Actie']);
     } else {
         sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+        if ($_REQUEST['Naam']=='GroheRed') {
+            if ($_REQUEST['Actie']=='On') {
+                storemode('GroheRed', 1);
+            } else {
+                storemode('GroheRed', 0);
+            }
+        }
     }
 }
 function handleverdieping()
@@ -704,6 +711,7 @@ function handleheating()
 }
 function handlesetsetpoint()
 {
+    global $d;
     $name=$_REQUEST['SetSetpoint'];
     echo '
     <body>

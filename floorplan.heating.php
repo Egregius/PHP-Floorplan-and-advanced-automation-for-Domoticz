@@ -18,20 +18,6 @@ if ($home) {
     $d=fetchdata();
     createheader('floorplanheating');
     handlerequest();
-    if (isset($_POST['Naam'])
-        &&isset($_POST['Actie'])
-        &&!isset($_POST['Setpoint'])
-    ) {
-        sw($_POST['Naam'], $_POST['Actie']);
-        usleep(80000);
-        if ($_POST['Naam']=='GroheRed') {
-            if ($_POST['Actie']=='On') {
-                storemode('GroheRed', 1);
-            } else {
-                storemode('GroheRed', 0);
-            }
-        }
-    }
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);
