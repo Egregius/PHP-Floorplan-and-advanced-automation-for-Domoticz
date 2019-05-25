@@ -711,7 +711,7 @@ function floorplanheating(){
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=Ralex\';" id="RRalex"></div>';
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerL\';" id="RRkamerL"></div>';
         html+='<div class="fix z" onclick="location.href=\'floorplan.heating.php?rollers=RkamerR\';" id="RRkamerR"></div>';
-        html+='<div class="fix stamp z1 id="tdeurinkom"></div>';
+        html+='<div class="fix stamp z1" id="traamkamer"></div>';
         document.getElementById("placeholder").innerHTML=html;
     }catch{}
 }

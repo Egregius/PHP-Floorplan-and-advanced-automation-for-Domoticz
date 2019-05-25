@@ -170,7 +170,7 @@ td{text-align:right;font-size:1.1em;}
 #traamliving{top:72px;left:75px;}
 #traamtobi{top:462px;left:75px;}
 #traamalex{top:581px;left:75px;}
-#traamkamer{top:598px;left:455px;}
+#traamkamer{top:598px;left:455px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #raamliving{top:46px;left:87px;width:11px;height:165px;z-index:-10;}
 #raamtobi{top:448px;left:87px;width:11px;height:42px;z-index:-10;}
 #raamalex{top:568px;left:87px;width:11px;height:42px;z-index:-10;}

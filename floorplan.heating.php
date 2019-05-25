@@ -109,7 +109,6 @@ if ($home) {
     showTimestamp('raamliving', 270);
     showTimestamp('raamtobi', 270);
     showTimestamp('raamalex', 270);
-    showTimestamp('raamkamer', 90);
     showTimestamp('deurbadkamer', 90);
     showTimestamp('Rliving', 270);
     showTimestamp('Rbureel', 0);
