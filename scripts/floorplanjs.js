@@ -658,6 +658,7 @@ function floorplan(){
         html+='<div class="fix stamp" id="tpirinkom"></div>';
         html+='<div class="fix stamp" id="tpirhall"></div>';
         html+='<div class="fix stamp" id="traamliving"></div>';
+        html+='<div class="fix stamp" id="traamkamer"></div>';
         html+='<div class="fix stamp" id="traamtobi"></div>';
         html+='<div class="fix stamp" id="traamalex"></div>';
         html+='<div class="fix stamp" id="tdeurbadkamer"></div>';
