@@ -446,8 +446,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="thermostaat"){
-                            //try{
-
+                            try{
                                 temp=sessionStorage.getItem(name.toString().replace("_set", "_temp"));
                                 dif=temp-value;
                                 opts=icon.split(",");
@@ -472,7 +471,7 @@ function ajax(){
                                 console.log(name+" = "+value+" "+mode);
                                 document.getElementById(name).innerHTML=html;
                                 console.log(html);
-                            //} catch {}
+                            } catch {}
                         }else if(type=="setpoint"){
                             try{
                                 document.getElementById(name).innerHTML=value;
