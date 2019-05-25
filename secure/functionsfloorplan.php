@@ -248,167 +248,12 @@ function handlerequest()
 /*--------------------- OUDE HANDLE ---------------------------------------------------*/
     if (isset($_REQUEST['setdimmer'])) {
         handlesetdimmer();
-
     } elseif (isset($_REQUEST['dimmer'])) {
-        if (!isset($d)) $d=fetchdata();
-        if (isset($_REQUEST['luifelauto'])) {
-            storemode('dimactionluifel', 1);
-        } elseif (isset($_REQUEST['dimlevelon_x'])) {
-            sl($_REQUEST['Naam'], 100);
-            storemode($_REQUEST['Naam'], 0);
-        } elseif (isset($_REQUEST['dimleveloff_x'])) {
-            sl($_REQUEST['Naam'], 0);
-            storemode($_REQUEST['Naam'], 0);
-        } elseif (isset($_REQUEST['dimsleep_x'])) {
-            lg('=> '.$user.' => activated dimmer sleep for '.$_REQUEST['Naam']);
-            storemode($_REQUEST['Naam'], 1);
-        } elseif (isset($_REQUEST['dimwake_x'])) {
-            lg('=> '.$user.' => activated dimmer wake for '.$_REQUEST['Naam']);
-            sl($_REQUEST['Naam'], $_REQUEST['dimwakelevel']+2);
-            storemode($_REQUEST['Naam'], 2);
-        } elseif (isset($_REQUEST['dimwake3u_x'])) {
-            lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_REQUEST['Naam']);
-            storemode($_REQUEST['Naam'], 3);
-        } else {
-            sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
-            storemode($_REQUEST['Naam'], 0);
-        }
-    } elseif (isset($_REQUEST['Naam'])&&!isset($_REQUEST['dimmer'])) {
-        if ($_REQUEST['Naam']=='bureeltobi') {
-            if (!isset($_REQUEST['confirm'])) {
-                    echo '<body><div id="message" class="fix confirm">
-				<form method="post">
-					<input type="hidden" name="Actie" value="On">
-					<input type="hidden" name="Naam" value="bureeltobi">
-					<input type="submit" name="confirm" value="Aan" class="btn huge2">
-				</form>
-				<form method="post">
-					<input type="hidden" name="Actie" value="Off">
-					<input type="hidden" name="Naam" value="bureeltobu">
-					<input type="submit" name="confirm" value="Uit" class="btn huge2">
-				</form>
-			</div>
-			</body>
-		</html>';
-                    exit;
-            } elseif (isset($_REQUEST['confirm'])) {
-                  sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-            }
-        } elseif ($_REQUEST['Naam']=='zoldertrap') {
-            if ($d['raamhall']['s']=='Closed') {
-                sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-            } else {
-                echo '<body><div id="message" class="fix confirm">
-			<form method="post" action="floorplan.php">
-					<input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2">
-					<input type="submit" name="confirm" value="Annuleer" class="btn huge2">
-				</form>
-			</div>
-			</body>
-		</html>';
-                exit;
-            }
-        } elseif ($_REQUEST['Naam']=='luifel') {
-            if (isset($_REQUEST['Rollerlevelon.x'])) {
-                sl('luifel', 0);
-            } elseif (isset($_REQUEST['Rollerleveloff.x'])) {
-                sl('luifel', 100);
-            }
-        } elseif ($_REQUEST['Naam']=='poortrf') {
-            if ($_REQUEST['Actie']=='On') {
-                store('Weg', 0);
-            }
-            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-        } else {
-            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-        }
+        handledimmer();
+    } elseif (isset($_REQUEST['Naam'])) {
+        handlenaam();
     } elseif (isset($_REQUEST['Weg'])) {
-        if (isset($_REQUEST['Action'])) {
-            store('Weg', $_REQUEST['Action']);
-            if ($_REQUEST['Action']==0) {
-                $d=fetchdata();
-                $db->query("UPDATE devices set t='1' WHERE n='heating';");
-                if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
-                    sw('poortrf', 'On');
-                }
-                lgsql($user, 'Weg', 'Thuis');
-                resetsecurity();
-            } elseif ($_REQUEST['Action']==1) {
-                lgsql($user, 'Weg', 'Slapen');
-                huisslapen();
-            } elseif ($_REQUEST['Action']==2) {
-                lgsql($user, 'Weg', 'Weg');
-                huisweg();
-            }
-        } else {
-            if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
-                echo '
-	<body>
-	    <div id="message" class="fix dimmer" >
-			<br><br>
-			<h2>Warning:</h2>
-			<h2>Raam Living open!<h2>
-			<br><br>
-			<form action="floorplan.php" method="post">
-				<input type="hidden" name="Weg" value="true">
-				<input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
-				<input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
-			</form>
-		</div>
-	</body>
-</html>';
-                exit;
-            }
-            if ($d['achterdeur']['s']=='Open'&&!isset($_REQUEST['continue'])) {
-                echo '
-    <body>
-        <div id="message" class="fix dimmer" >
-            <br><br>
-            <h2>Warning:</h2>
-            <h2>Achterdeur open!<h2>
-            <br><br>
-            <form action="floorplan.php" method="post">
-                <input type="hidden" name="Weg" value="true">
-                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
-                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
-            </form>
-        </div>
-    </body>
-</html>';
-                exit;
-            }
-            if ($d['poort']['s']=='Open'&&!isset($_REQUEST['continue'])) {
-                echo '
-    <body>
-        <div id="message" class="fix dimmer" >
-            <br><br>
-            <h2>Warning:</h2>
-            <h2>Poort open!<h2>
-            <br><br>
-            <form action="floorplan.php" method="GET">
-                <input type="hidden" name="Weg" value="true">
-                <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
-                <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
-            </form>
-        </div>
-    </body>
-</html>';
-                exit;
-            }
-            echo '
-    <body>
-        <div id="message" class="fix confirm">
-            <form action="floorplan.php" method="GET">
-                <input type="hidden" name="Weg" value="true">
-                <button name="Action" value="2" class="btn huge3">Weg</button>
-                <button name="Action" value="1" class="btn huge3">Slapen</button>
-                <button name="Action" value="0" class="btn huge3">Thuis</button>
-            </form>
-        </div>
-    </body>
-</html>';
-            exit;
-        }
+        handleweg();
     }
 }
 function handlesetdimmer()
@@ -500,4 +345,261 @@ function handlesetdimmer()
 	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
 </html>';
         exit;
+}
+function handledimmer()
+{
+    //if (!isset($d)) $d=fetchdata();
+    if (isset($_REQUEST['luifelauto'])) {
+        storemode('dimactionluifel', 1);
+    } elseif (isset($_REQUEST['dimlevelon_x'])) {
+        sl($_REQUEST['Naam'], 100);
+        storemode($_REQUEST['Naam'], 0);
+    } elseif (isset($_REQUEST['dimleveloff_x'])) {
+        sl($_REQUEST['Naam'], 0);
+        storemode($_REQUEST['Naam'], 0);
+    } elseif (isset($_REQUEST['dimsleep_x'])) {
+        lg('=> '.$user.' => activated dimmer sleep for '.$_REQUEST['Naam']);
+        storemode($_REQUEST['Naam'], 1);
+    } elseif (isset($_REQUEST['dimwake_x'])) {
+        lg('=> '.$user.' => activated dimmer wake for '.$_REQUEST['Naam']);
+        sl($_REQUEST['Naam'], $_REQUEST['dimwakelevel']+2);
+        storemode($_REQUEST['Naam'], 2);
+    } elseif (isset($_REQUEST['dimwake3u_x'])) {
+        lg('=> '.$user.' => activated dimmer wake after 3 hours for '.$_REQUEST['Naam']);
+        storemode($_REQUEST['Naam'], 3);
+    } else {
+        sl($_REQUEST['Naam'], $_REQUEST['dimlevel']);
+        storemode($_REQUEST['Naam'], 0);
+    }
+}
+function handleweg()
+{
+    if (isset($_REQUEST['Action'])) {
+        store('Weg', $_REQUEST['Action']);
+        if ($_REQUEST['Action']==0) {
+            $d=fetchdata();
+            $db->query("UPDATE devices set t='1' WHERE n='heating';");
+            if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
+                sw('poortrf', 'On');
+            }
+            lgsql($user, 'Weg', 'Thuis');
+            resetsecurity();
+        } elseif ($_REQUEST['Action']==1) {
+            lgsql($user, 'Weg', 'Slapen');
+            huisslapen();
+        } elseif ($_REQUEST['Action']==2) {
+            lgsql($user, 'Weg', 'Weg');
+            huisweg();
+        }
+    } else {
+        if ($d['raamliving']['s']=='Open'&&!isset($_REQUEST['continue'])) {
+            echo '
+<body>
+    <div id="message" class="fix dimmer" >
+        <br><br>
+        <h2>Warning:</h2>
+        <h2>Raam Living open!<h2>
+        <br><br>
+        <form action="floorplan.php" method="post">
+            <input type="hidden" name="Weg" value="true">
+            <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+            <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
+        </form>
+    </div>
+</body>
+</html>';
+            exit;
+        }
+        if ($d['achterdeur']['s']=='Open'&&!isset($_REQUEST['continue'])) {
+            echo '
+<body>
+    <div id="message" class="fix dimmer" >
+        <br><br>
+        <h2>Warning:</h2>
+        <h2>Achterdeur open!<h2>
+        <br><br>
+        <form action="floorplan.php" method="post">
+            <input type="hidden" name="Weg" value="true">
+            <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+            <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
+        </form>
+    </div>
+</body>
+</html>';
+            exit;
+        }
+        if ($d['poort']['s']=='Open'&&!isset($_REQUEST['continue'])) {
+            echo '
+<body>
+    <div id="message" class="fix dimmer" >
+        <br><br>
+        <h2>Warning:</h2>
+        <h2>Poort open!<h2>
+        <br><br>
+        <form action="floorplan.php" method="GET">
+            <input type="hidden" name="Weg" value="true">
+            <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
+            <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
+        </form>
+    </div>
+</body>
+</html>';
+            exit;
+        }
+        echo '
+<body>
+    <div id="message" class="fix confirm">
+        <form action="floorplan.php" method="GET">
+            <input type="hidden" name="Weg" value="true">
+            <button name="Action" value="2" class="btn huge3">Weg</button>
+            <button name="Action" value="1" class="btn huge3">Slapen</button>
+            <button name="Action" value="0" class="btn huge3">Thuis</button>
+        </form>
+    </div>
+</body>
+</html>';
+        exit;
+    }
+}
+function handlenaam()
+{
+    if ($_REQUEST['Naam']=='bureeltobi') {
+        if (!isset($_REQUEST['confirm'])) {
+                echo '<body><div id="message" class="fix confirm">
+            <form method="post">
+                <input type="hidden" name="Actie" value="On">
+                <input type="hidden" name="Naam" value="bureeltobi">
+                <input type="submit" name="confirm" value="Aan" class="btn huge2">
+            </form>
+            <form method="post">
+                <input type="hidden" name="Actie" value="Off">
+                <input type="hidden" name="Naam" value="bureeltobu">
+                <input type="submit" name="confirm" value="Uit" class="btn huge2">
+            </form>
+        </div>
+        </body>
+    </html>';
+                exit;
+        } elseif (isset($_REQUEST['confirm'])) {
+              sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+        }
+    } elseif ($_REQUEST['Naam']=='zoldertrap') {
+        if ($d['raamhall']['s']=='Closed') {
+            sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+        } else {
+            echo '<body><div id="message" class="fix confirm">
+        <form method="post" action="floorplan.php">
+                <input type="submit" name="confirm" value="RAAM OPEN!" class="btn huge2">
+                <input type="submit" name="confirm" value="Annuleer" class="btn huge2">
+            </form>
+        </div>
+        </body>
+    </html>';
+            exit;
+        }
+    } elseif ($_REQUEST['Naam']=='luifel') {
+        if (isset($_REQUEST['Rollerlevelon.x'])) {
+            sl('luifel', 0);
+        } elseif (isset($_REQUEST['Rollerleveloff.x'])) {
+            sl('luifel', 100);
+        }
+    } elseif ($_REQUEST['Naam']=='poortrf') {
+        if ($_REQUEST['Actie']=='On') {
+            store('Weg', 0);
+        }
+        sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+    } else {
+        sw($_REQUEST['Naam'], $_REQUEST['Actie']);
+    }
+}
+function handleverdieping()
+{
+    if (isset($_REQUEST['confirm'])) {
+        $verdiep=$_REQUEST['verdieping'];
+        $beneden=array('Rbureel','RkeukenL','RkeukenR');
+        $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
+        $items=${$verdiep};
+        if (isset($_REQUEST['verdiepingmode'])) {
+            lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['verdiepingmode']);
+            foreach ($items as $i) {
+                if ($d[$i]['m']<2) {
+                    if ($_REQUEST['verdiepingmode']=='Manueel') {
+                        storemode($i, 1);
+                        $d[$i]['m']=1;
+                    } else {
+                        storemode($i, 0);
+                        $d[$i]['m']=0;
+                    }
+                }
+            }
+        } else {
+            foreach ($items as $i) {
+                if (isset($_REQUEST['Rollerlevelon_x'])) {
+                    lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
+                    sl($i, 100, 'Roller');
+                    if ($d[$i]['m']==0) {
+                        storemode($i, 1);
+                        $d[$i]['m']=1;
+                    }
+                } elseif (isset($_REQUEST['Rollerleveloff_x'])) {
+                    lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' dicht ');
+                    sl($i, 0, 'Roller');
+                    if ($d[$i]['m']==0) {
+                        storemode($i, 1);
+                        $d[$i]['m']=1;
+                    }
+                } else {
+                    lg(' (Set rollers verdieping) | '.$user.' '.$verdiep.' to '.$_REQUEST['Rollerlevel']);
+                    sl($i, $_REQUEST['Rollerlevel'], 'Roller');
+                    if ($d[$i]['m']==0) {
+                        storemode($i, 1);
+                        $d[$i]['m']=1;
+                    }
+                }
+            }
+        }
+        include 'secure/_rolluiken.php';
+        //echo '</pre></div>';
+    } else {
+        $name=$_REQUEST['verdieping'];
+        echo '
+<body>
+    <div class="fix dimmer" >
+        <form method="POST" action="floorplan.heating.php" oninput="level.value = Rollerlevel.valueAsNumber">
+                <div class="fix z" style="top:15px;left:90px;">';
+        echo '<h2>'.$name.'</h2>
+                    <input type="hidden" name="verdieping" value="'.$name.'">
+                    <input type="hidden" name="confirm" value="true">
+                </div>
+                <div class="fix z" style="top:100px;left:40px;">
+                    <input type="image" name="Rollerlevelon" value ="100" src="images/arrowgreendown.png" class="i90">
+                </div>
+                <div class="fix z" style="top:95px;left:160px;">
+                    <input type="submit" name="verdiepingmode" value ="Manueel" class="btn mode"><br>
+                    <input type="submit" name="verdiepingmode" value ="Automatisch" class="btn mode">
+                </div>
+                <div class="fix z" style="top:100px;left:350px;">
+                    <input type="image" name="Rollerleveloff" value ="0" src="images/arrowgreenup.png" class="i90">
+                </div>
+                <div class="fix z" style="top:210px;left:10px;">';
+        $levels=array(5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99);
+        foreach ($levels as $level) {
+            echo '
+                    <button name="Rollerlevel" value="'.$level.'" class="dimlevel">
+                        '.$level.'
+                    </button>';
+        }
+        echo '
+                </div>
+            </form>
+            <div class="fix z" style="top:5px;left:5px;">
+                <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
+                    <img src="/images/close.png" width="72px" height="72px" alt="Close">
+                </a>
+            </div>
+        </div>
+    </body>
+</html>';
+        exit;
+    }
 }
