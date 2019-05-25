@@ -6,7 +6,7 @@ function ajax(){
         dataType : 'json',
         async: true,
         success: function(d){
-            for (var device in d){
+            for (device in d){
                 if(d.hasOwnProperty(device)){
                     name=device;
                     if(name=="t"){
@@ -19,17 +19,17 @@ function ajax(){
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         } catch {}
                     }else if(name=="ip"){
-                        var previp = localStorage.getItem("ip");
+                        previp = localStorage.getItem("ip");
                         if(previp!=d['ip']){
                             localStorage.setItem("ip", d['ip']);
                             setTimeout('window.location.href=window.location.href;', 0);
                         }
                     }else{
-                        var value=d[device]['s'];
-                        var mode=d[device]['m'];
-                        var type=d[device]['dt'];
-                        var icon=d[device]['ic'];
-                        var time=d[device]['t'];
+                        value=d[device]['s'];
+                        mode=d[device]['m'];
+                        type=d[device]['dt'];
+                        icon=d[device]['ic'];
+                        time=d[device]['t'];
                         if(name=="Weg"){
                             try{
                                 html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';
@@ -171,7 +171,7 @@ function ajax(){
                         }else if(name=="watervandaag"){
                             try{
                                 if(value>0){
-                                    var item=value / 1000;
+                                    item=value / 1000;
                                     html='<td id="tdwater">Water:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>';
                                     document.getElementById("trwater").innerHTML=html;
                                     if(value>1000)document.getElementById("trwater").style.color="#FF0000";
@@ -190,10 +190,10 @@ function ajax(){
                             } catch {}
                         }else if(name=="douche"){
                             try{
-                                var douchegas=value * 10;
-                                var douchewater=mode;
-                                var douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
-                                var douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
+                                douchegas=value * 10;
+                                douchewater=mode;
+                                douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
+                                douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
                                 if(value>0){
                                     html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" &#8364;</td>";
                                     document.getElementById("trdgas").innerHTML=html;
@@ -222,9 +222,9 @@ function ajax(){
                         }else if(name=="belknop"){
                             try{
                                 if(time>($LastUpdateTime-82800)){
-                                    var date=new Date(time*1000);
-                                    var hours=date.getHours();
-                                    var minutes="0"+date.getMinutes();
+                                    date=new Date(time*1000);
+                                    hours=date.getHours();
+                                    minutes="0"+date.getMinutes();
                                     document.getElementById("t"+name).innerHTML=hours+':'+minutes.substr(-2);
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
@@ -266,19 +266,19 @@ function ajax(){
                         }else if(type=="switch"){
                             try{
                                 if(name=="dampkap"||name=="water"||name=="regenpomp"||name=="zwembadfilter"||name=="zwembadwarmte"||name=="auto"||name=="bosesoundlink"||name=="denon"||name=="tv"||name=="lgtv"||name=="nvidia"){
-                                    var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
+                                    html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
                                     html+='<br>'+name+'</form>';
                                     if(time>($LastUpdateTime-82800)){
-                                        var date=new Date(time*1000);
-                                        var hours=date.getHours();
-                                        var minutes="0"+date.getMinutes();
+                                        date=new Date(time*1000);
+                                        hours=date.getHours();
+                                        minutes="0"+date.getMinutes();
                                         html+='<br>'+hours+':'+minutes.substr(-2);
                                     }
                                     document.getElementById(name).innerHTML=html;
                                 }else if(name=="bureeltobi"){
-                                    var html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
+                                    html='<form method="POST" action="" id="form"><input type="hidden" name="Naam" value="'+name+'">';
                                     if(value=="On")html+='<input type="hidden" name="Actie" value="Off"><input type="image" src="/images/'+icon+'_On.png" id="'+name+'">';
                                     else if(value=="Off")html+='<input type="hidden" name="Actie" value="On"><input type="image" src="/images/'+icon+'_Off.png" id="'+name+'">';
                                     html+='</form>';
@@ -293,13 +293,13 @@ function ajax(){
                             try{
                                 if(name=="bose105"){
                                     if(mode=="Online"){
-                                        var html="Online";
-                                        if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
-                                        else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
-                                    }else if(mode=="Offline"){var html="";}
+                                        html="Online";
+                                        if(value=="On"){html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
+                                        else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
+                                    }else if(mode=="Offline"){html="";}
                                 }else{
-                                    if(value=="On"){var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\""+name+"\" alt=\"bose\"></a>";}
-                                    else{var html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\""+name+"\" alt=\"bose\"></a>";}
+                                    if(value=="On"){html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_On.png\" id=\""+name+"\" alt=\"bose\"></a>";}
+                                    else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+name+"\");'><img src=\"images/bose_Off.png\" id=\""+name+"\" alt=\"bose\"></a>";}
                                 }
                                 document.getElementById(name).innerHTML=html;
                                 if(value=="On"){$('#'+name).attr("src", "/images/bose_On.png");}
@@ -317,8 +317,8 @@ function ajax(){
                             } catch {}
                         }else if(type=="pir"){
                             try{
-                                var name=name.toString().replace("pir", "")
-                                var element=document.getElementById("z"+name);
+                                name=name.toString().replace("pir", "")
+                                element=document.getElementById("z"+name);
                                 if(name=="hall"){
                                     if(value=="On"){
                                         document.getElementById("z"+name+"a").classList.add("motion");
@@ -367,10 +367,10 @@ function ajax(){
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
                                     if(value>-15)elem.style.color="#F00";
                                  }else{
-                                    hoogte=value * 3;
+                                    var hoogte=value * 3;
                                     if(hoogte>88)hoogte=88;
                                     else if(hoogte<20)hoogte=20;
-                                    top=91 - hoogte;
+                                    var top=91 - hoogte;
                                     if(value >= 22){tcolor="F00";dcolor="55F";}
                                     else if(value >= 20){tcolor="D12";dcolor="44F";}
                                     else if(value >= 18){tcolor="B24";dcolor="33F";}
@@ -392,19 +392,19 @@ function ajax(){
                             } catch {}
                         }else if(type=="rollers"){
                             try{
-                                var opts=icon.split(",");
-                                var stat=100 - value;
-                                if(stat<100){var perc=(stat/100)*0.7;}
-                                else{var perc=1;}
-                                var elem=document.getElementById(name);
+                                opts=icon.split(",");
+                                stat=100 - value;
+                                if(stat<100)perc=(stat/100)*0.7;
+                                else perc=1;
+                                elem=document.getElementById(name);
                                 if(stat==0){
-                                    var nsize=0;
+                                    nsize=0;
                                     elem.classList.remove("yellow");
                                 }else if(stat>0){
-                                    var nsize=(opts[2]*perc)+8;
+                                    nsize=(opts[2]*perc)+8;
                                     if(nsize>opts[2]){nsize=opts[2];}
-                                    var top=opts[0]+(opts[2]-nsize);
-                                }else{var nsize=opts[2];}
+                                    top=opts[0]+(opts[2]-nsize);
+                                }else{nsize=opts[2];}
                                 if(opts[3]=="P"){
                                     elem.style.top=opts[0]+'px';
                                     elem.style.left=opts[1]+'px';
@@ -416,7 +416,6 @@ function ajax(){
                                     elem.style.width=nsize+'px';
                                     elem.style.height='7px';
                                 }
-
                                 html='<form method="POST" action="">';
                                 html+='<input type="hidden" name="rollers" value="'+name+'">';
                                 if(value==100){
@@ -426,13 +425,13 @@ function ajax(){
                                 }else{
                                     html+='<input type="image" src="/images/circlegrey.png" class="i60">';
                                     html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;" onclick="location.href=\'floorplan.heating.php?rollers='+name+'\';">';
-                                    if(mode == 2){html+='<font size="5" color="#F00">';}
-                                    else if(mode == 1){html+='<font size="5" color="#222">';}
-                                    else{html+='<font size="5" color="#CCC">';}
+                                    if(mode == 2)html+='<font size="5" color="#F00">';
+                                    else if(mode == 1)html+='<font size="5" color="#222">';
+                                    else html+='<font size="5" color="#CCC">';
                                     html+=value+'</font></div>';
                                 }
-                                if(mode == 2){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';}
-                                else if(mode == 1){html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';}
+                                if(mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
+                                else if(mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
                                 html+='</div></form>';
                                 document.getElementById('R'+name).innerHTML=html;
 
@@ -489,34 +488,28 @@ function ajaxbose($ip){
         url: '/ajaxfloorplan.bose.php?ip='+$ip,
         dataType : 'json',
         success: function(data){
-            var date=new Date(data["time"]*1000);
-            var hours=date.getHours();
-            var minutes="0"+date.getMinutes();
-            var seconds="0"+date.getSeconds();
+            date=new Date(data["time"]*1000);
+            hours=date.getHours();
+            minutes="0"+date.getMinutes();
+            seconds="0"+date.getSeconds();
             document.getElementById("time").innerHTML=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
             try{
                 if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
                     let volume=parseInt(data["volume"]["actualvolume"], 10);
-                    var levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                    levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
                     html="<br>";
                     levels.forEach(function(level){
                         let newlevel=volume+level;
-                        if(level==0){
-                            html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
-                        }else{
-                            html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
-                        }
+                        if(level==0)html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        else html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
                     });
                     if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
                     let bass=parseInt(data["bass"]["actualbass"], 10);
-                    var levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+                    levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
                     html="<br>";
                     levels.forEach(function(level){
-                        if(level==bass){
-                            html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                        }else{
-                            html+='<button class="btn volume " onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                        }
+                        if(level==bass)html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                        else html+='<button class="btn volume " onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                     });
                     if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
                     if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
@@ -743,11 +736,11 @@ function floorplanmedia(){
     }catch{}
 }
 function pad(n, length){
-    var len=length - (''+n).length;
+    len=length - (''+n).length;
     return (len>0 ? new Array(++len).join('0') : '')+n
 }
 function toggle_visibility(id){
-    var e=document.getElementById(id);
+    e=document.getElementById(id);
     if(e.style.display=='inherit') e.style.display='none';
     else e.style.display='inherit';
 }
