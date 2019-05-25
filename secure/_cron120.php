@@ -69,7 +69,7 @@ if (isset($ds['currently'])) {
         }
         store('minmaxtemp', round($mintemp, 1));
         storemode('minmaxtemp', round($maxtemp, 1));
-        storemode('max', $maxrain);
+        storemode('max', $maxrain, 1);
     }
 }
 $ow=@json_decode(
