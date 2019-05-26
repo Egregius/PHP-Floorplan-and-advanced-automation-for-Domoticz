@@ -79,13 +79,14 @@ td{text-align:right;font-size:1.1em;}
 #gcal{top:378px;left:88px;width:318px;font-size:1.1em;}
 #nas{top:120px;left:140px;}
 #eettafel{top:140px;left:245px;}
-#ledluifel{top:870px;left:90px;}
+#terras{top:4px;left:16px;}
+#ledluifel{top:38px;left:60px;}
+#tuin{top:74px;left:16px;height:48px;width:auto;}
 #zithoek{top:140px;left:110px;}
 #kamer{top:547px;left:330px;}
 #tobi{top:432px;left:135px;}
 #alex{top:555px;left:135px;}
 #lichtbadkamer{top:418px;left:378px;}
-#terras{top:7px;left:16px;}
 #tvled{top:7px;left:87px;height:50px;width:auto;}
 #kristal{top:7px;left:147px;height:50px;width:auto;}
 #bureel{top:7px;left:207px;height:50px;width:auto;}
@@ -101,7 +102,6 @@ td{text-align:right;font-size:1.1em;}
 #zolderg{top:315px;left:130px;height:42px;width:auto;}
 #auto{top:312px;left:299px;height:40px;width:auto;}
 #Weg{top:286px;left:410px;height:80px;width:auto;}
-#tuin{top:66px;left:16px;height:48px;width:auto;}
 #zolder{top:690px;left:210px;height:48px;width:48px;}
 #wc{top:11px;left:412px;height:28px;width:auto;}
 #regenputleeg{top:800px;left:90px;height:28px;width:auto;}
