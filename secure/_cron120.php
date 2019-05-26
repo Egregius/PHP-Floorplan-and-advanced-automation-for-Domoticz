@@ -209,16 +209,6 @@ $db->query(
         ('$newbuien','$dsbuien','$buien');"
 );
 
-
-/*checkport('192.168.2.11',80);
-checkport('192.168.2.12',80);
-checkport('192.168.2.13',80);
-checkport('192.168.2.14');
-checkport('192.168.2.15',80);
-checkport('192.168.2.224',80);
-checkport('192.168.2.9',8080);
-*/
-
 if ($d['auto']['s']=='On') {
     $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -258,6 +248,7 @@ if ($d['auto']['s']=='On') {
     }
     if (TIME>=strtotime('21:30')
         &&$d['zon']['s']==0
+        &&$d['achterdeur']['s']=='Closed'
         &&past('zon')>1800
         &&past('water')>72000
     ) {
@@ -265,7 +256,7 @@ if ($d['auto']['s']=='On') {
             __Laatste 48u:$rainpast
             __Volgende 48u: $maxrain
             __Automatisch tuin water geven gestart.";
-        if ($rainpast<1000&&$maxrain<0.5) {
+        if ($rainpast<1000&&$maxrain<1) {
             sw('water', 'On');
             storemode('water', 300);
             telegram($msg, 2);

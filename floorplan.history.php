@@ -70,6 +70,8 @@ if ($home) {
             .container input:checked ~ .checkmark:after {display: block;}
             .container .checkmark:after {left: 14px;top: 5px;width: 5px;height: 20px;border: solid white;border-width: 0 3px 3px 0;-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);}
         </style>
+        <script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
