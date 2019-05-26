@@ -231,6 +231,70 @@ if ($d['auto']['s']=='On') {
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
     if ($d['Weg']['s']<=1) {
+        $items=array('eettafel','zithoek','tobi','kamer','alex');
+        foreach ($items as $item) {
+            if ($d[$item]['s']!=0) {
+                if ($d[$item]['m']==1) {
+                    $level=floor($d[$item]['s']*0.95);
+                    if ($level<2) {
+                        $level=0;
+                    }
+                    if ($level==20) {
+                        $level=19;
+                    }
+                    sl($item, $level);
+                    if ($level==0) {
+                        storemode($item, 0);
+                    }
+                } elseif ($d[$item]['m']==2) {
+                    $level=$d[$item]['s']+1;
+                    if ($level==20) {
+                        $level=21;
+                    }
+                    if ($level>50) {
+                        $level=50;
+                    }
+                    sl($item, $level);
+                    if ($level==50) {
+                        storemode($item, 0);
+                    }
+                }
+            } elseif ($d[$item]['s']==0&&$item=='alex') {
+                if ($d[$item]['m']==3) {
+                    if ($d['raamalex']['s']=='Open') {
+                        storemode('alex', 0);
+                    } else {
+                        if (past($item)>10800) {
+                            sl('alex', 2);
+                            storemode($item, 2);
+                        }
+                    }
+                }
+            }
+        }
+        if ($d['kamer']['m']==2) {
+            $items=array('RkamerR','RkamerL');
+            if ($d['kamer']['s']==3) {
+                foreach ($items as $i) {
+                    if ($d[$i]['s']>70) {
+                        sl($i, 65);
+                    }
+                }
+            } elseif ($d['kamer']['s']==10) {
+                foreach ($items as $i) {
+                    if ($d[$i]['s']>55) {
+                        sl($i, 30);
+                    }
+                }
+            } elseif ($d['kamer']['s']>=15) {
+                foreach ($items as $i) {
+                    if ($d[$i]['s']>0) {
+                        sl($i, 0);
+                        storemode($i, 0);
+                    }
+                }
+            }
+        }
 
     }
     /* -------------------------------------------- SLAPEN --------------------------*/
@@ -352,7 +416,7 @@ if ($d['auto']['s']=='On') {
 
 
         }
-    /* -------------------------------------------- ALTIJD ----------------------------*/
+    /* -------------------------------------------- ALTIJD BIJ AUT0----------------------------*/
     if (past('diepvries_temp')>7200) {
         alert(
                 'diepvriestemp',
@@ -490,129 +554,29 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-    //SMAPPEE
-    $timefrom=TIME-86400;
-    $chauth = curl_init(
-        'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
-        $smappeeclient_id.'&client_secret='.
-        $smappeeclient_secret.'&username='.
-        $smappeeusername.'&password='.
-        $smappeepassword.''
+
+}
+    /* -------------------------------------------- ALTIJD ----------------------------*/
+if ($d['diepvries']['s']!='On'
+    &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
+    &&past('diepvries')>1780
+) {
+    sw('diepvries', 'On', false, 'Diepvries On '.$d['diepvries_temp']['s'].'°C');
+} elseif ($d['diepvries']['s']!='Off'
+    &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
+    &&past('diepvries')>280
+) {
+    sw('diepvries', 'Off', false, 'Diepvries Off '.$d['diepvries_temp']['s'].'°C');
+} elseif ($d['diepvries']['s']!='Off'
+    &&past('diepvries')>7200
+) {
+    sw(
+        'diepvries',
+        'Off',
+        false,
+        'Diepvries Off '.$d['diepvries_temp']['s'].'°C, was aan voor meer dan 2 uur'
     );
-    curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
-    curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($chauth, CURLOPT_VERBOSE, 0);
-    curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
-    $objauth=json_decode(curl_exec($chauth));
-    if (!empty($objauth)) {
-        $access=$objauth->{'access_token'};
-        curl_close($chauth);
-        $chconsumption=curl_init('');
-        curl_setopt($chconsumption, CURLOPT_HEADER, 0);
-        $headers=array('Authorization: Bearer '.$access);
-        curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
-        curl_setopt(
-            $chconsumption,
-            CURLOPT_URL,
-            'https://app1pub.smappee.net/dev/v1/servicelocation/'.
-            $smappeeserviceLocationId.'/consumption?aggregation=3&from='.
-            $timefrom.'000&to='.
-            TIME.'000'
-        );
-        curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
-        curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
-        $data=json_decode(curl_exec($chconsumption), true);
-        if (!empty($data['consumptions'])) {
-            $vv=$data['consumptions'][0]['consumption']/1000;
-            storemode('el', round($vv, 1));
-            $zonvandaag=$data['consumptions'][0]['solar']/1000;
-            store('zonvandaag', round($zonvandaag, 1));
-            $gas=$d['gasvandaag']['s']/100;
-            $water=$d['watervandaag']['s']/1000;
-
-            @file_get_contents(
-                $vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag"
-            );
-        }
-        curl_close($chconsumption);
-    }
 }
-
-
-
-
-/*--------------------- OUDE CRON ---------------------------------------------------*/
-$items=array('eettafel','zithoek','tobi','kamer','alex');
-foreach ($items as $item) {
-    if ($d[$item]['s']!=0) {
-        if ($d[$item]['m']==1) {
-            $level=floor($d[$item]['s']*0.95);
-            if ($level<2) {
-                $level=0;
-            }
-            if ($level==20) {
-                $level=19;
-            }
-            sl($item, $level);
-            if ($level==0) {
-                storemode($item, 0);
-            }
-        } elseif ($d[$item]['m']==2) {
-            $level=$d[$item]['s']+1;
-            if ($level==20) {
-                $level=21;
-            }
-            if ($level>50) {
-                $level=50;
-            }
-            sl($item, $level);
-            if ($level==50) {
-                storemode($item, 0);
-            }
-        }
-    } elseif ($d[$item]['s']==0&&$item=='alex') {
-        if ($d[$item]['m']==3) {
-            if ($d['raamalex']['s']=='Open') {
-                storemode('alex', 0);
-            } else {
-                if (past($item)>10800) {
-                    sl('alex', 2);
-                    storemode($item, 2);
-                }
-            }
-        }
-    }
-}
-if ($d['kamer']['m']==2) {
-    $items=array('RkamerR','RkamerL');
-    if ($d['kamer']['s']==3) {
-        foreach ($items as $i) {
-            if ($d[$i]['s']>70) {
-                sl($i, 65);
-            }
-        }
-    } elseif ($d['kamer']['s']==10) {
-        foreach ($items as $i) {
-            if ($d[$i]['s']>55) {
-                sl($i, 30);
-            }
-        }
-    } elseif ($d['kamer']['s']>=15) {
-        foreach ($items as $i) {
-            if ($d[$i]['s']>0) {
-                sl($i, 0);
-                storemode($i, 0);
-            }
-        }
-    }
-}
-
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     $stamp=sprintf("%s", date("Y-m-d H:i"));
     $items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
@@ -648,6 +612,64 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
         die('There was an error running the query ['.$query.' - '.$db->error.']');
     }
 }
+//SMAPPEE
+$timefrom=TIME-86400;
+$chauth = curl_init(
+    'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
+    $smappeeclient_id.'&client_secret='.
+    $smappeeclient_secret.'&username='.
+    $smappeeusername.'&password='.
+    $smappeepassword.''
+);
+curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
+curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($chauth, CURLOPT_VERBOSE, 0);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
+$objauth=json_decode(curl_exec($chauth));
+if (!empty($objauth)) {
+    $access=$objauth->{'access_token'};
+    curl_close($chauth);
+    $chconsumption=curl_init('');
+    curl_setopt($chconsumption, CURLOPT_HEADER, 0);
+    $headers=array('Authorization: Bearer '.$access);
+    curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
+    curl_setopt(
+        $chconsumption,
+        CURLOPT_URL,
+        'https://app1pub.smappee.net/dev/v1/servicelocation/'.
+        $smappeeserviceLocationId.'/consumption?aggregation=3&from='.
+        $timefrom.'000&to='.
+        TIME.'000'
+    );
+    curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
+    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
+    $data=json_decode(curl_exec($chconsumption), true);
+    if (!empty($data['consumptions'])) {
+        $vv=$data['consumptions'][0]['consumption']/1000;
+        storemode('el', round($vv, 1));
+        $zonvandaag=$data['consumptions'][0]['solar']/1000;
+        store('zonvandaag', round($zonvandaag, 1));
+        $gas=$d['gasvandaag']['s']/100;
+        $water=$d['watervandaag']['s']/1000;
+
+        @file_get_contents(
+            $vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag"
+        );
+    }
+    curl_close($chconsumption);
+}
+
+
+
+/*--------------------- OUDE CRON ---------------------------------------------------*/
+
+
 
 if ($d['denon']['s']=='On') {
     $denonmain=json_decode(
@@ -692,26 +714,7 @@ if ($d['denon']['s']=='On') {
         }
     }
 }
-if ($d['diepvries']['s']!='On'
-    &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
-    &&past('diepvries')>1780
-) {
-    sw('diepvries', 'On', false, 'Diepvries On '.$d['diepvries_temp']['s'].'°C');
-} elseif ($d['diepvries']['s']!='Off'
-    &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
-    &&past('diepvries')>280
-) {
-    sw('diepvries', 'Off', false, 'Diepvries Off '.$d['diepvries_temp']['s'].'°C');
-} elseif ($d['diepvries']['s']!='Off'
-    &&past('diepvries')>7200
-) {
-    sw(
-        'diepvries',
-        'Off',
-        false,
-        'Diepvries Off '.$d['diepvries_temp']['s'].'°C, was aan voor meer dan 2 uur'
-    );
-}
+
 
 if ($d['auto']['s']=='On') {
     if ((    ($d['garage']['s']=='On'
