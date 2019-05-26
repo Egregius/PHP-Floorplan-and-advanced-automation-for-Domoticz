@@ -557,6 +557,17 @@ if ($d['auto']['s']=='On') {
 
 }
     /* -------------------------------------------- ALTIJD ----------------------------*/
+if ($d['heater1']['s']!='Off'
+    &&$d['heater2']['s']=='Off'
+    &&$d['heater3']['s']=='Off'
+    &&$d['heater4']['s']=='Off'
+    &&past('heater1')>120
+    &&past('heater2')>90
+    &&past('heater3')>90
+    &&past('heater4')>90
+) {
+    sw('heater1', 'Off');
+}
 if ($d['diepvries']['s']!='On'
     &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
     &&past('diepvries')>1780
@@ -612,6 +623,24 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
         die('There was an error running the query ['.$query.' - '.$db->error.']');
     }
 }
+if ($d['water']['s']=='On') {
+    if (past('water')>$d['water']['m']) {
+        double('water', 'Off');
+    }
+}
+if (TIME>$d['civil_twilight']['s']
+    &&TIME<$d['civil_twilight']['m']
+) {
+    if ($d['auto']['m']!=true) {
+        storemode('auto', true);
+        $d['auto']['m']=true;
+    }
+} else {
+    if ($d['auto']['m']!=false ) {
+        storemode('auto', false);
+        $d['auto']['m']=false;
+    }
+}
 //SMAPPEE
 $timefrom=TIME-86400;
 $chauth = curl_init(
@@ -664,8 +693,42 @@ if (!empty($objauth)) {
     }
     curl_close($chconsumption);
 }
-
-
+ping('192.168.2.11');
+ping('192.168.2.12');
+ping('192.168.2.13');
+ping('192.168.2.14');
+ping('192.168.2.15');
+ping('192.168.2.101');
+ping('192.168.2.102');
+ping('192.168.2.103');
+ping('192.168.2.104');
+ping('192.168.2.224');
+$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
+$relay=new SimpleXMLElement(
+    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
+);
+if (!empty($relay)) {
+    if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
+        store('heater1', 'On');
+    } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
+        store('heater1', 'Off');
+    }
+    if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
+        store('heater2', 'On');
+    } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
+        store('heater2', 'Off');
+    }
+    if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
+        store('heater3', 'On');
+    } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
+        store('heater3', 'Off');
+    }
+    if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
+        store('heater4', 'On');
+    } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
+        store('heater4', 'Off');
+    }
+}
 
 /*--------------------- OUDE CRON ---------------------------------------------------*/
 
@@ -961,83 +1024,13 @@ if ($d['auto']['s']=='On') {
             sl('terras', 0);
         }
     }
-}
-if ($d['heater1']['s']!='Off'
-    &&$d['heater2']['s']=='Off'
-    &&$d['heater3']['s']=='Off'
-    &&$d['heater4']['s']=='Off'
-    &&past('heater1')>120
-    &&past('heater2')>90
-    &&past('heater3')>90
-    &&past('heater4')>90
-) {
-    sw('heater1', 'Off');
+    if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
+        sl('ledluifel', 0);
+    }
 }
 
-if ($d['water']['s']=='On') {
-    if (past('water')>$d['water']['m']) {
-        double('water', 'Off');
-    }
-}
-if (TIME>$d['civil_twilight']['s']
-    &&TIME<$d['civil_twilight']['m']
-) {
-    echo 'zonop';
-    if ($d['auto']['m']!=true) {
-        storemode('auto', true);
-        $d['auto']['m']=true;
-    }
-} else {
-    echo 'zononder';
-    if ($d['auto']['m']!=false ) {
-        storemode('auto', false);
-        $d['auto']['m']=false;
-    }
-}
-/*
-if (pingport('diskstation',1598)==1){
-    if ($d['check_diskstation_1598']['s']>0)store('check_diskstation_1598',0);
-    if ($d['nas']['s']!='On')store('nas','On');
-}else{
-    $check=$d['check_diskstation_1598']['s']+1;
-    if ($check>0)store('check_diskstation_1598',$check);
-    if ($check>=3&&$d['nas']['s']!='Off')store('nas','Off');
-}*/
 
-ping('192.168.2.101');
-ping('192.168.2.102');
-ping('192.168.2.103');
-ping('192.168.2.104');
-ping('192.168.2.11');
-ping('192.168.2.12');
-ping('192.168.2.13');
-ping('192.168.2.14');
-ping('192.168.2.15');
-ping('192.168.2.224');
 
-$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
-$relay=new SimpleXMLElement(
-    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
-);
-if (!empty($relay)) {
-    if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
-        store('heater1', 'On');
-    } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
-        store('heater1', 'Off');
-    }
-    if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
-        store('heater2', 'On');
-    } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
-        store('heater2', 'Off');
-    }
-    if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
-        store('heater3', 'On');
-    } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
-        store('heater3', 'Off');
-    }
-    if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
-        store('heater4', 'On');
-    } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
-        store('heater4', 'Off');
-    }
-}
+
+
+
