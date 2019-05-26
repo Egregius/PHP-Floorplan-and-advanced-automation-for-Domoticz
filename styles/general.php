@@ -1,11 +1,6 @@
 <?php
 header("Content-type:text/css;charset:UTF-8");
-//header("Cache-Control:must-revalidate");
-header("Expires:".gmdate("D, d M Y H:i:s",time()+2592000)." GMT");//30 dagen
-//header("Expires:".gmdate("D, d M Y H:i:s",time()+259200)." GMT");//3 dagen
-//header("Expires:".gmdate("D, d M Y H:i:s",time()+7200)." GMT");//2 uur
-//header("Expires:".gmdate("D, d M Y H:i:s",time()+3600)." GMT");//1 uur
-//header("Expires:".gmdate("D, d M Y H:i:s",time()+1)." GMT");//Direct
+header("Expires:".gmdate("D, d M Y H:i:s",time()+2592000)." GMT");
 if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
 else $udevice='other';
@@ -13,7 +8,6 @@ $css="
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}
 .navbar{position:fixed;top:0px;left:0px;width:100%;padding:2px 0px 2px 0px;z-index:100;background-color:#111;}
-
 a:link{text-decoration:none;color:#ccc}
 a:visited{text-decoration:none;color:#ccc}
 a:hover{text-decoration:none;color:#ccc;}
@@ -24,7 +18,6 @@ input[type=number]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 input[type=submit]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
-
 .btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;/*padding:2px;*/margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
 .btn:hover{color:#000;background-color:#ffba00;cursor:pointer;}
 .btna{color:#000;background-color:#ffba00;}

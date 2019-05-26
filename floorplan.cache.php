@@ -36,6 +36,7 @@ if ($home) {
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
 		<script type="text/javascript" charset="utf-8">
 			var asInitVals = new Array();
 			$(document).ready(function() {
@@ -102,12 +103,12 @@ if ($home) {
 		        </tr>
 		    </thead>
 		    <tbody>';
+	$d=fetchdata();
     $sql="SELECT *  FROM `devices` ORDER BY t DESC";
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
     }
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        //print_r($row);
         echo '
         <tr class="border_bottom">';
         if (isset($_REQUEST['nicestatus'])) {
@@ -144,7 +145,6 @@ if ($home) {
                 <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td>'.$row['m'].'</td>';
                 }
-
             } elseif (startswith($row['n'], 'R')) {
                 echo '
                 <td>'.$row['n'].'</td>';
@@ -365,10 +365,7 @@ if ($home) {
         </tbody>
     </table>
     <br>
-    <br>
-    <script type="text/javascript">
-        function navigator_Go(url) {window.location.assign(url);}
-    </script>';
+    <br>';
 }
 ?>
     </body>
