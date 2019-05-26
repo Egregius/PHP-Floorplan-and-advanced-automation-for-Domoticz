@@ -24,12 +24,10 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .clear{clear:both;}
 .box{text-align:center;left:0px;background:#222;padding:6px;margin:6px;}
 .right{text-align:right;}
-
 .red{background-color:#F00;}
 .green{background-color:#0F0;}
 .blue{background-color:#00F;}
 .yellow{background-color:#FF0;}
-
 .content{/*height:100%;*/min-height:80%;margin:0 auto;padding-top:55px;}
 .btn{height:32px;font-size:1.2em;}
 .b1{width:1500px;max-width:99%}
