@@ -11,53 +11,66 @@ function ajax(){
                     name=device;
                     if(name=="t"){
                         $LastUpdateTime=parseInt(d['t']);
-                        //try{
+                        try{
                             date=new Date(d['t']*1000);
                             hours=date.getHours();
                             minutes="0"+date.getMinutes();
                             seconds="0"+date.getSeconds();
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+                        }catch{}
+                        try{
+                            tijdwater = sessionStorage.getItem("tijd_water");
+                            if(tijdwater>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
+                            else if(tijdwater>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
+                            else if(tijdwater>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
+                            else if(tijdwater>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
+                            else if(tijdwater>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
+                            else if(tijdwater>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
+                            else document.getElementById("tdwater").style.color=null;
+                        }catch{}
+                        try{
+                            tijdgas = sessionStorage.getItem("tijd_gas");
+                            if(tijdgas>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
+                            else if(tijdgas>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
+                            else if(tijdgas>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
+                            else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
+                            else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
+                            else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
+                            else document.getElementById("tdwater").style.color=null;
+                        }catch{}
+                        var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex'];
+                        var arrayLength = items.length;
+                        for (var i = 0; i < arrayLength; i++) {
                             try{
-                                tijdwater = sessionStorage.getItem("tijd_water");
-                                if(tijdwater>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
-                                else if(tijdwater>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
-                                else if(tijdwater>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
-                                else if(tijdwater>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
-                                else if(tijdwater>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
-                                else if(tijdwater>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
-                                else document.getElementById("tdwater").style.color=null;
+                                tijd = sessionStorage.getItem("tijd_"+items[i]);
+                                if(tijd>$LastUpdateTime-30)document.getElementById("t"+items[i]).style.color="#FF4400";
+                                else if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
+                                else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
+                                else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#CCC";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#BBB";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#AAA";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#999";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#888";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#777";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#666";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#555";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#444";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#333";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#222";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#111";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#000";
                             }catch{}
-                            try{
-                                tijdgas = sessionStorage.getItem("tijd_gas");
-                                if(tijdgas>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
-                                else if(tijdgas>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
-                                else if(tijdgas>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
-                                else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
-                                else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
-                                else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
-                                else document.getElementById("tdwater").style.color=null;
-                            }catch{}
-                            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex'];
-                            var arrayLength = items.length;
-                            for (var i = 0; i < arrayLength; i++) {
-                                try{
-                                    tijd = sessionStorage.getItem("tijd_"+items[i]);
-                                    if(tijd>$LastUpdateTime-30)document.getElementById("t"+items[i]).style.color="#FF4400";
-                                    else if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
-                                    else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
-                                    else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
-                                    else if(tijd>$LastUpdateTime-600)document.getElementById("t"+items[i]).style.color="#FFFF00";
-                                    else document.getElementById("t"+items[i]).style.color=null;
-                                }catch{}
-                            }
-
-                        //} catch {}
-                    }else if(name=="ip"){
-                        previp = sessionStorage.getItem("ip");
-                        if(previp!=d['ip']){
-                            sessionStorage.setItem("ip", d['ip']);
-                            setTimeout('window.location.href=window.location.href;', 0);
                         }
+                    }else if(name=="ip"){
+                        try{
+                            previp = sessionStorage.getItem("ip");
+                            if(previp!=d['ip']){
+                                sessionStorage.setItem("ip", d['ip']);
+                                setTimeout('window.location.href=window.location.href;', 0);
+                            }
+                        }catch{}
                     }else{
                         value=d[device]['s'];
                         mode=d[device]['m'];
