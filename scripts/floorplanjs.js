@@ -31,6 +31,16 @@ function ajax(){
                             else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
                             else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
                             else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
+                            var items=['pirliving'];
+                            for(i in items){
+                                tijd = sessionStorage.getItem("tijd_"+i);
+                                if(tijd>$LastUpdateTime-15)document.getElementById("t"+i).style.color="#FF0000";
+                                else if(tijd>$LastUpdateTime-30)document.getElementById("t"+i).style.color="#FF4400";
+                                else if(tijd>$LastUpdateTime-60)document.getElementById("t"+i).style.color="#FF8800";
+                                else if(tijd>$LastUpdateTime-90)document.getElementById("t"+i).style.color="#FFAA00";
+                                else if(tijd>$LastUpdateTime-300)document.getElementById("t"+i).style.color="#FFCC00";
+                                else if(tijd>$LastUpdateTime-600)document.getElementById("t"+i).style.color="#FFFF00";
+                            }
                         } catch {}
                     }else if(name=="ip"){
                         previp = sessionStorage.getItem("ip");
