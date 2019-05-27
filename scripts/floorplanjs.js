@@ -31,12 +31,11 @@ function ajax(){
                             else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
                             else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
                             else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
-                            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort'];
+                            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex'];
                             var arrayLength = items.length;
                             for (var i = 0; i < arrayLength; i++) {
                                 tijd = sessionStorage.getItem("tijd_"+items[i]);
-                                if(tijd>$LastUpdateTime-15)document.getElementById("t"+items[i]).style.color="#FF0000";
-                                else if(tijd>$LastUpdateTime-30)document.getElementById("t"+items[i]).style.color="#FF4400";
+                                if(tijd>$LastUpdateTime-30)document.getElementById("t"+items[i]).style.color="#FF4400";
                                 else if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
                                 else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
                                 else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
@@ -651,7 +650,7 @@ function floorplan(){
         html+='<div class="fix z0" id="zgarage"></div>';
         html+='<div class="fix z0" id="zhalla"></div>';
         html+='<div class="fix z0" id="zhallb"></div>';
-        html+='<div class="fix" id="poortrf"></div>';
+        html+='<div class="fix" id="poort"></div>';
         html+='<div class="fix" id="achterdeur"></div>';
         html+='<div class="fix" id="raamliving"></div>';
         html+='<div class="fix" id="raamtobi"></div>';
