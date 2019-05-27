@@ -17,6 +17,20 @@ function ajax(){
                             minutes="0"+date.getMinutes();
                             seconds="0"+date.getSeconds();
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+                            tijdwater = sessionStorage.getItem("tijd_water");
+                            if(tijdwater>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
+                            else if(tijdwater>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
+                            else if(tijdwater>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
+                            else if(tijdwater>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
+                            else if(tijdwater>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
+                            else if(tijdwater>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
+                            tijdgas = sessionStorage.getItem("tijd_gas");
+                            if(tijdgas>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
+                            else if(tijdgas>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
+                            else if(tijdgas>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
+                            else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
+                            else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
+                            else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
                         } catch {}
                     }else if(name=="ip"){
                         previp = sessionStorage.getItem("ip");
@@ -160,12 +174,7 @@ function ajax(){
                                     else if(value>400)document.getElementById("trgas").style.color="#FFAA00";
                                     else if(value>300)document.getElementById("trgas").style.color="#FFCC00";
                                     else if(value>200)document.getElementById("trgas").style.color="#FFFF00";
-                                    if(time>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
-                                    else if(time>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
-                                    else if(time>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
-                                    else if(time>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
-                                    else if(time>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
-                                    else if(time>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
+
                                     sessionStorage.setItem("tijd_gas", time);
                                 }
                             } catch {}
@@ -181,12 +190,7 @@ function ajax(){
                                     else if(value>400)document.getElementById("trwater").style.color="#FFAA00";
                                     else if(value>300)document.getElementById("trwater").style.color="#FFCC00";
                                     else if(value>200)document.getElementById("trwater").style.color="#FFFF00";
-                                    if(time>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
-                                    else if(time>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
-                                    else if(time>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
-                                    else if(time>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
-                                    else if(time>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
-                                    else if(time>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
+
                                     sessionStorage.setItem("tijd_water", time);
                                 }
                             } catch {}
