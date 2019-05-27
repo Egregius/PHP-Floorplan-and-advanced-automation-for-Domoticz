@@ -161,7 +161,7 @@ td{text-align:right;font-size:1.1em;}
 #achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
 #deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#tdeurinkom{top:70px;left:324px;}
+#tdeurinkom{top:70px;left:324px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #tdeurgarage{top:244px;left:344px;}
 #tpoort{top:315px;left:376px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}

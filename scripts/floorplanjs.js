@@ -31,7 +31,7 @@ function ajax(){
                             else if(tijdgas>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
                             else if(tijdgas>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
                             else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
-                            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
+                            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort'];
                             var arrayLength = items.length;
                             for (var i = 0; i < arrayLength; i++) {
                                 tijd = sessionStorage.getItem("tijd_"+items[i]);
@@ -378,6 +378,7 @@ function ajax(){
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
                                 }
+                                sessionStorage.setItem("tijd_"+name, time);
                             } catch {}
                         }else if(type=="thermometer"){
                              try{
@@ -681,6 +682,8 @@ function floorplan(){
         html+='<div class="fix stamp" id="traamtobi"></div>';
         html+='<div class="fix stamp" id="traamalex"></div>';
         html+='<div class="fix stamp" id="tdeurbadkamer"></div>';
+        html+='<div class="fix stamp" id="tdeurinkom"></div>';
+        html+='<div class="fix stamp" id="tdeurgarage"></div>';
         html+='<div class="fix stamp" id="tRliving"></div>';
         html+='<div class="fix stamp" id="tRbureel"></div>';
         html+='<div class="fix stamp" id="tRkeukenL"></div>';
