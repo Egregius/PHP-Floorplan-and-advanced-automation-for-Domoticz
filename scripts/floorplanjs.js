@@ -537,7 +537,7 @@ function ajaxbose($ip){
                     html="<br>";
                     levels.forEach(function(level){
                         if(level!=bass){
-                            html+='<button class="btn volume " id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                            html+='<button class="btn volume" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                             try{
                                 document.getElementById('bass'+level).classList.remove("btna");
                             }catch{}
