@@ -54,7 +54,7 @@ td{text-align:right;font-size:1.1em;}
 .green{background:rgba(50,255,50,0.6);padding:1px 2px 1px 2px;}
 .red{background:rgba(255,50,50,0.6);padding:1px 2px 1px 2px;}
 .yellow{background:rgba(255,200,0,1);z-index:-10;}
-.stamp{width:38px;text-align:center;font-size:100%;text-shadow: 2px 2px 5px black;}
+.stamp{width:38px;text-align:center;font-size:100%;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;}
 .secured{background:repeating-linear-gradient(135deg,rgba(255,0,0,0),rgba(255,0,0,0) 7px,rgba(255,0,0,0) 8px,rgba(255,0,0,0.6) 15px);z-index:-1000;}
 .motion{background:rgba(255,0,0,0.4);z-index:-100;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
