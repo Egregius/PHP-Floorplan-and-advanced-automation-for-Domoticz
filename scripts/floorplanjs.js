@@ -520,25 +520,31 @@ function ajaxbose($ip){
                     levels.forEach(function(level){
                         let newlevel=volume+level;
                         if(level!=0){
-                            html+='<button class="btn volume" id="vol'+newlevel+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                            html+='<button class="btn volume" id="vol'+newlevel+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'c</button>';
                             try{
-                                document.getElementById('vol'+newlevel).classList.remove("btna");
+                                document.getElementById('vol'+level).classList.remove("btna");
                             }catch{}
                         }
-                        else html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        else html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'d</button>';
+                    });
+                    levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+                    levels.forEach(function(level){
+                        try{
+                            document.getElementById('vol'+level).classList.remove("btna");
+                        }catch{}
                     });
                     if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
                     let bass=parseInt(data["bass"]["actualbass"], 10);
                     levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
                     html="<br>";
                     levels.forEach(function(level){
-                        if(level==bass)html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                        else {
+                        if(level!=bass){
                             html+='<button class="btn volume " id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                             try{
                                 document.getElementById('bass'+level).classList.remove("btna");
                             }catch{}
                         }
+                        else html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                     });
                     if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
                     if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
