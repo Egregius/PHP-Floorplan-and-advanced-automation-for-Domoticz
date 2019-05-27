@@ -18,8 +18,7 @@ input[type=number]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 input[type=submit]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
-.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;/*padding:2px;*/margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
-.hover:hover{color:#000;background-color:#ffba00;cursor:pointer;}
+.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;/*padding:2px;*/margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;cursor:pointer;}
 .btna{color:#000;background-color:#ffba00;}
 .clear{clear:both;}
 .box{text-align:center;left:0px;background:#222;padding:6px;margin:6px;}
@@ -39,7 +38,12 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .b7{width:1500px;max-width:13.2%}
 .b8{width:1500px;max-width:12%}
 .b9{width:1500px;max-width:10%}
-.b10{width:1500px;max-width:10%}";
+.b10{width:1500px;max-width:10%}
+@media (hover: hover) {
+    btn:hover {
+        color:#000;background-color:#ff3a00;cursor:pointer;
+    }
+}";
 $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
 $css = str_replace(': ', ':', $css);
 $css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
