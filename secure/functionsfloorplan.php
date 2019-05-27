@@ -431,6 +431,7 @@ function handleweg()
 }
 function handlenaam()
 {
+    if (!isset($d)) $d=fetchdata();
     if ($_REQUEST['Naam']=='bureeltobi') {
         if (!isset($_REQUEST['confirm'])) {
                 echo '<body><div id="message" class="fix confirm">
@@ -489,6 +490,7 @@ function handlenaam()
 }
 function handleverdieping()
 {
+    if (!isset($d)) $d=fetchdata();
     if (isset($_REQUEST['confirm'])) {
         $verdiep=$_REQUEST['verdieping'];
         $beneden=array('Rbureel','RkeukenL','RkeukenR');

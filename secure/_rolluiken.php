@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 //lg('               __rolluiken__');
+if (!isset($d)) $d=fetchdata();
 $user='rolluiken';
 $msg='Rolluiken__';
 $boven=array(
