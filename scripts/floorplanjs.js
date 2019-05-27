@@ -43,11 +43,10 @@ function ajax(){
                         for (var i = 0; i < arrayLength; i++) {
                             try{
                                 tijd = sessionStorage.getItem("tijd_"+items[i]);
-                                if(tijd>$LastUpdateTime-30)document.getElementById("t"+items[i]).style.color="#FF4400";
-                                else if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
+                                if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
                                 else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
                                 else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
-                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                else if(tijd>$LastUpdateTime-600)document.getElementById("t"+items[i]).style.color="#FFFF00";
                                 else if(tijd>$LastUpdateTime-3600)document.getElementById("t"+items[i]).style.color="#CCC";
                                 else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#BBB";
                                 else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#AAA";
