@@ -522,10 +522,11 @@ function ajaxbose($ip){
                         if(level!=0){
                             html+='<button class="btn volume" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'a</button>';
                             try{
-                                document.getElementById('vol'+level).classList.remove("btna");
-                            }catch{}
-                            try{
-                                document.getElementById('vol'+newlevel).classList.remove("btna");
+                                elem=document.getElementById('vol'+level);
+                                if(elem.classList.contains("btna")){
+                                    elem.classList.remove("btna");
+                                    console.log('btna removed from vol'+level);
+                                }
                             }catch{}
                         }
                         else html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'b</button>';
@@ -536,16 +537,9 @@ function ajaxbose($ip){
                     levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
                     html="<br>";
                     levels.forEach(function(level){
-                        if(level!=bass){
-                            html+='<button class="btn volume" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                            try{
-                                document.getElementById('bass'+level).classList.remove("btna");
-                            }catch{}
-                        }
+                        if(level!=bass)html+='<button class="btn volume" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                         else html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                     });
-                    console.log(document.getElementById("bass").innerHTML);
-                    console.log(html);
                     if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
                     if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
