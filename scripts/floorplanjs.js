@@ -520,7 +520,7 @@ function ajaxbose($ip){
                     levels.forEach(function(level){
                         let newlevel=volume+level;
                         if(level==0)html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
-                        else html+='<button class="btn volume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        else html+='<button class="btn volume" id="vol'+newlevel+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
                     });
                     if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
                     let bass=parseInt(data["bass"]["actualbass"], 10);
