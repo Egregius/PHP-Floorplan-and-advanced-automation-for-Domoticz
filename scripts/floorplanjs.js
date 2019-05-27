@@ -767,6 +767,11 @@ function floorplanheating(){
         html+='<div class="fix stamp" id="traamtobi"></div>';
         html+='<div class="fix stamp" id="traamalex"></div>';
         html+='<div class="fix stamp" id="tdeurbadkamer"></div>';
+        html+='<div class="fix stamp" id="tdeurinkom"></div>';
+        html+='<div class="fix stamp" id="tdeurgarage"></div>';
+        html+='<div class="fix stamp" id="tdeurkamer"></div>';
+        html+='<div class="fix stamp" id="tdeurtobi"></div>';
+        html+='<div class="fix stamp" id="tdeuralex"></div>';
         html+='<div class="fix stamp" id="tRliving"></div>';
         html+='<div class="fix stamp" id="tRbureel"></div>';
         html+='<div class="fix stamp" id="tRkeukenL"></div>';
