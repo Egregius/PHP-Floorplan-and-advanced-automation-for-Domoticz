@@ -166,6 +166,7 @@ function ajax(){
                                     else if(time>$LastUpdateTime-90)document.getElementById("tdgas").style.color="#FFAA00";
                                     else if(time>$LastUpdateTime-300)document.getElementById("tdgas").style.color="#FFCC00";
                                     else if(time>$LastUpdateTime-600)document.getElementById("tdgas").style.color="#FFFF00";
+                                    sessionStorage.setItem("tijd_gas", time);
                                 }
                             } catch {}
                         }else if(name=="watervandaag"){
@@ -186,6 +187,7 @@ function ajax(){
                                     else if(time>$LastUpdateTime-90)document.getElementById("tdwater").style.color="#FFAA00";
                                     else if(time>$LastUpdateTime-300)document.getElementById("tdwater").style.color="#FFCC00";
                                     else if(time>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
+                                    sessionStorage.setItem("tijd_water", time);
                                 }
                             } catch {}
                         }else if(name=="douche"){
