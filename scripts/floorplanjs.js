@@ -348,6 +348,7 @@ function ajax(){
                                 }else{
                                     document.getElementById("tpir"+name).innerHTML="";
                                 }
+                                sessionStorage.setItem("tijd_pir"+name, time);
                             } catch {}
                         }else if(type=="contact"){
                             try{
