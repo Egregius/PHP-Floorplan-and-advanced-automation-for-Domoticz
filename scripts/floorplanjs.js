@@ -519,17 +519,8 @@ function ajaxbose($ip){
                     html="<br>";
                     levels.forEach(function(level){
                         let newlevel=volume+level;
-                        if(level!=0){
-                            html+='<button class="btn volume" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'a</button>';
-                            try{
-                                elem=document.getElementById('vol'+level);
-                                if(elem.classList.contains("btna")){
-                                    elem.classList.remove("btna");
-                                    console.log('btna removed from vol'+level);
-                                }
-                            }catch{}
-                        }
-                        else html+='<button class="btn volume btna" id="currentvolume" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'b</button>';
+                        if(level!=0)html+='<button class="btn volume hover" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+                        else html+='<button class="btn volume btna" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
                     });
                     if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
 
@@ -537,8 +528,8 @@ function ajaxbose($ip){
                     levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
                     html="<br>";
                     levels.forEach(function(level){
-                        if(level!=bass)html+='<button class="btn volume" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                        else html+='<button class="btn volume btna" id="currentbass" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                        if(level!=bass)html+='<button class="btn volume hover" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+                        else html+='<button class="btn volume btna" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
                     });
                     if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
