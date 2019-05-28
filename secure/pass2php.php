@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.5-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -20,29 +20,7 @@ if (endswith($device, '_Temperature')) {
     die('Nothing to do');
 }
 $d=fetchdata();
-if (in_array(
-    $device, array(
-            'eettafel',
-            'zithoek',
-            'kamer',
-            'tobi',
-            'alex',
-            'terras',
-            'lichtbadkamer',
-            'ledluifel',
-            'Xvol',
-            'Rliving',
-            'Rbureel',
-            'RkeukenL',
-            'RkeukenR',
-            'RkamerL',
-            'RkamerR',
-            'Rtobi',
-            'Ralex',
-            'luifel'
-        )
-)
-) {
+if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='roller'||$d[$device]['dt']=='luifel') {
     if ($status=='Off'||$status=='Open') {
         store($device, 0);
     } elseif ($status=='On'||$status=='Closed') {
@@ -65,6 +43,4 @@ if (in_array(
 } else {
     store($device, $status);
 }
-//lgsql('Domoticz', $device, $status);
-//lg($device.' = '.$status);
 @require 'pass2php/'.$device.'.php';
