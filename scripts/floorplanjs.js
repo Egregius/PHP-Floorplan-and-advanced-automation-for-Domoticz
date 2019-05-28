@@ -129,7 +129,7 @@ function ajax(){
                         }else if(name=="icon"){
                             try{
                                 document.getElementById("hum").innerHTML=mode;
-                                $('#icon').attr("src", "https://openweathermap.org/img/w/"+value+".png");
+                                $('#icon').attr("src", "/images/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){
                             try{
