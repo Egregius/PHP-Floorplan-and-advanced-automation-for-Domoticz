@@ -380,7 +380,7 @@ function handleweg()
         <h2>Warning:</h2>
         <h2>Poort open!<h2>
         <br><br>
-        <form action="floorplan.php" method="GET">
+        <form action="floorplan.php" method="POST">
             <input type="hidden" name="Weg" value="true">
             <input type="submit" name="continue" value="Toch doorgaan" class="btn" style="height:200px;width:100%;"><br>
             <input type="submit" name="cancel" value="Sluit" class="btn" style="height:200px;width:100%;">
@@ -393,7 +393,7 @@ function handleweg()
         echo '
 <body>
     <div id="message" class="fix confirm">
-        <form action="floorplan.php" method="GET">
+        <form action="floorplan.php" method="POST">
             <input type="hidden" name="Weg" value="true">
             <button name="Action" value="2" class="btn huge3">Weg</button>
             <button name="Action" value="1" class="btn huge3">Slapen</button>

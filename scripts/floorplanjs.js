@@ -84,7 +84,7 @@ function ajax(){
                         time=d[device]['t'];
                         if(name=="Weg"){
                             try{
-                                html='<form action="floorplan.php" method="GET"><input type="hidden" name="Weg" value="true">';
+                                html='<form action="floorplan.php" method="POST"><input type="hidden" name="Weg" value="true">';
                                 if(value==0)html+='<input type="image" src="/images/Thuis.png" id="Weg">';
                                 else if(value==1)html+='<input type="image" src="/images/Slapen.png" id="Weg">';
                                 else if(value==2)html+='<input type="image" src="/images/Weg.png" id="Weg">';
