@@ -20,7 +20,7 @@ if (endswith($device, '_Temperature')) {
     die('Nothing to do');
 }
 $d=fetchdata();
-if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='roller'||$d[$device]['dt']=='luifel') {
+if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
     if ($status=='Off'||$status=='Open') {
         store($device, 0);
     } elseif ($status=='On'||$status=='Closed') {

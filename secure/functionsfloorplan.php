@@ -45,28 +45,6 @@ function blinds($name)
             </form>
         </div>';
 }
-function dimmer($name,$class='i70')
-{
-    global $page,$d;
-    $page=str_replace('ajax', '', $page);
-    echo '
-        <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">';
-    if ($d[$name]['s']==0||$d[$name]['s']=='') {
-        echo '
-			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="img'.$name.'">
-			    <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
-                </div>';
-    } else {
-        echo'
-                <input type="image" src="/images/light_On.png" class="'.$class.'" id="img'.$name.'">
-                <div class="fix center dimmerlevel '.$class.'" id="level'.$name.'">
-                    <a href=\'javascript:navigator_Go('.$page.'?setdimmer='.$name.');\'><font color="#000">'.$d[$name]['s'].'</font></a>
-                </div>';
-    }
-    echo '
-	        </form>
-	    </div>';
-}
 function luifel($name,$stat)
 {
     global $d;
@@ -475,7 +453,7 @@ function handlenaam()
             store('Weg', 0);
         }
         sw($_REQUEST['Naam'], $_REQUEST['Actie']);
-    } else {
+    } elseif (isset($_REQUEST['Actie'])) {
         sw($_REQUEST['Naam'], $_REQUEST['Actie']);
         if ($_REQUEST['Naam']=='GroheRed') {
             if ($_REQUEST['Actie']=='On') {
