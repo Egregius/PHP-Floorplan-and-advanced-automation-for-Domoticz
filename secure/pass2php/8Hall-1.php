@@ -26,6 +26,10 @@ if ($status=='On') {
         waarschuwing('Opgelet: bureel Tobi aan!');
         die('exit');
     }
+    if ($d['bose105']['m']=='Online') {
+        waarschuwing('Opgelet: bose buiten!');
+        die('exit');
+    }
     if ($d['Weg']['s']!=1) {
         store('Weg', 1);
     }

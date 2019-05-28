@@ -55,11 +55,11 @@ function huisslapen()
     if ($d['gcal']['s']==true) {
         storemode('Rtobi', 2);
     }
-    $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://'.$boseipbuiten.':8090/now_playing'))), true);
+    $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/now_playing'))), true);
     if (!empty($status)) {
         if (isset($status['@attributes']['source'])) {
             if ($status['@attributes']['source']!='STANDBY') {
-                bosekey("POWER", 0, 5);
+                bosekey("POWER", 0, 104);
             }
         }
     }
