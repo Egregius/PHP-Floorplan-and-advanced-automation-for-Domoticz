@@ -16,6 +16,9 @@ if ($status=='On') {
     if ($d['raamliving']['s']!='Closed') {
         waarschuwing('Opgelet: Raam Living open!');
     }
+    if ($d['bose105']['m']=='Online') {
+        waarschuwing('Opgelet: Bose buiten!');
+    }
     if ($d['poort']['s']=='Open') {
         if ($d['garage']['s']=='On') {
             sw('garage', 'Off');
