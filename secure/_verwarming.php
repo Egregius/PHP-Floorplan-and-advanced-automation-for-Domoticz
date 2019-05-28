@@ -497,83 +497,85 @@ if ($d['deurbadkamer']['s']=='Open'
         && $d['buiten_temp']['s']<21
         && $d['Weg']['s']<2
     ) {
-        if (TIME>=strtotime('6:00') && TIME<=strtotime('6:30')) {
-            $x=20;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('5:45') && TIME<=strtotime('6:30')) {
-            $x=19.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('5:30') && TIME<=strtotime('6:30')) {
-            $x=19;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('5:15') && TIME<=strtotime('6:30')) {
-            $x=18.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('5:00') && TIME<=strtotime('6:30')) {
-            $x=18;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('4:45') && TIME<=strtotime('6:30')) {
-            $x=17.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('4:30') && TIME<=strtotime('6:30')) {
-            $x=17;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('4:15') && TIME<=strtotime('6:30')) {
-            $x=16.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('4:00') && TIME<=strtotime('6:30')) {
-            $x=16;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('3:45') && TIME<=strtotime('6:30')) {
-            $x=15.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('3:30') && TIME<=strtotime('6:30')) {
-            $x=15;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('3:15') && TIME<=strtotime('6:30')) {
-            $x=14.5;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
-            }
-        } elseif (TIME>=strtotime('3:00') && TIME<=strtotime('6:30')) {
-            $x=14;
-            if ($d['badkamer_set']['s']!=$x) {
-                store('badkamer_set', $x);
-                $d['badkamer_set']['s']=$x;
+        if ($d['heating']['s']>1) {
+            if (TIME>=strtotime('6:00') && TIME<=strtotime('6:30')) {
+                $x=20;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('5:45') && TIME<=strtotime('6:30')) {
+                $x=19.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('5:30') && TIME<=strtotime('6:30')) {
+                $x=19;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('5:15') && TIME<=strtotime('6:30')) {
+                $x=18.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('5:00') && TIME<=strtotime('6:30')) {
+                $x=18;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('4:45') && TIME<=strtotime('6:30')) {
+                $x=17.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('4:30') && TIME<=strtotime('6:30')) {
+                $x=17;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('4:15') && TIME<=strtotime('6:30')) {
+                $x=16.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('4:00') && TIME<=strtotime('6:30')) {
+                $x=16;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('3:45') && TIME<=strtotime('6:30')) {
+                $x=15.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('3:30') && TIME<=strtotime('6:30')) {
+                $x=15;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('3:15') && TIME<=strtotime('6:30')) {
+                $x=14.5;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
+            } elseif (TIME>=strtotime('3:00') && TIME<=strtotime('6:30')) {
+                $x=14;
+                if ($d['badkamer_set']['s']!=$x) {
+                    store('badkamer_set', $x);
+                    $d['badkamer_set']['s']=$x;
+                }
             }
         } elseif ($d['badkamer_set']['s']!=10) {
             store('badkamer_set', 10);
