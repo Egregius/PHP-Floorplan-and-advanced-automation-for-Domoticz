@@ -67,7 +67,6 @@ td{text-align:right;font-size:1.1em;}
 .dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}
 .dimlevela{background-color:#ffba00;color:#000;}
 #clock{top:5px;left:266px;width:142px;text-align:center;font-size:33px;font-weight:500;color:#CCC;}
-#time{color:#F00!important;font-size:80px!important;}
 .floorplan{cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;font-size:80%;font-family:Arial;padding:0px;text-align:center;background:#000;background-image:url(/images/HomeZw.png);background-repeat:no-repeat;background-position:-4px -15px;height:848px;width:486px;padding-top:0px;margin:0 auto;}
 .confirm{top:0px;left:0px;height:100%;width:100%;padding:0px;background:#000;z-index:1000;}
 .floorplan2icon{top:776px;left:9px;}
