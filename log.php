@@ -187,6 +187,11 @@ console.log(e);
 </script>
 </head>
 <body>
+    <div class="fix z1" style="top:5px;left:5px;">
+        <a href="javascript:navigator_Go('floorplan.php');">
+            <img src="/images/close.png" width="72px" height="72px"/>
+        </a>
+    </div>
     <div class="contents">
         <div id="results" class="results"></div>
         <div id="settings" title="PHPTail settings">

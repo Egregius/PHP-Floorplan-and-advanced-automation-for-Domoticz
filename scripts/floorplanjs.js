@@ -162,6 +162,7 @@ function ajax(){
                                 else if(mode>14)document.getElementById("elecvandaag").style.color="#FFAA00";
                                 else if(mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
                                 else if(mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
+                                else document.getElementById("elecvandaag").style.color=null;
                             } catch {}
                         }else if(name=="zon"){
                             try{
@@ -177,6 +178,7 @@ function ajax(){
                                 else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
                                 else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
                                 else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
+                                else document.getElementById("zon").style.color=null;
                             } catch {}
                         }else if(name=="zonvandaag"){
                             try{
@@ -193,6 +195,7 @@ function ajax(){
                                 else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
                                 else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
                                 else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
+                                else document.getElementById("zonvandaag").style.color=null;
                             } catch {}
                         }else if(name=="gasvandaag"){
                             try{
@@ -206,7 +209,7 @@ function ajax(){
                                     else if(value>400)document.getElementById("trgas").style.color="#FFAA00";
                                     else if(value>300)document.getElementById("trgas").style.color="#FFCC00";
                                     else if(value>200)document.getElementById("trgas").style.color="#FFFF00";
-
+                                    else document.getElementById("trgas").style.color=null;
                                     sessionStorage.setItem("tijd_gas", time);
                                 }
                             } catch {}
@@ -222,7 +225,7 @@ function ajax(){
                                     else if(value>400)document.getElementById("trwater").style.color="#FFAA00";
                                     else if(value>300)document.getElementById("trwater").style.color="#FFCC00";
                                     else if(value>200)document.getElementById("trwater").style.color="#FFFF00";
-
+                                    else document.getElementById("trwater").style.color=null;
                                     sessionStorage.setItem("tijd_water", time);
                                 }
                             } catch {}

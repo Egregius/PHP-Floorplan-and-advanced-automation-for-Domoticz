@@ -267,15 +267,13 @@ if ($home===true) {
         unset($charthour);
         end:
     }
-    if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
-        $togo=61-date("s");
-        if ($togo<15) {
-            $togo=15;
-        }
-        $togo=$togo*1000+2000;
-        echo "<br>refreshing in ".$togo/1000 ." seconds";
-        echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
+    $togo=61-date("s");
+    if ($togo<15) {
+        $togo=15;
     }
+    $togo=$togo*1000+2000;
+    echo "<br>refreshing in ".$togo/1000 ." seconds";
+    echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
     $db->close();
 } else {
     header("Location: index.php");
