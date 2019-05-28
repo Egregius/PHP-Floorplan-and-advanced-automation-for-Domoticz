@@ -50,9 +50,7 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
-        <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">
-            <form method="POST" action="">
-                <input type="hidden" name="setdimmer" value="'.$name.'">';
+        <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
 			    <input type="image" src="/images/light_Off.png" class="'.$class.'" id="img'.$name.'">
