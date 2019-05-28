@@ -352,11 +352,9 @@ function ajax(){
                             try{
                                 html='<form method="POST" action=""><input type="hidden" name="setdimmer" value="'+name+'">';
                                 if(value==0||value=="Off"){
-                                    $('#img'+name).attr("src", "/images/light_Off.png");
-                                    document.getElementById("level"+name).innerHTML="";
+                                    html+='<input type="image" src="/images/light_Off.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'" ></div>';
                                 }else{
-                                    $('#img'+name).attr("src", "/images/light_On.png");
-                                    document.getElementById("level"+name).innerHTML=value;
+                                    html+='<input type="image" src="/images/light_On.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'"><a href=\'javascript:navigator_Go(floorplan.php?setdimmer='+name+');\'><font color="#000">'+value+'</font></a></div>';
                                 }
                                 html+='</form></div>';
                                 document.getElementById(name).innerHTML=html;

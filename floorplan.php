@@ -22,14 +22,6 @@ if ($home) {
 	<body class="floorplan">
 	    <div id="placeholder"></div>';
 	sidebar();
-    dimmer('tobi','i60');
-    dimmer('zithoek');
-    dimmer('eettafel');
-    dimmer('kamer','i60');
-    dimmer('alex','i60');
-    dimmer('lichtbadkamer','i60');
-    dimmer('terras','i48');
-    dimmer('ledluifel','i48');
     blinds('zoldertrap');
 }
 ?>
