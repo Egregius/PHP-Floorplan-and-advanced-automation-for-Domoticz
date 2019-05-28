@@ -87,14 +87,14 @@ function sidebar()
         echo '
     <div class="fix weather">
         <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-            <img src="https://openweathermap.org/img/w/03n.png" alt="icon" id="icon">
+            <img src="" alt="icon" id="icon">
         </a>
     </div>';
     } else {
         echo '
     <div class="fix weather">
         <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
-            <img src="https://openweathermap.org/img/w/03n.png" alt="icon" id="icon">
+            <img src="" alt="icon" id="icon">
         </a>
     </div>';
     }
