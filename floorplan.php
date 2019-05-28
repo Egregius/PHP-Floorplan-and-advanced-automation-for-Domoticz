@@ -20,6 +20,7 @@ if ($home) {
 	handlerequest();
     echo '
 	<body class="floorplan">
+	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time">Refresh</a></div>
 	    <div id="placeholder"></div>';
 	sidebar();
     blinds('zoldertrap');

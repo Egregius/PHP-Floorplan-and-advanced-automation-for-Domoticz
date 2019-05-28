@@ -642,7 +642,6 @@ function ajaxcontrolbose(ip,command,action){
 function floorplan(){
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="javascript:navigator_Go(\'floorplan.heating.php\');"></div>';
-        html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time"></a></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
         html+='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
         html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
