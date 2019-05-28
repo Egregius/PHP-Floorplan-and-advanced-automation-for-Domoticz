@@ -50,8 +50,8 @@ function dimmer($name,$class='i70')
     global $page,$d;
     $page=str_replace('ajax', '', $page);
     echo '
-        <form method="POST" action="">
-            <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">
+        <div class="fix z" onclick="location.href=\''.$page.'?setdimmer='.$name.'\';" id="'.$name.'">
+            <form method="POST" action="">
                 <input type="hidden" name="setdimmer" value="'.$name.'">';
     if ($d[$name]['s']==0||$d[$name]['s']=='') {
         echo '
@@ -66,8 +66,8 @@ function dimmer($name,$class='i70')
                 </div>';
     }
     echo '
-	        </div>
-        </form>';
+	        </form>
+	    </div>';
 }
 function luifel($name,$stat)
 {
