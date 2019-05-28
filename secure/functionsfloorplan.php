@@ -341,7 +341,7 @@ function handledimmer()
 }
 function handleweg()
 {
-    global $db;
+    global $db,$user;
     if (isset($_REQUEST['Action'])) {
         store('Weg', $_REQUEST['Action']);
         if ($_REQUEST['Action']==0) {
@@ -492,6 +492,7 @@ function handleverdieping()
 {
     if (!isset($d)) $d=fetchdata();
     if (isset($_REQUEST['confirm'])) {
+        global $user;
         $verdiep=$_REQUEST['verdieping'];
         $beneden=array('Rbureel','RkeukenL','RkeukenR');
         $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
