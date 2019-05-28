@@ -1,19 +1,12 @@
-// Check if a new cache is available on page load.
 window.addEventListener('load', function(e) {
-
-  window.applicationCache.addEventListener('updateready', function(e) {
-    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-      // Browser downloaded a new app cache.
-      // Swap it in and reload the page to get the new hotness.
-      window.applicationCache.swapCache();
-      if (confirm('A new version of this site is available. Load it?')) {
-        window.location.reload();
-      }
-    } else {
-      // Manifest didn't changed. Nothing new to server.
-    }
-  }, false);
-
+    window.applicationCache.addEventListener('updateready', function(e) {
+        if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            window.applicationCache.swapCache();
+            if (confirm('A new version of this site is available. Load it?')) {
+                window.location.reload();
+            }
+        }
+    }, false);
 }, false);
 $LastUpdateTime=parseInt(0);
 function ajax(){
@@ -62,7 +55,7 @@ function ajax(){
                                 if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
                                 else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
                                 else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
-                                else if(tijd>$LastUpdateTime-600)document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
                                 else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#CCC";
                                 else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#BBB";
                                 else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#AAA";
