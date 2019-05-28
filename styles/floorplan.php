@@ -1,7 +1,7 @@
 <?php
 include "general.php";
 $css="
-html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
+html{padding:0px;margin:0px;color:#f00;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
 h2{font-size:36px;}
 h3{font-size:24px;}
