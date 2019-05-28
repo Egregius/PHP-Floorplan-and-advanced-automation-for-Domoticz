@@ -36,7 +36,7 @@ if ($home) {
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var asInitVals = new Array();
 			$(document).ready(function() {

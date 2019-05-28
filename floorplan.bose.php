@@ -47,7 +47,7 @@ if ($home) {
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style type="text/css">
 			.btn{height:48px;margin:3px;}
 			.b2{margin:1px;}
@@ -55,7 +55,7 @@ if ($home) {
 			.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<script type="text/javascript">
 		    $(document).ready(function() {
                 ajaxbose('.$bose.');
