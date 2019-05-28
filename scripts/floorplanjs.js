@@ -350,7 +350,6 @@ function ajax(){
                             } catch {}
                         }else if(type=="dimmer"){
                             try{
-                                console.log(name+"="+value);
                                 html='<form method="POST" action=""><input type="hidden" name="setdimmer" value="'+name+'">';
                                 if(value==0||value=="Off"){
                                     html+='<input type="image" src="/images/light_Off.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'" ></div>';
@@ -358,6 +357,12 @@ function ajax(){
                                     html+='<input type="image" src="/images/light_On.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'"><a href=\'javascript:navigator_Go(floorplan.php?setdimmer='+name+');\'><font color="#000">'+value+'</font></a></div>';
                                 }
                                 html+='</form>';
+                                if (name=="ledluifel") {
+                                    console.log(name+"="+value);
+
+                                    luifel = sessionStorage.getItem("luifel");
+                                    if (luifel=="0"&&value==0)html='';
+                                }
                                 document.getElementById(name).innerHTML=html;
                                 sessionStorage.setItem(name, value);
                             } catch {}
