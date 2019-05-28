@@ -437,6 +437,8 @@ function ajax(){
                                     }
                                 }
                             } catch {}
+                        }else if(type=="luifel"){
+                            sessionStorage.setItem(name, value);
                         }else if(type=="rollers"){
                             try{
                                 opts=icon.split(",");
