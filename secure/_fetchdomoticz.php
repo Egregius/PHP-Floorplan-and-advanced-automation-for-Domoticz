@@ -21,11 +21,13 @@ if ($domoticz) {
         $idx=$dom['idx'];
         if (isset($dom['SwitchType'])) {
             $switchtype=$dom['SwitchType'];
+        } elseif (isset($dom['SubType'])) {
+            $switchtype=$dom['SubType'];
         } else {
             $switchtype='none';
         }
-        if($switchtype='On/Off')$type='switch';
-        $type=$switchtype;
+        if($switchtype=='On/Off')$type='switch';
+        else $type=strtolower($switchtype);
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
             $type='thermometer';
