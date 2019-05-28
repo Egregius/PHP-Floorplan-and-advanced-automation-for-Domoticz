@@ -156,6 +156,7 @@ function ajax(){
                                 else if(value>3000)document.getElementById("elec").style.color="#FFAA00";
                                 else if(value>2000)document.getElementById("elec").style.color="#FFCC00";
                                 else if(value>1000)document.getElementById("elec").style.color="#FFFF00";
+                                else document.getElementById("elec").style.color=null;
                                 if(mode>20)document.getElementById("elecvandaag").style.color="#FF0000";
                                 else if(mode>18)document.getElementById("elecvandaag").style.color="#FF4400";
                                 else if(mode>16)document.getElementById("elecvandaag").style.color="#FF8800";
@@ -329,6 +330,7 @@ function ajax(){
                                    else if(value=="Off")html='<img src="/images/'+icon+'_Off.png" id="'+name+'" onclick="ajaxcontrol(\''+name+'\',\'sw\',\'On\')""/>';
                                     document.getElementById(name).innerHTML=html;
                                 }
+                                sessionStorage.setItem(name, value);
                             } catch {}
                         }else if(type=="bose"){
                             try{
@@ -355,6 +357,7 @@ function ajax(){
                                     $('#img'+name).attr("src", "/images/light_On.png");
                                     document.getElementById("level"+name).innerHTML=value;
                                 }
+                                sessionStorage.setItem(name, value);
                             } catch {}
                         }else if(type=="pir"){
                             try{
@@ -487,6 +490,7 @@ function ajax(){
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
                                 }
+                                sessionStorage.setItem(name, value);
                             } catch {}
                         }else if(type=="thermostaat"){
                             try{
