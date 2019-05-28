@@ -167,12 +167,12 @@ function createheader($page,$ajax=250,$ajaxremote=2000)
 	    <link rel="manifest" href="/manifest.json">
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v='.$floorplanjs.'">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js?v='.$floorplanjs.'"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 '.$page.'();
