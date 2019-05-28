@@ -349,7 +349,7 @@ function ajax(){
                                else if(value=="Off"){$('#'+name).attr("src", "/images/bose_Off.png");}
                             } catch {}
                         }else if(type=="dimmer"){
-                           // try{
+                            try{
                                 console.log(name+"="+value);
                                 html='<form method="POST" action=""><input type="hidden" name="setdimmer" value="'+name+'">';
                                 if(value==0||value=="Off"){
@@ -360,7 +360,7 @@ function ajax(){
                                 html+='</form>';
                                 document.getElementById(name).innerHTML=html;
                                 sessionStorage.setItem(name, value);
-                            //} catch {}
+                            } catch {}
                         }else if(type=="pir"){
                             try{
                                 name=name.toString().replace("pir", "")
@@ -639,14 +639,14 @@ function floorplan(){
         html+='<div class="fix picam2" id="picam2"><a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
         html+='<div class="fix Weg" id="Weg"></div>';
         html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=alex\';" id="alex">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=eettafel\';" id="eettafel">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=kamer\';" id="kamer">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=ledluifel\';" id="ledluifel">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=lichtbadkamer\';" id="lichtbadkamer">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=terras\';" id="terras">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=tobi\';" id="tobi">';
-        html=+'<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=zithoek\';" id="zithoek">';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=alex\';" id="alex"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=eettafel\';" id="eettafel"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=kamer\';" id="kamer"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=ledluifel\';" id="ledluifel"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=lichtbadkamer\';" id="lichtbadkamer"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=terras\';" id="terras"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=tobi\';" id="tobi"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.php?setdimmer=zithoek\';" id="zithoek"></div>';
         html+='<div class="fix z1 i48" id="regenputleeg"></div>';
         html+='<div class="fix z1 i48" id="regenputvol"></div>';
         html+='<div class="fix z1 i48" id="kristal"></div>';
@@ -857,6 +857,8 @@ function floorplanmedia(){
     try{
         html='<div class="fix jbl z1 i48" id="jbl"></div>';
         html+='<div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.media.php");\' id="time"></a></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.media.php?setdimmer=eettafel\';" id="eettafel"></div>';
+        html+='<div class="fix z" onclick="location.href=\'floorplan.media.php?setdimmer=zithoek\';" id="zithoek"></div>';
         html+='<div class="fix kristal z1 i48" id="kristal"></div>';
         html+='<div class="fix bureel z1 i48" id="bureel"></div>';
         html+='<div class="fix keuken z1 i48" id="keuken"></div>';

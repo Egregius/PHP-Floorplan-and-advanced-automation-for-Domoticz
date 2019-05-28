@@ -253,8 +253,6 @@ if ($home) {
             <br>';
     echo '
 	    </div>';
-    dimmer('zithoek');
-    dimmer('eettafel');
     if (past('kristal')<$eendag) {
         echo '
         <div class="fix z0 right" style="top:55px;left:154px;width:35px;">
