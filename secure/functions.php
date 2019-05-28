@@ -144,7 +144,7 @@ function waarschuwing($msg)
     }
     sl('Xring', 30);
     sw('deurbel', 'On');
-    telegram($msg, false, 1);
+    telegram($msg, false, 2);
     sleep(4);
     sl('Xring', 0);
     die($msg);

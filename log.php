@@ -184,10 +184,12 @@ console.log(e);
         });
     }
     /* ]]> */
+    function navigator_Go(url){window.location.assign(url);}
+
 </script>
 </head>
 <body>
-    <div class="fix z1" style="top:5px;left:5px;">
+    <div class="fix z1" style="position:sticky;top:5px;left:5px;">
         <a href="javascript:navigator_Go('floorplan.php');">
             <img src="/images/close.png" width="72px" height="72px"/>
         </a>
