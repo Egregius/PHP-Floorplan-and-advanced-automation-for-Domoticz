@@ -29,6 +29,7 @@ if (in_array(
             'alex',
             'terras',
             'lichtbadkamer',
+            'ledluifel',
             'Xvol',
             'Rliving',
             'Rbureel',
