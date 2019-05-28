@@ -47,18 +47,17 @@ function ajax(){
                                 else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
                                 else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
                                 else if(tijd>$LastUpdateTime-600)document.getElementById("t"+items[i]).style.color="#FFFF00";
-                                else if(tijd>$LastUpdateTime-3600)document.getElementById("t"+items[i]).style.color="#CCC";
-                                else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#BBB";
-                                else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#AAA";
-                                else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#999";
-                                else if(tijd>$LastUpdateTime-18000)document.getElementById("t"+items[i]).style.color="#888";
-                                else if(tijd>$LastUpdateTime-21600)document.getElementById("t"+items[i]).style.color="#777";
-                                else if(tijd>$LastUpdateTime-25200)document.getElementById("t"+items[i]).style.color="#666";
-                                else if(tijd>$LastUpdateTime-28800)document.getElementById("t"+items[i]).style.color="#555";
-                                else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#444";
-                                else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#333";
-                                else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#222";
-                                else if(tijd>$LastUpdateTime-72000)document.getElementById("t"+items[i]).style.color="#111";
+                                else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#CCC";
+                                else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#BBB";
+                                else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#AAA";
+                                else if(tijd>$LastUpdateTime-18000)document.getElementById("t"+items[i]).style.color="#999";
+                                else if(tijd>$LastUpdateTime-21600)document.getElementById("t"+items[i]).style.color="#888";
+                                else if(tijd>$LastUpdateTime-25200)document.getElementById("t"+items[i]).style.color="#777";
+                                else if(tijd>$LastUpdateTime-28800)document.getElementById("t"+items[i]).style.color="#666";
+                                else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#555";
+                                else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#444";
+                                else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#333";
+                                else if(tijd>$LastUpdateTime-72000)document.getElementById("t"+items[i]).style.color="#222";
                                 else if(tijd>$LastUpdateTime-82800)document.getElementById("t"+items[i]).style.color="#000";
                             }catch{}
                         }
@@ -358,8 +357,6 @@ function ajax(){
                                 }
                                 html+='</form>';
                                 if (name=="ledluifel") {
-                                    console.log(name+"="+value);
-
                                     luifel = sessionStorage.getItem("luifel");
                                     if (luifel=="0"&&value==0)html='';
                                 }
