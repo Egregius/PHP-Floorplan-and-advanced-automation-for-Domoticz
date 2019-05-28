@@ -445,6 +445,7 @@ function ajax(){
                                 }
                             } catch {}
                         }else if(type=="luifel"){
+                            //setTimeout('window.location.href=window.location.href;', 0);
                             sessionStorage.setItem(name, value);
                         }else if(type=="rollers"){
                             try{
