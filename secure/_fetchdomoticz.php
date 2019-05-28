@@ -24,6 +24,7 @@ if ($domoticz) {
         } else {
             $switchtype='none';
         }
+        if($switchtype='On/Off')$type='switch';
         $type=$switchtype;
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
