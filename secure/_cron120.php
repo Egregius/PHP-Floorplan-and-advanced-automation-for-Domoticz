@@ -79,6 +79,8 @@ $ow=@json_decode(
     ),
     true
 );
+echo 'https://api.openweathermap.org/data/2.5/weather?id='.
+        $owid.'&units=metric&APPID='.$owappid;
 if (isset($ow['main']['temp'])) {
     $owtemp=$ow['main']['temp'];
     if ($owtemp>$d['buiten_temp']['s']+0.5) {
