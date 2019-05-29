@@ -448,6 +448,7 @@ function ajax(){
                                 }else{
                                     document.getElementById("t"+name).innerHTML="";
                                 }
+                                sessionStorage.setItem(name, value);
                                 sessionStorage.setItem("tijd_"+name, time);
                             } catch {}
                         }else if(type=="thermometer"){

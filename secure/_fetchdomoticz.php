@@ -28,6 +28,7 @@ if ($domoticz) {
         }
         if($switchtype=='On/Off')$type='switch';
         elseif($switchtype=='Door Contact')$type='contact';
+        elseif($switchtype=='Motion Sensor')$type='pir';
         else $type=strtolower($switchtype);
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
@@ -67,7 +68,11 @@ if ($domoticz) {
         } else {
             $status=$dom['Data'];
         }
-        $time=TIME;
+        if (isset($dom['LastUpdate'])) {
+            $time=strtotime($dom['LastUpdate']);
+        } else {
+            $time=TIME;
+        }
         $db->query("INSERT INTO devices (n,i,s,t,dt) VALUES ('$name','$idx','$status','$time','$type') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time',dt='$type';");
         echo $idx.' '.$name.' = '.$status.'<br>';
     }

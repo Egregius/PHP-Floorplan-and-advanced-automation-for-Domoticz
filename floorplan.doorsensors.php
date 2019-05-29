@@ -81,13 +81,7 @@ if ($home) {
                 <img src="/images/close.png" width="72px" height="72px"/>
             </a>
         </div>';
-    showTimestamp('raamliving', 270);
-    showTimestamp('raamtobi', 270);
-    showTimestamp('raamalex', 270);
-    showTimestamp('raamkamer', 90);
-    showTimestamp('deurbadkamer', 90);
-    showTimestamp('achterdeur', 270);
-    showTimestamp('poort', 90);
+
 
     if ($d['poort']['s']=='Open') {
         echo '
