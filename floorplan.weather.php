@@ -16,9 +16,9 @@ require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
-    createheader('floorplanweather');
+    createheader();
     echo '
 	<body>
 	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.weather.php");\' id="time">Refresh</a></div>
-	    <div id="placeholder">TEST</div>';
+	    <div id="placeholder"></div>';
 }

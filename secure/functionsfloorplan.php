@@ -136,7 +136,7 @@ function createheader($page='')
     global $udevice;
     echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
-    if (empty($page)) {
+    if ($page=='') {
         echo '
 <html>';
     } else {
@@ -168,8 +168,12 @@ function createheader($page='')
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		<script type=\'text/javascript\'>$(document).ready(function(){'.$page.'();ajax();});</script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
+    if ($page=='') {
+        echo '
+    <script type=\'text/javascript\'>$(document).ready(function(){'.$page.'();ajax();});</script>';
+    }
+    echo '
 	</head>';
 }
 /*
