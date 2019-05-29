@@ -92,8 +92,8 @@ function ajax(){
                             }catch{}
                         }
                     }else if(name=="ip"){
-                        /*if(d['ip'].startsWith("192.168.2."))setTimeout(ajax(), 2000);
-                        else setTimeout(ajax(), 20000);*/
+                        if(d['ip'].startsWith("192.168.2."))setTimeout(ajax, 200);
+                        else setTimeout(ajax, 2000);
                     }else{
                         value=d[device]['s'];
                         mode=d[device]['m'];
