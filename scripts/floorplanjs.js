@@ -1,3 +1,4 @@
+generate_noty('info', '<b>Double Click -> Fullscreen!!</b>', 1000);
 window.onload=function(){setTimeout(showReloadcache,4000)};
 window.addEventListener('load', function(e) {
     window.applicationCache.addEventListener('updateready', function(e) {
