@@ -41,7 +41,7 @@ if (isset($ds['currently'])) {
         }
     }
     if (isset($dswind)) {
-        $dswind=$dswind / 0.621371192;
+        $dswind=$dswind * 1.609344;
     }
     if (isset($ds['minutely']['data'])) {
         $dsbuien=0;
@@ -86,7 +86,7 @@ if (isset($ow['main']['temp'])) {
     } elseif ($owtemp<$d['buiten_temp']['s']-0.5) {
         $owtemp=$d['buiten_temp']['s']-0.5;
     }
-    $owwind=$ow['wind']['speed'];
+    $owwind=$ow['wind']['speed'] * 3.6;
     storemode('icon', $ow['main']['humidity']);
     store('icon', $ow['weather'][0]['icon']);
 }
