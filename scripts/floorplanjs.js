@@ -197,7 +197,17 @@ function ajax(){
                             } catch {}
                         }else if(name=="icon"){
                             try{
-                                document.getElementById("hum").innerHTML=mode;
+                                elem=document.getElementById("hum");
+                                elem.innerHTML="Hum:"+mode+"%";
+                                if(mode>85)elem.style.color="#00F";
+                                else if(mode>80)elem.style.color="#22F";
+                                else if(mode>75)elem.style.color="#44E";
+                                else if(mode>70)elem.style.color="#66D";
+                                else if(mode>65)elem.style.color="#88C";
+                                else if(mode<45)elem.style.color="#22F";
+                                else if(mode<40)elem.style.color="#22F";
+                                else if(mode<35)elem.style.color="#22F";
+                                else if(mode<30)elem.style.color="#22F";
                                 $('#icon').attr("src", "/images/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){

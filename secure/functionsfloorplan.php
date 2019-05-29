@@ -130,9 +130,9 @@ function sidebar()
         <div class="fix center zon">
             <span id="maxtemp"></span><br>
             <span id="mintemp"></span><br>
-            <a href=\'javascript:navigator_Go("regen.php");\'>
-                Buien: <span id="buien"></span>
-            </a><br>Hum:<span id="hum"></span>%<br><span id="wind"></span><br>
+            <a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br>
+            <span id="hum"></span><br>
+            <span id="wind"></span><br>
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>
