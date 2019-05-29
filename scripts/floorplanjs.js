@@ -194,6 +194,7 @@ function ajax(){
                                 else if(value>22)elem.style.color="#FF8800";
                                 else if(value>20)elem.style.color="#FFAA00";
                                 else if(value>18)elem.style.color="#FFCC00";
+                                else elem.style.color=null;
                             } catch {}
                         }else if(name=="icon"){
                             try{
@@ -512,10 +513,18 @@ function ajax(){
                                     html='<div class="fix tmpbg" style="top:'+top+'px;left:8px;height:'+hoogte+'px;background:linear-gradient(to bottom, #'+tcolor+', #'+dcolor +');">';
                                     html+='</div>'
                                     html+='<img src="/images/temp.png" height="100px" width="auto" alt="'+name+'">';
-                                    html+='<div class="fix center" style="top:73px;left:5px;width:30px;">';
+                                    html+='<div class="fix center" style="top:73px;left:5px;width:30px;" id="temp'+name+'">';
                                     html+=value.toString().replace(/[.]/, ",");
                                     html+='</div>';
                                     document.getElementById(name).innerHTML=html;
+                                    elem=document.getElementById('temp'+name);
+                                    if(value>30)elem.style.color="#F00";
+                                    else if(value>28)elem.style.color="#F22";
+                                    else if(value>26)elem.style.color="#F44";
+                                    else if(value>24)elem.style.color="#F66";
+                                    else if(value>22)elem.style.color="#F88";
+                                    else if(value>20)elem.style.color="#FAA";
+                                    else elem.style.color=null;
                                     if(name=="buiten_temp"){
                                         if(typeof mode !== 'undefined'){
                                             elem=document.getElementById('buien');
