@@ -51,21 +51,25 @@ function ajax(){
                             try{
                                 tijd=sessionStorage.getItem("tijd_"+items[i]);
                                 value=sessionStorage.getItem(items[i]);
-                                if(tijd>$LastUpdateTime-60&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FF8800";
-                                else if(tijd>$LastUpdateTime-90&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFAA00";
-                                else if(tijd>$LastUpdateTime-300&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFCC00";
-                                else if(tijd>$LastUpdateTime-900&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFFF00";
-                                else if(tijd>$LastUpdateTime-7200&&value=="Closed")document.getElementById("t"+items[i]).style.color="#CCC";
-                                else if(tijd>$LastUpdateTime-10800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#BBB";
-                                else if(tijd>$LastUpdateTime-14400&&value=="Closed")document.getElementById("t"+items[i]).style.color="#AAA";
-                                else if(tijd>$LastUpdateTime-18000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#999";
-                                else if(tijd>$LastUpdateTime-21600&&value=="Closed")document.getElementById("t"+items[i]).style.color="#888";
-                                else if(tijd>$LastUpdateTime-25200&&value=="Closed")document.getElementById("t"+items[i]).style.color="#777";
-                                else if(tijd>$LastUpdateTime-28800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#666";
-                                else if(tijd>$LastUpdateTime-32400&&value=="Closed")document.getElementById("t"+items[i]).style.color="#555";
-                                else if(tijd>$LastUpdateTime-36000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#444";
-                                else if(tijd>$LastUpdateTime-54000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#333";
-                                else if(tijd>$LastUpdateTime-82800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#000";
+                                if(value=="Closed"){
+                                    if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
+                                    else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
+                                    else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
+                                    else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                    else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#CCC";
+                                    else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#BBB";
+                                    else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#AAA";
+                                    else if(tijd>$LastUpdateTime-18000)document.getElementById("t"+items[i]).style.color="#999";
+                                    else if(tijd>$LastUpdateTime-21600)document.getElementById("t"+items[i]).style.color="#888";
+                                    else if(tijd>$LastUpdateTime-25200)document.getElementById("t"+items[i]).style.color="#777";
+                                    else if(tijd>$LastUpdateTime-28800)document.getElementById("t"+items[i]).style.color="#666";
+                                    else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#555";
+                                    else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#444";
+                                    else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#333";
+                                    else if(tijd>$LastUpdateTime-82800)document.getElementById("t"+items[i]).style.color="#000";
+                                }else{
+                                    document.getElementById("t"+items[i]).style.color=null;
+                                }
                             }catch{}
                         }
                         var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
@@ -73,21 +77,27 @@ function ajax(){
                         for (var i=0; i < arrayLength; i++) {
                             try{
                                 tijd=sessionStorage.getItem("tijd_"+items[i]);
-                                if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
-                                else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
-                                else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
-                                else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
-                                else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#CCC";
-                                else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#BBB";
-                                else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#AAA";
-                                else if(tijd>$LastUpdateTime-18000)document.getElementById("t"+items[i]).style.color="#999";
-                                else if(tijd>$LastUpdateTime-21600)document.getElementById("t"+items[i]).style.color="#888";
-                                else if(tijd>$LastUpdateTime-25200)document.getElementById("t"+items[i]).style.color="#777";
-                                else if(tijd>$LastUpdateTime-28800)document.getElementById("t"+items[i]).style.color="#666";
-                                else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#555";
-                                else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#444";
-                                else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#333";
-                                else if(tijd>$LastUpdateTime-82800)document.getElementById("t"+items[i]).style.color="#000";
+                                value=sessionStorage.getItem(items[i]);
+                                console.log(items[i]+" "+value);
+                                if(value=="Off"){
+                                    if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
+                                    else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
+                                    else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
+                                    else if(tijd>$LastUpdateTime-900)document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                    else if(tijd>$LastUpdateTime-7200)document.getElementById("t"+items[i]).style.color="#CCC";
+                                    else if(tijd>$LastUpdateTime-10800)document.getElementById("t"+items[i]).style.color="#BBB";
+                                    else if(tijd>$LastUpdateTime-14400)document.getElementById("t"+items[i]).style.color="#AAA";
+                                    else if(tijd>$LastUpdateTime-18000)document.getElementById("t"+items[i]).style.color="#999";
+                                    else if(tijd>$LastUpdateTime-21600)document.getElementById("t"+items[i]).style.color="#888";
+                                    else if(tijd>$LastUpdateTime-25200)document.getElementById("t"+items[i]).style.color="#777";
+                                    else if(tijd>$LastUpdateTime-28800)document.getElementById("t"+items[i]).style.color="#666";
+                                    else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#555";
+                                    else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#444";
+                                    else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#333";
+                                    else if(tijd>$LastUpdateTime-82800)document.getElementById("t"+items[i]).style.color="#000";
+                                }else{
+                                    document.getElementById("t"+items[i]).style.color=null;
+                                }
                             }catch{}
                         }
                     }else if(name=="ip"){
@@ -419,6 +429,7 @@ function ajax(){
                                 }else{
                                     document.getElementById("tpir"+name).innerHTML="";
                                 }
+                                sessionStorage.setItem("pir"+name, value);
                                 sessionStorage.setItem("tijd_pir"+name, time);
                             } catch {}
                         }else if(type=="contact"){
