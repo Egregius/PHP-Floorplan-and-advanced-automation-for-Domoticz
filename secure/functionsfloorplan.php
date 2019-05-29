@@ -128,8 +128,8 @@ function sidebar()
 		    <br>
         </div>
         <div class="fix center zon">
-            <small>&#x21e7;</small><span id="maxtemp"></span>&#8451;<br>
-            <small>&#x21e9;</small><span id="mintemp"></span>&#8451;<br>
+            <span id="maxtemp"></span><br>
+            <span id="mintemp"></span><br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: <span id="buien"></span>
             </a><br>Hum:<span id="hum"></span>%<br><span id="wind"></span>km/u<br>

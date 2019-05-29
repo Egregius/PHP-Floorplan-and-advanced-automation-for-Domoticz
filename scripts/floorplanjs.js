@@ -139,10 +139,16 @@ function ajax(){
                         }else if(name=="minmaxtemp"){
                             try{
                                 elem=document.getElementById("mintemp");
-                                elem.innerHTML=value.toString().replace(/[.]/, ",");
-                                elem.style.color="#FF8800";
+                                elem.innerHTML="<small>&#x21e7;</small>"+value.toString().replace(/[.]/, ",")+" &#8451;";
+                                if(value>30)elem.style.color="#FF0000";
+                                else if(value>28)elem.style.color="#FF2200";
+                                else if(value>26)elem.style.color="#FF4400";
+                                else if(value>24)elem.style.color="#FF6600";
+                                else if(value>22)elem.style.color="#FF8800";
+                                else if(value>20)elem.style.color="#FFAA00";
+                                else if(value>18)elem.style.color="#FFCC00";
                                 elem=document.getElementById("maxtemp");
-                                elem.innerHTML=mode.toString().replace(/[.]/, ",");
+                                elem.innerHTML="<small>&#x21e9;</small>"+mode.toString().replace(/[.]/, ",")+" &#8451;";
                                 elem.style.color="#FF8800";
                             } catch {}
                         }else if(name=="civil_twilight"){
