@@ -17,59 +17,58 @@ $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
 $maxrain=-1;
-$ds=@json_decode(
-    @file_get_contents(
-        'https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si'
-    ),
-    true
-);
-if (isset($ds['currently'])) {
-    if (isset($ds['currently']['temperature'])) {
-        $dstemp=$ds['currently']['temperature'];
-        if ($dstemp>$d['buiten_temp']['s']+0.5) {
-            $dstemp=$d['buiten_temp']['s']+0.5;
-        } elseif ($dstemp<$d['buiten_temp']['s']-0.5) {
-            $dstemp=$d['buiten_temp']['s']-0.5;
+$ds=file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
+if (isset($ds)) {
+    file_put_contents('/temp/ds.json', $ds);
+    $ds=@json_decode($ds, true);
+    if (isset($ds['currently'])) {
+        if (isset($ds['currently']['temperature'])) {
+            $dstemp=$ds['currently']['temperature'];
+            if ($dstemp>$d['buiten_temp']['s']+0.5) {
+                $dstemp=$d['buiten_temp']['s']+0.5;
+            } elseif ($dstemp<$d['buiten_temp']['s']-0.5) {
+                $dstemp=$d['buiten_temp']['s']-0.5;
+            }
         }
-    }
-    if (isset($ds['currently']['windSpeed'])) {
-        $dswind=$ds['currently']['windSpeed'];
-    }
-    if (isset($ds['currently']['windGust'])) {
-        if ($ds['currently']['windGust']>$dswind) {
-            $dswind=$ds['currently']['windGust'];
+        if (isset($ds['currently']['windSpeed'])) {
+            $dswind=$ds['currently']['windSpeed'];
         }
-    }
-    if (isset($dswind)) {
-        $dswind=$dswind * 1.609344;
-    }
-    if (isset($ds['minutely']['data'])) {
-        $dsbuien=0;
-        foreach ($ds['minutely']['data'] as $i) {
-            if ($i['time']>TIME&&$i['time']<TIME+1800) {
-                if ($i['precipProbability']*50>$dsbuien) {
-                    $dsbuien=$i['precipProbability']*35;
+        if (isset($ds['currently']['windGust'])) {
+            if ($ds['currently']['windGust']>$dswind) {
+                $dswind=$ds['currently']['windGust'];
+            }
+        }
+        if (isset($dswind)) {
+            $dswind=$dswind * 1.609344;
+        }
+        if (isset($ds['minutely']['data'])) {
+            $dsbuien=0;
+            foreach ($ds['minutely']['data'] as $i) {
+                if ($i['time']>TIME&&$i['time']<TIME+1800) {
+                    if ($i['precipProbability']*50>$dsbuien) {
+                        $dsbuien=$i['precipProbability']*35;
+                    }
                 }
             }
         }
-    }
-    if (isset($ds['hourly']['data'])) {
-        foreach ($ds['hourly']['data'] as $i) {
-            if ($i['time']>TIME&&$i['time']<TIME+3600*6) {
-                if ($i['temperature']>$maxtemp) {
-                    $maxtemp=$i['temperature'];
+        if (isset($ds['hourly']['data'])) {
+            foreach ($ds['hourly']['data'] as $i) {
+                if ($i['time']>TIME&&$i['time']<TIME+3600*6) {
+                    if ($i['temperature']>$maxtemp) {
+                        $maxtemp=$i['temperature'];
+                    }
+                    if ($i['temperature']<$mintemp) {
+                        $mintemp=$i['temperature'];
+                    }
                 }
-                if ($i['temperature']<$mintemp) {
-                    $mintemp=$i['temperature'];
+                if ($i['precipIntensity']>$maxrain) {
+                    $maxrain=$i['precipIntensity'];
                 }
             }
-            if ($i['precipIntensity']>$maxrain) {
-                $maxrain=$i['precipIntensity'];
-            }
+            store('minmaxtemp', round($mintemp, 1));
+            storemode('minmaxtemp', round($maxtemp, 1));
+            storemode('max', $maxrain, 1);
         }
-        store('minmaxtemp', round($mintemp, 1));
-        storemode('minmaxtemp', round($maxtemp, 1));
-        storemode('max', $maxrain, 1);
     }
 }
 $ow=@json_decode(
