@@ -496,14 +496,12 @@ function ajax(){
                                 sessionStorage.setItem("tijd_"+name, time);
                             } catch {}
                         }else if(type=="thermometer"){
-                             try{
+                             //try{
                                  if(name=="diepvries_temp"){
                                     elem=document.getElementById(name);
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
-                                    if(value>-20){
-                                        elem.style.color="#F00";
-                                        elem.classList.add("blink");
-                                    }
+                                    if(value>-20)elem.style.color="#F00";
+
                                  }else{
                                     sessionStorage.setItem(name, value);
                                     var hoogte=value * 3;
@@ -551,7 +549,7 @@ function ajax(){
                                         }
                                     }
                                 }
-                            } catch {}
+                            //} catch {}
                         }else if(type=="luifel"){
                             //setTimeout('window.location.href=window.location.href;', 0);
                             sessionStorage.setItem(name, value);
