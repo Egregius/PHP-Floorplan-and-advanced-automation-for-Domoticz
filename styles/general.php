@@ -39,13 +39,8 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .b8{width:1500px;max-width:12%}
 .b9{width:1500px;max-width:10%}
 .b10{width:1500px;max-width:10%}
-@media (hover: hover) {
-    btn:hover {
-        color:#000;background-color:#ff3a00;cursor:pointer;
-    }
-}
-@-webkit-keyframes blink{from{opacity:1.0;}to{opacity:0.0;}}
-blink {-webkit-animation-name:blink;-webkit-animation-iteration-count:infinite;-webkit-animation-timing-function:cubic-bezier(1.0,0,0,1.0);-webkit-animation-duration: 1s;}";
+@media (hover: hover) {btn:hover{color:#000;background-color:#ff3a00;cursor:pointer;}}
+";
 $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
 $css = str_replace(': ', ':', $css);
 $css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
