@@ -26,7 +26,7 @@ function ajax(){
                             document.getElementById("time").innerHTML=+hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
                         }catch{}
                         try{
-                            tijdwater = sessionStorage.getItem("tijd_water");
+                            tijdwater=sessionStorage.getItem("tijd_water");
                             if(tijdwater>$LastUpdateTime-15)document.getElementById("tdwater").style.color="#FF0000";
                             else if(tijdwater>$LastUpdateTime-30)document.getElementById("tdwater").style.color="#FF4400";
                             else if(tijdwater>$LastUpdateTime-60)document.getElementById("tdwater").style.color="#FF8800";
@@ -36,7 +36,7 @@ function ajax(){
                             else document.getElementById("tdwater").style.color=null;
                         }catch{}
                         try{
-                            tijdgas = sessionStorage.getItem("tijd_gas");
+                            tijdgas=sessionStorage.getItem("tijd_gas");
                             if(tijdgas>$LastUpdateTime-15)document.getElementById("tdgas").style.color="#FF0000";
                             else if(tijdgas>$LastUpdateTime-30)document.getElementById("tdgas").style.color="#FF4400";
                             else if(tijdgas>$LastUpdateTime-60)document.getElementById("tdgas").style.color="#FF8800";
@@ -45,11 +45,34 @@ function ajax(){
                             else if(tijdgas>$LastUpdateTime-600)document.getElementById("tdwater").style.color="#FFFF00";
                             else document.getElementById("tdwater").style.color=null;
                         }catch{}
-                        var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex'];
-                        var arrayLength = items.length;
-                        for (var i = 0; i < arrayLength; i++) {
+                        var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex'];
+                        var arrayLength=items.length;
+                        for (var i=0; i < arrayLength; i++) {
                             try{
-                                tijd = sessionStorage.getItem("tijd_"+items[i]);
+                                tijd=sessionStorage.getItem("tijd_"+items[i]);
+                                value=sessionStorage.getItem(items[i]);
+                                if(tijd>$LastUpdateTime-60&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FF8800";
+                                else if(tijd>$LastUpdateTime-90&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFAA00";
+                                else if(tijd>$LastUpdateTime-300&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFCC00";
+                                else if(tijd>$LastUpdateTime-900&&value=="Closed")document.getElementById("t"+items[i]).style.color="#FFFF00";
+                                else if(tijd>$LastUpdateTime-7200&&value=="Closed")document.getElementById("t"+items[i]).style.color="#CCC";
+                                else if(tijd>$LastUpdateTime-10800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#BBB";
+                                else if(tijd>$LastUpdateTime-14400&&value=="Closed")document.getElementById("t"+items[i]).style.color="#AAA";
+                                else if(tijd>$LastUpdateTime-18000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#999";
+                                else if(tijd>$LastUpdateTime-21600&&value=="Closed")document.getElementById("t"+items[i]).style.color="#888";
+                                else if(tijd>$LastUpdateTime-25200&&value=="Closed")document.getElementById("t"+items[i]).style.color="#777";
+                                else if(tijd>$LastUpdateTime-28800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#666";
+                                else if(tijd>$LastUpdateTime-32400&&value=="Closed")document.getElementById("t"+items[i]).style.color="#555";
+                                else if(tijd>$LastUpdateTime-36000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#444";
+                                else if(tijd>$LastUpdateTime-54000&&value=="Closed")document.getElementById("t"+items[i]).style.color="#333";
+                                else if(tijd>$LastUpdateTime-82800&&value=="Closed")document.getElementById("t"+items[i]).style.color="#000";
+                            }catch{}
+                        }
+                        var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
+                        var arrayLength=items.length;
+                        for (var i=0; i < arrayLength; i++) {
+                            try{
+                                tijd=sessionStorage.getItem("tijd_"+items[i]);
                                 if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
                                 else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
                                 else if(tijd>$LastUpdateTime-300)document.getElementById("t"+items[i]).style.color="#FFCC00";
@@ -64,13 +87,12 @@ function ajax(){
                                 else if(tijd>$LastUpdateTime-32400)document.getElementById("t"+items[i]).style.color="#555";
                                 else if(tijd>$LastUpdateTime-36000)document.getElementById("t"+items[i]).style.color="#444";
                                 else if(tijd>$LastUpdateTime-54000)document.getElementById("t"+items[i]).style.color="#333";
-                                else if(tijd>$LastUpdateTime-72000)document.getElementById("t"+items[i]).style.color="#222";
                                 else if(tijd>$LastUpdateTime-82800)document.getElementById("t"+items[i]).style.color="#000";
                             }catch{}
                         }
                     }else if(name=="ip"){
                         try{
-                            previp = sessionStorage.getItem("ip");
+                            previp=sessionStorage.getItem("ip");
                             if(previp!=d['ip']){
                                 sessionStorage.setItem("ip", d['ip']);
                                 setTimeout('window.location.href=window.location.href;', 0);
@@ -364,7 +386,7 @@ function ajax(){
                                 }
                                 html+='</form>';
                                 if (name=="ledluifel") {
-                                    luifel = sessionStorage.getItem("luifel");
+                                    luifel=sessionStorage.getItem("luifel");
                                     if (luifel=="0"&&value==0)html='';
                                 }
                                 document.getElementById(name).innerHTML=html;
@@ -904,9 +926,9 @@ function toggle_visibility(id){
 }
 function fix()
 {
-    var el = this;
-    var par = el.parentNode;
-    var next = el.nextSibling;
+    var el=this;
+    var par=el.parentNode;
+    var next=el.nextSibling;
     par.removeChild(el);
     setTimeout(function() {par.insertBefore(el, next);}, 0)
 }
