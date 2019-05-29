@@ -14,7 +14,7 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
     error_reporting(E_ALL);ini_set("display_errors", "on");
-    echo '<html>
+    echo '<html manifest="floorplan.appcache">
 	<head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>

@@ -14,8 +14,7 @@ require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
-    error_reporting(E_ALL);ini_set("display_errors", "on");
-    echo '<html>
+    echo '<html manifest="floorplan.appcache">
     <head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -69,20 +68,14 @@ if ($home) {
             }
         }
     }
+    $d=fetchdata();
     echo '
     <body class="floorplan">
-        <div class="fix clock">
-            <a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\' id="clock">
-                '.strftime("%k:%M:%S", TIME).'
-            </a>
-        </div>
         <div class="fix z1" style="top:5px;left:5px;">
             <a href=\'javascript:navigator_Go("floorplan.heating.php");\'>
                 <img src="/images/close.png" width="72px" height="72px"/>
             </a>
         </div>';
-
-
     if ($d['poort']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=poort&action=Off");\'>
@@ -224,14 +217,8 @@ if ($home) {
     }
 
     echo '
-        <div class="fix floorplanstats">
-            '.$udevice.' | '.$ipaddress. ' | '.number_format(((microtime(true)-$start)*1000), 3).'
-        </div>
-		<script type="text/javascript">
+        <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
-			setTimeout("window.location.href=window.location.href;",';
-    echo $local===true?'4950':'15000';
-    echo ');
 		</script>';
 }
 ?>

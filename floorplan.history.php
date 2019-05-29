@@ -32,7 +32,7 @@ if ($home) {
         'wind_mode'=>'wind hist',
         'zonvandaag_mode'=>'zonvandaag percent',
     );
-    echo '<html>
+    echo '<html manifest="floorplan.appcache">
 	<head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>

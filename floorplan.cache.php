@@ -14,7 +14,7 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '
-<html>
+<html manifest="floorplan.appcache">
 	<head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
