@@ -82,28 +82,16 @@ function bose($ip)
 }
 function sidebar()
 {
-    global $d,$udevice,$lat,$lon;
-    if ($udevice=='Mac') {
-        echo '
-    <div class="fix weather">
-        <a href="https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl" target="popup" >
-            <img src="" alt="icon" id="icon">
-        </a>
-    </div>';
-    } else {
+    global $d,$lat,$lon;
         echo '
     <div class="fix weather">
         <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
             <img src="" alt="icon" id="icon">
         </a>
-    </div>';
-    }
-    echo '
+    </div>
         <div class="fix mediabuttons">
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-                <img src="/images/denon_';
-    echo $d['denonpower']['s']=='ON'?'On':'Off';
-    echo '.png" class="i70" alt="denon">
+                <img src="/images/denon_'($d['denonpower']['s']=='ON'?'On':'Off').'.png" class="i70" alt="denon">
             </a>
             <br>
 		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
@@ -143,7 +131,7 @@ function sidebar()
             <div id="uv"></div>
 	    </div>';
 }
-function createheader($page,$ajax=250,$ajaxremote=2000)
+function createheader($page)
 {
     global $udevice;
     echo '

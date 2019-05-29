@@ -17,7 +17,7 @@ $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
 $maxrain=-1;
-$ds=file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
+$ds=@file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
     file_put_contents('/temp/ds.json', $ds);
     $ds=@json_decode($ds, true);
@@ -71,25 +71,21 @@ if (isset($ds)) {
         }
     }
 }
-$ow=@json_decode(
-    @file_get_contents(
-        'https://api.openweathermap.org/data/2.5/weather?id='.
-        $owid.'&units=metric&APPID='.$owappid
-    ),
-    true
-);
-echo 'https://api.openweathermap.org/data/2.5/weather?id='.
-        $owid.'&units=metric&APPID='.$owappid;
-if (isset($ow['main']['temp'])) {
-    $owtemp=$ow['main']['temp'];
-    if ($owtemp>$d['buiten_temp']['s']+0.5) {
-        $owtemp=$d['buiten_temp']['s']+0.5;
-    } elseif ($owtemp<$d['buiten_temp']['s']-0.5) {
-        $owtemp=$d['buiten_temp']['s']-0.5;
+$ow=@file_get_contents('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
+if (isset($ow)) {
+    file_put_contents('/temp/ow.json', $ow);
+    $ow=@json_decode($ow, true);
+    if (isset($ow['main']['temp'])) {
+        $owtemp=$ow['main']['temp'];
+        if ($owtemp>$d['buiten_temp']['s']+0.5) {
+            $owtemp=$d['buiten_temp']['s']+0.5;
+        } elseif ($owtemp<$d['buiten_temp']['s']-0.5) {
+            $owtemp=$d['buiten_temp']['s']-0.5;
+        }
+        $owwind=$ow['wind']['speed'] * 3.6;
+        storemode('icon', $ow['main']['humidity']);
+        store('icon', $ow['weather'][0]['icon']);
     }
-    $owwind=$ow['wind']['speed'] * 3.6;
-    storemode('icon', $ow['main']['humidity']);
-    store('icon', $ow['weather'][0]['icon']);
 }
 
 $rains=@file_get_contents(
@@ -157,11 +153,9 @@ if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
 if ($wind!=$prevwind) {
     store('wind', round($wind, 2));
 }
-
 $windhist=json_decode($d['wind']['m']);
 $windhist[]=round($wind, 3);
 $windhist=array_slice($windhist, -4);
-echo json_encode($windhist).'<hr>';
 storemode('wind', json_encode($windhist));
 $msg='Buiten temperaturen : ';
 if (isset($dstemp)) {
