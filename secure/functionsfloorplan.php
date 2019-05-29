@@ -169,7 +169,7 @@ function createheader($page='')
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
-    if ($page=='') {
+    if ($page!='') {
         echo '
     <script type=\'text/javascript\'>$(document).ready(function(){'.$page.'();ajax();});</script>';
     }

@@ -20,5 +20,16 @@ if ($home) {
     echo '
 	<body>
 	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.weather.php");\' id="time">Refresh</a></div>
-	    <div id="placeholder"></div>';
+	    <div>
+	        <br>
+	        Nu:
+	    </div>';
+	$ds=json_decode(file_get_contents('/temp/ds.json'));
+	$ow=json_decode(file_get_contents('/temp/ow.json'));
+	echo '<pre>';print_r($ds);echo '</pre>';
+	echo '<pre>';print_r($ow);echo '</pre>';
+	echo '
+	    <script>
+	        setTimeout("window.location.href=window.location.href;", 1000);
+	    </script>';
 }
