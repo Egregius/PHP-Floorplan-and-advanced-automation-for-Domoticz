@@ -145,22 +145,26 @@ function sidebar()
 }
 function createheader($page,$ajax=250,$ajaxremote=2000)
 {
-    global $udevice,$floorplanjs,$local;
+    global $udevice;
     echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html manifest="floorplan.appcache">
 	<head>
 		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">';
+    if ($udevice=='iPhone') {
+        echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-    if ($udevice=='iPhone') {
-        echo '
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
     }
     echo '
@@ -168,19 +172,16 @@ function createheader($page,$ajax=250,$ajaxremote=2000)
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
+		<script type=\'text/javascript\'>$(document).ready(function(){'.$page.'();ajax();});</script>
+	</head>';
+}
+/*
 		<style type="text/css">
 			.water{top:200px;left:218px;}
 		</style>
-		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		<script type=\'text/javascript\'>
-            $(document).ready(function() {
-                '.$page.'();
-                ajax();
-            });
-        </script>
-	</head>';
-}
+*/
 function handlerequest()
 {
     global $db,$d,$user;
