@@ -366,25 +366,25 @@ foreach ($kamers as $kamer) {
     ) {
         if ($kamer!='tobi') {
             if ($d[$kamer.'_temp']['s']<15) {
-                ${'RSet'.$kamer}=18.0;
+                ${'RSet'.$kamer}=18;
             } elseif ($d[$kamer.'_temp']['s']<16) {
-                ${'RSet'.$kamer}=17.0;
+                ${'RSet'.$kamer}=17;
             } elseif ($d[$kamer.'_temp']['s']<17) {
-                ${'RSet'.$kamer}=16.0;
+                ${'RSet'.$kamer}=16;
             }
         } elseif ($kamer=='tobi' && $d['gcal']['s']) {
             if ($d[$kamer.'_temp']['s']<15) {
-                ${'RSet'.$kamer}=18.0;
+                ${'RSet'.$kamer}=18;
             } elseif ($d[$kamer.'_temp']['s']<16) {
-                ${'RSet'.$kamer}=17.0;
+                ${'RSet'.$kamer}=17;
             } elseif ($d[$kamer.'_temp']['s']<17) {
-                ${'RSet'.$kamer}=16.0;
+                ${'RSet'.$kamer}=16;
             }
         }
     }
     if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
         //store('Tset'.$kamer.'Z',TIME);
-        ud($kamer.'Z', 0, ${'RSet'.$kamer}.'.0');
+        ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0');
     }
 }
 //lg('bigdif='.$bigdif.'|brander='.$brander.'|timebrander='.past('brander'));

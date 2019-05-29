@@ -566,7 +566,7 @@ function ajax(){
                             } catch {}
                         }else if(type=="setpoint"){
                             try{
-                                document.getElementById(name).innerHTML=value;
+                                document.getElementById(name).innerHTML=value.toString().replace(".0", "");
                             } catch {}
                         }else{
                             //console.log(type+" -> "+name+" -> "+value+" -> "+time+" -> "+mode);
