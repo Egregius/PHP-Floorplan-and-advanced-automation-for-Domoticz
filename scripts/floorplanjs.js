@@ -500,7 +500,10 @@ function ajax(){
                                  if(name=="diepvries_temp"){
                                     elem=document.getElementById(name);
                                     elem.innerHTML=value.toString().replace(/[.]/, ",")+"&#8451;";
-                                    if(value>-15)elem.style.color="#F00";
+                                    if(value>-20){
+                                        elem.style.color="#F00";
+                                        elem.classList.add("blink");
+                                    }
                                  }else{
                                     sessionStorage.setItem(name, value);
                                     var hoogte=value * 3;
