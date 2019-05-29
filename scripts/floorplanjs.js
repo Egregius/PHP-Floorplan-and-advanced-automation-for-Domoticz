@@ -214,16 +214,16 @@ function ajax(){
                             } catch {}
                         }else if(name=="uv"){
                             try{
-                                if(value<2)html='<font color="#99EE00">UV: '+value+'</font>';
-                               else if(value<4)html='<font color="#99CC00">UV: '+value+'</font>';
-                               else if(value<6)html='<font color="#FFCC00">UV: '+value+'</font>';
-                               else if(value<8)html='<font color="#FF6600">UV: '+value+'</font>';
-                                else html='<font color="#FF2200">UV: '+value+'</font>';
-                                if(mode<2)html+='<br><font color="#99EE00">max: '+mode+'</font>';
-                               else if(mode<4)html+='<br><font color="#99CC00">max: '+mode+'</font>';
-                               else if(mode<6)html+='<br><font color="#FFCC00">max: '+mode+'</font>';
-                               else if(mode<8)html+='<br><font color="#FF6600">max: '+mode+'</font>';
-                                else html+='<br><font color="#FF2200">max: '+mode+'</font>';
+                                if(value<2)html='<font color="#99EE00">UV: '+value.toString().replace(/[.]/, ",")+'</font>';
+                               else if(value<4)html='<font color="#99CC00">UV: '+value.toString().replace(/[.]/, ",")+'</font>';
+                               else if(value<6)html='<font color="#FFCC00">UV: '+value.toString().replace(/[.]/, ",")+'</font>';
+                               else if(value<8)html='<font color="#FF6600">UV: '+value.toString().replace(/[.]/, ",")+'</font>';
+                                else html='<font color="#FF2200">UV: '+value.toString().replace(/[.]/, ",")+'</font>';
+                                if(mode<2)html+='<br><font color="#99EE00">max: '+mode.toString().replace(/[.]/, ",")+'</font>';
+                               else if(mode<4)html+='<br><font color="#99CC00">max: '+mode.toString().replace(/[.]/, ",")+'</font>';
+                               else if(mode<6)html+='<br><font color="#FFCC00">max: '+mode.toString().replace(/[.]/, ",")+'</font>';
+                               else if(mode<8)html+='<br><font color="#FF6600">max: '+mode.toString().replace(/[.]/, ",")+'</font>';
+                                else html+='<br><font color="#FF2200">max: '+mode.toString().replace(/[.]/, ",")+'</font>';
                                 document.getElementById("uv").innerHTML=html;
                             } catch {}
                         }else if(name=="el"){
