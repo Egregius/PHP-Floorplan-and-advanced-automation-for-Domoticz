@@ -92,13 +92,8 @@ function ajax(){
                             }catch{}
                         }
                     }else if(name=="ip"){
-                        try{
-                            previp=sessionStorage.getItem("ip");
-                            if(previp!=d['ip']){
-                                sessionStorage.setItem("ip", d['ip']);
-                                setTimeout('window.location.href=window.location.href;', 0);
-                            }
-                        }catch{}
+                        /*if(d['ip'].startsWith("192.168.2."))setTimeout(ajax(), 2000);
+                        else setTimeout(ajax(), 20000);*/
                     }else{
                         value=d[device]['s'];
                         mode=d[device]['m'];

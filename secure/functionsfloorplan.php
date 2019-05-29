@@ -176,9 +176,7 @@ function createheader($page,$ajax=250,$ajaxremote=2000)
 		<script type=\'text/javascript\'>
             $(document).ready(function() {
                 '.$page.'();
-
                 ajax();
-                setInterval(ajax, '.($local===true?$ajax:$ajaxremote).');
             });
         </script>
 	</head>';
