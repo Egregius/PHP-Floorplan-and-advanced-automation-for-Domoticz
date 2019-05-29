@@ -9,13 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$smappee=json_decode(
-    file_get_contents(
-        'http://192.168.2.15/gateway/apipublic/reportInstantaneousValues'
-    ),
-    true
-);
-//lg('        ___SMAPPEE___');
+$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
+$smappee=json_decode(file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
 if (!empty($smappee['report'])) {
     preg_match_all(
         "/ activePower=(\\d*.\\d*)/",
