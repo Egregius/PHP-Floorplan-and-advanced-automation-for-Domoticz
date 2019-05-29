@@ -1,10 +1,8 @@
-generate_noty('info', '<b>Double Click -> Fullscreen!!</b>', 1000);
-window.onload=function(){setTimeout(showReloadcache,4000)};
 window.addEventListener('load', function(e) {
     window.applicationCache.addEventListener('updateready', function(e) {
         if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
             window.applicationCache.swapCache();
-            setTimeout(window.location.reload(), 2000);
+            setTimeout(window.location.reload(), 500);
         }
     }, false);
 }, false);
@@ -955,8 +953,3 @@ function fix()
     setTimeout(function() {par.insertBefore(el, next);}, 0)
 }
 function navigator_Go(url){window.location.assign(url);}
-function showReloadcache()
-{
-    placeholder=document.getElementById('placeholder');
-    placeholder.insertAdjacentHTML('beforeend', '<div id="two">TEST TEST TEST</div>');
-}
