@@ -204,10 +204,10 @@ function ajax(){
                                 else if(mode>75)elem.style.color="#44E";
                                 else if(mode>70)elem.style.color="#66D";
                                 else if(mode>65)elem.style.color="#88C";
-                                else if(mode<45)elem.style.color="#22F";
-                                else if(mode<40)elem.style.color="#22F";
-                                else if(mode<35)elem.style.color="#22F";
-                                else if(mode<30)elem.style.color="#22F";
+                                else if(mode<45)elem.style.color="#FCC";
+                                else if(mode<40)elem.style.color="#FAA";
+                                else if(mode<35)elem.style.color="#F88";
+                                else if(mode<30)elem.style.color="#F66";
                                 $('#icon').attr("src", "/images/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){
@@ -517,8 +517,23 @@ function ajax(){
                                     html+='</div>';
                                     document.getElementById(name).innerHTML=html;
                                     if(name=="buiten_temp"){
-                                        if(typeof mode !== 'undefined')document.getElementById('buien').innerHTML=mode;
-                                        else document.getElementById('buien').innerHTML=0;
+                                        if(typeof mode !== 'undefined'){
+                                            elem=document.getElementById('buien');
+                                            elem.innerHTML="Buien: "+mode;
+                                            if(mode>70)elem.style.color="#00F";
+                                            else if(mode>60)elem.style.color="#22F";
+                                            else if(mode>50)elem.style.color="#44F";
+                                            else if(mode>40)elem.style.color="#66F";
+                                            else if(mode>30)elem.style.color="#88F";
+                                            else if(mode>20)elem.style.color="#AAF";
+                                            else if(mode>10)elem.style.color="#CCF";
+                                            else if(mode>0)elem.style.color="#CCE";
+                                            else elem.style.color=null;
+                                        }else{
+                                            elem=document.getElementById('buien');
+                                            elem.innerHTML="Buien: 0";
+                                            elem.style.color="#888";
+                                        }
                                     }
                                 }
                             } catch {}
