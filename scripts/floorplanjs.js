@@ -187,13 +187,13 @@ function ajax(){
                             try{
                                 elem=document.getElementById("wind");
                                 elem.innerHTML=value.toString().replace(/[.]/, ",")+"km/u";
-                                if(value>3)elem.style.color="#FF0000";
-                                else if(value>2)elem.style.color="#FF2200";
-                                else if(value>1)elem.style.color="#FF4400";
-                                else if(value>24)elem.style.color="#FF6600";
-                                else if(value>22)elem.style.color="#FF8800";
-                                else if(value>20)elem.style.color="#FFAA00";
-                                else if(value>18)elem.style.color="#FFCC00";
+                                if(value>7)elem.style.color="#FF0000";
+                                else if(value>6)elem.style.color="#FF2200";
+                                else if(value>5)elem.style.color="#FF4400";
+                                else if(value>4)elem.style.color="#FF6600";
+                                else if(value>3)elem.style.color="#FF8800";
+                                else if(value>2)elem.style.color="#FFAA00";
+                                else if(value>1)elem.style.color="#FFCC00";
                                 else elem.style.color=null;
                             } catch {}
                         }else if(name=="icon"){
@@ -209,6 +209,7 @@ function ajax(){
                                 else if(mode<40)elem.style.color="#FAA";
                                 else if(mode<35)elem.style.color="#F88";
                                 else if(mode<30)elem.style.color="#F66";
+                                else elem.style.color=null;
                                 $('#icon').attr("src", "/images/"+value+".png");
                             } catch {}
                         }else if(name=="uv"){
@@ -371,13 +372,15 @@ function ajax(){
                                 item=parseInt(Math.round(elem[0]));
                                 if(item>0)html=item+" W"
                                 else html="";
-                                document.getElementById("bureeltobikwh").innerHTML=html;
-                                if(item>600)document.getElementById("bureeltobikwh").style.color="#FF0000";
-                                else if(item>500)document.getElementById("bureeltobikwh").style.color="#FF4400";
-                                else if(item>400)document.getElementById("bureeltobikwh").style.color="#FF8800";
-                                else if(item>300)document.getElementById("bureeltobikwh").style.color="#FFAA00";
-                                else if(item>200)document.getElementById("bureeltobikwh").style.color="#FFCC00";
-                                else if(item>100)document.getElementById("bureeltobikwh").style.color="#FFFF00";
+                                elem=document.getElementById("bureeltobikwh");
+                                elem.innerHTML=html;
+                                if(item>600)elem.style.color="#FF0000";
+                                else if(item>500)elem.style.color="#FF4400";
+                                else if(item>400)elem.style.color="#FF8800";
+                                else if(item>300)elem.style.color="#FFAA00";
+                                else if(item>200)elem.style.color="#FFCC00";
+                                else if(item>100)elem.style.color="#FFFF00";
+                                else elem.style.color=null;
                             }catch{}
                         }else if(name=="gcal"){
                             try{
@@ -956,6 +959,7 @@ function floorplanothers(){
         html+='<div class="fix z1 i48" style="width:70px;" id="regenpomp"></div>';
         html+='<div class="fix z1 i48" style="width:70px;" id="zwembadfilter"></div>';
         html+='<div class="fix z1 i48" style="width:70px;" id="zwembadwarmte"></div>';
+        html+='<div class="fix z1 i48" style="width:70px;" id="GroheRed"></div>';
         html+='<div class="fix z1 i48" style="width:70px;" id="dampkap"></div>';
         document.getElementById("placeholder").innerHTML=html;
     }catch{}
