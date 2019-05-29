@@ -132,7 +132,7 @@ function sidebar()
             <span id="mintemp"></span><br>
             <a href=\'javascript:navigator_Go("regen.php");\'>
                 Buien: <span id="buien"></span>
-            </a><br>Hum:<span id="hum"></span>%<br><span id="wind"></span>km/u<br>
+            </a><br>Hum:<span id="hum"></span>%<br><span id="wind"></span><br>
             <br>
             <img src="images/sunrise.png" alt="sunrise">
             <br>

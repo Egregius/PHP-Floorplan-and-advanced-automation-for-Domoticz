@@ -147,6 +147,13 @@ function ajax(){
                                 else if(value>22)elem.style.color="#FF8800";
                                 else if(value>20)elem.style.color="#FFAA00";
                                 else if(value>18)elem.style.color="#FFCC00";
+                                else if(value<10)elem.style.color="#CCCCEE";
+                                else if(value<8)elem.style.color="#CCCCFF";
+                                else if(value<6)elem.style.color="#AAAAFF";
+                                else if(value<4)elem.style.color="#8888FF";
+                                else if(value<2)elem.style.color="#6666FF";
+                                else if(value<0)elem.style.color="#4444FF";
+                                else elem.style.color=null
                                 elem=document.getElementById("maxtemp");
                                 elem.innerHTML="<small>&#x21e7;</small>"+mode.toString().replace(/[.]/, ",")+" &#8451;";
                                 elem.style.color="#FF8800";
@@ -157,6 +164,13 @@ function ajax(){
                                 else if(mode>22)elem.style.color="#FF8800";
                                 else if(mode>20)elem.style.color="#FFAA00";
                                 else if(mode>18)elem.style.color="#FFCC00";
+                                else if(mode<10)elem.style.color="#CCCCEE";
+                                else if(mode<8)elem.style.color="#CCCCFF";
+                                else if(mode<6)elem.style.color="#AAAAFF";
+                                else if(mode<4)elem.style.color="#8888FF";
+                                else if(mode<2)elem.style.color="#6666FF";
+                                else if(mode<0)elem.style.color="#4444FF";
+                                else elem.style.color=null
                             } catch {}
                         }else if(name=="civil_twilight"){
                             try {
@@ -171,7 +185,15 @@ function ajax(){
                             }catch{}
                         }else if(name=="wind"){
                             try{
-                                document.getElementById("wind").innerHTML=value.toString().replace(/[.]/, ",");
+                                elem=document.getElementById("wind");
+                                elem.innerHTML=value.toString().replace(/[.]/, ",")+"km/u";
+                                if(value>3)elem.style.color="#FF0000";
+                                else if(value>2)elem.style.color="#FF2200";
+                                else if(value>1)elem.style.color="#FF4400";
+                                else if(value>24)elem.style.color="#FF6600";
+                                else if(value>22)elem.style.color="#FF8800";
+                                else if(value>20)elem.style.color="#FFAA00";
+                                else if(value>18)elem.style.color="#FFCC00";
                             } catch {}
                         }else if(name=="icon"){
                             try{
