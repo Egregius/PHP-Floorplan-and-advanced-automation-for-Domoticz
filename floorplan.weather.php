@@ -18,6 +18,7 @@ require 'secure/authentication.php';
 if ($home) {
     createheader();
     $ds=json_decode(file_get_contents('/temp/ds.json'));
+    unset($ds->minutely);
 	$ow=json_decode(file_get_contents('/temp/ow.json'));
 	echo '
 	<body>
@@ -28,6 +29,7 @@ if ($home) {
 	            <thead>
     	            <tr>
     	                <th></th>
+    	                <th></th>
     	                <th>Temp</th>
     	                <th></th>
     	            </tr>
@@ -35,20 +37,36 @@ if ($home) {
     	        <tbody>
     	            <tr>
     	                <td>Nu:</td>
+    	                <td>'.$ds->currently->summary.'</td>
     	                <td>'.number_format($ds->currently->temperature, 1, ',', '').'&#8451;</td>
     	            </tr>
     	        </tbody>
 	        </table>
 	        Komende 48u:
 	        <table>
-	            <tr><td></td><td></td></tr>
-	        </table>
-	        Komende week:
-	        <table>
-	            <tr><td></td><td></td></tr>
-	        </table>
+	            <thead>
+    	            <tr>
+    	                <th></th>
+    	                <th></th>
+    	                <th>Temp</th>
+    	                <th></th>
+    	            </tr>
+    	        </thead>
+    	        <tbody>';
+    foreach ($ds->hourly->data as $i) {
+        echo '
+    	            <tr>
+    	                <td>'.$i->time.'</td>
+    	                <td>'.$i->summary.'</td>
+    	                <td>'.number_format($i->temperature, 1, ',', '').'&#8451;</td>
+    	            </tr>';
+    }
+    echo '
+    	        </tbody>
+    	    </table>
+
 	    </div>';
 	echo '<pre>';print_r($ds);echo '</pre>';
 	echo '<pre>';print_r($ow);echo '</pre>';
-	//echo '<script>setTimeout("window.location.href=window.location.href;", 1000);</script>';
+	echo '<script>setTimeout("window.location.href=window.location.href;", 1000);</script>';
 }
