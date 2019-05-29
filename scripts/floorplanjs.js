@@ -78,7 +78,6 @@ function ajax(){
                             try{
                                 tijd=sessionStorage.getItem("tijd_"+items[i]);
                                 value=sessionStorage.getItem(items[i]);
-                                console.log(items[i]+" "+value);
                                 if(value=="Off"){
                                     if(tijd>$LastUpdateTime-60)document.getElementById("t"+items[i]).style.color="#FF8800";
                                     else if(tijd>$LastUpdateTime-90)document.getElementById("t"+items[i]).style.color="#FFAA00";
