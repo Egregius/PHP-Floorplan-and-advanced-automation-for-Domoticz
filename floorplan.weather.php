@@ -19,6 +19,6 @@ if ($home) {
     createheader('floorplanweather');
     echo '
 	<body>
-	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time">Refresh</a></div>
-	    <div id="placeholder"></div>';
+	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.weather.php");\' id="time">Refresh</a></div>
+	    <div id="placeholder">TEST</div>';
 }

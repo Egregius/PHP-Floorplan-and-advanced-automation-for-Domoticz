@@ -85,13 +85,13 @@ function sidebar()
     global $d,$lat,$lon;
         echo '
     <div class="fix weather">
-        <a href=\'javascript:navigator_Go("https://darksky.net/details/'.$lat.','.$lon.'/'.strftime("%Y-%m-%d", TIME).'/si24/nl");\'>
+        <a href=\'javascript:navigator_Go("floorplan.weather.php");\'>
             <img src="" alt="icon" id="icon">
         </a>
     </div>
         <div class="fix mediabuttons">
             <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
-                <img src="/images/denon_'($d['denonpower']['s']=='ON'?'On':'Off').'.png" class="i70" alt="denon">
+                <img src="/images/denon_'.($d['denonpower']['s']=='ON'?'On':'Off').'.png" class="i70" alt="denon">
             </a>
             <br>
 		    <a href=\'javascript:navigator_Go("floorplan.media.redirect.php");\'>
@@ -131,13 +131,20 @@ function sidebar()
             <div id="uv"></div>
 	    </div>';
 }
-function createheader($page)
+function createheader($page='')
 {
     global $udevice;
     echo '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html manifest="floorplan.appcache">
-	<head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+    if (empty($page)) {
+        echo '
+<html>';
+    } else {
+        echo '
+<html manifest="floorplan.appcache">';
+    }
+    echo '
+    <head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">';
     if ($udevice=='iPhone') {
