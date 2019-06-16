@@ -11,21 +11,25 @@
  **/
 if ($status=='On') {
     if ($d['achterdeur']['s']!='Closed') {
-        waarschuwing('Opgelet: Achterdeur open!');
+        waarschuwing('Opgelet: Achterdeur open!', 'achterdeur');
     }
     if ($d['raamliving']['s']!='Closed') {
-        waarschuwing('Opgelet: Raam Living open!');
+        waarschuwing('Opgelet: Raam Living open!', 'raamliving');
+    }
+    if ($d['bureeltobi']['s']=='On') {
+        waarschuwing('Opgelet: bureel Tobi aan!', 'bureeltobi');
     }
     if ($d['bose105']['m']=='Online') {
-        waarschuwing('Opgelet: Bose buiten!');
+        waarschuwing('Opgelet: Bose buiten!', 'bosebuiten');
     }
     if ($d['poort']['s']=='Open') {
+ 		if ($d['bose104']['s']=='On') {
+			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+		}
         if ($d['garage']['s']=='On') {
             sw('garage', 'Off');
         }
         store('Weg', 2);
-        sw('deurbel', 'On');
-        lgsql('Remote','Weg','Weg');
         sw(array('weg'), 'Off');
     } else {
         sw('poortrf', 'On');

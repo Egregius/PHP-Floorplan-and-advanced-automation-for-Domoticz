@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -34,24 +34,36 @@ foreach ($tables as $table) {
         $rows = $db->changes();
         if ($rows>0) {
             echo $rows." rows removed from $table".PHP_EOL;
+            sleep(1);
         }
     }
-    sleep(2);
 
+	$query=$db->exec("DELETE FROM $table WHERE Date < '$clean'");
+    if ($query) {
+        $rows = $db->changes();
+        if ($rows>0) {
+            echo $rows." rows removed from $table".PHP_EOL;
+            sleep(1);
+        }
+    }
+    
 }
+
+$query=$db->exec("DELETE FROM LightingLog WHERE DeviceRowID in (6,24,170,171,172,173,174,175,176,177,295,296,297,298,299,300,301,302)");
+if ($query) {
+    $rows = $db->changes();
+    if ($rows>0) {
+        echo $rows." rows removed from LightingLog".PHP_EOL;
+        sleep(1);
+    }
+}
+
 $query=$db->exec("DELETE FROM LightingLog WHERE Date < '$clean'");
 if ($query) {
     $rows = $db->changes();
     if ($rows>0) {
         echo $rows." old rows removed from LightingLog".PHP_EOL;
-    }
-}
-sleep(2);
-$query=$db->exec("DELETE FROM LightingLog WHERE DeviceRowID in (6,9,10,170,171,172,173,174,175,176,177,295,296,297,298,299,300,301,302)");
-if ($query) {
-    $rows = $db->changes();
-    if ($rows>0) {
-        echo $rows." rows removed from LightingLog".PHP_EOL;
+        sleep(1);
     }
 }
 //$sql = 'VACUUM;';

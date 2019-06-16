@@ -1,15 +1,14 @@
 CACHE MANIFEST
-# v73
-# @category Home_Automation
+# 1560228171
+# Home_Automation
 # @package  Pass2PHP
 # @author   Guy Verschuere <guy@egregius.be>
 # @license  GNU GPLv3
 # @link     https://egregius.be
 
 manifest.json
+favicon.ico
 scripts/jQuery.js
-scripts/floorplanjs.js
-styles/floorplan.php
 images/01d.png
 images/01n.png
 images/02d.png
@@ -47,6 +46,7 @@ images/denon_Off.png
 images/denon_On.png
 images/denon.png
 images/domoticzphp48.png
+images/domoticzphp144.png
 images/Elec.png
 images/fan_Off.png
 images/fan_On.png
@@ -112,6 +112,10 @@ images/thermohotorange.png
 images/thermohotred.png
 images/thermored.png
 images/Thuis.png
+images/trendblue.png
+images/trenddown.png
+images/trendred.png
+images/trendup.png
 images/tv_Off.png
 images/tv_On.png
 images/verbruik.png
@@ -121,22 +125,11 @@ images/zwave.png
 
 # Resources that require the user to be online.
 NETWORK:
-floorplan.cache.php
-floorplan.bose.php
-floorplan.doorsensors.php
-floorplan.heating.php
-floorplan.history.php
-floorplan.media.php
-floorplan.media.redirect.php
-floorplan.ontime.php
-floorplan.others.php
-floorplan.weather.php
-floorplan.php
 ajax.php
-ajaxcontrol.php
-ajaxfloorplan.bose.php
+floorplan.php
+floorplan.doorsensors.php
 *
 
 # Fallback content
 FALLBACK:
-/ offline.html
+/ /offline.html

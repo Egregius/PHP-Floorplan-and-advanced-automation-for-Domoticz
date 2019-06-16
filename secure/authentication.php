@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-session_start();
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     die('No user agent specified');
 } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) {
@@ -65,11 +64,7 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
         if ($users[$subuser]==$subpass&&strlen($subuser)>=3&&strlen($subuser)<=5&&strlen($subpass)>=3&&strlen($subpass)<=14) {
             echo 'OK';
             lg(print_r($_SERVER, true));
-            if ($subuser=='Gast') {
-                koekje($subuser, TIME+86400);
-            } else {
-                koekje($subuser, TIME+31536000);
-            }
+            koekje($subuser, TIME+315360000);
             telegram('HOME '.$subuser.' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
             if (!empty($_SESSION['referer'])) {
                 header("Location:/".$_SESSION['referer']);
@@ -97,7 +92,23 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
             }
             lg($msg);
             telegram($msg, false);
-            die('Wrong password!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!');
+            die('<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
+        <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+        <link rel="shortcut icon" href="images/domoticzphp48.png"/>
+        <link rel="apple-touch-startup-image" href="images/domoticzphp144.png"/>
+        <link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
+        <script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
+		<title>Inloggen</title>
+    </head>
+	<body>
+		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">Wrong password!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!</div>');
         }
     } else {
         fail2ban($ipaddress.' FAILED unknown user');
@@ -117,7 +128,23 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
         }
         lg($msg);
         telegram($msg, false);
-        die('Unknown user!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!');
+        die('<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
+        <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+        <link rel="shortcut icon" href="images/domoticzphp48.png"/>
+        <link rel="apple-touch-startup-image" href="images/domoticzphp144.png"/>
+        <link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
+        <script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
+		<title>Inloggen</title>
+    </head>
+	<body>
+		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">Unknown user!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!</div>');
     }
 }
 if (isset($_COOKIE[$cookie])) {
@@ -128,6 +155,7 @@ if (isset($_COOKIE[$cookie])) {
         $Usleep=80000;
     }
     if ($user=='Tobi') {
+        $d=fetchdata();
         if ($local==false) {
             die('Enkel op wifi');
         }
@@ -147,10 +175,10 @@ if (isset($_COOKIE[$cookie])) {
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=yes, minimal-ui" />
-        <link rel="icon" type="image/png" href="images/kodi.png"/>
-        <link rel="shortcut icon" href="images/kodi.png"/>
-        <link rel="apple-touch-startup-image" href="images/kodi.png"/>
-        <link rel="apple-touch-icon" href="images/kodi.png"/>
+        <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+        <link rel="shortcut icon" href="images/domoticzphp48.png"/>
+        <link rel="apple-touch-startup-image" href="images/domoticzphp144.png"/>
+        <link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
         <title>Inloggen</title>
         <style>
             html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}

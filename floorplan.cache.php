@@ -14,7 +14,7 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '
-<html manifest="floorplan.appcache">
+<html>
 	<head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -85,7 +85,7 @@ if ($home) {
 	}
 	echo '
 		<div class="fix" style="top:0px;right:0px;">
-			<a href=\'javascript:navigator_Go("floorplan.others.php");\'>
+			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
 		</div>

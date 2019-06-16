@@ -12,6 +12,5 @@
 if ($status=='On') {
     store('Weg', 0);
     sw('poortrf', 'On');
-    lgsql('Remote','Weg','Thuis');
     resetsecurity();
 }

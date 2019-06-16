@@ -112,7 +112,7 @@ if ($home===true) {
     $legend='
             <div style="width:379px;padding:15px 0px 10px 4px;">
                 &nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buienradar.'">Buienradar</font></a>
-                &nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$darksky.'">DarkSky</font></a><br>
+                &nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$darksky.'">DarkSky</font></a>
                 &nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buien.'">Buien</font></a>
 		    </div>
 ';
@@ -138,7 +138,6 @@ if ($home===true) {
 							series:{
 								0:{lineDashStyle:[2,2]},
 								1:{lineDashStyle:[2,2]},
-								2:{lineDashStyle:[2,2]},
 								3:{lineDashStyle:[0,0],pointSize:5},
 							}
 							');
@@ -161,7 +160,6 @@ if ($home===true) {
 							series:{
 								0:{lineDashStyle:[2,2]},
 								1:{lineDashStyle:[2,2]},
-								2:{lineDashStyle:[2,2]},
 								3:{lineDashStyle:[0,0],pointSize:5},
 							}
 							');
@@ -174,7 +172,6 @@ if ($home===true) {
 							series:{
 								0:{lineDashStyle:[2,2]},
 								1:{lineDashStyle:[2,2]},
-								2:{lineDashStyle:[2,2]},
 								3:{lineDashStyle:[0,0],pointSize:5},
 							}
 							');
@@ -187,7 +184,6 @@ if ($home===true) {
 							series:{
 								0:{lineDashStyle:[2,2]},
 								1:{lineDashStyle:[2,2]},
-								2:{lineDashStyle:[2,2]},
 								3:{lineDashStyle:[0,0],pointSize:5},
 							}
 							');
@@ -200,7 +196,6 @@ if ($home===true) {
 							series:{
 								0:{lineDashStyle:[2,2]},
 								1:{lineDashStyle:[2,2]},
-								2:{lineDashStyle:[2,2]},
 								3:{lineDashStyle:[0,0],pointSize:5},
 							}
 							');

@@ -18,9 +18,10 @@ h4{font-size:18px;}
 .r90{transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 .r270{transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 .tmpbg{background-repeat:no-repeat;z-index:-1;left:7px;width:26px;border-radius:8px;}
-.z0{z-index:-10;}
-.z{z-index:10;}
-.z1{z-index:200;}
+.z0{z-index:-1;}
+.z{z-index:1;}
+.z1{z-index:2;}
+.z2{z-index:3;}
 .fontred{color:#FF0000;}
 .fontFF4400e{color:#FF4400;}
 .fontFF8800{color:#FF8800;}
@@ -39,6 +40,7 @@ h4{font-size:18px;}
 .fontCCCCCC{color:#CCCCCC;}
 td{text-align:right;font-size:1.1em;}
 .blackmedia{top:254px;left:79px;height:585px;width:410px;background-color:#000;}
+#mediasidebar{top:80px;left:0px;width:80px;background-color:#000;}
 .picam1{top:127px;left:445px;}
 .picam2{top:538px;left:210px;}
 .volume{width:33px;height:60px;padding:2px 0px 0px 0px!important;margin:0;}
@@ -47,9 +49,9 @@ td{text-align:right;font-size:1.1em;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander{width:99%;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander tr, .brander td{text-align:right;line-height:1.2;font-size:16px;margin-bottom:-30px;}
-.divsetpoints{top:680px;left:140px;width:340px;border-spacing:0;padding:0;}
+.divsetpoints{top:644px;left:228px;border-spacing:0;padding:0;}
 .tablesetpoints{width:99%;border-spacing:0;padding:0;margin:0;}
-.tablesetpoints tr{text-align:center;line-height:2;font-size:20px;}
+.tablesetpoints tr{text-align:center;line-height:1.6;font-size:18px;}
 .bottom{position:fixed;bottom:0px;}
 .green{background:rgba(50,255,50,0.6);padding:1px 2px 1px 2px;}
 .red{background:rgba(255,50,50,0.6);padding:1px 2px 1px 2px;}
@@ -62,7 +64,7 @@ td{text-align:right;font-size:1.1em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
 #afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
-.dimmer{position:fixed;top:0px;left:0px;height:735px;width:390px;padding:50px;background:#111;z-index:100000;}
+.dimmer{position:fixed;top:0px;left:0px;height:100%;width:100%;background:#000;z-index:100000;}
 .dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
 .dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}
 .dimlevela{background-color:#ffba00;color:#000;}
@@ -157,15 +159,18 @@ td{text-align:right;font-size:1.1em;}
 
 /* Deuren */
 .red{background:rgba(255,0,0,1);}
-#poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}
-#achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}
+
+#achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}#tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#tdeurinkom{top:70px;left:324px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#tdeurgarage{top:244px;left:344px;}
-#tpoort{top:315px;left:376px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}
-#deurgarage{top:248px;left:341px;width:46px;height:8px;z-index:-10;}
+
+
+
+#poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}#tpoort{top:315px;left:376px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}#tdeurinkom{top:70px;left:324px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#deurgarage{top:248px;left:341px;width:46px;height:8px;z-index:-10;}#tdeurgarage{top:244px;left:344px;}
+#deurkamer{top:468px;left:290px;width:42px;height:7px;z-index:-10;}#tdeurkamer{top:464px;left:293px;}
+#deurtobi{top:449px;left:207px;width:4px;height:43px;z-index:-10;}#tdeurtobi{top:463px;left:194px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#deuralex{top:534px;left:214px;width:41px;height:7px;z-index:-10;}#tdeuralex{top:530px;left:217px;}
 
 /* Ramen */
 #traamliving{top:72px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}

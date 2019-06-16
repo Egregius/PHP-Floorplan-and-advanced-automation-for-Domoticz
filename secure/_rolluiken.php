@@ -281,7 +281,7 @@ if ($d['heating']['s']>=2) {
     if ($d['Weg']['s']==0) {
         $msg.='Thuis__';
         if ($dag=='nacht') {
-        } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
+        } elseif ($dag=='ochtend'&&(past('pirliving')<4000||past('8badkamer-8')<4000)) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
                 if ($d['Rliving']['m']==0  && $d['Rliving']['s']>0 && past('Rliving')>900) {

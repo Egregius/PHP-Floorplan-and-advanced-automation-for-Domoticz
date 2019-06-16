@@ -11,24 +11,19 @@
  **/
 if ($status=='On') {
     if ($d['achterdeur']['s']!='Closed') {
-        waarschuwing('Opgelet: Achterdeur open!');
-        die('exit');
+        waarschuwing('Opgelet: Achterdeur open!', 'achterdeur');
     }
     if ($d['raamliving']['s']!='Closed') {
-        waarschuwing('Opgelet: Raam Living open!');
-        die('exit');
+        waarschuwing('Opgelet: Raam Living open!', 'raamliving');
     }
     if ($d['poort']['s']!='Closed') {
-        waarschuwing('Opgelet: Poort open!');
-        die('exit');
+        waarschuwing('Opgelet: Poort open!', 'poortopen');
     }
     if ($d['bureeltobi']['s']=='On') {
-        waarschuwing('Opgelet: bureel Tobi aan!');
-        die('exit');
+        waarschuwing('Opgelet: bureel Tobi aan!', 'bureeltobi');
     }
     if ($d['bose105']['m']=='Online') {
-        waarschuwing('Opgelet: bose buiten!');
-        die('exit');
+        waarschuwing('Opgelet: bose buiten!', 'bosebuiten');
     }
     if ($d['Weg']['s']!=1) {
         store('Weg', 1);

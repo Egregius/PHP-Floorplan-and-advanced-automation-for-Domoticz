@@ -13,7 +13,7 @@ require '/var/www/config.php';
 require 'functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
-$username='Domoticz';
+$username='pass2php';
 if (endswith($device, '_Temperature')) {
     die('Nothing to do');
 } elseif (endswith($device, '_Utility')) {
@@ -22,25 +22,21 @@ if (endswith($device, '_Temperature')) {
 $d=fetchdata();
 if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
     if ($status=='Off'||$status=='Open') {
-        store($device, 0);
+        $status=0;
     } elseif ($status=='On'||$status=='Closed') {
-        store($device, 100);
+        $status=100;
     } else {
         $status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
-        store($device, $status);
     }
 } elseif (in_array($device, array('badkamer_temp'))) {
     $status=explode(';', $status);
     $status=$status[0];
-    store($device, $status);
 } elseif ($device=='achterdeur') {
     if ($status=='Open') {
         $status='Closed';
     } else {
         $status='Open';
     }
-    store($device, $status);
-} else {
-    store($device, $status);
 }
+store($device, $status);
 @require 'pass2php/'.$device.'.php';

@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+session_start();
 require '/var/www/config.php';
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -39,7 +40,7 @@ function fetchdata()
 function huisslapen()
 {
     global $d,$boseipbuiten;
-    sw(array('slapen'), 'Off', true, 'huisslapen', 500000);
+    sw(array('slapen'), 'Off', true, 'huisslapen', 200000);
     $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
         storemode($i, 0);
@@ -96,7 +97,7 @@ function douche()
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
     if ($douchegas>0&&$douchewater>0) {
-        telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.00065).'€__Water: '.$douchewater.'L = '.($douchewater*0.0055).'€__Som = '.(($douchegas*0.00065)+($douchewater*0.0065)).'€');
+        telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.0004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.000)+($douchewater*0.005)).'€');
     }
     store('douche', 0);
     storemode('douche', 0);
@@ -116,14 +117,14 @@ function douchewarn($euro,$vol)
 {
     global $boseipbadkamer;
     lg('Douche € '.$euro.' geluid!');
-    $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://'.$boseipbadkamer.':8090/volume'))), true);
+    $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
     shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
     $cv=$volume['actualvolume'];
     if ($cv<$vol) {
         usleep(1550000);
-        bosevolume($vol, 4);
+        bosevolume($vol, 102);
         usleep(3500000);
-        bosevolume($cv, 4);
+        bosevolume($cv, 102);
     }
 }
 /**
@@ -136,16 +137,32 @@ function douchewarn($euro,$vol)
  *
  * @return null
  */
-function waarschuwing($msg)
+function waarschuwing($msg,$sound)
 {
     global $d;
-    if ($d['Xvol']['s']!=30) {
-        sl('Xvol', 30);
+    if ($d['bose101']['s']=='On') {
+    	shell_exec('/var/www/html/secure/boseplayinfo.sh "'.$sound.'" > /dev/null 2>/dev/null &');
+    }
+    if ($d['bose102']['s']=='On') {
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
+    }
+    if ($d['bose103']['s']=='On') {
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php" > /dev/null 2>/dev/null &');
+    }
+    if ($d['bose104']['s']=='On') {
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+    }
+    if ($d['bose105']['s']=='On') {
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php" > /dev/null 2>/dev/null &');
+    }
+
+    if ($d['Xvol']['s']!=25) {
+        sl('Xvol', 25);
     }
     sl('Xring', 30);
     sw('deurbel', 'On');
-    telegram($msg, false, 2);
-    sleep(4);
+    //telegram($msg, false, 2);
+    usleep(1500000);
     sl('Xring', 0);
     die($msg);
 }
@@ -213,20 +230,25 @@ function rgb($name,$hue,$level,$check=false)
 function resetsecurity()
 {
     global $d,$domoticzurl;
+    if (!isset($d)) $d=fetchdata();
+    lg(' ********* RESETSECURITY ************');
     if ($d['sirene']['s']!='Off') {
         sw('sirene', 'Off');
+        usleep(100000);
+        store('sirene', 'Off');
     }
     $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
     foreach ($items as $i) {
         if ($d[$i]['s']!='Off') {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
+            store($i, 'Off');
         }
     }
 }
 function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
 {
     global $user,$d,$domoticzurl;
-
+    if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
         $check=true;
         foreach ($name as $i) {
@@ -252,17 +274,15 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
         }
         if ($d[$name]['i']>0) {
             lg($msg);
-            lgsql($user, $name, $action);
             if ($check==false) {
-                file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+                echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
             } else {
                 if ($d[$name]['s']!=$action) {
-                    file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+                    echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
                 }
             }
         } else {
             store($name, $action);
-            lgsql($user, $name, $action);
         }
         if ($name=='denon') {
             if ($action=='Off') {
@@ -287,6 +307,7 @@ function lgcommand($action)
 function store($name,$status,$idx=null,$force=true,$type=null)
 {
     global $db, $d, $username;
+    if (!isset($d)) $d=fetchdata();
     $time=TIME;
     if ($force==true||$d[$name]['s']!=$status) {
         if ($idx>0) {
@@ -301,7 +322,7 @@ function store($name,$status,$idx=null,$force=true,$type=null)
             $db->query("INSERT INTO devices (n,s) VALUES ('$name','$status') ON DUPLICATE KEY UPDATE s='$status';");
         }
     }*/
-    lgsql($username, $name, $status);
+    lg('store '.$name.' '.$status);
 }
 function storemode($name,$mode,$time=0)
 {
@@ -312,7 +333,15 @@ function storemode($name,$mode,$time=0)
     } else {
         $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
     }
-    lgsql($username, $name.'_mode', $mode);
+    lg('storemode '.$name.' '.$mode);
+}
+function storeicon($name,$icon)
+{
+    global $db, $d, $username;
+    if ($d[$name]['icon']!=$icon) {
+		$db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon') ON DUPLICATE KEY UPDATE icon='$icon';");
+		lg('storeicon '.$name.' '.$icon);
+	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 {
@@ -327,9 +356,9 @@ function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
         $last=$last['t'];
     }
     if ($last < $time-$ttl) {
+        $db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
         telegram($msg, $silent, $to);
         lg('alert='.$last);
-        $db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
     }
 }
 function kodi($json)
@@ -544,40 +573,38 @@ function telegram($msg,$silent=true,$to=1)
 }
 function lg($msg)
 {
-    $fp=fopen('/var/log/domoticz.log', "a+");
-    $time=microtime(true);
-    $dFormat="Y-m-d H:i:s";
-    $mSecs=$time-floor($time);
-    $mSecs=substr(number_format($mSecs, 3), 1);
-    fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-    fclose($fp);
-}
-function lgsql($user='',$device='',$status='',$info='')
-{
-    global $db;
-    $db->query(
-        "INSERT INTO log (user,device,status,info)
-        VALUES ('$user','$device','$status','$info');"
-    );
+    global $log;
+    if ($log==true) {
+		$fp=fopen('/var/log/domoticz.log', "a+");
+		$time=microtime(true);
+		$dFormat="Y-m-d H:i:s";
+		$mSecs=$time-floor($time);
+		$mSecs=substr(number_format($mSecs, 3), 1);
+		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+		fclose($fp);
+	}
 }
 function logwrite($msg,$msg2=null)
 {
-    $time=microtime(true);
-    $dFormat="Y-m-d H:i:s";
-    $mSecs=$time-floor($time);
-    $mSecs=substr(number_format($mSecs, 3), 1);
-    $fp=fopen('/var/log/domoticz.log', "a+");
-    fwrite(
-        $fp,
-        sprintf(
-            "%s%s %s %s\n",
-            date($dFormat),
-            $mSecs,
-            ' > '.$msg,
-            $msg2
-        )
-    );
-    fclose($fp);
+    global $log;
+    if ($log==true) {
+		$time=microtime(true);
+		$dFormat="Y-m-d H:i:s";
+		$mSecs=$time-floor($time);
+		$mSecs=substr(number_format($mSecs, 3), 1);
+		$fp=fopen('/var/log/domoticz.log', "a+");
+		fwrite(
+			$fp,
+			sprintf(
+				"%s%s %s %s\n",
+				date($dFormat),
+				$mSecs,
+				' > '.$msg,
+				$msg2
+			)
+		);
+		fclose($fp);
+	}
 }
 function fail2ban($ip)
 {
@@ -657,7 +684,7 @@ function bosezone($ip)
                     if (isset($nowplaying['@attributes']['source'])) {
                         if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
                             if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
-                                bosekey("NEXT_TRACK", 0, 3);
+                                bosekey("NEXT_TRACK", 0, 101);
                                 break;
                             }
                         }
@@ -786,6 +813,7 @@ function strbefore($string, $substring)
 function fliving()
 {
     global $d;
+    lg('***** fliving *****');
     if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
@@ -844,10 +872,14 @@ function finkom()
 }
 function fhall()
 {
-    global $d;
-    if ($d['Weg']['s']==0&&$d['hall']['s']=='Off'&&(TIME<strtotime('7:00')||$d['zon']['s']==0)) {
-        sw('hall', 'On');
-    }
+    global $d,$device;
+    if ($d['hall']['s']=='Off') {
+		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']==0)) {
+			sw('hall', 'On');
+		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
+			sw('hall', 'On');
+		}
+	}
 }
 function sirene($msg)
 {

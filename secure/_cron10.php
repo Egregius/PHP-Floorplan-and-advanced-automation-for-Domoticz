@@ -111,7 +111,7 @@ if (ping($lgtvip)) {
             &&past('lgtv')>10
             &&$d['Weg']['s']==0
         ) {
-            sw('lgtv', 'On', true, 'LG TV On _cron5');
+            sw('lgtv', 'On', true, 'LG TV On _cron10');
         }
         if ($d['denon']['s']!='On'
             &&past('denon')>30
@@ -120,12 +120,12 @@ if (ping($lgtvip)) {
             sw('denon', 'On', true);
             storemode('denon', 'TV');
         }
-        if ($d['nvidia']['s']!='On'
+        /*if ($d['nvidia']['s']!='On'
             &&past('nvidia')>30
             &&$d['Weg']['s']==0
         ) {
             sw('nvidia', 'On');
-        }
+        }*/
 
     }
 } else {
@@ -136,7 +136,7 @@ if (ping($lgtvip)) {
             if ($d['lgtv']['s']!='Off'
                 &&past('lgtv')>120
             ) {
-                sw('lgtv', 'Off', true, 'LG TV Off _cron5');
+                sw('lgtv', 'Off', true, 'LG TV Off _cron10');
             }
             if ($d['denon']['s']!='Off'
                 &&$d['denon']['m']=='TV'
@@ -190,6 +190,7 @@ if (ping('192.168.2.105')) {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
+                	lg('Bose buiten aan leggen | '.$status['@attributes']['source']);
                     bosezone(105);
                     sw('bose105', 'On');
                 }

@@ -12,13 +12,9 @@
 if ($status=='On') {
     sw('lichtbadkamer', 'Off');
     if ($d['auto']['s']=='On') {
-        if (TIME>strtotime('5:00')&&TIME<strtotime('10:00')&&$d['Weg']['s']==1) {
-            sw('hall', 'On');
-            fliving();
-        } elseif ($d['zon']['s']<20&&$d['Weg']['s']==0) {
-            sw('hall', 'On');
-        }
-        if (TIME>strtotime('20:00')&&$d['Weg']['s']==2&&$d['kamer']['s']>0) {
+        fhall();
+        fliving();
+        if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
             telegram('Kamer op slapen gezet');
             storemode('kamer', 1);
         }

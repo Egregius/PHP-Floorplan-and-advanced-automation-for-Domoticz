@@ -9,5 +9,10 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('kristal');
+if ($d['Rliving']['s']<26) {
+	sl('Rliving', 26);
+}
+if ($d['Rbureel']['s']<40) {
+	sl('Rbureel', 40);
+}
 store('Weg', 0, null, true);

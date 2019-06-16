@@ -36,5 +36,8 @@ if (count($results->getItems())>0) {
 		}
   	}
 }
-store('verlof', $verlof);
-lg('Updating verlof '.$verlof);
+if (!isset($d['gcal'])) $d=fetchdata();
+if ($d['verlof']['s']!=$verlof) {
+    store('verlof', $verlof);
+    lg('Updating verlof '.$verlof);
+}

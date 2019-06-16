@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,6 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Off') {
-    storemode('alex', 0);
+if ($status==0) {
+	if ($d['alex']['m']!=0) {
+	    storemode('alex', 0);
+	}
 }

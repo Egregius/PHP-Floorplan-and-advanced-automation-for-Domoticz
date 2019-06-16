@@ -44,6 +44,9 @@ if (count($results->getItems())>0) {
 		}
 		$msg.=PHP_EOL;
   	}
-  	storemode('gcal',$afval);
-  	echo $msg.'<hr>'.$afval;
+  	if (!isset($d['gcal'])) $d=fetchdata();
+  	if ($d['gcal']['m']!=$afval) {
+        storemode('gcal',$afval);
+        echo $msg.'<hr>'.$afval;
+    }
 }

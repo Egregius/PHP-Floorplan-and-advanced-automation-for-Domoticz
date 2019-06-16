@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+store('auto', 'On');
+sw('garage', 'On');
 resetsecurity();

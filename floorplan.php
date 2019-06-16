@@ -14,16 +14,21 @@
  **/
 require 'secure/functions.php';
 require 'secure/functionsfloorplan.php';
+$_SESSION['referer']='floorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     createheader('floorplan');
 	handlerequest();
     echo '
 	<body class="floorplan">
-	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.php");\' id="time">Refresh</a></div>
+	    <div class="fix" id="clock">
+	    	<a href=\'javascript:navigator_Go("floorplan.php");\' id="time">
+	    		LOADING
+	    		<div class="fix" style="top:0px;left:-266px;width:480px;height:820px;" onclick="javascript:navigator_Go(\'floorplan.php\')">
+				</div>
+			</a>
+		</div>
 	    <div id="placeholder"></div>';
-	sidebar();
-    blinds('zoldertrap');
 }
 ?>
 

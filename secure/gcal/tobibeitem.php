@@ -39,4 +39,5 @@ if (count($results->getItems())>0) {
 		}
   	}
 }
-store('gcal',$tobibeitem);
+if (!isset($d['gcal'])) $d=fetchdata();
+if ($d['gcal']['s']!=$tobibeitem)store('gcal',$tobibeitem);

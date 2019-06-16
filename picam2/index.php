@@ -1,5 +1,6 @@
 <?php //Alex
 require('../secure/functions.php');
+$_SESSION['referer']='picam2/index.php';
 require('../secure/authentication.php');
 if($home){
     require(dirname(__FILE__) . '/config.php');
@@ -16,18 +17,25 @@ if($home){
     <link href="/styles/picam2.php" rel="stylesheet" type="text/css"/>
     </head><body>';
     if (isset($_POST['Record'])) {
-        file_get_contents("http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055");
+        shell_exec('curl -s "http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055" >/dev/null 2>/dev/null &');
     } elseif (isset($_POST['Foto'])) {
-        shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" &');
+        shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" >/dev/null 2>/dev/null &');
+    } elseif (isset($_POST['Off'])) {
+    	$status='Open';
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/Ralex.php?Off" >/dev/null 2>/dev/null &');
+    	echo '<script type="text/javascript">
+        window.location.replace("/floorplan.php");
+    	</script>';
     }
     echo '<div class="navbar" role="navigation">
             <form method="POST" action="../floorplan.php">
-          <input type="submit" value="Plan" class="btn b3"/>
+          <input type="submit" value="Plan" class="btn b5"/>
         </form>
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b5"/>
           <input type="submit" value="Foto" name="Foto" class="btn b5"/>
           <input type="submit" value="Refresh" name="Refresh" class="btn b5"/>
+          <input type="submit" value="Off" name="Off" class="btn b7"/>
         </form>
         </div>
         <div class="fix camera">
@@ -38,7 +46,7 @@ if($home){
         window.setInterval(function()
         {
             document.getElementById(\'mjpeg_destalex\').src = "jpg.php?random="+new Date().getTime();
-        }, '. 1000/2 .');
+        }, 750);
     </script></body></html>
     ';
 }

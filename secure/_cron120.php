@@ -12,7 +12,9 @@
 //lg('               __CRON120__');
 $user='cron120';
 $prevwind=(float)$d['wind']['s'];
-$prevbuien=(float)$d['buiten_temp']['m'];
+$prevbuien=(float)$d['buien']['s'];
+$prevbuitentemp=(float)$d['buiten_temp']['s'];
+$buiten_temp=(float)$d['buiten_temp']['s'];
 $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
@@ -24,10 +26,10 @@ if (isset($ds)) {
     if (isset($ds['currently'])) {
         if (isset($ds['currently']['temperature'])) {
             $dstemp=$ds['currently']['temperature'];
-            if ($dstemp>$d['buiten_temp']['s']+0.5) {
-                $dstemp=$d['buiten_temp']['s']+0.5;
-            } elseif ($dstemp<$d['buiten_temp']['s']-0.5) {
-                $dstemp=$d['buiten_temp']['s']-0.5;
+            if ($dstemp>$buiten_temp+0.5) {
+                $dstemp=$buiten_temp+0.5;
+            } elseif ($dstemp<$buiten_temp-0.5) {
+                $dstemp=$buiten_temp-0.5;
             }
         }
         if (isset($ds['currently']['windSpeed'])) {
@@ -65,9 +67,17 @@ if (isset($ds)) {
                     $maxrain=$i['precipIntensity'];
                 }
             }
-            store('minmaxtemp', round($mintemp, 1));
-            storemode('minmaxtemp', round($maxtemp, 1));
-            storemode('max', $maxrain, 1);
+            $mintemp=round($mintemp, 1);
+            if ($d['minmaxtemp']['s']!=$mintemp) {
+            	store('minmaxtemp', $mintemp);
+            }
+            $maxtemp=round($maxtemp, 1);
+            if ($d['minmaxtemp']['m']!=$maxtemp) {
+	            storemode('minmaxtemp', $maxtemp);
+	        }
+	        if ($d['max']['m']!=$maxrain) {
+	            storemode('max', $maxrain, 1);
+	        }
         }
     }
 }
@@ -77,17 +87,21 @@ if (isset($ow)) {
     $ow=@json_decode($ow, true);
     if (isset($ow['main']['temp'])) {
         $owtemp=$ow['main']['temp'];
-        if ($owtemp>$d['buiten_temp']['s']+0.5) {
-            $owtemp=$d['buiten_temp']['s']+0.5;
-        } elseif ($owtemp<$d['buiten_temp']['s']-0.5) {
-            $owtemp=$d['buiten_temp']['s']-0.5;
+        if ($owtemp>$buiten_temp+0.5) {
+            $owtemp=$buiten_temp+0.5;
+        } elseif ($owtemp<$buiten_temp-0.5) {
+            $owtemp=$buiten_temp-0.5;
         }
         $owwind=$ow['wind']['speed'] * 3.6;
-        storemode('icon', $ow['main']['humidity']);
-        store('icon', $ow['weather'][0]['icon']);
+        if ($d['icon']['m']!=$ow['main']['humidity']) {
+	        storemode('icon', $ow['main']['humidity']);
+	    }
+	    if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
+	        store('icon', $ow['weather'][0]['icon']);
+	    }
     }
 }
-
+$buienradar=0;
 $rains=@file_get_contents(
     'http://gadgets.buienradar.nl/data/raintext/?lat='.$lat.'&lon='.$lon
 );
@@ -102,40 +116,73 @@ if (!empty($rains)) {
             break;
         }
     }
-    $newbuien=$totalrain/7;
-    if ($newbuien>100) {
-        $newbuien=100;
+    $buienradar=round($totalrain/7, 0);
+    if ($buienradar>100) {
+        $buienradar=100;
     }
-    if ($newbuien>20) {
-        $maxrain=$newbuien;
+    if ($buienradar>20) {
+        $maxrain=$buienradar;
     }
 }
 
-if (isset($d['buiten_temp']['s'])
+if (isset($buiten_temp)
     &&isset($dstemp)
     &&isset($owtemp)
 ) {
-    $d['buiten_temp']['s']=($d['buiten_temp']['s']+$dstemp+$owtemp)/3;
-} elseif (isset($d['buiten_temp']['s'])&&isset($dstemp)) {
-    $d['buiten_temp']['s']=($d['buiten_temp']['s']+$dstemp)/2;
+    $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
+} elseif (isset($buiten_temp)&&isset($dstemp)) {
+    $buiten_temp=($buiten_temp+$dstemp)/2;
 } elseif (isset($owtemp)&&isset($dstemp)) {
-    $d['buiten_temp']['s']=($owtemp+$dstemp)/2;
+    $buiten_temp=($owtemp+$dstemp)/2;
 } elseif (isset($owtemp)) {
-    $d['buiten_temp']['s']=$owtemp;
+    $buiten_temp=$owtemp;
 } elseif (isset($dstemp)) {
-    $d['buiten_temp']['s']=$dstemp;
+    $buiten_temp=$dstemp;
 }
 if (isset($ds['hourly']['data'])) {
-    if ($d['buiten_temp']['s']>$maxtemp) {
-        $maxtemp=$d['buiten_temp']['s'];
-        storemode('minmaxtemp', round($maxtemp, 1));
+	$maxtemp=round($maxtemp, 1);
+    if ($buiten_temp>$maxtemp) {
+        $maxtemp=round($buiten_temp, 1);
+        storemode('minmaxtemp', $maxtemp);
     }
-    if ($d['buiten_temp']['s']<$mintemp) {
-        $mintemp=$d['buiten_temp']['s'];
-        store('minmaxtemp', round($mintemp, 1));
+    $mintemp=round($mintemp, 1);
+    if ($buiten_temp<$mintemp) {
+        $mintemp=round($buiten_temp, 1);
+        store('minmaxtemp', $mintemp);
     }
 }
-store('buiten_temp', round($d['buiten_temp']['s'],1));
+$buiten_temp=round($buiten_temp,1);
+if ($d['buiten_temp']['s']!=$buiten_temp) {
+	store('buiten_temp', $buiten_temp);
+}
+$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,10) as A");
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+	$avg=$row['AVG'];
+}
+if ($prevbuitentemp>$avg+0.5) {
+	storeicon('buiten_temp', 'red5');
+} elseif ($prevbuitentemp>$avg+0.4) {
+    storeicon('buiten_temp', 'red4');
+} elseif ($prevbuitentemp>$avg+0.3) {
+    storeicon('buiten_temp', 'red3');
+} elseif ($prevbuitentemp>$avg+0.2) {
+    storeicon('buiten_temp', 'red');
+} elseif ($prevbuitentemp>$avg+0.1) {
+    storeicon('buiten_temp', 'up');
+} elseif ($prevbuitentemp<$avg-0.5) {
+    storeicon('buiten_temp', 'blue5');
+} elseif ($prevbuitentemp<$avg-0.4) {
+    storeicon('buiten_temp', 'blue4');
+} elseif ($prevbuitentemp<$avg-0.3) {
+    storeicon('buiten_temp', 'blue3');
+} elseif ($prevbuitentemp<$avg-0.2) {
+    storeicon('buiten_temp', 'blue');
+} elseif ($prevbuitentemp<$avg-0.1) {
+    storeicon('buiten_temp', 'down');
+} else {
+    storeicon('buiten_temp', '');
+}
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
     $wind=($prevwind+$owwind+$dswind)/3;
@@ -168,12 +215,12 @@ if (isset($d['buiten_temp']['s'])) {
     $msg.='buiten_temp = '.round($d['buiten_temp']['s'], 1).'°C';
 }
 //lg($msg);
-if (isset($d['buiten_temp']['m'])&&isset($dsbuien)&&isset($newbuien)) {
-    $newbuien=($d['buiten_temp']['m']+$dsbuien+$newbuien)/3;
-} elseif (isset($d['buiten_temp']['m'])&&isset($newbuien)) {
-    $newbuien=($d['buiten_temp']['m']+$newbuien)/2;
-} elseif (isset($d['buiten_temp']['m'])&&isset($dsbuien)) {
-    $newbuien=($d['buiten_temp']['m']+$dsbuien)/2;
+if (isset($d['buien']['m'])&&isset($dsbuien)&&isset($buienradar)) {
+    $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
+} elseif (isset($d['buien']['s'])&&isset($newbuien)) {
+    $newbuien=($d['buien']['s']+$buienradar)/2;
+} elseif (isset($d['buien']['s'])&&isset($dsbuien)) {
+    $newbuien=($d['buien']['s']+$dsbuien)/2;
 } elseif (isset($dsbuien)) {
     $newbuien=$dsbuien;
 }
@@ -183,13 +230,9 @@ if (isset($newbuien)&&$newbuien>100) {
 if (isset($dsbuien)&&$dsbuien>100) {
     $dsbuien=100;
 }
-if (isset($buien)&&$buien>100) {
-    $buien=100;
-}
 $buien=round($newbuien, 0);
-storemode('buiten_temp', $buien);
-if (!isset($owbuien)) {
-    $owbuien=0;
+if ($d['buien']['s']!=$buien) {
+	store('buien', $buien);
 }
 if (!isset($dsbuien)) {
     $dsbuien=0;
@@ -201,9 +244,9 @@ $db->query(
     "INSERT IGNORE INTO `regen`
         (`buienradar`,`darksky`,`buien`)
     VALUES
-        ('$newbuien','$dsbuien','$buien');"
+        ('$buienradar','$dsbuien','$buien');"
 );
-
+lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
 if ($d['auto']['s']=='On') {
     $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -257,9 +300,6 @@ if ($d['auto']['s']=='On') {
             telegram($msg, 2);
         }
     }
-    $zonopen=1500;
-    $maxbuien=5;
-    $living_temp=$d['living_temp']['s'];
     $x=0;
     foreach ($windhist as $y) {
         $x=$y+$x;
@@ -310,8 +350,8 @@ if ($d['auto']['s']=='On') {
         sl('luifel', $maxluifel);
     } elseif ($d['heating']['s']==2
         &&$d['luifel']['s']<$maxluifel
-        &&$buien<$maxbuien
-        &&$d['zon']['s']>$zonopen
+        &&$buien<5
+        &&$d['zon']['s']>1500
         &&$d['luifel']['m']==0
         &&past('luifel')>600
         &&$wind<$windhist
@@ -322,10 +362,10 @@ if ($d['auto']['s']=='On') {
         }
     } elseif ($d['heating']['s']<2
         &&$d['luifel']['s']<$maxluifel
-        &&$buien<$maxbuien
-        &&$living_temp>22
+        &&$buien<5
+        &&$d['living_temp']['s']>22
         &&$d['buiten_temp']['s']>17
-        &&$d['zon']['s']>$zonopen
+        &&$d['zon']['s']>1500
         &&$d['luifel']['m']==0
         &&past('luifel')>600
         &&$wind<$windhist
@@ -334,12 +374,18 @@ if ($d['auto']['s']=='On') {
         if ($d['luifel']['m']==0) {
             sl('luifel', $maxluifel);
         }
-    } elseif (($buien>$maxbuien
+    } elseif (($buien>5
         ||(($d['zon']['s']==0
         ||$d['living_temp']['s']<19)
         &&$d['luifel']['m']==0))
         &&$d['luifel']['s']>0
     ) {
         sl('luifel', 0);
+    }
+}
+$items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
+foreach ($items as $i) {
+    if (past($i)>1800) {
+        storeicon($i, '');
     }
 }

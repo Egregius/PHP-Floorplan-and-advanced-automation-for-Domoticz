@@ -20,8 +20,9 @@ if ($home===true) {
     $f_startdate=date("Y-m-d", TIME);
     $f_enddate=date("Y-m-d", TIME);
     $week=date("Y-m-d", TIME-86400*6);
-    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		<html xmlns="http://www.w3.org/1999/xhtml">
+    echo '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="HandheldFriendly" content="true"/>
@@ -96,7 +97,7 @@ if ($home===true) {
         if ($udevice=='iPad') {
             $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='iPhone') {
-            $args=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
             $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {

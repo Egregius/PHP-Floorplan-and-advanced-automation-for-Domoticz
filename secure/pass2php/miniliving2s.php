@@ -11,12 +11,12 @@
  **/
 if ($d['keuken']['s']=='On') {
     if ($d['lgtv']['s']=='On') {
-        lgcommand('play');
+        shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
     }
     andereuit();
 } else {
     if ($d['lgtv']['s']=='On') {
-        lgcommand('pause');
+        shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
     }
     if ($d['keuken']['s']=='Off') {
         sw('keuken', 'On', false);

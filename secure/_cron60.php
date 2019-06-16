@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -280,13 +280,13 @@ if ($d['auto']['s']=='On') {
                         sl($i, 65);
                     }
                 }
-            } elseif ($d['kamer']['s']==10) {
+            } elseif ($d['kamer']['s']==7) {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>55) {
                         sl($i, 30);
                     }
                 }
-            } elseif ($d['kamer']['s']>=15) {
+            } elseif ($d['kamer']['s']>=11) {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>0) {
                         sl($i, 0);
@@ -477,14 +477,6 @@ if ($d['auto']['s']=='On') {
         store('Weg', 2);
         telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
     }
-
-    if (TIME<=strtotime('11:00')) {
-        if ($d['nas']['s']!='On') {
-            if (file_get_contents($urlnas)>0) {
-                shell_exec('./wakenas.sh');
-            }
-        }
-    }
     if (TIME<=strtotime('0:02')) {
         store('gasvandaag', 0, null, true);
         store('watervandaag', 0, null, true);
@@ -507,37 +499,11 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-    /*
-    if ($d['zwembadfilter']['s']=='On') {
-        if (past('zwembadfilter')>10700
-            &&TIME>strtotime("16:00")
-            &&$d['zwembadwarmte']['s']=='Off'
-            &&$d['buiten_temp']['s']<27
-        ) {
-            sw('zwembadfilter','Off');
-        }
-    }else{
-        if (
-            (
-                    past('zwembadfilter')>10700
-                    &&    TIME>strtotime("13:00")
-                    &&    TIME<strtotime("16:00")
-                )
-                ||
-                (
-                    past('zwembadfilter')>10700
-                    &&    $d['buiten_temp']['s']>27
-                )
-            )sw('zwembadfilter','On');
-    }
-    if ($d['zwembadwarmte']['s']=='On') {
-        if (past('zwembadwarmte')>86398)sw('zwembadwarmte','Off');
-        if ($zwembadfilter=='Off')sw('zwembadfilter','On');
-    }*/
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120
         &&past('poortrf')>120
         &&$d['poortrf']['s']=='On'
+        &&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))
     ) {
         sw('poortrf', 'Off');
     }
@@ -680,10 +646,14 @@ if (!empty($objauth)) {
     curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
     $data=json_decode(curl_exec($chconsumption), true);
     if (!empty($data['consumptions'])) {
-        $vv=$data['consumptions'][0]['consumption']/1000;
-        storemode('el', round($vv, 1));
-        $zonvandaag=$data['consumptions'][0]['solar']/1000;
-        store('zonvandaag', round($zonvandaag, 1));
+        $vv=round($data['consumptions'][0]['consumption']/1000, 1);
+        if ($d['el']['m']!=$vv) {
+	        storemode('el', $vv);
+	    }
+        $zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
+        if ($d['zonvandaag']['s']!=$zonvandaag) {
+	        store('zonvandaag', $zonvandaag);
+	    }
         $gas=$d['gasvandaag']['s']/100;
         $water=$d['watervandaag']['s']/1000;
 
@@ -811,9 +781,7 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-    if ($d['wc']['s']=='On'
-        && past('wc')>480
-    ) {
+    if ($d['wc']['s']=='On' && past('wc')>540) {
         sw('wc', 'Off');
     }
     //Bose
@@ -853,61 +821,7 @@ if ($d['auto']['s']=='On') {
                 }
             }
         }
-    } elseif ($d['pirliving']['s']=='Off'
-        &&$d['pirgarage']['s']=='Off'
-        &&past('pirliving')>90
-        &&past('pirgarage')>90
-        &&past('bose101')>90
-        &&past('bose102')>90
-        &&past('bose103')>90
-        &&past('bose104')>90
-        &&past('bose105')>90
-        &&$d['bose101']['s']=='On'
-        &&$d['bose102']['s']=='Off'
-        &&$d['bose103']['s']=='Off'
-        &&$d['bose104']['s']=='Off'
-        &&$d['bose105']['s']=='Off'
-    ) {
-        $volume=json_decode(
-            json_encode(
-                simplexml_load_string(
-                    @file_get_contents(
-                        "http://192.168.2.101:8090/volume"
-                    )
-                )
-            ),
-            true
-        );
-        $cv=$volume['actualvolume'];
-        if ($cv==0) {
-            sw('bose101', 'Off');
-            bosekey("POWER", 0, 101);
-        }
-    } elseif ($d['achterdeur']['s']=='Closed'
-        &&$d['pirgarage']['s']=='Off'
-        &&past('pirgarage')>90
-        &&past('bose105')>90
-        &&$d['bose105']['s']=='On'
-    ) {
-        $status=json_decode(
-            json_encode(
-                simplexml_load_string(
-                    @file_get_contents(
-                        "http://192.168.2.105:8090/now_playing"
-                    )
-                )
-            ),
-            true
-        );
-        if (!empty($status)) {
-            if (isset($status['@attributes']['source'])) {
-                if ($status['@attributes']['source']!='STANDBY') {
-                    bosekey("POWER", 0, 105);
-                    sw('bose105', 'Off');
-                }
-            }
-        }
-    }
+    } 
     if (past('deurbadkamer')>3600
         && $d['bose102']['s']=='0n'
     ) {
@@ -987,26 +901,29 @@ if ($d['auto']['s']=='On') {
     //End Bose
 
     if ($d['kamer']['s']>0
-        &&$d['zon']['s']>0
+        &&$d['zon']['s']>200
         &&$d['RkamerL']['s']==0
         &&$d['RkamerR']['s']==0
-        &&past('kamer')>900
     ) {
-        sl('kamer', 0);
+        if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
+			sl('kamer', 0);
+        } elseif (past('kamer')>900) {
+        	storemode('kamer', 1);
+        }
     }
     if ($d['tobi']['s']>0
-        &&$d['zon']['s']>0
+        &&$d['zon']['s']>200
         &&$d['Rtobi']['s']==0
         &&past('tobi')>900
     ) {
-        storemode('tobi', 2);
+        storemode('tobi', 1);
     }
     if ($d['alex']['s']>0
-        &&$d['zon']['s']>0
+        &&$d['zon']['s']>200
         &&$d['Ralex']['s']==0
         &&past('alex')>900
     ) {
-        storemode('alex', 2);
+        storemode('alex', 1);
     }
     if ($d['eettafel']['s']>0
         &&$d['Rbureel']['s']==0
@@ -1014,7 +931,15 @@ if ($d['auto']['s']=='On') {
         &&$d['zon']['s']>100
         &&past('eettafel')>2700
     ) {
-        sl('eettafel', 0);
+        storemode('eettafel', 1);
+    }
+    if ($d['zithoek']['s']>0
+        &&$d['Rbureel']['s']==0
+        &&$d['Rliving']['s']==0
+        &&$d['zon']['s']>100
+        &&past('zithoek')>2700
+    ) {
+        storemode('zithoek', 1);
     }
     if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
         if ($d['tuin']['s']=='On') {
@@ -1028,9 +953,3 @@ if ($d['auto']['s']=='On') {
         sl('ledluifel', 0);
     }
 }
-
-
-
-
-
-

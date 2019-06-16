@@ -27,9 +27,15 @@ if ($domoticz) {
             $switchtype='none';
         }
         if($switchtype=='On/Off')$type='switch';
+        elseif($switchtype=='Contact')$type='contact';
         elseif($switchtype=='Door Contact')$type='contact';
         elseif($switchtype=='Motion Sensor')$type='pir';
-        else $type=strtolower($switchtype);
+        elseif($switchtype=='Push On Button')$type='';
+        elseif($switchtype=='X10 Siren')$type='';
+        elseif($switchtype=='Smoke Detector')$type='';
+        elseif($switchtype=='Selector')$type='';
+        elseif($switchtype=='Blinds Inverted')$type='';
+        else $type=$switchtype;
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
             $type='thermometer';

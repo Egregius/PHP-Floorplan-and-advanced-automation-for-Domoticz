@@ -135,9 +135,7 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         }
         $uv=json_decode(
             shell_exec(
-                "curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".
-                $lat."&lng=".
-                $lon."' -H 'x-access-token: 3ede211d20c3fac5d9d1df3b5282ebf2'"
+                "curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"
             ),
             true
         );
@@ -159,7 +157,7 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
 //Update and clean SQL database
 
 $limit=86400000;
-echo '<h2>Putting temps min,avg,max into temp_hour</h2>';
+//Putting temps min,avg,max into temp_hour
 $stmt=$db->query(
     "SELECT left(stamp,13) as stamp,
         min(buiten) as buiten_min,
@@ -284,7 +282,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 
-echo '<h2>Putting buiten temp to verbruik.egregius.be</h2>';
+//Putting buiten temp to verbruik.egregius.be
 $stmt = $db->query(
     "SELECT
         left(stamp,10) as stamp,
@@ -317,18 +315,13 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
     }
 }
 
-echo '<hr>';
-$remove=strftime("%Y-%m-%d", TIME-691200);
-$db->query("delete from temp where stamp < '$remove'");
-
-$remove=strftime("%Y-%m-%d %H:%M", TIME-172700);
-$db->query("delete from regen where stamp < '$remove'");
-
-//Clean log table
-
-$stmt=$db->query("SELECT count(timestamp) as count FROM `log`");
-$data=$stmt->fetch(PDO::FETCH_ASSOC);
-lg('Count log = '.$data['count']);
-if ($data['count']>1000000) {
-    $db->query("DELETE FROM `log` ORDER BY timestamp ASC LIMIT 1000");
-}
+/* Clean old database records */
+$remove=strftime("%Y-%m-%d", TIME-90000);
+$stmt=$db->query("delete from temp where stamp < '$remove'");
+lg('Deleted '.$stmt->rowCount().' records from temp');
+$remove=strftime("%Y-%m-%d", TIME-432000);
+$stmt=$db->query("delete from temp_hour where stamp < '$remove'");
+lg('Deleted '.$stmt->rowCount().' records from temp_hour');
+$remove=strftime("%Y-%m-%d", TIME-200000);
+$stmt=$db->query("delete from regen where stamp < '$remove'");
+lg('Deleted '.$stmt->rowCount().' records from regen');

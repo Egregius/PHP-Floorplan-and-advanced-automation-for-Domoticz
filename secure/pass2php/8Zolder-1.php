@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,4 +9,10 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('zolder', 'On');
+if ($d['zolder']['s']<19) {
+	sl('zolder', 20);
+} elseif ($d['zolder']['s']<38) {
+	sl('zolder', 40);
+} elseif ($d['zolder']['s']<100) {
+	sl('zolder', 100);
+}

@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['denonpower']['s']=='ON') {
+if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
     denon('MVUP');
     denon('MVUP');
     denon('MVUP');

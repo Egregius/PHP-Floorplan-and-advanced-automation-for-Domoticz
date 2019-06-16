@@ -12,7 +12,6 @@
 if ($status=='Off') {
     if ($d['pirhall']['s']!='Off') {
         store('pirhall', 'Off');
-        ud('pirhall', 0, 'Off');
     }
 } elseif ($status=='On') {
     if ($d['Weg']['s']==1) {

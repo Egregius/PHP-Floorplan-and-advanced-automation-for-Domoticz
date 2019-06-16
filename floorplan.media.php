@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.5-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -28,7 +28,7 @@ if ($home) {
             sw($_POST['Naam'], $_POST['Actie']);
         }
     } elseif (isset($_POST['PowerOn'])) {
-        $items=array('tv','denon','nvidia');
+        $items=array('tv','denon'/*,'nvidia'*/);
         foreach ($items as $item) {
             if ($d[$item]['s']!='On') {
                 sw($item, 'On');
@@ -53,9 +53,6 @@ if ($home) {
             }
             ud('miniliving4l', 0, 'On');
         }
-    } elseif (isset($_POST['vol'])) {
-        @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');
-        usleep(120000);
     } elseif (isset($_POST['input'])) {
         @file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
         storemode('denon', $_POST['input']);
@@ -106,75 +103,7 @@ if ($home) {
         }
     } elseif (isset($_POST['PowerOff'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"System.Shutdown"}');
-    } elseif (isset($_REQUEST['setdimmer'])) {
-        $name=$_REQUEST['setdimmer'];
-        $stat=$d[$name]['s'];
-        $dimaction=$d[$name]['m'];
-        echo '<div id="D'.$name.'" class="fix dimmer" >
-		<form method="POST" action="floorplan.media.php" oninput="level.value = dimlevel.valueAsNumber">
-				<div class="fix z" style="top:15px;left:90px;">';
-        if ($stat=='Off') {
-            echo '<h2>'.ucwords($name).': Off</h2>';
-        } else {
-            echo '<h2>'.ucwords($name).': '.$stat.'%</h2>';
-        }
-        echo '
-					<input type="hidden" name="Naam" value="'.$name.'">
-					<input type="hidden" name="dimmer" value="true">
-				</div>
-				<div class="fix z" style="top:100px;left:30px;">
-					<input type="image" name="dimleveloff" value ="0" src="images/Light_Off.png" class="i90">
-				</div>
-				<div class="fix z" style="top:100px;left:150px;">
-					<input type="image" name="dimsleep" value ="100" src="images/Sleepy.png" class="i90">';
-        if ($dimaction==1) {
-            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-        }
-        echo '
-				</div>
-				<div class="fix z" style="top:100px;left:265px;">
-					<input type="image" name="dimwake" value="100" src="images/Wakeup.png" style="height:90px;width:90px">';
-        if ($dimaction==2) {
-            echo '<div class="fix" style="top:0px;left:0px;z-index:-100;background: #ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-        }
-        echo '
-					<input type="hidden" name="dimwakelevel" value="'.$stat.'">
-				</div>';
-        echo '
-				<div class="fix z" style="top:100px;left:385px;">
-					<input type="image" name="dimlevelon" value ="100" src="images/Light_On.png" class="i90">
-				</div>
-				<div class="fix z" style="top:210px;left:10px;">';
-
-        $levels=array(1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,35,40,45,50,55,60,65,70,75,80,85,90,95,100);
-        if ($stat!=0&&$stat!=100) {
-            if (!in_array($stat, $levels)) {
-                $levels[]=$stat;
-            }
-        }
-        asort($levels);
-        $levels=array_slice($levels, 0, 35);
-        foreach ($levels as $level) {
-            if ($stat!='Off'&&$stat==$level) {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'"/ class="dimlevel dimlevela">';
-            } else {
-                echo '<input type="submit" name="dimlevel" value="'.$level.'" class="dimlevel">';
-            }
-        }
-        echo '
-				</div>
-			</form>
-			<div class="fix z" style="top:5px;left:5px;">
-			    <a href=\'javascript:navigator_Go("floorplan.media.php");\'>
-			        <img src="/images/close.png" width="72px" height="72px" alt="">
-			    </a>
-			</div>
-		</div>
-	</body>
-	<script type="text/javascript">function navigator_Go(url){window.location.assign(url);}</script>
-</html>';
-        exit;
-    }
+    } 
 
     echo '
     <body class="floorplan">
@@ -223,133 +152,10 @@ if ($home) {
     }
     echo '
             </form>
-            <br>
-            <a href=\'javascript:navigator_Go("denon.php");\'>
-                <img src="/images/denon.png" class="i48" alt="">
-            </a>
-            <br>
-            <br>
-            <br>
-            <a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'>
-                <img src="/images/kodi.png" class="i48" alt="">
-                <br>Films
-            </a>
-            <br>
-            <br>
-            <a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'>
-                <img src="/images/kodi.png" class="i48" alt="">
-                <br>
-                Series
-            </a>
-            <br>
-            <br>
-            <a href=\'javascript:navigator_Go("kodi.php");\'>
-                <img src="/images/kodi.png" class="i48" alt="">
-                <br>
-                Kodi<br>
-                Control
-            </a>
-            <br>
-            <br>';
-    echo '
-	    </div>';
-    if (past('kristal')<$eendag) {
-        echo '
-        <div class="fix z0 right" style="top:55px;left:154px;width:35px;">
-            '.strftime("%k:%M", $d['kristal']['t']).'
-        </div>';
-    }
-    if (past('bureel')<$eendag) {
-        echo '
-        <div class="fix z0 right" style="top:55px;left:213px;width:35px;">
-            '.strftime("%k:%M", $d['bureel']['t']).'
-        </div>';
-    }
-    if ($d['denonpower']['s']=='ON') {
-        echo '
-	<div class="fix z1" id="denon">
-			<input type="image" src="/images/denon_On.png" id="denon">
-	</div>';
-    } else {
-        echo '
-	<div class="fix z1" id="denon">
-			<input type="image" src="/images/denon_Off.png" id="denon">
-	</div>';
-    }
-    if (past('lgtv')<$eendag) {
-        echo '
-        <div class="fix z0 right" style="top:116px;left:175px;width:35px;">
-            '.strftime("%k:%M", $d['lgtv']['t']).'
-        </div>';
-    }
-    if ($d['nvidia']['m']=='On') {
-        echo '
-	<div class="fix z1" id="nvidia">
-			<input type="image" src="/images/nvidia_On.png" id="nvidia">
-	</div>';
-    } else {
-        echo '
-	<div class="fix z1" id="nvidia">
-			<input type="image" src="/images/nvidia_Off.png" id="nvidia">
-	</div>';
-    }
-    if ($d['nas']['s']=='On') {
-        echo '
-        <div class="fix z1" id="nas">
-            <a href=\'javascript:navigator_Go("?nas=sleep");\'>
-                <img src="images/nas_On.png" class="i48" alt="" id="nas">
-            </a>
-            <br>';
-    } else {
-        echo '
-        <div class="fix z1" id="nas">
-            <a href=\'javascript:navigator_Go("?nas=wake");\'>
-                <img src="images/nas_Off.png" class="i48" alt="" id="nas">
-            </a>
-            <br>';
-    }
-    if (past('nas')<$eendag) {
-        echo strftime("%H:%M", $d['nas']['t']);
-    }
-    echo '
-        </div>';
-    bose(101);
-    echo '
-        <div class="fix blackmedia">
-            <form method="POST" action="floorplan.media.php">';
-    if ($d['denon']['s']=='Off'||$d['tv']['s']=='Off'||$d['nvidia']['s']=='Off') {
-        echo '
-                <br>
-                <br>
-                <button type="submit" class="btn b1" name="PowerOn">Power On</button>';
-    }
-    if ($d['denon']['s']=='On') {
-        if (!empty($denonmain)) {
-            $cv=80+$denonmain['MasterVolume']['value'];
-            if ($cv==80) {
-                $cv=0;
-            }
-            if ($denonmain['ZonePower']['value']=='ON') {
-                $levels=array($cv-10,$cv-5,$cv-3,$cv-2,$cv-1,$cv,$cv+1,$cv+2,$cv+3,$cv+5,$cv+10);
-                foreach ($levels as $k) {
-                    $setvalue=80-$k;
-                    $showvalue=$k;
-                    if ($showvalue==80) {
-                        $showvalue=0;
-                    }
-                    if ($showvalue>=0) {
-                        if ($k==$cv) {
-                            echo '
-                <button type="submit" name="vol" value="'.$setvalue.'" class="btn volume btna">'.$showvalue.'</button>';
-                        } else {
-                            echo '
-                <button type="submit" name="vol" value="'.$setvalue.'" class="btn volume">'.$showvalue.'</button>';
-                        }
-                    }
-                }
-            }
-        }
-    }
+        </div>
+    </div>';
+
+    
     if ($d['lgtv']['s']=='On') {
         $lgsource=trim(shell_exec('python3 secure/lgtv.py -c get-input '.$lgtvip));
         if ($lgsource=='com.webos.app.hdmi2') {
@@ -430,22 +236,13 @@ if ($home) {
             }
         }
     }
-    $pfsense=json_decode(@file_get_contents('http://192.168.2.254:44300/egregius.php'), true);
     echo '
                 </div>
             </div>
             </form>
-        </div>
-        <div class="fix" id="floorplanstats">
-            '.$udevice.' | '.$ipaddress.' | Up:'.human_kb(round($pfsense['up']), 0).' | Down:'.human_kb(round($pfsense['down']), 0).'
         </div>';
 }
-function human_filesize($bytes,$dec=2)
-{
-    $size=array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
-    $factor=floor((strlen($bytes)-1)/3);
-    return sprintf("%.{$dec}f", $bytes/pow(1024, $factor)).@$size[$factor];
-}
+
 function human_kb($bytes,$dec=2)
 {
     $size=array('kb','Mb','Gb');
