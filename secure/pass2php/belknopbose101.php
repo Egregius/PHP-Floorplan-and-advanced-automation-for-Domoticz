@@ -9,10 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    store('deurbadkamer', $d['deurbadkamer']['s']);
-    sl('lichtbadkamer', 100);
-    douche();
-    resetsecurity();
-    bosezone(102);
-}
+shell_exec('/var/www/html/secure/boseplayinfo.sh "deurbel" > /dev/null 2>/dev/null &');

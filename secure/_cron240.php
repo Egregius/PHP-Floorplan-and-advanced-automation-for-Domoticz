@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,3 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+$user='cron240';

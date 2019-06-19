@@ -9,10 +9,10 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    store('deurbadkamer', $d['deurbadkamer']['s']);
-    sl('lichtbadkamer', 100);
-    douche();
-    resetsecurity();
-    bosezone(102);
+if ($d['auto']['s']=='On') {
+	if ($status=='Open') {
+		fhall();
+	} elseif ($status=='Closed') {
+ 
+	}
 }

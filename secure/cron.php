@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP cron trigger script
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -13,27 +13,21 @@ require '/var/www/config.php';
 require 'functions.php';
 $d=fetchdata();
 if (isset($_REQUEST['rolluiken'])) {
-    $username='rolluiken';
     include '_rolluiken.php';
 }
 if (isset($_REQUEST['verwarming'])) {
-    $username='verwarming';
     include '_verwarming.php';
 }
 if (isset($_REQUEST['cron10'])) {
-    $username='cron10';
     include '_cron10.php';
 }
 if (isset($_REQUEST['cron60'])) {
-    $username='cron60';
     include '_cron60.php';
 }
 if (isset($_REQUEST['cron120'])) {
-    $username='cron120';
     include '_cron120.php';
 }
 if (isset($_REQUEST['cron180'])) {
-    $username='cron180';
     include '_cron180.php';
     $username='gcal';
     include 'gcal/gcal.php';
@@ -48,18 +42,14 @@ if (isset($_REQUEST['cron180'])) {
     sleep(2);
 }
 if (isset($_REQUEST['cron240'])) {
-    $username='cron240';
     include '_cron240.php';
 }
 if (isset($_REQUEST['cron300'])) {
-    $username='cron300';
     include '_cron300.php';
 }
 if (isset($_REQUEST['cron3600'])) {
-    $username='cron3600';
     include '_cron3600.php';
 }
 if (isset($_REQUEST['test'])) {
-    $username='test';
     include 'gcal/gcal.php';
 }

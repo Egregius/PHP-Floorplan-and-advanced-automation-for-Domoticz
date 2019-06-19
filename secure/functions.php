@@ -97,7 +97,7 @@ function douche()
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
     if ($douchegas>0&&$douchewater>0) {
-        telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.0004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.000)+($douchewater*0.005)).'€');
+        telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
     }
     store('douche', 0);
     storemode('douche', 0);
@@ -304,36 +304,24 @@ function lgcommand($action)
         echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }
-function store($name,$status,$idx=null,$force=true,$type=null)
+function store($name,$status,$idx=null,$force=true)
 {
     global $db, $d, $username;
     if (!isset($d)) $d=fetchdata();
     $time=TIME;
-    if ($force==true||$d[$name]['s']!=$status) {
-        if ($idx>0) {
-            $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
-        } else {
-            $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-        }
-    } /*else {
-        if ($idx>0) {
-            $db->query("INSERT INTO devices (n,i,s) VALUES ('$name','$idx','$status') ON DUPLICATE KEY UPDATE s='$status',i='$idx';");
-        } else {
-            $db->query("INSERT INTO devices (n,s) VALUES ('$name','$status') ON DUPLICATE KEY UPDATE s='$status';");
-        }
-    }*/
-    lg('store '.$name.' '.$status);
+	if ($idx>0) {
+		$db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
+	} else {
+		$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+	}
+	lg('store '.$name.' '.$status);
 }
 function storemode($name,$mode,$time=0)
 {
-    global $db, $username;
-    if ($time>0) {
-        $time=TIME+$time;
-        $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-    } else {
-        $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
-    }
-    lg('storemode '.$name.' '.$mode);
+    global $db, $d, $username;
+    $time=TIME+$time;
+	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
+	lg('storemode'.$name.' '.$mode);  
 }
 function storeicon($name,$icon)
 {
@@ -388,89 +376,9 @@ function ud($name,$nvalue,$svalue,$check=false)
     }
     lg(' (udevice) | '.$user.' => '.$name.' => '.$nvalue.','.$svalue);
 }
-function zwavecancelaction()
-{
-    global $domoticzurl;
-    file_get_contents(
-        $domoticzurl.'/ozwcp/admpost.html',
-        false,
-        stream_context_create(
-            array(
-                'http'=>array(
-                    'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
-                    'method'=>'POST',
-                    'content'=>http_build_query(
-                        array(
-                            'fun'=>'cancel'
-                        )
-                    ),
-                ),
-            )
-        )
-    );
-}
-function zwaveCommand($node,$command)
-{
-    global $domoticzurl;
-    $cm=array(
-        'AssignReturnRoute'=>'assrr',
-        'DeleteAllReturnRoutes'=>'delarr',
-        'NodeNeighbourUpdate'=>'reqnnu',
-        'RefreshNodeInformation'=>'refreshnode',
-        'RequestNetworkUpdate'=>'reqnu',
-        'HasNodeFailed'=>'hnf',
-        'Cancel'=>'cancel'
-    );
-    $cm=$cm[$command];
-    for ($k=1;$k<=5;$k++) {
-        $result=file_get_contents(
-            $domoticzurl.'/ozwcp/admpost.html',
-            false,
-            stream_context_create(
-                array(
-                    'http'=>array(
-                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
-                        'method'=>'POST',
-                        'content'=>http_build_query(
-                            array(
-                                'fun'=>$cm,
-                                'node'=>'node'.$node
-                                )
-                        ),
-                    ),
-                )
-            )
-        );
-        if ($result=='OK') {
-            break;
-        }
-        sleep(1);
-    }return $result;
-}
-function controllerBusy($retries)
-{
-    global $domoticzurl;
-    for ($k=1;$k<=$retries;$k++) {
-        $result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');
-        $p=xml_parser_create();
-        xml_parse_into_struct($p, $result, $vals, $index);
-        xml_parser_free($p);
-        foreach ($vals as $val) {
-            if ($val['tag']=='ADMIN') {
-                $result=$val['attributes']['ACTIVE'];
-                break;
-            }
-        }
-        if ($result=='false') {
-            break;
-        }
-        if ($k==$retries) {
-            zwaveCommand(1, 'Cancel');
-            break;
-        }
-        sleep(1);
-    }
-}
+function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
+function zwaveCommand($node,$command){global $domoticzurl;$cm=array('AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');$cm=$cm[$command];for($k=1;$k<=5;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));if ($result=='OK') {break;}sleep(1);}return $result;}
+function controllerBusy($retries){global $domoticzurl;for($k=1;$k<=$retries;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');$p=xml_parser_create();xml_parse_into_struct($p,$result,$vals,$index);xml_parser_free($p);foreach($vals as $val){if($val['tag']=='ADMIN'){$result=$val['attributes']['ACTIVE'];break;}}if($result=='false'){break;}if($k==$retries){zwaveCommand(1,'Cancel');break;}sleep(1);}}
 function convertToHours($time)
 {
     if ($time<600) {
@@ -566,10 +474,7 @@ function koekje($user,$expirytime)
 function telegram($msg,$silent=true,$to=1)
 {
     shell_exec('./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-    lg(
-        'Telegram sent:
-'.$msg
-    );
+    lg('Telegram sent: '.$msg);
 }
 function lg($msg)
 {
@@ -899,4 +804,53 @@ function sirene($msg)
         }
     }
     storemode('Weg', TIME);
+}
+function createheader($page='')
+{
+    global $udevice;
+    echo '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
+    if ($page=='') {
+        echo '
+<html>';
+    } else {
+        echo '
+<html manifest="floorplan.appcache">';
+    }
+    echo '
+    <head>
+		<title>Floorplan</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">';
+    if ($udevice=='iPhone') {
+        echo '
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
+    } elseif ($udevice=='iPad') {
+        echo '
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
+    }
+    echo '
+	    <link rel="manifest" href="/manifest.json">
+	    <link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<script type="text/javascript" src="/scripts/jQuery.js"></script>
+		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
+    if ($page!='') {
+        echo '
+    <script type=\'text/javascript\'>
+        function navigator_Go(url){window.location.assign(url);}
+        $(document).ready(function(){initview();});
+    </script>';
+    }
+    echo '
+	</head>';
 }

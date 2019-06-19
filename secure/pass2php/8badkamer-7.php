@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -14,11 +14,11 @@ if ($status=='On'&&past('8badkamer-7')>5) {
         store('badkamer_set', 10);
         $d['badkamer_set']['s']=10;
     } else {
-        store('deurbadkamer', 'Closed');
         store('badkamer_set', 22.5);
         $d['badkamer_set']['s']=22.5;
         $d['deurbadkamer']['s']='Closed';
     }
+    store('deurbadkamer', $d['deurbadkamer']['s']);
     douche();
     $d['lichtbadkamer']['s']=25;
     $d['deurbadkamer']['s']='Closed';

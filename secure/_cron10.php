@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP cron10
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg('               __CRON10__');
 $user='cron10';
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
@@ -126,7 +125,6 @@ if (ping($lgtvip)) {
         ) {
             sw('nvidia', 'On');
         }*/
-
     }
 } else {
     sleep(1);
@@ -174,7 +172,6 @@ if ($d['nvidia']['s']=='On') {
 if (ping('192.168.2.105')) {
     if ($d['bose105']['m']!='Online') {
         storemode('bose105', 'Online', 10);
-        lg('bose105 Online');
     }
     if ($d['achterdeur']['s']=='Open') {
         $status=json_decode(
@@ -190,7 +187,6 @@ if (ping('192.168.2.105')) {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
-                	lg('Bose buiten aan leggen | '.$status['@attributes']['source']);
                     bosezone(105);
                     sw('bose105', 'On');
                 }
@@ -200,7 +196,10 @@ if (ping('192.168.2.105')) {
 } else {
     if ($d['bose105']['m']!='Offline') {
         storemode('bose105', 'Offline', 10);
-        lg('bose105 Offline');
         sw('bose105', 'Off');
     }
+}
+if (past('wind')>86) {
+	lg('include weather');
+	require('_weather.php');
 }

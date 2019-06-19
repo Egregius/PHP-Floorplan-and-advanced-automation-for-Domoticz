@@ -62,6 +62,7 @@ td{text-align:right;font-size:1.1em;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
 .huge2{width:100%;height:48%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
+.huge4{width:100%;height:24%;margin:1% 0px 1% 0px;font-size:3em;}
 #afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
 .dimmer{position:fixed;top:0px;left:0px;height:100%;width:100%;background:#000;z-index:100000;}

@@ -9,7 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg('               __verwarming__');
+if (!isset($d)) {
+	$d=fetchdata();
+}
 $user='verwarming';
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {

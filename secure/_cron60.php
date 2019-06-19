@@ -520,240 +520,11 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
-
-}
-    /* -------------------------------------------- ALTIJD ----------------------------*/
-if ($d['heater1']['s']!='Off'
-    &&$d['heater2']['s']=='Off'
-    &&$d['heater3']['s']=='Off'
-    &&$d['heater4']['s']=='Off'
-    &&past('heater1')>120
-    &&past('heater2')>90
-    &&past('heater3')>90
-    &&past('heater4')>90
-) {
-    sw('heater1', 'Off');
-}
-if ($d['diepvries']['s']!='On'
-    &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
-    &&past('diepvries')>1780
-) {
-    sw('diepvries', 'On', false, 'Diepvries On '.$d['diepvries_temp']['s'].'°C');
-} elseif ($d['diepvries']['s']!='Off'
-    &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
-    &&past('diepvries')>280
-) {
-    sw('diepvries', 'Off', false, 'Diepvries Off '.$d['diepvries_temp']['s'].'°C');
-} elseif ($d['diepvries']['s']!='Off'
-    &&past('diepvries')>7200
-) {
-    sw(
-        'diepvries',
-        'Off',
-        false,
-        'Diepvries Off '.$d['diepvries_temp']['s'].'°C, was aan voor meer dan 2 uur'
-    );
-}
-if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
-    $stamp=sprintf("%s", date("Y-m-d H:i"));
-    $items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
-    foreach ($items as $i) {
-        ${$i.'_temp'}=$d[$i.'_temp']['s'];
-    }
-    $query="INSERT IGNORE INTO `temp`
-        (
-            `stamp`,
-            `buiten`,
-            `living`,
-            `badkamer`,
-            `kamer`,
-            `tobi`,
-            `alex`,
-            `zolder`
+	if ((    
+			($d['garage']['s']=='On'&&past('garage')>180)
+			||
+			($d['pirgarage']['s']=='On'&&past('pirgarage')>180)
         )
-		VALUES (
-		    '$stamp',
-		    '$buiten_temp',
-		    '$living_temp',
-		    '$badkamer_temp',
-		    '$kamer_temp',
-		    '$tobi_temp',
-		    '$alex_temp',
-		    '$zolder_temp'
-		);";
-    $db = new mysqli('localhost', 'domotica', 'domotica', 'domotica');
-    if ($db->connect_errno>0) {
-        die('Unable to connect to database ['.$db->connect_error.']');
-    }
-    if (!$result = $db->query($query)) {
-        die('There was an error running the query ['.$query.' - '.$db->error.']');
-    }
-}
-if ($d['water']['s']=='On') {
-    if (past('water')>$d['water']['m']) {
-        double('water', 'Off');
-    }
-}
-if (TIME>$d['civil_twilight']['s']
-    &&TIME<$d['civil_twilight']['m']
-) {
-    if ($d['auto']['m']!=true) {
-        storemode('auto', true);
-        $d['auto']['m']=true;
-    }
-} else {
-    if ($d['auto']['m']!=false ) {
-        storemode('auto', false);
-        $d['auto']['m']=false;
-    }
-}
-//SMAPPEE
-$timefrom=TIME-86400;
-$chauth = curl_init(
-    'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
-    $smappeeclient_id.'&client_secret='.
-    $smappeeclient_secret.'&username='.
-    $smappeeusername.'&password='.
-    $smappeepassword.''
-);
-curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
-curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
-curl_setopt($chauth, CURLOPT_VERBOSE, 0);
-curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
-$objauth=json_decode(curl_exec($chauth));
-if (!empty($objauth)) {
-    $access=$objauth->{'access_token'};
-    curl_close($chauth);
-    $chconsumption=curl_init('');
-    curl_setopt($chconsumption, CURLOPT_HEADER, 0);
-    $headers=array('Authorization: Bearer '.$access);
-    curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
-    curl_setopt(
-        $chconsumption,
-        CURLOPT_URL,
-        'https://app1pub.smappee.net/dev/v1/servicelocation/'.
-        $smappeeserviceLocationId.'/consumption?aggregation=3&from='.
-        $timefrom.'000&to='.
-        TIME.'000'
-    );
-    curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
-    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
-    $data=json_decode(curl_exec($chconsumption), true);
-    if (!empty($data['consumptions'])) {
-        $vv=round($data['consumptions'][0]['consumption']/1000, 1);
-        if ($d['el']['m']!=$vv) {
-	        storemode('el', $vv);
-	    }
-        $zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
-        if ($d['zonvandaag']['s']!=$zonvandaag) {
-	        store('zonvandaag', $zonvandaag);
-	    }
-        $gas=$d['gasvandaag']['s']/100;
-        $water=$d['watervandaag']['s']/1000;
-
-        @file_get_contents(
-            $vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag"
-        );
-    }
-    curl_close($chconsumption);
-}
-ping('192.168.2.11');
-ping('192.168.2.12');
-ping('192.168.2.13');
-ping('192.168.2.14');
-ping('192.168.2.15');
-ping('192.168.2.101');
-ping('192.168.2.102');
-ping('192.168.2.103');
-ping('192.168.2.104');
-ping('192.168.2.224');
-$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
-$relay=new SimpleXMLElement(
-    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
-);
-if (!empty($relay)) {
-    if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
-        store('heater1', 'On');
-    } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
-        store('heater1', 'Off');
-    }
-    if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
-        store('heater2', 'On');
-    } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
-        store('heater2', 'Off');
-    }
-    if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
-        store('heater3', 'On');
-    } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
-        store('heater3', 'Off');
-    }
-    if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
-        store('heater4', 'On');
-    } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
-        store('heater4', 'Off');
-    }
-}
-
-/*--------------------- OUDE CRON ---------------------------------------------------*/
-
-
-
-if ($d['denon']['s']=='On') {
-    $denonmain=json_decode(
-        json_encode(
-            simplexml_load_string(
-                @file_get_contents(
-                    'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
-                    false,
-                    $ctx
-                )
-            )
-        ),
-        true
-    );
-    if (!empty($denonmain)) {
-        if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
-            storemode('denon', $denonmain['InputFuncSelect']['value']);
-        }
-        if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) {
-            store('denonpower', $denonmain['ZonePower']['value']);
-        }
-        $denonsec=json_decode(
-            json_encode(
-                simplexml_load_string(
-                    @file_get_contents(
-                        'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
-                        false,
-                        $ctx
-                    )
-                )
-            ),
-            true
-        );
-        if ($denonmain['ZonePower']['value']=='ON'
-            &&$denonsec['Power']['value']=='OFF'
-        ) {
-            denon('Z2ON');
-        } elseif ($denonmain['ZonePower']['value']=='OFF'
-            &&$denonsec['Power']['value']=='ON'
-        ) {
-            denon('Z2OFF');
-        }
-    }
-}
-
-
-if ($d['auto']['s']=='On') {
-    if ((    ($d['garage']['s']=='On'
-        &&past('garage')>180)
-        ||($d['pirgarage']['s']=='On'
-        &&past('pirgarage')>180)    )
         &&TIME>strtotime('7:00')
         &&TIME<strtotime('23:00')
         &&$d['poort']['s']=='Closed'
@@ -762,10 +533,8 @@ if ($d['auto']['s']=='On') {
         if ($d['dampkap']['s']=='Off') {
             double('dampkap', 'On');
         }
-    } elseif (($d['garage']['s']=='Off'
-        &&past('garage')>270
-        &&$d['pirgarage']['s']=='Off'
-        &&past('pirgarage')>270)
+    } elseif (
+    	($d['garage']['s']=='Off'&&past('garage')>270&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>270)
         ||$d['poort']['s']=='Open'
         ||$d['achterdeur']['s']=='Open'
     ) {
@@ -784,7 +553,46 @@ if ($d['auto']['s']=='On') {
     if ($d['wc']['s']=='On' && past('wc')>540) {
         sw('wc', 'Off');
     }
-    //Bose
+    	if ($d['denon']['s']=='On') {
+		$denonmain=json_decode(
+			json_encode(
+				simplexml_load_string(
+					@file_get_contents(
+						'http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,
+						false,
+						$ctx
+					)
+				)
+			),
+			true
+		);
+		if (!empty($denonmain)) {
+			if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
+				storemode('denon', $denonmain['InputFuncSelect']['value']);
+			}
+			if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) {
+				store('denonpower', $denonmain['ZonePower']['value']);
+			}
+			$denonsec=json_decode(
+				json_encode(
+					simplexml_load_string(
+						@file_get_contents(
+							'http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,
+							false,
+							$ctx
+						)
+					)
+				),
+				true
+			);
+			if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') {
+				denon('Z2ON');
+			} elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') {
+				denon('Z2OFF');
+			}
+		}
+	}
+	    //Bose
     if ($d['pirliving']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'
         &&past('bose101')>90
@@ -951,5 +759,180 @@ if ($d['auto']['s']=='On') {
     }
     if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
         sl('ledluifel', 0);
+    }
+}
+    /* -------------------------------------------- ALTIJD ----------------------------*/
+if ($d['heater1']['s']!='Off'
+    &&$d['heater2']['s']=='Off'
+    &&$d['heater3']['s']=='Off'
+    &&$d['heater4']['s']=='Off'
+    &&past('heater1')>120
+    &&past('heater2')>90
+    &&past('heater3')>90
+    &&past('heater4')>90
+) {
+    sw('heater1', 'Off');
+}
+if ($d['diepvries']['s']!='On'
+    &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
+    &&past('diepvries')>1780
+) {
+    sw('diepvries', 'On', false, 'Diepvries On '.$d['diepvries_temp']['s'].'°C');
+} elseif ($d['diepvries']['s']!='Off'
+    &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
+    &&past('diepvries')>280
+) {
+    sw('diepvries', 'Off', false, 'Diepvries Off '.$d['diepvries_temp']['s'].'°C');
+} elseif ($d['diepvries']['s']!='Off'
+    &&past('diepvries')>7200
+) {
+    sw(
+        'diepvries',
+        'Off',
+        false,
+        'Diepvries Off '.$d['diepvries_temp']['s'].'°C, was aan voor meer dan 2 uur'
+    );
+}
+if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
+    $stamp=sprintf("%s", date("Y-m-d H:i"));
+    $items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
+    foreach ($items as $i) {
+        ${$i.'_temp'}=$d[$i.'_temp']['s'];
+    }
+    $query="INSERT IGNORE INTO `temp`
+        (
+            `stamp`,
+            `buiten`,
+            `living`,
+            `badkamer`,
+            `kamer`,
+            `tobi`,
+            `alex`,
+            `zolder`
+        )
+		VALUES (
+		    '$stamp',
+		    '$buiten_temp',
+		    '$living_temp',
+		    '$badkamer_temp',
+		    '$kamer_temp',
+		    '$tobi_temp',
+		    '$alex_temp',
+		    '$zolder_temp'
+		);";
+    $db = new mysqli('localhost', 'domotica', 'domotica', 'domotica');
+    if ($db->connect_errno>0) {
+        die('Unable to connect to database ['.$db->connect_error.']');
+    }
+    if (!$result = $db->query($query)) {
+        die('There was an error running the query ['.$query.' - '.$db->error.']');
+    }
+}
+if ($d['water']['s']=='On') {
+    if (past('water')>$d['water']['m']) {
+        double('water', 'Off');
+    }
+}
+if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
+    if ($d['auto']['m']!=true) {
+        storemode('auto', true);
+        $d['auto']['m']=true;
+    }
+} else {
+    if ($d['auto']['m']!=false ) {
+        storemode('auto', false);
+        $d['auto']['m']=false;
+    }
+}
+//SMAPPEE
+$timefrom=TIME-86400;
+$chauth = curl_init(
+    'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
+    $smappeeclient_id.'&client_secret='.
+    $smappeeclient_secret.'&username='.
+    $smappeeusername.'&password='.
+    $smappeepassword.''
+);
+curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
+curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($chauth, CURLOPT_VERBOSE, 0);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
+$objauth=json_decode(curl_exec($chauth));
+if (!empty($objauth)) {
+    $access=$objauth->{'access_token'};
+    curl_close($chauth);
+    $chconsumption=curl_init('');
+    curl_setopt($chconsumption, CURLOPT_HEADER, 0);
+    $headers=array('Authorization: Bearer '.$access);
+    curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
+    curl_setopt(
+        $chconsumption,
+        CURLOPT_URL,
+        'https://app1pub.smappee.net/dev/v1/servicelocation/'.
+        $smappeeserviceLocationId.'/consumption?aggregation=3&from='.
+        $timefrom.'000&to='.
+        TIME.'000'
+    );
+    curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
+    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
+    $data=json_decode(curl_exec($chconsumption), true);
+    if (!empty($data['consumptions'])) {
+        $vv=round($data['consumptions'][0]['consumption']/1000, 1);
+        if ($d['el']['m']!=$vv) {
+	        storemode('el', $vv);
+	    }
+        $zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
+        if ($d['zonvandaag']['s']!=$zonvandaag) {
+	        store('zonvandaag', $zonvandaag);
+	    }
+        $gas=$d['gasvandaag']['s']/100;
+        $water=$d['watervandaag']['s']/1000;
+
+        @file_get_contents(
+            $vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag"
+        );
+    }
+    curl_close($chconsumption);
+}
+ping('192.168.2.11');
+ping('192.168.2.12');
+ping('192.168.2.13');
+ping('192.168.2.14');
+ping('192.168.2.15');
+ping('192.168.2.101');
+ping('192.168.2.102');
+ping('192.168.2.103');
+ping('192.168.2.104');
+ping('192.168.2.224');
+$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
+$relay=new SimpleXMLElement(
+    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
+);
+if (!empty($relay)) {
+    if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
+        store('heater1', 'On');
+    } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
+        store('heater1', 'Off');
+    }
+    if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
+        store('heater2', 'On');
+    } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
+        store('heater2', 'Off');
+    }
+    if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
+        store('heater3', 'On');
+    } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
+        store('heater3', 'Off');
+    }
+    if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
+        store('heater4', 'On');
+    } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
+        store('heater4', 'Off');
     }
 }

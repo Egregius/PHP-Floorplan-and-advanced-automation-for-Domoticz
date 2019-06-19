@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP rolluiken
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,8 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg('               __rolluiken__');
-if (!isset($d)) $d=fetchdata();
+if (!isset($d)) {
+	$d=fetchdata();
+}
 $user='rolluiken';
 $msg='Rolluiken__';
 $boven=array(

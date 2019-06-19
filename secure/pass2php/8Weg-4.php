@@ -23,12 +23,17 @@ if ($status=='On') {
         waarschuwing('Opgelet: Bose buiten!', 'bosebuiten');
     }
     if ($d['poort']['s']=='Open') {
- 		if ($d['bose104']['s']=='On') {
+ 		shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
+    	if ($d['bose104']['s']=='On') {
 			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
 		}
         if ($d['garage']['s']=='On') {
             sw('garage', 'Off');
         }
+        if ($d['garageled']['s']=='On') {
+            sw('garageled', 'Off');
+        }
+        
         store('Weg', 2);
         sw(array('weg'), 'Off');
     } else {

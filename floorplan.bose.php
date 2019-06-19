@@ -12,7 +12,6 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     if (!isset($_SESSION['referer'])) {

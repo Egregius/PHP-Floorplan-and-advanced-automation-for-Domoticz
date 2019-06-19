@@ -11,7 +11,6 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     echo '<html>
@@ -45,6 +44,7 @@ if ($home) {
 			.draamtobi{top:448px;left:80px;width:60px;height:44px;}
 			.draamalex{top:568px;left:80px;width:60px;height:44px;}
 			.draamkamer{top:586px;left:425px;width:60px;height:43px;text-align:left;}
+			.draamhall{top:396px;left:216px;width:55px;height:40px;}
 			.ddeurbadkamer{top:420px;left:341px;width:60px;height:46px;}
 			.ddeurkamer{top:469px;left:290px;width:46px;height:33px;}
 			.ddeurtobi{top:448px;left:167px;width:44px;height:44px;}
@@ -193,6 +193,24 @@ if ($home) {
         echo '
         <a href=\'javascript:navigator_Go("?name=raamkamer&action=Open");\'>
             <div class="fix green draamkamer">
+                <br>
+                &nbsp;&nbsp;Closed
+            </div>
+        </a>';
+    }
+
+    if ($d['raamhall']['s']=='Open') {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=raamhall&action=Closed");\'>
+            <div class="fix red draamhall">
+                <br>
+                &nbsp;&nbsp;Open
+            </div>
+        </a>';
+    } else {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=raamhall&action=Open");\'>
+            <div class="fix green draamhall">
                 <br>
                 &nbsp;&nbsp;Closed
             </div>

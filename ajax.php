@@ -37,13 +37,10 @@ if ($home==true) {
     } 
     
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
-    	lg(print_r($_REQUEST, true));
-    	lg('denon = '.$_REQUEST['command'].' = '.$_REQUEST['action']);
     	if ($_REQUEST['command']=='volume') {
     		$vol=80-$_REQUEST['action'];
     		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
     	}
-    	
     }
 
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='lgtv') {
@@ -93,10 +90,24 @@ if ($home==true) {
         if ($_REQUEST['command']=='setpoint') {
         	store($_REQUEST['device'].'_set', $_REQUEST['action']);
 			storemode($_REQUEST['device'].'_set', 2);
-			lg(' (Set Setpoint) | '.$user.' set '.$_REQUEST['device'].'_set'.' to '.$_REQUEST['action'].'°');
 			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
 			$d[$_REQUEST['device'].'_set']['m']=2;
 			include 'secure/_verwarming.php';
+        } elseif ($_REQUEST['command']=='heating') {
+        	store('heating', $_REQUEST['action']);
+        } elseif ($_REQUEST['command']=='Weg') {
+        	store('Weg', $_REQUEST['action']);
+			if ($_REQUEST['action']==0) {
+				$db->query("UPDATE devices set t='1' WHERE n='heating';");
+				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
+					sw('poortrf', 'On');
+				}
+				resetsecurity();
+			} elseif ($_REQUEST['action']==1) {
+				huisslapen();
+			} elseif ($_REQUEST['action']==2) {
+				huisweg();
+			}
         } elseif ($_REQUEST['command']=='dimmerwake') {
         	storemode($_REQUEST['device'], 2);
         } elseif ($_REQUEST['command']=='dimmersleep') {
@@ -142,7 +153,6 @@ if ($home==true) {
     } 
     
     elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
-        lg($_REQUEST['boseip'].$_REQUEST['command'].$_REQUEST['action']);
         if ($_REQUEST['command']=='volume') {
             bosevolume($_REQUEST['action'], $_REQUEST['boseip']);
         } elseif ($_REQUEST['command']=='bass') {

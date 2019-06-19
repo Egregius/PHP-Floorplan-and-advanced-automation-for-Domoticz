@@ -12,12 +12,10 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     $d=fetchdata();
     createheader('floorplanheating');
-    handlerequest();
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
             storemode($_POST['Naam'].'_set', 0);

@@ -13,12 +13,10 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 $_SESSION['referer']='floorplan.php';
 require 'secure/authentication.php';
 if ($home) {
     createheader('floorplan');
-	handlerequest();
     echo '
 	<body class="floorplan">
 	    <div class="fix" id="clock">
