@@ -22,7 +22,6 @@ if ($home==true) {
         $d=array();
         $d['t']=$t;
         $diff=$t-$_REQUEST['t'];
-		if ($diff>2&&$diff<50000)lg('----------- AJAX ----------- '.$diff);
         $t=$_REQUEST['t'];
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
@@ -184,7 +183,9 @@ if ($home==true) {
                 }
         }
     }
-} else echo json_encode('NOTAUTHENTICATED');
+} else {
+	echo json_encode('NOTAUTHENTICATED');
+}
 $msg='';
 foreach($_REQUEST as $k=>$v) {
 	$msg.=' '.$k.'='.$v;
