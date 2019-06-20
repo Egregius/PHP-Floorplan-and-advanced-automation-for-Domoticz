@@ -149,12 +149,13 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
     }
 }
 if (isset($_COOKIE[$cookie])) {
-    if (in_array($_COOKIE[$cookie], $homes)) {
+	$user=$_COOKIE[$cookie];
+    if (in_array($user, $homes)) {
         $authenticated=true;
         $home=true;
         $Usleep=80000;
     }
-    if ($_COOKIE[$cookie]=='Tobi') {
+    if ($user=='Tobi') {
         $d=fetchdata();
         if ($local==false) {
             die('Enkel op wifi');

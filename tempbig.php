@@ -13,10 +13,6 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
-    if ($user=='Guy') {
-        error_reporting(E_ALL);
-        ini_set("display_errors", "on");
-    }
     $sensor=998;
     if (isset($_REQUEST['sensor'])) {
         $sensor=$_REQUEST['sensor'];
