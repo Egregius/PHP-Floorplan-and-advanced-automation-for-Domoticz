@@ -1145,9 +1145,9 @@ function human_kb(fileSizeInBytes) {
 function initview(){
 	view=localStorage.getItem('view');
 	console.log('view = '+view);
-	if(view="floorplan")window["floorplan"]();
-	else if(view="floorplanmedia")window["floorplanmedia"]();
-	else if(view="floorplanheating")window["floorplanheating"]();
+	if(view=="floorplan")window["floorplan"]();
+	else if(view=="floorplanmedia")window["floorplanmedia"]();
+	else if(view=="floorplanheating")window["floorplanheating"]();
 }
 
 function setpoint(device){
