@@ -181,3 +181,4 @@ if ($home==true) {
         }
     }
 } else echo json_encode('NOTAUTHENTICATED');
+lg($ipaddress.' '.$t);
