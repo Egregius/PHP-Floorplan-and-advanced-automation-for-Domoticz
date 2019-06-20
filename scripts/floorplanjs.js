@@ -17,7 +17,6 @@ function ajax(Update){
         async: true,
         defer: true,
         success: function(d){
-        	document.getElementById('placeholder').insertAdjacentHTML('beforeend', '•');
         	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
         	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
             for (device in d){
