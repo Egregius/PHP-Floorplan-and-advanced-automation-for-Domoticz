@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 1560228179
+# 1561018069
 # Home_Automation
 # @package  Pass2PHP
 # @author   Guy Verschuere <guy@egregius.be>
@@ -9,6 +9,10 @@ CACHE MANIFEST
 manifest.json
 favicon.ico
 scripts/jQuery.js
+scripts/jquery-1.11.1.min.js
+scripts/masonry.pkgd.min.js
+#scripts/floorplanjs.js
+styles/floorplan.php
 images/01d.png
 images/01n.png
 images/02d.png
@@ -82,6 +86,9 @@ images/plus.png
 images/rain.png
 images/reboot.png
 images/record.png
+images/regenputblauw.png
+images/regenputgroen.png
+images/regenputrood.png
 images/restart.png
 images/shutter.png
 images/Slapen.png
@@ -125,9 +132,9 @@ images/zwave.png
 
 # Resources that require the user to be online.
 NETWORK:
-ajax.php
-floorplan.php
-floorplan.doorsensors.php
+/ajax.php
+/floorplan.php
+/floorplan.doorsensors.php
 *
 
 # Fallback content

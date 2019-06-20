@@ -107,8 +107,7 @@ td{text-align:right;font-size:1.1em;}
 #Weg{top:286px;left:410px;height:80px;width:auto;}
 #zolder{top:690px;left:210px;height:48px;width:48px;}
 #wc{top:11px;left:412px;height:28px;width:auto;}
-#regenputleeg{top:800px;left:90px;height:28px;width:auto;}
-#regenputvol{top:800px;left:120px;height:28px;width:auto;}
+#regenput{top:500px;left:18px;}
 #bureeltobi{top:798px;left:375px;height:28px;width:auto;}
 #tvtobi{top:798px;left:152px;height:28px;width:auto;}
 #bureeltobikwh{top:811px;left:420px;text-align:left;min-width:60px;}

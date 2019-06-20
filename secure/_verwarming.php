@@ -41,9 +41,10 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
 }
 
 $Setkamer=4;
-if ($d['kamer_set']['m']!=2) {
+if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']<14
         && $d['minmaxtemp']['m']<15
+        && $d['deurkamer']['s']=='Closed'
         && $d['raamkamer']['s']=='Closed'
         && $d['heating']['s']>=2
         && (past('raamkamer')>7198 || TIME>strtotime('21:00'))
@@ -62,9 +63,10 @@ if ($d['kamer_set']['m']!=2) {
 }
 
 $Settobi=4;
-if ($d['tobi_set']['m']!=2) {
+if ($d['tobi_set']['m']==0) {
     if ($d['buiten_temp']['s']<14
         && $d['minmaxtemp']['m']<15
+        && $d['deurtobi']['s']=='Closed'
         && $d['raamtobi']['s']=='Closed'
         && $d['heating']['s']>=2
         && (past('raamtobi')>7198 || TIME>strtotime('20:00'))
@@ -84,9 +86,10 @@ if ($d['tobi_set']['m']!=2) {
 }
 
 $Setalex=4;
-if ($d['alex_set']['m']!=2) {
+if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']<16
         && $d['minmaxtemp']['m']<15
+        && $d['deuralex']['s']=='Closed'
         && $d['raamalex']['s']=='Closed'
         && $d['heating']['s']>=2
         && (past('raamalex')>1800 || TIME>strtotime('19:00'))
@@ -106,7 +109,7 @@ if ($d['alex_set']['m']!=2) {
 }
 
 $Setliving=16;
-if ($d['living_set']['m']!=2) {
+if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20
         && $d['minmaxtemp']['m']<20
         && $d['heating']['s']>=2
@@ -132,9 +135,13 @@ if ($d['living_set']['m']!=2) {
                 $Setliving=18.0;
             } elseif (TIME>=strtotime('4:30') && TIME<strtotime('18:45')) {
                 $Setliving=17.5;
+            } elseif (TIME>=strtotime('4:00') && TIME<strtotime('18:45')) {
+                $Setliving=17.0;
+            } elseif (TIME>=strtotime('3:30') && TIME<strtotime('18:45')) {
+                $Setliving=16.5;
             }
         }
-        if ($Setliving>=20.0) {
+        if ($Setliving>19.5) {
             if (TIME>=strtotime('11:00')
                 && $d['zon']['s']>3000
                 && $d['buiten_temp']['s']>15

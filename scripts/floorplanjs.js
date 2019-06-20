@@ -16,6 +16,7 @@ function ajax(Update){
         async: true,
         defer: true,
         success: function(d){
+        	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
             for (device in d){
                 if(d.hasOwnProperty(device)){
                     value=d[device]['s'];
@@ -349,6 +350,7 @@ function ajax(Update){
                             document.getElementById(device).innerHTML=html;
                         }catch{}
                         localStorage.setItem(device, value);
+                        localStorage.setItem(device+'_mode', mode);
                     }else if(device=="raamhall"){
                         try{
                         	if(value=='Closed') {
@@ -958,7 +960,7 @@ function floorplanheating(){
     ajax(0);
 	myAjax=setInterval(ajax, 750);
     try{
-        html='<div class="fix floorplan2icon"><a href=\'javascript:navigator_Go("floorplan.others.php");\'><img src="/images/plus.png" class="i60" alt="plus"></a></div>';
+        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
@@ -1036,20 +1038,24 @@ function floorplanbose(){
 function floorplanothers(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    localStorage.setItem('view', 'floorplanothers');
     ajax(0);
     myAjax=setInterval(ajax, 750);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px"/></div>';
-        items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','GroheRed','dampkap','regenputleeg','regenputvol'];
+        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="initview();"><img src="/images/close.png" width="72px" height="72px"/></div>';
+        items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','GroheRed','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
         html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
         gcal=localStorage.getItem('gcal');
         if(gcal==true)html+='Tobi: Beitem';
         else html+='Tobi: Rumbeke';
         html+='</div>';
+        low=localStorage.getItem('regenputleeg');
+        high=localStorage.getItem('regenputvol');
+        if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputrood.png"></div>';
+        else if(low=='Off'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputblauw.png"></div>';
+        else if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputgroen.png"></div>';
         html+='<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
@@ -1135,6 +1141,7 @@ function human_kb(fileSizeInBytes) {
 
 function initview(){
 	view=localStorage.getItem('view');
+	console.log('view = '+view);
 	window[view]();
 }
 
@@ -1142,7 +1149,14 @@ function setpoint(device){
 	mode=localStorage.getItem(device+'_set_mode');
 	level=localStorage.getItem(device+'_set');
 	temp=localStorage.getItem(device+'_temp');
-	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2><div class="fix z" style="top:210px;left:10px;">';
+	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
+	if(mode==1){
+		html+='<div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'mode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'mode\',\'0\');initview();"><br>Auto</div>';
+	}else{
+		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'mode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'mode\',\'0\');initview();"><br>Auto</div>';
+	}
 	if(device=='living'||device=='badkamer'){
         temps=[10,14,15,16,17,17.5,18,18.5,19,19.2,19.5,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
     }else if(device=='zolder'){
@@ -1150,10 +1164,11 @@ function setpoint(device){
     }else{
         temps=[10,10.5,11,11.5,12,12.5,13,13.5,14,14.2,14.5,14.7,15,15.1,15.2,15.3,15.4,15.5,15.6,15.7,15.8,15.9,16,16.1,16.2,16.3,16.4,16.5,16.6,16.7,16.8,16.9,17,17.1,17.2,17.3,17.4,17.5,17.6,17.7,17.8,17.9,18];
     }
+	html+='<div class="fix z" style="top:210px;left:10px;">';
 	temps.forEach(function(temp){
-		html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
+		if(level==temp)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
+		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 	});
-	
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	$('#placeholder').html(html);
 	
@@ -1192,25 +1207,30 @@ function roller(device,floorplan='floorplanheating'){
 	current=localStorage.getItem(device);
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	if(current==0){
-		if(device=='luifel')html+='<h2>'+device+' Dicht</h2>';
-		else html+='<h2>'+device+' Open</h2>';
+		if(device=='luifel')html+='<h2>'+device+' Dicht</h2><div class="fix" style="top:100px;left:385px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+		else html+='<h2>'+device+' Open</h2><div class="fix" style="top:100px;left:385px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 	}
 	else if(current==100){
-		if(device=='luifel')html+='<h2>'+device+' Open</h2>';
-		else html+='<h2>'+device+' Dicht</h2>';
+		if(device=='luifel')html+='<h2>'+device+' Open</h2><div class="fix" style="top:100px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+		else html+='<h2>'+device+' Dicht</h2><div class="fix" style="top:100px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 	}
 	else html+='<h2>'+device+' '+current+' %</h2>';
-	html+='<div class="fix z" style="top:100px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'100\');initview();"></div>';
-	if(mode==1)html+='<div class="fix" style="top:100px;left:150px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-	if(mode==2)html+='<div class="fix" style="top:100px;left:265px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-	html+='<div class="fix z" style="top:100px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'0\');initview();"></div>';
+	html+='<div class="fix z" style="top:100px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
+	if(mode==1){
+		html+='<div class="fix btn btna" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'mode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'mode\',\'0\');initview();"><br>Auto</div>';
+	}else{
+		html+='<div class="fix btn" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'mode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'mode\',\'0\');initview();"><br>Auto</div>';
+	}
+	html+='<div class="fix z" style="top:100px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
 	html+='</div><div>';
 	levels=[5,10,15,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,85,90,95];
 	if(levels.includes(parseInt(current))){console.log('if');}else{console.log('false');if(current>0&&current<100)levels.push(current);}
 	levels.sort((a, b) => a - b);
 	levels.forEach(function(level){
-		if(current==level)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\''+level+'\');initview();">'+level+'</button>';
-		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\''+level+'\');initview();">'+level+'</button>';
+		if(current==level)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'roller\',\''+level+'\');initview();">'+level+'</button>';
+		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'roller\',\''+level+'\');initview();">'+level+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
 

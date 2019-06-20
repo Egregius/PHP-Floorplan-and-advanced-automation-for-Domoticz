@@ -25,20 +25,6 @@ if (substr($_SERVER['REMOTE_ADDR'], 0, 10)=='192.168.2.') {
 } else {
     $local=false;
 }
-header("Expires: on, 01 Jan 1970 00:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-if (isset($_POST['logout'])) {
-    if (isset($_POST['username'])) {
-        $user=$_POST['username'];
-    }
-    setcookie($cookie, $user, TIME-86400, '/', $domainname, true, true);
-    telegram('Home: '.$user.' logged out', true);
-    header("Location:/index.php");
-    die("Redirecting to:/index.php");
-}
 if (getenv('HTTP_CLIENT_IP')) {
     $ipaddress=getenv('HTTP_CLIENT_IP');
 } elseif (getenv('HTTP_X_FORWARDED_FOR')) {
@@ -57,15 +43,30 @@ if (getenv('HTTP_CLIENT_IP')) {
     $ipaddress='UNKNOWN';
     die("IP ADDRESS UNKNOWN");
 }
-if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
-    $subuser=$_REQUEST['username'];
-    $subpass=$_REQUEST['password'];
-    if (isset($users[$subuser])) {
-        if ($users[$subuser]==$subpass&&strlen($subuser)>=3&&strlen($subuser)<=5&&strlen($subpass)>=3&&strlen($subpass)<=14) {
+
+header("Expires: on, 01 Jan 1970 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+if (isset($_POST['logout'])) {
+	$user='';
+    if (isset($_POST['username'])) {
+        $user=$_POST['username'];
+    }
+    setcookie($cookie, $user, TIME-86400, '/', $domainname, true, true);
+    telegram('Home: '.$user.' logged out', true);
+    header("Location:/index.php");
+    die("Redirecting to:/index.php");
+}
+
+if (isset($_POST['username'])&&isset($_POST['password'])) {
+    if (isset($users[$_POST['username']])) {
+        if ($users[$_POST['username']]==$_POST['password']) {
             echo 'OK';
             lg(print_r($_SERVER, true));
-            koekje($subuser, TIME+315360000);
-            telegram('HOME '.$subuser.' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
+            koekje($_POST['username'], TIME+315360000);
+            telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
             if (!empty($_SESSION['referer'])) {
                 header("Location:/".$_SESSION['referer']);
                 die("Redirecting to:/".$_SESSION['referer']);
@@ -76,11 +77,11 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
         } else {
             fail2ban($ipaddress.' FAILED wrong password');
             $msg="HOME Failed login attempt (Wrong password): ";
-            if (isset($subuser)) {
-                $msg.=PHP_EOL."USER=".$subuser;
+            if (isset($_POST['username'])) {
+                $msg.=PHP_EOL."USER=".$_POST['username'];
             }
-            if (isset($subpass)) {
-                $msg.=PHP_EOL."PSWD=".$subpass;
+            if (isset($_POST['password'])) {
+                $msg.=PHP_EOL."PSWD=".$_POST['password'];
             }
 
             $msg.=PHP_EOL."IP=".$ipaddress;
@@ -113,11 +114,11 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
     } else {
         fail2ban($ipaddress.' FAILED unknown user');
         $msg="HOME Failed login attempt (Unknown user): ";
-        if (isset($subuser)) {
-            $msg.="__USER=".$subuser;
+        if (isset($_POST['username'])) {
+            $msg.="__USER=".$_POST['username'];
         }
-        if (isset($subpass)) {
-            $msg.="__PSWD=".$subpass;
+        if (isset($_REQ_POSTEST['password'])) {
+            $msg.="__PSWD=".$_POST['password'];
         }
         $msg.="__IP=".$ipaddress;
         if (isset($_SERVER['REQUEST_URI'])) {
@@ -148,13 +149,12 @@ if (isset($_REQUEST['username'])&&isset($_REQUEST['password'])) {
     }
 }
 if (isset($_COOKIE[$cookie])) {
-    $user=$_COOKIE[$cookie];
-    if (in_array($user, $homes)) {
+    if (in_array($_COOKIE[$cookie], $homes)) {
         $authenticated=true;
         $home=true;
         $Usleep=80000;
     }
-    if ($user=='Tobi') {
+    if ($_COOKIE[$cookie]=='Tobi') {
         $d=fetchdata();
         if ($local==false) {
             die('Enkel op wifi');
@@ -163,8 +163,6 @@ if (isset($_COOKIE[$cookie])) {
             die('Enkel tijdens bezoek');
         }
 
-    } elseif ($user=='Gast'&&$local==false) {
-        die('Alleen te gebruiken op wifi');
     }
 } else {
     echo '

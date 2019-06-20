@@ -89,9 +89,9 @@ if ($home==true) {
         $d=fetchdata();
         if ($_REQUEST['command']=='setpoint') {
         	store($_REQUEST['device'].'_set', $_REQUEST['action']);
-			storemode($_REQUEST['device'].'_set', 2);
+			storemode($_REQUEST['device'].'_set', 1);
 			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
-			$d[$_REQUEST['device'].'_set']['m']=2;
+			$d[$_REQUEST['device'].'_set']['m']=1;
 			include 'secure/_verwarming.php';
         } elseif ($_REQUEST['command']=='heating') {
         	store('heating', $_REQUEST['action']);
@@ -115,6 +115,11 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='dimmer') {
         	storemode($_REQUEST['device'], 0);
         	sl($_REQUEST['device'], $_REQUEST['action']);
+		} elseif ($_REQUEST['command']=='roller') {
+        	sl($_REQUEST['device'], $_REQUEST['action']);
+        	storemode($_REQUEST['device'], 1);
+		} elseif ($_REQUEST['command']=='mode') {
+			storemode($_REQUEST['device'], $_REQUEST['action']);
 		} elseif ($_REQUEST['command']=='fetch') {
 			include 'secure/_fetchdomoticz.php';
 		} elseif ($_REQUEST['command']=='media') {
@@ -175,4 +180,4 @@ if ($home==true) {
                 }
         }
     }
-}
+} else echo json_encode('NOTAUTHENTICATED');

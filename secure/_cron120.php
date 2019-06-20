@@ -29,25 +29,10 @@ if ($d['auto']['s']=='On') {
         $pomppauze=86400*28;
     }
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
-        sw(
-            'regenpomp',
-            'Off',
-            false,
-            'Regenpomp off, was on for '.
-            convertToHours(past('regenpomp')).' rainpast='.$rainpast
-        );
-    } elseif ($d['regenpomp']['s']=='Off'
-        &&past('regenpomp')>$pomppauze
-    ) {
-        sw(
-            'regenpomp',
-            'On',
-            false,
-            'Regenpomp aan, was uit voor '.
-            convertToHours(past('regenpomp')).' rainpast='.$rainpast
-        );
-        telegram('Regenpomp aan, was uit voor '.
-            convertToHours(past('regenpomp')).'__rainpast='.$rainpast);
+        sw('regenpomp', 'Off');
+    } elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$pomppauze) {
+        sw('regenpomp', 'On');
+        telegram('Regenpomp aan, rainpast='.$rainpast);
     }
     if (TIME>=strtotime('21:30')
         &&$d['zon']['s']==0
@@ -101,12 +86,12 @@ if ($d['auto']['s']=='On') {
     } else {
         $maxluifel=0;
     }
-    if ($d['luifel']['m']==0) {
+    if ($d['luifel']['m']==1) {
         if (past('luifel')>3600&&$maxluifel>50) {
-            storemode('luifel', 1);
+            storemode('luifel', 0);
             $d['luifel']['m']=1;
         } elseif (past('luifel')>28800) {
-            storemode('luifel', 1);
+            storemode('luifel', 0);
             $d['luifel']['m']=1;
         }
     }
