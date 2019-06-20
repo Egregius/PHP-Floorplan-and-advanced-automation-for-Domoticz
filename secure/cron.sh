@@ -66,14 +66,14 @@ else
 	fi
 fi
 if [ $(($MINUTE%5)) -eq 0 ] ; then
-	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
-	PREV=$(cat "/temp/timestampappcache.txt")
-	echo $LAST>"/temp/timestampappcache.txt"
-	if [ "$LAST" != "$PREV" ]
-	then
-		awk -v timestamp=$(date +%s) 'NR == 2 { $2 = timestamp } 1' /var/www/html/floorplan.appcache > /temp/floorplan.appcache
-		mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
-	fi
+#	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
+#	PREV=$(cat "/temp/timestampappcache.txt")
+#	echo $LAST>"/temp/timestampappcache.txt"
+#	if [ "$LAST" != "$PREV" ]
+#	then
+#		awk -v timestamp=$(date +%s) 'NR == 2 { $2 = timestamp } 1' /var/www/html/floorplan.appcache > /temp/floorplan.appcache
+#		mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
+#	fi
 	
 	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampgithub.txt")
