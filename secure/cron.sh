@@ -65,7 +65,7 @@ else
 		fi
 	fi
 fi
-#if [ $(($MINUTE%5)) -eq 10 ] ; then
+if [ $(($MINUTE%5)) -eq 0 ] ; then
 	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"
@@ -85,4 +85,4 @@ fi
 		/usr/bin/nice -n20 git commit -am "Update"
 		/usr/bin/nice -n20 git push origin master
 	fi
-#fi
+fi
