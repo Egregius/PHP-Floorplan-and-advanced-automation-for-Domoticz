@@ -1142,10 +1142,11 @@ function human_kb(fileSizeInBytes) {
     return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 };
 
+
 function initview(){
 	view=localStorage.getItem('view');
 	console.log('view = '+view);
-	window[view]();
+	window["floorplan"]();
 }
 
 function setpoint(device){
