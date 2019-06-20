@@ -187,9 +187,9 @@ if ($home==true) {
 }
 $msg='';
 foreach($_REQUEST as $k=>$v) {
-	$msg.=' '.$k.'='.$v;
+	$msg.='	'.$k.'='.$v;
 	if (isset($diff)) {
-		$msg.=' '.$diff;
+		$msg.='	'.$diff;
 	}
 }
-lgajax($ipaddress.' '.$udevice.' '.$user.$msg);
+lgajax($ipaddress.'	'.$udevice.'	'.$user.$msg);

@@ -21,7 +21,7 @@ if ($home) {
 	<body class="floorplan">
 	    <div class="fix" id="clock">
 	    	<a href=\'javascript:location.reload(true);\' id="time">
-	    		LOADING
+	    		Loading...
 	    		<div class="fix" style="top:0px;left:-266px;width:480px;height:820px;" onclick="javascript:location.reload(true)">
 				</div>
 			</a>
