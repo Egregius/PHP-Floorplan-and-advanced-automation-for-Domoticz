@@ -22,8 +22,13 @@ if ($home) {
 	    <div class="fix" id="clock">
 	    	<a href=\'javascript:location.reload(true);\' id="time">
 	    		Loading...
-	    		<div class="fix" style="top:0px;left:-276px;width:480px;height:820px;" onclick="javascript:location.reload(true)">
+	    		<div class="fix z" style="top:0px;left:-285px;width:480px;height:820px;backgound-color:#F00;" onclick="javascript:location.reload(true)">
 	    			<br>
+		    		<br>
+		    		<br>
+		    		<br>
+		    		<br>
+		    		<br>
 		    		<br>
 		    		<br>
 		    		Push to refresh...<br>
