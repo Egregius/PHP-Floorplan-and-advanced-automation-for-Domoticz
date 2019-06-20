@@ -18,7 +18,10 @@ function ajax(Update){
         defer: true,
         success: function(d){
         	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
-        	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
+        	if(d=='NOTAUTHENTICATED'){
+        		document.getElementById('placeholder').insertAdjacentHTML('beforeend', 'NOT AUTHENTICATED');
+        		navigator_Go('index.php');
+        	}
             for (device in d){
                 if(d.hasOwnProperty(device)){
                     value=d[device]['s'];

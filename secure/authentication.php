@@ -233,7 +233,7 @@ if (isset($_COOKIE[$cookie])) {
                     </tr>
                 </table>
             </form>
-            <button class="btn">Reload</button>
+            <button class="btn" onclick="javascript:navigator_Go(\'index.php\');">Reload</button>
 		</div>
 	</body>
 </html>';
