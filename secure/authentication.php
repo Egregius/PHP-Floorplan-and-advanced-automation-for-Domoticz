@@ -109,7 +109,13 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
 		<title>Inloggen</title>
     </head>
 	<body>
-		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">Wrong password!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!</div>');
+		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">
+			Wrong password!<br>
+			Try again in 10 minutes.<br>
+			After second fail you are blocked for a week!
+		</div>
+	</body>
+</html>');
         }
     } else {
         fail2ban($ipaddress.' FAILED unknown user');
@@ -145,7 +151,13 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
 		<title>Inloggen</title>
     </head>
 	<body>
-		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">Unknown user!<br>Try again in 10 minutes.<br>After second fail you are blocked for a week!</div>');
+		<div style="position:fixed;top:10px;left:10px;" onclick="javascript:navigator_Go(\'floorplan.php\')">
+			Unknown user!<br>
+			Try again in 10 minutes.<br>
+			After second fail you are blocked for a week!
+		</div>
+	</body>
+</html>');
     }
 }
 if (isset($_COOKIE[$cookie])) {
