@@ -18,8 +18,9 @@ function ajax(Update){
         defer: true,
         success: function(d){
         	document.getElementById('placeholder').insertAdjacentHTML('beforeend', '•');
+        	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
         	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
-            for (device in d){
+            /*for (device in d){
                 if(d.hasOwnProperty(device)){
                     value=d[device]['s'];
                     mode=d[device]['m'];
@@ -27,7 +28,7 @@ function ajax(Update){
                     icon=d[device]['ic'];
                     time=d[device]['t'];
                     if(device=="t"){
-                    	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
+                    	
                         if($LastUpdateTime>100&&$more==false){
                         	if($LastUpdateTime<=$currentTime-900){$LastUpdateTime=parseInt(0);$more=true;console.log("LastUpdateTime set to 0");}
                         	else if($LastUpdateTime<=$currentTime-600){$LastUpdateTime=parseInt($currentTime-6000);$more=true;console.log("LastUpdateTime set to 6000");}
@@ -670,14 +671,14 @@ function ajax(Update){
                         //console.log(type+" -> "+device+" -> "+value+" -> "+time+" -> "+mode);
                     }
                 }
-            }
-            try{
+            }*/
+            //try{
                 date=new Date($currentTime*1000);
                 hours=date.getHours();
                 minutes="0"+date.getMinutes();
                 seconds="0"+date.getSeconds();
                 $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-            }catch{}
+            //}catch{}
             try{
                 tijd=localStorage.getItem("tijd_water");
                 elem=document.getElementById("tdwater");
