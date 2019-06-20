@@ -864,10 +864,9 @@ function createheader($page='')
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
     if ($page!='') {
         echo '
-    <script type=\'text/javascript\'>
-        function navigator_Go(url){window.location.assign(url);}
-        $(document).ready(function(){initview();});
-    </script>';
+		<script type=\'text/javascript\'>
+			$(document).ready(function(){initview();});
+		</script>';
     }
     echo '
 	</head>';
