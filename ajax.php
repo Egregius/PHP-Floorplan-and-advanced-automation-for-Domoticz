@@ -19,7 +19,6 @@ $nolog=false;
 if ($home==true) {
     if (isset($_REQUEST['t'])) {
         $t=time();
-        $d=array();
         $d['t']=$t;
         $diff=$t-$_REQUEST['t'];
         $t=$_REQUEST['t'];
@@ -189,5 +188,8 @@ if ($home==true) {
 $msg='';
 foreach($_REQUEST as $k=>$v) {
 	$msg.=' '.$k.'='.$v;
+	if (isset($diff)) {
+		$msg.=' '.$diff;
+	}
 }
 lgajax($ipaddress.' '.$udevice.' '.$user.$msg);
