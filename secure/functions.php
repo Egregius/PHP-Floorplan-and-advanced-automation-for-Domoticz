@@ -474,7 +474,7 @@ function koekje($user,$expirytime)
 function telegram($msg,$silent=true,$to=1)
 {
     shell_exec('./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-    lg('Telegram sent: '.$msg);
+    lg('Telegram sent: '.$msg.'<br>./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 }
 function lg($msg)
 {
