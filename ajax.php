@@ -182,7 +182,7 @@ if ($home==true) {
     }
 } else echo json_encode('NOTAUTHENTICATED');
 if (count($_REQUEST)>1) {
-	lg('ajax '.$ipaddress.' '.$udevice.' '.$user.' '.print_r($_REQUEST, true));
+	lgajax('ajax '.$ipaddress.' '.$udevice.' '.$user.' '.print_r($_REQUEST, true));
 } else {
-	lg('ajax '.$ipaddress.' '.$udevice.' '.$user.' t='.$t);
+	lgajax('ajax '.$ipaddress.' '.$udevice.' '.$user.' t='.$t);
 }

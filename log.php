@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -14,6 +14,7 @@ require 'secure/authentication.php';
 $tail=new PHPTail(
     array(
     "Domoticz"=>"/var/log/domoticz.log",
+    "Ajax"=>"/temp/ajax.log",
     "www error"=>"/var/log/apache2/phperror.log",
     "Fail2Ban"=>"/var/log/fail2ban.log",
     )
