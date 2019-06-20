@@ -20,7 +20,7 @@ function ajax(Update){
         	document.getElementById('placeholder').insertAdjacentHTML('beforeend', '•');
         	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
         	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
-            /*for (device in d){
+            for (device in d){
                 if(d.hasOwnProperty(device)){
                     value=d[device]['s'];
                     mode=d[device]['m'];
@@ -671,14 +671,14 @@ function ajax(Update){
                         //console.log(type+" -> "+device+" -> "+value+" -> "+time+" -> "+mode);
                     }
                 }
-            }*/
-            //try{
+            }
+            try{
                 date=new Date($currentTime*1000);
                 hours=date.getHours();
                 minutes="0"+date.getMinutes();
                 seconds="0"+date.getSeconds();
                 $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-            //}catch{}
+            }catch{}
             try{
                 tijd=localStorage.getItem("tijd_water");
                 elem=document.getElementById("tdwater");
@@ -1146,7 +1146,9 @@ function human_kb(fileSizeInBytes) {
 function initview(){
 	view=localStorage.getItem('view');
 	console.log('view = '+view);
-	window["floorplan"]();
+	if(view="floorplan")window["floorplan"]();
+	else if(view="floorplanmedia")window["floorplanmedia"]();
+	else if(view="floorplanheating")window["floorplanheating"]();
 }
 
 function setpoint(device){
