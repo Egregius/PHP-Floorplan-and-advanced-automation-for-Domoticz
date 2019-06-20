@@ -67,6 +67,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
             lg(print_r($_SERVER, true));
             koekje($_POST['username'], TIME+3153600000);
             telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
+            sleep(2);
             if (!empty($_SESSION['referer'])) {
                 header("Location:/".$_SESSION['referer']);
                 die("Redirecting to:/".$_SESSION['referer']);
