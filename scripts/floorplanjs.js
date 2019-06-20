@@ -16,7 +16,6 @@ function ajax(Update){
         async: true,
         defer: true,
         success: function(d){
-        	document.getElementById('placeholder').insertAdjacentHTML('beforeend', d);
         	if(d=='NOTAUTHENTICATED')navigator_Go('index.php');
             for (device in d){
                 if(d.hasOwnProperty(device)){

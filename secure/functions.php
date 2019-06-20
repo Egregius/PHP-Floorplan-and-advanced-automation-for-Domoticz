@@ -473,8 +473,13 @@ function koekje($user,$expirytime)
 }
 function telegram($msg,$silent=true,$to=1)
 {
-    shell_exec('./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-    lg('Telegram sent: '.$msg.'<br>./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
+	if ($silent==true) {
+		$silent='true';
+	} else {
+		$silent='false';
+	}
+    shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
+    lg('Telegram sent: '.$msg.PHP_EOL.'<br>./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 }
 function lg($msg)
 {

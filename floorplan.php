@@ -20,9 +20,9 @@ if ($home) {
     echo '
 	<body class="floorplan">
 	    <div class="fix" id="clock">
-	    	<a href=\'javascript:navigator_Go("floorplan.php");\' id="time">
+	    	<a href=\'javascript:location.reload(true);\' id="time">
 	    		LOADING
-	    		<div class="fix" style="top:0px;left:-266px;width:480px;height:820px;" onclick="javascript:navigator_Go(\'floorplan.php\')">
+	    		<div class="fix" style="top:0px;left:-266px;width:480px;height:820px;" onclick="javascript:location.reload(true)">
 				</div>
 			</a>
 		</div>
