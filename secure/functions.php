@@ -833,7 +833,8 @@ function createheader($page='')
 <html>';
     } else {
         echo '
-<html manifest="floorplan.appcache">';
+<html>';
+//manifest="floorplan.appcache"
     }
     echo '
     <head>

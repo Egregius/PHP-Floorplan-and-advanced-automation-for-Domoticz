@@ -9,6 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+$authenticated=false;
+$home=false;
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     die('No user agent specified');
 } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) {
