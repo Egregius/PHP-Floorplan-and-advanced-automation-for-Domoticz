@@ -179,6 +179,20 @@ if ($home==true) {
                 } elseif ($_REQUEST['action']=='Off') {
                     bosekey("POWER", 0, $_REQUEST['boseip']);
                     sw('bose'.$_REQUEST['boseip'], 'Off');
+                    if ($_REQUEST['boseip']==101) {
+                    	if ($d['bose102']['s']=='On') {
+                    		sw('bose102', 'Off');
+                    	}
+                    	if ($d['bose103']['s']=='On') {
+                    		sw('bose103', 'Off');
+                    	}
+                    	if ($d['bose104']['s']=='On') {
+                    		sw('bose104', 'Off');
+                    	}
+                    	if ($d['bose105']['s']=='On') {
+                    		sw('bose105', 'Off');
+                    	}
+                    }
                 }
         }
     }
