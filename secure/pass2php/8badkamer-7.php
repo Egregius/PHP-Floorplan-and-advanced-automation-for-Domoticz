@@ -13,7 +13,7 @@ if ($status=='On'&&past('8badkamer-7')>5) {
     if ($d['badkamervuur1']['s']=='On') {
         store('badkamer_set', 10);
         $d['badkamer_set']['s']=10;
-    } else {
+    } elseif ($d['heating']['s']!=1) {
         store('badkamer_set', 22.5);
         $d['badkamer_set']['s']=22.5;
         $d['deurbadkamer']['s']='Closed';
