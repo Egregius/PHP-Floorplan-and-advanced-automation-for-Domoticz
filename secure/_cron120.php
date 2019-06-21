@@ -19,15 +19,11 @@ if ($d['auto']['s']=='On') {
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
     }
-    if ($rainpast>64000) {
-        $pomppauze=43200;
-    } elseif ($rainpast>32000) {
-        $pomppauze=86400;
-    } elseif ($rainpast>16000) {
-        $pomppauze=86400*2;
-    } else {
-        $pomppauze=86400*28;
-    }
+    if ($rainpast>64000) $pomppauze=43200;
+    elseif ($rainpast>32000) $pomppauze=86400;
+    elseif ($rainpast>16000) $pomppauze=86400*2;
+    else $pomppauze=86400*28;
+
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
         sw('regenpomp', 'Off');
     } elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$pomppauze) {
@@ -56,33 +52,19 @@ if ($d['auto']['s']=='On') {
         $windhist=round($x/4, 2);
     }
     if ($d['heating']['s']==0) { //Neutral
-        if ($d['wind']['s']>=30) {
-            $maxluifel=0;
-        } elseif ($d['wind']['s']>=25) {
-            $maxluifel=25;
-        } elseif ($d['wind']['s']>=20) {
-            $maxluifel=30;
-        } elseif ($d['wind']['s']>=15) {
-            $maxluifel=35;
-        } elseif ($d['wind']['s']>=10) {
-            $maxluifel=40;
-        } else {
-            $maxluifel=40;
-        }
+        if ($d['wind']['s']>=30) $maxluifel=0;
+        elseif ($d['wind']['s']>=25) $maxluifel=25;
+        elseif ($d['wind']['s']>=20) $maxluifel=30;
+        elseif ($d['wind']['s']>=15) $maxluifel=35;
+        elseif ($d['wind']['s']>=10) $maxluifel=40;
+        else $maxluifel=40;
     } elseif ($d['heating']['s']==1) { //Cooling
-        if ($d['wind']['s']>=30) {
-            $maxluifel=0;
-        } elseif ($d['wind']['s']>=25) {
-            $maxluifel=28;
-        } elseif ($d['wind']['s']>=20) {
-            $maxluifel=36;
-        } elseif ($d['wind']['s']>=15) {
-            $maxluifel=44;
-        } elseif ($d['wind']['s']>=10) {
-            $maxluifel=52;
-        } else {
-            $maxluifel=60;
-        }
+        if ($d['wind']['s']>=30) $maxluifel=0;
+        elseif ($d['wind']['s']>=25) $maxluifel=28;
+        elseif ($d['wind']['s']>=20) $maxluifel=36;
+        elseif ($d['wind']['s']>=15) $maxluifel=44;
+        elseif ($d['wind']['s']>=10) $maxluifel=52;
+        else $maxluifel=60;
     } else {
         $maxluifel=0;
     }
