@@ -1043,12 +1043,13 @@ function floorplanbose(){
 function floorplanothers(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
+    localStorage.setItem('view', 'floorplanothers');
     ajax(0);
     myAjax=setInterval(ajax, 750);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="initview();"><img src="/images/close.png" width="72px" height="72px"/></div>';
+        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px"/></div>';
         items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
         html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
@@ -1151,6 +1152,8 @@ function initview(){
 	if(view=="floorplan")window["floorplan"]();
 	else if(view=="floorplanmedia")window["floorplanmedia"]();
 	else if(view=="floorplanheating")window["floorplanheating"]();
+	else if(view=="floorplanothers")window["floorplanothers"]();
+	else window["floorplan"]();
 }
 
 function setpoint(device){
