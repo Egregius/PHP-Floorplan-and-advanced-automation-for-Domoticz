@@ -60,16 +60,17 @@ if ($d['auto']['s']=='On') {
         else $maxluifel=40;
     } elseif ($d['heating']['s']==1) { //Cooling
         if ($d['wind']['s']>=30) $maxluifel=0;
-        elseif ($d['wind']['s']>=25) $maxluifel=28;
-        elseif ($d['wind']['s']>=20) $maxluifel=36;
-        elseif ($d['wind']['s']>=15) $maxluifel=44;
-        elseif ($d['wind']['s']>=10) $maxluifel=52;
-        else $maxluifel=60;
+        elseif ($d['wind']['s']>=25) $maxluifel=30;
+        elseif ($d['wind']['s']>=20) $maxluifel=40;
+        elseif ($d['wind']['s']>=15) $maxluifel=50;
+        elseif ($d['wind']['s']>=10) $maxluifel=60;
+        else $maxluifel=70;
     } else {
         $maxluifel=0;
     }
+    echo $maxluifel;
     if ($d['luifel']['m']==1) {
-        if (past('luifel')>3600&&$maxluifel>50) {
+        if (past('luifel')>3600&&$maxluifel>30) {
             storemode('luifel', 0);
             $d['luifel']['m']=1;
         } elseif (past('luifel')>28800) {
@@ -84,7 +85,7 @@ if ($d['auto']['s']=='On') {
         &&$buien<5
         &&$d['zon']['s']>1500
         &&$d['luifel']['m']==0
-        &&past('luifel')>600
+        &&past('luifel')>6
         &&$d['wind']['s']<$windhist
         &&TIME>strtotime("10:00")
     ) {
@@ -98,7 +99,7 @@ if ($d['auto']['s']=='On') {
         &&$d['buiten_temp']['s']>17
         &&$d['zon']['s']>1500
         &&$d['luifel']['m']==0
-        &&past('luifel')>600
+        &&past('luifel')>6
         &&$d['wind']['s']<$windhist
         &&TIME>strtotime("10:00")
     ) {

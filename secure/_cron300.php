@@ -27,7 +27,7 @@ if ($d['zwembadfilter']['s']=='On') {
 	}
 }else{
 	if (
-			(past('zwembadfilter')>10700&&TIME>strtotime("13:00")&&TIME<strtotime("16:00"))
+			(past('zwembadfilter')>10700&&TIME>strtotime("12:59")&&TIME<strtotime("15:59"))
 			||
 			(past('zwembadfilter')>10700&&$d['buiten_temp']['s']>27)
 	   ) {
