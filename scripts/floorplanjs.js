@@ -357,6 +357,8 @@ function ajax(Update){
                         localStorage.setItem(device, value);
                         localStorage.setItem(device+'_mode', mode);
                     }else if(device=="raamhall"){
+                        localStorage.setItem(device, value);
+                        localStorage.setItem("tijd_"+device, time);
                         try{
                         	if(value=='Closed') {
                         		zoldertrap=localStorage.getItem('zoldertrap');
@@ -367,7 +369,22 @@ function ajax(Update){
 							} else html='';
                             document.getElementById('zoldertrap').innerHTML=html;
                         }catch{}
-                        localStorage.setItem(device, value);
+                        try{
+                            element=document.getElementById(device);
+                            if(value=="Open"){
+                                element.classList.add("red");
+                            }else{
+                                element.classList.remove("red");
+                            }
+                            if(time>($currentTime-82800)){
+                                date=new Date(time*1000);
+                                hours=date.getHours();
+                                minutes="0"+date.getMinutes();
+                                document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
+                            }else{
+                                document.getElementById("t"+device).innerHTML="";
+                            }
+                        }catch{}
                     }else if(device=="zoldertrap"){
                         try{
                         	raamhall=localStorage.getItem('raamhall');
