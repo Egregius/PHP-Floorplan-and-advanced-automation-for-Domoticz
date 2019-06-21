@@ -85,7 +85,7 @@ if ($d['auto']['s']=='On') {
             $d['luifel']['m']=1;
         }
     }
-    if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
+    if (		past('luifel')>9&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
         sl('luifel', $luifel);
     } elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
         sl('luifel', $luifel);

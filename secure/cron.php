@@ -50,6 +50,9 @@ if (isset($_REQUEST['cron300'])) {
 if (isset($_REQUEST['cron3600'])) {
     include '_cron3600.php';
 }
+if (isset($_REQUEST['weather'])) {
+    include '_weather.php';
+}
 if (isset($_REQUEST['test'])) {
     include 'gcal/gcal.php';
 }
