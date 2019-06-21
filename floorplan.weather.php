@@ -22,7 +22,7 @@ if ($home) {
     unset($ds->minutely);
 	$ow=json_decode(file_get_contents('/temp/ow.json'));
     //echo '<pre>';print_r($ds);echo '</pre>';
-    echo '<pre>';print_r($ow);echo '</pre>';
+    //echo '<pre>';print_r($ow);echo '</pre>';
 	foreach ($ds->hourly->data as $i) {
 	    $hregen[$i->time]['time']=strftime("%H:%m", $i->time);
 	    $htemp[$i->time]['time']=strftime("%H:%m", $i->time);
@@ -81,8 +81,14 @@ if ($home) {
     	            <tr>
     	                <td>Text:</td>
     	                <td>'.$ds->currently->summary.'</td>
-    	                <td></td>
-    	                <td></td>
+    	                <td>'.$ow->weather[0]->description.'</td>
+    	                <td><img src="/images/'.$d['icon']['s'].'.png"" alt="icon" id="icon"></td>
+    	            </tr>
+    	            <tr>
+    	                <td>Wind:</td>
+    	                <td>'.number_format($ds->currently->windSpeed, 1, ',', '').'</td>
+    	                <td>'.number_format($ow->wind->speed, 1, ',', '').'</td>
+    	                <td><img src="/images/'.$d['icon']['s'].'.png"" alt="icon" id="icon"></td>
     	            </tr>
     	        </tbody>
 	        </table>
