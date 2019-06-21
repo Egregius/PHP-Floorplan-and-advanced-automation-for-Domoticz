@@ -16,11 +16,13 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home) {
+	$d=fetchdata();
     createheader();
     $ds=json_decode(file_get_contents('/temp/ds.json'));
-    //echo '<pre>';print_r($ds);echo '</pre>';
     unset($ds->minutely);
 	$ow=json_decode(file_get_contents('/temp/ow.json'));
+    //echo '<pre>';print_r($ds);echo '</pre>';
+    echo '<pre>';print_r($ow);echo '</pre>';
 	foreach ($ds->hourly->data as $i) {
 	    $hregen[$i->time]['time']=strftime("%H:%m", $i->time);
 	    $htemp[$i->time]['time']=strftime("%H:%m", $i->time);
@@ -65,15 +67,22 @@ if ($home) {
     	            <tr>
     	                <th></th>
     	                <th>Darksky</th>
-    	                <th>Openweathermap</th>
+    	                <th>OWM</th>
     	                <th>Domoticz</th>
     	            </tr>
     	        </thead>
     	        <tbody>
     	            <tr>
     	                <td>Temp:</td>
-    	                <td>'.$ds->currently->summary.'</td>
     	                <td>'.number_format($ds->currently->temperature, 1, ',', '').'&#8451;</td>
+    	                <td>'.number_format($ow->main->temp, 1, ',', '').'&#8451;</td>
+    	                <td>'.number_format($d['buiten_temp']['s'], 1, ',', '').'&#8451;</td>
+    	            </tr>
+    	            <tr>
+    	                <td>Text:</td>
+    	                <td>'.$ds->currently->summary.'</td>
+    	                <td></td>
+    	                <td></td>
     	            </tr>
     	        </tbody>
 	        </table>

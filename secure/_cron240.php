@@ -44,7 +44,7 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    7200,
+                    10800,
                     false,
                     2,
                     false
@@ -69,7 +69,7 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    72,
+                    10800,
                     false,
                     2,
                     false
@@ -91,7 +91,7 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    72,
+                    10800,
                     false,
                     2,
                     false
