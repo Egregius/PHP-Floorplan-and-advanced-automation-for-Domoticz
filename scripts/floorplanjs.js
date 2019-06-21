@@ -310,7 +310,7 @@ function ajax(Update){
                             if(value==0)html="";
                             else if(value>0&&value<11)html='<img src="images/plug_On.png" width="28px" height="auto" alt="">';
                             else html='<img src="images/plug_Red.png" width="28px" height="auto" alt="">';
-                            document.getElementById("GroheRed").innerHTML=html;
+                            document.getElementById("Usage_grohered").innerHTML=html;
                         }catch{}
                     }else if(device=="kWh_bureeltobi"){
                         try{
@@ -944,7 +944,7 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','GroheRed','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+        items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
@@ -969,7 +969,7 @@ function floorplanheating(){
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
-        items=['badkamervuur1','badkamervuur2','heater1','heater2','heater3','heater4'];
+        items=['badkamervuur1','badkamervuur2','heater1','heater2','heater3','heater4','GroheRed'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
@@ -1049,7 +1049,7 @@ function floorplanothers(){
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="initview();"><img src="/images/close.png" width="72px" height="72px"/></div>';
-        items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','GroheRed','dampkap'];
+        items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
         html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
         gcal=localStorage.getItem('gcal');
