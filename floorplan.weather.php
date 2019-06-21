@@ -13,12 +13,12 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/functionsfloorplan.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home) {
     createheader();
     $ds=json_decode(file_get_contents('/temp/ds.json'));
+    //echo '<pre>';print_r($ds);echo '</pre>';
     unset($ds->minutely);
 	$ow=json_decode(file_get_contents('/temp/ow.json'));
 	foreach ($ds->hourly->data as $i) {
@@ -64,14 +64,14 @@ if ($home) {
 	            <thead>
     	            <tr>
     	                <th></th>
-    	                <th></th>
-    	                <th>Temp</th>
-    	                <th></th>
+    	                <th>Darksky</th>
+    	                <th>Openweathermap</th>
+    	                <th>Domoticz</th>
     	            </tr>
     	        </thead>
     	        <tbody>
     	            <tr>
-    	                <td>Nu:</td>
+    	                <td>Temp:</td>
     	                <td>'.$ds->currently->summary.'</td>
     	                <td>'.number_format($ds->currently->temperature, 1, ',', '').'&#8451;</td>
     	            </tr>

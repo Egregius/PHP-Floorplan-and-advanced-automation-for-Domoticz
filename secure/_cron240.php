@@ -74,12 +74,12 @@ if ($d['auto']['s']=='On') {
                     2,
                     false
                 );
-            } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']
-                ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']
-                ||$d['buiten_temp']['s']<=$d['alex_temp']['s'])
-                &&($d['kamer_temp']['s']>19
-                ||$d['tobi_temp']['s']>19
-                ||$d['alex_temp']['s']>19)
+            } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']-1
+                ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']-1
+                ||$d['buiten_temp']['s']<=$d['alex_temp']['s']-1)
+                &&($d['kamer_temp']['s']>20
+                ||$d['tobi_temp']['s']>20
+                ||$d['alex_temp']['s']>20)
                 &&($d['raamkamer']['s']=='Closed'
                 ||$d['raamtobi']['s']=='Closed'
                 ||$d['raamalex']['s']=='Closed')
