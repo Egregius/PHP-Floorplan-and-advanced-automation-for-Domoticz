@@ -19,6 +19,7 @@ if ($d['auto']['s']=='On') {
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
     }
+    
     if ($rainpast>128000) $pomppauze=43200;
     elseif ($rainpast>64000) $pomppauze=86400;
     elseif ($rainpast>32000) $pomppauze=86400*2;
@@ -31,19 +32,22 @@ if ($d['auto']['s']=='On') {
         telegram('Regenpomp aan, rainpast='.$rainpast);
     }
     if ($d['achterdeur']['s']=='Closed') {
+    	$stmt=$db->query("SELECT MAX(`buiten`) AS max FROM temp;");
+		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+			$watertime=$row['max']*15;
+		}
 		if (TIME>=strtotime('21:30')
 			&&$d['zon']['s']==0
-			&&$d['achterdeur']['s']=='Closed'
 			&&past('zon')>1800
 			&&past('water')>72000
 		) {
 			$msg="Regen check:
 				__Laatste 48u:$rainpast
 				__Volgende 48u: $maxrain
-				__Automatisch tuin water geven gestart.";
+				__Automatisch tuin water geven gestart voor $watertime sec.";
 			if ($rainpast<1000&&$maxrain<1) {
 				sw('water', 'On');
-				storemode('water', 300);
+				storemode('water', $watertime);
 				telegram($msg, 2);
 			}
 		}
@@ -91,7 +95,7 @@ if ($d['auto']['s']=='On') {
 				$d['luifel']['m']=1;
 			}
 		}
-		if (		past('luifel')>9&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
+		if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
 			sl('luifel', $luifel);
 		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
 			sl('luifel', $luifel);
