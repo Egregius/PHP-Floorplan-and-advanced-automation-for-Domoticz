@@ -56,9 +56,9 @@ if ($home) {
     $argswind=array_merge($args, array('height'=>100,'colors'=>array('#A66'),'margins'=>array(0,0,0,50),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}'));
     echo '
 	<body>
-	    <div class="fix" id="clock"><a href=\'javascript:navigator_Go("floorplan.weather.php");\' id="time">Refresh</a></div>
-	    <div class="fix z1" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>
-	    <div>
+	    <div class="fix z" id="clock"><a href=\'javascript:navigator_Go("floorplan.weather.php");\' id="time">Refresh</a></div>
+	    <div class="fix" style="top:5px;left:5px;"><a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>
+	    <div class="fix" style="top:5px;left:100px;">
 	        <br>
 	        <br>
 	        <br>
@@ -92,6 +92,8 @@ if ($home) {
     	            </tr>
     	        </tbody>
 	        </table>
+	    </div>
+	    <div class="fix z1" style="top:140px;left:0px;">
 	        <br>
 	        <br>';
 	echo 'komende 48u:';
