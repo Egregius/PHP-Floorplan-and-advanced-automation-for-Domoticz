@@ -19,9 +19,9 @@ if ($d['auto']['s']=='On') {
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
     }
-    if ($rainpast>64000) $pomppauze=43200;
-    elseif ($rainpast>32000) $pomppauze=86400;
-    elseif ($rainpast>16000) $pomppauze=86400*2;
+    if ($rainpast>128000) $pomppauze=43200;
+    elseif ($rainpast>64000) $pomppauze=86400;
+    elseif ($rainpast>32000) $pomppauze=86400*2;
     else $pomppauze=86400*28;
 
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
@@ -30,71 +30,73 @@ if ($d['auto']['s']=='On') {
         sw('regenpomp', 'On');
         telegram('Regenpomp aan, rainpast='.$rainpast);
     }
-    if (TIME>=strtotime('21:30')
-        &&$d['zon']['s']==0
-        &&$d['achterdeur']['s']=='Closed'
-        &&past('zon')>1800
-        &&past('water')>72000
-    ) {
-        $msg="Regen check:
-            __Laatste 48u:$rainpast
-            __Volgende 48u: $maxrain
-            __Automatisch tuin water geven gestart.";
-        if ($rainpast<1000&&$maxrain<1) {
-            sw('water', 'On');
-            storemode('water', 300);
-            telegram($msg, 2);
-        }
-    }
-    $x=0;
-    foreach ($windhist as $y) {
-        $x=$y+$x;
-        $windhist=round($x/4, 2);
-    }
-    if (	$d['heating']['s']>=2	&&$d['living_temp']['s']>22&&$d['zon']['s']>3000&&TIME>strtotime("10:00")) { //Heating
-        if ($d['wind']['s']>=30) 	 $luifel=0;
-        elseif ($d['wind']['s']>=25) $luifel=25;
-        elseif ($d['wind']['s']>=20) $luifel=30;
-        elseif ($d['wind']['s']>=15) $luifel=35;
-        elseif ($d['wind']['s']>=10) $luifel=40;
-        else $luifel=40;
-    } elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>20&&$d['zon']['s']>2000&&TIME>strtotime("10:00")) { //Neutral
-        if ($d['wind']['s']>=30) 	 $luifel=0;
-        elseif ($d['wind']['s']>=25) $luifel=25;
-        elseif ($d['wind']['s']>=20) $luifel=30;
-        elseif ($d['wind']['s']>=15) $luifel=35;
-        elseif ($d['wind']['s']>=10) $luifel=40;
-        else $luifel=40;
-    } elseif ($d['heating']['s']==1	&&$d['living_temp']['s']>19&&$d['zon']['s']>500&&TIME>strtotime("10:00")) { //Cooling
-        if ($d['wind']['s']>=30) 	 $luifel=0;
-        elseif ($d['wind']['s']>=25) $luifel=30;
-        elseif ($d['wind']['s']>=20) $luifel=40;
-        elseif ($d['wind']['s']>=15) $luifel=50;
-        elseif ($d['wind']['s']>=10) $luifel=60;
-        else $luifel=70;
-    } else {
-        $luifel=0;
-    }
-    if ($luifel>$d['luifel']['s']) $luifel=$d['luifel']['s']+10;
-    elseif ($luifel<$d['luifel']['s']) $luifel=$d['luifel']['s']-10;
-    if ($luifel<0) $luifel=0;
-    elseif ($luifel>100) $luifel=100;
-    
-    echo $luifel;
-    if ($d['luifel']['m']==1) {
-        if (past('luifel')>3600&&$luifel<30) {
-            storemode('luifel', 0);
-            $d['luifel']['m']=1;
-        } elseif (past('luifel')>28800) {
-            storemode('luifel', 0);
-            $d['luifel']['m']=1;
-        }
-    }
-    if (		past('luifel')>9&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
-        sl('luifel', $luifel);
-    } elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
-        sl('luifel', $luifel);
-    }
+    if ($d['achterdeur']['s']=='Closed') {
+		if (TIME>=strtotime('21:30')
+			&&$d['zon']['s']==0
+			&&$d['achterdeur']['s']=='Closed'
+			&&past('zon')>1800
+			&&past('water')>72000
+		) {
+			$msg="Regen check:
+				__Laatste 48u:$rainpast
+				__Volgende 48u: $maxrain
+				__Automatisch tuin water geven gestart.";
+			if ($rainpast<1000&&$maxrain<1) {
+				sw('water', 'On');
+				storemode('water', 300);
+				telegram($msg, 2);
+			}
+		}
+		$x=0;
+		foreach ($windhist as $y) {
+			$x=$y+$x;
+			$windhist=round($x/4, 2);
+		}
+		if (	$d['heating']['s']>=2	&&$d['living_temp']['s']>22&&$d['zon']['s']>3000&&TIME>strtotime("10:00")) { //Heating
+			if ($d['wind']['s']>=30) 	 $luifel=0;
+			elseif ($d['wind']['s']>=25) $luifel=25;
+			elseif ($d['wind']['s']>=20) $luifel=30;
+			elseif ($d['wind']['s']>=15) $luifel=35;
+			elseif ($d['wind']['s']>=10) $luifel=40;
+			else $luifel=40;
+		} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>20&&$d['zon']['s']>2000&&TIME>strtotime("10:00")) { //Neutral
+			if ($d['wind']['s']>=30) 	 $luifel=0;
+			elseif ($d['wind']['s']>=25) $luifel=25;
+			elseif ($d['wind']['s']>=20) $luifel=30;
+			elseif ($d['wind']['s']>=15) $luifel=35;
+			elseif ($d['wind']['s']>=10) $luifel=40;
+			else $luifel=40;
+		} elseif ($d['heating']['s']==1	&&$d['living_temp']['s']>19&&$d['zon']['s']>500&&TIME>strtotime("10:00")) { //Cooling
+			if ($d['wind']['s']>=30) 	 $luifel=0;
+			elseif ($d['wind']['s']>=25) $luifel=30;
+			elseif ($d['wind']['s']>=20) $luifel=40;
+			elseif ($d['wind']['s']>=15) $luifel=50;
+			elseif ($d['wind']['s']>=10) $luifel=60;
+			else $luifel=70;
+		} else {
+			$luifel=0;
+		}
+		if ($luifel>$d['luifel']['s']) $luifel=$d['luifel']['s']+10;
+		elseif ($luifel<$d['luifel']['s']) $luifel=$d['luifel']['s']-10;
+		if ($luifel<0) $luifel=0;
+		elseif ($luifel>100) $luifel=100;
+	
+		echo $luifel;
+		if ($d['luifel']['m']==1) {
+			if (past('luifel')>3600&&$luifel<30) {
+				storemode('luifel', 0);
+				$d['luifel']['m']=1;
+			} elseif (past('luifel')>28800) {
+				storemode('luifel', 0);
+				$d['luifel']['m']=1;
+			}
+		}
+		if (		past('luifel')>9&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
+			sl('luifel', $luifel);
+		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+			sl('luifel', $luifel);
+		}
+	}
 }
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
 foreach ($items as $i) {
