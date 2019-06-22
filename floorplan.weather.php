@@ -93,7 +93,7 @@ if ($home) {
     	        </tbody>
 	        </table>
 	    </div>
-	    <div class="fix z1" style="top:140px;left:0px;">
+	    <div class="fix z1" style="top:180px;left:0px;">
 	        <br>
 	        <br>';
 	echo 'komende 48u:';
