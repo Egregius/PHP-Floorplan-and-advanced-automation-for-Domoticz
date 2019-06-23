@@ -281,7 +281,7 @@ if ($d['auto']['s']=='On') {
             'Ralex'
         );
         foreach ($items as $i) {
-            if ($d[$i]['m']&&past($i)>21600) {
+            if ($d[$i]['m']!=0&&past($i)>21600) {
                 storemode($i, 0);
             }
         }
