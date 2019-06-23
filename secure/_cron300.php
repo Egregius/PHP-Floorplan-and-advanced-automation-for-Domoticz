@@ -18,14 +18,13 @@ if (TIME<=strtotime('11:00')) {
 	}
 }
 if ($d['heating']['s']==1) {//Cooling
-	echo 'cooling<br>';
 	if(TIME>=strtotime('15:00')&&$d['zon']['s']>1000&&$d['Rbureel']['s']<50&&past('Rbureel')>7200) {
 		sl('Rbureel', 50);
 	}
-	if(TIME>=strtotime('10:00')&&$d['zon']['s']>1000&&$d['Rtobi']['s']<80&&past('Rtobi')>7200) {
+	if(TIME>=strtotime('10:00')&&$d['zon']['s']>1000&&$d['Rtobi']['s']<80&&$d['Rtobi']['m']==0&&past('Rtobi')>7200) {
 		sl('Rtobi', 80);
 	}
-	if(TIME>=strtotime('10:00')&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&past('Ralex')>7200) {
+	if(TIME>=strtotime('10:00')&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&$d['Rtobi']['m']==0&&past('Ralex')>7200) {
 		sl('Ralex', 80);
 	}
 }

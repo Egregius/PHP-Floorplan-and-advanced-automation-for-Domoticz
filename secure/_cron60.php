@@ -327,7 +327,7 @@ if ($d['auto']['s']=='On') {
         'Ralex'
     );
     foreach ($items as $i) {
-        if ($d[$i]['m']==1&&past($i)>21600) {
+        if ($d[$i]['m']!=0&&past($i)>21600) {
             storemode($i, 0);
         }
     }
@@ -355,7 +355,9 @@ if ($d['auto']['s']=='On') {
     } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
         $items=array('RkamerL','RkamerR','Rtobi','Ralex');
         foreach ($items as $i) {
-            storemode($i, 0);
+            if ($d[$i]['m']!=0) {
+            	storemode($i, 0);
+            }
         }
     }
     if ($d['lgtv']['s']=='Off') {
