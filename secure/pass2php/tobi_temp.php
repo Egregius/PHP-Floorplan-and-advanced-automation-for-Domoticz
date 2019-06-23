@@ -10,29 +10,30 @@
  * @link     https://egregius.be
  **/
 $n='tobi';
-$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,15) as A");
+$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,30) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
-if ($status>$avg+0.5) {
+echo $avg;
+if ($status>=$avg+0.5) {
 	storeicon($n.'_temp', 'red5');
-} elseif ($status>$avg+0.4) {
+} elseif ($status>=$avg+0.4) {
     storeicon($n.'_temp', 'red4');
-} elseif ($status>$avg+0.3) {
+} elseif ($status>=$avg+0.3) {
     storeicon($n.'_temp', 'red3');
-} elseif ($status>$avg+0.2) {
+} elseif ($status>=$avg+0.2) {
     storeicon($n.'_temp', 'red');
-} elseif ($status>$avg+0.1) {
+} elseif ($status>=$avg+0.1) {
     storeicon($n.'_temp', 'up');
-} elseif ($status<$avg-0.5) {
+} elseif ($status<=$avg-0.5) {
     storeicon($n.'_temp', 'blue5');
-} elseif ($status<$avg-0.4) {
+} elseif ($status<=$avg-0.4) {
     storeicon($n.'_temp', 'blue4');
-} elseif ($status<$avg-0.3) {
+} elseif ($status<=$avg-0.3) {
     storeicon($n.'_temp', 'blue3');
-} elseif ($status<$avg-0.2) {
+} elseif ($status<=$avg-0.2) {
     storeicon($n.'_temp', 'blue');
-} elseif ($status<$avg-0.1) {
+} elseif ($status<=$avg-0.1) {
     storeicon($n.'_temp', 'down');
 } else {
 	storeicon($n.'_temp', '');

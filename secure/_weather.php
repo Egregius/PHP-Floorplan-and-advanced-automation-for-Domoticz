@@ -152,7 +152,7 @@ if ($d['buiten_temp']['s']!=$buiten_temp) {
 	store('buiten_temp', $buiten_temp);
 }
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
-$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,10) as A");
+$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }

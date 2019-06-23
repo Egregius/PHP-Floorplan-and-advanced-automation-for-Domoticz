@@ -330,6 +330,7 @@ function storeicon($name,$icon)
     if ($d[$name]['icon']!=$icon) {
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		lg('storeicon '.$name.' '.$icon);
+		echo 'storeicon '.$name.' '.$icon;
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
