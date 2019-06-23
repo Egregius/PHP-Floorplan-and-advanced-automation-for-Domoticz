@@ -14,7 +14,6 @@ $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` 
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
-echo $avg;
 if ($status>=$avg+0.5) {
 	storeicon($n.'_temp', 'red5');
 } elseif ($status>=$avg+0.4) {
