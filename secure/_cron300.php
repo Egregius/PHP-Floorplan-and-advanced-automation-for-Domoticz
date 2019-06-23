@@ -17,6 +17,9 @@ if (TIME<=strtotime('11:00')) {
 		}
 	}
 }
+if ($d['heating']['s']==1&&TIME>=strtotime('15:00')&&$d['zon']['s']>1000&&$d['Rbureel']['s']<50&&past('Rbureel')>7200) {
+	sl('Rbureel', 50);
+}
 if ($d['zwembadfilter']['s']=='On') {
 	if (past('zwembadfilter')>10700
 		&&TIME>strtotime("16:00")
