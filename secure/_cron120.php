@@ -81,21 +81,21 @@ if ($d['auto']['s']=='On') {
 	} else {
 		$luifel=0;
 	}
-	//if ($luifel>$d['luifel']['s']) $luifel=$d['luifel']['s']+10;
-	//elseif ($luifel<$d['luifel']['s']&&$d['achterdeur']['s']=='Closed') $luifel=$d['luifel']['s']-10;
+	if ($luifel>$d['luifel']['s']+30) $luifel=$d['luifel']['s']+30;
+	elseif ($luifel<$d['luifel']['s']-30&&$d['achterdeur']['s']=='Closed') $luifel=$d['luifel']['s']-30;
 	if ($d['wind']['s']>=40) 	 $luifel=0;
 	if ($d['buien']['s']>=10) 	 $luifel=0;
 	if ($luifel<10) $luifel=0;
 	elseif ($luifel>100) $luifel=100;
 
-	echo $luifel;
-	
-	echo past('luifel');
+
+	echo 'past='.past('luifel').' $d[\'luifel\'][\'s\']='.$d['luifel']['s'].' $luifel='.$luifel.' $d[\'luifel\'][\'m\']='.$d['luifel']['m'].' wind='.$d['wind']['s'].' windhist='.$windhist;
 	if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
 		sl('luifel', $luifel);
 	} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
 		sl('luifel', $luifel);
 	}
+	
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30) {
 			storemode('luifel', 0);
