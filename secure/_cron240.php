@@ -81,8 +81,8 @@ if ($d['auto']['s']=='On') {
                 ||$d['tobi_temp']['s']>20
                 ||$d['alex_temp']['s']>20)
                 &&($d['raamkamer']['s']=='Closed'
-                ||$d['raamtobi']['s']=='Closed'
-                ||$d['raamalex']['s']=='Closed')
+                ||($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']<100)
+                ||($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<100))
             ) {
                 alert(
                     'ramenboven',

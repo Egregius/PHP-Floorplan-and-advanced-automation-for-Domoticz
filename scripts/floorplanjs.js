@@ -894,7 +894,7 @@ function ajaxbose($ip){
                     html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy Music</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Love ballads</button>';
                     html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">A mix</button>';
-                    html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\')">Power Off</button><br><br>';
+                    html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');initview();">Power Off</button><br><br>';
                     if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
                 }else{
                     document.getElementById("source").innerHTML="";
