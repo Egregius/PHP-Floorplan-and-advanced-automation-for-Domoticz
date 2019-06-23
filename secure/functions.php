@@ -328,7 +328,7 @@ function storeicon($name,$icon)
     global $db, $d, $username;
     $time=TIME;
     if ($d[$name]['icon']!=$icon) {
-		$db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
+		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		lg('storeicon '.$name.' '.$icon);
 	}
 }
