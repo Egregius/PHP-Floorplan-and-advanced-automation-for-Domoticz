@@ -182,7 +182,7 @@ if ($d['auto']['s']=='On') {
         $items=array(
             'hall',
             'bureel',
-            /*'denon',*/
+            'denon',
             'kristal',
             'garage',
             'terras',
@@ -229,7 +229,7 @@ if ($d['auto']['s']=='On') {
         }
         $items=array(
             'garage',
-            /*'denon',*/
+            'denon',
             'bureel',
             'kristal',
             'terras',
@@ -270,24 +270,8 @@ if ($d['auto']['s']=='On') {
                 }
             }
         }
-        $items=array(
-            'Rliving',
-            'Rbureel',
-            'RkeukenL',
-            'RkeukenR',
-            'RkamerL',
-            'RkamerR',
-            'Rtobi',
-            'Ralex'
-        );
-        foreach ($items as $i) {
-            if ($d[$i]['m']!=0&&past($i)>21600) {
-                storemode($i, 0);
-            }
-        }
+    }
 
-
-        }
     /* -------------------------------------------- ALTIJD BIJ AUT0----------------------------*/
     if (past('diepvries_temp')>7200) {
         alert(
@@ -326,29 +310,7 @@ if ($d['auto']['s']=='On') {
         'Rtobi',
         'Ralex'
     );
-    foreach ($items as $i) {
-        if ($d[$i]['m']!=0&&past($i)>21600) {
-            storemode($i, 0);
-        }
-    }
-        if ($d['auto']['s']!='On') {
-        if (past('auto')>10795) {
-            sw('auto', 'On');
-        }
-    }
-    if (past('Weg')>14400
-        && $d['Weg']['s']==0
-        && $d['Weg']['m']<TIME-14400
-    ) {
-        store('Weg', 1);
-        telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
-    } elseif (past('Weg')>36000
-        && $d['Weg']['s']==1
-        && $d['Weg']['m']<TIME-36000
-    ) {
-        store('Weg', 2);
-        telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
-    }
+    
     if (TIME<=strtotime('0:02')) {
         store('gasvandaag', 0, null, true);
         store('watervandaag', 0, null, true);
