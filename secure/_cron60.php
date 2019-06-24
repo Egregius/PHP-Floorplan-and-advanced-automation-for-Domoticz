@@ -79,7 +79,7 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             $avg=$avg+$d[$item]['s'];
         }
-        $avg=$avg/6;
+        $avg=$avg/count($items);
         foreach ($items as $item) {
             if ($d[$item]['s']>$avg+5&&$d[$item]['s']>25) {
                 $msg='T '.$item.'='.$d[$item]['s'].'°C. AVG='.round($avg, 1).'°C';
