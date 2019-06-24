@@ -40,7 +40,7 @@ if($home){
         </form>
         </div>
         <div class="fix camera">';
-    if ($d['picam2']['s']=='On') {
+    if ($d['picam2plug']['s']=='On') {
         echo '
             <img class="camerai" id="mjpeg_destalex" src="jpg.php"/>';
     } else {
