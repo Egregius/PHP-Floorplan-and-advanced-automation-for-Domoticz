@@ -3,6 +3,7 @@ require('../secure/functions.php');
 $_SESSION['referer']='picam2/index.php';
 require('../secure/authentication.php');
 if($home){
+	$d=fetchdata();
     require(dirname(__FILE__) . '/config.php');
     echo '<html><head><title>'.TITLE_STRING.'</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -38,8 +39,14 @@ if($home){
           <input type="submit" value="Off" name="Off" class="btn b7"/>
         </form>
         </div>
-        <div class="fix camera">
-            <img class="camerai" id="mjpeg_destalex" src="jpg.php"/>
+        <div class="fix camera">';
+    if ($d['picam2']['s']=='On') {
+        echo '
+            <img class="camerai" id="mjpeg_destalex" src="jpg.php"/>';
+    } else {
+    	echo 'Camera uit';
+    }
+    echo '
         </div>
         <script type="text/javascript">
         function navigator_Go(url) {window.location.assign(url);}
