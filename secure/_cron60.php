@@ -154,16 +154,29 @@ if ($d['auto']['s']=='On') {
                 }
             } elseif ($d['kamer']['s']==7) {
                 foreach ($items as $i) {
-                    if ($d[$i]['s']>55) {
-                        sl($i, 30, basename(__FILE__).':'.__LINE__);
-                    }
+                    if ($d['heating']['s']==1) {
+						if ($d[$i]['s']>35) {
+							sl($i, 35, basename(__FILE__).':'.__LINE__);
+						}
+					} else {
+						if ($d[$i]['s']>30) {
+							sl($i, 30, basename(__FILE__).':'.__LINE__);
+						}
+					}
                 }
             } elseif ($d['kamer']['s']>=11) {
                 foreach ($items as $i) {
-                    if ($d[$i]['s']>0) {
-                        sl($i, 0, basename(__FILE__).':'.__LINE__);
-                        storemode($i, 0, basename(__FILE__).':'.__LINE__);
-                    }
+                    if ($d['heating']['s']==1) {
+						if ($d[$i]['s']>30) {
+							sl($i, 30, basename(__FILE__).':'.__LINE__);
+							storemode($i, 0, basename(__FILE__).':'.__LINE__);
+						}
+					} else {
+						if ($d[$i]['s']>0) {
+							sl($i, 0, basename(__FILE__).':'.__LINE__);
+							storemode($i, 0, basename(__FILE__).':'.__LINE__);
+						}
+					}
                 }
             }
         }

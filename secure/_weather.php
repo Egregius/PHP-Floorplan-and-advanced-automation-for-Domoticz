@@ -67,14 +67,8 @@ if (isset($ds)) {
                 }
             }
             $mintemp=round($mintemp, 1);
-            if ($d['minmaxtemp']['s']!=$mintemp) {
-            	store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
-            }
             $maxtemp=round($maxtemp, 1);
-            if ($d['minmaxtemp']['m']!=$maxtemp) {
-	            storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
-	        }
-	        if ($d['max']['m']!=$maxrain) {
+            if ($d['max']['m']!=$maxrain) {
 	            storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
 	        }
         }
@@ -137,15 +131,20 @@ if (isset($buiten_temp)
 }
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
+	
     if ($buiten_temp>$maxtemp) {
         $maxtemp=round($buiten_temp, 1);
-        storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
     }
     $mintemp=round($mintemp, 1);
     if ($buiten_temp<$mintemp) {
         $mintemp=round($buiten_temp, 1);
-        store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
     }
+    if ($d['minmaxtemp']['m']!=$maxtemp) {
+    	storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
+    }
+    if ($d['minmaxtemp']['s']!=$mintemp) {
+	    store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
+	}
 }
 $buiten_temp=round($buiten_temp,1);
 if ($d['buiten_temp']['s']!=$buiten_temp) {
