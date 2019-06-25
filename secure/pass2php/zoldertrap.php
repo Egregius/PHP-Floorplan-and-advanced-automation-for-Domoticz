@@ -11,10 +11,10 @@
  **/
 if ($status=='Open') {
 	if ($d['bureeltobi']['s']=='Off'&&$d['tvtobi']=='Off'&&$d['zolder']['s']==0) {
-		sl('zolder', 50);
+		sl('zolder', 50, basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($status=='Closed') {
 	if ($d['bureeltobi']['s']=='Off'&&$d['tvtobi']=='Off'&&$d['zolder']['s']>0) {
-		sl('zolder', 0);
+		sl('zolder', 0, basename(__FILE__).':'.__LINE__);
 	}
 }

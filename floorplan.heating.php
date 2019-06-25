@@ -39,7 +39,7 @@ if ($home) {
         &&!isset($_POST['mode'])
     ) {
         if (isset($_POST['Rollerlevelon_x'])) {
-            sl($_POST['Naam'], 100, 'Roller');
+            sl($_POST['Naam'], 100, basename(__FILE__).':'.__LINE__);
             if ($d[$_POST['Naam']]['m']==0) {
                 storemode($_POST['Naam'], 1);
             }

@@ -30,7 +30,7 @@ if ($d['lgtv']['s']=='On') {
     shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging oprit" 192.168.2.27');
 }
 if ($d['Xvol']['s']!=5) {
-    sl('Xvol', 5);
+    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 }
-sl('Xbel', 20);
+sl('Xbel', 20, basename(__FILE__).':'.__LINE__);
 rgb('Xlight', 57, 50);

@@ -116,9 +116,9 @@ if ($home==true) {
         	storemode($_REQUEST['device'], 1);
 		} elseif ($_REQUEST['command']=='dimmer') {
         	storemode($_REQUEST['device'], 0);
-        	sl($_REQUEST['device'], $_REQUEST['action']);
+        	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='roller') {
-        	sl($_REQUEST['device'], $_REQUEST['action']);
+        	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         	storemode($_REQUEST['device'], 1);
 		} elseif ($_REQUEST['command']=='mode') {
 			storemode($_REQUEST['device'], $_REQUEST['action']);

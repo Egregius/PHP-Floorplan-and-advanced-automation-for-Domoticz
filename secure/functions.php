@@ -157,13 +157,13 @@ function waarschuwing($msg,$sound)
     }
 
     if ($d['Xvol']['s']!=25) {
-        sl('Xvol', 25);
+        sl('Xvol', 25, basename(__FILE__).':'.__LINE__);
     }
-    sl('Xring', 30);
+    sl('Xring', 30, basename(__FILE__).':'.__LINE__);
     sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
     //telegram($msg, false, 2);
     usleep(1500000);
-    sl('Xring', 0);
+    sl('Xring', 0, basename(__FILE__).':'.__LINE__);
     die($msg);
 }
 /**
@@ -194,19 +194,15 @@ function idx($name)
         return 0;
     }
 }
-function sl($name,$level,$msg)
+function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
     lg(' (SETLEVEL) | '.$user.' => '.$name.' => '.$level.' ('.$msg.')';
     if ($d[$name]['i']>0) {
-        if ($check==false) {
-            file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-        } else {
-            if ($d[$name]['s']!=$level) {
-                file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-            }
-        }
+		if ($d[$name]['s']!=$level) {
+			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+		}
     } else {
         store($name, $level);
     }
@@ -764,9 +760,9 @@ function fbadkamer()
     global $d;
     if (past('8badkamer-8')>10) {
         if (TIME>strtotime('5:00')&&TIME<strtotime('12:00')&&$d['lichtbadkamer']['s']<25&&$d['zon']['s']<20) {
-            sl('lichtbadkamer', 25);
+            sl('lichtbadkamer', 25, basename(__FILE__).':'.__LINE__);
         } elseif ($d['lichtbadkamer']['s']<18&&$d['zon']['s']<20) {
-            sl('lichtbadkamer', 18);
+            sl('lichtbadkamer', 18, basename(__FILE__).':'.__LINE__);
         }
         bosezone(102);
     }

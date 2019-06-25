@@ -10,9 +10,9 @@
  * @link     https://egregius.be
  **/
 if ($d['zolder']['s']<19) {
-	sl('zolder', 20);
+	sl('zolder', 20, basename(__FILE__).':'.__LINE__);
 } elseif ($d['zolder']['s']<38) {
-	sl('zolder', 40);
+	sl('zolder', 40, basename(__FILE__).':'.__LINE__);
 } elseif ($d['zolder']['s']<100) {
-	sl('zolder', 100);
+	sl('zolder', 100, basename(__FILE__).':'.__LINE__);
 }

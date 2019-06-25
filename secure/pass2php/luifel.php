@@ -14,7 +14,7 @@ if (isset($domoticz['result'][0]['Level'])) {
     store('luifel', $domoticz['result'][0]['Level']);
     if ($domoticz['result'][0]['Level']==0) {
         if ($d['ledluifel']['s']>0) {
-            sl('ledluifel', 0);
+            sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
         }
     }
 }

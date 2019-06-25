@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('alex', 8, 'sleep');
+    sl('alex', 8, basename(__FILE__).':'.__LINE__);
     storemode('alex', 1);
     resetsecurity();
 }

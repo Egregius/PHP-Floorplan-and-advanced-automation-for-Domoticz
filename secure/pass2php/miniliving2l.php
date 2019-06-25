@@ -10,9 +10,9 @@
  * @link     https://egregius.be
  **/
 if ($d['Rliving']['s']<26) {
-	sl('Rliving', 26);
+	sl('Rliving', 26, basename(__FILE__).':'.__LINE__);
 }
 if ($d['Rbureel']['s']<40) {
-	sl('Rbureel', 40);
+	sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);
 }
 store('Weg', 0, null, true);

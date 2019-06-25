@@ -12,17 +12,17 @@
 if ($status=='On') {
     $item='RkamerL';
     if (past('8boven-5')>=2) {
-        sl($item, 100);
+        sl($item, 100, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
         $lijntjes=78;
         $itemstatus=$d[$item]['s'];
         if ($itemstatus<$half) {
-            sl($item, $half);
+            sl($item, $half, basename(__FILE__).':'.__LINE__);
         } elseif ($itemstatus<$lijntjes) {
-            sl($item, $lijntjes);
+            sl($item, $lijntjes, basename(__FILE__).':'.__LINE__);
         } else {
-            sl($item, 100);
+            sl($item, 100, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d[$item]['m']==0) {

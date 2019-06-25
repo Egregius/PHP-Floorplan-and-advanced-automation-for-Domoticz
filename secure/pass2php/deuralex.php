@@ -14,7 +14,7 @@ if ($d['auto']['s']=='On') {
 		fhall();
 		if (TIME>strtotime('7:00')&&TIME<strtotime('10:00')) {
 			if ($d['Ralex']>0) {
-				sl('Ralex', 0);
+				sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 				storemode('Ralex', 0);
 			}
 		}
