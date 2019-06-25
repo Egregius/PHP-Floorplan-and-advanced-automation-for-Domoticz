@@ -204,7 +204,7 @@ function sl($name,$level,$msg='')
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 		}
     } else {
-        store($name, $level, basename(__FILE__).':'.__LINE__);
+        store($name, $level, $msg);
     }
 }
 function rgb($name,$hue,$level,$check=false)
@@ -231,13 +231,13 @@ function resetsecurity()
     if ($d['sirene']['s']!='Off') {
         sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         usleep(100000);
-        store('sirene', 'Off');
+        store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
     }
     $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
     foreach ($items as $i) {
         if ($d[$i]['s']!='Off') {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
-            store($i, 'Off');
+            store($i, 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
 }
@@ -272,7 +272,7 @@ function sw($name,$action='Toggle',$msg='')
 				echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
         } else {
-            store($name, $action);
+            store($name, $action, $msg);
         }
         if ($name=='denon') {
             if ($action=='Off') {
@@ -363,7 +363,7 @@ function ud($name,$nvalue,$svalue,$check=false)
             return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
         }
     } else {
-        store($name, $svalue);
+        store($name, $svalue, basename(__FILE__).':'.__LINE__);
     }
     lg(' (udevice) | '.$user.' => '.$name.' => '.$nvalue.','.$svalue);
 }
@@ -389,13 +389,13 @@ function checkport($ip,$port='None')
                 telegram($ip.' online', true);
             }
             if ($prevcheck>0) {
-                store('ping'.$ip, 0);
+                store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
             }
             return 1;
         } else {
             $check=$d['ping'.$ip]['s']+1;
             if ($check>0) {
-                store('ping'.$ip, $check);
+                store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
             }
             if ($check==5) {
                 telegram($ip.' Offline', true);
@@ -412,13 +412,13 @@ function checkport($ip,$port='None')
                 telegram($ip.':'.$port.' online', true);
             }
             if ($prevcheck>0) {
-                store('ping'.$ip, 0);
+                store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
             }
             return 1;
         } else {
             $check=$d['ping'.$ip]['s']+1;
             if ($check>0) {
-                store('ping'.$ip, $check);
+                store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
             }
             if ($check==5) {
                 telegram($ip.':'.$port.' Offline', true);
