@@ -18,15 +18,15 @@ if ($status=='On') {
         if ($Rbureel<45||$RkeukenL<29||$RkeukenR<30) {
             $item='Rbureel';
             if ($d[$item]['s']<45) {
-                sl($item, 45);
+                sl($item, 45, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenL';
             if ($d[$item]['s']<29) {
-                sl($item, 29);
+                sl($item, 29, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenR';
             if ($d[$item]['s']<30) {
-                sl($item, 30);
+                sl($item, 30, basename(__FILE__).':'.__LINE__);
             }
         } else {
             if ($d['heating']['s']==2) {
@@ -36,30 +36,30 @@ if ($status=='On') {
             }
             $item='Rbureel';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenL';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenR';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
         }
     } else {
         if ($Rbureel<30||$RkeukenL<29||$RkeukenR<30) {
             $item='Rbureel';
             if ($d[$item]['s']<30) {
-                sl($item, 30);
+                sl($item, 30, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenL';
             if ($d[$item]['s']<29) {
-                sl($item, 29);
+                sl($item, 29, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenR';
             if ($d[$item]['s']<30) {
-                sl($item, 30);
+                sl($item, 30, basename(__FILE__).':'.__LINE__);
             }
         } else {
             if ($d['heating']['s']==2) {
@@ -69,15 +69,15 @@ if ($status=='On') {
             }
             $item='Rbureel';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenL';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
             $item='RkeukenR';
             if ($d[$item]['s']<$level) {
-                sl($item, $level);
+                sl($item, $level, basename(__FILE__).':'.__LINE__);
             }
         }
     }

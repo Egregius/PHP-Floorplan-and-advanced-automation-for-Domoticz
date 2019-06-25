@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('alex', 8);
+    sl('alex', 8, basename(__FILE__).':'.__LINE__);
     store('Weg', 0, null, true);
 }

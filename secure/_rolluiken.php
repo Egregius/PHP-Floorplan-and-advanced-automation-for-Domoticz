@@ -55,13 +55,13 @@ if ($d['heating']['s']>=2) {
         if ($dag=='nacht') {
             foreach ($benedena as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
+                    sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
                 }
             }
             foreach ($boven as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                    sl($i, 100);
+                    sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
                 }
             }

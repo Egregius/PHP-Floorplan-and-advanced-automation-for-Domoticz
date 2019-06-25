@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     store('deurbadkamer', $d['deurbadkamer']['s']);
-    sl('lichtbadkamer', 100);
+    sl('lichtbadkamer', 100, basename(__FILE__).':'.__LINE__);
     douche();
     resetsecurity();
     bosezone(102);

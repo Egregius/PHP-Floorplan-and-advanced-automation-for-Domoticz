@@ -12,10 +12,10 @@
 if ($status=='On') {
     $eettafel=$d['eettafel']['s'];
     if ($eettafel>14) {
-        sl('eettafel', 14);
+        sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
     } elseif ($eettafel==0) {
-        sl('eettafel', 5);
+        sl('eettafel', 5, basename(__FILE__).':'.__LINE__);
     } else {
-        sl('eettafel', 0);
+        sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
     }
 }

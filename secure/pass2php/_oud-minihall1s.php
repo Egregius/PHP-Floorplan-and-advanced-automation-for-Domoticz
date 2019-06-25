@@ -30,7 +30,7 @@ if ($status=='On') {
         store('Weg', 1);
     }
     if ($d['kamer']['s']>5) {
-        sl('kamer', 5);
+        sl('kamer', 5, basename(__FILE__).':'.__LINE__);
     }
     huisslapen();
 }

@@ -12,7 +12,7 @@
 if ($status=='On') {
     $kamer=$d['kamer']['s'];
     if ($d['Weg']['s']==0&&$d['kamer']['s']!=3) {
-        sl('kamer', 3);
+        sl('kamer', 3, basename(__FILE__).':'.__LINE__);
         storemode('kamer', 0);
     } elseif ($d['Weg']['s']==0&&$d['kamer']['s']>=2) {
         sl('kamer', 2);
