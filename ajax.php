@@ -15,7 +15,6 @@
 require '/var/www/config.php';
 require 'secure/functions.php';
 require 'secure/authentication.php';
-$nolog=false;
 if ($home==true) {
     if (isset($_REQUEST['t'])) {
         $t=time();
@@ -33,7 +32,7 @@ if ($home==true) {
             if(!empty($row['icon']))$d[$row['n']]['ic']=$row['icon'];
         }
         echo json_encode($d);
-        if($nolog==true)exit;
+        exit;
     } 
     
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
@@ -67,7 +66,7 @@ if ($home==true) {
 		$d['volume']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 		$d['bass']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);
 		echo json_encode($d);
-		if($nolog==true)exit;
+		exit;
     } 
     
     elseif (isset($_REQUEST['media'])) {
@@ -84,7 +83,7 @@ if ($home==true) {
 			$data['lgtv']=trim(shell_exec('python3 secure/lgtv.py -c get-input '.$lgtvip));
 		}
     	echo json_encode($data);
-    	if($nolog==true)exit;
+    	exit;
     } 
     
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
