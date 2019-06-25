@@ -200,6 +200,5 @@ if (ping('192.168.2.105')) {
     }
 }
 if (past('wind')>86) {
-	lg('include weather');
 	require('_weather.php');
 }

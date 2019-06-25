@@ -198,7 +198,7 @@ function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
-    lg(' (SETLEVEL) | '.$user.' => '.$name.' => '.$level.' ('.$msg.')';
+    lg(' (SETLEVEL) | '.$user.' => '.$name.' => '.$level.' ('.$msg.')');
     if ($d[$name]['i']>0) {
 		if ($d[$name]['s']!=$level) {
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
