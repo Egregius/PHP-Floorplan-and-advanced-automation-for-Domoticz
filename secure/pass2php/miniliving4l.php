@@ -14,7 +14,7 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'/*||$d['nvidia']['s']=='Off'*/)
     $items=array('tv','denon'/*,'nvidia'*/);
     foreach ($items as $item) {
         if ($d[$item]['s']!='On') {
-            sw($item, 'On');
+            sw($item, 'On', basename(__FILE__).':'.__LINE__);
         }
     }
     sleep(4);
@@ -31,10 +31,10 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'/*||$d['nvidia']['s']=='Off'*/)
     $items=array('lgtv','bosesoundlink','kristal');
     foreach ($items as $item) {
         if ($d[$item]['s']!='Off') {
-            sw($item, 'Off');
+            sw($item, 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
 }
 store('Weg', 0, null, true);
 sleep(10);
-//sw('nvidia', 'Off');
+//sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);

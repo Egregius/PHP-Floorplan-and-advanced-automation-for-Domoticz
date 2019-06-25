@@ -12,7 +12,7 @@
 if (isset($status)&&$status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
     picamoff();
 } elseif (isset($status)&&$status=='Closed'&&TIME>strtotime('18:00')) {
-	sw('picam2plug', 'On');
+	sw('picam2plug', 'On', basename(__FILE__).':'.__LINE__);
 } elseif (isset($_REQUEST['Off'])) {
 	picamoff();
 }
@@ -23,5 +23,5 @@ function picamoff()
     sleep(1);
     file_get_contents('http://192.168.2.12/fifo_command.php?cmd=halt');
     sleep(10);
-    file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=283&switchcmd=Off');
+    sw('picam2plug', 'Off', basename(__FILE__).':'.__LINE__);
 }

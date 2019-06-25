@@ -41,10 +41,10 @@ $prev=$d[$n.'_temp']['s'];
 $set=$d[$n.'_set']['s'];
 $tbadkamervuur=$d['badkamervuur1']['t'];
 if ($status>$prev&&$status>$set&&$tbadkamervuur<time-600) {
-    sw('badkamervuur2', 'Off');
-    sw('badkamervuur1', 'Off');
+    sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+    sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 } elseif ($status<$prev&&$status<$set&&$tbadkamervuur<time-600) {
-    sw('badkamervuur1', 'On');
+    sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 } else {
     include '_verwarming.php';
 }

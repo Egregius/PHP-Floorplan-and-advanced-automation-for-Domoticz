@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($d['deurbadkamer']['s']=='Open'&&$status=='Off'&&$d['badkamervuur1']['s']=='On') {
-    sw('badkamervuur2', 'Off');
-    sw('badkamervuur1', 'Off');
+    sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+    sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 }

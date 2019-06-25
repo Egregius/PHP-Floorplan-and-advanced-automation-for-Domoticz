@@ -9,5 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('jbl');
+sw('jbl', basename(__FILE__).':'.__LINE__);
 store('Weg', 0, null, true);

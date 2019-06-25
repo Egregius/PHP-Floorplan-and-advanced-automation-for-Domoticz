@@ -40,7 +40,7 @@ function fetchdata()
 function huisslapen()
 {
     global $d,$boseipbuiten;
-    sw(array('slapen'), 'Off');
+    sw(array('slapen'), 'Off', basename(__FILE__).':'.__LINE__);
     $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
         storemode($i, 0);

@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('water', 'On');
+    sw('water', 'On', basename(__FILE__).':'.__LINE__);
     if ($d['water']['m']==0) {
         storemode('water', 300);
     } elseif ($d['water']['m']==300) {
@@ -19,5 +19,5 @@ if ($status=='On') {
         storemode('water', 7200);
     }
 } else {
-    sw('water', 'Off');
+    sw('water', 'Off', basename(__FILE__).':'.__LINE__);
 }

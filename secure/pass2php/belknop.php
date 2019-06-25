@@ -15,7 +15,7 @@ if ($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>10) {
     //shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
     //telegram('Deurbel', true, 2);
     if ($d['zon']['s']==0) {
-        sw('voordeur', 'On');
+        sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
     }
     if ($d['Weg']['s']==0) {
     	if ($d['bose101']['s']=='On') {
@@ -42,7 +42,7 @@ if ($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>10) {
             usleep(10000);
         }
         sl('Xbel', 10);
-        sw('deurbel', 'On', false);
+        sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
         rgb('Xlight', 360, 100);
     }
     sleep(2);

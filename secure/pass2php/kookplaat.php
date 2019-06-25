@@ -11,13 +11,13 @@
  **/
 if ($status=='On') {
     if ($d['keuken']['s']=='On') {
-        sw('keuken', 'Off');
+        sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
     }
 } else {
     /*if ($d['pirkeuken']['s']=='Off') {
         ud('pirkeuken', 0, 'On');
     }*/
     if ($d['zon']['s']<$zonkeuken&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['auto']['s']) {
-        sw('keuken', 'On');
+        sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
     }
 }
