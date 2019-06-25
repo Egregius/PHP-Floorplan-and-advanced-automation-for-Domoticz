@@ -47,7 +47,7 @@ if ($d['auto']['s']=='On') {
 				__Automatisch tuin water geven gestart voor $watertime sec.";
 			if ($rainpast<1000&&$maxrain<1) {
 				sw('water', 'On', basename(__FILE__).':'.__LINE__);
-				storemode('water', $watertime);
+				storemode('water', $watertime, basename(__FILE__).':'.__LINE__);
 				telegram($msg, 2);
 			}
 		}
@@ -98,10 +98,10 @@ if ($d['auto']['s']=='On') {
 	
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30) {
-			storemode('luifel', 0);
+			storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
 			$d['luifel']['m']=1;
 		} elseif (past('luifel')>28800) {
-			storemode('luifel', 0);
+			storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
 			$d['luifel']['m']=1;
 		}
 	}

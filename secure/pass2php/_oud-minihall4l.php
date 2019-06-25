@@ -11,5 +11,5 @@
  **/
 if ($status=='On') {
     sl('tobi', 8, basename(__FILE__).':'.__LINE__);
-    storemode('tobi', 1);
+    storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
 }

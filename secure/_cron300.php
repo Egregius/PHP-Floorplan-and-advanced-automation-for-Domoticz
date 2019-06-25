@@ -61,7 +61,7 @@ foreach ($items as $i) {
 }
 foreach ($items as $i) {
 	if ($d[$i]['m']==1&&past($i)>21600) {
-		storemode($i, 0);
+		storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['auto']['s']!='On') {

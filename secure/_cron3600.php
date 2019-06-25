@@ -95,17 +95,17 @@ $data=json_decode(
 if (!empty($data)) {
     store('jaarteller', $data['jaarteller']);
     if ($data['zonpercent']!=$d['zonvandaag']['m']) {
-        storemode('zonvandaag', $data['zonpercent']);
+        storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
     }
 }
 if (date('I', TIME) == 1) {
     if ($d['auto']['m']==false) {
-        storemode('auto', true);
+        storemode('auto', true, basename(__FILE__).':'.__LINE__);
         $d['auto']['m']=true;
     }
 } else {
     if ($d['auto']['m']==true) {
-        storemode('auto', false);
+        storemode('auto', false, basename(__FILE__).':'.__LINE__);
         $d['auto']['m']=false;
     }
 }
@@ -122,16 +122,11 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']));
     }
     if (strtotime($sunrise['results']['civil_twilight_end'])!=$d['civil_twilight']['m']) {
-        storemode(
-            'civil_twilight',
-            strtotime(
-                $sunrise['results']['civil_twilight_end']
-            )
-        );
+        storemode('civil_twilight', strtotime($sunrise['results']['civil_twilight_end']), basename(__FILE__).':'.__LINE__);
     }
     if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
         if ($d['auto']['m']!=true) {
-            storemode('auto', true);
+            storemode('auto', true, basename(__FILE__).':'.__LINE__);
             $d['auto']['m']=true;
         }
         $uv=json_decode(
@@ -145,12 +140,12 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
                 store('uv', round($uv['result']['uv'], 1));
             }
             if ($uv['result']['uv_max']!=$d['uv']['m']) {
-                storemode('uv', round($uv['result']['uv_max'], 1));
+                storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
             }
         }
     } else {
         if ($d['auto']['m']!=false ) {
-            storemode('auto', false);
+            storemode('auto', false, basename(__FILE__).':'.__LINE__);
             $d['auto']['m']=false;
         }
     }
