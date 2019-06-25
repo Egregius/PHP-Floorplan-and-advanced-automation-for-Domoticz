@@ -11,13 +11,13 @@
  **/
 if ($status=='On') {
     if ($d['keuken']['s']=='On') {
-        sw('keuken', 'Off', true, 'keuken uit omdat kookplaat aan is');
+        sw('keuken', 'Off');
     }
 } else {
     /*if ($d['pirkeuken']['s']=='Off') {
         ud('pirkeuken', 0, 'On');
     }*/
     if ($d['zon']['s']<$zonkeuken&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['auto']['s']) {
-        sw('keuken', 'On', false, 'keuken aan omdat kookplaat uit is');
+        sw('keuken', 'On');
     }
 }

@@ -44,7 +44,7 @@ if ($status=='On') {
                             }
                         }
                         bosekey("POWER", 0, 102);
-                        sw('bose102', 'Off', true);
+                        sw('bose102', 'Off');
                     }
                 }
             }
@@ -54,7 +54,7 @@ if ($status=='On') {
                     if (isset($nowplaying['@attributes']['source'])) {
                         if ($nowplaying['@attributes']['source']!='STANDBY') {
                             bosekey("POWER", 0, 101);
-                            sw('bose101', 'Off', true);
+                            sw('bose101', 'Off');
                         }
                     }
                 }

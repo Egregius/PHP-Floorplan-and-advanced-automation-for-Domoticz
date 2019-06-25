@@ -19,8 +19,8 @@ if ($prev==$status) {
 $set=$d['diepvries_temp']['m'];
 $tdiepvries=past('diepvries');
 if ($status < $prev && $status <= $set && $tdiepvries > 3600 ) {
-    sw('diepvries', 'Off', ' prev='.$prev.', new='.$status);
+    sw('diepvries', 'Off');
 } elseif ($status > $prev && $status >= $set && $tdiepvries > 3600 ) {
-    sw('diepvries', 'On', ' prev='.$prev.', new='.$status);
+    sw('diepvries', 'On');
 }
 

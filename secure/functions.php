@@ -40,7 +40,7 @@ function fetchdata()
 function huisslapen()
 {
     global $d,$boseipbuiten;
-    sw(array('slapen'), 'Off', true, 'huisslapen', 200000);
+    sw(array('slapen'), 'Off');
     $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
         storemode($i, 0);
@@ -250,21 +250,21 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
     global $user,$d,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
-        $check=true;
+        $usleep=200000;
         foreach ($name as $i) {
             if ($i=='media') {
-                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $check, $msg, $usleep);
+                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action);
             } elseif ($i=='lichtenbeneden') {
-                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action, $check, $msg, $usleep);
+                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action);
             } elseif ($i=='lichtenboven') {
-                sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action, $check, $msg, $usleep);
+                sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action);
             } elseif ($i=='slapen') {
-                sw(array('hall','pirhall','lichtenbeneden','dampkap','GroheRed'), $action, $check, $msg, $usleep);
+                sw(array('hall','pirhall','lichtenbeneden','dampkap','GroheRed'), $action);
             } elseif ($i=='weg') {
-                sw(array('garage','slapen','lichtenboven'), $action, $check, $msg, $usleep);
+                sw(array('garage','slapen','lichtenboven'), $action);
             } else {
                 if ($d[$i]['s']!=$action) {
-                    sw($i, $action, $check, $msg, $usleep);
+                    sw($i, $action);
                 }
             }
         }
@@ -290,7 +290,7 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
             }
         }
     }
-    if ($usleep>0) {
+    if (isset($usleep)) {
         usleep($usleep);
     }
 }
@@ -462,9 +462,11 @@ function pingport($ip,$port)
     }
     return $status;
 }
-function double($name,$action,$check=false,$comment='',$wait=2000000)
+function double($name,$action)
 {
-    sw($name, $action, $check, $comment);usleep($wait);sw($name, $action, $check, $comment.' | repeat');
+    sw($name, $action);
+    usleep(2000000);
+    sw($name, $action);
 }
 
 function koekje($user,$expirytime)

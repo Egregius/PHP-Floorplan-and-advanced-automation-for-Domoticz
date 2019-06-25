@@ -14,17 +14,17 @@ if ($status=='On') {
     alert($device, $msg, 300, false, 2, true);
     $items=array('Ralex','Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel');
     foreach ($items as $i) {
-        sl($i, 0, true);
+        sl($i, 0);
         usleep(100000);
     }
     $items=array('kamer','tobi','alex','eettafel','zithoek','lichtbadkamer');
     foreach ($items as $i) {
-        sl($i, 100, true);
+        sl($i, 100);
         usleep(100000);
     }
     $items=array('hall','inkom','keuken','garage','jbl','bureel');
     foreach ($items as $i) {
-        sw($i, 'On', true);
+        sw($i, 'On');
         usleep(100000);
     }
     sleep(10);

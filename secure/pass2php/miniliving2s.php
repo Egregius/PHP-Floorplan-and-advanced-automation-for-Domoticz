@@ -19,7 +19,7 @@ if ($d['keuken']['s']=='On') {
         shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
     }
     if ($d['keuken']['s']=='Off') {
-        sw('keuken', 'On', false);
+        sw('keuken', 'On');
     }
 }
 /**
@@ -38,7 +38,7 @@ function andereuit()
             ud($item, 0, 'Off');
         }
     }
-    sw('keuken', 'Off', false);
+    sw('keuken', 'Off');
     $items=array('eettafel','zithoek');
     foreach ($items as $item) {
         if ($d[$item]['s']>0) {
