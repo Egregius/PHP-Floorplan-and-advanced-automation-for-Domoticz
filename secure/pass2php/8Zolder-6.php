@@ -11,5 +11,5 @@
  **/
 if ($d['raamhall']['s']=='Closed') {
     sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
-    store('Weg', 0, null, true);
+    store('Weg', 0, basename(__FILE__).':'.__LINE__);
 }

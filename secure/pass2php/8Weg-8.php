@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    store('Weg', 0);
+    store('Weg', 0, basename(__FILE__).':'.__LINE__);
     sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
     resetsecurity();
 }

@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($d['Weg']['s']!=0) {
-    store('Weg', 0, null, true);
+    store('Weg', 0, basename(__FILE__).':'.__LINE__);
 }
 if ($d['hall']['s']=='Off') {
     sw('hall', 'On', basename(__FILE__).':'.__LINE__);

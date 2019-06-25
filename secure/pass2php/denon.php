@@ -11,6 +11,6 @@
  **/
 if ($status=='Off') {
 	if ($d['denonpower']['s']!='OFF') {
-		store('denonpower', 'OFF');
+		store('denonpower', 'OFF', basename(__FILE__).':'.__LINE__);
 	}
 }

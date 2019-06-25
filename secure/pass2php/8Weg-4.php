@@ -34,7 +34,7 @@ if ($status=='On') {
             sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
         
-        store('Weg', 2);
+        store('Weg', 2, basename(__FILE__).':'.__LINE__);
         sw(array('weg'), 'Off', basename(__FILE__).':'.__LINE__);
     } else {
         sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
