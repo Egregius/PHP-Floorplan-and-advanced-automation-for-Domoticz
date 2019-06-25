@@ -178,7 +178,7 @@ td{text-align:right;font-size:1.1em;}
 #traamtobi{top:462px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #traamalex{top:581px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #traamkamer{top:598px;left:455px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#raamliving{top:46px;left:87px;width:11px;height:165px;z-index:-10;}
+#raamliving{top:46px;left:87px;width:11px;height:163px;z-index:-10;}
 #raamtobi{top:448px;left:87px;width:11px;height:42px;z-index:-10;}
 #raamalex{top:568px;left:87px;width:11px;height:42px;z-index:-10;}
 #raamkamer{top:586px;left:467px;width:11px;height:42px;z-index:-10;}
