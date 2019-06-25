@@ -423,7 +423,8 @@ if ($d['heating']['s']>=2) {
                             $temp=${substr($i, 1).'_temp'};
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
-                            sl($i, 80, basename(__FILE__).':'.__LINE__);$msg.=$i.' 78 om af te koelen__';
+                            sl($i, 80, basename(__FILE__).':'.__LINE__);
+                            $msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }
@@ -516,12 +517,14 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='AM') {
             foreach ($benedena as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
-                    sl($i, 0);$msg.=$i.' open__';
+                    sl($i, 0, basename(__FILE__).':'.__LINE__);
+                    $msg.=$i.' open__';
                 }
             }
             foreach ($boven as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
-                    sl($i, 0);$msg.=$i.' open__';
+                    sl($i, 0, basename(__FILE__).':'.__LINE__);
+                    $msg.=$i.' open__';
                 }
             }
         } elseif ($dag=='PM') {
@@ -596,7 +599,8 @@ if ($d['heating']['s']>=2) {
                 $msg.='zonOP && Zon = 0__';
                 foreach ($benedena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<30 && past($i)>900) {
-                        sl($i, 30);$msg.=$i.' half toe__';
+                        sl($i, 30, basename(__FILE__).':'.__LINE__);
+                        $msg.=$i.' half toe__';
                     }
                 }
             } elseif ($d['auto']['m']&&$d['zon']['s']<50) {
@@ -604,10 +608,10 @@ if ($d['heating']['s']>=2) {
                 foreach ($boven as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         if ($i=='Rtobi'||$i=='RkamerR') {
-                            sl($i, 85);
+                            sl($i, 85, basename(__FILE__).':'.__LINE__);
                             $msg.=$i.' 85';
                         } else {
-                            sl($i, 100);
+                            sl($i, 100, basename(__FILE__).':'.__LINE__);
                             $msg.=$i.' 100__';
                         }
                     } elseif ($d[$i]['m']==0 && $d[$i]['s']==100 && past($i)>900) {
@@ -617,7 +621,8 @@ if ($d['heating']['s']>=2) {
                             $temp=${substr($i, 1).'_temp'};
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
-                            sl($i, 80);$msg.=$i.' 78 om af te koelen__';
+                            sl($i, 80, basename(__FILE__).':'.__LINE__);
+                            $msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }
@@ -627,16 +632,17 @@ if ($d['heating']['s']>=2) {
                 $msg.='Zononder __';
                 foreach ($benedena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
-                        sl($i, 100);$msg.=$i.' Dicht__';
+                        sl($i, 100, basename(__FILE__).':'.__LINE__);
+                        $msg.=$i.' Dicht__';
                     }
                 }
                 foreach ($boven as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         if ($i=='Rtobi'||$i=='RkamerR') {
-                            sl($i, 85);
+                            sl($i, 85, basename(__FILE__).':'.__LINE__);
                             $msg.=$i.'85';
                         } else {
-                            sl($i, 100);
+                            sl($i, 100, basename(__FILE__).':'.__LINE__);
                             $msg.=$i.' 100__';
                         }
                     } elseif ($d[$i]['m']==0 && $d[$i]['s']==100 && past($i)>900) {
@@ -646,7 +652,7 @@ if ($d['heating']['s']>=2) {
                             $temp=${substr($i, 1).'_temp'};
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
-                            sl($i, 80);$msg.=$i.' 78 om af te koelen__';
+                            sl($i, 80, basename(__FILE__).':'.__LINE__);$msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }
