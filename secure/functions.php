@@ -308,18 +308,18 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 }
 function storemode($name,$mode,$msg='',$time=0)
 {
-    global $db, $d, $username;
+    global $db, $d, $user;
     $time=TIME+$time;
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg('storemode'.$name.' '.$mode);  
+	$msg=' (STOREMODE) | '.$user.' => '.$name.' => '.$mode.' ('.$msg.')';
 }
 function storeicon($name,$icon,$msg='')
 {
-    global $db, $d, $username;
+    global $db, $d, $user;
     $time=TIME;
     if ($d[$name]['icon']!=$icon) {
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		lg('storeicon '.$name.' '.$icon);
+		$msg=' (STOREICON) | '.$user.' => '.$name.' => '.$icon.' ('.$msg.')';
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
