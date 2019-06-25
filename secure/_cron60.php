@@ -720,7 +720,7 @@ if (!empty($objauth)) {
 	    }
         $zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
         if ($d['zonvandaag']['s']!=$zonvandaag) {
-	        store('zonvandaag', $zonvandaag);
+	        store('zonvandaag', $zonvandaag, basename(__FILE__).':'.__LINE__);
 	    }
         $gas=$d['gasvandaag']['s']/100;
         $water=$d['watervandaag']['s']/1000;
@@ -747,23 +747,23 @@ $relay=new SimpleXMLElement(
 );
 if (!empty($relay)) {
     if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
-        store('heater1', 'On');
+        store('heater1', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
-        store('heater1', 'Off');
+        store('heater1', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
-        store('heater2', 'On');
+        store('heater2', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
-        store('heater2', 'Off');
+        store('heater2', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
-        store('heater3', 'On');
+        store('heater3', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
-        store('heater3', 'Off');
+        store('heater3', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
-        store('heater4', 'On');
+        store('heater4', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
-        store('heater4', 'Off');
+        store('heater4', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
