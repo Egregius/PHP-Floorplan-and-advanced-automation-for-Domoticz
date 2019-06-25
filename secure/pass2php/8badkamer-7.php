@@ -11,14 +11,14 @@
  **/
 if ($status=='On'&&past('8badkamer-7')>5) {
     if ($d['badkamervuur1']['s']=='On') {
-        store('badkamer_set', 10);
+        store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=10;
     } elseif ($d['heating']['s']!=1) {
-        store('badkamer_set', 22.5);
+        store('badkamer_set', 22.5, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=22.5;
         $d['deurbadkamer']['s']='Closed';
     }
-    store('deurbadkamer', $d['deurbadkamer']['s']);
+    store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
     douche();
     $d['lichtbadkamer']['s']=25;
     $d['deurbadkamer']['s']='Closed';

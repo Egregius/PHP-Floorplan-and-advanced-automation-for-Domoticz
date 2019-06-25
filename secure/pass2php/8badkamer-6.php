@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    store('deurbadkamer', $d['deurbadkamer']['s']);
+    store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
     sl('lichtbadkamer', 100, basename(__FILE__).':'.__LINE__);
     douche();
     resetsecurity();

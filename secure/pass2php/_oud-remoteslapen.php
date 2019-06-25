@@ -33,7 +33,7 @@ if ($status=='On') {
         sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['Weg']['s']!=0) {
-        store('Weg', 0);
+        store('Weg', 0, basename(__FILE__).':'.__LINE__);
     } elseif ($d['Weg']['s']==0) {
         if ($d['hall']['s']=='Off') {
             sw('hall', 'On', basename(__FILE__).':'.__LINE__);
