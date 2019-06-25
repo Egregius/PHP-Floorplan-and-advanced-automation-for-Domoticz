@@ -91,9 +91,9 @@ if ($d['auto']['s']=='On') {
 
 	echo 'past='.past('luifel').' $d[\'luifel\'][\'s\']='.$d['luifel']['s'].' $luifel='.$luifel.' $d[\'luifel\'][\'m\']='.$d['luifel']['m'].' wind='.$d['wind']['s'].' windhist='.$windhist;
 	if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
-		sl('luifel', $luifel);
+		sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 	} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
-		sl('luifel', $luifel);
+		sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 	}
 	
 	if ($d['luifel']['m']==1) {

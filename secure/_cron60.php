@@ -41,7 +41,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $item) {
                     if ($d[$item]['s']>0) {
                         if (past($item)>$uit) {
-                            sl($item, 0);
+                            sl($item, 0, basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -114,7 +114,7 @@ if ($d['auto']['s']=='On') {
                     if ($level==20) {
                         $level=19;
                     }
-                    sl($item, $level);
+                    sl($item, $level, basename(__FILE__).':'.__LINE__);
                     if ($level==0) {
                         storemode($item, 0);
                     }
@@ -126,7 +126,7 @@ if ($d['auto']['s']=='On') {
                     if ($level>50) {
                         $level=50;
                     }
-                    sl($item, $level);
+                    sl($item, $level, basename(__FILE__).':'.__LINE__);
                     if ($level==50) {
                         storemode($item, 0);
                     }
@@ -137,7 +137,7 @@ if ($d['auto']['s']=='On') {
                         storemode('alex', 0);
                     } else {
                         if (past($item)>10800) {
-                            sl('alex', 2);
+                            sl('alex', 2, basename(__FILE__).':'.__LINE__);
                             storemode($item, 2);
                         }
                     }
@@ -149,19 +149,19 @@ if ($d['auto']['s']=='On') {
             if ($d['kamer']['s']==3) {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>70) {
-                        sl($i, 65);
+                        sl($i, 65, basename(__FILE__).':'.__LINE__);
                     }
                 }
             } elseif ($d['kamer']['s']==7) {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>55) {
-                        sl($i, 30);
+                        sl($i, 30, basename(__FILE__).':'.__LINE__);
                     }
                 }
             } elseif ($d['kamer']['s']>=11) {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>0) {
-                        sl($i, 0);
+                        sl($i, 0, basename(__FILE__).':'.__LINE__);
                         storemode($i, 0);
                     }
                 }
@@ -208,7 +208,7 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             if ($d[$item]['s']>0) {
                 if (past($item)>$uit) {
-                    sl($item, 0);
+                    sl($item, 0, basename(__FILE__).':'.__LINE__);
                     lg($item.' uitgeschakeld omdat we slapen');
                 }
             }
@@ -265,7 +265,7 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             if ($d[$item]['s']>0) {
                 if (past($item)>$uit) {
-                    sl($item, 0);
+                    sl($item, 0, basename(__FILE__).':'.__LINE__);
                     lg($item.' uitgeschakeld omdat we weg zijn');
                 }
             }
@@ -291,7 +291,7 @@ if ($d['auto']['s']=='On') {
             if ($new<15) {
                 $new=0;
             }
-            sl('lichtbadkamer', $new);
+            sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
         }
     }
     $items=array('living_set','badkamer_set','kamer_set','tobi_set','alex_set');
@@ -550,7 +550,7 @@ if ($d['auto']['s']=='On') {
         &&$d['RkamerR']['s']==0
     ) {
         if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
-			sl('kamer', 0);
+			sl('kamer', 0, basename(__FILE__).':'.__LINE__);
         } elseif (past('kamer')>900) {
         	storemode('kamer', 1);
         }
