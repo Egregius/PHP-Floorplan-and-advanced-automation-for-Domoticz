@@ -17,14 +17,14 @@ if ($d['pirgarage']['s']=='Off'
     &&$d['garageled']['s']=='On'
     &&$d['auto']['s']=='On'
 ) {
-    sw('garageled', 'Off');
+    sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
 } elseif ($d['pirgarage']['s']=='On'
     &&$d['garageled']['s']=='Off'
     &&$d['garage']['s']=='Off'
     &&$d['auto']['s']=='On'
     &&$d['zon']['s']<500
 ) {
-    sw('garageled', 'On');
+    sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 
 if ($d['pirgarage']['s']=='Off'
@@ -34,7 +34,7 @@ if ($d['pirgarage']['s']=='Off'
     &&$d['garage']['s']=='On'
     &&$d['auto']['s']=='On'
 ) {
-    sw('garage', 'Off');
+    sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
 if ($d['pirinkom']['s']=='Off'
@@ -46,10 +46,10 @@ if ($d['pirinkom']['s']=='Off'
     &&$d['auto']['s']=='On'
 ) {
     if ($d['inkom']['s']=='On') {
-        sw('inkom', 'Off');
+        sw('inkom', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['hall']['s']=='On') {
-        sw('hall', 'Off');
+        sw('hall', 'Off', basename(__FILE__).':'.__LINE__);
     }
 } else {
     if ($d['pirinkom']['s']=='On'
@@ -57,7 +57,7 @@ if ($d['pirinkom']['s']=='Off'
         &&$d['auto']['s']=='On'
     ) {
         if ($d['inkom']['s']=='Off') {
-            sw('inkom', 'On');
+            sw('inkom', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d['pirhall']['s']=='On'
@@ -67,7 +67,7 @@ if ($d['pirinkom']['s']=='Off'
         if ($d['hall']['s']=='Off'
             &&$d['Weg']['s']==0
         ) {
-            sw('hall', 'On');
+            sw('hall', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
 }
@@ -80,7 +80,7 @@ if (past('pirkeuken')>50
     &&$d['werkblad1']['s']=='Off'
     &&$d['auto']['s']=='On'
 ) {
-    sw('keuken', 'Off');
+    sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['GroheRed']['s']=='On') {
     if ($d['wasbak']['s']=='Off'
@@ -88,10 +88,10 @@ if ($d['GroheRed']['s']=='On') {
         &&past('GroheRed')>110
         &&$d['GroheRed']['m']==0
     ) {
-        sw('GroheRed', 'Off');
+        sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if (past('GroheRed')>900) {
-        sw('GroheRed', 'Off');
+        sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
         storemode('GroheRed', 0);
     }
 } else {
@@ -100,7 +100,7 @@ if ($d['GroheRed']['s']=='On') {
         ($d['wasbak']['s']=='On'&&past('wasbak')>10)
         ||($d['kookplaat']['s']=='On'&&past('kookplaat')>10))
     ) {
-            sw('GroheRed', 'On');
+            sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
     }
 }
 if (ping($lgtvip)) {
@@ -110,20 +110,20 @@ if (ping($lgtvip)) {
             &&past('lgtv')>10
             &&$d['Weg']['s']==0
         ) {
-            sw('lgtv', 'On', true, 'LG TV On _cron10');
+            sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
         }
         if ($d['denon']['s']!='On'
             &&past('denon')>30
             &&$d['Weg']['s']==0
         ) {
-            sw('denon', 'On', true);
+            sw('denon', 'On', basename(__FILE__).':'.__LINE__);
             storemode('denon', 'TV');
         }
         /*if ($d['nvidia']['s']!='On'
             &&past('nvidia')>30
             &&$d['Weg']['s']==0
         ) {
-            sw('nvidia', 'On');
+            sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
         }*/
     }
 } else {
@@ -134,26 +134,26 @@ if (ping($lgtvip)) {
             if ($d['lgtv']['s']!='Off'
                 &&past('lgtv')>120
             ) {
-                sw('lgtv', 'Off', true, 'LG TV Off _cron10');
+                sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['denon']['s']!='Off'
                 &&$d['denon']['m']=='TV'
                 &&past('lgtv')>120
                 &&past('denon')>300
             ) {
-                sw('denon', 'Off', true);
+                sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['nvidia']['s']!='Off'
                 &&past('lgtv')>120
                 &&past('nvidia')>120
             ) {
-                sw('nvidia', 'Off', true);
+                sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['kristal']['s']!='Off'
                 &&past('lgtv')>120
                 &&past('kristal')>120
             ) {
-                sw('kristal', 'Off', true);
+                sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
             }
         }
     }
@@ -188,7 +188,7 @@ if (ping('192.168.2.105')) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     bosezone(105);
-                    sw('bose105', 'On');
+                    sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
                 }
             }
         }
@@ -196,7 +196,7 @@ if (ping('192.168.2.105')) {
 } else {
     if ($d['bose105']['m']!='Offline') {
         storemode('bose105', 'Offline', 10);
-        sw('bose105', 'Off');
+        sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
 if (past('wind')>86) {

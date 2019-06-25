@@ -194,11 +194,11 @@ function idx($name)
         return 0;
     }
 }
-function sl($name,$level,$check=false)
+function sl($name,$level,$msg)
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
-    lg(' (SETLEVEL) | '.$user.' =>	'.$name.'	'.$level);
+    lg(' (SETLEVEL) | '.$user.' => '.$name.' => '.$level.' ('.$msg.')';
     if ($d[$name]['i']>0) {
         if ($check==false) {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
@@ -776,10 +776,10 @@ function fkeuken()
 {
     global $d;
     if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<45||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-        sw('keuken', 'On');
+        sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
     } elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<45||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
         if ($d['tv']['s']=='On'||$d['jbl']['s']=='On') {
-            sw('keuken', 'On');
+            sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
 }
@@ -787,7 +787,7 @@ function finkom()
 {
     global $d;
     if ($d['Weg']['s']==0&&$d['inkom']['s']=='Off'&&$d['zon']['s']<10) {
-        sw('inkom', 'On');
+        sw('inkom', 'On', basename(__FILE__).':'.__LINE__);
     }
 }
 function fhall()
@@ -795,9 +795,9 @@ function fhall()
     global $d,$device;
     if ($d['hall']['s']=='Off') {
 		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']==0)) {
-			sw('hall', 'On');
+			sw('hall', 'On', basename(__FILE__).':'.__LINE__);
 		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
-			sw('hall', 'On');
+			sw('hall', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
@@ -807,13 +807,13 @@ function sirene($msg)
     $boven=array('pirhall');
     if (in_array($device, $boven)) {
         if ($d['Weg']['s']==2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
-            sw('sirene', 'On');
+            sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
             telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
         }
     } else {
         if ($d['Weg']['s']>=1&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
-            sw('sirene', 'On');
+            sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
             telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
         }

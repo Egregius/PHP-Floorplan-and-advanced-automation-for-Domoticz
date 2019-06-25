@@ -37,7 +37,7 @@ if ($status=='On') {
         store('Weg', 2);
         sw(array('weg'), 'Off', basename(__FILE__).':'.__LINE__);
     } else {
-        sw('poortrf', 'On');
+        sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
         if ($d['sirene']['s']!='Group Off') {
             double('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         }

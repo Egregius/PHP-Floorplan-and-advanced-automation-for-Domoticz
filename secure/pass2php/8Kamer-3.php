@@ -31,7 +31,7 @@ if ($status=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     bosekey("POWER", 0, 103);
-                    sw('bose103', 'On');
+                    sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
                 }
             }
         }

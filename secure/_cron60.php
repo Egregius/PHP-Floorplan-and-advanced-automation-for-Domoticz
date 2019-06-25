@@ -341,18 +341,18 @@ if ($d['auto']['s']=='On') {
         &&$d['poortrf']['s']=='On'
         &&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))
     ) {
-        sw('poortrf', 'Off');
+        sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['auto']['m']) {
         if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
             if ($d['jbl']['s']!='Off') {
-                sw('jbl', 'Off');
+                sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['bureel']['s']!='Off') {
-                sw('bureel', 'Off');
+                sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['kristal']['s']!='Off') {
-                sw('kristal', 'Off');
+                sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
             }
         }
     }
@@ -387,7 +387,7 @@ if ($d['auto']['s']=='On') {
         }
     }
     if ($d['wc']['s']=='On' && past('wc')>540) {
-        sw('wc', 'Off');
+        sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
     }
     	if ($d['denon']['s']=='On') {
 		$denonmain=json_decode(
@@ -457,11 +457,11 @@ if ($d['auto']['s']=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
                     bosekey("POWER", 0, 101);
-                    sw('bose101', 'Off');
-                    sw('bose102', 'Off');
-                    sw('bose103', 'Off');
-                    sw('bose104', 'Off');
-                    sw('bose105', 'Off');
+                    sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
                 }
             }
         }
@@ -482,7 +482,7 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose102', 'Off');
+                    sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
                     bosekey("POWER", 0, 102);
                 }
             }
@@ -510,7 +510,7 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose104', 'Off');
+                    sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
                     bosekey("POWER", 0, 104);
                 }
             }
@@ -587,14 +587,14 @@ if ($d['auto']['s']=='On') {
     }
     if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
         if ($d['tuin']['s']=='On') {
-            sw('tuin', 'Off');
+            sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($d['terras']['s']>0) {
-            sl('terras', 0);
+            sl('terras', 0, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
-        sl('ledluifel', 0);
+        sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
     }
 }
     /* -------------------------------------------- ALTIJD ----------------------------*/
@@ -607,22 +607,22 @@ if ($d['heater1']['s']!='Off'
     &&past('heater3')>90
     &&past('heater4')>90
 ) {
-    sw('heater1', 'Off');
+    sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['diepvries']['s']!='On'
     &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
     &&past('diepvries')>1780
 ) {
-    sw('diepvries', 'On');
+    sw('diepvries', 'On', basename(__FILE__).':'.__LINE__);
 } elseif ($d['diepvries']['s']!='Off'
     &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
     &&past('diepvries')>280
 ) {
-    sw('diepvries', 'Off');
+    sw('diepvries', 'Off', basename(__FILE__).':'.__LINE__);
 } elseif ($d['diepvries']['s']!='Off'
     &&past('diepvries')>7200
 ) {
-    sw('diepvries', 'Off');
+    sw('diepvries', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     $stamp=sprintf("%s", date("Y-m-d H:i"));
