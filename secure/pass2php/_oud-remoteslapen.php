@@ -30,15 +30,15 @@ if ($status=='On') {
     }
 } else {
     if ($d['sirene']['s']!='Group Off') {
-        sw('sirene', 'Off');
+        sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['Weg']['s']!=0) {
         store('Weg', 0);
     } elseif ($d['Weg']['s']==0) {
         if ($d['hall']['s']=='Off') {
-            sw('hall', 'On');
+            sw('hall', 'On', basename(__FILE__).':'.__LINE__);
         } else {
-            sl('lichtbadkamer', 18);
+            sl('lichtbadkamer', 18, basename(__FILE__).':'.__LINE__);
         }
     }
 }

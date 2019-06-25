@@ -34,7 +34,7 @@ if ($d['zwembadfilter']['s']=='On') {
 		&&$d['zwembadwarmte']['s']=='Off'
 		&&$d['buiten_temp']['s']<27
 	) {
-		sw('zwembadfilter','Off');
+		sw('zwembadfilter','Off', basename(__FILE__).':'.__LINE__);
 	}
 }else{
 	if (
@@ -42,15 +42,15 @@ if ($d['zwembadfilter']['s']=='On') {
 			||
 			(past('zwembadfilter')>10700&&$d['buiten_temp']['s']>27)
 	   ) {
-	   	sw('zwembadfilter','On');
+	   	sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['zwembadwarmte']['s']=='On') {
 	if (past('zwembadwarmte')>86398) {
-		sw('zwembadwarmte','Off');
+		sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['zwembadfilter']['s']=='Off') {
-		sw('zwembadfilter','On');
+		sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
 	}
 }
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
@@ -66,7 +66,7 @@ foreach ($items as $i) {
 }
 if ($d['auto']['s']!='On') {
 	if (past('auto')>10795) {
-		sw('auto', 'On');
+		sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	}
 }
 if (past('Weg')>14400

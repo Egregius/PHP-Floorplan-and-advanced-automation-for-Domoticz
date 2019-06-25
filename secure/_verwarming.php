@@ -204,57 +204,57 @@ if ($d['Weg']['s']==0) {
             && past('heater1')>90
             && past('heater2')>90
         ) {
-            sw('heater1', 'Off', false, 1);
+            sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>90
         ) {
             if ($d['heater1']['s']!='On') {
-                sw('heater1', 'On', false, 2);
+                sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
                 sleep(5);
             }
-            sw('heater2', 'On', false, 3);
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('111');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>180
             && $d['el']['s']<8000
         ) {
-            sw('heater2', 'On', false, 4);
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('222');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
             && past('heater2')>90
             || $d['el']['s']>8500
         ) {
-            sw('heater2', 'Off', false, 5);
+            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<=$difheater3
             && $d['heater3']['s']!='On'
             && past('heater3')>90
             && $d['el']['s']<7000
         ) {
-            sw('heater3', 'On');
+            sw('heater3', 'On', basename(__FILE__).':'.__LINE__);
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
             && past('heater3')>30
             || $d['el']['s']>8000
         ) {
-            sw('heater3', 'Off', false, 6);
+            sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<=$difheater4
             && $d['heater4']['s']!='On'
             && past('heater4')>90
             && $d['el']['s']<6000
         ) {
-            sw('heater4', 'On', false, 7);
+            sw('heater4', 'On', basename(__FILE__).':'.__LINE__);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
             && past('heater4')>30
             || $d['el']['s']>7000
         ) {
-            sw('heater4', 'Off', false, 8);
+            sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
         }
     } elseif ($d['heating']['s']==3) {//gas/elec
         $difheater2=-0.3;
@@ -265,77 +265,77 @@ if ($d['Weg']['s']==0) {
             && past('heater1')>90
             && past('heater2')>90
         ) {
-            sw('heater1', 'Off', false, 9);
+            sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>90
             && $d['el']['s']<8000
         ) {
-            sw('heater2', 'On', false, 10);
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('333');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
             && past('heater2')>180
             && $d['el']['s']<8000
         ) {
-            sw('heater2', 'On', false, 11);
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('444');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
             && past('heater2')>90
             || $d['el']['s']>8500
         ) {
-            sw('heater2', 'Off', false, 12);
+            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<$difheater3
             && $d['heater3']['s']!='On'
             && past('heater3')>90
             && $d['el']['s']<7000
         ) {
-            sw('heater3', 'On', false, 13);
+            sw('heater3', 'On', basename(__FILE__).':'.__LINE__);
         } elseif ($difliving>=$difheater3
             && $d['heater3']['s']!='Off'
             && past('heater3')>30
             || $d['el']['s']>8000
         ) {
-            sw('heater3', 'Off', false, 14);
+            sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<$difheater4
             && $d['heater4']['s']!='On'
             && past('heater4')>90
             && $d['el']['s']<6000
         ) {
-            sw('heater4', 'On', false, 15);
+            sw('heater4', 'On', basename(__FILE__).':'.__LINE__);
         } elseif ($difliving>=$difheater4
             && $d['heater4']['s']!='Off'
             && past('heater4')>30
             || $d['el']['s']>7000
         ) {
-            sw('heater4', 'Off', false, 16);
+            sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
         }
     } elseif ($d['heating']['s']==1) {
         //Cooling
         if ($d['heater4']['s']!='Off') {
-            sw('heater4', 'Off', false, 17);
+            sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($d['heater3']['s']!='Off') {
-            sw('heater3', 'Off', false, 18);
+            sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($d['heater2']['s']!='Off') {
-            sw('heater2', 'Off', false, 19);
+            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
 } else {
     //Niet thuis of slapen
     if ($d['heater4']['s']!='Off') {
-        sw('heater4', 'Off', false, 20);
+        sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['heater3']['s']!='Off') {
-        sw('heater3', 'Off', false, 21);
+        sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['heater2']['s']!='Off') {
-        sw('heater2', 'Off', false, 22);
+        sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
 if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
@@ -402,77 +402,35 @@ if ($d['heating']['s']==3) {
         && $d['brander']['s']=="Off"
         && past('brander')>180
     ) {
-        sw(
-            'brander',
-            'On',
-            false,
-            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($bigdif<=-0.1
         && $d['brander']['s']=="Off"
         && past('brander')>300
     ) {
-        sw(
-            'brander',
-            'On',
-            false,
-            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     } elseif ($bigdif<= 0
         && $d['brander']['s']=="Off"
         && past('brander')>600
     ) {
-        sw(
-            'brander',
-            'On',
-            false,
-            'brander ON dif = '.$bigdif.' was off for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander','On', basename(__FILE__).':'.__LINE__);
     } elseif ($bigdif>= 0
         && $d['brander']['s']=="On"
         && past('brander')>180
     ) {
-        sw(
-            'brander',
-            'Off',
-            false,
-            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
     } elseif ($bigdif>=-0.1
         && $d['brander']['s']=="On"
         && past('brander')>300
     ) {
-        sw(
-            'brander',
-            'Off',
-            false,
-            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
     } elseif ($bigdif>=-0.2
         && $d['brander']['s']=="On"
         && past('brander')>900
     ) {
-        sw(
-            'brander',
-            'Off',
-            false,
-            'brander OFF dif = '.$bigdif.' was on for '.convertToHours(
-                past('brander')
-            )
-        );
+        sw('brander','Off', basename(__FILE__).':'.__LINE__);
     }
 } elseif ($d['brander']['s']=='On') {
-    sw('brander', 'Off', false, 'Brander OFF, heating < 3');
+    sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($bigdif!=$d['heating']['m']) {
     storemode('heating', $bigdif);
@@ -664,13 +622,7 @@ if ($difzolder<=-0.2
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
-    sw(
-        'zoldervuur',
-        'On',
-        false,
-        'zoldervuur1 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<=-0.1
     && $d['zoldervuur']['s']!="On"
@@ -679,13 +631,7 @@ if ($difzolder<=-0.2
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
-    sw(
-        'zoldervuur',
-        'On',
-        false,
-        'zoldervuur2 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif ($difzolder<= 0
     && $d['zoldervuur']['s']!="On"
@@ -694,13 +640,7 @@ if ($difzolder<=-0.2
     && $d['heating']['s']>=2
     && $d['Weg']['s']==0
 ) {
-    sw(
-        'zoldervuur',
-        'On',
-        false,
-        'zoldervuur3 ON dif = '.$difzolder.' was off for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>= 0
     && $d['zoldervuur']['s']!="Off"
@@ -708,13 +648,7 @@ if ($difzolder<=-0.2
     || ($d['zoldervuur']['s']!="Off"
     && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
-    sw(
-        'zoldervuur',
-        'Off',
-        false,
-        'zoldervuur4 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.3
     && $d['zoldervuur']['s']!="Off"
@@ -722,13 +656,7 @@ if ($difzolder<=-0.2
     || ($d['zoldervuur']['s']!="Off"
     && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
-    sw(
-        'zoldervuur',
-        'Off',
-        false,
-        'zoldervuur5 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 } elseif (($difzolder>=-0.5
     && $d['zoldervuur']['s']!="Off"
@@ -736,13 +664,7 @@ if ($difzolder<=-0.2
     || ($d['zoldervuur']['s']!="Off"
     && ($d['el']['s']>6600 || $d['Weg']['s']>0))
 ) {
-    sw(
-        'zoldervuur',
-        'Off',
-        false,
-        'zoldervuur6 OFF dif = '.$difzolder.' was on for '.
-        convertToHours(past('zoldervuur')).', verbruik: '.$d['el']['s']
-    );
+    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 }
 /**

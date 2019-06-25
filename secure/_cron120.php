@@ -26,9 +26,9 @@ if ($d['auto']['s']=='On') {
     else $pomppauze=86400*28;
 
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
-        sw('regenpomp', 'Off');
+        sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
     } elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$pomppauze) {
-        sw('regenpomp', 'On');
+        sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
         telegram('Regenpomp aan, rainpast='.$rainpast);
     }
     if ($d['achterdeur']['s']=='Closed') {
@@ -46,7 +46,7 @@ if ($d['auto']['s']=='On') {
 				__Volgende 48u: $maxrain
 				__Automatisch tuin water geven gestart voor $watertime sec.";
 			if ($rainpast<1000&&$maxrain<1) {
-				sw('water', 'On');
+				sw('water', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('water', $watertime);
 				telegram($msg, 2);
 			}

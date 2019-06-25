@@ -13,6 +13,6 @@ if ($d['Weg']['s']!=0) {
     store('Weg', 0, null, true);
 }
 if ($d['hall']['s']=='Off') {
-    sw('hall', 'On');
+    sw('hall', 'On', basename(__FILE__).':'.__LINE__);
 }
 resetsecurity();

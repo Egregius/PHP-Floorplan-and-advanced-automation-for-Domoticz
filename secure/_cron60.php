@@ -20,7 +20,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $item) {
                     if ($d[$item]['s']!='Off') {
                         if (past($item)>$uit) {
-                            sw($item, 'Off');
+                            sw($item, 'Off', basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -33,7 +33,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $item) {
                     if ($d[$item]['s']!='Off') {
                         if (past($item)>$uit) {
-                            sw($item, 'Off');
+                            sw($item, 'Off', basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -52,7 +52,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $item) {
                     if ($d[$item]['s']!='Off') {
                         if (past($item)>$uit) {
-                            sw($item, 'Off');
+                            sw($item, 'Off', basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -66,7 +66,7 @@ if ($d['auto']['s']=='On') {
             }*/
         }
         if (past('Xlight')>300&&$d['Xlight']['s']!='Off') {
-            sw('Xlight', 'Off');
+            sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
         }
         $items=array(
             'living_temp',
@@ -199,7 +199,7 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
                 if (past($item)>$uit) {
-                    sw($item, 'Off');
+                    sw($item, 'Off', basename(__FILE__).':'.__LINE__);
                     lg($item.' uitgeschakeld omdat we slapen');
                 }
             }
@@ -249,7 +249,7 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
                 if (past($item)>$uit) {
-                    sw($item, 'Off');
+                    sw($item, 'Off', basename(__FILE__).':'.__LINE__);
                     lg($item.' uitgeschakeld omdat we weg zijn');
                 }
             }
@@ -282,7 +282,7 @@ if ($d['auto']['s']=='On') {
             );
         }
         if ($d['voordeur']['s']=='On'&&past('voordeur')>598) {
-        sw('voordeur', 'Off');
+        sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
     }
 
     if (past('deurbadkamer')>1200&&past('lichtbadkamer')>600) {
@@ -325,13 +325,13 @@ if ($d['auto']['s']=='On') {
     if ($d['lgtv']['s']=='Off') {
         if (past('lgtv')>600) {
             if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='OFF'&&past('denon')>600) {
-                sw('denon', 'Off');
+                sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
-                sw('nvidia', 'Off');
+                sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
             }
             if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) {
-                sw('tv', 'Off');
+                sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
             }
         }
     }
@@ -613,21 +613,16 @@ if ($d['diepvries']['s']!='On'
     &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
     &&past('diepvries')>1780
 ) {
-    sw('diepvries', 'On', false, 'Diepvries On '.$d['diepvries_temp']['s'].'°C');
+    sw('diepvries', 'On');
 } elseif ($d['diepvries']['s']!='Off'
     &&$d['diepvries_temp']['s']<=$d['diepvries_temp']['m']
     &&past('diepvries')>280
 ) {
-    sw('diepvries', 'Off', false, 'Diepvries Off '.$d['diepvries_temp']['s'].'°C');
+    sw('diepvries', 'Off');
 } elseif ($d['diepvries']['s']!='Off'
     &&past('diepvries')>7200
 ) {
-    sw(
-        'diepvries',
-        'Off',
-        false,
-        'Diepvries Off '.$d['diepvries_temp']['s'].'°C, was aan voor meer dan 2 uur'
-    );
+    sw('diepvries', 'Off');
 }
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     $stamp=sprintf("%s", date("Y-m-d H:i"));
