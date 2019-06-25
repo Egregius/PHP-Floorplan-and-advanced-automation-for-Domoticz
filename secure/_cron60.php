@@ -379,10 +379,10 @@ if ($d['auto']['s']=='On') {
             if ($d['dampkap']['m']==1) {
                 if ($tdampkap>1200) {
                     double('dampkap', 'Off');
-                    storemode('dampkap', 0);
+                    storemode('dampkap', 0, basename(__FILE__).':'.__LINE__);
                 }
             } elseif (past('dampkap')>350) {
-                double('dampkap', 'Off');
+                double('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
             }
         }
     }
@@ -404,10 +404,10 @@ if ($d['auto']['s']=='On') {
 		);
 		if (!empty($denonmain)) {
 			if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) {
-				storemode('denon', $denonmain['InputFuncSelect']['value']);
+				storemode('denon', $denonmain['InputFuncSelect']['value'], basename(__FILE__).':'.__LINE__);
 			}
 			if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) {
-				store('denonpower', $denonmain['ZonePower']['value']);
+				store('denonpower', $denonmain['ZonePower']['value'], basename(__FILE__).':'.__LINE__);
 			}
 			$denonsec=json_decode(
 				json_encode(
