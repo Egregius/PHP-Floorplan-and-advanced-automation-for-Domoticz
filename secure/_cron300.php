@@ -56,7 +56,7 @@ if ($d['zwembadwarmte']['s']=='On') {
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
 foreach ($items as $i) {
     if (past($i)>900) {
-        storeicon($i, '');
+        storeicon($i, '', basename(__FILE__).':'.__LINE__);
     }
 }
 foreach ($items as $i) {
