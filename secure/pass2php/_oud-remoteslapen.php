@@ -15,17 +15,17 @@ if ($status=='On') {
         sl('kamer', 3, basename(__FILE__).':'.__LINE__);
         storemode('kamer', 0);
     } elseif ($d['Weg']['s']==0&&$d['kamer']['s']>=2) {
-        sl('kamer', 2);
+        sl('kamer', 2, basename(__FILE__).':'.__LINE__);
         include 'pass2php/minihall1s.php';
         storemode('kamer', 0);
     } elseif ($d['Weg']['s']==1&&$d['kamer']['s']==0) {
-        sl('kamer', 2);
+        sl('kamer', 2, basename(__FILE__).':'.__LINE__);
         storemode('kamer', 0);
     } elseif ($d['kamer']['m']==1) {
-        sl('kamer', 0);
+        sl('kamer', 0, basename(__FILE__).':'.__LINE__);
         storemode('kamer', 0);
     } elseif ($d['Weg']['s']==1) {
-        sl('kamer', 1);
+        sl('kamer', 1, basename(__FILE__).':'.__LINE__);
         storemode('kamer', 1);
     }
 } else {

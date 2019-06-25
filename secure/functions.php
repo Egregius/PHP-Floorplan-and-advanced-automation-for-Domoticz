@@ -43,7 +43,7 @@ function huisslapen()
     sw(array('slapen'), 'Off', basename(__FILE__).':'.__LINE__);
     $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
-        storemode($i, 0);
+        storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
     $items=array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel');
     foreach ($items as $i) {

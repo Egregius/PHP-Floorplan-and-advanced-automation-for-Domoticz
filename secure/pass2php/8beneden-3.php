@@ -11,8 +11,8 @@
  **/
 if ($status=='On') {
     if ($d['eettafel']['s']<14) {
-        sl('eettafel', 14);
+        sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
     } else {
-        sl('eettafel', 100);
+        sl('eettafel', 100, basename(__FILE__).':'.__LINE__);
     }
 }
