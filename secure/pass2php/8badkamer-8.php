@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('lichtbadkamer', 'Off');
+    sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
     if ($d['auto']['s']=='On') {
         fhall();
         fliving();
@@ -44,7 +44,7 @@ if ($status=='On') {
                             }
                         }
                         bosekey("POWER", 0, 102);
-                        sw('bose102', 'Off');
+                        sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
                     }
                 }
             }
@@ -54,7 +54,7 @@ if ($status=='On') {
                     if (isset($nowplaying['@attributes']['source'])) {
                         if ($nowplaying['@attributes']['source']!='STANDBY') {
                             bosekey("POWER", 0, 101);
-                            sw('bose101', 'Off');
+                            sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }

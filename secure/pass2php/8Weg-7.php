@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('poortrf', 'Off');
+    sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
     resetsecurity();
 }

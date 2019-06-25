@@ -11,7 +11,7 @@
  **/
 if ($status=="Open") {
     if ($d['dampkap']['s']=='On') {
-        sw('dampkap', 'Off');
+        sw('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['bose105']['m']=='Online') {
         $status=json_decode(
@@ -28,14 +28,14 @@ if ($status=="Open") {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     bosezone(105);
-                    sw('bose105', 'On');
+                    sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
                 }
             }
         }
     }
  } else {
     if ($d['Weg']['s']>0&&$d['auto']['s']==1&&$d['Weg']['m']>TIME-178) {
-            sw('sirene', 'On');
+            sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             telegram('Achterdeur open om '.strftime("%k:%M:%S", TIME), false, 3);
     }
     if ($d['bose105']['m']=='Online') {
@@ -53,7 +53,7 @@ if ($status=="Open") {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
                     bosekey("POWER", 0, 105);
-                    sw('bose105', 'Off');
+                    sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
                 }
             }
         }

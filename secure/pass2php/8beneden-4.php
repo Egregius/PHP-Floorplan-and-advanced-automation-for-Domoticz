@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('jbl');
+    sw('jbl', null, basename(__FILE__).':'.__LINE__);
 }

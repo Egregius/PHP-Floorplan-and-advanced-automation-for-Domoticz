@@ -12,6 +12,6 @@
 if ($status=='Off'&&past('zolderg')>30) {
 	for ($x=1;$x<=10;$x++){
 		sleep(2);
-		sw('zolderg', 'Off');
+		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }

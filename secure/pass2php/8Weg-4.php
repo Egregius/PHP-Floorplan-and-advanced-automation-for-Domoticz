@@ -28,18 +28,18 @@ if ($status=='On') {
 			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
 		}
         if ($d['garage']['s']=='On') {
-            sw('garage', 'Off');
+            sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($d['garageled']['s']=='On') {
-            sw('garageled', 'Off');
+            sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
         
         store('Weg', 2);
-        sw(array('weg'), 'Off');
+        sw(array('weg'), 'Off', basename(__FILE__).':'.__LINE__);
     } else {
         sw('poortrf', 'On');
         if ($d['sirene']['s']!='Group Off') {
-            double('sirene', 'Off');
+            double('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
     huisweg();

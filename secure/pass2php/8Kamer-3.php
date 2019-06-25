@@ -17,10 +17,10 @@ if ($status=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
                     bosekey("POWER", 0, 101);
-                    sw('bose101', 'Off');
-                    sw('bose102', 'Off');
-                    sw('bose104', 'Off');
-                    sw('bose105', 'Off');
+                    sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+                    sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
                 }
             }
         }

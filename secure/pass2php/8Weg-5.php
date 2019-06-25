@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 store('auto', 'Off');
-sw('garage', 'Off');
+sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 resetsecurity();

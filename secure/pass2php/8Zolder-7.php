@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('bureeltobi', 'Off');
+sw('bureeltobi', 'Off', basename(__FILE__).':'.__LINE__);

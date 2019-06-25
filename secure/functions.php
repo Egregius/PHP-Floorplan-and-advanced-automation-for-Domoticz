@@ -65,7 +65,7 @@ function huisslapen()
         }
     }
     if ($d['auto']['s']=='Off') {
-        sw('auto', 'On');
+        sw('auto', 'On', basename(__FILE__).':'.__LINE__);
     }
 }
 /**
@@ -160,7 +160,7 @@ function waarschuwing($msg,$sound)
         sl('Xvol', 25);
     }
     sl('Xring', 30);
-    sw('deurbel', 'On');
+    sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
     //telegram($msg, false, 2);
     usleep(1500000);
     sl('Xring', 0);
@@ -233,7 +233,7 @@ function resetsecurity()
     if (!isset($d)) $d=fetchdata();
     lg(' ********* RESETSECURITY ************');
     if ($d['sirene']['s']!='Off') {
-        sw('sirene', 'Off');
+        sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         usleep(100000);
         store('sirene', 'Off');
     }
@@ -456,11 +456,11 @@ function pingport($ip,$port)
     }
     return $status;
 }
-function double($name,$action)
+function double($name, $action, $msg='')
 {
-    sw($name, $action);
+    sw($name, $action, $msg);
     usleep(2000000);
-    sw($name, $action);
+    sw($name, $action, $msg);
 }
 
 function koekje($user,$expirytime)
@@ -596,7 +596,7 @@ function bosezone($ip)
     if ($d['Weg']['s']<=1) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
             bosekey("POWER", 0, 101);
-            sw('bose101', 'On');
+            sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosevolume(25, 101);
             for ($x=1;$x<=10;$x++) {
                 $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
@@ -622,7 +622,7 @@ function bosezone($ip)
             }
         }
         if ($ip>101) {
-            sw('bose'.$ip, 'On');
+            sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
             if ($ip==102) {
                 $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
             } elseif ($ip==103) {
@@ -634,8 +634,8 @@ function bosezone($ip)
             }
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
                 bosekey("POWER", 0, 101);
-                sw('bose101', 'On');
-                sw('bose'.$ip, 'On');
+                sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+                sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
                 if ($d['denonpower']['s']=='ON') {
                     bosevolume(0, 101);
                 } else {
@@ -662,7 +662,7 @@ function bosezone($ip)
                     sleep(1);
                 }
             } elseif ($d['bose'.$ip]['s']=='Off') {
-                sw('bose'.$ip, 'On');
+                sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
                 bosepost('setZone', $xml, 101);
                 if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
                     bosevolume(35, $ip);
@@ -737,13 +737,13 @@ function fliving()
     if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
-                sw('keuken', 'On');
+                sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
             }
             if ($d['bureel']['s']=='Off') {
-                sw('bureel', 'On');
+                sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
             }
             if ($d['jbl']['s']=='Off') {
-                sw('jbl', 'On');
+                sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
             }
         }
         $d['pirliving']['t']=TIME;
@@ -755,7 +755,7 @@ function fgarage()
 {
     global $d;
     if ($d['Weg']['s']==0&&($d['zon']['s']<500||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
-        sw('garageled', 'On');
+        sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
     }
     bosezone(104);
 }

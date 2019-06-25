@@ -11,6 +11,6 @@
  **/
 if ($status=='On') {
     store('Weg', 0);
-    sw('poortrf', 'On');
+    sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
     resetsecurity();
 }
