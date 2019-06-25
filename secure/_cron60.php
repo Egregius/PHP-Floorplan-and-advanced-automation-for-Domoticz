@@ -65,7 +65,7 @@ if ($d['auto']['s']=='On') {
                 }
             }*/
         }
-        if (past('Xlight')>300&&$d['Xlight']['s']!=0) {
+        if (past('Xlight')>300&&$d['Xlight']['s']!='0') {
             sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
         }
         $items=array(
@@ -206,8 +206,7 @@ if ($d['auto']['s']=='On') {
             'wasbak',
             'kookplaat',
             'zolderg',
-            'dampkap',
-            'Xlight'
+            'dampkap'
         );
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
@@ -256,8 +255,7 @@ if ($d['auto']['s']=='On') {
             'kookplaat',
             'badkamervuur2',
             'badkamervuur1',
-            'zolderg',
-            'Xlight'
+            'zolderg'
         );
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
