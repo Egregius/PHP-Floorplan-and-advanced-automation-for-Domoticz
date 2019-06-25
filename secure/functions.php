@@ -47,14 +47,14 @@ function huisslapen()
     }
     $items=array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel');
     foreach ($items as $i) {
-        storemode($i, 0);
+        storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
     $items=array('Ralex','RkamerL','RkamerR');
     foreach ($items as $i) {
-        storemode($i, 2);
+        storemode($i, 2, basename(__FILE__).':'.__LINE__);
     }
     if ($d['gcal']['s']==true) {
-        storemode('Rtobi', 2);
+        storemode('Rtobi', 2, basename(__FILE__).':'.__LINE__);
     }
     $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/now_playing'))), true);
     if (!empty($status)) {
@@ -80,7 +80,7 @@ function huisweg()
     huisslapen();
     $items=array('Rtobi','Ralex','RkamerL','RkamerR');
     foreach ($items as $i) {
-        storemode($i, 0);
+        storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
 }
 /**
@@ -100,7 +100,7 @@ function douche()
         telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
     }
     store('douche', 0);
-    storemode('douche', 0);
+    storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 }
 /**
  * Function douchewarn
@@ -276,7 +276,7 @@ function sw($name,$action='Toggle',$msg='')
         }
         if ($name=='denon') {
             if ($action=='Off') {
-                storemode('denon', 'UIT');
+                storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
             }
         }
     }
@@ -766,7 +766,7 @@ function fbadkamer()
         }
         bosezone(102);
     }
-    storemode('Weg', TIME);
+    storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 }
 function fkeuken()
 {
@@ -814,7 +814,7 @@ function sirene($msg)
             telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
         }
     }
-    storemode('Weg', TIME);
+    storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 }
 function createheader($page='')
 {

@@ -18,7 +18,7 @@ if ($home) {
     createheader('floorplanheating');
     if (isset($_POST['Setpoint'])) {
         if (isset($_POST['resetauto'])) {
-            storemode($_POST['Naam'].'_set', 0);
+            storemode($_POST['Naam'].'_set', 0, basename(__FILE__).':'.__LINE__);
             lgsql($user, $_POST['Naam'].'_mode', 'reset auto');
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to Automatic');
             $d[$_POST['Naam'].'_set']['m']=0;
@@ -26,7 +26,7 @@ if ($home) {
         } else {
             store($_POST['Naam'].'_set', $_POST['Actie']);
             lgsql($user, $_POST['Naam'].'_set', $_POST['Actie']);
-            storemode($_POST['Naam'].'_set', 2);
+            storemode($_POST['Naam'].'_set', 2, basename(__FILE__).':'.__LINE__);
             lgsql($user, $_POST['Naam'].'_mode', 2);
             lg(' (Set Setpoint) | '.$user.' set '.$_POST['Naam'].' to '.$_POST['Actie'].'°');
             $d[$_POST['Naam'].'_set']['s']=$_POST['Actie'];
@@ -41,7 +41,7 @@ if ($home) {
         if (isset($_POST['Rollerlevelon_x'])) {
             sl($_POST['Naam'], 100, basename(__FILE__).':'.__LINE__);
             if ($d[$_POST['Naam']]['m']==0) {
-                storemode($_POST['Naam'], 1);
+                storemode($_POST['Naam'], 1, basename(__FILE__).':'.__LINE__);
             }
         } elseif (isset($_POST['Rollerleveloff_x'])) {
             if ($_POST['Naam']=='Rlivingzzz') {
@@ -50,7 +50,7 @@ if ($home) {
                 sl($_POST['Naam'], 0, basename(__FILE__).':'.__LINE__);
             }
             if ($d[$_POST['Naam']]['m']==0) {
-                storemode($_POST['Naam'], 1);
+                storemode($_POST['Naam'], 1, basename(__FILE__).':'.__LINE__);
             }
         } else {
             if ($_POST['Naam']=='Rlivingzzz'&&$_POST['Rollerlevel']<8) {
