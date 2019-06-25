@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$user='cron60';
+$user='cron60  ';
 if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS ----------------------------*/
     if ($d['Weg']['s']==0){

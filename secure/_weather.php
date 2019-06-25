@@ -158,47 +158,47 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 }
 if ($prevbuitentemp>$avg+0.5) {
 	if ($d['buiten_temp']['icon']!='red5') {
-		storeicon('buiten_temp', 'red5');
+		storeicon('buiten_temp', 'red5', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp>$avg+0.4) {
     if ($d['buiten_temp']['icon']!='red4') {
-		storeicon('buiten_temp', 'red4');
+		storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp>$avg+0.3) {
     if ($d['buiten_temp']['icon']!='red3') {
-		storeicon('buiten_temp', 'red3');
+		storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp>$avg+0.2) {
     if ($d['buiten_temp']['icon']!='red') {
-		storeicon('buiten_temp', 'red');
+		storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp>$avg+0.1) {
     if ($d['buiten_temp']['icon']!='up') {
-		storeicon('buiten_temp', 'up');
+		storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp<$avg-0.5) {
     if ($d['buiten_temp']['icon']!='blue5') {
-		storeicon('buiten_temp', 'blue5');
+		storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp<$avg-0.4) {
     if ($d['buiten_temp']['icon']!='blue4') {
-		storeicon('buiten_temp', 'blue4');
+		storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp<$avg-0.3) {
     if ($d['buiten_temp']['icon']!='blue3') {
-		storeicon('buiten_temp', 'blue3');
+		storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp<$avg-0.2) {
     if ($d['buiten_temp']['icon']!='blue') {
-		storeicon('buiten_temp', 'blue');
+		storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($prevbuitentemp<$avg-0.1) {
     if ($d['buiten_temp']['icon']!='down') {
-		storeicon('buiten_temp', 'down');
+		storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
 	}
 } else {
     if ($d['buiten_temp']['icon']!='') {
-		storeicon('buiten_temp', '');
+		storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
 	}
 }
 

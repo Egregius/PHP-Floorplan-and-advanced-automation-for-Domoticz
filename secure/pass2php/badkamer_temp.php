@@ -15,27 +15,27 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
 if ($status>=$avg+0.5) {
-	storeicon($n.'_temp', 'red5');
+	storeicon($n.'_temp', 'red5', basename(__FILE__).':'.__LINE__);
 } elseif ($status>=$avg+0.4) {
-    storeicon($n.'_temp', 'red4');
+    storeicon($n.'_temp', 'red4', basename(__FILE__).':'.__LINE__);
 } elseif ($status>=$avg+0.3) {
-    storeicon($n.'_temp', 'red3');
+    storeicon($n.'_temp', 'red3', basename(__FILE__).':'.__LINE__);
 } elseif ($status>=$avg+0.2) {
-    storeicon($n.'_temp', 'red');
+    storeicon($n.'_temp', 'red', basename(__FILE__).':'.__LINE__);
 } elseif ($status>=$avg+0.1) {
-    storeicon($n.'_temp', 'up');
+    storeicon($n.'_temp', 'up', basename(__FILE__).':'.__LINE__);
 } elseif ($status<=$avg-0.5) {
-    storeicon($n.'_temp', 'blue5');
+    storeicon($n.'_temp', 'blue5', basename(__FILE__).':'.__LINE__);
 } elseif ($status<=$avg-0.4) {
-    storeicon($n.'_temp', 'blue4');
+    storeicon($n.'_temp', 'blue4', basename(__FILE__).':'.__LINE__);
 } elseif ($status<=$avg-0.3) {
-    storeicon($n.'_temp', 'blue3');
+    storeicon($n.'_temp', 'blue3', basename(__FILE__).':'.__LINE__);
 } elseif ($status<=$avg-0.2) {
-    storeicon($n.'_temp', 'blue');
+    storeicon($n.'_temp', 'blue', basename(__FILE__).':'.__LINE__);
 } elseif ($status<=$avg-0.1) {
-    storeicon($n.'_temp', 'down');
+    storeicon($n.'_temp', 'down', basename(__FILE__).':'.__LINE__);
 } else {
-	storeicon($n.'_temp', '');
+	storeicon($n.'_temp', '', basename(__FILE__).':'.__LINE__);
 }
 $prev=$d[$n.'_temp']['s'];
 $set=$d[$n.'_set']['s'];

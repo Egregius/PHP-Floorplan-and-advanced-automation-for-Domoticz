@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$user='cron10';
+$user='cron10  ';
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
     &&past('poort')>90

@@ -198,7 +198,7 @@ function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
-    lg(' (SETLEVEL) | '.$user.' => '.$name.' => '.$level.' ('.$msg.')');
+    lg(' (SETLEVEL)	'.$user.' => '.$name.' => '.$level.' ('.$msg.')');
     if ($d[$name]['i']>0) {
 		if ($d[$name]['s']!=$level) {
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
@@ -210,7 +210,7 @@ function sl($name,$level,$msg='')
 function rgb($name,$hue,$level,$check=false)
 {
     global $user,$d,$domoticzurl;
-    lg(' (RGB) | '.$user.' =>	'.$name.'	'.$level);
+    lg(' (RGB)		'.$user.' =>	'.$name.'	'.$level);
     if ($d[$name]['i']>0) {
         if ($check==false) {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
@@ -265,7 +265,7 @@ function sw($name,$action='Toggle',$msg='')
             }
         }
     } else {
-        $msg=' (SWITCH) | '.$user.' => '.$name.' => '.$action.' ('.$msg.')';
+        $msg=' (SWITCH)		'.$user.' => '.$name.' => '.$action.' ('.$msg.')';
         if ($d[$name]['i']>0) {
             lg($msg);
 			if ($d[$name]['s']!=$action) {
