@@ -433,7 +433,7 @@ if ($d['heating']['s']==3) {
     sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($bigdif!=$d['heating']['m']) {
-    storemode('heating', $bigdif);
+    storemode('heating', $bigdif, basename(__FILE__).':'.__LINE__);
 }
 
 if ($d['deurbadkamer']['s']=='Open'

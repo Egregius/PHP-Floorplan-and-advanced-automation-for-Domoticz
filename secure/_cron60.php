@@ -116,7 +116,7 @@ if ($d['auto']['s']=='On') {
                     }
                     sl($item, $level, basename(__FILE__).':'.__LINE__);
                     if ($level==0) {
-                        storemode($item, 0);
+                        storemode($item, 0, basename(__FILE__).':'.__LINE__);
                     }
                 } elseif ($d[$item]['m']==2) {
                     $level=$d[$item]['s']+1;
@@ -128,17 +128,17 @@ if ($d['auto']['s']=='On') {
                     }
                     sl($item, $level, basename(__FILE__).':'.__LINE__);
                     if ($level==50) {
-                        storemode($item, 0);
+                        storemode($item, 0, basename(__FILE__).':'.__LINE__);
                     }
                 }
             } elseif ($d[$item]['s']==0&&$item=='alex') {
                 if ($d[$item]['m']==3) {
                     if ($d['raamalex']['s']=='Open') {
-                        storemode('alex', 0);
+                        storemode('alex', 0, basename(__FILE__).':'.__LINE__);
                     } else {
                         if (past($item)>10800) {
                             sl('alex', 2, basename(__FILE__).':'.__LINE__);
-                            storemode($item, 2);
+                            storemode($item, 2, basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -162,7 +162,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $i) {
                     if ($d[$i]['s']>0) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
-                        storemode($i, 0);
+                        storemode($i, 0, basename(__FILE__).':'.__LINE__);
                     }
                 }
             }
@@ -297,7 +297,7 @@ if ($d['auto']['s']=='On') {
     $items=array('living_set','badkamer_set','kamer_set','tobi_set','alex_set');
     foreach ($items as $i) {
         if ($d[$i]['m']!=0&&past($i)>7200) {
-            storemode($i, 0);
+            storemode($i, 0, basename(__FILE__).':'.__LINE__);
         }
     }
     $items=array(
@@ -318,7 +318,7 @@ if ($d['auto']['s']=='On') {
         $items=array('RkamerL','RkamerR','Rtobi','Ralex');
         foreach ($items as $i) {
             if ($d[$i]['m']!=0) {
-            	storemode($i, 0);
+            	storemode($i, 0, basename(__FILE__).':'.__LINE__);
             }
         }
     }

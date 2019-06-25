@@ -72,10 +72,10 @@ if (isset($ds)) {
             }
             $maxtemp=round($maxtemp, 1);
             if ($d['minmaxtemp']['m']!=$maxtemp) {
-	            storemode('minmaxtemp', $maxtemp);
+	            storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
 	        }
 	        if ($d['max']['m']!=$maxrain) {
-	            storemode('max', $maxrain, 1);
+	            storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
 	        }
         }
     }
@@ -93,10 +93,10 @@ if (isset($ow)) {
         }
         $owwind=$ow['wind']['speed'] * 3.6;
         if ($d['icon']['m']!=$ow['main']['humidity']) {
-	        storemode('icon', $ow['main']['humidity']);
+	        storemode('icon', $ow['main']['humidity'], basename(__FILE__).':'.__LINE__);
 	    }
 	    if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
-	        store('icon', $ow['weather'][0]['icon']);
+	        store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
 	    }
     }
 }
@@ -139,17 +139,17 @@ if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
     if ($buiten_temp>$maxtemp) {
         $maxtemp=round($buiten_temp, 1);
-        storemode('minmaxtemp', $maxtemp);
+        storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
     }
     $mintemp=round($mintemp, 1);
     if ($buiten_temp<$mintemp) {
         $mintemp=round($buiten_temp, 1);
-        store('minmaxtemp', $mintemp);
+        store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
     }
 }
 $buiten_temp=round($buiten_temp,1);
 if ($d['buiten_temp']['s']!=$buiten_temp) {
-	store('buiten_temp', $buiten_temp);
+	store('buiten_temp', $buiten_temp, basename(__FILE__).':'.__LINE__);
 }
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
