@@ -14,23 +14,11 @@ if (!isset($d)) {
 }
 $user='rolluiken';
 $msg='Rolluiken__';
-$boven=array(
-    'Rtobi',
-    'Ralex',
-    'RkamerL',
-    'RkamerR'
-);
-$beneden=array(
-    'Rbureel',
-    'RkeukenL',
-    'RkeukenR'
-);
-$benedena=array(
-    'Rliving',
-    'Rbureel',
-    'RkeukenL',
-    'RkeukenR'
-);
+$boven=array('Rtobi','Ralex','RkamerL','RkamerR');
+$bovenv=array('RkamerL','RkamerR');
+$bovena=array('Rtobi','Ralex');
+$beneden=array('Rbureel','RkeukenL','RkeukenR');
+$benedena=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 
 if ($d['heating']['s']>=2) {
     $msg.='Heating__';
