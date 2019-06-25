@@ -29,15 +29,15 @@ if (isset($_REQUEST['cron120'])) {
 }
 if (isset($_REQUEST['cron180'])) {
     include '_cron180.php';
-    $username='gcal';
+    $user='gcal';
     include 'gcal/gcal.php';
     sleep(2);
     include 'gcal/verlof.php';
     sleep(2);
-    $username='gcaltobibeitem';
+    $user='gcaltobibeitem';
     include 'gcal/tobibeitem.php';
     sleep(2);
-    $username='gcalmirom';
+    $user='gcalmirom';
     include 'gcal/mirom.php';
     sleep(2);
 }
