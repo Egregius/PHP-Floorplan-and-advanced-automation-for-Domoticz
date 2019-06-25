@@ -73,12 +73,12 @@ if (past('Weg')>14400
 	&& $d['Weg']['s']==0
 	&& $d['Weg']['m']<TIME-14400
 ) {
-	store('Weg', 1);
+	store('Weg', 1, basename(__FILE__).':'.__LINE__);
 	telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
 } elseif (past('Weg')>36000
 	&& $d['Weg']['s']==1
 	&& $d['Weg']['m']<TIME-36000
 ) {
-	store('Weg', 2);
+	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }

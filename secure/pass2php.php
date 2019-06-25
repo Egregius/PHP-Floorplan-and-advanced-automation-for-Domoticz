@@ -38,5 +38,5 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
         $status='Open';
     }
 }
-store($device, $status);
+store($device, $status, basename(__FILE__).':'.__LINE__);
 @require 'pass2php/'.$device.'.php';

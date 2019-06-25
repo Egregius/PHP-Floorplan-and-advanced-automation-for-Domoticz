@@ -16,7 +16,7 @@ $user='verwarming';
 if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
         if ($d['heating']['s']!=1) {
-            store('heating', 1);
+            store('heating', 1, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=1;
         }
     } elseif ($d['buiten_temp']['s']<12
@@ -24,17 +24,17 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
         ||$d['minmaxtemp']['s']<5
     ) {
         if ($d['heating']['s']!=3) {
-            store('heating', 3);
+            store('heating', 3, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=3;
         }
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
         if ($d['heating']['s']!=2) {
-            store('heating', 2);
+            store('heating', 2, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=2;
         }
     } else {
         if ($d['heating']['s']!=0) {
-            store('heating', 0);
+            store('heating', 0, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=0;
         }
     }
@@ -57,7 +57,7 @@ if ($d['kamer_set']['m']==0) {
         }
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
-        store('kamer_set', $Setkamer);
+        store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
         $d['kamer_set']['s']=$Setkamer;
     }
 }

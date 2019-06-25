@@ -93,7 +93,7 @@ $data=json_decode(
     true
 );
 if (!empty($data)) {
-    store('jaarteller', $data['jaarteller']);
+    store('jaarteller', $data['jaarteller'], basename(__FILE__).':'.__LINE__);
     if ($data['zonpercent']!=$d['zonvandaag']['m']) {
         storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
     }
@@ -119,7 +119,7 @@ $sunrise=json_decode(
 );
 if (isset($sunrise['results']['civil_twilight_begin'])) {
     if (strtotime($sunrise['results']['civil_twilight_begin'])!=$d['civil_twilight']['s']) {
-        store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']));
+        store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']), basename(__FILE__).':'.__LINE__);
     }
     if (strtotime($sunrise['results']['civil_twilight_end'])!=$d['civil_twilight']['m']) {
         storemode('civil_twilight', strtotime($sunrise['results']['civil_twilight_end']), basename(__FILE__).':'.__LINE__);
@@ -137,7 +137,7 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         );
         if (isset($uv['result'])) {
             if ($uv['result']['uv']!=$d['uv']['s']) {
-                store('uv', round($uv['result']['uv'], 1));
+                store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
             }
             if ($uv['result']['uv_max']!=$d['uv']['m']) {
                 storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);

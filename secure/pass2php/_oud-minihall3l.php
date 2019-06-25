@@ -11,5 +11,5 @@
  **/
 if ($status=='On') {
     include 'pass2php/minihall4l.php';
-    store('Weg', 0, null, true);
+    store('Weg', 0, basename(__FILE__).':'.__LINE__);
 }

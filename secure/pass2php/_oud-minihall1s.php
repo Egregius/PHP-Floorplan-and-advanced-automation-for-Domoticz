@@ -27,7 +27,7 @@ if ($status=='On') {
         die('exit');
     }
     if ($d['Weg']['s']!=1) {
-        store('Weg', 1);
+        store('Weg', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['kamer']['s']>5) {
         sl('kamer', 5, basename(__FILE__).':'.__LINE__);
