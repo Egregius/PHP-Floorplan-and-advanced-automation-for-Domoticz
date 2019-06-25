@@ -55,7 +55,7 @@ if ($home) {
 		</style>
 	</head>';
     if (isset($_REQUEST['name'])&&isset($_REQUEST['action'])) {
-        store($_REQUEST['name'], $_REQUEST['action'], null, false);
+        store($_REQUEST['name'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         if ($_REQUEST['action']=='Open') {
             if ($_REQUEST['name']=='raamkamer') {
                 storemode('RkamerL', 0, basename(__FILE__).':'.__LINE__);

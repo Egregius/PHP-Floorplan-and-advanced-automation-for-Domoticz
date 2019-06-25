@@ -18,24 +18,24 @@ if (isset($_REQUEST['gpio'])) {
     $d=fetchdata();
     $gpio=$_REQUEST['gpio'];
     if ($gpio==20) {
-        store('gasvandaag', $d['gasvandaag']['s']+1);
+        store('gasvandaag', $d['gasvandaag']['s']+1, basename(__FILE__).':'.__LINE__);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['s']+1;
-            store('douche', $data);
+            store('douche', $data, basename(__FILE__).':'.__LINE__);
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
                 sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
         }
     } elseif ($gpio==21) {
-        store('watervandaag', $d['watervandaag']['s']+1);
+        store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['m']+1;
             storemode('douche', $data, basename(__FILE__).':'.__LINE__, 1);
         }
     } elseif ($gpio==19) {
         if ($_REQUEST['action']=='on') {
-            store('poort', 'Closed');
+            store('poort', 'Closed', basename(__FILE__).':'.__LINE__);
         } else {
-            store('poort', 'Open');
+            store('poort', 'Open', basename(__FILE__).':'.__LINE__);
             fgarage();
             sirene('Poort open');
             if ($d['dampkap']['s']=='On') {

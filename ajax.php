@@ -90,15 +90,15 @@ if ($home==true) {
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         $d=fetchdata();
         if ($_REQUEST['command']=='setpoint') {
-        	store($_REQUEST['device'].'_set', $_REQUEST['action']);
+        	store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
 			$d[$_REQUEST['device'].'_set']['m']=1;
 			include 'secure/_verwarming.php';
         } elseif ($_REQUEST['command']=='heating') {
-        	store('heating', $_REQUEST['action']);
+        	store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='Weg') {
-        	store('Weg', $_REQUEST['action']);
+        	store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['action']==0) {
 				$db->query("UPDATE devices set t='1' WHERE n='heating';");
 				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {

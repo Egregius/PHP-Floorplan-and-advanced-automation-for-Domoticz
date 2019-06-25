@@ -24,7 +24,7 @@ if ($home) {
             $d[$_POST['Naam'].'_set']['m']=0;
             include 'secure/_verwarming.php';
         } else {
-            store($_POST['Naam'].'_set', $_POST['Actie']);
+            store($_POST['Naam'].'_set', $_POST['Actie'], basename(__FILE__).':'.__LINE__);
             lgsql($user, $_POST['Naam'].'_set', $_POST['Actie']);
             storemode($_POST['Naam'].'_set', 2, basename(__FILE__).':'.__LINE__);
             lgsql($user, $_POST['Naam'].'_mode', 2);

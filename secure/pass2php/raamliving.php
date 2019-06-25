@@ -11,7 +11,7 @@
  **/
 if ($status=='Open') {
     if ($d['Weg']['s']>0&&$d['auto']['s']) {
-        store('beweging', TIME);
+        store('beweging', TIME, basename(__FILE__).':'.__LINE__);
         if (past('beweging')<1800) {
             sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             telegram('Raam living open om '.strftime("%k:%M:%S", TIME), false, 3);
