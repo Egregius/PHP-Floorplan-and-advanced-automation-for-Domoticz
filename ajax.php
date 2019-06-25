@@ -91,7 +91,7 @@ if ($home==true) {
         $d=fetchdata();
         if ($_REQUEST['command']=='setpoint') {
         	store($_REQUEST['device'].'_set', $_REQUEST['action']);
-			storemode($_REQUEST['device'].'_set', 1);
+			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
 			$d[$_REQUEST['device'].'_set']['m']=1;
 			include 'secure/_verwarming.php';
@@ -111,17 +111,17 @@ if ($home==true) {
 				huisweg();
 			}
         } elseif ($_REQUEST['command']=='dimmerwake') {
-        	storemode($_REQUEST['device'], 2);
+        	storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='dimmersleep') {
-        	storemode($_REQUEST['device'], 1);
+        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='dimmer') {
-        	storemode($_REQUEST['device'], 0);
+        	storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='roller') {
         	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-        	storemode($_REQUEST['device'], 1);
+        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='mode') {
-			storemode($_REQUEST['device'], $_REQUEST['action']);
+			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='fetch') {
 			include 'secure/_fetchdomoticz.php';
 		} elseif ($_REQUEST['command']=='media') {
@@ -148,7 +148,7 @@ if ($home==true) {
 				}				
 			}
 		} elseif ($_REQUEST['command']=='water') {
-			storemode('water', $_REQUEST['action']);
+			storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         	double('water', 'On');
 		} else {
 			if ($_REQUEST['device']=='nas') {

@@ -11,6 +11,6 @@
  **/
 if ($status==0) {
 	if ($d['tobi']['m']!=0) {
-	    storemode('tobi', 0);
+	    storemode('tobi', 0, basename(__FILE__).':'.__LINE__);
 	}
 }

@@ -11,5 +11,5 @@
  **/
 if ($status==0) {
     store('zolder_set', 4);
-    storemode('zolder_set', 0);
+    storemode('zolder_set', 0, basename(__FILE__).':'.__LINE__);
 }

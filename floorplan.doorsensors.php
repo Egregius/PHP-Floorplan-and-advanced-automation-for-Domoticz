@@ -58,12 +58,12 @@ if ($home) {
         store($_REQUEST['name'], $_REQUEST['action'], null, false);
         if ($_REQUEST['action']=='Open') {
             if ($_REQUEST['name']=='raamkamer') {
-                storemode('RkamerL', 0);
-                storemode('RkamerR', 0);
+                storemode('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+                storemode('RkamerR', 0, basename(__FILE__).':'.__LINE__);
             } elseif ($_REQUEST['name']=='raamtobi') {
-                storemode('Rtobi', 0);
+                storemode('Rtobi', 0, basename(__FILE__).':'.__LINE__);
             } elseif ($_REQUEST['name']=='raamalex') {
-                storemode('Ralex', 0);
+                storemode('Ralex', 0, basename(__FILE__).':'.__LINE__);
             }
         }
     }

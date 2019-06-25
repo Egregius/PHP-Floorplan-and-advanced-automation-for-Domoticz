@@ -42,7 +42,7 @@ if ($home) {
     if (isset($_POST['vol'])) {
         @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');usleep(120000);
     } elseif (isset($_POST['input'])) {
-        storemode('denon', $_POST['input']);
+        storemode('denon', $_POST['input'], basename(__FILE__).':'.__LINE__);
         @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
         usleep(120000);
     } elseif (isset($_POST['surround'])) {

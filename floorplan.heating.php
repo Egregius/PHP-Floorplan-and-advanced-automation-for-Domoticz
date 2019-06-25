@@ -58,7 +58,7 @@ if ($home) {
             }
             sl($_POST['Naam'], $_POST['Rollerlevel'], basename(__FILE__).':'.__LINE__);
             if ($d[$_POST['Naam']]['m']==0) {
-                storemode($_POST['Naam'], 1);
+                storemode($_POST['Naam'], 1, basename(__FILE__).':'.__LINE__);
             }
         }
     } elseif (isset($_POST['Roller'])
@@ -66,9 +66,9 @@ if ($home) {
         &&isset($_POST['mode'])
     ) {
         if ($_POST['mode']=='Manueel') {
-            storemode($_POST['Naam'], 1);
+            storemode($_POST['Naam'], 1, basename(__FILE__).':'.__LINE__);
         } else {
-            storemode($_POST['Naam'], 0);
+            storemode($_POST['Naam'], 0, basename(__FILE__).':'.__LINE__);
         }
     }
     if (isset($_REQUEST['rollers'])) {
