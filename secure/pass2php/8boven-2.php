@@ -26,7 +26,7 @@ if ($status=='On') {
         }
     }
     if ($d[$item]['m']==0) {
-        storemode($item, 1);
+        storemode($item, 1, basename(__FILE__).':'.__LINE__);
     }
     resetsecurity();
 }

@@ -11,6 +11,6 @@
  **/
 if ($status==0) {
 	if ($d['alex']['m']!=0) {
-	    storemode('alex', 0);
+	    storemode('alex', 0, basename(__FILE__).':'.__LINE__);
 	}
 }

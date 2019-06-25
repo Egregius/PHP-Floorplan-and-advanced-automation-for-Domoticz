@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    storemode('kamer', 1);
+    storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
     if ($d['bose101']['s']=='On') {
     	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
         if (!empty($status)) {

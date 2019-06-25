@@ -10,8 +10,8 @@
  * @link     https://egregius.be
  **/
 if ($status=='Open'&&TIME>strtotime('5:00')&&TIME<strtotime('21:00')) {
-    storemode('RkamerL', 0);
-    storemode('RkamerR', 0);
+    storemode('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+    storemode('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 }
 if ($status=='Open') {
     $d['raamkamer']['s']='Open';

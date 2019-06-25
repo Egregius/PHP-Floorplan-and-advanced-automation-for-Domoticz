@@ -11,6 +11,6 @@
  **/
 if ($status=='On') {
     sl('alex', 8, basename(__FILE__).':'.__LINE__);
-    storemode('alex', 1);
+    storemode('alex', 1, basename(__FILE__).':'.__LINE__);
     resetsecurity();
 }
