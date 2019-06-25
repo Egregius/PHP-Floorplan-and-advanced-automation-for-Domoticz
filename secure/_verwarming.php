@@ -492,7 +492,7 @@ if ($d['deurbadkamer']['s']=='Open'
             } elseif (TIME>=strtotime('5:00') && TIME<=strtotime('6:30')) {
                 $x=18;
                 if ($d['badkamer_set']['s']!=$x) {
-                    store('badkamer_set', $x);
+                    store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
             } elseif (TIME>=strtotime('4:45') && TIME<=strtotime('6:30')) {

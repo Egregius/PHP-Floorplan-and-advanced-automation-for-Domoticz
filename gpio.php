@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * This file is called by a secondary Domoticz running on a Rasperry Pi
  * It handles some GPIO's that has sensors on it for gas and water meter counting
