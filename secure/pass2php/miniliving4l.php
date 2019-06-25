@@ -35,6 +35,6 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'/*||$d['nvidia']['s']=='Off'*/)
         }
     }
 }
-store('Weg', 0, null, true);
+store('Weg', 0, basename(__FILE__).':'.__LINE__);
 sleep(10);
 //sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);

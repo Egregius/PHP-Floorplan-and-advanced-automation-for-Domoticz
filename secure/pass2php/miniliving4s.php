@@ -41,4 +41,4 @@ if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
         }
     }
 }
-store('Weg', 0, null, true);
+store('Weg', 0, basename(__FILE__).':'.__LINE__);

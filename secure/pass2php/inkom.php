@@ -11,6 +11,6 @@
  **/
 if ($status=='Off') {
     if ($d['pirinkom']['s']!='Off') {
-        store('pirinkom', 'Off');
+        store('pirinkom', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }

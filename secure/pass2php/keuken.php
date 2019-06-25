@@ -13,7 +13,7 @@
 /*if($status=='Off') {
     if($d['pirkeuken']['s']!='Off') {
         if($d['kookplaat']['s']=='Off'&&$d['wasbak']['s']=='Off') {
-            store('pirkeuken', 'Off');
+            store('pirkeuken', 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
 }*/

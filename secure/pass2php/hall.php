@@ -11,11 +11,11 @@
  **/
 if ($status=='Off') {
     if ($d['pirhall']['s']!='Off') {
-        store('pirhall', 'Off');
+        store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
     }
 } elseif ($status=='On') {
     if ($d['Weg']['s']==1) {
-        store('Weg', 0);
+        store('Weg', 0, basename(__FILE__).':'.__LINE__);
         $db->query("UPDATE devices set t='0' WHERE n='heating';");
     }
 }
