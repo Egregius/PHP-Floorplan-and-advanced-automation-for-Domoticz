@@ -100,15 +100,15 @@ if ($home===true) {
     } elseif (isset($_POST['bigforward'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
     } elseif (isset($_POST['PowerOff'])) {
-        sw('nvidia', 'Off');
+        sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
     } elseif (isset($_POST['PowerOn'])) {
-        sw('nvidia', 'On');
+        sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
     } elseif (isset($_POST['TVKodi'])) {
         if ($d['lgtv']['s']!='On') {
-            sw('lgtv', 'On');
+            sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
         }
         if ($d['nvidia']['s']!='On') {
-            sw('nvidia', 'On');
+            sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
         }
     } elseif (isset($_POST['audio'])) {
         @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);

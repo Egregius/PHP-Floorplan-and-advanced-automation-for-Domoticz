@@ -51,7 +51,7 @@ if ($home) {
         if ($d['denon']['s']=='On') {
             denon('PWON');
         } else {
-            sw('denon', 'On');
+            sw('denon', 'On',basename(__FILE__).':'.__LINE__);
         }
     } elseif (isset($_POST['delay'])) {
         $x=str_pad($_POST['delay'], 3, 0, STR_PAD_LEFT);

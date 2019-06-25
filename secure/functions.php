@@ -245,7 +245,7 @@ function resetsecurity()
         }
     }
 }
-function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
+function sw($name,$action='Toggle',$msg='')
 {
     global $user,$d,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
@@ -253,15 +253,15 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
         $usleep=200000;
         foreach ($name as $i) {
             if ($i=='media') {
-                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action);
+                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $msg);
             } elseif ($i=='lichtenbeneden') {
-                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action);
+                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action, $msg);
             } elseif ($i=='lichtenboven') {
-                sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action);
+                sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action, $msg);
             } elseif ($i=='slapen') {
-                sw(array('hall','pirhall','lichtenbeneden','dampkap','GroheRed'), $action);
+                sw(array('hall','pirhall','lichtenbeneden','dampkap','GroheRed'), $action, $msg);
             } elseif ($i=='weg') {
-                sw(array('garage','slapen','lichtenboven'), $action);
+                sw(array('garage','slapen','lichtenboven'), $action, $msg);
             } else {
                 if ($d[$i]['s']!=$action) {
                     sw($i, $action);
@@ -269,18 +269,12 @@ function sw($name,$action='Toggle',$check=true,$msg='',$usleep=0)
             }
         }
     } else {
-        if (empty($msg)) {
-            $msg=' (SWITCH) | '.$user.' => '.$name.' => '.$action;
-        }
+        $msg=' (SWITCH) | '.$user.' => '.$name.' => '.$action.' ('.$msg.')';
         if ($d[$name]['i']>0) {
             lg($msg);
-            if ($check==false) {
-                echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
-            } else {
-                if ($d[$name]['s']!=$action) {
-                    echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
-                }
-            }
+			if ($d[$name]['s']!=$action) {
+				echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+			}
         } else {
             store($name, $action);
         }

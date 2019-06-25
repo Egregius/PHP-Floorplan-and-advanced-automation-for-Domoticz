@@ -23,7 +23,7 @@ if (isset($_REQUEST['gpio'])) {
             $data=$d['douche']['s']+1;
             store('douche', $data);
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
-                sw('brander', 'Off');
+                sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
         }
     } elseif ($gpio==21) {
         store('watervandaag', $d['watervandaag']['s']+1);
@@ -39,7 +39,7 @@ if (isset($_REQUEST['gpio'])) {
             fgarage();
             sirene('Poort open');
             if ($d['dampkap']['s']=='On') {
-                sw('dampkap', 'Off');
+                sw('dampkap', 'Off',basename(__FILE__).':'.__LINE__);
             }
         }
     } else {

@@ -102,7 +102,7 @@ if ($home==true) {
 			if ($_REQUEST['action']==0) {
 				$db->query("UPDATE devices set t='1' WHERE n='heating';");
 				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
-					sw('poortrf', 'On');
+					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				resetsecurity();
 			} elseif ($_REQUEST['action']==1) {
@@ -127,10 +127,10 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
 				if ($d['denon']['s']!='On') {
-					sw('denon', 'On');
+					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['tv']['s']!='On') {
-					sw('tv', 'On');
+					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				sleep(4);
 				lgcommand('on');
@@ -144,7 +144,7 @@ if ($home==true) {
 					sleep(2);
 				}
 				if ($d['denon']['s']!='Off') {
-					sw('denon', 'Off');
+					sw('denon', 'Off',basename(__FILE__).':'.__LINE__);
 				}				
 			}
 		} elseif ($_REQUEST['command']=='water') {
@@ -154,7 +154,7 @@ if ($home==true) {
 			if ($_REQUEST['device']=='nas') {
 				shell_exec('secure/wakenas.sh');
 			} else {
-				call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action']);
+				call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 			}			
 		}
     } 
@@ -175,22 +175,22 @@ if ($home==true) {
         } elseif ($_REQUEST['command']=='power') {
                 if ($_REQUEST['action']=='On') {
                     bosezone($_REQUEST['boseip']);
-                    sw('bose'.$_REQUEST['boseip'], 'On');
+                    sw('bose'.$_REQUEST['boseip'], 'On',basename(__FILE__).':'.__LINE__);
                 } elseif ($_REQUEST['action']=='Off') {
                     bosekey("POWER", 0, $_REQUEST['boseip']);
-                    sw('bose'.$_REQUEST['boseip'], 'Off');
+                    sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);
                     if ($_REQUEST['boseip']==101) {
                     	if ($d['bose102']['s']=='On') {
-                    		sw('bose102', 'Off');
+                    		sw('bose102', 'Off',basename(__FILE__).':'.__LINE__);
                     	}
                     	if ($d['bose103']['s']=='On') {
-                    		sw('bose103', 'Off');
+                    		sw('bose103', 'Off',basename(__FILE__).':'.__LINE__);
                     	}
                     	if ($d['bose104']['s']=='On') {
-                    		sw('bose104', 'Off');
+                    		sw('bose104', 'Off',basename(__FILE__).':'.__LINE__);
                     	}
                     	if ($d['bose105']['s']=='On') {
-                    		sw('bose105', 'Off');
+                    		sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
                     	}
                     }
                 }
