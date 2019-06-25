@@ -28,9 +28,9 @@ if (isset($_REQUEST['fetch'])) {
             }
         }
     }
-    store($_REQUEST['store'], $_REQUEST['value']);
+    store($_REQUEST['store'], $_REQUEST['value'], basename(__FILE__).':'.__LINE__);
 } elseif (isset($_REQUEST['count'])) {
     $data=$d[$_REQUEST['count']]['s']+1;
     echo $data;
-    store($_REQUEST['count'], $data);
+    store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
 }

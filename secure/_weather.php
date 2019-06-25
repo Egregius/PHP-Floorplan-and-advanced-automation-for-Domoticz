@@ -68,7 +68,7 @@ if (isset($ds)) {
             }
             $mintemp=round($mintemp, 1);
             if ($d['minmaxtemp']['s']!=$mintemp) {
-            	store('minmaxtemp', $mintemp);
+            	store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
             }
             $maxtemp=round($maxtemp, 1);
             if ($d['minmaxtemp']['m']!=$maxtemp) {
@@ -216,7 +216,7 @@ if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
     $wind=$dswind;
 }
 if ($wind!=$prevwind) {
-    store('wind', round($wind, 2));
+    store('wind', round($wind, 2), basename(__FILE__).':'.__LINE__);
 }
 $windhist=json_decode($d['wind']['m']);
 $windhist[]=round($wind, 3);
@@ -253,7 +253,7 @@ if ($newbuien<1) {
 }
 $buien=round($newbuien, 0);
 if ($d['buien']['s']!=$buien) {
-	store('buien', $buien);
+	store('buien', $buien, basename(__FILE__).':'.__LINE__);
 }
 if (!isset($dsbuien)) {
     $dsbuien=0;

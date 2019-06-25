@@ -312,8 +312,8 @@ if ($d['auto']['s']=='On') {
     );
     
     if (TIME<=strtotime('0:02')) {
-        store('gasvandaag', 0, null, true);
-        store('watervandaag', 0, null, true);
+        store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
+        store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
     } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
         $items=array('RkamerL','RkamerR','Rtobi','Ralex');
         foreach ($items as $i) {
@@ -532,11 +532,11 @@ if ($d['auto']['s']=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     if ($d['bose'.$i]['s']!='Off') {
-                        store('bose'.$i, 'Off');
+                        store('bose'.$i, 'Off', basename(__FILE__).':'.__LINE__);
                     }
                 } else {
                     if ($d['bose'.$i]['s']!='On') {
-                        store('bose'.$i, 'On');
+                        store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
                     }
                 }
             }
@@ -552,7 +552,7 @@ if ($d['auto']['s']=='On') {
         if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
 			sl('kamer', 0, basename(__FILE__).':'.__LINE__);
         } elseif (past('kamer')>900) {
-        	storemode('kamer', 1);
+        	storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d['tobi']['s']>0
@@ -560,14 +560,14 @@ if ($d['auto']['s']=='On') {
         &&$d['Rtobi']['s']==0
         &&past('tobi')>900
     ) {
-        storemode('tobi', 1);
+        storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['alex']['s']>0
         &&$d['zon']['s']>200
         &&$d['Ralex']['s']==0
         &&past('alex')>900
     ) {
-        storemode('alex', 1);
+        storemode('alex', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['eettafel']['s']>0
         &&$d['Rbureel']['s']==0
@@ -575,7 +575,7 @@ if ($d['auto']['s']=='On') {
         &&$d['zon']['s']>100
         &&past('eettafel')>2700
     ) {
-        storemode('eettafel', 1);
+        storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['zithoek']['s']>0
         &&$d['Rbureel']['s']==0
@@ -583,7 +583,7 @@ if ($d['auto']['s']=='On') {
         &&$d['zon']['s']>100
         &&past('zithoek')>2700
     ) {
-        storemode('zithoek', 1);
+        storemode('zithoek', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
         if ($d['tuin']['s']=='On') {
@@ -666,12 +666,12 @@ if ($d['water']['s']=='On') {
 }
 if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
     if ($d['auto']['m']!=true) {
-        storemode('auto', true);
+        storemode('auto', true, basename(__FILE__).':'.__LINE__);
         $d['auto']['m']=true;
     }
 } else {
     if ($d['auto']['m']!=false ) {
-        storemode('auto', false);
+        storemode('auto', false, basename(__FILE__).':'.__LINE__);
         $d['auto']['m']=false;
     }
 }
@@ -716,7 +716,7 @@ if (!empty($objauth)) {
     if (!empty($data['consumptions'])) {
         $vv=round($data['consumptions'][0]['consumption']/1000, 1);
         if ($d['el']['m']!=$vv) {
-	        storemode('el', $vv);
+	        storemode('el', $vv, basename(__FILE__).':'.__LINE__);
 	    }
         $zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
         if ($d['zonvandaag']['s']!=$zonvandaag) {
