@@ -65,8 +65,8 @@ if ($d['auto']['s']=='On') {
                 }
             }*/
         }
-        if (past('Xlight')>300&&$d['Xlight']['s']!='Off') {
-            sw('Xlight', 'Off', $d['Xlight']['s'].basename(__FILE__).':'.__LINE__);
+        if (past('Xlight')>300&&$d['Xlight']['s']!=0) {
+            sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
         }
         $items=array(
             'living_temp',

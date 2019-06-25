@@ -221,7 +221,7 @@ if ($wind!=$prevwind) {
 $windhist=json_decode($d['wind']['m']);
 $windhist[]=round($wind, 3);
 $windhist=array_slice($windhist, -4);
-storemode('wind', json_encode($windhist));
+storemode('wind', json_encode($windhist), basename(__FILE__).':'.__LINE__);
 $msg='Buiten temperaturen : ';
 if (isset($dstemp)) {
     $msg.='Darksky = '.round($dstemp, 1).'°C ';

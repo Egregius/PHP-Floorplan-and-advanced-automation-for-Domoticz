@@ -304,14 +304,14 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 	} else {
 		$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
-	lg(' (STORE) | '.$user.' => '.$name.' => '.$status.' ('.$msg.')');
+	lg(' (STORE)	'.$user.' => '.$name.' => '.$status.' ('.$msg.')');
 }
 function storemode($name,$mode,$msg='',$time=0)
 {
-    global $db, $d, $user;
+    global $db, $user;
     $time=TIME+$time;
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg(' (STOREMODE) | '.$user.' => '.$name.' => '.$mode.' ('.$msg.')');
+	lg(' (STOREMODE)	'.$user.' => '.$name.' => '.$mode.' ('.$msg.')');
 }
 function storeicon($name,$icon,$msg='')
 {
@@ -319,7 +319,7 @@ function storeicon($name,$icon,$msg='')
     $time=TIME;
     if ($d[$name]['icon']!=$icon) {
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		lg(' (STOREICON) | '.$user.' => '.$name.' => '.$icon.' ('.$msg.')');
+		lg(' (STOREICON)	'.$user.' => '.$name.' => '.$icon.' ('.$msg.')');
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
