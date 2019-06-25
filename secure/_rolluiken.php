@@ -652,7 +652,8 @@ if ($d['heating']['s']>=2) {
                             $temp=${substr($i, 1).'_temp'};
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
-                            sl($i, 80, basename(__FILE__).':'.__LINE__);$msg.=$i.' 78 om af te koelen__';
+                            sl($i, 80, basename(__FILE__).':'.__LINE__);
+                            $msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }

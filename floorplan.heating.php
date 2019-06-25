@@ -45,18 +45,18 @@ if ($home) {
             }
         } elseif (isset($_POST['Rollerleveloff_x'])) {
             if ($_POST['Naam']=='Rlivingzzz') {
-                sl($_POST['Naam'], 8, 'Roller');
+                sl($_POST['Naam'], 8, basename(__FILE__).':'.__LINE__);
             } else {
-                sl($_POST['Naam'], 0, 'Roller');
+                sl($_POST['Naam'], 0, basename(__FILE__).':'.__LINE__);
             }
             if ($d[$_POST['Naam']]['m']==0) {
                 storemode($_POST['Naam'], 1);
             }
         } else {
             if ($_POST['Naam']=='Rlivingzzz'&&$_POST['Rollerlevel']<8) {
-                sl($_POST['Naam'], 8, 'Roller');
+                sl($_POST['Naam'], 8, basename(__FILE__).':'.__LINE__);
             }
-            sl($_POST['Naam'], $_POST['Rollerlevel'], 'Roller');
+            sl($_POST['Naam'], $_POST['Rollerlevel'], basename(__FILE__).':'.__LINE__);
             if ($d[$_POST['Naam']]['m']==0) {
                 storemode($_POST['Naam'], 1);
             }
