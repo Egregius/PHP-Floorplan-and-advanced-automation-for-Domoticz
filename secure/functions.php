@@ -284,7 +284,7 @@ function sw($name,$action='Toggle',$msg='')
         usleep($usleep);
     }
 }
-function lgcommand($action)
+function lgcommand($action,$msg='')
 {
     global $lgtvip, $lgtvmac;
     if ($action=='on') {
@@ -294,9 +294,9 @@ function lgcommand($action)
         echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }
-function store($name,$status,$idx=null,$force=true)
+function store($name,$status,$msg='',$idx=null,$force=true)
 {
-    global $db, $d, $username;
+    global $db, $d, $user;
     if (!isset($d)) $d=fetchdata();
     $time=TIME;
 	if ($idx>0) {
@@ -304,16 +304,16 @@ function store($name,$status,$idx=null,$force=true)
 	} else {
 		$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
-	lg('store '.$name.' '.$status);
+	$msg=' (STORE) | '.$user.' => '.$name.' => '.$status.' ('.$msg.')';
 }
-function storemode($name,$mode,$time=0)
+function storemode($name,$mode,$msg='',$time=0)
 {
     global $db, $d, $username;
     $time=TIME+$time;
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg('storemode'.$name.' '.$mode);  
 }
-function storeicon($name,$icon)
+function storeicon($name,$icon,$msg='')
 {
     global $db, $d, $username;
     $time=TIME;
