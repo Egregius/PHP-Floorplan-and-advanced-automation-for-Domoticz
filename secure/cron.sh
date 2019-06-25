@@ -65,6 +65,7 @@ else
 		fi
 	fi
 fi
+if [ $(($MINUTE%5)) -eq 0 ] ; then
 #	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 #	PREV=$(cat "/temp/timestampappcache.txt")
 #	echo $LAST>"/temp/timestampappcache.txt"
@@ -74,13 +75,14 @@ fi
 #		mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
 #	fi
 	
-LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
-PREV=$(cat "/temp/timestampgithub.txt")
-echo $LAST>"/temp/timestampgithub.txt"
-if [ "$LAST" != "$PREV" ]
-then
-	cd /var/www/html/
-	/usr/bin/nice -n20 git add .
-	/usr/bin/nice -n20 git commit -am "Update"
-	/usr/bin/nice -n20 git push origin master
+	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
+	PREV=$(cat "/temp/timestampgithub.txt")
+	echo $LAST>"/temp/timestampgithub.txt"
+	if [ "$LAST" != "$PREV" ]
+	then
+		cd /var/www/html/
+		/usr/bin/nice -n20 git add .
+		/usr/bin/nice -n20 git commit -am "Update"
+		/usr/bin/nice -n20 git push origin master
+	fi
 fi
