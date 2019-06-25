@@ -92,7 +92,7 @@ if ($d['GroheRed']['s']=='On') {
     }
     if (past('GroheRed')>900) {
         sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-        storemode('GroheRed', 0);
+        storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
     }
 } else {
     if (past('GroheRed')>120
@@ -117,7 +117,7 @@ if (ping($lgtvip)) {
             &&$d['Weg']['s']==0
         ) {
             sw('denon', 'On', basename(__FILE__).':'.__LINE__);
-            storemode('denon', 'TV');
+            storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
         }
         /*if ($d['nvidia']['s']!='On'
             &&past('nvidia')>30
@@ -161,17 +161,17 @@ if (ping($lgtvip)) {
 if ($d['nvidia']['s']=='On') {
     if (pingport($shieldip, 9080)==1) {
         if ($d['nvidia']['m']=='Off') {
-            storemode('nvidia', 'On');
+            storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
         }
     } else {
         if ($d['nvidia']['m']=='On') {
-            storemode('nvidia', 'Off');
+            storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
         }
     }
 }
 if (ping('192.168.2.105')) {
     if ($d['bose105']['m']!='Online') {
-        storemode('bose105', 'Online', 10);
+        storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
     }
     if ($d['achterdeur']['s']=='Open') {
         $status=json_decode(
@@ -195,7 +195,7 @@ if (ping('192.168.2.105')) {
     }
 } else {
     if ($d['bose105']['m']!='Offline') {
-        storemode('bose105', 'Offline', 10);
+        storemode('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
         sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }

@@ -99,7 +99,7 @@ function douche()
     if ($douchegas>0&&$douchewater>0) {
         telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
     }
-    store('douche', 0);
+    store('douche', 0, basename(__FILE__).':'.__LINE__);
     storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 }
 /**
@@ -204,7 +204,7 @@ function sl($name,$level,$msg='')
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 		}
     } else {
-        store($name, $level);
+        store($name, $level, basename(__FILE__).':'.__LINE__);
     }
 }
 function rgb($name,$hue,$level,$check=false)
