@@ -18,9 +18,9 @@ if ($prev==$status) {
 }
 $set=$d['diepvries_temp']['m'];
 $tdiepvries=past('diepvries');
-if ($status < $prev && $status <= $set && $tdiepvries > 3600 ) {
+if ($status < $prev && $status <= $set && $tdiepvries > 3600 && $d['diepvries']['s']!='Off') {
     sw('diepvries', 'Off', basename(__FILE__).':'.__LINE__);
-} elseif ($status > $prev && $status >= $set && $tdiepvries > 3600 ) {
+} elseif ($status > $prev && $status >= $set && $tdiepvries > 3600 && $d['diepvries']['s']!='On') {
     sw('diepvries', 'On', basename(__FILE__).':'.__LINE__);
 }
 
