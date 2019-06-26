@@ -487,19 +487,6 @@ function lg($msg)
 		fclose($fp);
 	}
 }
-function lgajax($msg)
-{
-    global $log;
-    if ($log==true) {
-		$fp=fopen('/temp/ajax.log', "a+");
-		$time=microtime(true);
-		$dFormat="Y-m-d H:i:s";
-		$mSecs=$time-floor($time);
-		$mSecs=substr(number_format($mSecs, 3), 1);
-		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-		fclose($fp);
-	}
-}
 function logwrite($msg,$msg2=null)
 {
     global $log;

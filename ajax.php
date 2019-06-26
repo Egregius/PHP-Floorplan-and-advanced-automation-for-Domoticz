@@ -205,4 +205,4 @@ foreach($_REQUEST as $k=>$v) {
 		$msg.='	'.$diff;
 	}
 }
-lgajax($ipaddress.'	'.$udevice.'	'.$user.$msg);
+lg('(AJAX)	'.$ipaddress.'	'.$udevice.'	'.$user.$msg);
