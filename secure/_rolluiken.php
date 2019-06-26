@@ -404,7 +404,7 @@ if ($d['heating']['s']>=2) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']==0
-                    && $TRliving>120
+                    && past('Rliving')>120
                 ) {
                     sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
                 }
