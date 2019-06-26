@@ -495,7 +495,13 @@ if ($d['heating']['s']>=2) {
                         $msg.=$i.' open__';
                     }
                 }
-                foreach ($boven as $i) {
+                foreach ($bovenv as $i) {
+                    if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
+                         sl($i, 35, basename(__FILE__).':'.__LINE__);
+                         $msg.=$i.' open__';
+                    }
+                }
+                foreach ($bovena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                          sl($i, 0, basename(__FILE__).':'.__LINE__);
                          $msg.=$i.' open__';
@@ -509,7 +515,7 @@ if ($d['heating']['s']>=2) {
                     $msg.=$i.' open__';
                 }
             }
-            foreach ($boven as $i) {
+            foreach ($bovenv as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -560,10 +566,16 @@ if ($d['heating']['s']>=2) {
                         $msg.=$i.' open__';
                     }
                 }
-                foreach ($boven as $i) {
-                    if ($d[$i]['m']==0 && $d[$i]['s']>30 && past($i)>900) {
-                         sl($i, 30, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' half open__';
+                foreach ($bovenv as $i) {
+                    if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
+                         sl($i, 35, basename(__FILE__).':'.__LINE__);
+                         $msg.=$i.' open__';
+                    }
+                }
+                foreach ($bovena as $i) {
+                    if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+                         sl($i, 0, basename(__FILE__).':'.__LINE__);
+                         $msg.=$i.' open__';
                     }
                 }
             }
@@ -574,12 +586,18 @@ if ($d['heating']['s']>=2) {
                     $msg.=$i.' open__';
                 }
             }
-            foreach ($boven as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
-                    sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
-                }
-            }
+            foreach ($bovenv as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
+					 sl($i, 35, basename(__FILE__).':'.__LINE__);
+					 $msg.=$i.' open__';
+				}
+			}
+			foreach ($bovena as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+					 sl($i, 0, basename(__FILE__).':'.__LINE__);
+					 $msg.=$i.' open__';
+				}
+			}
         } elseif ($dag=='PM') {
 
         } elseif ($dag=='avond') {
