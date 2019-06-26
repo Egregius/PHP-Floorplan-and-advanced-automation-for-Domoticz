@@ -16,6 +16,16 @@ require '/var/www/config.php';
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home==true) {
+	if (!isset($_REQUEST['t'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])) {
+		$msg='';
+		foreach($_REQUEST as $k=>$v) {
+			$msg.='	'.$k.'='.$v;
+			if (isset($diff)) {
+				$msg.='	'.$diff;
+			}
+		}
+		lg(' (AJAX)	'.$ipaddress.'	'.$udevice.'	'.$user.$msg);
+    } 
     if (isset($_REQUEST['t'])) {
         $t=time();
         $d['t']=$t;
@@ -198,11 +208,3 @@ if ($home==true) {
 } else {
 	echo json_encode('NOTAUTHENTICATED');
 }
-$msg='';
-foreach($_REQUEST as $k=>$v) {
-	$msg.='	'.$k.'='.$v;
-	if (isset($diff)) {
-		$msg.='	'.$diff;
-	}
-}
-lg(' (AJAX)	'.$ipaddress.'	'.$udevice.'	'.$user.$msg);
