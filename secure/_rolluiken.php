@@ -18,7 +18,9 @@ $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $bovenv=array('RkamerL','RkamerR');
 $bovena=array('Rtobi','Ralex');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
-$benedena=array('Rliving','Rbureel','RkeukenL','RkeukenR');
+$benedenv=array('RkeukenL','RkeukenR');
+$benedena=array('Rliving','Rbureel');
+$benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 
 if ($d['heating']['s']>=2) {
     $msg.='Heating__';
@@ -41,7 +43,7 @@ if ($d['heating']['s']>=2) {
     if ($d['Weg']['s']==0) {
         $msg.='Thuis__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
@@ -79,7 +81,7 @@ if ($d['heating']['s']>=2) {
                 }
             } elseif ($d['auto']['m']==true) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0
                         && $d[$i]['s']>0
                         && past($i)>120
@@ -99,7 +101,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0
                     && $d[$i]['s']>0
                     && past($i)>900
@@ -162,7 +164,7 @@ if ($d['heating']['s']>=2) {
     } elseif ($d['Weg']['s']==2) {
         $msg.='Weg__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
@@ -177,7 +179,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']!=30 && past($i)>900) {
                         sl($i, 30, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half open__';
@@ -185,7 +187,7 @@ if ($d['heating']['s']>=2) {
                 }
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' open__';
@@ -199,7 +201,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -216,7 +218,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
                 $msg.='zonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<31 && past($i)>900) {
                         sl($i, 40, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half dicht__';
@@ -234,7 +236,7 @@ if ($d['heating']['s']>=2) {
                 $msg.='zonOP, zon = '.$d['zon']['s'].'__';
             } else {
                 $msg.='Zononder __';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         sl($i, 100, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' Dicht__';
@@ -286,7 +288,7 @@ if ($d['heating']['s']>=2) {
 
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' open__';
@@ -300,7 +302,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -319,7 +321,7 @@ if ($d['heating']['s']>=2) {
         }
     } elseif ($d['Weg']['s']==1) {
         $msg.='Slapen__';
-        foreach ($benedena as $i) {
+        foreach ($benedenall as $i) {
             if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                 sl($i, 100, basename(__FILE__).':'.__LINE__);
                 $msg.=$i.' Dicht__';
@@ -328,7 +330,7 @@ if ($d['heating']['s']>=2) {
     } elseif ($d['Weg']['s']==2) {
         $msg.='Weg__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
@@ -348,7 +350,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {
                         sl($i, 27, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half open__';
@@ -356,7 +358,7 @@ if ($d['heating']['s']>=2) {
                 }
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' open__';
@@ -370,7 +372,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -387,7 +389,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
                 $msg.='zonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<31 && past($i)>900) {
                         sl($i, 31, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half toe__';
@@ -420,7 +422,7 @@ if ($d['heating']['s']>=2) {
                 $msg.='zonOP, zon = '.$d['zon']['s'].'__';
             } else {
                 $msg.='Zononder __';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         sl($i, 100, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' Dicht__';
@@ -489,7 +491,7 @@ if ($d['heating']['s']>=2) {
                 }
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' open__';
@@ -509,7 +511,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -528,7 +530,7 @@ if ($d['heating']['s']>=2) {
         }
     } elseif ($d['Weg']['s']==1) {
         $msg.='Slapen__';
-        foreach ($benedena as $i) {
+        foreach ($benedenall as $i) {
             if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                 sl($i, 85, basename(__FILE__).':'.__LINE__);
                 $msg.=$i.' 85% Dicht__';
@@ -537,7 +539,7 @@ if ($d['heating']['s']>=2) {
     } elseif ($d['Weg']['s']==2) {
         $msg.='Weg__';
         if ($dag=='nacht') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' Dicht__';
@@ -552,7 +554,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 $msg.='ZonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>30 && past($i)>900) {
                         sl($i, 30, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half open__';
@@ -560,7 +562,7 @@ if ($d['heating']['s']>=2) {
                 }
             } elseif ($d['auto']['m']) {
                 $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' open__';
@@ -580,7 +582,7 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedena as $i) {
+            foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                     $msg.=$i.' open__';
@@ -603,7 +605,7 @@ if ($d['heating']['s']>=2) {
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
                 $msg.='zonOP && Zon = 0__';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<30 && past($i)>900) {
                         sl($i, 30, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' half toe__';
@@ -636,7 +638,7 @@ if ($d['heating']['s']>=2) {
                 $msg.='zonOP, zon = '.$d['zon']['s'].'__';
             } else {
                 $msg.='Zononder __';
-                foreach ($benedena as $i) {
+                foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         sl($i, 100, basename(__FILE__).':'.__LINE__);
                         $msg.=$i.' Dicht__';
