@@ -13,7 +13,6 @@ if (!isset($d)) {
 	$d=fetchdata();
 }
 $user='rolluiken';
-$msg='Rolluiken__';
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $bovenv=array('RkamerL','RkamerR');
 $bovena=array('Rtobi','Ralex');
@@ -23,7 +22,6 @@ $benedena=array('Rliving','Rbureel');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 
 if ($d['heating']['s']>=2) {
-    $msg.='Heating__';
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
     }
@@ -39,20 +37,16 @@ if ($d['heating']['s']>=2) {
     if (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
         $dag='avond';
     }
-    $msg.=$dag.'__';
     if ($d['Weg']['s']==0) {
-        $msg.='Thuis__';
         if ($dag=='nacht') {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' Dicht__';
                 }
             }
             foreach ($boven as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' Dicht__';
                 }
             }
         } elseif ($dag=='ochtend'
@@ -61,13 +55,11 @@ if ($d['heating']['s']>=2) {
             if ($d['auto']['m']
                 &&$d['zon']['s']==0
             ) {
-                $msg.='ZonOP && Zon = 0__';
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']>0
                     && past('Rliving')>900
                 ) {
                     sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
-                    $msg.='Rliving open__';
                     sleep(1);
                 }
                 foreach ($beneden as $i) {
@@ -76,18 +68,15 @@ if ($d['heating']['s']>=2) {
                         && past('T'.$i)>900
                     ) {
                          sl($i, 27, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' half open__';
                     }
                 }
             } elseif ($d['auto']['m']==true) {
-                $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0
                         && $d[$i]['s']>0
                         && past($i)>120
                     ) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' open__';
                     }
                 }
                 foreach ($boven as $i) {
@@ -96,7 +85,6 @@ if ($d['heating']['s']>=2) {
                         && past($i)>900
                     ) {
                          sl($i, 31, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' half open__';
                     }
                 }
             }
@@ -107,7 +95,6 @@ if ($d['heating']['s']>=2) {
                     && past($i)>900
                 ) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
                 }
             }
             foreach ($boven as $i) {
@@ -118,14 +105,12 @@ if ($d['heating']['s']>=2) {
                 }
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
                 }
             }
         } elseif ($dag=='PM') {
 
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']<50) {
-                $msg.='zonOP, zon < 50 : '.$d['zon']['s'].'__';
                 foreach ($boven as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70 && past($i)>900) {
                         sl($i, 100, basename(__FILE__).':'.__LINE__);
@@ -453,7 +438,6 @@ if ($d['heating']['s']>=2) {
         }
     }
 } elseif ($d['heating']['s']==1) {
-    $msg.='Cooling__';
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
     }
@@ -469,44 +453,40 @@ if ($d['heating']['s']>=2) {
     if (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) {
         $dag='avond';
     }
-    $msg.=$dag.'__';
     if ($d['Weg']['s']==0) {
-        $msg.='Thuis__';
         if ($dag=='nacht') {
         } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
-                $msg.='ZonOP && Zon = 0__';
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']==0
                     && $TRliving>120
                 ) {
                     sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
-                    $msg.='Rliving open__';
                 }
-                foreach ($beneden as $i) {
+                foreach ($benedenv as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {
                         sl($i, 27, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' half open__';
+                    }
+                }
+                foreach ($benedena as $i) {
+                    if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+                        sl($i, 0, basename(__FILE__).':'.__LINE__);
                     }
                 }
             } elseif ($d['auto']['m']) {
-                $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' open__';
                     }
                 }
                 foreach ($bovenv as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
                          sl($i, 35, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' open__';
                     }
                 }
                 foreach ($bovena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                          sl($i, 0, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' open__';
                     }
                 }
             }
@@ -514,13 +494,11 @@ if ($d['heating']['s']>=2) {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
                 }
             }
             foreach ($bovenv as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
                 }
             }
         } elseif ($dag=='PM') {
@@ -529,55 +507,44 @@ if ($d['heating']['s']>=2) {
 
         }
     } elseif ($d['Weg']['s']==1) {
-        $msg.='Slapen__';
         foreach ($benedenall as $i) {
             if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                 sl($i, 85, basename(__FILE__).':'.__LINE__);
-                $msg.=$i.' 85% Dicht__';
             }
         }
     } elseif ($d['Weg']['s']==2) {
-        $msg.='Weg__';
         if ($dag=='nacht') {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' Dicht__';
                 }
             }
             foreach ($boven as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' Dicht__';
                 }
             }
         } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
-                $msg.='ZonOP && Zon = 0__';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>30 && past($i)>900) {
                         sl($i, 30, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' half open__';
                     }
                 }
             } elseif ($d['auto']['m']) {
-                $msg.='ZonOP && Zon = '.$d['zon']['s'].'__';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' open__';
                     }
                 }
                 foreach ($bovenv as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
                          sl($i, 35, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' open__';
                     }
                 }
                 foreach ($bovena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                          sl($i, 0, basename(__FILE__).':'.__LINE__);
-                         $msg.=$i.' open__';
                     }
                 }
             }
@@ -585,42 +552,34 @@ if ($d['heating']['s']>=2) {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
-                    $msg.=$i.' open__';
                 }
             }
             foreach ($bovenv as $i) {
 				if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
 					 sl($i, 35, basename(__FILE__).':'.__LINE__);
-					 $msg.=$i.' open__';
 				}
 			}
 			foreach ($bovena as $i) {
 				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
 					 sl($i, 0, basename(__FILE__).':'.__LINE__);
-					 $msg.=$i.' open__';
 				}
 			}
         } elseif ($dag=='PM') {
 
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
-                $msg.='zonOP && Zon = 0__';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<30 && past($i)>900) {
                         sl($i, 30, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' half toe__';
                     }
                 }
             } elseif ($d['auto']['m']&&$d['zon']['s']<50) {
-                $msg.='zonOP && Zon < 50 : '.$d['zon']['s'].'__';
                 foreach ($boven as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         if ($i=='Rtobi'||$i=='RkamerR') {
                             sl($i, 85, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.' 85';
                         } else {
                             sl($i, 100, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.' 100__';
                         }
                     } elseif ($d[$i]['m']==0 && $d[$i]['s']==100 && past($i)>900) {
                         if ($i=='RkamerL'||$i=='RkamerR') {
@@ -630,28 +589,22 @@ if ($d['heating']['s']>=2) {
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
                             sl($i, 80, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }
             } elseif ($d['auto']['m']) {
-                $msg.='zonOP, zon = '.$d['zon']['s'].'__';
             } else {
-                $msg.='Zononder __';
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         sl($i, 100, basename(__FILE__).':'.__LINE__);
-                        $msg.=$i.' Dicht__';
                     }
                 }
                 foreach ($boven as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                         if ($i=='Rtobi'||$i=='RkamerR') {
                             sl($i, 85, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.'85';
                         } else {
                             sl($i, 100, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.' 100__';
                         }
                     } elseif ($d[$i]['m']==0 && $d[$i]['s']==100 && past($i)>900) {
                         if ($i=='RkamerL'||$i=='RkamerR') {
@@ -661,15 +614,10 @@ if ($d['heating']['s']>=2) {
                         }
                         if ($temp>19&&$temp>$buiten_temp+1) {
                             sl($i, 80, basename(__FILE__).':'.__LINE__);
-                            $msg.=$i.' 78 om af te koelen__';
                         }
                     }
                 }
             }
         }
     }
-}
-echo str_replace('__', ' | ', $msg);
-if (strlen($msg)>=60) {
-    lg(str_replace('__', ' | ', $msg));
 }
