@@ -202,20 +202,21 @@ if ($prevbuitentemp>$avg+0.5) {
 }
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
-    $wind=($prevwind+$owwind+$dswind)/3;
+    $wind=round(($prevwind+$owwind+$dswind)/3,1);
 } elseif (isset($prevwind)&&isset($owwind)) {
-    $wind=($prevwind+$owwind)/2;
+    $wind=round(($prevwind+$owwind)/2,1);
 } elseif (isset($prevwind)&&isset($dswind)) {
-    $wind=($prevwind+$dswind)/2;
+    $wind=round(($prevwind+$dswind)/2,1);
 } elseif (isset($owwind)&&isset($dswind)) {
-    $wind=($owwind+$dswind)/2;
+    $wind=round(($owwind+$dswind)/2,1);
 } elseif (isset($owwind)) {
-    $wind=$owwind;
+    $wind=round($owwind,1);
 } elseif (isset($dswind)) {
-    $wind=$dswind;
+    $wind=round($dswind,1);
 }
+lg('wind='.$wind.', prevwind='.$prevwind);
 if ($wind!=$prevwind) {
-    store('wind', round($wind, 1), basename(__FILE__).':'.__LINE__);
+    store('wind', $wind, basename(__FILE__).':'.__LINE__);
 }
 $windhist=json_decode($d['wind']['m']);
 $windhist[]=round($wind, 2);

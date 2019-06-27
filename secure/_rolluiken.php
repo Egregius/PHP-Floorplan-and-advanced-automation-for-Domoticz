@@ -436,18 +436,27 @@ if ($d['heating']['s']>=2) {
                 }
             }
         } elseif ($dag=='AM') {
-            foreach ($benedenall as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
-                    sl($i, 0, basename(__FILE__).':'.__LINE__);
-                }
-            }
-            foreach ($bovenv as $i) {
+            foreach ($benedenv as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {
+					sl($i, 27, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			foreach ($benedena as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+					sl($i, 0, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			foreach ($bovenv as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                 }
             }
         } elseif ($dag=='PM') {
-
+			foreach ($benedenv as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+					sl($i, 0, basename(__FILE__).':'.__LINE__);
+				}
+			}
         } elseif ($dag=='avond') {
 
         }
