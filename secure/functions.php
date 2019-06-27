@@ -753,7 +753,6 @@ function fbadkamer()
         }
         bosezone(102);
     }
-    storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 }
 function fkeuken()
 {
@@ -801,7 +800,9 @@ function sirene($msg)
             telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
         }
     }
-    storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+    if ($d['Weg']['s']>0) {
+    	storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+    }
 }
 function createheader($page='')
 {
