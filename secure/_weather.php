@@ -215,10 +215,10 @@ if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
     $wind=$dswind;
 }
 if ($wind!=$prevwind) {
-    store('wind', round($wind, 2), basename(__FILE__).':'.__LINE__);
+    store('wind', round($wind, 1), basename(__FILE__).':'.__LINE__);
 }
 $windhist=json_decode($d['wind']['m']);
-$windhist[]=round($wind, 3);
+$windhist[]=round($wind, 2);
 $windhist=array_slice($windhist, -4);
 storemode('wind', json_encode($windhist), basename(__FILE__).':'.__LINE__);
 $msg='Buiten temperaturen : ';
