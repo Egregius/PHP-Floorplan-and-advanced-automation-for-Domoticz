@@ -383,10 +383,10 @@ if ($d['heating']['s']>=2) {
         }
     }
 } elseif ($d['heating']['s']==1) {
-    if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
+    if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) {
         $dag='nacht';
     }
-    if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
+    if (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
         $dag='ochtend';
     }
     if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
@@ -400,7 +400,7 @@ if ($d['heating']['s']>=2) {
     }
     if ($d['Weg']['s']==0) {
         if ($dag=='nacht') {
-        } elseif ($dag=='ochtend'&&past('pirliving')<4000) {
+        } elseif ($dag=='ochtend') {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']==0

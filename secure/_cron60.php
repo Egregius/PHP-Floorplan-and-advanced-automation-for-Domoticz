@@ -148,23 +148,11 @@ if ($d['auto']['s']=='On') {
             $items=array('RkamerR','RkamerL');
             if ($d['kamer']['s']==3) {
                 foreach ($items as $i) {
-                    if ($d[$i]['s']>70) {
+                    if ($d[$i]['s']>65) {
                         sl($i, 65, basename(__FILE__).':'.__LINE__);
                     }
                 }
-            } elseif ($d['kamer']['s']==7) {
-                foreach ($items as $i) {
-                    if ($d['heating']['s']==1) {
-						if ($d[$i]['s']>35) {
-							sl($i, 35, basename(__FILE__).':'.__LINE__);
-						}
-					} else {
-						if ($d[$i]['s']>30) {
-							sl($i, 30, basename(__FILE__).':'.__LINE__);
-						}
-					}
-                }
-            } elseif ($d['kamer']['s']>=11) {
+            } elseif ($d['kamer']['s']>=7) {
                 foreach ($items as $i) {
                     if ($d['heating']['s']==1) {
 						if ($d[$i]['s']>30) {
@@ -180,7 +168,6 @@ if ($d['auto']['s']=='On') {
                 }
             }
         }
-
     }
     /* -------------------------------------------- SLAPEN --------------------------*/
     if ($d['Weg']['s']==1) {
@@ -557,8 +544,8 @@ if ($d['auto']['s']=='On') {
 
     if ($d['kamer']['s']>0
         &&$d['zon']['s']>200
-        &&$d['RkamerL']['s']==0
-        &&$d['RkamerR']['s']==0
+        &&$d['RkamerL']['s']<=40
+        &&$d['RkamerR']['s']<=40
     ) {
         if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
 			sl('kamer', 0, basename(__FILE__).':'.__LINE__);
