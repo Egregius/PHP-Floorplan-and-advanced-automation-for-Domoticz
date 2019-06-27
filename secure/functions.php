@@ -227,7 +227,6 @@ function resetsecurity()
 {
     global $d,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
-    lg(' ********* RESETSECURITY ************');
     if ($d['sirene']['s']!='Off') {
         sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         usleep(100000);
@@ -716,7 +715,6 @@ function strbefore($string, $substring)
 function fliving()
 {
     global $d;
-    lg('***** fliving *****');
     if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
@@ -729,9 +727,7 @@ function fliving()
                 sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
             }
         }
-        $d['pirliving']['t']=TIME;
         bosezone(101);
-        include '_rolluiken.php';
     }
 }
 function fgarage()
