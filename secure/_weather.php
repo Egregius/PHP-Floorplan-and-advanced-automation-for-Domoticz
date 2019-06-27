@@ -10,10 +10,10 @@
  * @link     https://egregius.be
  **/
 $user='weather';
-$prevwind=(float)$d['wind']['s'];
-$prevbuien=(float)$d['buien']['s'];
-$prevbuitentemp=(float)$d['buiten_temp']['s'];
-$buiten_temp=(float)$d['buiten_temp']['s'];
+$prevwind=$d['wind']['s'];
+$prevbuien=$d['buien']['s'];
+$prevbuitentemp=$d['buiten_temp']['s'];
+$buiten_temp=$d['buiten_temp']['s'];
 $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
@@ -266,4 +266,6 @@ $db->query(
     VALUES
         ('$buienradar','$dsbuien','$buien');"
 );
-lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
+if ($buienradar>0||$dsbuien>0||$buien>0) {
+	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
+}
