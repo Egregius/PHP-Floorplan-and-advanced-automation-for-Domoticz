@@ -214,7 +214,6 @@ if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
 } elseif (isset($dswind)) {
     $wind=round($dswind,1);
 }
-lg('wind='.$wind.', prevwind='.$prevwind);
 if ($wind!=$prevwind) {
     store('wind', $wind, basename(__FILE__).':'.__LINE__);
 }
