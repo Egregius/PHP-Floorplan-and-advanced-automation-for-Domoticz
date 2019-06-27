@@ -34,7 +34,7 @@ if ($status=="Open") {
         }
     }
  } else {
-    if ($d['Weg']['s']>0&&$d['auto']['s']==1&&$d['Weg']['m']>TIME-178) {
+    if ($d['Weg']['s']>0&&$d['auto']['s']==1&&past('Weg')>178) {
             sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             telegram('Achterdeur open om '.strftime("%k:%M:%S", TIME), false, 3);
     }

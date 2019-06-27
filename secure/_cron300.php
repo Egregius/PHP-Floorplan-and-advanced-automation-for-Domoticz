@@ -71,13 +71,21 @@ if ($d['auto']['s']!='On') {
 }
 if (past('Weg')>14400
 	&& $d['Weg']['s']==0
-	&& $d['Weg']['m']<TIME-14400
+	&& past('pirliving')>14400
+	&& past('pirkeuken')>14400
+	&& past('pirinkom')>14400
+	&& past('pirhall')>14400
+	&& past('pirgarage')>14400
 ) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);
 	telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
 } elseif (past('Weg')>36000
 	&& $d['Weg']['s']==1
-	&& $d['Weg']['m']<TIME-36000
+	&& past('pirliving')>36000
+	&& past('pirkeuken')>36000
+	&& past('pirinkom')>36000
+	&& past('pirhall')>36000
+	&& past('pirgarage')>36000
 ) {
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
