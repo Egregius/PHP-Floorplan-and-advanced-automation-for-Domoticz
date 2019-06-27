@@ -312,12 +312,12 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 /* Clean old database records */
-$remove=strftime("%Y-%m-%d", TIME-90000);
+$remove=strftime("%F %T", TIME-90000);
 $stmt=$db->query("delete from temp where stamp < '$remove'");
-lg('Deleted '.$stmt->rowCount().' records from temp');
-$remove=strftime("%Y-%m-%d", TIME-432000);
+lg(' Deleted '.$stmt->rowCount().' records from temp');
+$remove=strftime("%F %T", TIME-432000);
 $stmt=$db->query("delete from temp_hour where stamp < '$remove'");
-lg('Deleted '.$stmt->rowCount().' records from temp_hour');
-$remove=strftime("%Y-%m-%d", TIME-200000);
+lg(' Deleted '.$stmt->rowCount().' records from temp_hour');
+$remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
-lg('Deleted '.$stmt->rowCount().' records from regen');
+lg(' Deleted '.$stmt->rowCount().' records from regen');
