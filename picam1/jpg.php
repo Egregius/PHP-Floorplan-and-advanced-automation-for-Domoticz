@@ -30,4 +30,4 @@ if ($home===true) {
     echo "\r\n";
     ob_end_flush();
 }
-alert('picam1view','picam1viewed',300,false);
+alert('picam1view','picam1viewed__'.$ipaddress.'__'.$_SERVER['HTTP_USER_AGENT'],300,false);
