@@ -67,12 +67,12 @@ if ($home) {
         <script type="text/javascript">
         window.setInterval(function()
         {
-            document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
+            document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php";
         }, '.$refresh.');
     </script><script type="text/javascript">
         window.setInterval(function()
         {
-            document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php?random="+new Date().getTime();
+            document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php";
         }, '.$refresh .');
         </script>
         </body></html>
