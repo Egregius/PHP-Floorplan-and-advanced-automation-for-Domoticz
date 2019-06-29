@@ -942,6 +942,8 @@ function ajaxcontrolbose(ip,command,action){
 function floorplan(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
+    try{clearInterval(mypicam1);}catch{}
+    try{clearInterval(mypicam2);}catch{}
     localStorage.setItem('view', 'floorplan');
     ajax(0);
 	myAjax=setInterval(ajax, 500);

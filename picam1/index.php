@@ -25,7 +25,6 @@ if ($home) {
     <meta name="mobile-web-app-capable" content="yes"/>
     <link href="/styles/picam1.php" rel="stylesheet" type="text/css"/>
     </head><body>';
-    $refresh=1000/4;
     if(isset($_POST['Record'])){
         file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
         file_get_contents("http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055");
@@ -65,15 +64,11 @@ if ($home) {
         function navigator_Go(url) {window.location.assign(url);}
         </script>
         <script type="text/javascript">
-        window.setInterval(function()
-        {
-            document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php";
-        }, '.$refresh.');
-    </script><script type="text/javascript">
-        window.setInterval(function()
-        {
-            document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php";
-        }, '.$refresh .');
+        mypicam1=setInterval(getpic, 250);
+        function getpic(){
+        	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php";
+        	document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php";
+        }
         </script>
         </body></html>
     ';
