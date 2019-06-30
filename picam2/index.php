@@ -49,8 +49,9 @@ if($home){
     echo '
         </div>
         <script type="text/javascript">
-        try{clearInterval(myAjax);}catch{}
-		try{clearInterval(myAjaxmedia);}catch{}
+        for (var i = 1; i < 99999; i++){
+     		try{window.clearInterval(i);}catch{};
+     	}
 		mypicam=setInterval(getpic, 500);
         function getpic(){
         	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
