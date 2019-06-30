@@ -30,7 +30,6 @@ function ajax(Update){
                     icon=d[device]['ic'];
                     time=d[device]['t'];
                     if(device=="t"){
-                    	
                         if($LastUpdateTime>100&&$more==false){
                         	if($LastUpdateTime<=$currentTime-900){$LastUpdateTime=parseInt(0);$more=true;console.log("LastUpdateTime set to 0");}
                         	else if($LastUpdateTime<=$currentTime-600){$LastUpdateTime=parseInt($currentTime-6000);$more=true;console.log("LastUpdateTime set to 6000");}
