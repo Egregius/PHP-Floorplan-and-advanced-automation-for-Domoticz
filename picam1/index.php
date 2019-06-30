@@ -66,8 +66,8 @@ if ($home) {
         <script type="text/javascript">
         mypicam1=setInterval(getpic, 250);
         function getpic(){
-        	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php";
-        	document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php";
+        	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
+        	document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php?random="+new Date().getTime();
         }
         </script>
         </body></html>
