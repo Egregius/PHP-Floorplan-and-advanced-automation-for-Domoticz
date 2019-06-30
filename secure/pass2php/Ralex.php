@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 if (isset($status)&&$status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
+    sleep(900);
     picamoff();
 } elseif (isset($status)&&$status=='Closed'&&TIME>strtotime('18:00')) {
 	sw('picam2plug', 'On', basename(__FILE__).':'.__LINE__);
