@@ -1049,7 +1049,7 @@ function floorplanmedia(){
 function floorplanbose(){
     for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	ajaxbose($ip)();
-    myAjaxmedia=setInterval(function(){ajaxbose($ip);}, 500);
+    myAjaxmedia=setInterval(function(){ajaxbose($ip);}, 1000);
     try{
 	}catch{}
 }
@@ -1058,7 +1058,7 @@ function floorplanothers(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanothers');
     ajax(0);
-    myAjax=setInterval(ajax, 750);
+    myAjax=setInterval(ajax, 1500);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';

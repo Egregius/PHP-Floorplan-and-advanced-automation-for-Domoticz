@@ -13,7 +13,7 @@ require '../secure/functions.php';
 $_SESSION['referer']='picam1/index.php';
 require '../secure/authentication.php';
 if ($home) {
-    echo '<html><head><title>Voordeur - Oprit</title>
+    echo '<html><head><title>Oprit</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="HandheldFriendly" content="true"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -67,7 +67,7 @@ if ($home) {
         for (var i = 1; i < 99999; i++){
      		try{window.clearInterval(i);}catch{};
      	}
-		mypicam=setInterval(getpic, 200);
+		mypicam=setInterval(getpic, 500);
         function getpic(){
         	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
         	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
