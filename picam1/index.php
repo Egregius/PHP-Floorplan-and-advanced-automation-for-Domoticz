@@ -64,7 +64,9 @@ if ($home) {
         function navigator_Go(url) {window.location.assign(url);}
         </script>
         <script type="text/javascript">
-        mypicam=setInterval(getpic, 250);
+        try{clearInterval(myAjax);}catch{}
+		try{clearInterval(myAjaxmedia);}catch{}
+		mypicam=setInterval(getpic, 2500);
         function getpic(){
         	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
         	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
