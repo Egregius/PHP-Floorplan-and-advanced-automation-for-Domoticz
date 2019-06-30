@@ -942,8 +942,7 @@ function ajaxcontrolbose(ip,command,action){
 function floorplan(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    try{clearInterval(mypicam1);}catch{}
-    try{clearInterval(mypicam2);}catch{}
+    try{clearInterval(mypicam);}catch{}
     localStorage.setItem('view', 'floorplan');
     ajax(0);
 	myAjax=setInterval(ajax, 500);
@@ -980,8 +979,7 @@ function floorplan(){
 function floorplanheating(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    try{clearInterval(mypicam1);}catch{}
-    try{clearInterval(mypicam2);}catch{}
+    try{clearInterval(mypicam);}catch{}
     localStorage.setItem('view', 'floorplanheating');
     ajax(0);
 	myAjax=setInterval(ajax, 750);
@@ -1023,8 +1021,7 @@ function floorplanheating(){
 function floorplanmedia(){
     try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    try{clearInterval(mypicam1);}catch{}
-    try{clearInterval(mypicam2);}catch{}
+    try{clearInterval(mypicam);}catch{}
     localStorage.setItem('view', 'floorplanmedia');
     ajax(0);
     ajaxmedia();
@@ -1057,8 +1054,7 @@ function floorplanmedia(){
 function floorplanbose(){
     try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    try{clearInterval(mypicam1);}catch{}
-    try{clearInterval(mypicam2);}catch{}
+    try{clearInterval(mypicam);}catch{}
     ajaxbose($ip)();
     myAjaxmedia=setInterval(function(){ajaxbose($ip);}, 500);
     try{
@@ -1068,8 +1064,7 @@ function floorplanbose(){
 function floorplanothers(){
 	try{clearInterval(myAjax);}catch{}
     try{clearInterval(myAjaxmedia);}catch{}
-    try{clearInterval(mypicam1);}catch{}
-    try{clearInterval(mypicam2);}catch{}
+    try{clearInterval(mypicam);}catch{}
     localStorage.setItem('view', 'floorplanothers');
     ajax(0);
     myAjax=setInterval(ajax, 750);

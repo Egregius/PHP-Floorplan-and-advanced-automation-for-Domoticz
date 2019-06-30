@@ -42,18 +42,17 @@ if($home){
         <div class="fix camera">';
     if ($d['picam2plug']['s']=='On') {
         echo '
-            <img class="camerai" id="mjpeg_destalex" src="jpg.php"/>';
+            <img class="camerai" id="mjpeg_dest" src="jpg.php"/>';
     } else {
     	echo 'Camera uit';
     }
     echo '
         </div>
         <script type="text/javascript">
-        function navigator_Go(url) {window.location.assign(url);}
-        window.setInterval(function()
-        {
-            document.getElementById(\'mjpeg_destalex\').src = "jpg.php?random="+new Date().getTime();
-        }, 750);
-    </script></body></html>
+        mypicam=setInterval(getpic, 500);
+        function getpic(){
+        	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
+        }
+        </script></body></html>
     ';
 }

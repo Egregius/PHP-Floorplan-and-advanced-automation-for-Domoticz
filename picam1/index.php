@@ -55,7 +55,7 @@ if ($home) {
         </form>
         </div>
         <div class="fix camera1">
-            <img class="camerai" id="mjpeg_destvoordeur" src="jpg.php"/>
+            <img class="camerai" id="mjpeg_dest" src="jpg.php"/>
         </div>
         <div class="fix camera2">
             <img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
@@ -67,7 +67,7 @@ if ($home) {
         mypicam=setInterval(getpic, 250);
         function getpic(){
         	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
-        	document.getElementById(\'mjpeg_destvoordeur\').src = "jpg.php?random="+new Date().getTime();
+        	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
         }
         </script>
         </body></html>
