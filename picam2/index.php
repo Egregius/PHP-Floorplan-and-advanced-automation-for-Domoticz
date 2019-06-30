@@ -27,6 +27,8 @@ if($home){
     	echo '<script type="text/javascript">
         window.location.replace("/floorplan.php");
     	</script>';
+    } elseif (isset($_POST['On'])) {
+    	sw('picam2plug', 'On');
     }
     echo '<div class="navbar" role="navigation">
             <form method="POST" action="../floorplan.php">
@@ -35,9 +37,16 @@ if($home){
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b5"/>
           <input type="submit" value="Foto" name="Foto" class="btn b5"/>
-          <input type="submit" value="Refresh" name="Refresh" class="btn b5"/>
-          <input type="submit" value="Off" name="Off" class="btn b7"/>
-        </form>
+          <input type="submit" value="Refresh" name="Refresh" class="btn b5"/>';
+    if ($d['picam2plug']['s']=='On') {
+    	echo '
+          <input type="submit" value="Off" name="Off" class="btn b7"/>';
+    } else {
+    	echo '
+          <input type="submit" value="On" name="On" class="btn b7"/>';
+    }
+    echo '
+    	</form>
         </div>
         <div class="fix camera">';
     if ($d['picam2plug']['s']=='On') {
