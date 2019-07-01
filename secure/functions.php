@@ -733,7 +733,7 @@ function fliving()
 function fgarage()
 {
     global $d;
-    if ($d['Weg']['s']==0&&($d['zon']['s']<500||TIME<strtotime('9:00')-($d['auto']['m']==true?3600:0)||TIME>strtotime('21:00')-($d['auto']['m']==true?3600:0))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
+    if ($d['Weg']['s']==0&&($d['zon']['s']<400||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
         sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
     }
     bosezone(104);
@@ -742,10 +742,8 @@ function fbadkamer()
 {
     global $d;
     if (past('8badkamer-8')>10) {
-        if (TIME>strtotime('5:00')&&TIME<strtotime('12:00')&&$d['lichtbadkamer']['s']<25&&$d['zon']['s']<20) {
-            sl('lichtbadkamer', 25, basename(__FILE__).':'.__LINE__);
-        } elseif ($d['lichtbadkamer']['s']<18&&$d['zon']['s']<20) {
-            sl('lichtbadkamer', 18, basename(__FILE__).':'.__LINE__);
+		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
+            sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
         }
         bosezone(102);
     }
@@ -753,9 +751,9 @@ function fbadkamer()
 function fkeuken()
 {
     global $d;
-    if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<45||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+    if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
         sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']<45||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+    } elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
         if ($d['tv']['s']=='On'||$d['jbl']['s']=='On') {
             sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
         }
@@ -764,7 +762,7 @@ function fkeuken()
 function finkom()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['inkom']['s']=='Off'&&$d['zon']['s']<10) {
+    if ($d['Weg']['s']==0&&$d['inkom']['s']=='Off'&&$d['zon']['s']==0) {
         sw('inkom', 'On', basename(__FILE__).':'.__LINE__);
     }
 }
