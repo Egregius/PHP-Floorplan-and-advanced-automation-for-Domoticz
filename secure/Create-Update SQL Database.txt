@@ -153,3 +153,7 @@ DROP TABLE IF EXISTS `vDevices`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`domotica`@`localhost` SQL SECURITY DEFINER VIEW `vDevices`  AS  select `devices`.`n` AS `n`,`devices`.`i` AS `i`,`devices`.`s` AS `s`,`devices`.`m` AS `m`,date_format(from_unixtime(`devices`.`t`),'%d-%m %H:%i:%s') AS `t` from `devices` order by date_format(from_unixtime(`devices`.`t`),'%d-%m %H:%i:%s') desc limit 0,500 ;
 COMMIT;
+
+
+ALTER TABLE `devices` ADD IF NOT EXISTS `dt` VARCHAR(20) NOT NULL AFTER `m`;
+ALTER TABLE `devices` ADD IF NOT EXISTS `icon` VARCHAR(20) NOT NULL AFTER `dt`;
