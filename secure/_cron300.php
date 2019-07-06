@@ -90,3 +90,10 @@ if (past('Weg')>14400
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
+if ($d['Ralex']['s']=='Open'&&$d['deuralex']['s']=='Open'&TIME>strtotime("7:00")&&TIME<strtotime("18:00")) {
+    file_get_contents('http://192.168.2.12/fifo_command.php?cmd=halt');
+    sleep(1);
+    file_get_contents('http://192.168.2.12/fifo_command.php?cmd=halt');
+    sleep(10);
+    sw('picam2plug', 'Off', basename(__FILE__).':'.__LINE__);
+}
