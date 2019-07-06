@@ -733,7 +733,7 @@ function fliving()
 function fgarage()
 {
     global $d;
-    if ($d['Weg']['s']==0&&($d['zon']['s']<400||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
+    if ($d['Weg']['s']==0&&($d['zon']['s']<300||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
         sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
     }
     bosezone(104);
