@@ -1099,6 +1099,8 @@ function floorplanothers(){
 			} else {
             	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 			}
+			watertuin=localStorage.getItem('watertuin');
+			html+=watertuin+' L';
 		}else{
 			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
         	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
