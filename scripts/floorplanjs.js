@@ -1061,7 +1061,7 @@ function floorplanothers(){
     myAjax=setInterval(ajax, 1500);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
+        html+='<div class="fix" id="clock" onclick="initview();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px"/></div>';
         items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
@@ -1099,8 +1099,6 @@ function floorplanothers(){
 			} else {
             	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 			}
-			watertuin=localStorage.getItem('watertuin');
-			html+=watertuin+' L';
 		}else{
 			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
         	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
