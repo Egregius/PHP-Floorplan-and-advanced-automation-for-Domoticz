@@ -243,6 +243,9 @@ function ajax(Update){
                         localStorage.setItem("tijd_water", time);
                     }else if(device=="watertuin"){
                     	localStorage.setItem("watertuin", mode);
+                    	try{
+                    		$("#watertuin").html(mode+' L');
+                    	}catch{}
                     }else if(device=="douche"){
                         try{
                             douchegas=value * 10;
@@ -971,7 +974,7 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
         html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
         watertuin=localStorage.getItem('watertuin');
-			if(watertuin>0)html+='<tr><td>Tuin</td><td>'+watertuin+' L</td></tr>';
+			if(watertuin>0)html+='<tr><td>Tuin</td><td id="watertuin">'+watertuin+' L</td></tr>';
 		html+='</table></div>';
         $('#placeholder').html(html).fadeIn(3000);
    }catch{}
@@ -1102,15 +1105,13 @@ function floorplanothers(){
 			} else {
             	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 			}
-			watertuin=localStorage.getItem('watertuin');
-			if(watertuin>0)html+='<br><b> '+watertuin+' L</b><br>';
 		}else{
 			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
         	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
         	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 		}
 		watertuin=localStorage.getItem('watertuin');
-		html+=watertuin+' L';
+		if(watertuin>0)html+='<br><span id="watertuin">'+watertuin+' L</span>';
 		html+='<div class="fix z1 bottom" style="right:0px"><form method="POST"><input type="hidden" name="username" value="logout"/><input type="submit" name="logout" value="Logout" class="btn" style="padding:0px;margin:0px;width:90px;height:35px;"/></form><br/><br/></div>';
         $('#placeholder').html(html);
     }catch{}
