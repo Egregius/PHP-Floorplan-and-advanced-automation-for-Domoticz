@@ -1072,9 +1072,9 @@ function floorplanothers(){
         html+='</div>';
         low=localStorage.getItem('regenputleeg');
         high=localStorage.getItem('regenputvol');
-        if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputrood.png"></div>';
-        else if(low=='Off'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputblauw.png"></div>';
-        else if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputgroen.png"></div>';
+        if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputrood.png"></div>';
+        else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputblauw.png"></div>';
+        else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputgroen.png"></div>';
         html+='<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
