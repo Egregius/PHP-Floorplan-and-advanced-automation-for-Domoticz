@@ -471,7 +471,7 @@ function telegram($msg,$silent=true,$to=1)
 		$silent='false';
 	}
     shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-    lg('Telegram sent: '.$msg.PHP_EOL.'<br>./telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
+    lg('Telegram sent: '.$msg);
 }
 function lg($msg)
 {
