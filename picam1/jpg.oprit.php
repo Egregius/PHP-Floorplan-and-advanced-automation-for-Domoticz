@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -12,6 +12,7 @@
 require '../secure/functions.php';
 require '../secure/authentication.php';
 if ($home===true) {
+	$ctx=stream_context_create(array('http'=>array('timeout' =>1)));
     $boundary="PIderman";
     header("Content-type: multipart/x-mixed-replace; boundary=$boundary");
     header("Cache-Control: no-cache");
@@ -22,7 +23,7 @@ if ($home===true) {
     ob_start();
     echo "--$boundary\r\n";
     echo "Content-type: image/jpeg\r\n";
-    $fileContents=file_get_contents("http://192.168.2.13/mjpeg_read.php");
+    $fileContents=file_get_contents("http://192.168.2.13/mjpeg_read.php", false, $ctx);
     $fileLength=strlen($fileContents);
     echo "Content-Length:".$fileLength."\r\n";
     echo "\r\n";
