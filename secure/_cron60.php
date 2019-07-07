@@ -659,7 +659,7 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
 }
 if ($d['water']['s']=='On') {
     if (past('water')>$d['water']['m']) {
-        double('water', 'Off');
+        sw('water', 'Off');
     }
 }
 if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {

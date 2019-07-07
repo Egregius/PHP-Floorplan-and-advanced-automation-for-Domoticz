@@ -241,6 +241,8 @@ function ajax(Update){
                             }else $("#trwater").html("");
                         }catch{}
                         localStorage.setItem("tijd_water", time);
+                    }else if(device=="watertuin"){
+                    	localStorage.setItem("watertuin", mode);
                     }else if(device=="douche"){
                         try{
                             douchegas=value * 10;
@@ -943,7 +945,6 @@ function floorplan(){
 	localStorage.setItem('view', 'floorplan');
     ajax(0);
 	myAjax=setInterval(ajax, 1000);
-	console.log(myAjax);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
@@ -979,7 +980,6 @@ function floorplanheating(){
 	localStorage.setItem('view', 'floorplanheating');
     ajax(0);
 	myAjax=setInterval(ajax, 1000);
-	console.log(myAjax);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
@@ -1058,10 +1058,10 @@ function floorplanothers(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanothers');
     ajax(0);
-    myAjax=setInterval(ajax, 1500);
+    myAjax=setInterval(ajax, 1000);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix" id="clock" onclick="initview();"></div>';
+        html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px"/></div>';
         items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
@@ -1099,6 +1099,8 @@ function floorplanothers(){
 			} else {
             	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 			}
+			watertuin=localStorage.getItem('watertuin');
+			html+=watertuin+' L';
 		}else{
 			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
         	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
