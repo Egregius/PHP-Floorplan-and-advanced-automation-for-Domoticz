@@ -30,7 +30,7 @@ if (isset($_REQUEST['gpio'])) {
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
             $data=$d['douche']['m']+1;
             storemode('douche', $data, basename(__FILE__).':'.__LINE__, 1);
-        } elseif ($d['water']['s']>'On'&&past('watervandaag')<60) {
+        } elseif ($d['water']['s']=='On') {
             $data=$d['watertuin']['m']+1;
             storemode('watertuin', $data, basename(__FILE__).':'.__LINE__, 1);
         }
