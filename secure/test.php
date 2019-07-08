@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-echo (100 + 21%);
+lgcommand('on');
 
 
 /*---------------------------*/

@@ -459,6 +459,12 @@ function ajax(Update){
                                 			document.getElementById("water7200").classList.remove("btna");
                                 		}
                                 	}catch{}
+                                }else if(localStorage.getItem('view')=='floorplan'&&device=="denon"){
+									if(value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
+									else $('#denonicon').attr("src", "/images/denon_Off.png");
+                                }else if(localStorage.getItem('view')=='floorplan'&&device=="lgtv"){
+									if(value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
+									else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
                                 }
                             }else if(device=="bureeltobi"){
                                 if(value=="On")html='<img src="/images/'+icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
@@ -1130,13 +1136,13 @@ function sidebar(){
 		denonpower=localStorage.getItem("denonpower");
 		html='<div class="fix weather"><a href=\'javascript:navigator_Go("floorplan.weather.php");\'><img src="" alt="icon" id="icon"></a></div>';
 		html+='<div class="fix mediabuttons" onclick="floorplanmedia();">';
-		if(denonpower=="On")html+='<img src="/images/denon_On.png" class="i70" alt="denon">';
-		else html+='<img src="/images/denon_Off.png" class="i70" alt="denon">';
+		if(denonpower=="On")html+='<img src="/images/denon_On.png" class="i70" alt="denon" id="denonicon">';
+		else html+='<img src="/images/denon_Off.png" class="i70" alt="denon" id="denonicon">';
 		html+='<br>';
 		if(tv=="On"){
-			if(lgtv=="On")html+='<img src="/images/lgtv_On.png" class="i60" alt="lgtv">';
-			else if(lgtv=="Off")html+='<img src="/images/lgtv_Off.png" class="i60" alt="lgtv">';
-		}else if(tv=="Off")html+='<img src="/images/tv_Off.png" class="i60" alt="lgtv">';
+			if(lgtv=="On")html+='<img src="/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtvicon">';
+			else if(lgtv=="Off")html+='<img src="/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
+		}else if(tv=="Off")html+='<img src="/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		html+='<br>';
 		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="hum"></span><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
