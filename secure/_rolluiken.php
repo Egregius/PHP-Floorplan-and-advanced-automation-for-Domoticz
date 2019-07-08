@@ -217,21 +217,11 @@ if ($d['heating']['s']>=2) {
         }
     }
 } elseif ($d['heating']['s']==0) {//Neutral
-    if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
-        $dag='nacht';
-    }
-    if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
-        $dag='ochtend';
-    }
-    if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
-        $dag='AM';
-    }
-    if (TIME>=strtotime('10:30')&&TIME<strtotime('18:00')) {
-        $dag='PM';
-    }
-    if (TIME>=strtotime('18:00')&&TIME<strtotime('22:00')) {
-        $dag='avond';
-    }
+    if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) $dag='nacht';
+    if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) $dag='ochtend';
+    if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) $dag='AM';
+    if (TIME>=strtotime('10:30')&&TIME<strtotime('18:00')) $dag='PM';
+    if (TIME>=strtotime('18:00')&&TIME<strtotime('22:00')) $dag='avond';
     if ($d['Weg']['s']==0) {
         if ($dag=='nacht') {
         } elseif ($dag=='ochtend'&&(past('pirliving')<4000||past('8badkamer-8')<4000)) {
@@ -381,22 +371,12 @@ if ($d['heating']['s']>=2) {
             }
         }
     }
-} elseif ($d['heating']['s']==1) {
-    if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) {
-        $dag='nacht';
-    }
-    if (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
-        $dag='ochtend';
-    }
-    if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
-        $dag='AM';
-    }
-    if (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) {
-        $dag='PM';
-    }
-    if (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) {
-        $dag='avond';
-    }
+} elseif ($d['heating']['s']==1) {//Cooling
+    if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) $dag='nacht';
+    if (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) $dag='ochtend';
+    if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) $dag='AM';
+    if (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) $dag='PM';
+    if (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) $dag='avond';
     if ($d['Weg']['s']==0) {
         if ($dag=='nacht') {
         } elseif ($dag=='ochtend') {
