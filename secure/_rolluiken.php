@@ -216,8 +216,7 @@ if ($d['heating']['s']>=2) {
             }
         }
     }
-} elseif ($d['heating']['s']==0) {
-    $msg.='Neutral__';
+} elseif ($d['heating']['s']==0) {//Neutral
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
     }
