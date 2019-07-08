@@ -287,7 +287,12 @@ function lgcommand($action,$msg='')
 {
     global $lgtvip, $lgtvmac;
     if ($action=='on') {
-        shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
+        //$msg= shell_exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
+        //echo $msg;
+        exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+		var_dump($output);
+		var_dump($return_var);
+//        echo shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {
         echo shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
         echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
