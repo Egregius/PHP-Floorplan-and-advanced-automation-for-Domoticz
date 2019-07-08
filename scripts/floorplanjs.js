@@ -507,6 +507,7 @@ function ajax(Update){
                     }else if(type=="rollers"){
                         localStorage.setItem(device, value);
                         localStorage.setItem(device+'_mode', mode);
+                        console.log(device+' '+value);
                         try{
                             opts=icon.split(",");
                             stat=100 - value;
