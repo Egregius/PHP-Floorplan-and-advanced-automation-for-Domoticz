@@ -15,8 +15,8 @@ echo '<pre>';
 /*-------------------------------------------------*/
 
 //lgcommand('on');
-$cmd='python3 /var/www/lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip;
-echo exec('python3 lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip, $output, $return_var);
+$cmd='/var/www/html/secure/lgtv.py -c send-message -a "TEST" '.$lgtvip;
+echo exec($cmd, $output, $return_var);
 var_dump($output);
 var_dump($return_var);
 
