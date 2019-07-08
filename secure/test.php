@@ -13,9 +13,9 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-
+shell_exec('python3 lgtv.py -c send-message -a "NAS Opgestart" '.$lgtvip.' > /dev/null 2>&1 &');
 //lgcommand('on');
-$cmd='/var/www/html/secure/lgtv.py -c send-message -a "TEST" '.$lgtvip;
+$cmd='/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip;
 echo exec($cmd, $output, $return_var);
 var_dump($output);
 var_dump($return_var);

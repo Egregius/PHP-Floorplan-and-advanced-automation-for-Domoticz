@@ -6,7 +6,7 @@ import argparse
 import socket
 import struct
 import asyncio
-logging.basicConfig(filename='/var/log/lgtv-error.log', level=logging.ERROR, format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logging.basicConfig(filename='/var/log/lgtv-error.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
 class LgCommand (object):
     def __init__(self, ip):
         self.client = WebOsClient(ip)
