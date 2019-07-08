@@ -372,14 +372,8 @@ if ($d['heating']['s']>=2) {
         }
     }
 } elseif ($d['heating']['s']==1) {//Cooling
-    if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) $dag='nacht';
-    if (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) $dag='ochtend';
-    if (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) $dag='AM';
-    if (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) $dag='PM';
-    if (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) $dag='avond';
     if ($d['Weg']['s']==0) {
-        if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) {
-        } elseif (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
+        if (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']==0
@@ -445,8 +439,6 @@ if ($d['heating']['s']>=2) {
 			if($d['raamalex']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&$d['Rtobi']['m']==0&&past('Ralex')>7200) {
 				sl('Ralex', 80, basename(__FILE__).':'.__LINE__);
 			}
-        } elseif ($dag=='avond') {
-
         }
     } elseif ($d['Weg']['s']==1) {
         foreach ($benedenall as $i) {
@@ -521,7 +513,7 @@ if ($d['heating']['s']>=2) {
 			if($d['raamalex']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&$d['Rtobi']['m']==0&&past('Ralex')>7200) {
 				sl('Ralex', 80, basename(__FILE__).':'.__LINE__);
 			}
-        } elseif ($dag=='avond') {
+        } elseif (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']<30 && past($i)>900) {
