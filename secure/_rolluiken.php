@@ -378,8 +378,8 @@ if ($d['heating']['s']>=2) {
     if (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) $dag='PM';
     if (TIME>=strtotime('20:00')&&TIME<strtotime('22:00')) $dag='avond';
     if ($d['Weg']['s']==0) {
-        if ($dag=='nacht') {
-        } elseif ($dag=='ochtend') {
+        if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) {
+        } elseif (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 if ($d['Rliving']['m']==0
                     && $d['Rliving']['s']==0
@@ -414,27 +414,36 @@ if ($d['heating']['s']>=2) {
                     }
                 }
             }
-        } elseif ($dag=='AM') {
+        } elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
             foreach ($benedenv as $i) {
-				if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>900) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>27 && past($i)>7200) {
 					sl($i, 27, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			foreach ($benedena as $i) {
-				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			foreach ($bovenv as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+                if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                 }
             }
-        } elseif ($dag=='PM') {
+        } elseif (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) {
 			foreach ($benedenv as $i) {
-				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
+			}
+			if(TIME>=strtotime('15:00')&&$d['zon']['s']>1000&&$d['Rbureel']['s']<50&&past('Rbureel')>7200) {
+				sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+			}
+			if($d['raamtobi']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Rtobi']['s']<80&&$d['Rtobi']['m']==0&&past('Rtobi')>7200) {
+				sl('Rtobi', 80, basename(__FILE__).':'.__LINE__);
+			}
+			if($d['raamalex']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&$d['Rtobi']['m']==0&&past('Ralex')>7200) {
+				sl('Ralex', 80, basename(__FILE__).':'.__LINE__);
 			}
         } elseif ($dag=='avond') {
 
@@ -446,7 +455,7 @@ if ($d['heating']['s']>=2) {
             }
         }
     } elseif ($d['Weg']['s']==2) {
-        if ($dag=='nacht') {
+        if (TIME<strtotime('5:30')||TIME>=strtotime('22:00')) {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']<70) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
@@ -457,7 +466,7 @@ if ($d['heating']['s']>=2) {
                     sl($i, 100, basename(__FILE__).':'.__LINE__);
                 }
             }
-        } elseif ($dag=='ochtend') {
+        } elseif (TIME>=strtotime('5:30')&&TIME<strtotime('8:30')) {
             if ($d['auto']['m']&&$d['zon']['s']==0) {
                 foreach ($benedenall as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>30 && past($i)>900) {
@@ -481,7 +490,7 @@ if ($d['heating']['s']>=2) {
                     }
                 }
             }
-        } elseif ($dag=='AM') {
+        } elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
             foreach ($benedenall as $i) {
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -497,8 +506,21 @@ if ($d['heating']['s']>=2) {
 					 sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
 			}
-        } elseif ($dag=='PM') {
-
+        } elseif (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) {
+			foreach ($benedenv as $i) {
+				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
+					sl($i, 0, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			if(TIME>=strtotime('15:00')&&$d['zon']['s']>1000&&$d['Rbureel']['s']<50&&past('Rbureel')>7200) {
+				sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+			}
+			if($d['raamtobi']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Rtobi']['s']<80&&$d['Rtobi']['m']==0&&past('Rtobi')>7200) {
+				sl('Rtobi', 80, basename(__FILE__).':'.__LINE__);
+			}
+			if($d['raamalex']['s']=='Closed'&&$d['zon']['s']>1000&&$d['Ralex']['s']<80&&$d['Rtobi']['m']==0&&past('Ralex')>7200) {
+				sl('Ralex', 80, basename(__FILE__).':'.__LINE__);
+			}
         } elseif ($dag=='avond') {
             if ($d['auto']['m']&&$d['zon']['s']==0&&past('zon')>600) {
                 foreach ($benedenall as $i) {
