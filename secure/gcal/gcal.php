@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.3-1
+ * php version 7.3.4-2
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -30,12 +30,9 @@ $optParams=array(
     'singleEvents'=>TRUE,
     'timeMin'=>$timeMin
 );
-//echo '<pre>';print_r($service);echo '</pre>';
 $results=$service->events->listEvents($calendarId, $optParams);
-//echo '<pre>';print_r($results);echo '</pre>';
-if (count($results->getItems())>0){
-	foreach($results->getItems() as $event){
-		//echo '<pre>';print_r($event);echo '</pre>';
+if (count($results->getItems())>0) {
+	foreach ($results->getItems() as $event) {
 		if (isset($event->start->dateTime)) {
 		    $start=strtotime($event->start->dateTime);
 		}
@@ -48,8 +45,6 @@ if (count($results->getItems())>0){
 		if (empty($end)) {
 		    $end=strtotime($event->end->date);
 		}
-		$msg.=strftime("%Y-%m-%d %H:%M:%S",$start).' '.$event->summary.'<br>';
-		//echo strftime("%Y-%m-%d %H:%M:%S",$start).' '.strftime("%Y-%m-%d %H:%M:%S",$end).' '.$event->summary.'<br>';
 		if (TIME>$start&&TIME<$end) {
 			echo 'Executing<br>';
 			$user='GCal';
@@ -79,59 +74,59 @@ if (count($results->getItems())>0){
 				    $detail="Off";
 				}
 			}
-			$msg.=strftime("%Y-%m-%d %H:%M:%S",TIME).'  => GCAL: '.$event->summary.' from '.$event->start->dateTime.' till '.$event->end->dateTime.'<br>';
 			if ($action=="wake") {
 				if ($d[$place]['s']=='Off') {
 				    $d[$place]['s']=0;
 				}
 				if ($place=='kamer') {
-					if ($d[$place]['s']<30
-					    &&$d[$place]['m']!=2
+					if ($d['kamer']['s']<30
+					    &&$d['kamer']['m']!=2
 					    &&$d['Ralex']['m']==2
-					    &&past($place)>300
+					    &&past('kamer')>300
 					) {
-						storemode($place,2);
-						sl($place,($d[$place]['s']+1));
+						if ($d['zon']['s']>0||$d['auto']['m']) {
+							if ($d['RkamerR']['s']>0) {
+								sl('RkamerR', 0, basename(__FILE__).':'.__LINE__)
+							}
+							if ($d['RkamerL']['s']>0) {
+								sl('RkamerL', 0, basename(__FILE__).':'.__LINE__)
+							}
+						} else {
+							storemode($place,2);
+							sl($place, ($d[$place]['s']+1), basename(__FILE__).':'.__LINE__);
+						}
 					}
 				} else {
 					if ($d[$place]['s']<30
 					    &&$d[$place]['m']!=2
 					    &&past($place)>300
 					) {
-						lg('GCal OK'.$place);
 						storemode($place,2);
-						sl($place,($d[$place]['s']+1));
+						sl($place, ($d[$place]['s']+1), basename(__FILE__).':'.__LINE__);
 					}
 				}
-				$msg.='gcal: '.$place.' '.$action.', status='.$d[$place]['s'].'<br>';
 			} elseif ($action=="sleep") {
 				if ($d[$place]['s']>0&&$d[$place]['m']!=1) {
 					storemode($place,1);
-					sl($place,$d[$place]['s']-1);
+					sl($place,$d[$place]['s']-1, basename(__FILE__).':'.__LINE__);
 				}
-				$msg.='gcal: '.$place.' '.$action.', status='.$d[$place]['s'].'<br>';
 			} elseif ($action=="dimmer") {
 				if ($d[$place]['s']=='Off') {
 				    $d[$place]['s']=0;
 				}
 				if ($d[$place]['s']!=$detail&&past($place)>300) {
-				    sl($place,$detail,"GCAL: ".$place);
+				    sl($place,$detail, basename(__FILE__).':'.__LINE__);
 				}
-				$msg.='gcal: '.$place.' '.$action.', status='.$d[$place]['s'].'<br>';
 			} elseif ($action=="schakel"){
 				if ($d[$place]['s']!=$detail&&past($place)>300){
-					sw($place,$detail,'GCAL: '.$place);
+					sw($place,$detail, basename(__FILE__).':'.__LINE__);
 				}
-				$msg.='gcal: '.$place.' '.$action.', status='.$d[$place]['s'].'<br>';
 			}elseif ($action=="setpoint"){
 				storemode($place.'_set',2);
 				if ($d[$place]['s']!=$detail&&past($place)>300) {
-				    ud($place.'_set',0,$detail,"GCAL: ".$place);
+				    ud($place.'_set',0,$detail, basename(__FILE__).':'.__LINE__);
 				}
-				$msg.='gcal: '.$place.' '.$action.', status='.$d[$place]['s'].'<br>';
 			}
 		}
   	}
-  	echo $msg;
-  	//if (strlen($msg)>40)telegram($msg);
 }
