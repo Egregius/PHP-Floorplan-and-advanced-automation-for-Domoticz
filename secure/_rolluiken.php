@@ -25,12 +25,11 @@ if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true;
 else $koud=false;
 if ($d['auto']['m']) $dag=true;
 else $dag=false;
-if ($d['zon']['s']>0) $zon=true;
-else $zon=false;
+$zon=$d['zon']['s'];
 
 if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	foreach ($bovenv as $i) {
-		if ($d[$i]['m']==0&&$d[$i]['s']>0&&past($i)>900) {
+		if ($d[$i]['s']>0&&past($i)>900) {
 			 sl($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -42,9 +41,11 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	}
 } elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
 	if ($d['heating']['s']==1&&$warm) {
-		foreach ($bovena as $i) {
-			if ($d[$i]['m']==0&&$d[$i]['s']!=80&&past($i)>900) {
-				 sl($i, 80, basename(__FILE__).':'.__LINE__);
+		if($zon>2000) {
+			foreach ($bovena as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']!=81&&past($i)>900) {
+					 sl($i, 81, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	} else {
@@ -56,13 +57,15 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	}
 } elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
 	if ($d['heating']['s']==1&&$warm) {
-		foreach ($bovena as $i) {
-			if ($d[$i]['m']==0&&$d[$i]['s']!=80&&past($i)>900) {
-				 sl($i, 80, basename(__FILE__).':'.__LINE__);
+		if($zon>2000) {
+			foreach ($bovena as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']!=81&&past($i)>900) {
+					 sl($i, 81, basename(__FILE__).':'.__LINE__);
+				}
 			}
-		}
-		if ($d['Rbureel']['s']<50) {
-			sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+			if ($d['Rbureel']['s']<50) {
+				sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	} else {
 		foreach ($boven as $i) {
