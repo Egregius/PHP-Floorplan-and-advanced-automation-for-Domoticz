@@ -596,17 +596,6 @@ if ($d['auto']['s']=='On') {
     }
 }
     /* -------------------------------------------- ALTIJD ----------------------------*/
-if (date('I', TIME) == 1) {
-    if ($d['auto']['m']==false) {
-        storemode('auto', true, basename(__FILE__).':'.__LINE__);
-        $d['auto']['m']=true;
-    }
-} else {
-    if ($d['auto']['m']==true) {
-        storemode('auto', false, basename(__FILE__).':'.__LINE__);
-        $d['auto']['m']=false;
-    }
-}
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
     &&$d['heater3']['s']=='Off'
