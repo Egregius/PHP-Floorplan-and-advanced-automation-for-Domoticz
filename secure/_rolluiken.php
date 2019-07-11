@@ -26,7 +26,7 @@ else $koud=false;
 if ($d['auto']['m']) $dag=true;
 else $dag=false;
 $zon=$d['zon']['s'];
-
+$heating=$d['heating']['s'];
 if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	foreach ($bovenv as $i) {
 		if ($d[$i]['s']>0&&past($i)>900) {
@@ -40,7 +40,7 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 		 sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 	}
 } elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
-	if ($d['heating']['s']==1&&$warm) {
+	if ($heating==1&&$warm) {
 		if($zon>2000) {
 			foreach ($bovena as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']!=81&&past($i)>900) {
@@ -56,7 +56,7 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 		}
 	}
 } elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
-	if ($d['heating']['s']==1&&$warm) {
+	if ($heating==1&&$warm) {
 		if($zon>2000) {
 			foreach ($bovena as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']!=81&&past($i)>900) {
@@ -76,10 +76,18 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	}
 	
 } elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
-
+	if ($heating>=2) {
+		if ($zon==0) {
+			foreach ($boven as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']<100&&past($i)>900) {
+					 sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			}
+		}
+	}
 } else {
 	if ($d['Weg']['s']>0) {
-		if ($d['heating']['s']==1) {
+		if ($heating==1) {
 			foreach ($benedenall as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']<83&&past($i)>900) {
 					 sl($i, 83, basename(__FILE__).':'.__LINE__);
