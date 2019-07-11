@@ -27,10 +27,28 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
 			 sl($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
-} elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
+	if ($d['Rtobi']['m']==0&&$d[$i]['s']>0&&$d['deurtobi']['s']=='Open'&&past($i)>900) {
+		 sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+	}
+	if ($d['Ralex']['m']==0&&$d[$i]['s']>0&&$d['deuralex']['s']=='Open'&&past($i)>900) {
+		 sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+	}
+} elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:15')) {
 
-} elseif (TIME>=strtotime('12:30')&&TIME<strtotime('17:00')) {
-
+} elseif (TIME>=strtotime('10:15')&&TIME<strtotime('17:00')) {
+	if ($d['heating']['s']==1&&$d['minmaxtemp']['s']>20&&$d['minmaxtemp']['m']>22) {
+		foreach ($boven as $i) {
+			if ($d[$i]['m']==0&&$d[$i]['s']!=80&&past($i)>900) {
+				 sl($i, 80, basename(__FILE__).':'.__LINE__);
+			}
+		}
+	} else {
+		foreach ($boven as $i) {
+			if ($d[$i]['m']==0&&$d[$i]['s']>0&&past($i)>900) {
+				 sl($i, 0, basename(__FILE__).':'.__LINE__);
+			}
+		}
+	}
 } elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 
 }
