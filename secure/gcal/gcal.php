@@ -86,10 +86,10 @@ if (count($results->getItems())>0) {
 					) {
 						if ($d['zon']['s']>0||$d['auto']['m']) {
 							if ($d['RkamerR']['s']>0) {
-								sl('RkamerR', 0, basename(__FILE__).':'.__LINE__)
+								sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 							}
 							if ($d['RkamerL']['s']>0) {
-								sl('RkamerL', 0, basename(__FILE__).':'.__LINE__)
+								sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 							}
 						} else {
 							storemode($place,2);
