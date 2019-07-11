@@ -51,8 +51,34 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
 	}
 } elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 
+} else {
+	if ($d['Weg']['s']>0) {
+		if ($d['heating']['s']==1) {
+			foreach ($benedenall as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']<80&&past($i)>900) {
+					 sl($i, 80, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			foreach ($boven as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']<80&&past($i)>900) {
+					 sl($i, 80, basename(__FILE__).':'.__LINE__);
+				}
+			}
+		} else {
+			foreach ($benedenall as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']<100&&past($i)>900) {
+					 sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			foreach ($boven as $i) {
+				if ($d[$i]['m']==0&&$d[$i]['s']<100&&past($i)>900) {
+					 sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			}
+		}
+	}
 }
-
+/*
 if ($d['heating']['s']>=2) {
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
@@ -575,3 +601,4 @@ if ($d['heating']['s']>=2) {
         }
     }
 }
+*/
