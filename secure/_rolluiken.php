@@ -12,7 +12,6 @@
 if (!isset($d)) {
 	$d=fetchdata();
 }
-$user='rolluiken';
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $bovenv=array('RkamerL','RkamerR');
 $bovena=array('Rtobi','Ralex');
@@ -20,10 +19,14 @@ $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenv=array('RkeukenL','RkeukenR');
 $benedena=array('Rliving','Rbureel');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
-if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warmbuiten=true;
-else $warmbuiten=false;
+if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true;
+else $warm=false;
+if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true;
+else $koud=false;
 if ($d['auto']['m']) $dag=true;
 else $dag=false;
+if ($d['zon']['s']>0) $zon=true;
+else $zon=false;
 
 if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 	foreach ($bovenv as $i) {
@@ -38,11 +41,7 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 		 sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 	}
 } elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
-	if ($d['heating']['s']==1&&$warmbuiten) {
-		
-	}
-} elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
-	if ($d['heating']['s']==1&&$warmbuiten) {
+	if ($d['heating']['s']==1&&$warm) {
 		foreach ($bovena as $i) {
 			if ($d[$i]['m']==0&&$d[$i]['s']!=80&&past($i)>900) {
 				 sl($i, 80, basename(__FILE__).':'.__LINE__);
@@ -55,14 +54,32 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 			}
 		}
 	}
+} elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
+	if ($d['heating']['s']==1&&$warm) {
+		foreach ($bovena as $i) {
+			if ($d[$i]['m']==0&&$d[$i]['s']!=80&&past($i)>900) {
+				 sl($i, 80, basename(__FILE__).':'.__LINE__);
+			}
+		}
+		if ($d['Rbureel']['s']<50) {
+			sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+		}
+	} else {
+		foreach ($boven as $i) {
+			if ($d[$i]['m']==0&&$d[$i]['s']>0&&past($i)>900) {
+				 sl($i, 0, basename(__FILE__).':'.__LINE__);
+			}
+		}
+	}
+	
 } elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 
 } else {
 	if ($d['Weg']['s']>0) {
 		if ($d['heating']['s']==1) {
 			foreach ($benedenall as $i) {
-				if ($d[$i]['m']==0&&$d[$i]['s']<80&&past($i)>900) {
-					 sl($i, 80, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['m']==0&&$d[$i]['s']<83&&past($i)>900) {
+					 sl($i, 83, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			foreach ($boven as $i) {
@@ -87,6 +104,7 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 
 
 /* ------- OUD --------- */
+/*
 if ($d['heating']['s']>=2) {
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
@@ -609,3 +627,4 @@ if ($d['heating']['s']>=2) {
         }
     }
 }
+*/
