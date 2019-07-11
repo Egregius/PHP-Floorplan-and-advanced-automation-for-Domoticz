@@ -22,7 +22,11 @@ $benedena=array('Rliving','Rbureel');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 
 if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
-
+	foreach ($bovenv as $i) {
+		if ($d[$i]['m']==0&&$d[$i]['s']>0&&past($i)>900) {
+			 sl($i, 0, basename(__FILE__).':'.__LINE__);
+		}
+	}
 } elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
 
 } elseif (TIME>=strtotime('12:30')&&TIME<strtotime('17:00')) {
@@ -30,6 +34,7 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
 } elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 
 }
+
 if ($d['heating']['s']>=2) {
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
@@ -401,11 +406,6 @@ if ($d['heating']['s']>=2) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                     }
                 }
-                foreach ($bovenv as $i) {
-                    if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
-                         sl($i, 35, basename(__FILE__).':'.__LINE__);
-                    }
-                }
                 foreach ($bovena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                          sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -423,11 +423,6 @@ if ($d['heating']['s']>=2) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
 			}
-			foreach ($bovenv as $i) {
-                if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
-                    sl($i, 0, basename(__FILE__).':'.__LINE__);
-                }
-            }
         } elseif (TIME>=strtotime('10:30')&&TIME<strtotime('20:00')) {
 			foreach ($benedenv as $i) {
 				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>7200) {
@@ -475,11 +470,6 @@ if ($d['heating']['s']>=2) {
                         sl($i, 0, basename(__FILE__).':'.__LINE__);
                     }
                 }
-                foreach ($bovenv as $i) {
-                    if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
-                         sl($i, 35, basename(__FILE__).':'.__LINE__);
-                    }
-                }
                 foreach ($bovena as $i) {
                     if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                          sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -492,11 +482,6 @@ if ($d['heating']['s']>=2) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                 }
             }
-            foreach ($bovenv as $i) {
-				if ($d[$i]['m']==0 && $d[$i]['s']>35 && past($i)>900) {
-					 sl($i, 35, basename(__FILE__).':'.__LINE__);
-				}
-			}
 			foreach ($bovena as $i) {
 				if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
 					 sl($i, 0, basename(__FILE__).':'.__LINE__);

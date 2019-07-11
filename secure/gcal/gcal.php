@@ -83,18 +83,10 @@ if (count($results->getItems())>0) {
 					    &&$d['kamer']['m']!=2
 					    &&$d['Ralex']['m']==2
 					    &&past('kamer')>300
+					    &&$d['zon']['s']==0
 					) {
-						if ($d['zon']['s']>0||$d['auto']['m']) {
-							if ($d['RkamerR']['s']>0) {
-								sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-							}
-							if ($d['RkamerL']['s']>0) {
-								sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-							}
-						} else {
 							storemode($place,2);
 							sl($place, ($d[$place]['s']+1), basename(__FILE__).':'.__LINE__);
-						}
 					}
 				} else {
 					if ($d[$place]['s']<30
