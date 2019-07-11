@@ -21,6 +21,15 @@ $benedenv=array('RkeukenL','RkeukenR');
 $benedena=array('Rliving','Rbureel');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 
+if (TIME>=strtotime('6:00')&&TIME<strtotime('8:30')) {
+
+} elseif (TIME>=strtotime('8:30')&&TIME<strtotime('10:30')) {
+
+} elseif (TIME>=strtotime('12:30')&&TIME<strtotime('17:00')) {
+
+} elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
+
+}
 if ($d['heating']['s']>=2) {
     if (TIME<strtotime('6:00')||TIME>=strtotime('22:00')) {
         $dag='nacht';
@@ -98,11 +107,6 @@ if ($d['heating']['s']>=2) {
                 }
             }
             foreach ($boven as $i) {
-                if ($i=='RkamerL'||$i=='RkamerR') {
-                    $temp=$d[substr($i, 1, -1).'_temp']['s'];
-                } else {
-                    $temp=$d[substr($i, 1).'_temp']['s'];
-                }
                 if ($d[$i]['m']==0 && $d[$i]['s']>0 && past($i)>900) {
                     sl($i, 0, basename(__FILE__).':'.__LINE__);
                 }
