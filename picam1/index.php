@@ -78,13 +78,13 @@ if ($home) {
         </div>
         <script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
-			/*for (var i = 1; i < 99999; i++){
-				try{window.clearInterval(i);}catch{};
-			}*/
 			mypicam=setInterval(getpic, 500);
+			mypicam2=setInterval(getpic2, 500);
 			function getpic(){
-				document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
-				document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
+				try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
+			}
+			function getpic2(){
+				try{document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();}catch{}
 			}
         </script>
         </body></html>
