@@ -77,17 +77,15 @@ if ($home) {
             <img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
         </div>
         <script type="text/javascript">
-        function navigator_Go(url) {window.location.assign(url);}
-        </script>
-        <script type="text/javascript">
-        for (var i = 1; i < 99999; i++){
-     		try{window.clearInterval(i);}catch{};
-     	}
-		mypicam=setInterval(getpic, 500);
-        function getpic(){
-        	document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
-        	document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
-        }
+			function navigator_Go(url) {window.location.assign(url);}
+			/*for (var i = 1; i < 99999; i++){
+				try{window.clearInterval(i);}catch{};
+			}*/
+			mypicam=setInterval(getpic, 500);
+			function getpic(){
+				document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();
+				document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();
+			}
         </script>
         </body></html>
     ';
