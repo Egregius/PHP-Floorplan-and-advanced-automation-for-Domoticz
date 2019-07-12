@@ -46,7 +46,7 @@ if ($d['pirinkom']['s']=='Off'
     &&$d['auto']['s']=='On'
 ) {
     if ($d['inkom']['s']=='On') {
-        sw('inkom', 'Off', basename(__FILE__).':'.__LINE__);
+        //sw('inkom', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if ($d['hall']['s']=='On') {
         sw('hall', 'Off', basename(__FILE__).':'.__LINE__);
