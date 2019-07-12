@@ -31,6 +31,21 @@ if ($home) {
     }elseif(isset($_POST['Foto'])){
         shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
         shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" &');
+    }elseif(isset($_POST['Motion'])){
+    	for ($k=1;$k<=60;$k++) {
+			file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20toggle');
+			if ($http_response_header[0]=='HTTP/1.1 200 OK') {
+				break;
+			}
+			sleep(5);
+		}
+		for ($k=1;$k<=60;$k++) {
+			file_get_contents('http://192.168.2.11/fifo_command.php?cmd=motion_enable%20toggle');
+			if ($http_response_header[0]=='HTTP/1.1 200 OK') {
+				break;
+			}
+			sleep(5);
+		}
     }elseif(isset($_POST['Licht'])){
         sw('voordeur');
     }
@@ -39,10 +54,11 @@ if ($home) {
           <input type="submit" value="Plan" class="btn b7" />
         </form>
         <form method="POST">
-          <input type="submit" value="Record" name="Record" class="btn b7"/>
+          <input type="submit" value="Record" name="Record" class="btn b8"/>
           <input type="submit" value="Foto" name="Foto" class="btn b8"/>
-          <input type="submit" value="Licht" name="Licht" class="btn b7"/>
-          <input type="submit" value="Refresh" name="Refresh" class="btn b7"/>
+          <input type="submit" value="Licht" name="Licht" class="btn b8"/>
+          <input type="submit" value="Motion" name="Motion" class="btn b8"/>
+          <input type="submit" value="Refresh" name="Refresh" class="btn b8"/>
         </form>
         <form method="POST" action="media-archive.php">
             <input type="hidden" name="type" value="videos"/>
