@@ -61,10 +61,11 @@ if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$dag) {
 elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
 	if ($heating==1&&$warm) {
 		if($zon>2000) {
-			foreach ($bovena as $i) {
-				if ($d[$i]['m']==0&&$d[$i]['s']!=81&&past($i)>900) {
-					 sl($i, 81, basename(__FILE__).':'.__LINE__);
-				}
+			if ($d['Rtobi']['m']==0&&$d['raamtobi']['s']=='Closed'&&$d[$i]['s']!=81&&past($i)>900) {
+				 sl($i, 81, basename(__FILE__).':'.__LINE__);
+			}
+			if ($d['Ralex']['m']==0&&$d['raamalex']['s']=='Closed'&&$d[$i]['s']!=81&&past($i)>900) {
+				 sl($i, 81, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	} else {
