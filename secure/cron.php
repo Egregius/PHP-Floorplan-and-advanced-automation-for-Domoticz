@@ -11,6 +11,7 @@
  **/
 require '/var/www/config.php';
 require 'functions.php';
+lg('cron');
 $d=fetchdata();
 if (isset($_REQUEST['rolluiken'])) {
     include '_rolluiken.php';

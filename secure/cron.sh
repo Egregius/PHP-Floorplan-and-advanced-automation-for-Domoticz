@@ -47,7 +47,10 @@ if [ "$STATUS" == "OK" ] ; then
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken" >/dev/null 2>&1 &
 	sleep 9.998
 	#50
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken"
+	if [ $? -gt 0 ] ; then
+		service apache2 restart
+	fi
 else
 	sleep 20
 	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
@@ -65,6 +68,13 @@ else
 		fi
 	fi
 fi
+
+ps cax | grep httpd
+if [ $? -eq 0 ] ; then
+	service apache2 restart
+fi
+
+
 if [ $(($MINUTE%5)) -eq 0 ] ; then
 #	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 #	PREV=$(cat "/temp/timestampappcache.txt")

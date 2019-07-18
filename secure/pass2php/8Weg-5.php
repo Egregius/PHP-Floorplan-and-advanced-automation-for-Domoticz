@@ -9,6 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-store('auto', 'Off', basename(__FILE__).':'.__LINE__);
+store('auto', 'On', basename(__FILE__).':'.__LINE__);
 sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 resetsecurity();

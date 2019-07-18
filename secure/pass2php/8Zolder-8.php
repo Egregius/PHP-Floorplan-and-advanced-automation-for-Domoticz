@@ -9,4 +9,12 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('tvtobi', 'Off', basename(__FILE__).':'.__LINE__);
+sl('zolder', 10, basename(__FILE__).':'.__LINE__);
+storemode('zolder', 1, basename(__FILE__).':'.__LINE__);
+sw('bureeltobi', 'Off');
+sw('tvtobi', 'Off');
+
+if ($d['raamhall']['s']=='Closed') {
+    sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
+    store('Weg', 0, basename(__FILE__).':'.__LINE__);
+}

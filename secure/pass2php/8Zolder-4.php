@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('tvtobi', 'On', basename(__FILE__).':'.__LINE__);
+sl('zolder', 100, basename(__FILE__).':'.__LINE__);
