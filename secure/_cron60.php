@@ -103,7 +103,7 @@ if ($d['auto']['s']=='On') {
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
     if ($d['Weg']['s']<=1) {
-        $items=array('eettafel','zithoek','tobi','kamer','alex');
+        $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
             if ($d[$item]['s']!=0) {
                 if ($d[$item]['m']==1) {
