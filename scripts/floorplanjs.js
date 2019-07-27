@@ -853,77 +853,83 @@ function ajaxbose($ip){
             minutes="0"+date.getMinutes();
             seconds="0"+date.getSeconds();
             $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-            try{
-                if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
-                    let volume=parseInt(data["volume"]["actualvolume"], 10);
-                    levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
-                    html="<br>";
-                    levels.forEach(function(level){
-                        let newlevel=parseInt(volume+level);
-                        if(newlevel>=0){
-							if(level!=0)html+='<button class="btn volume hover" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
-							else html+='<button class="btn volume btna" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
-						}
-                    });
-                    if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
+			console.log(data["nowplaying"]["@attributes"]["source"]);
+			if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
+				let volume=parseInt(data["volume"]["actualvolume"], 10);
+				levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
+				html="<br>";
+				levels.forEach(function(level){
+					let newlevel=parseInt(volume+level);
+					if(newlevel>=0){
+						if(level!=0)html+='<button class="btn volume hover" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+						else html+='<button class="btn volume btna" id="vol'+level+'" onclick="ajaxcontrolbose('+$ip+',\'volume\',\''+newlevel+'\')">'+newlevel+'</button>';
+					}
+				});
+				try{
+					if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
+				}catch{};
 
-                    let bass=parseInt(data["bass"]["actualbass"], 10);
-                    levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
-                    html="<br>";
-                    levels.forEach(function(level){
-                        if(level!=bass)html+='<button class="btn volume hover" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                        else html+='<button class="btn volume btna" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
-                    });
-                    if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
+				let bass=parseInt(data["bass"]["actualbass"], 10);
+				levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
+				html="<br>";
+				levels.forEach(function(level){
+					if(level!=bass)html+='<button class="btn volume hover" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+					else html+='<button class="btn volume btna" id="bass'+level+'" onclick="ajaxcontrolbose('+$ip+',\'bass\',\''+level+'\')">'+level+'</button>';
+				});
+				if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
-                    if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-                        if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
-                        if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
-                        if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
-                    }else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
-                        if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
-                        if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
-                        if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
-                    }else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
-                    	document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
-                    	html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Trance, Techno and Retro</button>';
-						html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Tiësto</button>';
-						html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">MNM</button>';
-						html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy Music</button>';
-						html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Love ballads</button>';
-						html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">A mix</button>';
-                    	if(document.getElementById("power").textContent!=html){
-							document.getElementById("power").innerHTML=html;
-						}
-                    }else{
-                        document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
-                    }
-                    html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art">';
-                    elem=document.getElementById("art");
-                    if(elem.innerHTML!=html)elem.innerHTML=html;
-                    html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'prev\')">Prev</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'next\')">Next</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Trance, Techno and Retro</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Tiësto</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">MNM</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy Music</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Love ballads</button>';
-                    html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">A mix</button>';
-                    html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');initview();">Power Off</button><br><br>';
-                    if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
-                }else{
-                    document.getElementById("source").innerHTML="";
-                    document.getElementById("artist").innerHTML="";
-                    document.getElementById("track").innerHTML="";
-                    document.getElementById("art").innerHTML="";
-                    document.getElementById("volume").innerHTML="";
-                    document.getElementById("bass").innerHTML="";
-                    html='<button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Power On</button>';
-                    if(document.getElementById("power").textContent!=html){
-                        document.getElementById("power").innerHTML=html;
-                    }
-                }
-            }catch{}
+				if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
+					if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
+					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
+					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
+				}else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
+					if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
+					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
+					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
+				}else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
+					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
+					html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Trance, Techno and Retro</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Tiësto</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">MNM</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy Music</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Love ballads</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">A mix</button>';
+					if(document.getElementById("power").textContent!=html){
+						document.getElementById("power").innerHTML=html;
+					}
+				}else{
+					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
+				}
+				img='None';
+				try{
+					img=data["nowplaying"]["art"].toString().replace("http", "https");
+				}catch{};
+				if(img=='None')html='';
+				else html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art">';
+				elem=document.getElementById("art");
+				if(elem.innerHTML!=html)elem.innerHTML=html;
+				html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'prev\')">Prev</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'next\')">Next</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Trance, Techno and Retro</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Tiësto</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">MNM</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy Music</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Love ballads</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">A mix</button>';
+				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');initview();">Power Off</button><br><br>';
+				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
+			}else{
+				document.getElementById("source").innerHTML="";
+				document.getElementById("artist").innerHTML="";
+				document.getElementById("track").innerHTML="";
+				document.getElementById("art").innerHTML="";
+				document.getElementById("volume").innerHTML="";
+				document.getElementById("bass").innerHTML="";
+				html='<button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Power On</button>';
+				if(document.getElementById("power").textContent!=html){
+					document.getElementById("power").innerHTML=html;
+				}
+			}
         }
     })
 }
