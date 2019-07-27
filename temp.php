@@ -193,7 +193,7 @@ if ($home===true) {
             echo 'No data for last week<hr>';
             goto endb;
         } else {
-            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graph for last week';
+            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 5 dagen';
         }
         while ($row=$result->fetch_assoc()) {
             $graphhour[]=$row;
