@@ -842,6 +842,8 @@ function ajaxmedia($ip){
 }
 
 function ajaxbose($ip){
+    try{clearInterval(myAjax);}catch{};
+    try{clearInterval(myAjaxMedia);}catch{};
     $.ajax({
         url: '/ajax.php?bose='+$ip,
         dataType : 'json',
@@ -924,7 +926,7 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');initview();">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
-				console.log('STANDBY');
+				console.log('Wel STANDBY');
 				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
