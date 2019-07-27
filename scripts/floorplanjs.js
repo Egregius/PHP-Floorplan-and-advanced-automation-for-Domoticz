@@ -843,7 +843,6 @@ function ajaxmedia($ip){
 
 function ajaxbose($ip){
     try{clearInterval(myAjax);}catch{};
-    try{clearInterval(myAjaxMedia);}catch{};
     $.ajax({
         url: '/ajax.php?bose='+$ip,
         dataType : 'json',
@@ -855,11 +854,7 @@ function ajaxbose($ip){
             minutes="0"+date.getMinutes();
             seconds="0"+date.getSeconds();
             $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-			
-			console.log(data["nowplaying"]["@attributes"]["source"]);
-			
 			if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
-				console.log('Niet STANDBY');
 				let volume=parseInt(data["volume"]["actualvolume"], 10);
 				levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
 				html="<br>";
@@ -873,7 +868,6 @@ function ajaxbose($ip){
 				try{
 					if(document.getElementById("volume").innerHTML!=html)document.getElementById("volume").innerHTML=html;
 				}catch{};
-
 				let bass=parseInt(data["bass"]["actualbass"], 10);
 				levels=[-9, -8, -7, -6, -5, -4, -3, -2, -1, 0];
 				html="<br>";
@@ -926,7 +920,6 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
-				console.log('Wel STANDBY');
 				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
@@ -934,7 +927,7 @@ function ajaxbose($ip){
 				document.getElementById("volume").innerHTML="";
 				document.getElementById("bass").innerHTML="";
 				html='<button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Power On</button>';
-				if(document.getElementById("power").textContent!=html){
+				if(document.getElementById("power").innerHTML!=html){
 					document.getElementById("power").innerHTML=html;
 				}
 			}
