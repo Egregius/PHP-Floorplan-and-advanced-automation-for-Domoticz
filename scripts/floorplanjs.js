@@ -853,8 +853,11 @@ function ajaxbose($ip){
             minutes="0"+date.getMinutes();
             seconds="0"+date.getSeconds();
             $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
+			
 			console.log(data["nowplaying"]["@attributes"]["source"]);
+			
 			if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
+				console.log('Niet STANDBY');
 				let volume=parseInt(data["volume"]["actualvolume"], 10);
 				levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
 				html="<br>";
@@ -906,8 +909,10 @@ function ajaxbose($ip){
 				}catch{};
 				if(img=='None')html='';
 				else html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art">';
-				elem=document.getElementById("art");
-				if(elem.innerHTML!=html)elem.innerHTML=html;
+				try{
+					elem=document.getElementById("art");
+					if(elem.innerHTML!=html)elem.innerHTML=html;
+				}catch{};
 				html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'prev\')">Prev</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'next\')">Next</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Trance, Techno and Retro</button>';
@@ -919,6 +924,7 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose(\''+$ip+'\',\'power\',\'Off\');initview();">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
+				console.log('STANDBY');
 				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
