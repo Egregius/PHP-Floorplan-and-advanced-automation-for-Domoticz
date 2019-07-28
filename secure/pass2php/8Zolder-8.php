@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sl('zolder', 10, basename(__FILE__).':'.__LINE__);
+sl('zolder', 8, basename(__FILE__).':'.__LINE__);
 storemode('zolder', 1, basename(__FILE__).':'.__LINE__);
 sw('bureeltobi', 'Off');
 sw('tvtobi', 'Off');
