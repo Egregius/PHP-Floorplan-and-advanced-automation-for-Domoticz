@@ -735,7 +735,7 @@ function ajax(Update){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','raamliving','raamkamer','raamtobi','raamalex'];
+            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
