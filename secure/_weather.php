@@ -269,3 +269,25 @@ $db->query(
 if ($buienradar>0||$dsbuien>0||$buien>0) {
 	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
 }
+
+if ($d['achterdeur']['s']=='Closed') {
+	$stmt=$db->query("SELECT MAX(`buiten`) AS max FROM temp;");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+		$watertime=$row['max']*15;
+	}
+	if (TIME>=strtotime('21:30')
+		&&$d['zon']['s']==0
+		&&past('zon')>1800
+		&&past('water')>72000
+	) {
+		$msg="Regen check:
+			__Laatste 48u:$rainpast
+			__Volgende 48u: $maxrain
+			__Automatisch tuin water geven gestart voor $watertime sec.";
+		if ($rainpast<1000&&$maxrain<1) {
+			sw('water', 'On', basename(__FILE__).':'.__LINE__);
+			storemode('water', $watertime, basename(__FILE__).':'.__LINE__);
+			telegram($msg, 2);
+		}
+	}
+}
