@@ -32,12 +32,12 @@ function ajax(Update){
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
                         	if($LastUpdateTime<=$currentTime-900){$LastUpdateTime=parseInt(0);$more=true;console.log("LastUpdateTime set to 0");}
-                        	else if($LastUpdateTime<=$currentTime-600){$LastUpdateTime=parseInt($currentTime-6000);$more=true;console.log("LastUpdateTime set to 6000");}
-                        	else if($LastUpdateTime<=$currentTime-300){$LastUpdateTime=parseInt($currentTime-3000);$more=true;console.log("LastUpdateTime set to 3000");}
-                        	else if($LastUpdateTime<=$currentTime-120){$LastUpdateTime=parseInt($currentTime-1200);$more=true;console.log("LastUpdateTime set to 1200");}
-                        	else if($LastUpdateTime<=$currentTime-60){$LastUpdateTime=parseInt($currentTime-600);$more=true;console.log("LastUpdateTime set to 600");}
-                        	else if($LastUpdateTime<=$currentTime-30){$LastUpdateTime=parseInt($currentTime-300);$more=true;console.log("LastUpdateTime set to 300");}
-                        	else if($LastUpdateTime<=$currentTime-10){$LastUpdateTime=parseInt($currentTime-100);$more=true;console.log("LastUpdateTime set to 100");}
+                        	else if($LastUpdateTime<=$currentTime-600){$LastUpdateTime=parseInt($currentTime-60000);$more=true;console.log("LastUpdateTime set to 6000");}
+                        	else if($LastUpdateTime<=$currentTime-300){$LastUpdateTime=parseInt($currentTime-30000);$more=true;console.log("LastUpdateTime set to 3000");}
+                        	else if($LastUpdateTime<=$currentTime-120){$LastUpdateTime=parseInt($currentTime-12000);$more=true;console.log("LastUpdateTime set to 1200");}
+                        	else if($LastUpdateTime<=$currentTime-60){$LastUpdateTime=parseInt($currentTime-6000);$more=true;console.log("LastUpdateTime set to 600");}
+                        	else if($LastUpdateTime<=$currentTime-30){$LastUpdateTime=parseInt($currentTime-3000);$more=true;console.log("LastUpdateTime set to 300");}
+                        	else if($LastUpdateTime<=$currentTime-10){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
                         	else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                         }else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                     }else if(device=="Weg"){
