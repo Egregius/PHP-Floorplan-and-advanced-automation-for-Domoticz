@@ -172,6 +172,7 @@ td{text-align:right;font-size:1.1em;}
 #deurkamer{top:468px;left:290px;width:42px;height:7px;z-index:-10;}#tdeurkamer{top:464px;left:293px;}
 #deurtobi{top:449px;left:207px;width:4px;height:43px;z-index:-10;}#tdeurtobi{top:463px;left:194px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #deuralex{top:534px;left:214px;width:41px;height:7px;z-index:-10;}#tdeuralex{top:530px;left:217px;}
+#deurwc{top:44px;left:418px;width:42px;height:6px;z-index:-10;}#tdeurwc{top:40px;left:422px;}
 
 /* Ramen */
 #traamliving{top:72px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
