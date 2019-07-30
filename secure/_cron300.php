@@ -17,7 +17,7 @@ if (TIME<=strtotime('11:00')) {
 		}
 	}
 }
-if ($d['zwembadfilter']['s']=='On') {
+/*if ($d['zwembadfilter']['s']=='On') {
 	if (past('zwembadfilter')>10700
 		&&TIME>strtotime("16:00")
 		&&$d['zwembadwarmte']['s']=='Off'
@@ -41,7 +41,7 @@ if ($d['zwembadwarmte']['s']=='On') {
 	if ($d['zwembadfilter']['s']=='Off') {
 		sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
 	}
-}
+}*/
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
 foreach ($items as $i) {
     if (past($i)>900) {
