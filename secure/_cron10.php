@@ -43,6 +43,12 @@ if ($d['pirinkom']['s']=='Off'
     &&past('pirinkom')>50
     &&$d['pirhall']['s']=='Off'
     &&past('pirhall')>50
+    &&past('deurwc')>50
+    &&past('deurinkom')>50
+    &&past('deurkamer')>50
+    &&past('deurbadkamer')>50
+    &&past('deurtobi')>50
+    &&past('deuralex')>50
     &&past('inkom')>80
     &&past('hall')>80
     &&$d['auto']['s']=='On'
