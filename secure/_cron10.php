@@ -13,6 +13,7 @@ $user='cron10  ';
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
     &&past('poort')>90
+    &&past('deurgarage')>90
     &&past('garageled')>120
     &&$d['garageled']['s']=='On'
     &&$d['auto']['s']=='On'
@@ -30,6 +31,7 @@ if ($d['pirgarage']['s']=='Off'
 if ($d['pirgarage']['s']=='Off'
     &&past('pirgarage')>120
     &&past('poort')>90
+    &&past('deurgarage')>90
     &&past('garage')>240
     &&$d['garage']['s']=='On'
     &&$d['auto']['s']=='On'
