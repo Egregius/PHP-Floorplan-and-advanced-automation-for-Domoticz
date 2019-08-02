@@ -18,13 +18,13 @@ if ($status=='On') {
         	sl($i, 0, basename(__FILE__).':'.__LINE__);
         }
     }
-    $items=array('kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer');
+    $items=array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer');
     foreach ($items as $i) {
         if ($d[$i]['s']<100) {
         	sl($i, 100, basename(__FILE__).':'.__LINE__);
         }
     }
-    $items=array('hall','inkom','keuken','garage','jbl','bureel');
+    $items=array('keuken','garage','jbl','bureel');
     foreach ($items as $i) {
         if ($d[$i]['s']!='On') {
         	sw($i, 'On', basename(__FILE__).':'.__LINE__);
