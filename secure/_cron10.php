@@ -49,33 +49,31 @@ if ($d['pirinkom']['s']=='Off'
     &&past('deurbadkamer')>50
     &&past('deurtobi')>50
     &&past('deuralex')>50
-    &&past('inkom')>80
-    &&past('hall')>80
     &&$d['auto']['s']=='On'
 ) {
-    if ($d['inkom']['s']=='On') {
-        sw('inkom', 'Off', basename(__FILE__).':'.__LINE__);
+    if ($d['inkom']['s']>0) {
+        sl('inkom', 0, basename(__FILE__).':'.__LINE__);
     }
-    if ($d['hall']['s']=='On') {
-        sw('hall', 'Off', basename(__FILE__).':'.__LINE__);
+    if ($d['hall']['s']>0) {
+        sl('hall', 0, basename(__FILE__).':'.__LINE__);
     }
 } else {
     if ($d['pirinkom']['s']=='On'
-        &&$d['zon']['s']<10
+        &&$d['zon']['s']==0
         &&$d['auto']['s']=='On'
     ) {
-        if ($d['inkom']['s']=='Off') {
-            sw('inkom', 'On', basename(__FILE__).':'.__LINE__);
+        if ($d['inkom']['s']<30) {
+            sl('inkom', 30, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d['pirhall']['s']=='On'
         &&$d['zon']['s']==0
         &&$d['auto']['s']=='On'
     ) {
-        if ($d['hall']['s']=='Off'
+        if ($d['hall']['s']==0
             &&$d['Weg']['s']==0
         ) {
-            sw('hall', 'On', basename(__FILE__).':'.__LINE__);
+            sl('hall', 30, basename(__FILE__).':'.__LINE__);
         }
     }
 }
