@@ -767,7 +767,7 @@ function fkeuken()
 function finkom()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['zon']['s']<=10000) {
+    if ($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['zon']['s']<=5) {
         sl('inkom', 30, basename(__FILE__).':'.__LINE__);
     }
 }
@@ -775,7 +775,7 @@ function fhall()
 {
     global $d,$device;
     if ($d['hall']['s']<30) {
-		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']<=10000)) {
+		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']<=5)) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
