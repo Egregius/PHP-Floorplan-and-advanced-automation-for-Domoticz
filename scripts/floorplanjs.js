@@ -976,9 +976,9 @@ function floorplan(){
         html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
         html+='<div class="fix z2" id="sirene"></div>';
         html+='<div class="fix z1" id="zoldertrap"></div>';
-        items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder'];
+        items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-        items=['jbl','diepvries','heater1','heater2','heater3','heater4','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','hall','inkom','wc','garage','garageled','zolderg','poortrf'];
+        items=['jbl','diepvries','heater1','heater2','heater3','heater4','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
