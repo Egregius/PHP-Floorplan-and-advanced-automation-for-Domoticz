@@ -9,13 +9,13 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Off') {
+if ($status==0) {
     if ($d['pirhall']['s']!='Off') {
         store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
     }
-} elseif ($status=='On') {
+} else {
     if ($d['Weg']['s']==1) {
         store('Weg', 0, basename(__FILE__).':'.__LINE__);
-        $db->query("UPDATE devices set t='0' WHERE n='heating';");
+        //$db->query("UPDATE devices set t='0' WHERE n='heating';");
     }
 }
