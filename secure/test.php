@@ -14,7 +14,7 @@ require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
 sl('inkom', 100, basename(__FILE__).':'.__LINE__);
-usleep(1500000);
+usleep(1000000);
 sl('inkom', 26, basename(__FILE__).':'.__LINE__);
 
 
