@@ -767,18 +767,28 @@ function fkeuken()
 function finkom()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['inkom']['s']<26&&$d['zon']['s']<=5) {
-        sl('inkom', 26, basename(__FILE__).':'.__LINE__);
+    if ($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']<=5) {
+        sl('inkom', 100, basename(__FILE__).':'.__LINE__);
+		usleep(1000000);
+		sl('inkom', 28, basename(__FILE__).':'.__LINE__);
     }
 }
 function fhall()
 {
     global $d,$device;
     if ($d['hall']['s']<26) {
-		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']<=5)) {
-			sl('hall', 26, basename(__FILE__).':'.__LINE__);
+		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<strtotime('8:00'))||$d['zon']['s']==0)) {
+			if ($d['hall']['s']<28) {
+				sl('hall', 100, basename(__FILE__).':'.__LINE__);
+				usleep(1000000);
+				sl('hall', 28, basename(__FILE__).':'.__LINE__);
+			}
 		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
-			sl('hall', 26, basename(__FILE__).':'.__LINE__);
+			if ($d['hall']['s']<28) {
+				sl('hall', 100, basename(__FILE__).':'.__LINE__);
+				usleep(1000000);
+				sl('hall', 28, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 }
