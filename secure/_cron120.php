@@ -40,22 +40,22 @@ if ($d['auto']['s']=='On') {
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
-		elseif ($d['wind']['s']>=15) $luifel=35;
-		elseif ($d['wind']['s']>=10) $luifel=40;
+		elseif ($d['wind']['s']>=15) $luifel=30;
+		elseif ($d['wind']['s']>=10) $luifel=30;
 		else $luifel=40;
 	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>20&&$d['zon']['s']>2000&&TIME>=strtotime("10:00")) { //Neutral
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
-		elseif ($d['wind']['s']>=15) $luifel=35;
-		elseif ($d['wind']['s']>=10) $luifel=40;
+		elseif ($d['wind']['s']>=15) $luifel=30;
+		elseif ($d['wind']['s']>=10) $luifel=30;
 		else $luifel=40;
 	} elseif ($d['heating']['s']==1	&&$d['living_temp']['s']>19&&$d['zon']['s']>200&&TIME>=strtotime("10:00")) { //Cooling
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=30;
-		elseif ($d['wind']['s']>=20) $luifel=40;
-		elseif ($d['wind']['s']>=15) $luifel=50;
-		elseif ($d['wind']['s']>=10) $luifel=60;
+		elseif ($d['wind']['s']>=20) $luifel=30;
+		elseif ($d['wind']['s']>=15) $luifel=30;
+		elseif ($d['wind']['s']>=10) $luifel=30;
 		else $luifel=70;
 	} else {
 		$luifel=0;
