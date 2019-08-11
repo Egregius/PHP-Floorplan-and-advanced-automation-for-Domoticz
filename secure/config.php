@@ -18,6 +18,7 @@ date_default_timezone_set('Europe/Brussels');
 if (!defined('TIME')) {
     define('TIME', $_SERVER['REQUEST_TIME']);
 }
+$log=false;
 $page=basename($_SERVER['PHP_SELF']);
 
 $domoticzurl='http://127.0.0.1:8080';
