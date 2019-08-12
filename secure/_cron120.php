@@ -60,6 +60,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		$luifel=0;
 	}
+	$luifel=0;
 	if ($luifel>$d['luifel']['s']+30) $luifel=$d['luifel']['s']+30;
 	elseif ($luifel<$d['luifel']['s']-30&&$d['achterdeur']['s']=='Closed') $luifel=$d['luifel']['s']-30;
 	if ($d['wind']['s']>=40) 	 $luifel=0;
