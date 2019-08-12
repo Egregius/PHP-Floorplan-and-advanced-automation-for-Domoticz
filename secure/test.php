@@ -13,10 +13,10 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-sl('inkom', 100, basename(__FILE__).':'.__LINE__);
-usleep(1000000);
-sl('inkom', 26, basename(__FILE__).':'.__LINE__);
-
+shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
+    	/*if ($d['bose104']['s']=='On') {
+			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+		}*/
 
 /*---------------------------*/
 echo '</pre>';
