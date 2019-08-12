@@ -24,9 +24,14 @@ if ($status=='On') {
     }
     if ($d['poort']['s']=='Open') {
  		shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
-    	if ($d['bose104']['s']=='On') {
-			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+    	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/volume'))), true);
+		$cv=$volume['actualvolume'];
+		if ($cv<55) {
+			usleep(1100000);
+			bosevolume(55, 104);
+			usleep(3000000);
 		}
+		
         if ($d['garage']['s']=='On') {
             sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
         }
@@ -34,7 +39,7 @@ if ($status=='On') {
             sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
         store('Weg', 2, basename(__FILE__).':'.__LINE__);
-        sleep(5);
+        sleep(8);
         sw(array('weg'), 'Off', basename(__FILE__).':'.__LINE__);
     } else {
         sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
