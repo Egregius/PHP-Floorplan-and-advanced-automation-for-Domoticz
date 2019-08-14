@@ -40,7 +40,7 @@ if (isset($_REQUEST['gpio'])) {
         } else {
             store('poort', 'Open', basename(__FILE__).':'.__LINE__);
             fgarage();
-            if ($d['voordeur']['s']=='On'&&past('Weg')<120) {
+            if ($d['voordeur']['s']=='On') {
             	sw('voordeur', 'Off');
             }
             sirene('Poort open');
