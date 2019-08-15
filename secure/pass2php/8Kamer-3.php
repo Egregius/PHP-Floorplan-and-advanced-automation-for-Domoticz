@@ -35,7 +35,7 @@ if ($status=='On') {
                 }
             }
         }
-        bosevolume(21, 103);
+        bosevolume(17, 103);
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
@@ -51,7 +51,7 @@ if ($status=='On') {
 			sleep(1);
 		}
     } elseif ($d['bose103']['s']=='On') {
-    	bosevolume(21, 103);
+    	bosevolume(17, 103);
     }
     resetsecurity();
 }
