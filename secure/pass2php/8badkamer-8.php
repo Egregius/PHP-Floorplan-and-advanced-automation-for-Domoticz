@@ -13,9 +13,6 @@ if ($status=='On') {
     sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
     if ($d['auto']['s']=='On') {
         fhall();
-        if ($d['zon']['s']<50&&$d['inkom']['s']<30) {
-        	sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-        }
         fliving();
     }
 	if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
