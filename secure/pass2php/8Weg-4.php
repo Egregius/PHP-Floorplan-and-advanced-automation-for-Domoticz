@@ -23,27 +23,23 @@ if ($status=='On') {
         waarschuwing('Opgelet: Bose buiten!', 'bosebuiten');
     }
     if ($d['poort']['s']=='Open') {
- 		shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
-    	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/volume'))), true);
-		$cv=$volume['actualvolume'];
-		if ($cv<55) {
-			usleep(1100000);
-			bosevolume(55, 104);
-			usleep(3000000);
-		}
-		
         if ($d['garage']['s']=='On') {
             sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($d['garageled']['s']=='On') {
             sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
+ 		shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
+		usleep(1100000);
+		bosevolume(55, 104);
+		usleep(3000000);
+		bosekey("POWER", 0, 104);
         store('Weg', 2, basename(__FILE__).':'.__LINE__);
-        sleep(8);
+        sleep(5);
         sw(array('weg'), 'Off', basename(__FILE__).':'.__LINE__);
     } else {
         sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
-        if ($d['sirene']['s']!='Group Off') {
+        if ($d['sirene']['s']!='Off') {
             double('sirene', 'Off', basename(__FILE__).':'.__LINE__);
         }
     }

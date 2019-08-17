@@ -16,7 +16,6 @@ if ($status=='On') {
         fliving();
     }
 	if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
-		telegram('Kamer op slapen gezet');
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 	storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
