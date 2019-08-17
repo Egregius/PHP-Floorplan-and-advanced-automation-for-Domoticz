@@ -33,13 +33,3 @@ if ($status=='On') {
     }
     huisslapen();
 }
-
-
-<?php
-if ($status=='On') {
-	if (TIME<=strtotime('8:00')||TIME>=strtotime('21:00')) {
-		sl('Badkamer', 40);
-	} else {
-		sl('Badkamer', 100);
-	}
-}
