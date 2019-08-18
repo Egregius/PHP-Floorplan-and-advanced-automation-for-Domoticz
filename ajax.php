@@ -30,13 +30,12 @@ if ($home==true) {
         $t=time();
         $d['t']=$t;
         $diff=$t-$_REQUEST['t'];
-        $t=$_REQUEST['t']-2;
+        $t=$_REQUEST['t']-3;
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
             $d[$row['n']]['t']=$row['t'];
-            //if(!empty($row['i']))$d[$row['n']]['i']=$row['i'];
             if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
             if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
             if(!empty($row['icon']))$d[$row['n']]['ic']=$row['icon'];
