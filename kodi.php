@@ -40,7 +40,7 @@ if ($home===true) {
     <body>
         <div class="content">
             <div class="navbar">
-                <form action="/floorplan.media.php">
+                <form action="/floorplan.php">
                     <input type="submit" class="btn b7" value="Plan"/>
                 </form>
                 <form action="/denon.php">

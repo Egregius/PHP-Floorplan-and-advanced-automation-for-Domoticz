@@ -64,7 +64,6 @@ if ($home) {
     }
     echo '<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
     <form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
-    <form action="/floorplan.media.php"><input type="submit" class="btn b5" value="Media"/></form>
 	<form action="/films/films.php"><input type="submit" class="btn b5" value="Films"/></form>
 	<form action="/films/series.php"><input type="submit" class="btn b5" value="Series"/></form>
 </div>
