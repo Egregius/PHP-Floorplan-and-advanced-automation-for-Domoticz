@@ -65,10 +65,12 @@ if ($home==true) {
 			shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
     	} elseif ($_REQUEST['command']=='pause') {
 			shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
-    	} elseif ($_REQUEST['action']=='On') {
-			lgcommand('on');
-		} elseif ($_REQUEST['action']=='Off') {
-			lgcommand('off');
+    	} if ($_REQUEST['command']=='sw') {
+			if ($_REQUEST['action']=='On') {
+				exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+			} elseif ($_REQUEST['action']=='Off') {
+				shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
+			}
 		}
     }
     
