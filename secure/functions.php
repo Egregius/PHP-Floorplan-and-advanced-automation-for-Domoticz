@@ -294,7 +294,7 @@ function lgcommand($action,$msg='')
 		var_dump($return_var);
 //        echo shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {
-        echo shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
+        shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
         echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }

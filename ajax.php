@@ -65,7 +65,11 @@ if ($home==true) {
 			shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
     	} elseif ($_REQUEST['command']=='pause') {
 			shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
-    	}
+    	} elseif ($_REQUEST['action']=='On') {
+			lgcommand('on');
+		} elseif ($_REQUEST['action']=='Off') {
+			lgcommand('off');
+		}
     }
     
     elseif (isset($_REQUEST['bose'])) {
