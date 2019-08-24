@@ -14,7 +14,7 @@ require 'functions.php';
 //lg('cron');
 $d=fetchdata();
 if (isset($_REQUEST['rolluiken'])) {
-    include '_rolluiken.php';
+    //include '_rolluiken.php';
 }
 if (isset($_REQUEST['verwarming'])) {
     include '_verwarming.php';
