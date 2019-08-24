@@ -26,7 +26,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&$d['deuralex']['s']=='Open') sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		if ($dag==true&&$zon==0) {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']>30) sl($i, 30, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>29) sl($i, 29, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0) {
