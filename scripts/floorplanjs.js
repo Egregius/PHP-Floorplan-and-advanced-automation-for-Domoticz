@@ -31,13 +31,7 @@ function ajax(Update){
                     time=d[device]['t'];
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
-                        	if($LastUpdateTime<=$currentTime-900){$LastUpdateTime=parseInt(0);$more=true;console.log("LastUpdateTime set to 0");}
-                        	else if($LastUpdateTime<=$currentTime-600){$LastUpdateTime=parseInt($currentTime-60000);$more=true;console.log("LastUpdateTime set to 6000");}
-                        	else if($LastUpdateTime<=$currentTime-300){$LastUpdateTime=parseInt($currentTime-30000);$more=true;console.log("LastUpdateTime set to 3000");}
-                        	else if($LastUpdateTime<=$currentTime-120){$LastUpdateTime=parseInt($currentTime-12000);$more=true;console.log("LastUpdateTime set to 1200");}
-                        	else if($LastUpdateTime<=$currentTime-60){$LastUpdateTime=parseInt($currentTime-6000);$more=true;console.log("LastUpdateTime set to 600");}
-                        	else if($LastUpdateTime<=$currentTime-30){$LastUpdateTime=parseInt($currentTime-3000);$more=true;console.log("LastUpdateTime set to 300");}
-                        	else if($LastUpdateTime<=$currentTime-10){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
+							if($LastUpdateTime<=$currentTime-5){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
                         	else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                         }else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                     }else if(device=="Weg"){
@@ -965,7 +959,7 @@ function floorplan(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplan');
     ajax(0);
-	myAjax=setInterval(ajax, 1000);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
@@ -1003,7 +997,7 @@ function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
     ajax(0);
-	myAjax=setInterval(ajax, 1000);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
