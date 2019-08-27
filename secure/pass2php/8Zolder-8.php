@@ -20,5 +20,7 @@ sw('tvtobi', 'Off');
 
 if ($d['raamhall']['s']=='Closed') {
     sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
-    store('Weg', 0, basename(__FILE__).':'.__LINE__);
+    if ($d['Weg']['s']>0) {
+    	store('Weg', 0, basename(__FILE__).':'.__LINE__);
+    }
 }
