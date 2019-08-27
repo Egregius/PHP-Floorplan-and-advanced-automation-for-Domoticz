@@ -9,8 +9,12 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sl('zolder', 8, basename(__FILE__).':'.__LINE__);
-storemode('zolder', 1, basename(__FILE__).':'.__LINE__);
+if ($d['zon']['s']==0) {
+	sl('zolder', 8, basename(__FILE__).':'.__LINE__);
+	storemode('zolder', 1, basename(__FILE__).':'.__LINE__);
+} else {
+	sl('zolder', 0, basename(__FILE__).':'.__LINE__);
+}
 sw('bureeltobi', 'Off');
 sw('tvtobi', 'Off');
 
