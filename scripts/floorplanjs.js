@@ -1015,13 +1015,13 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
 		items=['zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];        
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
-		items=['poort','achterdeur','raamliving','raamtobi','raamalex','raamkamer','raamhall','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex'];        
+        items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
 		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];        
         items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
-        items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR',];
+        items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
         items=['living','badkamer','kamer','tobi','alex','zolder'];
 		items.forEach(function(item){html+='<div class="fix z1" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
