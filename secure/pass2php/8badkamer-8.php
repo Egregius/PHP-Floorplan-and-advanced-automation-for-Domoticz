@@ -60,5 +60,10 @@ if ($status=='On') {
 			}
 		}
 	}
+	if ($d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
+        if ($d['Weg']['s']>0) {
+        	store('Weg', 0, basename(__FILE__).':'.__LINE__);
+        }
+    }
 }
 resetsecurity();

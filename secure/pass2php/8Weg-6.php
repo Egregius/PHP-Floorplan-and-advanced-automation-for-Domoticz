@@ -9,4 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+sw('zolderg', 'Off');
 resetsecurity();
