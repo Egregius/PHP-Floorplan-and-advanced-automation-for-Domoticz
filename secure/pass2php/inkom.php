@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Off') {
+if ($status==0) {
     if ($d['pirinkom']['s']!='Off') {
         store('pirinkom', 'Off', basename(__FILE__).':'.__LINE__);
     }

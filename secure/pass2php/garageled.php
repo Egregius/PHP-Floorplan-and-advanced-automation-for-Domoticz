@@ -9,9 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-
-if($status=='Off') {
-    if($d['pirkeuken']['s']!='Off'&&$d['kookplaat']['s']=='Off'&&$d['wasbak']['s']=='Off') {
-        store('pirkeuken', 'Off', basename(__FILE__).':'.__LINE__);
+if ($status=='Off') {
+    if ($d['pirgarage']['s']!='Off') {
+        store('pirgarage', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
