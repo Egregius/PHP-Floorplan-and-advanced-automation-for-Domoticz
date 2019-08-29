@@ -144,13 +144,10 @@ if ($d['auto']['s']=='On') {
                 }
             }
         }
-        if (TIME>=strtotime('6:00')&&TIME<strtotime('6:15')) {
+        if (TIME>=strtotime('6:00')&&TIME<strtotime('6:05')) {
         	if ($d['kamer']['m']!=2) {
         		sl('kamer', 1);
         		storemode('kamer', 2);
-        		if ($d['bose103']['s']=='Off') {
-        			bosezone(103);
-        		}
         	}
         }
         if ($d['kamer']['m']==2) {
@@ -176,6 +173,9 @@ if ($d['auto']['s']=='On') {
 					}
                 }
             }
+            if ($d['bose103']['s']=='Off') {
+				bosezone(103);
+			}
         }
     }
     /* -------------------------------------------- SLAPEN --------------------------*/
