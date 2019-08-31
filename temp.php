@@ -95,13 +95,13 @@ if ($home===true) {
         $line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
         $query="SELECT stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if ($udevice=='iPad') {
-            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='iPhone') {
-            $args=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -121,13 +121,13 @@ if ($home===true) {
         montha:
         $query="SELECT stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
         if ($udevice=='iPad') {
-            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'));
+            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'));
         } elseif ($udevice=='iPhone') {
-            $argshour=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -152,13 +152,13 @@ if ($home===true) {
         $line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
         $query="SELECT stamp,living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if ($udevice=='iPad') {
-            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='iPhone') {
-            $args=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -178,13 +178,13 @@ if ($home===true) {
         monthb:
         $query="SELECT stamp,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
         if ($udevice=='iPad') {
-            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'));
+            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'));
         } elseif ($udevice=='iPhone') {
-            $argshour=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'legend_position'=>'bottom','raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -216,13 +216,13 @@ if ($home===true) {
         }
         $query="SELECT stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if ($udevice=='iPad') {
-            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='iPhone') {
-            $args=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query .' - '.$db->error.']');
@@ -242,13 +242,13 @@ if ($home===true) {
         month:
         $query="SELECT stamp, $min, $max, $avg from `temp_hour` where stamp > '$week'";
         if ($udevice=='iPad') {
-            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>1000,'height'=>880,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='iPhone') {
-            $argshour=array('width'=>320,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>300,'height'=>440,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } elseif ($udevice=='Mac') {
-            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>490,'height'=>700,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         } else {
-            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,49),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
+            $argshour=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graphhour','colors'=>array('6666FF','FF5555','55FF55'),'margins'=>array(0,0,0,0),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'raw_options'=>'lineWidth:3,crosshair:{trigger:"both"}');
         }
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
