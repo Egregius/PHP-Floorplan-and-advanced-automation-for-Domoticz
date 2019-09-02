@@ -37,9 +37,9 @@ function ajax(Update){
                     }else if(device=="Weg"){
                         try{
                             html='<div class="fix z" onclick="Weg();">';
-                            if(value==0)html+='<img src="/images/Thuis.png" id="Weg">';
-                            else if(value==1)html+='<img src="/images/Slapen.png" id="Weg">';
-                            else if(value==2)html+='<img src="/images/Weg.png" id="Weg">';
+                            if(value==0)html+='<img src="https://home.egregius.be/images/Thuis.png" id="Weg">';
+                            else if(value==1)html+='<img src="https://home.egregius.be/images/Slapen.png" id="Weg">';
+                            else if(value==2)html+='<img src="https://home.egregius.be/images/Weg.png" id="Weg">';
                             html+='</div>';
                             document.getElementById('Weg').innerHTML=html;
                             if(value==0){
@@ -261,13 +261,13 @@ function ajax(Update){
                         }catch{}
                     }else if(device=="heating"){
                         try{
-                           html='<img src="/images/arrowdown.png" class="i60" alt="Open">';
+                           html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
                             if(value==0)html+='';
-                            else if(value==1)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">';
-                            else if(value==2)html+='<img src="/images/Elec.png" class="i40" alt="Elec">';
+                            else if(value==1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
+                            else if(value==2)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
                             else if(value==3){
-                                if(d['brander']['s']=='On')html+='<img src="/images/fire_On.png" class="i40" alt="Gas">';
-                                else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">';
+                                if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" alt="Gas">';
+                                else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
                             }
                             document.getElementById("heating").innerHTML=html;
                         }catch{}
@@ -293,8 +293,8 @@ function ajax(Update){
                         }catch{}
                     }else if(device=="picam2plug"){
                     	try{
-							if(value=='On')html='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a>';
-							else html='<img src="/images/Camera_Off.png" class="i48" onclick="ajaxcontrol(\'picam2plug\',\'sw\',\'On\')""/>';
+							if(value=='On')html='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a>';
+							else html='<img src="https://home.egregius.be/images/Camera_Off.png" class="i48" onclick="ajaxcontrol(\'picam2plug\',\'sw\',\'On\')""/>';
 							document.getElementById("picam2").innerHTML=html;
 						}catch{}
                     }else if(device=="zoldervuur"){
@@ -346,9 +346,9 @@ function ajax(Update){
                         }catch{}
                     }else if(device=="luifel"){
                         try{
-                            if(value==0)html='<img src="/images/arrowgreenup.png" class="i60">';
-                            else if(value==100)html='<img src="/images/arrowgreendown.png" class="i60">';
-                            else html='<img src="/images/arrowdown.png" class="i60"><div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;"><font size="5" color="#CCC">'+value+'</font> </div>';
+                            if(value==0)html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
+                            else if(value==100)html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
+                            else html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60"><div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;"><font size="5" color="#CCC">'+value+'</font> </div>';
                             if(mode==1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
                             document.getElementById(device).innerHTML=html;
                         }catch{}
@@ -360,10 +360,10 @@ function ajax(Update){
                         try{
                         	if(value=='Closed') {
                         		zoldertrap=localStorage.getItem('zoldertrap');
-								if(zoldertrap=="Closed")html='<img src="/images/arrowgreenup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
-								else html='<img src="/images/arrowup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
-								if(zoldertrap=="Open")html+='<img src="/images/arrowgreendown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
-								else html+='<img src="/images/arrowdown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
+								if(zoldertrap=="Closed")html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
+								else html='<img src="https://home.egregius.be/images/arrowup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
+								if(zoldertrap=="Open")html+='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
+								else html+='<img src="https://home.egregius.be/images/arrowdown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
 							} else html='';
                             document.getElementById('zoldertrap').innerHTML=html;
                         }catch{}
@@ -387,10 +387,10 @@ function ajax(Update){
                         try{
                         	raamhall=localStorage.getItem('raamhall');
                         	if(raamhall=='Closed') {
-								if(value=="Closed")html='<img src="/images/arrowgreenup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
-								else html='<img src="/images/arrowup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
-								if(value=="Open")html+='<img src="/images/arrowgreendown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
-								else html+='<img src="/images/arrowdown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
+								if(value=="Closed")html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
+								else html='<img src="https://home.egregius.be/images/arrowup.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'Off\')"><br>';
+								if(value=="Open")html+='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
+								else html+='<img src="https://home.egregius.be/images/arrowdown.png" class="i48" alt="Open" onclick="ajaxcontrol(\'zoldertrap\',\'sw\',\'On\')">';
 							} else html='';
                             document.getElementById(device).innerHTML=html;
                         }catch{}
@@ -424,8 +424,8 @@ function ajax(Update){
                     }else if(type=="switch"){
                         try{
                             if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"){
-                                if(value=="On")html='<img src="/images/'+icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
-                                else if(value=="Off")html='<img src="/images/'+icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
+                                if(value=="On")html='<img src="https://home.egregius.be/images/'+icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
+                                else if(value=="Off")html='<img src="https://home.egregius.be/images/'+icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
                                 html+='<br>'+device;
                                 if(time>($currentTime-82800)){
                                     date=new Date(time*1000);
@@ -461,11 +461,11 @@ function ajax(Update){
 									else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
                                 }
                             }else if(device=="bureeltobi"){
-                                if(value=="On")html='<img src="/images/'+icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
-                                else if(value=="Off")html='<img src="/images/'+icon+'_Off.png" id="bureeltobi" onclick="bureeltobi()">';
+                                if(value=="On")html='<img src="https://home.egregius.be/images/'+icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
+                                else if(value=="Off")html='<img src="https://home.egregius.be/images/'+icon+'_Off.png" id="bureeltobi" onclick="bureeltobi()">';
                             }else{
-                                if(value=="On")html='<img src="/images/'+icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
-                                else if(value=="Off")html='<img src="/images/'+icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
+                                if(value=="On")html='<img src="https://home.egregius.be/images/'+icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
+                                else if(value=="Off")html='<img src="https://home.egregius.be/images/'+icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
                             }
                             $('#'+device).html(html);
                         }catch{}
@@ -494,9 +494,9 @@ function ajax(Update){
                         localStorage.setItem(device+'_mode', mode);
                         try{
                             if(value==0||value=="Off"){
-                                html='<img src="/images/light_Off.png" class="'+icon+'">';
+                                html='<img src="https://home.egregius.be/images/light_Off.png" class="'+icon+'">';
                             }else{
-                                html='<img src="/images/light_On.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'"><font color="#000">'+value+'</font></div>';
+                                html='<img src="https://home.egregius.be/images/light_On.png" class="'+icon+'"><div class="fix center dimmerlevel '+icon+'"><font color="#000">'+value+'</font></div>';
                             }
                             if (device=="ledluifel") {
                                 luifel=localStorage.getItem("luifel");
@@ -533,11 +533,11 @@ function ajax(Update){
                                 elem.style.height='7px';
                             }
                             if(value==100){
-                                html='<img src="/images/arrowgreendown.png" class="i60">';
+                                html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
                             }else if(value==0){
-                                html='<img src="/images/arrowgreenup.png" class="i60">';
+                                html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
                             }else{
-                                html='<img src="/images/circlegrey.png" class="i60">';
+                                html='<img src="https://home.egregius.be/images/circlegrey.png" class="i60">';
                                 html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;">';
                                 if(mode == 2)html+='<font size="5" color="#F00">';
                                 else if(mode == 1)html+='<font size="5" color="#222">';
@@ -637,7 +637,7 @@ function ajax(Update){
                                 else{tcolor="55F";dcolor="00F";}
                                 html='<div class="fix tmpbg" style="top:'+top+'px;left:8px;height:'+hoogte+'px;background:linear-gradient(to bottom, #'+tcolor+', #'+dcolor +');">';
                                 html+='</div>'
-                                html+='<img src="/images/temp.png" height="100px" width="auto" alt="'+device+'">';
+                                html+='<img src="https://home.egregius.be/images/temp.png" height="100px" width="auto" alt="'+device+'">';
                                 html+='<div class="fix center" style="top:73px;left:5px;width:30px;" id="temp'+device+'">';
                                 html+=value.toString().replace(/[.]/, ",");
                                 html+='</div>';
@@ -650,16 +650,16 @@ function ajax(Update){
                                 else if(value>22)elem.style.color="#F88";
                                 else if(value>20)elem.style.color="#FAA";
                                 else elem.style.color=null;
-                                if(icon=="up")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendup.png" height="14px" width="15px"></div>';
-                                else if(icon=="down")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trenddown.png" height="14px" width="15px"></div>';
-                                else if(icon=="red")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendred.png" height="14px" width="15px"></div>';
-                                else if(icon=="blue")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendblue.png" height="14px" width="15px"></div>';
-                                else if(icon=="red3")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendred.png" height="28px" width="15px"></div>';
-                                else if(icon=="blue3")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendblue.png" height="28px" width="15px"></div>';
-                                else if(icon=="red4")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendred.png" height="42px" width="15px"></div>';
-                                else if(icon=="blue4")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendblue.png" height="42px" width="15px"></div>';
-                                else if(icon=="red5")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendred.png" height="56px" width="15px"></div>';
-                                else if(icon=="blue5")html='<div class="fix" style="top:10px;left:13px;"><img src="/images/trendblue.png" height="56px" width="15px"></div>';
+                                if(icon=="up")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendup.png" height="14px" width="15px"></div>';
+                                else if(icon=="down")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trenddown.png" height="14px" width="15px"></div>';
+                                else if(icon=="red")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="14px" width="15px"></div>';
+                                else if(icon=="blue")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="14px" width="15px"></div>';
+                                else if(icon=="red3")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="28px" width="15px"></div>';
+                                else if(icon=="blue3")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="28px" width="15px"></div>';
+                                else if(icon=="red4")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="42px" width="15px"></div>';
+                                else if(icon=="blue4")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="42px" width="15px"></div>';
+                                else if(icon=="red5")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="56px" width="15px"></div>';
+                                else if(icon=="blue5")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="56px" width="15px"></div>';
                                 else html="";
                                 document.getElementById(device).insertAdjacentHTML('beforeend', html);
                             }
@@ -681,7 +681,7 @@ function ajax(Update){
                             elem=document.getElementById(device);
                             elem.style.top=opts[0]+'px';
                             elem.style.left=opts[1]+'px';
-                            html='<img src="/images/thermo'+circle+center+'.png" class="i48" alt="">';
+                            html='<img src="https://home.egregius.be/images/thermo'+circle+center+'.png" class="i48" alt="">';
                             html+='<div class="fix center" style="top:32px;left:11px;width:26px;">';
                             if(mode>0){
                                 html+='<font size="2" color="#222">'+value.toString().replace(/[.]/, ",")+'</font></div>';
@@ -963,8 +963,8 @@ function floorplan(){
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
-        html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="/images/Camera.png" class="i48" alt="cam"></a></div>';
+        html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+        html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
         html+='<div class="fix picam2" id="picam2"></div>';
         html+='<div class="fix Weg" id="Weg"></div>';
         html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
@@ -999,10 +999,10 @@ function floorplanheating(){
     ajax(0);
 	myAjax=setInterval(ajax, 500);
     try{
-        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
+        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
-        html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
+        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+        html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
         items=['badkamervuur1','badkamervuur2','heater1','heater2','heater3','heater4','GroheRed'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
@@ -1045,7 +1045,7 @@ function floorplanmedia(){
     try{
         html='<div class="fix jbl z1 i48" id="jbl"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         items=['eettafel','zithoek'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
         items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','lgtv','denon','nas','nvidia'];
@@ -1057,7 +1057,7 @@ function floorplanmedia(){
 		items=['raamliving','deurinkom','deurgarage','deurwc'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
         html+='<div class="fix blackmedia" id="media"></div>';
-        html+='<div class="fix" id="mediasidebar"><br><a href=\'javascript:navigator_Go("denon.php");\'><img src="/images/denon.png" class="i48" alt=""></a><br><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="/images/kodi.png" class="i48" alt=""><br>Films</a><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="/images/kodi.png" class="i48" alt=""><br>Series</a><br><br><a href=\'javascript:navigator_Go("kodi.php");\'><img src="/images/kodi.png" class="i48" alt=""><br>Kodi<br>Control</a><br><br>';
+        html+='<div class="fix" id="mediasidebar"><br><a href=\'javascript:navigator_Go("denon.php");\'><img src="https://home.egregius.be/images/denon.png" class="i48" alt=""></a><br><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Films</a><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Series</a><br><br><a href=\'javascript:navigator_Go("kodi.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Kodi<br>Control</a><br><br>';
         html+='<div id="playpause"></div>';
         html+='<div id="pfsense"></div></div>';
         $('#placeholder').html(html);
@@ -1078,24 +1078,24 @@ function floorplanothers(){
     ajax(0);
     myAjax=setInterval(ajax, 1000);
     try{
-        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="/images/plus.png" class="i60" alt="plus"></div>';
+        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px"/></div>';
+        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px"/></div>';
         items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
         items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
-        html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
+        html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="https://home.egregius.be/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
         gcal=localStorage.getItem('gcal');
         if(gcal==true)html+='Tobi: Beitem';
         else html+='Tobi: Rumbeke';
         html+='</div>';
         low=localStorage.getItem('regenputleeg');
         high=localStorage.getItem('regenputvol');
-        if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputrood.png"></div>';
-        else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="/images/regenputblauw.png"></div>';
-        else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="/images/regenputgroen.png"></div>';
-        html+='<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
-		html+='<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
-		html+='<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
+        if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputrood.png"></div>';
+        else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputblauw.png"></div>';
+        else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputgroen.png"></div>';
+        html+='<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
 		html+='<div class="fix z1 center" style="top:700px;left:0px;width:300px;"><button onclick="ajaxcontrol(\'fetch\', \'fetch\', \'fetch\');floorplan();" class="btn b2">Fetch Domoticz</button></div>';
 		html+='<div class="fix blackmedia">';
 		html+='<div class="fix" style="top:230px;left:0px;width:400px">';
@@ -1136,13 +1136,13 @@ function sidebar(){
 		denonpower=localStorage.getItem("denonpower");
 		html='<div class="fix weather"><a href=\'javascript:navigator_Go("floorplan.weather.php");\'><img src="" alt="icon" id="icon"></a></div>';
 		html+='<div class="fix mediabuttons" onclick="floorplanmedia();">';
-		if(denonpower=="On")html+='<img src="/images/denon_On.png" class="i70" alt="denon" id="denonicon">';
-		else html+='<img src="/images/denon_Off.png" class="i70" alt="denon" id="denonicon">';
+		if(denonpower=="On")html+='<img src="https://home.egregius.be/images/denon_On.png" class="i70" alt="denon" id="denonicon">';
+		else html+='<img src="https://home.egregius.be/images/denon_Off.png" class="i70" alt="denon" id="denonicon">';
 		html+='<br>';
 		if(tv=="On"){
-			if(lgtv=="On")html+='<img src="/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtvicon">';
-			else if(lgtv=="Off")html+='<img src="/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
-		}else if(tv=="Off")html+='<img src="/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
+			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtvicon">';
+			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
+		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		html+='<br>';
 		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="hum"></span><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
@@ -1213,7 +1213,7 @@ function setpoint(device){
 		if(level==temp)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 	});
-	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	$('#placeholder').html(html);
 	
 }
@@ -1240,7 +1240,7 @@ function dimmer(device,floorplan='floorplan'){
 		if(current==level)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\''+level+'\');initview();">'+level+'</button>';
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\''+level+'\');initview();">'+level+'</button>';
 	});
-	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 
 	$('#placeholder').html(html);
 }
@@ -1276,14 +1276,14 @@ function roller(device,floorplan='floorplanheating'){
 		if(current==level)html+='<button class="dimlevel dimlevela" onclick="ajaxcontrol(\''+device+'\',\'roller\',\''+level+'\');initview();">'+level+'</button>';
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'roller\',\''+level+'\');initview();">'+level+'</button>';
 	});
-	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 
 	$('#placeholder').html(html);
 }
 
 function Weg(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
-	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
 	poort=localStorage.getItem('poort');
 	achterdeur=localStorage.getItem('achterdeur');
@@ -1309,7 +1309,7 @@ function Weg(){
 
 function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
-	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
 	html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
     html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
@@ -1323,7 +1323,7 @@ function heating(){
 function bureeltobi(){
 	value=localStorage.getItem('bureeltobi');
 	html='<div class="dimmer" ><div style="min-height:140px">';
-	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
 	html+='<br><h1>Bureel Tobi = '+value+'</h1><br>';
 	html+='<button class="btn huge3" onclick="ajaxcontrol(\'bureeltobi\',\'sw\',\'On\');initview();">On</button>';

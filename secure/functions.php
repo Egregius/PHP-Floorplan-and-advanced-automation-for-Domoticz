@@ -854,9 +854,9 @@ function createheader($page='')
 	    <link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=2">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php?v=3">
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>';
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v=3"></script>';
     if ($page!='') {
         echo '
 		<script type=\'text/javascript\'>
