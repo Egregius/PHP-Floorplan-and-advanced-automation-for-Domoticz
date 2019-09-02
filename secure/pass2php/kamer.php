@@ -15,7 +15,7 @@ if ($status==0) {
 	}
 	if (TIME<strtotime('20:00')) {
 		if ($d['bose103']['s']=='On') {
-			bosekey('POWER', 103);
+			bosekey("POWER", 0, 103);
 		}
 	}
 }
