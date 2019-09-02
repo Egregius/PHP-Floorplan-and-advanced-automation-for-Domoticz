@@ -580,9 +580,12 @@ function bosepreset($pre,$ip=3)
 function bosezone($ip)
 {
     $d=fetchdata();
+    if (TIME<strtotime('8:00') $preset='PRESET_4';
+    elseif (TIME>strtotime('20:00') $preset='PRESET_5';
+    else  $preset='PRESET_6';
     if ($d['Weg']['s']<=1) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
-            bosekey("POWER", 0, 101);
+            bosekey($preset, 0, 101);
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosevolume(25, 101);
             for ($x=1;$x<=10;$x++) {
@@ -620,7 +623,7 @@ function bosezone($ip)
                 $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
             }
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-                bosekey("POWER", 0, 101);
+                bosekey($preset, 0, 101);
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
                 if ($d['denonpower']['s']=='ON') {
