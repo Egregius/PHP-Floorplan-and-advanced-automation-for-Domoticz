@@ -101,7 +101,9 @@ if ($d['auto']['s']=='On') {
             }
         }
         if ($d['bose101']['s']=='On') {
-        	
+        	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
+				bosekey('PRESET_6', 0, 101);
+        	}
         }
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
