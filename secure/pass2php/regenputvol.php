@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-telegram($device.' = '.$status);
+alert('regenput', $device.' = '.$status, 3600, false, true);
