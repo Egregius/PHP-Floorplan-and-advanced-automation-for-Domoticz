@@ -31,7 +31,7 @@ function ajax(Update){
                     time=d[device]['t'];
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
-							if($LastUpdateTime<=$currentTime-5){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
+							if($LastUpdateTime<=$currentTime-15){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
                         	else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                         }else {$LastUpdateTime=parseInt(d['t']);$more=false;}
                     }else if(device=="Weg"){
