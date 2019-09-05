@@ -32,9 +32,9 @@ function ajax(Update=$LastUpdateTime){
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
 							if($LastUpdateTime<=$currentTime-15){
-								$LastUpdateTime=parseInt($currentTime-1000);
+								$LastUpdateTime=parseInt(0);
 								$more=true;
-								console.log("LastUpdateTime set to 100");
+								console.log("LastUpdateTime set to 0");
 							}else {
 								$LastUpdateTime=parseInt(d['t']);
 								$more=false;
