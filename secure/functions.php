@@ -548,7 +548,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 			if (!empty($nowplaying)) {
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+						if (trim($nowplaying['artist'])=='Cygnux X'&&trim($nowplaying['track'])=='Superstring - Rank 1 Remix') {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
@@ -564,7 +564,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 			if (!empty($nowplaying)) {
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+						if (trim($nowplaying['artist'])=='Tiësto, Dzeko, Preme, Post Malone'&&trim($nowplaying['track'])=='Jackie Chan') {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
@@ -671,20 +671,6 @@ function bosezone($ip)
             bosekey($preset, 0, 101);
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosevolume(25, 101);
-            for ($x=1;$x<=10;$x++) {
-                $nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-                if (!empty($nowplaying)) {
-                    if (isset($nowplaying['@attributes']['source'])) {
-                        if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-                            if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
-                                bosekey("NEXT_TRACK", 0, 101);
-                                break;
-                            }
-                        }
-                    }
-                }
-                sleep(1);
-            }
         } elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
             if (isset($volume['actualvolume'])) {
