@@ -453,7 +453,7 @@ if ($d['deurbadkamer']['s']=='Open'
         && $d['lichtbadkamer']['s']>0
         && $d['badkamer_set']['s']!=22.5
         && ($b7>900
-        && $d['heating']['s']>=2
+        && ($d['heating']['s']==0||$d['heating']['s']>=2)
         && (TIME>strtotime('5:00')
         && TIME<strtotime('10:00')))
     ) {
@@ -464,7 +464,7 @@ if ($d['deurbadkamer']['s']=='Open'
         && $d['buiten_temp']['s']<21
         && $d['Weg']['s']<2
     ) {
-        if ($d['heating']['s']>1) {
+        if ($d['heating']['s']>=2) {
             if (TIME>=strtotime('6:00') && TIME<=strtotime('6:30')) {
                 $x=20;
                 if ($d['badkamer_set']['s']!=$x) {
