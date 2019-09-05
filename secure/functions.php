@@ -582,7 +582,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 			if (!empty($nowplaying)) {
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+						if (trim($nowplaying['artist'])=='Pharrell Williams'&&trim($nowplaying['track'])=='Happy - From "Despicable Me 2"') {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
@@ -598,7 +598,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 			if (!empty($nowplaying)) {
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+						if (trim($nowplaying['artist'])=='Christina Perri'&&trim($nowplaying['track'])=='A Thousand Years') {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
