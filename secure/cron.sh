@@ -30,6 +30,7 @@ if [ "$STATUS" == "OK" ] ; then
     if [ $MINUTE -eq 0 ] ; then
         CRON="$CRON&cron3600"
     fi
+	echo $MINUTE $CRON >> /run/cronlog
 	echo OK
 	#0
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken&cron60$CRON" >/dev/null 2>&1 &
