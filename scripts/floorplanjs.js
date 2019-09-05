@@ -9,7 +9,7 @@ function navigator_Go(url){window.location.assign(url);}
 }, false);*/
 $LastUpdateTime=parseInt(0);
 $more=false;
-function ajax(Update){
+function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
     $.ajax({
         url: '/ajax.php?t='+$LastUpdateTime,
@@ -31,9 +31,19 @@ function ajax(Update){
                     time=d[device]['t'];
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
-							if($LastUpdateTime<=$currentTime-15){$LastUpdateTime=parseInt($currentTime-1000);$more=true;console.log("LastUpdateTime set to 100");}
-                        	else {$LastUpdateTime=parseInt(d['t']);$more=false;}
-                        }else {$LastUpdateTime=parseInt(d['t']);$more=false;}
+							if($LastUpdateTime<=$currentTime-15){
+								$LastUpdateTime=parseInt($currentTime-1000);
+								$more=true;
+								console.log("LastUpdateTime set to 100");
+							}else {
+								$LastUpdateTime=parseInt(d['t']);
+								$more=false;
+							}
+                        }else {
+                        	$LastUpdateTime=parseInt(d['t']);
+                        	$more=false;
+                        }
+                        console.log($LastUpdateTime);
                     }else if(device=="Weg"){
                         try{
                             html='<div class="fix z" onclick="Weg();">';
