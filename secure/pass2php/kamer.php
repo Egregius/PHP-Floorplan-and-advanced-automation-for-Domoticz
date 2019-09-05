@@ -29,6 +29,7 @@ if ($status==0) {
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']!='STANDBY') {
 						bosekey("POWER", 0, 103);
+						sw('bose103', 'Off');
 					}
 				}
 			}
