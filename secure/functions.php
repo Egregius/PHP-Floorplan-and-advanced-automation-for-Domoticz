@@ -541,6 +541,89 @@ function bosekey($key,$sleep=100000,$ip=101)
     bosepost("key", $xml, $ip, true);
     $xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
     bosepost("key", $xml, $ip);
+    if ($key=='PRESET_1') {
+    	//Trance, Techno and retro
+    	for ($x=1;$x<=10;$x++) {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+							bosekey("NEXT_TRACK", $sleep, $ip);
+							break;
+						}
+					}
+				}
+			}
+			sleep(1);
+		}
+    } elseif ($key=='PRESET_2') {
+    	//Tiesto
+    	for ($x=1;$x<=10;$x++) {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+							bosekey("NEXT_TRACK", $sleep, $ip);
+							break;
+						}
+					}
+				}
+			}
+			sleep(1);
+		}
+    } elseif ($key=='PRESET_3') {
+    	//MNM
+    } elseif ($key=='PRESET_4') {
+    	//Happy music
+    	for ($x=1;$x<=10;$x++) {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+							bosekey("NEXT_TRACK", $sleep, $ip);
+							break;
+						}
+					}
+				}
+			}
+			sleep(1);
+		}
+    } elseif ($key=='PRESET_5') {
+    	//Ballads
+    	for ($x=1;$x<=10;$x++) {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+							bosekey("NEXT_TRACK", $sleep, $ip);
+							break;
+						}
+					}
+				}
+			}
+			sleep(1);
+		}
+    } elseif ($key=='PRESET_6') {
+    	//Mix
+    	for ($x=1;$x<=10;$x++) {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (trim($nowplaying['artist'])=='Paul Kalkbrenner'&&trim($nowplaying['track'])=='Page Two') {
+							bosekey("NEXT_TRACK", $sleep, $ip);
+							break;
+						}
+					}
+				}
+			}
+			sleep(1);
+		}
+    }
 }
 function bosevolume($vol,$ip=101)
 {
