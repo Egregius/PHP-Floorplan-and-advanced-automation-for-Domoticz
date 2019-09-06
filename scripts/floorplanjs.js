@@ -432,6 +432,7 @@ function ajax(Update=$LastUpdateTime){
                             else document.getElementById("gcal").innerHTML='';
                         }catch{}
                     }else if(type=="switch"){
+                    	console.log(icon);
                         try{
                             if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"){
                                 if(value=="On")html='<img src="https://home.egregius.be/images/'+icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
