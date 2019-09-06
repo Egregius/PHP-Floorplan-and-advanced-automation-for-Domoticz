@@ -29,7 +29,6 @@ if ($home==true) {
     if (isset($_REQUEST['t'])) {
         $t=time();
         $d['t']=$t;
-        $diff=$t-$_REQUEST['t'];
         $t=$_REQUEST['t']-3;
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t ORDER BY t desc limit 0,3;");
