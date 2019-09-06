@@ -135,7 +135,7 @@ function ajax(Update=$LastUpdateTime){
 								else if($value>8)elem.style.color="#FCC";
 								else elem.style.color=null;
 							}catch{}
-						}else if(device=="$icon"){
+						}else if(device=="icon"){
 							try{
 								elem=document.getElementById("hum");
 								elem.innerHTML="Hum:"+$mode+"%";
@@ -149,7 +149,7 @@ function ajax(Update=$LastUpdateTime){
 								else if($mode<35)elem.style.color="#FAA";
 								else if($mode<30)elem.style.color="#F99";
 								else elem.style.color=null;
-								$('#$icon').attr("src", "/images/"+$value+".png");
+								$('#icon').attr("src", "/images/"+$value+".png");
 							}catch{}
 						}else if(device=="uv"){
 							try{
@@ -975,7 +975,7 @@ function floorplan(){
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
-        html+='<div class="fix floorplan2$icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+        html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
         html+='<div class="fix picam2" id="picam2"></div>';
         html+='<div class="fix Weg" id="Weg"></div>';
@@ -1011,7 +1011,7 @@ function floorplanheating(){
     ajax(0);
 	myAjax=setInterval(ajax, 500);
     try{
-        html='<div class="fix floorplan2$icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
@@ -1090,7 +1090,7 @@ function floorplanothers(){
     ajax(0);
     myAjax=setInterval(ajax, 1000);
     try{
-        html='<div class="fix floorplan2$icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px"/></div>';
         items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
@@ -1146,7 +1146,7 @@ function sidebar(){
 		tv=localStorage.getItem("tv");
 		lgtv=localStorage.getItem("lgtv");
 		denonpower=localStorage.getItem("denonpower");
-		html='<div class="fix weather"><a href=\'javascript:navigator_Go("floorplan.weather.php");\'><img src="" alt="$icon" id="$icon"></a></div>';
+		html='<div class="fix weather"><a href=\'javascript:navigator_Go("floorplan.weather.php");\'><img src="" alt="icon" id="icon"></a></div>';
 		html+='<div class="fix mediabuttons" onclick="floorplanmedia();">';
 		if(denonpower=="On")html+='<img src="https://home.egregius.be/images/denon_On.png" class="i70" alt="denon" id="denon$icon">';
 		else html+='<img src="https://home.egregius.be/images/denon_Off.png" class="i70" alt="denon" id="denon$icon">';
