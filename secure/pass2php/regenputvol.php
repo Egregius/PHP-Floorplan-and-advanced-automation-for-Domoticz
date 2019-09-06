@@ -9,4 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-alert('regenput', $device.' = '.$status, 3600, false, true);
+if ($status=='Off') alert('regenput', 'Regenput niet meer vol.', 3600, false, true);
+else alert('regenput', 'Regenput vol! Zet warm water op regenput.', 3600, false, true);
