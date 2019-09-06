@@ -29,6 +29,7 @@ function ajax(Update=$LastUpdateTime){
                     type=d[device]['dt'];
                     $icon=d[device]['ic'];
                     time=d[device]['t'];
+                    console.log(device+' = '+$value);
                     if(device=="t"){
                         if($LastUpdateTime>100&&$more==false){
 							if($LastUpdateTime<=$currentTime-15){
