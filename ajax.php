@@ -29,17 +29,20 @@ if ($home==true) {
     if (isset($_REQUEST['t'])) {
         $t=time();
         $d['t']=$t;
-        if(intval($_REQUEST['t'])==0)$t=0;
-        else $t=$t-3;
+        if(intval($_REQUEST['t'])==0){$t=0;$d['fetch']=0;}
+        else {$t=$t-3;$d['fetch']=$t;}
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t ORDER BY t desc limit 0,3;");
+        $x=0;
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
             $d[$row['n']]['t']=$row['t'];
             if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
             if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
             if(!empty($row['icon']))$d[$row['n']]['ic']=$row['icon'];
+            $x++;
         }
+        $d['aantal']=$x;
         echo json_encode($d);
         exit;
     } 
