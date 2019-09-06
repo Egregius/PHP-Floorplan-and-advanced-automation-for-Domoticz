@@ -29,10 +29,10 @@ if ($home==true) {
     if (isset($_REQUEST['t'])) {
         $t=time();
         $d['t']=$t;
-        if(intval($_REQUEST['t'])==0){$t=0;$d['fetch']=0;}
+        if($_REQUEST['t']==0){$t=0;$d['fetch']=0;}
         else {$t=$t-3;$d['fetch']=$t;}
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
-        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t ORDER BY t desc limit 0,3;");
+        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         $x=0;
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
