@@ -31,11 +31,11 @@ function ajax(Update=$LastUpdateTime){
 								$more=true;
 								console.log("LastUpdateTime set to 0");
 							}else {
-								$LastUpdateTime=parseInt(1);
+								$LastUpdateTime=parseInt(d[device]['t']);
 								$more=false;
 							}
                         }else {
-                        	$LastUpdateTime=parseInt(1);
+                        	$LastUpdateTime=parseInt(d[device]['t']);
                         	$more=false;
                         }
                     }else{
@@ -465,11 +465,11 @@ function ajax(Update=$LastUpdateTime){
 											}
 										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="denon"){
-										if($value=='On')$('#denon$icon').attr("src", "/images/denon_On.png");
-										else $('#denon$icon').attr("src", "/images/denon_Off.png");
+										if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
+										else $('#denonicon').attr("src", "/images/denon_Off.png");
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="lgtv"){
-										if($value=='On')$('#lgtv$icon').attr("src", "/images/lgtv_On.png");
-										else $('#lgtv$icon').attr("src", "/images/lgtv_Off.png");
+										if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
+										else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
 									}
 								}else if(device=="bureeltobi"){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
@@ -1148,13 +1148,13 @@ function sidebar(){
 		denonpower=localStorage.getItem("denonpower");
 		html='<div class="fix weather"><a href=\'javascript:navigator_Go("floorplan.weather.php");\'><img src="" alt="icon" id="icon"></a></div>';
 		html+='<div class="fix mediabuttons" onclick="floorplanmedia();">';
-		if(denonpower=="On")html+='<img src="https://home.egregius.be/images/denon_On.png" class="i70" alt="denon" id="denon$icon">';
-		else html+='<img src="https://home.egregius.be/images/denon_Off.png" class="i70" alt="denon" id="denon$icon">';
+		if(denonpower=="On")html+='<img src="https://home.egregius.be/images/denon_On.png" class="i70" alt="denon" id="denonicon">';
+		else html+='<img src="https://home.egregius.be/images/denon_Off.png" class="i70" alt="denon" id="denonicon">';
 		html+='<br>';
 		if(tv=="On"){
-			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtv$icon">';
-			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtv$icon">';
-		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="lgtv" id="lgtv$icon">';
+			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtvicon">';
+			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
+		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		html+='<br>';
 		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="hum"></span><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
