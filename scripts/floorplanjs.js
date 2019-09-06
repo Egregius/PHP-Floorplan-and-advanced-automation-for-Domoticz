@@ -31,11 +31,11 @@ function ajax(Update=$LastUpdateTime){
 								$more=true;
 								console.log("LastUpdateTime set to 0");
 							}else {
-								$LastUpdateTime=parseInt(d[device]['t']);
+								$LastUpdateTime=parseInt(d['t']);
 								$more=false;
 							}
                         }else {
-                        	$LastUpdateTime=parseInt(d[device]['t']);
+                        	$LastUpdateTime=parseInt(d['t']);
                         	$more=false;
                         }
                     }else{

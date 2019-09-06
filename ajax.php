@@ -26,6 +26,27 @@ if ($home==true) {
 		}
 		lg(' (AJAX)	'.$ipaddress.'	'.$udevice.'	'.$user.$msg);
     } 
+    if (isset($_REQUEST['q'])) {
+        header("Content-type:application/json");
+        $t=time();
+        $d['t']=$t;
+        if($_REQUEST['q']==0)$t=0;
+        else $t=$t-3;
+        $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
+        echo "SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;<br>";
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $d[$row['n']]['s']=$row['s'];
+            $d[$row['n']]['t']=$row['t'];
+            if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
+            if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+            if(!empty($row['icon']))$d[$row['n']]['ic']=$row['icon'];
+            echo $row['n'];
+        }
+        echo '<hr>';
+        echo json_encode($d);
+        exit;
+    } 
     if (isset($_REQUEST['t'])) {
         $t=time();
         $d['t']=$t;
