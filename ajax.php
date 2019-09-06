@@ -32,7 +32,7 @@ if ($home==true) {
         $diff=$t-$_REQUEST['t'];
         $t=$_REQUEST['t']-3;
         $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
-        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
+        $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t ORDER BY t desc limit 0,3;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
             $d[$row['n']]['t']=$row['t'];
