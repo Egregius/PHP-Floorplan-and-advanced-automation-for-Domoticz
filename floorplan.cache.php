@@ -304,10 +304,10 @@ if ($home) {
                 }
                 if ($row['m']==0) {
                     echo '
-                <td>Wintertijd</td>';
+                <td>Nacht</td>';
                 } elseif ($row['m']==1) {
                     echo '
-                <td>Zomertijd</td>';
+                <td>Dag</td>';
                 }
             } elseif ($row['n']=='douche') {
                 echo '

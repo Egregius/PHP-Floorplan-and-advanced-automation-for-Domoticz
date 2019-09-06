@@ -71,6 +71,12 @@ if ($d['auto']['s']=='On') {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
+		} elseif ($heating==0&&$d['auto']['m']==false) {
+			if ($zon==0) {
+				foreach ($boven as $i) {
+					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			}
 		}
 	} 
 
