@@ -76,6 +76,9 @@ if ($d['auto']['s']=='On') {
 				foreach ($boven as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
+				foreach ($beneden as $i) {
+					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	} 
