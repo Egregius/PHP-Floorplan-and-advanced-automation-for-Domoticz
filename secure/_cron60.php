@@ -178,8 +178,47 @@ if ($d['auto']['s']=='On') {
 					}
                 }
             }
-            if ($d['bose103']['s']=='Off') {
-				bosezone(103);
+            $nowplaying=json_decode(
+				json_encode(
+					simplexml_load_string(
+						file_get_contents('http://192.168.2.103:8090/now_playing')
+					)
+				),
+				true
+			);
+			if (!empty($nowplaying)) {
+				if (TIME>=strtotime('7:00')) $nv=30;
+				elseif (TIME>=strtotime('6:55')) $nv=28;
+				elseif (TIME>=strtotime('6:50')) $nv=26;
+				elseif (TIME>=strtotime('6:45')) $nv=24;
+				elseif (TIME>=strtotime('6:40')) $nv=22;
+				elseif (TIME>=strtotime('6:35')) $nv=20;
+				elseif (TIME>=strtotime('6:30')) $nv=18;
+				elseif (TIME>=strtotime('6:25')) $nv=16;
+				elseif (TIME>=strtotime('6:20')) $nv=14;
+				elseif (TIME>=strtotime('6:15')) $nv=13;
+				elseif (TIME>=strtotime('6:10')) $nv=12;
+				elseif (TIME>=strtotime('6:05')) $nv=11;
+				else $nv=10;
+				if (isset($nowplaying['@attributes']['source'])) {
+					if ($nowplaying['@attributes']['source']!='STANDBY') {
+						$volume=json_decode(
+							json_encode(
+								simplexml_load_string(
+									file_get_contents("http://192.168.2.103:8090/volume")
+								)
+							),
+							true
+						);
+						$cv=$volume['actualvolume'];
+						if ($cv<=$nv) {
+							bosevolume($cv, 103);
+						} 
+					} else {
+						bosezone(103);
+						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
+					}
+				}
 			}
         }
     }
