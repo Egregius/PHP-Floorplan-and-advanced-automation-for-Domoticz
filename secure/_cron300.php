@@ -13,7 +13,10 @@ $user='cron300';
 if (TIME<=strtotime('11:00')) {
 	if ($d['nas']['s']!='On') {
 		if (file_get_contents($urlnas)>0) {
-			shell_exec('./wakenas.sh');
+			$k=file_get_contents($urlnas2);
+			if ($k<40000000) {
+				shell_exec('./wakenas.sh');
+			}
 		}
 	}
 }
