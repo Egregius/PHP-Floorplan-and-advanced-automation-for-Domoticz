@@ -1273,11 +1273,11 @@ function roller(device,floorplan='floorplanheating'){
 	else html+='<h2>'+device+' '+current+' %</h2>';
 	html+='<div class="fix z" style="top:100px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
 	if($mode==1){
-		html+='<div class="fix btn btna" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'$mode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'$mode\',\'0\');initview();"><br>Auto</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}else{
-		html+='<div class="fix btn" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'$mode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn btna" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'$mode\',\'0\');initview();"><br>Auto</div>';
+		html+='<div class="fix btn" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
 	html+='<div class="fix z" style="top:100px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
 	html+='</div><div>';
