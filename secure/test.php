@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-if (TIME>=strtotime('7:00')) echo 'ja';else echo 'nee';
+if (TIME>=strtotime('10:49')) echo 'ja';else echo 'nee';
 
 /*---------------------------*/
 echo '</pre>';

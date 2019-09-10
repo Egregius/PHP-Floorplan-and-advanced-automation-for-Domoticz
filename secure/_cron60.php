@@ -215,7 +215,7 @@ if ($d['auto']['s']=='On') {
 							bosevolume($cv, 103);
 						} 
 					} else {
-						bosezone(103);
+						bosezone(103, $cv);
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 					}
 				}
