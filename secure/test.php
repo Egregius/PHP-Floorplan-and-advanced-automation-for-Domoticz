@@ -13,10 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
-    	/*if ($d['bose104']['s']=='On') {
-			shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
-		}*/
+if (TIME>=strtotime('7:00')) echo 'ja';else echo 'nee';
 
 /*---------------------------*/
 echo '</pre>';
