@@ -82,6 +82,12 @@ if (past('Weg')>14400
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
+$items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
+foreach ($items as $i) {
+	if (past($i)>10800&&$d[$i]['m']!=0) {
+		storemode($i, 0, basename(__FILE__).':'.__LINE__);
+	}
+}
 if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
     $nowplaying=json_decode(
         json_encode(
