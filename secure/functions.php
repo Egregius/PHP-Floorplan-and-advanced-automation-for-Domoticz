@@ -667,7 +667,7 @@ function bosezone($ip,$vol='')
     elseif (TIME>strtotime('20:00')) $preset='PRESET_5';
     else  $preset='PRESET_6';
     if ($d['Weg']['s']<=1) {
-        if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
+        if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             bosekey($preset, 0, 101);
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosevolume(25, 101);
@@ -702,7 +702,7 @@ function bosezone($ip,$vol='')
                 }
                 bosepost('setZone', $xml, 101);
                 if ($vol=='') {
-					if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('22:00')-($d['auto']['m']==true?3600:0)) {
+					if (TIME>strtotime('6:00')&&TIME<strtotime('22:00')) {
 						bosevolume(30, $ip);
 					} else {
 						bosevolume(22, $ip);
@@ -729,7 +729,7 @@ function bosezone($ip,$vol='')
                 bosepost('setZone', $xml, 101);
                 store('bose'.$ip, 'On');
                 if ($vol=='') {
-					if (TIME>strtotime('6:00')-($d['auto']['m']==true?3600:0)&&TIME<strtotime('21:00')-($d['auto']['m']==true?3600:0)) {
+					if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
 						bosevolume(30, $ip);
 					} else {
 						bosevolume(20, $ip);

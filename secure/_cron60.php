@@ -190,10 +190,10 @@ if ($d['auto']['s']=='On') {
 						);
 						$cv=$volume['actualvolume'];
 						if ($cv<=$nv) {
-							bosevolume($cv, 103);
+							bosevolume($nv, 103);
 						} 
 					} else {
-						bosezone(103, $cv);
+						bosezone(103, $nv);
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 					}
 				}
