@@ -1207,11 +1207,11 @@ function setpoint(device){
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
 	if($mode==1){
-		html+='<div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'$mode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'$mode\',\'0\');initview();"><br>Auto</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}else{
-		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'$mode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'$mode\',\'0\');initview();"><br>Auto</div>';
+		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
+		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
 	if(device=='living'||device=='badkamer'){
         temps=[10,14,15,16,17,17.5,18,18.5,19,19.2,19.5,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
