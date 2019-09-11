@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 $user='cron300';
-if (TIME<=strtotime('3:00')) {
+if (TIME<=strtotime('9:00')) {
 	if ($d['nas']['s']!='On') {
 		if (file_get_contents($urlnas)>0) {
 			$k=file_get_contents($urlnas2);
