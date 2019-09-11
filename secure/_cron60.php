@@ -151,33 +151,11 @@ if ($d['auto']['s']=='On') {
         }
         if (TIME>=strtotime('6:00')&&TIME<strtotime('6:05')) {
         	if ($d['kamer']['m']!=2) {
-        		sl('kamer', 1);
-        		storemode('kamer', 2);
+        		sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+        		storemode('kamer', 2, basename(__FILE__).':'.__LINE__);
         	}
         }
         if ($d['kamer']['m']==2) {
-            $items=array('RkamerR','RkamerL');
-            if ($d['kamer']['s']==3) {
-                foreach ($items as $i) {
-                    if ($d[$i]['s']>65) {
-                        sl($i, 65, basename(__FILE__).':'.__LINE__);
-                    }
-                }
-            } elseif ($d['kamer']['s']>=7) {
-                foreach ($items as $i) {
-                    if ($d['heating']['s']==1) {
-						if ($d[$i]['s']>30) {
-							sl($i, 30, basename(__FILE__).':'.__LINE__);
-							storemode($i, 0, basename(__FILE__).':'.__LINE__);
-						}
-					} else {
-						if ($d[$i]['s']>0) {
-							sl($i, 0, basename(__FILE__).':'.__LINE__);
-							storemode($i, 0, basename(__FILE__).':'.__LINE__);
-						}
-					}
-                }
-            }
             $nowplaying=json_decode(
 				json_encode(
 					simplexml_load_string(
