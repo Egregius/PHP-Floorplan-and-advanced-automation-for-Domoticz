@@ -702,7 +702,7 @@ function bosezone($ip,$vol='')
                 }
                 bosepost('setZone', $xml, 101);
                 if ($vol=='') {
-					if (TIME>strtotime('6:00')&&TIME<strtotime('22:00')) {
+					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
 						bosevolume(30, $ip);
 					} else {
 						bosevolume(22, $ip);
@@ -817,7 +817,9 @@ function fbadkamer()
 		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
             sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
         }
-        bosezone(102);
+        if (TIME>strtotime('5:30')&&TIME<strtotime('22:00')) {
+        	bosezone(102);
+        }
     }
 }
 function fkeuken()

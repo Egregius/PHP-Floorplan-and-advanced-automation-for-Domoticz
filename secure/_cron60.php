@@ -165,18 +165,18 @@ if ($d['auto']['s']=='On') {
 				true
 			);
 			if (!empty($nowplaying)) {
-				if (TIME>=strtotime('7:00')) $nv=30;
-				elseif (TIME>=strtotime('6:55')) $nv=28;
-				elseif (TIME>=strtotime('6:50')) $nv=26;
-				elseif (TIME>=strtotime('6:45')) $nv=24;
-				elseif (TIME>=strtotime('6:40')) $nv=22;
-				elseif (TIME>=strtotime('6:35')) $nv=20;
-				elseif (TIME>=strtotime('6:30')) $nv=18;
-				elseif (TIME>=strtotime('6:25')) $nv=16;
-				elseif (TIME>=strtotime('6:20')) $nv=14;
-				elseif (TIME>=strtotime('6:15')) $nv=13;
-				elseif (TIME>=strtotime('6:10')) $nv=12;
-				elseif (TIME>=strtotime('6:05')) $nv=11;
+				if (TIME>=strtotime('7:00')) $nv=34;
+				elseif (TIME>=strtotime('6:55')) $nv=32;
+				elseif (TIME>=strtotime('6:50')) $nv=30;
+				elseif (TIME>=strtotime('6:45')) $nv=28;
+				elseif (TIME>=strtotime('6:40')) $nv=26;
+				elseif (TIME>=strtotime('6:35')) $nv=24;
+				elseif (TIME>=strtotime('6:30')) $nv=22;
+				elseif (TIME>=strtotime('6:25')) $nv=20;
+				elseif (TIME>=strtotime('6:20')) $nv=18;
+				elseif (TIME>=strtotime('6:15')) $nv=16;
+				elseif (TIME>=strtotime('6:10')) $nv=14;
+				elseif (TIME>=strtotime('6:05')) $nv=12;
 				else $nv=10;
 				if (isset($nowplaying['@attributes']['source'])) {
 					if ($nowplaying['@attributes']['source']!='STANDBY') {
