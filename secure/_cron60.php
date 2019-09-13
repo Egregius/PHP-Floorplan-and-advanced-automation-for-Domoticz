@@ -317,7 +317,7 @@ if ($d['auto']['s']=='On') {
     if (past('deurbadkamer')>1200&&past('lichtbadkamer')>600) {
         if ($d['lichtbadkamer']['s']>0) {
             $new=round($d['lichtbadkamer']['s'] * 0.85, 0);
-            if ($new<15) {
+            if ($new<10) {
                 $new=0;
             }
             sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
