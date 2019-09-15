@@ -280,6 +280,12 @@ if ($d['achterdeur']['s']=='Closed') {
 		&&past('zon')>1800
 		&&past('water')>72000
 	) {
+		$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
+		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+			$rainpast=$row['buien'];
+		}
 		$msg="Regen check:
 			__Laatste 48u:$rainpast
 			__Volgende 48u: $maxrain
