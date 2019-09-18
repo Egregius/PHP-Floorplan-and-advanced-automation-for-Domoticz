@@ -971,7 +971,7 @@ function floorplan(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplan');
     ajax(0);
-	myAjax=setInterval(ajax, 333);
+	myAjax=setInterval(ajax, 999);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
@@ -1009,7 +1009,7 @@ function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
     ajax(0);
-	myAjax=setInterval(ajax, 333);
+	myAjax=setInterval(ajax, 999);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
@@ -1050,7 +1050,7 @@ function floorplanmedia(){
 	localStorage.setItem('view', 'floorplanmedia');
     ajax(0);
     ajaxmedia();
-    myAjax=setInterval(ajax, 666);
+    myAjax=setInterval(ajax, 999);
     myAjaxmedia=setInterval(ajaxmedia, 999);
     denon=localStorage.getItem('denon');
     lgtv=localStorage.getItem('lgtv');
