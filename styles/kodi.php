@@ -36,6 +36,7 @@ h2{font-size:1.8em;margin:0px;padding:0px;}
 .input{width:142px;}
 .level{width:64px;}
 .surround{width:120px;}
+.title{margin-top:50px;}
 ";
 } elseif ($udevice=='iPad') {
     $css.="
