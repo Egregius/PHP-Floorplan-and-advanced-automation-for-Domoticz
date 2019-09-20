@@ -126,6 +126,7 @@ function douchewarn($euro,$vol)
         usleep(3500000);
         bosevolume($cv, 102);
     }
+    telegram('Douche € '.$euro.' geluid!');
 }
 /**
  * Function waarschuwing
