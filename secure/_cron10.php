@@ -96,8 +96,7 @@ if ($d['GroheRed']['s']=='On') {
     ) {
         sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    if (past('GroheRed')>900) {
-        sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+    if (past('GroheRed')>1200) {
         storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
     }
 } else {

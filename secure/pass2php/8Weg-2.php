@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
+storemode('GroheRed', 1, basename(__FILE__).':'.__LINE__);
 resetsecurity();
