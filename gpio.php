@@ -19,20 +19,17 @@ if (isset($_REQUEST['gpio'])) {
     $gpio=$_REQUEST['gpio'];
     if ($gpio==20) {
         store('gasvandaag', $d['gasvandaag']['s']+1, basename(__FILE__).':'.__LINE__);
-        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
-            $data=$d['douche']['s']+1;
-            store('douche', $data, basename(__FILE__).':'.__LINE__);
+        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80) {
+            store('douche', $d['douche']['s']+1, basename(__FILE__).':'.__LINE__);
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
                 sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
         }
     } elseif ($gpio==21) {
         store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
-        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<60&&past('watervandaag')<60) {
-            $data=$d['douche']['m']+1;
-            storemode('douche', $data, basename(__FILE__).':'.__LINE__, 1);
+        if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80) {
+            storemode('douche', $d['douche']['m']+1, basename(__FILE__).':'.__LINE__, 1);
         } elseif ($d['water']['s']=='On') {
-            $data=$d['watertuin']['m']+1;
-            storemode('watertuin', $data, basename(__FILE__).':'.__LINE__, 1);
+            storemode('watertuin', $d['watertuin']['m']+1, basename(__FILE__).':'.__LINE__, 1);
         }
     } elseif ($gpio==19) {
         if ($_REQUEST['action']=='on') {
@@ -51,7 +48,7 @@ if (isset($_REQUEST['gpio'])) {
     } else {
         die('Unknown');
     }
-    if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<90&&past('watervandaag')<90)) {
+    if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80)) {
         $douchegas=$d['douche']['s']*10;
         $douchewater=$d['douche']['m']*1;
         $euro=($douchegas*0.0004)+($douchewater*0.005);
