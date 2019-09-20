@@ -121,7 +121,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
         }
     }
 }
-if ($d['picam2plug']['s']=='On'&&past('picam2plug')>300) {
+if ($d['picam2plug']['s']=='On'&&past('picam2plug')>7200) {
     file_get_contents('http://192.168.2.12/fifo_command.php?cmd=halt');
     sleep(1);
     file_get_contents('http://192.168.2.12/fifo_command.php?cmd=halt');
