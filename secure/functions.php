@@ -118,14 +118,14 @@ function douchewarn($euro,$vol)
     global $boseipbadkamer;
     lg('Douche € '.$euro.' geluid!');
     $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-    shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
+    /*shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
     $cv=$volume['actualvolume'];
     if ($cv<$vol) {
         usleep(1550000);
         bosevolume($vol, 102);
         usleep(3500000);
         bosevolume($cv, 102);
-    }
+    }*/
     telegram('Douche € '.$euro.' geluid!');
 }
 /**
