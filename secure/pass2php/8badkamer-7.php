@@ -19,12 +19,12 @@ if ($status=='On'&&past('8badkamer-7')>5) {
         $d['deurbadkamer']['s']='Closed';
     }
     store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-    douche();
     $d['lichtbadkamer']['s']=25;
     $d['deurbadkamer']['s']='Closed';
     $d['8badkamer-7']['t']=0;
     $d['badkamervuur1']['t']=0;
     $d['badkamervuur2']['t']=0;
     require '_verwarming.php';
+    douche();
     resetsecurity();
 }
