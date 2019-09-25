@@ -14,7 +14,7 @@ if (TIME<=strtotime('9:00')) {
 	if ($d['nas']['s']!='On') {
 		if (file_get_contents($urlnas)>0) {
 			$k=file_get_contents($urlnas2);
-			if ($k<40000000) {
+			if ($k<4000000000) {
 				shell_exec('./wakenas.sh');
 			}
 		}
