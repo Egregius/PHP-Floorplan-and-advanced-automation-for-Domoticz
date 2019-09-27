@@ -37,7 +37,7 @@ if ($status=='On') {
 		if (isset($nowplaying['@attributes']['source'])) {
 			if ($nowplaying['@attributes']['source']!='STANDBY') {
 				bosekey("POWER", 0, 101);
-				if ($d['bose1']['s']!='Off') {
+				if ($d['bose101']['s']!='Off') {
 					sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 				}
 			}

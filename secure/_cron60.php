@@ -480,7 +480,7 @@ if ($d['auto']['s']=='On') {
         &&$d['bose103']['s']=='Off'
         &&$d['bose104']['s']=='Off'
         &&$d['bose105']['s']=='Off'
-        &&$d['Weg']['s']>0
+        //&&$d['Weg']['s']>0
     ) {
         $status=json_decode(
             json_encode(
@@ -496,11 +496,11 @@ if ($d['auto']['s']=='On') {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
                     bosekey("POWER", 0, 101);
-                    sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
-                    sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
-                    sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-                    sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
-                    sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose101']['s']!='Off') sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose102']['s']!='Off') sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose103']['s']!='Off') sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose105']['s']!='Off') sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
                 }
             }
         }
@@ -521,7 +521,7 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose102']['s']!='Off') sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
                     bosekey("POWER", 0, 102);
                 }
             }
@@ -549,7 +549,7 @@ if ($d['auto']['s']=='On') {
         if (!empty($status)) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']!='STANDBY') {
-                    sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
                     bosekey("POWER", 0, 104);
                 }
             }
@@ -591,7 +591,7 @@ if ($d['auto']['s']=='On') {
         if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
 			sl('kamer', 0, basename(__FILE__).':'.__LINE__);
         } elseif (past('kamer')>900) {
-        	storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
+        	if ($d['kamer']['m']!=1) storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d['tobi']['s']>0
@@ -599,14 +599,14 @@ if ($d['auto']['s']=='On') {
         &&$d['Rtobi']['s']==0
         &&past('tobi')>900
     ) {
-        storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
+        if ($d['tobi']['m']!=1) storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['alex']['s']>0
         &&$d['zon']['s']>200
         &&$d['Ralex']['s']==0
         &&past('alex')>900
     ) {
-        storemode('alex', 1, basename(__FILE__).':'.__LINE__);
+        if ($d['alex']['m']!=1) storemode('alex', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['eettafel']['s']>0
         &&$d['Rbureel']['s']==0
@@ -614,7 +614,7 @@ if ($d['auto']['s']=='On') {
         &&$d['zon']['s']>100
         &&past('eettafel')>2700
     ) {
-        storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
+        if ($d['eettafel']['m']!=1) storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['zithoek']['s']>0
         &&$d['Rbureel']['s']==0
@@ -622,7 +622,7 @@ if ($d['auto']['s']=='On') {
         &&$d['zon']['s']>100
         &&past('zithoek')>2700
     ) {
-        storemode('zithoek', 1, basename(__FILE__).':'.__LINE__);
+        if ($d['zithoek']['m']!=1) storemode('zithoek', 1, basename(__FILE__).':'.__LINE__);
     }
     if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
         if ($d['tuin']['s']=='On') {
