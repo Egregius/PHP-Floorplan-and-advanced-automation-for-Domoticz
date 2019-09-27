@@ -13,7 +13,13 @@ if (!isset($d)) {
 	$d=fetchdata();
 }
 $user='heating';
-if ($d['heatingauto']['s']=='On'&&past('heating')>36) {
+/* Heating
+0 = Neutral
+1 = Cooling
+2 = Elec
+3 = Elec / Gas
+*/
+if ($d['heatingauto']['s']=='On'&&past('heating')>360) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
         if ($d['heating']['s']!=1) {
             store('heating', 1, basename(__FILE__).':'.__LINE__);
