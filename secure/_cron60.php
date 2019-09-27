@@ -480,7 +480,7 @@ if ($d['auto']['s']=='On') {
         &&$d['bose103']['s']=='Off'
         &&$d['bose104']['s']=='Off'
         &&$d['bose105']['s']=='Off'
-        //&&$d['Weg']['s']>0
+        &&$d['Weg']['s']>0
     ) {
         $status=json_decode(
             json_encode(
