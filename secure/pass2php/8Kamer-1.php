@@ -18,5 +18,5 @@ if ($d['kamer']['m']==1) {
     if ($d[$item]['s']>0) {
         sl($item, 0, basename(__FILE__).':'.__LINE__);
     }
-    resetsecurity();
 }
+resetsecurity();

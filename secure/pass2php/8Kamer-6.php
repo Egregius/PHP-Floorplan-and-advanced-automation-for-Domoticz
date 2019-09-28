@@ -9,7 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
+if ($d['kamer']['m']==1) {
+	sl('kamer', (1+$d['kamer']['s']), basename(__FILE__).':'.__LINE__);
+	$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
+	bosevolume((1+$volume['actualvolume']), 103);           
+} elseif ($status=='On') {
     $item='RkamerR';
     if ($d['raamkamer']['s']=='Open') {
         if ($d[$item]['s']<70) {
@@ -24,5 +28,5 @@ if ($status=='On') {
             sl($item, 100, basename(__FILE__).':'.__LINE__);
         }
     }
-    resetsecurity();
 }
+resetsecurity();
