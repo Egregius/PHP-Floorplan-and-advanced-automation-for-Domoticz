@@ -9,7 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
+if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')&&$d['kamer']['m']==1) {
+	sl('kamer', (1+$d['kamer']['s']), basename(__FILE__).':'.__LINE__);
+	$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
+	bosevolume((1+$volume['actualvolume']), 103);           
+} elseif ($status=='On') {
     $item='RkamerR';
     if ($d[$item]['s']>85) {
         sl($item, 85, basename(__FILE__).':'.__LINE__);

@@ -45,9 +45,9 @@ if ($home==true) {
         exit;
     } 
     
-    elseif ($user=='Guy'&&TIME>strtotime('6:00')&&TIME<strtotime('7:00')) {
+    elseif ($user=='Kirby'&&TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
     	$d=fetchdata();
-    	if ($d['kamer']['m']==0) {
+    	if ($d['kamer']['m']==1) {
     		exit;
     	}
 	}
