@@ -45,6 +45,13 @@ if ($home==true) {
         exit;
     } 
     
+    elseif ($user=='Guy'&&TIME>strtotime('6:00')&&TIME<strtotime('7:00')) {
+    	$d=fetchdata();
+    	if ($d['kamer']['m']==0) {
+    		exit;
+    	}
+	}
+    
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
     	if ($_REQUEST['command']=='volume') {
     		$vol=80-$_REQUEST['action'];
