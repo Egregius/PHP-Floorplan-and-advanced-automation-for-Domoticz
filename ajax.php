@@ -45,16 +45,6 @@ if ($home==true) {
         exit;
     } 
     
-    elseif ($user=='Kirby'&&TIME>strtotime('6:00')&&TIME<strtotime('8:00')) {
-    	$d=fetchdata();
-    	if ($d['kamer']['m']==1) {
-    		sl('kamer', (1+$d['kamer']['s']), basename(__FILE__).':'.__LINE__);
-			$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
-			bosevolume((1+$volume['actualvolume']), 103);  
-    		exit;
-    	}
-	}
-    
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
     	if ($_REQUEST['command']=='volume') {
     		$vol=80-$_REQUEST['action'];
