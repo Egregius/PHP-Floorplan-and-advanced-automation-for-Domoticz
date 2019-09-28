@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['Rliving']['s']<26) {
-	sl('Rliving', 26, basename(__FILE__).':'.__LINE__);
+if ($d['Rliving']['s']<29) {
+	sl('Rliving', 29, basename(__FILE__).':'.__LINE__);
 }
 if ($d['Rbureel']['s']<40) {
 	sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);
