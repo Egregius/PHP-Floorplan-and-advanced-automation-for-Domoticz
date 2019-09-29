@@ -27,7 +27,7 @@ if ($home==true) {
 		lg(' (AJAX)	'.$ipaddress.'	'.$udevice.'	'.$user.$msg);
     } 
     if (isset($_REQUEST['t'])) {
-        $t=time();
+        $t=$_SERVER['REQUEST_TIME'];
         $d=array();
         $d['t']=$t;
         if($_REQUEST['t']==0)$t=0;
@@ -128,10 +128,16 @@ if ($home==true) {
         } elseif ($_REQUEST['command']=='dimmerwake') {
         	storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='dimmersleep') {
-        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+        	if ($_SERVER['REQUEST_TIME']>=strtotime('6:00')&&$_SERVER['REQUEST_TIME']<strtotime('8:00')) {
+        	} else {
+	        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+	        }
 		} elseif ($_REQUEST['command']=='dimmer') {
-        	storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
-        	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+        	if ($_SERVER['REQUEST_TIME']>=strtotime('6:00')&&$_SERVER['REQUEST_TIME']<strtotime('8:00')) {
+        	} else {
+        		storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
+        		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+        	}
 		} elseif ($_REQUEST['command']=='roller') {
         	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
