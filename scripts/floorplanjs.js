@@ -1054,8 +1054,6 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-		items=['zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];        
-        items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
