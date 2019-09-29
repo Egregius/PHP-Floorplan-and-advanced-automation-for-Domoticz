@@ -33,7 +33,7 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>360) {
             store('heating', 3, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=3;
         }
-    } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<16) {
+    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20) {
         if ($d['heating']['s']!=2) {
             store('heating', 2, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=2;
