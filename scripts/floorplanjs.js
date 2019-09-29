@@ -543,6 +543,8 @@ function ajax(Update=$LastUpdateTime){
 									elem.style.width=nsize+'px';
 									elem.style.height='7px';
 								}
+							}catch{}
+							try{
 								if($value==100){
 									html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
 								}else if($value==0){
@@ -558,22 +560,20 @@ function ajax(Update=$LastUpdateTime){
 								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
 								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
 								html+='</div>';
-								try{
-									$('#R'+device).html(html);
-								}catch{}
-								if(localStorage.getItem('view')=='floorplanheating'){
-									try{
-										if(time>($currentTime-82800)){
-											date=new Date(time*1000);
-											hours=date.getHours();
-											minutes="0"+date.getMinutes();
-											document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
-										}else{
-											document.getElementById("t"+device).innerHTML="";
-										}
-									}catch{}
-								}
+								$('#R'+device).html(html);
 							}catch{}
+							if(localStorage.getItem('view')=='floorplanheating'){
+								try{
+									if(time>($currentTime-82800)){
+										date=new Date(time*1000);
+										hours=date.getHours();
+										minutes="0"+date.getMinutes();
+										document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
+									}else{
+										document.getElementById("t"+device).innerHTML="";
+									}
+								}catch{}
+							}
 						}else if(type=="pir"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
