@@ -144,30 +144,33 @@ if ($home==true) {
 	        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 	        }
 		} elseif ($_REQUEST['command']=='dimmer') {
-        	
         	if ($_SERVER['REQUEST_TIME']>=strtotime('6:00')&&$_SERVER['REQUEST_TIME']<strtotime('8:00')) {
-        		if ($user=='Guy'&&$_REQUEST['device']=='eettafel') {
-        			
+        		if ($user=='Kirby'&&$_REQUEST['device']=='kamer') {
         			$d=fetchdata();
-        			if ($d['eettafel']['m']==2&&$_REQUEST['action']<=$d[$_REQUEST['device']]['s']) {
+        			if ($d['kamer']['m']==2) {
         				lg(basename(__FILE__).':'.__LINE__);
         				if ($_REQUEST['action']<=$d[$_REQUEST['device']]['s']) {
-	        				sl('eettafel', (1+$d['eettafel']['s']), basename(__FILE__).':'.__LINE__);
+        					lg(basename(__FILE__).':'.__LINE__);
+	        				sl('kamer', (1+$d['kamer']['s']), basename(__FILE__).':'.__LINE__);
 	        				$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 							bosevolume((1+$volume['actualvolume']), 101);  
 
 	        			} else {
-	        				sl('eettafel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+	        				lg(basename(__FILE__).':'.__LINE__);
+	        				sl('kamer', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	        			}
         			} else {
+        				lg(basename(__FILE__).':'.__LINE__);
         				storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 		        		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		        	}
 		        } else {
+		        	lg(basename(__FILE__).':'.__LINE__);
 					storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 					sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		        }
         	} else {
+        		lg(basename(__FILE__).':'.__LINE__);
         		storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         	}

@@ -199,13 +199,6 @@ function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
- 
-//	if ($name=='eettafel'&&$user=='Guy'&&$d['eettafel']['m']==2) {
-//		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
-//		bosevolume((1+$volume['actualvolume']), 103);  
-//		exit;
-//	}
-    
     lg(' (SETLEVEL)	'.$user.' => '.$name.' => '.$level.' ('.$msg.')');
     if ($d[$name]['i']>0) {
 		if ($d[$name]['s']!=$level) {
