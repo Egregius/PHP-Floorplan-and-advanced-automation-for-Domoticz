@@ -72,6 +72,13 @@ if ($d['auto']['s']=='On') {
 				foreach ($boven as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
+				foreach ($beneden as $i) {
+					if ($d[$i]['m']==0&&$d[$i]['s']<30) sl($i, 30, basename(__FILE__).':'.__LINE__);
+				}
+			} elseif ($zon==0&&$d['auto']['m']==false) {
+				foreach ($beneden as $i) {
+					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		} elseif ($heating==0&&$d['auto']['m']==false) {
 			if ($zon==0) {
@@ -82,7 +89,7 @@ if ($d['auto']['s']=='On') {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
-		}
+		} 
 	} 
 
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
