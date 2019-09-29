@@ -200,10 +200,9 @@ function sl($name,$level,$msg='')
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
  
-	if ($name=='eettafel'&&$user=='Guy'&&$d['eettafel']['m']==1) {
-		sl('kamer', (1+$d['kamer']['s']), basename(__FILE__).':'.__LINE__);
-		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
-		bosevolume((1+$volume['actualvolume']), 103);  
+	if ($name=='eettafel'&&$user=='Guy'&&$d['eettafel']['m']==2) {
+//		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
+//		bosevolume((1+$volume['actualvolume']), 103);  
 		exit;
 	}
     
