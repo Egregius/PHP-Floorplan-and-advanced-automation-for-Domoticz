@@ -22,8 +22,7 @@ if($home){
     } elseif (isset($_POST['Foto'])) {
         shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" >/dev/null 2>/dev/null &');
     } elseif (isset($_POST['Off'])) {
-    	$status='Open';
-    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/Ralex.php?Off" >/dev/null 2>/dev/null &');
+    	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/Ralex.php?status=0" >/dev/null 2>/dev/null &');
     	echo '<script type="text/javascript">
         window.location.replace("/floorplan.php");
     	</script>';
