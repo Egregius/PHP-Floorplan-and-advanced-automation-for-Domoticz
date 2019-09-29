@@ -53,29 +53,65 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Weg.png" id="Weg">';
 								html+='</div>';
 								document.getElementById('Weg').innerHTML=html;
-								if($value==0){
-									document.getElementById("zliving").classList.remove("secured");
-									document.getElementById("zkeuken").classList.remove("secured");
-									document.getElementById("zgarage").classList.remove("secured");
-									document.getElementById("zinkom").classList.remove("secured");
-									document.getElementById("zhalla").classList.remove("secured");
-									document.getElementById("zhallb").classList.remove("secured");
-								}else if($value==1){
-									document.getElementById("zliving").classList.add("secured");
-									document.getElementById("zkeuken").classList.add("secured");
-									document.getElementById("zgarage").classList.add("secured");
-									document.getElementById("zinkom").classList.add("secured");
-									document.getElementById("zhalla").classList.remove("secured");
-									document.getElementById("zhallb").classList.remove("secured");
-								}else if($value==2){
-									document.getElementById("zliving").classList.add("secured");
-									document.getElementById("zkeuken").classList.add("secured");
-									document.getElementById("zgarage").classList.add("secured");
-									document.getElementById("zinkom").classList.add("secured");
-									document.getElementById("zhalla").classList.add("secured");
-									document.getElementById("zhallb").classList.add("secured");
-								}
 							}catch{}
+								if($value==0){
+									try{
+										document.getElementById("zliving").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.remove("secured");
+									}catch{}
+								}else if($value==1){
+									try{
+										document.getElementById("zliving").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.remove("secured");
+									}catch{}
+								}else if($value==2){
+									try{
+										document.getElementById("zliving").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.add("secured");
+									}catch{}
+								}
 						}else if(device=="minmaxtemp"){
 							try{
 								elem=document.getElementById("mintemp");
@@ -488,7 +524,6 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if(device=="bose105"){
 									if($mode=="Online"){
-										html="Online";
 										if($value=="On"){html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
 										else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
 									}else if($mode=="Offline"){html="";}
@@ -498,7 +533,7 @@ function ajax(Update=$LastUpdateTime){
 								}
 								$('#'+device).html(html);
 								if($value=="On"){$('#'+device).attr("src", "/images/bose_On.png");}
-							   else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
+							    else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
 							}catch{}
 						}else if(type=="dimmer"){
 							localStorage.setItem(device, $value);
