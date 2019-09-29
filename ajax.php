@@ -165,12 +165,10 @@ if ($home==true) {
 		        		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		        	}
 		        } else {
-		        	lg(basename(__FILE__).':'.__LINE__);
 					storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 					sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		        }
         	} else {
-        		lg(basename(__FILE__).':'.__LINE__);
         		storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         	}

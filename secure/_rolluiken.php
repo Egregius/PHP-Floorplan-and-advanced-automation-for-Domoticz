@@ -22,6 +22,11 @@ if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
 		if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['RkamerR']['s']>0) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+		if ($d['Rtobi']['s']>0) {
+			if ($d['gcal']['s']==false) {
+				sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+			}
+		}
 		if ($dag==true) {
 			if ($d['Rtobi']['m']==0&&$d['Rtobi']['s']>0&&$d['deurtobi']['s']=='Open') sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&$d['deuralex']['s']=='Open') sl('Ralex', 0, basename(__FILE__).':'.__LINE__);

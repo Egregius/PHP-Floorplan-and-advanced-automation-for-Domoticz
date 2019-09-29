@@ -1098,7 +1098,7 @@ function floorplanothers(){
         html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="https://home.egregius.be/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
         gcal=localStorage.getItem('gcal');
         if(gcal==true)html+='Tobi: Beitem';
-        else html+='Tobi: Rumbeke';
+        else html+='Tobi: Ingelmunster';
         html+='</div>';
         low=localStorage.getItem('regenputleeg');
         high=localStorage.getItem('regenputvol');
