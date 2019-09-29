@@ -129,11 +129,31 @@ if ($home==true) {
         	storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='dimmersleep') {
         	if ($_SERVER['REQUEST_TIME']>=strtotime('6:00')&&$_SERVER['REQUEST_TIME']<strtotime('8:00')) {
+        		if ($user=='Kirby'&&$_REQUEST['device']=='kamer') {
+        			$d=fetchdata();
+        			if ($d['kamer']['m']!=1) {
+			        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+        			}
+        		} else {
+		        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+        		}
         	} else {
 	        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 	        }
 		} elseif ($_REQUEST['command']=='dimmer') {
+        	
         	if ($_SERVER['REQUEST_TIME']>=strtotime('6:00')&&$_SERVER['REQUEST_TIME']<strtotime('8:00')) {
+        		if ($user=='Guy'&&$_REQUEST['device']=='eettafel') {
+        			lg('jaja');
+        			$d=fetchdata();
+        			if ($d['eettafel']['m']!=1) {
+        				storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
+		        		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		        	}
+		        } else {
+					storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
+					sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		        }
         	} else {
         		storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
