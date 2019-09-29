@@ -501,11 +501,15 @@ function ajax(Update=$LastUpdateTime){
 											}
 										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="denon"){
-										if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
-										else $('#denonicon').attr("src", "/images/denon_Off.png");
+										try{
+											if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
+											else $('#denonicon').attr("src", "/images/denon_Off.png");
+										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="lgtv"){
-										if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
-										else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
+										try{
+											if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
+											else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
+										}catch{}
 									}
 								}else if(device=="bureeltobi"){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
@@ -514,7 +518,9 @@ function ajax(Update=$LastUpdateTime){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
 									else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
 								}
-								$('#'+device).html(html);
+								try{
+									$('#'+device).html(html);
+								}catch{}
 							}catch{}
 							localStorage.setItem(device, $value);
 							try{
@@ -532,6 +538,8 @@ function ajax(Update=$LastUpdateTime){
 									else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_Off.png\" id=\""+device+"\" alt=\"bose\"></a>";}
 								}
 								$('#'+device).html(html);
+							}catch{}
+							try{
 								if($value=="On"){$('#'+device).attr("src", "/images/bose_On.png");}
 							    else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
 							}catch{}
