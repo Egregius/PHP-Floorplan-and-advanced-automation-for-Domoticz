@@ -132,7 +132,7 @@ if ($home==true) {
         		if ($user=='Guy'&&$_REQUEST['device']=='eettafel') {
         			$d=fetchdata();
         			if ($d['eettafel']['m']==2) {
-        				lg('jaja'.basename(__FILE__).':'.__LINE__);
+        				lg(basename(__FILE__).':'.__LINE__);
         				sl('eettafel', (1+$d['eettafel']['s']), basename(__FILE__).':'.__LINE__);
         			} else {
 			        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
@@ -149,9 +149,16 @@ if ($home==true) {
         		if ($user=='Guy'&&$_REQUEST['device']=='eettafel') {
         			
         			$d=fetchdata();
-        			if ($d['eettafel']['m']==2) {
-        				lg('jaja'.basename(__FILE__).':'.__LINE__);
-        				sl('eettafel', (1+$d['eettafel']['s']), basename(__FILE__).':'.__LINE__);
+        			if ($d['eettafel']['m']==2&&$_REQUEST['action']<=$d[$_REQUEST['device']]['s']) {
+        				lg(basename(__FILE__).':'.__LINE__);
+        				if ($_REQUEST['action']<=$d[$_REQUEST['device']]['s']) {
+	        				sl('eettafel', (1+$d['eettafel']['s']), basename(__FILE__).':'.__LINE__);
+	        				$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+							bosevolume((1+$volume['actualvolume']), 101);  
+
+	        			} else {
+	        				sl('eettafel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+	        			}
         			} else {
         				storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 		        		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
