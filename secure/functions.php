@@ -303,7 +303,7 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 {
     global $db, $d, $user;
     if (!isset($d)) $d=fetchdata();
-    $time=TIME;
+    $time=time();
 	if ($idx>0) {
 		$db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	} else {
