@@ -314,7 +314,7 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 function storemode($name,$mode,$msg='',$time=0)
 {
     global $db, $user;
-    $time=TIME+$time;
+    $time=time()+$time;
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg(' (STOREMODE)	'.$user.'	=> '.$name.'	=> '.$mode.'	('.$msg.')');
 }
