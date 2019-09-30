@@ -11,6 +11,7 @@
  **/
 if ($d['auto']['s']=='On') {
 	fhall();
+	finkom();
 	fliving();
 }
 if ($d['Weg']['s']!=0) {

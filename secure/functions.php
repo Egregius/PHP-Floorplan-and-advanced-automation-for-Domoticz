@@ -800,7 +800,9 @@ function fliving()
                 sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
             }
         }
-        bosezone(101);
+        if (TIME>=strtotime('5:30')&&TIME<strtotime('21:30')) {
+        	bosezone(101);
+        }
     }
 }
 function fgarage()
@@ -809,7 +811,9 @@ function fgarage()
     if ($d['Weg']['s']==0&&($d['zon']['s']<300||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
         sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
     }
-    bosezone(104);
+    if (TIME>=strtotime('5:30')&&TIME<strtotime('21:30')) {
+    	bosezone(104);
+    }
 }
 function fbadkamer()
 {
