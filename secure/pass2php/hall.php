@@ -14,7 +14,7 @@ if ($status==0) {
         store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
     }
 } else {
-    if ($d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
+    if ($d['Weg']['s']==1) {
         if ($d['Weg']['s']>0) {
         	store('Weg', 0, basename(__FILE__).':'.__LINE__);
         	//$db->query("UPDATE devices set t='0' WHERE n='heating';");
