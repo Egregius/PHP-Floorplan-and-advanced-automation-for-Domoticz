@@ -115,10 +115,6 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         storemode('civil_twilight', strtotime($sunrise['results']['civil_twilight_end']), basename(__FILE__).':'.__LINE__);
     }
     if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
-        if ($d['auto']['m']!=true) {
-            storemode('auto', true, basename(__FILE__).':'.__LINE__);
-            $d['auto']['m']=true;
-        }
         $uv=json_decode(
             shell_exec(
                 "curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"
@@ -132,11 +128,6 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
             if ($uv['result']['uv_max']!=$d['uv']['m']) {
                 storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
             }
-        }
-    } else {
-        if ($d['auto']['m']!=false ) {
-            storemode('auto', false, basename(__FILE__).':'.__LINE__);
-            $d['auto']['m']=false;
         }
     }
 }

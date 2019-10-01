@@ -101,7 +101,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['Weg']['s']>0) {
 			if ($heating==1) {
 				foreach ($benedenall as $i) {
-					if ($d[$i]['m']==0&&$d[$i]['s']<83) sl($i, 83, basename(__FILE__).':'.__LINE__);
+					if ($d[$i]['m']==0&&$d[$i]['s']<84) sl($i, 84, basename(__FILE__).':'.__LINE__);
 				}
 				foreach ($boven as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
