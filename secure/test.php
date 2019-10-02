@@ -13,7 +13,9 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-echo strtotime( 'first day of ' . date( 'F Y'));
+$time=$_SERVER['REQUEST_TIME'];
+$period=strftime('%F',$time-86400*30*3);
+echo date('F jS Y H:i:s', strtotime('first day of '.$period));
 
 
 /*---------------------------*/
