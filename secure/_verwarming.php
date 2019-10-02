@@ -218,20 +218,19 @@ if ($d['Weg']['s']==0) {
         ) {
             if ($d['heater1']['s']!='On') {
                 sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
-                sleep(5);
             }
             sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('111');
         } elseif ($difliving==$difheater2
             && $d['heater2']['s']!='On'
-            && past('heater2')>180
+            && past('heater2')>140
             && $d['el']['s']<8000
         ) {
             sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
             lg('222');
         } elseif ($difliving>=$difheater2
             && $d['heater2']['s']!='Off'
-            && past('heater2')>90
+            && past('heater2')>110
             || $d['el']['s']>8500
         ) {
             sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
