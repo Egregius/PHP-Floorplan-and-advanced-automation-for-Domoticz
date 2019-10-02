@@ -19,14 +19,14 @@ $user='heating';
 2 = Elec
 3 = Elec / Gas
 */
-if ($d['heatingauto']['s']=='On'&&past('heating')>360) {
+if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
         if ($d['heating']['s']!=1) {
             store('heating', 1, basename(__FILE__).':'.__LINE__);
             $d['heating']['s']=1;
         }
-    } elseif ($d['buiten_temp']['s']<12
-        ||$d['minmaxtemp']['m']<12
+    } elseif ($d['buiten_temp']['s']<10
+        ||$d['minmaxtemp']['m']<10
         ||$d['minmaxtemp']['s']<5
     ) {
         if ($d['heating']['s']!=3) {
