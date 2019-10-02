@@ -9,4 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+sl('hall', 100, basename(__FILE__).':'.__LINE__);
+sl('badkamer', 100, basename(__FILE__).':'.__LINE__);
+sl('kamer', 100, basename(__FILE__).':'.__LINE__);
+sl('alex', 100, basename(__FILE__).':'.__LINE__);
+sl('tobi', 100, basename(__FILE__).':'.__LINE__);
 resetsecurity();
