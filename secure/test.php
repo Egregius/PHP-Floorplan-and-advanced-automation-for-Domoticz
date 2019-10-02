@@ -13,7 +13,8 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-if (TIME>=strtotime('10:49')) echo 'ja';else echo 'nee';
+echo strtotime( 'first day of ' . date( 'F Y'));
+
 
 /*---------------------------*/
 echo '</pre>';
