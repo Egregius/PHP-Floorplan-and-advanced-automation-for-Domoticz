@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     $item='Ralex';
-    if (past('8boven-7')>=2) {
+    if (past('8boven-7')<=2) {
         sl($item, 100, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;

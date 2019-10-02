@@ -12,5 +12,8 @@
 if ($status=='On') {
     sl('tobi', 8, basename(__FILE__).':'.__LINE__);
     storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
+    if ($d['Rtobi']['s']<70) {
+    	sl('Rtobi', 100);
+    }
     resetsecurity();
 }
