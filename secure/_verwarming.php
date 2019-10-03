@@ -204,7 +204,7 @@ if ($d['Weg']['s']==0) {
         $difheater2=0;
         $difheater3=-0.2;
         $difheater4=-0.4;
-        $difheater2=-20;$difheater3=-20;$difheater4=-20;
+        $difheater2=-200;$difheater3=-200;$difheater4=-200;
         //lg ('difliving='.$difliving.' - difheater2 = '.$difheater2.' -  1='.$d['heater1']['s'].' 2='.$d['heater2']['s'].'   3='.$d['heater3']['s'].'    4='.$d['heater4']['s']);
         if ($difliving>$difheater2
             && $d['heater1']['s']!='Off'
