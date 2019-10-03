@@ -101,7 +101,7 @@ if (!empty($data)) {
 
 $sunrise=json_decode(
     file_get_contents(
-        'http://api.sunrise-sunset.org/json?lat='
+        'https://api.sunrise-sunset.org/json?lat='
         .$lat.'&lng='
         .$lon.'&date=today&formatted=0'
     ),
