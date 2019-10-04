@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('tuin', null, basename(__FILE__).':'.__LINE__);
+    sw('tuin');
 }
