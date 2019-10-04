@@ -265,7 +265,6 @@ if ($d['Weg']['s']==0) {
         $difheater2=-0.3;
         $difheater3=-0.6;
         $difheater4=-1.0;
-        $difheater2=-200;$difheater3=-200;$difheater4=-200;
         if ($difliving>$difheater2
             && $d['heater1']['s']!='Off'
             && past('heater1')>90
