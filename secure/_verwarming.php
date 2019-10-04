@@ -325,14 +325,60 @@ if ($d['Weg']['s']==0) {
             sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
         }
     } elseif ($d['heating']['s']==4) {//gas
-        if ($d['heater4']['s']!='Off') {
-            sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
+        $difheater2=-1;
+        $difheater3=-1.5;
+        $difheater4=-2;
+        if ($difliving>$difheater2
+            && $d['heater1']['s']!='Off'
+            && past('heater1')>90
+            && past('heater2')>90
+        ) {
+            sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
         }
-        if ($d['heater3']['s']!='Off') {
+        if ($difliving<$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>90
+            && $d['el']['s']<8000
+        ) {
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
+        } elseif ($difliving==$difheater2
+            && $d['heater2']['s']!='On'
+            && past('heater2')>180
+            && $d['el']['s']<8000
+        ) {
+            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
+        } elseif ($difliving>=$difheater2
+            && $d['heater2']['s']!='Off'
+            && past('heater2')>90
+            || $d['el']['s']>8500
+        ) {
+            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
+        }
+        if ($difliving<$difheater3
+            && $d['heater3']['s']!='On'
+            && past('heater3')>90
+            && $d['el']['s']<7000
+        ) {
+            sw('heater3', 'On', basename(__FILE__).':'.__LINE__);
+        } elseif ($difliving>=$difheater3
+            && $d['heater3']['s']!='Off'
+            && past('heater3')>30
+            || $d['el']['s']>8000
+        ) {
             sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
         }
-        if ($d['heater2']['s']!='Off') {
-            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
+        if ($difliving<$difheater4
+            && $d['heater4']['s']!='On'
+            && past('heater4')>90
+            && $d['el']['s']<6000
+        ) {
+            sw('heater4', 'On', basename(__FILE__).':'.__LINE__);
+        } elseif ($difliving>=$difheater4
+            && $d['heater4']['s']!='Off'
+            && past('heater4')>30
+            || $d['el']['s']>7000
+        ) {
+            sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
         }
     } elseif ($d['heating']['s']==1) {//Cooling
         if ($d['heater4']['s']!='Off') {
