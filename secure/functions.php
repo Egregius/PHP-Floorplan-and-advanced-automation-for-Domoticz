@@ -672,7 +672,7 @@ function bosezone($ip,$vol='')
             bosekey($preset, 0, 101);
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosevolume(25, 101);
-        } elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
+        } /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
             if (isset($volume['actualvolume'])) {
                 $cv=$volume['actualvolume'];
@@ -680,7 +680,7 @@ function bosezone($ip,$vol='')
                     bosevolume(10, 101);
                 }
             }
-        }
+        }*/
         if ($ip>101) {
             sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
             if ($ip==102) {
