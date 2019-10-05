@@ -1,7 +1,7 @@
 <?php
 header("Content-type:text/css;charset:UTF-8");
 //header("Expires:".gmdate("D, d M Y H:i:s",time()+1)." GMT");
-header("Expires:".gmdate("D, d M Y H:i:s",time()+3600)." GMT");
+header("Expires:".gmdate("D, d M Y H:i:s",time()+21600)." GMT");
 if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
 else $udevice='other';

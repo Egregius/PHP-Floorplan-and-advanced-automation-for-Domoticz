@@ -323,6 +323,7 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById("heating").innerHTML=html;
 							}catch{}
 							localStorage.setItem("bigdif", $mode);
+							localStorage.setItem(device, $value);
 							try{
 								html='<td></td><td width="65px">';
 								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating()"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral</td>';
