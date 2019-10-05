@@ -28,8 +28,8 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		if ($dag==true) {
-			if ($d['Rtobi']['m']==0&&$d['Rtobi']['s']>0&&$d['deurtobi']['s']=='Open') sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&$d['deuralex']['s']=='Open') sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rtobi']['m']==0&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true&&$zon==0) {
 			foreach ($beneden as $i) {
