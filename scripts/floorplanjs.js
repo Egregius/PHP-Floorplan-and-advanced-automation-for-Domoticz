@@ -385,14 +385,26 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}
 						}else if(device=="brander"){
+							localStorage.setItem(device, $value);
 							try{
 								if($value=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">';
 								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
 								document.getElementById("brander").innerHTML=html;
 							}catch{}
-							try{
+							//try{
 								//BRANDERFLOORPLAN
-							}catch{}
+								heating=localStorage.getItem('heating');
+								console.log(heating);
+								if(heating==4){
+									if($value=="Off")$('#branderfloorplan').attr("src", "/images/fire_Off.png");
+									else $('#branderfloorplan').attr("src", "/images/fire_On.png");
+								} else if(heating==3){
+									if($value=="Off")$('#branderfloorplan').attr("src", "/images/gaselec_Off.png");
+									else $('#branderfloorplan').attr("src", "/images/gaselec_On.png");
+								} else {
+									$('#branderfloorplan').attr("src", "");
+								}
+							//}catch{}
 						}else if(device=="heatingauto"){
 							try{
 								if($value=="Off")html='<td></td><td width="65px"><img src="images/fire_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>';
