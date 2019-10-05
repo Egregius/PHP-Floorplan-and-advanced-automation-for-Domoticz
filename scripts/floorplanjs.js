@@ -313,11 +313,11 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
 								else if($value==3){
-									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/gaselec_On.png" class="i40" alt="Gas">';
+									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/gaselec_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/gaselec_Off.png" class="i40" alt="Gas">';
 								}
 								else if($value==4){
-									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" alt="Gas">';
+									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
 								}
 								document.getElementById("heating").innerHTML=html;
@@ -389,6 +389,9 @@ function ajax(Update=$LastUpdateTime){
 								if($value=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">';
 								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
 								document.getElementById("brander").innerHTML=html;
+							}catch{}
+							try{
+								//BRANDERFLOORPLAN
 							}catch{}
 						}else if(device=="heatingauto"){
 							try{
