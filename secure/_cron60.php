@@ -128,13 +128,10 @@ if ($d['auto']['s']=='On') {
                     if ($level==20) {
                         $level=21;
                     }
-                    if ($level>50) {
-                        $level=50;
+                    if ($level>100) {
+                        $level=100;
                     }
                     sl($item, $level, basename(__FILE__).':'.__LINE__);
-                    if ($level==50) {
-                        storemode($item, 0, basename(__FILE__).':'.__LINE__);
-                    }
                 }
             } elseif ($d[$item]['s']==0&&$item=='alex') {
                 if ($d[$item]['m']==3) {
