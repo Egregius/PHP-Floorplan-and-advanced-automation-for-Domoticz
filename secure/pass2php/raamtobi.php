@@ -9,11 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
+if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
     storemode('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-}
-if ($status=='Open') {
-    $d['raamtobi']['s']='Open';
-    $d['Rtobi']['m']=0;
-    include '_rolluiken.php';
+    sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 }
