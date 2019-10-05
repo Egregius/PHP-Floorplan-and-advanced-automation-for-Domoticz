@@ -50,7 +50,7 @@ if (isset($_REQUEST['gpio'])) {
         $douchegas=$d['douche']['s']*10;
         $douchewater=$d['douche']['m']*1;
         $euro=($douchegas*0.0004)+($douchewater*0.005);
-        lg('Douche = '.round($euro*100));
+        lg('Douche = '.$euro));
         if ($euro>0&&round($euro*100)%450==0) {
             douchewarn($euro, 69);
         } elseif ($euro>0&&round($euro*100)%400==0) {
