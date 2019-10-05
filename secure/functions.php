@@ -696,7 +696,7 @@ function bosezone($ip,$vol='')
                 bosekey($preset, 0, 101);
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-                if ($d['denonpower']['s']=='ON') {
+                if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') {
                     bosevolume(0, 101);
                 } else {
                     bosevolume(25, 101);
