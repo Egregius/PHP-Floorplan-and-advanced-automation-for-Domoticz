@@ -21,6 +21,7 @@ if (isset($_REQUEST['gpio'])) {
         store('gasvandaag', $d['gasvandaag']['s']+1, basename(__FILE__).':'.__LINE__);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80) {
             store('douche', $d['douche']['s']+1, basename(__FILE__).':'.__LINE__);
+            $d['douche']['s']=$d['douche']['s']+1;
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
                 sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
         }
@@ -28,6 +29,7 @@ if (isset($_REQUEST['gpio'])) {
         store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80) {
             storemode('douche', $d['douche']['m']+1, basename(__FILE__).':'.__LINE__, 1);
+            $d['douche']['m']=$d['douche']['m']+1;
         } elseif ($d['water']['s']=='On') {
             storemode('watertuin', $d['watertuin']['m']+1, basename(__FILE__).':'.__LINE__, 1);
         }
@@ -47,10 +49,9 @@ if (isset($_REQUEST['gpio'])) {
         die('Unknown');
     }
     if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80)) {
-        $douchegas=$d['douche']['s']*10;
-        $douchewater=$d['douche']['m']*1;
-        $euro=($douchegas*0.0004)+($douchewater*0.005);
-        lg('Douche = '.$euro));
+        $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
+
+        lg('Douche = '.$euro.', round='.round($euro*100));
         if ($euro>0&&round($euro*100)%450==0) {
             douchewarn($euro, 69);
         } elseif ($euro>0&&round($euro*100)%400==0) {

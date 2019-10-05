@@ -291,7 +291,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								douchegas=$value * 10;
 								douchewater=$mode;
-								douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
+								douchegaseuro=parseFloat(Math.round(douchegas * 0.004*10)/10).toFixed(2);
 								douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
 								if($value>0){
 									html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" &#8364;</td>";

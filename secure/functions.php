@@ -116,8 +116,8 @@ function douche()
 function douchewarn($euro,$vol)
 {
     global $boseipbadkamer;
-    $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-    /*shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
+    /*$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
+    shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
     $cv=$volume['actualvolume'];
     if ($cv<$vol) {
         usleep(1550000);
