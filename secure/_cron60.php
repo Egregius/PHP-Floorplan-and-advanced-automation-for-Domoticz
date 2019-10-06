@@ -211,21 +211,23 @@ if ($d['auto']['s']=='On') {
     }
     /* -------------------------------------------- SLAPEN --------------------------*/
     if ($d['Weg']['s']==1) {
-        $uit=600;
+        
+    }
+    /* -------------------------------------------- SLAPEN OF WEG ---------------*/
+    if ($d['Weg']['s']>=1) {
+    	$uit=600;
         $items=array('pirgarage','pirkeuken','pirliving','pirinkom');
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
                 ud($item, 0, 'Off');
-                lg($item.' uitgeschakeld omdat we slapen');
+                lg($item.' uitgeschakeld omdat we slapen of weg zijn');
             }
         }
         $items=array(
-            'hall',
             'bureel',
             'denon',
             'kristal',
             'garage',
-            'terras',
             'tuin',
             'voordeur',
             'keuken',
@@ -239,22 +241,19 @@ if ($d['auto']['s']=='On') {
             if ($d[$item]['s']!='Off') {
                 if (past($item)>$uit) {
                     sw($item, 'Off', basename(__FILE__).':'.__LINE__);
-                    lg($item.' uitgeschakeld omdat we slapen');
+                    lg($item.' uitgeschakeld omdat we slapen of weg zijn');
                 }
             }
         }
-        $items=array('eettafel','zithoek');
+        $items=array('eettafel','zithoek','hall','inkom','terras');
         foreach ($items as $item) {
             if ($d[$item]['s']>0) {
                 if (past($item)>$uit) {
                     sl($item, 0, basename(__FILE__).':'.__LINE__);
-                    lg($item.' uitgeschakeld omdat we slapen');
+                    lg($item.' uitgeschakeld omdat we slapen of weg zijn');
                 }
             }
         }
-    }
-    /* -------------------------------------------- SLAPEN OF WEG ---------------*/
-    if ($d['Weg']['s']>=1) {
     }
     /* -------------------------------------------- WEG ----------------------------*/
     if ($d['Weg']['s']==2) {
