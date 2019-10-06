@@ -148,66 +148,6 @@ if ($d['auto']['s']=='On') {
                 }
             }
         }
-        if (TIME>=strtotime('6:00')&&TIME<strtotime('6:05')) {
-        	if ($d['kamer']['m']!=2) {
-        		sl('kamer', 1, basename(__FILE__).':'.__LINE__);
-        		storemode('kamer', 2, basename(__FILE__).':'.__LINE__);
-        		$d['kamer']['m']=2;
-        	}
-        }
-        if ($d['kamer']['m']==2) {
-            $nowplaying=json_decode(
-				json_encode(
-					simplexml_load_string(
-						file_get_contents('http://192.168.2.103:8090/now_playing')
-					)
-				),
-				true
-			);
-			if (!empty($nowplaying)) {
-				if (TIME>=strtotime('7:00')) $nv=32;
-				elseif (TIME>=strtotime('6:30')) $nv=31;
-				elseif (TIME>=strtotime('6:28')) $nv=29;
-				elseif (TIME>=strtotime('6:26')) $nv=28;
-				elseif (TIME>=strtotime('6:24')) $nv=27;
-				elseif (TIME>=strtotime('6:22')) $nv=26;
-				elseif (TIME>=strtotime('6:20')) $nv=25;
-				elseif (TIME>=strtotime('6:18')) $nv=24;
-				elseif (TIME>=strtotime('6:16')) $nv=23;
-				elseif (TIME>=strtotime('6:14')) $nv=22;
-				elseif (TIME>=strtotime('6:12')) $nv=21;
-				elseif (TIME>=strtotime('6:10')) $nv=20;
-				elseif (TIME>=strtotime('6:09')) $nv=19;
-				elseif (TIME>=strtotime('6:08')) $nv=18;
-				elseif (TIME>=strtotime('6:07')) $nv=17;
-				elseif (TIME>=strtotime('6:06')) $nv=16;
-				elseif (TIME>=strtotime('6:05')) $nv=15;
-				elseif (TIME>=strtotime('6:04')) $nv=14;
-				elseif (TIME>=strtotime('6:03')) $nv=13;
-				elseif (TIME>=strtotime('6:02')) $nv=12;
-				elseif (TIME>=strtotime('6:01')) $nv=11;
-				else $nv=10;
-				if (isset($nowplaying['@attributes']['source'])) {
-					if ($nowplaying['@attributes']['source']!='STANDBY') {
-						$volume=json_decode(
-							json_encode(
-								simplexml_load_string(
-									file_get_contents("http://192.168.2.103:8090/volume")
-								)
-							),
-							true
-						);
-						$cv=$volume['actualvolume'];
-						if ($cv<=$nv) {
-							bosevolume($nv, 103);
-						} 
-					} else {
-						bosezone(103, $nv);
-						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
-					}
-				}
-			}
-        }
     }
     /* -------------------------------------------- SLAPEN --------------------------*/
     if ($d['Weg']['s']==1) {
