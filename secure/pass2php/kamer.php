@@ -10,9 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status==0) {
-	if ($d['kamer']['m']!=0) {
-	    storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
-	}
 	if (TIME<strtotime('20:00')) {
 		if ($d['bose103']['s']=='On') {
 			$status=json_decode(

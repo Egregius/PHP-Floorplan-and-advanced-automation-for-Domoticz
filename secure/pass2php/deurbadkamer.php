@@ -11,6 +11,11 @@
  **/
 if ($status=='Open'&&$d['auto']['s']) {
     fbadkamer();
+    if ($d['kamer']['m']!=0) {
+    	if (past('kamer')<90) {
+		    storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
+		}
+	}
 } else {
     if (past('8badkamer-8')>10) {
         if($d['zon']['s']==0||(TIME>strtotime('5:00')&& TIME<strtotime('10:00'))) $d['lichtbadkamer']['s']=25;

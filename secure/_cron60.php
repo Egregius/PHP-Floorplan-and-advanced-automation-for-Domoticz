@@ -111,28 +111,30 @@ if ($d['auto']['s']=='On') {
         $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
             if ($d[$item]['s']!=0) {
-                if ($d[$item]['m']==1) {
-                    $level=floor($d[$item]['s']*0.95);
-                    if ($level<2) {
-                        $level=0;
-                    }
-                    if ($level==20) {
-                        $level=19;
-                    }
-                    sl($item, $level, basename(__FILE__).':'.__LINE__);
-                    if ($level==0) {
-                        storemode($item, 0, basename(__FILE__).':'.__LINE__);
-                    }
-                } elseif ($d[$item]['m']==2) {
-                    $level=$d[$item]['s']+1;
-                    if ($level==20) {
-                        $level=21;
-                    }
-                    if ($level>100) {
-                        $level=100;
-                    }
-                    sl($item, $level, basename(__FILE__).':'.__LINE__);
-                }
+            	if (past($item>58) {
+					if ($d[$item]['m']==1) {
+						$level=floor($d[$item]['s']*0.95);
+						if ($level<2) {
+							$level=0;
+						}
+						if ($level==20) {
+							$level=19;
+						}
+						sl($item, $level, basename(__FILE__).':'.__LINE__);
+						if ($level==0) {
+							storemode($item, 0, basename(__FILE__).':'.__LINE__);
+						}
+					} elseif ($d[$item]['m']==2) {
+						$level=$d[$item]['s']+1;
+						if ($level==20) {
+							$level=21;
+						}
+						if ($level>100) {
+							$level=100;
+						}
+						sl($item, $level, basename(__FILE__).':'.__LINE__);
+					}
+				}
             } elseif ($d[$item]['s']==0&&$item=='alex') {
                 if ($d[$item]['m']==3) {
                     if ($d['raamalex']['s']=='Open') {
