@@ -8,7 +8,6 @@ function navigator_Go(url){window.location.assign(url);}
     }, false);
 }, false);*/
 $LastUpdateTime=parseInt(0);
-$more=false;
 function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
     $.ajax({
@@ -25,18 +24,13 @@ function ajax(Update=$LastUpdateTime){
             for (device in d){
                 if(d.hasOwnProperty(device)){
                     if(device=="t"){
-                        if($LastUpdateTime>100&&$more==false){
+                        if($LastUpdateTime>100){
 							if($LastUpdateTime<=$currentTime-15){
-								$LastUpdateTime=parseInt(0);
-								$more=true;
 								console.log("LastUpdateTime set to 0");
-							}else{
-								$LastUpdateTime=parseInt(d['t']);
-								$more=false;
+								ajax(0);
 							}
                         }else{
                         	$LastUpdateTime=parseInt(d['t']);
-                        	$more=false;
                         }
                     }else{
                     	$value=d[device]['s'];
@@ -357,7 +351,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="zoldervuur"){
 							try{
-								if($value=="On")html='<img src="images/Fire_On.png" width="28px" height="auto" alt="">';
+								if($value=="On")html='<img src="images/fire_On.png" width="28px" height="auto" alt="">';
 								else html='';
 								document.getElementById("zoldervuur2").innerHTML=html;
 							}catch{}
