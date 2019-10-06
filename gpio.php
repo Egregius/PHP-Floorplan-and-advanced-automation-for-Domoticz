@@ -52,23 +52,23 @@ if (isset($_REQUEST['gpio'])) {
         $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 
         lg('Douche = '.$euro.', round='.round($euro*1000));
-        if ($euro>0&&round($euro*1000)%450==0) {
+        if ($euro>0&&round($euro*1000)%4500==0) {
             douchewarn($euro, 69);
-        } elseif ($euro>0&&round($euro*1000)%400==0) {
+        } elseif ($euro>0&&round($euro*1000)%4000==0) {
             douchewarn($euro, 66);
-        } elseif ($euro>0&&round($euro*1000)%350==0) {
+        } elseif ($euro>0&&round($euro*1000)%3500==0) {
             douchewarn($euro, 63);
-        } elseif ($euro>0&&round($euro*1000)%300==0) {
+        } elseif ($euro>0&&round($euro*1000)%3000==0) {
             douchewarn($euro, 60);
-        } elseif ($euro>0&&round($euro*1000)%250==0) {
+        } elseif ($euro>0&&round($euro*1000)%2500==0) {
             douchewarn($euro, 57);
-        } elseif ($euro>0&&round($euro*1000)%200==0) {
+        } elseif ($euro>0&&round($euro*1000)%2000==0) {
             douchewarn($euro, 54);
-        } elseif ($euro>0&&round($euro*1000)%150==0) {
+        } elseif ($euro>0&&round($euro*1000)%1500==0) {
             douchewarn($euro, 51);
-        } elseif ($euro>0&&round($euro*1000)%100==0) {
+        } elseif ($euro>0&&round($euro*1000)%1000==0) {
             douchewarn($euro, 48);
-        } elseif ($euro>0&&round($euro*1000)%50==0) {
+        } elseif ($euro>0&&round($euro*1000)%500==0) {
             douchewarn($euro, 45);
         }
     }
