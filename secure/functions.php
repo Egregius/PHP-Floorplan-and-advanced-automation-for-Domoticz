@@ -681,7 +681,9 @@ function bosezone($ip,$vol='')
             }
         }*/
         if ($ip>101) {
-            sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+        	if ($d['bose'.$ip]['s']!='On') {
+	            sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+	        }
             if ($ip==102) {
                 $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
             } elseif ($ip==103) {
