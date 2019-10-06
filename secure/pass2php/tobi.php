@@ -13,4 +13,10 @@ if ($status==0) {
 	if ($d['tobi']['m']!=0) {
 	    storemode('tobi', 0, basename(__FILE__).':'.__LINE__);
 	}
+} else {
+	if (TIME>strtotime('6:00')&&TIME<strtotime('10:00') {
+		if ($d['Rtobi']['s']>0) {
+			sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
