@@ -30,11 +30,11 @@ function ajax(Update=$LastUpdateTime){
 								$LastUpdateTime=parseInt(0);
 								$more=true;
 								console.log("LastUpdateTime set to 0");
-							}else {
+							}else{
 								$LastUpdateTime=parseInt(d['t']);
 								$more=false;
 							}
-                        }else {
+                        }else{
                         	$LastUpdateTime=parseInt(d['t']);
                         	$more=false;
                         }
@@ -49,7 +49,7 @@ function ajax(Update=$LastUpdateTime){
 						minutes="0"+date.getMinutes();
 						seconds="0"+date.getSeconds();
 						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-						console.log($time+': '+device+' = '+ $value);
+						console.log($LastUpdateTime+' '+$time+': '+device+' = '+ $value);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
@@ -400,7 +400,6 @@ function ajax(Update=$LastUpdateTime){
 							//try{
 								//BRANDERFLOORPLAN
 								heating=localStorage.getItem('heating');
-								console.log(heating);
 								if(heating==4){
 									if($value=="Off")$('#branderfloorplan').attr("src", "/images/fire_Off.png");
 									else $('#branderfloorplan').attr("src", "/images/fire_On.png");
