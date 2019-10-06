@@ -25,8 +25,8 @@ function ajax(Update=$LastUpdateTime){
                 if(d.hasOwnProperty(device)){
                     if(device=="t"){
                         if($LastUpdateTime>100){
-							if($LastUpdateTime<=$currentTime-15){
-								console.log("LastUpdateTime set to 0");
+							if($LastUpdateTime<=$currentTime-10){
+								console.log("Last more than 10 seconds ago, fetching everything.");
 								ajax(0);
 							}else{
                         		$LastUpdateTime=parseInt(d['t']);
@@ -1041,7 +1041,7 @@ function floorplan(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplan');
     ajax(0);
-	myAjax=setInterval(ajax, 999);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
@@ -1079,7 +1079,7 @@ function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
     ajax(0);
-	myAjax=setInterval(ajax, 999);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
@@ -1118,8 +1118,8 @@ function floorplanmedia(){
 	localStorage.setItem('view', 'floorplanmedia');
     ajax(0);
     ajaxmedia();
-    myAjax=setInterval(ajax, 999);
-    myAjaxmedia=setInterval(ajaxmedia, 999);
+    myAjax=setInterval(ajax, 800);
+    myAjaxmedia=setInterval(ajaxmedia, 900);
     denon=localStorage.getItem('denon');
     lgtv=localStorage.getItem('lgtv');
     try{
