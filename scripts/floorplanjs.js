@@ -44,7 +44,12 @@ function ajax(Update=$LastUpdateTime){
 						type=d[device]['dt'];
 						$icon=d[device]['ic'];
 						time=d[device]['t'];
-						console.log(device+' = '+ $value);
+						date=new Date($currentTime*1000);
+						hours=date.getHours();
+						minutes="0"+date.getMinutes();
+						seconds="0"+date.getSeconds();
+						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+						console.log($time+': '+device+' = '+ $value);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
