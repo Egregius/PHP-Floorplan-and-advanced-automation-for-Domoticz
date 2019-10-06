@@ -28,8 +28,11 @@ function ajax(Update=$LastUpdateTime){
 							if($LastUpdateTime<=$currentTime-15){
 								console.log("LastUpdateTime set to 0");
 								ajax(0);
+							}else{
+                        		$LastUpdateTime=parseInt(d['t']);
 							}
                         }else{
+                        	console.log("LastUpdateTime = " + $LastUpdateTime);
                         	$LastUpdateTime=parseInt(d['t']);
                         }
                     }else{
