@@ -15,7 +15,7 @@
 require 'secure/functions.php';
 $_SESSION['referer']='floorplan.php';
 require 'secure/authentication.php';
-if ($home) {
+if ($home==true) {
     createheader('floorplan');
     echo '
 	<body class="floorplan">
