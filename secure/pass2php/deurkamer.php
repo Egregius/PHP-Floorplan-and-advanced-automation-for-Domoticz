@@ -15,9 +15,7 @@ if ($d['auto']['s']=='On') {
 	} elseif ($status=='Closed') {
  
 	}
-	if ($d['kamer']['m']!=0) {
-    	if (past('kamer')<90) {
-		    storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
-		}
-	}
+}
+if ($d['kamer']['m']!=0&&$d['kamer']['s']==0&&past('kamer')<90) {
+	storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
 }

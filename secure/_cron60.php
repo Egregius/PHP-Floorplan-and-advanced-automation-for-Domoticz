@@ -111,7 +111,7 @@ if ($d['auto']['s']=='On') {
         $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
             if ($d[$item]['s']!=0) {
-            	if (past($item>58) {
+            	if (past($item)>58) {
 					if ($d[$item]['m']==1) {
 						$level=floor($d[$item]['s']*0.95);
 						if ($level<2) {
