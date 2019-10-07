@@ -506,8 +506,7 @@ if ($d['deurbadkamer']['s']=='Open'
     && (past('deurbadkamer')>57
     || $d['lichtbadkamer']['s']==0)
 ) {
-    store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-    $d['badkamer_set']['s']=10.0;
+    $x=10;
 } elseif ($d['deurbadkamer']['s']=='Closed') {
     $b7=past('8badkamer-7');
     $b7b=past('8Kamer-7');
@@ -522,8 +521,7 @@ if ($d['deurbadkamer']['s']=='Open'
         && ($b7>900
         && ($d['heating']['s']==0||$d['heating']['s']>=2))
     ) {
-        store('badkamer_set', 22.5, basename(__FILE__).':'.__LINE__);
-        $d['badkamer_set']['s']=22.5;
+        $x=22.5;
     } elseif ($b7>900
         && $d['lichtbadkamer']['s']==0
         && $d['buiten_temp']['s']<21
@@ -544,7 +542,7 @@ if ($d['deurbadkamer']['s']=='Open'
             elseif (TIME>=strtotime('3:15') && TIME<=strtotime('6:45'))$x=14.5;
             elseif (TIME>=strtotime('3:00') && TIME<=strtotime('6:45'))$x=14;
             elseif ($d['badkamer_set']['s']!=10)$x=10;
-        } elseif ($d['badkamer_set']['s']!=10) $x=10;
+        } elseif ($d['badkamer_set']['s']!=10)$x=10;
     } elseif ($b7>900
         && ($d['lichtbadkamer']['s']==0
         && $d['badkamer_set']['s']!=10)
