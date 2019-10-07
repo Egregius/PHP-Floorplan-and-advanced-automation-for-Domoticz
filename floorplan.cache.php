@@ -44,7 +44,9 @@ if ($home) {
 				{
 					"bStateSave": true,
 					"bPaginate": false,
-                    "ordering": false
+                    "ordering": false,
+                    "fnInitComplete":function(){
+						$("#table_filter input").focus();}
 				});
 			});
 		</script>
