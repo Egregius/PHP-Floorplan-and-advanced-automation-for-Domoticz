@@ -1,12 +1,12 @@
 function navigator_Go(url){window.location.assign(url);}
-/*window.addEventListener('load', function(e) {
+window.addEventListener('load', function(e) {
     window.applicationCache.addEventListener('updateready', function(e) {
         if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
             window.applicationCache.swapCache();
             setTimeout(window.location.reload(), 0);
         }
     }, false);
-}, false);*/
+}, false);
 $LastUpdateTime=parseInt(0);
 function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
