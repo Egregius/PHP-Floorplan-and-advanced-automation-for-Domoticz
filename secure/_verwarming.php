@@ -500,27 +500,14 @@ if ($d['heating']['s']==3) {
 if ($bigdif!=$d['heating']['m']) {
     storemode('heating', $bigdif, basename(__FILE__).':'.__LINE__);
 }
-
+$x=10;
 if ($d['deurbadkamer']['s']=='Open'&&(past('deurbadkamer')>57||$d['lichtbadkamer']['s']==0))$x=10;
 elseif ($d['deurbadkamer']['s']=='Closed') {
     $b7=past('8badkamer-7');
     $b7b=past('8Kamer-7');
-    if ($b7b<$b7) {
-        $b7=$b7b;
-    }
-    if ($d['buiten_temp']['s']<21
-        && $d['lichtbadkamer']['s']>0
-        && TIME>strtotime('5:00')
-        && TIME<strtotime('7:00')
-        && ($b7>900
-        && ($d['heating']['s']==0||$d['heating']['s']>=2))
-    ) {
-        $x=22.5;
-    } elseif ($b7>900
-        && $d['lichtbadkamer']['s']==0
-        && $d['buiten_temp']['s']<21
-        && $d['Weg']['s']<2
-    ) {
+    if($b7b<$b7)$b7=$b7b;
+    if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&TIME>strtotime('5:00')&&TIME<strtotime('7:00')&&($b7>900&&($d['heating']['s']==0||$d['heating']['s']>=2)))$x=22.5;
+    elseif ($b7>900&&$d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<21&&$d['Weg']['s']<2) {
         if ($d['heating']['s']>=2) {
             if     (TIME>=strtotime('6:00') && TIME<=strtotime('6:45'))$x=20;
             elseif (TIME>=strtotime('5:45') && TIME<=strtotime('6:45'))$x=19.5;
@@ -535,11 +522,9 @@ elseif ($d['deurbadkamer']['s']=='Closed') {
             elseif (TIME>=strtotime('3:30') && TIME<=strtotime('6:45'))$x=15;
             elseif (TIME>=strtotime('3:15') && TIME<=strtotime('6:45'))$x=14.5;
             elseif (TIME>=strtotime('3:00') && TIME<=strtotime('6:45'))$x=14;
-            else $x=10;
-        } else $x=10;
-    } elseif ($b7>900&&$d['lichtbadkamer']['s']==0||$d['Weg']['s']==2)$x=10;
-    elseif ($d['lichtbadkamer']['s']==0)$x=10;
-} else $x=10;
+        }
+    }
+}
 if ($d['badkamer_set']['s']!=$x) {
 	store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 	$d['badkamer_set']['s']=$x;
