@@ -51,24 +51,24 @@ if (isset($_REQUEST['gpio'])) {
     if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80)) {
         $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 
-        lg('Douche = '.$euro.', round='.round($euro*1000));
-        if ($euro>0&&round($euro*1000)%4500==0) {
+        lg('Douche = '.$euro.', round='.round($euro*100));
+        if ($euro>0&&round($euro*100)%450==0) {
             douchewarn($euro, 69);
-        } elseif ($euro>0&&round($euro*1000)%4000==0) {
+        } elseif ($euro>0&&round($euro*100)%400==0) {
             douchewarn($euro, 66);
-        } elseif ($euro>0&&round($euro*1000)%3500==0) {
+        } elseif ($euro>0&&round($euro*100)%350==0) {
             douchewarn($euro, 63);
-        } elseif ($euro>0&&round($euro*1000)%3000==0) {
+        } elseif ($euro>0&&round($euro*100)%300==0) {
             douchewarn($euro, 60);
-        } elseif ($euro>0&&round($euro*1000)%2500==0) {
+        } elseif ($euro>0&&round($euro*100)%250==0) {
             douchewarn($euro, 57);
-        } elseif ($euro>0&&round($euro*1000)%2000==0) {
+        } elseif ($euro>0&&round($euro*100)%200==0) {
             douchewarn($euro, 54);
-        } elseif ($euro>0&&round($euro*1000)%1500==0) {
+        } elseif ($euro>0&&round($euro*100)%150==0) {
             douchewarn($euro, 51);
-        } elseif ($euro>0&&round($euro*1000)%1000==0) {
+        } elseif ($euro>0&&round($euro*100)%100==0) {
             douchewarn($euro, 48);
-        } elseif ($euro>0&&round($euro*1000)%500==0) {
+        } elseif ($euro>0&&round($euro*100)%50==0) {
             douchewarn($euro, 45);
         }
     }
