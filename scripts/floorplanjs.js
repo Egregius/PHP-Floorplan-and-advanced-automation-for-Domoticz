@@ -315,18 +315,24 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
 								else if($value==3){
-									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" alt="Gas">';
+									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/gaselec_On.png" class="i40" id="branderfloorplan" alt="Gas">';
+									else html+='<img src="https://home.egregius.be/images/gaselec_Off.png" class="i40" alt="Gas">';
+								}
+								else if($value==4){
+									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
 								}
 								document.getElementById("heating").innerHTML=html;
 							}catch{}
 							localStorage.setItem("bigdif", $mode);
+							localStorage.setItem(device, $value);
 							try{
 								html='<td></td><td width="65px">';
-								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating()"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral</td>';
-								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating()"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling</td>';
-								else if($value==2)html+='<img src="images/Elec.png" onclick="heating()"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec</td>';
-								else if($value==3)html+='<img src="images/fire_On.png" onclick="heating()"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec</td>';
+								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral</td>';
+								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling</td>';
+								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec</td>';
+								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec</td>';
+								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
@@ -348,7 +354,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="zoldervuur"){
 							try{
-								if($value=="On")html='<img src="images/Fire_On.png" width="28px" height="auto" alt="">';
+								if($value=="On")html='<img src="images/fire_On.png" width="28px" height="auto" alt="">';
 								else html='';
 								document.getElementById("zoldervuur2").innerHTML=html;
 							}catch{}
@@ -382,11 +388,34 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}
 						}else if(device=="brander"){
+
+
+							localStorage.setItem(device, $value);
 							try{
 								if($value=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">';
 								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
 								document.getElementById("brander").innerHTML=html;
 							}catch{}
+							/*try{
+								//BRANDERFLOORPLAN
+								heating=localStorage.getItem('heating');
+								if(heating==4){
+									if($value=="Off")$('#branderfloorplan').attr("src", "/images/fire_Off.png");
+									else $('#branderfloorplan').attr("src", "/images/fire_On.png");
+								} else if(heating==3){
+									if($value=="Off")$('#branderfloorplan').attr("src", "/images/gaselec_Off.png");
+									else $('#branderfloorplan').attr("src", "/images/gaselec_On.png");
+								} else {
+									$('#branderfloorplan').attr("src", "");
+								}
+							}catch{}*/
+						
+						
+							/*try{
+								if($value=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">';
+								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
+								document.getElementById("brander").innerHTML=html;
+							}catch{}*/
 						}else if(device=="heatingauto"){
 							try{
 								if($value=="Off")html='<td></td><td width="65px"><img src="images/fire_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>';
@@ -503,11 +532,15 @@ function ajax(Update=$LastUpdateTime){
 											}
 										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="denon"){
-										if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
-										else $('#denonicon').attr("src", "/images/denon_Off.png");
+										try{
+											if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
+											else $('#denonicon').attr("src", "/images/denon_Off.png");
+										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="lgtv"){
-										if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
-										else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
+										try{
+											if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
+											else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
+										}catch{}
 									}
 								}else if(device=="bureeltobi"){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
@@ -516,7 +549,9 @@ function ajax(Update=$LastUpdateTime){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
 									else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
 								}
-								$('#'+device).html(html);
+								try{
+									$('#'+device).html(html);
+								}catch{}
 							}catch{}
 							localStorage.setItem(device, $value);
 							try{
@@ -526,7 +561,6 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if(device=="bose105"){
 									if($mode=="Online"){
-										html="Online";
 										if($value=="On"){html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_On.png\" id=\"bose105\" alt=\"bose\"></a>";}
 										else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_Off.png\" id=\"bose105\" alt=\"bose\"></a>";}
 									}else if($mode=="Offline"){html="";}
@@ -535,8 +569,10 @@ function ajax(Update=$LastUpdateTime){
 									else{html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/bose_Off.png\" id=\""+device+"\" alt=\"bose\"></a>";}
 								}
 								$('#'+device).html(html);
+							}catch{}
+							try{
 								if($value=="On"){$('#'+device).attr("src", "/images/bose_On.png");}
-							   else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
+							    else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
 							}catch{}
 						}else if(type=="dimmer"){
 							localStorage.setItem(device, $value);
@@ -564,11 +600,16 @@ function ajax(Update=$LastUpdateTime){
 								elem=document.getElementById(device);
 								if(stat==0){
 									nsize=0;
-									elem.classList.remove("yellow");
+									try{
+										elem.classList.remove("yellow");
+									}catch{}
 								}else if(stat>0){
 									nsize=(opts[2]*perc)+8;
 									if(nsize>opts[2])nsize=opts[2];
 									top=+opts[0] + +opts[2]-nsize;
+									try{
+										elem.classList.add("yellow");
+									}catch{}
 								}else{nsize=opts[2];}
 								if(opts[3]=="P"){
 									elem.style.top=top+'px';
@@ -581,6 +622,8 @@ function ajax(Update=$LastUpdateTime){
 									elem.style.width=nsize+'px';
 									elem.style.height='7px';
 								}
+							}catch{}
+							try{
 								if($value==100){
 									html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
 								}else if($value==0){
@@ -596,22 +639,20 @@ function ajax(Update=$LastUpdateTime){
 								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
 								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
 								html+='</div>';
-								try{
-									document.getElementById('R'+device).innerHTML=html;
-								}catch{}
-								if(localStorage.getItem('view')=='floorplanheating'){
-									try{
-										if(time>($currentTime-82800)){
-											date=new Date(time*1000);
-											hours=date.getHours();
-											minutes="0"+date.getMinutes();
-											document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
-										}else{
-											document.getElementById("t"+device).innerHTML="";
-										}
-									}catch{}
-								}
+								$('#R'+device).html(html);
 							}catch{}
+							if(localStorage.getItem('view')=='floorplanheating'){
+								try{
+									if(time>($currentTime-82800)){
+										date=new Date(time*1000);
+										hours=date.getHours();
+										minutes="0"+date.getMinutes();
+										document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
+									}else{
+										document.getElementById("t"+device).innerHTML="";
+									}
+								}catch{}
+							}
 						}else if(type=="pir"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
@@ -1009,7 +1050,7 @@ function floorplan(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplan');
     ajax(0);
-	myAjax=setInterval(ajax, 999);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
         html+='<div class="fix z0 afval" id="gcal"></div>';
@@ -1047,7 +1088,7 @@ function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
     ajax(0);
-	myAjax=setInterval(ajax, 999);
+	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
@@ -1057,8 +1098,6 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-		items=['zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];        
-        items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
@@ -1088,8 +1127,8 @@ function floorplanmedia(){
 	localStorage.setItem('view', 'floorplanmedia');
     ajax(0);
     ajaxmedia();
-    myAjax=setInterval(ajax, 999);
-    myAjaxmedia=setInterval(ajaxmedia, 999);
+    myAjax=setInterval(ajax, 800);
+    myAjaxmedia=setInterval(ajaxmedia, 900);
     denon=localStorage.getItem('denon');
     lgtv=localStorage.getItem('lgtv');
     try{
@@ -1359,12 +1398,13 @@ function Weg(){
 
 function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
-	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
-    html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
-    html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
-    html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Cooling</button>';
+	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');initview();">Gas</button>';
+	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Cooling</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
