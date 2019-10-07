@@ -19,40 +19,18 @@ $user='heating';
 2 = Elec
 3 = Elec / Gas
 */
+$x=0;//Neutral
 if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
-    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21) {
-        if ($d['heating']['s']!=1) {
-            store('heating', 1, basename(__FILE__).':'.__LINE__);//Cooling
-            $d['heating']['s']=1;
-        }
-    } elseif ($d['buiten_temp']['s']<10
-        ||$d['minmaxtemp']['m']<10
-        ||$d['minmaxtemp']['s']<5
-    ) {
-        if ($d['jaarteller']['s']<3) {
-			if ($d['heating']['s']!=3) {
-				store('heating', 3, basename(__FILE__).':'.__LINE__);//Gas/Elec
-				$d['heating']['s']=3;
-			}
-		} else {
-			if ($d['heating']['s']!=4) {
-				store('heating', 4, basename(__FILE__).':'.__LINE__);//Gas
-				$d['heating']['s']=4;
-			}
-		}
-    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20) {
-        if ($d['heating']['s']!=2) {
-            store('heating', 2, basename(__FILE__).':'.__LINE__);//Elec
-            $d['heating']['s']=2;
-        }
-    } else {
-        if ($d['heating']['s']!=0) {
-            store('heating', 0, basename(__FILE__).':'.__LINE__);//Neutral
-            $d['heating']['s']=0;
-        }
-    }
+    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=1;//Cooling
+    elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
+        if ($d['jaarteller']['s']<2)$x=3;//Gas/Elec
+        else $x=4;//Gas
+    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
 }
-
+if ($d['heating']['s']!=$x) {
+	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
+	$d['heating']['s']=$x;
+}
 $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']<14
