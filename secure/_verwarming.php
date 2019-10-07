@@ -530,7 +530,7 @@ if ($d['deurbadkamer']['s']=='Open'
         && $d['Weg']['s']<2
     ) {
         if ($d['heating']['s']>=2) {
-            if (TIME>=strtotime('6:00') && TIME<=strtotime('6:45')) $x=20;
+            if     (TIME>=strtotime('6:00') && TIME<=strtotime('6:45'))$x=20;
             elseif (TIME>=strtotime('5:45') && TIME<=strtotime('6:45'))$x=19.5;
             elseif (TIME>=strtotime('5:30') && TIME<=strtotime('6:45'))$x=19;
             elseif (TIME>=strtotime('5:15') && TIME<=strtotime('6:45'))$x=18.5;
