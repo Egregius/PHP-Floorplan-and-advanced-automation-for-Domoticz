@@ -539,7 +539,7 @@ elseif ($d['deurbadkamer']['s']=='Closed') {
         } else $x=10;
     } elseif ($b7>900&&$d['lichtbadkamer']['s']==0||$d['Weg']['s']==2)$x=10;
     elseif ($d['lichtbadkamer']['s']==0)$x=10;
-}
+} else $x=10;
 if ($d['badkamer_set']['s']!=$x) {
 	store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 	$d['badkamer_set']['s']=$x;
