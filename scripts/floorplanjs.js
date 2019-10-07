@@ -8,7 +8,6 @@ function navigator_Go(url){window.location.assign(url);}
     }, false);
 }, false);*/
 $LastUpdateTime=parseInt(0);
-$more=false;
 function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
     $.ajax({
@@ -24,19 +23,17 @@ function ajax(Update=$LastUpdateTime){
         	}
             for (device in d){
                 if(d.hasOwnProperty(device)){
-                    if(device=="t"){
-                        if($LastUpdateTime>100&&$more==false){
-							if($LastUpdateTime<=$currentTime-15){
-								$LastUpdateTime=parseInt(0);
-								$more=true;
-								console.log("LastUpdateTime set to 0");
-							}else {
-								$LastUpdateTime=parseInt(d['t']);
-								$more=false;
+                     if(device=="t"){
+                        if($LastUpdateTime>100){
+							if($LastUpdateTime<=$currentTime-10){
+								console.log("Last more than 10 seconds ago, fetching everything.");
+								ajax(0);
+							}else{
+                        		$LastUpdateTime=parseInt(d['t']);
 							}
-                        }else {
+                        }else{
+                        	console.log("LastUpdateTime = " + $LastUpdateTime);
                         	$LastUpdateTime=parseInt(d['t']);
-                        	$more=false;
                         }
                     }else{
                     	$value=d[device]['s'];
@@ -44,7 +41,12 @@ function ajax(Update=$LastUpdateTime){
 						type=d[device]['dt'];
 						$icon=d[device]['ic'];
 						time=d[device]['t'];
-						console.log(device+' = '+ $value);
+						date=new Date($currentTime*1000);
+						hours=date.getHours();
+						minutes="0"+date.getMinutes();
+						seconds="0"+date.getSeconds();
+						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
+						console.log($LastUpdateTime+' '+$time+': '+device+' = '+ $value);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
@@ -53,29 +55,65 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Weg.png" id="Weg">';
 								html+='</div>';
 								document.getElementById('Weg').innerHTML=html;
-								if($value==0){
-									document.getElementById("zliving").classList.remove("secured");
-									document.getElementById("zkeuken").classList.remove("secured");
-									document.getElementById("zgarage").classList.remove("secured");
-									document.getElementById("zinkom").classList.remove("secured");
-									document.getElementById("zhalla").classList.remove("secured");
-									document.getElementById("zhallb").classList.remove("secured");
-								}else if($value==1){
-									document.getElementById("zliving").classList.add("secured");
-									document.getElementById("zkeuken").classList.add("secured");
-									document.getElementById("zgarage").classList.add("secured");
-									document.getElementById("zinkom").classList.add("secured");
-									document.getElementById("zhalla").classList.remove("secured");
-									document.getElementById("zhallb").classList.remove("secured");
-								}else if($value==2){
-									document.getElementById("zliving").classList.add("secured");
-									document.getElementById("zkeuken").classList.add("secured");
-									document.getElementById("zgarage").classList.add("secured");
-									document.getElementById("zinkom").classList.add("secured");
-									document.getElementById("zhalla").classList.add("secured");
-									document.getElementById("zhallb").classList.add("secured");
-								}
 							}catch{}
+								if($value==0){
+									try{
+										document.getElementById("zliving").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.remove("secured");
+									}catch{}
+								}else if($value==1){
+									try{
+										document.getElementById("zliving").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.remove("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.remove("secured");
+									}catch{}
+								}else if($value==2){
+									try{
+										document.getElementById("zliving").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zkeuken").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zgarage").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zinkom").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhalla").classList.add("secured");
+									}catch{}
+									try{
+										document.getElementById("zhallb").classList.add("secured");
+									}catch{}
+								}
 						}else if(device=="minmaxtemp"){
 							try{
 								elem=document.getElementById("mintemp");
@@ -255,8 +293,8 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								douchegas=$value * 10;
 								douchewater=$mode;
-								douchegaseuro=parseFloat(Math.round(douchegas * 10 * 0.0004*10)/10).toFixed(2);
-								douchewatereuro=parseFloat(Math.round(douchewater * 0.005*10)/10).toFixed(2);
+								douchegaseuro=parseFloat(douchegas * 0.004).toFixed(2);
+								douchewatereuro=parseFloat(douchewater * 0.005).toFixed(2);
 								if($value>0){
 									html="<td>D-gas:</td><td>"+douchegas+" L</td><td>"+douchegaseuro.toString().replace(/[.]/, ",")+" &#8364;</td>";
 									document.getElementById("trdgas").innerHTML=html;
@@ -1321,7 +1359,7 @@ function Weg(){
 
 function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
-	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
 	html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
     html+='<button class="btn huge4" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
