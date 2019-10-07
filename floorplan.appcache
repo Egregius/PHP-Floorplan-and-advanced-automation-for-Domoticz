@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 1561042250
+# 1570432556
 # Home_Automation
 # @package  Pass2PHP
 # @author   Guy Verschuere <guy@egregius.be>
@@ -56,9 +56,10 @@ images/fan_Off.png
 images/fan_On.png
 images/fire_Off.png
 images/fire_On.png
-images/_firework.jpg
 images/flamegrey.png
 images/flame.png
+images/gaselec_Off.png
+images/gaselec_On.png
 images/heating.png
 images/HomeZw.png
 images/Kerstboom_Off.png
@@ -132,9 +133,6 @@ images/zwave.png
 
 # Resources that require the user to be online.
 NETWORK:
-/ajax.php
-/floorplan.php
-/floorplan.doorsensors.php
 *
 
 # Fallback content
