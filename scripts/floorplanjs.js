@@ -1085,6 +1085,7 @@ function floorplanheating(){
     try{
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
+        html+='<div class="fix z2" id="sirene"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
         items=['badkamervuur1','badkamervuur2','heater1','heater2','heater3','heater4','GroheRed'];
@@ -1128,6 +1129,7 @@ function floorplanmedia(){
         html='<div class="fix jbl z1 i48" id="jbl"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+        html+='<div class="fix z2" id="sirene"></div>';
         items=['eettafel','zithoek'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
         items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','lgtv','denon','nas','nvidia'];
