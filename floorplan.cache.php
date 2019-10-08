@@ -326,13 +326,15 @@ if ($home) {
                 <td>Heating</td>
                 <td>';
                 if ($row['s']==0) {
-                    echo 'Neutral';
+                    echo '0 Neutral';
                 } elseif ($row['s']==1) {
-                    echo 'Cooling';
+                    echo '1 Cooling';
                 } elseif ($row['s']==2) {
-                    echo 'Elec';
+                    echo '2 Elec';
                 } elseif ($row['s']==3) {
-                    echo 'Gas/Elec';
+                    echo '3 Gas/Elec';
+                } elseif ($row['s']==4) {
+                    echo '4 Gas';
                 }
                 echo '</td>
                 <td>Big diff '.number_format($row['m'], 1, ',', '').' °C</td>';

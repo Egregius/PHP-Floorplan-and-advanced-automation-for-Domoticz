@@ -23,11 +23,14 @@ $x=0;//Neutral
 if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=1;//Cooling
     elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
+        if ($d['jaarteller']['s']<1)$x=3;//Gas/Elec
+        else $x=4;//Gas
+    } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<15||$d['minmaxtemp']['s']<10) {
         if ($d['jaarteller']['s']<2)$x=3;//Gas/Elec
         else $x=4;//Gas
     } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
 }
-if ($d['heating']['s']!=$x) {
+if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
 }
@@ -439,8 +442,8 @@ foreach ($kamers as $kamer) {
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0');
     }
 }
-//lg('bigdif='.$bigdif.'|brander='.$brander.'|timebrander='.past('brander'));
-if ($d['heating']['s']==3) {
+//lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
+if ($d['heating']['s']>=3) {
     if ($bigdif<=-0.2
         && $d['brander']['s']=="Off"
         && past('brander')>180
