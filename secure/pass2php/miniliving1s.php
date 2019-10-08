@@ -10,4 +10,15 @@
  * @link     https://egregius.be
  **/
 bosekey("POWER");
+$items=array('bose102', 'bose103', 'bose104', 'bose105');
+if ($d['bose101']['s']=='On') {
+	sw('bose101', 'Off');
+	foreach ($items as $i) {
+		if ($d[$i]['s']=='On') {
+			sw($i, 'Off');
+		}
+	}
+} else {
+	sw('bose101', 'On');
+}
 store('Weg', 0, basename(__FILE__).':'.__LINE__);

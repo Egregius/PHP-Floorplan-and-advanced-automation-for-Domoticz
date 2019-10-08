@@ -383,7 +383,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="sirene"||type=="smoke detector"){
 							try{
-								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'Sirene\',\'sw\',\'Off\')">';
+								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'Sirene\',\'sw\',\'Off\')"><br>'+device;
 								else html="";
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}

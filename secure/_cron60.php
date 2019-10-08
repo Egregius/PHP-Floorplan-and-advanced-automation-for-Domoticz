@@ -408,7 +408,7 @@ if ($d['auto']['s']=='On') {
 	    //Bose
     if ($d['pirliving']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'
-        &&past('bose101')>90
+        &&past('bose101')>180
         &&past('bose102')>90
         &&past('bose103')>90
         &&past('bose104')>90
@@ -418,7 +418,7 @@ if ($d['auto']['s']=='On') {
         &&$d['bose103']['s']=='Off'
         &&$d['bose104']['s']=='Off'
         &&$d['bose105']['s']=='Off'
-        &&$d['Weg']['s']>0
+        &&($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On')
     ) {
         $status=json_decode(
             json_encode(
