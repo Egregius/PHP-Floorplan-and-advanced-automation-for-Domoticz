@@ -31,7 +31,7 @@ if ($d['heatingauto']['s']=='On') {
         else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
     } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20){$x=2;$xs=basename(__FILE__).':'.__LINE__;}//Elec
 }
-lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x.'  '.$xs);
+//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x.'  '.$xs);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
