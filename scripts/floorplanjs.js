@@ -400,7 +400,7 @@ function ajax(Update=$LastUpdateTime){
 							//try{
 								//BRANDERFLOORPLAN
 								heatingmode=localStorage.getItem('heating');
-								console.log('heatingmode='+heatingmode+' device '+device+' value '+value);
+								console.log('heatingmode='+heatingmode+' device '+device+' value '+$value);
 								if(heatingmode==4){
 									console.log('heatingmode==4');
 									if($value=="Off")$('#branderfloorplan').attr("src", "/images/fire_Off.png");
