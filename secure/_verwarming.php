@@ -20,18 +20,19 @@ $user='heating';
 3 = Elec / Gas
 4 = Gas
 */
-$x=0;//Neutral
-if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
-    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=1;//Cooling
+$x=0;$xs=basename(__FILE__).':'.__LINE__;//Neutral
+$past=past('heating');
+if ($d['heatingauto']['s']=='On'&&$past>3) {
+    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21){$x=1;$xs=basename(__FILE__).':'.__LINE__;}//Cooling
     elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
-        if ($d['jaarteller']['s']<1)$x=3;//Gas/Elec
-        else $x=4;//Gas
+        if ($d['jaarteller']['s']<1){$x=3;$xs=basename(__FILE__).':'.__LINE__;}//Gas/Elec
+        else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<15||$d['minmaxtemp']['s']<10) {
-        if ($d['jaarteller']['s']<2)$x=3;//Gas/Elec
-        else $x=4;//Gas
-    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
+        if ($d['jaarteller']['s']<2){$x=3;$xs=basename(__FILE__).':'.__LINE__;}//Gas/Elec
+        else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
+    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20){$x=2;$xs=basename(__FILE__).':'.__LINE__;}//Elec
 }
-lg('HEATING >>> heatingauto = '.$d['heatingauto']['s'].', past heating='.past('heating').', buiten_temp='.$d['buiten_temp']['s'].', minmax m='.$d['minmaxtemp']['m'].', minmax s='.$d['minmaxtemp']['s'].', jaarteller='.$d['jaarteller']['s'].', $x='.$x);
+lg('HEATING >>> heatingauto = '.$d['heatingauto']['s'].', past heating='.$past.', buiten_temp='.$d['buiten_temp']['s'].', minmax m='.$d['minmaxtemp']['m'].', minmax s='.$d['minmaxtemp']['s'].', jaarteller='.$d['jaarteller']['s'].', $x='.$x.' $xs='.$xs);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
