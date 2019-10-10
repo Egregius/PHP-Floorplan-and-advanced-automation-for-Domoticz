@@ -355,7 +355,7 @@ function kodi($json)
     $result=curl_exec($ch);
     return $result;
 }
-function ud($name,$nvalue,$svalue,$check=false)
+function ud($name,$nvalue,$svalue,$check=false,$smg='')
 {
     global $user,$d,$domoticzurl;
     if ($d[$name]['i']>0) {
@@ -369,7 +369,7 @@ function ud($name,$nvalue,$svalue,$check=false)
     } else {
         store($name, $svalue, basename(__FILE__).':'.__LINE__);
     }
-    lg(' (udevice) | '.$user.' => '.$name.' => '.$nvalue.','.$svalue);
+    lg(' (udevice) | '.$user.' => '.$name.' => '.$nvalue.','.$svalue.' ('.$msg.')');
 }
 function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
 function zwaveCommand($node,$command){global $domoticzurl;$cm=array('AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');$cm=$cm[$command];for($k=1;$k<=5;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));if ($result=='OK') {break;}sleep(1);}return $result;}

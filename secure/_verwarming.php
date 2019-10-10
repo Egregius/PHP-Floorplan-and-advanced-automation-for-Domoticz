@@ -18,6 +18,7 @@ $user='heating';
 1 = Cooling
 2 = Elec
 3 = Elec / Gas
+4 = Gas
 */
 $x=0;//Neutral
 if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
@@ -30,6 +31,7 @@ if ($d['heatingauto']['s']=='On'&&past('heating')>3) {
         else $x=4;//Gas
     } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
 }
+lg('HEATING >>> heatingauto = '.$d['heatingauto']['s'].', past heating='.past('heating').', buiten_temp='.$d['buiten_temp']['s'].', minmax m='.$d['minmaxtemp']['m'].', minmax s='.$d['minmaxtemp']['s'].', jaarteller='.$d['jaarteller']['s'].', $x='.$x);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
@@ -73,7 +75,7 @@ if ($d['tobi_set']['m']==0) {
         }
     }
     if ($d['tobi_set']['s']!=$Settobi) {
-        store('tobi_set', $Settobi, basename(__FILE__).':'.__LINE__);
+        store('tobi_set', $Settobi, true, basename(__FILE__).':'.__LINE__);
         $tobi_set=$Settobi;
         $d['tobi_set']['s']=$Settobi;
     }
@@ -96,13 +98,13 @@ if ($d['alex_set']['m']==0) {
         }
     }
     if ($d['alex_set']['s']!=$Setalex) {
-        ud('alex_set', 0, $Setalex);
+        ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);
         $alex_set=$Setalex;
         $d['alex_set']['s']=$Setalex;
     }
 }
 
-$Setliving=16;
+$Setliving=10;
 if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20
         && $d['minmaxtemp']['m']<20
@@ -111,7 +113,7 @@ if ($d['living_set']['m']==0) {
         && $d['deurinkom']['s']=='Closed'
         && $d['deurgarage']['s']=='Closed'
     ) {
-        $Setliving=17;
+        $Setliving=16;
         if ($d['Weg']['s']==0) {
             if (TIME>=strtotime('5:00') && TIME<strtotime('18:45')) {
                 $Setliving=20.5;
@@ -439,7 +441,7 @@ foreach ($kamers as $kamer) {
     }
     if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
         //store('Tset'.$kamer.'Z',TIME, basename(__FILE__).':'.__LINE__);
-        ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0');
+        ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
