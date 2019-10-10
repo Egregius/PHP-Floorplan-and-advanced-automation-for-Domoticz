@@ -21,8 +21,7 @@ $user='heating';
 4 = Gas
 */
 $x=0;$xs=basename(__FILE__).':'.__LINE__;//Neutral
-$past=past('heating');
-if ($d['heatingauto']['s']=='On'&&$past>3) {
+if ($d['heatingauto']['s']=='On') {
     if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21){$x=1;$xs=basename(__FILE__).':'.__LINE__;}//Cooling
     elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
         if ($d['jaarteller']['s']<1){$x=3;$xs=basename(__FILE__).':'.__LINE__;}//Gas/Elec
@@ -32,7 +31,7 @@ if ($d['heatingauto']['s']=='On'&&$past>3) {
         else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
     } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20){$x=2;$xs=basename(__FILE__).':'.__LINE__;}//Elec
 }
-lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	past='.$past.'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x.'  '.$xs);
+lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x.'  '.$xs);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
