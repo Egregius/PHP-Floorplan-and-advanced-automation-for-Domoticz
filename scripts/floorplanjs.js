@@ -28,12 +28,15 @@ function ajax(Update=$LastUpdateTime){
 							if($LastUpdateTime<=$currentTime-10){
 								console.log("Last more than 10 seconds ago, fetching everything.");
 								ajax(0);
+								log=false;
 							}else{
                         		$LastUpdateTime=parseInt(d['t']);
+                        		log=true;
 							}
                         }else{
                         	console.log("LastUpdateTime = " + $LastUpdateTime);
                         	$LastUpdateTime=parseInt(d['t']);
+                        	log=false;
                         }
                     }else{
                     	$value=d[device]['s'];
@@ -46,7 +49,7 @@ function ajax(Update=$LastUpdateTime){
 						minutes="0"+date.getMinutes();
 						seconds="0"+date.getSeconds();
 						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-						console.log($LastUpdateTime+' '+$time+': '+device+' = '+ $value);
+						if(log==true&&device!='el'&&device!='zon')console.log($LastUpdateTime+' '+$time+': '+device+' = '+ $value);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
