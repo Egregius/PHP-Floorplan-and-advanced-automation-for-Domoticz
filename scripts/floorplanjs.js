@@ -8,6 +8,7 @@ window.addEventListener('load', function(e) {
     }, false);
 }, false);
 $LastUpdateTime=parseInt(0);
+$prevmsg='';
 function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
     $.ajax({
@@ -49,7 +50,11 @@ function ajax(Update=$LastUpdateTime){
 						minutes="0"+date.getMinutes();
 						seconds="0"+date.getSeconds();
 						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-						if(log==true&&device!='el'&&device!='zon')console.log($LastUpdateTime+' '+$time+': '+device+' = '+ $value);
+						if(log==true&&device!='el'&&device!='zon'){
+							msg=$LastUpdateTime+' '+$time+': '+device+' = '+ $value;
+							if(msg!=$prevmsg)console.log(msg);
+							$prevmsg=msg;
+						}
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
