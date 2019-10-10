@@ -400,11 +400,16 @@ function ajax(Update=$LastUpdateTime){
 							//try{
 								//BRANDERFLOORPLAN
 								heatingmode=localStorage.getItem('heating');
-								console.log('heatingmode='+heatingmode+' device '+device+' value '+$value);
+								console.log('heatingmode='+heatingmode+' '+device+' '+$value);
 								if(heatingmode==4){
 									console.log('heatingmode==4');
-									if($value=="Off")$('#branderfloorplan').attr("src", "/images/fire_Off.png");
-									else $('#branderfloorplan').attr("src", "/images/fire_On.png");
+									if($value=="Off"){
+										console.log('/images/fire_Off.png');
+										$('#branderfloorplan').attr("src", "/images/fire_Off.png");
+									}else{
+										console.log('/images/fire_On.png');
+										$('#branderfloorplan').attr("src", "/images/fire_On.png");
+									}
 								} else if(heatingmode==3){
 									console.log('heatingmode==3');
 									if($value=="Off")$('#branderfloorplan').attr("src", "/images/gaselec_Off.png");
