@@ -727,6 +727,7 @@ function bosezone($ip,$vol='')
 				}
             }
         }
+        usleep(200000);
         bosekey('SHUFFLE_ON', 0, 101);
     }
 }

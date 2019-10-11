@@ -495,6 +495,7 @@ if ($d['auto']['s']=='On') {
     }
     $items=array(101,102,103,104,105);
     foreach ($items as $i) {
+    	echo 'Checking bose'.$i.'<br>';
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
