@@ -727,6 +727,7 @@ function bosezone($ip,$vol='')
 				}
             }
         }
+        bosekey('SHUFFLE_ON', 0, 101);
     }
 }
 function bosepost($method,$xml,$ip=3,$log=false)
