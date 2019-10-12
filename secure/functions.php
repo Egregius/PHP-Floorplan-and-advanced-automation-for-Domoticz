@@ -668,8 +668,8 @@ function bosezone($ip,$vol='')
     else  $preset='PRESET_6';
     if ($d['Weg']['s']<=1) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
-            bosekey($preset, 0, 101);
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+            bosekey($preset, 0, 101);
             bosevolume(25, 101);
         } /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
@@ -694,9 +694,9 @@ function bosezone($ip,$vol='')
                 $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
             }
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-                bosekey($preset, 0, 101);
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+                bosekey($preset, 0, 101);
                 if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') {
                     bosevolume(0, 101);
                 } else {
