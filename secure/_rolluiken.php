@@ -30,11 +30,12 @@ if ($d['auto']['s']=='On') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']>29) sl($i, 29, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['m']==0&&$d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
+			if ($d['Rliving']['m']==0&&$d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	} 
 

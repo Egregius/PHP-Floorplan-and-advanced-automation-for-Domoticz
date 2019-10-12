@@ -858,7 +858,7 @@ function fhall()
 {
     global $d,$device;
     if ($d['hall']['s']<30) {
-		if ($d['Weg']['s']==0&&((TIME>strtotime('6:00')&&TIME<=strtotime('21:00'))||$d['zon']['s']==0)) {
+		if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
 			if ($d['hall']['s']<30) {
 				sl('hall', 30, basename(__FILE__).':'.__LINE__);
 			}
@@ -872,9 +872,9 @@ function fhall()
 			}
 		}
 	}
-	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
-		if ($d['Rtobi']['s']>0) {
-			if ($d['gcal']['s']==false) {
+	if ($d['gcal']['s']==false) {
+		if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
+			if ($d['Rtobi']['s']>0) {
 				sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
