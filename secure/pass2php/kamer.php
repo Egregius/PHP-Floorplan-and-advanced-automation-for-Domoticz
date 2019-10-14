@@ -33,11 +33,3 @@ if ($status==0) {
 		}
 	}
 }
-if (TIME>strtotime('6:00')&&TIME<strtotime('10:00')) {
-	if ($d['RkamerL']['s']>0) {
-		sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['RkamerR']['s']>0) {
-		sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-	}
-}

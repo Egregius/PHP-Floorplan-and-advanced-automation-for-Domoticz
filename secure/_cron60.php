@@ -109,12 +109,14 @@ if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
     if ($d['Weg']['s']<=1) {
         if (TIME>=strtotime('6:00')&&TIME<=strtotime('6:01')) {
+        	if ($d['bose103']['s']=='Off') {
+				bosezone(103, 10);
+			}
+        }
+        if ($d['kamer']['m']>0&&TIME>=strtotime('6:15')&&TIME<=strtotime('6:16')) {
         	if ($d['kamer']['s']==0) {
         		sl('kamer', 1);
         	}
-        	if ($d['bose103']['s']=='Off') {
-				bosezone(103, 15);
-			}
         }
         $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
