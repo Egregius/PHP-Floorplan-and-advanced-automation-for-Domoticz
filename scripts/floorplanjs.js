@@ -1431,5 +1431,8 @@ function bureeltobi(){
 }
 
 function formatDate(nowDate) {
-	return nowDate.getDate() +"/"+ (nowDate.getMonth() + 1) + '/'+ nowDate.getFullYear();
+	date=new Date(nowDate*1000);
+	hours=date.getHours();
+	minutes="0"+date.getMinutes();
+	return (hours+':'+minutes.substr(-2));			
 }
