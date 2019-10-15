@@ -842,10 +842,10 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
                         else if(tijd>$currentTime-43200)elem.style.color="#777";
                         else if(tijd>$currentTime-82800)elem.style.color="#666";
-                        else elem.innerHTML="";
+                        else elem.innerHTML="lang geleden";
                     }else{
-                        if(tijd>$currentTime-82800)elem.style.color="#666";
-                        //else elem.innerHTML="";
+                        if(tijd>$currentTime-82800)elem.style.color=null;
+                        else elem.innerHTML="lang geleden";
                         console.log(items[i]+' = '+tijd+' '+$value);
                     }
                 }catch{}
@@ -869,10 +869,10 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
                         else if(tijd>$currentTime-43200)elem.style.color="#777";
                         else if(tijd>$currentTime-82800)elem.style.color="#666";
-                        else elem.innerHTML="";
+                        else elem.innerHTML="lang geleden";
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML="";
+                        else elem.innerHTML="lang geleden";
                     }
                 }catch{}
             }
