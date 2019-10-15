@@ -823,7 +823,7 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
+            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex','deurbel'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
@@ -841,15 +841,15 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-28800)elem.style.color="#999";
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
                         else if(tijd>$currentTime-43200)elem.style.color="#777";
-                        else if(tijd>$currentTime-82800)elem.style.color="#666";
-                        else elem.innerHTML=formatDate(tijd);
+                        else {
+                        	elem.style.color="#777";
+                        	elem.innerHTML=formatDate(tijd);
+                        }
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
                         else elem.innerHTML=formatDate(tijd);
-                        console.log(items[i]+' = '+formatDate(tijd));
                     }
                 }catch{}
-                console.log(items[i]+' = '+formatDate(tijd));
             }
             var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
             var arrayLength=items.length;
@@ -869,11 +869,16 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-28800)elem.style.color="#999";
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
                         else if(tijd>$currentTime-43200)elem.style.color="#777";
-                        else if(tijd>$currentTime-82800)elem.style.color="#666";
-                        else elem.innerHTML="lang geleden";
+                        else {
+                        	elem.style.color="#777";
+                        	elem.innerHTML=formatDate(tijd);
+                        }
                     }else{
-                        if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML=formatDate(tijd);
+                        if(tijd>$currentTime-82800)elem.style.color="#777";
+                        else {
+                        	elem.style.color="#777";
+                        	elem.innerHTML=formatDate(tijd);
+                        }
                     }
                 }catch{}
             }
@@ -1076,7 +1081,7 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
-		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR'];
+		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR','tdeurbel'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
@@ -1432,7 +1437,7 @@ function bureeltobi(){
 
 function formatDate(nowDate) {
 	date=new Date(nowDate*1000);
-	hours=date.getHours();
-	minutes="0"+date.getMinutes();
-	return (hours+':'+minutes.substr(-2));			
+	var day = date.getDate();
+	var month = date.getMonth()+1;
+	return (day+'/'+month);			
 }
