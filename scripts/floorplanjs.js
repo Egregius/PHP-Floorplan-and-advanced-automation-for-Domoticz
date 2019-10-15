@@ -842,13 +842,14 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
                         else if(tijd>$currentTime-43200)elem.style.color="#777";
                         else if(tijd>$currentTime-82800)elem.style.color="#666";
-                        else elem.innerHTML="lang geleden";
+                        else elem.innerHTML=formatDate(tijd);
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML="lang geleden";
-                        console.log(items[i]+' = '+tijd+' '+$value);
+                        else elem.innerHTML=formatDate(tijd);
+                        console.log(items[i]+' = '+formatDate(tijd));
                     }
                 }catch{}
+                console.log(items[i]+' = '+formatDate(tijd));
             }
             var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
             var arrayLength=items.length;
@@ -872,7 +873,7 @@ function ajax(Update=$LastUpdateTime){
                         else elem.innerHTML="lang geleden";
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML="lang geleden";
+                        else elem.innerHTML=formatDate(tijd);
                     }
                 }catch{}
             }
@@ -1427,4 +1428,8 @@ function bureeltobi(){
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
+}
+
+function formatDate(nowDate) {
+	return nowDate.getDate() +"/"+ (nowDate.getMonth() + 1) + '/'+ nowDate.getFullYear();
 }
