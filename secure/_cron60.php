@@ -652,7 +652,7 @@ if ($d['water']['s']=='On') {
         sw('water', 'Off');
     }
 }
-if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
+if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
     if ($d['auto']['m']!=true) {
         storemode('auto', true, basename(__FILE__).':'.__LINE__);
         $d['auto']['m']=true;

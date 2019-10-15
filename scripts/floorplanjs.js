@@ -844,8 +844,9 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-82800)elem.style.color="#666";
                         else elem.innerHTML="";
                     }else{
-                        if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML="";
+                        if(tijd>$currentTime-82800)elem.style.color="#666";
+                        //else elem.innerHTML="";
+                        console.log(items[i]+' = '+tijd+' '+$value);
                     }
                 }catch{}
             }
