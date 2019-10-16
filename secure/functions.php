@@ -262,6 +262,7 @@ function sw($name,$action='Toggle',$msg='')
                     sw($i, $action);
                 }
             }
+            usleep($usleep);
         }
     } else {
         $msg=' (SWITCH)		'.$user.' => '.$name.' => '.$action.' ('.$msg.')';
@@ -279,23 +280,14 @@ function sw($name,$action='Toggle',$msg='')
             }
         }
     }
-    if (isset($usleep)) {
-        usleep($usleep);
-    }
 }
 function lgcommand($action,$msg='')
 {
     global $lgtvip, $lgtvmac;
     if ($action=='on') {
-        //$msg= shell_exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
-        //echo $msg;
         exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
-		var_dump($output);
-		var_dump($return_var);
-//        echo shell_exec('python3 lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip.' > /dev/null 2>&1 &');
     } else {
         shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
-        echo 'python3 lgtv.py -c '.$action.' '.$lgtvip;
     }
 }
 function store($name,$status,$msg='',$idx=null,$force=true)
