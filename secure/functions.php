@@ -701,7 +701,6 @@ function bosezone($ip,$vol='')
             }
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-                sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
                 bosekey($preset, 0, 101);
                 if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') {
                     bosevolume(0, 101);
@@ -719,7 +718,6 @@ function bosezone($ip,$vol='')
 						bosevolume($vol, $ip);
 				}
             } elseif ($d['bose'.$ip]['s']=='Off') {
-                sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
                 bosepost('setZone', $xml, 101);
                 store('bose'.$ip, 'On');
                 if ($vol=='') {

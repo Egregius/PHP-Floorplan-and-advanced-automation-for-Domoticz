@@ -25,8 +25,8 @@ if ($status==0) {
 			if (!empty($status)) {
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']!='STANDBY') {
-						bosekey("POWER", 0, 103);
 						sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+						bosekey("POWER", 0, 103);
 					}
 				}
 			}

@@ -115,25 +115,25 @@ if ($d['living_set']['m']==0) {
     ) {
         $Setliving=16;
         if ($d['Weg']['s']==0) {
-            if (TIME>=strtotime('5:00') && TIME<strtotime('18:45')) {
+            if (TIME>=strtotime('5:00') && TIME<strtotime('18:30')) {
                 $Setliving=20.5;
             }
         } elseif ($d['Weg']['s']==1) {
-            if (TIME>=strtotime('7:00') && TIME<strtotime('18:45')) {
+            if (TIME>=strtotime('7:00') && TIME<strtotime('18:30')) {
                 $Setliving=20;
-            } elseif (TIME>=strtotime('6:30') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('6:30') && TIME<strtotime('18:30')) {
                 $Setliving=19.5;
-            } elseif (TIME>=strtotime('6:00') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('6:00') && TIME<strtotime('18:30')) {
                 $Setliving=19.0;
-            } elseif (TIME>=strtotime('5:30') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('5:30') && TIME<strtotime('18:30')) {
                 $Setliving=18.5;
-            } elseif (TIME>=strtotime('5:00') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('5:00') && TIME<strtotime('18:30')) {
                 $Setliving=18.0;
-            } elseif (TIME>=strtotime('4:30') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('4:30') && TIME<strtotime('18:30')) {
                 $Setliving=17.5;
-            } elseif (TIME>=strtotime('4:00') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('4:00') && TIME<strtotime('18:30')) {
                 $Setliving=17.0;
-            } elseif (TIME>=strtotime('3:30') && TIME<strtotime('18:45')) {
+            } elseif (TIME>=strtotime('3:30') && TIME<strtotime('18:30')) {
                 $Setliving=16.5;
             }
         }
