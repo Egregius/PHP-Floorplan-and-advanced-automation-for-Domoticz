@@ -10,26 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    $msg='Rook gedecteerd in badkamer!';
-    alert($device, $msg, 300, false, 2, true);
-    $items=array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel');
-    foreach ($items as $i) {
-        if ($d[$i]['s']>0) {
-        	sl($i, 0, basename(__FILE__).':'.__LINE__);
-        }
-    }
-    $items=array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer');
-    foreach ($items as $i) {
-        if ($d[$i]['s']<100) {
-        	sl($i, 100, basename(__FILE__).':'.__LINE__);
-        }
-    }
-    $items=array('keuken','garage','jbl','bureel');
-    foreach ($items as $i) {
-        if ($d[$i]['s']!='On') {
-        	sw($i, 'On', basename(__FILE__).':'.__LINE__);
-        }
-    }
-    sleep(10);
-    resetsecurity();
+    rookmelder('Rook gedecteerd in badkamer!');
 }
