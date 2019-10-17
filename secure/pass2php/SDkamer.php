@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     $msg='Rook gedecteerd in slaapkamer!';
-    alert($device, $msg, 300, false, 2, true);
+    alert($device, 	$msg, 	300, false, 2, true);
     $items=array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel');
     foreach ($items as $i) {
         if ($d[$i]['s']>0) {

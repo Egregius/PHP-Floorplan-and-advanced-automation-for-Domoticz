@@ -321,9 +321,6 @@ function storeicon($name,$icon,$msg='')
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 {
     global $db;
-    if ($ios) {
-        shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
-    }
     $time=TIME;
     $stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
     $last=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -331,7 +328,10 @@ function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
         $last=$last['t'];
     }
     if ($last < $time-$ttl) {
-        $db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
+        if ($ios) {
+			shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
+		}
+		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
         telegram($msg, $silent, $to);
         lg('alert='.$last);
     }
