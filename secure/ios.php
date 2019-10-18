@@ -16,8 +16,10 @@ if (isset($_REQUEST['text'])) {
         $fmi=new FindMyiPhone($appleid, $applepass);
         $reply=$fmi->playSound($appledevice, $_REQUEST['text']);
         echo $reply.PHP_EOL;
-        if ($reply==200) {
+        if ($reply=='') {
             die('OK');
+        } else {
+        	echo 'reply = '.$reply.'<br>';
         }
         sleep($k);
     }
