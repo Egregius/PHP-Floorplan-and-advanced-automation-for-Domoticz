@@ -352,7 +352,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='')
     global $user,$d,$domoticzurl;
     if ($d[$name]['i']>0) {
         if ($check==true) {
-            if ($d['name']['s']!=$svalue) {
+            if ($d[$name]['s']!=$svalue) {
                 return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
             }
         } else {
