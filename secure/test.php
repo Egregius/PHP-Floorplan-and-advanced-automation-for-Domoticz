@@ -13,14 +13,16 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
+echo 20%6 .'<br>';
 for ($x=1;$x<=100;$x++) {
 	for ($y=1;$y<=100;$y++) {
 		$d['douche']['s']=$x;
 		$d['douche']['m']=$y;
 		$euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
-		echo $x.'	'.$y.'	'.$euro;
-		for ($z=5;$z<=100;$z=$z+5) {
-			if (round($euro*10)%$z) echo '	%'.$z;
+		$eurocent=round($euro*100, 0);
+		echo $x.'	'.$y.'	'.$euro.'	'.$eurocent;
+		for ($z=50;$z<=1000;$z=$z+50) {
+			if ($eurocent%$z==0) echo '	%'.$z;
 		}
 		echo '<br>';
 	}
