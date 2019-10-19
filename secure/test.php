@@ -15,7 +15,7 @@ echo '<pre>';
 /*-------------------------------------------------*/
 echo 20%6 .'<br>';
 for($y=1;$y<=4;$y++) {
-	for ($x=1;$x<=9;$x=$x+1) {
+	for ($x=10;$x<=99;$x=$x+1) {
 		$postdata = http_build_query(
 				array(
 					'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
@@ -36,7 +36,7 @@ for($y=1;$y<=4;$y++) {
 
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
 			print_r($result);
-			file_put_contents('/var/www/html/sounds/douche-'.$y.'0'.$x.'.mp3', file_get_contents($result['URL']));
+			file_put_contents('/var/www/html/sounds/douche-'.$y.$x.'.mp3', file_get_contents($result['URL']));
 	}
 }
 

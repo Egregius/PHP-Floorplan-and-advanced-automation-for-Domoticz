@@ -97,7 +97,10 @@ function douche()
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
     if ($douchegas>0&&$douchewater>0) {
-        telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
+        $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
+		$eurocent=round($euro*100, 0);
+		douchewarn($eurocent, 0);
+		telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
     }
     store('douche', 0, basename(__FILE__).':'.__LINE__);
     storemode('douche', 0, basename(__FILE__).':'.__LINE__);
@@ -113,21 +116,23 @@ function douche()
  *
  * @return null
  */
-function douchewarn($euro,$vol)
+function douchewarn($eurocent,$vol=0)
 {
     global $boseipbadkamer, $d;
     if ($d['douche']['icon']<TIME-3) {
     	storeicon('douche', TIME);
-		//$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
+		//if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
 		shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
-		/*$cv=$volume['actualvolume'];
-		if ($cv<$vol) {
-			usleep(1550000);
-			bosevolume($vol, 102);
-			usleep(3500000);
-			bosevolume($cv, 102);
+		/*if ($vol>0) {
+			$cv=$volume['actualvolume'];
+			if ($cv<$vol) {
+				usleep(1550000);
+				bosevolume($vol, 102);
+				usleep(3500000);
+				bosevolume($cv, 102);
+			}
 		}*/
-		telegram('Douche € '.($euro/100).' geluid op vol '.$vol.'!');
+		telegram('Douche € '.($eurocent/100).' geluid op vol '.$vol.'!');
 	}
 }
 /**
