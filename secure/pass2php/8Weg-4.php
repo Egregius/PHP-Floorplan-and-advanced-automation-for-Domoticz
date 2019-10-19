@@ -11,19 +11,19 @@
  **/
 if ($status=='On') {
     if ($d['achterdeur']['s']!='Closed') {
-        waarschuwing(' . Opgelet: Achterdeur open', 'achterdeur');
+        waarschuwing(' . Let op. Achterdeur open', 'achterdeur');
         exit('');
     }
     if ($d['raamliving']['s']!='Closed') {
-        waarschuwing(' . Opgelet: Raam Living open', 'raamliving');
+        waarschuwing(' . Let op. Raam Living open', 'raamliving');
         exit('');
     }
     if ($d['bureeltobi']['s']=='On') {
-        waarschuwing(' . Opgelet: bureel Tobi aan', 'bureeltobi');
+        waarschuwing(' . Let op. bureel Tobi aan', 'bureeltobi');
         exit('');
     }
     if ($d['bose105']['m']=='Online') {
-        waarschuwing(' . Opgelet: Bose buiten', 'bosebuiten');
+        waarschuwing(' . Let op. Bose buiten', 'bosebuiten');
         exit('');
     }
     if ($d['poort']['s']=='Open') {
