@@ -16,27 +16,36 @@ echo '<pre>';
 echo 20%6 .'<br>';
 for($y=1;$y<=4;$y++) {
 	for ($x=10;$x<=99;$x=$x+1) {
-		$postdata = http_build_query(
-				array(
-					'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
-					'lang' => 'Ruben',
-					'source' => 'ttsmp3'
-				)
-			);
+		if(!file_exists('/var/www/html/sounds/douche-'.$y.$x.'.mp3')) {
+			$postdata = http_build_query(
+					array(
+						'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
+						'lang' => 'Ruben',
+						'source' => 'ttsmp3'
+					)
+				);
 
-			$opts = array('http' =>
-				array(
-					'method'  => 'POST',
-					'header'  => 'Content-Type: application/x-www-form-urlencoded',
-					'content' => $postdata
-				)
-			);
+				$opts = array('http' =>
+					array(
+						'method'  => 'POST',
+						'header'  => 'Content-Type: application/x-www-form-urlencoded',
+						'content' => $postdata
+					)
+				);
 
-			$context  = stream_context_create($opts);
+				$context  = stream_context_create($opts);
 
-			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-			print_r($result);
-			file_put_contents('/var/www/html/sounds/douche-'.$y.$x.'.mp3', file_get_contents($result['URL']));
+				$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+				print_r($result);
+				if($result['Error']==0) {
+					$mp3=file_get_contents($result['URL']);
+					if(strlen($mp3)>1000) {
+						file_put_contents('/var/www/html/sounds/douche-'.$y.$x.'.mp3', $mp3);
+					}
+				} else {
+					exit;
+				}
+			}
 	}
 }
 
