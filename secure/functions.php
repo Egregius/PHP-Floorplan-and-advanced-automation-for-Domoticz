@@ -94,13 +94,17 @@ function huisweg()
 function douche()
 {
     global $d;
+    $d['douche']['s']=4;
+    $d['douche']['m']=20;
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
     if ($douchegas>0&&$douchewater>0) {
         $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 		$eurocent=round($euro*100, 0);
 		douchewarn($eurocent, 0);
-		telegram('Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€');
+		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
+		echo $msg;
+		telegram($msg);
     }
     store('douche', 0, basename(__FILE__).':'.__LINE__);
     storemode('douche', 0, basename(__FILE__).':'.__LINE__);

@@ -12,11 +12,12 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
+if(!ob_get_level()) ob_start();
 /*-------------------------------------------------*/
-echo 20%6 .'<br>';
-for($y=1;$y<=4;$y++) {
-	for ($x=10;$x<=99;$x=$x+1) {
+/*for($y=1;$y<=1;$y++) {
+	for ($x=10;$x<=30;$x=$x+1) {
 		if(!file_exists('/var/www/html/sounds/douche-'.$y.$x.'.mp3')) {
+			echo 'fetching '.$y.$x.'<br>';
 			$postdata = http_build_query(
 					array(
 						'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
@@ -45,9 +46,13 @@ for($y=1;$y<=4;$y++) {
 				} else {
 					exit;
 				}
+				ob_end_flush();
+				ob_flush();
+				flush();
 			}
 	}
-}
+}*/
+douche();
 
 
 /*---------------------------*/
