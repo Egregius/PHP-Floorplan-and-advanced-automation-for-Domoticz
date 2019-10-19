@@ -169,17 +169,18 @@ function boseplayinfo($sound) {
  * Function waarschuwing
  *
  * Plays a sound on the Xiami doorbell and a regular doorbell
+ * Says the message on the Bose Soundtouch speakers
  * and sents a telegram message
  *
  * @param string $msg Message to sent to telegram
  *
  * @return null
  */
-function waarschuwing($msg,$sound)
+function waarschuwing($msg)
 {
     global $d;
     if ($d['bose101']['s']=='On') {
-    	boseplayinfo($sound);
+    	boseplayinfo($msg);
     }
     if ($d['bose102']['s']=='On') {
     	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
@@ -199,7 +200,7 @@ function waarschuwing($msg,$sound)
     }
     sl('Xring', 30, basename(__FILE__).':'.__LINE__);
     sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
-    //telegram($msg, false, 2);
+    telegram($msg, false, 2);
     usleep(1500000);
     sl('Xring', 0, basename(__FILE__).':'.__LINE__);
     die($msg);

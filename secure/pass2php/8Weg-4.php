@@ -11,19 +11,19 @@
  **/
 if ($status=='On') {
     if ($d['achterdeur']['s']!='Closed') {
-        waarschuwing(' . Let op. Achterdeur open', 'achterdeur');
+        waarschuwing(' . Let op. Achterdeur open');
         exit('');
     }
     if ($d['raamliving']['s']!='Closed') {
-        waarschuwing(' . Let op. Raam Living open', 'raamliving');
+        waarschuwing(' . Let op. Raam Living open');
         exit('');
     }
     if ($d['bureeltobi']['s']=='On') {
-        waarschuwing(' . Let op. bureel Tobi aan', 'bureeltobi');
+        waarschuwing(' . Let op. bureel Tobi aan');
         exit('');
     }
     if ($d['bose105']['m']=='Online') {
-        waarschuwing(' . Let op. Bose buiten', 'bosebuiten');
+        waarschuwing(' . Let op. Bose buiten');
         exit('');
     }
     if ($d['poort']['s']=='Open') {
@@ -33,7 +33,7 @@ if ($status=='On') {
         if ($d['garageled']['s']=='On') {
             sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
- 		shell_exec('/var/www/html/secure/boseplayinfo.sh "allesok" > /dev/null 2>/dev/null &');
+		boseplayinfo(' . Alles ok. Vertrek maar.');
 		usleep(1100000);
 		bosevolume(55, 104);
 		usleep(3000000);

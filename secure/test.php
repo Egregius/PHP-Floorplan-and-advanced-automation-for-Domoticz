@@ -15,7 +15,7 @@ echo '<pre>';
 if(!ob_get_level()) ob_start();
 $d=fetchdata();
 /*-------------------------------------------------*/
-boseplayinfo(' . Opgelet: Achterdeur open');
+boseplayinfo(' . Let op. Bose buiten');
 
 /*---------------------------*/
 echo '</pre>';
