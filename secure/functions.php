@@ -108,6 +108,7 @@ function douche()
     }
     store('douche', 0, basename(__FILE__).':'.__LINE__);
     storemode('douche', 0, basename(__FILE__).':'.__LINE__);
+    sleep(5);
 }
 /**
  * Function douchewarn
