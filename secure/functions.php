@@ -125,12 +125,14 @@ function douchewarn($eurocent,$vol=0)
     global $boseipbadkamer, $d;
     if ($d['douche']['icon']<TIME-3) {
     	storeicon('douche', TIME);
-		//if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
+		if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
 		if ($eurocent<100) boseplayinfo(' . Douche. '.$eurocent.' cent.');
 		else {
-			
+			$euro=floor($eurocent/100);
+			$cent=$eurocent%($euro*100);
+			boseplayinfo(' . Douche. '.$euro.' euro '.$cent.' cent.');
 		}
-		/*if ($vol>0) {
+		if ($vol>0) {
 			$cv=$volume['actualvolume'];
 			if ($cv<$vol) {
 				usleep(1550000);
@@ -138,11 +140,12 @@ function douchewarn($eurocent,$vol=0)
 				usleep(3500000);
 				bosevolume($cv, 102);
 			}
-		}*/
+		}
 		telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol.'!');
 	}
 }
 function boseplayinfo($sound) {
+	echo $sound.'<br>';
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.$sound.'" > /dev/null 2>/dev/null &');
 	} else {
