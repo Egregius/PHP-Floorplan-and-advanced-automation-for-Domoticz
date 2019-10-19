@@ -94,8 +94,6 @@ function huisweg()
 function douche()
 {
     global $d;
-    $d['douche']['s']=4;
-    $d['douche']['m']=20;
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
     if ($douchegas>0&&$douchewater>0) {
