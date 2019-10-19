@@ -14,18 +14,27 @@ require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
 echo 20%6 .'<br>';
-for ($x=1;$x<=100;$x++) {
-	for ($y=1;$y<=100;$y++) {
-		$d['douche']['s']=$x;
-		$d['douche']['m']=$y;
-		$euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
-		$eurocent=round($euro*100, 0);
-		echo $x.'	'.$y.'	'.$euro.'	'.$eurocent;
-		for ($z=50;$z<=1000;$z=$z+50) {
-			if ($eurocent%$z==0) echo '	%'.$z;
-		}
-		echo '<br>';
-	}
+for ($x=1;$x<=1;$x++) {
+	$postdata = http_build_query(
+			array(
+				'msg' => 'Opgelet: Douche. '.$x.' cent.',
+				'lang' => 'Ruben',
+				'source' => 'ttsmp3'
+			)
+		);
+
+		$opts = array('http' =>
+			array(
+				'method'  => 'POST',
+				'header'  => 'Content-Type: application/x-www-form-urlencoded',
+				'content' => $postdata
+			)
+		);
+
+		$context  = stream_context_create($opts);
+
+		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+		print_r($result);
 }
 
 
