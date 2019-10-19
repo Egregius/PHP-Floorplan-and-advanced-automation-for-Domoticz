@@ -126,7 +126,10 @@ function douchewarn($eurocent,$vol=0)
     if ($d['douche']['icon']<TIME-3) {
     	storeicon('douche', TIME);
 		//if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-		shell_exec('./boseplayinfo.sh "douche-'.$eurocent.'" > /dev/null 2>/dev/null &');
+		if ($eurocent<100) boseplayinfo(' . Douche. '.$eurocent.' cent.');
+		else {
+			
+		}
 		/*if ($vol>0) {
 			$cv=$volume['actualvolume'];
 			if ($cv<$vol) {
@@ -136,23 +139,24 @@ function douchewarn($eurocent,$vol=0)
 				bosevolume($cv, 102);
 			}
 		}*/
-		telegram('Douche € '.($eurocent/100).' geluid op vol '.$vol.'!');
+		telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol.'!');
 	}
 }
 function boseplayinfo($sound) {
-	if(!file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
+	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.$sound.'" > /dev/null 2>/dev/null &');
 	} else {
 		$postdata = http_build_query(array('msg'=>$sound, 'lang'=>'Ruben', 'source'=>'ttsmp3'));
 		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 		$context  = stream_context_create($opts);
 		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-		if($result['Error']==0) {
+		if($result['Error']==0&&isset($result['URL'])) {
 			$mp3=file_get_contents($result['URL']);
 			if(strlen($mp3)>1000) {
 				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 			}
-		} 
+		}
+		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.$sound.'" > /dev/null 2>/dev/null &');
 	}
 }
 

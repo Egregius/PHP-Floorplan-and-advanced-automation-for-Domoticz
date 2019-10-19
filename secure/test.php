@@ -15,7 +15,7 @@ echo '<pre>';
 if(!ob_get_level()) ob_start();
 $d=fetchdata();
 /*-------------------------------------------------*/
-boseplayinfo(' . Douche. 1 euro 10 cent');
+douchewarn(50, 0);
 
 
 /*---------------------------*/
