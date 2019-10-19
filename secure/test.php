@@ -15,45 +15,7 @@ echo '<pre>';
 if(!ob_get_level()) ob_start();
 $d=fetchdata();
 /*-------------------------------------------------*/
-/*for($y=1;$y<=1;$y++) {
-	for ($x=10;$x<=30;$x=$x+1) {
-		if(!file_exists('/var/www/html/sounds/douche-'.$y.$x.'.mp3')) {
-			echo 'fetching '.$y.$x.'<br>';
-			$postdata = http_build_query(
-					array(
-						'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
-						'lang' => 'Ruben',
-						'source' => 'ttsmp3'
-					)
-				);
-
-				$opts = array('http' =>
-					array(
-						'method'  => 'POST',
-						'header'  => 'Content-Type: application/x-www-form-urlencoded',
-						'content' => $postdata
-					)
-				);
-
-				$context  = stream_context_create($opts);
-
-				$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-				print_r($result);
-				if($result['Error']==0) {
-					$mp3=file_get_contents($result['URL']);
-					if(strlen($mp3)>1000) {
-						file_put_contents('/var/www/html/sounds/douche-'.$y.$x.'.mp3', $mp3);
-					}
-				} else {
-					exit;
-				}
-				ob_end_flush();
-				ob_flush();
-				flush();
-			}
-	}
-}*/
-douche();
+boseplayinfo(' . Douche. 1 euro 10 cent');
 
 
 /*---------------------------*/

@@ -139,6 +139,23 @@ function douchewarn($eurocent,$vol=0)
 		telegram('Douche € '.($eurocent/100).' geluid op vol '.$vol.'!');
 	}
 }
+function boseplayinfo($sound) {
+	if(!file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
+		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.$sound.'" > /dev/null 2>/dev/null &');
+	} else {
+		$postdata = http_build_query(array('msg'=>$sound, 'lang'=>'Ruben', 'source'=>'ttsmp3'));
+		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
+		$context  = stream_context_create($opts);
+		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+		if($result['Error']==0) {
+			$mp3=file_get_contents($result['URL']);
+			if(strlen($mp3)>1000) {
+				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
+			}
+		} 
+	}
+}
+
 /**
  * Function waarschuwing
  *
@@ -210,7 +227,7 @@ function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
-    lg(' (SETLEVEL)	'.$user.' => '.$name.' => '.$level.' ('.$msg.')');
+    lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
     if ($d[$name]['i']>0) {
 		if ($d[$name]['s']!=$level) {
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
@@ -277,7 +294,7 @@ function sw($name,$action='Toggle',$msg='')
             usleep($usleep);
         }
     } else {
-        $msg=' (SWITCH)		'.$user.' => '.$name.' => '.$action.' ('.$msg.')';
+        $msg=' (SWITCH)		'.$user.'=>'.$name.'=>'.$action.' ('.$msg.')';
         if ($d[$name]['i']>0) {
             lg($msg);
 			if ($d[$name]['s']!=$action) {
@@ -373,7 +390,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='')
     } else {
         store($name, $svalue, basename(__FILE__).':'.__LINE__);
     }
-    lg(' (udevice) | '.$user.' => '.$name.' => '.$nvalue.','.$svalue.' ('.$msg.')');
+    lg(' (udevice) | '.$user.'=>'.$name.'=>'.$nvalue.','.$svalue.' ('.$msg.')');
 }
 function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
 function zwaveCommand($node,$command){global $domoticzurl;$cm=array('AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');$cm=$cm[$command];for($k=1;$k<=5;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));if ($result=='OK') {break;}sleep(1);}return $result;}
