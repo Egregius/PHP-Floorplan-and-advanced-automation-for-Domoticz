@@ -15,10 +15,7 @@ echo '<pre>';
 if(!ob_get_level()) ob_start();
 $d=fetchdata();
 /*-------------------------------------------------*/
-douchewarn(50, 0);
-douchewarn(125, 0);
-douchewarn(254, 0);
-
+boseplayinfo(' . Opgelet: Achterdeur open');
 
 /*---------------------------*/
 echo '</pre>';
