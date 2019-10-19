@@ -14,10 +14,10 @@ require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
 echo 20%6 .'<br>';
-for ($x=1;$x<=1;$x++) {
+for ($x=1;$x<=500;$x++) {
 	$postdata = http_build_query(
 			array(
-				'msg' => 'Opgelet: Douche. '.$x.' cent.',
+				'msg' => 'Douche. '.$x.' cent.',
 				'lang' => 'Ruben',
 				'source' => 'ttsmp3'
 			)
@@ -35,6 +35,7 @@ for ($x=1;$x<=1;$x++) {
 
 		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
 		print_r($result);
+		file_put_contents('/var/www/html/sounds/douche-'.$x.'.mp3', file_get_contents($result['URL']));
 }
 
 
