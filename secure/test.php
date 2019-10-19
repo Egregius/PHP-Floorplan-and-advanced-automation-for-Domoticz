@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 /*-------------------------------------------------*/
-echo dechex(36119830366710500);
+echo date("w");
 
 
 /*---------------------------*/
