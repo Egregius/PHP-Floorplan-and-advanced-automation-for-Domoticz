@@ -20,16 +20,32 @@ $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
-		if ($d['RkamerL']['s']>0) {
-			sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['RkamerL']['m']>0) {
-				storemode('RKamerL', 0, basename(__FILE__).':'.__LINE__);
+		$dow=date("w");
+		if($dow==0||$dow==6) {
+			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) {
+				sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['RkamerL']['m']>0) {
+					storemode('RKamerL', 0, basename(__FILE__).':'.__LINE__);
+				}
 			}
-		}
-		if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:15')) {
-			sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['RkamerR']['m']>0) {
-				storemode('RKamerR', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:15')) {
+				sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['RkamerR']['m']>0) {
+					storemode('RKamerR', 0, basename(__FILE__).':'.__LINE__);
+				}
+			}
+		} else {
+			if ($d['RkamerL']['s']>0) {
+				sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['RkamerL']['m']>0) {
+					storemode('RKamerL', 0, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:15')) {
+				sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['RkamerR']['m']>0) {
+					storemode('RKamerR', 0, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 		if ($dag==true) {
