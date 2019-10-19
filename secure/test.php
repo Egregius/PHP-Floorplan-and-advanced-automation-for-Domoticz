@@ -13,6 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 if(!ob_get_level()) ob_start();
+$d=fetchdata();
 /*-------------------------------------------------*/
 /*for($y=1;$y<=1;$y++) {
 	for ($x=10;$x<=30;$x=$x+1) {

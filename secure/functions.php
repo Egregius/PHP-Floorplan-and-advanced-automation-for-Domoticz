@@ -126,7 +126,7 @@ function douchewarn($eurocent,$vol=0)
     if ($d['douche']['icon']<TIME-3) {
     	storeicon('douche', TIME);
 		//if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-		shell_exec('./boseplayinfo.sh "martian-gun" > /dev/null 2>/dev/null &');
+		shell_exec('./boseplayinfo.sh "douche-'.$eurocent.'" > /dev/null 2>/dev/null &');
 		/*if ($vol>0) {
 			$cv=$volume['actualvolume'];
 			if ($cv<$vol) {
