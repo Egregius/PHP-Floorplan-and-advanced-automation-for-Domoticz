@@ -12,19 +12,13 @@
 if ($status=='On'&&past('8badkamer-7')>5) {
     if ($d['badkamervuur1']['s']=='On') {
         store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-        $d['badkamer_set']['s']=10;
+        if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
+        sw('badkamervuur1', 'Off');
     } elseif ($d['heating']['s']!=1) {
         store('badkamer_set', 22.5, basename(__FILE__).':'.__LINE__);
-        $d['badkamer_set']['s']=22.5;
-        $d['deurbadkamer']['s']='Closed';
+        sw('badkamervuur1', 'On');
+        if ($d['badkamervuur2']['s']=='Off') sw('badkamervuur2', 'On');
     }
-    store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-    $d['lichtbadkamer']['s']=25;
-    $d['deurbadkamer']['s']='Closed';
-    $d['8badkamer-7']['t']=0;
-    $d['badkamervuur1']['t']=0;
-    $d['badkamervuur2']['t']=0;
-    require '_verwarming.php';
     douche();
     resetsecurity();
 }
