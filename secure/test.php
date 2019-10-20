@@ -14,10 +14,20 @@ require 'functions.php';
 echo '<pre>';
 //$d=fetchdata();
 /*-------------------------------------------------*/
-saytime(7, 16);
+for($hour=0;$hour<=23;$hour++) {
+	for($minute=0;$minute<=59;$minute++) {
+		saytime($hour, $minute);
+	}
+}
 
 function saytime($hour, $minute) {
-	
+	echo 'SayTime = '.$hour.':'.$minute.'	';
+	if ($hour==0) $hour='middernacht';
+	if ($minute==0) $msg='Het is '.$hour;
+	elseif ($minute<15) $msg='Het is '.$minute.' over '.$hour;
+	elseif ($minute==15) $msg='Het is kwart over '.$hour;
+	elseif ($minute==45) $msg='Het is kwart voor '.$hour+1;
+	echo $msg.'<br>';
 }
 /*---------------------------*/
 echo '</pre>';
