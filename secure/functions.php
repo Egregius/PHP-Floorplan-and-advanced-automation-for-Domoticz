@@ -167,7 +167,22 @@ function boseplayinfo($sound, $vol=50) {
 		}
 	}
 }
-
+function saytime($hour, $minute) {
+	echo 'SayTime = '.$hour.':'.$minute.'	';
+	if ($hour==0) $hourtxt='middernacht';
+	else $hourtxt=$hour;
+	if ($minute==0) $msg='Het is '.$hourtxt.' uur';
+	elseif ($minute<15) $msg='Het is '.$minute.' over '.$hourtxt;
+	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
+	elseif ($minute==20) $msg='Het is 20 over '.$hourtxt;
+	elseif ($minute==30) $msg='Het is half '.($hour+1);
+	elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
+	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
+	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
+	else $msg='Het is '.$hour.' uur '.$minute;
+	echo $msg.'<br>';
+	boseplayinfo($msg, $vol=30)
+}
 /**
  * Function waarschuwing
  *
