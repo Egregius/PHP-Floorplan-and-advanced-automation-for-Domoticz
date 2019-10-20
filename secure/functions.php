@@ -41,20 +41,20 @@ function huisslapen()
 {
     global $d,$boseipbuiten;
     sw(array('slapen'), 'Off', basename(__FILE__).':'.__LINE__);
-    $items=array('living_set','tobi_set','alex_set','kamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
+    $items=array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
-        storemode($i, 0, basename(__FILE__).':'.__LINE__);
+        if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
     $items=array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel');
     foreach ($items as $i) {
-        storemode($i, 0, basename(__FILE__).':'.__LINE__);
+        if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
     $items=array('Ralex','RkamerL','RkamerR');
     foreach ($items as $i) {
-        storemode($i, 2, basename(__FILE__).':'.__LINE__);
+        if ($d[$i]['m']!=2) storemode($i, 2, basename(__FILE__).':'.__LINE__);
     }
     if ($d['gcal']['s']==true) {
-        storemode('Rtobi', 2, basename(__FILE__).':'.__LINE__);
+        if ($d['Rtobi']['m']!=2) storemode('Rtobi', 2, basename(__FILE__).':'.__LINE__);
     }
     $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/now_playing'))), true);
     if (!empty($status)) {
@@ -80,7 +80,7 @@ function huisweg()
     huisslapen();
     $items=array('Rtobi','Ralex','RkamerL','RkamerR');
     foreach ($items as $i) {
-        storemode($i, 0, basename(__FILE__).':'.__LINE__);
+        if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
 }
 /**
