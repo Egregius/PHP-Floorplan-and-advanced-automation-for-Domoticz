@@ -490,7 +490,7 @@ if ($d['deurbadkamer']['s']=='Open'
 ) {
     store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
     $d['badkamer_set']['s']=10.0;
-} elseif ($d['deurbadkamer']['s']=='Closed') {
+} elseif ($d['deurbadkamer']['s']=='Closed'&&$d[$_REQUEST['device'].'_set']['m']==0) {
     $b7=past('8badkamer-7');
     $b7b=past('8Kamer-7');
     if ($b7b<$b7) {
