@@ -11,23 +11,23 @@
  **/
 if ($status=='On') {
     if ($d['achterdeur']['s']!='Closed') {
-        waarschuwing(' . Let op. Achterdeur open');
+        waarschuwing('Let op. Achterdeur open', 55);
         exit('');
     }
     if ($d['raamliving']['s']!='Closed') {
-        waarschuwing(' . Let op. Raam Living open');
+        waarschuwing('Let op. Raam Living open', 55);
         exit('');
     }
     if ($d['bureeltobi']['s']=='On') {
-        waarschuwing(' . Let op. bureel Tobi aan');
+        waarschuwing('Let op. Bureel Tobi aan', 55);
         exit('');
     }
     if ($d['bose105']['m']=='Online') {
-        waarschuwing(' . Let op. Bose buiten');
+        waarschuwing('Let op. Bose buiten', 55);
         exit('');
     }
     if ($d['poort']['s']!='Closed') {
-        waarschuwing(' . Let op. Poort open');
+        waarschuwing('Let op. Poort open', 55);
     }
     if ($d['Weg']['s']!=1) {
         store('Weg', 1, basename(__FILE__).':'.__LINE__);
