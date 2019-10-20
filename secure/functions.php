@@ -147,6 +147,7 @@ function douchewarn($eurocent,$vol=0)
 }
 function boseplayinfo($sound, $vol=50) {
 	global $d;
+	echo 'boseplayinfo<br>';
 	if ($d['bose101']['s']=='On') {
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
@@ -167,7 +168,9 @@ function boseplayinfo($sound, $vol=50) {
 		}
 	}
 }
-function saytime($hour, $minute) {
+function saytime() {
+	$hour=strftime('%k', TIME);
+	$minute=(1*strftime('%M', TIME));
 	echo 'SayTime = '.$hour.':'.$minute.'	';
 	if ($hour==0) $hourtxt='middernacht';
 	else $hourtxt=$hour;
@@ -181,7 +184,7 @@ function saytime($hour, $minute) {
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
-	boseplayinfo($msg, $vol=30)
+	boseplayinfo($msg, $vol=30);
 }
 /**
  * Function waarschuwing

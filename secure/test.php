@@ -12,9 +12,9 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-//$d=fetchdata();
+$d=fetchdata();
 /*-------------------------------------------------*/
-saytime(strftime('%k', TIME), strftime('%M', TIME));
+saytime();
 
 /*---------------------------*/
 echo '</pre>';
