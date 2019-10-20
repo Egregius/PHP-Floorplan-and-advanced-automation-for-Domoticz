@@ -53,15 +53,15 @@ if (isset($_REQUEST['gpio'])) {
 		$eurocent=round($euro*100, 0);
         lg('Douche = '.$euro.', round='.roundUpToAny($euro*100, 5));
         if ($eurocent>0) {
-			if ($eurocent==450) douchewarn($eurocent, 41);
-			elseif ($eurocent==400) douchewarn($eurocent, 41);
-			elseif ($eurocent==350) douchewarn($eurocent, 41);
-			elseif ($eurocent==300) douchewarn($eurocent, 41);
-			elseif ($eurocent==250) douchewarn($eurocent, 41);
-			elseif ($eurocent==200) douchewarn($eurocent, 41);
-			elseif ($eurocent==150) douchewarn($eurocent, 41);
-			elseif ($eurocent==100) douchewarn($eurocent, 38);
-			elseif ($eurocent==50) douchewarn($eurocent, 35);
+			if ($eurocent==450) douchewarn($eurocent, 56);
+			elseif ($eurocent==400) douchewarn($eurocent, 54);
+			elseif ($eurocent==350) douchewarn($eurocent, 52);
+			elseif ($eurocent==300) douchewarn($eurocent, 50);
+			elseif ($eurocent==250) douchewarn($eurocent, 48);
+			elseif ($eurocent==200) douchewarn($eurocent, 46);
+			elseif ($eurocent==150) douchewarn($eurocent, 44);
+			elseif ($eurocent==100) douchewarn($eurocent, 42);
+			elseif ($eurocent==50) douchewarn($eurocent, 40);
 		}
     }
     echo 'ok';
