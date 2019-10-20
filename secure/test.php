@@ -15,9 +15,7 @@ echo '<pre>';
 //$d=fetchdata();
 /*-------------------------------------------------*/
 
-boseplayinfo(' . Douche. 62 cent');
 
-/*
 for($y=30;$y<=60;$y++) {
 	if ($y<100) $file=(' . Douche. '.$y.' cent');
 	else {
@@ -56,7 +54,7 @@ for($y=30;$y<=60;$y++) {
 			exit;
 		}
 	}
-}*/
+}
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

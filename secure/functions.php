@@ -145,11 +145,11 @@ function douchewarn($eurocent,$vol=0)
 		telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol.'!');
 	}
 }
-function boseplayinfo($sound) {
+function boseplayinfo($sound, $vol=50) {
 	echo $sound.'<br>';
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-		echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'"';
-		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" > /dev/null 2>/dev/null &');
+		echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
+		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 	} else {
 		$postdata = http_build_query(array('msg'=>$sound, 'lang'=>'Ruben', 'source'=>'ttsmp3'));
 		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -161,7 +161,7 @@ function boseplayinfo($sound) {
 				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 			}
 		}
-		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" > /dev/null 2>/dev/null &');
+		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 	}
 }
 
