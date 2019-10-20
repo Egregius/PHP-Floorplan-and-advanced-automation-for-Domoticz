@@ -913,6 +913,8 @@ function fbadkamer()
         }
         if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) {
         	bosezone(102);
+        	sleep(2);
+        	saytime();
         }
     }
 }

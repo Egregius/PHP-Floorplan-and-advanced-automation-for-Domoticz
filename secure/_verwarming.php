@@ -417,10 +417,7 @@ foreach ($kamers as $kamer) {
             $d[$kamer.'_set']['s']
         );
     }
-    if (TIME>=strtotime('15:00')
-        && ${'RSet'.$kamer}<15
-        && $d['raam'.$kamer]['s']!='Open'
-    ) {
+    if (TIME>=strtotime('15:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed') {
         if ($kamer!='tobi') {
             if ($d[$kamer.'_temp']['s']<15) {
                 ${'RSet'.$kamer}=18;
@@ -440,7 +437,6 @@ foreach ($kamers as $kamer) {
         }
     }
     if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
-        //store('Tset'.$kamer.'Z',TIME, basename(__FILE__).':'.__LINE__);
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
 }
@@ -490,6 +486,9 @@ if ($d['deurbadkamer']['s']=='Open'
 ) {
     store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
     $d['badkamer_set']['s']=10.0;
+    if ($d['badkamer_set']['m']==1) {
+    	storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
+    }
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0) {
     $b7=past('8badkamer-7');
     $b7b=past('8Kamer-7');
