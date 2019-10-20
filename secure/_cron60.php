@@ -104,15 +104,15 @@ if ($d['auto']['s']=='On') {
         	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
 				bosekey('PRESET_6', 0, 101);
         	}
-        	if (TIME>=strtotime('6:00')&&TIME<strtotime('6:01')) boseplayinfo(' . Het is zes uur', 40);
-        	elseif (TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(' . Het is kwart over zes', 40);
-        	elseif (TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(' . Het is half zeven', 40);
-        	elseif (TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(' . Het is kwart voor zeven', 40);
-        	elseif (TIME>=strtotime('7:00')&&TIME<strtotime('7:01')) boseplayinfo(' . Het is zeven uur', 40);
-        	elseif (TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(' . Het is kwart over zeven', 40);
-        	elseif (TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(' . Het is half acht', 40);
-        	elseif (TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(' . Het is kwart voor acht', 40);
-        	elseif (TIME>=strtotime('8:00')&&TIME<strtotime('8:01')) boseplayinfo(' . Het is acht uur', 40);
+        	if (TIME>=strtotime('6:00')&&TIME<strtotime('6:01')) boseplayinfo('Het is zes uur', 40);
+        	elseif (TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo('Het is kwart over zes', 40);
+        	elseif (TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo('Het is half zeven', 40);
+        	elseif (TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo('Het is kwart voor zeven', 40);
+        	elseif (TIME>=strtotime('7:00')&&TIME<strtotime('7:01')) boseplayinfo('Het is zeven uur', 40);
+        	elseif (TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo('Het is kwart over zeven', 40);
+        	elseif (TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo('Het is half acht', 40);
+        	elseif (TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo('Het is kwart voor acht', 40);
+        	elseif (TIME>=strtotime('8:00')&&TIME<strtotime('8:01')) boseplayinfo('Het is acht uur', 40);
         }
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
