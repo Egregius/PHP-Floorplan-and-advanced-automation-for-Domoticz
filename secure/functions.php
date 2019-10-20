@@ -173,6 +173,7 @@ function boseplayinfo($sound, $vol=50) {
 }
 function saytime() {
 	$hour=strftime('%k', TIME);
+	if ($hour>12) $hour=$hour-12;
 	$minute=(1*strftime('%M', TIME));
 	echo 'SayTime = '.$hour.':'.$minute.'	';
 	if ($hour==0) $hourtxt='middernacht';
