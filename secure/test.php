@@ -12,10 +12,13 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-ob_start();
 //$d=fetchdata();
 /*-------------------------------------------------*/
-for($y=30;$y<=40;$y=$y++) {
+
+boseplayinfo(' . Douche. 62 cent');
+
+/*
+for($y=30;$y<=60;$y++) {
 	if ($y<100) $file=(' . Douche. '.$y.' cent');
 	else {
 		$euro=floor($y/100);
@@ -52,11 +55,8 @@ for($y=30;$y<=40;$y=$y++) {
 		} else {
 			exit;
 		}
-		ob_end_flush();
-		ob_flush();
-		flush();
 	}
-}
+}*/
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
