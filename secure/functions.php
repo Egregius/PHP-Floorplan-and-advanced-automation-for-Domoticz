@@ -122,6 +122,7 @@ function douche()
  */
 function douchewarn($eurocent,$vol=0)
 {
+    lg('Douchewarn '.$eurocent);
     global $boseipbadkamer, $d;
     if ($d['douche']['icon']<TIME-30) {
     	storeicon('douche', TIME);
