@@ -33,4 +33,5 @@ if ($status=='On') {
             }
         }
     }
+    saytime();
 }

@@ -123,7 +123,7 @@ function douche()
 function douchewarn($eurocent,$vol=0)
 {
     global $boseipbadkamer, $d;
-    if ($d['douche']['icon']<TIME-3) {
+    if ($d['douche']['icon']<TIME-30) {
     	storeicon('douche', TIME);
 		if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
 		if ($eurocent<100) boseplayinfo('Douche. '.$eurocent.' cent', 40);
@@ -144,6 +144,9 @@ function douchewarn($eurocent,$vol=0)
 		}
 		telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol.'!');
 	}
+}
+function roundUpToAny($n,$x=5) {
+    return round(($n+$x/2)/$x)*$x;
 }
 function boseplayinfo($sound, $vol=50) {
 	global $d;
