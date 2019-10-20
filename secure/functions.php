@@ -183,8 +183,9 @@ function saytime() {
 	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
 	elseif ($minute==20) $msg='Het is 20 over '.$hourtxt;
 	elseif ($minute==30) $msg='Het is half '.($hour+1);
-	elseif ($minute==35) $msg='Het is 5 over half '.($hour+1);
+	elseif ($minute<40) $msg='Het is '.(30-$minute).' over half '.($hour+1);
 	elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
+	elseif ($minute<45) $msg='Het is '.(30-$minute).' over half '.($hour+1);
 	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
