@@ -14,46 +14,10 @@ require 'functions.php';
 echo '<pre>';
 //$d=fetchdata();
 /*-------------------------------------------------*/
+saytime(7, 16);
 
-
-for($y=30;$y<=60;$y++) {
-	if ($y<100) $file=(' . Douche. '.$y.' cent');
-	else {
-		$euro=floor($y/100);
-		$cent=$y%($euro*100);
-		if ($cent==0) $file=(' . Douche. '.$euro.' euro');
-		else $file=(' . Douche. '.$euro.' euro '.$cent.' cent');
-	}
+function saytime($hour, $minute) {
 	
-	
-	if(!file_exists('/var/www/html/sounds/'.$file.'.mp3')) {
-		echo 'fetching '.$file.'<br>';
-		$postdata = http_build_query(
-			array(
-				'msg' => $file,
-				'lang' => 'Ruben',
-				'source' => 'ttsmp3'
-			)
-		);
-		$opts = array('http' =>
-			array(
-				'method'  => 'POST',
-				'header'  => 'Content-Type: application/x-www-form-urlencoded',
-				'content' => $postdata
-			)
-		);
-		$context  = stream_context_create($opts);
-		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-		print_r($result);
-		if($result['Error']==0) {
-			$mp3=file_get_contents($result['URL']);
-			if(strlen($mp3)>1000) {
-				file_put_contents('/var/www/html/sounds/'.$file.'.mp3', $mp3);
-			}
-		} else {
-			exit;
-		}
-	}
 }
 /*---------------------------*/
 echo '</pre>';
