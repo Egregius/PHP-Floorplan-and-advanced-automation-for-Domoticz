@@ -146,22 +146,25 @@ function douchewarn($eurocent,$vol=0)
 	}
 }
 function boseplayinfo($sound, $vol=50) {
-	echo $sound.'<br>';
-	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-		echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
-		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
-	} else {
-		$postdata = http_build_query(array('msg'=>'<break time="2s"/><prosody pitch="-5%">'.$sound.'</prosody>', 'lang'=>'Ruben', 'source'=>'ttsmp3'));
-		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
-		$context  = stream_context_create($opts);
-		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-		if($result['Error']==0&&isset($result['URL'])) {
-			$mp3=file_get_contents($result['URL']);
-			if(strlen($mp3)>1000) {
-				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
+	global $d;
+	if ($d['bose101']['s']=='On') {
+		echo $sound.'<br>';
+		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
+			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
+		} else {
+			$postdata = http_build_query(array('msg'=>'<break time="2s"/><prosody pitch="-10%">'.$sound.'</prosody>', 'lang'=>'Ruben', 'source'=>'ttsmp3'));
+			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
+			$context  = stream_context_create($opts);
+			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+			if($result['Error']==0&&isset($result['URL'])) {
+				$mp3=file_get_contents($result['URL']);
+				if(strlen($mp3)>1000) {
+					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
+				}
 			}
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 		}
-		shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 	}
 }
 

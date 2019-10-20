@@ -22,11 +22,14 @@ for($hour=0;$hour<=23;$hour++) {
 
 function saytime($hour, $minute) {
 	echo 'SayTime = '.$hour.':'.$minute.'	';
-	if ($hour==0) $hour='middernacht';
-	if ($minute==0) $msg='Het is '.$hour;
-	elseif ($minute<15) $msg='Het is '.$minute.' over '.$hour;
-	elseif ($minute==15) $msg='Het is kwart over '.$hour;
-	elseif ($minute==45) $msg='Het is kwart voor '.$hour+1;
+	if ($hour==0) $hourtxt='middernacht';
+	else $hourtxt=$hour;
+	if ($minute==0) $msg='Het is '.$hourtxt;
+	elseif ($minute<15) $msg='Het is '.$minute.' over '.$hourtxt;
+	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
+	elseif ($minute==30) $msg='Het is half '.($hour+1);
+	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
+	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
 }
 /*---------------------------*/
