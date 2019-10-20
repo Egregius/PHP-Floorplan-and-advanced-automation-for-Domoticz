@@ -12,16 +12,16 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-if(!ob_get_level()) ob_start();
-$d=fetchdata();
+ob_start();
+//$d=fetchdata();
 /*-------------------------------------------------*/
-for($y=50;$y<=500;$y=$y+50) {
-	if ($y<100) $file=(' . Douche. '.$y.' cent.');
+for($y=30;$y<=40;$y=$y++) {
+	if ($y<100) $file=(' . Douche. '.$y.' cent');
 	else {
 		$euro=floor($y/100);
 		$cent=$y%($euro*100);
-		if ($cent==0) $file=(' . Douche. '.$euro.' euro.');
-		else $file=(' . Douche. '.$euro.' euro '.$cent.' cent.');
+		if ($cent==0) $file=(' . Douche. '.$euro.' euro');
+		else $file=(' . Douche. '.$euro.' euro '.$cent.' cent');
 	}
 	
 	
@@ -29,7 +29,7 @@ for($y=50;$y<=500;$y=$y+50) {
 		echo 'fetching '.$file.'<br>';
 		$postdata = http_build_query(
 			array(
-				'msg' => 'Douche. '.$y.' euro '.$x.' cent.',
+				'msg' => $file,
 				'lang' => 'Ruben',
 				'source' => 'ttsmp3'
 			)
@@ -47,7 +47,7 @@ for($y=50;$y<=500;$y=$y+50) {
 		if($result['Error']==0) {
 			$mp3=file_get_contents($result['URL']);
 			if(strlen($mp3)>1000) {
-				file_put_contents('/var/www/html/sounds/douche-'.$y.$x.'.mp3', $mp3);
+				file_put_contents('/var/www/html/sounds/'.$file.'.mp3', $mp3);
 			}
 		} else {
 			exit;

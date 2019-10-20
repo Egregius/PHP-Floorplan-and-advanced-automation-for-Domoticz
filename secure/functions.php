@@ -126,12 +126,12 @@ function douchewarn($eurocent,$vol=0)
     if ($d['douche']['icon']<TIME-3) {
     	storeicon('douche', TIME);
 		if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-		if ($eurocent<100) boseplayinfo(' . Douche. '.$eurocent.' cent.');
+		if ($eurocent<100) boseplayinfo(' . Douche. '.$eurocent.' cent');
 		else {
 			$euro=floor($eurocent/100);
 			$cent=$eurocent%($euro*100);
 			if ($cent==0) boseplayinfo(' . Douche. '.$euro.' euro.');
-			else boseplayinfo(' . Douche. '.$euro.' euro '.$cent.' cent.');
+			else boseplayinfo(' . Douche. '.$euro.' euro '.$cent.' cent');
 		}
 		if ($vol>0) {
 			$cv=$volume['actualvolume'];
