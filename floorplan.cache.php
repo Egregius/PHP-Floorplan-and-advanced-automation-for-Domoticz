@@ -185,10 +185,10 @@ if ($home) {
                 <td>'.$row['n'].'</td>';
                 if ($row['s']==0) {
                     echo '
-                <td>Open</td>';
+                <td>Gesloten</td>';
                 } elseif ($row['s']==100) {
                     echo '
-                <td>Gesloten</td>';
+                <td>Open</td>';
                 } else {
                     echo '
                 <td>'.$row['s'].' % Open</td>';
@@ -297,10 +297,10 @@ if ($home) {
             } elseif ($row['n']=='auto') {
                 echo '
                 <td>'.$row['n'].'</td>';
-                if ($row['s']==0) {
+                if ($row['s']=='Off') {
                     echo '
                 <td>Lichten manueel</td>';
-                } elseif ($row['s']==1) {
+                } elseif ($row['s']=='On') {
                     echo '
                 <td>Lichten automatisch</td>';
                 }
