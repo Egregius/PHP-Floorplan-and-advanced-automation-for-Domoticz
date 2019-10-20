@@ -103,11 +103,10 @@ function douche()
 		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
 		echo $msg;
 		telegram($msg);
-		sleep(5);
+		store('douche', 0, basename(__FILE__).':'.__LINE__);
+		storemode('douche', 0, basename(__FILE__).':'.__LINE__);
+		sleep(8);
     }
-    store('douche', 0, basename(__FILE__).':'.__LINE__);
-    storemode('douche', 0, basename(__FILE__).':'.__LINE__);
-    
 }
 /**
  * Function douchewarn
