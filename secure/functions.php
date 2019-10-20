@@ -158,7 +158,7 @@ function boseplayinfo($sound, $vol=50) {
 			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 		} else {
-			$postdata = http_build_query(array('msg'=>'<break time="1200ms"/><prosody pitch="-10%" rate="90%">'.$sound.'</prosody>', 'lang'=>'Ruben', 'source'=>'ttsmp3'));
+			$postdata = http_build_query(array('msg'=>'<break time="1200ms"/><prosody pitch="-15%" rate="85%">'.$sound.'</prosody>', 'lang'=>'Ruben', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 			$context  = stream_context_create($opts);
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
@@ -183,6 +183,7 @@ function saytime() {
 	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
 	elseif ($minute==20) $msg='Het is 20 over '.$hourtxt;
 	elseif ($minute==30) $msg='Het is half '.($hour+1);
+	elseif ($minute==35) $msg='Het is 5 over half '.($hour+1);
 	elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
 	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
