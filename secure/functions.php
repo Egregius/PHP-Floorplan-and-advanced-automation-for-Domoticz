@@ -103,10 +103,11 @@ function douche()
 		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
 		echo $msg;
 		telegram($msg);
+		sleep(5);
     }
     store('douche', 0, basename(__FILE__).':'.__LINE__);
     storemode('douche', 0, basename(__FILE__).':'.__LINE__);
-    sleep(5);
+    
 }
 /**
  * Function douchewarn
@@ -399,7 +400,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='')
     } else {
         store($name, $svalue, basename(__FILE__).':'.__LINE__);
     }
-    lg(' (udevice) | '.$user.'=>'.$name.'=>'.$nvalue.','.$svalue.' ('.$msg.')');
+    lg(' (udevice) | '.$user.'=>'.$name.'=>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
 function zwaveCommand($node,$command){global $domoticzurl;$cm=array('AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');$cm=$cm[$command];for($k=1;$k<=5;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));if ($result=='OK') {break;}sleep(1);}return $result;}
