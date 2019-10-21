@@ -82,20 +82,15 @@ if ($home) {
 		    <thead>
 		        <tr class="border_bottom">
 		            <th>Name</th>
-		            <th>Duration</th>
 		        </tr>
 		    </thead>
 		    <tbody>';
 	$sounds=glob('/var/www/html/sounds/*.mp3');
     foreach ($sounds as $sound) {
-    	$mp3file = new MP3File($sound);
-		$duration1 = $mp3file->getDurationEstimate();
-
     	$name=str_replace('/var/www/html/sounds/', '', str_replace('.mp3', '', $sound));
         echo '
         <tr class="border_bottom">
 			<td>'.$name.'</td>
-			<td>'.$duration1.'</td>
         </tr>';
     }
     echo '
