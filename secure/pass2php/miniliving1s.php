@@ -30,8 +30,8 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 	    	$mp3file=new MP3File('/var/www/html/sounds/'.$sound.'.mp3');
 			$duration=$mp3file->getDurationEstimate();
-			lg('sleeping '.$duration);
-			sleep($duration);
+			lg('sleeping '.$duration-1);
+			if($duration>1) sleep($duration-1);
 	    } else sleep(5);
 	    $sound='Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition();
 	    boseplayinfo($sound, 30);
