@@ -51,7 +51,7 @@ if (isset($_REQUEST['gpio'])) {
     if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80)) {
         $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 		$eurocent=round($euro*100, 0);
-        lg('Douche = '.$euro.', round='.roundUpToAny($euro*100, 5));
+        //lg('Douche = '.$euro.', round='.roundUpToAny($euro*100, 5));
         if ($eurocent>0) {
 			if ($eurocent==450) douchewarn($eurocent, 56);
 			elseif ($eurocent==400) douchewarn($eurocent, 54);
