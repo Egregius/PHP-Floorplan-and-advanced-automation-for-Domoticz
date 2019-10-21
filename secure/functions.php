@@ -152,12 +152,10 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
 	if(empty($d)) $d=fetchdata();
-	echo 'boseplayinfo<br>';
 	if ($d['bose101']['s']=='On') {
 		lg($sound.' '.$log);
-		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"';
+			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
 		} else {
 			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
@@ -170,6 +168,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 				}
 			}
+			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
 		}
 	}

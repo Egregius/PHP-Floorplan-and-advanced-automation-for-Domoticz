@@ -34,7 +34,7 @@ if [ "$STATUS" == "OK" ] ; then
 	echo $NOW   $MINUTE $CRON >> /run/cronlog
 	echo OK
 	#0
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken&cron60$CRON" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10&verwarming&rolluiken$CRON" >/dev/null 2>&1 &
 	sleep 8.859
 	#10
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
