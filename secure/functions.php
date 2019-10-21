@@ -142,7 +142,8 @@ function douchewarn($eurocent,$vol=0)
 				bosevolume($cv, 102);
 			}
 		}
-		telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol.'!');
+		if ($vol>0) telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol);
+		else telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.'));
 	}
 }
 function roundUpToAny($n,$x=5) {
