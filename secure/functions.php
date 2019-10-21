@@ -197,24 +197,44 @@ function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
 	$minute=(1*strftime('%M', TIME));
 	
-	if ($hour==0) $hourtxt='middernacht';
-	elseif ($hour==13) $hourtxt=1;
-	elseif ($hour>13) $hourtxt=$hour-1;
-	else $hourtxt=$hour;
-	
-	
+	if ($hour==0) {
+		if ($minute==0) $msg='Het is middernacht';
+		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over middernacht';
+		elseif ($minute==15) $msg='Het is kwart over middernacht';
+		elseif ($minute==20) $msg='Het is 20 over middernacht';
+		elseif ($minute==30) $msg='Het is half 1';
+		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half 1';
+		elseif ($minute==40) $msg='Het is 20 voor 1'.($hour+1);
+		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half 1';
+		elseif ($minute==45) $msg='Het is kwart voor 1';
+		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor 1';
+		else $msg='Het is '.$hour.' uur '.$minute;
+	} elseif ($hour==12) {
+		if ($minute==0) $msg='Het is 12 uur';
+		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hour;
+		elseif ($minute==15) $msg='Het is kwart over '.$hour;
+		elseif ($minute==20) $msg='Het is 20 over '.$hour;
+		elseif ($minute==30) $msg='Het is half '.($hour+1);
+		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
+		elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
+		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
+		elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
+		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
+		else $msg='Het is '.$hour.' uur '.$minute;
+	} elseif ($hour>=13) {
+		if ($minute==0) $msg='Het is '.$hour.' uur';
+		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hour;
+		elseif ($minute==15) $msg='Het is kwart over '.$hour;
+		elseif ($minute==20) $msg='Het is 20 over '.$hour;
+		elseif ($minute==30) $msg='Het is half '.($hour+1);
+		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
+		elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
+		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
+		elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
+		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
+		else $msg='Het is '.$hour.' uur '.$minute;
+	} 
 	echo 'SayTime = '.$hour.':'.$minute.'	';
-	if ($minute==0) $msg='Het is '.$hourtxt.' uur';
-	elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hourtxt;
-	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
-	elseif ($minute==20) $msg='Het is 20 over '.$hourtxt;
-	elseif ($minute==30) $msg='Het is half '.($hour+1);
-	elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
-	elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
-	elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
-	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
-	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
-	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
 	lg('SayTime = '.$hour.':'.$minute.'	'.$msg);
 	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__, $ip);
