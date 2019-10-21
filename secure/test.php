@@ -18,7 +18,7 @@ $sound="Het is half 12";
 $vol=30;
 $raw=rawurlencode($sound);
 $postdata = "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>'.$vol.'</volume></play_info>";
-$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/xml', 'content'=>$postdata));
+$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 $context  = stream_context_create($opts);
 $result = json_decode(file_get_contents('http://192.168.2.101:8090/speaker', false, $context), true);
 echo $result;
