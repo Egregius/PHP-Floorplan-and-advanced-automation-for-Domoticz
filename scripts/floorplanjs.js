@@ -1122,6 +1122,7 @@ function floorplanheating(){
 
         //html+='<div class="fix z" onclick="location.href=\'floorplan.php?luifel=luifel\';" id="luifel"></div>';
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
+        html+='<div class="fix z" onclick="ajaxcontrol(\'saytime\',\'\',\'\')" id="saytime">Say Time</div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
         html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander</td></tr>';

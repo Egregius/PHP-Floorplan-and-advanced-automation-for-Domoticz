@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status>0) {
-	if ($d['tobi']['m']!=0) {
+	if ($d['tobi']['m']!=0&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
 	    storemode('tobi', 0, basename(__FILE__).':'.__LINE__);
 	}
 	if (TIME>strtotime('6:00')&&TIME<strtotime('10:00')) {
