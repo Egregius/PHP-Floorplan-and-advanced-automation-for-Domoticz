@@ -195,6 +195,69 @@ function saytime() {
 	echo $msg.'<br>';
 	boseplayinfo($msg, 35, basename(__FILE__).':'.__LINE__);
 }
+function owcondition() {
+	global $d;
+	if (empty($d)) $d=fetchdata();
+	$c=array(
+		200=>'onweer met lichte regen',
+		201=>'onweer met regen',
+		202=>'onweer met zware regen',
+		210=>'licht onweer',
+		211=>'onweersbui',
+		212=>'zware onweersbui',
+		221=>'haveloze onweersbui',
+		230=>'onweer met lichte motregen',
+		231=>'onweer met motregen',
+		232=>'onweer met zware motregen',
+		300=>'lichtintensiteit motregen',
+		301=>'motregen',
+		302=>'zware motregen',
+		310=>'lichtintensiteit motregen',
+		311=>'motregen',
+		312=>'zware intensiteit motregen',
+		313=>'douche regen en motregen',
+		314=>'zware regenbui en motregen',
+		321=>'motregen',
+		500=>'lichte regen',
+		501=>'lichte regen',
+		502=>'zware regenval',
+		503=>'zeer zware regen',
+		504=>'extreme regen',
+		511=>'ijskoude regen',
+		520=>'lichtintensiteit douche regen',
+		521=>'douche regen',
+		522=>'zware regenbui',
+		531=>'haveloze douche regen',
+		600=>'lichte sneeuw',
+		601=>'Sneeuw',
+		602=>'Zware sneeuw',
+		611=>'Sleet',
+		612=>'Lichte douchebak',
+		613=>'Douchebak',
+		615=>'Lichte regen en sneeuw',
+		616=>'Regen en sneeuw',
+		620=>'Lichte douchesneeuw',
+		621=>'Douche sneeuw',
+		622=>'Zware douchesneeuw',
+		701=>'de nevel',
+		711=>'Rook',
+		721=>'Nevel',
+		731=>'zand / stof wervelt',
+		741=>'mist',
+		751=>'zand',
+		761=>'stof',
+		762=>'vulkanische as',
+		771=>'rukwinden',
+		781=>'tornado',
+		800=>'heldere lucht',
+		801=>'weinig wolken',
+		802=>'verspreide wolken',
+		803=>'gebroken wolken',
+		804=>'zwaar bewolkt',
+	);
+	if (isset($c[$d['icon']['m']])) return $c[$d['icon']['m']];
+	else return '';
+}
 /**
  * Function waarschuwing
  *
