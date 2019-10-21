@@ -818,7 +818,10 @@ function bosezone($ip,$vol='')
             }
         }
         usleep(200000);
-        bosekey('SHUFFLE_ON', 0, 101);
+        if ($d['bose101']['m']<TIME-3600) {
+        	storemode('bose101', TIME);
+	        bosekey('SHUFFLE_ON', 0, 101);
+	    }
     }
 }
 function bosepost($method,$xml,$ip=3,$log=false)
