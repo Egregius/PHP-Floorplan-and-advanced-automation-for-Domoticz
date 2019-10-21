@@ -26,6 +26,8 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 		bosekey("POWER");
 	} else {
 		saytime();
+		sleep(3);
+	    boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
 	}
 }
 store('Weg', 0, basename(__FILE__).':'.__LINE__);

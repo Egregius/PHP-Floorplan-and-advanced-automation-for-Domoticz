@@ -157,7 +157,8 @@ function boseplayinfo($sound, $vol=50, $log='') {
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
+			//shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
+			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
 		} else {
 			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -170,7 +171,8 @@ function boseplayinfo($sound, $vol=50, $log='') {
 				}
 			}
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
+//			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
+			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
 		}
 	}
 }
@@ -991,7 +993,7 @@ function fbadkamer()
         	sleep(2);
         	saytime();
         	sleep(2);
-        	boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition());
+        	boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
         }
     }
 }
