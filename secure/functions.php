@@ -152,48 +152,24 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
-	//if ($d['bose101']['s']=='On') {
-		$raw=rawurlencode($sound);
-		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-			bosepost('speaker', $xml);
-/*			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
-			for($x=1;$x<=100;$x++) {
-				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.'.$ip.':8090/speaker', false, $context);
-				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					usleep(30000);
-				} else {
-					lg($result);
-					break;
-				}
-			}*/
-		} else {
-			$xml = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
-			bosepost('speaker', $xml);
-/*			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
-			$context  = stream_context_create($opts);
-			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
-			if($result['Error']==0&&isset($result['URL'])) {
-				$mp3=file_get_contents($result['URL']);
-				if(strlen($mp3)>1000) {
-					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
-				}
+	$raw=rawurlencode($sound);
+	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
+		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+		bosepost('speaker', $xml);
+	} else {
+		$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
+		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
+		$context  = stream_context_create($opts);
+		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+		if($result['Error']==0&&isset($result['URL'])) {
+			$mp3=file_get_contents($result['URL']);
+			if(strlen($mp3)>1000) {
+				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 			}
-			$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
-			for($x=1;$x<=100;$x++) {
-				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.'.$ip.':8090/speaker', false, $context);
-				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					usleep(30000);
-				} else {
-					lg($result);
-					break;
-				}
-			}*/
 		}
-	//}
+		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+		bosepost('speaker', $xml);
+	}
 }
 function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
