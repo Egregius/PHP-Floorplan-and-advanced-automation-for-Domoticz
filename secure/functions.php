@@ -190,6 +190,7 @@ function saytime() {
 	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
+	lg($msg);
 	echo $msg.'<br>';
 	boseplayinfo($msg, $vol=44);
 }

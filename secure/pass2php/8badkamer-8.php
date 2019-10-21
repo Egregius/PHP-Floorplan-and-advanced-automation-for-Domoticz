@@ -10,25 +10,25 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
+    if ($d['badkamervuur1']['s']=='On') {
+		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
+		sw('badkamervuur1', 'Off');
+	}
+	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
     if ($d['auto']['s']=='On') {
         fhall();
         finkom();
         fliving();
     }
+	if ($d['badkamer_set']['m']!=0) {
+		storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
+	}
+	douche();
 	if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
 		if ($d['kamer']['m']!=1) {
 			storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	if ($d['badkamer_set']['m']!=0) {
-		storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['badkamervuur1']['s']=='On') {
-		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
-		sw('badkamervuur1', 'Off');
-	}
-	douche();
 	if (past('8badkamer-8')>3) {
 		$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/now_playing'))), true);
 		if (!empty($nowplaying)) {
