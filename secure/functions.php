@@ -153,18 +153,16 @@ function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
 	if(empty($d)) $d=fetchdata();
 	if ($d['bose101']['s']=='On') {
-		lg($sound.' '.$log);
-		echo $sound.'<br>';
+		$raw=rawurlencode($sound);
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			for($x=1;$x<=10;$x++) {
-				$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-				lg($postdata);
-				$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+			$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
 				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
-				lg($result);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					sleep(1);
+					lg('speaker busy, retrying...'.$x);
+					usleep(50000);
 				} else {
 					break;
 				}
@@ -180,15 +178,14 @@ function boseplayinfo($sound, $vol=50, $log='') {
 					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 				}
 			}
-			for($x=1;$x<=10;$x++) {
-				$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-				lg($postdata);
-				$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+			$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
 				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
-				lg($result);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					sleep(1);
+					lg('speaker busy, retrying...'.$x);
+					usleep(50000);
 				} else {
 					break;
 				}
