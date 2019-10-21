@@ -195,11 +195,13 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 }
 function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
-	if ($hour>12) $hour=$hour-12;
+	if ($hour==0) $hourtxt='middernacht';
+	elseif ($hour==13) $hour=1;
+	elseif ($hour>13) $hourtxt=$hour-1;
+	else $hourtxt=$hour;
+	
 	$minute=(1*strftime('%M', TIME));
 	echo 'SayTime = '.$hour.':'.$minute.'	';
-	if ($hour==0) $hourtxt='middernacht';
-	else $hourtxt=$hour;
 	if ($minute==0) $msg='Het is '.$hourtxt.' uur';
 	elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hourtxt;
 	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
