@@ -26,7 +26,6 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 		bosekey("POWER");
 	} else {
 		$sound=saytime();
-		lg(basename(__FILE__).':'.__LINE__.' '.$sound);
 		/*if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 	    	$mp3file=new MP3File('/var/www/html/sounds/'.$sound.'.mp3');
 			$duration=$mp3file->getDurationEstimate();
