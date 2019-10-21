@@ -159,7 +159,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
 		} else {
-			$postdata = http_build_query(array('msg'=>'<break time="300ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
+			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 			$context  = stream_context_create($opts);
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
