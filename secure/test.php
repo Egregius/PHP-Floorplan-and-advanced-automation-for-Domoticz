@@ -15,7 +15,8 @@ echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
 $icons=array(
-	);
+	'10d'=>'met regen',
+);
 boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.(isset($icons[$d['icon']['s']])?$icons[$d['icon']['s']]:''));
 
 
