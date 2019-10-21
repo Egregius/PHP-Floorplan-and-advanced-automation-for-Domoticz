@@ -9,16 +9,23 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-bosekey("POWER");
+
 $items=array('bose102', 'bose103', 'bose104', 'bose105');
-if ($d['bose101']['s']=='On') {
+if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='On') {
 	sw('bose101', 'Off');
+	bosekey("POWER");
 	foreach ($items as $i) {
 		if ($d[$i]['s']=='On') {
 			sw($i, 'Off');
+			bosekey("POWER");
 		}
 	}
 } else {
-	sw('bose101', 'On');
+	if ($d['bose101']['s']=='Off') {
+		sw('bose101', 'On');
+		bosekey("POWER");
+	} else {
+		saytime();
+	}
 }
 store('Weg', 0, basename(__FILE__).':'.__LINE__);
