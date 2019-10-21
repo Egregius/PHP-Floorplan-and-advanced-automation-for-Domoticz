@@ -149,9 +149,10 @@ function douchewarn($eurocent,$vol=0)
 function roundUpToAny($n,$x=5) {
     return round(($n+$x/2)/$x)*$x;
 }
-function boseplayinfo($sound, $vol=50) {
+function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
 	echo 'boseplayinfo<br>';
+	lg($sound.' '.$log);
 	if ($d['bose101']['s']=='On') {
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
@@ -190,7 +191,6 @@ function saytime() {
 	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
-	lg($msg);
 	echo $msg.'<br>';
 	boseplayinfo($msg, $vol=44);
 }
