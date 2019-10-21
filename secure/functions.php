@@ -151,13 +151,14 @@ function roundUpToAny($n,$x=5) {
 }
 function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
+	if(empty($d)) $d=fetchdata();
 	echo 'boseplayinfo<br>';
 	if ($d['bose101']['s']=='On') {
 		lg($sound.' '.$log);
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
+			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"';
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
 		} else {
 			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -169,7 +170,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 				}
 			}
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' > /dev/null 2>/dev/null &');
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
 		}
 	}
 }
@@ -192,7 +193,7 @@ function saytime() {
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
-	boseplayinfo($msg, $vol=40);
+	boseplayinfo($msg, 35, basename(__FILE__).':'.__LINE__);
 }
 /**
  * Function waarschuwing

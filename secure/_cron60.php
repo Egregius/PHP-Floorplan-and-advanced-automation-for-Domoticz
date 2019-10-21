@@ -113,6 +113,8 @@ if ($d['auto']['s']=='On') {
         	elseif (TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) saytime();
         	elseif (TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) saytime();
         	elseif (TIME>=strtotime('8:00')&&TIME<strtotime('8:01')) saytime();
+        	elseif (TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) saytime();
+        	elseif (strftime('%M', TIME)==0) saytime();
         }
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
