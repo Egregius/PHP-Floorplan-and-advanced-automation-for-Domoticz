@@ -159,7 +159,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
 		} else {
-			/*$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
+			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 			$context  = stream_context_create($opts);
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
@@ -170,7 +170,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 				}
 			}
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');*/
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
 		}
 	}
 }
@@ -209,13 +209,13 @@ function owcondition() {
 		230=>'onweer met lichte motregen',
 		231=>'onweer met motregen',
 		232=>'onweer met zware motregen',
-		300=>'lichtintensiteit motregen',
+		300=>'lichte motregen',
 		301=>'motregen',
 		302=>'zware motregen',
-		310=>'lichtintensiteit motregen',
-		311=>'motregen',
-		312=>'zware intensiteit motregen',
-		313=>'douche regen en motregen',
+		310=>'lichte motregen tot regen',
+		311=>'motregen tot regen',
+		312=>'zware intensiteit motregen tot regen',
+		313=>'regen en motregen',
 		314=>'zware regenbui en motregen',
 		321=>'motregen',
 		500=>'lichte regen',
@@ -224,24 +224,24 @@ function owcondition() {
 		503=>'zeer zware regen',
 		504=>'extreme regen',
 		511=>'ijskoude regen',
-		520=>'lichtintensiteit douche regen',
-		521=>'douche regen',
+		520=>'lichte regen',
+		521=>' regen',
 		522=>'zware regenbui',
-		531=>'haveloze douche regen',
+		531=>'haveloze regen',
 		600=>'lichte sneeuw',
-		601=>'Sneeuw',
-		602=>'Zware sneeuw',
-		611=>'Sleet',
-		612=>'Lichte douchebak',
-		613=>'Douchebak',
-		615=>'Lichte regen en sneeuw',
-		616=>'Regen en sneeuw',
-		620=>'Lichte douchesneeuw',
-		621=>'Douche sneeuw',
-		622=>'Zware douchesneeuw',
-		701=>'de nevel',
-		711=>'Rook',
-		721=>'Nevel',
+		601=>'sneeuw',
+		602=>'zware sneeuw',
+		611=>'lichte ijzel',
+		612=>'ijzel',
+		613=>'sterke ijzel',
+		615=>'lichte regen en sneeuw',
+		616=>'regen en sneeuw',
+		620=>'lichte sneeuw',
+		621=>'sneeuw',
+		622=>'zware sneeuw',
+		701=>'nevel',
+		711=>'rook',
+		721=>'nevel',
 		731=>'zand / stof wervelt',
 		741=>'mist',
 		751=>'zand',
@@ -991,7 +991,7 @@ function fbadkamer()
         	sleep(2);
         	saytime();
         	sleep(2);
-        	boseplayinfo('Het wordt vandaag tussen '.$d['minmax']['s'].' en '.$d['minmax']['m'].' graden');
+        	boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition());
         }
     }
 }
