@@ -154,6 +154,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 	if(empty($d)) $d=fetchdata();
 	if ($d['bose101']['s']=='On') {
 		lg($sound.' '.$log);
+		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');

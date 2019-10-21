@@ -24,7 +24,7 @@ if ($home) {
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
 	if ($udevice=='iPhone') {
 	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.75,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPad') {
 	    echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
@@ -52,8 +52,8 @@ if ($home) {
 		</script>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style>
-		    html{width:320px!important;}
-		    body{width:320px!important;}
+		    html{width:480px!important;}
+		    body{width:480px!important;}
 		    td{font-size:0.8em;text-align:left;}
 		    .fix{width:320px;padding:0}
 		    .btn{width:300px;}
@@ -78,7 +78,7 @@ if ($home) {
 		<br>
 		<br>
 	    <div class="fix" style="top:82px;left:0px">
-		<table  id="table" cellpadding="2" cellspacing="0">
+		<table  id="table" cellpadding="2" cellspacing="0" width="100%">
 		    <thead>
 		        <tr class="border_bottom">
 		            <th>Name</th>
