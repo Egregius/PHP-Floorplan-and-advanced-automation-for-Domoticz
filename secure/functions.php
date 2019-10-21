@@ -156,9 +156,11 @@ function boseplayinfo($sound, $vol=50, $log='') {
 		lg($sound.' '.$log);
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
+			//lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			//shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
+			lg(__LINE__);
 			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
+			lg(__LINE__);
 		} else {
 			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -170,9 +172,11 @@ function boseplayinfo($sound, $vol=50, $log='') {
 					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 				}
 			}
-			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
+			//lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 //			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
+			lg(__LINE__);
 			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
+			lg(__LINE__);
 		}
 	}
 }
@@ -195,7 +199,8 @@ function saytime() {
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
-	boseplayinfo($msg, 35, basename(__FILE__).':'.__LINE__);
+	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__);
+	return $msg;
 }
 function owcondition() {
 	global $d;

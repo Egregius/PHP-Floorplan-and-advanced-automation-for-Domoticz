@@ -27,7 +27,13 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 	} else {
 		saytime();
 		sleep(3);
-	    boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
+	    $sound='Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition();
+	    if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
+	    	$mp3file=new MP3File($sound);
+			$duration=$mp3file->getDurationEstimate();
+			sleep($duration);
+	    } else sleep(5);
+	    boseplayinfo($msg, 30);
 	}
 }
 store('Weg', 0, basename(__FILE__).':'.__LINE__);
