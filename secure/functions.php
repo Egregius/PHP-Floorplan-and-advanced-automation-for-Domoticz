@@ -156,11 +156,19 @@ function boseplayinfo($sound, $vol=50, $log='') {
 		lg($sound.' '.$log);
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			//lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-			//shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
-			lg(__LINE__);
-			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
-			lg(__LINE__);
+			for($x=1;$x<=10;$x++) {
+				$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+				lg($postdata);
+				$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+				$context=stream_context_create($opts);
+				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
+				lg($result);
+				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
+					sleep(1);
+				} else {
+					break;
+				}
+			}
 		} else {
 			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -172,11 +180,19 @@ function boseplayinfo($sound, $vol=50, $log='') {
 					file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 				}
 			}
-			//lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-//			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
-			lg(__LINE__);
-			shell_exec('curl -d "<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/'.rawurlencode($sound).'.mp3</url><service>'.$sound.'</service><reason>$1</reason><message>'.$sound.'</message><volume>'.$vol.'</volume></play_info>" http://192.168.2.101:8090/speaker');
-			lg(__LINE__);
+			for($x=1;$x<=10;$x++) {
+				$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+				lg($postdata);
+				$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+				$context=stream_context_create($opts);
+				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
+				lg($result);
+				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
+					sleep(1);
+				} else {
+					break;
+				}
+			}
 		}
 	}
 }
