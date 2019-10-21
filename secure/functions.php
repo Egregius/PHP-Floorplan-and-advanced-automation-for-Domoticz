@@ -158,7 +158,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
 			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'" > /dev/null 2>/dev/null &');
 		} else {
-			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
+			/*$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 			$context  = stream_context_create($opts);
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
@@ -169,7 +169,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 				}
 			}
 			lg('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null & '.$log);
-			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');
+			shell_exec('/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol.' "'.$sound.'"> /dev/null 2>/dev/null &');*/
 		}
 	}
 }
@@ -922,10 +922,12 @@ function fbadkamer()
             	sl('lichtbadkamer', 10, basename(__FILE__).':'.__LINE__);
             }
         }
-        if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) {
+        if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
         	bosezone(102);
         	sleep(2);
         	saytime();
+        	sleep(2);
+        	boseplayinfo('Het wordt vandaag tussen '.$d['minmax']['s'].' en '.$d['minmax']['m'].' graden');
         }
     }
 }

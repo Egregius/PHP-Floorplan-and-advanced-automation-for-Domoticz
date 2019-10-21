@@ -14,7 +14,9 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-saytime();
+if ($d['icon']['s']=='10d') $msg='';
+boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.$msg);
+
 
 /*---------------------------*/
 echo '</pre>';
