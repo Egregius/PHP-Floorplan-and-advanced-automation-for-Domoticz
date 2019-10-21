@@ -936,7 +936,7 @@ function bosezone($ip,$vol='')
 	    }
     }
 }
-function bosepost($method,$xml,$ip=103,$log=false)
+function bosepost($method,$xml,$ip=101,$log=false)
 {
     global $user;
     for($x=1;$x<=100;$x++) {
@@ -948,10 +948,10 @@ function bosepost($method,$xml,$ip=103,$log=false)
 		$response=curl_exec($ch);
 		curl_close($ch);
 		if ($log) {
-			lg($user.' >> Bose '.$ip.' '.$method.' '.$xml);
+			lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
 		}
 		usleep(10000);
-		lg($user.' >> Bose '.$ip.' '.$method.' '.$xml.' '.$response);
+		lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
 		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
 		usleep(30000);
 	}
