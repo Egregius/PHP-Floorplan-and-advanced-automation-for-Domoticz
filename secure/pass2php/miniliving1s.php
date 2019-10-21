@@ -27,11 +27,11 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 	} else {
 		if ($d['bose101']['s']=='Off') {
 			saytime(105);
-			boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
+			boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
 			bosezone(105);
 		} else {
 			saytime(101);
-			boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 101);
+			boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 101);
 		}
 	}
 }
