@@ -152,18 +152,18 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
 	if(empty($d)) $d=fetchdata();
-	if ($d['bose101']['s']=='On') {
+	//if ($d['bose101']['s']=='On') {
 		$raw=rawurlencode($sound);
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 			$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
 			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
+				$result=file_get_contents('http://192.168.2.105:8090/speaker', false, $context);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					lg('speaker busy, retrying...'.$x);
-					usleep(50000);
+					usleep(30000);
 				} else {
+					lg($result);
 					break;
 				}
 			}
@@ -182,16 +182,16 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.101:8090/speaker', false, $context);
+				$result=file_get_contents('http://192.168.2.105:8090/speaker', false, $context);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
-					lg('speaker busy, retrying...'.$x);
-					usleep(50000);
+					usleep(30000);
 				} else {
+					lg($result);
 					break;
 				}
 			}
 		}
-	}
+	//}
 }
 function saytime() {
 	$hour=strftime('%k', TIME);
@@ -908,7 +908,7 @@ function bosezone($ip,$vol='')
 	    }
     }
 }
-function bosepost($method,$xml,$ip=3,$log=false)
+function bosepost($method,$xml,$ip=103,$log=false)
 {
     global $user;
     $ch=curl_init("http://192.168.2.$ip:8090/$method");
