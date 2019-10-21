@@ -178,18 +178,6 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="icon"){
 							try{
-								elem=document.getElementById("hum");
-								elem.innerHTML="Hum:"+$mode+"%";
-								if($mode>85)elem.style.color="#69F";
-								else if($mode>80)elem.style.color="#99F";
-								else if($mode>75)elem.style.color="#AAF";
-								else if($mode>70)elem.style.color="#BBF";
-								else if($mode>65)elem.style.color="#CCF";
-								else if($mode<45)elem.style.color="#FCC";
-								else if($mode<40)elem.style.color="#FBB";
-								else if($mode<35)elem.style.color="#FAA";
-								else if($mode<30)elem.style.color="#F99";
-								else elem.style.color=null;
 								$('#icon').attr("src", "/images/"+$value+".png");
 							}catch{}
 						}else if(device=="uv"){
@@ -1247,7 +1235,7 @@ function sidebar(){
 			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		html+='<br>';
-		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="hum"></span><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
+		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
 	}catch{}
 }

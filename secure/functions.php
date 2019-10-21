@@ -255,7 +255,7 @@ function owcondition() {
 		803=>'gebroken wolken',
 		804=>'zwaar bewolkt',
 	);
-	if (isset($c[$d['icon']['m']])) return $c[$d['icon']['m']];
+	if (isset($c[$d['icon']['m']])) return ' en '.$c[$d['icon']['m']];
 	else return '';
 }
 /**
