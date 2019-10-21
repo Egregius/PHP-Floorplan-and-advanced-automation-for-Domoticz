@@ -82,15 +82,24 @@ if ($home) {
 		    <thead>
 		        <tr class="border_bottom">
 		            <th>Name</th>
+		            <th>1</th>
+		            <th>2</th>
+		            <th></th>
 		        </tr>
 		    </thead>
 		    <tbody>';
 	$sounds=glob('/var/www/html/sounds/*.mp3');
     foreach ($sounds as $sound) {
+    	$mp3file = new MP3File($sound);
+		$duration1 = $mp3file->getDurationEstimate();//(faster) for CBR only
+		$duration2 = $mp3file->getDuration();//(slower) for VBR (or CBR)
+
     	$name=str_replace('/var/www/html/sounds/', '', str_replace('.mp3', '', $sound));
         echo '
         <tr class="border_bottom">
 			<td>'.$name.'</td>
+			<td>'.$duration1.'</td>
+			<td>'.$duration2.'</td>
         </tr>';
     }
     echo '
