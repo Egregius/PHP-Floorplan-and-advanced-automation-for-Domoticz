@@ -155,8 +155,9 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	//if ($d['bose101']['s']=='On') {
 		$raw=rawurlencode($sound);
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-			$postdata="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
+			$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+			bosepost('speaker', $xml);
+/*			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
 				$result=file_get_contents('http://192.168.2.'.$ip.':8090/speaker', false, $context);
@@ -166,10 +167,11 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 					lg($result);
 					break;
 				}
-			}
+			}*/
 		} else {
-			$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
-			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
+			$xml = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
+			bosepost('speaker', $xml);
+/*			$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 			$context  = stream_context_create($opts);
 			$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
 			if($result['Error']==0&&isset($result['URL'])) {
@@ -189,7 +191,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 					lg($result);
 					break;
 				}
-			}
+			}*/
 		}
 	//}
 }
