@@ -65,8 +65,39 @@ unset(
     $local,
     $user,
     $ipaddress,
-    $timediff
-);
+    $timediff,
+    $domainname,
+    $domoticzurl,
+    $_SESSION,
+    $zwaveidx,
+    $db,
+    $denonip,
+    $lgtvip,
+    $lgtvmac,
+    $nasip,
+    $shieldip,
+    $kodiurl,
+    $dsapikey,
+    $owappid,
+    $openuv,
+    $owid,
+    $lat,
+    $lon,
+    $calendarApp,
+    $calendarId,
+    $calendarIdMirom,
+    $calendarIdTobi,
+    $calendarIdVerlof,
+    $telegramchatid1,
+    $appledevice,
+    $appleid,
+    $applepass,
+    $vurl,
+    $urlnas,
+    $urlnas2,
+    $urlfilms
+    
+    );
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
