@@ -25,15 +25,9 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 		sw('bose101', 'On');
 		bosekey("POWER");
 	} else {
-		$sound=saytime();
-		/*if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-	    	$mp3file=new MP3File('/var/www/html/sounds/'.$sound.'.mp3');
-			$duration=$mp3file->getDurationEstimate();
-			lg('sleeping '.$duration-1);
-			if($duration>1) sleep($duration-1);
-	    } else sleep(5);*/
-	    $sound='Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition();
-	    boseplayinfo($sound, 30);
+		saytime(105);
+		boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
+		bosezone(105);
 	}
 }
 store('Weg', 0, basename(__FILE__).':'.__LINE__);

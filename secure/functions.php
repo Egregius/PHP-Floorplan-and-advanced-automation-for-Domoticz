@@ -149,7 +149,7 @@ function douchewarn($eurocent,$vol=0)
 function roundUpToAny($n,$x=5) {
     return round(($n+$x/2)/$x)*$x;
 }
-function boseplayinfo($sound, $vol=50, $log='') {
+function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
 	//if ($d['bose101']['s']=='On') {
@@ -159,7 +159,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.105:8090/speaker', false, $context);
+				$result=file_get_contents('http://192.168.2.'.$ip.':8090/speaker', false, $context);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
 					usleep(30000);
 				} else {
@@ -182,7 +182,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 			$opts=array('http'=>array('method'=>'POST', 'header' =>'Content-Type: text/xml', 'content'=>$postdata));
 			for($x=1;$x<=100;$x++) {
 				$context=stream_context_create($opts);
-				$result=file_get_contents('http://192.168.2.105:8090/speaker', false, $context);
+				$result=file_get_contents('http://192.168.2.'.$ip.':8090/speaker', false, $context);
 				if ($result=='<?xml version="1.0" encoding="UTF-8" ?><Error value="409" name="HTTP_STATUS_CONFLICT" severity="Unknown">request not supported while speaker resource is in use</Error>') {
 					usleep(30000);
 				} else {
@@ -193,7 +193,7 @@ function boseplayinfo($sound, $vol=50, $log='') {
 		}
 	//}
 }
-function saytime() {
+function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
 	if ($hour>12) $hour=$hour-12;
 	$minute=(1*strftime('%M', TIME));
@@ -219,7 +219,7 @@ function saytime() {
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
 	lg('SayTime = '.$hour.':'.$minute.'	'.$msg);
-	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__);
+	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__, $ip);
 	return $msg;
 }
 function owcondition() {
@@ -1014,11 +1014,9 @@ function fbadkamer()
             }
         }
         if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
-        	bosezone(102);
-        	sleep(2);
         	saytime();
-        	sleep(2);
         	boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
+        	bosezone(102);
         }
     }
 }
