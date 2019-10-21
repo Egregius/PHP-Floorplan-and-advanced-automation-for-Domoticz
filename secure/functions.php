@@ -195,28 +195,24 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 }
 function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
+	$minute=(1*strftime('%M', TIME));
+	
 	if ($hour==0) $hourtxt='middernacht';
-	elseif ($hour==13) $hour=1;
+	elseif ($hour==13) $hourtxt=1;
 	elseif ($hour>13) $hourtxt=$hour-1;
 	else $hourtxt=$hour;
 	
-	$minute=(1*strftime('%M', TIME));
+	
 	echo 'SayTime = '.$hour.':'.$minute.'	';
 	if ($minute==0) $msg='Het is '.$hourtxt.' uur';
 	elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hourtxt;
 	elseif ($minute==15) $msg='Het is kwart over '.$hourtxt;
 	elseif ($minute==20) $msg='Het is 20 over '.$hourtxt;
-	elseif ($minute==30) {
-		if ($hour==12) $msg='Het is half 1';
-		else $msg='Het is half '.($hour+1);
-	} elseif ($minute>30&&$minute<40) {
-		if ($hour==12) $msg='Het is '.($minute-30).' over half 1';
-		else $msg='Het is '.($minute-30).' over half '.($hour+1);
-	} elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
-	elseif ($minute>40&&$minute<45) {
-		if ($hour==12) $msg='Het is '.($minute-30).' over half 1';
-		else $msg='Het is '.($minute-30).' over half '.($hour+1);
-	} elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
+	elseif ($minute==30) $msg='Het is half '.($hour+1);
+	elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
+	elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
+	elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
+	elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
@@ -1021,9 +1017,15 @@ function fbadkamer()
             }
         }
         if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
-        	saytime();
-        	boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
-        	bosezone(102);
+        	if ($d['bose102']['s']=='Off') {
+				saytime(102);
+				boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 102);
+				sleep(5);
+				bosezone(102);
+			} else {
+				saytime(101);
+				boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101);
+			}
         }
     }
 }
