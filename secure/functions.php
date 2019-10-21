@@ -918,17 +918,22 @@ function bosezone($ip,$vol='')
 function bosepost($method,$xml,$ip=103,$log=false)
 {
     global $user;
-    $ch=curl_init("http://192.168.2.$ip:8090/$method");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-    $response=curl_exec($ch);
-    curl_close($ch);
-    if ($log) {
-        lg($user.' >> Bose '.$ip.' '.$method.' '.$xml);
-    }
-    usleep(10000);
+    for($x=1;$x<=100;$x++) {
+		$ch=curl_init("http://192.168.2.$ip:8090/$method");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+		$response=curl_exec($ch);
+		curl_close($ch);
+		if ($log) {
+			lg($user.' >> Bose '.$ip.' '.$method.' '.$xml);
+		}
+		usleep(10000);
+		lg($user.' >> Bose '.$ip.' '.$method.' '.$xml.' '.$response);
+		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
+		usleep(30000);
+	}
     return $response;
 }
 function denon($cmd)
