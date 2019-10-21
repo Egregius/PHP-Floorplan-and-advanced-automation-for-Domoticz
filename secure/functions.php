@@ -152,8 +152,8 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='') {
 	global $d;
 	echo 'boseplayinfo<br>';
-	lg($sound.' '.$log);
 	if ($d['bose101']['s']=='On') {
+		lg($sound.' '.$log);
 		echo $sound.'<br>';
 		if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 			echo '/var/www/html/secure/boseplayinfo.sh "'.rawurlencode($sound).'" '.$vol;
@@ -192,7 +192,7 @@ function saytime() {
 	elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 	else $msg='Het is '.$hour.' uur '.$minute;
 	echo $msg.'<br>';
-	boseplayinfo($msg, $vol=44);
+	boseplayinfo($msg, $vol=40);
 }
 /**
  * Function waarschuwing

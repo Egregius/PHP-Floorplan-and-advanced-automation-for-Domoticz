@@ -151,6 +151,8 @@ td{text-align:right;font-size:1.1em;}
 #buiten_temp{top:450px;left:20px;}
 #floorplanstats{top:810px;left:80px;width:410px;}
 
+#saytime{top:320px;left:200px;font-size:1.5em;}
+
 /* Media */
 #denon{top:77px;left:87px;}
 #tv{top:70px;left:168px;}
