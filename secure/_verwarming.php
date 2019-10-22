@@ -515,16 +515,17 @@ if ($d['deurbadkamer']['s']=='Open'
     if ($b7b<$b7) {
         $b7=$b7b;
     }
+    $x=22.4;
     if ($d['buiten_temp']['s']<21
         && $d['lichtbadkamer']['s']>0
-        && $d['badkamer_set']['s']!=22.5
+        && $d['badkamer_set']['s']!=$x
         && ($b7>900
 			&& $d['heating']['s']>=2
 			&& (TIME>strtotime('5:00')&& TIME<strtotime('7:30'))
 		)
     ) {
-        store('badkamer_set', 22.5, basename(__FILE__).':'.__LINE__);
-        $d['badkamer_set']['s']=22.5;
+        store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
+        $d['badkamer_set']['s']=$x;
     } elseif ($b7>900
         && $d['lichtbadkamer']['s']==0
         && $d['buiten_temp']['s']<21

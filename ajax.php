@@ -101,7 +101,10 @@ if ($home==true) {
     	echo json_encode($data);
     	exit;
     } 
-    elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='saytime') saytime();
+    elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='saytime') {
+    	saytime();
+		boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101);
+    }
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         $d=fetchdata();
         if ($_REQUEST['command']=='setpoint') {

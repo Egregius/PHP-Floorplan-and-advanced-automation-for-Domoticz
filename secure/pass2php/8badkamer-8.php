@@ -14,6 +14,9 @@ if ($status=='On') {
 		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
 		sw('badkamervuur1', 'Off');
 	}
+	if ($d['badkamer_set']['s']!=10) {
+		store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
+    }
 	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
     if ($d['auto']['s']=='On') {
         fhall();
