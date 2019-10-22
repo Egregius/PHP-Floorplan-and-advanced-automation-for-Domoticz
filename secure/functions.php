@@ -944,9 +944,9 @@ function bosepost($method,$xml,$ip=101,$log=false)
 		$response=curl_exec($ch);
 		curl_close($ch);
 		if ($log) {
-			lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
+			//lg($user.' >> Bose '.$ip.'	method='.$method.'	response='.$response);
 		}
-		lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
+		//lg($user.' >> Bose '.$ip.'	method='.$method.'	response='.$response);
 		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
 		usleep(100000);
 	}
