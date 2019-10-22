@@ -155,7 +155,9 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		bosepost('speaker', $xml);
+		bosevolume($volume['actualvolume'], 101);
 	} else {
 		$postdata = http_build_query(array('msg'=>'<break time="500ms"/>'.$sound, 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
@@ -168,7 +170,9 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 			}
 		}
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		bosepost('speaker', $xml);
+		bosevolume($volume['actualvolume'], 101);
 	}
 }
 function saytime($ip=101) {
@@ -232,6 +236,7 @@ function saytime($ip=101) {
 	return $msg;
 }
 function sayweather() {
+	global $d;
 	boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
 }
 function owcondition() {
@@ -941,10 +946,9 @@ function bosepost($method,$xml,$ip=101,$log=false)
 		if ($log) {
 			lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
 		}
-		usleep(10000);
 		lg($user.' >> Bose '.$ip.'	method='.$method.'	xml='.$xml.'	response='.$response);
 		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
-		usleep(30000);
+		usleep(100000);
 	}
     return $response;
 }
