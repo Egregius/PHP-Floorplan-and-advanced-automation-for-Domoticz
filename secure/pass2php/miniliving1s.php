@@ -25,14 +25,8 @@ if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='
 		sw('bose101', 'On');
 		bosekey("POWER");
 	} else {
-		if ($d['bose105']['s']=='Off') {
-			saytime(105);
-			boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
-			bosezone(105);
-		} else {
-			saytime(101);
-			boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 101);
-		}
+		saytime(101);
+		sayweather();
 	}
 }
 store('Weg', 0, basename(__FILE__).':'.__LINE__);

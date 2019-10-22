@@ -231,6 +231,9 @@ function saytime($ip=101) {
 	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__, $ip);
 	return $msg;
 }
+function sayweather() {
+	boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, 105);
+}
 function owcondition() {
 	global $d;
 	if (empty($d)) $d=fetchdata();
