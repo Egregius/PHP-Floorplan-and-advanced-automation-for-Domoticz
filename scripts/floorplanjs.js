@@ -828,7 +828,7 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-21600)elem.style.color="#AAA";
                         else if(tijd>$currentTime-28800)elem.style.color="#999";
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
-                        else if(tijd>$currentTime-43200)elem.style.color="#777";
+                        else if(tijd>$currentTime-82800)elem.style.color="#777";
                         else {
                         	elem.style.color="#777";
                         	elem.innerHTML=formatDate(tijd);
@@ -856,7 +856,7 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-21600)elem.style.color="#AAA";
                         else if(tijd>$currentTime-28800)elem.style.color="#999";
                         else if(tijd>$currentTime-36000)elem.style.color="#888";
-                        else if(tijd>$currentTime-43200)elem.style.color="#777";
+                        else if(tijd>$currentTime-82800)elem.style.color="#777";
                         else {
                         	elem.style.color="#777";
                         	elem.innerHTML=formatDate(tijd);

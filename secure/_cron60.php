@@ -137,11 +137,6 @@ if ($d['auto']['s']=='On') {
 					bosezone(103, 10);
 				}
 			}
-			if ($d['kamer']['m']>0&&TIME>=strtotime('6:15')&&TIME<=strtotime('6:16')) {
-				if ($d['kamer']['s']==0) {
-					sl('kamer', 1);
-				}
-			}
 		}
         $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
