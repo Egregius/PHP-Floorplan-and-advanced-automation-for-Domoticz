@@ -158,20 +158,14 @@ if ($d['living_set']['m']==0) {
 			}
         }
         if ($Setliving>19.5) {
-            if (TIME>=strtotime('11:00')
-                && $d['zon']['s']>3000
-                && $d['buiten_temp']['s']>15
-            ) {
+            if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) {
                 $Setliving=19.5;
             } elseif ($d['zon']['s']<2000) {
                 $Setliving=20.5;
             }
         }
     }
-    if ($d['living_set']['s']!=$Setliving
-        && past('deurinkom')>60
-        && past('deurgarage')>60
-    ) {
+    if ($d['living_set']['s']!=$Setliving&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
         $living_set=$Setliving;
         $d['living_set']['s']=$Setliving;
@@ -215,34 +209,17 @@ if ($d['Weg']['s']==0) {
         $difheater3=-0.2;
         $difheater4=-0.4;
         //lg ('difliving='.$difliving.' - difheater2 = '.$difheater2.' -  1='.$d['heater1']['s'].' 2='.$d['heater2']['s'].'   3='.$d['heater3']['s'].'    4='.$d['heater4']['s']);
-        if ($difliving>$difheater2
-            && $d['heater1']['s']!='Off'
-            && past('heater1')>90
-            && past('heater2')>90
-        ) {
+        if ($difliving>$difheater2&&$d['heater1']['s']!='Off'&&past('heater1')>90&&past('heater2')>90) {
             sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
         }
-        if ($difliving<$difheater2
-            && $d['heater2']['s']!='On'
-            && past('heater2')>90
-        ) {
+        if ($difliving<$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>90) {
             if ($d['heater1']['s']!='On') {
                 sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
             }
             sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-            lg('111');
-        } elseif ($difliving==$difheater2
-            && $d['heater2']['s']!='On'
-            && past('heater2')>140
-            && $d['el']['s']<8000
-        ) {
+        } elseif ($difliving==$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>140&&$d['el']['s']<8000) {
             sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-            lg('222');
-        } elseif ($difliving>=$difheater2
-            && $d['heater2']['s']!='Off'
-            && past('heater2')>110
-            || $d['el']['s']>8500
-        ) {
+        } elseif ($difliving>=$difheater2&&$d['heater2']['s']!='Off'&&past('heater2')>110||$d['el']['s']>8500) {
             sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
         }
         if ($difliving<=$difheater3
