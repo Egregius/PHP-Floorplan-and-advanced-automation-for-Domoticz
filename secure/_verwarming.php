@@ -278,37 +278,24 @@ foreach ($kamers as $kamer) {
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 if ($d['heating']['s']>=3) {
-    if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) {
-        sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>300) {
-        sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>600) {
-        sw('brander','On', basename(__FILE__).':'.__LINE__);
-    } elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>180) {
-        sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-    } elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>300) {
-        sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-    } elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>900) {
-        sw('brander','Off', basename(__FILE__).':'.__LINE__);
-    }
-} elseif ($d['brander']['s']=='On') {
-    sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-}
-if ($bigdif!=$d['heating']['m']) {
-    storemode('heating', $bigdif, basename(__FILE__).':'.__LINE__);
-}
+    if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+    elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>300) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+    elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>600) sw('brander','On', basename(__FILE__).':'.__LINE__);
+    elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>180) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+    elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>300) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+    elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>900) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+} elseif ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+
+if ($bigdif!=$d['heating']['m']) storemode('heating', $bigdif, basename(__FILE__).':'.__LINE__);
+
 if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbadkamer')>57|| $d['lichtbadkamer']['s']==0)) {
     store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
     $d['badkamer_set']['s']=10.0;
-    if ($d['badkamer_set']['m']==1) {
-    	storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
-    }
+    if ($d['badkamer_set']['m']==1) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0) {
     $b7=past('8badkamer-7');
     $b7b=past('8Kamer-7');
-    if ($b7b<$b7) {
-        $b7=$b7b;
-    }
+    if ($b7b<$b7) $b7=$b7b;
     $x=22.4;
     if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=2&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
         store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
