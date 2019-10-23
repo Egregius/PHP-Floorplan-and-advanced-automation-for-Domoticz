@@ -62,19 +62,13 @@ if ($d['pirinkom']['s']=='Off'
         &&$d['zon']['s']==0
         &&$d['auto']['s']=='On'
     ) {
-        if ($d['inkom']['s']<26) {
-            sl('inkom', 26, basename(__FILE__).':'.__LINE__);
-        }
+        finkom();
     }
     if ($d['pirhall']['s']=='On'
         &&$d['zon']['s']==0
         &&$d['auto']['s']=='On'
     ) {
-        if ($d['hall']['s']<26
-            &&$d['Weg']['s']==0
-        ) {
-            sl('hall', 26, basename(__FILE__).':'.__LINE__);
-        }
+        fhall();
     }
 }
 if (past('pirkeuken')>50
