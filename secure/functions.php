@@ -247,9 +247,9 @@ function owcondition() {
 		201=>' met onweer en regen',
 		202=>' met onweer en zware regen',
 		210=>' met licht onweer',
-		211=>' met onweersbui',
-		212=>' met zware onweersbui',
-		221=>' met haveloze onweersbui',
+		211=>' met een onweersbui',
+		212=>' met een zware onweersbui',
+		221=>' met een haveloze onweersbui',
 		230=>' met onweer en lichte motregen',
 		231=>' met onweer en motregen',
 		232=>' met onweer en zware motregen',
@@ -258,19 +258,19 @@ function owcondition() {
 		302=>' met zware motregen',
 		310=>' met lichte motregen tot regen',
 		311=>' met motregen tot regen',
-		312=>' met zware intensiteit motregen tot regen',
+		312=>' met zware motregen tot regen',
 		313=>' met regen en motregen',
 		314=>' met zware regenbui en motregen',
 		321=>' met motregen',
 		500=>' met lichte regen',
 		501=>' met lichte regen',
-		502=>' met zware regenval',
+		502=>' met zware regen',
 		503=>' met zeer zware regen',
 		504=>' met extreme regen',
 		511=>' met ijskoude regen',
 		520=>' met lichte regen',
 		521=>' met regen',
-		522=>' met zware regenbui',
+		522=>' met een zware regenbui',
 		531=>' met haveloze regen',
 		600=>' met lichte sneeuw',
 		601=>' met sneeuw',
@@ -1036,14 +1036,11 @@ function fbadkamer()
         }
         if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
         	if ($d['bose102']['s']=='Off') {
-				saytime(102);
-				boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 102);
-				sleep(5);
 				bosezone(102);
-			} else {
-				saytime(101);
-				boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101);
-			}
+				sleep(3);
+				saytime();
+				boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__);	
+			} 
         }
     }
 }
@@ -1061,27 +1058,27 @@ function fkeuken()
 function finkom()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['inkom']['s']<31&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']<50) {
-        sl('inkom', 31, basename(__FILE__).':'.__LINE__);
-    } elseif ($d['Weg']['s']==0&&$d['inkom']['s']<24&&$d['zon']['s']==0) {
-        sl('inkom', 24, basename(__FILE__).':'.__LINE__);
+    if ($d['Weg']['s']==0&&$d['inkom']['s']<32&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']<50) {
+        sl('inkom', 32, basename(__FILE__).':'.__LINE__);
+    } elseif ($d['Weg']['s']==0&&$d['inkom']['s']<25&&$d['zon']['s']==0) {
+        sl('inkom', 25, basename(__FILE__).':'.__LINE__);
     }
 }
 function fhall()
 {
     global $d,$device;
-    if ($d['hall']['s']<31) {
+    if ($d['hall']['s']<32) {
 		if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-			if ($d['hall']['s']<31) {
-				sl('hall', 31, basename(__FILE__).':'.__LINE__);
+			if ($d['hall']['s']<32) {
+				sl('hall', 32, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
-			if ($d['hall']['s']<24) {
-				sl('hall', 24, basename(__FILE__).':'.__LINE__);
+			if ($d['hall']['s']<25) {
+				sl('hall', 25, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
-			if ($d['hall']['s']<31) {
-				sl('hall', 31, basename(__FILE__).':'.__LINE__);
+			if ($d['hall']['s']<32) {
+				sl('hall', 32, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}
@@ -1115,18 +1112,12 @@ function createheader($page='')
     global $udevice;
     echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
-    if ($page=='') {
-        echo '
-<html>';
-    } else {
-        echo '
-<html manifest="floorplan.appcache">';
-//manifest="floorplan.appcache"
-    }
+    if ($page=='') echo '<html>';
+    else echo '<html manifest="floorplan.appcache">';
     echo '
     <head>
-		<title>Floorplan</title>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">';
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<title>Floorplan</title>';
     if ($udevice=='iPhone') {
         echo '
 		<meta name="HandheldFriendly" content="true">
