@@ -11,8 +11,8 @@
  **/
 if ($status=='On') {
     $item='Rtobi';
-    if (past('8boven-8')<=2) {
-        sl($item, 100, basename(__FILE__).':'.__LINE__);
+    if ($d['heating']['s']!=1) {
+    	sl($item, 100, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
         $lijntjes=78;
@@ -22,7 +22,7 @@ if ($status=='On') {
         } elseif ($itemstatus<$lijntjes) {
             sl($item, $lijntjes, basename(__FILE__).':'.__LINE__);
         } else {
-            sl($item, 100, basename(__FILE__).':'.__LINE__);
+            sl($item, 0, basename(__FILE__).':'.__LINE__);
         }
     }
     if ($d[$item]['m']==0) {

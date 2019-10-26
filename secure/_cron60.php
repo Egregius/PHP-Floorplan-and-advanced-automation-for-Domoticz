@@ -102,7 +102,7 @@ if ($d['auto']['s']=='On') {
         }
         if ($d['bose101']['s']=='On') {
         	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
-				bosekey('PRESET_6', 0, 101);
+				bosekey('PRESET_2', 0, 101);
         	}
         	if (TIME>=strtotime('6:00')&&TIME<strtotime('6:01')) saytime();
         	elseif (TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) saytime();

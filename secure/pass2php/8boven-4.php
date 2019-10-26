@@ -11,8 +11,8 @@
  **/
 if ($status=='On') {
     $item='Rtobi';
-    if (past('8boven-4')>=2) {
-        sl($item, 0, basename(__FILE__).':'.__LINE__);
+    if ($d['heating']['s']!=1) {
+    	sl($item, 0, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
         $lijntjes=78;

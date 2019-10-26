@@ -864,8 +864,8 @@ function bosezone($ip,$vol='')
 {
     $d=fetchdata();
     if (TIME<strtotime('9:00')) $preset='PRESET_4';
-    elseif (TIME>strtotime('20:00')) $preset='PRESET_5';
-    else  $preset='PRESET_6';
+    elseif (TIME>strtotime('20:00')) $preset='PRESET_6';
+    else  $preset='PRESET_2';
     if ($d['Weg']['s']<=1) {
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
