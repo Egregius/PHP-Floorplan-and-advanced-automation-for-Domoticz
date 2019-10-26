@@ -972,9 +972,9 @@ function ajaxbose($ip){
 					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
 					html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Mix</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Techno & Happy</button>';
-					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')"></button>';
-					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')"></button>';
-					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')"></button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">Techno + T&K</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Ballads & Happy</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">Ballads</button>';
 					if(document.getElementById("power").textContent!=html){
 						document.getElementById("power").innerHTML=html;
@@ -996,9 +996,9 @@ function ajaxbose($ip){
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'skip\',\'next\')">Next</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Mix</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Techno & Happy</button>';
-				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')"></button>';
-				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')"></button>';
-				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')"></button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">Techno + T&K</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">Happy</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Ballads & Happy</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">Ballads</button>';
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
