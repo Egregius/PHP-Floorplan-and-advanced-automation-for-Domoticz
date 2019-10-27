@@ -232,7 +232,7 @@ function saytime($ip=101) {
 	echo 'SayTime = '.$hour.':'.$minute.'	';
 	echo $msg.'<br>';
 	lg('SayTime = '.$hour.':'.$minute.'	'.$msg);
-	boseplayinfo($msg, 30, basename(__FILE__).':'.__LINE__, $ip);
+	boseplayinfo($msg, 37, basename(__FILE__).':'.__LINE__, $ip);
 	return $msg;
 }
 function sayweather($ip=101) {
