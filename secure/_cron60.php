@@ -104,16 +104,14 @@ if ($d['auto']['s']=='On') {
         	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
 				bosekey('PRESET_2', 0, 101);
         	}
-        	if (TIME>=strtotime('6:00')&&TIME<strtotime('6:01')) {saytime();sayweather();}
-        	elseif (TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) saytime();
-        	elseif (TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) saytime();
-        	elseif (TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) saytime();
-        	elseif (TIME>=strtotime('7:00')&&TIME<strtotime('7:01')) {saytime();sayweather();}
-        	elseif (TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) saytime();
-        	elseif (TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) saytime();
-        	elseif (TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) saytime();
-        	elseif (TIME>=strtotime('8:00')&&TIME<strtotime('8:01')) {saytime();sayweather();}
-        	elseif (TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) saytime();
+        	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+        	if ($weekend&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) saytime();
+        	elseif ($weekend&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) saytime();
         	elseif (strftime('%M', TIME)==0) {saytime();sayweather();}
         }
     }
