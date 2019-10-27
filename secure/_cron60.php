@@ -104,6 +104,7 @@ if ($d['auto']['s']=='On') {
         	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
 				bosekey('PRESET_2', 0, 101);
         	}
+        	$dow=date("w");
         	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
         	if ($weekend&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) saytime();
         	elseif ($weekend&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) saytime();
