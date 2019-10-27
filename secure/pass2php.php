@@ -13,11 +13,10 @@ require '/var/www/config.php';
 require 'functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
-if (endswith($device, '_Temperature')) {
-    die('Nothing to do');
-} elseif (endswith($device, '_Utility')) {
-    die('Nothing to do');
-}
+if (endswith($device, '_Temperature')) die('Nothing to do');
+elseif (endswith($device, '_Utility')) die('Nothing to do');
+elseif ($device=='belknop') die('Nothing to do');
+
 $d=fetchdata();
 if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
     if ($status=='Off'||$status=='Open') {
