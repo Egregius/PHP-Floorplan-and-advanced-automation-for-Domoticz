@@ -1039,7 +1039,7 @@ function fbadkamer()
 				bosezone(102);
 				sleep(3);
 				saytime();
-				boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__);	
+				sayweather;
 			} 
         }
     }
