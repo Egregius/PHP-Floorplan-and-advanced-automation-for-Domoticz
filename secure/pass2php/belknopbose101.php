@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-shell_exec('/var/www/html/secure/boseplayinfo.sh "deurbel" > /dev/null 2>/dev/null &');
+boseplayinfo("deurbel", 50, basename(__FILE__).':'.__LINE__, 101);
