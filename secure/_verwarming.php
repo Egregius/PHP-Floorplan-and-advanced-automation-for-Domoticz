@@ -87,6 +87,7 @@ if ($d['living_set']['m']==0) {
                 $Setliving=20.5;
             }
         } elseif ($d['Weg']['s']==1) {
+        	$dow=date("w");
             if($dow==0||$dow==6) {
 				if (TIME>=strtotime('7:00')&&TIME<strtotime('18:30')) $Setliving=20;
 				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:30')) $Setliving=19.5;
