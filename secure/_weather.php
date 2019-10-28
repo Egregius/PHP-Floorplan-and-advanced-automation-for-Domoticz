@@ -95,9 +95,7 @@ if (isset($ow)) {
     }
 }
 $buienradar=0;
-$rains=@file_get_contents(
-    'http://gadgets.buienradar.nl/data/raintext/?lat='.$lat.'&lon='.$lon
-);
+$rains=file_get_contents('http://gadgets.buienradar.nl/data/raintext/?lat='.$lat.'&lon='.$lon);
 if (!empty($rains)) {
     $rains=str_split($rains, 11);
     $totalrain=0;
@@ -105,30 +103,18 @@ if (!empty($rains)) {
     foreach ($rains as $rain) {
         $aantal=$aantal+1;
         $totalrain=$totalrain+substr($rain, 0, 3);
-        if ($aantal==7) {
-            break;
-        }
+        if ($aantal==7) break;
     }
     $buienradar=round($totalrain/7, 0);
-    if ($buienradar>20) {
-        $maxrain=$buienradar;
-    }
+    if ($buienradar>20) $maxrain=$buienradar;
 }
 
-if (isset($buiten_temp)
-    &&isset($dstemp)
-    &&isset($owtemp)
-) {
-    $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
-} elseif (isset($buiten_temp)&&isset($dstemp)) {
-    $buiten_temp=($buiten_temp+$dstemp)/2;
-} elseif (isset($owtemp)&&isset($dstemp)) {
-    $buiten_temp=($owtemp+$dstemp)/2;
-} elseif (isset($owtemp)) {
-    $buiten_temp=$owtemp;
-} elseif (isset($dstemp)) {
-    $buiten_temp=$dstemp;
-}
+if (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
+elseif (isset($buiten_temp)&&isset($dstemp)) $buiten_temp=($buiten_temp+$dstemp)/2;
+elseif (isset($owtemp)&&isset($dstemp)) $buiten_temp=($owtemp+$dstemp)/2;
+elseif (isset($owtemp)) $buiten_temp=$owtemp;
+elseif (isset($dstemp)) $buiten_temp=$dstemp;
+
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
 	
