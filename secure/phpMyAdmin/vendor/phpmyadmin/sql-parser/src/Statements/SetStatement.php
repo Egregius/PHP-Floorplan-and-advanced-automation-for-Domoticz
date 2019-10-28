@@ -1,8 +1,8 @@
 <?php
-
 /**
  * `SET` statement.
  */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -26,48 +26,48 @@ class SetStatement extends Statement
      *
      * @var array
      */
-    public static $CLAUSES = array(
-        'SET' => array(
+    public static $CLAUSES = [
+        'SET' => [
             'SET',
-            3
-        ),
-        '_END_OPTIONS' => array(
+            3,
+        ],
+        '_END_OPTIONS' => [
             '_END_OPTIONS',
-            1
-        )
-    );
+            1,
+        ],
+    ];
 
     /**
      * Possible exceptions in SET statment.
      *
      * @var array
      */
-    public static $OPTIONS = array(
-        'CHARSET' => array(
+    public static $OPTIONS = [
+        'CHARSET' => [
             3,
             'var',
-        ),
-        'CHARACTER SET' => array(
+        ],
+        'CHARACTER SET' => [
             3,
             'var',
-        ),
-        'NAMES' => array(
+        ],
+        'NAMES' => [
             3,
             'var',
-        ),
-        'PASSWORD' => array(
+        ],
+        'PASSWORD' => [
             3,
             'expr',
-        )
-    );
+        ],
+    ];
 
-    public static $END_OPTIONS = array(
-        'COLLATE' => array(
+    public static $END_OPTIONS = [
+        'COLLATE' => [
             1,
             'var',
-        ),
-        'DEFAULT' => 1
-    );
+        ],
+        'DEFAULT' => 1,
+    ];
 
     /**
      * Options used in current statement.

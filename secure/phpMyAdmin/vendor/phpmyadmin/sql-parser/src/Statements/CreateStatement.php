@@ -1,8 +1,8 @@
 <?php
-
 /**
  * `CREATE` statement.
  */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -32,25 +32,25 @@ class CreateStatement extends Statement
      *
      * @var array
      */
-    public static $OPTIONS = array(
+    public static $OPTIONS = [
         // CREATE TABLE
         'TEMPORARY' => 1,
 
         // CREATE VIEW
         'OR REPLACE' => 2,
-        'ALGORITHM' => array(
+        'ALGORITHM' => [
             3,
             'var=',
-        ),
+        ],
         // `DEFINER` is also used for `CREATE FUNCTION / PROCEDURE`
-        'DEFINER' => array(
+        'DEFINER' => [
             4,
             'expr=',
-        ),
-        'SQL SECURITY' => array(
+        ],
+        'SQL SECURITY' => [
             5,
             'var',
-        ),
+        ],
 
         'DATABASE' => 6,
         'EVENT' => 6,
@@ -68,159 +68,159 @@ class CreateStatement extends Statement
         'VIEW' => 6,
 
         // CREATE TABLE
-        'IF NOT EXISTS' => 7
-    );
+        'IF NOT EXISTS' => 7,
+    ];
 
     /**
      * All database options.
      *
      * @var array
      */
-    public static $DB_OPTIONS = array(
-        'CHARACTER SET' => array(
+    public static $DB_OPTIONS = [
+        'CHARACTER SET' => [
             1,
             'var=',
-        ),
-        'CHARSET' => array(
+        ],
+        'CHARSET' => [
             1,
             'var=',
-        ),
-        'DEFAULT CHARACTER SET' => array(
+        ],
+        'DEFAULT CHARACTER SET' => [
             1,
             'var=',
-        ),
-        'DEFAULT CHARSET' => array(
+        ],
+        'DEFAULT CHARSET' => [
             1,
             'var=',
-        ),
-        'DEFAULT COLLATE' => array(
+        ],
+        'DEFAULT COLLATE' => [
             2,
             'var=',
-        ),
-        'COLLATE' => array(
+        ],
+        'COLLATE' => [
             2,
             'var=',
-        )
-    );
+        ],
+    ];
 
     /**
      * All table options.
      *
      * @var array
      */
-    public static $TABLE_OPTIONS = array(
-        'ENGINE' => array(
+    public static $TABLE_OPTIONS = [
+        'ENGINE' => [
             1,
             'var=',
-        ),
-        'AUTO_INCREMENT' => array(
+        ],
+        'AUTO_INCREMENT' => [
             2,
             'var=',
-        ),
-        'AVG_ROW_LENGTH' => array(
+        ],
+        'AVG_ROW_LENGTH' => [
             3,
             'var',
-        ),
-        'CHARACTER SET' => array(
+        ],
+        'CHARACTER SET' => [
             4,
             'var=',
-        ),
-        'CHARSET' => array(
+        ],
+        'CHARSET' => [
             4,
             'var=',
-        ),
-        'DEFAULT CHARACTER SET' => array(
+        ],
+        'DEFAULT CHARACTER SET' => [
             4,
             'var=',
-        ),
-        'DEFAULT CHARSET' => array(
+        ],
+        'DEFAULT CHARSET' => [
             4,
             'var=',
-        ),
-        'CHECKSUM' => array(
+        ],
+        'CHECKSUM' => [
             5,
             'var',
-        ),
-        'DEFAULT COLLATE' => array(
+        ],
+        'DEFAULT COLLATE' => [
             6,
             'var=',
-        ),
-        'COLLATE' => array(
+        ],
+        'COLLATE' => [
             6,
             'var=',
-        ),
-        'COMMENT' => array(
+        ],
+        'COMMENT' => [
             7,
             'var=',
-        ),
-        'CONNECTION' => array(
+        ],
+        'CONNECTION' => [
             8,
             'var',
-        ),
-        'DATA DIRECTORY' => array(
+        ],
+        'DATA DIRECTORY' => [
             9,
             'var',
-        ),
-        'DELAY_KEY_WRITE' => array(
+        ],
+        'DELAY_KEY_WRITE' => [
             10,
             'var',
-        ),
-        'INDEX DIRECTORY' => array(
+        ],
+        'INDEX DIRECTORY' => [
             11,
             'var',
-        ),
-        'INSERT_METHOD' => array(
+        ],
+        'INSERT_METHOD' => [
             12,
             'var',
-        ),
-        'KEY_BLOCK_SIZE' => array(
+        ],
+        'KEY_BLOCK_SIZE' => [
             13,
             'var',
-        ),
-        'MAX_ROWS' => array(
+        ],
+        'MAX_ROWS' => [
             14,
             'var',
-        ),
-        'MIN_ROWS' => array(
+        ],
+        'MIN_ROWS' => [
             15,
             'var',
-        ),
-        'PACK_KEYS' => array(
+        ],
+        'PACK_KEYS' => [
             16,
             'var',
-        ),
-        'PASSWORD' => array(
+        ],
+        'PASSWORD' => [
             17,
             'var',
-        ),
-        'ROW_FORMAT' => array(
+        ],
+        'ROW_FORMAT' => [
             18,
             'var',
-        ),
-        'TABLESPACE' => array(
+        ],
+        'TABLESPACE' => [
             19,
             'var',
-        ),
-        'STORAGE' => array(
+        ],
+        'STORAGE' => [
             20,
             'var',
-        ),
-        'UNION' => array(
+        ],
+        'UNION' => [
             21,
             'var',
-        )
-    );
+        ],
+    ];
 
     /**
      * All function options.
      *
      * @var array
      */
-    public static $FUNC_OPTIONS = array(
-        'COMMENT' => array(
+    public static $FUNC_OPTIONS = [
+        'COMMENT' => [
             1,
             'var=',
-        ),
+        ],
         'LANGUAGE SQL' => 2,
         'DETERMINISTIC' => 3,
         'NOT DETERMINISTIC' => 3,
@@ -228,24 +228,24 @@ class CreateStatement extends Statement
         'NO SQL' => 4,
         'READS SQL DATA' => 4,
         'MODIFIES SQL DATA' => 4,
-        'SQL SECURITY DEFINER' => array(
+        'SQL SECURITY DEFINER' => [
             5,
             'var',
-        )
-    );
+        ],
+    ];
 
     /**
      * All trigger options.
      *
      * @var array
      */
-    public static $TRIGGER_OPTIONS = array(
+    public static $TRIGGER_OPTIONS = [
         'BEFORE' => 1,
         'AFTER' => 1,
         'INSERT' => 2,
         'UPDATE' => 2,
-        'DELETE' => 2
-    );
+        'DELETE' => 2,
+    ];
 
     /**
      * The name of the entity that is created.
@@ -367,7 +367,7 @@ class CreateStatement extends Statement
      *
      * @var Token[]|string
      */
-    public $body = array();
+    public $body = [];
 
     /**
      * @return string
@@ -474,10 +474,10 @@ class CreateStatement extends Statement
         $this->name = Expression::parse(
             $parser,
             $list,
-            array(
+            [
                 'parseField' => 'table',
-                'breakOnAlias' => true
-            )
+                'breakOnAlias' => true,
+            ]
         );
 
         if (! isset($this->name) || ($this->name === '')) {
@@ -524,10 +524,10 @@ class CreateStatement extends Statement
                 $this->like = Expression::parse(
                     $parser,
                     $list,
-                    array(
+                    [
                         'parseField' => 'table',
-                        'breakOnAlias' => true
-                    )
+                        'breakOnAlias' => true,
+                    ]
                 );
                 // The 'LIKE' keyword was found, but no table_name was found next to it
                 if (is_null($this->like)) {
@@ -637,9 +637,9 @@ class CreateStatement extends Statement
                             $this->partitions = ArrayObj::parse(
                                 $parser,
                                 $list,
-                                array(
-                                    'type' => 'PhpMyAdmin\\SqlParser\\Components\\PartitionDefinition'
-                                )
+                                [
+                                    'type' => 'PhpMyAdmin\\SqlParser\\Components\\PartitionDefinition',
+                                ]
                             );
                         }
                         break;
@@ -714,10 +714,10 @@ class CreateStatement extends Statement
             $this->table = Expression::parse(
                 $parser,
                 $list,
-                array(
+                [
                     'parseField' => 'table',
-                    'breakOnAlias' => true
-                )
+                    'breakOnAlias' => true,
+                ]
             );
             ++$list->idx;
 

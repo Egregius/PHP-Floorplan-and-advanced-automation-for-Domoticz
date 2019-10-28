@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Parses a reference to a CASE expression.
  */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -33,21 +33,21 @@ class CaseExpression extends Component
      *
      * @var array
      */
-    public $conditions = array();
+    public $conditions = [];
 
     /**
      * The results matching with the WHEN clauses.
      *
      * @var array
      */
-    public $results = array();
+    public $results = [];
 
     /**
      * The values to be compared against.
      *
      * @var array
      */
-    public $compare_values = array();
+    public $compare_values = [];
 
     /**
      * The result in ELSE section of expr.
@@ -84,7 +84,7 @@ class CaseExpression extends Component
      *
      * @return CaseExpression
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = array())
+    public static function parse(Parser $parser, TokensList $list, array $options = [])
     {
         $ret = new self();
 
@@ -216,7 +216,7 @@ class CaseExpression extends Component
                 if ($token->type === Token::TYPE_DELIMITER) {
                     break;
                 }
-
+                
                 // Skipping whitespaces and comments.
                 if (($token->type === Token::TYPE_WHITESPACE)
                     || ($token->type === Token::TYPE_COMMENT)
@@ -279,7 +279,7 @@ class CaseExpression extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = array())
+    public static function build($component, array $options = [])
     {
         $ret = 'CASE ';
         if (isset($component->value)) {
