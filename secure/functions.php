@@ -233,7 +233,7 @@ function saytime($ip=101) {
 }
 function sayweather($ip=101) {
 	global $d;
-	return ('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.owcondition());
+	return ('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.owcondition().'.');
 }
 function owcondition() {
 	global $d;
