@@ -142,10 +142,13 @@ if (isset($ds['hourly']['data'])) {
 	    store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
 	}
 }
-$temps['buiten_temp']=round($temps['buiten_temp'],1);
-if ($d['buiten_temp']['s']!=$temps['buiten_temp']) {
-	store('buiten_temp', $temps['buiten_temp'], basename(__FILE__).':'.__LINE__);
+$newbuitentemp=round(array_sum($temps)/count($temps), 1);
+
+echo 'new = '.$newbuitentemp;
+if ($d['buiten_temp']['s']!=$newbuitentemp) {
+	store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
 }
+
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -218,16 +221,11 @@ $windhist[]=round($wind, 2);
 $windhist=array_slice($windhist, -4);
 storemode('wind', json_encode($windhist), basename(__FILE__).':'.__LINE__);
 $msg='Buiten temperaturen : ';
-if (isset($dstemp)) {
-    $msg.='Darksky = '.round($dstemp, 1).'°C ';
+foreach ($temps as $k=>$v) {
+	$msg.=$k.'='.$v.', ';
 }
-if (isset($owtemp)) {
-    $msg.='Openweathermap = '.round($owtemp, 1).'°C ';
-}
-if (isset($d['buiten_temp']['s'])) {
-    $msg.='buiten_temp = '.round($d['buiten_temp']['s'], 1).'°C';
-}
-//lg($msg);
+$msg.='newbuitentemp='.$newbuitentemp;
+lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
     $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
 } elseif (isset($d['buien']['s'])&&isset($buienradar)) {
