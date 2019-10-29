@@ -18,7 +18,7 @@ $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
 $maxrain=-1;
-$ds=@file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
+$ds=file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
     file_put_contents('/temp/ds.json', $ds);
     $ds=@json_decode($ds, true);
@@ -74,7 +74,7 @@ if (isset($ds)) {
         }
     }
 }
-$ow=@file_get_contents('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
+$ow=file_get_contents('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
 if (isset($ow)) {
     file_put_contents('/temp/ow.json', $ow);
     $ow=@json_decode($ow, true);
@@ -94,6 +94,13 @@ if (isset($ow)) {
 	    }
     }
 }
+
+$ob=json_decode(file_get_contents('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
+if (isset($ob)) {
+	$obtemp=$ob['temperature'];
+}
+
+
 $buienradar=0;
 $rains=file_get_contents('http://gadgets.buienradar.nl/data/raintext/?lat='.$lat.'&lon='.$lon);
 if (!empty($rains)) {
@@ -109,11 +116,15 @@ if (!empty($rains)) {
     if ($buienradar>20) $maxrain=$buienradar;
 }
 
-if (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
+if (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp+$obtemp)/4;
+elseif (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
+elseif (isset($buiten_temp)&&isset($dstemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$dstemp+$obtemp)/3;
+elseif (isset($buiten_temp)&&isset($owtemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$owtemp+$obtemp)/3;
 elseif (isset($buiten_temp)&&isset($dstemp)) $buiten_temp=($buiten_temp+$dstemp)/2;
 elseif (isset($owtemp)&&isset($dstemp)) $buiten_temp=($owtemp+$dstemp)/2;
 elseif (isset($owtemp)) $buiten_temp=$owtemp;
 elseif (isset($dstemp)) $buiten_temp=$dstemp;
+elseif (isset($obtemp)) $buiten_temp=$obtemp;
 
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
