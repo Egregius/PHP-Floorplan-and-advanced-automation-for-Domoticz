@@ -372,9 +372,15 @@ function ajax(Update=$LastUpdateTime){
 								else if(item>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
 							}catch{}
-						}else if(device=="sirene"||type=="smoke detector"){
+						}else if(device=="sirene"){
 							try{
-								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'Sirene\',\'sw\',\'Off\')"><br>'+device;
+								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device;
+								else html="";
+								document.getElementById("sirene").innerHTML=html;
+							}catch{}
+						}else if(type=="smoke detector"){
+							try{
+								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'resetsecurity\',\'resetsecurity\',\'Off\')"><br>'+device;
 								else html="";
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}

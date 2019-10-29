@@ -51,7 +51,10 @@ if ($home==true) {
     		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
     	}
     }
-
+	
+	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
+		resetsecurity();
+	}
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='lgtv') {
     	if ($_REQUEST['command']=='input') {
     		if($_REQUEST['action']=='Netflix') {
