@@ -842,6 +842,7 @@ function ajax(Update=$LastUpdateTime){
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
                         else elem.innerHTML=formatDate(tijd);
+                        elem.style.color="#FFF";
                     }
                 }catch{}
             }
@@ -868,9 +869,9 @@ function ajax(Update=$LastUpdateTime){
                         	elem.innerHTML=formatDate(tijd);
                         }
                     }else{
-                        if(tijd>$currentTime-82800)elem.style.color="#777";
+                        if(tijd>$currentTime-82800)elem.style.color="#FFF";
                         else {
-                        	elem.style.color="#777";
+                        	elem.style.color="#FFF";
                         	elem.innerHTML=formatDate(tijd);
                         }
                     }
