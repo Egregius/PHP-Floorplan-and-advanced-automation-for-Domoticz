@@ -229,7 +229,7 @@ function saytime($ip=101) {
 		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 		else $msg='Het is '.$hour.' uur '.$minute;
 	} 
-	return $msg;
+	return $msg.'. ';
 }
 function sayweather($ip=101) {
 	global $d;
