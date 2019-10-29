@@ -106,14 +106,14 @@ if ($d['auto']['s']=='On') {
         	}
         	$dow=date("w");
         	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-        	if ($weekend&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) saytime();
-        	elseif ($weekend&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) saytime();
-        	elseif (strftime('%M', TIME)==0) {saytime();sayweather();}
+        	if ($weekend&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
+        	elseif ($weekend&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
+        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
         }
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/

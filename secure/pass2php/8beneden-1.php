@@ -33,7 +33,5 @@ if ($status=='On') {
             }
         }
     }
-    saytime();
-    sleep(3);
-    boseplayinfo('Het wordt vandaag tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30);
+    boseplayinfo(boseplayinfo(saytime().sayweather()));
 }

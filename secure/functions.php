@@ -229,15 +229,11 @@ function saytime($ip=101) {
 		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 		else $msg='Het is '.$hour.' uur '.$minute;
 	} 
-	echo 'SayTime = '.$hour.':'.$minute.'	';
-	echo $msg.'<br>';
-	lg('SayTime = '.$hour.':'.$minute.'	'.$msg);
-	boseplayinfo($msg, 37, basename(__FILE__).':'.__LINE__, $ip);
 	return $msg;
 }
 function sayweather($ip=101) {
 	global $d;
-	boseplayinfo('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), 30, basename(__FILE__).':'.__LINE__, $ip);
+	return ('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.owcondition());
 }
 function owcondition() {
 	global $d;
