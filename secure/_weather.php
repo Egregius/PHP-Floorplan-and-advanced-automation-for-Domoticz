@@ -13,22 +13,24 @@ $user='weather';
 $prevwind=$d['wind']['s'];
 $prevbuien=$d['buien']['s'];
 $prevbuitentemp=$d['buiten_temp']['s'];
-$buiten_temp=$d['buiten_temp']['s'];
 $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
 $maxrain=-1;
+$temps=array();
+$temps['buiten_temp']=$d['buiten_temp']['s'];
+echo 'Weather<hr>';
 $ds=file_get_contents('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
     file_put_contents('/temp/ds.json', $ds);
     $ds=@json_decode($ds, true);
     if (isset($ds['currently'])) {
         if (isset($ds['currently']['temperature'])) {
-            $dstemp=$ds['currently']['temperature'];
-            if ($dstemp>$buiten_temp+0.5) {
-                $dstemp=$buiten_temp+0.5;
-            } elseif ($dstemp<$buiten_temp-0.5) {
-                $dstemp=$buiten_temp-0.5;
+            $temps['ds']=$ds['currently']['temperature'];
+            if ($temps['ds']>$temps['buiten_temp']+0.5) {
+                $temps['ds']=$temps['buiten_temp']+0.5;
+            } elseif ($temps['ds']<$temps['buiten_temp']-0.5) {
+                $temps['ds']=$temps['buiten_temp']-0.5;
             }
         }
         if (isset($ds['currently']['windSpeed'])) {
@@ -79,11 +81,11 @@ if (isset($ow)) {
     file_put_contents('/temp/ow.json', $ow);
     $ow=@json_decode($ow, true);
     if (isset($ow['main']['temp'])) {
-        $owtemp=$ow['main']['temp'];
-        if ($owtemp>$buiten_temp+0.5) {
-            $owtemp=$buiten_temp+0.5;
-        } elseif ($owtemp<$buiten_temp-0.5) {
-            $owtemp=$buiten_temp-0.5;
+        $temps['ow']=$ow['main']['temp'];
+        if ($temps['ow']>$temps['buiten_temp']+0.5) {
+            $temps['ow']=$temps['buiten_temp']+0.5;
+        } elseif ($temps['ow']<$temps['buiten_temp']-0.5) {
+            $temps['ow']=$temps['buiten_temp']-0.5;
         }
         $owwind=$ow['wind']['speed'] * 3.6;
         if ($d['icon']['m']!=$ow['weather'][0]['id']) {
@@ -97,7 +99,12 @@ if (isset($ow)) {
 
 $ob=json_decode(file_get_contents('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob)) {
-	$obtemp=$ob['temperature'];
+	$temps['ob']=$ob['temperature'];
+	if ($temps['ob']>$temps['buiten_temp']+0.5) {
+		$temps['ob']=$temps['buiten_temp']+0.5;
+	} elseif ($temps['ob']<$temps['buiten_temp']-0.5) {
+		$temps['ob']=$temps['buiten_temp']-0.5;
+	}
 }
 
 
@@ -116,25 +123,17 @@ if (!empty($rains)) {
     if ($buienradar>20) $maxrain=$buienradar;
 }
 
-if (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp+$obtemp)/4;
-elseif (isset($buiten_temp)&&isset($dstemp)&&isset($owtemp)) $buiten_temp=($buiten_temp+$dstemp+$owtemp)/3;
-elseif (isset($buiten_temp)&&isset($dstemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$dstemp+$obtemp)/3;
-elseif (isset($buiten_temp)&&isset($owtemp)&&isset($obtemp)) $buiten_temp=($buiten_temp+$owtemp+$obtemp)/3;
-elseif (isset($buiten_temp)&&isset($dstemp)) $buiten_temp=($buiten_temp+$dstemp)/2;
-elseif (isset($owtemp)&&isset($dstemp)) $buiten_temp=($owtemp+$dstemp)/2;
-elseif (isset($owtemp)) $buiten_temp=$owtemp;
-elseif (isset($dstemp)) $buiten_temp=$dstemp;
-elseif (isset($obtemp)) $buiten_temp=$obtemp;
+print_r($temps);
 
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
 	
-    if ($buiten_temp>$maxtemp) {
-        $maxtemp=round($buiten_temp, 1);
+    if ($temps['buiten_temp']>$maxtemp) {
+        $maxtemp=round($temps['buiten_temp'], 1);
     }
     $mintemp=round($mintemp, 1);
-    if ($buiten_temp<$mintemp) {
-        $mintemp=round($buiten_temp, 1);
+    if ($temps['buiten_temp']<$mintemp) {
+        $mintemp=round($temps['buiten_temp'], 1);
     }
     if ($d['minmaxtemp']['m']!=$maxtemp) {
     	storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
@@ -143,9 +142,9 @@ if (isset($ds['hourly']['data'])) {
 	    store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
 	}
 }
-$buiten_temp=round($buiten_temp,1);
-if ($d['buiten_temp']['s']!=$buiten_temp) {
-	store('buiten_temp', $buiten_temp, basename(__FILE__).':'.__LINE__);
+$temps['buiten_temp']=round($temps['buiten_temp'],1);
+if ($d['buiten_temp']['s']!=$temps['buiten_temp']) {
+	store('buiten_temp', $temps['buiten_temp'], basename(__FILE__).':'.__LINE__);
 }
 $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
