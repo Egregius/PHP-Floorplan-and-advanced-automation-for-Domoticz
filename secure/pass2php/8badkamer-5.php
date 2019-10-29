@@ -14,5 +14,6 @@ if ($status=='On') {
     store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
     douche();
     resetsecurity();
-    bosezone(102);
+    if ($d['bose102']['s']=='Off') bosezone(102);
+    boseplayinfo(saytime().sayweather());
 }

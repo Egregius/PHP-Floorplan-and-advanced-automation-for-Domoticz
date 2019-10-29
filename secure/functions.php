@@ -1034,8 +1034,7 @@ function fbadkamer()
         	if ($d['bose102']['s']=='Off') {
 				bosezone(102);
 				sleep(3);
-				saytime();
-				sayweather;
+				boseplayinfo(saytime().sayweather());
 			} 
         }
     }
