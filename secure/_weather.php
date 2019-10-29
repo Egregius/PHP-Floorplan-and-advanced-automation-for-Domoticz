@@ -109,21 +109,18 @@ if (isset($ob)) {
 
 
 $buienradar=0;
-$rains=file_get_contents('http://gadgets.buienradar.nl/data/raintext/?lat='.$lat.'&lon='.$lon);
-if (!empty($rains)) {
-    $rains=str_split($rains, 11);
-    $totalrain=0;
-    $aantal=0;
-    foreach ($rains as $rain) {
-        $aantal=$aantal+1;
-        $totalrain=$totalrain+substr($rain, 0, 3);
-        if ($aantal==7) break;
-    }
-    $buienradar=round($totalrain/7, 0);
+$rains=json_decode(file_get_contents('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
+if (isset($rains['forecasts'])) {
+	$totalrain=0;
+	$x=1;
+	foreach ($rains['forecasts'] as $i) {
+		$totalrain=$totalrain+$i['precipitation'];
+		$x++;
+		if ($x==7) break;
+	}
+	$buienradar=round($totalrain/7, 0);
     if ($buienradar>20) $maxrain=$buienradar;
 }
-
-print_r($temps);
 
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
