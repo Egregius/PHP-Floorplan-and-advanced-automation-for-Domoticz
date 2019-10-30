@@ -327,6 +327,7 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
+							localStorage.setItem("tijd_belknop", time);
 							try{
 								if(time>($currentTime-82800)){
 									date=new Date(time*1000);
