@@ -200,13 +200,13 @@ td{text-align:center;font-size:1.1em;}
 /* Rollers */
 #luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
 #RRliving{top:97px;left:90px;}
-#RRbureel{top:5px;left:195px;}
-#RRkeukenL{top:115px;left:405px;}
-#RRkeukenR{top:186px;left:405px;}
-#RRtobi{top:402px;left:138px;}
-#RRalex{top:560px;left:137px;}
-#RRkamerL{top:510px;left:350px;}
-#RRkamerR{top:580px;left:350px;}
+#RRbureel{top:6px;left:205px;}
+#RRkeukenL{top:119px;left:419px;}
+#RRkeukenR{top:183px;left:419px;}
+#RRtobi{top:403px;left:140px;}
+#RRalex{top:561px;left:140px;}
+#RRkamerL{top:512px;left:419px;}
+#RRkamerR{top:581px;left:419px;}
 #zoldertrap{top:670px;left:145px;}
 
 /* Zones */
