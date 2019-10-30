@@ -633,11 +633,11 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							try{
 								if($value==100){
-									html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
+									html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i48">';
 								}else if($value==0){
-									html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
+									html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i48">';
 								}else{
-									html='<img src="https://home.egregius.be/images/circlegrey.png" class="i60">';
+									html='<img src="https://home.egregius.be/images/circlegrey.png" class="i48">';
 									html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;">';
 									if($mode == 2)html+='<font size="5" color="#F00">';
 									else if($mode == 1)html+='<font size="5" color="#222">';

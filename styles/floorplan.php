@@ -191,7 +191,7 @@ td{text-align:center;font-size:1.1em;}
 /* Thermometers */
 #living_temp{top:95px;left:193px;}
 #badkamer_temp{top:403px;left:441px;}
-#kamer_temp{top:530px;left:427px;}
+#kamer_temp{top:530px;left:357px;}
 #tobi_temp{top:433px;left:94px;}
 #alex_temp{top:544px;left:94px;}
 #zolder_temp{top:670px;left:94px;}
@@ -199,15 +199,15 @@ td{text-align:center;font-size:1.1em;}
 
 /* Rollers */
 #luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
-#RRliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;}
-#RRbureel{top:5px;left:195px;}#tRbureel{top:-2px;left:170px;}
-#RRkeukenL{top:115px;left:405px;}#tRkeukenL{top:102px;left:456px;}
-#RRkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;}
-#RRtobi{top:402px;left:138px;}#tRtobi{top:510px;left:68px;}
-#RRalex{top:560px;left:137px;}#tRalex{top:620px;left:68px;}
-#RRkamerL{top:510px;left:350px;}#tRkamerL{top:504px;left:462px;}
-#RRkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;}
-#zoldertrap{top:670px;left:145px;}#tzoldertrap{top:675px;left:170px;}
+#RRliving{top:97px;left:90px;}
+#RRbureel{top:5px;left:195px;}
+#RRkeukenL{top:115px;left:405px;}
+#RRkeukenR{top:186px;left:405px;}
+#RRtobi{top:402px;left:138px;}
+#RRalex{top:560px;left:137px;}
+#RRkamerL{top:510px;left:350px;}
+#RRkamerR{top:580px;left:350px;}
+#zoldertrap{top:670px;left:145px;}
 
 /* Zones */
 #zliving{top:51px;left:89px;width:249px;height:197px;}

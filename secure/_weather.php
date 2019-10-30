@@ -222,7 +222,7 @@ foreach ($temps as $k=>$v) {
 	$msg.=$k.'='.$v.', ';
 }
 $msg.='newbuitentemp='.$newbuitentemp;
-lg($msg);
+if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
     $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
 } elseif (isset($d['buien']['s'])&&isset($buienradar)) {

@@ -239,7 +239,6 @@ if ($d['auto']['s']=='On') {
             'denon',
             'bureel',
             'kristal',
-            'terras',
             'tuin',
             'voordeur',
             'hall',
@@ -255,8 +254,10 @@ if ($d['auto']['s']=='On') {
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
                 if (past($item)>$uit) {
-                    sw($item, 'Off', basename(__FILE__).':'.__LINE__);
-                    lg($item.' uitgeschakeld omdat we weg zijn');
+                    if ($d[$item]['s']!='Off') {
+						sw($item, 'Off', basename(__FILE__).':'.__LINE__);
+						lg($item.' uitgeschakeld omdat we weg zijn');
+					}
                 }
             }
         }
@@ -266,13 +267,16 @@ if ($d['auto']['s']=='On') {
             'kamer',
             'tobi',
             'alex',
+            'terras',
             'lichtbadkamer'
         );
         foreach ($items as $item) {
             if ($d[$item]['s']>0) {
                 if (past($item)>$uit) {
-                    sl($item, 0, basename(__FILE__).':'.__LINE__);
-                    lg($item.' uitgeschakeld omdat we weg zijn');
+                	if ($d[$item]['s']>0) {
+						sl($item, 0, basename(__FILE__).':'.__LINE__);
+						lg($item.' uitgeschakeld omdat we weg zijn');
+					}
                 }
             }
         }
