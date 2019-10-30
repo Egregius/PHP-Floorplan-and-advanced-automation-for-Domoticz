@@ -442,7 +442,7 @@ function sw($name,$action='Toggle',$msg='')
         $msg=' (SWITCH)		'.$user.'=>'.$name.'=>'.$action.' ('.$msg.')';
         if ($d[$name]['i']>0) {
             lg($msg);
-			if ($d[$name]['s']!=$action) {
+			if ($d[$name]['s']!=$action||$name=='deurbel') {
 				echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
         } else {

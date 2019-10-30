@@ -12,11 +12,9 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-//$d=fetchdata();
+$d=fetchdata();
 /*-------------------------------------------------*/
-$data=json_decode(file_get_contents('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
-echo $data['temperature'];
-
+sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 
 /*---------------------------*/
 echo '</pre>';

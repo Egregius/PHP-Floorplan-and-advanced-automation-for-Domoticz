@@ -427,15 +427,17 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById("heatingauto").innerHTML=html;
 							}catch{}
 						}else if(device=="luifel"){
+							localStorage.setItem(device, $value);
+							localStorage.setItem('tijd_'+device, time);
+							localStorage.setItem(device+'_$mode', $mode);
 							try{
 								if($value==0)html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
 								else if($value==100)html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
 								else html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60"><div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;"><font size="5" color="#CCC">'+$value+'</font> </div>';
 								if($mode==1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
+								html+='<br><span id="tluifel"></span>';
 								document.getElementById(device).innerHTML=html;
 							}catch{}
-							localStorage.setItem(device, $value);
-							localStorage.setItem(device+'_$mode', $mode);
 						}else if(device=="raamhall"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
@@ -845,7 +847,7 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','heatingauto','heating'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','heatingauto','heating','luifel'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
