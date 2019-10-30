@@ -201,11 +201,11 @@ td{text-align:center;font-size:1.1em;}
 #luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
 #RRliving{top:97px;left:90px;}
 #RRbureel{top:6px;left:205px;}
-#RRkeukenL{top:119px;left:419px;}
-#RRkeukenR{top:183px;left:419px;}
+#RRkeukenL{top:123px;left:419px;}
+#RRkeukenR{top:182px;left:419px;}
 #RRtobi{top:403px;left:140px;}
 #RRalex{top:561px;left:140px;}
-#RRkamerL{top:512px;left:419px;}
+#RRkamerL{top:521px;left:419px;}
 #RRkamerR{top:581px;left:419px;}
 #zoldertrap{top:670px;left:145px;}
 
