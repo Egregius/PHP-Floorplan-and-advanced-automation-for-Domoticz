@@ -872,7 +872,7 @@ function ajax(Update=$LastUpdateTime){
 					else {
 						elem.style.color="#777";
 						html=formatDate(tijd);
-						if(elem.innerHTML!=html)elem.innerHTML=formatDate(tijd);
+						if(elem.innerHTML!=html)elem.innerHTML=html;
 					}
                 }catch{}
             }
