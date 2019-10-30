@@ -287,7 +287,7 @@ if ($d['heating']['s']>=3) {
     elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>900) sw('brander','Off', basename(__FILE__).':'.__LINE__);
 } elseif ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($bigdif!=$d['heating']['m']) storemode('heating', $bigdif, basename(__FILE__).':'.__LINE__);
+if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 
 if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbadkamer')>57|| $d['lichtbadkamer']['s']==0)) {
     store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);

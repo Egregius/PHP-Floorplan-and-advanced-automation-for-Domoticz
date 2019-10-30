@@ -299,6 +299,10 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById("trdwater").innerHTML="";
 								}
 							}catch{}
+						}else if(device=="bigdif"){
+							try{
+								document.getElementById("bigdif").innerHTML=$mode;
+							}catch{}
 						}else if(device=="heating"){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
@@ -315,7 +319,6 @@ function ajax(Update=$LastUpdateTime){
 								}
 								document.getElementById("heating").innerHTML=html;
 							}catch{}
-							localStorage.setItem("bigdif", $mode);
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
 							try{
@@ -1180,7 +1183,7 @@ function floorplanheating(){
         html+='<div class="fix z" onclick="ajaxcontrol(\'saytime\',\'\',\'\')" id="saytime">Say Time</div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
-        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander">time</span></td></tr>';
+        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
         html+='<tr id="heatingauto"></tr>';
         html+='<tr id="trheating"></tr>';
         html+='</table></div>';
