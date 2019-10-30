@@ -858,7 +858,7 @@ function ajax(Update=$LastUpdateTime){
 					hours=date.getHours();
 					minutes="0"+date.getMinutes();
 					html=hours+':'+minutes.substr(-2);
-					if(elem.innerHTML!=html)elem.innerHTML=html;
+					if(elem.innerHTML!=html&&tijd>$currentTime-82800)elem.innerHTML=html;
 					if(tijd>$currentTime-60)elem.style.color="#FF8800";
 					else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
 					else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
