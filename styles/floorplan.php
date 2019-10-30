@@ -87,7 +87,7 @@ td{text-align:center;font-size:1.1em;}
 #ledluifel{top:38px;left:60px;}
 #tuin{top:74px;left:16px;height:48px;width:auto;}
 #zithoek{top:140px;left:110px;}
-#kamer{top:547px;left:330px;}
+#kamer{top:526px;left:280px;}
 #tobi{top:432px;left:135px;}
 #alex{top:555px;left:135px;}
 #lichtbadkamer{top:418px;left:378px;}

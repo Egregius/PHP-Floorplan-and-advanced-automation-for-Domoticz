@@ -644,8 +644,8 @@ function ajax(Update=$LastUpdateTime){
 									else html+='<font size="5" color="#CCC">';
 									html+=$value+'</font></div>';
 								}
-								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
-								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
+								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:45px;height:45px;border-radius:45px;"></div>';
+								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:45px;height:45px;border-radius:45px;"></div>';
 								html+='</div>';
 								if(time>($currentTime-82800)){
 									date=new Date(time*1000);
