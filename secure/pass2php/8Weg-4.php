@@ -33,8 +33,8 @@ if ($status=='On') {
         if ($d['garageled']['s']=='On') {
             sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
         }
-		boseplayinfo('Alles ok. Vertrek maar', 55);
-		usleep(800000);
+		boseplayinfo('Alles ok. Vertrek maar', 50);
+		usleep(400000);
 		bosevolume(55, 104);
 		usleep(3000000);
 		bosekey("POWER", 0, 104);

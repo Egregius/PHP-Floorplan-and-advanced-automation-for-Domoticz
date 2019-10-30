@@ -315,7 +315,7 @@ function waarschuwing($msg)
 {
     global $d;
     if ($d['bose101']['s']=='On') {
-    	boseplayinfo($msg);
+    	boseplayinfo($msg, 40);
     }
     if ($d['bose102']['s']=='On') {
     	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
