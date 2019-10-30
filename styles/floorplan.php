@@ -140,7 +140,7 @@ td{text-align:right;font-size:1.1em;}
 #heater3{top:223px;left:123px;height:22px;width:auto;}
 #heater4{top:223px;left:140px;height:22px;width:auto;}
 
-#tbelknop{top:17px;left:466px;}
+#tbelknop{top:24px;left:466px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}
 #tpirliving{top:230px;left:300px;}
 #tpirlivingR{top:230px;left:105px;}
