@@ -317,13 +317,14 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							localStorage.setItem("bigdif", $mode);
 							localStorage.setItem(device, $value);
+							localStorage.setItem('tijd_'+device, time);
 							try{
 								html='<td></td><td width="65px">';
-								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral</td>';
-								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling</td>';
-								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec</td>';
-								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec</td>';
-								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas</td>';
+								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span</td>';
+								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span</td>';
+								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span</td>';
+								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span</td>';
+								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas<br><span id="theating"></span</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
@@ -416,9 +417,10 @@ function ajax(Update=$LastUpdateTime){
 								}
 							//}catch{}
 						}else if(device=="heatingauto"){
+							localStorage.setItem("tijd_"+device, time);
 							try{
-								if($value=="Off")html='<td></td><td width="65px"><img src="images/fire_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>';
-								else html='<td></td><td width="65px"><img src="images/fire_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch</td>';
+								if($value=="Off")html='<td></td><td width="65px"><img src="images/fire_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel<br><span id="theatingauto"></span></td>';
+								else html='<td></td><td width="65px"><img src="images/fire_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch<br><span id="theatingauto"></span></td>';
 								document.getElementById("heatingauto").innerHTML=html;
 							}catch{}
 						}else if(device=="luifel"){
@@ -840,17 +842,17 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','heatingauto','heating'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
                     tijd=localStorage.getItem("tijd_"+items[i]);
                     $value=localStorage.getItem(items[i]);
                     elem=document.getElementById("t"+items[i]);
-					date=new Date(time*1000);
-									hours=date.getHours();
-									minutes="0"+date.getMinutes();
-									html=hours+':'+minutes.substr(-2);
+					date=new Date(tijd*1000);
+					hours=date.getHours();
+					minutes="0"+date.getMinutes();
+					html=hours+':'+minutes.substr(-2);
 					if(elem.innerHTML!=html)elem.innerHTML=html;
 					if(tijd>$currentTime-60)elem.style.color="#FF8800";
 					else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
