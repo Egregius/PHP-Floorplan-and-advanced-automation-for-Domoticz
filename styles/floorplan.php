@@ -38,7 +38,7 @@ h4{font-size:18px;}
 .fontCCCCCC{color:#CCCCCC;}
 .fontCCCCCC{color:#CCCCCC;}
 .fontCCCCCC{color:#CCCCCC;}
-td{text-align:right;font-size:1.1em;}
+td{text-align:center;font-size:1.1em;}
 .blackmedia{top:254px;left:79px;height:585px;width:410px;background-color:#000;}
 #mediasidebar{top:80px;left:0px;width:80px;background-color:#000;}
 .picam1{top:127px;left:445px;}
