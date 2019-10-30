@@ -387,6 +387,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="brander"){
 							localStorage.setItem(device, $value);
+							localStorage.setItem('tijd_'+device, time);
 							try{
 								if($value=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">';
 								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
@@ -709,7 +710,7 @@ function ajax(Update=$LastUpdateTime){
 									minutes="0"+date.getMinutes();
 									document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
 								}else{
-									document.getElementById("t"+device).innerHTML="";
+									document.getElementById("t"+device).innerHTML=formatdate(time);
 								}
 							}catch{}
 						}else if(type=="thermometer"){
@@ -839,13 +840,18 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
                     tijd=localStorage.getItem("tijd_"+items[i]);
                     $value=localStorage.getItem(items[i]);
                     elem=document.getElementById("t"+items[i]);
+					date=new Date(time*1000);
+									hours=date.getHours();
+									minutes="0"+date.getMinutes();
+									html=hours+':'+minutes.substr(-2);
+					if(elem.innerHTML!=html)elem.innerHTML=html;
 					if(tijd>$currentTime-60)elem.style.color="#FF8800";
 					else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
 					else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
