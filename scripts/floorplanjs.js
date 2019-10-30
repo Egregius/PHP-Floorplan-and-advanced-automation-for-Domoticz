@@ -498,7 +498,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="switch"){
 							try{
-								if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"){
+								if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"||device=="nas"||device=="nvidia"){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
 									else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
 									html+='<br>'+device;
@@ -507,6 +507,8 @@ function ajax(Update=$LastUpdateTime){
 										hours=date.getHours();
 										minutes="0"+date.getMinutes();
 										html+='<br>'+hours+':'+minutes.substr(-2);
+									} else {
+										html+='<br>'+formatDate(tijd);
 									}
 									if(device=="water"){
 										try{
@@ -1136,8 +1138,6 @@ function floorplanmedia(){
     ajaxmedia();
     myAjax=setInterval(ajax, 800);
     myAjaxmedia=setInterval(ajaxmedia, 900);
-    denon=localStorage.getItem('denon');
-    lgtv=localStorage.getItem('lgtv');
     try{
         html='<div class="fix jbl z1 i48" id="jbl"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
