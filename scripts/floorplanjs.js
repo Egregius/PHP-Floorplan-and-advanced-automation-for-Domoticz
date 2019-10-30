@@ -779,6 +779,14 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									html+='<font size="2" color="#CCC">'+$value.toString().replace(/[.]/, ",")+'</font></div>';
 								}
+								if(time>($currentTime-82800)){
+									date=new Date(time*1000);
+									hours=date.getHours();
+									minutes="0"+date.getMinutes();
+									html+='<br>'+hours+':'+minutes.substr(-2);
+								}else{
+									html+='<br>'+formatDate(time);
+								}
 								document.getElementById(device).innerHTML=html;
 							}catch{}
 						}else if(type=="setpoint"){
