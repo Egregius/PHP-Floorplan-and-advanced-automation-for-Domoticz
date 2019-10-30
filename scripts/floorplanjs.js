@@ -857,7 +857,8 @@ function ajax(Update=$LastUpdateTime){
 					else if(tijd>$currentTime-82800)elem.style.color="#777";
 					else {
 						elem.style.color="#777";
-						elem.innerHTML=formatDate(tijd);
+						html=formatDate(tijd);
+						if(elem.innerHTML!=html)elem.innerHTML=formatDate(tijd);
 					}
                 }catch{}
             }
