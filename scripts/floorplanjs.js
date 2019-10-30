@@ -783,9 +783,9 @@ function ajax(Update=$LastUpdateTime){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
-									html+='<br>'+hours+':'+minutes.substr(-2);
+									html+='<br><div id="t'+device+'">'+hours+':'+minutes.substr(-2)+'</div>';
 								}else{
-									html+='<br>'+formatDate(time);
+									html+='<br><div id="t'+device+'">'+formatDate(time)+'</div>';
 								}
 								document.getElementById(device).innerHTML=html;
 							}catch{}
@@ -828,7 +828,7 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
+            var items=['living_set','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
