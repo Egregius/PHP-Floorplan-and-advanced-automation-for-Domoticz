@@ -757,6 +757,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(type=="thermostaat"){
 							localStorage.setItem(device+'_$mode', $mode);
 							localStorage.setItem(device, $value);
+							localStorage.setItem("tijd_"+device, time);
 							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
@@ -828,7 +829,30 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set'];
+            var arrayLength=items.length;
+            for (var i=0; i < arrayLength; i++) {
+                try{
+                    tijd=localStorage.getItem("tijd_"+items[i]);
+                    $value=localStorage.getItem(items[i]);
+                    elem=document.getElementById("t"+items[i]);
+					if(tijd>$currentTime-60)elem.style.color="#FF8800";
+					else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
+					else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
+					else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+					else if(tijd>$currentTime-7200)elem.style.color="#CCC";
+					else if(tijd>$currentTime-14400)elem.style.color="#BBB";
+					else if(tijd>$currentTime-21600)elem.style.color="#AAA";
+					else if(tijd>$currentTime-28800)elem.style.color="#999";
+					else if(tijd>$currentTime-36000)elem.style.color="#888";
+					else if(tijd>$currentTime-82800)elem.style.color="#777";
+					else {
+						elem.style.color="#777";
+						elem.innerHTML=formatDate(tijd);
+					}
+                }catch{}
+            }
+            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
@@ -848,11 +872,15 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-82800)elem.style.color="#777";
                         else {
                         	elem.style.color="#777";
-                        	elem.innerHTML=formatDate(tijd);
+                        	html=formatDate(tijd);
+                        	if(elem.innerHTML!=html)elem.innerHTML=html;
                         }
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color=null;
-                        else elem.innerHTML=formatDate(tijd);
+                        else {
+                        	html=formatDate(tijd);
+                        	if(elem.innerHTML!=html)elem.innerHTML=html;
+                        }
                         elem.style.color="#FFF";
                     }
                 }catch{}
@@ -877,13 +905,15 @@ function ajax(Update=$LastUpdateTime){
                         else if(tijd>$currentTime-82800)elem.style.color="#777";
                         else {
                         	elem.style.color="#777";
-                        	elem.innerHTML=formatDate(tijd);
+                        	html=formatDate(tijd);
+                        	if(elem.innerHTML!=html)elem.innerHTML=html;
                         }
                     }else{
                         if(tijd>$currentTime-82800)elem.style.color="#FFF";
                         else {
                         	elem.style.color="#FFF";
-                        	elem.innerHTML=formatDate(tijd);
+                        	html=formatDate(tijd);
+                        	if(elem.innerHTML!=html)elem.innerHTML=html;
                         }
                     }
                 }catch{}
