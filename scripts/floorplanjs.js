@@ -508,7 +508,7 @@ function ajax(Update=$LastUpdateTime){
 										minutes="0"+date.getMinutes();
 										html+='<br>'+hours+':'+minutes.substr(-2);
 									} else {
-										html+='<br>'+formatDate(tijd);
+										html+='<br>'+formatDate(time);
 									}
 									if(device=="water"){
 										try{
@@ -649,6 +649,7 @@ function ajax(Update=$LastUpdateTime){
 										document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
 									}else{
 										document.getElementById("t"+device).innerHTML="";
+										document.getElementById("t"+device).innerHTML=formatDate(time);
 									}
 								}catch{}
 							}
