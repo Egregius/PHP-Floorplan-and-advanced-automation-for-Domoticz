@@ -199,14 +199,14 @@ td{text-align:right;font-size:1.1em;}
 
 /* Rollers */
 #luifel{top:140px;left:5px;}#tluifel{top:140px;left:5px;}
-#RRliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#RRliving{top:97px;left:90px;}#tRliving{top:217px;left:68px;}
 #RRbureel{top:5px;left:195px;}#tRbureel{top:-2px;left:170px;}
-#RRkeukenL{top:116px;left:405px;}#tRkeukenL{top:102px;left:456px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#RRkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#RRtobi{top:404px;left:137px;}#tRtobi{top:510px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#RRalex{top:560px;left:137px;}#tRalex{top:620px;left:68px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#RRkamerL{top:512px;left:350px;}#tRkamerL{top:504px;left:462px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#RRkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#RRkeukenL{top:116px;left:405px;}#tRkeukenL{top:102px;left:456px;}
+#RRkeukenR{top:186px;left:405px;}#tRkeukenR{top:229px;left:456px;}
+#RRtobi{top:404px;left:137px;}#tRtobi{top:510px;left:68px;}
+#RRalex{top:560px;left:137px;}#tRalex{top:620px;left:68px;}
+#RRkamerL{top:512px;left:350px;}#tRkamerL{top:504px;left:462px;}
+#RRkamerR{top:580px;left:350px;}#tRkamerR{top:638px;left:462px;}
 #zoldertrap{top:670px;left:145px;}#tzoldertrap{top:675px;left:170px;}
 
 /* Zones */
@@ -219,7 +219,7 @@ td{text-align:right;font-size:1.1em;}
 
 /* Setpoints */
 #kamerZ{top:523px;left:455px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#tobiZ{top:415px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#tobiZ{top:417px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #alexZ{top:555px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 ";
 $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);

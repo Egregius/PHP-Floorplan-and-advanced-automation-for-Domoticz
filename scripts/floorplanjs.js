@@ -638,6 +638,15 @@ function ajax(Update=$LastUpdateTime){
 								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:56px;height:56px;border-radius:45px;"></div>';
 								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>';
 								html+='</div>';
+								if(time>($currentTime-82800)){
+									date=new Date(time*1000);
+									hours=date.getHours();
+									minutes="0"+date.getMinutes();
+									html+='<br><div id="t'+device+'">'+hours+':'+minutes.substr(-2)+'</div>';
+								}else{
+									html+='<br><div id="t'+device+'">'+formatDate(time)+'</div>';
+								}
+								
 								$('#R'+device).html(html);
 							}catch{}
 							if(localStorage.getItem('view')=='floorplanheating'){
@@ -1117,7 +1126,7 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
-		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR'];
+		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
@@ -1151,7 +1160,7 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
 		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];        
         items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
-        items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc','tRliving','tRbureel','tRkeukenL','tRkeukenR','tRtobi','tRalex','tRkamerL','tRkamerR'];
+        items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
         items=['living','badkamer','kamer','tobi','alex','zolder'];
 		items.forEach(function(item){html+='<div class="fix z1" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
