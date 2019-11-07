@@ -850,7 +850,7 @@ function bosebass($bass,$ip=101)
     $xml="<bass>$bass</bass>";
     bosepost("bass", $xml, $ip);
 }
-function bosepreset($pre,$ip=3)
+function bosepreset($pre,$ip=101)
 {
     $pre=1*$pre;
     if ($pre<1||$pre>6) {

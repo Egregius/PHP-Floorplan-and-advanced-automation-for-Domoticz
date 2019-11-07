@@ -14,7 +14,7 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
+bosezone(101);
 
 /*---------------------------*/
 echo '</pre>';
