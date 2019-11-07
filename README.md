@@ -13,6 +13,8 @@ Follow the Domoticz forum topic for information at https://www.domoticz.com/foru
 <br>
 Also @sincze wrote a nice post with information at https://www.domoticz.com/forum/viewtopic.php?p=212446#p212453<br>
 <br>
+And @Trigun did something similar at https://www.domoticz.com/forum/viewtopic.php?f=64&t=12343&start=1020#p221232<br>
+<br>
 Screenshots of the floorplans are available at https://egregius.be/2019/pass2php-and-floorplan-v3-for-domoticz/<br>
 <br>
 This repository is not intended to be used with git pull. There are to many personal changes that has to be done.<br>
