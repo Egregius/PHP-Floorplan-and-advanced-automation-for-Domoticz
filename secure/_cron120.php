@@ -19,17 +19,17 @@ if ($d['auto']['s']=='On') {
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
         $rainpast=$row['buien'];
     }
-    
-    if ($rainpast>128000) $pomppauze=43200;
-    elseif ($rainpast>64000) $pomppauze=86400;
-    elseif ($rainpast>32000) $pomppauze=86400*2;
-    else $pomppauze=86400*28;
+    if ($d['minmaxtemp']['m']>1) $base=3600*$d['minmaxtemp']['m'];
+    else $base=3600;
+    if ($rainpast>64000) $pomppauze=$base;
+    elseif ($rainpast>32000) $pomppauze=$base*2;
+    elseif ($rainpast>16000) $pomppauze=$base*4;
+    else $pomppauze=$base*24;
 
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
         sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
     } elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$pomppauze) {
         sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
-        telegram('Regenpomp aan, rainpast='.$rainpast);
     }
 	$x=0;
 	foreach ($windhist as $y) {
