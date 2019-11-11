@@ -14,5 +14,5 @@ if ($status=='Off') {
    		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } else {
-	rgb('Xlight', 127, 100);
+	rgb('Xlight', 127, 15);
 }

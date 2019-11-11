@@ -27,7 +27,6 @@ if ($status=='On') {
 		storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 	douche();
-	boseplayinfo(saytime().sayweather());
 	if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
 		if ($d['kamer']['m']!=1) {
 			storemode('kamer', 1, basename(__FILE__).':'.__LINE__);

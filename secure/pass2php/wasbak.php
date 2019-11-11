@@ -23,4 +23,7 @@ if ($status=='On') {
     if ($d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['m']==1) {
     	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
     }
+    if ($d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['s']=='On') {
+    	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+    }
 }
