@@ -14,11 +14,12 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-rgb('Xlight', 200, 100);
+rgb('Xlight', 127, 100);
 
 /*
 0 = rood
-
+127 = groen
+230 = blauw
 */
 /*---------------------------*/
 echo '</pre>';
