@@ -129,3 +129,7 @@ if ($d['picam2plug']['s']=='On'&&past('picam2plug')>7200) {
     sleep(10);
     sw('picam2plug', 'Off', basename(__FILE__).':'.__LINE__);
 }
+
+if ($d['regenputvol']['s']=='On'&&past('regenputvol')>600) {
+	alert('regenput', 'Regenput vol! Zet warm water op regenput.', 259200, false, true);
+}

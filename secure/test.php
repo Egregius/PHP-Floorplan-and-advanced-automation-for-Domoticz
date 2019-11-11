@@ -14,8 +14,12 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-bosezone(101);
+rgb('Xlight', 200, 100);
 
+/*
+0 = rood
+
+*/
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

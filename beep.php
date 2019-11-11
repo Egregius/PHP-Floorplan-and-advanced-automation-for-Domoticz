@@ -33,4 +33,3 @@ if ($d['Xvol']['s']!=5) {
     sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 }
 sl('Xbel', 20, basename(__FILE__).':'.__LINE__);
-rgb('Xlight', 57, 50);

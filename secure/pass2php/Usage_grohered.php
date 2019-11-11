@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Off') alert('regenput', 'Regenput niet meer vol.', 3600, false, true);
+if ($status>10&&past('Xlight')>30) {
+    rgb('Xlight', 360, 100);
+}

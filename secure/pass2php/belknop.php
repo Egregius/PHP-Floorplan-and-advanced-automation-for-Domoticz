@@ -43,7 +43,6 @@ if ($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15) {
         }
         sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
         sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
-        rgb('Xlight', 360, 100);
     }
     sleep(2);
     sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
