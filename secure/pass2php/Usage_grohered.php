@@ -9,6 +9,16 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status>10&&past('Xlight')>30) {
-    rgb('Xlight', 360, 100);
+if ($d['GroheRed']['s']=='Off') {
+	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+} elseif ($d['GroheRed']['s']=='On') {
+	if (past('GroheRed')<10&&$status<10) {
+		rgb('Xlight', 127, 100);
+	} elseif (past('GroheRed')>10) {
+		if ($status<10) {
+			rgb('Xlight', 0, 100);
+		} else {
+			rgb('Xlight', 230, 100);
+		}
+	}
 }

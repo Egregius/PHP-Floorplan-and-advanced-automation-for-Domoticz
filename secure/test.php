@@ -14,7 +14,7 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-rgb('Xlight', 127, 100);
+ud('Usage_grohered', 0, 2000);
 
 /*
 0 = rood
