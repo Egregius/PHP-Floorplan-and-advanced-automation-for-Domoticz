@@ -12,9 +12,9 @@
 if ($d['GroheRed']['s']=='Off') {
 	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 } elseif ($d['GroheRed']['s']=='On') {
-	if (past('GroheRed')<10&&$status<10) {
+	if (past('GroheRed')<=2&&$status<10) {
 		rgb('Xlight', 127, 15);
-	} elseif (past('GroheRed')>10) {
+	} elseif (past('GroheRed')>=2) {
 		if ($status<10) {
 			rgb('Xlight', 0, 15);
 		} else {
