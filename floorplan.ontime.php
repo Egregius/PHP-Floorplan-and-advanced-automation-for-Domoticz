@@ -112,7 +112,7 @@ if ($home) {
     echo '
 		</table>
 		</div>
-		<div class="fix" style="top:0px;left:204px;width:60px;font-size:2em"><a href="?idx='.$idx.'">'.convertToHours($totalon).'</a></div>
+		<div class="fix" style="top:0px;left:204px;width:60px;font-size:2em"><a href="?idx='.$idx.'">'.convertToHours($totalon).'</a> '.$udevice.'</div>
 		<script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 		    function toggle_visibility(id){var e=document.getElementById(id);if(e.style.display==\'inherit\') e.style.display=\'none\';else e.style.display=\'inherit\';}

@@ -1123,7 +1123,7 @@ function createheader($page='')
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
 		<meta name="HandheldFriendly" content="true">
