@@ -36,6 +36,9 @@ require 'secure/authentication.php';
         </div>
         <div class="clear">
         </div>
+        <div class="fix box box1" style="bottom:0px;left:0px;width:100%">
+        	<?php echo ''.$udevice.'<br>'.$_SERVER['HTTP_USER_AGENT']; ?>
+        </div>
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}
         </script>

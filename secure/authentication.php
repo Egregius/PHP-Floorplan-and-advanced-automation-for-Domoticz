@@ -13,6 +13,7 @@ $authenticated=false;
 $home=false;
 if (!isset($_SERVER['HTTP_USER_AGENT'])) die('No user agent specified');
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) $udevice='iPhone';
+elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')!==false) $udevice='iPad';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh')!==false) $udevice='Mac';
 else $udevice='other';
