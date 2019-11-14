@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>        <dict>
+      <key>UserDefinedName</key>
+      <string>Autoconnect VPN</string>
+      <key>PayloadDisplayName</key>
+      <string>Autoconnect VPN</string>
+      <key>PayloadIdentifier</key>
+      <string>HomeL2TPVPN</string>
+      <key>PayloadUUID</key>
+      <string>F3BBD195-83EC-DEB6-A96D-83FECAA1945A</string>
+      <key>VPNType</key>
+      <string>L2TP</string>
+      <key>IPSec</key>
+      <dict>
+        <key>AuthenticationMethod</key>
+        <string>SharedSecret</string>
+        <key>LocalIdentifierType</key>
+        <string>KeyID</string>
+        <key>SharedSecret</key>
+        <string>67f317d13a7f444ef7c5206129cbcb6dae97be2efb7f33dfb36338e7</string>
+      </dict>
+      <key>PPP</key>
+      <dict>
+        <key>AuthName</key>
+        <string>Guy</string>
+        <key>AuthPassword</key>
+        <string>homegrBE!8800</string>
+        <key>CommRemoteAddress</key>
+        <string>178.116.232.135</string>
+      </dict>
+      <key>OnDemandEnabled</key>
+   <integer>1</integer>
+   <key>OnDemandRules</key>
+          <array>
+        <dict>
+          <key>InterfaceTypeMatch</key>
+          <string>WiFi</string>
+          <key>SSIDMatch</key>
+          <array>
+ <string>Egregius</string>
+           </array>
+          <key>Action</key>
+          <string>Disconnect</string>
+        </dict>
+        <dict>
+          <!-- VPN Default state -->
+          <key>Action</key>
+          <string>Connect</string>
+        </dict>
+          </array>
+      <key>OverridePrimary</key>
+      <true/>
+      <key>IPv4</key>
+      <dict>
+        <key>OverridePrimary</key>
+        <integer>1</integer>
+      </dict>
+      <key>PayloadType</key>
+      <string>com.apple.vpn.managed</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+    </dict>
+</array>
+  <key>PayloadDisplayName</key>
+  <string>VPN Configurations</string>
+  <key>PayloadIdentifier</key>
+  <string>89751E9B-DC25-8AE9-DA98-18C4C85D3E2E</string>
+  <key>PayloadRemovalDisallowed</key>
+  <false/>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>7FF45CEF-6A7C-BBC8-1584-E14C6267083D</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>
