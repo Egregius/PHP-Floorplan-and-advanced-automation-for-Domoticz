@@ -96,7 +96,7 @@ function douche()
     global $d;
     $douchegas=$d['douche']['s']*10;
     $douchewater=$d['douche']['m']*1;
-    if ($douchegas>0&&$douchewater>0) {
+    if ($douchegas>0||$douchewater>0) {
         $euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 		$eurocent=round($euro*100, 0);
 		douchewarn($eurocent, 0);
