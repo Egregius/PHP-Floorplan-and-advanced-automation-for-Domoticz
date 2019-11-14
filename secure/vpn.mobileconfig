@@ -18,7 +18,7 @@
 				<key>IPSec</key>
 				<dict>
 					<key>RemoteAddress</key>
-					<string>home.egregius.be</string>
+					<string>178.116.232.135</string>
 					<key>AuthenticationMethod</key>
 					<string>SharedSecret</string>
 					<key>XAuthName</key>
