@@ -153,7 +153,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
 	$raw=rawurlencode($sound);
-	if ($d['bose102']['m']<TIME-300) return null;
+	//if ($d['bose102']['m']<TIME-300) return null;
 	storemode('bose102', TIME);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
