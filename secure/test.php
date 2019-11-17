@@ -14,7 +14,8 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-ud('Usage_grohered', 0, 2000);
+boseplayinfo(saytime().sayweather());
+
 
 /*
 0 = rood
