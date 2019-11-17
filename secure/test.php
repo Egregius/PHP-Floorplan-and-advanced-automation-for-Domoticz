@@ -14,16 +14,19 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-echo saytime().'<br>';
+$sound=saytime().'<br>';
+if(!startsWith($sound, 'Het')) echo 'yes';
+echo $sound;
+echo '<hr>';
+$sound='test<br>';
+if(!startsWith($sound, 'Het')) echo 'yes';
+echo $sound;
+
+
+$sound=saytime().'<br>';
 //echo sayweather().'<br>';
-boseplayinfo(saytime().sayweather());
+//boseplayinfo(saytime().sayweather());
 
-
-/*
-0 = rood
-127 = groen
-230 = blauw
-*/
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

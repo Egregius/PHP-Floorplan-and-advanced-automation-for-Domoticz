@@ -152,7 +152,7 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
-	if ($d['bose102']['m']>TIME-300) return null;
+	if ($d['bose102']['m']>TIME-300&&!startsWith($sound, 'Het')) return null;
 	storemode('bose102', TIME);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
