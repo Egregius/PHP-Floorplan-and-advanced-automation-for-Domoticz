@@ -16,6 +16,10 @@ $d=fetchdata();
 /*-------------------------------------------------*/
 echo saytime().'<br>';
 echo sayweather().'<br>';
+$data=file_get_contents('https://freetts.com/Home/PlayAudio?Language=nl-NL&Voice=Female&TextMessage='.saytime().sayweather());
+echo $data;
+
+
 boseplayinfo(saytime().sayweather());
 
 
