@@ -15,17 +15,7 @@ echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
 $sound=saytime().'<br>';
-if(!startsWith($sound, 'Het')) echo 'yes';
-echo $sound;
-echo '<hr>';
-$sound='test<br>';
-if(!startsWith($sound, 'Het')) echo 'yes';
-echo $sound;
-
-
-$sound=saytime().'<br>';
-//echo sayweather().'<br>';
-//boseplayinfo(saytime().sayweather());
+boseplayinfo(saytime().sayweather());
 
 /*---------------------------*/
 echo '</pre>';

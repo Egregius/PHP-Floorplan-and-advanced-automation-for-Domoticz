@@ -152,8 +152,12 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
-	if ($d['bose102']['m']>TIME-300&&!startsWith($sound, 'Het')) return null;
+	if ($d['bose102']['m']>TIME-900&&!startsWith($sound, 'Het')) {
+		return null;
+		exit;
+	}
 	storemode('bose102', TIME);
+	
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
