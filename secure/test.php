@@ -14,7 +14,9 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-boseplayinfo(saytime().sayweather());
+echo saytime().'<br>';
+echo sayweather().'<br>';
+//boseplayinfo(saytime().sayweather());
 
 
 /*
