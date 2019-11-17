@@ -152,13 +152,15 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
+	if ($d['bose102']['m']>TIME-300) return null;
+	storemode('bose102', TIME);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-		//bosepost('speaker', $xml);
-		//bosevolume($volume['actualvolume'], 101);
+		bosepost('speaker', $xml);
+		bosevolume($volume['actualvolume'], 101);
 	} else {
 		$data=file_get_contents('https://freetts.com/Home/PlayAudio?Language=nl-NL&Voice=Female&TextMessage='.urlencode(saytime().sayweather()));
 		$data=strafter($data, '<input id="GId" name="GId" type="hidden" value="');
@@ -166,13 +168,13 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		if(strlen($data)>10) {
 			$result = file_get_contents('https://freetts.com/Home/download?path='.$data);
 			if(strlen($result)>1000) {
-				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
+				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $result);
 			}
 			$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 			$vol=$volume['actualvolume'];
 			$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-			//bosepost('speaker', $xml);
-			//bosevolume($volume['actualvolume'], 101);
+			bosepost('speaker', $xml);
+			bosevolume($volume['actualvolume'], 101);
 		}
 	}
 }
