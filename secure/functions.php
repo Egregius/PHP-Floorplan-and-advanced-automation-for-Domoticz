@@ -156,7 +156,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	//if ($d['bose102']['m']>TIME-300) return null;
 	//storemode('bose102', TIME);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+		$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
 		bosepost('speaker', $xml);
@@ -172,7 +172,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 			}
 		}
-		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+		$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
 		bosepost('speaker', $xml);
