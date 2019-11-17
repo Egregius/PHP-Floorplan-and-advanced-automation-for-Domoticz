@@ -153,30 +153,29 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d;
 	if(empty($d)) $d=fetchdata();
 	$raw=rawurlencode($sound);
-	//if ($d['bose102']['m']>TIME-300) return null;
-	//storemode('bose102', TIME);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
-		$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/volume'))), true);
+		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-		bosepost('speaker', $xml);
-		bosevolume($volume['actualvolume'], 101);
+		//bosepost('speaker', $xml);
+		//bosevolume($volume['actualvolume'], 101);
 	} else {
 		$postdata = http_build_query(array('msg'=>'<break time="400ms"/><prosody volume="+24dB">'.$sound.'</prosody>', 'lang'=>'Lotte', 'source'=>'ttsmp3'));
 		$opts = array('http'=>array('method'=>'POST', 'header' =>'Content-Type: application/x-www-form-urlencoded', 'content'=>$postdata));
 		$context  = stream_context_create($opts);
 		$result = json_decode(file_get_contents('https://ttsmp3.com/makemp3.php', false, $context), true);
+		print_r($result);
 		if($result['Error']==0&&isset($result['URL'])) {
 			$mp3=file_get_contents($result['URL']);
 			if(strlen($mp3)>1000) {
 				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $mp3);
 			}
 		}
-		$volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/volume'))), true);
+		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-		bosepost('speaker', $xml);
-		bosevolume($volume['actualvolume'], 101);
+		//bosepost('speaker', $xml);
+		//bosevolume($volume['actualvolume'], 101);
 	}
 }
 function saytime($ip=101) {

@@ -16,7 +16,7 @@ $d=fetchdata();
 /*-------------------------------------------------*/
 echo saytime().'<br>';
 echo sayweather().'<br>';
-//boseplayinfo(saytime().sayweather());
+boseplayinfo(saytime().sayweather());
 
 
 /*
