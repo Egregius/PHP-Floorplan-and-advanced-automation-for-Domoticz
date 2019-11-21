@@ -119,18 +119,18 @@ if ($d['auto']['s']=='On') {
 		if($dow==0||$dow==6) {
 			if (TIME>=strtotime('7:00')&&TIME<=strtotime('7:01')) {
 				if ($d['bose103']['s']=='Off') {
-					bosezone(103, 10);
+					bosezone(103, 14);
 				}
 			}
 			if ($d['kamer']['m']>0&&TIME>=strtotime('7:15')&&TIME<=strtotime('7:16')) {
 				if ($d['kamer']['s']==0) {
-					sl('kamer', 1);
+					sl('kamer', 2);
 				}
 			}
 		} else {
 			if (TIME>=strtotime('6:00')&&TIME<=strtotime('6:01')) {
 				if ($d['bose103']['s']=='Off') {
-					bosezone(103, 10);
+					bosezone(103, 14);
 				}
 			}
 		}

@@ -90,22 +90,22 @@ if ($d['living_set']['m']==0) {
         	$dow=date("w");
             if($dow==0||$dow==6) {
 				if (TIME>=strtotime('7:00')&&TIME<strtotime('18:30')) $Setliving=20;
-				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:30')) $Setliving=19.5;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=19.0;
-				elseif (TIME>=strtotime('5:30')&&TIME<strtotime('18:30')) $Setliving=18.5;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=18.0;
-				elseif (TIME>=strtotime('4:30')&&TIME<strtotime('18:30')) $Setliving=17.5;
-				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
-				elseif (TIME>=strtotime('3:30')&&TIME<strtotime('18:30')) $Setliving=16.5;
+				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('18:30')) $Setliving=19.5;
+				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('18:30')) $Setliving=19.0;
+				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=18.5;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('18:30')) $Setliving=18.0;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('18:30')) $Setliving=17.5;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('18:30')) $Setliving=16.5;
 			} else {
 				if (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=20;
-				elseif (TIME>=strtotime('5:30')&&TIME<strtotime('18:30')) $Setliving=19.5;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=19.0;
-				elseif (TIME>=strtotime('4:30')&&TIME<strtotime('18:30')) $Setliving=18.5;
-				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=18.0;
-				elseif (TIME>=strtotime('3:30')&&TIME<strtotime('18:30')) $Setliving=17.5;
-				elseif (TIME>=strtotime('3:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
-				elseif (TIME>=strtotime('2:30')&&TIME<strtotime('18:30')) $Setliving=16.5;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('18:30')) $Setliving=19.5;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('18:30')) $Setliving=19.0;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=18.5;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('18:30')) $Setliving=18.0;
+				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('18:30')) $Setliving=17.5;
+				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
+				elseif (TIME>=strtotime('3:40')&&TIME<strtotime('18:30')) $Setliving=16.5;
 			}
         }
         if ($Setliving>19.5) {
@@ -309,74 +309,68 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:50')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:57')&&TIME<=strtotime('6:30')) {
                 $x=19.5;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:40')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:54')&&TIME<=strtotime('6:30')) {
                 $x=19;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:30')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:51')&&TIME<=strtotime('6:30')) {
                 $x=18.5;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:20')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:48')&&TIME<=strtotime('6:30')) {
                 $x=18;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:10')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:45')&&TIME<=strtotime('6:30')) {
                 $x=17.5;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('5:00')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:42')&&TIME<=strtotime('6:30')) {
                 $x=17;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('4:50')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:39')&&TIME<=strtotime('6:30')) {
                 $x=16.5;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('4:40')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:36')&&TIME<=strtotime('6:30')) {
                 $x=16;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('4:30')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:33')&&TIME<=strtotime('6:30')) {
                 $x=15.5;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('4:20')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:30')&&TIME<=strtotime('6:30')) {
                 $x=15;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;
                 }
-            } elseif (TIME>=strtotime('4:10')&&TIME<=strtotime('6:30')) {
+            } elseif (TIME>=strtotime('5:27')&&TIME<=strtotime('6:30')) {
                 $x=14.5;
-                if ($d['badkamer_set']['s']!=$x) {
-                    store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
-                    $d['badkamer_set']['s']=$x;
-                }
-            } elseif (TIME>=strtotime('4:00')&&TIME<=strtotime('6:30')) {
-                $x=14;
                 if ($d['badkamer_set']['s']!=$x) {
                     store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
                     $d['badkamer_set']['s']=$x;

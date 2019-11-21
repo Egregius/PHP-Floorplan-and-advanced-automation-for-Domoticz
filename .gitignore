@@ -10,3 +10,4 @@ logs/*
 pychromecast/*
 secure/phpmyadmin/tmp/twig/*
 secure/phpMyAdmin/tmp/*
+secure/*.mobileconfig
