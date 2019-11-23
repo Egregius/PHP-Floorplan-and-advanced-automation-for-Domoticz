@@ -261,7 +261,7 @@ if ($buienradar>0||$dsbuien>0||$buien>0) {
 	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
 }
 
-if ($d['achterdeur']['s']=='Closed') {
+/*if ($d['achterdeur']['s']=='Closed') {
 	$stmt=$db->query("SELECT MAX(`buiten`) AS max FROM temp;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$watertime=$row['max']*15;
@@ -287,4 +287,4 @@ if ($d['achterdeur']['s']=='Closed') {
 			telegram($msg, 2);
 		}
 	}
-}
+}*/

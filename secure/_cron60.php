@@ -124,7 +124,7 @@ if ($d['auto']['s']=='On') {
 			}
 			if ($d['kamer']['m']>0&&TIME>=strtotime('7:15')&&TIME<=strtotime('7:16')) {
 				if ($d['kamer']['s']==0) {
-					sl('kamer', 2);
+					sl('kamer', 3);
 				}
 			}
 		} else {
@@ -324,6 +324,7 @@ if ($d['auto']['s']=='On') {
     } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
         $items=array('RkamerL','RkamerR','Rtobi','Ralex');
         foreach ($items as $i) {
+        	telegram($i.' = '.$d[$i]['m']);
             if ($d[$i]['m']!=0) {
             	storemode($i, 0, basename(__FILE__).':'.__LINE__);
             }

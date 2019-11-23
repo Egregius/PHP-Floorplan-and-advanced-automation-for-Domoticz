@@ -14,9 +14,11 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-$sound=saytime().'<br>';
-boseplayinfo(saytime().sayweather());
-
+$hist=file_get_contents($urlhist);
+echo $hist;
+	if ($hist>0) {
+		telegram($hist.' markers toegevoegd aan historiek vandaag.');
+	} 
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

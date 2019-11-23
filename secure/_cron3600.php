@@ -131,6 +131,16 @@ if (isset($sunrise['results']['civil_twilight_begin'])) {
         }
     }
 }
+
+if (TIME>=strtotime('9:00')&&TIME<strtotime('22:01')) {
+	$hist=file_get_contents($urlhist);
+	if ($hist>0) {
+		telegram($hist.' markers toegevoegd aan historiek vandaag.');
+	} elseif ($hist==0&&TIME>strtotime('21:00') {
+		telegram('Geen markers toegevoegd aan historiek vandaag.');
+	}
+}
+
 //Update and clean SQL database
 
 $limit=86400000;
