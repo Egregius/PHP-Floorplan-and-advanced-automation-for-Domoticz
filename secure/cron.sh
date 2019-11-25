@@ -66,7 +66,8 @@ else
 		if [ "$STATUS3" == "OK" ] ; then
 			exit
 		else
-			shutdown -r now
+			service domoticz restart
+			#shutdown -r now
 		fi
 	fi
 fi
