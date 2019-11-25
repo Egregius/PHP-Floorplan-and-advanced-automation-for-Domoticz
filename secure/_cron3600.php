@@ -31,7 +31,7 @@ $xml=json_decode(
     json_encode(
         simplexml_load_string(
             file_get_contents(
-                '/domoticz/Config/zwcfg_0xe9238f6e.xml'
+                '/domoticz/Config/ozwcache_0xe9238f6e.xml'
             ),
             "SimpleXMLElement",
             LIBXML_NOCDATA

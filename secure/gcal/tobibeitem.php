@@ -20,7 +20,7 @@ $tobibeitem=false;
 if (count($results->getItems())>0) {
 	foreach ($results->getItems() as $event) {
 		if (isset($event->start->dateTime)) {
-		    $start=strtotime($event->start->dateTime);
+		    $start=strtotime($event->start->dateTime)-180;
 		} else {
 		    $start=strtotime($event->start->date);
 		}
@@ -31,7 +31,7 @@ if (count($results->getItems())>0) {
 		}
 		echo('Tobi Calendar: '.$event->summary.' '.strftime('%Y-%m-%d %H:%M:%S', $start).' '.strftime('%Y-%m-%d %H:%M:%S', $end));
 		echo '<br>';
-		if (TIME>$start&&TIME<$end) {
+		if (TIME>=$start&&TIME<$end) {
 			if (trim(strtolower($event->summary))=='beitem') {
 			    $tobibeitem=true;
 			}
