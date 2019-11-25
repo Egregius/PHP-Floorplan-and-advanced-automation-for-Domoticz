@@ -779,7 +779,6 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
-								opts=$icon.split(",");
 								if(dif>0.2)circle="hot";
 								else if(dif<0)circle="cold";
 								else circle="grey";
@@ -788,8 +787,6 @@ function ajax(Update=$LastUpdateTime){
 								else if($value>14)center="grey";
 								else center="blue";
 								elem=document.getElementById(device);
-								elem.style.top=opts[0]+'px';
-								elem.style.left=opts[1]+'px';
 								html='<img src="https://home.egregius.be/images/thermo'+circle+center+'.png" class="i48" alt="">';
 								html+='<div class="fix center" style="top:32px;left:11px;width:26px;">';
 								if($mode>0){
@@ -1182,7 +1179,7 @@ function floorplanheating(){
         items=['kamerZ','tobiZ','alexZ'];
         items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
         items=['living','badkamer','kamer','tobi','alex','zolder'];
-		items.forEach(function(item){html+='<div class="fix z1" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
+		items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
 
         //html+='<div class="fix z" onclick="location.href=\'floorplan.php?luifel=luifel\';" id="luifel"></div>';
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
