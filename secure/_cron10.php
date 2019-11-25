@@ -57,9 +57,13 @@ if ($d['pirinkom']['s']=='Off'
 	foreach ($items as $i) {
 		if ($d['inkom']['s']>$i) {
 			sl('inkom', $i, basename(__FILE__).':'.__LINE__);
+			break;
 		}
+	}
+	foreach ($items as $i) {
 		if ($d['hall']['s']>$i) {
 			sl('hall', $i, basename(__FILE__).':'.__LINE__);
+			break;
 		}
 	}
 } else {
