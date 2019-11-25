@@ -45,7 +45,7 @@ function andereuit()
             sl($item, 0, basename(__FILE__).':'.__LINE__);
         }
     }
-    $items=array('werkblad1','wasbak','kookplaat','garage','inkom','hall');
+    $items=array('werkblad1','wasbak','kookplaat','garage','garageled','inkom','hall');
     foreach ($items as $item) {
         if ($d[$item]['s']!='Off') {
             sw($item, 'Off', basename(__FILE__).':'.__LINE__);

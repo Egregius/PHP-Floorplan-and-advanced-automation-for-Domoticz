@@ -48,6 +48,7 @@ if ($home) {
     } elseif (isset($_POST['surround'])) {
         @file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');usleep(120000);
     } elseif (isset($_POST['poweron'])) {
+    	$d=fetchdata();
         if ($d['denon']['s']=='On') {
             denon('PWON');
         } else {

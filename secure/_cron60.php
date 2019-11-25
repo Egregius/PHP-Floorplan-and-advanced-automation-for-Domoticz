@@ -324,7 +324,7 @@ if ($d['auto']['s']=='On') {
     } elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
         $items=array('RkamerL','RkamerR','Rtobi','Ralex');
         foreach ($items as $i) {
-        	telegram($i.' = '.$d[$i]['m']);
+        	//telegram($i.' = '.$d[$i]['m']);
             if ($d[$i]['m']!=0) {
             	storemode($i, 0, basename(__FILE__).':'.__LINE__);
             }
