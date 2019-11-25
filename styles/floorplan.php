@@ -218,9 +218,9 @@ td{text-align:center;font-size:1.1em;}
 #zhallb{top:469px;left:214px;width:44px;height:66px;}
 
 /* Setpoints */
-#kamerZ{top:523px;left:455px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#tobiZ{top:417px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#alexZ{top:555px;left:76px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#kamerZ{top:513px;left:467px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#tobiZ{top:405px;left:86px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#alexZ{top:544px;left:86px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 ";
 $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
 $css = str_replace(': ', ':', $css);

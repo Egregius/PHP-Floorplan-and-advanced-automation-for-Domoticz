@@ -812,7 +812,7 @@ function ajax(Update=$LastUpdateTime){
 							console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
 							try{
 								//document.getElementById(device).innerHTML=$value.toString().replace(".0", "");
-								document.getElementById(device).innerHTML=$value;
+								document.getElementById(device).innerHTML=$value * 1;
 							}catch{}
 						}else{
 							//console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
