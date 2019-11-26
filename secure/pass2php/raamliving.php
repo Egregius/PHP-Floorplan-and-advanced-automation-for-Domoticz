@@ -18,7 +18,3 @@ if ($status=='Open') {
         }
     }
 }
-if ($status=='Open') {
-    $d['raamliving']['s']='Open';
-    include '_verwarming.php';
-}

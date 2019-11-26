@@ -113,7 +113,7 @@ if ($d['living_set']['m']==0) {
             elseif ($d['zon']['s']<2000) $Setliving=20.5;
         }
     }
-    if ($d['living_set']['s']!=$Setliving&&past('deurinkom')>60&&past('deurgarage')>60) {
+    if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
         $living_set=$Setliving;
         $d['living_set']['s']=$Setliving;

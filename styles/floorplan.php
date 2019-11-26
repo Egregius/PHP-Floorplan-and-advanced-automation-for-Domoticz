@@ -218,9 +218,9 @@ td{text-align:center;font-size:1.1em;}
 #zhallb{top:469px;left:214px;width:44px;height:66px;}
 
 /* Setpoints */
-#kamerZ{top:513px;left:467px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
-#tobiZ{top:405px;left:86px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
-#alexZ{top:544px;left:86px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#kamerZ{top:513px;left:471px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#tobiZ{top:405px;left:91px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#alexZ{top:544px;left:91px;text-align:right;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #living_set{top:140px;left:260px;line-height:0.8em;}
 #badkamer_set{top:432px;left:380px;line-height:0.8em;}
 #kamer_set{top:563px;left:290px;line-height:0.8em;}
