@@ -110,6 +110,7 @@ if ($home==true) {
     }
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         $d=fetchdata();
+        if ($user=='Tobi'&&$_REQUEST['device']!='poortrf') exit;
         if ($_REQUEST['command']=='setpoint') {
         	if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
         		if ($_REQUEST['action']>16) $_REQUEST['action']=16;

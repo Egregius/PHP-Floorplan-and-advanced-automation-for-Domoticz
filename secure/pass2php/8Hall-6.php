@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($d['raamhall']['s']=='Closed') {
-    sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
+    //sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
     store('Weg', 0, basename(__FILE__).':'.__LINE__);
     resetsecurity();
 }
