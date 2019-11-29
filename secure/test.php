@@ -14,11 +14,8 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-$hist=file_get_contents($urlhist);
-echo $hist;
-	if ($hist>0) {
-		telegram($hist.' markers toegevoegd aan historiek vandaag.');
-	} 
+$data=file_get_contents('https://freetts.com/Home/PlayAudio?Language=nl-NL&Voice=Female&TextMessage='.urlencode(saytime().sayweather()));
+print_r($data);
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
