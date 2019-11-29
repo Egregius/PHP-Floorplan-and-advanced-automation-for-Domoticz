@@ -11,7 +11,7 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-require_once 'gcal/google-api-php-client/vendor/autoload.php';
+require 'gcal/google-api-php-client/vendor/autoload.php';
 
 
 
