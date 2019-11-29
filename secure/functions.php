@@ -150,7 +150,7 @@ function roundUpToAny($n,$x=5) {
     return round(($n+$x/2)/$x)*$x;
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
-	global $d;
+	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
 	if ($d['bose102']['m']>TIME-900&&!startsWith($sound, 'Het')) {
 		return null;
@@ -179,26 +179,28 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 			'audioConfig' => [
 				'audioEncoding' => 'MP3',
 				'pitch' => 0.00,
-				'speakingRate' => 1.00
+				'speakingRate' => 1.00,
+				'effectsProfileId' => 'large-home-entertainment-class-device'
 			]
 		];
 		try {
 			$response = $client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' . $googleTTSAPIKey, [
 				'json' => $requestData
 			]);
+				$fileData = json_decode($response->getBody()->getContents(), true);
+			$audio=base64_decode($fileData['audioContent']);
+			if(strlen($audio)>10) {
+				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $audio);
+				$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+				$vol=$volume['actualvolume'];
+				$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+				bosepost('speaker', $xml);
+				bosevolume($volume['actualvolume'], 101);
+			}
 		} catch (Exception $e) {
-			die('Something went wrong: ' . $e->getMessage());
+			exit('Something went wrong: ' . $e->getMessage());
 		}
-		$fileData = json_decode($response->getBody()->getContents(), true);
-		$audio=base64_decode($fileData['audioContent']);
-		if(strlen($audio)>10) {
-			file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $audio);
-			$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-			$vol=$volume['actualvolume'];
-			$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-			bosepost('speaker', $xml);
-			bosevolume($volume['actualvolume'], 101);
-		}
+		
 	}
 }
 function saytime($ip=101) {
