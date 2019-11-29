@@ -14,7 +14,7 @@ require 'functions.php';
 echo '<pre>';
 $d=fetchdata();
 /*-------------------------------------------------*/
-$data=file_get_contents('https://freetts.com/Home/PlayAudio?Language=nl-NL&Voice=Female&TextMessage='.urlencode(saytime().sayweather()));
+$data=file_get_contents('https://texttospeech.googleapis.com/v1beta1/text:synthesize');
 print_r($data);
 /*---------------------------*/
 echo '</pre>';
