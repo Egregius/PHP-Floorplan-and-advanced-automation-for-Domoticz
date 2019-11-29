@@ -152,7 +152,7 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
-	if ($d['bose102']['m']>TIME-900&&!startsWith($sound, 'Het')) {
+	if ($d['bose102']['m']>TIME-900&&startsWith($sound, 'Het')) {
 		return null;
 		exit;
 	}
