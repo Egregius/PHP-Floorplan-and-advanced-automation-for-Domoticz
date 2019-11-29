@@ -18,7 +18,7 @@ require 'gcal/google-api-php-client/vendor/autoload.php';
 
     $articleText = 'Het is 1 uur. Het wordt tussen 5 en 9 graden met verspreide wolken.';
     $client = new GuzzleHttp\Client();
-    //$client->setAuthConfig('/var/www/service-account-credentials.json');
+    $client->setAuthConfig('/var/www/homeegregius-71b574e2c5f1-tts.json');
     $requestData = [
         'input' =>[
             'text' => $articleText
@@ -34,9 +34,7 @@ require 'gcal/google-api-php-client/vendor/autoload.php';
         ]
     ];
     try {
-        $response = $client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' . $googleTTSAPIKey, [
-            'json' => $requestData
-        ]);
+        $response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
     } catch (Exception $e) {
     	echo $e->getMessage();
     	print_r($e);
