@@ -19,42 +19,32 @@ echo '<pre>';
 
 require 'gcal/google-api-php-client/vendor/autoload.php';
 
-
-use Google\Cloud\TextToSpeech\V1\AudioConfig;
-use Google\Cloud\TextToSpeech\V1\AudioEncoding;
-use Google\Cloud\TextToSpeech\V1\SsmlVoiceGender;
-use Google\Cloud\TextToSpeech\V1\SynthesisInput;
-use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
-use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
-    
-$client = new TextToSpeechClient();
-
-// sets text to be synthesised
-$synthesisInputText = (new SynthesisInput())
-    ->setText('Hello, world!');
-
-// build the voice request, select the language code ("en-US") and the ssml
-// voice gender
-$voice = (new VoiceSelectionParams())
-    ->setLanguageCode('en-US')
-    ->setSsmlGender(SsmlVoiceGender::FEMALE);
-
-// Effects profile
-$effectsProfileId = "telephony-class-application";
-
-// select the type of audio file you want returned
-$audioConfig = (new AudioConfig())
-    ->setAudioEncoding(AudioEncoding::MP3)
-    ->setEffectsProfileId(array($effectsProfileId));
-
-// perform text-to-speech request on the text input with selected voice
-// parameters and audio file type
-$response = $client->synthesizeSpeech($synthesisInputText, $voice, $audioConfig);
-$audioContent = $response->getAudioContent();
-
-// the response's audioContent is binary
-file_put_contents('/var/www/html/sounds/output.mp3', $audioContent);
-echo 'Audio content written to "output.mp3"' . PHP_EOL;    
+ $googleAPIKey = 'YOUR_API_KEY_HERE';
+    $articleText = 'Cisco, a worldwide leader in IT and networking, is developing a method of confidential group communications based on Blockchain technology, according to a patent application released by the US Patent and Trademark Office (USPTO) March 29.';
+    $client = new GuzzleHttp\Client();
+    $requestData = [
+        'input' =>[
+            'text' => $articleText
+        ],
+        'voice' => [
+            'languageCode' => 'en-US',
+            'name' => 'en-US-Wavenet-F'
+        ],
+        'audioConfig' => [
+            'audioEncoding' => 'MP3',
+            'pitch' => 0.00,
+            'speakingRate' => 1.00
+        ]
+    ];
+    try {
+        $response = $client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' . $googleTTSAPIKey, [
+            'json' => $requestData
+        ]);
+    } catch (Exception $e) {
+        die('Something went wrong: ' . $e->getMessage());
+    }
+    $fileData = json_decode($response->getBody()->getContents(), true);
+    file_put_contents('/var/www/html/sounds/tts.mp3', base64_decode($fileData['audioContent']));
     
     
 /*---------------------------*/
