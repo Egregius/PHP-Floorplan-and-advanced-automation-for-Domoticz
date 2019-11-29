@@ -20,15 +20,15 @@ echo '<pre>';
 require 'gcal/google-api-php-client/vendor/autoload.php';
 
  $googleAPIKey = 'YOUR_API_KEY_HERE';
-    $articleText = 'Cisco, a worldwide leader in IT and networking, is developing a method of confidential group communications based on Blockchain technology, according to a patent application released by the US Patent and Trademark Office (USPTO) March 29.';
+    $articleText = 'Het is 1 uur. Het wordt tussen 5 en 9 graden met verspreide wolken.';
     $client = new GuzzleHttp\Client();
     $requestData = [
         'input' =>[
             'text' => $articleText
         ],
         'voice' => [
-            'languageCode' => 'en-US',
-            'name' => 'en-US-Wavenet-F'
+            'languageCode' => 'nl-NL',
+            'name' => 'nl-NL-Wavenet-B'
         ],
         'audioConfig' => [
             'audioEncoding' => 'MP3',
@@ -44,7 +44,7 @@ require 'gcal/google-api-php-client/vendor/autoload.php';
         die('Something went wrong: ' . $e->getMessage());
     }
     $fileData = json_decode($response->getBody()->getContents(), true);
-    file_put_contents('/var/www/html/sounds/tts.mp3', base64_decode($fileData['audioContent']));
+    file_put_contents('/var/www/html/sounds/'.$articleText.'.mp3', base64_decode($fileData['audioContent']));
     
     
 /*---------------------------*/

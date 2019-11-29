@@ -166,14 +166,33 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		bosepost('speaker', $xml);
 		bosevolume($volume['actualvolume'], 101);
 	} else {
-		$data=file_get_contents('https://freetts.com/Home/PlayAudio?Language=nl-NL&Voice=Female&TextMessage='.urlencode(saytime().sayweather()));
-		$data=strafter($data, '<input id="GId" name="GId" type="hidden" value="');
-		$data=strbefore($data, '"');
-		if(strlen($data)>10) {
-			$result = file_get_contents('https://freetts.com/Home/download?path='.$data);
-			if(strlen($result)>1000) {
-				file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $result);
-			}
+		require 'gcal/google-api-php-client/vendor/autoload.php';
+		$client = new GuzzleHttp\Client();
+		$requestData = [
+			'input' =>[
+				'text' => $sound
+			],
+			'voice' => [
+				'languageCode' => 'nl-NL',
+				'name' => 'nl-NL-Wavenet-B'
+			],
+			'audioConfig' => [
+				'audioEncoding' => 'MP3',
+				'pitch' => 0.00,
+				'speakingRate' => 1.00
+			]
+		];
+		try {
+			$response = $client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=' . $googleTTSAPIKey, [
+				'json' => $requestData
+			]);
+		} catch (Exception $e) {
+			die('Something went wrong: ' . $e->getMessage());
+		}
+		$fileData = json_decode($response->getBody()->getContents(), true);
+		$audio=base64_decode($fileData['audioContent']);
+		if(strlen($audio)>10) {
+			file_put_contents('/var/www/html/sounds/'.$sound.'.mp3', $audio);
 			$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 			$vol=$volume['actualvolume'];
 			$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
