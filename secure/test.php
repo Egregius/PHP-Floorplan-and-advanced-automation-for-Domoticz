@@ -18,6 +18,7 @@ require 'gcal/google-api-php-client/vendor/autoload.php';
 
     $articleText = 'Het is 1 uur. Het wordt tussen 5 en 9 graden met verspreide wolken.';
     $client = new GuzzleHttp\Client();
+    //$client->setAuthConfig('/var/www/service-account-credentials.json');
     $requestData = [
         'input' =>[
             'text' => $articleText
@@ -37,7 +38,10 @@ require 'gcal/google-api-php-client/vendor/autoload.php';
             'json' => $requestData
         ]);
     } catch (Exception $e) {
-        die('Something went wrong: ' . $e->getMessage());
+    	echo $e->getMessage();
+    	print_r($e);
+    	exit;
+//        die('Something went wrong: ' . $e->getMessage());
     }
     $fileData = json_decode($response->getBody()->getContents(), true);
     file_put_contents('/var/www/html/sounds/tts.mp3', base64_decode($fileData['audioContent']));
