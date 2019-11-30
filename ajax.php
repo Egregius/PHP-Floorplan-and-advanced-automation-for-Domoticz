@@ -106,7 +106,7 @@ if ($home==true) {
     } 
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='saytime') {
     	$d=fetchdata();
-		boseplayinfo(saytime().'Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101);
+		boseplayinfo(saytime().'Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101, true);
     }
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         $d=fetchdata();
