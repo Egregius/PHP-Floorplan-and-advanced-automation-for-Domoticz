@@ -426,7 +426,7 @@ function resetsecurity()
 }
 function sw($name,$action='Toggle',$msg='')
 {
-    global $user,$d,$domoticzurl;
+    global $user,$d,$db,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
         $usleep=200000;
@@ -462,6 +462,12 @@ function sw($name,$action='Toggle',$msg='')
             if ($action=='Off') {
                 storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
             }
+        } else {
+	        $ontime=array('badkamervuur1','badkamervuur2','heater1','heater2');
+   			if (in_array($name, $ontime)) {
+   				$stamp=TIME;
+   				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
+   			}
         }
     }
 }

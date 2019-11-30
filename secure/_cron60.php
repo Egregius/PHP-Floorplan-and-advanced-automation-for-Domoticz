@@ -13,6 +13,21 @@ $user='cron60  ';
 if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS ----------------------------*/
     if ($d['Weg']['s']==0){
+    	if ($d['bose101']['s']=='On') {
+        	$dow=date("w");
+        	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+        	if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
+        	elseif ($weekend==false&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
+        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
+        	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
+				bosekey('PRESET_2', 0, 101);
+        	}
+        }
         if ($d['pirkeuken']['s']=='Off') {
             $uit=300;
             if (past('pirkeuken')>$uit) {
@@ -97,21 +112,7 @@ if ($d['auto']['s']=='On') {
                 );
             }
         }
-        if ($d['bose101']['s']=='On') {
-        	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
-				bosekey('PRESET_2', 0, 101);
-        	}
-        	$dow=date("w");
-        	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-        	if ($weekend&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
-        	elseif ($weekend&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
-        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
-        }
+        
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
     if ($d['Weg']['s']<=1) {
@@ -749,11 +750,13 @@ ping('192.168.2.101');
 ping('192.168.2.102');
 ping('192.168.2.103');
 ping('192.168.2.104');
+
+
+/*
 ping('192.168.2.224');
+
 $ctx=stream_context_create(array('http'=>array('timeout' =>15)));
-$relay=new SimpleXMLElement(
-    @file_get_contents('http://192.168.2.224/status.xml', false, $ctx)
-);
+$relay=new SimpleXMLElement(@file_get_contents('http://192.168.2.224/status.xml', false, $ctx));
 if (!empty($relay)) {
     if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
         store('heater1', 'On', basename(__FILE__).':'.__LINE__);
@@ -775,4 +778,4 @@ if (!empty($relay)) {
     } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
         store('heater4', 'Off', basename(__FILE__).':'.__LINE__);
     }
-}
+}*/
