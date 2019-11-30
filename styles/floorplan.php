@@ -135,10 +135,8 @@ td{text-align:center;font-size:1.1em;}
 #zwembadfilter{top:260px;left:0px;height:48px;width:auto;}
 #zwembadwarmte{top:340px;left:0px;height:48px;width:auto;}
 #dampkap{top:280px;left:110px;height:48px;width:auto;}
-#heater1{top:226px;left:90px;height:18px;width:auto;}
-#heater2{top:223px;left:106px;height:22px;width:auto;}
-#heater3{top:223px;left:123px;height:22px;width:auto;}
-#heater4{top:223px;left:140px;height:22px;width:auto;}
+#heater1{top:221px;left:86px;height:26px;width:auto;}
+#heater2{top:221px;left:108px;height:26px;width:auto;}
 
 #tbelknop{top:24px;left:466px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}

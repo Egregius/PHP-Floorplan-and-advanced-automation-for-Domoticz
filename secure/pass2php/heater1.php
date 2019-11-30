@@ -13,10 +13,4 @@ if ($status=='Off') {
     if ($d['heater2']['s']!='Off') {
         sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    if ($d['heater3']['s']!='Off') {
-        sw('heater3', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-    if ($d['heater4']['s']!='Off') {
-        sw('heater4', 'Off', basename(__FILE__).':'.__LINE__);
-    }
 }
