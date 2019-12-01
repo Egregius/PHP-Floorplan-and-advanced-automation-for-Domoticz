@@ -21,9 +21,9 @@ if ($d['auto']['s']=='On') {
     }
     if ($d['minmaxtemp']['m']>1) $base=3600*$d['minmaxtemp']['m'];
     else $base=3600;
-    if ($rainpast>64000) $pomppauze=$base;
-    elseif ($rainpast>32000) $pomppauze=$base*2;
-    elseif ($rainpast>16000) $pomppauze=$base*4;
+    if ($rainpast>32000) $pomppauze=$base;
+    elseif ($rainpast>16000) $pomppauze=$base*2;
+    elseif ($rainpast>8000) $pomppauze=$base*4;
     else $pomppauze=$base*24;
 
     if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
