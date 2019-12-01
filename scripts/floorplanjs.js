@@ -1055,10 +1055,10 @@ function ajaxbose($ip){
 				}
 				img='None';
 				try{
-					img=data["nowplaying"]["art"].toString().replace("http", "https");
+					img=data["nowplaying"]["art"].toString().replace("http://", "https://");
 				}catch{};
 				if(img=='None')html='';
-				else html='<img src="'+data["nowplaying"]["art"].toString().replace("http", "https")+'" height="160px" width="auto" alt="Art">';
+				else html='<img src="'+img+'" height="160px" width="auto" alt="Art">';
 				try{
 					elem=document.getElementById("art");
 					if(elem.innerHTML!=html)elem.innerHTML=html;
