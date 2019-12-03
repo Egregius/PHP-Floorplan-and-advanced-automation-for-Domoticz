@@ -49,7 +49,7 @@ if ($home) {
 		<br>';
 	$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$stmt=$db->query("SELECT DISTINCT device FROM ontime");
+	$stmt=$db->query("SELECT DISTINCT device FROM ontime ORDER BY device ASC");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$devices[]=$row['device'];
 	}
