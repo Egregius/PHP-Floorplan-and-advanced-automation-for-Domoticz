@@ -463,7 +463,7 @@ function sw($name,$action='Toggle',$msg='')
                 storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
             }
         } else {
-	        $ontime=array('badkamervuur1','badkamervuur2','heater1','heater2');
+	        $ontime=array('brander','badkamervuur1','badkamervuur2','heater1','heater2');
    			if (in_array($name, $ontime)) {
    				$stamp=TIME;
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");

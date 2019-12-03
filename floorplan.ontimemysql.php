@@ -47,34 +47,31 @@ if ($home) {
 		<br>
 		<br>
 		<br>';
-	$db=new PDO("mysql:host=127.0.0.1;dbname=domotica;", 'domotica', 'domotica');
+	$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$stmt=$db->query("SELECT DISTINCT device FROM ontime");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		$Settings[$row['id']]=$row['value'];
+		$devices[]=$row['device'];
 	}
-    $devices=@json_decode(@file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getplandevices&idx=4', true, $ctx), true);
-    if (!isset($_REQUEST['idx'])) {
-        $_REQUEST['idx']=1958;
-    }
-    foreach ($devices['result'] as $d) {
-        if ($_REQUEST['idx']==$d['devidx']) {
+	if (!isset($_REQUEST['device']))$_REQUEST['device']='brander';
+    foreach ($devices as $d) {
+        if ($_REQUEST['device']==$d) {
             echo '
             <div class="fix" style="top:35px;left:75px;width:245px;">
-                <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d['Name'].'</button>
+                <button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d.'</button>
             </div>';
         }
     }
     echo '
         <form method="GET">
             <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">';
-    foreach ($devices['result'] as $d) {
-        if ($_REQUEST['idx']==$d['devidx']) {
+    foreach ($devices as $d) {
+        if ($_REQUEST['device']==$d) {
             echo '
-				<button name="idx" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+				<button name="device" value="'.$d.'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d.'</button>';
         } else {
             echo '
-			    <button name="idx" value="'.$d['devidx'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d['Name'].'</button>';
+			    <button name="device" value="'.$d.'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d.'</button>';
         }
     }
     echo '
