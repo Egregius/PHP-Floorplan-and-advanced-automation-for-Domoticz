@@ -1254,10 +1254,11 @@ function floorplanothers(){
         if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputrood.png"></div>';
         else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputblauw.png"></div>';
         else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputgroen.png"></div>';
-        html+='<div class="fix z1 center" style="top:600px;left:100px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
-		html+='<div class="fix z1 center" style="top:600px;left:200px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
-		html+='<div class="fix z1 center" style="top:600px;left:300px;"><a href=\'javascript:navigator_Go("floorplan.sounds.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Sounds</a></div>';
-		html+='<div class="fix z1 center" style="top:600px;left:400px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
+        html+='<div class="fix z1 center" style="top:600px;left:20px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:120px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:220px;"><a href=\'javascript:navigator_Go("floorplan.sounds.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Sounds</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:320px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:420px;"><a href=\'javascript:navigator_Go("floorplan.ontimemysql.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time<br>MySQL</a></div>';
 		html+='<div class="fix z1 center" style="top:700px;left:0px;width:300px;"><button onclick="ajaxcontrol(\'fetch\', \'fetch\', \'fetch\');floorplan();" class="btn b2">Fetch Domoticz</button></div>';
 		html+='<div class="fix blackmedia">';
 		html+='<div class="fix" style="top:230px;left:0px;width:400px">';
