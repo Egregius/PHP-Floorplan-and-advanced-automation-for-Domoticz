@@ -18,8 +18,7 @@ echo '<pre>';
 /*-------------------------------------------------*/
 $d=fetchdata();
 
-foreach(array('een', 'twee', 'drie') as $i) echo $i.'<br>';
-
+boseplayinfo(saytime().sayweather());
 
 /*---------------------------*/
 echo '</pre>';

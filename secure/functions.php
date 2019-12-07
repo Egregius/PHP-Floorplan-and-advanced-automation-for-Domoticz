@@ -39,7 +39,7 @@ function huisslapen()
 {
     global $d,$boseipbuiten;
     sl(array('hall','inkom','eettafel','zithoek','terras'), 0, basename(__FILE__).':'.__LINE__);
-    sw(array('pirhall','garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
+    sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
 	
     foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/) as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
@@ -148,11 +148,10 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101, $force=false) {
 	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
-	if ($force=false&&$d['bose102']['m']>TIME-600&&startsWith($sound, 'Het')) {
+	if ($force==false&&$d['bose102']['m']>TIME-600&&startsWith($sound, 'Het')) {
+		storemode('bose102', TIME);
 		return null;
-		exit;
 	}
-	storemode('bose102', TIME);
 	lg($sound);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
