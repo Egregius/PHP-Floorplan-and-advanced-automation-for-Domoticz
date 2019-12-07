@@ -116,25 +116,6 @@ if ($d['auto']['s']=='On') {
     }
     /* -------------------------------------------- THUIS OF SLAPEN --------------*/
     if ($d['Weg']['s']<=1) {
-        $dow=date("w");
-		if($dow==0||$dow==6) {
-			if (TIME>=strtotime('7:00')&&TIME<=strtotime('7:01')) {
-				if ($d['bose103']['s']=='Off') {
-					bosezone(103, 14);
-				}
-			}
-			if ($d['kamer']['m']>0&&TIME>=strtotime('7:15')&&TIME<=strtotime('7:16')) {
-				if ($d['kamer']['s']==0) {
-					sl('kamer', 3);
-				}
-			}
-		} else {
-			if (TIME>=strtotime('6:00')&&TIME<=strtotime('6:01')) {
-				if ($d['bose103']['s']=='Off') {
-					bosezone(103, 14);
-				}
-			}
-		}
         $items=array('eettafel','zithoek','tobi','kamer','alex','zolder');
         foreach ($items as $item) {
             if ($d[$item]['s']!=0) {
@@ -610,12 +591,8 @@ if ($d['auto']['s']=='On') {
     /* -------------------------------------------- ALTIJD ----------------------------*/
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
-    &&$d['heater3']['s']=='Off'
-    &&$d['heater4']['s']=='Off'
     &&past('heater1')>120
     &&past('heater2')>90
-    &&past('heater3')>90
-    &&past('heater4')>90
 ) {
     sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
 }
@@ -750,32 +727,3 @@ ping('192.168.2.101');
 ping('192.168.2.102');
 ping('192.168.2.103');
 ping('192.168.2.104');
-
-
-/*
-ping('192.168.2.224');
-
-$ctx=stream_context_create(array('http'=>array('timeout' =>15)));
-$relay=new SimpleXMLElement(@file_get_contents('http://192.168.2.224/status.xml', false, $ctx));
-if (!empty($relay)) {
-    if ($relay->RELAYS->RLY1=='on'&&$d['heater1']['s']!='On') {
-        store('heater1', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($relay->RELAYS->RLY1=='off'&&$d['heater1']['s']!='Off') {
-        store('heater1', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-    if ($relay->RELAYS->RLY2=='on'&&$d['heater2']['s']!='On') {
-        store('heater2', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($relay->RELAYS->RLY2=='off'&&$d['heater2']['s']!='Off') {
-        store('heater2', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-    if ($relay->RELAYS->RLY3=='on'&&$d['heater3']['s']!='On') {
-        store('heater3', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($relay->RELAYS->RLY3=='off'&&$d['heater3']['s']!='Off') {
-        store('heater3', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-    if ($relay->RELAYS->RLY4=='on'&&$d['heater4']['s']!='On') {
-        store('heater4', 'On', basename(__FILE__).':'.__LINE__);
-    } elseif ($relay->RELAYS->RLY4=='off'&&$d['heater4']['s']!='Off') {
-        store('heater4', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-}*/

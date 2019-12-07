@@ -29,9 +29,12 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:15')) {
+				if ($d['Weg']['s']<=1&&$d['bose103']['s']=='Off') {
+					bosezone(103, 15);
+				}
 				sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['kamer']['s']==0) {
-					sl('kamer', 1);
+				if ($d['Weg']['s']<=1&&$d['kamer']['s']==0) {
+					sl('kamer', 3);
 				}
 				if ($d['RkamerR']['m']>0) {
 					storemode('RKamerR', 0, basename(__FILE__).':'.__LINE__);
@@ -45,9 +48,12 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:15')) {
+				if ($d['Weg']['s']<=1&&$d['bose103']['s']=='Off') {
+					bosezone(103, 15);
+				}
 				sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['kamer']['s']==0) {
-					sl('kamer', 1);
+				if ($d['Weg']['s']<=1&&$d['kamer']['s']==0) {
+					sl('kamer', 3);
 				}
 				if ($d['RkamerR']['m']>0) {
 					storemode('RKamerR', 0, basename(__FILE__).':'.__LINE__);

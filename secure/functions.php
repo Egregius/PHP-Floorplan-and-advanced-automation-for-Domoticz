@@ -433,12 +433,10 @@ function sw($name,$action='Toggle',$msg='')
         foreach ($name as $i) {
             if ($i=='media') {
                 sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $msg);
-            } elseif ($i=='lichtenbeneden') {
-                sw(array('garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','eettafel','zithoek','media','bureel','jbl','terras','tuin','keuken','werkblad1','wasbak','kookplaat','inkom','zolderg','voordeur','wc'), $action, $msg);
             } elseif ($i=='lichtenboven') {
                 sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action, $msg);
             } elseif ($i=='slapen') {
-                sw(array('hall','pirhall','lichtenbeneden','dampkap','GroheRed'), $action, $msg);
+                sw(array('hall','pirhall','dampkap','GroheRed'), $action, $msg);
             } elseif ($i=='weg') {
                 sw(array('garage','slapen','lichtenboven'), $action, $msg);
             } else {
