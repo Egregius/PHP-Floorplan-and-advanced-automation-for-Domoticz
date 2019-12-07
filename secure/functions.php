@@ -25,9 +25,7 @@ function fetchdata()
 {
     global $db;
     $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
-    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-        $d[$row['n']] = $row;
-    }
+    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
     return $d;
 }
 /**
