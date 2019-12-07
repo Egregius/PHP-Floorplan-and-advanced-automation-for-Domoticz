@@ -40,8 +40,9 @@ function fetchdata()
 function huisslapen()
 {
     global $d,$boseipbuiten;
-    sw(array('slapen'), 'Off', basename(__FILE__).':'.__LINE__);
-    $items=array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
+    sl(array('hall','inkom','eettafel','zithoek','terras'), 0, basename(__FILE__).':'.__LINE__);
+    sw(array('pirhall','garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
+	$items=array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
     foreach ($items as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
