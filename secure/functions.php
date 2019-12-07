@@ -382,14 +382,23 @@ function sl($name,$level,$msg='')
 {
     global $user,$d,$domoticzurl;
     if(!isset($d))$d=fetchdata();
-    lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
-    if ($d[$name]['i']>0) {
-		if ($d[$name]['s']!=$level) {
-			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-		}
+     if (is_array($name)) {
+        foreach ($name as $i) {
+			if ($d[$i]['s']!=$action) {
+				sl($i, $level, $msg);
+				usleep(200000);
+			}
+        }
     } else {
-        store($name, $level, $msg);
-    }
+		lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
+		if ($d[$name]['i']>0) {
+			if ($d[$name]['s']!=$level) {
+				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+			}
+		} else {
+			store($name, $level, $msg);
+		}
+	}
 }
 function rgb($name,$hue,$level,$check=false)
 {
@@ -429,22 +438,11 @@ function sw($name,$action='Toggle',$msg='')
     global $user,$d,$db,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
-        $usleep=200000;
         foreach ($name as $i) {
-            if ($i=='media') {
-                sw(array(/*'lgtv','denon',*/'tvled','kristal'/*,'nvidia'*/), $action, $msg);
-            } elseif ($i=='lichtenboven') {
-                sw(array('pirhall','lichtbadkamer','kamer','tobi','alex','hall','zolder'), $action, $msg);
-            } elseif ($i=='slapen') {
-                sw(array('hall','pirhall','dampkap','GroheRed'), $action, $msg);
-            } elseif ($i=='weg') {
-                sw(array('garage','slapen','lichtenboven'), $action, $msg);
-            } else {
-                if ($d[$i]['s']!=$action) {
-                    sw($i, $action);
-                }
-            }
-            usleep($usleep);
+			if ($d[$i]['s']!=$action) {
+				sw($i, $action, $msg);
+				usleep(200000);
+			}
         }
     } else {
         $msg=' (SWITCH)		'.$user.'=>'.$name.'=>'.$action.' ('.$msg.')';
