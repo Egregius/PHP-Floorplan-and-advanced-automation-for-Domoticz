@@ -35,6 +35,12 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
     } else {
         $status='Open';
     }
+} elseif ($device=='sirene') {
+    if ($status=='Group On') {
+        $status='On';
+    } else {
+        $status='Off';
+    }
 }
 store($device, $status);
 @require 'pass2php/'.$device.'.php';
