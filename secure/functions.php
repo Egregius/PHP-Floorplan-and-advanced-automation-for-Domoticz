@@ -42,16 +42,14 @@ function huisslapen()
     global $d,$boseipbuiten;
     sl(array('hall','inkom','eettafel','zithoek','terras'), 0, basename(__FILE__).':'.__LINE__);
     sw(array('pirhall','garage','garageled','pirgarage','pirkeuken','pirliving','pirinkom','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
-	$items=array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/);
-    foreach ($items as $i) {
+	
+    foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/) as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
-    $items=array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel');
-    foreach ($items as $i) {
+    foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
-    $items=array('Ralex','RkamerL','RkamerR');
-    foreach ($items as $i) {
+    foreach (array('Ralex','RkamerL','RkamerR') as $i) {
         if ($d[$i]['m']!=2) storemode($i, 2, basename(__FILE__).':'.__LINE__);
     }
     if ($d['gcal']['s']==true) {
@@ -79,8 +77,7 @@ function huisslapen()
 function huisweg()
 {
     huisslapen();
-    $items=array('Rtobi','Ralex','RkamerL','RkamerR');
-    foreach ($items as $i) {
+    foreach (array('Rtobi','Ralex','RkamerL','RkamerR') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
 }
@@ -426,8 +423,7 @@ function resetsecurity()
         usleep(100000);
         store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    $items=array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving');
-    foreach ($items as $i) {
+    foreach (array('SDbadkamer','SDkamer','SDalex','SDtobi','SDzolder','SDliving') as $i) {
         if ($d[$i]['s']!='Off') {
             file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
             store($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -460,8 +456,7 @@ function sw($name,$action='Toggle',$msg='')
                 storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
             }
         } else {
-	        $ontime=array('brander','badkamervuur1','badkamervuur2','heater1','heater2');
-   			if (in_array($name, $ontime)) {
+   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','heater1','heater2','regenpomp'))) {
    				$stamp=TIME;
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
    			}
