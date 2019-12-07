@@ -148,10 +148,15 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101, $force=false) {
 	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
+	echo $sound.'<br>';
+	if (startsWith($sound, 'Het')) echo 'true<br>';
+	if ($force==false) echo 'force is false<br>';
+	if ($d['bose102']['m']>TIME-600) echo 'time ok<br>';
 	if ($force==false&&$d['bose102']['m']>TIME-600&&startsWith($sound, 'Het')) {
-		storemode('bose102', TIME);
+		echo 'storemode<br>';
 		return null;
 	}
+	storemode('bose102', TIME);
 	lg($sound);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
