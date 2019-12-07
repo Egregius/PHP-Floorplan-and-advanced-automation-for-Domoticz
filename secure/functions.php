@@ -550,60 +550,36 @@ function zwaveCommand($node,$command){global $domoticzurl;$cm=array('AssignRetur
 function controllerBusy($retries){global $domoticzurl;for($k=1;$k<=$retries;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');$p=xml_parser_create();xml_parse_into_struct($p,$result,$vals,$index);xml_parser_free($p);foreach($vals as $val){if($val['tag']=='ADMIN'){$result=$val['attributes']['ACTIVE'];break;}}if($result=='false'){break;}if($k==$retries){zwaveCommand(1,'Cancel');break;}sleep(1);}}
 function convertToHours($time)
 {
-    if ($time<600) {
-        return substr(strftime('%k:%M:%S', $time-3600), 1);
-    } elseif ($time>=600&&$time<3600) {
-        return strftime('%k:%M:%S', $time-3600);
-    } else {
-        return strftime('%k:%M:%S', $time-3600);
-    }
+    if ($time<600) return substr(strftime('%k:%M:%S', $time-3600), 1);
+    elseif ($time>=600&&$time<3600) return strftime('%k:%M:%S', $time-3600);
+    else return strftime('%k:%M:%S', $time-3600);
 }
 function checkport($ip,$port='None')
 {
     if ($port=='None') {
         if (ping($ip)) {
             $prevcheck=$d['ping'.$ip]['s'];
-            if ($prevcheck>=5) {
-                telegram($ip.' online', true);
-            }
-            if ($prevcheck>0) {
-                store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
-            }
+            if ($prevcheck>=5) telegram($ip.' online', true);
+            if ($prevcheck>0) store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
             return 1;
         } else {
             $check=$d['ping'.$ip]['s']+1;
-            if ($check>0) {
-                store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
-            }
-            if ($check==5) {
-                telegram($ip.' Offline', true);
-            }
-            if ($check%120==0) {
-                telegram($ip.' nog steeds Offline', true);
-            }
+            if ($check>0) store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
+            if ($check==5) telegram($ip.' Offline', true);
+            if ($check%120==0) telegram($ip.' nog steeds Offline', true);
             return 0;
         }
     } else {
         if (pingport($ip, $port)==1) {
             $prevcheck=$d['ping'.$ip]['s'];
-            if ($prevcheck>=5) {
-                telegram($ip.':'.$port.' online', true);
-            }
-            if ($prevcheck>0) {
-                store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
-            }
+            if ($prevcheck>=5) telegram($ip.':'.$port.' online', true);
+            if ($prevcheck>0) store('ping'.$ip, 0, basename(__FILE__).':'.__LINE__);
             return 1;
         } else {
             $check=$d['ping'.$ip]['s']+1;
-            if ($check>0) {
-                store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
-            }
-            if ($check==5) {
-                telegram($ip.':'.$port.' Offline', true);
-            }
-            if ($check%120==0) {
-                telegram($ip.':'.$port.' nog steeds Offline', true);
-            }
+            if ($check>0) store('ping'.$ip, $check, basename(__FILE__).':'.__LINE__);
+            if ($check==5) telegram($ip.':'.$port.' Offline', true);
+            if ($check%120==0) telegram($ip.':'.$port.' nog steeds Offline', true);
             return 0;
         }
     }
@@ -611,12 +587,8 @@ function checkport($ip,$port='None')
 function ping($ip)
 {
     $result=exec("/bin/ping -c1 -w1 $ip", $outcome, $status);
-    if ($status==0) {
-        $status=true;
-    } else {
-        $status=false;
-    }
-    return $status;
+    if ($status==0) return true;
+    else return false;
 }
 function pingport($ip,$port)
 {
@@ -640,21 +612,18 @@ function double($name, $action, $msg='')
 function rookmelder($msg){
 	global $d;
     alert($device, 	$msg, 	300, false, 2, true);
-    $items=array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel');
-    foreach ($items as $i) {
+    foreach (array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
         if ($d[$i]['s']>0) {
         	sl($i, 0, basename(__FILE__).':'.__LINE__);
         }
     }
 	if ($d['zon']['s']<500) {
-		$items=array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer', 'terras');
-		foreach ($items as $i) {
+		foreach (array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer', 'terras') as $i) {
 			if ($d[$i]['s']<100) {
 				sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		}
-		$items=array('keuken','garage','jbl','bureel', 'tuin');
-		foreach ($items as $i) {
+		foreach (array('keuken','garage','jbl','bureel', 'tuin') as $i) {
 			if ($d[$i]['s']!='On') {
 				sw($i, 'On', basename(__FILE__).':'.__LINE__);
 			}
@@ -670,11 +639,8 @@ function koekje($user,$expirytime)
 }
 function telegram($msg,$silent=true,$to=1)
 {
-	if ($silent==true) {
-		$silent='true';
-	} else {
-		$silent='false';
-	}
+	if ($silent==true) $silent='true';
+	else $silent='false';
     shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
     lg('Telegram sent: '.$msg);
 }
@@ -887,48 +853,31 @@ function bosezone($ip,$vol='')
             }
         }*/
         if ($ip>101) {
-        	if ($d['bose'.$ip]['s']!='On') {
-	            sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-	        }
-            if ($ip==102) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
-            } elseif ($ip==103) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
-            } elseif ($ip==104) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
-            } elseif ($ip==105) {
-                $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
-            }
+        	if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+
+            if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
+            elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
+            elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
+            elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
+
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 bosekey($preset, 0, 101);
-                if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') {
-                    bosevolume(0, 101);
-                } else {
-                    bosevolume(25, 101);
-                }
+                if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') bosevolume(0, 101);
+                else bosevolume(25, 101);
+
                 bosepost('setZone', $xml, 101);
                 if ($vol=='') {
-					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
-						bosevolume(30, $ip);
-					} else {
-						bosevolume(22, $ip);
-					}
-				} else {
-						bosevolume($vol, $ip);
-				}
+					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) bosevolume(30, $ip);
+					else bosevolume(22, $ip);
+				} else bosevolume($vol, $ip);
             } elseif ($d['bose'.$ip]['s']=='Off') {
                 bosepost('setZone', $xml, 101);
                 store('bose'.$ip, 'On');
                 if ($vol=='') {
-					if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
-						bosevolume(30, $ip);
-					} else {
-						bosevolume(20, $ip);
-					}
-				} else {
-					bosevolume($vol, $ip);
-				}
+					if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) bosevolume(30, $ip);
+					else bosevolume(20, $ip);
+				} else bosevolume($vol, $ip);
             }
         }
         usleep(200000);
@@ -984,20 +933,14 @@ function denontcp($cmd, $x)
 function strafter($string, $substring)
 {
     $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return '';
-    } else {
-        return(substr($string, $pos+strlen($substring)));
-    }
+    if ($pos===false) return '';
+    else return(substr($string, $pos+strlen($substring)));
 }
 function strbefore($string, $substring)
 {
     $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return '';
-    } else {
-        return(substr($string, 0, $pos));
-    }
+    if ($pos===false) return '';
+    else return(substr($string, 0, $pos));
 }
 function fliving()
 {
@@ -1094,8 +1037,7 @@ function fhall()
 function sirene($msg)
 {
     global $d,$device;
-    $boven=array('pirhall');
-    if (in_array($device, $boven)) {
+    if (in_array($device, array('pirhall'))) {
         if ($d['Weg']['s']==2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
             sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
