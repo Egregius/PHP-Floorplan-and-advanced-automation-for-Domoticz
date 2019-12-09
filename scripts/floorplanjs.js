@@ -1180,11 +1180,9 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
         items=['living','badkamer','kamer','tobi','alex','zolder'];
 		items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
-
-        //html+='<div class="fix z" onclick="location.href=\'floorplan.php?luifel=luifel\';" id="luifel"></div>';
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" id="saytime"><button class="btn" onclick="ajaxcontrol(\'saytime\',\'\',\'\')">Say Time</button></div>';
-        html+='<div class="fix z" id="bovenbeneden"><button class="btn btnbovenbenden" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnbovenbenden" onclick="roller(\'Boven\');">Boven</button></div>';
+        html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="ajaxcontrol(\'saytime\',\'\',\'\')">Say Time</button></div>';
+        html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
         html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
