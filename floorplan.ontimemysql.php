@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
+require '/var/www/config.php';
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
@@ -47,7 +48,7 @@ if ($home) {
 		<br>
 		<br>
 		<br>';
-	$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+	$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$stmt=$db->query("SELECT DISTINCT device FROM ontime ORDER BY device ASC");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {

@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+require '/var/www/config.php';
 require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
@@ -99,7 +100,7 @@ if ($home===true) {
 			    <input type="submit" class="btn btna b3" value="Regen"/>
 			</form>';
     }
-    $db=new mysqli('localhost', 'domotica', 'domotica', 'domotica');
+    $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
     }

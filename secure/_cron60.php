@@ -638,7 +638,7 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
 		    '$alex_temp',
 		    '$zolder_temp'
 		);";
-    $db = new mysqli('localhost', 'domotica', 'domotica', 'domotica');
+    $db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
     if ($db->connect_errno>0) {
         die('Unable to connect to database ['.$db->connect_error.']');
     }

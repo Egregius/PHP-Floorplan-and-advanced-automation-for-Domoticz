@@ -13,7 +13,7 @@ $user='cron120';
 
 if ($d['auto']['s']=='On') {
 	$windhist=json_decode($d['wind']['m']);
-    $db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+    $db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
