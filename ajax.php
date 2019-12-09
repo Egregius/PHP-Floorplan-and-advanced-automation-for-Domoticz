@@ -157,8 +157,18 @@ if ($home==true) {
         	storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='roller') {
-        	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-        	storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+			if ($_REQUEST['device']=='Beneden') {
+				foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
+					if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				}
+			} elseif ($_REQUEST['device']=='Boven') {
+				foreach(array('RkamerL', 'RkamerR', 'Rtobi', 'Ralex') as $i) {
+					if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				}
+			} else {
+				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+			}
 		} elseif ($_REQUEST['command']=='mode') {
 			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='fetch') {
