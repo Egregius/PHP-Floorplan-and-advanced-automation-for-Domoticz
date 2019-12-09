@@ -47,9 +47,11 @@ function huisslapen()
     foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
-    foreach (array('Ralex','RkamerL','RkamerR') as $i) {
-        if ($d[$i]['m']!=2) storemode($i, 2, basename(__FILE__).':'.__LINE__);
-    }
+    if (TIME>=strtotime('21:00')) {
+		foreach (array('Ralex','RkamerL','RkamerR') as $i) {
+			if ($d[$i]['m']!=2) storemode($i, 2, basename(__FILE__).':'.__LINE__);
+		}
+	}
     if ($d['gcal']['s']==true) {
         if ($d['Rtobi']['m']!=2) storemode('Rtobi', 2, basename(__FILE__).':'.__LINE__);
     }
