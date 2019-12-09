@@ -1183,8 +1183,8 @@ function floorplanheating(){
 
         //html+='<div class="fix z" onclick="location.href=\'floorplan.php?luifel=luifel\';" id="luifel"></div>';
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" onclick="ajaxcontrol(\'saytime\',\'\',\'\')" id="saytime">Say Time</div>';
-        html+='<div class="fix z" id="bovenbeneden"><button class="btn" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn" onclick="roller(\'Boven\');">Boven</button></div>';
+        html+='<div class="fix z" id="saytime"><button class="btn" onclick="ajaxcontrol(\'saytime\',\'\',\'\')">Say Time</button></div>';
+        html+='<div class="fix z" id="bovenbeneden"><button class="btn btnbovenbenden" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnbovenbenden" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
         html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
@@ -1421,6 +1421,7 @@ function roller(device,floorplan='floorplanheating'){
 		if(device=='luifel')html+='<h2>'+device+' Open</h2><div class="fix" style="top:90px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 		else html+='<h2>'+device+' Dicht</h2><div class="fix" style="top:90px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 	} else if(device!='Beneden'&&device!='Boven'&&$mode==1) html+='<h2>'+device+' '+current+' %</h2>';
+	else html+='<h2>'+device+'</h2>';
 	html+='<div class="fix z" style="top:90px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
 	if(device!='Beneden'&&device!='Boven'&&$mode==1){
 		html+='<div class="fix btn btna" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
@@ -1429,8 +1430,8 @@ function roller(device,floorplan='floorplanheating'){
 		html+='<div class="fix btn" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
 		html+='<div class="fix btn btna" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
-	html+='<div class="fix z" style="top:190px;left:0px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
-	html+='</div><div class="fix z" style="top:90px;left:385px;">';
+	html+='<div class="fix z" style="top:90px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
+	html+='</div><div class="fix z" style="top:190px;left:0px;">';
 	levels=[5,10,15,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,85,90,95];
 	if(levels.includes(parseInt(current))){console.log('if');}else{console.log('false');if(current>0&&current<100)levels.push(current);}
 	levels.sort((a, b) => a - b);
