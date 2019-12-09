@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
-    storemode('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-    sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+    if ($d['Rtobi']['m']!=0) storemode('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+    if ($d['Rtobi']['s']>0) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 }

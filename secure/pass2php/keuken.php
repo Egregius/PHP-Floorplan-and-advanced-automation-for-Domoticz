@@ -14,10 +14,7 @@ if($status=='Off') {
     if($d['pirkeuken']['s']!='Off'&&$d['kookplaat']['s']=='Off'&&$d['wasbak']['s']=='Off') {
         store('pirkeuken', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    if ($d['kookplaat']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['m']==1) {
-    	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-    }
-    if ($d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['s']=='On') {
+    if ($d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['m']==0&&$d['GroheRed']['s']=='On') {
     	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }

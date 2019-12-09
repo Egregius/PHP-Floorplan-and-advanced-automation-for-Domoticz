@@ -10,6 +10,6 @@
  * @link     https://egregius.be
  **/
 if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
-    storemode('Ralex', 0, basename(__FILE__).':'.__LINE__);
-    sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+    if ($d['Ralex']['m']!=0) storemode('Ralex', 0, basename(__FILE__).':'.__LINE__);
+    if ($d['Ralex']['s']>0) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 }
