@@ -110,11 +110,11 @@ if ($home==true) {
     }
     elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         $d=fetchdata();
-        if ($user=='Tobi'&&$_REQUEST['device']!='poortrf') exit;
+        //if ($user=='Tobi'&&$_REQUEST['device']!='poortrf') exit;
         if ($_REQUEST['command']=='setpoint') {
-        	if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
+        	/*if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
         		if ($_REQUEST['action']>16) $_REQUEST['action']=16;
-        	}
+        	}*/
         	store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 //			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
