@@ -9,7 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$db=new mysqli('localhost', 'domotica', 'domotica');
+require '/var/www/config.php';
+$db=new mysqli('localhost', $dbuser, $dbpass);
 if ($db->connect_errno>0) {
     die('Unable to connect to database ['.$db->connect_error.']');
 }

@@ -146,7 +146,7 @@ if ($d['buiten_temp']['s']!=$newbuitentemp) {
 	store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
 }
 
-$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
@@ -271,7 +271,7 @@ if ($buienradar>0||$dsbuien>0||$buien>0) {
 		&&past('zon')>1800
 		&&past('water')>72000
 	) {
-		$db=new PDO("mysql:host=localhost;dbname=domotica;", 'domotica', 'domotica');
+		$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {

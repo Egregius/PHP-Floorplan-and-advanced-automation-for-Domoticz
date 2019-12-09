@@ -19,16 +19,11 @@ if (!empty($smappee['report'])) {
     );
     if (!empty($matches[1][1])) {
         $time=time();
-        $db=new PDO(
-            "mysql:host=localhost;dbname=domotica;",
-            'domotica',
-            'domotica'
-        );
+        require '/var/www/config.php';
+		$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $newzon=round($matches[1][1], 0);
-        if ($newzon<0) {
-            $newzon=0;
-        }
+        if ($newzon<0) $newzon=0;
         if ($newzon==0 ) {
             $result = $db->query(
                 "UPDATE devices SET s='$newzon' WHERE n='zon';"
