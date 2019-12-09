@@ -149,7 +149,7 @@ td{text-align:center;font-size:1.1em;}
 #buiten_temp{top:450px;left:20px;}
 #floorplanstats{top:810px;left:80px;width:410px;}
 
-#saytime{top:320px;left:200px;font-size:1.5em;}
+#saytime{top:280px;left:200px;font-size:1.5em;}
 
 /* Media */
 #denon{top:77px;left:87px;}
@@ -206,6 +206,7 @@ td{text-align:center;font-size:1.1em;}
 #RRkamerL{top:521px;left:419px;line-height:0.8em;}
 #RRkamerR{top:581px;left:419px;line-height:0.8em;}
 #zoldertrap{top:670px;left:145px;}
+#bovenbeneden{top:340px;left:145px;}
 
 /* Zones */
 #zliving{top:51px;left:89px;width:249px;height:197px;}
