@@ -68,7 +68,8 @@ else
 		if [ "$STATUS3" == "OK" ] ; then
 			exit
 		else
-			service domoticz restart
+			service domoticz stop
+			service domoticz start
 			#shutdown -r now
 		fi
 	fi
@@ -76,7 +77,8 @@ fi
 
 ps cax | grep httpd
 if [ $? -eq 0 ] ; then
-	service apache2 restart
+	service apache2 stop
+	service apache2 start
 fi
 
 

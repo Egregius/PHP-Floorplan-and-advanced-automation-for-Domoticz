@@ -106,60 +106,62 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
-if (ping($lgtvip)) {
-    sleep(3);
-    if (ping($lgtvip)) {
-        if ($d['lgtv']['s']!='On'
-            &&past('lgtv')>10
-            &&$d['Weg']['s']==0
-        ) {
-            sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-        }
-        if ($d['denon']['s']!='On'
-            &&past('denon')>30
-            &&$d['Weg']['s']==0
-        ) {
-            sw('denon', 'On', basename(__FILE__).':'.__LINE__);
-            storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
-        }
-        /*if ($d['nvidia']['s']!='On'
-            &&past('nvidia')>30
-            &&$d['Weg']['s']==0
-        ) {
-            sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-        }*/
-    }
-} else {
-    usleep(300000);
-    if (!ping($lgtvip)) {
-        usleep(300000);
-        if (!ping($lgtvip)) {
-            if ($d['lgtv']['s']!='Off'
-                &&past('lgtv')>120
-            ) {
-                sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-            }
-            if ($d['denon']['s']!='Off'
-                &&$d['denon']['m']=='TV'
-                &&past('lgtv')>120
-                &&past('denon')>300
-            ) {
-                sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
-            }
-            if ($d['nvidia']['s']!='Off'
-                &&past('lgtv')>120
-                &&past('nvidia')>120
-            ) {
-                sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-            }
-            if ($d['kristal']['s']!='Off'
-                &&past('lgtv')>120
-                &&past('kristal')>120
-            ) {
-                sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
-            }
-        }
-    }
+if ($d['tv']['s']=='On') {
+	if (ping($lgtvip)) {
+		usleep(300000);
+		if (ping($lgtvip)) {
+			if ($d['lgtv']['s']!='On'
+				&&past('lgtv')>10
+				&&$d['Weg']['s']==0
+			) {
+				sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+			}
+			if ($d['denon']['s']!='On'
+				&&past('denon')>30
+				&&$d['Weg']['s']==0
+			) {
+				sw('denon', 'On', basename(__FILE__).':'.__LINE__);
+				storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
+			}
+			/*if ($d['nvidia']['s']!='On'
+				&&past('nvidia')>30
+				&&$d['Weg']['s']==0
+			) {
+				sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
+			}*/
+		}
+	} else {
+		usleep(300000);
+		if (!ping($lgtvip)) {
+			usleep(300000);
+			if (!ping($lgtvip)) {
+				if ($d['lgtv']['s']!='Off'
+					&&past('lgtv')>120
+				) {
+					sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['denon']['s']!='Off'
+					&&$d['denon']['m']=='TV'
+					&&past('lgtv')>120
+					&&past('denon')>300
+				) {
+					sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['nvidia']['s']!='Off'
+					&&past('lgtv')>120
+					&&past('nvidia')>120
+				) {
+					sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['kristal']['s']!='Off'
+					&&past('lgtv')>120
+					&&past('kristal')>120
+				) {
+					sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+			}
+		}
+	}
 }
 if ($d['nvidia']['s']=='On') {
     if (pingport($shieldip, 9080)==1) {
