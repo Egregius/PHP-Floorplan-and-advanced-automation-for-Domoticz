@@ -393,22 +393,22 @@ if ($d['minmaxtemp']['m']>19) {
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
-if ($difzolder<=-0.2&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>30&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
+if ($difzolder<=-0.2&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>90&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
     sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif ($difzolder<=-0.1&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>90&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
+} elseif ($difzolder<=-0.1&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>180&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
     sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif ($difzolder<= 0&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>180&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
+} elseif ($difzolder<= 0&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>270&&$d['el']['s']<4800&&$d['heating']['s']>=2&&$d['Weg']['s']==0) {
     sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>= 0&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>30)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
+} elseif (($difzolder>= 0&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>90)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
     sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>=-0.3&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>120)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
+} elseif (($difzolder>=-0.3&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>180)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
     sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>=-0.5&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>180)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
+} elseif (($difzolder>=-0.5&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>270)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
     sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
     lg('>>>>>>>>>> difzolder = '.$difzolder);
 }
