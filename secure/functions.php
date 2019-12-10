@@ -11,6 +11,8 @@
  **/
 session_start();
 require '/var/www/config.php';
+$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 //$d=fetchdata();
 /**
  * Function fetchdata
@@ -21,9 +23,7 @@ require '/var/www/config.php';
  */
 function fetchdata()
 {
-    global $dbname,$dbuser,$dbpass;
-    $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    global $db;
     $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
     return $d;
@@ -427,7 +427,7 @@ function resetsecurity()
 }
 function sw($name,$action='Toggle',$msg='')
 {
-    global $user,$d,$dbuser,$dbpass,$domoticzurl;
+    global $user,$d,$db,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
         foreach ($name as $i) {
@@ -453,9 +453,7 @@ function sw($name,$action='Toggle',$msg='')
         } else {
    			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','heater1','heater2','regenpomp','zoldervuur'))) {
    				$stamp=TIME;
-   				$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
+   				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
    			}
         }
     }
@@ -471,11 +469,9 @@ function lgcommand($action,$msg='')
 }
 function store($name,$status,$msg='',$idx=null,$force=true)
 {
-    global $dbuser,$dbpass, $d, $user;
+    global $db, $d, $user;
     if (!isset($d)) $d=fetchdata();
     $time=time();
-    $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	if ($idx>0) {
 		$db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	} else {
@@ -492,11 +488,9 @@ function storemode($name,$mode,$msg='',$time=0)
 }
 function storeicon($name,$icon,$msg='')
 {
-    global $dbname,$dbuser,$dbpass, $d, $user;
+    global $db, $d, $user;
     $time=TIME;
     if ($d[$name]['icon']!=$icon) {
-		$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
