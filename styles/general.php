@@ -43,7 +43,7 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .b10{width:1500px;max-width:10%}
 @media (hover: hover) {btn:hover{color:#000;background-color:#ff3a00;cursor:pointer;}}
 ";
-$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
-$css = str_replace(': ', ':', $css);
-$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
+//$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+//$css = str_replace(': ', ':', $css);
+//$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
 echo($css);

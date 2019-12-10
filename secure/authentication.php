@@ -12,22 +12,22 @@
 $authenticated=false;
 $home=false;
 if (!isset($_SERVER['HTTP_USER_AGENT'])) die('No user agent specified');
-elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) $udevice='iPhone';
-elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
-elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')!==false) $udevice='iPad';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Macintosh')!==false) $udevice='Mac';
+elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
+elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) $udevice='iPhone';
+elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')!==false) $udevice='iPad';
 else $udevice='other';
 
 if (substr($_SERVER['REMOTE_ADDR'], 0, 10)=='192.168.2.') $local=true;
 else $local=false;
 
 if (getenv('HTTP_CLIENT_IP')) $ipaddress=getenv('HTTP_CLIENT_IP');
+elseif (getenv('REMOTE_ADDR')) $ipaddress=getenv('REMOTE_ADDR');
 elseif (getenv('HTTP_X_FORWARDED_FOR')) $ipaddress=getenv('HTTP_X_FORWARDED_FOR');
 elseif (getenv('HTTP_X_FORWARDED')) $ipaddress=getenv('HTTP_X_FORWARDED');
 elseif (getenv('HTTP_X_REAL_IP')) $ipaddress=getenv('HTTP_X_REAL_IP');
 elseif (getenv('HTTP_FORWARDED_FOR')) $ipaddress=getenv('HTTP_FORWARDED_FOR');
 elseif (getenv('HTTP_FORWARDED')) $ipaddress=getenv('HTTP_FORWARDED');
-elseif (getenv('REMOTE_ADDR')) $ipaddress=getenv('REMOTE_ADDR');
 else {
     $ipaddress='UNKNOWN';
     die("IP ADDRESS UNKNOWN");
