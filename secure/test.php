@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-require 'functions.php';
+//require 'functions.php';
 
     
     
@@ -18,8 +18,13 @@ echo '<pre>';
 /*-------------------------------------------------*/
 function dbconnect() {
 	global $db;
+	if (isset($db)) echo 'isset';
+	else 'not set';
 	print_r($db);
 }
+echo 'db test<br>';
+dbconnect();
+
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;

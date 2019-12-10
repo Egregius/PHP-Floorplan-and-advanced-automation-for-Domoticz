@@ -13,6 +13,12 @@
 require '/var/www/config.php';
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+function dbconnect() {
+	global $db,$dbname,$dbuser,$dbpass;
+	if (isset($db)) return $db;
+	else return $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+}
 //$d=fetchdata();
 /**
  * Function fetchdata
@@ -23,7 +29,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
  */
 function fetchdata()
 {
-    global $db;
+    $db=dbconnect();
     $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
     while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
     return $d;
