@@ -35,6 +35,7 @@ if ($d['kamer']['m']==2) {
 			if (isset($status['@attributes']['source'])) {
 				if ($status['@attributes']['source']=='STANDBY') {
 					bosekey("PRESET_6", 0, 103);
+					bosekey('SHUFFLE_ON', 0, 103);
 					sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 					bosevolume(17, 103);
 				} else {

@@ -713,6 +713,7 @@ function bosekey($key,$sleep=100000,$ip=101)
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
+				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
@@ -729,6 +730,7 @@ function bosekey($key,$sleep=100000,$ip=101)
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
+				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
@@ -747,6 +749,7 @@ function bosekey($key,$sleep=100000,$ip=101)
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
+				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
@@ -763,6 +766,7 @@ function bosekey($key,$sleep=100000,$ip=101)
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
+				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
@@ -779,6 +783,7 @@ function bosekey($key,$sleep=100000,$ip=101)
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
+				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
@@ -875,11 +880,6 @@ function bosezone($ip,$vol='')
 				} else bosevolume($vol, $ip);
             }
         }
-        usleep(200000);
-        if ($d['bose101']['m']<TIME-3600) {
-        	storemode('bose101', TIME);
-	        bosekey('SHUFFLE_ON', 0, 101);
-	    }
     }
 }
 function bosepost($method,$xml,$ip=101,$log=false)
