@@ -33,11 +33,11 @@ else {
     die("IP ADDRESS UNKNOWN");
 }
 
-header("Expires: on, 01 Jan 1970 00:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+//header("Expires: on, 01 Jan 1970 00:00:00 GMT");
+//header("Last-Modified: Tue, 10 Dec 2025 14:50:27 GMT");
+//header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+//header("Cache-Control: post-check=0, pre-check=0", false);
+//header("Pragma: no-cache");
 if (isset($_POST['logout'])) {
 	$user='';
     if (isset($_POST['username'])) {
