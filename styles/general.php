@@ -2,10 +2,10 @@
 header("Content-type:text/css;charset:UTF-8");
 //header("Expires:".gmdate("D, d M Y H:i:s",time()+1)." GMT");
 header("Expires:".gmdate("D, d M Y H:i:s",time()+2592000)." GMT");
-if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
-elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
-elseif(strpos($_SERVER['HTTP_USER_AGENT'],'10_15')!==false)$udevice='iPhone';
-else $udevice='other';
+//if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
+//elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
+//elseif(strpos($_SERVER['HTTP_USER_AGENT'],'10_15')!==false)$udevice='iPhone';
+//else $udevice='other';
 $css="
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}

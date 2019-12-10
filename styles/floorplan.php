@@ -228,7 +228,7 @@ td{text-align:center;font-size:1.1em;}
 #alex_set{top:563px;left:200px;line-height:0.8em;}
 #zolder_set{top:705px;left:175px;line-height:0.8em;}
 ";
-$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
+//$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
 //$css = str_replace(': ', ':', $css);
 //$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
 echo($css);
