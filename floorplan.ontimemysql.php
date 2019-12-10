@@ -64,7 +64,7 @@ if ($home) {
         }
     }
     echo '
-        <form method="GET">
+        <form method="POST">
             <div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">';
     foreach ($devices as $d) {
         if ($device==$d) {
