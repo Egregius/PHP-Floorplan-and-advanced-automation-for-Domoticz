@@ -42,5 +42,5 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
         $status='Off';
     }
 }
-store($device, $status);
+store($device, $status, 'Pass2PHP');
 @require 'pass2php/'.$device.'.php';
