@@ -10,7 +10,6 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-require '/var/www/config.php';
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
