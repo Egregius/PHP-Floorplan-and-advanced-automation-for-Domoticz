@@ -22,6 +22,8 @@ if ($status=='On'&&past('8badkamer-7')>5) {
     douche();
     resetsecurity();
     if ($d['bose102']['s']=='Off') bosezone(102);
-    boseplayinfo(saytime().sayweather());
-   	if ($d['bose102']['m']==0) storemode('bose102', 1);
+   	if ($d['bose102']['m']==0) {
+   		boseplayinfo(saytime().sayweather());
+   		storemode('bose102', 1);
+   	}
 }

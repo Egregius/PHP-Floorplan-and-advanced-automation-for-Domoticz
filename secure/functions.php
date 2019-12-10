@@ -147,10 +147,9 @@ function douchewarn($eurocent,$vol=0)
 function roundUpToAny($n,$x=5) {
     return round(($n+$x/2)/$x)*$x;
 }
-function boseplayinfo($sound, $vol=50, $log='', $ip=101, $force=false) {
+function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
-	if ($force==false&&$d['bose102']['m']>0&&startsWith($sound, 'Het')) return null;
 	lg($sound);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
@@ -838,7 +837,7 @@ function bosezone($ip,$vol='')
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosekey($preset, 0, 101);
-            bosevolume(25, 101);
+            bosevolume(21, 101);
         } /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
             if (isset($volume['actualvolume'])) {
@@ -860,7 +859,7 @@ function bosezone($ip,$vol='')
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 bosekey($preset, 0, 101);
                 if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') bosevolume(0, 101);
-                else bosevolume(25, 101);
+                else bosevolume(21, 101);
 
                 bosepost('setZone', $xml, 101);
                 if ($vol=='') {
@@ -982,8 +981,11 @@ function fbadkamer()
         if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
         	if ($d['bose102']['s']=='Off') {
 				bosezone(102);
-				sleep(3);
-				boseplayinfo(saytime().sayweather());
+				if ($d['bose102']['m']==0) {
+					sleep(3);
+					boseplayinfo(saytime().sayweather());
+					storemode('bose102', 1);
+				}
 			} 
         }
     }
