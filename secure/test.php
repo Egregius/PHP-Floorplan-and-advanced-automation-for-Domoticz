@@ -16,10 +16,10 @@ require 'functions.php';
     
 echo '<pre>';
 /*-------------------------------------------------*/
-$d=fetchdata();
-
-boseplayinfo(saytime().sayweather());
-
+function dbconnect() {
+	global $db;
+	print_r($db);
+}
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
