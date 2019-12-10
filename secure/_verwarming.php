@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP verwarming
- * php version 7.3.9-1
+ * php version 7.3.11-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,9 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if (!isset($d)) {
-	$d=fetchdata();
-}
+if (!isset($d)) $d=fetchdata();
 $user='heating';
 /* Heating
 0 = Neutral
@@ -20,18 +18,18 @@ $user='heating';
 3 = Elec / Gas
 4 = Gas
 */
-$x=0;$xs=basename(__FILE__).':'.__LINE__;//Neutral
+$x=0;//Neutral
 if ($d['heatingauto']['s']=='On') {
-    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21){$x=1;$xs=basename(__FILE__).':'.__LINE__;}//Cooling
+    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=1;//Cooling
     elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
-        if ($d['jaarteller']['s']<1){$x=3;$xs=basename(__FILE__).':'.__LINE__;}//Gas/Elec
-        else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
+        if ($d['jaarteller']['s']<1)$x=3;//Gas/Elec
+        else $x=4;//Gas
     } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<15||$d['minmaxtemp']['s']<10) {
-        if ($d['jaarteller']['s']<2){$x=3;$xs=basename(__FILE__).':'.__LINE__;}//Gas/Elec
-        else {$x=4;$xs=basename(__FILE__).':'.__LINE__;}//Gas
-    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20){$x=2;$xs=basename(__FILE__).':'.__LINE__;}//Elec
+        if ($d['jaarteller']['s']<2)$x=3;//Gas/Elec
+        else $x=4;//Gas
+    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
 }
-//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x.'  '.$xs);
+//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
 	$d['heating']['s']=$x;
@@ -83,29 +81,27 @@ if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=2&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
         $Setliving=16;
         if ($d['Weg']['s']==0) {
-            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) {
-                $Setliving=20.5;
-            }
+            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
         } elseif ($d['Weg']['s']==1) {
         	$dow=date("w");
             if($dow==0||$dow==6) {
-				if (TIME>=strtotime('7:00')&&TIME<strtotime('18:30')) $Setliving=20;
-				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('18:30')) $Setliving=19.5;
-				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('18:30')) $Setliving=19.0;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=18.5;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('18:30')) $Setliving=18.0;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('18:30')) $Setliving=17.5;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
-				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('18:30')) $Setliving=16.5;
+				if (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=20;
+				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
+				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
 			} else {
-				if (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=20;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('18:30')) $Setliving=19.5;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('18:30')) $Setliving=19.0;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=18.5;
-				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('18:30')) $Setliving=18.0;
-				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('18:30')) $Setliving=17.5;
-				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=17.0;
-				elseif (TIME>=strtotime('3:40')&&TIME<strtotime('18:30')) $Setliving=16.5;
+				if (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=20;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
+				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
+				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
+				elseif (TIME>=strtotime('3:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
 			}
         }
         if ($Setliving>19.5) {

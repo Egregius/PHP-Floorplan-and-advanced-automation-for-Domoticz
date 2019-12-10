@@ -32,7 +32,7 @@ if [ "$STATUS" == "OK" ] ; then
         CRON="$CRON&cron3600"
     fi
     DEBUG=''
-    DEBUG='XDEBUG_PROFILE'
+    #DEBUG='XDEBUG_PROFILE'
 	echo $NOW   $MINUTE $CRON >> /run/cronlog
 	echo OK
 	#0
