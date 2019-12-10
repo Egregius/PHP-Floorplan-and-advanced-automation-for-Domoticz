@@ -31,25 +31,27 @@ if [ "$STATUS" == "OK" ] ; then
     if [ $MINUTE -eq 0 ] ; then
         CRON="$CRON&cron3600"
     fi
+    DEBUG=''
+    DEBUG='XDEBUG_PROFILE'
 	echo $NOW   $MINUTE $CRON >> /run/cronlog
 	echo OK
 	#0
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10&verwarming&rolluiken$CRON" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10&verwarming&rolluiken$CRON&$DEBUG" >/dev/null 2>&1 &
 	sleep 8.859
 	#10
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#20
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#30
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#40
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&verwarming&rolluiken&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#50
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10"
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG"
 	if [ $? -gt 0 ] ; then
 		service apache2 restart
 	fi
