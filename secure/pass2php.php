@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require '/var/www/config.php';
 require 'functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
