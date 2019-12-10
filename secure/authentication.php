@@ -20,19 +20,6 @@ else $udevice='other';
 
 if (substr($_SERVER['REMOTE_ADDR'], 0, 10)=='192.168.2.') $local=true;
 else $local=false;
-
-if (getenv('HTTP_CLIENT_IP')) $ipaddress=getenv('HTTP_CLIENT_IP');
-elseif (getenv('REMOTE_ADDR')) $ipaddress=getenv('REMOTE_ADDR');
-elseif (getenv('HTTP_X_FORWARDED_FOR')) $ipaddress=getenv('HTTP_X_FORWARDED_FOR');
-elseif (getenv('HTTP_X_FORWARDED')) $ipaddress=getenv('HTTP_X_FORWARDED');
-elseif (getenv('HTTP_X_REAL_IP')) $ipaddress=getenv('HTTP_X_REAL_IP');
-elseif (getenv('HTTP_FORWARDED_FOR')) $ipaddress=getenv('HTTP_FORWARDED_FOR');
-elseif (getenv('HTTP_FORWARDED')) $ipaddress=getenv('HTTP_FORWARDED');
-else {
-    $ipaddress='UNKNOWN';
-    die("IP ADDRESS UNKNOWN");
-}
-
 //header("Expires: on, 01 Jan 1970 00:00:00 GMT");
 //header("Last-Modified: Tue, 10 Dec 2025 14:50:27 GMT");
 //header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -55,7 +42,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
             echo 'OK';
             lg(print_r($_SERVER, true));
             koekje($_POST['username'], 2147483647);
-            telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
+            telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$_SERVER['REMOTE_ADDR'].PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
             sleep(2);
             if (!empty($_SESSION['referer'])) {
                 header("Location:/".$_SESSION['referer']);
@@ -65,7 +52,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
                 die("Redirecting to:/index.php");
             }
         } else {
-            fail2ban($ipaddress.' FAILED wrong password');
+            fail2ban($_SERVER['REMOTE_ADDR'].' FAILED wrong password');
             $msg="HOME Failed login attempt (Wrong password): ";
             if (isset($_POST['username'])) {
                 $msg.=PHP_EOL."USER=".$_POST['username'];
@@ -74,7 +61,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
                 $msg.=PHP_EOL."PSWD=".$_POST['password'];
             }
 
-            $msg.=PHP_EOL."IP=".$ipaddress;
+            $msg.=PHP_EOL."IP=".$_SERVER['REMOTE_ADDR'];
             if (isset($_SERVER['REQUEST_URI'])) {
                 $msg.=PHP_EOL."REQUEST=".$_SERVER['REQUEST_URI'];
             }
@@ -108,7 +95,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
 </html>');
         }
     } else {
-        fail2ban($ipaddress.' FAILED unknown user');
+        fail2ban($_SERVER['REMOTE_ADDR'].' FAILED unknown user');
         $msg="HOME Failed login attempt (Unknown user): ";
         if (isset($_POST['username'])) {
             $msg.="__USER=".$_POST['username'];
@@ -116,7 +103,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
         if (isset($_REQ_POSTEST['password'])) {
             $msg.="__PSWD=".$_POST['password'];
         }
-        $msg.="__IP=".$ipaddress;
+        $msg.="__IP=".$_SERVER['REMOTE_ADDR'];
         if (isset($_SERVER['REQUEST_URI'])) {
             $msg.=PHP_EOL."REQUEST=".$_SERVER['REQUEST_URI'];
         }
