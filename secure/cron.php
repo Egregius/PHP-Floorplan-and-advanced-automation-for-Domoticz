@@ -30,13 +30,9 @@ if (isset($_REQUEST['cron120'])) {
 if (isset($_REQUEST['cron180'])) {
     include '_cron180.php';
     include 'gcal/gcal.php';
-    sleep(2);
     include 'gcal/verlof.php';
-    sleep(2);
     include 'gcal/tobibeitem.php';
-    sleep(2);
     include 'gcal/mirom.php';
-    sleep(2);
 }
 if (isset($_REQUEST['cron240'])) {
     include '_cron240.php';

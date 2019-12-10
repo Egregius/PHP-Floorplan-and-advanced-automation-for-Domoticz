@@ -323,11 +323,11 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem('tijd_'+device, time);
 							try{
 								html='<td></td><td width="65px">';
-								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span</td>';
-								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span</td>';
-								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span</td>';
-								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span</td>';
-								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas<br><span id="theating"></span</td>';
+								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span></td>';
+								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span></td>';
+								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span></td>';
+								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span></td>';
+								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas<br><span id="theating"></span></td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
