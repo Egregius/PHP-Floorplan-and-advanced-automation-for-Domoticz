@@ -130,9 +130,9 @@ if (ping($lgtvip)) {
         }*/
     }
 } else {
-    sleep(1);
+    usleep(300000);
     if (!ping($lgtvip)) {
-        sleep(1);
+        usleep(300000);
         if (!ping($lgtvip)) {
             if ($d['lgtv']['s']!='Off'
                 &&past('lgtv')>120

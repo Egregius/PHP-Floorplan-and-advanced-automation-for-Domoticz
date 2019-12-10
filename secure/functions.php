@@ -850,7 +850,8 @@ function bosezone($ip,$vol='')
         if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosekey($preset, 0, 101);
-            bosevolume(21, 101);
+            if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') bosevolume(0, 101);
+            else bosevolume(21, 101);
         } /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
             if (isset($volume['actualvolume'])) {
