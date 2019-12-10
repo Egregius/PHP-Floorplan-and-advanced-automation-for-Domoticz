@@ -32,7 +32,7 @@ if ($home==true) {
         $d['t']=$t;
         if($_REQUEST['t']==0)$t=0;
         else $t=$t-1;
-        $db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
+        $db=dbconnect();
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
@@ -125,6 +125,7 @@ if ($home==true) {
         } elseif ($_REQUEST['command']=='Weg') {
         	store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['action']==0) {
+				$db=dbconnect();
 				$db->query("UPDATE devices set t='1' WHERE n='heating';");
 				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
 					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);

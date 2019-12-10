@@ -11,8 +11,6 @@
  **/
 //session_start();
 require '/var/www/config.php';
-$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 function dbconnect() {
 	global $db,$dbname,$dbuser,$dbpass;
@@ -433,7 +431,7 @@ function resetsecurity()
 }
 function sw($name,$action='Toggle',$msg='')
 {
-    global $user,$d,$db,$domoticzurl;
+    global $user,$d,$domoticzurl;
     if (!isset($d)) $d=fetchdata();
     if (is_array($name)) {
         foreach ($name as $i) {
@@ -459,6 +457,7 @@ function sw($name,$action='Toggle',$msg='')
         } else {
    			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','heater1','heater2','regenpomp','zoldervuur'))) {
    				$stamp=TIME;
+   				$db=dbconnect();
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
    			}
         }
@@ -475,9 +474,10 @@ function lgcommand($action,$msg='')
 }
 function store($name,$status,$msg='',$idx=null,$force=true)
 {
-    global $db, $d, $user;
+    global $d, $user;
     if (!isset($d)) $d=fetchdata();
     $time=time();
+	$db=dbconnect();
 	if ($idx>0) {
 		$db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	} else {
@@ -487,33 +487,35 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 }
 function storemode($name,$mode,$msg='',$time=0)
 {
-    global $db, $user;
+    global $user;
     $time=time()+$time;
+	$db=dbconnect();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg(' (STOREMODE)	'.$user.'	=> '.$name.'	=> '.$mode.'	('.$msg.')');
 }
 function storeicon($name,$icon,$msg='')
 {
-    global $db, $d, $user;
+    global $d, $user;
     $time=TIME;
     if ($d[$name]['icon']!=$icon) {
+		$db=dbconnect();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 {
-    global $db;
-    $time=TIME;
+    $db=dbconnect();
     $stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
     $last=$stmt->fetch(PDO::FETCH_ASSOC);
     if (isset($last['t'])) {
         $last=$last['t'];
     }
-    if ($last < $time-$ttl) {
+    if ($last < TIME-$ttl) {
         if ($ios) {
 			shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
 		}
+		$time=TIME;
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
         telegram($msg, $silent, $to);
         lg('alert='.$last);
