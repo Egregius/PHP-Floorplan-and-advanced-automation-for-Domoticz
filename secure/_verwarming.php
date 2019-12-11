@@ -253,7 +253,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
     $d['badkamer_set']['s']=10.0;
     if ($d['badkamer_set']['m']==1) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0) {
-    $b7=past('8badkamer-7');
+    $b7=past('$ 8badkamer-7');
     $b7b=past('8Kamer-7');
     if ($b7b<$b7) $b7=$b7b;
     $x=22.4;
