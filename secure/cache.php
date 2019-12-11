@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require '/var/www/config.php';
 require 'functions.php';
 $d=fetchdata();
 if (isset($_REQUEST['fetch'])) {
