@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8badkamer-7.php');
+require('$ 8Zolder-7.php');

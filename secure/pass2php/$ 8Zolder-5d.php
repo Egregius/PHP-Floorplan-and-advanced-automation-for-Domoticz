@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8badkamer-5.php');
+if ($d['zolder']['s']>0) {
+	sl('zolder', 0);
+}

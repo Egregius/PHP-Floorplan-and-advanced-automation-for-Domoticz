@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8zolder-3.php');
+require('$ 8Zolder-3.php');

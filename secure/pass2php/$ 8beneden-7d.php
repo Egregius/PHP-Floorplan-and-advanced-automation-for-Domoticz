@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8beneden-7.php');
+if ($d['eettafel']['s']>0) {
+	sl('eettafel', 0);
+}

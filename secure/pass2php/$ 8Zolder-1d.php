@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Zolder-1.php');
+if ($d['zolder']['s']<100) {
+	sl('zolder', 100);
+}

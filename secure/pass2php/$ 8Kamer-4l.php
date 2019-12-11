@@ -9,4 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Kamer-4.php');
+if ($d['kamer']['s']<100) {
+	if ($d['kamer']['s']==0) $d['kamer']['s']=1;
+	sl('kamer', ceil($d['kamer']['s']*1.05));
+}

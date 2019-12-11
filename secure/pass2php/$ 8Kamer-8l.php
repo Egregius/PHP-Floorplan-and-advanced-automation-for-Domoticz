@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Kamer-8.php');
+if ($d['kamer']['s']>0) {
+	sl('kamer', floor($d['kamer']['s']*0.95));
+}
