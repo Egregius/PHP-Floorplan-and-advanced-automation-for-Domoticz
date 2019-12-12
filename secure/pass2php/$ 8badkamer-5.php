@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3.11-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('lichtbadkamer', 50, basename(__FILE__).':'.__LINE__);
+    sl('lichtbadkamer', 44, basename(__FILE__).':'.__LINE__);
     store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
     douche();
     resetsecurity();

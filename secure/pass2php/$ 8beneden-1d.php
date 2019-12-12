@@ -9,4 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8beneden-1.php');
+if ($d['Rliving']['s']>0) {
+	sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+}
+boseplayinfo(boseplayinfo(saytime().sayweather()));

@@ -9,4 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8beneden-5.php');
+if ($d['heating']['s']==2) {
+	$level=85;
+} else {
+	$level=100;
+}
+if ($d['Rliving']['s']<$level) {
+	sl('Rliving', $level, basename(__FILE__).':'.__LINE__);
+}

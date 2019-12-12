@@ -979,7 +979,7 @@ function fgarage()
 function fbadkamer()
 {
     global $d;
-    if (past('8badkamer-8')>10) {
+    if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
             if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) {
             	sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
