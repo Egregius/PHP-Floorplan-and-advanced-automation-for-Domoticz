@@ -853,7 +853,7 @@ function bosezone($ip,$vol='')
     elseif (TIME>strtotime('20:00')) $preset='PRESET_6';
     else  $preset='PRESET_2';
     if ($d['Weg']['s']<=1) {
-        if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+        if ($d['Weg']['s']==0&&$d['denon']['s']=='Off'&&$d['denonpower']['s']=='OFF'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosekey($preset, 0, 101);
             if ($d['denonpower']['s']=='ON'||$d['denon']['s']=='On') bosevolume(0, 101);
