@@ -632,7 +632,13 @@ function rookmelder($msg){
 			}
 		}
 	}
-    sleep(10);
+	bosezone(101);
+	bosezone(102);
+	bosezone(103);
+	bosezone(104);
+	boseplayinfo($msg, 45);
+	sleep(5);
+	boseplayinfo($msg, 45);
     resetsecurity();
 }
 function koekje($user,$expirytime)

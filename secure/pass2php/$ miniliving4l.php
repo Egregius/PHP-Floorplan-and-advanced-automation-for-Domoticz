@@ -17,7 +17,17 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'/*||$d['nvidia']['s']=='Off'*/)
             sw($item, 'On', basename(__FILE__).':'.__LINE__);
         }
     }
-    sleep(4);
+    if ($d['bose101']['s']=='On') {
+		sw('bose101', 'Off');
+		bosekey("POWER");
+		foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
+			if ($d[$i]['s']=='On') {
+				sw($i, 'Off');
+				bosekey("POWER");
+			}
+		}
+	}
+sleep(4);
     lgcommand('on');
     for ($x=1;$x<=4;$x++) {
 		lgcommand('on');

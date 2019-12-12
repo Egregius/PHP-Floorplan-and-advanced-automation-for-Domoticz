@@ -10,11 +10,10 @@
  * @link     https://egregius.be
  **/
 
-$items=array('bose102', 'bose103', 'bose104', 'bose105');
 if (($d['denon']['s']=='On'||$d['denonpower']['s']=='ON')&&$d['bose101']['s']=='On') {
 	sw('bose101', 'Off');
 	bosekey("POWER");
-	foreach ($items as $i) {
+	foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
 		if ($d[$i]['s']=='On') {
 			sw($i, 'Off');
 			bosekey("POWER");
