@@ -10,19 +10,34 @@
  * @link     https://egregius.be
  **/
 $start=microtime(true);
-//require 'functions.php';
+require 'functions.php';
 
     
     
 echo '<pre>';
 /*-------------------------------------------------*/
-function dbconnect() {
-	global $db;
-	if (isset($db)) return $db;
-	else return $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+zwaveswitch();
+function zwaveswitch(){
+	global $domoticzurl;
+	echo file_get_contents(
+		$domoticzurl.'/ozwcp/valuepost.html',
+		false,
+		stream_context_create(
+			array(
+				'http'=>array(
+					'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+					'method'=>'POST',
+					'content'=>http_build_query(
+						array(
+							'103-SWITCH BINARY-user-bool-6-0'=>false
+						)
+					),
+				),
+			)
+		)
+	);
 }
-echo 'db test<br>';
-$db=dbconnect();
+
 
 /*---------------------------*/
 echo '</pre>';
