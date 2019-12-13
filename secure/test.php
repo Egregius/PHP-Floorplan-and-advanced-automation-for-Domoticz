@@ -19,17 +19,18 @@ echo '<pre>';
 zwaveswitch();
 function zwaveswitch(){
 	global $domoticzurl;
+	file_get_contents($domoticzurl.'/json.htm?type=openzwavenodes&idx=3',false);
 	echo file_get_contents(
 		$domoticzurl.'/ozwcp/valuepost.html',
 		false,
 		stream_context_create(
 			array(
 				'http'=>array(
-					'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+					'header'=>'Content-Type: application/x-www-form-urlencoded',
 					'method'=>'POST',
 					'content'=>http_build_query(
 						array(
-							'103-SWITCH BINARY-user-bool-6-0'=>false
+							'103-SWITCH BINARY-user-bool-6-0'=>true
 						)
 					),
 				),
