@@ -110,6 +110,7 @@ if (isset($ob)) {
 
 $buienradar=0;
 $rains=json_decode(file_get_contents('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
+//lg(print_r($rains, true));
 if (isset($rains['forecasts'])) {
 	$totalrain=0;
 	$x=1;

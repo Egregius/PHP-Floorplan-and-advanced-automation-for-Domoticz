@@ -16,12 +16,35 @@ require 'functions.php';
     
 echo '<pre>';
 /*-------------------------------------------------*/
-$ch=curl_init('http://127.0.0.1:8080/ozwcp/valuepost.html');
+zwaveswitch();
+function zwaveswitch(){
+	global $domoticzurl;
+	file_get_contents($domoticzurl.'/json.htm?type=openzwavenodes&idx=3',false);
+	echo file_get_contents(
+		$domoticzurl.'/ozwcp/valuepost.html',
+		false,
+		stream_context_create(
+			array(
+				'http'=>array(
+					'header'=>'Content-Type: application/x-www-form-urlencoded',
+					'method'=>'POST',
+					'content'=>http_build_query(
+						array(
+							'103-SWITCH BINARY-user-bool-6-0=true'
+						)
+					),
+				),
+			)
+		)
+	);
+}
+
+$ch=curl_init($domoticzurl.'/ozwcp/valuepost.html');
 curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, '103-SWITCH BINARY-user-bool-1-0=false');
+curl_setopt($ch, CURLOPT_POSTFIELDS, '103-SWITCH BINARY-user-bool-6-0=true');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-curl_exec($ch);
+$result=curl_exec($ch);
     
     
 /*---------------------------*/
