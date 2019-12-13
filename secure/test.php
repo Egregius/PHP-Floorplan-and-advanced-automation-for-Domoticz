@@ -16,36 +16,21 @@ require 'functions.php';
     
 echo '<pre>';
 /*-------------------------------------------------*/
-zwaveswitch();
-function zwaveswitch(){
-	global $domoticzurl;
-	file_get_contents($domoticzurl.'/json.htm?type=openzwavenodes&idx=3',false);
-	echo file_get_contents(
-		$domoticzurl.'/ozwcp/valuepost.html',
-		false,
-		stream_context_create(
-			array(
-				'http'=>array(
-					'header'=>'Content-Type: application/x-www-form-urlencoded',
-					'method'=>'POST',
-					'content'=>http_build_query(
-						array(
-							'103-SWITCH BINARY-user-bool-6-0'=>true
-						)
-					),
-				),
-			)
-		)
-	);
-}
-
-
+$ch=curl_init('http://127.0.0.1:8080/ozwcp/valuepost.html');
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, '103-SWITCH BINARY-user-bool-6-0=false');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+curl_exec($ch);
+    
+    
 /*---------------------------*/
 echo '</pre>';
 $total=microtime(true)-$start;
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
     $_COOKIE,
+    $_ENV,
     $_GET,
     $_POST,
     $_FILES,
@@ -73,6 +58,7 @@ unset(
     $Usleep,
     $eendag,
     $Weg,
+    $googleTTSAPIKey,
     $home,
     $log,
     $offline,
@@ -84,6 +70,9 @@ unset(
     $timediff,
     $domainname,
     $domoticzurl,
+    $dbname,
+    $dbuser,
+    $dbpass,
     $_SESSION,
     $zwaveidx,
     $db,
