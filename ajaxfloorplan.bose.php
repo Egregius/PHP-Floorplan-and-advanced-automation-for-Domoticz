@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3.11-1
  *
  * This file gives the status of the bose soundtouch with the $_REQUEST['ip'].
  *
