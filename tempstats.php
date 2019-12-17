@@ -50,11 +50,35 @@ if ($home===true) {
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
     }
-    $query="SELECT MIN(stamp) as start from temp_hour";
+    $query="SELECT MIN(stamp) AS start FROM temp_hour";
 	$result=$db->query($query);
-		
-	while ($row=$result->fetch_assoc()) print_r($row);
-
+	while ($row=$result->fetch_assoc()) $startdate=$row['start'];
+	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour";
+	$result=$db->query($query);
+	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
+	foreach (array('living', 'kamer', 'tobi', 'alex') as $a) {
+		$b=$a.'_avg';
+		for ($x=30;$x>=20;$x--) {
+			$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE $b > $x";
+			$result=$db->query($query);
+			while ($row=$result->fetch_assoc()) $data[$x][$a]=$row['aantal'];
+		}
+	}
+	print_r($data);
+	echo '
+	<table>
+		<thead>
+		</thead>
+		<tbody>';
+	foreach ($data as $a=>$b) {
+		echo '
+			<tr>
+				<td>'.$a.'</td>
+			</tr>';
+	}
+	echo '
+		</tbody>
+	</table>';
     $db->close();
 } else {
     header("Location: index.php");
