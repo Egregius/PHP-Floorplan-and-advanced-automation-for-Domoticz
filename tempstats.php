@@ -44,6 +44,10 @@ if ($home===true) {
 		<title>Temperaturen</title>
 		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
+		<style>
+			table{border:1px solid white;}
+			td{text-align:right;border:1px solid #555;}
+		</style>
 		</head>
 		<body style="width:100%">';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
@@ -68,12 +72,27 @@ if ($home===true) {
 	echo '
 	<table>
 		<thead>
+			<tr>
+				<th>Temp</th>
+				<th colspan="2">Living</th>
+				<th colspan="2">Kamer</th>
+				<th colspan="2">Tobi</th>
+				<th colspan="2">Alex</th>
+			</tr>
 		</thead>
 		<tbody>';
 	foreach ($data as $a=>$b) {
 		echo '
 			<tr>
 				<td>'.$a.'</td>
+				<td>'.$b['living'].'</td>
+				<td>'.round(($b['living']/$aantal)*100, 1).'</td>
+				<td>'.$b['kamer'].'</td>
+				<td>'.round(($b['kamer']/$aantal)*100, 1).'</td>
+				<td>'.$b['tobi'].'</td>
+				<td>'.round(($b['tobi']/$aantal)*100, 1).'</td>
+				<td>'.$b['alex'].'</td>
+				<td>'.round(($b['alex']/$aantal)*100, 1).'</td>
 			</tr>';
 	}
 	echo '
