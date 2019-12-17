@@ -297,9 +297,6 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 $remove=strftime("%F %T", TIME-90000);
 $stmt=$db->query("delete from temp where stamp < '$remove'");
 lg(' Deleted '.$stmt->rowCount().' records from temp');
-$remove=strftime("%F %T", TIME-432000);
-$stmt=$db->query("delete from temp_hour where stamp < '$remove'");
-lg(' Deleted '.$stmt->rowCount().' records from temp_hour');
 $remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
 lg(' Deleted '.$stmt->rowCount().' records from regen');

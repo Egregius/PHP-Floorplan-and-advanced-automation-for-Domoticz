@@ -13,24 +13,6 @@ $user='cron120';
 
 if ($d['auto']['s']=='On') {
 	$windhist=json_decode($d['wind']['m']);
-    $db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
-    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-        $rainpast=$row['buien'];
-    }
-    if ($rainpast==0) $rainpast=1;
-    if ($d['minmaxtemp']['m'] > -3) {
-    	$pomppauze=round((864/($rainpast/30))*$d['minmaxtemp']['m']*$d['minmaxtemp']['m'], 0);
-    	if ($pomppauze<600) $pomppauze=600;
-    	lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
-    	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$pomppauze) {
-			sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
-		}
-    } 
-    if ($d['regenpomp']['s']=='On'&&past('regenpomp')>57) {
-        sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
-    }
 	$x=0;
 	foreach ($windhist as $y) {
 		$x=$y+$x;

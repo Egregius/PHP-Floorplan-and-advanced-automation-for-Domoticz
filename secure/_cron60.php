@@ -14,6 +14,9 @@ if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS ----------------------------*/
     if ($d['Weg']['s']==0){
     	if ($d['bose101']['s']=='On') {
+        	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
+				bosekey('PRESET_2', 0, 101);
+        	}
         	$dow=date("w");
         	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
         	if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
@@ -24,9 +27,6 @@ if ($d['auto']['s']=='On') {
         	elseif ($weekend==false&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
         	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
-        	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
-				bosekey('PRESET_2', 0, 101);
-        	}
         }
         if ($d['pirkeuken']['s']=='Off') {
             $uit=300;
@@ -589,6 +589,9 @@ if ($d['auto']['s']=='On') {
     }
 }
     /* -------------------------------------------- ALTIJD ----------------------------*/
+if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {
+	sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
+}
 if ($d['heater1']['s']!='Off'
     &&$d['heater2']['s']=='Off'
     &&past('heater1')>120

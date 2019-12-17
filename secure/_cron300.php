@@ -21,6 +21,21 @@ if (TIME<=strtotime('9:00')) {
 		}
 	}
 }
+$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
+while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+	$rainpast=$row['buien'];
+}
+if ($rainpast==0) $rainpast=1;
+if ($d['minmaxtemp']['m'] > -3) {
+	$pomppauze=round((86400/($rainpast/10))*$d['minmaxtemp']['m']*$d['minmaxtemp']['m'], 0);
+	if ($pomppauze<590) $pomppauze=590;
+	lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
+	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
+		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+	}
+} 
 /*if ($d['zwembadfilter']['s']=='On') {
 	if (past('zwembadfilter')>10700
 		&&TIME>strtotime("16:00")

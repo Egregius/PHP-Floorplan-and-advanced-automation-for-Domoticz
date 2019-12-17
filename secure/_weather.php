@@ -112,40 +112,28 @@ $buienradar=0;
 $rains=json_decode(file_get_contents('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
 //lg(print_r($rains, true));
 if (isset($rains['forecasts'])) {
-	$totalrain=0;
 	$x=1;
 	foreach ($rains['forecasts'] as $i) {
-		$totalrain=$totalrain+$i['precipitation'];
+		$buienradar=$buienradar+$i['precipitation'];
 		$x++;
 		if ($x==7) break;
 	}
-	$buienradar=round($totalrain/7, 0);
+	$buienradar=round($buienradar/7, 0);
     if ($buienradar>20) $maxrain=$buienradar;
 }
 
 if (isset($ds['hourly']['data'])) {
 	$maxtemp=round($maxtemp, 1);
-	
-    if ($temps['buiten_temp']>$maxtemp) {
-        $maxtemp=round($temps['buiten_temp'], 1);
-    }
+    if ($temps['buiten_temp']>$maxtemp) $maxtemp=round($temps['buiten_temp'], 1);
     $mintemp=round($mintemp, 1);
-    if ($temps['buiten_temp']<$mintemp) {
-        $mintemp=round($temps['buiten_temp'], 1);
-    }
-    if ($d['minmaxtemp']['m']!=$maxtemp) {
-    	storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
-    }
-    if ($d['minmaxtemp']['s']!=$mintemp) {
-	    store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
-	}
+    if ($temps['buiten_temp']<$mintemp) $mintemp=round($temps['buiten_temp'], 1);
+    if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
+    if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
 }
 $newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
 echo 'new = '.$newbuitentemp;
-if ($d['buiten_temp']['s']!=$newbuitentemp) {
-	store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
-}
+if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
 
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
@@ -153,67 +141,37 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
 if ($prevbuitentemp>$avg+0.5) {
-	if ($d['buiten_temp']['icon']!='red5') {
-		storeicon('buiten_temp', 'red5', basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.4) {
-    if ($d['buiten_temp']['icon']!='red4') {
-		storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.3) {
-    if ($d['buiten_temp']['icon']!='red3') {
-		storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.2) {
-    if ($d['buiten_temp']['icon']!='red') {
-		storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.1) {
-    if ($d['buiten_temp']['icon']!='up') {
-		storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.5) {
-    if ($d['buiten_temp']['icon']!='blue5') {
-		storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.4) {
-    if ($d['buiten_temp']['icon']!='blue4') {
-		storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.3) {
-    if ($d['buiten_temp']['icon']!='blue3') {
-		storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.2) {
-    if ($d['buiten_temp']['icon']!='blue') {
-		storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.1) {
-    if ($d['buiten_temp']['icon']!='down') {
-		storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
 } else {
-    if ($d['buiten_temp']['icon']!='') {
-		storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
-	}
+    if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
 }
 
-if (isset($prevwind)&&isset($owwind)&&isset($dswind)) {
-    $wind=round(($prevwind+$owwind+$dswind)/3,1);
-} elseif (isset($prevwind)&&isset($owwind)) {
-    $wind=round(($prevwind+$owwind)/2,1);
-} elseif (isset($prevwind)&&isset($dswind)) {
-    $wind=round(($prevwind+$dswind)/2,1);
-} elseif (isset($owwind)&&isset($dswind)) {
-    $wind=round(($owwind+$dswind)/2,1);
-} elseif (isset($owwind)) {
-    $wind=round($owwind,1);
-} elseif (isset($dswind)) {
-    $wind=round($dswind,1);
-}
-if ($wind!=$prevwind) {
-    store('wind', $wind, basename(__FILE__).':'.__LINE__);
-}
+if (isset($prevwind)&&isset($owwind)&&isset($dswind)) $wind=round(($prevwind+$owwind+$dswind)/3,1);
+elseif (isset($prevwind)&&isset($owwind)) $wind=round(($prevwind+$owwind)/2,1);
+elseif (isset($prevwind)&&isset($dswind)) $wind=round(($prevwind+$dswind)/2,1);
+elseif (isset($owwind)&&isset($dswind)) $wind=round(($owwind+$dswind)/2,1);
+elseif (isset($owwind)) $wind=round($owwind,1);
+elseif (isset($dswind)) $wind=round($dswind,1);
+
+if ($wind!=$prevwind) store('wind', $wind, basename(__FILE__).':'.__LINE__);
 $windhist=json_decode($d['wind']['m']);
 $windhist[]=round($wind, 2);
 $windhist=array_slice($windhist, -4);
