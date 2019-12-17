@@ -46,7 +46,7 @@ if ($home===true) {
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		<style>
 			table{border:1px solid white;}
-			td{text-align:right;border:1px solid #555;}
+			td{text-align:right;border:1px solid #555;min-width:80px;}
 		</style>
 		</head>
 		<body style="width:100%">';
@@ -60,20 +60,21 @@ if ($home===true) {
 	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
-	foreach (array('living', 'kamer', 'tobi', 'alex') as $a) {
+	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
+	foreach ($items as $a) {
 		$b=$a.'_avg';
-		for ($x=30;$x>=20;$x--) {
+		for ($x=30;$x>=0;$x--) {
 			$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE $b > $x";
 			$result=$db->query($query);
 			while ($row=$result->fetch_assoc()) $data[$x][$a]=$row['aantal'];
 		}
 	}
-	print_r($data);
 	echo '
 	<table>
 		<thead>
 			<tr>
 				<th>Temp</th>
+				<th colspan="2">Buiten</th>
 				<th colspan="2">Living</th>
 				<th colspan="2">Kamer</th>
 				<th colspan="2">Tobi</th>
@@ -84,15 +85,13 @@ if ($home===true) {
 	foreach ($data as $a=>$b) {
 		echo '
 			<tr>
-				<td>'.$a.'</td>
-				<td>'.$b['living'].'</td>
-				<td>'.round(($b['living']/$aantal)*100, 1).'</td>
-				<td>'.$b['kamer'].'</td>
-				<td>'.round(($b['kamer']/$aantal)*100, 1).'</td>
-				<td>'.$b['tobi'].'</td>
-				<td>'.round(($b['tobi']/$aantal)*100, 1).'</td>
-				<td>'.$b['alex'].'</td>
-				<td>'.round(($b['alex']/$aantal)*100, 1).'</td>
+				<td>'.$a.'</td>';
+		foreach ($items as $i) {
+			echo '
+				<td>'.$b[$i].'</td>
+				<td>'.round(($b[$i]/$aantal)*100, 1).' %</td>';
+		}
+		echo '
 			</tr>';
 	}
 	echo '
