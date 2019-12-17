@@ -54,17 +54,17 @@ if ($home===true) {
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
     }
-    $query="SELECT MIN(stamp) AS start FROM temp_hour";
+    $query="SELECT MIN(stamp) AS start FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $startdate=$row['start'];
-	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour";
+	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
 	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
 	foreach ($items as $a) {
 		$b=$a.'_avg';
 		for ($x=30;$x>=0;$x--) {
-			$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE $b > $x";
+			$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE $b > $x AND stamp like '2019%'";
 			$result=$db->query($query);
 			while ($row=$result->fetch_assoc()) $data[$x][$a]=$row['aantal'];
 		}
