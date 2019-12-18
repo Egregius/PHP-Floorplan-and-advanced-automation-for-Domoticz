@@ -9,18 +9,20 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['keuken']['s']=='On') {
-    if ($d['lgtv']['s']=='On') {
-        shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
-    }
-    andereuit();
-} else {
-    if ($d['lgtv']['s']=='On') {
-        shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
-    }
-    if ($d['keuken']['s']=='Off') {
-        sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
-    }
+if (past('$ miniliving2s')>2) {
+	if ($d['keuken']['s']=='On') {
+		if ($d['lgtv']['s']=='On') {
+			shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
+		}
+		andereuit();
+	} else {
+		if ($d['lgtv']['s']=='On') {
+			shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
+		}
+		if ($d['keuken']['s']=='Off') {
+			sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
 /**
  * Function andereuit
