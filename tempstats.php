@@ -26,7 +26,7 @@ if ($home===true) {
 		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		<style>
-			table{border:1px solid white;border-spacing:0px;}
+			table{border:2px solid #CCC;border-spacing:0px;}
 			th{border:1px solid #999;}
 			td{text-align:right;border:1px solid #555;min-width:80px;padding-right:5px;}
 			.btn{padding:8px 3px 8px 3px;}
@@ -75,7 +75,7 @@ if ($home===true) {
     if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
    $query="SELECT stamp";
 	foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
-	$query.=" FROM temp_hour WHERE stamp like '2019%'";
+	$query.=" FROM temp_hour WHERE stamp like '2019-05%' OR stamp like '2019-06%' OR stamp like '2019-07%' OR stamp like '2019-08%' OR stamp like '2019-09%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $datas[]=$row;
 
@@ -131,21 +131,20 @@ if ($home===true) {
 	foreach ($kamers as $i) {
 		if (count($dag[$i.'-5'])>$aantaldagen) $aantaldagen = count($dag[$i.'-5']);
 	}
-	print_r($aantaldagen);
 	for ($x=40;$x>=-5;$x--) {
 		if ($x%2==0) echo '
 			<tr class="even">';
 		else  echo '
 			<tr>';
 		echo '
-				<td>'.$x.' °C </td>';
+				<td class="borderright1">'.$x.' °C </td>';
 		foreach ($kamers as $i) {
 			isset($dag[$i.$x])?$aantal=count($dag[$i.$x]):$aantal=0;
 			echo '
 				<td class="borderleft1">'.$aantal.'</td>
-				<td>'.number_format(($aantal/$aantaldagen)*100, 2, ',', '').' %</td>
+				<td class="borderright2">'.number_format(($aantal/$aantaldagen)*100, 2, ',', '').' %</td>
 				<td class="borderleft2">'.${$i.$x}.'</td>
-				<td>'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
+				<td class="borderright2">'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
 		}
 		echo '
 			</tr>';

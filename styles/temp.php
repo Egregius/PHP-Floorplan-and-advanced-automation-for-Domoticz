@@ -15,8 +15,10 @@ input:checked + label{background-color:#ffba00;color:#000;}
 .kamer{display: inline-block;width:148px;max-width:19.9%}
 .uur{display: inline-block;width:22.6px;max-width:4,166666667%}
 .even{background:#333;}
-.borderleft1{border-left:1px solid #999;}
-.borderleft2{border-left:1px solid #777;}
+.borderleft1{border-left:1px solid #AAA;}
+.borderleft2{border-left:1px solid #999;}
+.borderright1{border-left:1px solid #AAA;}
+.borderright2{border-left:1px solid #999;}
 ";
 if ($udevice=='other') {
     $css.="
