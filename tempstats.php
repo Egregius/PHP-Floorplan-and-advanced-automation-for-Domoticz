@@ -81,14 +81,14 @@ if ($home===true) {
 
 	//print_r($datas);
 	foreach ($kamers as $i) {
-		for ($x=40;$x>=-5;$x--) ${$i.$x}=0;
+		for ($x=40;$x>=-20;$x--) ${$i.$x}=0;
 	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		$day=substr($a['stamp'], 0, 10);
 		if (in_array($hour, $hours)) {
 			foreach ($kamers as $i) {
-				for ($x=40;$x>=-5;$x--) {
+				for ($x=40;$x>=-20;$x--) {
 					if ($a[$i]>=$x) {
 						${$i.$x}++;
 						@$dag[$i.$x][$day]=true;
@@ -125,13 +125,13 @@ if ($home===true) {
 		<tbody>';
 	$aantaluren=0;
 	foreach ($kamers as $i) {
-		if (${$i.'-5'}>$aantaluren) $aantaluren = ${$i.'-5'};
+		if (${$i.'-20'}>$aantaluren) $aantaluren = ${$i.'-20'};
 	}
 	$aantaldagen=0;
 	foreach ($kamers as $i) {
-		if (count($dag[$i.'-5'])>$aantaldagen) $aantaldagen = count($dag[$i.'-5']);
+		if (count($dag[$i.'-20'])>$aantaldagen) $aantaldagen = count($dag[$i.'-20']);
 	}
-	for ($x=40;$x>=-5;$x--) {
+	for ($x=40;$x>=15;$x--) {
 		if ($x%2==0) echo '
 			<tr class="even">';
 		else  echo '
