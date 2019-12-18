@@ -34,9 +34,9 @@ if ($home===true) {
 		</head>
 		<body style="width:100%">
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&living=on&10=on&11=on&12=on&13=on&14=on&15=on&16=on&17=on&18=on&19=on&20=on&21=on" class="btn b7">Living</a>
-			<a href="https://home.egregius.be/tempstats.php?buiten=on&kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
-			<a href="https://home.egregius.be/tempstats.php?buiten=on&tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
-			<a href="https://home.egregius.be/tempstats.php?buiten=on&alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
+			<a href="https://home.egregius.be/tempstats.php?kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
+			<a href="https://home.egregius.be/tempstats.php?tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
+			<a href="https://home.egregius.be/tempstats.php?alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
 			<br>
 			<form method="GET">';
 	foreach ($items as $i) {
@@ -101,6 +101,7 @@ if ($home===true) {
 	}
 	//unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
 	echo '
+	Statestieken mei -> september 2019
 	<table>
 		<thead>
 			<tr>
@@ -131,7 +132,8 @@ if ($home===true) {
 	foreach ($kamers as $i) {
 		if (count($dag[$i.'-20'])>$aantaldagen) $aantaldagen = count($dag[$i.'-20']);
 	}
-	for ($x=40;$x>=15;$x--) {
+	if (isset($_REQUEST['buiten'])) $start=40; else $start=28;
+	for ($x=$start;$x>=15;$x--) {
 		if ($x%2==0) echo '
 			<tr class="even">';
 		else  echo '
