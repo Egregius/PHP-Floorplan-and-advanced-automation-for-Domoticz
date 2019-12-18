@@ -96,17 +96,19 @@ if ($home===true) {
 	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
+		$day=substr($a['stamp'], 0, 10);
 		if (in_array($hour, $hours)) {
 			foreach ($kamers as $i) {
 				for ($x=30;$x>=0;$x--) {
 					if ($a[$i]>=$x) ${$i.$x}++;
+					@${$i.$x.$day}++;
 				}
 			}
 			//echo $a['stamp'].' = '.$hour.'<br>';
 			//print_r($a);
 		}
 	}
-//	unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
+	unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
 	echo '
 	<table>
 		<thead>
