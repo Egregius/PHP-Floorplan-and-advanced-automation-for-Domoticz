@@ -62,7 +62,7 @@ if ($home===true) {
 			$hours[$x]=$x;
 		}
 	}
-	print_r($hours);
+	//print_r($hours);
 	echo '
 			</form>';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
@@ -85,21 +85,21 @@ if ($home===true) {
 
 	//print_r($datas);
 	foreach ($items as $i) {
-		for ($x=30;$x>=20;$x--) ${$i.$x}=0;
+		for ($x=30;$x>=0;$x--) ${$i.$x}=0;
 	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		if (in_array($hour, $hours)) {
 			foreach ($items as $i) {
-				for ($x=30;$x>=20;$x--) ${$i.$x}++;
+				for ($x=30;$x>=0;$x--) {
+					if ($a[$i]>=$x) ${$i.$x}++;
+				}
 			}
-			echo $a['stamp'].' = '.$hour.'<br>';
+			//echo $a['stamp'].' = '.$hour.'<br>';
 			//print_r($a);
 		}
 	}
-	unset ($datas);
-	echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
-	exit;
+//	unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
 	echo '
 	<table>
 		<thead>
@@ -113,14 +113,18 @@ if ($home===true) {
 			</tr>
 		</thead>
 		<tbody>';
-	foreach ($data as $a=>$b) {
+	$aantal=0;
+	foreach ($items as $i) {
+		if (${$i.'0'}>$aantal) $aantal = ${$i.'0'};
+	}
+	for ($x=30;$x>=0;$x--) {
 		echo '
 			<tr>
-				<td>'.$a.'</td>';
+				<td>'.$x.'</td>';
 		foreach ($items as $i) {
 			echo '
-				<td>'.$b[$i].'</td>
-				<td>'.round(($b[$i]/$aantal)*100, 1).' %</td>';
+				<td>'.${$i.$x}.'</td>
+				<td>'.round(${$i.$x}/$aantal, 2).' %</td>';
 		}
 		echo '
 			</tr>';
