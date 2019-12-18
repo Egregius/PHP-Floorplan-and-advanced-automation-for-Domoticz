@@ -13,26 +13,6 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
-    if (isset($_REQUEST['f_startdate'])) {
-        $_SESSION['f_startdate']=$_REQUEST['f_startdate'];
-    }
-    if (isset($_REQUEST['f_enddate'])) {
-        $_SESSION['f_enddate']=$_REQUEST['f_enddate'];
-    }
-    /*if(!isset($_SESSION['f_startdate']))*/$_SESSION['f_startdate']=date("Y-m", TIME);
-    /*if(!isset($_SESSION['f_enddate']))*/$_SESSION['f_enddate']=date("Y-m", TIME);
-    if (isset($_REQUEST['clear'])) {
-        $_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-        $_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-    }
-    if ($_SESSION['f_startdate']>$_SESSION['f_enddate']) {
-        $_SESSION['f_enddate']=$_SESSION['f_startdate'];
-    }
-    $f_startdate=$_SESSION['f_startdate'];
-    $f_enddate=$_SESSION['f_enddate'];
-    $r_startdate=date("Y-m-d", TIME);
-    $r_enddate=date("Y-m-d", TIME);
-    $week=date("Y-m-d", TIME-86400*6);
     $items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
     echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
@@ -91,18 +71,8 @@ if ($home===true) {
 			<br>
 			<br>';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-    if ($db->connect_errno>0) {
-        die('Unable to connect to database [' . $db->connect_error . ']');
-    }
-    /*$query="SELECT MIN(stamp) AS start FROM temp_hour WHERE stamp like '2019%'";
-	$result=$db->query($query);
-	while ($row=$result->fetch_assoc()) $startdate=$row['start'];
-	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE stamp like '2019%'";
-	$result=$db->query($query);
-	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];*/
-	
-	
-	$query="SELECT stamp";
+    if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
+   $query="SELECT stamp";
 	foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
 	$query.=" FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
@@ -158,16 +128,17 @@ if ($home===true) {
 	}
 	$aantaldagen=0;
 	foreach ($kamers as $i) {
-		if (count($dag[$i.'0'])>$aantaldagen) $aantaldagen = $dag[$i.'0'];
+		if (count($dag[$i.'-5'])>$aantaldagen) $aantaldagen = $dag[$i.'-5'];
 	}
 	for ($x=40;$x>=-5;$x--) {
 		echo '
 			<tr>
 				<td>'.$x.'</td>';
 		foreach ($kamers as $i) {
+			isset($dag[$i.$x])?$aantal=count($dag[$i.$x]):$aantal=0;
 			echo '
-				<td>'.(isset($dag[$i.$x])?count($dag[$i.$x]):0).'</td>
-				<td>'./*number_format((${$i.$x}/$aantaldagen)*100, 2, ',', '').*/' %</td>
+				<td>'.$aantal.'</td>
+				<td>'.number_format(($aantal/$aantaldagen)*100, 2, ',', '').' %</td>
 				<td>'.${$i.$x}.'</td>
 				<td>'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
 		}
