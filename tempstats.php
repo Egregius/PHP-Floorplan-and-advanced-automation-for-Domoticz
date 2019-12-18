@@ -84,14 +84,22 @@ if ($home===true) {
 	while ($row=$result->fetch_assoc()) $datas[]=$row;
 
 	//print_r($datas);
-	foreach ($items as $i) ${$i}=0;
+	foreach ($items as $i) {
+		for ($x=30;$x>=20;$x--) ${$i.$x}=0;
+	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		if (in_array($hour, $hours)) {
+			foreach ($items as $i) {
+				for ($x=30;$x>=20;$x--) ${$i.$x}++;
+			}
 			echo $a['stamp'].' = '.$hour.'<br>';
-			print_r($a);
+			//print_r($a);
 		}
 	}
+	unset ($datas);
+	echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
+	exit;
 	echo '
 	<table>
 		<thead>
@@ -121,6 +129,7 @@ if ($home===true) {
 		</tbody>
 	</table>';
     $db->close();
+    
 } else {
     header("Location: index.php");
     die("Redirecting to: index.php");
