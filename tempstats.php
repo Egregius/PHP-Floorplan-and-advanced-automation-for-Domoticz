@@ -56,7 +56,7 @@ if ($home===true) {
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
-			<br><br>
+			<br>
 			<form method="GET">';
 	foreach ($items as $i) {
 		if(isset($_REQUEST[$i])) echo '
@@ -69,7 +69,7 @@ if ($home===true) {
 		if (isset($_REQUEST[$i])) $kamers[]=$i;
 	}
 	if (!isset($kamers)) $kamers=array('buiten');
-	echo '<br><br><br><br>';
+	echo '<br><br>';
 	for ($i=0;$i<=23;$i++) {
 		if(isset($_REQUEST[$i])) echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>

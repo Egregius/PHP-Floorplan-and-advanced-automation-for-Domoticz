@@ -10,7 +10,7 @@ h2{font-size:36px;}
 .box{left:0px;width:80px;background:#222;padding-top:10px; border:thin #666}
 input[type=checkbox]{position:absolute;left:-9999px;}
 label{margin:0px;padding:14px 3px 14px 3px;border:0px solid #fff;color:#fff;background-color:#555;cursor:pointer;user-select:none;text-align:center}
-input:checked + label{background-color:#4688F1;color:#000;}
+input:checked + label{background-color:#ffba00;color:#000;}
 
 .kamer{display: inline-block;width:145px;max-width:19.9%}
 .uur{display: inline-block;width:22px;max-width:4,166666667%}
