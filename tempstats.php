@@ -69,23 +69,27 @@ if ($home===true) {
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
     }
-    $query="SELECT MIN(stamp) AS start FROM temp_hour WHERE stamp like '2019%'";
+    /*$query="SELECT MIN(stamp) AS start FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $startdate=$row['start'];
 	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
-	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
+	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];*/
 	
-	foreach ($items as $i) ${$i}=0;
-	$query="SELECT stamp, buiten_avg, living_avg, kamer_avg, tobi_avg, alex_avg FROM temp_hour WHERE stamp like '2019%'";
+	
+	$query="SELECT stamp";
+	foreach ($items as $i) $query.=", ".$i."_avg as $i";
+	$query.=" FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $datas[]=$row;
 
 	//print_r($datas);
+	foreach ($items as $i) ${$i}=0;
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		if (in_array($hour, $hours)) {
 			echo $a['stamp'].' = '.$hour.'<br>';
+			print_r($a);
 		}
 	}
 	echo '
