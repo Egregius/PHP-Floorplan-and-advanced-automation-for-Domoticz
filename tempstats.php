@@ -61,17 +61,14 @@ if ($home===true) {
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
 	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
-	foreach ($items as $a) {
-		$b=$a.'_avg';
-		for ($x=30;$x>=0;$x--) {
-			$query="SELECT stamp FROM temp_hour WHERE $b > $x AND stamp like '2019%'";
-			$result=$db->query($query);
-			while ($row=$result->fetch_assoc()) $datas[$row['stamp']][$a][$x]=$row['stamp'];
-		}
-	}
-	print_r($datas);
-	foreach ($datas as $a=>$b) {
-		echo $a.'<br>';
+	foreach ($items as $i) ${$i}=0;
+	$query="SELECT stamp, buiten_avg, living_avg, kamer_avg, tobi_avg, alex_avg FROM temp_hour WHERE stamp like '2019%'";
+	$result=$db->query($query);
+	while ($row=$result->fetch_assoc()) $datas[]=$row;
+
+	//print_r($datas);
+	foreach ($datas as $a) {
+		echo $a['stamp'].'<br>';
 	}
 	echo '
 	<table>
