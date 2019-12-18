@@ -55,9 +55,14 @@ if ($home===true) {
 	for ($x=0;$x<=23;$x++) {
 		echo '
 				<input type="checkbox" name="'.$x.'" '.(isset($_REQUEST[$x])?'checked':'').' onChange="submit()">'.$x.'</input>';
-		if (isset($_REQUEST[$x])) $hours[]=$_REQUEST[$x];
+		if (isset($_REQUEST[$x])) $hours[$x]=$x;
 	}
-	
+	if (!isset($hours)) {
+		for ($x=0;$x<=23;$x++) {
+			$hours[$x]=$x;
+		}
+	}
+	print_r($hours);
 	echo '
 			</form>';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
@@ -78,8 +83,10 @@ if ($home===true) {
 
 	//print_r($datas);
 	foreach ($datas as $a) {
-		echo $a['stamp'].'<br>';
-		
+		$hour=substr($a['stamp'], 11, 2) * 1;
+		if (in_array($hour, $hours)) {
+			echo $a['stamp'].' = '.$hour.'<br>';
+		}
 	}
 	echo '
 	<table>
