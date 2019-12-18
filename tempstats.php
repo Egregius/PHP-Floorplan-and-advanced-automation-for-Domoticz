@@ -100,15 +100,17 @@ if ($home===true) {
 		if (in_array($hour, $hours)) {
 			foreach ($kamers as $i) {
 				for ($x=30;$x>=0;$x--) {
-					if ($a[$i]>=$x) ${$i.$x}++;
-					@${$i.$x.$day}++;
+					if ($a[$i]>=$x) {
+						${$i.$x}++;
+						@$dag[$i.$x][$day]=true;
+					}
 				}
 			}
 			//echo $a['stamp'].' = '.$hour.'<br>';
 			//print_r($a);
 		}
 	}
-	unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
+	//unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
 	echo '
 	<table>
 		<thead>
@@ -142,7 +144,7 @@ if ($home===true) {
 				<td>'.$x.'</td>';
 		foreach ($kamers as $i) {
 			echo '
-				<td>'.${$i.$x}.'</td>
+				<td>'.count($dag[$i.$x]).'</td>
 				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>
 				<td>'.${$i.$x}.'</td>
 				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>';
