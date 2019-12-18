@@ -51,6 +51,11 @@ if ($home===true) {
 		</style>
 		</head>
 		<body style="width:100%">
+			<a href="https://home.egregius.be/tempstats.php?buiten=on&living=on&12=on&13=on&14=on&15=on&16=on&17=on&18=on&19=on&20=on&21=on" class="btn b7">Living</a>
+			<a href="https://home.egregius.be/tempstats.php?buiten=on&kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
+			<a href="https://home.egregius.be/tempstats.php?buiten=on&tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
+			<a href="https://home.egregius.be/tempstats.php?buiten=on&alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
+			<br>
 			<form method="GET">';
 	foreach ($items as $i) {
 		echo '
@@ -148,7 +153,7 @@ if ($home===true) {
 				<td>'.$x.'</td>';
 		foreach ($kamers as $i) {
 			echo '
-				<td>'.count($dag[$i.$x]).'</td>
+				<td>'.(isset($dag[$i.$x])?count($dag[$i.$x]):0).'</td>
 				<td>'./*number_format((${$i.$x}/$aantaldagen)*100, 2, ',', '').*/' %</td>
 				<td>'.${$i.$x}.'</td>
 				<td>'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
