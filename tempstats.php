@@ -104,12 +104,22 @@ if ($home===true) {
 	<table>
 		<thead>
 			<tr>
-				<th>Temp</th>
-				<th colspan="2">Buiten</th>
-				<th colspan="2">Living</th>
-				<th colspan="2">Kamer</th>
-				<th colspan="2">Tobi</th>
-				<th colspan="2">Alex</th>
+				<th></th>';
+	foreach ($items as $i) echo '
+				<th colspan="4">'.ucfirst($i).'</th>';
+	echo '
+			</tr>
+			<tr>
+				<th></th>';
+	foreach ($items as $i) echo '
+				<th colspan="2">Dagen</th><th colspan="2">Uren</th>';
+	echo '
+			</tr>
+			<tr>
+				<th>Temp</th>';
+	foreach ($items as $i) echo '
+				<th>Aantal</th><th>Percent</th>';
+	echo '
 			</tr>
 		</thead>
 		<tbody>';
