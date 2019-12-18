@@ -23,13 +23,24 @@ if ($home===true) {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>Temperatuur Statestieken</title>
-		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+		<link href="/styles/temp.php?v=2" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		<style>
 			table{border:2px solid #CCC;border-spacing:0px;}
 			th{border:1px solid #999;}
 			td{text-align:right;border:1px solid #555;min-width:80px;padding-right:5px;}
 			.btn{padding:8px 3px 8px 3px;}
+			input[type=checkbox]{position:absolute;left:-9999px;}
+			label{margin:0px;padding:14px 3px 14px 3px;border:0px solid #fff;color:#fff;background-color:#555;cursor:pointer;user-select:none;text-align:center}
+			input:checked + label{background-color:#ffba00;color:#000;}
+
+			.kamer{display: inline-block;width:148px;max-width:19.9%}
+			.uur{display: inline-block;width:22.6px;max-width:4,166666667%}
+			.even{background:#333;}
+			.borderleft1{border-left:1px solid #AAA;}
+			.borderleft2{border-left:1px solid #999;}
+			.borderright1{border-left:1px solid #AAA;}
+			.borderright2{border-left:1px solid #999;}
 		</style>
 		</head>
 		<body style="width:100%">
