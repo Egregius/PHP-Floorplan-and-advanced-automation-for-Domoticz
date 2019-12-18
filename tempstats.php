@@ -92,14 +92,14 @@ if ($home===true) {
 
 	//print_r($datas);
 	foreach ($kamers as $i) {
-		for ($x=30;$x>=0;$x--) ${$i.$x}=0;
+		for ($x=40;$x>=-20;$x--) ${$i.$x}=0;
 	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		$day=substr($a['stamp'], 0, 10);
 		if (in_array($hour, $hours)) {
 			foreach ($kamers as $i) {
-				for ($x=30;$x>=0;$x--) {
+				for ($x=40;$x>=-20;$x--) {
 					if ($a[$i]>=$x) {
 						${$i.$x}++;
 						@$dag[$i.$x][$day]=true;
@@ -134,20 +134,24 @@ if ($home===true) {
 			</tr>
 		</thead>
 		<tbody>';
-	$aantal=0;
+	$aantaluren=0;
 	foreach ($kamers as $i) {
-		if (${$i.'0'}>$aantal) $aantal = ${$i.'0'};
+		if (${$i.'-20'}>$aantaluren) $aantaluren = ${$i.'-20'};
 	}
-	for ($x=30;$x>=0;$x--) {
+	$aantaldagen=0;
+	foreach ($kamers as $i) {
+		if (count($dag[$i.'0'])>$aantaldagen) $aantaldagen = $dag[$i.'0'];
+	}
+	for ($x=40;$x>=-20;$x--) {
 		echo '
 			<tr>
 				<td>'.$x.'</td>';
 		foreach ($kamers as $i) {
 			echo '
 				<td>'.count($dag[$i.$x]).'</td>
-				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>
+				<td>'./*number_format((${$i.$x}/$aantaldagen)*100, 2, ',', '').*/' %</td>
 				<td>'.${$i.$x}.'</td>
-				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>';
+				<td>'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
 		}
 		echo '
 			</tr>';
