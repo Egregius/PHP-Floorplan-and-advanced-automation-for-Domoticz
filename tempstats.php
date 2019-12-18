@@ -42,11 +42,12 @@ if ($home===true) {
 		<meta name="viewport" content="width=device-width,height=device-height, user-scalable=yes, minimal-ui"/>
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<title>Temperaturen</title>
+		<title>Temperatuur Statestieken</title>
 		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		<style>
-			table{border:1px solid white;}
+			table{border:1px solid white;border-spacing:0px;}
+			th{border:1px solid #999;}
 			td{text-align:right;border:1px solid #555;min-width:80px;}
 		</style>
 		</head>
@@ -58,8 +59,13 @@ if ($home===true) {
 			<br>
 			<form method="GET">';
 	foreach ($items as $i) {
-		echo '
-				<input type="checkbox" name="'.$i.'" '.(isset($_REQUEST[$i])?'checked':'').' onChange="submit()">'.ucfirst($i).'</input>';
+		if(isset($_REQUEST[$i])) echo '
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
+				<label for="'.$i.'">'.$i.'</label>';
+		else echo '
+				<input type="checkbox" name="'.$u.'" id="'.$u.'" onChange="this.form.submit()" class="'.$u.'">
+				<label for="'.$u.'">'.$u.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
+			
 		if (isset($_REQUEST[$i])) $kamers[]=$i;
 	}
 	if (!isset($kamers)) $kamers=array('buiten');
