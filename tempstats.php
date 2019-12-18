@@ -33,6 +33,7 @@ if ($home===true) {
     $r_startdate=date("Y-m-d", TIME);
     $r_enddate=date("Y-m-d", TIME);
     $week=date("Y-m-d", TIME-86400*6);
+    $items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
     echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
@@ -49,7 +50,16 @@ if ($home===true) {
 			td{text-align:right;border:1px solid #555;min-width:80px;}
 		</style>
 		</head>
-		<body style="width:100%">';
+		<body style="width:100%">
+			<form method="GET">';
+	for ($x=0;$x<=23;$x++) {
+		echo '
+				<input type="checkbox" name="'.$x.'" '.(isset($_REQUEST[$x])?'checked':'').' onChange="submit()">'.$x.'</input>';
+		if (isset($_REQUEST[$x])) $hours[]=$_REQUEST[$x];
+	}
+	
+	echo '
+			</form>';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
@@ -60,7 +70,7 @@ if ($home===true) {
 	$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $aantal=$row['aantal'];
-	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
+	
 	foreach ($items as $i) ${$i}=0;
 	$query="SELECT stamp, buiten_avg, living_avg, kamer_avg, tobi_avg, alex_avg FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
@@ -69,6 +79,7 @@ if ($home===true) {
 	//print_r($datas);
 	foreach ($datas as $a) {
 		echo $a['stamp'].'<br>';
+		
 	}
 	echo '
 	<table>
