@@ -64,10 +64,14 @@ if ($home===true) {
 	foreach ($items as $a) {
 		$b=$a.'_avg';
 		for ($x=30;$x>=0;$x--) {
-			$query="SELECT COUNT(stamp) AS aantal FROM temp_hour WHERE $b > $x AND stamp like '2019%'";
+			$query="SELECT stamp FROM temp_hour WHERE $b > $x AND stamp like '2019%'";
 			$result=$db->query($query);
-			while ($row=$result->fetch_assoc()) $data[$x][$a]=$row['aantal'];
+			while ($row=$result->fetch_assoc()) $datas[$row['stamp']][$a][$x]=$row['stamp'];
 		}
+	}
+	print_r($datas);
+	foreach ($datas as $a=>$b) {
+		echo $a.'<br>';
 	}
 	echo '
 	<table>
