@@ -60,11 +60,11 @@ if ($home===true) {
 			<form method="GET">';
 	foreach ($items as $i) {
 		if(isset($_REQUEST[$i])) echo '
-				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="kamer" checked>
-				<label for="'.$i.'">'.$i.'</label>';
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
+				<label for="'.$i.'" class="kamer b5" >'.$i.'</label>';
 		else echo '
-				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="kamer">
-				<label for="'.$i.'">'.$i.'</label>';
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
+				<label for="'.$i.'" class="kamer b5" >'.$i.'</label>';
 			
 		if (isset($_REQUEST[$i])) $kamers[]=$i;
 	}
@@ -72,11 +72,11 @@ if ($home===true) {
 	echo '<br><br><br><br>';
 	for ($i=0;$i<=23;$i++) {
 		if(isset($_REQUEST[$i])) echo '
-				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="uur" checked>
-				<label for="'.$i.'">'.$i.'</label>';
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
+				<label for="'.$i.'" class="uur">'.$i.'</label>';
 		else echo '
-				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="uur">
-				<label for="'.$i.'">'.$i.'</label>';
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
+				<label for="'.$i.'" class="uur">'.$i.'</label>';
 		
 		if (isset($_REQUEST[$i])) $hours[$i]=$i;
 	}

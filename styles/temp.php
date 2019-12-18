@@ -9,10 +9,11 @@ h2{font-size:36px;}
 .i48{width:55px;height:auto;}
 .box{left:0px;width:80px;background:#222;padding-top:10px; border:thin #666}
 input[type=checkbox]{position:absolute;left:-9999px;}
-label{margin:1px;padding:14px 3px 14px 3px;border:0px solid #fff;color:#fff;background-color:#555;cursor:pointer;user-select:none;}
+label{margin:1px;padding:14px 3px 14px 3px;border:0px solid #fff;color:#fff;background-color:#555;cursor:pointer;user-select:none;text-align:center}
 input:checked + label{background-color:#4688F1;color:#000;}
 
-.kamer{min-width:400px;}
+.kamer{display: inline-block;width:200px;}
+.uur{display: inline-block;width:80px;}
 
 
 ";
