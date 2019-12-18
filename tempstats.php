@@ -132,8 +132,8 @@ if ($home===true) {
 	foreach ($kamers as $i) {
 		if (count($dag[$i.'-20'])>$aantaldagen) $aantaldagen = count($dag[$i.'-20']);
 	}
-	if (isset($_REQUEST['buiten'])) $start=40; else $start=28;
-	for ($x=$start;$x>=15;$x--) {
+	if (isset($_REQUEST['buiten'])) $start=40; else $start=26;
+	for ($x=$start;$x>=18;$x--) {
 		if ($x%2==0) echo '
 			<tr class="even">';
 		else  echo '
