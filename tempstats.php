@@ -124,7 +124,7 @@ if ($home===true) {
 		foreach ($items as $i) {
 			echo '
 				<td>'.${$i.$x}.'</td>
-				<td>'.round(${$i.$x}/$aantal, 2).' %</td>';
+				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>';
 		}
 		echo '
 			</tr>';
