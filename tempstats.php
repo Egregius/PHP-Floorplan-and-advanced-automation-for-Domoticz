@@ -52,6 +52,13 @@ if ($home===true) {
 		</head>
 		<body style="width:100%">
 			<form method="GET">';
+	foreach ($items as $i) {
+		echo '
+				<input type="checkbox" name="'.$i.'" '.(isset($_REQUEST[$i])?'checked':'').' onChange="submit()">'.ucfirst($i).'</input>';
+		if (isset($_REQUEST[$i])) $kamers[]=$i;
+	}
+	if (!isset($kamers)) $kamers=array('buiten');
+	echo '<br>';
 	for ($x=0;$x<=23;$x++) {
 		echo '
 				<input type="checkbox" name="'.$x.'" '.(isset($_REQUEST[$x])?'checked':'').' onChange="submit()">'.$x.'</input>';
@@ -78,19 +85,19 @@ if ($home===true) {
 	
 	
 	$query="SELECT stamp";
-	foreach ($items as $i) $query.=", ".$i."_avg as $i";
+	foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
 	$query.=" FROM temp_hour WHERE stamp like '2019%'";
 	$result=$db->query($query);
 	while ($row=$result->fetch_assoc()) $datas[]=$row;
 
 	//print_r($datas);
-	foreach ($items as $i) {
+	foreach ($kamers as $i) {
 		for ($x=30;$x>=0;$x--) ${$i.$x}=0;
 	}
 	foreach ($datas as $a) {
 		$hour=substr($a['stamp'], 11, 2) * 1;
 		if (in_array($hour, $hours)) {
-			foreach ($items as $i) {
+			foreach ($kamers as $i) {
 				for ($x=30;$x>=0;$x--) {
 					if ($a[$i]>=$x) ${$i.$x}++;
 				}
@@ -105,34 +112,36 @@ if ($home===true) {
 		<thead>
 			<tr>
 				<th></th>';
-	foreach ($items as $i) echo '
+	foreach ($kamers as $i) echo '
 				<th colspan="4">'.ucfirst($i).'</th>';
 	echo '
 			</tr>
 			<tr>
 				<th></th>';
-	foreach ($items as $i) echo '
+	foreach ($kamers as $i) echo '
 				<th colspan="2">Dagen</th><th colspan="2">Uren</th>';
 	echo '
 			</tr>
 			<tr>
 				<th>Temp</th>';
-	foreach ($items as $i) echo '
+	foreach ($kamers as $i) echo '
 				<th>Aantal</th><th>Percent</th>';
 	echo '
 			</tr>
 		</thead>
 		<tbody>';
 	$aantal=0;
-	foreach ($items as $i) {
+	foreach ($kamers as $i) {
 		if (${$i.'0'}>$aantal) $aantal = ${$i.'0'};
 	}
 	for ($x=30;$x>=0;$x--) {
 		echo '
 			<tr>
 				<td>'.$x.'</td>';
-		foreach ($items as $i) {
+		foreach ($kamers as $i) {
 			echo '
+				<td>'.${$i.$x}.'</td>
+				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>
 				<td>'.${$i.$x}.'</td>
 				<td>'.number_format((${$i.$x}/$aantal)*100, 2, ',', '').' %</td>';
 		}
