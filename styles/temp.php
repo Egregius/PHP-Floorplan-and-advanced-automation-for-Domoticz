@@ -14,7 +14,7 @@ input:checked + label{background-color:#ffba00;color:#000;}
 
 .kamer{display: inline-block;width:145px;max-width:19.9%}
 .uur{display: inline-block;width:22px;max-width:4,166666667%}
-
+.even{background:#333;}
 
 ";
 if ($udevice=='other') {

@@ -28,7 +28,7 @@ if ($home===true) {
 		<style>
 			table{border:1px solid white;border-spacing:0px;}
 			th{border:1px solid #999;}
-			td{text-align:right;border:1px solid #555;min-width:80px;}
+			td{text-align:right;border:1px solid #555;min-width:80px;padding-right:5px;}
 		</style>
 		</head>
 		<body style="width:100%">
@@ -117,7 +117,7 @@ if ($home===true) {
 			<tr>
 				<th>Temp</th>';
 	foreach ($kamers as $i) echo '
-				<th>Aantal</th><th>Percent</th>';
+				<th>Aantal</th><th>Percent</th><th>Aantal</th><th>Percent</th>';
 	echo '
 			</tr>
 		</thead>
@@ -128,12 +128,16 @@ if ($home===true) {
 	}
 	$aantaldagen=0;
 	foreach ($kamers as $i) {
-		if (count($dag[$i.'-5'])>$aantaldagen) $aantaldagen = $dag[$i.'-5'];
+		if (count($dag[$i.'-5'])>$aantaldagen) $aantaldagen = count($dag[$i.'-5']);
 	}
+	print_r($aantaldagen);
 	for ($x=40;$x>=-5;$x--) {
+		if ($x%2==0) echo '
+			<tr class="even">';
+		else  echo '
+			<tr>';
 		echo '
-			<tr>
-				<td>'.$x.'</td>';
+				<td>'.$x.' °C </td>';
 		foreach ($kamers as $i) {
 			isset($dag[$i.$x])?$aantal=count($dag[$i.$x]):$aantal=0;
 			echo '
