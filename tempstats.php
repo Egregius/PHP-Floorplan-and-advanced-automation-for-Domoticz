@@ -56,24 +56,29 @@ if ($home===true) {
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
-			<br>
+			<br><br>
 			<form method="GET">';
 	foreach ($items as $i) {
 		if(isset($_REQUEST[$i])) echo '
-				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="kamer" checked>
 				<label for="'.$i.'">'.$i.'</label>';
 		else echo '
-				<input type="checkbox" name="'.$u.'" id="'.$u.'" onChange="this.form.submit()" class="'.$u.'">
-				<label for="'.$u.'">'.$u.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="kamer">
+				<label for="'.$i.'">'.$i.'</label>';
 			
 		if (isset($_REQUEST[$i])) $kamers[]=$i;
 	}
 	if (!isset($kamers)) $kamers=array('buiten');
-	echo '<br>';
-	for ($x=0;$x<=23;$x++) {
-		echo '
-				<input type="checkbox" name="'.$x.'" '.(isset($_REQUEST[$x])?'checked':'').' onChange="submit()">'.$x.'</input>';
-		if (isset($_REQUEST[$x])) $hours[$x]=$x;
+	echo '<br><br><br><br>';
+	for ($i=0;$i<=23;$i++) {
+		if(isset($_REQUEST[$i])) echo '
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="uur" checked>
+				<label for="'.$i.'">'.$i.'</label>';
+		else echo '
+				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" class="uur">
+				<label for="'.$i.'">'.$i.'</label>';
+		
+		if (isset($_REQUEST[$i])) $hours[$i]=$i;
 	}
 	if (!isset($hours)) {
 		for ($x=0;$x<=23;$x++) {
@@ -82,7 +87,9 @@ if ($home===true) {
 	}
 	//print_r($hours);
 	echo '
-			</form>';
+			</form>
+			<br>
+			<br>';
     $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
     if ($db->connect_errno>0) {
         die('Unable to connect to database [' . $db->connect_error . ']');
