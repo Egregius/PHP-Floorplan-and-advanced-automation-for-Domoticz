@@ -15,10 +15,9 @@ if ($d['auto']['s']=='On') {
     if ($d['Weg']['s']==0){
     	if ($d['bose101']['s']=='On') {
         	if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
-				bosekey('PRESET_2', 0, 101);
+				if ($weekend==false) bosekey('PRESET_2', 0, 101);
+				else bosekey('PRESET_1', 0, 101);
         	}
-        	$dow=date("w");
-        	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
         	if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
