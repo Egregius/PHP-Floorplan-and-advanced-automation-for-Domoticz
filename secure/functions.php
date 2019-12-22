@@ -383,7 +383,7 @@ function sl($name,$level,$msg='')
         foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sl($i, $level, $msg);
-				usleep(200000);
+				usleep(100000);
 			}
         }
     } else {
@@ -437,7 +437,7 @@ function sw($name,$action='Toggle',$msg='')
         foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
-				usleep(200000);
+				usleep(100000);
 			}
         }
     } else {
@@ -710,7 +710,7 @@ function endswith($string,$test)
     }
     return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
-function bosekey($key,$sleep=100000,$ip=101)
+function bosekey($key,$sleep=75000,$ip=101)
 {
     $xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
     bosepost("key", $xml, $ip, true);
