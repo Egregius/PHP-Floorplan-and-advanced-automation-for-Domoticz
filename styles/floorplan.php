@@ -92,7 +92,7 @@ td{text-align:center;font-size:1.1em;}
 #alex{top:555px;left:135px;}
 #lichtbadkamer{top:418px;left:378px;}
 #tvled{top:7px;left:87px;height:50px;width:auto;}
-#kristal{top:7px;left:147px;height:50px;width:auto;}
+#kristal{top:7px;left:89px;height:50px;width:auto;}
 #bureel{top:7px;left:207px;height:50px;width:auto;}
 #inkom{top:51px;left:349px;height:50px;width:auto;}
 #keuken{top:159px;left:390px;height:50px;width:auto;}
