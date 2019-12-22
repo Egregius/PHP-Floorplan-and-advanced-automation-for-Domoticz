@@ -29,7 +29,7 @@ if ($d['auto']['s']=='On') {
         	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
         }
         if ($d['pirkeuken']['s']=='Off') {
-            $uit=300;
+            $uit=235;
             if (past('pirkeuken')>$uit) {
                 $items=array('keuken','wasbak','kookplaat','werkblad1');
                 foreach ($items as $item) {
@@ -42,7 +42,7 @@ if ($d['auto']['s']=='On') {
             }
         }
         if ($d['pirliving']['s']=='Off') {
-            $uit=7200;
+            $uit=3600;
             if (past('pirliving')>$uit) {
                 $items=array('bureel');
                 foreach ($items as $item) {
@@ -56,7 +56,7 @@ if ($d['auto']['s']=='On') {
                 foreach ($items as $item) {
                     if ($d[$item]['s']>0) {
                         if (past($item)>$uit) {
-                            sl($item, 0, basename(__FILE__).':'.__LINE__);
+                            storemode($item, 1, basename(__FILE__).':'.__LINE__);
                         }
                     }
                 }
@@ -72,13 +72,13 @@ if ($d['auto']['s']=='On') {
                     }
                 }
             }
-            /*$uit=10800;
+            $uit=10800;
             if (past('pirliving')>$uit) {
                 if ($d['denon']['s']=='On'||$d['lgtv']['s']=='On') {
                     ud('miniliving4l', 1, 'On');
                     lg('miniliving4l pressed omdat er al 3 uur geen beweging is');
                 }
-            }*/
+            }
         }
         $items=array(
             'living_temp',

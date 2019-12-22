@@ -38,19 +38,19 @@ if ($d['auto']['s']=='On') {
 	}
 
 	if ($d['pirinkom']['s']=='Off'
-		&&past('pirinkom')>=30
+		&&past('pirinkom')>=19
 		&&$d['pirhall']['s']=='Off'
-		&&past('pirhall')>=30
-		&&past('deurwc')>=30
-		&&past('deurinkom')>=30
-		&&past('deurkamer')>=30
-		&&past('deurbadkamer')>=30
-		&&past('deurtobi')>=30
-		&&past('deuralex')>=30
-		&&past('inkom')>=30
-		&&past('hall')>=30
+		&&past('pirhall')>=19
+		&&past('deurwc')>=19
+		&&past('deurinkom')>=19
+		&&past('deurkamer')>=19
+		&&past('deurbadkamer')>=19
+		&&past('deurtobi')>=19
+		&&past('deuralex')>=19
+		&&past('inkom')>=19
+		&&past('hall')>=19
 	) {
-		$items=array(31,25,20,0);
+		$items=array(31,28,25,22,0);
 		foreach ($items as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);

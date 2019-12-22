@@ -16,4 +16,5 @@ if ($status=='On') {
 } else {
     store('Weg', 2);
     sw('voordeur', 'Off');
+    huisweg();
 }

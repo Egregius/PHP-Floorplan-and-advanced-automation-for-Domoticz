@@ -720,7 +720,8 @@ function bosekey($key,$sleep=100000,$ip=101)
     	'Cygnux X'=>'Superstring - Rank 1 Remix',
     	'Tiësto, Dzeko, Preme, Post Malone'=>'Jackie Chan',
     	'Pharrell Williams'=>'Happy - From "Despicable Me 2"',
-    	'Christina Perri'=>'A Thousand Years'
+    	'Christina Perri'=>'A Thousand Years',
+    	'Sam Smith'=>'Stay With Me'
     );
     if ($key=='PRESET_1') {
     	//Trance, Techno and retro
@@ -731,6 +732,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
+							bosekey("NEXT_TRACK", $sleep, $ip);
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
@@ -748,6 +750,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
+							bosekey("NEXT_TRACK", $sleep, $ip);
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
@@ -767,6 +770,7 @@ function bosekey($key,$sleep=100000,$ip=101)
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
+							bosekey("NEXT_TRACK", $sleep, $ip);
 							bosekey("NEXT_TRACK", $sleep, $ip);
 							break;
 						}
