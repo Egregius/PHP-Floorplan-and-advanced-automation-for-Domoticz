@@ -716,15 +716,14 @@ function bosekey($key,$sleep=100000,$ip=101)
     bosepost("key", $xml, $ip, true);
     $xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
     bosepost("key", $xml, $ip);
-    $dontplayfirst=array(
-    	'Cygnux X'=>'Superstring - Rank 1 Remix',
-    	'Tiësto, Dzeko, Preme, Post Malone'=>'Jackie Chan',
-    	'Pharrell Williams'=>'Happy - From "Despicable Me 2"',
-    	'Christina Perri'=>'A Thousand Years',
-    	'Sam Smith'=>'Stay With Me'
-    );
-    if ($key=='PRESET_1') {
-    	//Trance, Techno and retro
+    if (startsWith($key,'PRESET')) {
+    	$dontplayfirst=array(
+			'Cygnux X'=>'Superstring - Rank 1 Remix',
+			'Tiësto, Dzeko, Preme, Post Malone'=>'Jackie Chan',
+			'Pharrell Williams'=>'Happy - From "Despicable Me 2"',
+			'Christina Perri'=>'A Thousand Years',
+			'Sam Smith'=>'Stay With Me'
+		);
     	for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
@@ -733,80 +732,6 @@ function bosekey($key,$sleep=100000,$ip=101)
 					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
 						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
 							bosekey("NEXT_TRACK", $sleep, $ip);
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							break;
-						}
-					}
-				}
-			}
-			sleep(1);
-		}
-    } elseif ($key=='PRESET_2') {
-    	//Tiesto
-    	for ($x=1;$x<=10;$x++) {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
-			if (!empty($nowplaying)) {
-				bosekey('SHUFFLE_ON', 0, $ip);
-				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							break;
-						}
-					}
-				}
-			}
-			sleep(1);
-		}
-    } elseif ($key=='PRESET_3') {
-    	//MNM
-    } elseif ($key=='PRESET_4') {
-    	//Happy music
-    	for ($x=1;$x<=10;$x++) {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
-			if (!empty($nowplaying)) {
-				bosekey('SHUFFLE_ON', 0, $ip);
-				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							break;
-						}
-					}
-				}
-			}
-			sleep(1);
-		}
-    } elseif ($key=='PRESET_5') {
-    	//Ballads
-    	for ($x=1;$x<=10;$x++) {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
-			if (!empty($nowplaying)) {
-				bosekey('SHUFFLE_ON', 0, $ip);
-				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							break;
-						}
-					}
-				}
-			}
-			sleep(1);
-		}
-    } elseif ($key=='PRESET_6') {
-    	//Mix
-    	for ($x=1;$x<=10;$x++) {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
-			if (!empty($nowplaying)) {
-				bosekey('SHUFFLE_ON', 0, $ip);
-				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
-							bosekey("NEXT_TRACK", $sleep, $ip);
-							break;
 						}
 					}
 				}
@@ -821,19 +746,12 @@ function bosevolume($vol,$ip=101)
     $xml="<volume>$vol</volume>";
     bosepost("volume", $xml, $ip, true);
     if ($ip==101) {
-        if ($vol>50) {
-            bosebass(0, $ip);
-        } elseif ($vol>40) {
-            bosebass(-1, $ip);
-        } elseif ($vol>30) {
-            bosebass(-2, $ip);
-        } elseif ($vol>20) {
-            bosebass(-3, $ip);
-        } elseif ($vol>10) {
-            bosebass(-4, $ip);
-        } else {
-            bosebass(-5, $ip);
-        }
+        if ($vol>50) bosebass(0, $ip);
+        elseif ($vol>40) bosebass(-1, $ip);
+        elseif ($vol>30) bosebass(-2, $ip);
+        elseif ($vol>20) bosebass(-3, $ip);
+        elseif ($vol>10) bosebass(-4, $ip);
+        else bosebass(-5, $ip);
     }
 }
 function bosebass($bass,$ip=101)
@@ -845,9 +763,7 @@ function bosebass($bass,$ip=101)
 function bosepreset($pre,$ip=101)
 {
     $pre=1*$pre;
-    if ($pre<1||$pre>6) {
-        return;
-    }
+    if ($pre<1||$pre>6) return;
     bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip,$vol='')
