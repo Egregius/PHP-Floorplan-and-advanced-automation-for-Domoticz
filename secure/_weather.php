@@ -114,7 +114,7 @@ $rains=json_decode(file_get_contents('https://graphdata.buienradar.nl/2.0/foreca
 if (isset($rains['forecasts'])) {
 	$x=1;
 	foreach ($rains['forecasts'] as $i) {
-		$buienradar=$buienradar+$i['precipitation'];
+		$buienradar=$buienradar+($i['precipitation']*100);
 		$x++;
 		if ($x==7) break;
 	}
@@ -217,7 +217,7 @@ $db->query(
         ('$buienradar','$dsbuien','$buien');"
 );
 if ($buienradar>0||$dsbuien>0||$buien>0) {
-	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien);
+	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
 }
 
 /*if ($d['achterdeur']['s']=='Closed') {
