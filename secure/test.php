@@ -16,35 +16,7 @@ require 'functions.php';
     
 echo '<pre>';
 /*-------------------------------------------------*/
-zwaveswitch();
-function zwaveswitch(){
-	global $domoticzurl;
-	file_get_contents($domoticzurl.'/json.htm?type=openzwavenodes&idx=3',false);
-	echo file_get_contents(
-		$domoticzurl.'/ozwcp/valuepost.html',
-		false,
-		stream_context_create(
-			array(
-				'http'=>array(
-					'header'=>'Content-Type: application/x-www-form-urlencoded',
-					'method'=>'POST',
-					'content'=>http_build_query(
-						array(
-							'103-SWITCH BINARY-user-bool-6-0=true'
-						)
-					),
-				),
-			)
-		)
-	);
-}
-
-$ch=curl_init($domoticzurl.'/ozwcp/valuepost.html');
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, '103-SWITCH BINARY-user-bool-6-0=true');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-$result=curl_exec($ch);
+echo date("w");
     
     
 /*---------------------------*/
