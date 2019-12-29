@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($d['auto']['s']=='On') {
+	$d['Weg']['s']==0;
 	fhall();
 	finkom();
 	fliving();

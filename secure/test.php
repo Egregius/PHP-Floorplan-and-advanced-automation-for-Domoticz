@@ -16,8 +16,19 @@ require 'functions.php';
     
 echo '<pre>';
 /*-------------------------------------------------*/
-echo date("w");
-    
+require 'gcal/google-api-php-client/vendor/autoload.php';
+$client=new GuzzleHttp\Client();
+$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'nl-NL','name'=>'nl-NL-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'MP3','pitch'=>0.00,'speakingRate'=>1.00,'effectsProfileId' => 'large-home-entertainment-class-device']];
+try {
+	$response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
+	$fileData=json_decode($response->getBody()->getContents(), true);
+	$audio=base64_decode($fileData['audioContent']);
+	if(strlen($audio)>10) {
+		file_put_contents('/var/www/html/3CX/'.$sound.'.mp3', $audio);
+	}
+} catch (Exception $e) {
+	exit('Something went wrong: ' . $e->getMessage());
+}    
     
 /*---------------------------*/
 echo '</pre>';
