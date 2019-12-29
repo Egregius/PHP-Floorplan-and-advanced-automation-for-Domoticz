@@ -12,9 +12,8 @@
 $start=microtime(true);
 require 'functions.php';
 
-FR('Nos bureaux sont actuellement fermés. Nous sommes disponibles tous les jours ouvrables de huit heures et demie à cinq heures. Vous pouvez toujours nous envoyer un e-mail à support@xafax.be');
-NL('');
-FR('');
+NL('Druk 1 voor commerciële vragen, 2 voor technische ondersteuning, 3 om een medewerker te kiezen');
+FR('Appuyez sur 1 pour les questions commerciales, 2 pour le support technique, 4 pour choisir une personne.');
 NL('');
 FR('');
 NL('');
