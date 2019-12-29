@@ -12,9 +12,16 @@
 $start=microtime(true);
 require 'functions.php';
 
-NL('Welkom bij Xafax');
-FR('Bienvenua à Xafax');
-    
+FR('Nos bureaux sont actuellement fermés. Nous sommes disponibles tous les jours ouvrables de huit heures et demie à cinq heures. Vous pouvez toujours nous envoyer un e-mail à support@xafax.be');
+NL('');
+FR('');
+NL('');
+FR('');
+NL('');
+FR('');
+NL('');
+FR('');
+
 echo '<pre>';
 /*-------------------------------------------------*/
 require_once 'gcal/google-api-php-client/vendor/autoload.php';
