@@ -12,14 +12,9 @@
 $start=microtime(true);
 require 'functions.php';
 
-NL('Druk 1 voor commerciële vragen, 2 voor technische ondersteuning, 3 om een medewerker te kiezen');
-FR('Appuyez sur 1 pour les questions commerciales, 2 pour le support technique, 4 pour choisir une personne.');
-NL('');
-FR('');
-NL('');
-FR('');
-NL('');
-FR('');
+NL('Druk 5 voor Shani, 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Guy.');
+FR('Appuyez 5 pour Shani, 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
+
 
 echo '<pre>';
 /*-------------------------------------------------*/
