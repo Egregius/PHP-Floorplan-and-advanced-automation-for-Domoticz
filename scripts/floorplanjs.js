@@ -969,12 +969,12 @@ function ajaxmedia($ip){
             		if(data['denon']['vol']=='--')data['denon']['vol']=0;
             		
 					let cv=80+parseInt(data['denon']['vol']);
-					console.log('parseint='+parseInt(data['denon']['vol'])+' cv='+cv);
-					//if(cv=80)cv=0;
+					console.log('vol='+data['denon']['vol']+'	parseint='+parseInt(data['denon']['vol'])+'	cv='+cv);
+					if(data['denon']['vol']==0)cv=0;
 					levels=[-10,-5,-3,-2,-1,0,1,2,3,5,10];
 					levels.forEach(function(level){
 						let newlevel=parseInt(cv+level);
-						if(newlevel>0&&newlevel<=80){
+						if(newlevel>=0&&newlevel<=80){
 							if(cv==newlevel)html+='<button onclick="ajaxcontrol(\'denonset\', \'volume\', \''+newlevel+'\')" class="btn btna volume">'+newlevel+'</button> ';
 							else html+='<button onclick="ajaxcontrol(\'denonset\', \'volume\', \''+newlevel+'\')" class="btn volume">'+newlevel+'</button> ';
 						}
