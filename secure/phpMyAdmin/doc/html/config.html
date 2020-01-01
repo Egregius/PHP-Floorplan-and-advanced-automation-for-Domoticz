@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &#8212; phpMyAdmin 5.0.0-alpha1 documentation</title>
+    <title>Configuration &#8212; phpMyAdmin 5.1.0-dev documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '5.0.0-alpha1',
+        VERSION:     '5.1.0-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="phpMyAdmin 5.0.0-alpha1 documentation" href="index.html" />
+    <link rel="top" title="phpMyAdmin 5.1.0-dev documentation" href="index.html" />
     <link rel="next" title="User Guide" href="user.html" />
     <link rel="prev" title="Installation" href="setup.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="setup.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.0.0-alpha1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.1.0-dev documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -1053,7 +1053,7 @@ starting with the letter &#8220;a&#8221;, use</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="nv">$cfg</span><span class="p">[</span><span class="s1">&#39;Servers&#39;</span><span class="p">][</span><span class="nv">$i</span><span class="p">][</span><span class="s1">&#39;hide_db&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;^(db1|db2)$&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>More information on regular expressions can be found in the <a class="reference external" href="https://secure.php.net/manual/en/reference.pcre.pattern.syntax.php">PCRE
+<p>More information on regular expressions can be found in the <a class="reference external" href="https://www.php.net/manual/en/reference.pcre.pattern.syntax.php">PCRE
 pattern syntax</a> portion
 of the PHP reference manual.</p>
 </dd></dl>
@@ -1501,7 +1501,7 @@ disappear after you logout.</p>
 </table>
 <p>Since release 4.1.0 you can create different user groups with menu items
 attached to them. Users can be assigned to these groups and the logged in
-user would only see menu items configured to the usergroup he is assigned to.
+user would only see menu items configured to the usergroup they are assigned to.
 To do this it needs two tables &#8220;usergroups&#8221; (storing allowed menu items for each
 user group) and &#8220;users&#8221; (storing users and their assignments to user groups).</p>
 <p>To allow the usage of this functionality:</p>
@@ -2033,7 +2033,6 @@ signon. The script has to provide a function called
 password, accepting single parameter of existing username (can be
 empty). See <code class="file docutils literal"><span class="pre">examples/signon-script.php</span></code> for an example:</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="cm">/* vim: set expandtab sw=4 ts=4 sts=4: */</span>
 <span class="sd">/**</span>
 <span class="sd"> * Single signon for phpMyAdmin</span>
 <span class="sd"> *</span>
@@ -2121,7 +2120,7 @@ is session which phpMyAdmin uses internally. Takes effect only if
 <p>An associative array of session cookie parameters of other authentication system.
 It is not needed if the other system doesn&#8217;t use session_set_cookie_params().
 Keys should include &#8216;lifetime&#8217;, &#8216;path&#8217;, &#8216;domain&#8217;, &#8216;secure&#8217; or &#8216;httponly&#8217;.
-Valid values are mentioned in <a class="reference external" href="https://secure.php.net/manual/en/function.session-get-cookie-params.php">session_get_cookie_params</a>, they should be set to same values as the
+Valid values are mentioned in <a class="reference external" href="https://www.php.net/manual/en/function.session-get-cookie-params.php">session_get_cookie_params</a>, they should be set to same values as the
 other application uses. Takes effect only if
 <span class="target" id="index-129"></span><a class="reference internal" href="#cfg_Servers_SignonScript"><code class="xref config config-option docutils literal"><span class="pre">$cfg['Servers'][$i]['SignonScript']</span></code></a> is not configured.</p>
 <div class="admonition seealso">
@@ -2370,11 +2369,11 @@ query&#8217;s length exceeds this limit, this query is not saved in the history.
 </tr>
 </tbody>
 </table>
-<p>Whether <a class="reference external" href="https://secure.php.net/manual/en/features.persistent-connections.php">persistent connections</a> should be used or not. Works with
+<p>Whether <a class="reference external" href="https://www.php.net/manual/en/features.persistent-connections.php">persistent connections</a> should be used or not. Works with
 following extensions:</p>
 <ul class="simple">
-<li>mysql (<a class="reference external" href="https://secure.php.net/manual/en/function.mysql-pconnect.php">mysql_pconnect</a>),</li>
-<li>mysqli (requires PHP 5.3.0 or newer, <a class="reference external" href="https://secure.php.net/manual/en/mysqli.persistconns.php">more information</a>).</li>
+<li>mysql (<a class="reference external" href="https://www.php.net/manual/en/function.mysql-pconnect.php">mysql_pconnect</a>),</li>
+<li>mysqli (requires PHP 5.3.0 or newer, <a class="reference external" href="https://www.php.net/manual/en/mysqli.persistconns.php">more information</a>).</li>
 </ul>
 </dd></dl>
 
@@ -2437,7 +2436,7 @@ no effect when PHP is running in safe mode.</p>
 </tr>
 </tbody>
 </table>
-<p>Path for storing session data (<a class="reference external" href="https://secure.php.net/session_save_path">session_save_path PHP parameter</a>).</p>
+<p>Path for storing session data (<a class="reference external" href="https://www.php.net/session_save_path">session_save_path PHP parameter</a>).</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This folder should not be publicly accessible through the webserver,
@@ -2723,7 +2722,7 @@ configured <span class="target" id="index-134"></span><a class="reference intern
 </tbody>
 </table>
 <p>Define how long a login cookie is valid. Please note that php
-configuration option <a class="reference external" href="https://secure.php.net/manual/en/session.configuration.php#ini.session.gc-maxlifetime">session.gc_maxlifetime</a> might limit session validity and if the session is lost,
+configuration option <a class="reference external" href="https://www.php.net/manual/en/session.configuration.php#ini.session.gc-maxlifetime">session.gc_maxlifetime</a> might limit session validity and if the session is lost,
 the login cookie is also invalidated. So it is a good idea to set
 <code class="docutils literal"><span class="pre">session.gc_maxlifetime</span></code> at least to the same value of
 <span class="target" id="index-135"></span><a class="reference internal" href="#cfg_LoginCookieValidity"><code class="xref config config-option docutils literal"><span class="pre">$cfg['LoginCookieValidity']</span></code></a>.</p>
@@ -2843,7 +2842,7 @@ server.</p>
 </tbody>
 </table>
 <p>The public key for the reCaptcha service that can be obtained from
-<a class="reference external" href="https://www.google.com/recaptcha/intro/">https://www.google.com/recaptcha/intro/</a>.</p>
+<a class="reference external" href="https://www.google.com/recaptcha/intro/v3.html">https://www.google.com/recaptcha/intro/v3.html</a>.</p>
 <p>reCaptcha will be then used in <a class="reference internal" href="setup.html#cookie"><span class="std std-ref">Cookie authentication mode</span></a>.</p>
 </dd></dl>
 
@@ -2861,7 +2860,7 @@ server.</p>
 </tbody>
 </table>
 <p>The private key for the reCaptcha service that can be obtain from
-<a class="reference external" href="https://www.google.com/recaptcha/intro/">https://www.google.com/recaptcha/intro/</a>.</p>
+<a class="reference external" href="https://www.google.com/recaptcha/intro/v3.html">https://www.google.com/recaptcha/intro/v3.html</a>.</p>
 <p>reCaptcha will be then used in <a class="reference internal" href="setup.html#cookie"><span class="std std-ref">Cookie authentication mode</span></a>.</p>
 </dd></dl>
 
@@ -4364,7 +4363,7 @@ The default value in this menu comes from
 </tbody>
 </table>
 <p>Specify some parameters for iconv used in charset conversion. See
-<a class="reference external" href="https://www.gnu.org/software/libiconv/documentation/libiconv/iconv_open.3.html">iconv documentation</a> for details. By default
+<a class="reference external" href="https://www.gnu.org/savannah-checkouts/gnu/libiconv/documentation/libiconv-1.15/iconv_open.3.html">iconv documentation</a> for details. By default
 <code class="docutils literal"><span class="pre">//TRANSLIT</span></code> is used, so that invalid characters will be
 transliterated.</p>
 </dd></dl>
@@ -4730,6 +4729,25 @@ name of the column. The comment is shown as a tool-tip for that
 column.</p>
 </dd></dl>
 
+<dl class="option">
+<dt id="cfg_FirstDayOfCalendar">
+<code class="descname">$cfg['FirstDayOfCalendar']</code><a class="headerlink" href="#cfg_FirstDayOfCalendar" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">integer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Default value:</th><td class="field-body">0</td>
+</tr>
+</tbody>
+</table>
+<p>This will define the first day of week in the calendar. The number
+can be set from 0 to 6, which represents the seven days of the week,
+Sunday to Saturday respectively. This value can also be configured by the user
+in server settings -&gt; features -&gt; general -&gt; First Day calendar field.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="text-fields">
 <h2>Text fields<a class="headerlink" href="#text-fields" title="Permalink to this headline">¶</a></h2>
@@ -5042,8 +5060,8 @@ to setup this directory and how to make its usage secure.</p>
 </tr>
 </tbody>
 </table>
-<p>The name of the directory where dumps can be saved.</p>
-<p>If you want different directory for each user, %u will be replaced with
+<p>The name of the webserver directory where exported files can be saved.</p>
+<p>If you want a different directory for each user, %u will be replaced with the
 username.</p>
 <p>Please note that the directory must exist and has to be writable for
 the user running webserver.</p>
@@ -5875,7 +5893,6 @@ get some core configuration layout; it is distributed with phpMyAdmin as
 <code class="file docutils literal"><span class="pre">config.sample.inc.php</span></code>. Please note that it does not contain all
 configuration options, only the most frequently used ones.</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="cm">/* vim: set expandtab sw=4 ts=4 sts=4: */</span>
 <span class="sd">/**</span>
 <span class="sd"> * phpMyAdmin sample configuration, you can use it as base for</span>
 <span class="sd"> * manual configuration. For easier setup you can use setup/</span>
@@ -6232,7 +6249,7 @@ server certificates and tell phpMyAdmin to use them:</p>
         <li class="right" >
           <a href="setup.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.0.0-alpha1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.1.0-dev documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

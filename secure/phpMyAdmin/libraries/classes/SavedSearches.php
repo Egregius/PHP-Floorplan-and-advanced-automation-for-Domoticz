@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Saved searches managing
  *
@@ -18,36 +17,42 @@ class SavedSearches
 {
     /**
      * Global configuration
+     *
      * @var array
      */
     private $_config = null;
 
     /**
      * Id
+     *
      * @var int|null
      */
     private $_id = null;
 
     /**
      * Username
+     *
      * @var string
      */
     private $_username = null;
 
     /**
      * DB name
+     *
      * @var string
      */
     private $_dbname = null;
 
     /**
      * Saved search name
+     *
      * @var string
      */
     private $_searchName = null;
 
     /**
      * Criterias
+     *
      * @var array
      */
     private $_criterias = null;
@@ -286,7 +291,7 @@ class SavedSearches
         }
 
         $savedSearchesTbl
-            = Util::backquote($this->_config['cfgRelation']['db']) . "."
+            = Util::backquote($this->_config['cfgRelation']['db']) . '.'
             . Util::backquote($this->_config['cfgRelation']['savedsearches']);
 
         //If it's an insert.
@@ -308,9 +313,9 @@ class SavedSearches
                 exit;
             }
 
-            $sqlQuery = "INSERT INTO " . $savedSearchesTbl
-                . "(`username`, `db_name`, `search_name`, `search_data`)"
-                . " VALUES ("
+            $sqlQuery = 'INSERT INTO ' . $savedSearchesTbl
+                . '(`username`, `db_name`, `search_name`, `search_data`)'
+                . ' VALUES ('
                 . "'" . $GLOBALS['dbi']->escapeString($this->getUsername()) . "',"
                 . "'" . $GLOBALS['dbi']->escapeString($this->getDbname()) . "',"
                 . "'" . $GLOBALS['dbi']->escapeString($this->getSearchName()) . "',"
@@ -329,7 +334,7 @@ class SavedSearches
 
         //Else, it's an update.
         $wheres = [
-            "id != " . $this->getId(),
+            'id != ' . $this->getId(),
             "search_name = '" . $GLOBALS['dbi']->escapeString($this->getSearchName()) . "'",
         ];
         $existingSearches = $this->getList($wheres);
@@ -345,12 +350,12 @@ class SavedSearches
             exit;
         }
 
-        $sqlQuery = "UPDATE " . $savedSearchesTbl
+        $sqlQuery = 'UPDATE ' . $savedSearchesTbl
             . "SET `search_name` = '"
             . $GLOBALS['dbi']->escapeString($this->getSearchName()) . "', "
             . "`search_data` = '"
             . $GLOBALS['dbi']->escapeString(json_encode($this->getCriterias())) . "' "
-            . "WHERE id = " . $this->getId();
+            . 'WHERE id = ' . $this->getId();
         return (bool) $this->relation->queryAsControlUser($sqlQuery);
     }
 
@@ -373,10 +378,10 @@ class SavedSearches
         }
 
         $savedSearchesTbl
-            = Util::backquote($this->_config['cfgRelation']['db']) . "."
+            = Util::backquote($this->_config['cfgRelation']['db']) . '.'
             . Util::backquote($this->_config['cfgRelation']['savedsearches']);
 
-        $sqlQuery = "DELETE FROM " . $savedSearchesTbl
+        $sqlQuery = 'DELETE FROM ' . $savedSearchesTbl
             . "WHERE id = '" . $GLOBALS['dbi']->escapeString($this->getId()) . "'";
 
         return (bool) $this->relation->queryAsControlUser($sqlQuery);
@@ -401,10 +406,10 @@ class SavedSearches
         }
 
         $savedSearchesTbl = Util::backquote($this->_config['cfgRelation']['db'])
-            . "."
+            . '.'
             . Util::backquote($this->_config['cfgRelation']['savedsearches']);
-        $sqlQuery = "SELECT id, search_name, search_data "
-            . "FROM " . $savedSearchesTbl . " "
+        $sqlQuery = 'SELECT id, search_name, search_data '
+            . 'FROM ' . $savedSearchesTbl . ' '
             . "WHERE id = '" . $GLOBALS['dbi']->escapeString($this->getId()) . "' ";
 
         $resList = $this->relation->queryAsControlUser($sqlQuery);
@@ -440,19 +445,19 @@ class SavedSearches
         }
 
         $savedSearchesTbl = Util::backquote($this->_config['cfgRelation']['db'])
-            . "."
+            . '.'
             . Util::backquote($this->_config['cfgRelation']['savedsearches']);
-        $sqlQuery = "SELECT id, search_name "
-            . "FROM " . $savedSearchesTbl . " "
-            . "WHERE "
+        $sqlQuery = 'SELECT id, search_name '
+            . 'FROM ' . $savedSearchesTbl . ' '
+            . 'WHERE '
             . "username = '" . $GLOBALS['dbi']->escapeString($this->getUsername()) . "' "
             . "AND db_name = '" . $GLOBALS['dbi']->escapeString($this->getDbname()) . "' ";
 
         foreach ($wheres as $where) {
-            $sqlQuery .= "AND " . $where . " ";
+            $sqlQuery .= 'AND ' . $where . ' ';
         }
 
-        $sqlQuery .= "order by search_name ASC ";
+        $sqlQuery .= 'order by search_name ASC ';
 
         $resList = $this->relation->queryAsControlUser($sqlQuery);
 

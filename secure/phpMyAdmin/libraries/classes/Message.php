@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds class Message
  *
@@ -10,7 +9,6 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Sanitize;
-use PhpMyAdmin\Util;
 
 /**
  * a single message
@@ -169,6 +167,7 @@ class Message
      *                       executed successfully')
      *
      * @return Message
+     *
      * @static
      */
     public static function success(string $string = ''): self
@@ -188,6 +187,7 @@ class Message
      * @param string $string A localized string e.g. __('Error')
      *
      * @return Message
+     *
      * @static
      */
     public static function error(string $string = ''): self
@@ -210,6 +210,7 @@ class Message
      *                       why click %shere%s.')
      *
      * @return Message
+     *
      * @static
      */
     public static function notice(string $string): self
@@ -226,6 +227,7 @@ class Message
      * @param integer $type    A numeric representation of the type of message
      *
      * @return Message
+     *
      * @static
      */
     public static function raw(string $message, int $type = Message::NOTICE): self
@@ -244,6 +246,7 @@ class Message
      * @param integer $rows Number of rows
      *
      * @return Message
+     *
      * @static
      */
     public static function getMessageForAffectedRows(int $rows): self
@@ -263,6 +266,7 @@ class Message
      * @param integer $rows Number of rows
      *
      * @return Message
+     *
      * @static
      */
     public static function getMessageForDeletedRows(int $rows): self
@@ -282,6 +286,7 @@ class Message
      * @param integer $rows Number of rows
      *
      * @return Message
+     *
      * @static
      */
     public static function getMessageForInsertedRows(int $rows): self
@@ -301,6 +306,7 @@ class Message
      * @param string $message A localized string
      *
      * @return Message
+     *
      * @static
      */
     public static function rawError(string $message): self
@@ -316,6 +322,7 @@ class Message
      * @param string $message A localized string
      *
      * @return Message
+     *
      * @static
      */
     public static function rawNotice(string $message): self
@@ -331,6 +338,7 @@ class Message
      * @param string $message A localized string
      *
      * @return Message
+     *
      * @static
      */
     public static function rawSuccess(string $message): self
@@ -610,6 +618,7 @@ class Message
      * @param mixed $message the message(s)
      *
      * @return mixed  the sanitized message(s)
+     *
      * @access  public
      * @static
      */
@@ -633,6 +642,7 @@ class Message
      * @param string $message the message
      *
      * @return string  the decoded message
+     *
      * @access  public
      * @static
      */
@@ -645,6 +655,7 @@ class Message
      * wrapper for sprintf()
      *
      * @param mixed[] ...$params Params
+     *
      * @return string formatted
      */
     public static function format(...$params): string
@@ -770,8 +781,20 @@ class Message
     public function getDisplay(): string
     {
         $this->isDisplayed(true);
-        return '<div class="' . $this->getLevel() . '">'
-            . $this->getMessage() . '</div>';
+
+        $context = 'primary';
+        $level = $this->getLevel();
+        if ($level === 'error') {
+            $context = 'danger';
+        } elseif ($level === 'success') {
+            $context = 'success';
+        }
+
+        $template = new Template();
+        return $template->render('message', [
+            'context' => $context,
+            'message' => $this->getMessage(),
+        ]);
     }
 
     /**
@@ -806,7 +829,7 @@ class Message
         } else {
             $image = 's_notice';
         }
-        $message = self::notice(Util::getImage($image)) . " " . $message;
+        $message = self::notice(Html\Generator::getImage($image)) . ' ' . $message;
         return $message;
     }
 }

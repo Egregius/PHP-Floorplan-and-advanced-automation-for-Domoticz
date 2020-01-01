@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * holds the ListDatabase class
  *
@@ -20,7 +19,6 @@ use PhpMyAdmin\Util;
  * </code>
  *
  * @todo this object should be attached to the PMA_Server object
- *
  * @package PhpMyAdmin
  * @since   phpMyAdmin 2.9.10
  */
@@ -67,15 +65,15 @@ class ListDatabase extends ListAbstract
     protected function retrieve($like_db_name = null)
     {
         $database_list = [];
-        $command = "";
+        $command = '';
         if (! $GLOBALS['cfg']['Server']['DisableIS']) {
-            $command .= "SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`";
+            $command .= 'SELECT `SCHEMA_NAME` FROM `INFORMATION_SCHEMA`.`SCHEMATA`';
             if (null !== $like_db_name) {
                 $command .= " WHERE `SCHEMA_NAME` LIKE '" . $like_db_name . "'";
             }
         } else {
             if ($GLOBALS['dbs_to_test'] === false || null !== $like_db_name) {
-                $command .= "SHOW DATABASES";
+                $command .= 'SHOW DATABASES';
                 if (null !== $like_db_name) {
                     $command .= " LIKE '" . $like_db_name . "'";
                 }

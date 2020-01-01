@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Handles the IPv4/IPv6 to binary transformation for text plain
  *
@@ -116,7 +115,7 @@ class Text_Plain_Iptobinary extends IOTransformationsPlugin
      */
     public static function getName()
     {
-        return "IPv4/IPv6 To Binary";
+        return 'IPv4/IPv6 To Binary';
     }
 
     /**
@@ -126,7 +125,7 @@ class Text_Plain_Iptobinary extends IOTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Text";
+        return 'Text';
     }
 
     /**
@@ -136,6 +135,6 @@ class Text_Plain_Iptobinary extends IOTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "Plain";
+        return 'Plain';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Text Plain Link Transformations plugin for phpMyAdmin
  *
@@ -28,7 +27,7 @@ class Text_Plain_Link extends TextLinkTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Text";
+        return 'Text';
     }
 
     /**
@@ -38,6 +37,6 @@ class Text_Plain_Link extends TextLinkTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "Plain";
+        return 'Plain';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\AbstractController
  *
@@ -36,11 +35,9 @@ abstract class AbstractController
     protected $template;
 
     /**
-     * AbstractController constructor.
-     *
      * @param Response          $response Response object
      * @param DatabaseInterface $dbi      DatabaseInterface object
-     * @param Template          $template Template that should be used (if provided, default one otherwise)
+     * @param Template          $template Template that should be used
      */
     public function __construct($response, $dbi, Template $template)
     {

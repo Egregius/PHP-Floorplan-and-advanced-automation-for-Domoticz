@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * phpMyAdmin sample configuration, you can use it as base for
  * manual configuration. For easier setup you can use setup/
@@ -9,12 +8,14 @@
  *
  * @package PhpMyAdmin
  */
+declare(strict_types=1);
 
 /**
  * This is needed for cookie based authentication to encrypt password in
  * cookie. Needs to be 32 chars long.
  */
-$cfg['blowfish_secret'] = 'W,oZFo.SurB.WS63An7w}Ht-WmqH,CpF';
+$cfg['blowfish_secret'] = 'AFVkaECsmzgSQZyvCSnXy9GsmW9PfBkziiE2b5ZuBdVa99oAUmbnm5JXVU9gxrDk'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+
 /**
  * Servers configuration
  */
@@ -93,7 +94,7 @@ $cfg['SaveDir'] = '';
  * Possible values: 25, 50, 100, 250, 500
  * default = 25
  */
-$cfg['MaxRows'] = 500;
+//$cfg['MaxRows'] = 50;
 
 /**
  * Disallow editing of binary fields
@@ -129,13 +130,13 @@ $cfg['MaxRows'] = 500;
  * This requires configuration storage enabled, see above.
  * default = false
  */
-$cfg['QueryHistoryDB'] = true;
+//$cfg['QueryHistoryDB'] = true;
 
 /**
  * When using DB-based query history, how many entries should be kept?
  * default = 25
  */
-$cfg['QueryHistoryMax'] = 100;
+//$cfg['QueryHistoryMax'] = 100;
 
 /**
  * Whether or not to query the user before sending the error report to

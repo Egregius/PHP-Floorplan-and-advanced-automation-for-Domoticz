@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Generic plugin interface.
  *
@@ -9,6 +8,7 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
+use PhpMyAdmin\Html\MySQLDocumentation;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertySubgroup;
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\DocPropertyItem;
@@ -22,7 +22,6 @@ use PhpMyAdmin\Properties\Options\OptionsPropertyItem;
 use PhpMyAdmin\Properties\Plugins\ExportPluginProperties;
 use PhpMyAdmin\Properties\Plugins\PluginPropertyItem;
 use PhpMyAdmin\Properties\Plugins\SchemaPluginProperties;
-use PhpMyAdmin\Util;
 
 /**
  * PhpMyAdmin\Plugins class
@@ -53,7 +52,7 @@ class Plugins
             . mb_strtolower(mb_substr($plugin_type, 1))
             . mb_strtoupper($plugin_format[0])
             . mb_strtolower(mb_substr($plugin_format, 1));
-        $file = $class_name . ".php";
+        $file = $class_name . '.php';
         if (is_file($plugins_dir . $file)) {
             //include_once $plugins_dir . $file;
             $fqnClass = 'PhpMyAdmin\\' . str_replace('/', '\\', mb_substr($plugins_dir, 18)) . $class_name;
@@ -133,7 +132,7 @@ class Plugins
      */
     public static function getString($name)
     {
-        return isset($GLOBALS[$name]) ? $GLOBALS[$name] : $name;
+        return $GLOBALS[$name] ?? $name;
     }
 
     /**
@@ -175,10 +174,7 @@ class Plugins
             return htmlspecialchars($_GET[$opt]);
         }
 
-        if (isset($GLOBALS['timeout_passed'])
-            && $GLOBALS['timeout_passed']
-            && isset($_REQUEST[$opt])
-        ) {
+        if (isset($GLOBALS['timeout_passed'], $_REQUEST[$opt]) && $GLOBALS['timeout_passed']) {
             return htmlspecialchars($_REQUEST[$opt]);
         }
 
@@ -295,7 +291,7 @@ class Plugins
         $properties = null;
         if (! $is_subgroup) {
             // for subgroup headers
-            if (mb_strpos(get_class($propertyGroup), "PropertyItem")) {
+            if (mb_strpos(get_class($propertyGroup), 'PropertyItem')) {
                 $properties = [$propertyGroup];
             } else {
                 // for main groups
@@ -326,7 +322,7 @@ class Plugins
             foreach ($properties as $propertyItem) {
                 $property_class = get_class($propertyItem);
                 // if the property is a subgroup, we deal with it recursively
-                if (mb_strpos($property_class, "Subgroup")) {
+                if (mb_strpos($property_class, 'Subgroup')) {
                     // for subgroups
                     // each subgroup can have a header, which may also be a form element
                     /** @var OptionsPropertyItem $subgroup_header */
@@ -374,11 +370,11 @@ class Plugins
             }
         }
 
-        if (method_exists($propertyGroup, "getDoc")) {
+        if (method_exists($propertyGroup, 'getDoc')) {
             $doc = $propertyGroup->getDoc();
             if ($doc != null) {
                 if (count($doc) === 3) {
-                    $ret .= Util::showMySQLDocu(
+                    $ret .= MySQLDocumentation::show(
                         $doc[1],
                         false,
                         null,
@@ -386,9 +382,9 @@ class Plugins
                         $doc[2]
                     );
                 } elseif (count($doc) === 1) {
-                    $ret .= Util::showDocu('faq', $doc[0]);
+                    $ret .= MySQLDocumentation::showDocumentation('faq', $doc[0]);
                 } else {
-                    $ret .= Util::showMySQLDocu(
+                    $ret .= MySQLDocumentation::show(
                         $doc[1]
                     );
                 }

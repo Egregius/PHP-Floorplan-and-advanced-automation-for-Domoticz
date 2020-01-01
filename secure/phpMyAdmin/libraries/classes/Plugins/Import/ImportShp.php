@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * ESRI Shape file import plugin for phpMyAdmin
  *
@@ -160,7 +159,7 @@ class ImportShp extends ImportPlugin
 
         // Load data
         $shp->loadFromFile('');
-        if ($shp->lastError != "") {
+        if ($shp->lastError != '') {
             $error = true;
             $message = Message::error(
                 __('There was an error importing the ESRI shape file: "%s".')
@@ -290,8 +289,7 @@ class ImportShp extends ImportPlugin
         $null_param = null;
         $this->import->buildSql($db_name, $tables, $analyses, $null_param, $options, $sql_data);
 
-        unset($tables);
-        unset($analyses);
+        unset($tables, $analyses);
 
         $finished = true;
         $error = false;

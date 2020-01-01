@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    function used in QBE for DB
  * @name            Database Operations
@@ -10,7 +9,7 @@
  */
 
 /**
- * Ajax event handlers here for db_qbe.php
+ * Ajax event handlers here for /database/qbe
  *
  * Actions Ajaxified here:
  * Select saved search
@@ -28,7 +27,15 @@ AJAX.registerTeardown('database/qbe.js', function () {
 });
 
 AJAX.registerOnload('database/qbe.js', function () {
-    Functions.getSqlEditor($('#textSqlquery'), {}, 'both');
+    Functions.getSqlEditor($('#textSqlquery'), {}, 'none');
+
+    $('#tblQbe').width($('#tblQbe').parent().width());
+    $('#tblQbeFooters').width($('#tblQbeFooters').parent().width());
+    $('#tblQbe').resize(function () {
+        var newWidthTblQbe = $('#textSqlquery').next().width();
+        $('#tblQbe').width(newWidthTblQbe);
+        $('#tblQbeFooters').width(newWidthTblQbe);
+    });
 
     /**
      * Ajax handler to check the corresponding 'show' checkbox when column is selected

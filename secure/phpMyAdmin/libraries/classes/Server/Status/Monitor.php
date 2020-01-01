@@ -1,9 +1,6 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * functions for displaying server status sub item: monitor
- *
- * @usedby  server_status_monitor.php
  *
  * @package PhpMyAdmin
  */
@@ -28,7 +25,6 @@ class Monitor
     private $dbi;
 
     /**
-     * Monitor constructor.
      * @param DatabaseInterface $dbi DatabaseInterface instance
      */
     public function __construct($dbi)
@@ -241,7 +237,7 @@ class Monitor
                     $memory = $sysinfo->memory();
                 }
 
-                $ret['value'] = isset($memory[$pName]) ? $memory[$pName] : 0;
+                $ret['value'] = $memory[$pName] ?? 0;
                 break;
         }
 
@@ -464,13 +460,13 @@ class Monitor
      */
     public function getJsonForLoggingVars(?string $name, ?string $value): array
     {
-        if (isset($name) && isset($value)) {
+        if (isset($name, $value)) {
             $escapedValue = $this->dbi->escapeString($value);
             if (! is_numeric($escapedValue)) {
                 $escapedValue = "'" . $escapedValue . "'";
             }
 
-            if (! preg_match("/[^a-zA-Z0-9_]+/", $name)) {
+            if (! preg_match('/[^a-zA-Z0-9_]+/', $name)) {
                 $this->dbi->query(
                     'SET GLOBAL ' . $name . ' = ' . $escapedValue
                 );

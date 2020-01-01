@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Classes to create relation schema in EPS format.
  *
@@ -18,7 +17,7 @@ use PhpMyAdmin\Response;
  *
  * @package PhpMyAdmin
  * @access  public
- * @see     https://secure.php.net/manual/en/book.xmlwriter.php
+ * @see     https://www.php.net/manual/en/book.xmlwriter.php
  */
 class Eps
 {
@@ -37,7 +36,7 @@ class Eps
      */
     public function __construct()
     {
-        $this->stringCommands = "";
+        $this->stringCommands = '';
         $this->stringCommands .= "%!PS-Adobe-3.0 EPSF-3.0 \n";
     }
 
@@ -87,11 +86,11 @@ class Eps
     public function setOrientation($orientation)
     {
         $this->stringCommands .= "%%PageOrder: Ascend \n";
-        if ($orientation == "L") {
-            $orientation = "Landscape";
+        if ($orientation == 'L') {
+            $orientation = 'Landscape';
             $this->stringCommands .= '%%Orientation: ' . $orientation . "\n";
         } else {
-            $orientation = "Portrait";
+            $orientation = 'Portrait';
             $this->stringCommands .= '%%Orientation: ' . $orientation . "\n";
         }
         $this->stringCommands .= "%%EndComments \n";
@@ -113,9 +112,9 @@ class Eps
     {
         $this->font = $value;
         $this->fontSize = $size;
-        $this->stringCommands .= "/" . $value . " findfont   % Get the basic font\n";
-        $this->stringCommands .= ""
-            . $size . " scalefont            % Scale the font to $size points\n";
+        $this->stringCommands .= '/' . $value . " findfont   % Get the basic font\n";
+        $this->stringCommands .= ''
+            . $size . ' scalefont            % Scale the font to ' . $size . " points\n";
         $this->stringCommands
             .= "setfont                 % Make it the current font\n";
     }
@@ -193,10 +192,10 @@ class Eps
     {
         $this->stringCommands .= $lineWidth . " setlinewidth  \n";
         $this->stringCommands .= "newpath \n";
-        $this->stringCommands .= $x_from . " " . $y_from . " moveto \n";
-        $this->stringCommands .= "0 " . $y_to . " rlineto \n";
+        $this->stringCommands .= $x_from . ' ' . $y_from . " moveto \n";
+        $this->stringCommands .= '0 ' . $y_to . " rlineto \n";
         $this->stringCommands .= $x_to . " 0 rlineto \n";
-        $this->stringCommands .= "0 -" . $y_to . " rlineto \n";
+        $this->stringCommands .= '0 -' . $y_to . " rlineto \n";
         $this->stringCommands .= "closepath \n";
         $this->stringCommands .= "stroke \n";
     }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Setup\AbstractController
  *
@@ -15,7 +14,6 @@ use PhpMyAdmin\Config\Forms\Setup\SetupFormList;
 use PhpMyAdmin\Template;
 
 /**
- * Class AbstractController
  * @package PhpMyAdmin\Controllers\Setup
  */
 abstract class AbstractController
@@ -31,8 +29,6 @@ abstract class AbstractController
     protected $template;
 
     /**
-     * AbstractController constructor.
-     *
      * @param ConfigFile $config   ConfigFile instance
      * @param Template   $template Template instance
      */

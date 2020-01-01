@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * General functions.
  *
@@ -27,8 +26,6 @@ class General
     private $dbi;
 
     /**
-     * General constructor.
-     *
      * @param DatabaseInterface $dbi DatabaseInterface object
      */
     public function __construct(DatabaseInterface $dbi)
@@ -59,7 +56,7 @@ class General
         // this just in case.
         $errors[] = $error . '<br>'
             . __('The backed up query was:')
-            . "\"" . htmlspecialchars($createStatement) . "\"" . '<br>'
+            . '"' . htmlspecialchars($createStatement) . '"' . '<br>'
             . __('MySQL said: ') . $this->dbi->getError();
 
         return $errors;
@@ -94,7 +91,7 @@ class General
                 $response->addJSON('message', $editor);
                 $response->addJSON('title', $title);
             } else {
-                echo "\n\n<h2>$title</h2>\n\n$editor";
+                echo "\n\n<h2>" . $title . "</h2>\n\n" . $editor;
                 unset($_POST);
             }
             exit;

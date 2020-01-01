@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the formatted transformations plugins
  *
@@ -60,6 +59,6 @@ abstract class FormattedTransformationsPlugin extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "Formatted";
+        return 'Formatted';
     }
 }

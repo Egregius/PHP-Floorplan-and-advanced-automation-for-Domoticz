@@ -38,10 +38,10 @@ use Twig\TokenParser\TokenParserInterface;
  */
 class Environment
 {
-    const VERSION = '2.11.3';
-    const VERSION_ID = 21103;
+    const VERSION = '2.12.3';
+    const VERSION_ID = 21203;
     const MAJOR_VERSION = 2;
-    const MINOR_VERSION = 11;
+    const MINOR_VERSION = 12;
     const RELEASE_VERSION = 3;
     const EXTRA_VERSION = '';
 
@@ -435,7 +435,7 @@ class Environment
      *
      * This method should not be used as a generic way to load templates.
      *
-     * @param string $template The template name
+     * @param string $template The template source
      * @param string $name     An optional name of the template to be used in error messages
      *
      * @return TemplateWrapper A template instance representing the given template name

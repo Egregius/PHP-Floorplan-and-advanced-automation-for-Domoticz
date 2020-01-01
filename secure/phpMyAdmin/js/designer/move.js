@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @package PhpMyAdmin-Designer
  */
@@ -7,15 +6,13 @@
 /* global DesignerHistory, historyArray, selectField */ // js/designer/history.js
 /* global contr, db, designerTablesEnabled, displayField, hTabs, jTabs, selectedPage:writable, server */ // js/designer/init.js
 /* global DesignerPage */ // js/designer/page.js
+/* global pmaThemeImage */ // templates/javascript/variables.twig
 
 var DesignerMove = {};
 
 var change = 0; // variable to track any change in designer layout.
 var showRelationLines = true;
 var alwaysShowText = false;
-
-var colName;
-var tabName;
 
 AJAX.registerTeardown('designer/move.js', function () {
     $(document).off('fullscreenchange');
@@ -71,7 +68,6 @@ var globY;
 var timeoutId;
 var layerMenuCurClick = 0;
 var fromArray = [];
-var downer;
 var menuMoved = false;
 var gridSize = 10;
 
@@ -518,10 +514,55 @@ DesignerMove.toggleFullscreen = function () {
         valueSent = 'on';
         $content.fullScreen(true);
     } else {
+        $img.attr('src', $img.data('enter'))
+            .attr('title', $span.data('enter'));
+        $span.text($span.data('enter'));
         $content.fullScreen(false);
         valueSent = 'off';
     }
     DesignerMove.saveValueInConfig('full_screen', valueSent);
+};
+
+DesignerMove.addTableToTablesList = function (index, tableDom) {
+    var db = $(tableDom).find('.small_tab_pref').attr('db');
+    var table = $(tableDom).find('.small_tab_pref').attr('table_name');
+    var dbEncoded = $(tableDom).find('.small_tab_pref').attr('db_url');
+    var tableEncoded = $(tableDom).find('.small_tab_pref').attr('table_name_url');
+    var $newTableLine = $('<tr>' +
+        '    <td title="' + Messages.strStructure + '"' +
+        '        width="1px"' +
+        '        class="L_butt2_1">' +
+        '        <img alt=""' +
+        '            db="' + dbEncoded + '"' +
+        '            table_name="' + tableEncoded + '"' +
+        '            class="scroll_tab_struct"' +
+        '            src="' + pmaThemeImage + 'designer/exec.png"/>' +
+        '    </td>' +
+        '    <td width="1px">' +
+        '        <input class="scroll_tab_checkbox"' +
+        '            title="' + Messages.strHide + '"' +
+        '            id="check_vis_' + dbEncoded + '.' + tableEncoded + '"' +
+        '            style="margin:0;"' +
+        '            type="checkbox"' +
+        '            value="' + dbEncoded + '.' + tableEncoded + '"' +
+        '            checked="checked"' +
+        '            />' +
+        '    </td>' +
+        '    <td class="designer_Tabs"' +
+        '        designer_url_table_name="' + dbEncoded + '.' + tableEncoded + '">' + $('<div/>').text(db + '.' + table).html() + '</td>' +
+        '</tr>');
+    $('#id_scroll_tab table').first().append($newTableLine);
+    $($newTableLine).find('.scroll_tab_struct').click(function () {
+        DesignerMove.startTabUpd(db, table);
+    });
+    $($newTableLine).on('click', '.designer_Tabs2,.designer_Tabs', function () {
+        DesignerMove.selectTab($(this).attr('designer_url_table_name'));
+    });
+    $($newTableLine).find('.scroll_tab_checkbox').click(function () {
+        DesignerMove.visibleTab(this,$(this).val());
+    });
+    var $tablesCounter = $('#tables_counter');
+    $tablesCounter.text(parseInt($tablesCounter.text(), 10) + 1);
 };
 
 DesignerMove.addOtherDbTables = function () {
@@ -529,7 +570,19 @@ DesignerMove.addOtherDbTables = function () {
     buttonOptions[Messages.strGo] = function () {
         var db = $('#add_table_from').val();
         var table = $('#add_table').val();
-        $.post('db_designer.php', {
+
+        // Check if table already imported or not.
+        var $table = $('[id="' + encodeURIComponent(db) + '.' + encodeURIComponent(table) + '"]');
+        if ($table.length !== 0) {
+            Functions.ajaxShowMessage(
+                Functions.sprintf(Messages.strTableAlreadyExists, db + '.' + table),
+                undefined,
+                'error'
+            );
+            return;
+        }
+
+        $.post('index.php?route=/database/designer', {
             'ajax_request' : true,
             'dialog' : 'add_table',
             'db' : db,
@@ -538,19 +591,17 @@ DesignerMove.addOtherDbTables = function () {
         }, function (data) {
             var $newTableDom = $(data.message);
             $newTableDom.find('a').first().remove();
-            $('#container-form').append($newTableDom);
-            $('.designer_tab').on('click','.tab_field_2,.tab_field_3,.tab_field', function () {
-                var params = ($(this).attr('click_field_param')).split(',');
-                DesignerMove.clickField(params[3], params[0], params[1], params[2]);
-            });
-            $('.designer_tab').on('click', '.select_all_store_col', function () {
-                var params = ($(this).attr('store_column_param')).split(',');
-                DesignerMove.storeColumn(params[0], params[1], params[2]);
-            });
-            $('.designer_tab').on('click', '.small_tab_pref_click_opt', function () {
-                var params = ($(this).attr('Click_option_param')).split(',');
-                DesignerMove.clickOption(params[0], params[1], params[2]);
-            });
+
+            var dbEncoded = $($newTableDom).find('.small_tab_pref').attr('db_url');
+            var tableEncoded = $($newTableDom).find('.small_tab_pref').attr('table_name_url');
+
+            if (typeof dbEncoded === 'string' && typeof tableEncoded === 'string') { // Do not try to add if attr not found !
+                $('#container-form').append($newTableDom);
+                DesignerMove.enableTableEvents(null, $newTableDom);
+                DesignerMove.addTableToTablesList(null, $newTableDom);
+                jTabs[dbEncoded + '.' + tableEncoded] = 1;
+                DesignerMove.markUnsaved();
+            }
         });
         $(this).dialog('close');
     };
@@ -559,19 +610,19 @@ DesignerMove.addOtherDbTables = function () {
     };
 
     var $selectDb = $('<select id="add_table_from"></select>');
-    $selectDb.append('<option value="">None</option>');
+    $selectDb.append('<option value="">' + Messages.strNone + '</option>');
 
     var $selectTable = $('<select id="add_table"></select>');
-    $selectTable.append('<option value="">None</option>');
+    $selectTable.append('<option value="">' + Messages.strNone + '</option>');
 
-    $.post('sql.php', {
+    $.post('index.php?route=/sql', {
         'ajax_request' : true,
         'sql_query' : 'SHOW databases;',
         'server': CommonParams.get('server')
     }, function (data) {
         $(data.message).find('table.table_results.data.ajax').find('td.data').each(function () {
-            var val = $(this)[0].innerHTML;
-            $selectDb.append('<option value="' + val + '">' + val + '</option>');
+            var val = $(this)[0].innerText;
+            $selectDb.append($('<option></option>').val(val).text(val));
         });
     });
 
@@ -594,16 +645,20 @@ DesignerMove.addOtherDbTables = function () {
         if ($(this).val()) {
             var dbName = $(this).val();
             var sqlQuery = 'SHOW tables;';
-            $.post('sql.php', {
+            $.post('index.php?route=/sql', {
                 'ajax_request' : true,
                 'sql_query': sqlQuery,
                 'db' : dbName,
                 'server': CommonParams.get('server')
             }, function (data) {
                 $selectTable.html('');
-                $(data.message).find('table.table_results.data.ajax').find('td.data').each(function () {
-                    var val = $(this)[0].innerHTML;
-                    $selectTable.append('<option value="' + val + '">' + val + '</option>');
+                var rows = $(data.message).find('table.table_results.data.ajax').find('td.data');
+                if (rows.length === 0) {
+                    $selectTable.append('<option value="">' + Messages.strNone + '</option>');
+                }
+                rows.each(function () {
+                    var val = $(this)[0].innerText;
+                    $selectTable.append($('<option></option>').val(val).text(val));
                 });
             });
         }
@@ -626,8 +681,8 @@ DesignerMove.save = function (url) {
         document.getElementById('t_v_' + key + '_').value = document.getElementById('id_tbody_' + key).style.display === 'none' ? 0 : 1;
         document.getElementById('t_h_' + key + '_').value = document.getElementById('check_vis_' + key).checked ? 1 : 0;
     }
-    document.form1.action = url;
-    $(document.form1).trigger('submit');
+    document.getElementById('container-form').action = url;
+    $('#container-form').submit();
 };
 
 DesignerMove.getUrlPos = function (forceString) {
@@ -635,11 +690,15 @@ DesignerMove.getUrlPos = function (forceString) {
     if (designerTablesEnabled || forceString) {
         var poststr = '';
         var argsep = CommonParams.get('arg_separator');
+        var i = 1;
         for (key in jTabs) {
-            poststr += argsep + 't_x[' + key + ']=' + parseInt(document.getElementById(key).style.left, 10);
-            poststr += argsep + 't_y[' + key + ']=' + parseInt(document.getElementById(key).style.top, 10);
-            poststr += argsep + 't_v[' + key + ']=' + (document.getElementById('id_tbody_' + key).style.display === 'none' ? 0 : 1);
-            poststr += argsep + 't_h[' + key + ']=' + (document.getElementById('check_vis_' + key).checked ? 1 : 0);
+            poststr += argsep + 't_x[' + i + ']=' + parseInt(document.getElementById(key).style.left, 10);
+            poststr += argsep + 't_y[' + i + ']=' + parseInt(document.getElementById(key).style.top, 10);
+            poststr += argsep + 't_v[' + i + ']=' + (document.getElementById('id_tbody_' + key).style.display === 'none' ? 0 : 1);
+            poststr += argsep + 't_h[' + i + ']=' + (document.getElementById('check_vis_' + key).checked ? 1 : 0);
+            poststr += argsep + 't_db[' + i + ']=' + $(document.getElementById(key)).attr('db_url');
+            poststr += argsep + 't_tbl[' + i + ']=' + $(document.getElementById(key)).attr('table_name_url');
+            i++;
         }
         return poststr;
     } else {
@@ -648,7 +707,10 @@ DesignerMove.getUrlPos = function (forceString) {
             if (document.getElementById('check_vis_' + key).checked) {
                 var x = parseInt(document.getElementById(key).style.left, 10);
                 var y = parseInt(document.getElementById(key).style.top, 10);
-                var tbCoords = new DesignerObjects.TableCoordinate(db, key.split('.')[1], -1, x, y);
+                var tbCoords = new DesignerObjects.TableCoordinate(
+                    $(document.getElementById(key)).attr('db_url'),
+                    $(document.getElementById(key)).attr('table_name_url'),
+                    -1, x, y);
                 coords.push(tbCoords);
             }
         }
@@ -659,12 +721,12 @@ DesignerMove.getUrlPos = function (forceString) {
 DesignerMove.save2 = function (callback) {
     if (designerTablesEnabled) {
         var argsep = CommonParams.get('arg_separator');
-        var poststr = argsep + 'operation=savePage' + argsep + 'save_page=same' + argsep + 'ajax_request=true';
-        poststr += argsep + 'server=' + server + argsep + 'db=' + db + argsep + 'selected_page=' + selectedPage;
+        var poststr = 'operation=savePage' + argsep + 'save_page=same' + argsep + 'ajax_request=true';
+        poststr += argsep + 'server=' + server + argsep + 'db=' + encodeURIComponent(db) + argsep + 'selected_page=' + selectedPage;
         poststr += DesignerMove.getUrlPos();
 
         var $msgbox = Functions.ajaxShowMessage(Messages.strProcessingRequest);
-        $.post('db_designer.php', poststr, function (data) {
+        $.post('index.php?route=/database/designer', poststr, function (data) {
             if (data.success === false) {
                 Functions.ajaxShowMessage(data.error, false);
             } else {
@@ -729,7 +791,7 @@ DesignerMove.submitSaveDialogAndClose = function (callback) {
 };
 
 DesignerMove.save3 = function (callback) {
-    if (parseInt(selectedPage) !== -1) {
+    if (selectedPage !== -1) {
         DesignerMove.save2(callback);
     } else {
         var buttonOptions = {};
@@ -741,7 +803,7 @@ DesignerMove.save3 = function (callback) {
             $(this).dialog('close');
         };
 
-        var $form = $('<form action="db_designer.php" method="post" name="save_page" id="save_page" class="ajax"></form>')
+        var $form = $('<form action="index.php?route=/database/designer" method="post" name="save_page" id="save_page" class="ajax"></form>')
             .append('<input type="hidden" name="server" value="' + server + '">')
             .append($('<input type="hidden" name="db" />').val(db))
             .append('<input type="hidden" name="operation" value="savePage">')
@@ -786,7 +848,7 @@ DesignerMove.editPages = function () {
         };
 
         var $msgbox = Functions.ajaxShowMessage();
-        $.post('db_designer.php', {
+        $.post('index.php?route=/database/designer', {
             'ajax_request': true,
             'server': server,
             'db': db,
@@ -815,7 +877,7 @@ DesignerMove.editPages = function () {
                         }
                     });
             }
-        }); // end $.get()
+        }); // end $.post()
     });
 };
 
@@ -869,7 +931,7 @@ DesignerMove.deletePages = function () {
     };
 
     var $msgbox = Functions.ajaxShowMessage();
-    $.post('db_designer.php', {
+    $.post('index.php?route=/database/designer', {
         'ajax_request': true,
         'server': server,
         'db': db,
@@ -899,7 +961,7 @@ DesignerMove.deletePages = function () {
                     }
                 });
         }
-    }); // end $.get()
+    }); // end $.post()
 };
 
 // ------------------------------ SAVE AS PAGES ---------------------------------------
@@ -938,7 +1000,7 @@ DesignerMove.saveAs = function () {
                     if (data.id) {
                         selectedPage = data.id;
                     }
-                    $('#page_name').text(name);
+                    DesignerMove.loadPage(selectedPage);
                 }
             }); // end $.post()
         } else {
@@ -950,7 +1012,7 @@ DesignerMove.saveAs = function () {
                     if (page.pgNr) {
                         selectedPage = page.pgNr;
                     }
-                    $('#page_name').text(page.pageDescr);
+                    DesignerMove.loadPage(selectedPage);
                 });
             } else if (choice === 'new') {
                 DesignerPage.saveToNewPage(db, name, DesignerMove.getUrlPos(), function (page) {
@@ -959,7 +1021,7 @@ DesignerMove.saveAs = function () {
                     if (page.pgNr) {
                         selectedPage = page.pgNr;
                     }
-                    $('#page_name').text(page.pageDescr);
+                    DesignerMove.loadPage(selectedPage);
                 });
             }
         }
@@ -971,7 +1033,7 @@ DesignerMove.saveAs = function () {
     };
 
     var $msgbox = Functions.ajaxShowMessage();
-    $.post('db_designer.php', {
+    $.post('index.php?route=/database/designer', {
         'ajax_request': true,
         'server': server,
         'db': db,
@@ -1001,15 +1063,15 @@ DesignerMove.saveAs = function () {
                     }
                 });
             // select current page by default
-            if (selectedPage !== '-1') {
+            if (selectedPage !== -1) {
                 $('select[name="selected_page"]').val(selectedPage);
             }
         }
-    }); // end $.get()
+    }); // end $.post()
 };
 
 DesignerMove.promptToSaveCurrentPage = function (callback) {
-    if (change === 1 || selectedPage === '-1') {
+    if (change === 1 || selectedPage === -1) {
         var buttonOptions = {};
         buttonOptions[Messages.strYes] = function () {
             $(this).dialog('close');
@@ -1052,7 +1114,7 @@ DesignerMove.exportPages = function () {
     var $msgbox = Functions.ajaxShowMessage();
     var argsep = CommonParams.get('arg_separator');
 
-    $.post('db_designer.php', {
+    $.post('index.php?route=/database/designer', {
         'ajax_request': true,
         'server': server,
         'db': db,
@@ -1095,7 +1157,7 @@ DesignerMove.exportPages = function () {
                     }
                 });
         }
-    }); // end $.get()
+    }); // end $.post()
 };
 
 DesignerMove.loadPage = function (page) {
@@ -1105,7 +1167,7 @@ DesignerMove.loadPage = function (page) {
         if (page !== null) {
             paramPage = argsep + 'page=' + page;
         }
-        $('<a href="db_designer.php?server=' + server + argsep + 'db=' + encodeURI(db) + paramPage + '"></a>')
+        $('<a href="index.php?route=/database/designer&server=' + server + argsep + 'db=' + encodeURIComponent(db) + paramPage + '"></a>')
             .appendTo($('#page_content'))
             .trigger('click');
     } else {
@@ -1150,7 +1212,7 @@ DesignerMove.angularDirect = function () {
 };
 
 DesignerMove.saveValueInConfig = function (indexSent, valueSent) {
-    $.post('db_designer.php',
+    $.post('index.php?route=/database/designer',
         {
             'operation': 'save_setting_value',
             'index': indexSent,
@@ -1218,15 +1280,34 @@ DesignerMove.clickField = function (db, T, f, pk) {
     }
 
     if (onDisplayField) {
+        var fieldNameToSend = decodeURIComponent(f);
+        var newDisplayFieldClass = 'tab_field';
+        var oldTabField = document.getElementById('id_tr_' + T + '.' + displayField[T]);
         // if is display field
-        if (displayField[T] === f) {
+        if (displayField[T] === f) {// The display field is already the one defined, user wants to remove it
+            newDisplayFieldClass = 'tab_field';
             delete displayField[T];
+            if (oldTabField) {// Clear the style
+                // Set display field class on old item
+                oldTabField.className = 'tab_field';
+            }
+            fieldNameToSend = '';
         } else {
-            if (displayField[T]) {
-                document.getElementById('id_tr_' + T + '.' + displayField[T]).className = 'tab_field';
+            newDisplayFieldClass = 'tab_field_3';
+            if (displayField[T]) { // Had a previous one, clear it
+                if (oldTabField) {
+                    // Set display field class on old item
+                    oldTabField.className = 'tab_field';
+                }
                 delete displayField[T];
             }
             displayField[T] = f;
+
+            var tabField = document.getElementById('id_tr_' + T + '.' + displayField[T]);
+            if (tabField) {
+                // Set new display field class
+                tabField.className = newDisplayFieldClass;
+            }
         }
         onDisplayField = 0;
         document.getElementById('designer_hint').innerHTML = '';
@@ -1234,14 +1315,14 @@ DesignerMove.clickField = function (db, T, f, pk) {
         document.getElementById('display_field_button').className = 'M_butt';
 
         var $msgbox = Functions.ajaxShowMessage(Messages.strProcessingRequest);
-        $.post('db_designer.php',
+        $.post('index.php?route=/database/designer',
             {
                 'operation': 'setDisplayField',
                 'ajax_request': true,
                 'server': server,
                 'db': db,
                 'table': T,
-                'field': f
+                'field': fieldNameToSend
             },
             function (data) {
                 if (data.success === false) {
@@ -1262,7 +1343,7 @@ DesignerMove.newRelation = function () {
     linkRelation += argsep + 'operation=addNewRelation' + argsep + 'ajax_request=true';
 
     var $msgbox = Functions.ajaxShowMessage(Messages.strProcessingRequest);
-    $.post('db_designer.php', linkRelation, function (data) {
+    $.post('index.php?route=/database/designer', linkRelation, function (data) {
         if (data.success === false) {
             Functions.ajaxShowMessage(data.error, false);
         } else {
@@ -1275,36 +1356,36 @@ DesignerMove.newRelation = function () {
 // -------------------------- create tables -------------------------------------
 DesignerMove.startTableNew = function () {
     CommonParams.set('table', '');
-    CommonActions.refreshMain('tbl_create.php');
+    CommonActions.refreshMain('index.php?route=/table/create');
 };
 
-DesignerMove.startTabUpd = function (table) {
+DesignerMove.startTabUpd = function (db, table) {
+    CommonParams.set('db', db);
     CommonParams.set('table', table);
-    CommonActions.refreshMain('tbl_structure.php');
+    CommonActions.refreshMain('index.php?route=/table/structure');
 };
 
 // --------------------------- hide tables --------------------------------------
 // max/min all tables
 DesignerMove.smallTabAll = function (idThis) {
     var icon = idThis.children[0];
-    var key;
     var valueSent = '';
 
     if (icon.alt === 'v') {
-        for (key in jTabs) {
-            if (document.getElementById('id_hide_tbody_' + key).innerHTML === 'v') {
-                DesignerMove.smallTab(key, 0);
+        $('.designer_tab .small_tab,.small_tab2').each(function (index, element) {
+            if ($(element).text() === 'v') {
+                DesignerMove.smallTab($(element).attr('table_name'), 0);
             }
-        }
+        });
         icon.alt = '>';
         icon.src = icon.dataset.right;
         valueSent = 'v';
     } else {
-        for (key in jTabs) {
-            if (document.getElementById('id_hide_tbody_' + key).innerHTML !== 'v') {
-                DesignerMove.smallTab(key, 0);
+        $('.designer_tab .small_tab,.small_tab2').each(function (index, element) {
+            if ($(element).text() !== 'v') {
+                DesignerMove.smallTab($(element).attr('table_name'), 0);
             }
-        }
+        });
         icon.alt = 'v';
         icon.src = icon.dataset.down;
         valueSent = '>';
@@ -1491,7 +1572,7 @@ DesignerMove.updRelation = function () {
     linkRelation += argsep + 'operation=removeRelation' + argsep + 'ajax_request=true';
 
     var $msgbox = Functions.ajaxShowMessage(Messages.strProcessingRequest);
-    $.post('db_designer.php', linkRelation, function (data) {
+    $.post('index.php?route=/database/designer', linkRelation, function (data) {
         if (data.success === false) {
             Functions.ajaxShowMessage(data.error, false);
         } else {
@@ -1519,8 +1600,9 @@ DesignerMove.hideTabAll = function (idThis) {
         idThis.alt = 'v';
         idThis.src = idThis.dataset.down;
     }
-    var E = document.form1;
-    for (var i = 0; i < E.elements.length; i++) {
+    var E = document.getElementById('container-form');
+    var EelementsLength = E.elements.length;
+    for (var i = 0; i < EelementsLength; i++) {
         if (E.elements[i].type === 'checkbox' && E.elements[i].id.substring(0, 10) === 'check_vis_') {
             if (idThis.alt === 'v') {
                 E.elements[i].checked = true;
@@ -1571,8 +1653,9 @@ DesignerMove.noHaveConstr = function (idThis) {
         idThis.alt = 'v';
         idThis.src = idThis.dataset.down;
     }
-    var E = document.form1;
-    for (var i = 0; i < E.elements.length; i++) {
+    var E = document.getElementById('container-form');
+    var EelementsLength = E.elements.length;
+    for (var i = 0; i < EelementsLength; i++) {
         if (E.elements[i].type === 'checkbox' && E.elements[i].id.substring(0, 10) === 'check_vis_') {
             if (!DesignerMove.inArrayK(E.elements[i].value, a)) {
                 if (idThis.alt === 'v') {
@@ -1719,15 +1802,18 @@ DesignerMove.getColorByTarget = function (target) {
     return color;
 };
 
-DesignerMove.clickOption = function (idThis, columnName, tableName) {
-    var left = globX - (document.getElementById(idThis).offsetWidth >> 1);
-    document.getElementById(idThis).style.left = left + 'px';
-    // var top = globY - document.getElementById(id_this).offsetHeight - 10;
-    document.getElementById(idThis).style.top  = (screen.height / 4) + 'px';
-    document.getElementById(idThis).style.display = 'block';
-    document.getElementById('option_col_name').innerHTML = '<strong>' + Functions.sprintf(Messages.strAddOption, decodeURI(columnName)) + '</strong>';
-    colName = columnName;
-    tabName = tableName;
+DesignerMove.clickOption = function (dbName, tableName, columnName, tableDbNameUrl, optionColNameString) {
+    var designerOptions = document.getElementById('designer_optionse');
+    var left = globX - (designerOptions.offsetWidth >> 1);
+    designerOptions.style.left = left + 'px';
+    // var top = Glob_Y - designerOptions.offsetHeight - 10;
+    designerOptions.style.top  = (screen.height / 4) + 'px';
+    designerOptions.style.display = 'block';
+    document.getElementById('ok_add_object_db_and_table_name_url').value = tableDbNameUrl;
+    document.getElementById('ok_add_object_db_name').value = dbName;
+    document.getElementById('ok_add_object_table_name').value = tableName;
+    document.getElementById('ok_add_object_col_name').value = columnName;
+    document.getElementById('option_col_name').innerHTML = optionColNameString;
 };
 
 DesignerMove.closeOption = function () {
@@ -1743,35 +1829,33 @@ DesignerMove.closeOption = function () {
     document.getElementById('orderby').value = '---';
 };
 
-DesignerMove.selectAll = function (idThis, owner) {
-    var parent = document.form1;
-    downer = owner;
-    var i;
-    var k;
-    var tab = [];
-    for (i = 0; i < parent.elements.length; i++) {
-        if (parent.elements[i].type === 'checkbox' && parent.elements[i].id.substring(0, (9 + idThis.length)) === 'select_' + idThis + '._') {
-            if (document.getElementById('select_all_' + idThis).checked === true) {
-                parent.elements[i].checked = true;
-                parent.elements[i].disabled = true;
-            } else {
-                parent.elements[i].checked = false;
-                parent.elements[i].disabled = false;
-            }
+DesignerMove.selectAll = function (tableName, dbName, idSelectAll) {
+    var parentIsChecked = $('#' + idSelectAll).is(':checked');
+    var checkboxAll = $('#container-form input[id_check_all=\'' + idSelectAll + '\']:checkbox');
+
+    checkboxAll.each(function () {
+        // already checked and then check parent
+        if (parentIsChecked === true && this.checked) {
+            // was checked, removing column from selected fields
+            // trigger unchecked event
+            this.click();
         }
-    }
-    if (document.getElementById('select_all_' + idThis).checked === true) {
-        selectField.push('`' + idThis.substring(owner.length + 1) + '`.*');
-        tab = idThis.split('.');
-        fromArray.push(tab[1]);
+        this.checked = parentIsChecked;
+        this.disabled = parentIsChecked;
+    });
+    if (parentIsChecked) {
+        selectField.push('`' + tableName + '`.*');
+        fromArray.push(tableName);
     } else {
+        var i;
         for (i = 0; i < selectField.length; i++) {
-            if (selectField[i] === ('`' + idThis.substring(owner.length + 1) + '`.*')) {
+            if (selectField[i] === ('`' + tableName + '`.*')) {
                 selectField.splice(i, 1);
             }
         }
+        var k;
         for (k = 0; k < fromArray.length; k++) {
-            if (fromArray[k] === idThis) {
+            if (fromArray[k] === tableName) {
                 fromArray.splice(k, 1);
                 break;
             }
@@ -1799,21 +1883,22 @@ DesignerMove.tableOnOver = function (idThis, val, buil) {
  * This function stores selected column information in selectField[]
  * In case column is checked it add else it deletes
  */
-DesignerMove.storeColumn = function (idThis, owner, col) {
+DesignerMove.storeColumn = function (tableName, colName, checkboxId) {
     var i;
     var k;
-    if (document.getElementById('select_' + owner + '.' + idThis + '._' + col).checked === true) {
-        selectField.push('`' + idThis + '`.`' + col + '`');
-        fromArray.push(idThis);
+    var selectKeyField = '`' + tableName + '`.`' + colName + '`';
+    if (document.getElementById(checkboxId).checked === true) {
+        selectField.push(selectKeyField);
+        fromArray.push(tableName);
     } else {
         for (i = 0; i < selectField.length; i++) {
-            if (selectField[i] === ('`' + idThis + '`.`' + col + '`')) {
+            if (selectField[i] === selectKeyField) {
                 selectField.splice(i, 1);
                 break;
             }
         }
         for (k = 0; k < fromArray.length; k++) {
-            if (fromArray[k] === idThis) {
+            if (fromArray[k] === tableName) {
                 fromArray.splice(k, 1);
                 break;
             }
@@ -1826,7 +1911,7 @@ DesignerMove.storeColumn = function (idThis, owner, col) {
  * first it does a few checks on each object, then makes an object(where,rename,groupby,aggregate,orderby)
  * then a new history object is made and finally all these history objects are added to historyArray[]
  */
-DesignerMove.addObject = function () {
+DesignerMove.addObject = function (dbName, tableName, colName, dbTableNameUrl) {
     var p;
     var whereObj;
     var rel = document.getElementById('rel_opt');
@@ -1839,22 +1924,22 @@ DesignerMove.addObject = function () {
         }
         p = document.getElementById('Query');
         whereObj = new DesignerHistory.Where(rel.value, p.value);// make where object
-        historyArray.push(new DesignerHistory.HistoryObj(colName, whereObj, tabName, hTabs[downer + '.' + tabName], 'Where'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, whereObj, tableName, hTabs[dbTableNameUrl], 'Where'));
         sum = sum + 1;
     }
     if (document.getElementById('new_name').value !== '') {
         var renameObj = new DesignerHistory.Rename(document.getElementById('new_name').value);// make Rename object
-        historyArray.push(new DesignerHistory.HistoryObj(colName, renameObj, tabName, hTabs[downer + '.' + tabName], 'Rename'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, renameObj, tableName, hTabs[dbTableNameUrl], 'Rename'));
         sum = sum + 1;
     }
     if (document.getElementById('operator').value !== '---') {
         var aggregateObj = new DesignerHistory.Aggregate(document.getElementById('operator').value);
-        historyArray.push(new DesignerHistory.HistoryObj(colName, aggregateObj, tabName, hTabs[downer + '.' + tabName], 'Aggregate'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, aggregateObj, tableName, hTabs[dbTableNameUrl], 'Aggregate'));
         sum = sum + 1;
         // make aggregate operator
     }
     if (document.getElementById('groupby').checked === true) {
-        historyArray.push(new DesignerHistory.HistoryObj(colName, 'GroupBy', tabName, hTabs[downer + '.' + tabName], 'GroupBy'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, 'GroupBy', tableName, hTabs[dbTableNameUrl], 'GroupBy'));
         sum = sum + 1;
         // make groupby
     }
@@ -1867,13 +1952,13 @@ DesignerMove.addObject = function () {
             document.getElementById('having').value,
             document.getElementById('h_operator').value
         );// make where object
-        historyArray.push(new DesignerHistory.HistoryObj(colName, whereObj, tabName, hTabs[downer + '.' + tabName], 'Having'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, whereObj, tableName, hTabs[dbTableNameUrl], 'Having'));
         sum = sum + 1;
         // make having
     }
     if (document.getElementById('orderby').value !== '---') {
         var orderByObj = new DesignerHistory.OrderBy(document.getElementById('orderby').value);
-        historyArray.push(new DesignerHistory.HistoryObj(colName, orderByObj, tabName, hTabs[downer + '.' + tabName], 'OrderBy'));
+        historyArray.push(new DesignerHistory.HistoryObj(colName, orderByObj, tableName, hTabs[dbTableNameUrl], 'OrderBy'));
         sum = sum + 1;
         // make orderby
     }
@@ -1883,6 +1968,68 @@ DesignerMove.addObject = function () {
     existingDiv.innerHTML = DesignerHistory.display(init, historyArray.length);
     DesignerMove.closeOption();
     $('#ab').accordion('refresh');
+};
+
+DesignerMove.enablePageContentEvents = function () {
+    $('#page_content').off('mousedown');
+    $('#page_content').off('mouseup');
+    $('#page_content').off('mousemove');
+    $('#page_content').on('mousedown', function (e) {
+        DesignerMove.mouseDown(e);
+    });
+    $('#page_content').on('mouseup', function (e) {
+        DesignerMove.mouseUp(e);
+    });
+    $('#page_content').on('mousemove', function (e) {
+        DesignerMove.mouseMove(e);
+    });
+};
+
+/**
+ * This function enables the events on table items.
+ * It helps to enable them on page loading and when a table is added on the fly.
+ */
+DesignerMove.enableTableEvents = function (index, element) {
+    $(element).on('click', '.select_all_1', function () {
+        DesignerMove.selectAll($(this).attr('table_name'), $(this).attr('db_name'), $(this).attr('id'));
+    });
+    $(element).on('click', '.small_tab,.small_tab2', function () {
+        DesignerMove.smallTab($(this).attr('table_name'), 1);
+    });
+    $(element).on('click', '.small_tab_pref_1', function () {
+        DesignerMove.startTabUpd($(this).attr('db_url'), $(this).attr('table_name_url'));
+    });
+    $(element).on('click', '.select_all_store_col', function () {
+        DesignerMove.storeColumn($(this).attr('table_name'), $(this).attr('col_name'), $(this).attr('id'));
+    });
+    $(element).on('click', '.small_tab_pref_click_opt', function () {
+        DesignerMove.clickOption(
+            $(this).attr('db_name'),
+            $(this).attr('table_name'),
+            $(this).attr('col_name'),
+            $(this).attr('db_table_name_url'),
+            $(this).attr('option_col_name_modal')
+        );
+    });
+    $(element).on('click', '.tab_field_2,.tab_field_3,.tab_field', function () {
+        var params = ($(this).attr('click_field_param')).split(',');
+        DesignerMove.clickField(params[3], params[0], params[1], params[2]);
+    });
+
+    $(element).find('.tab_zag_noquery').mouseover(function () {
+        DesignerMove.tableOnOver($(this).attr('table_name'),0, $(this).attr('query_set'));
+    });
+    $(element).find('.tab_zag_noquery').mouseout(function () {
+        DesignerMove.tableOnOver($(this).attr('table_name'),1, $(this).attr('query_set'));
+    });
+    $(element).find('.tab_zag_query').mouseover(function () {
+        DesignerMove.tableOnOver($(this).attr('table_name'),0, 1);
+    });
+    $(element).find('.tab_zag_query').mouseout(function () {
+        DesignerMove.tableOnOver($(this).attr('table_name'),1, 1);
+    });
+
+    DesignerMove.enablePageContentEvents();
 };
 
 AJAX.registerTeardown('designer/move.js', function () {
@@ -1981,7 +2128,7 @@ AJAX.registerOnload('designer/move.js', function () {
         return false;
     });
     $('#reloadPage').on('click', function () {
-        $('#designer_tab').trigger('click');
+        DesignerMove.loadPage(selectedPage);
     });
     $('#angular_direct_button').on('click', function () {
         DesignerMove.angularDirect();
@@ -2036,49 +2183,11 @@ AJAX.registerOnload('designer/move.js', function () {
         DesignerMove.noHaveConstr(this);
         return false;
     });
-    $('.scroll_tab_struct').on('click', function () {
-        DesignerMove.startTabUpd($(this).attr('table_name'));
-    });
-    $('.scroll_tab_checkbox').on('click', function () {
-        DesignerMove.visibleTab(this,$(this).val());
-    });
-    $('#id_scroll_tab').find('tr').on('click', '.designer_Tabs2,.designer_Tabs', function () {
-        DesignerMove.selectTab($(this).attr('designer_url_table_name'));
-    });
-    $('.designer_tab').on('click', '.select_all_1', function () {
-        DesignerMove.selectAll($(this).attr('designer_url_table_name'), $(this).attr('designer_out_owner'));
-    });
-    $('.designer_tab').on('click', '.small_tab,.small_tab2', function () {
-        DesignerMove.smallTab($(this).attr('table_name'), 1);
-    });
-    $('.designer_tab').on('click', '.small_tab_pref_1', function () {
-        DesignerMove.startTabUpd($(this).attr('table_name_small'));
-    });
-    $('.tab_zag_noquery').mouseover(function () {
-        DesignerMove.tableOnOver($(this).attr('table_name'),0, $(this).attr('query_set'));
-    });
-    $('.tab_zag_noquery').mouseout(function () {
-        DesignerMove.tableOnOver($(this).attr('table_name'),1, $(this).attr('query_set'));
-    });
-    $('.tab_zag_query').mouseover(function () {
-        DesignerMove.tableOnOver($(this).attr('table_name'),0, 1);
-    });
-    $('.tab_zag_query').mouseout(function () {
-        DesignerMove.tableOnOver($(this).attr('table_name'),1, 1);
-    });
-    $('.designer_tab').on('click','.tab_field_2,.tab_field_3,.tab_field', function () {
-        var params = ($(this).attr('click_field_param')).split(',');
-        DesignerMove.clickField(params[3], params[0], params[1], params[2]);
-    });
-    $('.designer_tab').on('click', '.select_all_store_col', function () {
-        var params = ($(this).attr('store_column_param')).split(',');
-        DesignerMove.storeColumn(params[0], params[1], params[2]);
-    });
-    $('.designer_tab').on('click', '.small_tab_pref_click_opt', function () {
-        var params = ($(this).attr('Click_option_param')).split(',');
-        DesignerMove.clickOption(params[0], params[1], params[2]);
-    });
-    $('input#del_button').on('click', function () {
+
+    $('.designer_tab').each(DesignerMove.enableTableEvents);
+    $('.designer_tab').each(DesignerMove.addTableToTablesList);
+
+    $('input#del_button').click(function () {
         DesignerMove.updRelation();
     });
     $('input#cancel_button').on('click', function () {
@@ -2086,7 +2195,12 @@ AJAX.registerOnload('designer/move.js', function () {
         DesignerMove.reload();
     });
     $('input#ok_add_object').on('click', function () {
-        DesignerMove.addObject();
+        DesignerMove.addObject(
+            $('#ok_add_object_db_name').val(),
+            $('#ok_add_object_table_name').val(),
+            $('#ok_add_object_col_name').val(),
+            $('#ok_add_object_db_and_table_name_url').val()
+        );
     });
     $('input#cancel_close_option').on('click', function () {
         DesignerMove.closeOption();
@@ -2097,13 +2211,5 @@ AJAX.registerOnload('designer/move.js', function () {
     $('input#cancel_new_rel_panel').on('click', function () {
         document.getElementById('layer_new_relation').style.display = 'none';
     });
-    $('#page_content').on('mousedown', function (e) {
-        DesignerMove.mouseDown(e);
-    });
-    $('#page_content').on('mouseup', function (e) {
-        DesignerMove.mouseUp(e);
-    });
-    $('#page_content').on('mousemove', function (e) {
-        DesignerMove.mouseMove(e);
-    });
+    DesignerMove.enablePageContentEvents();
 });

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\UserPreferences class
  *
@@ -119,9 +118,7 @@ class UserPreferences
     public function save(array $config_array)
     {
         $cfgRelation = $this->relation->getRelationsParam();
-        $server = isset($GLOBALS['server'])
-            ? $GLOBALS['server']
-            : $GLOBALS['cfg']['ServerDefault'];
+        $server = $GLOBALS['server'] ?? $GLOBALS['cfg']['ServerDefault'];
         $cache_key = 'server_' . $server;
         if (! $cfgRelation['userconfigwork']) {
             // no pmadb table, use session storage
@@ -258,7 +255,7 @@ class UserPreferences
             $hash = '#' . urlencode($hash);
         }
         Core::sendHeaderLocation('./' . $file_name
-            . Url::getCommonRaw($url_params) . $hash);
+            . Url::getCommonRaw($url_params, strpos($file_name, '?') === false ? '?' : '&') . $hash);
     }
 
     /**

@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    functions used on the table structure page
  * @name            Table Structure
@@ -13,7 +12,7 @@
 /* global sprintf */ // js/vendor/sprintf.js
 
 /**
- * AJAX scripts for tbl_structure.php
+ * AJAX scripts for /table/structure
  *
  * Actions ajaxified here:
  * Drop Column
@@ -91,7 +90,7 @@ AJAX.registerOnload('table/structure.js', function () {
                         .append(data.message)
                         .show();
                     Functions.highlightSql($('#page_content'));
-                    $('.result_query .notice').remove();
+                    $('.result_query .alert-primary').remove();
                     reloadFieldForm();
                     $form.remove();
                     Functions.ajaxRemoveMessage($msg);
@@ -222,7 +221,7 @@ AJAX.registerOnload('table/structure.js', function () {
                     if (data.tableStat) {
                         $('#tablestatistics').html(data.tableStat);
                     }
-                    // refresh the list of indexes (comes from sql.php)
+                    // refresh the list of indexes (comes from /sql)
                     $('.index_info').replaceWith(data.indexes_list);
                     Navigation.reload();
                 } else {

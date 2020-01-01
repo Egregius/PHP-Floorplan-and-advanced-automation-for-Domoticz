@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Properties class for the schema export plug-in
  *
@@ -31,7 +30,7 @@ class SchemaPluginProperties extends PluginPropertyItem
      */
     public function getItemType()
     {
-        return "schema";
+        return 'schema';
     }
 
     /**

@@ -37,7 +37,7 @@ final class CacheItem implements ItemInterface
     /**
      * {@inheritdoc}
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -53,15 +53,17 @@ final class CacheItem implements ItemInterface
     /**
      * {@inheritdoc}
      */
-    public function isHit()
+    public function isHit(): bool
     {
         return $this->isHit;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return $this
      */
-    public function set($value)
+    public function set($value): self
     {
         $this->value = $value;
 
@@ -70,8 +72,10 @@ final class CacheItem implements ItemInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return $this
      */
-    public function expiresAt($expiration)
+    public function expiresAt($expiration): self
     {
         if (null === $expiration) {
             $this->expiry = $this->defaultLifetime > 0 ? microtime(true) + $this->defaultLifetime : null;
@@ -86,8 +90,10 @@ final class CacheItem implements ItemInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return $this
      */
-    public function expiresAfter($time)
+    public function expiresAfter($time): self
     {
         if (null === $time) {
             $this->expiry = $this->defaultLifetime > 0 ? microtime(true) + $this->defaultLifetime : null;
@@ -123,8 +129,8 @@ final class CacheItem implements ItemInterface
             if ('' === $tag) {
                 throw new InvalidArgumentException('Cache tag length must be greater than zero');
             }
-            if (false !== strpbrk($tag, '{}()/\@:')) {
-                throw new InvalidArgumentException(sprintf('Cache tag "%s" contains reserved characters {}()/\@:', $tag));
+            if (false !== strpbrk($tag, self::RESERVED_CHARACTERS)) {
+                throw new InvalidArgumentException(sprintf('Cache tag "%s" contains reserved characters %s', $tag, self::RESERVED_CHARACTERS));
             }
             $this->newMetadata[self::METADATA_TAGS][$tag] = $tag;
         }
@@ -141,29 +147,13 @@ final class CacheItem implements ItemInterface
     }
 
     /**
-     * Returns the list of tags bound to the value coming from the pool storage if any.
-     *
-     * @return array
-     *
-     * @deprecated since Symfony 4.2, use the "getMetadata()" method instead.
-     */
-    public function getPreviousTags()
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.2, use the "getMetadata()" method instead.', __METHOD__), E_USER_DEPRECATED);
-
-        return $this->metadata[self::METADATA_TAGS] ?? [];
-    }
-
-    /**
      * Validates a cache key according to PSR-6.
      *
      * @param string $key The key to validate
      *
-     * @return string
-     *
      * @throws InvalidArgumentException When $key is not valid
      */
-    public static function validateKey($key)
+    public static function validateKey($key): string
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(sprintf('Cache key must be string, "%s" given', \is_object($key) ? \get_class($key) : \gettype($key)));
@@ -171,8 +161,8 @@ final class CacheItem implements ItemInterface
         if ('' === $key) {
             throw new InvalidArgumentException('Cache key length must be greater than zero');
         }
-        if (false !== strpbrk($key, '{}()/\@:')) {
-            throw new InvalidArgumentException(sprintf('Cache key "%s" contains reserved characters {}()/\@:', $key));
+        if (false !== strpbrk($key, self::RESERVED_CHARACTERS)) {
+            throw new InvalidArgumentException(sprintf('Cache key "%s" contains reserved characters %s', $key, self::RESERVED_CHARACTERS));
         }
 
         return $key;
@@ -183,7 +173,7 @@ final class CacheItem implements ItemInterface
      *
      * @internal
      */
-    public static function log(LoggerInterface $logger = null, $message, $context = [])
+    public static function log(?LoggerInterface $logger, string $message, array $context = [])
     {
         if ($logger) {
             $logger->warning($message, $context);

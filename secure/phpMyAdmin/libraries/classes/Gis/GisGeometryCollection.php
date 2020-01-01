@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Handles actions related to GIS GEOMETRYCOLLECTION objects
  *
@@ -34,6 +33,7 @@ class GisGeometryCollection extends GisGeometry
      * Returns the singleton.
      *
      * @return GisGeometryCollection the singleton
+     *
      * @access public
      */
     public static function singleton()
@@ -51,6 +51,7 @@ class GisGeometryCollection extends GisGeometry
      * @param string $spatial spatial data of a row
      *
      * @return array array containing the min, max values for x and y coordinates
+     *
      * @access public
      */
     public function scaleRow($spatial)
@@ -116,6 +117,7 @@ class GisGeometryCollection extends GisGeometry
      * @param resource    $image      Image object
      *
      * @return resource the modified image object
+     *
      * @access public
      */
     public function prepareRowAsPng($spatial, ?string $label, $color, array $scale_data, $image)
@@ -163,6 +165,7 @@ class GisGeometryCollection extends GisGeometry
      * @param TCPDF       $pdf        TCPDF instance
      *
      * @return TCPDF the modified TCPDF instance
+     *
      * @access public
      */
     public function prepareRowAsPdf($spatial, ?string $label, $color, array $scale_data, $pdf)
@@ -209,6 +212,7 @@ class GisGeometryCollection extends GisGeometry
      * @param array  $scale_data array containing data related to scaling
      *
      * @return string the code related to a row in the GIS dataset
+     *
      * @access public
      */
     public function prepareRowAsSvg($spatial, $label, $color, array $scale_data)
@@ -258,6 +262,7 @@ class GisGeometryCollection extends GisGeometry
      * @param array  $scale_data array containing data related to scaling
      *
      * @return string JavaScript related to a row in the GIS dataset
+     *
      * @access public
      */
     public function prepareRowAsOl($spatial, $srid, $label, $color, array $scale_data)
@@ -303,6 +308,7 @@ class GisGeometryCollection extends GisGeometry
      * @param string $geom_col geometry collection string
      *
      * @return array the constituents of the geometry collection object
+     *
      * @access private
      */
     private function _explodeGeomCol($geom_col)
@@ -340,12 +346,12 @@ class GisGeometryCollection extends GisGeometry
      * @param string $empty    value for empty points
      *
      * @return string WKT with the set of parameters passed by the GIS editor
+     *
      * @access public
      */
     public function generateWkt(array $gis_data, $index, $empty = '')
     {
-        $geom_count = isset($gis_data['GEOMETRYCOLLECTION']['geom_count'])
-            ? $gis_data['GEOMETRYCOLLECTION']['geom_count'] : 1;
+        $geom_count = $gis_data['GEOMETRYCOLLECTION']['geom_count'] ?? 1;
         $wkt = 'GEOMETRYCOLLECTION(';
         for ($i = 0; $i < $geom_count; $i++) {
             if (isset($gis_data[$i]['gis_type'])) {
@@ -376,6 +382,7 @@ class GisGeometryCollection extends GisGeometry
      * @param string $value of the GIS column
      *
      * @return array parameters for the GIS editor from the value of the GIS column
+     *
      * @access public
      */
     public function generateParams($value)

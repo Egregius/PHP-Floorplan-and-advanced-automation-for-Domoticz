@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Image JPEG Upload Input Transformations plugin for phpMyAdmin
  *
@@ -29,7 +28,7 @@ class Image_JPEG_Upload extends ImageUploadTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Image";
+        return 'Image';
     }
 
     /**
@@ -39,6 +38,6 @@ class Image_JPEG_Upload extends ImageUploadTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "JPEG";
+        return 'JPEG';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold Theme class
  *
@@ -11,7 +10,6 @@ namespace PhpMyAdmin;
 
 use PhpMyAdmin\Template;
 use PhpMyAdmin\ThemeManager;
-use PhpMyAdmin\Url;
 
 /**
  * handles theme
@@ -19,7 +17,6 @@ use PhpMyAdmin\Url;
  * @todo add the possibility to make a theme depend on another theme
  * and by default on original
  * @todo make all components optional - get missing components from 'parent' theme
- *
  * @package PhpMyAdmin
  */
 class Theme
@@ -63,6 +60,7 @@ class Theme
     /**
      * needed because sometimes, the mtime for different themes
      * is identical
+     *
      * @var integer filesize for info file
      * @access  protected
      */
@@ -102,6 +100,7 @@ class Theme
      * Loads theme information
      *
      * @return boolean whether loading them info was successful or not
+     *
      * @access  public
      */
     public function loadInfo()
@@ -160,6 +159,7 @@ class Theme
      * @param string $folder path to theme
      *
      * @return Theme|false
+     *
      * @static
      * @access public
      */
@@ -181,8 +181,9 @@ class Theme
     /**
      * checks image path for existence - if not found use img from fallback theme
      *
-     * @access public
      * @return bool
+     *
+     * @access public
      */
     public function checkImgPath()
     {
@@ -213,8 +214,9 @@ class Theme
     /**
      * returns path to theme
      *
-     * @access public
      * @return string path to theme
+     *
+     * @access public
      */
     public function getPath()
     {
@@ -227,6 +229,7 @@ class Theme
      * @param string $path path to theme
      *
      * @return void
+     *
      * @access public
      */
     public function setPath($path)
@@ -240,6 +243,7 @@ class Theme
      * @param string $version version to set
      *
      * @return void
+     *
      * @access public
      */
     public function setVersion($version)
@@ -251,6 +255,7 @@ class Theme
      * returns version
      *
      * @return string version
+     *
      * @access public
      */
     public function getVersion()
@@ -265,6 +270,7 @@ class Theme
      * @param string $version version to compare to
      *
      * @return boolean true if theme version is equal or higher to $version
+     *
      * @access public
      */
     public function checkVersion($version)
@@ -278,6 +284,7 @@ class Theme
      * @param string $name name to set
      *
      * @return void
+     *
      * @access public
      */
     public function setName($name)
@@ -288,8 +295,9 @@ class Theme
     /**
      * returns name
      *
-     * @access  public
      * @return string name
+     *
+     * @access  public
      */
     public function getName()
     {
@@ -302,6 +310,7 @@ class Theme
      * @param string $id new id
      *
      * @return void
+     *
      * @access public
      */
     public function setId($id)
@@ -313,6 +322,7 @@ class Theme
      * returns id
      *
      * @return string id
+     *
      * @access public
      */
     public function getId()
@@ -326,6 +336,7 @@ class Theme
      * @param string $path path to images for this theme
      *
      * @return void
+     *
      * @access public
      */
     public function setImgPath($path)
@@ -341,8 +352,9 @@ class Theme
      * @param string $file     file name for image
      * @param string $fallback fallback image
      *
-     * @access public
      * @return string image path for this theme
+     *
+     * @access public
      */
     public function getImgPath($file = null, $fallback = null)
     {
@@ -365,6 +377,7 @@ class Theme
      * Renders the preview for this theme
      *
      * @return string
+     *
      * @access public
      */
     public function getPrintPreview()

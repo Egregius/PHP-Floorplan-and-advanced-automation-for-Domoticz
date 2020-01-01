@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Classes to create relation schema in Dia format.
  *
@@ -19,7 +18,7 @@ use XMLWriter;
  *
  * @package PhpMyAdmin
  * @access  public
- * @see     https://secure.php.net/manual/en/book.xmlwriter.php
+ * @see     https://www.php.net/manual/en/book.xmlwriter.php
  */
 class Dia extends XMLWriter
 {
@@ -53,6 +52,9 @@ class Dia extends XMLWriter
      * to define the document, then finally a Layer starts which
      * holds all the objects.
      *
+     * @see    XMLWriter::startElement(),XMLWriter::writeAttribute(),
+     *      XMLWriter::writeRaw()
+     *
      * @param string $paper        the size of the paper/document
      * @param float  $topMargin    top margin of the paper/document in cm
      * @param float  $bottomMargin bottom margin of the paper/document in cm
@@ -63,8 +65,6 @@ class Dia extends XMLWriter
      * @return void
      *
      * @access public
-     * @see    XMLWriter::startElement(),XMLWriter::writeAttribute(),
-     *      XMLWriter::writeRaw()
      */
     public function startDiaDoc(
         $paper,
@@ -154,9 +154,11 @@ class Dia extends XMLWriter
     /**
      * Ends Dia Document
      *
-     * @return void
-     * @access public
      * @see    XMLWriter::endElement(),XMLWriter::endDocument()
+     *
+     * @return void
+     *
+     * @access public
      */
     public function endDiaDoc()
     {
@@ -167,11 +169,13 @@ class Dia extends XMLWriter
     /**
      * Output Dia Document for download
      *
+     * @see    XMLWriter::flush()
+     *
      * @param string $fileName name of the dia document
      *
      * @return void
+     *
      * @access public
-     * @see    XMLWriter::flush()
      */
     public function showOutput($fileName)
     {

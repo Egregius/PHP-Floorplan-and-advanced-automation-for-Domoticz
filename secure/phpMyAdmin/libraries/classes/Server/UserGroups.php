@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * set of functions for user group handling
  *
@@ -9,6 +8,7 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Server;
 
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
@@ -36,8 +36,8 @@ class UserGroups
 
         $cfgRelation = $relation->getRelationsParam();
         $usersTable = Util::backquote($cfgRelation['db'])
-            . "." . Util::backquote($cfgRelation['users']);
-        $sql_query = "SELECT `username` FROM " . $usersTable
+            . '.' . Util::backquote($cfgRelation['users']);
+        $sql_query = 'SELECT `username` FROM ' . $usersTable
             . " WHERE `usergroup`='" . $GLOBALS['dbi']->escapeString($userGroup)
             . "'";
         $result = $relation->queryAsControlUser($sql_query, false);
@@ -74,16 +74,16 @@ class UserGroups
     public static function getHtmlForUserGroupsTable()
     {
         $relation = new Relation($GLOBALS['dbi']);
-        $html_output  = '<h2>' . __('User groups') . '</h2>';
+        $html_output  = '<div class="row"><h2>' . __('User groups') . '</h2></div>';
         $cfgRelation = $relation->getRelationsParam();
         $groupTable = Util::backquote($cfgRelation['db'])
-            . "." . Util::backquote($cfgRelation['usergroups']);
-        $sql_query = "SELECT * FROM " . $groupTable . " ORDER BY `usergroup` ASC";
+            . '.' . Util::backquote($cfgRelation['usergroups']);
+        $sql_query = 'SELECT * FROM ' . $groupTable . ' ORDER BY `usergroup` ASC';
         $result = $relation->queryAsControlUser($sql_query, false);
 
         if ($result && $GLOBALS['dbi']->numRows($result)) {
             $html_output .= '<form name="userGroupsForm" id="userGroupsForm"'
-                . ' action="server_privileges.php" method="post">';
+                . ' action="' . Url::getFromRoute('/server/privileges') . '" method="post">';
             $html_output .= Url::getHiddenInputs();
             $html_output .= '<table id="userGroupsTable">';
             $html_output .= '<thead><tr>';
@@ -112,7 +112,7 @@ class UserGroups
                 $html_output .= '<td>' . self::getAllowedTabNames($tabs, 'table') . '</td>';
 
                 $html_output .= '<td>';
-                $html_output .= '<a class="" href="server_user_groups.php" data-post="'
+                $html_output .= '<a class="" href="' . Url::getFromRoute('/server/user-groups') . '" data-post="'
                     . Url::getCommon(
                         [
                             'viewUsers' => 1,
@@ -121,10 +121,10 @@ class UserGroups
                         ''
                     )
                     . '">'
-                    . Util::getIcon('b_usrlist', __('View users'))
+                    . Generator::getIcon('b_usrlist', __('View users'))
                     . '</a>';
                 $html_output .= '&nbsp;&nbsp;';
-                $html_output .= '<a class="" href="server_user_groups.php" data-post="'
+                $html_output .= '<a class="" href="' . Url::getFromRoute('/server/user-groups') . '" data-post="'
                     . Url::getCommon(
                         [
                             'editUserGroup' => 1,
@@ -133,10 +133,10 @@ class UserGroups
                         ''
                     )
                     . '">'
-                    . Util::getIcon('b_edit', __('Edit')) . '</a>';
+                    . Generator::getIcon('b_edit', __('Edit')) . '</a>';
                 $html_output .= '&nbsp;&nbsp;';
                 $html_output .= '<a class="deleteUserGroup ajax"'
-                    . ' href="server_user_groups.php" data-post="'
+                    . ' href="' . Url::getFromRoute('/server/user-groups') . '" data-post="'
                     . Url::getCommon(
                         [
                             'deleteUserGroup' => 1,
@@ -145,7 +145,7 @@ class UserGroups
                         ''
                     )
                     . '">'
-                    . Util::getIcon('b_drop', __('Delete')) . '</a>';
+                    . Generator::getIcon('b_drop', __('Delete')) . '</a>';
                 $html_output .= '</td>';
 
                 $html_output .= '</tr>';
@@ -157,12 +157,11 @@ class UserGroups
         }
         $GLOBALS['dbi']->freeResult($result);
 
-        $html_output .= '<fieldset id="fieldset_add_user_group">';
-        $html_output .= '<a href="server_user_groups.php'
-            . Url::getCommon(['addUserGroup' => 1]) . '">'
-            . Util::getIcon('b_usradd')
+        $html_output .= '<div class="row"><fieldset id="fieldset_add_user_group">';
+        $html_output .= '<a href="' . Url::getFromRoute('/server/user-groups', ['addUserGroup' => 1]) . '">'
+            . Generator::getIcon('b_usradd')
             . __('Add user group') . '</a>';
-        $html_output .= '</fieldset>';
+        $html_output .= '</fieldset></div>';
 
         return $html_output;
     }
@@ -202,14 +201,14 @@ class UserGroups
         $relation = new Relation($GLOBALS['dbi']);
         $cfgRelation = $relation->getRelationsParam();
         $userTable = Util::backquote($cfgRelation['db'])
-            . "." . Util::backquote($cfgRelation['users']);
+            . '.' . Util::backquote($cfgRelation['users']);
         $groupTable = Util::backquote($cfgRelation['db'])
-            . "." . Util::backquote($cfgRelation['usergroups']);
-        $sql_query = "DELETE FROM " . $userTable
+            . '.' . Util::backquote($cfgRelation['usergroups']);
+        $sql_query = 'DELETE FROM ' . $userTable
             . " WHERE `usergroup`='" . $GLOBALS['dbi']->escapeString($userGroup)
             . "'";
         $relation->queryAsControlUser($sql_query, true);
-        $sql_query = "DELETE FROM " . $groupTable
+        $sql_query = 'DELETE FROM ' . $groupTable
             . " WHERE `usergroup`='" . $GLOBALS['dbi']->escapeString($userGroup)
             . "'";
         $relation->queryAsControlUser($sql_query, true);
@@ -235,7 +234,7 @@ class UserGroups
         }
 
         $html_output .= '<form name="userGroupForm" id="userGroupForm"'
-            . ' action="server_user_groups.php" method="post">';
+            . ' action="' . Url::getFromRoute('/server/user-groups') . '" method="post">';
         $urlParams = [];
         if ($userGroup != null) {
             $urlParams['userGroup'] = $userGroup;
@@ -267,8 +266,8 @@ class UserGroups
         if ($userGroup != null) {
             $cfgRelation = $relation->getRelationsParam();
             $groupTable = Util::backquote($cfgRelation['db'])
-                . "." . Util::backquote($cfgRelation['usergroups']);
-            $sql_query = "SELECT * FROM " . $groupTable
+                . '.' . Util::backquote($cfgRelation['usergroups']);
+            $sql_query = 'SELECT * FROM ' . $groupTable
                 . " WHERE `usergroup`='" . $GLOBALS['dbi']->escapeString($userGroup)
                 . "'";
             $result = $relation->queryAsControlUser($sql_query, false);
@@ -359,32 +358,32 @@ class UserGroups
         $tabs = Util::getMenuTabList();
         $cfgRelation = $relation->getRelationsParam();
         $groupTable = Util::backquote($cfgRelation['db'])
-            . "." . Util::backquote($cfgRelation['usergroups']);
+            . '.' . Util::backquote($cfgRelation['usergroups']);
 
         if (! $new) {
-            $sql_query = "DELETE FROM " . $groupTable
+            $sql_query = 'DELETE FROM ' . $groupTable
                 . " WHERE `usergroup`='" . $GLOBALS['dbi']->escapeString($userGroup)
                 . "';";
             $relation->queryAsControlUser($sql_query, true);
         }
 
-        $sql_query = "INSERT INTO " . $groupTable
-            . "(`usergroup`, `tab`, `allowed`)"
-            . " VALUES ";
+        $sql_query = 'INSERT INTO ' . $groupTable
+            . '(`usergroup`, `tab`, `allowed`)'
+            . ' VALUES ';
         $first = true;
         foreach ($tabs as $tabGroupName => $tabGroup) {
             foreach ($tabGroup as $tab => $tabName) {
                 if (! $first) {
-                    $sql_query .= ", ";
+                    $sql_query .= ', ';
                 }
                 $tabName = $tabGroupName . '_' . $tab;
                 $allowed = isset($_POST[$tabName]) && $_POST[$tabName] == 'Y';
                 $sql_query .= "('" . $GLOBALS['dbi']->escapeString($userGroup) . "', '" . $tabName . "', '"
-                    . ($allowed ? "Y" : "N") . "')";
+                    . ($allowed ? 'Y' : 'N') . "')";
                 $first = false;
             }
         }
-        $sql_query .= ";";
+        $sql_query .= ';';
         $relation->queryAsControlUser($sql_query, true);
     }
 }

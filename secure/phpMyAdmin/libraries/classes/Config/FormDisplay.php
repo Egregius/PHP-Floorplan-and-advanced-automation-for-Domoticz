@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Form management class, displays and processes forms
  *
@@ -17,6 +16,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Config;
 
 use PhpMyAdmin\Config\Forms\User\UserFormList;
+use PhpMyAdmin\Html\MySQLDocumentation;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Util;
 
@@ -29,12 +29,14 @@ class FormDisplay
 {
     /**
      * ConfigFile instance
+     *
      * @var ConfigFile
      */
     private $_configFile;
 
     /**
      * Form list
+     *
      * @var Form[]
      */
     private $_forms = [];
@@ -43,12 +45,14 @@ class FormDisplay
      * Stores validation errors, indexed by paths
      * [ Form_name ] is an array of form errors
      * [path] is a string storing error associated with single field
+     *
      * @var array
      */
     private $_errors = [];
 
     /**
      * Paths changed so that they can be used as HTML ids, indexed by paths
+     *
      * @var array
      */
     private $_translatedPaths = [];
@@ -56,6 +60,7 @@ class FormDisplay
     /**
      * Server paths change indexes so we define maps from current server
      * path to the first one, indexed by work path
+     *
      * @var array
      */
     private $_systemPaths = [];
@@ -63,24 +68,28 @@ class FormDisplay
     /**
      * Language strings which will be sent to Messages JS variable
      * Will be looked up in $GLOBALS: str{value} or strSetup{value}
+     *
      * @var array
      */
     private $_jsLangStrings = [];
 
     /**
      * Tells whether forms have been validated
+     *
      * @var bool
      */
     private $_isValidated = true;
 
     /**
      * Dictionary with user preferences keys
+     *
      * @var array|null
      */
     private $_userprefsKeys;
 
     /**
      * Dictionary with disallowed user preferences keys
+     *
      * @var array
      */
     private $_userprefsDisallow;
@@ -141,7 +150,7 @@ class FormDisplay
         foreach ($this->_forms[$formName]->fields as $path) {
             $workPath = $serverId === null
                 ? $path
-                : str_replace('Servers/1/', "Servers/$serverId/", $path);
+                : str_replace('Servers/1/', 'Servers/' . $serverId . '/', $path);
             $this->_systemPaths[$workPath] = $path;
             $this->_translatedPaths[$workPath] = str_replace('/', '-', $workPath);
         }
@@ -240,11 +249,10 @@ class FormDisplay
 
         foreach ($this->_forms as $form) {
             /** @var Form $form */
-            $formErrors = isset($this->_errors[$form->name])
-                ? $this->_errors[$form->name] : null;
+            $formErrors = $this->_errors[$form->name] ?? null;
             $htmlOutput .= $this->formDisplayTemplate->displayFieldsetTop(
-                Descriptions::get("Form_{$form->name}"),
-                Descriptions::get("Form_{$form->name}", 'desc'),
+                Descriptions::get('Form_' . $form->name),
+                Descriptions::get('Form_' . $form->name, 'desc'),
                 $formErrors,
                 ['id' => $form->name]
             );
@@ -310,7 +318,7 @@ class FormDisplay
         if ($tabbedForm) {
             $tabs = [];
             foreach ($this->_forms as $form) {
-                $tabs[$form->name] = Descriptions::get("Form_$form->name");
+                $tabs[$form->name] = Descriptions::get('Form_' . $form->name);
             }
             $htmlOutput .= $this->formDisplayTemplate->displayTabsTop($tabs);
         }
@@ -349,7 +357,7 @@ class FormDisplay
             $jsLangSent = true;
             $jsLang = [];
             foreach ($this->_jsLangStrings as $strName => $strValue) {
-                $jsLang[] = "'$strName': '" . Sanitize::jsFormat($strValue, false) . '\'';
+                $jsLang[] = "'" . $strName . "': '" . Sanitize::jsFormat($strValue, false) . '\'';
             }
             $js[] = "$.extend(Messages, {\n\t"
                 . implode(",\n\t", $jsLang) . '})';
@@ -452,7 +460,7 @@ class FormDisplay
                 }
                 return $htmlOutput;
             case 'NULL':
-                trigger_error("Field $systemPath has no type", E_USER_WARNING);
+                trigger_error('Field ' . $systemPath . ' has no type', E_USER_WARNING);
                 return null;
         }
 
@@ -494,7 +502,11 @@ class FormDisplay
                 $jsLine .= '[\'' . Sanitize::escapeJsString($valueDefaultJs) . '\']';
                 break;
             case 'list':
-                $jsLine .= '\'' . Sanitize::escapeJsString(implode("\n", $valueDefault))
+                $val = $valueDefault;
+                if (isset($val['wrapper_params'])) {
+                    unset($val['wrapper_params']);
+                }
+                $jsLine .= '\'' . Sanitize::escapeJsString(implode("\n", $val))
                 . '\'';
                 break;
         }
@@ -652,8 +664,7 @@ class FormDisplay
                 if ($isSetupScript
                     && isset($this->_userprefsKeys[$systemPath])
                 ) {
-                    if (isset($this->_userprefsDisallow[$systemPath])
-                        && isset($_POST[$key . '-userprefs-allow'])
+                    if (isset($this->_userprefsDisallow[$systemPath], $_POST[$key . '-userprefs-allow'])
                     ) {
                         unset($this->_userprefsDisallow[$systemPath]);
                     } elseif (! isset($_POST[$key . '-userprefs-allow'])) {
@@ -704,8 +715,8 @@ class FormDisplay
                 $values[$systemPath] = $_POST[$key];
                 if ($changeIndex !== false) {
                     $workPath = str_replace(
-                        "Servers/$form->index/",
-                        "Servers/$changeIndex/",
+                        'Servers/' . $form->index . '/',
+                        'Servers/' . $changeIndex . '/',
                         $workPath
                     );
                 }
@@ -728,7 +739,7 @@ class FormDisplay
                 foreach ($values[$path] as $value) {
                     $matches = [];
                     $match = preg_match(
-                        "/^(.+):(?:[ ]?)(\\w+)$/",
+                        '/^(.+):(?:[ ]?)(\\w+)$/',
                         $value,
                         $matches
                     );
@@ -738,7 +749,7 @@ class FormDisplay
                         $proxies[$ip] = trim($matches[2]);
                     } else {
                         // save also incorrect values
-                        $proxies["-$i"] = $value;
+                        $proxies['-' . $i] = $value;
                         $i++;
                     }
                 }
@@ -783,7 +794,7 @@ class FormDisplay
         if ($test == 'Import' || $test == 'Export') {
             return '';
         }
-        return Util::getDocuLink(
+        return MySQLDocumentation::getDocumentationLink(
             'config',
             'cfg_' . $this->_getOptName($path)
         );
@@ -843,7 +854,7 @@ class FormDisplay
             }
             if (! function_exists('recode_string')) {
                 $opts['values']['recode'] .= ' (' . __('unavailable') . ')';
-                $comment .= ($comment ? ", " : '') . sprintf(
+                $comment .= ($comment ? ', ' : '') . sprintf(
                     __('"%s" requires %s extension'),
                     'recode',
                     'recode'

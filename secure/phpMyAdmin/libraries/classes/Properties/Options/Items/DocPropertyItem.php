@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Properties\Options\Items\DocPropertyItem class
  *
@@ -30,6 +29,6 @@ class DocPropertyItem extends OptionsPropertyOneItem
      */
     public function getItemType()
     {
-        return "doc";
+        return 'doc';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * holds the database index columns class
  *
@@ -133,10 +132,10 @@ class IndexColumn
      *
      * @param boolean $as_text whether to returned the string representation
      *
-     * @return mixed nullability of the column. True/false or Yes/No depending
-     *               on the value of the $as_text parameter
+     * @return string nullability of the column. True/false or Yes/No depending
+     *                on the value of the $as_text parameter
      */
-    public function getNull($as_text = false)
+    public function getNull($as_text = false): string
     {
         if ($as_text) {
             if (! $this->_null || $this->_null == 'NO') {

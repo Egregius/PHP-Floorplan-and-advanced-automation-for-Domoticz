@@ -1,7 +1,7 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Database\SqlController
+ *
  * @package PhpMyAdmin\Controllers\Database
  */
 declare(strict_types=1);
@@ -10,9 +10,11 @@ namespace PhpMyAdmin\Controllers\Database;
 
 use PhpMyAdmin\Config\PageSettings;
 use PhpMyAdmin\SqlQueryForm;
+use PhpMyAdmin\Url;
 
 /**
  * Database SQL executor
+ *
  * @package PhpMyAdmin\Controllers\Database
  */
 class SqlController extends AbstractController
@@ -35,8 +37,8 @@ class SqlController extends AbstractController
          * After a syntax error, we return to this script
          * with the typed query in the textarea.
          */
-        $goto = 'db_sql.php';
-        $back = 'db_sql.php';
+        $goto = Url::getFromRoute('/database/sql');
+        $back = $goto;
 
         return $sqlQueryForm->getHtml(
             true,

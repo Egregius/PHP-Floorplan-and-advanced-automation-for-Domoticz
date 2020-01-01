@@ -181,7 +181,7 @@ class AlterOperation extends Component
      */
     public static function parse(Parser $parser, TokensList $list, array $options = [])
     {
-        $ret = new self();
+        $ret = new static();
 
         /**
          * Counts brackets.
@@ -339,7 +339,7 @@ class AlterOperation extends Component
             'COMMENT',
             'DEFAULT',
             'CHARACTER SET',
-            'COLLATE'
+            'COLLATE',
         ];
         // Since these options can be used for
         // both table as well as a specific column in the table

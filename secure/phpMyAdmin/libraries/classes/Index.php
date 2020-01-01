@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * holds the database index class
  *
@@ -8,6 +7,9 @@
 declare(strict_types=1);
 
 namespace PhpMyAdmin;
+
+use PhpMyAdmin\Html\Generator;
+use PhpMyAdmin\Html\MySQLDocumentation;
 
 /**
  * Index manipulation class
@@ -284,8 +286,7 @@ class Index
             // $columns[names][]
             // $columns[sub_parts][]
             foreach ($columns['names'] as $key => $name) {
-                $sub_part = isset($columns['sub_parts'][$key])
-                    ? $columns['sub_parts'][$key] : '';
+                $sub_part = $columns['sub_parts'][$key] ?? '';
                 $_columns[] = [
                     'Column_name'   => $name,
                     'Sub_part'      => $sub_part,
@@ -529,16 +530,16 @@ class Index
      */
     public function generateIndexTypeSelector()
     {
-        $types = ["" => "--"];
+        $types = ['' => '--'];
         foreach (Index::getIndexTypes() as $type) {
             $types[$type] = $type;
         }
 
-        return Util::getDropdown(
-            "index[Index_type]",
+        return Html\Forms\Fields\DropDown::generate(
+            'index[Index_type]',
             $types,
             $this->_type,
-            "select_index_type"
+            'select_index_type'
         );
     }
 
@@ -640,13 +641,13 @@ class Index
      */
     public static function getHtmlForDisplayIndexes()
     {
-        $html_output = '<div id="index_div" class="width100 ajax" >';
+        $html_output = '<div id="index_div" class="w-100 ajax" >';
         $html_output .= self::getHtmlForIndexes(
             $GLOBALS['table'],
             $GLOBALS['db']
         );
         $html_output .= '<fieldset class="tblFooters print_ignore" style="text-align: '
-            . 'left;"><form action="tbl_indexes.php" method="post">';
+            . 'left;"><form action="' . Url::getFromRoute('/table/indexes') . '" method="post">';
         $html_output .= Url::getHiddenInputs(
             $GLOBALS['db'],
             $GLOBALS['table']
@@ -683,14 +684,14 @@ class Index
         $indexes = Index::getFromTable($table, $schema);
 
         $no_indexes_class = count($indexes) > 0 ? ' hide' : '';
-        $no_indexes  = "<div class='no_indexes_defined$no_indexes_class'>";
+        $no_indexes  = "<div class='no_indexes_defined" . $no_indexes_class . "'>";
         $no_indexes .= Message::notice(__('No index defined!'))->getDisplay();
         $no_indexes .= '</div>';
 
         if (! $print_mode) {
             $r  = '<fieldset class="index_info">';
             $r .= '<legend id="index_header">' . __('Indexes');
-            $r .= Util::showMySQLDocu('optimizing-database-structure');
+            $r .= MySQLDocumentation::show('optimizing-database-structure');
 
             $r .= '</legend>';
             $r .= $no_indexes;
@@ -738,8 +739,8 @@ class Index
                 $r .= '" ' . $row_span . '>'
                    . '    <a class="';
                 $r .= 'ajax';
-                $r .= '" href="tbl_indexes.php" data-post="' . Url::getCommon($this_params, '')
-                   . '">' . Util::getIcon('b_edit', __('Edit')) . '</a>'
+                $r .= '" href="' . Url::getFromRoute('/table/indexes') . '" data-post="' . Url::getCommon($this_params, '')
+                   . '">' . Generator::getIcon('b_edit', __('Edit')) . '</a>'
                    . '</td>' . "\n";
                 $this_params = $GLOBALS['url_params'];
                 if ($index->getName() == 'PRIMARY') {
@@ -763,9 +764,9 @@ class Index
                 $r .= '<td ' . $row_span . ' class="print_ignore">';
                 $r .= '<input type="hidden" class="drop_primary_key_index_msg"'
                     . ' value="' . $js_msg . '">';
-                $r .= Util::linkOrButton(
-                    'sql.php' . Url::getCommon($this_params),
-                    Util::getIcon('b_drop', __('Drop')),
+                $r .= Generator::linkOrButton(
+                    Url::getFromRoute('/sql', $this_params),
+                    Generator::getIcon('b_drop', __('Drop')),
                     ['class' => 'drop_primary_key_index_anchor ajax']
                 );
                 $r .= '</td>' . "\n";
@@ -855,6 +856,7 @@ class Index
      * @param string $schema schema name
      *
      * @return string  Output HTML
+     *
      * @access  public
      */
     public static function findDuplicates($table, $schema)

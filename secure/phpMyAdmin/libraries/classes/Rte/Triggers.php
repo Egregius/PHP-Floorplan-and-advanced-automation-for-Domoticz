@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functions for trigger management.
  *
@@ -10,6 +9,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Rte;
 
 use PhpMyAdmin\DatabaseInterface;
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Url;
@@ -53,8 +53,6 @@ class Triggers
     private $dbi;
 
     /**
-     * Triggers constructor.
-     *
      * @param DatabaseInterface $dbi DatabaseInterface object
      */
     public function __construct(DatabaseInterface $dbi)
@@ -122,7 +120,7 @@ class Triggers
      */
     public function handleEditor()
     {
-        global $errors, $db, $table;
+        global $db, $errors, $message, $table;
 
         if (! empty($_POST['editor_process_add'])
             || ! empty($_POST['editor_process_edit'])
@@ -214,7 +212,7 @@ class Triggers
                 $message->addHtml('</ul>');
             }
 
-            $output = Util::getMessage($message, $sql_query);
+            $output = Generator::getMessage($message, $sql_query);
             $response = Response::getInstance();
             if ($response->isAjax()) {
                 if ($message->isSuccess()) {
@@ -259,13 +257,16 @@ class Triggers
             && (! empty($_REQUEST['add_item'])
             || ! empty($_REQUEST['edit_item']))) // FIXME: this must be simpler than that
         ) {
+            $mode = null;
+            $item = null;
+            $title = null;
             // Get the data for the form (if any)
             if (! empty($_REQUEST['add_item'])) {
                 $title = $this->words->get('add');
                 $item = $this->getDataFromRequest();
                 $mode = 'add';
             } elseif (! empty($_REQUEST['edit_item'])) {
-                $title = __("Edit trigger");
+                $title = __('Edit trigger');
                 if (! empty($_REQUEST['item_name'])
                     && empty($_POST['editor_process_edit'])
                 ) {
@@ -300,7 +301,7 @@ class Triggers
             'item_definer',
         ];
         foreach ($indices as $index) {
-            $retval[$index] = isset($_POST[$index]) ? $_POST[$index] : '';
+            $retval[$index] = $_POST[$index] ?? '';
         }
         return $retval;
     }
@@ -370,40 +371,40 @@ class Triggers
         $original_data = '';
         if ($mode == 'edit') {
             $original_data = "<input name='item_original_name' "
-                           . "type='hidden' value='{$item['item_original_name']}'>\n";
+                           . "type='hidden' value='" . $item['item_original_name'] . "'>\n";
         }
-        $query  = "SELECT `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` ";
+        $query  = 'SELECT `TABLE_NAME` FROM `INFORMATION_SCHEMA`.`TABLES` ';
         $query .= "WHERE `TABLE_SCHEMA`='" . $this->dbi->escapeString($db) . "' ";
         $query .= "AND `TABLE_TYPE` IN ('BASE TABLE', 'SYSTEM VERSIONED')";
         $tables = $this->dbi->fetchResult($query);
 
         // Create the output
-        $retval  = "";
-        $retval .= "<!-- START " . $modeToUpper . " TRIGGER FORM -->\n\n";
-        $retval .= "<form class='rte_form' action='db_triggers.php' method='post'>\n";
-        $retval .= "<input name='{$mode}_item' type='hidden' value='1'>\n";
+        $retval  = '';
+        $retval .= '<!-- START ' . $modeToUpper . " TRIGGER FORM -->\n\n";
+        $retval .= '<form class="rte_form" action="' . Url::getFromRoute('/database/triggers') . '" method="post">' . "\n";
+        $retval .= "<input name='" . $mode . "_item' type='hidden' value='1'>\n";
         $retval .= $original_data;
         $retval .= Url::getHiddenInputs($db, $table) . "\n";
         $retval .= "<fieldset>\n";
-        $retval .= "<legend>" . __('Details') . "</legend>\n";
+        $retval .= '<legend>' . __('Details') . "</legend>\n";
         $retval .= "<table class='rte_table'>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . __('Trigger name') . "</td>\n";
+        $retval .= '    <td>' . __('Trigger name') . "</td>\n";
         $retval .= "    <td><input type='text' name='item_name' maxlength='64'\n";
-        $retval .= "               value='{$item['item_name']}'></td>\n";
+        $retval .= "               value='" . $item['item_name'] . "'></td>\n";
         $retval .= "</tr>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . __('Table') . "</td>\n";
+        $retval .= '    <td>' . __('Table') . "</td>\n";
         $retval .= "    <td>\n";
         $retval .= "        <select name='item_table'>\n";
         foreach ($tables as $key => $value) {
-            $selected = "";
+            $selected = '';
             if ($mode == 'add' && $value == $table) {
                 $selected = " selected='selected'";
             } elseif ($mode == 'edit' && $value == $item['item_table']) {
                 $selected = " selected='selected'";
             }
-            $retval .= "<option$selected>";
+            $retval .= '<option' . $selected . '>';
             $retval .= htmlspecialchars($value);
             $retval .= "</option>\n";
         }
@@ -411,58 +412,58 @@ class Triggers
         $retval .= "    </td>\n";
         $retval .= "</tr>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . _pgettext('Trigger action time', 'Time') . "</td>\n";
+        $retval .= '    <td>' . _pgettext('Trigger action time', 'Time') . "</td>\n";
         $retval .= "    <td><select name='item_timing'>\n";
         foreach ($action_timings as $key => $value) {
-            $selected = "";
+            $selected = '';
             if (! empty($item['item_action_timing'])
                 && $item['item_action_timing'] == $value
             ) {
                 $selected = " selected='selected'";
             }
-            $retval .= "<option$selected>$value</option>";
+            $retval .= '<option' . $selected . '>' . $value . '</option>';
         }
         $retval .= "    </select></td>\n";
         $retval .= "</tr>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . __('Event') . "</td>\n";
+        $retval .= '    <td>' . __('Event') . "</td>\n";
         $retval .= "    <td><select name='item_event'>\n";
         foreach ($event_manipulations as $key => $value) {
-            $selected = "";
+            $selected = '';
             if (! empty($item['item_event_manipulation'])
                 && $item['item_event_manipulation'] == $value
             ) {
                 $selected = " selected='selected'";
             }
-            $retval .= "<option$selected>$value</option>";
+            $retval .= '<option' . $selected . '>' . $value . '</option>';
         }
         $retval .= "    </select></td>\n";
         $retval .= "</tr>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . __('Definition') . "</td>\n";
+        $retval .= '    <td>' . __('Definition') . "</td>\n";
         $retval .= "    <td><textarea name='item_definition' rows='15' cols='40'>";
         $retval .= $item['item_definition'];
         $retval .= "</textarea></td>\n";
         $retval .= "</tr>\n";
         $retval .= "<tr>\n";
-        $retval .= "    <td>" . __('Definer') . "</td>\n";
+        $retval .= '    <td>' . __('Definer') . "</td>\n";
         $retval .= "    <td><input type='text' name='item_definer'\n";
-        $retval .= "               value='{$item['item_definer']}'></td>\n";
+        $retval .= "               value='" . $item['item_definer'] . "'></td>\n";
         $retval .= "</tr>\n";
         $retval .= "</table>\n";
         $retval .= "</fieldset>\n";
         if ($response->isAjax()) {
-            $retval .= "<input type='hidden' name='editor_process_{$mode}'\n";
+            $retval .= "<input type='hidden' name='editor_process_" . $mode . "'\n";
             $retval .= "       value='true'>\n";
             $retval .= "<input type='hidden' name='ajax_request' value='true'>\n";
         } else {
             $retval .= "<fieldset class='tblFooters'>\n";
-            $retval .= "    <input type='submit' name='editor_process_{$mode}'\n";
+            $retval .= "    <input type='submit' name='editor_process_" . $mode . "'\n";
             $retval .= "           value='" . __('Go') . "'>\n";
             $retval .= "</fieldset>\n";
         }
         $retval .= "</form>\n\n";
-        $retval .= "<!-- END " . $modeToUpper . " TRIGGER FORM -->\n\n";
+        $retval .= '<!-- END ' . $modeToUpper . " TRIGGER FORM -->\n\n";
 
         return $retval;
     }

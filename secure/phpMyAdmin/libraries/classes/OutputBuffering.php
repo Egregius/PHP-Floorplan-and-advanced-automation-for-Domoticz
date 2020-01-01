@@ -1,4 +1,4 @@
-<?php /* vim: set expandtab sw=4 ts=4 sts=4: */
+<?php
 /**
  * Output buffering wrapper
  *
@@ -18,6 +18,10 @@ class OutputBuffering
     private static $_instance;
     private $_mode;
     private $_content;
+
+    /**
+     * @var bool
+     */
     private $_on;
 
     /**

@@ -1,7 +1,5 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * for tbl_relation.php
- *
+ * for table relation
  */
 
 var TableRelation = {};
@@ -74,10 +72,12 @@ TableRelation.getDropdownValues = function ($dropdown) {
     }
     var $msgbox = Functions.ajaxShowMessage();
     var $form = $dropdown.parents('form');
+    var $db = $form.find('input[name="db"]').val();
+    var $table = $form.find('input[name="table"]').val();
     var argsep = CommonParams.get('arg_separator');
     var params = 'getDropdownValues=true' + argsep + 'ajax_request=true' +
-        argsep + 'db=' + $form.find('input[name="db"]').val() +
-        argsep + 'table=' + $form.find('input[name="table"]').val() +
+        argsep + 'db=' + encodeURIComponent($db) +
+        argsep + 'table=' + encodeURIComponent($table) +
         argsep + 'foreign=' + (foreign !== '') +
         argsep + 'foreignDb=' + encodeURIComponent(foreignDb) +
         (foreignTable !== null ?
@@ -89,7 +89,7 @@ TableRelation.getDropdownValues = function ($dropdown) {
     }
     $.ajax({
         type: 'POST',
-        url: 'tbl_relation.php',
+        url: 'index.php?route=/table/relation',
         data: params,
         dataType: 'json',
         success: function (data) {

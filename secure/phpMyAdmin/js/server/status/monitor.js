@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    Javascript functions used in server status monitor page
  * @name            Server Status Monitor
@@ -10,7 +9,7 @@
 
 /* global isStorageSupported */ // js/config.js
 /* global codeMirrorEditor:writable */ // js/functions.js
-/* global pmaThemeImage */ // js/messages.php
+/* global firstDayOfCalendar, pmaThemeImage */ // templates/javascript/variables.twig
 /* global variableNames */ // templates/server/status/monitor/index.twig
 
 var runtime = {};
@@ -20,6 +19,49 @@ var isSuperUser;
 var serverDbIsLocal;
 var chartSize;
 var monitorSettings;
+
+function serverResponseError () {
+    var btns = {};
+    btns[Messages.strReloadPage] = function () {
+        window.location.reload();
+    };
+    $('#emptyDialog').dialog({ title: Messages.strRefreshFailed });
+    $('#emptyDialog').html(
+        Functions.getImage('s_attention') +
+        Messages.strInvalidResponseExplanation
+    );
+    $('#emptyDialog').dialog({ buttons: btns });
+}
+
+/**
+ * Destroys all monitor related resources
+ */
+function destroyGrid () {
+    if (runtime.charts) {
+        $.each(runtime.charts, function (key, value) {
+            try {
+                value.chart.destroy();
+            } catch (err) {
+                // continue regardless of error
+            }
+        });
+    }
+
+    try {
+        runtime.refreshRequest.abort();
+    } catch (err) {
+        // continue regardless of error
+    }
+    try {
+        clearTimeout(runtime.refreshTimeout);
+    } catch (err) {
+        // continue regardless of error
+    }
+    $('#chartGrid').html('');
+    runtime.charts = null;
+    runtime.chartAI = 0;
+    monitorSettings = null;
+}
 
 AJAX.registerOnload('server/status/monitor.js', function () {
     var $jsDataForm = $('#js_data');
@@ -133,7 +175,7 @@ AJAX.registerOnload('server/status/monitor.js', function () {
     // Whenever the monitor object (runtime.charts) or the settings object
     // (monitorSettings) changes in a way incompatible to the previous version,
     // increase this number. It will reset the users monitor and settings object
-    // in his localStorage to the default configuration
+    // in their localStorage to the default configuration
     var monitorProtocolVersion = '1.0';
 
     // Runtime parameter of the monitor, is being fully set in initGrid()
@@ -501,9 +543,9 @@ AJAX.registerOnload('server/status/monitor.js', function () {
             if (type === 'preset') {
                 newChart = presetCharts[$('#addChartDialog').find('select[name="presetCharts"]').prop('value')];
             } else {
-                // If user builds his own chart, it's being set/updated
-                // each time he adds a series
-                // So here we only warn if he didn't add a series yet
+                // If user builds their own chart, it's being set/updated
+                // each time they add a series
+                // So here we only warn if they didn't add a series yet
                 if (! newChart || ! newChart.nodes || newChart.nodes.length === 0) {
                     alert(Messages.strAddOneSeriesWarning);
                     return;
@@ -712,13 +754,13 @@ AJAX.registerOnload('server/status/monitor.js', function () {
         var loadLogVars = function (getvars) {
             var vars = {
                 'ajax_request': true,
-                'logging_vars': true
+                'server': CommonParams.get('server')
             };
             if (getvars) {
                 $.extend(vars, getvars);
             }
 
-            $.post('server_status_monitor.php' + CommonParams.get('common_query'), vars,
+            $.post('index.php?route=/server/status/monitor/log-vars', vars,
                 function (data) {
                     var logVars;
                     if (typeof data !== 'undefined' && data.success === true) {
@@ -1358,12 +1400,14 @@ AJAX.registerOnload('server/status/monitor.js', function () {
         Functions.addDatepicker($dateStart, 'datetime', {
             showMillisec: false,
             showMicrosec: false,
-            timeFormat: 'HH:mm:ss'
+            timeFormat: 'HH:mm:ss',
+            firstDay: firstDayOfCalendar
         });
         Functions.addDatepicker($dateEnd, 'datetime', {
             showMillisec: false,
             showMicrosec: false,
-            timeFormat: 'HH:mm:ss'
+            timeFormat: 'HH:mm:ss',
+            firstDay: firstDayOfCalendar
         });
         $dateStart.datepicker('setDate', min);
         $dateEnd.datepicker('setDate', max);
@@ -1385,10 +1429,8 @@ AJAX.registerOnload('server/status/monitor.js', function () {
     /* Called in regular intervals, this function updates the values of each chart in the grid */
     function refreshChartGrid () {
         /* Send to server */
-        runtime.refreshRequest = $.post('server_status_monitor.php' + CommonParams.get('common_query'), {
+        runtime.refreshRequest = $.post('index.php?route=/server/status/monitor/chart', {
             'ajax_request': true,
-            'chart_data': 1,
-            'type': 'chartgrid',
             'requiredData': JSON.stringify(runtime.dataList),
             'server': CommonParams.get('server')
         }, function (data) {
@@ -1623,16 +1665,19 @@ AJAX.registerOnload('server/status/monitor.js', function () {
             buttons: dlgBtns
         });
 
+        var url = 'index.php?route=/server/status/monitor/slow-log';
+        if (opts.src === 'general') {
+            url = 'index.php?route=/server/status/monitor/general-log';
+        }
         logRequest = $.post(
-            'server_status_monitor.php' + CommonParams.get('common_query'),
+            url,
             {
                 'ajax_request': true,
-                'log_data': 1,
-                'type': opts.src,
                 'time_start': Math.round(opts.start / 1000),
                 'time_end': Math.round(opts.end / 1000),
                 'removeVariables': opts.removeVariables,
-                'limitTypes': opts.limitTypes
+                'limitTypes': opts.limitTypes,
+                'server': CommonParams.get('server')
             },
             function (data) {
                 var logData;
@@ -2025,9 +2070,8 @@ AJAX.registerOnload('server/status/monitor.js', function () {
             Messages.strAnalyzing + ' <img class="ajaxIcon" src="' +
             pmaThemeImage + 'ajax_clock_small.gif" alt="">');
 
-        $.post('server_status_monitor.php' + CommonParams.get('common_query'), {
+        $.post('index.php?route=/server/status/monitor/query', {
             'ajax_request': true,
-            'query_analyzer': true,
             'query': codeMirrorEditor ? codeMirrorEditor.getValue() : $('#sqlquery').val(),
             'database': db,
             'server': CommonParams.get('server')
@@ -2042,7 +2086,7 @@ AJAX.registerOnload('server/status/monitor.js', function () {
                 if (data.error.indexOf('1146') !== -1 || data.error.indexOf('1046') !== -1) {
                     data.error = Messages.strServerLogError;
                 }
-                $('#queryAnalyzerDialog').find('div.placeHolder').html('<div class="error">' + data.error + '</div>');
+                $('#queryAnalyzerDialog').find('div.placeHolder').html('<div class="alert alert-danger" role="alert">' + data.error + '</div>');
                 return;
             }
             var totalTime = 0;
@@ -2176,44 +2220,3 @@ AJAX.registerOnload('server/status/monitor.js', function () {
 AJAX.registerOnload('server/status/monitor.js', function () {
     $('a[href="#pauseCharts"]').trigger('click');
 });
-
-function serverResponseError () {
-    var btns = {};
-    btns[Messages.strReloadPage] = function () {
-        window.location.reload();
-    };
-    $('#emptyDialog').dialog({ title: Messages.strRefreshFailed });
-    $('#emptyDialog').html(
-        Functions.getImage('s_attention') +
-        Messages.strInvalidResponseExplanation
-    );
-    $('#emptyDialog').dialog({ buttons: btns });
-}
-
-/* Destroys all monitor related resources */
-function destroyGrid () {
-    if (runtime.charts) {
-        $.each(runtime.charts, function (key, value) {
-            try {
-                value.chart.destroy();
-            } catch (err) {
-                // continue regardless of error
-            }
-        });
-    }
-
-    try {
-        runtime.refreshRequest.abort();
-    } catch (err) {
-        // continue regardless of error
-    }
-    try {
-        clearTimeout(runtime.refreshTimeout);
-    } catch (err) {
-        // continue regardless of error
-    }
-    $('#chartGrid').html('');
-    runtime.charts = null;
-    runtime.chartAI = 0;
-    monitorSettings = null;
-}

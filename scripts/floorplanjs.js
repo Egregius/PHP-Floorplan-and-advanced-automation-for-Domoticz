@@ -967,6 +967,7 @@ function ajaxmedia($ip){
             	if(data['denon']['power']!='ON')html+='<button class="btn b1" onclick="ajaxcontrol(\'power\', \'denon\', \'On\')">Denon Power On</button>';
             	if(data['denon']['vol']!=='undefined'){
             		if(data['denon']['vol']=='--')data['denon']['vol']=0;
+            		console.log(parseInt(data['denon']['vol']));
 					let cv=80+parseInt(data['denon']['vol']);
 					levels=[-10,-5,-3,-2,-1,0,1,2,3,5,10];
 					levels.forEach(function(level){

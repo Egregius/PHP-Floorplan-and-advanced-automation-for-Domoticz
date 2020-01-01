@@ -2,7 +2,7 @@
   "data": [
     {
       "cli": "--activate-all-roles-on-login[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_activate_all_roles_on_login",
       "name": "activate_all_roles_on_login",
@@ -53,7 +53,7 @@
     },
     {
       "cli": "--authentication-windows-use-principal-name[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_authentication_windows_use_principal_name",
       "name": "authentication_windows_use_principal_name",
@@ -64,7 +64,7 @@
     },
     {
       "cli": "--autocommit[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_autocommit",
       "name": "autocommit",
@@ -76,7 +76,7 @@
     },
     {
       "cli": "--automatic-sp-privileges[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_automatic_sp_privileges",
       "name": "automatic_sp_privileges",
@@ -87,7 +87,7 @@
     },
     {
       "cli": "--auto-generate-certs[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_auto_generate_certs",
       "name": "auto_generate_certs",
@@ -98,7 +98,7 @@
     },
     {
       "cli": "--avoid-temporal-upgrade[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_avoid_temporal_upgrade",
       "name": "avoid_temporal_upgrade",
@@ -109,7 +109,7 @@
     },
     {
       "cli": "--back-log=#",
-      "default": "-1 (signifies autosizing; do not assign this literal value)",
+      "default": "(-1 signifies autosizing; do not use -1)",
       "dynamic": false,
       "id": "sysvar_back_log",
       "name": "back_log",
@@ -134,7 +134,7 @@
     },
     {
       "cli": "--big-tables[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_big_tables",
       "name": "big_tables",
@@ -184,7 +184,7 @@
     },
     {
       "cli": "--caching-sha2-password-auto-generate-rsa-keys[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_caching_sha2_password_auto_generate_rsa_keys",
       "name": "caching_sha2_password_auto_generate_rsa_keys",
@@ -300,7 +300,7 @@
     },
     {
       "cli": "--check-proxy-users[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_check_proxy_users",
       "name": "check_proxy_users",
@@ -342,7 +342,7 @@
     },
     {
       "cli": "--completion-type=#",
-      "default": "no_chain",
+      "default": "NO_CHAIN",
       "dynamic": true,
       "id": "sysvar_completion_type",
       "name": "completion_type",
@@ -361,8 +361,8 @@
       ]
     },
     {
-      "cli": "--concurrent-insert[=#]",
-      "default": "auto",
+      "cli": "--concurrent-insert[=value]",
+      "default": "AUTO",
       "dynamic": true,
       "id": "sysvar_concurrent_insert",
       "name": "concurrent_insert",
@@ -395,7 +395,7 @@
       "type": "integer"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_core_file",
       "name": "core_file",
@@ -406,7 +406,7 @@
     },
     {
       "cli": "--create-admin-listener-thread[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_create_admin_listener_thread",
       "name": "create_admin_listener_thread",
@@ -502,7 +502,7 @@
     },
     {
       "cli": "--default-storage-engine=name",
-      "default": "innodb",
+      "default": "InnoDB",
       "dynamic": true,
       "id": "sysvar_default_storage_engine",
       "name": "default_storage_engine",
@@ -513,8 +513,8 @@
       "type": "enumeration"
     },
     {
-      "cli": "--default-table-encryption=#",
-      "default": "off",
+      "cli": "--default-table-encryption[={OFF|ON}]",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_default_table_encryption",
       "name": "default_table_encryption",
@@ -526,7 +526,7 @@
     },
     {
       "cli": "--default-tmp-storage-engine=name",
-      "default": "innodb",
+      "default": "InnoDB",
       "dynamic": true,
       "id": "sysvar_default_tmp_storage_engine",
       "name": "default_tmp_storage_engine",
@@ -554,7 +554,7 @@
     },
     {
       "cli": "--delay-key-write[={OFF|ON|ALL}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_delay_key_write",
       "name": "delay_key_write",
@@ -620,7 +620,7 @@
     },
     {
       "cli": "--disconnect-on-expired-password[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_disconnect_on_expired_password",
       "name": "disconnect_on_expired_password",
@@ -647,7 +647,7 @@
     },
     {
       "cli": "--dragnet.log-error-filter-rules=value",
-      "default": "if prio>=information then drop. if exists source_line then unset source_line.",
+      "default": "IF prio>=INFORMATION THEN drop. IF EXISTS source_line THEN unset source_line.",
       "dynamic": true,
       "id": "sysvar_dragnet.log_error_filter_rules",
       "name": "dragnet.log_error_filter_rules",
@@ -658,7 +658,7 @@
     },
     {
       "cli": "--end-markers-in-json[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_end_markers_in_json",
       "name": "end_markers_in_json",
@@ -721,7 +721,7 @@
     },
     {
       "cli": "--flush[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_flush",
       "name": "flush",
@@ -745,7 +745,7 @@
       "type": "integer"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_foreign_key_checks",
       "name": "foreign_key_checks",
@@ -820,7 +820,7 @@
     },
     {
       "cli": "--general-log[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_general_log",
       "name": "general_log",
@@ -841,6 +841,22 @@
       "type": "file name"
     },
     {
+      "cli": "--generated-random-password-length=#",
+      "default": "20",
+      "dynamic": true,
+      "id": "sysvar_generated_random_password_length",
+      "name": "generated_random_password_length",
+      "range": {
+        "from": 5,
+        "to": 255
+      },
+      "scope": [
+        "global",
+        "session"
+      ],
+      "type": "integer"
+    },
+    {
       "cli": "--group-concat-max-len=#",
       "default": "1024",
       "dynamic": true,
@@ -854,6 +870,19 @@
         "session"
       ],
       "type": "integer"
+    },
+    {
+      "dynamic": false,
+      "id": "sysvar_have_ssl",
+      "name": "have_ssl",
+      "scope": [
+        "global"
+      ],
+      "type": "string",
+      "validValues": [
+        "YES",
+        "DISABLED"
+      ]
     },
     {
       "dynamic": false,
@@ -881,7 +910,7 @@
     },
     {
       "cli": "--host-cache-size=#",
-      "default": "-1 (signifies autosizing; do not assign this literal value)",
+      "default": "(-1 signifies autosizing; do not use -1)",
       "dynamic": true,
       "id": "sysvar_host_cache_size",
       "name": "host_cache_size",
@@ -956,7 +985,7 @@
     },
     {
       "cli": "--internal-tmp-disk-storage-engine=#",
-      "default": "innodb",
+      "default": "INNODB",
       "dynamic": true,
       "id": "sysvar_internal_tmp_disk_storage_engine",
       "name": "internal_tmp_disk_storage_engine",
@@ -971,7 +1000,7 @@
     },
     {
       "cli": "--internal-tmp-mem-storage-engine=#",
-      "default": "temptable",
+      "default": "TempTable",
       "dynamic": true,
       "id": "sysvar_internal_tmp_mem_storage_engine",
       "name": "internal_tmp_mem_storage_engine",
@@ -1002,7 +1031,7 @@
     },
     {
       "cli": "--keep-files-on-create[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_keep_files_on_create",
       "name": "keep_files_on_create",
@@ -1080,7 +1109,7 @@
     },
     {
       "cli": "--large-pages[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_large_pages",
       "name": "large_pages",
@@ -1101,7 +1130,7 @@
     },
     {
       "cli": "--lc-messages=name",
-      "default": "en_us",
+      "default": "en_US",
       "dynamic": true,
       "id": "sysvar_lc_messages",
       "name": "lc_messages",
@@ -1133,7 +1162,7 @@
       "type": "string"
     },
     {
-      "default": "gpl",
+      "default": "GPL",
       "dynamic": false,
       "id": "sysvar_license",
       "name": "license",
@@ -1235,7 +1264,7 @@
     },
     {
       "cli": "--log-output=name",
-      "default": "file",
+      "default": "FILE",
       "dynamic": true,
       "id": "sysvar_log_output",
       "name": "log_output",
@@ -1251,7 +1280,7 @@
     },
     {
       "cli": "--log-queries-not-using-indexes[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_log_queries_not_using_indexes",
       "name": "log_queries_not_using_indexes",
@@ -1261,8 +1290,15 @@
       "type": "boolean"
     },
     {
+      "cli": "--log-raw[={OFF|ON}]",
+      "default": "OFF",
+      "id": "sysvar_log_raw",
+      "name": "log_raw",
+      "type": "boolean"
+    },
+    {
       "cli": "--log-slow-admin-statements[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_log_slow_admin_statements",
       "name": "log_slow_admin_statements",
@@ -1273,7 +1309,7 @@
     },
     {
       "cli": "--log-slow-extra[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_log_slow_extra",
       "name": "log_slow_extra",
@@ -1305,7 +1341,7 @@
     },
     {
       "cli": "--log-syslog-include-pid[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_log_syslog_include_pid",
       "name": "log_syslog_include_pid",
@@ -1327,7 +1363,7 @@
     },
     {
       "cli": "--log-timestamps=#",
-      "default": "utc",
+      "default": "UTC",
       "dynamic": true,
       "id": "sysvar_log_timestamps",
       "name": "log_timestamps",
@@ -1382,7 +1418,7 @@
     },
     {
       "cli": "--low-priority-updates[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_low_priority_updates",
       "name": "low_priority_updates",
@@ -1608,8 +1644,7 @@
       "id": "sysvar_max_prepared_stmt_count",
       "name": "max_prepared_stmt_count",
       "range": {
-        "from": 0,
-        "to": 1048576
+        "from": 0
       },
       "scope": [
         "global"
@@ -1800,11 +1835,21 @@
       "type": "integer"
     },
     {
+      "cli": "--myisam-recover-options[=list]",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_myisam_recover_options",
       "name": "myisam_recover_options",
       "scope": [
         "global"
+      ],
+      "type": "enumeration",
+      "validValues": [
+        "OFF",
+        "DEFAULT",
+        "BACKUP",
+        "FORCE",
+        "QUICK"
       ]
     },
     {
@@ -1856,7 +1901,7 @@
     },
     {
       "cli": "--myisam-use-mmap[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_myisam_use_mmap",
       "name": "myisam_use_mmap",
@@ -1867,7 +1912,7 @@
     },
     {
       "cli": "--mysql-native-password-proxy-users[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_mysql_native_password_proxy_users",
       "name": "mysql_native_password_proxy_users",
@@ -1878,7 +1923,7 @@
     },
     {
       "cli": "--named-pipe[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_named_pipe",
       "name": "named_pipe",
@@ -1965,7 +2010,7 @@
     },
     {
       "cli": "--new[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_new",
       "name": "new",
@@ -1992,7 +2037,7 @@
     },
     {
       "cli": "--offline-mode[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_offline_mode",
       "name": "offline_mode",
@@ -2003,7 +2048,7 @@
     },
     {
       "cli": "--old[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_old",
       "name": "old",
@@ -2014,7 +2059,7 @@
     },
     {
       "cli": "--old-alter-table[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_old_alter_table",
       "name": "old_alter_table",
@@ -2170,7 +2215,7 @@
     },
     {
       "cli": "--partial-revokes[={OFF|ON}]",
-      "default": "off (if partial revokes do not exist)on (if partial revokes exist)",
+      "default": "OFF (if partial revokes do not exist)ON (if partial revokes exist)",
       "dynamic": true,
       "id": "sysvar_partial_revokes",
       "name": "partial_revokes",
@@ -2196,7 +2241,7 @@
     },
     {
       "cli": "--password-require-current[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_password_require_current",
       "name": "password_require_current",
@@ -2222,7 +2267,7 @@
     },
     {
       "cli": "--persisted-globals-load[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_persisted_globals_load",
       "name": "persisted_globals_load",
@@ -2254,7 +2299,7 @@
     },
     {
       "cli": "--plugin-dir=dir_name",
-      "default": "basedir/lib/plugin",
+      "default": "BASEDIR/lib/plugin",
       "dynamic": false,
       "id": "sysvar_plugin_dir",
       "name": "plugin_dir",
@@ -2296,7 +2341,7 @@
     },
     {
       "cli": "--print-identified-with-as-hex[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_print_identified_with_as_hex",
       "name": "print_identified_with_as_hex",
@@ -2305,6 +2350,22 @@
         "session"
       ],
       "type": "boolean"
+    },
+    {
+      "cli": "--protocol-compression-algorithms=value",
+      "default": "zlib,zstd,uncompressed",
+      "dynamic": true,
+      "id": "sysvar_protocol_compression_algorithms",
+      "name": "protocol_compression_algorithms",
+      "scope": [
+        "global"
+      ],
+      "type": "set",
+      "validValues": [
+        "zlib",
+        "zstd",
+        "uncompressed"
+      ]
     },
     {
       "dynamic": false,
@@ -2418,7 +2479,7 @@
     },
     {
       "cli": "--query-cache-wlock-invalidate[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_query_cache_wlock_invalidate",
       "name": "query_cache_wlock_invalidate",
@@ -2485,7 +2546,7 @@
       "type": "integer"
     },
     {
-      "default": "strict",
+      "default": "STRICT",
       "dynamic": true,
       "id": "sysvar_rbr_exec_mode",
       "name": "rbr_exec_mode",
@@ -2517,7 +2578,7 @@
     },
     {
       "cli": "--read-only[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_read_only",
       "name": "read_only",
@@ -2574,7 +2635,7 @@
     },
     {
       "cli": "--require-secure-transport[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_require_secure_transport",
       "name": "require_secure_transport",
@@ -2584,7 +2645,7 @@
       "type": "boolean"
     },
     {
-      "default": "full",
+      "default": "FULL",
       "dynamic": true,
       "id": "sysvar_resultset_metadata",
       "name": "resultset_metadata",
@@ -2627,7 +2688,7 @@
     },
     {
       "cli": "--secure-auth[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_secure_auth",
       "name": "secure_auth",
@@ -2656,22 +2717,8 @@
       ]
     },
     {
-      "cli": "--server-id=#",
-      "dynamic": true,
-      "id": "sysvar_server_id",
-      "name": "server_id",
-      "range": {
-        "from": 0,
-        "to": 4294967295
-      },
-      "scope": [
-        "global"
-      ],
-      "type": "integer"
-    },
-    {
       "cli": "--session-track-gtids=value",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_session_track_gtids",
       "name": "session_track_gtids",
@@ -2688,7 +2735,7 @@
     },
     {
       "cli": "--session-track-schema[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_session_track_schema",
       "name": "session_track_schema",
@@ -2700,7 +2747,7 @@
     },
     {
       "cli": "--session-track-state-change[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_session_track_state_change",
       "name": "session_track_state_change",
@@ -2724,7 +2771,7 @@
     },
     {
       "cli": "--session-track-transaction-info=value",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_session_track_transaction_info",
       "name": "session_track_transaction_info",
@@ -2741,7 +2788,7 @@
     },
     {
       "cli": "--sha256-password-auto-generate-rsa-keys[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_sha256_password_auto_generate_rsa_keys",
       "name": "sha256_password_auto_generate_rsa_keys",
@@ -2763,7 +2810,7 @@
     },
     {
       "cli": "--sha256-password-proxy-users[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sha256_password_proxy_users",
       "name": "sha256_password_proxy_users",
@@ -2785,7 +2832,7 @@
     },
     {
       "cli": "--shared-memory[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_shared_memory",
       "name": "shared_memory",
@@ -2796,7 +2843,7 @@
     },
     {
       "cli": "--shared-memory-base-name=name",
-      "default": "mysql",
+      "default": "MYSQL",
       "dynamic": false,
       "id": "sysvar_shared_memory_base_name",
       "name": "shared_memory_base_name",
@@ -2807,7 +2854,7 @@
     },
     {
       "cli": "--show-compatibility-56[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_show_compatibility_56",
       "name": "show_compatibility_56",
@@ -2817,8 +2864,19 @@
       "type": "boolean"
     },
     {
+      "cli": "--show-create-table-skip-secondary-engine[={OFF|ON}]",
+      "default": "OFF",
+      "dynamic": true,
+      "id": "sysvar_show_create_table_skip_secondary_engine",
+      "name": "show_create_table_skip_secondary_engine",
+      "scope": [
+        "session"
+      ],
+      "type": "boolean"
+    },
+    {
       "cli": "--show-create-table-verbosity[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_show_create_table_verbosity",
       "name": "show_create_table_verbosity",
@@ -2830,7 +2888,7 @@
     },
     {
       "cli": "--show-old-temporals[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_show_old_temporals",
       "name": "show_old_temporals",
@@ -2842,7 +2900,7 @@
     },
     {
       "cli": "--skip-external-locking[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_skip_external_locking",
       "name": "skip_external_locking",
@@ -2853,7 +2911,7 @@
     },
     {
       "cli": "--skip-name-resolve[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_skip_name_resolve",
       "name": "skip_name_resolve",
@@ -2863,13 +2921,15 @@
       "type": "boolean"
     },
     {
-      "cli": "--skip-networking",
+      "cli": "--skip-networking[={OFF|ON}]",
+      "default": "OFF",
       "dynamic": false,
       "id": "sysvar_skip_networking",
       "name": "skip_networking",
       "scope": [
         "global"
-      ]
+      ],
+      "type": "boolean"
     },
     {
       "cli": "--skip-show-database",
@@ -2893,7 +2953,7 @@
     },
     {
       "cli": "--slow-query-log[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_slow_query_log",
       "name": "slow_query_log",
@@ -2939,7 +2999,7 @@
       "type": "integer"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_auto_is_null",
       "name": "sql_auto_is_null",
@@ -2950,7 +3010,7 @@
       "type": "boolean"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_sql_big_selects",
       "name": "sql_big_selects",
@@ -2961,7 +3021,7 @@
       "type": "boolean"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_buffer_result",
       "name": "sql_buffer_result",
@@ -2972,7 +3032,7 @@
       "type": "boolean"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_log_off",
       "name": "sql_log_off",
@@ -2998,7 +3058,7 @@
       "type": "set"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_sql_notes",
       "name": "sql_notes",
@@ -3009,7 +3069,7 @@
       "type": "boolean"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_sql_quote_show_create",
       "name": "sql_quote_show_create",
@@ -3021,7 +3081,7 @@
     },
     {
       "cli": "--sql-require-primary-key[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_require_primary_key",
       "name": "sql_require_primary_key",
@@ -3032,7 +3092,7 @@
       "type": "boolean"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_safe_updates",
       "name": "sql_safe_updates",
@@ -3053,7 +3113,7 @@
       "type": "integer"
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_sql_warnings",
       "name": "sql_warnings",
@@ -3119,7 +3179,7 @@
     },
     {
       "cli": "--ssl-fips-mode={OFF|ON|STRICT}",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_ssl_fips_mode",
       "name": "ssl_fips_mode",
@@ -3174,7 +3234,7 @@
     },
     {
       "cli": "--super-read-only[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_super_read_only",
       "name": "super_read_only",
@@ -3196,7 +3256,7 @@
     },
     {
       "cli": "--syseventlog.include-pid[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_syseventlog.include_pid",
       "name": "syseventlog.include_pid",
@@ -3227,7 +3287,7 @@
     },
     {
       "cli": "--table-definition-cache=#",
-      "default": "-1 (signifies autosizing; do not assign this literal value)",
+      "default": "(-1 signifies autosizing; do not use -1)",
       "dynamic": true,
       "id": "sysvar_table_definition_cache",
       "name": "table_definition_cache",
@@ -3242,7 +3302,7 @@
     },
     {
       "cli": "--table-encryption-privilege-check[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_table_encryption_privilege_check",
       "name": "table_encryption_privilege_check",
@@ -3312,7 +3372,7 @@
     },
     {
       "cli": "--temptable-use-mmap[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_temptable_use_mmap",
       "name": "temptable_use_mmap",
@@ -3323,7 +3383,7 @@
     },
     {
       "cli": "--thread-cache-size=#",
-      "default": "-1 (signifies autosizing; do not assign this literal value)",
+      "default": "(-1 signifies autosizing; do not use -1)",
       "dynamic": true,
       "id": "sysvar_thread_cache_size",
       "name": "thread_cache_size",
@@ -3384,6 +3444,21 @@
       "type": "integer"
     },
     {
+      "cli": "--thread-pool-max-active-query-threads",
+      "default": "0",
+      "dynamic": true,
+      "id": "sysvar_thread_pool_max_active_query_threads",
+      "name": "thread_pool_max_active_query_threads",
+      "range": {
+        "from": 0,
+        "to": 512
+      },
+      "scope": [
+        "global"
+      ],
+      "type": "integer"
+    },
+    {
       "cli": "--thread-pool-max-unused-threads=#",
       "default": "0",
       "dynamic": true,
@@ -3421,8 +3496,7 @@
       "id": "sysvar_thread_pool_size",
       "name": "thread_pool_size",
       "range": {
-        "from": 1,
-        "to": 64
+        "from": 1
       },
       "scope": [
         "global"
@@ -3540,7 +3614,7 @@
     },
     {
       "cli": "--transaction-isolation=name",
-      "default": "repeatable-read",
+      "default": "REPEATABLE-READ",
       "dynamic": true,
       "id": "sysvar_transaction_isolation",
       "name": "transaction_isolation",
@@ -3574,7 +3648,7 @@
     },
     {
       "cli": "--transaction-read-only[={OFF|ON}]",
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_transaction_read_only",
       "name": "transaction_read_only",
@@ -3585,7 +3659,7 @@
       "type": "boolean"
     },
     {
-      "default": "repeatable-read",
+      "default": "REPEATABLE-READ",
       "dynamic": true,
       "id": "sysvar_tx_isolation",
       "name": "tx_isolation",
@@ -3602,7 +3676,7 @@
       ]
     },
     {
-      "default": "off",
+      "default": "OFF",
       "dynamic": true,
       "id": "sysvar_tx_read_only",
       "name": "tx_read_only",
@@ -3613,7 +3687,7 @@
       "type": "boolean"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_unique_checks",
       "name": "unique_checks",
@@ -3636,7 +3710,7 @@
       "type": "boolean"
     },
     {
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_use_secondary_engine",
       "name": "use_secondary_engine",
@@ -3647,12 +3721,12 @@
       "validValues": [
         "OFF",
         "ON",
-        "FORCE"
+        "FORCED"
       ]
     },
     {
       "cli": "--validate-user-plugins[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": false,
       "id": "sysvar_validate_user_plugins",
       "name": "validate_user_plugins",
@@ -3714,7 +3788,7 @@
     },
     {
       "cli": "--windowing-use-high-precision[={OFF|ON}]",
-      "default": "on",
+      "default": "ON",
       "dynamic": true,
       "id": "sysvar_windowing_use_high_precision",
       "name": "windowing_use_high_precision",

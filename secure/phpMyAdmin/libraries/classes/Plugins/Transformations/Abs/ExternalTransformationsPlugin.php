@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the external transformations plugins
  *
@@ -115,12 +114,12 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
         $newstring = '';
         $descriptorspec = [
             0 => [
-                "pipe",
-                "r",
+                'pipe',
+                'r',
             ],
             1 => [
-                "pipe",
-                "w",
+                'pipe',
+                'w',
             ],
         ];
         $process = proc_open($program . ' ' . $options[1], $descriptorspec, $pipes);
@@ -155,6 +154,6 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "External";
+        return 'External';
     }
 }

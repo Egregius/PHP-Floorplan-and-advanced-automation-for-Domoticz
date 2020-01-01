@@ -38,7 +38,7 @@ standards, the most widely used include:
 
 * `FreeOTP for iOS, Android and Pebble <https://freeotp.github.io/>`_
 * `Authy for iOS, Android, Chrome, OS X <https://authy.com/>`_
-* `Google Authenticator for iOS <https://itunes.apple.com/us/app/google-authenticator/id388497605>`_
+* `Google Authenticator for iOS <https://apps.apple.com/us/app/google-authenticator/id388497605>`_
 * `Google Authenticator for Android <https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2>`_
 * `LastPass Authenticator for iOS, Android, OS X, Windows <https://lastpass.com/auth/>`_
 
@@ -51,8 +51,8 @@ tokens.
 
 There are several manufacturers of these tokens, for example:
 
-* `youbico FIDO U2F Security Key <https://www.yubico.com/solutions/fido-u2f/>`_
-* `HyperFIDO <https://www.hypersecu.com/products/hyperfido>`_
+* `youbico FIDO U2F Security Key <https://www.yubico.com/fido-u2f/>`_
+* `HyperFIDO <https://www.hypersecu.com/tmp/products/hyperfido>`_
 * `Trezor Hardware Wallet <https://trezor.io/?offer_id=12&aff_id=1592&source=phpmyadmin>`_ can act as an `U2F token <https://wiki.trezor.io/User_manual:Two-factor_Authentication_with_U2F>`_
 * `List of Two Factor Auth (2FA) Dongles <https://www.dongleauth.info/dongles/>`_
 

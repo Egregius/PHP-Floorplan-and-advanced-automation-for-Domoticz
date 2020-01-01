@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Two authentication factor handling
  *
@@ -64,10 +63,10 @@ class TwoFactor
     {
         $this->userPreferences = new UserPreferences();
         $this->user = $user;
-        $this->_available = $this->getAvailable();
+        $this->_available = $this->getAvailableBackends();
         $this->config = $this->readConfig();
         $this->_writable = ($this->config['type'] == 'db');
-        $this->_backend = $this->getBackend();
+        $this->_backend = $this->getBackendForCurrentUser();
     }
 
     /**
@@ -93,25 +92,36 @@ class TwoFactor
     }
 
     /**
-     * Get any property of this class
-     *
-     * @param string $property name of the property
-     *
-     * @return mixed|void if property exist, value of the relevant property
+     * @return bool
      */
-    public function __get($property)
+    public function isWritable(): bool
     {
-        switch ($property) {
-            case 'backend':
-                return $this->_backend;
-            case 'available':
-                return $this->_available;
-            case 'writable':
-                return $this->_writable;
-            case 'showSubmit':
-                $backend = $this->_backend;
-                return $backend::$showSubmit;
-        }
+        return $this->_writable;
+    }
+
+    /**
+     * @return TwoFactorPlugin
+     */
+    public function getBackend(): TwoFactorPlugin
+    {
+        return $this->_backend;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailable(): array
+    {
+        return $this->_available;
+    }
+
+    /**
+     * @return bool
+     */
+    public function showSubmit(): bool
+    {
+        $backend = $this->_backend;
+        return $backend::$showSubmit;
     }
 
     /**
@@ -119,7 +129,7 @@ class TwoFactor
      *
      * @return array
      */
-    public function getAvailable()
+    public function getAvailableBackends()
     {
         $result = [];
         if ($GLOBALS['cfg']['DBG']['simple2fa']) {
@@ -186,7 +196,7 @@ class TwoFactor
      *
      * @return TwoFactorPlugin
      */
-    public function getBackend()
+    public function getBackendForCurrentUser()
     {
         $name = $this->getBackendClass($this->config['backend']);
         return new $name($this);
@@ -284,7 +294,7 @@ class TwoFactor
      */
     public function getAllBackends()
     {
-        $all = array_merge([''], $this->available);
+        $all = array_merge([''], $this->_available);
         $backends = [];
         foreach ($all as $name) {
             $cls = $this->getBackendClass($name);

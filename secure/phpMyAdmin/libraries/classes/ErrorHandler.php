@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds class PhpMyAdmin\ErrorHandler
  *
@@ -39,7 +38,6 @@ class ErrorHandler
 
     /**
      * Constructor - set PHP error handler
-     *
      */
     public function __construct()
     {
@@ -52,42 +50,41 @@ class ErrorHandler
         if (! defined('TESTSUITE')) {
             set_error_handler([$this, 'handleError']);
         }
-        $this->error_reporting = error_reporting();
+        if (function_exists('error_reporting')) {
+            $this->error_reporting = error_reporting();
+        }
     }
 
     /**
      * Destructor
      *
      * stores errors in session
-     *
      */
     public function __destruct()
     {
-        if (isset($_SESSION)) {
-            if (! isset($_SESSION['errors'])) {
-                $_SESSION['errors'] = [];
-            }
+        if (! isset($_SESSION['errors'])) {
+            $_SESSION['errors'] = [];
+        }
 
-            // remember only not displayed errors
-            foreach ($this->errors as $key => $error) {
-                /**
-                 * We don't want to store all errors here as it would
-                 * explode user session.
-                 */
-                if (count($_SESSION['errors']) >= 10) {
-                    $error = new Error(
-                        0,
-                        __('Too many error messages, some are not displayed.'),
-                        __FILE__,
-                        __LINE__
-                    );
-                    $_SESSION['errors'][$error->getHash()] = $error;
-                    break;
-                } elseif (($error instanceof Error)
-                    && ! $error->isDisplayed()
-                ) {
-                    $_SESSION['errors'][$key] = $error;
-                }
+        // remember only not displayed errors
+        foreach ($this->errors as $key => $error) {
+            /**
+             * We don't want to store all errors here as it would
+             * explode user session.
+             */
+            if (count($_SESSION['errors']) >= 10) {
+                $error = new Error(
+                    0,
+                    __('Too many error messages, some are not displayed.'),
+                    __FILE__,
+                    __LINE__
+                );
+                $_SESSION['errors'][$error->getHash()] = $error;
+                break;
+            } elseif (($error instanceof Error)
+                && ! $error->isDisplayed()
+            ) {
+                $_SESSION['errors'][$key] = $error;
             }
         }
     }
@@ -163,16 +160,23 @@ class ErrorHandler
         string $errfile,
         int $errline
     ): void {
-        /**
-         * Check if Error Control Operator (@) was used, but still show
-         * user errors even in this case.
-         */
-        if (error_reporting() == 0 &&
-            $this->error_reporting != 0 &&
-            ($errno & (E_USER_WARNING | E_USER_ERROR | E_USER_NOTICE)) == 0
-        ) {
-            return;
+        if (function_exists('error_reporting')) {
+            /**
+            * Check if Error Control Operator (@) was used, but still show
+            * user errors even in this case.
+            */
+            if (error_reporting() == 0 &&
+                $this->error_reporting != 0 &&
+                ($errno & (E_USER_WARNING | E_USER_ERROR | E_USER_NOTICE)) == 0
+            ) {
+                return;
+            }
+        } else {
+            if (($errno & (E_USER_WARNING | E_USER_ERROR | E_USER_NOTICE)) == 0) {
+                return;
+            }
         }
+
         $this->addError($errstr, $errno, $errfile, $errline, true);
     }
 
@@ -356,8 +360,8 @@ class ErrorHandler
             &&  $this->countErrors() !=  $this->countUserErrors()
         ) {
             // add report button.
-            $retval .= '<form method="post" action="error_report.php"'
-                    . ' id="pma_report_errors_form"';
+            $retval .= '<form method="post" action="' . Url::getFromRoute('/error-report')
+                    . '" id="pma_report_errors_form"';
             if ($GLOBALS['cfg']['SendErrorReports'] == 'always') {
                 // in case of 'always', generate 'invisible' form.
                 $retval .= ' class="hide"';
@@ -389,16 +393,6 @@ class ErrorHandler
             $retval .= '</form>';
         }
         return $retval;
-    }
-
-    /**
-     * displays errors not displayed
-     *
-     * @return void
-     */
-    public function dispErrors(): void
-    {
-        echo $this->getDispErrors();
     }
 
     /**

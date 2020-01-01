@@ -86,7 +86,7 @@
     },
     {
       "cli": "--innodb-adaptive-hash-index=#",
-      "default": "ON",
+      "default": "OFF (>= MariaDB 10.5), ON (<= MariaDB 10.4)",
       "dynamic": true,
       "id": "innodb_adaptive_hash_index",
       "name": "innodb_adaptive_hash_index",
@@ -505,6 +505,16 @@
       "type": "integer"
     },
     {
+      "default": "OFF",
+      "dynamic": false,
+      "id": "innodb_change_buffer_dump",
+      "name": "innodb_change_buffer_dump",
+      "scope": [
+        "global"
+      ],
+      "type": "boolean"
+    },
+    {
       "cli": "--innodb-change-buffer-max-size=#",
       "default": "25",
       "dynamic": true,
@@ -687,7 +697,7 @@
       "id": "innodb_compression_level",
       "name": "innodb_compression_level",
       "range": {
-        "from": 0,
+        "from": 1,
         "to": 9
       },
       "scope": [
@@ -754,7 +764,7 @@
     },
     {
       "cli": "--innodb-data-home-dir=path",
-      "default": "The MariaDB data directory",
+      "default": "(the MariaDB data directory)",
       "dynamic": false,
       "id": "innodb_data_home_dir",
       "name": "innodb_data_home_dir",
@@ -1015,6 +1025,21 @@
         "ON",
         "OFF",
         "FORCE"
+      ]
+    },
+    {
+      "cli": "--innodb-encrypt-temporary-tables=value",
+      "default": "OFF",
+      "dynamic": false,
+      "id": "innodb_encrypt_temporary_tables",
+      "name": "innodb_encrypt_temporary_tables",
+      "scope": [
+        "global"
+      ],
+      "type": "boolean",
+      "validValues": [
+        "ON",
+        "OFF"
       ]
     },
     {
@@ -1651,7 +1676,10 @@
       "dynamic": true,
       "id": "innodb_kill_idle_transaction",
       "name": "innodb_kill_idle_transaction",
-      "range": {},
+      "range": {
+        "from": 0,
+        "to": 9223372036854776000
+      },
       "scope": [
         "global"
       ],

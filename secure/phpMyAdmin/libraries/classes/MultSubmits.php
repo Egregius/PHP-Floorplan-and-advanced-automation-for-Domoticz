@@ -1,15 +1,15 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\MultSubmits class
  *
  * @usedby  mult_submits.inc.php
- *
  * @package PhpMyAdmin
  */
 declare(strict_types=1);
 
 namespace PhpMyAdmin;
+
+use PhpMyAdmin\Html\Forms\Fields\FKCheckbox;
 
 /**
  * Functions for multi submit forms
@@ -74,9 +74,9 @@ class MultSubmits
             'query_type' => $what,
             'reload' => ! empty($reload) ? 1 : 0,
         ];
-        if (mb_strpos(' ' . $action, 'db_') == 1) {
+        if (mb_strpos(' ' . $action, 'db_') === 1 || mb_strpos($action, '?route=/database/') !== false) {
             $urlParams['db'] = $db;
-        } elseif (mb_strpos(' ' . $action, 'tbl_') == 1
+        } elseif (mb_strpos(' ' . $action, 'tbl_') === 1 || mb_strpos($action, '?route=/table/') !== false
             || $what == 'row_delete'
         ) {
             $urlParams['db'] = $db;
@@ -373,7 +373,7 @@ class MultSubmits
             $_REQUEST['pos'] = $sql->calculatePosForLastPage(
                 $db,
                 $table,
-                isset($_REQUEST['pos']) ? $_REQUEST['pos'] : null
+                $_REQUEST['pos'] ?? null
             );
         }
 
@@ -524,7 +524,7 @@ class MultSubmits
         // Display option to disable foreign key checks while dropping tables
         if ($what === 'drop_tbl' || $what === 'empty_tbl' || $what === 'row_delete') {
             $html .= '<div id="foreignkeychk">';
-            $html .= Util::getFKCheckbox();
+            $html .= FKCheckbox::generate();
             $html .= '</div>';
         }
         $html .= '<input id="buttonYes" class="btn btn-secondary" type="submit" name="mult_btn" value="'
@@ -640,7 +640,7 @@ class MultSubmits
             unset($fullQueryViews);
         }
 
-        $fullQueryViews = isset($fullQueryViews) ? $fullQueryViews : null;
+        $fullQueryViews = $fullQueryViews ?? null;
 
         return [
             $fullQuery,

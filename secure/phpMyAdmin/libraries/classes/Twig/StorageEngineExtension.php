@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\Twig\StorageEngineExtension class
  *
@@ -13,8 +12,6 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Class StorageEngineExtension
- *
  * @package PhpMyAdmin\Twig
  */
 class StorageEngineExtension extends AbstractExtension

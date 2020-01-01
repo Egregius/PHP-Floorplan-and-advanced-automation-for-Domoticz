@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Set of functions used to build dumps of tables as PHP Arrays
  *
@@ -11,7 +10,6 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Plugins\Export;
 
 use PhpMyAdmin\DatabaseInterface;
-use PhpMyAdmin\Export;
 use PhpMyAdmin\Plugins\ExportPlugin;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyMainGroup;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyRootGroup;
@@ -53,13 +51,13 @@ class ExportPhparray extends ExportPlugin
         // $exportPluginProperties
         // this will be shown as "Format specific options"
         $exportSpecificOptions = new OptionsPropertyRootGroup(
-            "Format Specific Options"
+            'Format Specific Options'
         );
 
         // general options main group
-        $generalOptions = new OptionsPropertyMainGroup("general_opts");
+        $generalOptions = new OptionsPropertyMainGroup('general_opts');
         // create primary items and add them to the group
-        $leaf = new HiddenPropertyItem("structure_or_data");
+        $leaf = new HiddenPropertyItem('structure_or_data');
         $generalOptions->addProperty($leaf);
         // add the main group to the root group
         $exportSpecificOptions->addProperty($generalOptions);
@@ -199,7 +197,7 @@ class ExportPhparray extends ExportPlugin
         }
 
         // fix variable names (based on
-        // https://secure.php.net/manual/language.variables.basics.php)
+        // https://www.php.net/manual/en/language.variables.basics.php)
         if (! preg_match(
             '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/',
             $table_alias
@@ -240,8 +238,8 @@ class ExportPhparray extends ExportPlugin
 
             for ($i = 0; $i < $columns_cnt; $i++) {
                 $buffer .= var_export($columns[$i], true)
-                    . " => " . var_export($record[$i], true)
-                    . (($i + 1 >= $columns_cnt) ? '' : ',');
+                    . ' => ' . var_export($record[$i], true)
+                    . ($i + 1 >= $columns_cnt ? '' : ',');
             }
 
             $buffer .= ')';

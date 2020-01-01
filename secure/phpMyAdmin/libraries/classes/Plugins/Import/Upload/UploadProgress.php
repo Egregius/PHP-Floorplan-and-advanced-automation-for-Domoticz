@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Provides upload functionalities for the import plugins
  *
@@ -42,7 +41,7 @@ class UploadProgress implements UploadInterface
     {
         global $SESSION_KEY;
 
-        if (trim($id) == "") {
+        if (trim($id) == '') {
             return null;
         }
 
@@ -63,6 +62,7 @@ class UploadProgress implements UploadInterface
         }
 
         $status = null;
+        // @see https://pecl.php.net/package/uploadprogress
         if (function_exists('uploadprogress_get_info')) {
             $status = uploadprogress_get_info($id);
         }

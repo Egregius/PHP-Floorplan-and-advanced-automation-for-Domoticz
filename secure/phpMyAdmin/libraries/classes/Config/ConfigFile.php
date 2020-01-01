@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Config file management
  *
@@ -9,7 +8,6 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Config;
 
-use PhpMyAdmin\Config;
 use PhpMyAdmin\Core;
 
 /**
@@ -22,30 +20,35 @@ class ConfigFile
 {
     /**
      * Stores default PMA config from config.default.php
+     *
      * @var array
      */
     private $_defaultCfg;
 
     /**
      * Stores allowed values for non-standard fields
+     *
      * @var array
      */
     private $_cfgDb;
 
     /**
      * Stores original PMA config, not modified by user preferences
+     *
      * @var array|null
      */
     private $_baseCfg;
 
     /**
      * Whether we are currently working in PMA Setup context
+     *
      * @var bool
      */
     private $_isInSetup;
 
     /**
      * Keys which will be always written to config file
+     *
      * @var array
      */
     private $_persistKeys = [];
@@ -53,12 +56,14 @@ class ConfigFile
     /**
      * Changes keys while updating config in {@link updateWithGlobalConfig()}
      * or reading by {@link getConfig()} or {@link getConfigArray()}
+     *
      * @var array
      */
     private $_cfgUpdateReadMapping = [];
 
     /**
      * Key filter for {@link set()}
+     *
      * @var array|null
      */
     private $_setFilter;
@@ -66,12 +71,14 @@ class ConfigFile
     /**
      * Instance id (key in $_SESSION array, separate for each server -
      * ConfigFile{server id})
+     *
      * @var string
      */
     private $_id;
 
     /**
      * Result for {@link _flattenArray()}
+     *
      * @var array|null
      */
     private $_flattenArrayResult;
@@ -395,9 +402,7 @@ class ConfigFile
      */
     public function getServers()
     {
-        return isset($_SESSION[$this->_id]['Servers'])
-            ? $_SESSION[$this->_id]['Servers']
-            : null;
+        return $_SESSION[$this->_id]['Servers'] ?? null;
     }
 
     /**
@@ -415,21 +420,21 @@ class ConfigFile
 
         $path = 'Servers/' . $server;
         $dsn = 'mysqli://';
-        if ($this->getValue("$path/auth_type") == 'config') {
-            $dsn .= $this->getValue("$path/user");
-            if (! empty($this->getValue("$path/password"))) {
+        if ($this->getValue($path . '/auth_type') == 'config') {
+            $dsn .= $this->getValue($path . '/user');
+            if (! empty($this->getValue($path . '/password'))) {
                 $dsn .= ':***';
             }
             $dsn .= '@';
         }
-        if ($this->getValue("$path/host") != 'localhost') {
-            $dsn .= $this->getValue("$path/host");
-            $port = $this->getValue("$path/port");
+        if ($this->getValue($path . '/host') != 'localhost') {
+            $dsn .= $this->getValue($path . '/host');
+            $port = $this->getValue($path . '/port');
             if ($port) {
                 $dsn .= ':' . $port;
             }
         } else {
-            $dsn .= $this->getValue("$path/socket");
+            $dsn .= $this->getValue($path . '/socket');
         }
         return $dsn;
     }
@@ -446,11 +451,11 @@ class ConfigFile
         if (! isset($_SESSION[$this->_id]['Servers'][$id])) {
             return '';
         }
-        $verbose = $this->get("Servers/$id/verbose");
+        $verbose = $this->get('Servers/' . $id . '/verbose');
         if (! empty($verbose)) {
             return $verbose;
         }
-        $host = $this->get("Servers/$id/host");
+        $host = $this->get('Servers/' . $id . '/host');
         return empty($host) ? 'localhost' : $host;
     }
 

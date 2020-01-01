@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    functions used wherever an sql query form is used
  *
@@ -123,6 +122,19 @@ Sql.autoSaveWithSort = function (query) {
 };
 
 /**
+ * Clear saved SQL query with sort in local storage or cookie
+ *
+ * @return void
+ */
+Sql.clearAutoSavedSort = function () {
+    if (isStorageSupported('localStorage')) {
+        window.localStorage.removeItem('auto_saved_sql_sort');
+    } else {
+        Cookies.set('auto_saved_sql_sort', '');
+    }
+};
+
+/**
  * Get the field name for the current field.  Required to construct the query
  * for grid editing
  *
@@ -227,20 +239,20 @@ AJAX.registerOnload('sql.js', function () {
             $('#sqlquery').on('input propertychange', function () {
                 Sql.autoSave($('#sqlquery').val());
             });
+            var useLocalStorageValue = isStorageSupported('localStorage') && typeof window.localStorage.auto_saved_sql_sort !== 'undefined';
             // Save sql query with sort
             if ($('#RememberSorting') !== undefined && $('#RememberSorting').is(':checked')) {
                 $('select[name="sql_query"]').on('change', function () {
-                    Sql.autoSaveWithSort($('select[name="sql_query"]').val());
+                    Sql.autoSaveWithSort($(this).val());
+                });
+                $('.sortlink').on('click', function () {
+                    Sql.clearAutoSavedSort();
                 });
             } else {
-                if (isStorageSupported('localStorage') && window.localStorage.autoSavedSqlSort !== undefined) {
-                    window.localStorage.removeItem('autoSavedSqlSort');
-                } else {
-                    Cookies.set('autoSavedSqlSort', '');
-                }
+                Sql.clearAutoSavedSort();
             }
             // If sql query with sort for current table is stored, change sort by key select value
-            var sortStoredQuery = (isStorageSupported('localStorage') && typeof window.localStorage.autoSavedSqlSort !== 'undefined') ? window.localStorage.autoSavedSqlSort : Cookies.get('autoSavedSqlSort');
+            var sortStoredQuery = useLocalStorageValue ? window.localStorage.auto_saved_sql_sort : Cookies.get('auto_saved_sql_sort');
             if (typeof sortStoredQuery !== 'undefined' && sortStoredQuery !== $('select[name="sql_query"]').val() && $('select[name="sql_query"] option[value="' + sortStoredQuery + '"]').length !== 0) {
                 $('select[name="sql_query"]').val(sortStoredQuery).trigger('change');
             }
@@ -338,12 +350,12 @@ AJAX.registerOnload('sql.js', function () {
 
         textArea.value = '';
 
-        $('#serverinfo a').each(function () {
+        $('#server-breadcrumb a').each(function () {
             textArea.value += $(this).text().split(':')[1].trim() + '/';
         });
         textArea.value += '\t\t' + window.location.href;
         textArea.value += '\n';
-        $('.success').each(function () {
+        $('.alert-success').each(function () {
             textArea.value += $(this).text() + '\n\n';
         });
 
@@ -457,13 +469,13 @@ AJAX.registerOnload('sql.js', function () {
      * @memberOf    jQuery
      */
     $(document).on('click', '#button_submit_query', function () {
-        $('.success,.error').hide();
+        $('.alert-success,.alert-danger').hide();
         // hide already existing error or success message
         var $form = $(this).closest('form');
         // the Go button related to query submission was clicked,
         // instead of the one related to Bookmarks, so empty the
         // id_bookmark selector to avoid misinterpretation in
-        // import.php about what needs to be done
+        // /import about what needs to be done
         $form.find('select[name=id_bookmark]').val('');
         // let normal event propagation happen
         if (isStorageSupported('localStorage')) {
@@ -556,7 +568,7 @@ AJAX.registerOnload('sql.js', function () {
         }
 
         // remove any div containing a previous error message
-        $('div.error').remove();
+        $('.alert-danger').remove();
 
         var $msgbox = Functions.ajaxShowMessage();
         var $sqlqueryresultsouter = $('#sqlqueryresultsouter');
@@ -629,12 +641,12 @@ AJAX.registerOnload('sql.js', function () {
                     var url;
                     if (data.db) {
                         if (data.table) {
-                            url = 'table_sql.php';
+                            url = 'index.php?route=/table/sql';
                         } else {
-                            url = 'db_sql.php';
+                            url = 'index.php?route=/database/sql';
                         }
                     } else {
-                        url = 'server_sql.php';
+                        url = 'index.php?route=/server/sql';
                     }
                     CommonActions.refreshMain(url, function () {
                         $('#sqlqueryresultsouter')
@@ -925,7 +937,7 @@ Sql.browseForeignDialog = function ($thisA) {
                 });
             }
             // updates values in dialog
-            $.post($(this).attr('action') + '?ajax_request=1', postParams, function (data) {
+            $.post($(this).attr('action') + '&ajax_request=1', postParams, function (data) {
                 var $obj = $('<div>').html(data.message);
                 $(formId).html($obj.find(formId).html());
                 $(tableId).html($obj.find(tableId).html());

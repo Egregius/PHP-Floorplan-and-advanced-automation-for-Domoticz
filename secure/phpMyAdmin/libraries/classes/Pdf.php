@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * TCPDF wrapper class.
  *
@@ -45,6 +44,7 @@ class Pdf extends TCPDF
      * @param boolean $pdfa        If TRUE set the document to PDF/A mode.
      *
      * @throws Exception
+     *
      * @access public
      */
     public function __construct(

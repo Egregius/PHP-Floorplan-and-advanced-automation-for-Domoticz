@@ -1,7 +1,6 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * Contains functions used by browse_foreigners.php
+ * Contains functions used by browse foreigners
  *
  * @package PhpMyAdmin
  */
@@ -16,10 +15,15 @@ namespace PhpMyAdmin;
  */
 class BrowseForeigners
 {
+    /** @var int */
     private $limitChars;
+    /** @var int */
     private $maxRows;
+    /** @var int */
     private $repeatCells;
+    /** @var bool */
     private $showAll;
+    /** @var string */
     private $themeImage;
 
     /**
@@ -28,29 +32,19 @@ class BrowseForeigners
     public $template;
 
     /**
-     * Constructor
-     *
-     * @param int      $limitChars  Maximum number of characters to show
-     * @param int      $maxRows     Number of rows to display
-     * @param int      $repeatCells Repeat the headers every X cells, or 0 to deactivate
-     * @param boolean  $showAll     Shows the 'Show all' button or not
-     * @param string   $themeImage  Theme image path
-     * @param Template $template    Template object
+     * @param Template $template Template object
      */
-    public function __construct(
-        int $limitChars,
-        int $maxRows,
-        int $repeatCells,
-        bool $showAll,
-        string $themeImage,
-        Template $template
-    ) {
-        $this->limitChars = $limitChars;
-        $this->maxRows = $maxRows;
-        $this->repeatCells = $repeatCells;
-        $this->showAll = $showAll;
-        $this->themeImage = $themeImage;
+    public function __construct(Template $template)
+    {
+        global $cfg, $pmaThemeImage;
+
         $this->template = $template;
+
+        $this->limitChars = (int) $cfg['LimitChars'];
+        $this->maxRows = (int) $cfg['MaxRows'];
+        $this->repeatCells = (int) $cfg['RepeatCells'];
+        $this->showAll = (bool) $cfg['ShowAll'];
+        $this->themeImage = $pmaThemeImage;
     }
 
     /**
@@ -183,9 +177,9 @@ class BrowseForeigners
         ]);
 
         $output = '<form class="ajax" '
-            . 'id="browse_foreign_form" name="browse_foreign_from" '
-            . 'action="browse_foreigners.php" method="post">'
-            . '<fieldset>'
+            . 'id="browse_foreign_form" name="browse_foreign_from" action="'
+            . Url::getFromRoute('/browse-foreigners')
+            . '" method="post"><fieldset>'
             . Url::getHiddenInputs($db, $table)
             . '<input type="hidden" name="field" value="' . htmlspecialchars($field)
             . '">'
@@ -318,7 +312,7 @@ class BrowseForeigners
     {
         $gotopage = '';
         isset($_POST['pos']) ? $pos = $_POST['pos'] : $pos = 0;
-        if (! is_array($foreignData['disp_row'])) {
+        if ($foreignData === null || ! is_array($foreignData['disp_row'])) {
             return $gotopage;
         }
 

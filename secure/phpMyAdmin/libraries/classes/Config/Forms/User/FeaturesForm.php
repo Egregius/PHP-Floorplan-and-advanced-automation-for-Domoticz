@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * User preferences form
  *
@@ -12,7 +11,6 @@ namespace PhpMyAdmin\Config\Forms\User;
 use PhpMyAdmin\Config\Forms\BaseForm;
 
 /**
- * Class FeaturesForm
  * @package PhpMyAdmin\Config\Forms\User
  */
 class FeaturesForm extends BaseForm
@@ -33,6 +31,7 @@ class FeaturesForm extends BaseForm
                 'SendErrorReports',
                 'ConsoleEnterExecutes',
                 'DisableShortcutKeys',
+                'FirstDayOfCalendar',
             ],
             'Databases' => [
                 'Servers/1/only_db', // saves to Server/only_db

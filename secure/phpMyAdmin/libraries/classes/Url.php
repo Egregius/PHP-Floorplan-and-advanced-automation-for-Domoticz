@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Static methods for URL/hidden inputs generating
  *
@@ -19,14 +18,14 @@ class Url
     /**
      * Generates text with hidden inputs.
      *
+     * @see Url::getCommon()
+     *
      * @param string|array $db     optional database name
      *                             (can also be an array of parameters)
      * @param string       $table  optional table name
      * @param int          $indent indenting level
      * @param string|array $skip   do not generate a hidden field for this parameter
      *                             (can be an array of strings)
-     *
-     * @see Url::getCommon()
      *
      * @return string   string with input fields
      *
@@ -38,6 +37,9 @@ class Url
         $indent = 0,
         $skip = []
     ) {
+        /** @var Config $PMA_Config */
+        global $PMA_Config;
+
         if (is_array($db)) {
             $params  =& $db;
         } else {
@@ -55,7 +57,7 @@ class Url
         ) {
             $params['server'] = $GLOBALS['server'];
         }
-        if (empty($_COOKIE['pma_lang']) && ! empty($GLOBALS['lang'])) {
+        if (empty($PMA_Config->getCookie('pma_lang')) && ! empty($GLOBALS['lang'])) {
             $params['lang'] = $GLOBALS['lang'];
         }
 
@@ -160,6 +162,7 @@ class Url
      * @param string $divider optional character to use instead of '?'
      *
      * @return string   string with URL parameters
+     *
      * @access  public
      */
     public static function getCommon($params = [], $divider = '?')
@@ -196,28 +199,31 @@ class Url
      * @param string $divider optional character to use instead of '?'
      *
      * @return string   string with URL parameters
+     *
      * @access  public
      */
     public static function getCommonRaw($params = [], $divider = '?')
     {
+        /** @var Config $PMA_Config */
+        global $PMA_Config;
         $separator = Url::getArgSeparator();
 
         // avoid overwriting when creating navi panel links to servers
         if (isset($GLOBALS['server'])
             && $GLOBALS['server'] != $GLOBALS['cfg']['ServerDefault']
             && ! isset($params['server'])
-            && ! $GLOBALS['PMA_Config']->get('is_setup')
+            && ! $PMA_Config->get('is_setup')
         ) {
             $params['server'] = $GLOBALS['server'];
         }
 
-        if (empty($_COOKIE['pma_lang']) && ! empty($GLOBALS['lang'])) {
+        if (empty($PMA_Config->getCookie('pma_lang')) && ! empty($GLOBALS['lang'])) {
             $params['lang'] = $GLOBALS['lang'];
         }
 
         $query = http_build_query($params, '', $separator);
 
-        if ($divider != '?' || strlen($query) > 0) {
+        if (($divider !== '?' && $divider !== '&') || strlen($query) > 0) {
             return $divider . $query;
         }
 
@@ -234,6 +240,7 @@ class Url
      *                       currently 'none' or 'html'
      *
      * @return string  character used for separating url parts usually ; or &
+     *
      * @access  public
      */
     public static function getArgSeparator($encode = 'none')
@@ -250,7 +257,7 @@ class Url
             if (mb_strpos($arg_separator, ';') !== false) {
                 $separator = ';';
             } elseif (strlen($arg_separator) > 0) {
-                $separator = $arg_separator{0};
+                $separator = $arg_separator[0];
             } else {
                 $separator = '&';
             }
@@ -265,5 +272,16 @@ class Url
             default:
                 return $separator;
         }
+    }
+
+    /**
+     * @param string $route                Route to use
+     * @param array  $additionalParameters Additional URL parameters
+     *
+     * @return string
+     */
+    public static function getFromRoute(string $route, array $additionalParameters = []): string
+    {
+        return 'index.php?route=' . $route . self::getCommon($additionalParameters, '&');
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * XML (and HTML) editing with syntax highlighted CodeMirror editor
  *
@@ -60,7 +59,7 @@ class Text_Plain_XmlEditor extends CodeMirrorEditorTransformationPlugin
      */
     public static function getName()
     {
-        return "XML";
+        return 'XML';
     }
 
     /**
@@ -70,7 +69,7 @@ class Text_Plain_XmlEditor extends CodeMirrorEditorTransformationPlugin
      */
     public static function getMIMEType()
     {
-        return "Text";
+        return 'Text';
     }
 
     /**
@@ -80,6 +79,6 @@ class Text_Plain_XmlEditor extends CodeMirrorEditorTransformationPlugin
      */
     public static function getMIMESubtype()
     {
-        return "Plain";
+        return 'Plain';
     }
 }

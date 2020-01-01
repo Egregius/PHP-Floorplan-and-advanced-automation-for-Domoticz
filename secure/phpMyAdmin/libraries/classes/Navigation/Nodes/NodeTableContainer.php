@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functionality for the navigation tree
  *
@@ -9,8 +8,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Navigation\Nodes;
 
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Navigation\NodeFactory;
-use PhpMyAdmin\Util;
+use PhpMyAdmin\Url;
 
 /**
  * Represents a container for table nodes in the navigation tree
@@ -25,30 +25,36 @@ class NodeTableContainer extends NodeDatabaseChildContainer
     public function __construct()
     {
         parent::__construct(__('Tables'), Node::CONTAINER);
-        $this->icon = Util::getImage('b_browse', __('Tables'));
+        $this->icon = Generator::getImage('b_browse', __('Tables'));
         $this->links = [
-            'text' => 'db_structure.php?server=' . $GLOBALS['server']
-                . '&amp;db=%1$s&amp;tbl_type=table',
-            'icon' => 'db_structure.php?server=' . $GLOBALS['server']
-                . '&amp;db=%1$s&amp;tbl_type=table',
+            'text' => Url::getFromRoute('/database/structure', [
+                'server' => $GLOBALS['server'],
+                'db' => '%1\$s',
+                'tbl_type' => 'table',
+            ]),
+            'icon' => Url::getFromRoute('/database/structure', [
+                'server' => $GLOBALS['server'],
+                'db' => '%1\$s',
+                'tbl_type' => 'table',
+            ]),
         ];
         $this->realName = 'tables';
         $this->classes = 'tableContainer subContainer';
 
         $newLabel = _pgettext('Create new table', 'New');
-        $new = NodeFactory::getInstance(
-            'Node',
-            $newLabel
+        $new = NodeFactory::getInstanceForNewNode(
+            $newLabel,
+            'new_table italics'
         );
-        $new->isNew = true;
-        $new->icon = Util::getImage('b_table_add', $newLabel);
+        $new->icon = Generator::getImage('b_table_add', $newLabel);
         $new->links = [
-            'text' => 'tbl_create.php?server=' . $GLOBALS['server']
-                . '&amp;db=%2$s',
-            'icon' => 'tbl_create.php?server=' . $GLOBALS['server']
-                . '&amp;db=%2$s',
+            'text' => Url::getFromRoute('/table/create', [
+                'server' => $GLOBALS['server'],
+            ]) . '&amp;db=%2$s',
+            'icon' => Url::getFromRoute('/table/create', [
+                'server' => $GLOBALS['server'],
+            ]) . '&amp;db=%2$s',
         ];
-        $new->classes = 'new_table italics';
         $this->addChild($new);
     }
 }

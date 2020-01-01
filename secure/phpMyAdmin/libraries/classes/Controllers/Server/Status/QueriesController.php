@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Displays query statistics for the server
  *
@@ -10,7 +9,6 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Controllers\Server\Status;
 
 /**
- * Class QueriesController
  * @package PhpMyAdmin\Controllers\Server\Status
  */
 class QueriesController extends AbstractController
@@ -20,6 +18,19 @@ class QueriesController extends AbstractController
      */
     public function index(): string
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        $header = $this->response->getHeader();
+        $scripts = $header->getScripts();
+        $scripts->addFile('chart.js');
+        $scripts->addFile('vendor/jqplot/jquery.jqplot.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.pieRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.highlighter.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.enhancedPieLegendRenderer.js');
+        $scripts->addFile('vendor/jquery/jquery.tablesorter.js');
+        $scripts->addFile('server/status/sorter.js');
+        $scripts->addFile('server/status/queries.js');
+
         if ($this->data->dataLoaded) {
             $hourFactor = 3600 / $this->data->status['Uptime'];
             $usedQueries = $this->data->used_queries;

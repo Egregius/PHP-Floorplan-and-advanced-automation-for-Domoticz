@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the regex validation input transformations plugins
  *
@@ -69,6 +68,6 @@ abstract class RegexValidationTransformationsPlugin extends IOTransformationsPlu
      */
     public static function getName()
     {
-        return "Regex Validation";
+        return 'Regex Validation';
     }
 }

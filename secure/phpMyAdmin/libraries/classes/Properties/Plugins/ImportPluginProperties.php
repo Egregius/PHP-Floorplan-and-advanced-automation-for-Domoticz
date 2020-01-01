@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Properties class for the import plug-in
  *
@@ -28,6 +27,6 @@ class ImportPluginProperties extends PluginPropertyItem
      */
     public function getItemType()
     {
-        return "import";
+        return 'import';
     }
 }

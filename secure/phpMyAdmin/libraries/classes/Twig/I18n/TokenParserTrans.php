@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\Twig\I18n\TokenParserTrans class
  *
@@ -15,8 +14,6 @@ use Twig\Token;
 use Twig_Error_Syntax;
 
 /**
- * Class TokenParserTrans
- *
  * @package PhpMyAdmin\Twig\I18n
  */
 class TokenParserTrans extends TransTokenParser

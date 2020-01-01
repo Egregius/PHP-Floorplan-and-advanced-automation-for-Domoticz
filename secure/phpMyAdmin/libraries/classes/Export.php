@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * function for the main export logic
  *
@@ -25,7 +24,6 @@ class Export
     private $dbi;
 
     /**
-     * Export constructor.
      * @param DatabaseInterface $dbi DatabaseInterface instance
      */
     public function __construct($dbi)
@@ -41,7 +39,7 @@ class Export
     public function shutdown(): void
     {
         $error = error_get_last();
-        if ($error != null && mb_strpos($error['message'], "execution time")) {
+        if ($error != null && mb_strpos($error['message'], 'execution time')) {
             //set session variable to check if there was error while exporting
             $_SESSION['pma_export_error'] = $error['message'];
         }
@@ -99,7 +97,7 @@ class Export
             $line = Encoding::kanjiStrConv(
                 $line,
                 $GLOBALS['knjenc'],
-                isset($GLOBALS['xkana']) ? $GLOBALS['xkana'] : ''
+                $GLOBALS['xkana'] ?? ''
             );
         }
 
@@ -315,7 +313,7 @@ class Export
             $extension_start_pos,
             mb_strlen($filename)
         );
-        $required_extension = "." . $export_plugin->getProperties()->getExtension();
+        $required_extension = '.' . $export_plugin->getProperties()->getExtension();
         if (mb_strtolower($user_extension) != $required_extension) {
             $filename  .= $required_extension;
         }
@@ -499,11 +497,11 @@ class Export
          */
         $back_button = '<p id="export_back_button">[ <a href="';
         if ($export_type == 'server') {
-            $back_button .= 'server_export.php" data-post="' . Url::getCommon([], '');
+            $back_button .= Url::getFromRoute('/server/export') . '" data-post="' . Url::getCommon([], '');
         } elseif ($export_type == 'database') {
-            $back_button .= 'db_export.php" data-post="' . Url::getCommon(['db' => $db], '');
+            $back_button .= Url::getFromRoute('/database/export') . '" data-post="' . Url::getCommon(['db' => $db], '');
         } else {
-            $back_button .= 'tbl_export.php" data-post="' . Url::getCommon(
+            $back_button .= Url::getFromRoute('/table/export') . '" data-post="' . Url::getCommon(
                 [
                     'db' => $db,
                     'table' => $table,
@@ -531,7 +529,7 @@ class Export
         $back_button .= '&amp;repopulate=1">' . __('Back') . '</a> ]</p>';
         $html .= '<br>';
         $html .= $back_button;
-        $refreshButton = '<form id="export_refresh_form" method="POST" action="export.php" class="disableAjax">';
+        $refreshButton = '<form id="export_refresh_form" method="POST" action="' . Url::getFromRoute('/export') . '" class="disableAjax">';
         $refreshButton .= '[ <a class="disableAjax" onclick="$(this).parent().submit()">' . __('Refresh') . '</a> ]';
         foreach ($_POST as $name => $value) {
             if (is_array($value)) {
@@ -589,7 +587,7 @@ class Export
         string $separate_files
     ): void {
         if (! empty($db_select)) {
-            $tmp_select = implode($db_select, '|');
+            $tmp_select = implode('|', $db_select);
             $tmp_select = '|' . $tmp_select . '|';
         }
         // Walk over databases
@@ -732,7 +730,7 @@ class Export
 
                         $size = $this->dbi->fetchValue($query);
                         //Converting the size to MB
-                        $size = ($size / 1024) / 1024;
+                        $size = $size / 1024 / 1024;
                         if ($size > $table_size) {
                             continue;
                         }
@@ -1051,14 +1049,14 @@ class Export
     {
         global $cfg;
         if ($export_type == 'server') {
-            $active_page = 'server_export.php';
-            include_once ROOT_PATH . 'server_export.php';
+            $active_page = Url::getFromRoute('/server/export');
+            include_once ROOT_PATH . 'libraries/entry_points/server/export.php';
         } elseif ($export_type == 'database') {
-            $active_page = 'db_export.php';
-            include_once ROOT_PATH . 'db_export.php';
+            $active_page = Url::getFromRoute('/database/export');
+            include_once ROOT_PATH . 'libraries/entry_points/database/export.php';
         } else {
-            $active_page = 'tbl_export.php';
-            include_once ROOT_PATH . 'tbl_export.php';
+            $active_page = Url::getFromRoute('/table/export');
+            include_once ROOT_PATH . 'libraries/entry_points/table/export.php';
         }
         exit;
     }
@@ -1126,15 +1124,15 @@ class Export
      *
      * @return mixed result of the query
      */
-    public function lockTables(string $db, array $tables, string $lockType = "WRITE")
+    public function lockTables(string $db, array $tables, string $lockType = 'WRITE')
     {
         $locks = [];
         foreach ($tables as $table) {
-            $locks[] = Util::backquote($db) . "."
-                . Util::backquote($table) . " " . $lockType;
+            $locks[] = Util::backquote($db) . '.'
+                . Util::backquote($table) . ' ' . $lockType;
         }
 
-        $sql = "LOCK TABLES " . implode(", ", $locks);
+        $sql = 'LOCK TABLES ' . implode(', ', $locks);
         return $this->dbi->tryQuery($sql);
     }
 
@@ -1145,7 +1143,7 @@ class Export
      */
     public function unlockTables()
     {
-        return $this->dbi->tryQuery("UNLOCK TABLES");
+        return $this->dbi->tryQuery('UNLOCK TABLES');
     }
 
     /**
@@ -1209,7 +1207,7 @@ class Export
         // get the specific plugin
         /** @var SchemaPlugin $export_plugin */
         $export_plugin = Plugins::getPlugin(
-            "schema",
+            'schema',
             $export_type,
             'libraries/classes/Plugins/Schema/'
         );
@@ -1219,7 +1217,7 @@ class Export
             Core::fatalError(__('Bad type!'));
         }
 
-        $this->dbi->selectDb($GLOBALS['db']);
-        $export_plugin->exportSchema($GLOBALS['db']);
+        $this->dbi->selectDb($_POST['db']);
+        $export_plugin->exportSchema($_POST['db']);
     }
 }

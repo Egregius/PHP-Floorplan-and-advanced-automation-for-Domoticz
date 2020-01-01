@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the date format transformations plugins
  *
@@ -153,6 +152,6 @@ abstract class DateFormatTransformationsPlugin extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "Date Format";
+        return 'Date Format';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Server\Status\AdvisorController
  *
@@ -14,7 +13,6 @@ use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Server\Status\Data;
 use PhpMyAdmin\Template;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * Displays the advisor feature
@@ -29,8 +27,6 @@ class AdvisorController extends AbstractController
     private $advisor;
 
     /**
-     * AdvisorController constructor.
-     *
      * @param Response          $response Response object
      * @param DatabaseInterface $dbi      DatabaseInterface object
      * @param Template          $template Template object
@@ -48,6 +44,9 @@ class AdvisorController extends AbstractController
      */
     public function index(): string
     {
+        $scripts = $this->response->getHeader()->getScripts();
+        $scripts->addFile('server/status/advisor.js');
+
         $data = '';
         if ($this->data->dataLoaded) {
             $data = json_encode($this->advisor->run());

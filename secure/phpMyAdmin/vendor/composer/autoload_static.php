@@ -4,12 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
+class ComposerStaticInitda14df64b4e15f6dda9b595a1316b88a
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     );
 
@@ -29,8 +29,6 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         ),
         'S' => 
         array (
-            'Symfony\\Polyfill\\Util\\' => 22,
-            'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Contracts\\Service\\' => 26,
@@ -42,7 +40,6 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
             'Symfony\\Component\\DependencyInjection\\' => 38,
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Cache\\' => 24,
-            'Samyoul\\U2F\\U2FServer\\' => 22,
         ),
         'R' => 
         array (
@@ -53,23 +50,14 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
-            'PragmaRX\\Google2FA\\Tests\\' => 25,
-            'PragmaRX\\Google2FA\\' => 19,
-            'PragmaRX\\Google2FAQRCode\\Tests\\' => 31,
-            'PragmaRX\\Google2FAQRCode\\' => 25,
             'PhpMyAdmin\\SqlParser\\' => 21,
             'PhpMyAdmin\\ShapeFile\\' => 21,
             'PhpMyAdmin\\MoTranslator\\' => 24,
             'PhpMyAdmin\\' => 11,
-            'ParagonIE\\ConstantTime\\' => 23,
         ),
-        'D' => 
+        'F' => 
         array (
-            'DASPRiD\\Enum\\' => 13,
-        ),
-        'B' => 
-        array (
-            'BaconQrCode\\' => 12,
+            'FastRoute\\' => 10,
         ),
     );
 
@@ -89,14 +77,6 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
-        ),
-        'Symfony\\Polyfill\\Util\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
-        ),
-        'Symfony\\Polyfill\\Php56\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -142,10 +122,6 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
         ),
-        'Samyoul\\U2F\\U2FServer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/samyoul/u2f-php-server/src',
-        ),
         'ReCaptcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/recaptcha/src/ReCaptcha',
@@ -161,22 +137,6 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
-        'PragmaRX\\Google2FA\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa/tests',
-        ),
-        'PragmaRX\\Google2FA\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',
-        ),
-        'PragmaRX\\Google2FAQRCode\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa-qrcode/tests',
-        ),
-        'PragmaRX\\Google2FAQRCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pragmarx/google2fa-qrcode/src',
         ),
         'PhpMyAdmin\\SqlParser\\' => 
         array (
@@ -194,17 +154,9 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         array (
             0 => __DIR__ . '/../..' . '/libraries/classes',
         ),
-        'ParagonIE\\ConstantTime\\' => 
+        'FastRoute\\' => 
         array (
-            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
-        ),
-        'DASPRiD\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dasprid/enum/src',
-        ),
-        'BaconQrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
+            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
     );
 
@@ -222,30 +174,12 @@ class ComposerStaticInit48d3722638608bd697a4cde40306c8dd
         ),
     );
 
-    public static $classMap = array (
-        'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
-        'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
-        'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
-        'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
-        'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
-        'TCPDFBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_1d.php',
-        'TCPDF_COLORS' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_colors.php',
-        'TCPDF_FILTERS' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_filters.php',
-        'TCPDF_FONTS' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_fonts.php',
-        'TCPDF_FONT_DATA' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_font_data.php',
-        'TCPDF_IMAGES' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_images.php',
-        'TCPDF_IMPORT' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_import.php',
-        'TCPDF_PARSER' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_parser.php',
-        'TCPDF_STATIC' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_static.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit48d3722638608bd697a4cde40306c8dd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit48d3722638608bd697a4cde40306c8dd::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit48d3722638608bd697a4cde40306c8dd::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit48d3722638608bd697a4cde40306c8dd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitda14df64b4e15f6dda9b595a1316b88a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitda14df64b4e15f6dda9b595a1316b88a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitda14df64b4e15f6dda9b595a1316b88a::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }

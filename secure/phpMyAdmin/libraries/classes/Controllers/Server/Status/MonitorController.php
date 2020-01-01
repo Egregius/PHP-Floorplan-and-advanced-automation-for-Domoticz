@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Server\Status\MonitorController
  *
@@ -17,7 +16,6 @@ use PhpMyAdmin\SysInfo;
 use PhpMyAdmin\Template;
 
 /**
- * Class MonitorController
  * @package PhpMyAdmin\Controllers\Server\Status
  */
 class MonitorController extends AbstractController
@@ -28,8 +26,6 @@ class MonitorController extends AbstractController
     private $monitor;
 
     /**
-     * MonitorController constructor.
-     *
      * @param Response          $response Response object
      * @param DatabaseInterface $dbi      DatabaseInterface object
      * @param Template          $template Template object
@@ -47,6 +43,24 @@ class MonitorController extends AbstractController
      */
     public function index(): string
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        $header = $this->response->getHeader();
+        $scripts = $header->getScripts();
+        $scripts->addFile('vendor/jquery/jquery.tablesorter.js');
+        $scripts->addFile('vendor/jquery/jquery.sortableTable.js');
+        $scripts->addFile('vendor/jqplot/jquery.jqplot.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.pieRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.enhancedPieLegendRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.canvasTextRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.dateAxisRenderer.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.highlighter.js');
+        $scripts->addFile('vendor/jqplot/plugins/jqplot.cursor.js');
+        $scripts->addFile('jqplot/plugins/jqplot.byteFormatter.js');
+        $scripts->addFile('server/status/monitor.js');
+        $scripts->addFile('server/status/sorter.js');
+
         $form = [
             'server_time' => microtime(true) * 1000,
             'server_os' => SysInfo::getOs(),
@@ -70,10 +84,17 @@ class MonitorController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return array JSON
      */
     public function chartingData(array $params): array
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $json = [];
         $json['message'] = $this->monitor->getJsonForChartingData(
             $params['requiredData'] ?? ''
@@ -84,10 +105,17 @@ class MonitorController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return array JSON
      */
     public function logDataTypeSlow(array $params): array
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $json = [];
         $json['message'] = $this->monitor->getJsonForLogDataTypeSlow(
             (int) $params['time_start'],
@@ -99,10 +127,17 @@ class MonitorController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return array JSON
      */
     public function logDataTypeGeneral(array $params): array
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $json = [];
         $json['message'] = $this->monitor->getJsonForLogDataTypeGeneral(
             (int) $params['time_start'],
@@ -116,10 +151,17 @@ class MonitorController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return array JSON
      */
     public function loggingVars(array $params): array
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $json = [];
         $json['message'] = $this->monitor->getJsonForLoggingVars(
             $params['varName'],
@@ -131,10 +173,17 @@ class MonitorController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return array JSON
      */
     public function queryAnalyzer(array $params): array
     {
+        require_once ROOT_PATH . 'libraries/server_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $json = [];
         $json['message'] = $this->monitor->getJsonForQueryAnalyzer(
             $params['database'] ?? '',

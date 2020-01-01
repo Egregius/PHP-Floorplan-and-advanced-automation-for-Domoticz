@@ -49,16 +49,16 @@ const regexCli = /([-]{2})([0-9a-z-_]+)/i;
  * @returns {String} The cleaned cli
  */
 const cleanCli = function(cli, skipRegex = false) {
-    if (cli !== undefined && typeof cli === 'string') {
+    if (typeof cli === 'string') {
         if (cli.match(/<code\>/i) || cli.match(/<\/code\>/i)) {
             cli = cli.replace(/<code\>/gi, '');
             cli = cli.replace(/<\/code\>/gi, '');
             cli = cli.replace(/\>/gi, '');
             cli = cli.replace(/</gi, '');
         }
-    }
-    if (!cli.match(regexCli) && skipRegex === false) {
-        cli = undefined;
+        if (!cli.match(regexCli) && skipRegex === false) {
+            cli = undefined;
+        }
     }
     return cli;
 };
@@ -83,9 +83,46 @@ const cleanRange = function(range) {
     return range;
 };
 
+/**
+ * Clean a default value
+ * @param {String} defaultValue The default value
+ * @returns {String} The same or an alternative formated text
+ */
+const cleanDefault = function(defaultValue) {
+    return defaultValue
+        .split('\n')
+        .map(el => cleanTextDefault(el.trim()))
+        .join(', ');
+};
+
+/**
+ * Clean text of a default value
+ * @param {String} defaultTextValue The default text value
+ * @returns {String} The same or an alternative text
+ */
+const cleanTextDefault = function(defaultTextValue) {
+    if (defaultTextValue === 'Autosized (see description)') {
+        defaultTextValue = '(autosized)';
+    }
+    if (defaultTextValue.indexOf('Based on the number of processors') !== -1) {
+        defaultTextValue = '(based on the number of processors)';
+    }
+    if (defaultTextValue === 'The MariaDB data directory') {
+        defaultTextValue = '(the MariaDB data directory)';
+    }
+    if (defaultTextValue.match(/-1 \(signifies (autoscaling); do not assign this literal value\)/g)) {
+        defaultTextValue = '(-1 signifies autoscaling; do not use -1)';
+    }
+    if (defaultTextValue.match(/-1 \(signifies (autosizing); do not assign this literal value\)/g)) {
+        defaultTextValue = '(-1 signifies autosizing; do not use -1)';
+    }
+    return defaultTextValue;
+};
+
 module.exports = {
     regexCli: regexCli,
     cleanType: cleanType,
     cleanCli: cleanCli,
     cleanRange: cleanRange,
+    cleanDefault: cleanDefault,
 };

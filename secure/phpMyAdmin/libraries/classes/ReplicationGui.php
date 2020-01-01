@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functions for the replication GUI
  *
@@ -27,8 +26,6 @@ class ReplicationGui
     private $template;
 
     /**
-     * ReplicationGui constructor.
-     *
      * @param Replication $replication Replication instance
      * @param Template    $template    Template instance
      */
@@ -46,9 +43,7 @@ class ReplicationGui
     public function getHtmlForErrorMessage()
     {
         $html = '';
-        if (isset($_SESSION['replication']['sr_action_status'])
-            && isset($_SESSION['replication']['sr_action_info'])
-        ) {
+        if (isset($_SESSION['replication']['sr_action_status'], $_SESSION['replication']['sr_action_info'])) {
             if ($_SESSION['replication']['sr_action_status'] == 'error') {
                 $error_message = $_SESSION['replication']['sr_action_info'];
                 $html .= Message::error($error_message)->getDisplay();
@@ -267,18 +262,20 @@ class ReplicationGui
 
         $variables = [];
         foreach ($replicationVariables as $variable) {
+            $serverReplicationVariable = is_array($serverReplication) && isset($serverReplication[0]) ? $serverReplication[0][$variable] : '';
+
             $variables[$variable] = [
                 'name' => $variable,
                 'status' => '',
-                'value' => $serverReplication[0][$variable],
+                'value' => $serverReplicationVariable,
             ];
 
             if (isset($variablesAlerts[$variable])
-                && $variablesAlerts[$variable] === $serverReplication[0][$variable]
+                && $variablesAlerts[$variable] === $serverReplicationVariable
             ) {
                 $variables[$variable]['status'] = 'attention';
             } elseif (isset($variablesOks[$variable])
-                && $variablesOks[$variable] === $serverReplication[0][$variable]
+                && $variablesOks[$variable] === $serverReplicationVariable
             ) {
                 $variables[$variable]['status'] = 'allfine';
             }
@@ -295,7 +292,7 @@ class ReplicationGui
                 $variables[$variable]['value'] = str_replace(
                     ',',
                     ', ',
-                    $serverReplication[0][$variable]
+                    $serverReplicationVariable
                 );
             }
         }
@@ -459,8 +456,8 @@ class ReplicationGui
                     );
                 } else {
                     Core::sendHeaderLocation(
-                        './server_replication.php'
-                        . Url::getCommonRaw($GLOBALS['url_params'])
+                        './index.php?route=/server/replication'
+                        . Url::getCommonRaw($GLOBALS['url_params'], '&')
                     );
                 }
             }
@@ -553,9 +550,9 @@ class ReplicationGui
             $_POST['sr_slave_control_parm'] = null;
         }
         if ($_POST['sr_slave_action'] == 'reset') {
-            $qStop = $this->replication->slaveControl("STOP");
-            $qReset = $GLOBALS['dbi']->tryQuery("RESET SLAVE;");
-            $qStart = $this->replication->slaveControl("START");
+            $qStop = $this->replication->slaveControl('STOP', null, DatabaseInterface::CONNECT_USER);
+            $qReset = $GLOBALS['dbi']->tryQuery('RESET SLAVE;');
+            $qStart = $this->replication->slaveControl('START', null, DatabaseInterface::CONNECT_USER);
 
             $result = ($qStop !== false && $qStop !== -1 &&
                 $qReset !== false && $qReset !== -1 &&
@@ -563,7 +560,8 @@ class ReplicationGui
         } else {
             $qControl = $this->replication->slaveControl(
                 $_POST['sr_slave_action'],
-                $_POST['sr_slave_control_parm']
+                $_POST['sr_slave_control_parm'],
+                DatabaseInterface::CONNECT_USER
             );
 
             $result = ($qControl !== false && $qControl !== -1);
@@ -584,11 +582,11 @@ class ReplicationGui
             $count = $_POST['sr_skip_errors_count'] * 1;
         }
 
-        $qStop = $this->replication->slaveControl("STOP");
+        $qStop = $this->replication->slaveControl('STOP', null, DatabaseInterface::CONNECT_USER);
         $qSkip = $GLOBALS['dbi']->tryQuery(
-            "SET GLOBAL SQL_SLAVE_SKIP_COUNTER = " . $count . ";"
+            'SET GLOBAL SQL_SLAVE_SKIP_COUNTER = ' . $count . ';'
         );
-        $qStart = $this->replication->slaveControl("START");
+        $qStart = $this->replication->slaveControl('START', null, DatabaseInterface::CONNECT_USER);
 
         $result = ($qStop !== false && $qStop !== -1 &&
             $qSkip !== false && $qSkip !== -1 &&

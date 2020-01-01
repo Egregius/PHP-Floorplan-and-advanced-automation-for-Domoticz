@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Application OctetStream Download Transformations plugin for phpMyAdmin
  *
@@ -28,7 +27,7 @@ class Application_Octetstream_Download extends DownloadTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Application";
+        return 'Application';
     }
 
     /**
@@ -38,6 +37,6 @@ class Application_Octetstream_Download extends DownloadTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "OctetStream";
+        return 'OctetStream';
     }
 }

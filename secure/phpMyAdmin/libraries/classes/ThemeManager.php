@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * phpMyAdmin theme manager
  *
@@ -8,9 +7,6 @@
 declare(strict_types=1);
 
 namespace PhpMyAdmin;
-
-use PhpMyAdmin\Theme;
-use PhpMyAdmin\Url;
 
 /**
  * phpMyAdmin theme manager
@@ -216,9 +212,12 @@ class ThemeManager
      */
     public function getThemeCookie()
     {
+        /** @var Config $PMA_Config */
+        global $PMA_Config;
+
         $name = $this->getThemeCookieName();
-        if (isset($_COOKIE[$name])) {
-            return $_COOKIE[$name];
+        if ($PMA_Config->issetCookie($name)) {
+            return $PMA_Config->getCookie($name);
         }
 
         return false;
@@ -339,13 +338,12 @@ class ThemeManager
 
         if ($form) {
             $select_box .= '<form name="setTheme" method="post"';
-            $select_box .= ' action="index.php" class="disableAjax">';
+            $select_box .= ' action="index.php?route=/set-theme" class="disableAjax">';
             $select_box .= Url::getHiddenInputs();
         }
 
-        $theme_preview_path = './themes.php';
         $theme_preview_href = '<a href="'
-            . $theme_preview_path . '" target="themes" class="themeselect">';
+            . Url::getFromRoute('/themes') . '" target="themes" class="themeselect">';
         $select_box .=  $theme_preview_href . __('Theme:') . '</a>' . "\n";
 
         $select_box .=  '<select name="set_theme" lang="en" dir="ltr"'

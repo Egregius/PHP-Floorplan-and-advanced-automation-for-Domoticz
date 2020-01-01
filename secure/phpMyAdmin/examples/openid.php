@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Single signon for phpMyAdmin using OpenID
  *
@@ -56,7 +55,7 @@ function Show_page($contents)
     </head>
     <body>
     <?php
-    if (isset($_SESSION) && isset($_SESSION['PMA_single_signon_error_message'])) {
+    if (isset($_SESSION['PMA_single_signon_error_message'])) {
         echo '<p class="error">' , $_SESSION['PMA_single_signon_message'] , '</p>';
         unset($_SESSION['PMA_single_signon_message']);
     }
@@ -77,7 +76,7 @@ function Show_page($contents)
 function Die_error($e)
 {
     $contents = "<div class='relyingparty_results'>\n";
-    $contents .= "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>\n";
+    $contents .= '<pre>' . htmlspecialchars($e->getMessage()) . "</pre>\n";
     $contents .= "</div class='relyingparty_results'>";
     Show_page($contents);
     exit;
@@ -144,7 +143,7 @@ if (isset($_POST['start'])) {
 
     $url = $authRequest->getAuthorizeURL();
 
-    header("Location: $url");
+    header('Location: ' . $url);
     exit;
 } else {
     /* Grab query string */

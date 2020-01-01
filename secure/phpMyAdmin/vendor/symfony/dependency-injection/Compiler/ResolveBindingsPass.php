@@ -12,6 +12,8 @@
 namespace Symfony\Component\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -95,6 +97,11 @@ class ResolveBindingsPass extends AbstractRecursivePass
         if ($value instanceof TypedReference && $value->getType() === (string) $value) {
             // Already checked
             $bindings = $this->container->getDefinition($this->currentId)->getBindings();
+            $name = $value->getName();
+
+            if (isset($name, $bindings[$name = $value.' $'.$name])) {
+                return $this->getBindingValue($bindings[$name]);
+            }
 
             if (isset($bindings[$value->getType()])) {
                 return $this->getBindingValue($bindings[$value->getType()]);
@@ -120,8 +127,8 @@ class ResolveBindingsPass extends AbstractRecursivePass
                 continue;
             }
 
-            if (null !== $bindingValue && !$bindingValue instanceof Reference && !$bindingValue instanceof Definition) {
-                throw new InvalidArgumentException(sprintf('Invalid value for binding key "%s" for service "%s": expected null, an instance of %s or an instance of %s, %s given.', $key, $this->currentId, Reference::class, Definition::class, \gettype($bindingValue)));
+            if (null !== $bindingValue && !$bindingValue instanceof Reference && !$bindingValue instanceof Definition && !$bindingValue instanceof TaggedIteratorArgument && !$bindingValue instanceof ServiceLocatorArgument) {
+                throw new InvalidArgumentException(sprintf('Invalid value for binding key "%s" for service "%s": expected null, %s, %s, %s or ServiceLocatorArgument, %s given.', $key, $this->currentId, Reference::class, Definition::class, TaggedIteratorArgument::class, \gettype($bindingValue)));
             }
         }
 
@@ -205,6 +212,9 @@ class ResolveBindingsPass extends AbstractRecursivePass
         return parent::processValue($value, $isRoot);
     }
 
+    /**
+     * @return mixed
+     */
     private function getBindingValue(BoundArgument $binding)
     {
         list($bindingValue, $bindingId) = $binding->getValues();

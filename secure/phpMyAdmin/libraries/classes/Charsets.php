@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * MySQL charset metadata and manipulations
  *
@@ -52,6 +51,7 @@ class Charsets
 
     /**
      * The charset for the server
+     *
      * @var Charset|null
      */
     private static $serverCharset = null;
@@ -155,6 +155,9 @@ class Charsets
         }
         self::loadCharsets($dbi, $disableIs);
         $serverCharset = $dbi->getVariable('character_set_server');
+        if (! is_string($serverCharset)) {// MySQL 5.7.8 fallback, issue #15614
+            $serverCharset = $dbi->fetchValue('SELECT @@character_set_server;');
+        }
         self::$serverCharset = self::$charsets[$serverCharset];
         return self::$serverCharset;
     }

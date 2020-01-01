@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold the ListAbstract base class
  *
@@ -41,6 +40,7 @@ abstract class ListAbstract extends ArrayObject
      * missing at least one item it returns false otherwise true
      *
      * @param mixed[] ...$params params
+     *
      * @return bool true if all items exists, otherwise false
      */
     public function exists(...$params)
@@ -57,9 +57,9 @@ abstract class ListAbstract extends ArrayObject
     /**
      * returns HTML <option>-tags to be used inside <select></select>
      *
-     * @param mixed   $selected                   the selected db or true for
-     *                                            selecting current db
-     * @param boolean $include_information_schema whether include information schema
+     * @param string|true $selected                   the selected db or true for
+     *                                                selecting current db
+     * @param boolean     $include_information_schema whether include information schema
      *
      * @return string  HTML option tags
      */

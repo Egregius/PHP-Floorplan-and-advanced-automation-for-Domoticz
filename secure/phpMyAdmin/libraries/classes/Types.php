@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * SQL data types definition
  *
@@ -196,7 +195,6 @@ class Types
      * @param string $type The data type to get a description.
      *
      * @return string
-     *
      */
     public function getTypeDescription($type)
     {
@@ -290,9 +288,9 @@ class Types
                 );
             case 'YEAR':
                 return __(
-                    "A year in four-digit (4, default) or two-digit (2) format, the " .
-                    "allowable values are 70 (1970) to 69 (2069) or 1901 to 2155 and " .
-                    "0000"
+                    'A year in four-digit (4, default) or two-digit (2) format, the ' .
+                    'allowable values are 70 (1970) to 69 (2069) or 1901 to 2155 and ' .
+                    '0000'
                 );
             case 'CHAR':
                 return __(
@@ -365,11 +363,11 @@ class Types
                 );
             case 'ENUM':
                 return __(
-                    "An enumeration, chosen from the list of up to 65,535 values or " .
+                    'An enumeration, chosen from the list of up to 65,535 values or ' .
                     "the special '' error value"
                 );
             case 'SET':
-                return __("A single value chosen from a set of up to 64 members");
+                return __('A single value chosen from a set of up to 64 members');
             case 'GEOMETRY':
                 return __('A type that can store a geometry of any type');
             case 'POINT':
@@ -404,7 +402,6 @@ class Types
      * @param string $type The data type to get a class.
      *
      * @return string
-     *
      */
     public function getTypeClass($type)
     {
@@ -470,7 +467,6 @@ class Types
      * @param string $class The class to get function list.
      *
      * @return string[]
-     *
      */
     public function getFunctionsClass($class)
     {
@@ -658,7 +654,6 @@ class Types
      * @param string $type The data type to get function list.
      *
      * @return string[]
-     *
      */
     public function getFunctions($type)
     {
@@ -670,7 +665,6 @@ class Types
      * Returns array of all functions available.
      *
      * @return string[]
-     *
      */
     public function getAllFunctions()
     {
@@ -688,7 +682,6 @@ class Types
      * Returns array of all attributes available.
      *
      * @return string[]
-     *
      */
     public function getAttributes()
     {
@@ -708,7 +701,6 @@ class Types
      * estimated popularity.
      *
      * @return string[]
-     *
      */
     public function getColumns()
     {
@@ -867,7 +859,7 @@ class Types
         $relevantArray = $signed
             ? $min_max_data['signed']
             : $min_max_data['unsigned'];
-        return isset($relevantArray[$type]) ? $relevantArray[$type] : [
+        return $relevantArray[$type] ?? [
             '',
             '',
         ];

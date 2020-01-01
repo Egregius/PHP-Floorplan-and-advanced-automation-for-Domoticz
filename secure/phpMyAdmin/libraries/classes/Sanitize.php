@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * This class includes various sanitization methods that can be called statically
  *
@@ -10,6 +9,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Core;
+use PhpMyAdmin\Html\MySQLDocumentation;
 use PhpMyAdmin\Util;
 
 /**
@@ -35,26 +35,7 @@ class Sanitize
             'https://',
             './url.php?url=https%3a%2f%2f',
             './doc/html/',
-            // possible return values from Util::getScriptNameForOption
             './index.php?',
-            './server_databases.php?',
-            './server_status.php?',
-            './server_variables.php?',
-            './server_privileges.php?',
-            './db_structure.php?',
-            './db_sql.php?',
-            './db_search.php?',
-            './db_operations.php?',
-            './tbl_structure.php?',
-            './tbl_sql.php?',
-            './tbl_select.php?',
-            './tbl_change.php?',
-            './sql.php?',
-            // Hardcoded options in \PhpMyAdmin\Config\SpecialSchemaLinks
-            './db_events.php?',
-            './db_routines.php?',
-            './server_privileges.php?',
-            './tbl_structure.php?',
         ];
         $is_setup = $GLOBALS['PMA_Config'] !== null && $GLOBALS['PMA_Config']->get('is_setup');
         // Adjust path to setup script location
@@ -144,7 +125,7 @@ class Sanitize
                 $page = 'setup';
             }
         }
-        $link = Util::getDocuLink($page, $anchor);
+        $link = MySQLDocumentation::getDocumentationLink($page, $anchor);
         return '<a href="' . $link . '" target="documentation">';
     }
 
@@ -190,7 +171,7 @@ class Sanitize
             // used in common.inc.php:
             '[conferr]' => '<iframe src="show_config_errors.php"><a href="show_config_errors.php">show_config_errors.php</a></iframe>',
             // used in libraries/Util.php
-            '[dochelpicon]' => Util::getImage('b_help', __('Documentation')),
+            '[dochelpicon]' => Html\Generator::getImage('b_help', __('Documentation')),
         ];
 
         $message = strtr($message, $replace_pairs);
@@ -234,7 +215,6 @@ class Sanitize
      * @param boolean $replaceDots Whether to also replace dots
      *
      * @return string  the sanitized filename
-     *
      */
     public static function sanitizeFilename($filename, $replaceDots = false)
     {
@@ -349,7 +329,7 @@ class Sanitize
         } elseif (is_array($value)) {
             $result .= '[';
             foreach ($value as $val) {
-                $result .= self::formatJsVal($val) . ",";
+                $result .= self::formatJsVal($val) . ',';
             }
             $result .= "];\n";
         } else {
@@ -359,68 +339,12 @@ class Sanitize
     }
 
     /**
-     * Prints an javascript assignment with proper escaping of a value
-     * and support for assigning array of strings.
-     *
-     * @param string $key   Name of value to set
-     * @param mixed  $value Value to set, can be either string or array of strings
-     *
-     * @return void
-     */
-    public static function printJsValue($key, $value)
-    {
-        echo self::getJsValue($key, $value);
-    }
-
-    /**
-     * Formats javascript assignment for form validation api
-     * with proper escaping of a value.
-     *
-     * @param string  $key   Name of value to set
-     * @param string  $value Value to set
-     * @param boolean $addOn Check if $.validator.format is required or not
-     * @param boolean $comma Check if comma is required
-     *
-     * @return string Javascript code.
-     */
-    public static function getJsValueForFormValidation($key, $value, $addOn, $comma)
-    {
-        $result = $key . ': ';
-        if ($addOn) {
-            $result .= '$.validator.format(';
-        }
-        $result .= self::formatJsVal($value);
-        if ($addOn) {
-            $result .= ')';
-        }
-        if ($comma) {
-            $result .= ', ';
-        }
-        return $result;
-    }
-
-    /**
-     * Prints javascript assignment for form validation api
-     * with proper escaping of a value.
-     *
-     * @param string  $key   Name of value to set
-     * @param string  $value Value to set
-     * @param boolean $addOn Check if $.validator.format is required or not
-     * @param boolean $comma Check if comma is required
-     *
-     * @return void
-     */
-    public static function printJsValueForFormValidation($key, $value, $addOn = false, $comma = true)
-    {
-        echo self::getJsValueForFormValidation($key, $value, $addOn, $comma);
-    }
-
-    /**
      * Removes all variables from request except whitelisted ones.
      *
      * @param string[] $whitelist list of variables to allow
      *
      * @return void
+     *
      * @access public
      */
     public static function removeRequestVars(&$whitelist): void
@@ -428,18 +352,6 @@ class Sanitize
         // do not check only $_REQUEST because it could have been overwritten
         // and use type casting because the variables could have become
         // strings
-        if (! isset($_REQUEST)) {
-            $_REQUEST = [];
-        }
-        if (! isset($_GET)) {
-            $_GET = [];
-        }
-        if (! isset($_POST)) {
-            $_POST = [];
-        }
-        if (! isset($_COOKIE)) {
-            $_COOKIE = [];
-        }
         $keys = array_keys(
             array_merge((array) $_REQUEST, (array) $_GET, (array) $_POST, (array) $_COOKIE)
         );

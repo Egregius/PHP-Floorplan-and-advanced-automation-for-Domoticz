@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Manages the rendering of pages in PMA
  *
@@ -90,8 +89,9 @@ class Response
     private $_CWD;
 
     /**
-     * @var array<int, string>
      * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     *
+     * @var array<int, string>
      */
     protected static $httpStatusMessages = [
         // Informational

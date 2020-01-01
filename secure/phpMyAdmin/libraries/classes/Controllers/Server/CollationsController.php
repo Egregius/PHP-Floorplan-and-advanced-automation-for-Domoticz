@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Server\CollationsController
  *
@@ -35,8 +34,6 @@ class CollationsController extends AbstractController
     private $collations;
 
     /**
-     * CollationsController constructor.
-     *
      * @param Response          $response   Response object
      * @param DatabaseInterface $dbi        DatabaseInterface object
      * @param Template          $template   Template object
@@ -69,7 +66,7 @@ class CollationsController extends AbstractController
      *
      * @return string HTML
      */
-    public function indexAction(): string
+    public function index(): string
     {
         include_once ROOT_PATH . 'libraries/server_common.inc.php';
 

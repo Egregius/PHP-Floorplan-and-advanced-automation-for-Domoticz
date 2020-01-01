@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Classes to create relation schema in SVG format.
  *
@@ -19,7 +18,7 @@ use XMLWriter;
  *
  * @package PhpMyAdmin
  * @access  public
- * @see     https://secure.php.net/manual/en/book.xmlwriter.php
+ * @see     https://www.php.net/manual/en/book.xmlwriter.php
  */
 class Svg extends XMLWriter
 {
@@ -133,14 +132,14 @@ class Svg extends XMLWriter
      * which contains all the attributes and namespace that needed
      * to define the svg document
      *
+     * @see XMLWriter::startElement(),XMLWriter::writeAttribute()
+     *
      * @param integer $width  total width of the RelationStatsSvg document
      * @param integer $height total height of the RelationStatsSvg document
      * @param integer $x      min-x of the view box
      * @param integer $y      min-y of the view box
      *
      * @return void
-     *
-     * @see XMLWriter::startElement(),XMLWriter::writeAttribute()
      */
     public function startSvgDoc($width, $height, $x = 0, $y = 0)
     {
@@ -155,7 +154,7 @@ class Svg extends XMLWriter
         }
 
         if ($x != 0 || $y != 0) {
-            $this->writeAttribute('viewBox', "$x $y $width $height");
+            $this->writeAttribute('viewBox', sprintf('%d %d %d %d', $x, $y, $width, $height));
         }
         $this->writeAttribute('width', ($width - $x) . 'px');
         $this->writeAttribute('height', ($height - $y) . 'px');
@@ -166,8 +165,9 @@ class Svg extends XMLWriter
     /**
      * Ends RelationStatsSvg Document
      *
-     * @return void
      * @see XMLWriter::endElement(),XMLWriter::endDocument()
+     *
+     * @return void
      */
     public function endSvgDoc()
     {
@@ -182,10 +182,11 @@ class Svg extends XMLWriter
      * RelationStatsSvg document saved in .svg extension and can be
      * easily changeable by using any svg IDE
      *
+     * @see XMLWriter::startElement(),XMLWriter::writeAttribute()
+     *
      * @param string $fileName file name
      *
      * @return void
-     * @see XMLWriter::startElement(),XMLWriter::writeAttribute()
      */
     public function showOutput($fileName)
     {
@@ -207,6 +208,9 @@ class Svg extends XMLWriter
      * and other elements who have x,y co-ordinates are drawn.
      * specify their width and height and can give styles too.
      *
+     * @see XMLWriter::startElement(), XMLWriter::writeAttribute(),
+     * XMLWriter::text(), XMLWriter::endElement()
+     *
      * @param string      $name   RelationStatsSvg element name
      * @param int         $x      The x attr defines the left position of the element
      *                            (e.g. x="0" places the element 0 pixels from the
@@ -221,9 +225,6 @@ class Svg extends XMLWriter
      *                            styles can be defined like CSS styles
      *
      * @return void
-     *
-     * @see XMLWriter::startElement(), XMLWriter::writeAttribute(),
-     * XMLWriter::text(), XMLWriter::endElement()
      */
     public function printElement(
         $name,
@@ -255,6 +256,9 @@ class Svg extends XMLWriter
      * arrows are also drawn by specify its start and ending
      * co-ordinates
      *
+     * @see XMLWriter::startElement(), XMLWriter::writeAttribute(),
+     * XMLWriter::endElement()
+     *
      * @param string  $name   RelationStatsSvg element name i.e line
      * @param integer $x1     Defines the start of the line on the x-axis
      * @param integer $y1     Defines the start of the line on the y-axis
@@ -264,9 +268,6 @@ class Svg extends XMLWriter
      *                        styles can be defined like CSS styles
      *
      * @return void
-     *
-     * @see XMLWriter::startElement(), XMLWriter::writeAttribute(),
-     * XMLWriter::endElement()
      */
     public function printElementLine($name, $x1, $y1, $x2, $y2, $styles)
     {

@@ -5,6 +5,10 @@ services:
       dbi: '@dbi'
       expression_language: '@expression_language'
 
+  browse_foreigners:
+    class: 'PhpMyAdmin\BrowseForeigners'
+    arguments: ['@template']
+
   config:
     class: 'PhpMyAdmin\Config'
     arguments: [!php/const CONFIG_FILE]
@@ -116,6 +120,8 @@ services:
 
   sql_query_form:
     class: 'PhpMyAdmin\SqlQueryForm'
+    arguments:
+        template: '@template'
 
   status_data:
     class: 'PhpMyAdmin\Server\Status\Data'
@@ -123,6 +129,11 @@ services:
   status_monitor:
     class: 'PhpMyAdmin\Server\Status\Monitor'
     arguments: ['@dbi']
+
+  table_search:
+    class: 'PhpMyAdmin\Table\Search'
+    arguments:
+      dbi: '@dbi'
 
   template:
     class: 'PhpMyAdmin\Template'
@@ -140,6 +151,9 @@ services:
   user_password:
     class: 'PhpMyAdmin\UserPassword'
     arguments: ['@server_privileges']
+
+  user_preferences:
+    class: 'PhpMyAdmin\UserPreferences'
 
   #Aliases
 

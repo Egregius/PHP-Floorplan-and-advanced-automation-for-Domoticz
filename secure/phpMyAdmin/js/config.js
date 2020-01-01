@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functions used in configuration forms and on user preferences pages
  */
@@ -637,23 +636,18 @@ AJAX.registerOnload('config.js', function () {
     setupConfigTabs();
     adjustPrefsNotification();
 
-    // tab links handling, check each 200ms
+    // tab links handling
     // (works with history in FF, further browser support here would be an overkill)
-    var prevHash;
-    var tabCheckFnc = function () {
-        if (location.hash !== prevHash) {
-            prevHash = location.hash;
-            if (prevHash.match(/^#tab_[a-zA-Z0-9_]+$/)) {
-                // session ID is sometimes appended here
-                var hash = prevHash.substr(5).split('&')[0];
-                if ($('#' + hash).length) {
-                    setTab(hash);
-                }
+    window.onhashchange = function () {
+        if (location.hash.match(/^#tab_[a-zA-Z0-9_]+$/)) {
+            // session ID is sometimes appended here
+            var hash = location.hash.substr(5).split('&')[0];
+            if ($('#' + hash).length) {
+                setTab(hash);
             }
         }
     };
-    tabCheckFnc();
-    setInterval(tabCheckFnc, 200);
+    window.onhashchange();
 });
 
 //
@@ -791,7 +785,7 @@ AJAX.registerOnload('config.js', function () {
     $(document).on('click', 'div.click-hide-message', function () {
         $(this)
             .hide()
-            .parent('.group')
+            .parent('.card-body')
             .css('height', '')
             .next('form')
             .show();
@@ -808,7 +802,7 @@ function savePrefsToLocalStorage (form) {
     var submit = $form.find('input[type=submit]');
     submit.prop('disabled', true);
     $.ajax({
-        url: 'prefs_manage.php',
+        url: 'index.php?route=/preferences/manage',
         cache: false,
         type: 'POST',
         data: {
@@ -824,7 +818,7 @@ function savePrefsToLocalStorage (form) {
                 updatePrefsDate();
                 $('div.localStorage-empty').hide();
                 $('div.localStorage-exists').show();
-                var group = $form.parent('.group');
+                var group = $form.parent('.card-body');
                 group.css('height', group.height() + 'px');
                 $form.hide('fast');
                 $form.prev('.click-hide-message').show('fast');

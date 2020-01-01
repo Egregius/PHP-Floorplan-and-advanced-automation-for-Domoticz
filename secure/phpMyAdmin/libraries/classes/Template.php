@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\Template class
  *
@@ -15,7 +14,6 @@ use PhpMyAdmin\Twig\MessageExtension;
 use PhpMyAdmin\Twig\PluginsExtension;
 use PhpMyAdmin\Twig\RelationExtension;
 use PhpMyAdmin\Twig\SanitizeExtension;
-use PhpMyAdmin\Twig\ServerPrivilegesExtension;
 use PhpMyAdmin\Twig\StorageEngineExtension;
 use PhpMyAdmin\Twig\TableExtension;
 use PhpMyAdmin\Twig\TrackerExtension;
@@ -35,8 +33,6 @@ use Twig_Error_Syntax;
 use Twig_TemplateWrapper;
 
 /**
- * Class Template
- *
  * Handle front end templating
  *
  * @package PhpMyAdmin
@@ -45,6 +41,7 @@ class Template
 {
     /**
      * Twig environment
+     *
      * @var Environment
      */
     protected static $twig;
@@ -79,7 +76,6 @@ class Template
             $twig->addExtension(new PluginsExtension());
             $twig->addExtension(new RelationExtension());
             $twig->addExtension(new SanitizeExtension());
-            $twig->addExtension(new ServerPrivilegesExtension());
             $twig->addExtension(new StorageEngineExtension());
             $twig->addExtension(new TableExtension());
             $twig->addExtension(new TrackerExtension());
@@ -96,6 +92,7 @@ class Template
      * @param string $templateName Template path name
      *
      * @return Twig_TemplateWrapper
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -130,6 +127,7 @@ class Template
      * @param array  $data     Associative array of template variables
      *
      * @return string
+     *
      * @throws Throwable
      * @throws Twig_Error_Loader
      * @throws Twig_Error_Runtime

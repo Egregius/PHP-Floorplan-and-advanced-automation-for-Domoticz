@@ -1,9 +1,9 @@
 {# Invisible characters will make javascript crash #}
-{% spaceless %}
+{% apply spaceless %}
 <script type="text/javascript">
 var designerConfig = {{ designer_config|raw }};
 </script>
-{% endspaceless %}
+{% endapply %}
 
 {# side menu #}
 {% if not has_query %}
@@ -201,7 +201,7 @@ var designerConfig = {{ designer_config|raw }};
             <canvas class="designer" id="canvas" width="100" height="100"></canvas>
         </div>
         <div id="layer_menu" class="hide">
-            <div class="center">
+            <div class="text-center">
                 <a href="#" class="M_butt" target="_self" >
                     <img title="{% trans 'Hide/Show all' %}"
                         alt="v"
@@ -220,41 +220,11 @@ var designerConfig = {{ designer_config|raw }};
                 </a>
             </div>
             <div id="id_scroll_tab" class="scroll_tab">
-                <table width="100%" style="padding-left: 3px;">
-                    {% for i in 0..table_names|length - 1 %}
-                        <tr>
-                            <td title="{% trans 'Structure' %}"
-                                width="1px"
-                                class="L_butt2_1">
-                                <img alt=""
-                                    table_name="{{ table_names_small_url[i]|url_encode }}"
-                                    class="scroll_tab_struct"
-                                    src="{{ theme.getImgPath('designer/exec.png') }}">
-                            </td>
-                            <td width="1px">
-                                <input class="scroll_tab_checkbox"
-                                    title="{% trans 'Hide' %}"
-                                    id="check_vis_{{ table_names_url[i]|url_encode }}"
-                                    style="margin:0;"
-                                    type="checkbox"
-                                    value="{{ table_names_url[i]|url_encode }}"
-                                    {% if (tab_pos[table_names[i]] is defined
-                                        and tab_pos[table_names[i]]['H'])
-                                        or display_page == -1 -%}
-                                        checked="checked"
-                                    {%- endif %}>
-                            </td>
-                            <td class="designer_Tabs"
-                                designer_url_table_name="{{ table_names_url[i]|url_encode }}">
-                                {{ table_names_out[i]|raw }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                <table width="100%" style="padding-left: 3px;"></table>
             </div>
             {# end id_scroll_tab #}
-            <div class="center">
-                {% trans 'Number of tables:' %} {{ table_names|length }}
+            <div class="text-center">
+                {% trans 'Number of tables:' %} <span id="tables_counter">0</span>
             </div>
             <div id="layer_menu_sizer">
                 <div class="floatleft">
@@ -274,14 +244,8 @@ var designerConfig = {{ designer_config|raw }};
             'tab_column': tab_column,
             'tables_all_keys': tables_all_keys,
             'tables_pk_or_unique_keys': tables_pk_or_unique_keys,
-            'table_names': table_names,
-            'table_names_url': table_names_url,
-            'table_names_small': table_names_small,
-            'table_names_small_url': table_names_small_url,
-            'table_names_small_out': table_names_small_out,
-            'table_types': table_types,
-            'owner_out': owner_out,
             'columns_type': columns_type,
+            'tables': designerTables,
             'theme': theme,
         } only %}
     </form>
@@ -304,10 +268,10 @@ var designerConfig = {{ designer_config|raw }};
             <td class="frams8">
             </td>
             <td class="input_tab">
-                <table width="168" class="center" cellpadding="2" cellspacing="0">
+                <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                     <thead>
                         <tr>
-                            <td colspan="2" class="center nowrap">
+                            <td colspan="2" class="text-center nowrap">
                                 <strong>
                                     {% trans 'Create relationship' %}
                                 </strong>
@@ -316,7 +280,7 @@ var designerConfig = {{ designer_config|raw }};
                     </thead>
                     <tbody id="foreign_relation">
                         <tr>
-                            <td colspan="2" class="center nowrap">
+                            <td colspan="2" class="text-center nowrap">
                                 <strong>
                                     FOREIGN KEY
                                 </strong>
@@ -373,7 +337,7 @@ var designerConfig = {{ designer_config|raw }};
                     </tbody>
                     <tbody>
                         <tr>
-                            <td colspan="2" class="center nowrap">
+                            <td colspan="2" class="text-center nowrap">
                                 <input type="button" id="ok_new_rel_panel" class="btn btn-secondary butt"
                                     name="Button" value="{% trans 'OK' %}">
                                 <input type="button" id="cancel_new_rel_panel"
@@ -415,16 +379,16 @@ var designerConfig = {{ designer_config|raw }};
             <td class="frams8">
             </td>
             <td class="input_tab">
-                <table width="100%" class="center" cellpadding="2" cellspacing="0">
+                <table width="100%" class="text-center" cellpadding="2" cellspacing="0">
                     <tr>
-                        <td colspan="3" class="center nowrap">
+                        <td colspan="3" class="text-center nowrap">
                             <strong>
                                 {% trans 'Delete relationship' %}
                             </strong>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="center nowrap">
+                        <td colspan="3" class="text-center nowrap">
                             <input id="del_button" name="Button" type="button"
                                 class="btn btn-secondary butt" value="{% trans 'Delete' %}">
                             <input id="cancel_button" type="button" class="btn btn-secondary butt"
@@ -466,16 +430,16 @@ var designerConfig = {{ designer_config|raw }};
                 <td class="frams8">
                 </td>
                 <td class="input_tab">
-                    <table width="168" class="center" cellpadding="2" cellspacing="0">
+                    <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                         <thead>
                             <tr>
-                                <td colspan="2" rowspan="2" id="option_col_name" class="center nowrap">
+                                <td colspan="2" rowspan="2" id="option_col_name" class="text-center nowrap">
                                 </td>
                             </tr>
                         </thead>
                         <tbody id="where">
                             <tr>
-                                <td class="center nowrap">
+                                <td class="text-center nowrap">
                                     <b>
                                         WHERE
                                     </b>
@@ -531,7 +495,7 @@ var designerConfig = {{ designer_config|raw }};
                                 </td>
                             </tr>
                             <tr>
-                                <td class="center nowrap">
+                                <td class="text-center nowrap">
                                     <b>
                                         {% trans 'Rename to' %}
                                     </b>
@@ -546,7 +510,7 @@ var designerConfig = {{ designer_config|raw }};
                                 </td>
                             </tr>
                             <tr>
-                                <td class="center nowrap">
+                                <td class="text-center nowrap">
                                     <b>
                                         {% trans 'Aggregate' %}
                                     </b>
@@ -580,7 +544,7 @@ var designerConfig = {{ designer_config|raw }};
                                 </td>
                             </tr>
                             <tr>
-                                <td width="58" class="center nowrap">
+                                <td width="58" class="text-center nowrap">
                                     <b>
                                         GROUP BY
                                     </b>
@@ -590,7 +554,7 @@ var designerConfig = {{ designer_config|raw }};
                                 </td>
                             </tr>
                             <tr>
-                                <td width="58" class="center nowrap">
+                                <td width="58" class="text-center nowrap">
                                     <b>
                                         ORDER BY
                                     </b>
@@ -610,7 +574,7 @@ var designerConfig = {{ designer_config|raw }};
                                 </td>
                             </tr>
                             <tr>
-                                <td class="center nowrap">
+                                <td class="text-center nowrap">
                                     <b>
                                         HAVING
                                     </b>
@@ -698,7 +662,11 @@ var designerConfig = {{ designer_config|raw }};
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
+                                    <input type="hidden" id="ok_add_object_db_and_table_name_url" />
+                                    <input type="hidden" id="ok_add_object_db_name" />
+                                    <input type="hidden" id="ok_add_object_table_name" />
+                                    <input type="hidden" id="ok_add_object_col_name" />
                                     <input type="button" id="ok_add_object" class="btn btn-secondary butt"
                                         name="Button" value="{% trans 'OK' %}">
                                     <input type="button" id="cancel_close_option" class="btn btn-secondary butt"
@@ -740,10 +708,10 @@ var designerConfig = {{ designer_config|raw }};
                 <td class="frams8">
                 </td>
                 <td class="input_tab">
-                    <table width="168" class="center" cellpadding="2" cellspacing="0">
+                    <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                         <thead>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <strong>
                                         {% trans 'Rename to' %}
                                     </strong>
@@ -762,7 +730,7 @@ var designerConfig = {{ designer_config|raw }};
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <input type="button" id="ok_edit_rename" class="btn btn-secondary butt"
                                         name="Button" value="{% trans 'OK' %}">
                                     <input id="query_rename_to_button" type="button"
@@ -806,10 +774,10 @@ var designerConfig = {{ designer_config|raw }};
                 <td class="frams8">
                 </td>
                 <td class="input_tab">
-                    <table width="168" class="center" cellpadding="2" cellspacing="0">
+                    <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                         <thead>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <strong>
                                         HAVING
                                     </strong>
@@ -901,7 +869,7 @@ var designerConfig = {{ designer_config|raw }};
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <input type="button" id="ok_edit_having" class="btn btn-secondary butt"
                                         name="Button" value="{% trans 'OK' %}">
                                     <input id="query_having_button" type="button"
@@ -945,10 +913,10 @@ var designerConfig = {{ designer_config|raw }};
                 <td class="frams8">
                 </td>
                 <td class="input_tab">
-                    <table width="168" class="center" cellpadding="2" cellspacing="0">
+                    <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                         <thead>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <strong>
                                         {% trans 'Aggregate' %}
                                     </strong>
@@ -986,7 +954,7 @@ var designerConfig = {{ designer_config|raw }};
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <input type="button" id="ok_edit_Aggr" class="btn btn-secondary butt"
                                         name="Button" value="{% trans 'OK' %}">
                                     <input id="query_Aggregate_Button" type="button"
@@ -1030,10 +998,10 @@ var designerConfig = {{ designer_config|raw }};
                 <td class="frams8">
                 </td>
                 <td class="input_tab">
-                    <table width="168" class="center" cellpadding="2" cellspacing="0">
+                    <table width="168" class="text-center" cellpadding="2" cellspacing="0">
                         <thead>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <strong>
                                         WHERE
                                     </strong>
@@ -1087,14 +1055,13 @@ var designerConfig = {{ designer_config|raw }};
                                     {% trans 'subquery' %}
                                 </td>
                                 <td>
-                                    <textarea id="eQuery" cols="18">
-                                    </textarea>
+                                    <textarea id="eQuery" cols="18"></textarea>
                                 </td>
                             </tr>
                         </tbody>
                         <tbody>
                             <tr>
-                                <td colspan="2" class="center nowrap">
+                                <td colspan="2" class="text-center nowrap">
                                     <input type="button" id="ok_edit_where" class="btn btn-secondary butt"
                                         name="Button" value="{% trans 'OK' %}">
                                     <input id="query_where_button" type="button" class="btn btn-secondary butt" name="Button"
@@ -1127,7 +1094,7 @@ var designerConfig = {{ designer_config|raw }};
     </div>
     <a class="trigger" href="#">{% trans 'Active options' %}</a>
     <div id="box">
-        <form method="post" action="db_qbe.php" id="vqb_form">
+        <form method="post" action="{{ url('/database/qbe') }}" id="vqb_form">
             <textarea cols="80" name="sql_query" id="textSqlquery" rows="15"></textarea>
             <input type="hidden" name="submit_sql" value="true">
             {{ get_hidden_inputs(get_db) }}

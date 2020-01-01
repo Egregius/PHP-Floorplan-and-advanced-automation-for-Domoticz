@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * function used in or for navigation panel
  *
@@ -608,20 +607,21 @@ $(function () {
         var $self = $(this);
         var anchorId = $self.attr('id');
         if ($self.data('favtargetn') !== null) {
-            if ($('a[data-favtargets="' + $self.data('favtargetn') + '"]').length > 0) {
-                $('a[data-favtargets="' + $self.data('favtargetn') + '"]').trigger('click');
+            var $dataFavTargets = $('a[data-favtargets="' + $self.data('favtargetn') + '"]');
+            if ($dataFavTargets.length > 0) {
+                $dataFavTargets.trigger('click');
                 return;
             }
         }
 
+        var hasLocalStorage = isStorageSupported('localStorage') &&
+            typeof window.localStorage.favoriteTables !== 'undefined';
         $.ajax({
             url: $self.attr('href'),
             cache: false,
             type: 'POST',
             data: {
-                'favoriteTables': (isStorageSupported('localStorage') && typeof window.localStorage.favoriteTables !== 'undefined')
-                    ? window.localStorage.favoriteTables
-                    : '',
+                'favoriteTables': hasLocalStorage ? window.localStorage.favoriteTables : '',
                 'server': CommonParams.get('server'),
             },
             success: function (data) {
@@ -1076,7 +1076,7 @@ Navigation.treePagination = function ($this) {
         url = $this.attr('href');
         params = 'ajax_request=true';
     } else { // tagName === 'SELECT'
-        url = 'navigation.php';
+        url = 'index.php?route=/navigation';
         params = $this.closest('form').serialize() + CommonParams.get('arg_separator') + 'ajax_request=true';
     }
     var searchClause = Navigation.FastFilter.getSearchClause();
@@ -1164,7 +1164,27 @@ Navigation.ResizeHandler = function () {
         var windowWidth = $(window).width();
         $('#pma_navigation').width(pos);
         $('body').css('margin-' + this.left, pos + 'px');
-        $('#floating_menubar, #pma_console')
+        // Issue #15127 : Adding fixed positioning to menubar
+        // Issue #15570 : Panels on homescreen go underneath of floating menubar
+        $('#floating_menubar')
+            .css('margin-' + this.left, $('#pma_navigation').width() + $('#pma_navigation_resizer').width())
+            .css(this.left, 0)
+            .css({
+                'position': 'fixed',
+                'top': 0,
+                'width': '100%',
+                'z-index': 99
+            })
+            .append($('#server-breadcrumb'))
+            .append($('#topmenucontainer'));
+        // Allow the DOM to render, then adjust the padding on the body
+        setTimeout(function () {
+            $('body').css(
+                'padding-top',
+                $('#floating_menubar').outerHeight(true)
+            );
+        }, 2);
+        $('#pma_console')
             .css('margin-' + this.left, (pos + resizerWidth) + 'px');
         $resizer.css(this.left, pos + 'px');
         if (pos === 0) {

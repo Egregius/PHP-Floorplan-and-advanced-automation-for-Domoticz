@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the prepend/append transformations plugins
  *
@@ -63,6 +62,6 @@ abstract class PreApPendTransformationsPlugin extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "PreApPend";
+        return 'PreApPend';
     }
 }

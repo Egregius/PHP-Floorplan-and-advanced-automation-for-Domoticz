@@ -1,7 +1,6 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * Holds the PhpMyAdmin\Controllers\Database\StructureController
+ * Database structure manipulation
  *
  * @package PhpMyAdmin\Controllers
  */
@@ -14,6 +13,7 @@ use PhpMyAdmin\Config\PageSettings;
 use PhpMyAdmin\Core;
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Display\CreateTable;
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\RecentFavoriteTable;
 use PhpMyAdmin\Relation;
@@ -36,22 +36,27 @@ class StructureController extends AbstractController
      * @var int Number of tables
      */
     protected $numTables;
+
     /**
      * @var int Current position in the list
      */
     protected $position;
+
     /**
      * @var bool DB is information_schema
      */
     protected $dbIsSystemSchema;
+
     /**
      * @var int Number of tables
      */
     protected $totalNumTables;
+
     /**
      * @var array Tables in the database
      */
     protected $tables;
+
     /**
      * @var bool whether stats show or not
      */
@@ -93,17 +98,8 @@ class StructureController extends AbstractController
      */
     private function getDatabaseInfo(string $subPart): void
     {
-        list(
-            $tables,
-            $numTables,
-            $totalNumTables,
-            ,
-            $isShowStats,
-            $dbIsSystemSchema,
-            ,
-            ,
-            $position
-        ) = Util::getDbInfo($this->db, $subPart);
+        [$tables, $numTables, $totalNumTables,, $isShowStats, $dbIsSystemSchema,,, $position]
+            = Util::getDbInfo($this->db, $subPart);
 
         $this->tables = $tables;
         $this->numTables = $numTables;
@@ -116,16 +112,24 @@ class StructureController extends AbstractController
     /**
      * Index action
      *
-     * @param array $params Request parameters
+     * @param array $parameters Request parameters
+     *
      * @return string HTML
      */
-    public function index(array $params): string
+    public function index(array $parameters): string
     {
         global $cfg;
 
+        require_once ROOT_PATH . 'libraries/db_common.inc.php';
+
+        $this->response->getHeader()->getScripts()->addFiles([
+            'database/structure.js',
+            'table/change.js',
+        ]);
+
         // Drops/deletes/etc. multiple tables if required
-        if ((! empty($params['submit_mult']) && isset($params['selected_tbl']))
-            || isset($params['mult_btn'])
+        if ((! empty($parameters['submit_mult']) && isset($parameters['selected_tbl']))
+            || isset($parameters['mult_btn'])
         ) {
             $this->multiSubmitAction();
         }
@@ -137,11 +141,11 @@ class StructureController extends AbstractController
         // If there are no tables, the user is redirected to the last page
         // having any.
         if ($this->totalNumTables > 0 && $this->position > $this->totalNumTables) {
-            $uri = './db_structure.php' . Url::getCommonRaw([
+            $uri = './index.php?route=/database/structure' . Url::getCommonRaw([
                 'db' => $this->db,
                 'pos' => max(0, $this->totalNumTables - $cfg['MaxTableList']),
                 'reload' => 1,
-            ]);
+            ], '&');
             Core::sendHeaderLocation($uri);
         }
 
@@ -154,17 +158,17 @@ class StructureController extends AbstractController
                 'pos' => $this->position,
                 'db' => $this->db,
             ];
-            if (isset($params['sort'])) {
-                $urlParams['sort'] = $params['sort'];
+            if (isset($parameters['sort'])) {
+                $urlParams['sort'] = $parameters['sort'];
             }
-            if (isset($params['sort_order'])) {
-                $urlParams['sort_order'] = $params['sort_order'];
+            if (isset($parameters['sort_order'])) {
+                $urlParams['sort_order'] = $parameters['sort_order'];
             }
-            $listNavigator = Util::getListNavigator(
+            $listNavigator = Generator::getListNavigator(
                 $this->totalNumTables,
                 $this->position,
                 $urlParams,
-                'db_structure.php',
+                Url::getFromRoute('/database/structure'),
                 'frame_content',
                 $cfg['MaxTableList']
             );
@@ -190,16 +194,23 @@ class StructureController extends AbstractController
     /**
      * Add or remove favorite tables
      *
-     * @param array $params Request parameters
-     * @return array|null JSON
+     * @param array $parameters Request parameters
+     *
+     * @return array
      */
-    public function addRemoveFavoriteTablesAction(array $params): ?array
+    public function addRemoveFavoriteTablesAction(array $parameters): ?array
     {
         global $cfg;
 
+        require_once ROOT_PATH . 'libraries/db_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         $favoriteInstance = RecentFavoriteTable::getInstance('favorite');
-        if (isset($params['favoriteTables'])) {
-            $favoriteTables = json_decode($params['favoriteTables'], true);
+        if (isset($parameters['favoriteTables'])) {
+            $favoriteTables = json_decode($parameters['favoriteTables'], true);
         } else {
             $favoriteTables = [];
         }
@@ -207,25 +218,25 @@ class StructureController extends AbstractController
         $user = sha1($cfg['Server']['user']);
 
         // Request for Synchronization of favorite tables.
-        if (isset($params['sync_favorite_tables'])) {
+        if (isset($parameters['sync_favorite_tables'])) {
             $cfgRelation = $this->relation->getRelationsParam();
             if ($cfgRelation['favoritework']) {
                 return $this->synchronizeFavoriteTables($favoriteInstance, $user, $favoriteTables);
             }
-            return null;
+            return [];
         }
         $changes = true;
         $titles = Util::buildActionTitles();
-        $favoriteTable = $params['favorite_table'];
+        $favoriteTable = $parameters['favorite_table'] ?? '';
         $alreadyFavorite = $this->checkFavoriteTable($favoriteTable);
 
-        if (isset($params['remove_favorite'])) {
+        if (isset($parameters['remove_favorite'])) {
             if ($alreadyFavorite) {
                 // If already in favorite list, remove it.
                 $favoriteInstance->remove($this->db, $favoriteTable);
                 $alreadyFavorite = false; // for favorite_anchor template
             }
-        } elseif (isset($params['add_favorite'])) {
+        } elseif (isset($parameters['add_favorite'])) {
             if (! $alreadyFavorite) {
                 $numTables = count($favoriteInstance->getTables());
                 if ($numTables == $cfg['NumFavoriteTables']) {
@@ -244,7 +255,7 @@ class StructureController extends AbstractController
         $json['changes'] = $changes;
         if (! $changes) {
             $json['message'] = $this->template->render('components/error_message', [
-                'msg' => __("Favorite List is full!"),
+                'msg' => __('Favorite List is full!'),
             ]);
             return $json;
         }
@@ -261,7 +272,7 @@ class StructureController extends AbstractController
         $json['list'] = $favoriteInstance->getHtmlList();
         $json['anchor'] = $this->template->render('database/structure/favorite_anchor', [
             'table_name_hash' => md5($favoriteTable),
-            'db_table_name_hash' => md5($this->db . "." . $favoriteTable),
+            'db_table_name_hash' => md5($this->db . '.' . $favoriteTable),
             'fav_params' => $favoriteParams,
             'already_favorite' => $alreadyFavorite,
             'titles' => $titles,
@@ -273,16 +284,23 @@ class StructureController extends AbstractController
     /**
      * Handles request for real row count on database level view page.
      *
-     * @param array $params Request parameters
+     * @param array $parameters Request parameters
+     *
      * @return array JSON
      */
-    public function handleRealRowCountRequestAction(array $params): array
+    public function handleRealRowCountRequestAction(array $parameters): array
     {
+        require_once ROOT_PATH . 'libraries/db_common.inc.php';
+
+        if (! $this->response->isAjax()) {
+            return [];
+        }
+
         // If there is a request to update all table's row count.
-        if (! isset($params['real_row_count_all'])) {
+        if (! isset($parameters['real_row_count_all'])) {
             // Get the real row count for the table.
             $realRowCount = $this->dbi
-                ->getTable($this->db, (string) $params['table'])
+                ->getTable($this->db, (string) $parameters['table'])
                 ->getRealRowCountTable();
             // Format the number.
             $realRowCount = Util::formatNumber($realRowCount, 0);
@@ -313,14 +331,13 @@ class StructureController extends AbstractController
      */
     public function multiSubmitAction(): void
     {
-        $action = 'db_structure.php';
-        $err_url = 'db_structure.php' . Url::getCommon(
-            ['db' => $this->db]
-        );
+        // for mult_submits.inc.php
+        $action = Url::getFromRoute('/database/structure');
+        $err_url = Url::getFromRoute('/database/structure', ['db' => $this->db]);
 
         // see bug #2794840; in this case, code path is:
-        // db_structure.php -> libraries/mult_submits.inc.php -> sql.php
-        // -> db_structure.php and if we got an error on the multi submit,
+        // /database/structure -> libraries/mult_submits.inc.php -> /sql
+        // -> /database/structure and if we got an error on the multi submit,
         // we must display it here and not call again mult_submits.inc.php
         if (! isset($_POST['error']) || false === $_POST['error']) {
             include ROOT_PATH . 'libraries/mult_submits.inc.php';
@@ -367,21 +384,26 @@ class StructureController extends AbstractController
 
             $table_is_view = false;
             // Sets parameters for links
-            $tbl_url_query = Url::getCommon(
-                [
-                    'db' => $this->db,
-                    'table' => $current_table['TABLE_NAME'],
-                ]
-            );
+            $tableUrlParams = [
+                'db' => $this->db,
+                'table' => $current_table['TABLE_NAME'],
+            ];
             // do not list the previous table's size info for a view
 
-            list($current_table, $formatted_size, $unit, $formatted_overhead,
-                $overhead_unit, $overhead_size, $table_is_view, $sum_size)
-                    = $this->getStuffForEngineTypeTable(
-                        $current_table,
-                        $sum_size,
-                        $overhead_size
-                    );
+            [
+                $current_table,
+                $formatted_size,
+                $unit,
+                $formatted_overhead,
+                $overhead_unit,
+                $overhead_size,
+                $table_is_view,
+                $sum_size,
+            ] = $this->getStuffForEngineTypeTable(
+                    $current_table,
+                    $sum_size,
+                    $overhead_size
+                );
 
             $curTable = $this->dbi
                 ->getTable($this->db, $current_table['TABLE_NAME']);
@@ -397,20 +419,21 @@ class StructureController extends AbstractController
                     $current_table['Collation']
                 );
                 if ($tableCollation !== null) {
-                    $collationDefinition = '<dfn title="'
-                        . $tableCollation->getDescription() . '">'
-                        . $tableCollation->getName() . '</dfn>';
+                    $collationDefinition = $this->template->render('database/structure/collation_definition', [
+                        'valueTitle' => $tableCollation->getDescription(),
+                        'value' => $tableCollation->getName(),
+                    ]);
                 }
             }
 
             if ($this->isShowStats) {
                 $overhead = '-';
                 if ($formatted_overhead != '') {
-                    $overhead = '<a href="tbl_structure.php'
-                        . $tbl_url_query . '#showusage">'
-                        . '<span>' . $formatted_overhead . '</span>&nbsp;'
-                        . '<span class="unit">' . $overhead_unit . '</span>'
-                        . '</a>' . "\n";
+                    $overhead = $this->template->render('database/structure/overhead', [
+                        'table_url_params' => $tableUrlParams,
+                        'formatted_overhead' => $formatted_overhead,
+                        'overhead_unit' => $overhead_unit,
+                    ]);
                     $overhead_check = true;
                     $input_class[] = 'tbl-overhead';
                 }
@@ -424,8 +447,7 @@ class StructureController extends AbstractController
             }
 
             if ($GLOBALS['cfg']['ShowDbStructureCreation']) {
-                $create_time = isset($current_table['Create_time'])
-                    ? $current_table['Create_time'] : '';
+                $create_time = $current_table['Create_time'] ?? '';
                 if ($create_time
                     && (! $create_time_all
                     || $create_time < $create_time_all)
@@ -435,8 +457,7 @@ class StructureController extends AbstractController
             }
 
             if ($GLOBALS['cfg']['ShowDbStructureLastUpdate']) {
-                $update_time = isset($current_table['Update_time'])
-                    ? $current_table['Update_time'] : '';
+                $update_time = $current_table['Update_time'] ?? '';
                 if ($update_time
                     && (! $update_time_all
                     || $update_time < $update_time_all)
@@ -446,8 +467,7 @@ class StructureController extends AbstractController
             }
 
             if ($GLOBALS['cfg']['ShowDbStructureLastCheck']) {
-                $check_time = isset($current_table['Check_time'])
-                    ? $current_table['Check_time'] : '';
+                $check_time = $current_table['Check_time'] ?? '';
                 if ($check_time
                     && (! $check_time_all
                     || $check_time < $check_time_all)
@@ -523,12 +543,12 @@ class StructureController extends AbstractController
                 $structure_table_rows = [];
             }
 
-            list($approx_rows, $show_superscript) = $this->isRowCountApproximated(
+            [$approx_rows, $show_superscript] = $this->isRowCountApproximated(
                 $current_table,
                 $table_is_view
             );
 
-            list($do, $ignored) = $this->getReplicationStatus($truename);
+            [$do, $ignored] = $this->getReplicationStatus($truename);
 
             $structure_table_rows[] = [
                 'table_name_hash' => md5($current_table['TABLE_NAME']),
@@ -542,10 +562,8 @@ class StructureController extends AbstractController
                 'search_table_title' => $may_have_rows ? $titles['Search'] : $titles['NoSearch'],
                 'browse_table_label_title' => htmlspecialchars($current_table['TABLE_COMMENT']),
                 'browse_table_label_truename' => $truename,
-                'empty_table_sql_query' => urlencode(
-                    'TRUNCATE ' . Util::backquote(
-                        $current_table['TABLE_NAME']
-                    )
+                'empty_table_sql_query' => 'TRUNCATE ' . Util::backquote(
+                    $current_table['TABLE_NAME']
                 ),
                 'empty_table_message_to_show' => urlencode(
                     sprintf(
@@ -558,7 +576,7 @@ class StructureController extends AbstractController
                 'empty_table_title' => $may_have_rows ? $titles['Empty'] : $titles['NoEmpty'],
                 'tracking_icon' => $this->getTrackingIcon($truename),
                 'server_slave_status' => $GLOBALS['replication_info']['slave']['status'],
-                'tbl_url_query' => $tbl_url_query,
+                'table_url_params' => $tableUrlParams,
                 'db_is_system_schema' => $this->dbIsSystemSchema,
                 'titles' => $titles,
                 'drop_query' => $drop_query,
@@ -573,8 +591,7 @@ class StructureController extends AbstractController
                         ? Util::localisedDate(strtotime($update_time)) : '-',
                 'check_time' => isset($check_time) && $check_time
                         ? Util::localisedDate(strtotime($check_time)) : '-',
-                'charset' => isset($charset)
-                        ? $charset : '',
+                'charset' => $charset ?? '',
                 'is_show_stats' => $this->isShowStats,
                 'ignored' => $ignored,
                 'do' => $do,
@@ -617,7 +634,7 @@ class StructureController extends AbstractController
             'db_is_system_schema' => $this->dbIsSystemSchema,
             'replication' => $GLOBALS['replication_info']['slave']['status'],
             'properties_num_columns' => $GLOBALS['cfg']['PropertiesNumColumns'],
-            'is_show_stats' => $GLOBALS['is_show_stats'],
+            'is_show_stats' => $this->isShowStats,
             'show_charset' => $GLOBALS['cfg']['ShowDbStructureCharset'],
             'show_comment' => $GLOBALS['cfg']['ShowDbStructureComment'],
             'show_creation' => $GLOBALS['cfg']['ShowDbStructureCreation'],
@@ -650,13 +667,13 @@ class StructureController extends AbstractController
                 'show_last_check' => $GLOBALS['cfg']['ShowDbStructureLastCheck'],
             ],
             'check_all_tables' => [
-                'pma_theme_image' => $GLOBALS['pmaThemeImage'],
+                'pma_theme_image' => $GLOBALS['pmaThemeImage'] ?? null,
                 'text_dir' => $GLOBALS['text_dir'],
                 'overhead_check' => $overhead_check,
                 'db_is_system_schema' => $this->dbIsSystemSchema,
                 'hidden_fields' => $hidden_fields,
                 'disable_multi_table' => $GLOBALS['cfg']['DisableMultiTableMaintenance'],
-                'central_columns_work' => $GLOBALS['cfgRelation']['centralcolumnswork'],
+                'central_columns_work' => $GLOBALS['cfgRelation']['centralcolumnswork'] ?? null,
             ],
         ]);
 
@@ -720,7 +737,7 @@ class StructureController extends AbstractController
                 && $current_table['TABLE_ROWS'] >= $GLOBALS['cfg']['MaxExactCountViews']
             ) {
                 $approx_rows = true;
-                $show_superscript = Util::showHint(
+                $show_superscript = Generator::showHint(
                     Sanitize::sanitizeMessage(
                         sprintf(
                             __(
@@ -767,8 +784,8 @@ class StructureController extends AbstractController
                 $GLOBALS['replication_info']['slave']['Do_DB']
             );
 
-            $do = strlen($searchDoDBInTruename) > 0
-                || strlen($searchDoDBInDB) > 0
+            $do = ($searchDoDBInTruename && strlen($searchDoDBInTruename) > 0)
+                || ($searchDoDBInDB && strlen($searchDoDBInDB) > 0)
                 || ($nbServSlaveDoDb == 0 && $nbServSlaveIgnoreDb == 0)
                 || $this->hasTable(
                     $GLOBALS['replication_info']['slave']['Wild_Do_Table'],
@@ -783,8 +800,8 @@ class StructureController extends AbstractController
                 $table,
                 $GLOBALS['replication_info']['slave']['Ignore_Table']
             );
-            $ignored = strlen($searchTable) > 0
-                || strlen($searchDb) > 0
+            $ignored = ($searchTable && strlen($searchTable) > 0)
+                || ($searchDb && strlen($searchDb) > 0)
                 || $this->hasTable(
                     $GLOBALS['replication_info']['slave']['Wild_Ignore_Table'],
                     $table
@@ -799,7 +816,6 @@ class StructureController extends AbstractController
 
     /**
      * Synchronize favorite tables
-     *
      *
      * @param RecentFavoriteTable $favoriteInstance Instance of this class
      * @param string              $user             The user hash
@@ -845,7 +861,8 @@ class StructureController extends AbstractController
     {
         // ensure $_SESSION['tmpval']['favoriteTables'] is initialized
         RecentFavoriteTable::getInstance('favorite');
-        foreach ($_SESSION['tmpval']['favoriteTables'][$GLOBALS['server']] as $value) {
+        $favoriteTables = $_SESSION['tmpval']['favoriteTables'][$GLOBALS['server']] ?? [];
+        foreach ($favoriteTables as $value) {
             if ($value['db'] == $this->db && $value['table'] == $currentTable) {
                 return true;
             }
@@ -880,12 +897,13 @@ class StructureController extends AbstractController
     /**
      * Get the value set for ENGINE table,
      *
+     * @internal param bool $table_is_view whether table is view or not
+     *
      * @param array   $current_table current table
      * @param integer $sum_size      total table size
      * @param integer $overhead_size overhead size
      *
      * @return array
-     * @internal param bool $table_is_view whether table is view or not
      */
     protected function getStuffForEngineTypeTable(
         array $current_table,
@@ -908,9 +926,15 @@ class StructureController extends AbstractController
             case 'ARCHIVE':
             case 'Aria':
             case 'Maria':
-                list($current_table, $formatted_size, $unit, $formatted_overhead,
-                $overhead_unit, $overhead_size, $sum_size)
-                    = $this->getValuesForAriaTable(
+                [
+                    $current_table,
+                    $formatted_size,
+                    $unit,
+                    $formatted_overhead,
+                    $overhead_unit,
+                    $overhead_size,
+                    $sum_size,
+                ] = $this->getValuesForAriaTable(
                         $current_table,
                         $sum_size,
                         $overhead_size,
@@ -926,7 +950,7 @@ class StructureController extends AbstractController
                 // InnoDB table: Row count is not accurate but data and index sizes are.
                 // PBMS table in Drizzle: TABLE_ROWS is taken from table cache,
                 // so it may be unavailable
-                list($current_table, $formatted_size, $unit, $sum_size)
+                [$current_table, $formatted_size, $unit, $sum_size]
                 = $this->getValuesForInnodbTable(
                     $current_table,
                     $sum_size
@@ -1010,10 +1034,11 @@ class StructureController extends AbstractController
         }
 
         if ($this->isShowStats) {
+            /** @var int $tblsize */
             $tblsize = $current_table['Data_length']
                 + $current_table['Index_length'];
             $sum_size += $tblsize;
-            list($formatted_size, $unit) = Util::formatByteDown(
+            [$formatted_size, $unit] = Util::formatByteDown(
                 $tblsize,
                 3,
                 $tblsize > 0 ? 1 : 0
@@ -1021,7 +1046,7 @@ class StructureController extends AbstractController
             if (isset($current_table['Data_free'])
                 && $current_table['Data_free'] > 0
             ) {
-                list($formatted_overhead, $overhead_unit)
+                [$formatted_overhead, $overhead_unit]
                     = Util::formatByteDown(
                         $current_table['Data_free'],
                         3,
@@ -1068,10 +1093,11 @@ class StructureController extends AbstractController
         }
 
         if ($this->isShowStats) {
+            /** @var int $tblsize */
             $tblsize = $current_table['Data_length']
                 + $current_table['Index_length'];
             $sum_size += $tblsize;
-            list($formatted_size, $unit) = Util::formatByteDown(
+            [$formatted_size, $unit] = Util::formatByteDown(
                 $tblsize,
                 3,
                 ($tblsize > 0 ? 1 : 0)

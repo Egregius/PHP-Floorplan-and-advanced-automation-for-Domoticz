@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Migration from home-made DI to Symfony DI
  *
@@ -46,8 +45,6 @@ class Migration
     }
 
     /**
-     * Migration constructor.
-     *
      * @param ContainerBuilder $containerBuilder ContainerBuilder object that should be used to store the data
      */
     protected function __construct(ContainerBuilder $containerBuilder)

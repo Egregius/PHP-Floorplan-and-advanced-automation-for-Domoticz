@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Image PNG Inline Transformations plugin for phpMyAdmin
  *
@@ -28,7 +27,7 @@ class Image_PNG_Inline extends InlineTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Image";
+        return 'Image';
     }
 
     /**
@@ -38,6 +37,6 @@ class Image_PNG_Inline extends InlineTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "PNG";
+        return 'PNG';
     }
 }

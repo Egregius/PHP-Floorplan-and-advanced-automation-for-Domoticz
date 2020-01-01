@@ -1,4 +1,5 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
+/* global firstDayOfCalendar */ // templates/javascript/variables.twig
+
 /**
  * Create advanced table (resize, reorder, and show/hide columns; and also grid editing).
  * This function is designed mainly for table DOM generated from browsing a table in the database.
@@ -392,11 +393,11 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                 if (g.colVisib.length > 0) {
                     $.extend(postParams, { 'col_visib': g.colVisib.toString() });
                 }
-                $.post('sql.php', postParams, function (data) {
+                $.post('index.php?route=/sql', postParams, function (data) {
                     if (data.success !== true) {
                         var $tempDiv = $(document.createElement('div'));
                         $tempDiv.html(data.error);
-                        $tempDiv.addClass('error');
+                        $tempDiv.addClass('alert alert-danger');
                         Functions.ajaxShowMessage($tempDiv, false);
                     }
                 });
@@ -889,7 +890,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                         'relation_key_or_display_column' : relationKeyOrDisplayColumn
                     };
 
-                    g.lastXHR = $.post('sql.php', postParams, function (data) {
+                    g.lastXHR = $.post('index.php?route=/sql', postParams, function (data) {
                         g.lastXHR = null;
                         $editArea.removeClass('edit_area_loading');
                         if ($(data.dropdown).is('select')) {
@@ -933,7 +934,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                         'column' : fieldName,
                         'curr_value' : currValue
                     };
-                    g.lastXHR = $.post('sql.php', postParams, function (data) {
+                    g.lastXHR = $.post('index.php?route=/sql', postParams, function (data) {
                         g.lastXHR = null;
                         $editArea.removeClass('edit_area_loading');
                         $editArea.append(data.dropdown);
@@ -973,7 +974,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                         };
                     }
 
-                    g.lastXHR = $.post('sql.php', postParams, function (data) {
+                    g.lastXHR = $.post('index.php?route=/sql', postParams, function (data) {
                         g.lastXHR = null;
                         $editArea.removeClass('edit_area_loading');
                         $editArea.append(data.select);
@@ -1012,7 +1013,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                         var sqlQuery = 'SELECT `' + fieldName + '` FROM `' + g.table + '` WHERE ' + whereClause;
 
                         // Make the Ajax call and get the data, wrap it and insert it
-                        g.lastXHR = $.post('sql.php', {
+                        g.lastXHR = $.post('index.php?route=/sql', {
                             'server' : g.server,
                             'db' : g.db,
                             'ajax_request' : true,
@@ -1077,7 +1078,8 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                     Functions.addDatepicker($inputField, $td.attr('data-type'), {
                         showMillisec: showMillisec,
                         showMicrosec: showMicrosec,
-                        timeFormat: timeFormat
+                        timeFormat: timeFormat,
+                        firstDay: firstDayOfCalendar
                     });
 
                     $inputField.on('keyup', function (e) {
@@ -1310,7 +1312,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                 'do_transformations' : transformationFields,
                 'transform_fields_list' : transformFieldsList,
                 'relational_display' : relationalDisplay,
-                'goto' : 'sql.php',
+                'goto' : encodeURIComponent('index.php?route=/sql'),
                 'submit_type' : 'save'
             };
 
@@ -1324,7 +1326,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
 
             $.ajax({
                 type: 'POST',
-                url: 'tbl_replace.php',
+                url: 'index.php?route=/table/replace',
                 data: postParams,
                 success:
                     function (data) {
@@ -1474,7 +1476,7 @@ var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGrid
                     if ($(g.cEdit).find('.edit_box').val().match(/^(0x)?[a-f0-9]*$/i) !== null) {
                         thisFieldParams[fieldName] = $(g.cEdit).find('.edit_box').val();
                     } else {
-                        var hexError = '<div class="error">' + Messages.strEnterValidHex + '</div>';
+                        var hexError = '<div class="alert alert-danger" role="alert">' + Messages.strEnterValidHex + '</div>';
                         Functions.ajaxShowMessage(hexError, false);
                         thisFieldParams[fieldName] = Functions.getCellValue(g.currentEditCell);
                     }

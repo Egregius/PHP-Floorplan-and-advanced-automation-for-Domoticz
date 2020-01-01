@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Used to render the header of PMA's pages
  *
@@ -9,7 +8,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Navigation\Navigation;
+use function ini_get;
 
 /**
  * Class used to output the HTTP and HTML headers
@@ -124,6 +125,8 @@ class Header
      */
     public function __construct()
     {
+        global $db, $table;
+
         $this->template = new Template();
 
         $this->_isEnabled = true;
@@ -131,11 +134,9 @@ class Header
         $this->_bodyId = '';
         $this->_title = '';
         $this->_console = new Console();
-        $db = strlen($GLOBALS['db']) ? $GLOBALS['db'] : '';
-        $table = strlen($GLOBALS['table']) ? $GLOBALS['table'] : '';
         $this->_menu = new Menu(
-            $db,
-            $table
+            $db ?? '',
+            $table ?? ''
         );
         $this->_menuEnabled = true;
         $this->_warningsEnabled = true;
@@ -171,7 +172,6 @@ class Header
         // Localised strings
         $this->_scripts->addFile('vendor/jquery/jquery.min.js');
         $this->_scripts->addFile('vendor/jquery/jquery-migrate.js');
-        $this->_scripts->addFile('whitelist.php');
         $this->_scripts->addFile('vendor/sprintf.js');
         $this->_scripts->addFile('ajax.js');
         $this->_scripts->addFile('keyhandler.js');
@@ -201,6 +201,7 @@ class Header
         // the user preferences have not been merged at this point
 
         $this->_scripts->addFile('messages.php', ['l' => $GLOBALS['lang']]);
+        $this->_scripts->addCode($this->getVariablesForJavaScript());
         $this->_scripts->addFile('config.js');
         $this->_scripts->addFile('doclinks.js');
         $this->_scripts->addFile('functions.js');
@@ -225,10 +226,9 @@ class Header
      */
     public function getJsParams(): array
     {
-        $db = strlen($GLOBALS['db']) ? $GLOBALS['db'] : '';
-        $table = strlen($GLOBALS['table']) ? $GLOBALS['table'] : '';
-        $pftext = isset($_SESSION['tmpval']['pftext'])
-            ? $_SESSION['tmpval']['pftext'] : '';
+        global $db, $table;
+
+        $pftext = $_SESSION['tmpval']['pftext'] ?? '';
 
         $params = [
             'common_query' => Url::getCommonRaw(),
@@ -238,8 +238,8 @@ class Header
             ),
             'lang' => $GLOBALS['lang'],
             'server' => $GLOBALS['server'],
-            'table' => $table,
-            'db' => $db,
+            'table' => $table ?? '',
+            'db' => $db ?? '',
             'token' => $_SESSION[' PMA_token '],
             'text_dir' => $GLOBALS['text_dir'],
             'show_databases_navigation_as_tree' => $GLOBALS['cfg']['ShowDatabasesNavigationAsTree'],
@@ -263,9 +263,7 @@ class Header
             'arg_separator' => Url::getArgSeparator(),
             'PMA_VERSION' => PMA_VERSION,
         ];
-        if (isset($GLOBALS['cfg']['Server'])
-            && isset($GLOBALS['cfg']['Server']['auth_type'])
-        ) {
+        if (isset($GLOBALS['cfg']['Server'], $GLOBALS['cfg']['Server']['auth_type'])) {
             $params['auth_type'] = $GLOBALS['cfg']['Server']['auth_type'];
             if (isset($GLOBALS['cfg']['Server']['user'])) {
                 $params['user'] = $GLOBALS['cfg']['Server']['user'];
@@ -402,6 +400,8 @@ class Header
      */
     public function getDisplay(): string
     {
+        global $db, $table;
+
         if (! $this->_headerIsSent) {
             if (! $this->_isAjax && $this->_isEnabled) {
                 $this->sendHttpHeaders();
@@ -453,10 +453,7 @@ class Header
                 $messages = $this->getMessage();
             }
             if ($this->_isEnabled && empty($_REQUEST['recent_table'])) {
-                $recentTable = $this->_addRecentTable(
-                    $GLOBALS['db'],
-                    $GLOBALS['table']
-                );
+                $recentTable = $this->_addRecentTable($db, $table);
             }
             return $this->template->render('header', [
                 'is_ajax' => $this->_isAjax,
@@ -509,7 +506,7 @@ class Header
             if (isset($GLOBALS['buffer_message'])) {
                 $buffer_message = $GLOBALS['buffer_message'];
             }
-            $retval .= Util::getMessage($message);
+            $retval .= Generator::getMessage($message);
             if (isset($buffer_message)) {
                 $GLOBALS['buffer_message'] = $buffer_message;
             }
@@ -565,25 +562,25 @@ class Header
             . "style-src 'self' 'unsafe-inline' "
             . $captcha_url
             . $GLOBALS['cfg']['CSPAllow']
-            . ";"
+            . ';'
             . "img-src 'self' data: "
             . $GLOBALS['cfg']['CSPAllow']
             . $map_tile_urls
             . $captcha_url
-            . ";"
+            . ';'
             . "object-src 'none';"
         );
         header(
             "X-Content-Security-Policy: default-src 'self' "
             . $captcha_url
             . $GLOBALS['cfg']['CSPAllow'] . ';'
-            . "options inline-script eval-script;"
-            . "referrer no-referrer;"
+            . 'options inline-script eval-script;'
+            . 'referrer no-referrer;'
             . "img-src 'self' data: "
             . $GLOBALS['cfg']['CSPAllow']
             . $map_tile_urls
             . $captcha_url
-            . ";"
+            . ';'
             . "object-src 'none';"
         );
         header(
@@ -594,7 +591,7 @@ class Header
             . $captcha_url
             . $GLOBALS['cfg']['CSPAllow']
             . " 'unsafe-inline' 'unsafe-eval';"
-            . "referrer no-referrer;"
+            . 'referrer no-referrer;'
             . "style-src 'self' 'unsafe-inline' "
             . $captcha_url
             . ';'
@@ -602,7 +599,7 @@ class Header
             . $GLOBALS['cfg']['CSPAllow']
             . $map_tile_urls
             . $captcha_url
-            . ";"
+            . ';'
             . "object-src 'none';"
         );
         // Re-enable possible disabled XSS filters
@@ -700,6 +697,23 @@ class Header
      */
     public static function getVersionParameter(): string
     {
-        return "v=" . urlencode(PMA_VERSION);
+        return 'v=' . urlencode(PMA_VERSION);
+    }
+
+    /**
+     * @return string
+     */
+    private function getVariablesForJavaScript(): string
+    {
+        global $cfg, $pmaThemeImage;
+
+        $maxInputVars = ini_get('max_input_vars');
+        $maxInputVarsValue = $maxInputVars === false || $maxInputVars === '' ? 'false' : (int) $maxInputVars;
+
+        return $this->template->render('javascript/variables', [
+            'first_day_of_calendar' => $cfg['FirstDayOfCalendar'],
+            'pma_theme_image' => $pmaThemeImage,
+            'max_input_vars' => $maxInputVarsValue,
+        ]);
     }
 }

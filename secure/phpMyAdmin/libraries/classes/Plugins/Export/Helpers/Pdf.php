@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * PhpMyAdmin\Plugins\Export\Helpers\Pdf class
  *
@@ -111,7 +110,7 @@ class Pdf extends PdfLib
             $y = $this->y;
         }
         $current_page = $this->page;
-        if ((($y + $h) > $this->PageBreakTrigger)
+        if (($y + $h > $this->PageBreakTrigger)
             && (! $this->InFooter)
             && $this->AcceptPageBreak()
         ) {
@@ -134,7 +133,7 @@ class Pdf extends PdfLib
                     }
                 } else {
                     if ($this_page_olm != $old_page_olm) {
-                        $this->x = $x + ($this_page_olm - $old_page_olm);
+                        $this->x = $x + $this_page_olm - $old_page_olm;
                     } else {
                         $this->x = $x;
                     }
@@ -356,12 +355,7 @@ class Pdf extends PdfLib
             return; //prevents printing blank trigger list for any table
         }
 
-        unset($this->tablewidths);
-        unset($this->colTitles);
-        unset($this->titleWidth);
-        unset($this->colFits);
-        unset($this->display_column);
-        unset($this->colAlign);
+        unset($this->tablewidths, $this->colTitles, $this->titleWidth, $this->colFits, $this->display_column, $this->colAlign);
 
         /**
          * Making table heading
@@ -473,7 +467,7 @@ class Pdf extends PdfLib
      * @param bool   $do_comments whether to include the pmadb-style column
      *                            comments as comments in the structure;
      *                            this is deprecated but the parameter is
-     *                            left here because export.php calls
+     *                            left here because /export calls
      *                            PMA_exportStructure() also for other
      *                            export types which use this parameter
      * @param bool   $do_mime     whether to include mime comments
@@ -495,12 +489,7 @@ class Pdf extends PdfLib
         // since the class initialization
         global $cfgRelation;
 
-        unset($this->tablewidths);
-        unset($this->colTitles);
-        unset($this->titleWidth);
-        unset($this->colFits);
-        unset($this->display_column);
-        unset($this->colAlign);
+        unset($this->tablewidths, $this->colTitles, $this->titleWidth, $this->colFits, $this->display_column, $this->colAlign);
 
         /**
          * Gets fields properties
@@ -554,7 +543,7 @@ class Pdf extends PdfLib
             $columns_cnt++;
         }
         if ($do_mime && $cfgRelation['mimework']) {
-            $this->colTitles[$columns_cnt] = __('MIME');
+            $this->colTitles[$columns_cnt] = __('Media type');
             $this->display_column[$columns_cnt] = true;
             $this->colAlign[$columns_cnt] = 'L';
             $this->tablewidths[$columns_cnt] = 120;
@@ -613,7 +602,7 @@ class Pdf extends PdfLib
             $data[] = $column['Null'] == '' || $column['Null'] == 'NO'
                 ? 'No'
                 : 'Yes';
-            $data[] = isset($column['Default']) ? $column['Default'] : '';
+            $data[] = $column['Default'] ?? '';
 
             $field_name = $column['Field'];
 
@@ -625,9 +614,7 @@ class Pdf extends PdfLib
                     : '';
             }
             if ($do_comments) {
-                $data[] = isset($comments[$field_name])
-                    ? $comments[$field_name]
-                    : '';
+                $data[] = $comments[$field_name] ?? '';
             }
             if ($do_mime) {
                 $data[] = isset($mime_map[$field_name])
@@ -702,12 +689,7 @@ class Pdf extends PdfLib
      */
     public function mysqlReport($query)
     {
-        unset($this->tablewidths);
-        unset($this->colTitles);
-        unset($this->titleWidth);
-        unset($this->colFits);
-        unset($this->display_column);
-        unset($this->colAlign);
+        unset($this->tablewidths, $this->colTitles, $this->titleWidth, $this->colFits, $this->display_column, $this->colAlign);
 
         /**
          * Pass 1 for column widths
@@ -803,7 +785,7 @@ class Pdf extends PdfLib
                     // enlarge the column (but avoid enlarging it if the
                     // data's width is very big)
                     if ($stringWidth > $val
-                        && $stringWidth < ($this->sColWidth * 3)
+                        && $stringWidth < $this->sColWidth * 3
                     ) {
                         $colFits[$key] = $stringWidth;
                     }

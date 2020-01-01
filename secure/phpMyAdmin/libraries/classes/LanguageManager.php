@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Hold the PhpMyAdmin\LanguageManager class
  *
@@ -10,10 +9,9 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Core;
+use PhpMyAdmin\Html\MySQLDocumentation;
 use PhpMyAdmin\Language;
 use PhpMyAdmin\Template;
-use PhpMyAdmin\Url;
-use PhpMyAdmin\Util;
 
 /**
  * Language selection manager
@@ -38,6 +36,13 @@ class LanguageManager
             'Afrikaans',
             '',
             'af|afrikaans',
+            '',
+        ],
+        'am' => [
+            'am',
+            'Amharic',
+            'አማርኛ',
+            'am|amharic',
             '',
         ],
         'ar' => [
@@ -710,8 +715,8 @@ class LanguageManager
             $path = LOCALE_PATH
                 . '/' . $file
                 . '/LC_MESSAGES/phpmyadmin.mo';
-            if ($file != "."
-                && $file != ".."
+            if ($file != '.'
+                && $file != '..'
                 && @file_exists($path)
             ) {
                 $result[] = $file;
@@ -731,11 +736,11 @@ class LanguageManager
     public function availableLocales()
     {
         if (! $this->_available_locales) {
-            if (empty($GLOBALS['cfg']['FilterLanguages'])) {
+            if (! isset($GLOBALS['PMA_Config']) || empty($GLOBALS['PMA_Config']->get('FilterLanguages'))) {
                 $this->_available_locales = $this->listLocaleDir();
             } else {
                 $this->_available_locales = preg_grep(
-                    '@' . $GLOBALS['cfg']['FilterLanguages'] . '@',
+                    '@' . $GLOBALS['PMA_Config']->get('FilterLanguages') . '@',
                     $this->listLocaleDir()
                 );
             }
@@ -867,8 +872,8 @@ class LanguageManager
         }
 
         // check previous set language
-        if (! empty($_COOKIE['pma_lang'])) {
-            $lang = $this->getLanguage($_COOKIE['pma_lang']);
+        if (! empty($GLOBALS['PMA_Config']->getCookie('pma_lang'))) {
+            $lang = $this->getLanguage($GLOBALS['PMA_Config']->getCookie('pma_lang'));
             if ($lang !== false) {
                 return $lang;
             }
@@ -953,7 +958,7 @@ class LanguageManager
         $language_title = __('Language')
             . (__('Language') != 'Language' ? ' - <em>Language</em>' : '');
         if ($show_doc) {
-            $language_title .= Util::showDocu('faq', 'faq7-2');
+            $language_title .= MySQLDocumentation::showDocumentation('faq', 'faq7-2');
         }
 
         $available_languages = $this->sortedLanguages();

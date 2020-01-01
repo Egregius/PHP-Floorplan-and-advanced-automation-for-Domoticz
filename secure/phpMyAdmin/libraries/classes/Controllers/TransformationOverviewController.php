@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\TransformationOverviewController
  *
@@ -27,8 +26,6 @@ class TransformationOverviewController extends AbstractController
     private $transformations;
 
     /**
-     * TransformationOverviewController constructor.
-     *
      * @param Response          $response        Response object
      * @param DatabaseInterface $dbi             DatabaseInterface object
      * @param Template          $template        Template object
@@ -44,8 +41,11 @@ class TransformationOverviewController extends AbstractController
     /**
      * @return string HTML
      */
-    public function indexAction(): string
+    public function index(): string
     {
+        $header = $this->response->getHeader();
+        $header->disableMenuAndConsole();
+
         $types = $this->transformations->getAvailableMimeTypes();
 
         $mimeTypes = [];

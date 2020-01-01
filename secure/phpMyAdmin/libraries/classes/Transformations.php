@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Set of functions used with the relation and pdf feature
  *
@@ -54,7 +53,7 @@ class Transformations
         $result = [];
 
         if (strlen($option_string) === 0
-            || ! $transform_options = explode(",", $option_string)
+            || ! $transform_options = explode(',', $option_string)
         ) {
             return $result;
         }
@@ -91,9 +90,10 @@ class Transformations
     /**
      * Gets all available MIME-types
      *
+     * @return array    array[mimetype], array[transformation]
+     *
      * @access  public
      * @staticvar   array   mimetypes
-     * @return array    array[mimetype], array[transformation]
      */
     public function getAvailableMimeTypes()
     {
@@ -139,7 +139,7 @@ class Transformations
                 if (preg_match('|^[^.].*_.*_.*\.php$|', $file)) {
                     // File contains transformation functions.
                     $parts = explode('_', str_replace('.php', '', $file));
-                    $mimetype = $parts[0] . "/" . $parts[1];
+                    $mimetype = $parts[0] . '/' . $parts[1];
                     $stack['mimetype'][$mimetype] = $mimetype;
 
                     $stack[$prefix . 'transformation'][] = $mimetype . ': ' . $parts[2];
@@ -173,7 +173,7 @@ class Transformations
     public function getClassName($filename)
     {
         // get the transformation class name
-        $class_name = explode(".php", $filename);
+        $class_name = explode('.php', $filename);
         $class_name = 'PhpMyAdmin\\' . str_replace('/', '\\', mb_substr($class_name[0], 18));
 
         return $class_name;
@@ -231,12 +231,12 @@ class Transformations
     {
         $value = str_replace(
             [
-                "jpeg",
-                "png",
+                'jpeg',
+                'png',
             ],
             [
-                "JPEG",
-                "PNG",
+                'JPEG',
+                'PNG',
             ],
             $value
         );
@@ -257,9 +257,9 @@ class Transformations
      * @param boolean $strict   whether to include only results having a mimetype set
      * @param boolean $fullName whether to use full column names as the key
      *
-     * @access public
-     *
      * @return array|bool [field_name][field_key] = field_value
+     *
+     * @access public
      */
     public function getMime($db, $table, $strict = false, $fullName = false)
     {
@@ -272,11 +272,11 @@ class Transformations
 
         $com_qry = '';
         if ($fullName) {
-            $com_qry .= "SELECT CONCAT("
+            $com_qry .= 'SELECT CONCAT('
                 . "`db_name`, '.', `table_name`, '.', `column_name`"
-                . ") AS column_name, ";
+                . ') AS column_name, ';
         } else {
-            $com_qry  = "SELECT `column_name`, ";
+            $com_qry  = 'SELECT `column_name`, ';
         }
         $com_qry .= '`mimetype`,
                     `transformation`,
@@ -335,9 +335,9 @@ class Transformations
      * @param boolean $forcedelete        force delete, will erase any existing
      *                                    comments for this column
      *
-     * @access  public
-     *
      * @return boolean  true, if comment-query was made.
+     *
+     * @access  public
      */
     public function setMime(
         $db,

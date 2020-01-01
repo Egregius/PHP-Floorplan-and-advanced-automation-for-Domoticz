@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Text Plain Regex Validation Input Transformations plugin for phpMyAdmin
  *
@@ -29,7 +28,7 @@ class Text_Plain_RegexValidation extends RegexValidationTransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Text";
+        return 'Text';
     }
 
     /**
@@ -39,6 +38,6 @@ class Text_Plain_RegexValidation extends RegexValidationTransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "Plain";
+        return 'Plain';
     }
 }

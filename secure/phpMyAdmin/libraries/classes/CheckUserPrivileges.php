@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Get user's global privileges and some db-specific privileges
  *
@@ -130,19 +129,19 @@ class CheckUserPrivileges
             // Ex. '... ALL PRIVILEGES on `mysql`.`columns_priv` .. '
             if ($show_grants_dbname == 'mysql') {
                 switch ($show_grants_tblname) {
-                    case "columns_priv":
+                    case 'columns_priv':
                         $GLOBALS['col_priv'] = true;
                         break;
-                    case "db":
+                    case 'db':
                         $GLOBALS['db_priv'] = true;
                         break;
-                    case "procs_priv":
+                    case 'procs_priv':
                         $GLOBALS['proc_priv'] = true;
                         break;
-                    case "tables_priv":
+                    case 'tables_priv':
                         $GLOBALS['table_priv'] = true;
                         break;
-                    case "*":
+                    case '*':
                         $GLOBALS['col_priv'] = true;
                         $GLOBALS['db_priv'] = true;
                         $GLOBALS['proc_priv'] = true;
@@ -163,14 +162,14 @@ class CheckUserPrivileges
      * (no control user needed) and we don't have to try any other method for
      * detection
      *
+     * @return void
+     *
      * @todo fix to get really all privileges, not only explicitly defined for this user
      * from MySQL manual: (https://dev.mysql.com/doc/refman/5.0/en/show-grants.html)
      * SHOW GRANTS displays only the privileges granted explicitly to the named
      * account. Other privileges might be available to the account, but they are not
      * displayed. For example, if an anonymous account exists, the named account
      * might be able to use its privileges, but SHOW GRANTS will not display them.
-     *
-     * @return void
      */
     private function analyseShowGrant(): void
     {

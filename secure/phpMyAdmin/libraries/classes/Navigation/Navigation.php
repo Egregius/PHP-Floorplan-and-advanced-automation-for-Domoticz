@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * This class is responsible for instantiating
  * the various components of the navigation panel
@@ -48,7 +47,6 @@ class Navigation
     private $tree;
 
     /**
-     * Navigation constructor.
      * @param Template          $template Template instance
      * @param Relation          $relation Relation instance
      * @param DatabaseInterface $dbi      DatabaseInterface instance
@@ -155,15 +153,15 @@ class Navigation
         $tableName = null
     ) {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . "." . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = "INSERT INTO " . $navTable
-            . "(`username`, `item_name`, `item_type`, `db_name`, `table_name`)"
-            . " VALUES ("
+            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'INSERT INTO ' . $navTable
+            . '(`username`, `item_name`, `item_type`, `db_name`, `table_name`)'
+            . ' VALUES ('
             . "'" . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "',"
             . "'" . $this->dbi->escapeString($itemName) . "',"
             . "'" . $this->dbi->escapeString($itemType) . "',"
             . "'" . $this->dbi->escapeString($dbName) . "',"
-            . "'" . (! empty($tableName) ? $this->dbi->escapeString($tableName) : "" )
+            . "'" . (! empty($tableName) ? $this->dbi->escapeString($tableName) : '' )
             . "')";
         $this->relation->queryAsControlUser($sqlQuery, false);
     }
@@ -186,9 +184,9 @@ class Navigation
         $tableName = null
     ) {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . "." . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = "DELETE FROM " . $navTable
-            . " WHERE"
+            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'DELETE FROM ' . $navTable
+            . ' WHERE'
             . " `username`='"
             . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "'"
             . " AND `item_name`='" . $this->dbi->escapeString($itemName) . "'"
@@ -196,7 +194,7 @@ class Navigation
             . " AND `db_name`='" . $this->dbi->escapeString($dbName) . "'"
             . (! empty($tableName)
                 ? " AND `table_name`='" . $this->dbi->escapeString($tableName) . "'"
-                : ""
+                : ''
             );
         $this->relation->queryAsControlUser($sqlQuery, false);
     }
@@ -235,13 +233,14 @@ class Navigation
     /**
      * @param string      $database Database name
      * @param string|null $table    Table name
+     *
      * @return array
      */
     private function getHiddenItems(string $database, ?string $table): array
     {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . "." . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = "SELECT `item_name`, `item_type` FROM " . $navTable
+            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'SELECT `item_name`, `item_type` FROM ' . $navTable
             . " WHERE `username`='"
             . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "'"
             . " AND `db_name`='" . $this->dbi->escapeString($database) . "'"

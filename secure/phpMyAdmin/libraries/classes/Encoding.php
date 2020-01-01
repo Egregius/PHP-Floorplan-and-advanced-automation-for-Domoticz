@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Hold the PhpMyAdmin\Encoding class
  *
@@ -9,7 +8,6 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
-use PhpMyAdmin\Config\ConfigFile;
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Template;
 
@@ -199,7 +197,7 @@ class Encoding
                 return iconv(
                     $src_charset,
                     $dest_charset .
-                    (isset($GLOBALS['cfg']['IconvExtraParams']) ? $GLOBALS['cfg']['IconvExtraParams'] : ''),
+                    ($GLOBALS['cfg']['IconvExtraParams'] ?? ''),
                     $what
                 );
             case self::ENGINE_MB:

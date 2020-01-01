@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Core functions used all over the scripts.
  * This script is distinct from libraries/common.inc.php because this
@@ -22,62 +21,6 @@ use PhpMyAdmin\Display\Error as DisplayError;
 class Core
 {
     /**
-     * the whitelist for goto parameter
-     * @static array $goto_whitelist
-     */
-    public static $goto_whitelist = [
-        'db_datadict.php',
-        'db_sql.php',
-        'db_events.php',
-        'db_export.php',
-        'db_importdocsql.php',
-        'db_multi_table_query.php',
-        'db_qbe.php',
-        'db_structure.php',
-        'db_import.php',
-        'db_operations.php',
-        'db_search.php',
-        'db_routines.php',
-        'export.php',
-        'import.php',
-        'index.php',
-        'pdf_pages.php',
-        'pdf_schema.php',
-        'server_binlog.php',
-        'server_collations.php',
-        'server_databases.php',
-        'server_engines.php',
-        'server_export.php',
-        'server_import.php',
-        'server_privileges.php',
-        'server_sql.php',
-        'server_status.php',
-        'server_status_advisor.php',
-        'server_status_monitor.php',
-        'server_status_queries.php',
-        'server_status_variables.php',
-        'server_variables.php',
-        'sql.php',
-        'tbl_addfield.php',
-        'tbl_change.php',
-        'tbl_create.php',
-        'tbl_import.php',
-        'tbl_indexes.php',
-        'tbl_sql.php',
-        'tbl_export.php',
-        'tbl_operations.php',
-        'tbl_structure.php',
-        'tbl_relation.php',
-        'tbl_replace.php',
-        'tbl_row_action.php',
-        'tbl_select.php',
-        'tbl_zoom_select.php',
-        'transformation_overview.php',
-        'transformation_wrapper.php',
-        'user_password.php',
-    ];
-
-    /**
      * checks given $var and returns it if valid, or $default of not valid
      * given $var is also checked for type being 'similar' as $default
      * or against any other type if $type is provided
@@ -98,13 +41,13 @@ class Core
      * echo Core::ifSetOr($cfg['EnableFoo'], false, 'boolean'); // true
      * </code>
      *
+     * @see self::isValid()
+     *
      * @param mixed $var     param to check
      * @param mixed $default default value
      * @param mixed $type    var type or array of values to check against $var
      *
      * @return mixed $var or $default
-     *
-     * @see self::isValid()
      */
     public static function ifSetOr(&$var, $default = null, $type = 'similar')
     {
@@ -148,6 +91,8 @@ class Core
      *
      * to avoid this we set this var to null if not isset
      *
+     * @see https://secure.php.net/gettype
+     *
      * @param mixed $var     variable to check
      * @param mixed $type    var type or array of valid values to check against $var
      * @param mixed $compare var to compare with $var
@@ -155,7 +100,6 @@ class Core
      * @return boolean whether valid or not
      *
      * @todo add some more var types like hex, bin, ...?
-     * @see https://secure.php.net/gettype
      */
     public static function isValid(&$var, $type = 'length', $compare = null): bool
     {
@@ -277,7 +221,9 @@ class Core
          * Avoid using Response class as config does not have to be loaded yet
          * (this can happen on early fatal error)
          */
-        if (isset($GLOBALS['dbi']) && $GLOBALS['dbi'] !== null && isset($GLOBALS['PMA_Config']) && $GLOBALS['PMA_Config']->get('is_setup') === false && Response::getInstance()->isAjax()) {
+        if (isset($GLOBALS['dbi'], $GLOBALS['PMA_Config']) && $GLOBALS['dbi'] !== null
+            && $GLOBALS['PMA_Config']->get('is_setup') === false
+            && Response::getInstance()->isAjax()) {
             $response = Response::getInstance();
             $response->setRequestStatus(false);
             $response->addJSON('message', Message::error($error_message));
@@ -293,8 +239,8 @@ class Core
         } else {
             $error_message = strtr($error_message, ['<br>' => '[br]']);
             $error_header = __('Error');
-            $lang = isset($GLOBALS['lang']) ? $GLOBALS['lang'] : 'en';
-            $dir = isset($GLOBALS['text_dir']) ? $GLOBALS['text_dir'] : 'ltr';
+            $lang = $GLOBALS['lang'] ?? 'en';
+            $dir = $GLOBALS['text_dir'] ?? 'ltr';
 
             echo DisplayError::display(new Template(), $lang, $dir, $error_header, $error_message);
         }
@@ -454,7 +400,7 @@ class Core
     public static function checkPageValidity(&$page, array $whitelist = [], $include = false): bool
     {
         if (empty($whitelist)) {
-            $whitelist = self::$goto_whitelist;
+            $whitelist = ['index.php'];
         }
         if (empty($page)) {
             return false;
@@ -482,11 +428,8 @@ class Core
             0,
             mb_strpos($_page . '?', '?')
         );
-        if (in_array($_page, $whitelist)) {
-            return true;
-        }
 
-        return false;
+        return in_array($_page, $whitelist);
     }
 
     /**
@@ -663,7 +606,7 @@ class Core
      * @param array  $array   the array
      * @param mixed  $default default value
      *
-     * @return mixed    array element or $default
+     * @return array|null|mixed    array element or $default
      */
     public static function arrayRead(string $path, array $array, $default = null)
     {
@@ -762,8 +705,8 @@ class Core
         $url = Url::getCommon($params);
         //strip off token and such sensitive information. Just keep url.
         $arr = parse_url($url);
-        parse_str($arr["query"], $vars);
-        $query = http_build_query(["url" => $vars["url"]]);
+        parse_str($arr['query'], $vars);
+        $query = http_build_query(['url' => $vars['url']]);
 
         if ($GLOBALS['PMA_Config'] !== null && $GLOBALS['PMA_Config']->get('is_setup')) {
             $url = '../url.php?' . $query;
@@ -801,7 +744,7 @@ class Core
                 return false;
             }
         }
-        $domain = $arr["host"];
+        $domain = $arr['host'];
         $domainWhiteList = [
             /* Include current domain */
             $_SERVER['SERVER_NAME'],
@@ -860,10 +803,10 @@ class Core
             $retval .= __('No change');
         } elseif (is_array($query_data)) {
             foreach ($query_data as $query) {
-                $retval .= Util::formatSql($query);
+                $retval .= Html\Generator::formatSql($query);
             }
         } else {
-            $retval .= Util::formatSql($query_data);
+            $retval .= Html\Generator::formatSql($query_data);
         }
         $retval .= '</div>';
         $response = Response::getInstance();
@@ -981,6 +924,7 @@ class Core
 
     /**
      * Checks that required PHP extensions are there.
+     *
      * @return void
      */
     public static function checkExtensions(): void
@@ -1107,7 +1051,7 @@ class Core
      *
      * @param string $data Data to unserialize
      *
-     * @return mixed
+     * @return mixed|null
      */
     public static function safeUnserialize(string $data)
     {
@@ -1261,7 +1205,7 @@ class Core
     public static function checkRequest(): void
     {
         if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-            self::fatalError(__("GLOBALS overwrite attempt"));
+            self::fatalError(__('GLOBALS overwrite attempt'));
         }
 
         /**
@@ -1276,6 +1220,7 @@ class Core
      * Sign the sql query using hmac using the session token
      *
      * @param string $sqlQuery The sql query
+     *
      * @return string
      */
     public static function signSqlQuery($sqlQuery)
@@ -1290,6 +1235,7 @@ class Core
      *
      * @param string $sqlQuery  The sql query
      * @param string $signature The Signature to check
+     *
      * @return bool
      */
     public static function checkSqlQuerySignature($sqlQuery, $signature)

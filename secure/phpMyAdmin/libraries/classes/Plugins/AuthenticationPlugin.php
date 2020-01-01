@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the authentication plugins
  *
@@ -15,7 +14,6 @@ use PhpMyAdmin\IpAllowDeny;
 use PhpMyAdmin\Logging;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
-use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Session;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\TwoFactor;
@@ -121,6 +119,9 @@ abstract class AuthenticationPlugin
      */
     public function logOut()
     {
+        /** @var Config $PMA_Config */
+        global $PMA_Config;
+
         /* Obtain redirect URL (before doing logout) */
         if (! empty($GLOBALS['cfg']['Server']['LogoutURL'])) {
             $redirect_url = $GLOBALS['cfg']['Server']['LogoutURL'];
@@ -140,7 +141,7 @@ abstract class AuthenticationPlugin
             && $GLOBALS['cfg']['Server']['auth_type'] == 'cookie'
         ) {
             foreach ($GLOBALS['cfg']['Servers'] as $key => $val) {
-                if (isset($_COOKIE['pmaAuth-' . $key])) {
+                if ($PMA_Config->issetCookie('pmaAuth-' . $key)) {
                     $server = $key;
                 }
             }
@@ -159,7 +160,7 @@ abstract class AuthenticationPlugin
             /* Redirect to other autenticated server */
             $_SESSION['partial_logout'] = true;
             Core::sendHeaderLocation(
-                './index.php' . Url::getCommonRaw(['server' => $server])
+                './index.php?route=/' . Url::getCommonRaw(['server' => $server], '&')
             );
         }
     }
@@ -171,7 +172,7 @@ abstract class AuthenticationPlugin
      */
     public function getLoginFormURL()
     {
-        return './index.php';
+        return './index.php?route=/';
     }
 
     /**
@@ -282,9 +283,7 @@ abstract class AuthenticationPlugin
 
         // Check IP-based Allow/Deny rules as soon as possible to reject the
         // user based on mod_access in Apache
-        if (isset($cfg['Server']['AllowDeny'])
-            && isset($cfg['Server']['AllowDeny']['order'])
-        ) {
+        if (isset($cfg['Server']['AllowDeny']['order'])) {
             $allowDeny_forbidden         = false; // default
             if ($cfg['Server']['AllowDeny']['order'] == 'allow,deny') {
                 $allowDeny_forbidden     = true;
@@ -357,12 +356,13 @@ abstract class AuthenticationPlugin
         )->display();
         echo $this->template->render('login/twofactor', [
             'form' => $twofactor->render(),
-            'show_submit' => $twofactor->showSubmit,
+            'show_submit' => $twofactor->showSubmit(),
         ]);
         echo $this->template->render('login/footer');
         echo Config::renderFooter();
         if (! defined('TESTSUITE')) {
             exit;
         }
+        return;
     }
 }

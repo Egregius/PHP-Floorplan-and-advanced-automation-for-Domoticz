@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Library for extracting information about the available storage engines
  *
@@ -21,6 +20,7 @@ use PhpMyAdmin\Engines\Myisam;
 use PhpMyAdmin\Engines\Ndbcluster;
 use PhpMyAdmin\Engines\Pbxt;
 use PhpMyAdmin\Engines\PerformanceSchema;
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Util;
 
 /**
@@ -75,9 +75,7 @@ class StorageEngine
         if (! empty($storage_engines[$engine])) {
             $this->engine  = $engine;
             $this->title   = $storage_engines[$engine]['Engine'];
-            $this->comment = (isset($storage_engines[$engine]['Comment'])
-                ? $storage_engines[$engine]['Comment']
-                : '');
+            $this->comment = ($storage_engines[$engine]['Comment'] ?? '');
             switch ($storage_engines[$engine]['Support']) {
                 case 'DEFAULT':
                     $this->support = PMA_ENGINE_SUPPORT_DEFAULT;
@@ -98,10 +96,11 @@ class StorageEngine
     /**
      * Returns array of storage engines
      *
+     * @return array[] array of storage engines
+     *
      * @static
      * @staticvar array $storage_engines storage engines
      * @access public
-     * @return array[] array of storage engines
      */
     public static function getStorageEngines()
     {
@@ -119,7 +118,7 @@ class StorageEngine
                         );
                     }
                 );
-                foreach (explode(",", $disabled) as $engine) {
+                foreach (explode(',', $disabled) as $engine) {
                     if (isset($storage_engines[$engine])) {
                         $storage_engines[$engine]['Support'] = 'DISABLED';
                     }
@@ -140,8 +139,9 @@ class StorageEngine
      *                                         engines be offered?
      * @param boolean $addEmpty                Whether to provide empty option
      *
-     * @static
      * @return string html selectbox
+     *
+     * @static
      */
     public static function getHtmlSelect(
         $name = 'engine',
@@ -188,6 +188,7 @@ class StorageEngine
      * @param string $engine The engine ID
      *
      * @return StorageEngine The engine plugin
+     *
      * @static
      */
     public static function getEngine($engine)
@@ -227,12 +228,13 @@ class StorageEngine
      *
      * @param string $engine name of engine
      *
-     * @static
      * @return boolean whether $engine is valid or not
+     *
+     * @static
      */
     public static function isValid($engine)
     {
-        if ($engine == "PBMS") {
+        if ($engine == 'PBMS') {
             return true;
         }
         $storage_engines = self::getStorageEngines();
@@ -254,7 +256,7 @@ class StorageEngine
                   . '    <td>' . "\n";
             if (! empty($details['desc'])) {
                 $ret .= '        '
-                    . Util::showHint($details['desc'])
+                    . Generator::showHint($details['desc'])
                     . "\n";
             }
             $ret .= '    </td>' . "\n"
@@ -335,7 +337,7 @@ class StorageEngine
                 $mysql_vars[$row['Variable_name']]
                     = $variables[$row['Variable_name']];
             } elseif (! $like
-                && mb_strpos(mb_strtolower($row['Variable_name']), mb_strtolower($this->engine)) !== 0
+                && mb_stripos($row['Variable_name'], $this->engine) !== 0
             ) {
                 continue;
             }

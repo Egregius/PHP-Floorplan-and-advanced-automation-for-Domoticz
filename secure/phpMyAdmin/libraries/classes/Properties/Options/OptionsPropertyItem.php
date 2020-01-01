@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * The top-level class of the "Options" subtree of the object-oriented
  * properties system (the other subtree is "Plugin").
@@ -131,6 +130,6 @@ abstract class OptionsPropertyItem extends PropertyItem
      */
     public function getPropertyType()
     {
-        return "options";
+        return 'options';
     }
 }

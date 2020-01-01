@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Config Authentication plugin for phpMyAdmin
  *
@@ -10,10 +9,10 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Auth;
 
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Plugins\AuthenticationPlugin;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Server\Select;
-use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
 
 /**
@@ -86,11 +85,11 @@ class AuthenticationConfig extends AuthenticationPlugin
         $header->setTitle(__('Access denied!'));
         $header->disableMenuAndConsole();
         echo '<br><br>
-    <center>
+    <div class="text-center">
         <h1>';
         echo sprintf(__('Welcome to %s'), ' phpMyAdmin ');
         echo '</h1>
-    </center>
+    </div>
     <br>
     <table cellpadding="0" cellspacing="3" class= "auth_config_tbl" width="80%">
         <tr>
@@ -133,7 +132,7 @@ class AuthenticationConfig extends AuthenticationPlugin
                     E_USER_WARNING
                 );
             }
-            echo Util::mysqlDie(
+            echo Generator::mysqlDie(
                 $conn_error,
                 '',
                 true,
@@ -151,7 +150,7 @@ class AuthenticationConfig extends AuthenticationPlugin
                 $GLOBALS['cfg']['DefaultTabServer'],
                 'server'
             )
-            , Url::getCommon() , '" class="button disableAjax">'
+            , '" class="button disableAjax">'
             , __('Retry to connect')
             , '</a>' , "\n";
         echo '</td>

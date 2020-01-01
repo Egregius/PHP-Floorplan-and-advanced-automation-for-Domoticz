@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Server\BinlogController
  *
@@ -11,6 +10,7 @@ namespace PhpMyAdmin\Controllers\Server;
 
 use PhpMyAdmin\Controllers\AbstractController;
 use PhpMyAdmin\DatabaseInterface;
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
@@ -54,7 +54,7 @@ class BinlogController extends AbstractController
      *
      * @return string
      */
-    public function indexAction(array $params): string
+    public function index(array $params): string
     {
         global $cfg, $pmaThemeImage;
 
@@ -113,7 +113,7 @@ class BinlogController extends AbstractController
             'url_params' => $urlParams,
             'binary_logs' => $this->binaryLogs,
             'log' => $params['log'],
-            'sql_message' => Util::getMessage(Message::success(), $sqlQuery),
+            'sql_message' => Generator::getMessage(Message::success(), $sqlQuery),
             'values' => $values,
             'has_previous' => $position > 0,
             'has_next' => $numRows >= $cfg['MaxRows'],

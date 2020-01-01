@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\Twig\SanitizeExtension class
  *
@@ -14,8 +13,6 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
- * Class SanitizeExtension
- *
  * @package PhpMyAdmin\Twig
  */
 class SanitizeExtension extends AbstractExtension

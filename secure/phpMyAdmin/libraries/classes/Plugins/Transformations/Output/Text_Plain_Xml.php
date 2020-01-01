@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Text Plain XML Transformations plugin for phpMyAdmin
  *
@@ -76,7 +75,7 @@ class Text_Plain_Xml extends TransformationsPlugin
      */
     public static function getMIMEType()
     {
-        return "Text";
+        return 'Text';
     }
 
     /**
@@ -86,7 +85,7 @@ class Text_Plain_Xml extends TransformationsPlugin
      */
     public static function getMIMESubtype()
     {
-        return "Plain";
+        return 'Plain';
     }
 
     /**
@@ -96,6 +95,6 @@ class Text_Plain_Xml extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "XML";
+        return 'XML';
     }
 }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Code for displaying server selection
  *
@@ -97,12 +96,13 @@ class Select
                 if ($selected) {
                     $retval .= '<strong>' . htmlspecialchars($label) . '</strong>';
                 } else {
+                    $scriptName = Util::getScriptNameForOption(
+                        $GLOBALS['cfg']['DefaultTabServer'],
+                        'server'
+                    );
                     $retval .= '<a class="disableAjax item" href="'
-                        . Util::getScriptNameForOption(
-                            $GLOBALS['cfg']['DefaultTabServer'],
-                            'server'
-                        )
-                        . Url::getCommon(['server' => $key])
+                        . $scriptName
+                        . Url::getCommon(['server' => $key], strpos($scriptName, '?') === false ? '?' : '&')
                         . '" >' . htmlspecialchars($label) . '</a>';
                 }
                 $retval .= '</li>';

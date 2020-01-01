@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * PDF schema handling
  *
@@ -11,7 +10,6 @@ namespace PhpMyAdmin\Plugins\Schema\Pdf;
 
 use PhpMyAdmin\Pdf as PdfLib;
 use PhpMyAdmin\Plugins\Schema\ExportRelationSchema;
-use PhpMyAdmin\Relation;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Util;
 
@@ -80,9 +78,9 @@ class PdfRelationSchema extends ExportRelationSchema
     /**
      * The "PdfRelationSchema" constructor
      *
-     * @param string $db database name
-     *
      * @see PMA_Schema_PDF
+     *
+     * @param string $db database name
      */
     public function __construct($db)
     {
@@ -339,14 +337,14 @@ class PdfRelationSchema extends ExportRelationSchema
     /**
      * Defines relation objects
      *
+     * @see _setMinMax
+     *
      * @param string $masterTable  The master table name
      * @param string $masterField  The relation field in the master table
      * @param string $foreignTable The foreign table name
      * @param string $foreignField The relation field in the foreign table
      *
      * @return void
-     *
-     * @see _setMinMax
      */
     private function _addRelation(
         $masterTable,
@@ -392,9 +390,9 @@ class PdfRelationSchema extends ExportRelationSchema
     /**
      * Draws the grid
      *
-     * @return void
-     *
      * @see PMA_Schema_PDF
+     *
+     * @return void
      */
     private function _strokeGrid()
     {
@@ -453,9 +451,9 @@ class PdfRelationSchema extends ExportRelationSchema
     /**
      * Draws relation arrows
      *
-     * @return void
-     *
      * @see Relation_Stats_Pdf::relationdraw()
+     *
+     * @return void
      */
     private function _drawRelations()
     {
@@ -469,9 +467,9 @@ class PdfRelationSchema extends ExportRelationSchema
     /**
      * Draws tables
      *
-     * @return void
-     *
      * @see Table_Stats_Pdf::tableDraw()
+     *
+     * @return void
      */
     private function _drawTables()
     {
@@ -502,7 +500,7 @@ class PdfRelationSchema extends ExportRelationSchema
             $this->diagram->Cell(
                 0,
                 6,
-                __('Page number:') . ' {' . sprintf("%02d", $i) . '}',
+                __('Page number:') . ' {' . sprintf('%02d', $i) . '}',
                 0,
                 0,
                 'R',
@@ -564,7 +562,7 @@ class PdfRelationSchema extends ExportRelationSchema
             $this->diagram->AddPage($this->orientation);
             $this->diagram->Bookmark($table);
             $this->diagram->setAlias(
-                '{' . sprintf("%02d", $z) . '}',
+                '{' . sprintf('%02d', $z) . '}',
                 $this->diagram->PageNo()
             );
             $this->diagram->PMA_links['RT'][$table]['-']
@@ -598,9 +596,7 @@ class PdfRelationSchema extends ExportRelationSchema
              */
             $showtable = $GLOBALS['dbi']->getTable($this->db, $table)
                 ->getStatusInfo();
-            $show_comment = isset($showtable['Comment'])
-                ? $showtable['Comment']
-                : '';
+            $show_comment = $showtable['Comment'] ?? '';
             $create_time  = isset($showtable['Create_time'])
                 ? Util::localisedDate(
                     strtotime($showtable['Create_time'])
@@ -768,16 +764,14 @@ class PdfRelationSchema extends ExportRelationSchema
                     $field_name,
                     $type,
                     $attribute,
-                    ($row['Null'] == '' || $row['Null'] == 'NO')
+                    $row['Null'] == '' || $row['Null'] == 'NO'
                         ? __('No')
                         : __('Yes'),
-                    isset($row['Default']) ? $row['Default'] : '',
+                    $row['Default'] ?? '',
                     $row['Extra'],
                     $linksTo,
-                    isset($comments[$field_name])
-                        ? $comments[$field_name]
-                        : '',
-                    isset($mime_map) && isset($mime_map[$field_name])
+                    $comments[$field_name] ?? '',
+                    isset($mime_map, $mime_map[$field_name])
                         ? str_replace('_', '/', $mime_map[$field_name]['mimetype'])
                         : '',
                 ];
@@ -787,8 +781,6 @@ class PdfRelationSchema extends ExportRelationSchema
                     && isset($this->diagram->PMA_links['doc'][$foreigner['foreign_table']][$foreigner['foreign_field']])
                 ) {
                     $links[6] = $this->diagram->PMA_links['doc'][$foreigner['foreign_table']][$foreigner['foreign_field']];
-                } else {
-                    unset($links[6]);
                 }
                 $this->diagram->row($diagram_row, $links);
             } // end foreach

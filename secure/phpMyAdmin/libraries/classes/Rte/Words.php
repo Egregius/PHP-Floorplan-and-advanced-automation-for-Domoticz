@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Helper functions for RTE
  *
@@ -84,6 +83,6 @@ class Words
                 break;
         }
 
-        return isset($words[$index]) ? $words[$index] : '';
+        return $words[$index] ?? '';
     }
 }

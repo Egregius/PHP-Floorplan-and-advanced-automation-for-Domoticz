@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Form templates
  *
@@ -10,10 +9,9 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Config;
 
 use PhpMyAdmin\Config;
+use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Template;
-use PhpMyAdmin\Url;
-use PhpMyAdmin\Util;
 
 /**
  * PhpMyAdmin\Config\FormDisplayTemplate class
@@ -38,8 +36,6 @@ class FormDisplayTemplate
     public $template;
 
     /**
-     * FormDisplayTemplate constructor.
-     *
      * @param Config $config Config instance
      */
     public function __construct(Config $config)
@@ -67,22 +63,24 @@ class FormDisplayTemplate
         if ($action === null) {
             $action = $_SERVER['REQUEST_URI'];
         }
-        if ($method != 'post') {
+        if ($method !== 'post') {
             $method = 'get';
         }
-        $htmlOutput = '<form method="' . $method . '" action="'
-            . htmlspecialchars($action) . '" class="config-form disableAjax">';
-        $htmlOutput .= '<input type="hidden" name="tab_hash" value="">';
-        // we do validation on page refresh when browser remembers field values,
-        // add a field with known value which will be used for checks
+
+        /**
+         * We do validation on page refresh when browser remembers field values,
+         * add a field with known value which will be used for checks.
+         */
         if (! $hasCheckPageRefresh) {
             $hasCheckPageRefresh = true;
-            $htmlOutput .= '<input type="hidden" name="check_page_refresh" '
-                . ' id="check_page_refresh" value="">' . "\n";
         }
-        $htmlOutput .= Url::getHiddenInputs('', '', 0, 'server') . "\n";
-        $htmlOutput .= Url::getHiddenFields((array) $hiddenFields, '', true);
-        return $htmlOutput;
+
+        return $this->template->render('config/form_display/form_top', [
+            'method' => $method,
+            'action' => $action,
+            'has_check_page_refresh' => $hasCheckPageRefresh,
+            'hidden_fields' => (array) $hiddenFields,
+        ]);
     }
 
     /**
@@ -106,11 +104,10 @@ class FormDisplayTemplate
         }
 
         $htmlOutput = $this->template->render('list/unordered', [
-            'class' => 'tabs responsivetable',
+            'class' => 'tabs responsivetable row',
             'items' => $items,
         ]);
-        $htmlOutput .= '<br>';
-        $htmlOutput .= '<div class="tabs_contents">';
+        $htmlOutput .= '<div class="tabs_contents row">';
         return $htmlOutput;
     }
 
@@ -222,14 +219,14 @@ class FormDisplayTemplate
                     $icons[$k] = sprintf(
                         '<img alt="%s" src="%s"%s>',
                         $v[1],
-                        "../themes/pmahomme/img/{$v[0]}.png",
+                        '../themes/pmahomme/img/' . $v[0] . '.png',
                         $title
                     );
                 }
             } else {
                 // In this case we just use getImage() because it's available
                 foreach ($iconInit as $k => $v) {
-                    $icons[$k] = Util::getImage(
+                    $icons[$k] = Generator::getImage(
                         $v[0],
                         $v[1]
                     );
@@ -278,7 +275,7 @@ class FormDisplayTemplate
             $htmlOutput .= __(
                 'This setting is disabled, it will not be applied to your configuration.'
             );
-            $htmlOutput .= '">' . __('Disabled') . "</span>";
+            $htmlOutput .= '">' . __('Disabled') . '</span>';
         }
 
         if (! empty($description)) {
@@ -290,11 +287,11 @@ class FormDisplayTemplate
 
         switch ($type) {
             case 'text':
-                $htmlOutput .= '<input type="text" class="all85" ' . $nameId . $fieldClass
+                $htmlOutput .= '<input type="text" class="w-75" ' . $nameId . $fieldClass
                 . ' value="' . htmlspecialchars($value) . '">';
                 break;
             case 'password':
-                $htmlOutput .= '<input type="password" class="all85" ' . $nameId . $fieldClass
+                $htmlOutput .= '<input type="password" class="w-75" ' . $nameId . $fieldClass
                 . ' value="' . htmlspecialchars($value) . '">';
                 break;
             case 'short_text':
@@ -316,7 +313,7 @@ class FormDisplayTemplate
                   . ($value ? ' checked="checked"' : '') . '></span>';
                 break;
             case 'select':
-                $htmlOutput .= '<select class="all85" ' . $nameId . $fieldClass . '>';
+                $htmlOutput .= '<select class="w-75" ' . $nameId . $fieldClass . '>';
                 $escape = ! (isset($opts['values_escaped']) && $opts['values_escaped']);
                 $valuesDisabled = isset($opts['values_disabled'])
                 ? array_flip($opts['values_disabled']) : [];
@@ -352,8 +349,12 @@ class FormDisplayTemplate
                 $htmlOutput .= '</select>';
                 break;
             case 'list':
+                $val = $value;
+                if (isset($val['wrapper_params'])) {
+                    unset($val['wrapper_params']);
+                }
                 $htmlOutput .= '<textarea cols="35" rows="5" ' . $nameId . $fieldClass
-                . '>' . htmlspecialchars(implode("\n", $value)) . '</textarea>';
+                . '>' . htmlspecialchars(implode("\n", $val)) . '</textarea>';
                 break;
         }
         if ($isSetupScript
@@ -366,7 +367,7 @@ class FormDisplayTemplate
         }
         if (isset($opts['setvalue']) && $opts['setvalue']) {
             $htmlOutput .= '<a class="set-value hide" href="#'
-                . htmlspecialchars("$path={$opts['setvalue']}") . '" title="'
+                . htmlspecialchars($path . '=' . $opts['setvalue']) . '" title="'
                 . sprintf(__('Set value: %s'), htmlspecialchars($opts['setvalue']))
                 . '">' . $icons['edit'] . '</a>';
         }
@@ -486,7 +487,7 @@ class FormDisplayTemplate
                 $vArgs[] = Sanitize::escapeJsString($arg);
             }
             $vArgs = $vArgs ? ", ['" . implode("', '", $vArgs) . "']" : '';
-            $jsArray[] = "registerFieldValidator('$fieldId', '$vName', true$vArgs)";
+            $jsArray[] = "registerFieldValidator('" . $fieldId . "', '" . $vName . "', true" . $vArgs . ')';
         }
     }
 

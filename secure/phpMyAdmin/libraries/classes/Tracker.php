@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Tracking changes on databases, tables and views
  *
@@ -28,7 +27,6 @@ use PhpMyAdmin\Util;
  * This class tracks changes on databases, tables and views.
  *
  * @package PhpMyAdmin
- *
  * @todo use stristr instead of strstr
  */
 class Tracker
@@ -47,9 +45,9 @@ class Tracker
      * Actually enables tracking. This needs to be done after all
      * underlaying code is initialized.
      *
-     * @static
-     *
      * @return void
+     *
+     * @static
      */
     public static function enable()
     {
@@ -59,9 +57,9 @@ class Tracker
     /**
      * Gets the on/off value of the Tracker module, starts initialization.
      *
-     * @static
-     *
      * @return boolean (true=on|false=off)
+     *
+     * @static
      */
     public static function isActive()
     {
@@ -90,9 +88,9 @@ class Tracker
      *
      * @param string $string part of SQL statement
      *
-     * @static
-     *
      * @return string the name of table
+     *
+     * @static
      */
     protected static function getTableName($string)
     {
@@ -119,9 +117,9 @@ class Tracker
      * @param string $dbname    name of database
      * @param string $tablename name of table
      *
-     * @static
-     *
      * @return boolean true or false
+     *
+     * @static
      */
     public static function isTracked($dbname, $tablename)
     {
@@ -144,10 +142,10 @@ class Tracker
             return false;
         }
 
-        $sql_query = " SELECT tracking_active FROM " . self::_getTrackingTable() .
+        $sql_query = ' SELECT tracking_active FROM ' . self::_getTrackingTable() .
         " WHERE db_name = '" . $GLOBALS['dbi']->escapeString($dbname) . "' " .
         " AND table_name = '" . $GLOBALS['dbi']->escapeString($tablename) . "' " .
-        " ORDER BY version DESC LIMIT 1";
+        ' ORDER BY version DESC LIMIT 1';
 
         $result = $GLOBALS['dbi']->fetchValue($sql_query, 0, 0, DatabaseInterface::CONNECT_CONTROL) == 1;
 
@@ -166,7 +164,7 @@ class Tracker
         $date = Util::date('Y-m-d H:i:s');
         $user = preg_replace('/\s+/', ' ', $GLOBALS['cfg']['Server']['user']);
 
-        return "# log " . $date . " " . $user . "\n";
+        return '# log ' . $date . ' ' . $user . "\n";
     }
 
     /**
@@ -179,9 +177,9 @@ class Tracker
      * @param string $tracking_set set of tracking statements
      * @param bool   $is_view      if table is a view
      *
-     * @static
-     *
      * @return int result of version insertion
+     *
+     * @static
      */
     public static function createVersion(
         $dbname,
@@ -201,11 +199,12 @@ class Tracker
 
         /**
          * get Export SQL instance
+         *
          * @var ExportSql $export_sql_plugin
          */
         $export_sql_plugin = Plugins::getPlugin(
-            "export",
-            "sql",
+            'export',
+            'sql',
             'libraries/classes/Plugins/Export/',
             [
                 'export_type' => $export_type,
@@ -238,7 +237,7 @@ class Tracker
         // Get DROP TABLE / DROP VIEW and CREATE TABLE SQL statements
         $sql_backquotes = true;
 
-        $create_sql  = "";
+        $create_sql  = '';
 
         if ($GLOBALS['cfg']['Server']['tracking_add_drop_table'] == true
             && $is_view === false
@@ -255,22 +254,22 @@ class Tracker
         }
 
         $create_sql .= self::getLogComment() .
-            $export_sql_plugin->getTableDef($dbname, $tablename, "\n", "");
+            $export_sql_plugin->getTableDef($dbname, $tablename, "\n", '');
 
         // Save version
 
         $sql_query = "/*NOTRACK*/\n" .
-        "INSERT INTO " . self::_getTrackingTable() . " (" .
-        "db_name, " .
-        "table_name, " .
-        "version, " .
-        "date_created, " .
-        "date_updated, " .
-        "schema_snapshot, " .
-        "schema_sql, " .
-        "data_sql, " .
-        "tracking " .
-        ") " .
+        'INSERT INTO ' . self::_getTrackingTable() . ' (' .
+        'db_name, ' .
+        'table_name, ' .
+        'version, ' .
+        'date_created, ' .
+        'date_updated, ' .
+        'schema_snapshot, ' .
+        'schema_sql, ' .
+        'data_sql, ' .
+        'tracking ' .
+        ') ' .
         "values (
         '" . $GLOBALS['dbi']->escapeString($dbname) . "',
         '" . $GLOBALS['dbi']->escapeString($tablename) . "',
@@ -301,16 +300,16 @@ class Tracker
      * @param string $tablename name of table
      * @param string $version   version
      *
-     * @static
-     *
      * @return int result of version insertion
+     *
+     * @static
      */
     public static function deleteTracking($dbname, $tablename, $version = '')
     {
         $relation = new Relation($GLOBALS['dbi']);
 
         $sql_query = "/*NOTRACK*/\n"
-            . "DELETE FROM " . self::_getTrackingTable()
+            . 'DELETE FROM ' . self::_getTrackingTable()
             . " WHERE `db_name` = '"
             . $GLOBALS['dbi']->escapeString($dbname) . "'"
             . " AND `table_name` = '"
@@ -331,9 +330,9 @@ class Tracker
      * @param string $query        query
      * @param string $tracking_set set of tracking statements
      *
-     * @static
-     *
      * @return int result of version insertion
+     *
+     * @static
      */
     public static function createDatabaseVersion(
         $dbname,
@@ -350,7 +349,7 @@ class Tracker
                 = $GLOBALS['cfg']['Server']['tracking_default_statements'];
         }
 
-        $create_sql  = "";
+        $create_sql  = '';
 
         if ($GLOBALS['cfg']['Server']['tracking_add_drop_database'] == true) {
             $create_sql .= self::getLogComment()
@@ -361,17 +360,17 @@ class Tracker
 
         // Save version
         $sql_query = "/*NOTRACK*/\n" .
-        "INSERT INTO " . self::_getTrackingTable() . " (" .
-        "db_name, " .
-        "table_name, " .
-        "version, " .
-        "date_created, " .
-        "date_updated, " .
-        "schema_snapshot, " .
-        "schema_sql, " .
-        "data_sql, " .
-        "tracking " .
-        ") " .
+        'INSERT INTO ' . self::_getTrackingTable() . ' (' .
+        'db_name, ' .
+        'table_name, ' .
+        'version, ' .
+        'date_created, ' .
+        'date_updated, ' .
+        'schema_snapshot, ' .
+        'schema_sql, ' .
+        'data_sql, ' .
+        'tracking ' .
+        ') ' .
         "values (
         '" . $GLOBALS['dbi']->escapeString($dbname) . "',
         '" . $GLOBALS['dbi']->escapeString('') . "',
@@ -397,9 +396,9 @@ class Tracker
      * @param string  $version   version
      * @param integer $new_state the new state of tracking
      *
-     * @static
-     *
      * @return int result of SQL query
+     *
+     * @static
      */
     private static function _changeTracking(
         $dbname,
@@ -409,7 +408,7 @@ class Tracker
     ) {
         $relation = new Relation($GLOBALS['dbi']);
 
-        $sql_query = " UPDATE " . self::_getTrackingTable() .
+        $sql_query = ' UPDATE ' . self::_getTrackingTable() .
         " SET `tracking_active` = '" . $new_state . "' " .
         " WHERE `db_name` = '" . $GLOBALS['dbi']->escapeString($dbname) . "' " .
         " AND `table_name` = '" . $GLOBALS['dbi']->escapeString($tablename) . "' " .
@@ -427,9 +426,9 @@ class Tracker
      * @param string       $type      type of data(DDL || DML)
      * @param string|array $new_data  the new tracking data
      *
-     * @static
-     *
      * @return bool result of change
+     *
+     * @static
      */
     public static function changeTrackingData(
         $dbname,
@@ -459,8 +458,8 @@ class Tracker
             $new_data_processed = $new_data;
         }
 
-        $sql_query = " UPDATE " . self::_getTrackingTable() .
-        " SET `" . $save_to . "` = '" . $new_data_processed . "' " .
+        $sql_query = ' UPDATE ' . self::_getTrackingTable() .
+        ' SET `' . $save_to . "` = '" . $new_data_processed . "' " .
         " WHERE `db_name` = '" . $GLOBALS['dbi']->escapeString($dbname) . "' " .
         " AND `table_name` = '" . $GLOBALS['dbi']->escapeString($tablename) . "' " .
         " AND `version` = '" . $GLOBALS['dbi']->escapeString($version) . "' ";
@@ -477,9 +476,9 @@ class Tracker
      * @param string $tablename name of table
      * @param string $version   version
      *
-     * @static
-     *
      * @return int result of SQL query
+     *
+     * @static
      */
     public static function activateTracking($dbname, $tablename, $version)
     {
@@ -494,9 +493,9 @@ class Tracker
      * @param string $tablename name of table
      * @param string $version   version
      *
-     * @static
-     *
      * @return int result of SQL query
+     *
+     * @static
      */
     public static function deactivateTracking($dbname, $tablename, $version)
     {
@@ -512,26 +511,24 @@ class Tracker
      * @param string $tablename name of table
      * @param string $statement tracked statement
      *
-     * @static
-     *
      * @return int (-1 if no version exists | >  0 if a version exists)
+     *
+     * @static
      */
     public static function getVersion($dbname, $tablename, $statement = null)
     {
         $relation = new Relation($GLOBALS['dbi']);
 
-        $sql_query = " SELECT MAX(version) FROM " . self::_getTrackingTable() .
+        $sql_query = ' SELECT MAX(version) FROM ' . self::_getTrackingTable() .
         " WHERE `db_name` = '" . $GLOBALS['dbi']->escapeString($dbname) . "' " .
         " AND `table_name` = '" . $GLOBALS['dbi']->escapeString($tablename) . "' ";
 
-        if ($statement != "") {
+        if ($statement != '') {
             $sql_query .= " AND FIND_IN_SET('"
                 . $statement . "',tracking) > 0" ;
         }
         $row = $GLOBALS['dbi']->fetchArray($relation->queryAsControlUser($sql_query));
-        return isset($row[0])
-            ? $row[0]
-            : -1;
+        return $row[0] ?? -1;
     }
 
 
@@ -542,16 +539,16 @@ class Tracker
      * @param string $tablename name of table
      * @param string $version   version number
      *
-     * @static
-     *
      * @return mixed record DDM log, DDL log, structure snapshot, tracked
      *         statements.
+     *
+     * @static
      */
     public static function getTrackedData($dbname, $tablename, $version)
     {
         $relation = new Relation($GLOBALS['dbi']);
 
-        $sql_query = " SELECT * FROM " . self::_getTrackingTable() .
+        $sql_query = ' SELECT * FROM ' . self::_getTrackingTable() .
             " WHERE `db_name` = '" . $GLOBALS['dbi']->escapeString($dbname) . "' ";
         if (! empty($tablename)) {
             $sql_query .= " AND `table_name` = '"
@@ -561,6 +558,16 @@ class Tracker
             . "' ORDER BY `version` DESC LIMIT 1";
 
         $mixed = $GLOBALS['dbi']->fetchAssoc($relation->queryAsControlUser($sql_query));
+
+        // PHP 7.4 fix for accessing array offset on null
+        if (! is_array($mixed)) {
+            $mixed = [
+                'schema_sql' => null,
+                'data_sql' => null,
+                'tracking' => null,
+                'schema_snapshot' => null,
+            ];
+        }
 
         // Parse log
         $log_schema_entries = explode('# log ', (string) $mixed['schema_sql']);
@@ -658,14 +665,13 @@ class Tracker
      *
      * @param string $query query
      *
+     * @return array containing identifier, type and tablename.
+     *
      * @static
      * @todo: using PMA SQL Parser when possible
      * @todo: support multi-table/view drops
-     *
-     * @return mixed Array containing identifier, type and tablename.
-     *
      */
-    public static function parseQuery($query)
+    public static function parseQuery($query): array
     {
         // Usage of PMA_SQP does not work here
         //
@@ -799,16 +805,16 @@ class Tracker
      *
      * @param string $query a SQL query
      *
-     * @static
-     *
      * @return void
+     *
+     * @static
      */
     public static function handleQuery($query)
     {
         $relation = new Relation($GLOBALS['dbi']);
 
         // If query is marked as untouchable, leave
-        if (mb_strstr($query, "/*NOTRACK*/")) {
+        if (mb_strstr($query, '/*NOTRACK*/')) {
             return;
         }
 
@@ -819,7 +825,7 @@ class Tracker
         $result = self::parseQuery($query);
 
         // Get database name
-        $dbname = trim(isset($GLOBALS['db']) ? $GLOBALS['db'] : '', '`');
+        $dbname = trim($GLOBALS['db'] ?? '', '`');
         // $dbname can be empty, for example when coming from Synchronize
         // and this is a query for the remote server
         if (empty($dbname)) {
@@ -886,9 +892,9 @@ class Tracker
 
                 // Mark it as untouchable
                 $sql_query = " /*NOTRACK*/\n"
-                    . " UPDATE " . self::_getTrackingTable()
-                    . " SET " . Util::backquote($save_to)
-                    . " = CONCAT( " . Util::backquote($save_to) . ",'\n"
+                    . ' UPDATE ' . self::_getTrackingTable()
+                    . ' SET ' . Util::backquote($save_to)
+                    . ' = CONCAT( ' . Util::backquote($save_to) . ",'\n"
                     . $GLOBALS['dbi']->escapeString($query) . "') ,"
                     . " `date_updated` = '" . $date . "' ";
 

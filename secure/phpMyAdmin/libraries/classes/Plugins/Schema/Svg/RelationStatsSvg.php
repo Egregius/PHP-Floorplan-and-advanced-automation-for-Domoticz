@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Contains PhpMyAdmin\Plugins\Schema\Svg\RelationStatsSvg class
  *
@@ -54,12 +53,13 @@ class RelationStatsSvg extends RelationStats
     /**
      * draws relation links and arrows shows foreign key relations
      *
+     * @see    PMA_SVG
+     *
      * @param boolean $showColor Whether to use one color per relation or not
      *
      * @return void
-     * @access public
      *
-     * @see    PMA_SVG
+     * @access public
      */
     public function relationDraw($showColor)
     {

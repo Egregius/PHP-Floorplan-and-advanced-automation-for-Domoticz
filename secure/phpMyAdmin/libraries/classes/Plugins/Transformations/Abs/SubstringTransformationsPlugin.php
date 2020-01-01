@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the substring transformations plugins
  *
@@ -70,7 +69,7 @@ abstract class SubstringTransformationsPlugin extends TransformationsPlugin
                 $newtext = $options[2] . $newtext;
             }
 
-            if (($length + (int) $options[0]) != $baselength) {
+            if ($length + (int) $options[0] != $baselength) {
                 $newtext .= $options[2];
             }
         }
@@ -88,6 +87,6 @@ abstract class SubstringTransformationsPlugin extends TransformationsPlugin
      */
     public static function getName()
     {
-        return "Substring";
+        return 'Substring';
     }
 }

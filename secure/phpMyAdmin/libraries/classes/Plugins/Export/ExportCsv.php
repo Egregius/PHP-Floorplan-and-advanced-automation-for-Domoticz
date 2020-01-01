@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * CSV export code
  *
@@ -11,13 +10,11 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Plugins\Export;
 
 use PhpMyAdmin\DatabaseInterface;
-use PhpMyAdmin\Export;
 use PhpMyAdmin\Plugins\ExportPlugin;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyMainGroup;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyRootGroup;
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\HiddenPropertyItem;
-use PhpMyAdmin\Properties\Options\Items\SelectPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\TextPropertyItem;
 use PhpMyAdmin\Properties\Plugins\ExportPluginProperties;
 
@@ -55,29 +52,29 @@ class ExportCsv extends ExportPlugin
         // $exportPluginProperties
         // this will be shown as "Format specific options"
         $exportSpecificOptions = new OptionsPropertyRootGroup(
-            "Format Specific Options"
+            'Format Specific Options'
         );
 
         // general options main group
-        $generalOptions = new OptionsPropertyMainGroup("general_opts");
+        $generalOptions = new OptionsPropertyMainGroup('general_opts');
         // create leaf items and add them to the group
         $leaf = new TextPropertyItem(
-            "separator",
+            'separator',
             __('Columns separated with:')
         );
         $generalOptions->addProperty($leaf);
         $leaf = new TextPropertyItem(
-            "enclosed",
+            'enclosed',
             __('Columns enclosed with:')
         );
         $generalOptions->addProperty($leaf);
         $leaf = new TextPropertyItem(
-            "escaped",
+            'escaped',
             __('Columns escaped with:')
         );
         $generalOptions->addProperty($leaf);
         $leaf = new TextPropertyItem(
-            "terminated",
+            'terminated',
             __('Lines terminated with:')
         );
         $generalOptions->addProperty($leaf);
@@ -297,7 +294,7 @@ class ExportCsv extends ExportPlugin
                                 "\r",
                                 "\n",
                             ],
-                            "",
+                            '',
                             $row[$j]
                         );
                     }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * PDF schema export code
  *
@@ -50,11 +49,11 @@ class SchemaPdf extends SchemaPlugin
         // $schemaPluginProperties
         // this will be shown as "Format specific options"
         $exportSpecificOptions = new OptionsPropertyRootGroup(
-            "Format Specific Options"
+            'Format Specific Options'
         );
 
         // specific options main group
-        $specificOptions = new OptionsPropertyMainGroup("general_opts");
+        $specificOptions = new OptionsPropertyMainGroup('general_opts');
         // add options common to all plugins
         $this->addCommonOptions($specificOptions);
 
@@ -66,7 +65,7 @@ class SchemaPdf extends SchemaPlugin
         $specificOptions->addProperty($leaf);
 
         $leaf = new SelectPropertyItem(
-            "orientation",
+            'orientation',
             __('Orientation')
         );
         $leaf->setValues(
@@ -78,7 +77,7 @@ class SchemaPdf extends SchemaPlugin
         $specificOptions->addProperty($leaf);
 
         $leaf = new SelectPropertyItem(
-            "paper",
+            'paper',
             __('Paper size')
         );
         $leaf->setValues($this->getPaperSizeArray());
@@ -97,7 +96,7 @@ class SchemaPdf extends SchemaPlugin
         $specificOptions->addProperty($leaf);
 
         $leaf = new SelectPropertyItem(
-            "table_order",
+            'table_order',
             __('Order of the tables')
         );
         $leaf->setValues(

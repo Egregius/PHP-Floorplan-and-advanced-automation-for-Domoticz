@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * PhpMyAdmin\Server\Status\Data class
  * Used by server_status_*.php pages
@@ -150,7 +149,7 @@ class Data
             'params' => Url::getCommon(['flush' => 'TABLES'], ''),
         ];
         $links['table'][__('Show open tables')] = [
-            'url' => 'sql.php',
+            'url' => Url::getFromRoute('/sql'),
             'params' => Url::getCommon([
                 'sql_query' => 'SHOW OPEN TABLES',
                 'goto' => $this->selfUrl,
@@ -159,7 +158,7 @@ class Data
 
         if ($GLOBALS['replication_info']['master']['status']) {
             $links['repl'][__('Show slave hosts')] = [
-                'url' => 'sql.php',
+                'url' => Url::getFromRoute('/sql'),
                 'params' => Url::getCommon([
                     'sql_query' => 'SHOW SLAVE HOSTS',
                     'goto' => $this->selfUrl,
@@ -194,15 +193,12 @@ class Data
         $links['Slow_queries']['doc'] = 'slow_query_log';
 
         $links['innodb'][__('Variables')] = [
-            'url' => 'server_engines.php',
-            'params' => Url::getCommon(['engine' => 'InnoDB'], ''),
+            'url' => Url::getFromRoute('/server/engines/InnoDB'),
+            'params' => '',
         ];
         $links['innodb'][__('InnoDB Status')] = [
-            'url' => 'server_engines.php',
-            'params' => Url::getCommon([
-                'engine' => 'InnoDB',
-                'page' => 'Status',
-            ], ''),
+            'url' => Url::getFromRoute('/server/engines/InnoDB/Status'),
+            'params' => '',
         ];
         $links['innodb']['doc'] = 'innodb';
 
@@ -220,8 +216,7 @@ class Data
     private function _calculateValues(array $server_status, array $server_variables)
     {
         // Key_buffer_fraction
-        if (isset($server_status['Key_blocks_unused'])
-            && isset($server_variables['key_cache_block_size'])
+        if (isset($server_status['Key_blocks_unused'], $server_variables['key_cache_block_size'])
             && isset($server_variables['key_buffer_size'])
             && $server_variables['key_buffer_size'] != 0
         ) {
@@ -231,8 +226,7 @@ class Data
                 * $server_variables['key_cache_block_size']
                 / $server_variables['key_buffer_size']
                 * 100;
-        } elseif (isset($server_status['Key_blocks_used'])
-            && isset($server_variables['key_buffer_size'])
+        } elseif (isset($server_status['Key_blocks_used'], $server_variables['key_buffer_size'])
             && $server_variables['key_buffer_size'] != 0
         ) {
             $server_status['Key_buffer_fraction_%']
@@ -242,8 +236,7 @@ class Data
         }
 
         // Ratio for key read/write
-        if (isset($server_status['Key_writes'])
-            && isset($server_status['Key_write_requests'])
+        if (isset($server_status['Key_writes'], $server_status['Key_write_requests'])
             && $server_status['Key_write_requests'] > 0
         ) {
             $key_writes = $server_status['Key_writes'];
@@ -252,8 +245,7 @@ class Data
                 = 100 * $key_writes / $key_write_requests;
         }
 
-        if (isset($server_status['Key_reads'])
-            && isset($server_status['Key_read_requests'])
+        if (isset($server_status['Key_reads'], $server_status['Key_read_requests'])
             && $server_status['Key_read_requests'] > 0
         ) {
             $key_reads = $server_status['Key_reads'];
@@ -263,8 +255,7 @@ class Data
         }
 
         // Threads_cache_hitrate
-        if (isset($server_status['Threads_created'])
-            && isset($server_status['Connections'])
+        if (isset($server_status['Threads_created'], $server_status['Connections'])
             && $server_status['Connections'] > 0
         ) {
             $server_status['Threads_cache_hitrate_%']
@@ -322,6 +313,12 @@ class Data
      */
     public function __construct()
     {
+        global $replication_info;
+
+        if (! isset($replication_info)) {
+            require_once ROOT_PATH . 'libraries/replication.inc.php';
+        }
+
         $this->selfUrl = basename($GLOBALS['PMA_PHP_SELF']);
 
         // get status from server
@@ -421,7 +418,7 @@ class Data
             'Com_dealloc_sql' => 'Com_stmt_close',
         ];
         foreach ($deprecated as $old => $new) {
-            if (isset($server_status[$old]) && isset($server_status[$new])) {
+            if (isset($server_status[$old], $server_status[$new])) {
                 unset($server_status[$old]);
             }
         }

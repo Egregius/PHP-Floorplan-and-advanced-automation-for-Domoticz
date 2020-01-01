@@ -80,6 +80,11 @@ class CreateDefinition extends Component
         'VIRTUAL' => 10,
         'PERSISTENT' => 11,
         'STORED' => 11,
+        'CHECK' => [
+            12,
+            'expr',
+            ['parenthesesDelimited' => true],
+        ]
         // Common entries.
         //
         // NOTE: Some of the common options are not in the same order which
@@ -176,7 +181,7 @@ class CreateDefinition extends Component
     {
         $ret = [];
 
-        $expr = new self();
+        $expr = new static();
 
         /**
          * The state of the parser.
@@ -285,7 +290,7 @@ class CreateDefinition extends Component
                 if (! empty($expr->type) || ! empty($expr->key)) {
                     $ret[] = $expr;
                 }
-                $expr = new self();
+                $expr = new static();
                 if ($token->value === ',') {
                     $state = 1;
                 } elseif ($token->value === ')') {

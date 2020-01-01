@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functions used in the export tab
  *
@@ -85,7 +84,7 @@ Export.createTemplate = function (name) {
     };
 
     Functions.ajaxShowMessage();
-    $.post('tbl_export.php', params, function (response) {
+    $.post('index.php?route=/table/export', params, function (response) {
         if (response.success === true) {
             $('#templateName').val('');
             $('#template').html(response.data);
@@ -118,7 +117,7 @@ Export.loadTemplate = function (id) {
     };
 
     Functions.ajaxShowMessage();
-    $.post('tbl_export.php', params, function (response) {
+    $.post('index.php?route=/table/export', params, function (response) {
         if (response.success === true) {
             var $form = $('form[name="dump"]');
             var options = JSON.parse(response.data);
@@ -169,7 +168,7 @@ Export.updateTemplate = function (id) {
     };
 
     Functions.ajaxShowMessage();
-    $.post('tbl_export.php', params, function (response) {
+    $.post('index.php?route=/table/export', params, function (response) {
         if (response.success === true) {
             Functions.ajaxShowMessage(Messages.strTemplateUpdated);
         } else {
@@ -195,7 +194,7 @@ Export.deleteTemplate = function (id) {
     };
 
     Functions.ajaxShowMessage();
-    $.post('tbl_export.php', params, function (response) {
+    $.post('index.php?route=/table/export', params, function (response) {
         if (response.success === true) {
             $('#template').find('option[value="' + id + '"]').remove();
             Functions.ajaxShowMessage(Messages.strTemplateDeleted);
@@ -728,17 +727,16 @@ Export.checkTimeOut = function (timeLimit) {
     }
     // margin of one second to avoid race condition to set/access session variable
     limit = limit + 1;
-    var href = 'export.php';
     var params = {
         'ajax_request' : true,
         'check_time_out' : true
     };
     clearTimeout(timeOut);
     timeOut = setTimeout(function () {
-        $.get(href, params, function (data) {
+        $.get('index.php?route=/export', params, function (data) {
             if (data.message === 'timeout') {
                 Functions.ajaxShowMessage(
-                    '<div class="error">' +
+                    '<div class="alert alert-danger" role="alert">' +
                     Messages.strTimeOutError +
                     '</div>',
                     false
@@ -816,10 +814,9 @@ Export.createAliasModal = function (event) {
             } else {
                 var params = {
                     'ajax_request': true,
-                    'server': CommonParams.get('server'),
-                    'type': 'list-databases'
+                    'server': CommonParams.get('server')
                 };
-                $.post('ajax.php', params, function (response) {
+                $.post('index.php?route=/ajax/list-databases', params, function (response) {
                     if (response.success === true) {
                         $.each(response.databases, function (idx, value) {
                             var option = $('<option></option>');
@@ -930,13 +927,14 @@ AJAX.registerOnload('export.js', function () {
             option.attr('value', table);
             $('#table_alias_select').append(option).val(table).trigger('change');
         } else {
+            var database = $(this).val();
             var params = {
                 'ajax_request': true,
                 'server': CommonParams.get('server'),
-                'db': $(this).val(),
-                'type': 'list-tables'
+                'db': database,
             };
-            $.post('ajax.php', params, function (response) {
+            var url = 'index.php?route=/ajax/list-tables/' + encodeURIComponent(database);
+            $.post(url, params, function (response) {
                 if (response.success === true) {
                     $.each(response.tables, function (idx, value) {
                         var option = $('<option></option>');
@@ -952,14 +950,16 @@ AJAX.registerOnload('export.js', function () {
     });
     $('#table_alias_select').on('change', function () {
         Export.aliasToggleRow($(this));
+        var database = $('#db_alias_select').val();
+        var table = $(this).val();
         var params = {
             'ajax_request': true,
             'server': CommonParams.get('server'),
-            'db': $('#db_alias_select').val(),
-            'table': $(this).val(),
-            'type': 'list-columns'
+            'db': database,
+            'table': table,
         };
-        $.post('ajax.php', params, function (response) {
+        var url = 'index.php?route=/ajax/list-columns/' + encodeURIComponent(database) + '/' + encodeURIComponent(table);
+        $.post(url, params, function (response) {
             if (response.success === true) {
                 $.each(response.columns, function (idx, value) {
                     var option = $('<option></option>');

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Form validation for configuration editor
  *
@@ -165,7 +164,7 @@ class Validator
         // restore original paths
         $newResult = [];
         foreach ($result as $k => $v) {
-            $k2 = isset($keyMap[$k]) ? $keyMap[$k] : $k;
+            $k2 = $keyMap[$k] ?? $k;
             if (is_array($v)) {
                 $newResult[$k2] = array_map('htmlspecialchars', $v);
             } else {
@@ -432,7 +431,7 @@ class Validator
             $line = trim($line);
             $matches = [];
             // we catch anything that may (or may not) be an IP
-            if (! preg_match("/^(.+):(?:[ ]?)\\w+$/", $line, $matches)) {
+            if (! preg_match('/^(.+):(?:[ ]?)\\w+$/', $line, $matches)) {
                 $result[$path][] = __('Incorrect value:') . ' '
                     . htmlspecialchars($line);
                 continue;

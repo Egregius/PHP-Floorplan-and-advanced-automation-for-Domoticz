@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\Twig\I18n\NodeTrans class
  *
@@ -15,15 +14,11 @@ use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Node;
 
 /**
- * Class NodeTrans
- *
  * @package PhpMyAdmin\Twig\I18n
  */
 class NodeTrans extends TransNode
 {
     /**
-     * Constructor.
-     *
      * The nodes are automatically made available as properties ($this->node).
      * The attributes are automatically made available as array items ($this['name']).
      *
@@ -74,6 +69,7 @@ class NodeTrans extends TransNode
 
         list($msg, $vars) = $this->compileString($this->getNode('body'));
 
+        $msg1 = null;
         if ($this->hasNode('plural')) {
             list($msg1, $vars1) = $this->compileString($this->getNode('plural'));
 
@@ -90,7 +86,7 @@ class NodeTrans extends TransNode
 
             // line breaks are not allowed cause we want a single line comment
             $message = str_replace(["\n", "\r"], ' ', $message);
-            $compiler->write("// l10n: {$message}\n");
+            $compiler->write('// l10n: ' . $message . "\n");
         }
 
         if ($vars) {

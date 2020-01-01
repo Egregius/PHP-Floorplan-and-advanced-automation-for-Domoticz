@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Handles plugins that show the upload progress
  *
@@ -33,12 +32,12 @@ class ImportAjax
         /**
          * sets default plugin for handling the import process
          */
-        $_SESSION[$SESSION_KEY]["handler"] = "";
+        $_SESSION[$SESSION_KEY]['handler'] = '';
 
         /**
          * unique ID for each upload
          */
-        $upload_id = uniqid("");
+        $upload_id = uniqid('');
 
         /**
          * list of available plugins
@@ -46,20 +45,20 @@ class ImportAjax
         $plugins = [
             // PHP 5.4 session-based upload progress is problematic, see bug 3964
             //"session",
-            "progress",
-            "apc",
-            "noplugin",
+            'progress',
+            'apc',
+            'noplugin',
         ];
 
         // select available plugin
         foreach ($plugins as $plugin) {
-            $check = $plugin . "Check";
+            $check = $plugin . 'Check';
 
             if (self::$check()) {
                 $upload_class = 'PhpMyAdmin\Plugins\Import\Upload\Upload' . ucwords(
                     $plugin
                 );
-                $_SESSION[$SESSION_KEY]["handler"] = $upload_class;
+                $_SESSION[$SESSION_KEY]['handler'] = $upload_class;
                 break;
             }
         }
@@ -96,7 +95,7 @@ class ImportAjax
      */
     public static function progressCheck()
     {
-        return function_exists("uploadprogress_get_info")
+        return function_exists('uploadprogress_get_info')
             && function_exists('getallheaders');
     }
 

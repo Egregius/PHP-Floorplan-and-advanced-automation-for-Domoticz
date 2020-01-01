@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FAQ - Frequently Asked Questions &#8212; phpMyAdmin 5.0.0-alpha1 documentation</title>
+    <title>FAQ - Frequently Asked Questions &#8212; phpMyAdmin 5.1.0-dev documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '5.0.0-alpha1',
+        VERSION:     '5.1.0-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="top" title="phpMyAdmin 5.0.0-alpha1 documentation" href="index.html" />
+    <link rel="top" title="phpMyAdmin 5.1.0-dev documentation" href="index.html" />
     <link rel="next" title="Developers Information" href="developers.html" />
     <link rel="prev" title="Other sources of information" href="other.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="other.html" title="Other sources of information"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.0.0-alpha1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.1.0-dev documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -204,7 +204,7 @@ output. In general, it should have at least the same minor version as
 your server - as mentioned in <a class="reference internal" href="#faq1-17"><span class="std std-ref">1.17 Which Database versions does phpMyAdmin support?</span></a>. This problem is
 generally caused by using MySQL version 4.1 or newer. MySQL changed
 the authentication hash and your PHP is trying to use the old method.
-The proper solution is to use the <a class="reference external" href="https://secure.php.net/mysqli">mysqli extension</a> with the proper client library to match
+The proper solution is to use the <a class="reference external" href="https://www.php.net/mysqli">mysqli extension</a> with the proper client library to match
 your MySQL installation. More
 information (and several workarounds) are located in the <a class="reference external" href="https://dev.mysql.com/doc/refman/5.7/en/common-errors.html">MySQL
 Documentation</a>.</p>
@@ -311,7 +311,7 @@ PHP scripts. Of course you have to restart Apache.</p>
 <span id="faq1-26"></span><h3>1.26 I just installed phpMyAdmin in my document root of IIS but I get the error &#8220;No input file specified&#8221; when trying to run phpMyAdmin.<a class="headerlink" href="#i-just-installed-phpmyadmin-in-my-document-root-of-iis-but-i-get-the-error-no-input-file-specified-when-trying-to-run-phpmyadmin" title="Permalink to this headline">¶</a></h3>
 <p>This is a permission problem. Right-click on the phpmyadmin folder and
 choose properties. Under the tab Security, click on &#8220;Add&#8221; and select
-the user &#8220;IUSR_machine&#8221; from the list. Now set his permissions and it
+the user &#8220;IUSR_machine&#8221; from the list. Now set their permissions and it
 should work.</p>
 </div>
 <div class="section" id="i-get-empty-page-when-i-want-to-view-huge-page-eg-db-structure-php-with-plenty-of-tables">
@@ -418,6 +418,10 @@ forget to change directory name inside of it):</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#faq4-8"><span class="std std-ref">4.8 Which parameters can I use in the URL that starts phpMyAdmin?</span></a></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 5.1.0: </span>Support for using the <code class="docutils literal"><span class="pre">target</span></code> parameter was removed in phpMyAdmin 5.1.0.
+Use the <code class="docutils literal"><span class="pre">route</span></code> parameter instead.</p>
 </div>
 </div>
 <div class="section" id="can-i-use-http-authentication-with-apache-cgi">
@@ -680,7 +684,7 @@ by <a class="reference external" href="https://bugs.php.net/bug.php?id=39842">bu
 <div class="section" id="seeing-an-upload-progress-bar">
 <span id="faq2-9"></span><h3>2.9 Seeing an upload progress bar<a class="headerlink" href="#seeing-an-upload-progress-bar" title="Permalink to this headline">¶</a></h3>
 <p>To be able to see a progress bar during your uploads, your server must
-have the <a class="reference external" href="https://secure.php.net/manual/en/book.apc.php">APC</a> extension, the
+have the <a class="reference external" href="https://www.php.net/manual/en/book.apc.php">APC</a> extension, the
 <a class="reference external" href="https://pecl.php.net/package/uploadprogress">uploadprogress</a> one, or
 you must be running PHP 5.4.0 or higher. Moreover, the JSON extension
 has to be enabled in your PHP.</p>
@@ -850,7 +854,7 @@ is no way for PHP to set the charset before authenticating.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference external" href="https://github.com/phpmyadmin/phpmyadmin/issues/12232">phpMyAdmin issue 12232</a>,
-<a class="reference external" href="https://secure.php.net/manual/en/mysqli.real-connect.php#refsect1-mysqli.real-connect-notes">MySQL documentation note</a></p>
+<a class="reference external" href="https://www.php.net/manual/en/mysqli.real-connect.php#refsect1-mysqli.real-connect-notes">MySQL documentation note</a></p>
 </div>
 </div>
 </div>
@@ -907,7 +911,7 @@ authentication, so remove it.</li>
 wildcard database name for a user (for example &#8220;joe%&#8221;), and put the
 privileges you want. For example, adding <code class="docutils literal"><span class="pre">SELECT,</span> <span class="pre">INSERT,</span> <span class="pre">UPDATE,</span>
 <span class="pre">DELETE,</span> <span class="pre">CREATE,</span> <span class="pre">DROP,</span> <span class="pre">INDEX,</span> <span class="pre">ALTER</span></code> would let a user create/manage
-his/her database(s).</p>
+their database(s).</p>
 </div>
 <div class="section" id="how-can-i-use-the-host-based-authentication-additions">
 <span id="faq4-6"></span><h3>4.6 How can I use the Host-based authentication additions?<a class="headerlink" href="#how-can-i-use-the-host-based-authentication-additions" title="Permalink to this headline">¶</a></h3>
@@ -1285,7 +1289,7 @@ different structure.</li>
 any) will be included in backup.</li>
 <li>&#8220;Enclose table and column names with backquotes&#8221; ensures that column
 and table names formed with special characters are protected.</li>
-<li>&#8220;Add into comments&#8221; includes column comments, relations, and MIME
+<li>&#8220;Add into comments&#8221; includes column comments, relations, and media
 types set in the pmadb in the dump as <a class="reference internal" href="glossary.html#term-sql"><span class="xref std std-term">SQL</span></a> comments
 (<em>/* xxx */</em>).</li>
 </ul>
@@ -1335,7 +1339,7 @@ checking issues and validation, this introduces a high-risk false-
 user-input situation. Instead you have to initialize mimetypes using
 functions or empty mimetype definitions.</p>
 <p>Plus, you have a whole overview of available mimetypes. Who knows all those
-mimetypes by heart so he/she can enter it at will?</p>
+mimetypes by heart so they can enter it at will?</p>
 </div>
 <div class="section" id="bookmarks-where-can-i-store-bookmarks-why-can-t-i-see-any-bookmarks-below-the-query-box-what-are-these-variables-for">
 <span id="faqbookmark"></span><h3>6.18 Bookmarks: Where can I store bookmarks? Why can&#8217;t I see any bookmarks below the query box? What are these variables for?<a class="headerlink" href="#bookmarks-where-can-i-store-bookmarks-why-can-t-i-see-any-bookmarks-below-the-query-box-what-are-these-variables-for" title="Permalink to this headline">¶</a></h3>
@@ -1418,7 +1422,7 @@ in Browse mode or on the Structure page.</p>
 <div class="section" id="what-format-strings-can-i-use">
 <span id="faq6-27"></span><h3>6.27 What format strings can I use?<a class="headerlink" href="#what-format-strings-can-i-use" title="Permalink to this headline">¶</a></h3>
 <p>In all places where phpMyAdmin accepts format strings, you can use
-<code class="docutils literal"><span class="pre">&#64;VARIABLE&#64;</span></code> expansion and <a class="reference external" href="https://secure.php.net/strftime">strftime</a>
+<code class="docutils literal"><span class="pre">&#64;VARIABLE&#64;</span></code> expansion and <a class="reference external" href="https://www.php.net/strftime">strftime</a>
 format strings. The expanded variables depend on a context (for
 example, if you haven&#8217;t chosen a table, you can not get the table
 name), but the following variables can be used:</p>
@@ -1739,7 +1743,7 @@ authentication to the Apache environment and it can be used in Apache
 logs. Currently there are two variables available:</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">userID</span></code></dt>
-<dd>User name of currently active user (he does not have to be logged in).</dd>
+<dd>User name of currently active user (they do not have to be logged in).</dd>
 <dt><code class="docutils literal"><span class="pre">userStatus</span></code></dt>
 <dd>Status of currently active user, one of <code class="docutils literal"><span class="pre">ok</span></code> (user is logged in),
 <code class="docutils literal"><span class="pre">mysql-denied</span></code> (MySQL denied user login), <code class="docutils literal"><span class="pre">allow-denied</span></code> (user denied
@@ -2013,7 +2017,7 @@ spreadsheet program to properly parse and sanitize such data on input instead.</
         <li class="right" >
           <a href="other.html" title="Other sources of information"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.0.0-alpha1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">phpMyAdmin 5.1.0-dev documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

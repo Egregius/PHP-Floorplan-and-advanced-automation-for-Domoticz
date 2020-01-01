@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Functionality for the navigation tree
  *
@@ -9,7 +8,8 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Navigation\Nodes;
 
-use PhpMyAdmin\Util;
+use PhpMyAdmin\Html\Generator;
+use PhpMyAdmin\Url;
 
 /**
  * Represents a index node in the navigation tree
@@ -29,12 +29,14 @@ class NodeIndex extends Node
     public function __construct($name, $type = Node::OBJECT, $isGroup = false)
     {
         parent::__construct($name, $type, $isGroup);
-        $this->icon = Util::getImage('b_index', __('Index'));
+        $this->icon = Generator::getImage('b_index', __('Index'));
         $this->links = [
-            'text' => 'tbl_indexes.php?server=' . $GLOBALS['server']
-                . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
-            'icon' => 'tbl_indexes.php?server=' . $GLOBALS['server']
-                . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
+            'text' => Url::getFromRoute('/table/indexes', [
+                'server' => $GLOBALS['server'],
+            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
+            'icon' => Url::getFromRoute('/table/indexes', [
+                'server' => $GLOBALS['server'],
+            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
         ];
         $this->classes = 'index';
     }

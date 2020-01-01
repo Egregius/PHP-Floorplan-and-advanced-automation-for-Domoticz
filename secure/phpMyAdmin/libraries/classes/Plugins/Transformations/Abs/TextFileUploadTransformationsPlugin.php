@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Abstract class for the text file upload input transformations plugins
  *
@@ -98,6 +97,6 @@ abstract class TextFileUploadTransformationsPlugin extends IOTransformationsPlug
      */
     public static function getName()
     {
-        return "Text file upload";
+        return 'Text file upload';
     }
 }

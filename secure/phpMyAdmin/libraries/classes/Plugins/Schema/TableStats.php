@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Contains abstract class to hold table preferences/statistics
  *
@@ -14,6 +13,7 @@ use PhpMyAdmin\Font;
 use PhpMyAdmin\Index;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Util;
+use function rawurldecode;
 
 /**
  * Table preferences/statistics
@@ -135,6 +135,7 @@ abstract class TableStats
      * Displays an error when the table cannot be found.
      *
      * @return void
+     *
      * @abstract
      */
     abstract protected function showMissingTableError();
@@ -146,11 +147,15 @@ abstract class TableStats
      */
     protected function loadCoordinates()
     {
-        foreach ($_REQUEST['t_h'] as $key => $value) {
-            if ($this->db . '.' . $this->tableName == $key) {
-                $this->x = (double) $_REQUEST['t_x'][$key];
-                $this->y = (double) $_REQUEST['t_y'][$key];
-                break;
+        if (isset($_POST['t_h'])) {
+            foreach ($_POST['t_h'] as $key => $value) {
+                $db = rawurldecode($_POST['t_db'][$key]);
+                $tbl = rawurldecode($_POST['t_tbl'][$key]);
+                if ($this->db . '.' . $this->tableName === $db . '.' . $tbl) {
+                    $this->x = (double) $_POST['t_x'][$key];
+                    $this->y = (double) $_POST['t_y'][$key];
+                    break;
+                }
             }
         }
     }

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * The PBXT storage engine
  *
@@ -140,7 +139,7 @@ class Pbxt extends StorageEngine
      * returns the pbxt engine specific handling for
      * PMA_ENGINE_DETAILS_TYPE_SIZE variables.
      *
-     * @param string $formatted_size the size expression (for example 8MB)
+     * @param int|string $formatted_size the size expression (for example 8MB)
      *
      * @return array the formatted value and its unit
      */

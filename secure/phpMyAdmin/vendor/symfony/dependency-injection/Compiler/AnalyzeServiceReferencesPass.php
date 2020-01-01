@@ -34,7 +34,6 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass implements Repe
     private $onlyConstructorArguments;
     private $hasProxyDumper;
     private $lazy;
-    private $expressionLanguage;
     private $byConstructor;
     private $definitions;
     private $aliases;
@@ -137,7 +136,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass implements Repe
         $this->lazy = false;
 
         $byConstructor = $this->byConstructor;
-        $this->byConstructor = true;
+        $this->byConstructor = $isRoot || $byConstructor;
         $this->processValue($value->getFactory());
         $this->processValue($value->getArguments());
 

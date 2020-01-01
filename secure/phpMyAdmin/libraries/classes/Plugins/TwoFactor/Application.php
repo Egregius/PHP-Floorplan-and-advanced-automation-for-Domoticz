@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Second authentication factor handling
  *
@@ -53,24 +52,18 @@ class Application extends TwoFactorPlugin
     }
 
     /**
-     * Get any property of this class
-     *
-     * @param string $property name of the property
-     *
-     * @return mixed|void if property exist, value of the relevant property
+     * @return Google2FA
      */
-    public function __get($property)
+    public function getGoogle2fa(): Google2FA
     {
-        switch ($property) {
-            case 'google2fa':
-                return $this->_google2fa;
-        }
+        return $this->_google2fa;
     }
 
     /**
      * Checks authentication, returns true on success
      *
      * @return boolean
+     *
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
@@ -122,6 +115,7 @@ class Application extends TwoFactorPlugin
      * Performs backend configuration
      *
      * @return boolean
+     *
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException

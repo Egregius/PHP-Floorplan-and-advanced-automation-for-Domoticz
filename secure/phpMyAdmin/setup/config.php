@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Front controller for config view / download and clear
  *
@@ -29,7 +28,7 @@ $response = Response::getInstance();
 $response->disable();
 
 if (isset($_POST['eol'])) {
-    $_SESSION['eol'] = ($_POST['eol'] == 'unix') ? 'unix' : 'win';
+    $_SESSION['eol'] = $_POST['eol'] == 'unix' ? 'unix' : 'win';
 }
 
 if (Core::ifSetOr($_POST['submit_clear'], '')) {

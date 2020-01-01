@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Setup\HomeController
  *
@@ -18,13 +17,13 @@ use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Setup\Index;
 
 /**
- * Class HomeController
  * @package PhpMyAdmin\Controllers\Setup
  */
 class HomeController extends AbstractController
 {
     /**
      * @param array $params Request parameters
+     *
      * @return string HTML
      */
     public function index(array $params): string
@@ -138,9 +137,10 @@ class HomeController extends AbstractController
                 $servers[$id] = [
                     'id' => $id,
                     'name' => $this->config->getServerName($id),
-                    'auth_type' => $this->config->getValue("Servers/$id/auth_type"),
+                    'auth_type' => $this->config->getValue('Servers/' . $id . '/auth_type'),
                     'dsn' => $this->config->getServerDSN($id),
                     'params' => [
+                        'token' => $_SESSION[' PMA_token '],
                         'edit' => [
                             'page' => 'servers',
                             'mode' => 'edit',
@@ -153,7 +153,7 @@ class HomeController extends AbstractController
                         ],
                     ],
                 ];
-                $serverDefaultOptions['values'][(string) $id] = $this->config->getServerName($id) . " [$id]";
+                $serverDefaultOptions['values'][(string) $id] = $this->config->getServerName($id) . ' [' . $id . ']';
             }
         } else {
             $serverDefaultOptions['values']['1'] = __('- none -');

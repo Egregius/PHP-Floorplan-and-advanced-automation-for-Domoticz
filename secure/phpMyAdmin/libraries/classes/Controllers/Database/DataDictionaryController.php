@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\Database\DataDictionaryController
  *
@@ -18,7 +17,6 @@ use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Util;
 
 /**
- * Class DataDictionaryController
  * @package PhpMyAdmin\Controllers\Database
  */
 class DataDictionaryController extends AbstractController
@@ -34,8 +32,6 @@ class DataDictionaryController extends AbstractController
     private $transformations;
 
     /**
-     * DataDictionaryController constructor.
-     *
      * @param Response          $response        Response instance
      * @param DatabaseInterface $dbi             DatabaseInterface instance
      * @param Template          $template        Template object
@@ -51,10 +47,17 @@ class DataDictionaryController extends AbstractController
     }
 
     /**
-     * @return string HTML
+     * @param array $params Request parameters
+     *
+     * @return string
      */
-    public function index(): string
+    public function index(array $params): string
     {
+        $this->db = $params['database'];
+
+        $header = $this->response->getHeader();
+        $header->enablePrintView();
+
         $cfgRelation = $this->relation->getRelationsParam();
 
         $comment = $this->relation->getDbComment($this->db);

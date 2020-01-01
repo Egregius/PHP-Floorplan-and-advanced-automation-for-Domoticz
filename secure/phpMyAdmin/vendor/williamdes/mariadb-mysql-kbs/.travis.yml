@@ -69,6 +69,7 @@ jobs:
           name: 'PHPUNIT - PHP 7.1'
           addons:
               homebrew:
+                  update: true
                   packages:
                       - php@7.1
                       - composer
@@ -89,6 +90,7 @@ jobs:
           name: 'PHPUNIT - PHP 7.2'
           addons:
               homebrew:
+                  update: true
                   packages:
                       - php@7.2
                       - composer
@@ -109,10 +111,13 @@ jobs:
           name: 'PHPUNIT - PHP 7.3'
           addons:
               homebrew:
+                  update: true
                   packages:
                       - php@7.3
                       - composer
           before_install:
+            - echo "memory_limit=-1" > /usr/local/etc/php/7.3/conf.d/50-travis-ci.ini
+            - echo "pcre.jit=0" >> /usr/local/etc/php/7.3/conf.d/50-travis-ci.ini
             - mkdir ~/.homebrew_logs
             - export HOMEBREW_LOGS="~/.homebrew_logs"
             - export HOMEBREW_TEMP="/tmp"

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Used to render the console of PMA's pages
  *
@@ -12,7 +11,6 @@ namespace PhpMyAdmin;
 use PhpMyAdmin\Bookmark;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Template;
-use PhpMyAdmin\Util;
 
 /**
  * Class used to output the console
@@ -83,8 +81,9 @@ class Console
     /**
      * Renders the bookmark content
      *
-     * @access public
      * @return string
+     *
+     * @access public
      */
     public static function getBookmarkContent(): string
     {
@@ -108,7 +107,6 @@ class Console
             } else {
                 $welcomeMessage = __('No bookmarks');
             }
-            unset($count_bookmarks, $private_message, $shared_message);
             return $template->render('console/bookmark_content', [
                 'welcome_message' => $welcomeMessage,
                 'bookmarks' => $bookmarks,
@@ -130,17 +128,18 @@ class Console
     /**
      * Renders the console
      *
-     * @access public
      * @return string
+     *
+     * @access public
      */
     public function getDisplay(): string
     {
-        if ((! $this->_isAjax) && $this->_isEnabled) {
+        if (! $this->_isAjax && $this->_isEnabled) {
             $cfgBookmark = Bookmark::getParams(
                 $GLOBALS['cfg']['Server']['user']
             );
 
-            $image = Util::getImage('console', __('SQL Query Console'));
+            $image = Html\Generator::getImage('console', __('SQL Query Console'));
             $_sql_history = $this->relation->getHistory(
                 $GLOBALS['cfg']['Server']['user']
             );

@@ -35,6 +35,7 @@
     {
       "cli": "--binlog-annotate-row-events[={0|1}]",
       "default": "ON (>= MariaDB 10.2.4), OFF (<= MariaDB 10.2.3)",
+      "dynamic": true,
       "id": "binlog_annotate_row_events",
       "name": "binlog_annotate_row_events",
       "scope": [
@@ -171,6 +172,22 @@
         "FULL",
         "NOBLOB",
         "MINIMAL"
+      ]
+    },
+    {
+      "cli": "--binlog-row-metadata=value",
+      "default": "NO_LOG",
+      "dynamic": true,
+      "id": "binlog_row_metadata",
+      "name": "binlog_row_metadata",
+      "scope": [
+        "global",
+        "session"
+      ],
+      "validValues": [
+        "NO_LOG",
+        "MINIMAL",
+        "FULL"
       ]
     },
     {

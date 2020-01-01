@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Server config checks management
  *
@@ -33,8 +32,6 @@ class ServerConfigChecks
     protected $cfg;
 
     /**
-     * Constructor.
-     *
      * @param ConfigFile $cfg Configuration
      */
     public function __construct(ConfigFile $cfg)
@@ -149,7 +146,7 @@ class ServerConfigChecks
         $serverCnt = $this->cfg->getServerCount();
         for ($i = 1; $i <= $serverCnt; $i++) {
             $cookieAuthServer
-                = ($this->cfg->getValue("Servers/$i/auth_type") == 'cookie');
+                = ($this->cfg->getValue('Servers/' . $i . '/auth_type') == 'cookie');
             $cookieAuthUsed |= $cookieAuthServer;
             $serverName = $this->performConfigChecksServersGetServerName(
                 $this->cfg->getServerName($i),
@@ -168,11 +165,11 @@ class ServerConfigChecks
             // $cfg['Servers'][$i]['ssl']
             // should be enabled if possible
             //
-            if (! $this->cfg->getValue("Servers/$i/ssl")) {
-                $title = Descriptions::get('Servers/1/ssl') . " ($serverName)";
+            if (! $this->cfg->getValue('Servers/' . $i . '/ssl')) {
+                $title = Descriptions::get('Servers/1/ssl') . ' (' . $serverName . ')';
                 SetupIndex::messagesSet(
                     'notice',
-                    "Servers/$i/ssl",
+                    'Servers/' . $i . '/ssl',
                     $title,
                     __(
                         'You should use SSL connections if your database server '
@@ -197,15 +194,15 @@ class ServerConfigChecks
             // $cfg['Servers'][$i]['auth_type']
             // warn about full user credentials if 'auth_type' is 'config'
             //
-            if ($this->cfg->getValue("Servers/$i/auth_type") == 'config'
-                && $this->cfg->getValue("Servers/$i/user") != ''
-                && $this->cfg->getValue("Servers/$i/password") != ''
+            if ($this->cfg->getValue('Servers/' . $i . '/auth_type') == 'config'
+                && $this->cfg->getValue('Servers/' . $i . '/user') != ''
+                && $this->cfg->getValue('Servers/' . $i . '/password') != ''
             ) {
                 $title = Descriptions::get('Servers/1/auth_type')
-                    . " ($serverName)";
+                    . ' (' . $serverName . ')';
                 SetupIndex::messagesSet(
                     'notice',
-                    "Servers/$i/auth_type",
+                    'Servers/' . $i . '/auth_type',
                     $title,
                     Sanitize::sanitizeMessage(sprintf(
                         __(
@@ -227,14 +224,14 @@ class ServerConfigChecks
             // $cfg['Servers'][$i]['AllowNoPassword']
             // serious security flaw
             //
-            if ($this->cfg->getValue("Servers/$i/AllowRoot")
-                && $this->cfg->getValue("Servers/$i/AllowNoPassword")
+            if ($this->cfg->getValue('Servers/' . $i . '/AllowRoot')
+                && $this->cfg->getValue('Servers/' . $i . '/AllowNoPassword')
             ) {
                 $title = Descriptions::get('Servers/1/AllowNoPassword')
-                    . " ($serverName)";
+                    . ' (' . $serverName . ')';
                 SetupIndex::messagesSet(
                     'notice',
-                    "Servers/$i/AllowNoPassword",
+                    'Servers/' . $i . '/AllowNoPassword',
                     $title,
                     __('You allow for connecting to the server without a password.')
                     . ' ' . $sSecurityInfoMsg
@@ -285,7 +282,7 @@ class ServerConfigChecks
         $serverId
     ) {
         if ($serverName == 'localhost') {
-            $serverName .= " [$serverId]";
+            $serverName .= ' [' . $serverId . ']';
             return $serverName;
         }
         return $serverName;

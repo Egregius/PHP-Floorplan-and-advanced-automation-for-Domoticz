@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Hold PhpMyAdmin\SysInfoLinux class
  *
@@ -30,7 +29,7 @@ class SysInfoLinux extends SysInfoBase
     {
         $buf = file_get_contents('/proc/stat');
         $nums = preg_split(
-            "/\s+/",
+            '/\s+/',
             mb_substr(
                 $buf,
                 0,

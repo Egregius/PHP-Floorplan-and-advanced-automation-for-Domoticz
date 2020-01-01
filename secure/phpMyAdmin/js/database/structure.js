@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    functions used on the database structure page
  * @name            Database Structure
@@ -11,7 +10,7 @@
 var DatabaseStructure = {};
 
 /**
- * AJAX scripts for db_structure.php
+ * AJAX scripts for /database/structure
  *
  * Actions ajaxified here:
  * Drop Database
@@ -245,7 +244,7 @@ AJAX.registerOnload('database/structure.js', function () {
             }
             $.ajax({
                 type: 'POST',
-                url: 'db_structure.php',
+                url: 'index.php?route=/database/structure',
                 dataType: 'html',
                 data: formData
 

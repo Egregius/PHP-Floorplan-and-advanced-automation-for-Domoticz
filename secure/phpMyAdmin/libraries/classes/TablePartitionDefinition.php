@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * hold PhpMyAdmin\TablePartitionDefinition class
  *
@@ -12,8 +11,6 @@ namespace PhpMyAdmin;
 use function array_merge;
 
 /**
- * Class TablePartitionDefinition
- *
  * @package PhpMyAdmin
  */
 class TablePartitionDefinition

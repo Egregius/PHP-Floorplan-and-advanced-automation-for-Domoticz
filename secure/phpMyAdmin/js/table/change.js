@@ -1,4 +1,3 @@
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * @fileoverview    function used in table data manipulation pages
  *
@@ -8,7 +7,7 @@
  *
  */
 
-/* global extendingValidatorMessages */ // js/messages.php
+/* global extendingValidatorMessages */ // templates/javascript/variables.twig
 /* global openGISEditor, gisEditorLoaded, loadJSAndGISEditor, loadGISEditor */ // js/gis_data_editor.js
 
 /**
@@ -422,7 +421,7 @@ AJAX.registerOnload('table/change.js', function () {
      */
     $(document).on('click', 'input.checkbox_null', function () {
         nullify(
-            // use hidden fields populated by tbl_change.php
+            // use hidden fields populated by /table/change
             $(this).siblings('.nullify_code').val(),
             $(this).closest('tr').find('input:hidden').first().val(),
             $(this).siblings('.hashed_field').val(),
@@ -553,7 +552,7 @@ function addNewContinueInsertionFiels (event) {
                 $thisElement
                     .off('change')
                     // Remove onchange attribute that was placed
-                    // by tbl_change.php; it refers to the wrong row index
+                    // by /table/change; it refers to the wrong row index
                     .attr('onchange', null)
                     // Keep these values to be used when the element
                     // will change

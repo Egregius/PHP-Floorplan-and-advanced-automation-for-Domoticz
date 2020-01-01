@@ -31,11 +31,11 @@ class Exporter
      * @param int               &$objectsCount
      * @param bool              &$valuesAreStatic
      *
-     * @return int
+     * @return array
      *
      * @throws NotInstantiableTypeException When a value cannot be serialized
      */
-    public static function prepare($values, $objectsPool, &$refsPool, &$objectsCount, &$valuesAreStatic)
+    public static function prepare($values, $objectsPool, &$refsPool, &$objectsCount, &$valuesAreStatic): array
     {
         $refs = $values;
         foreach ($values as $k => $value) {
@@ -155,7 +155,7 @@ class Exporter
                     }
                     $sleep[$n] = false;
                 }
-                if (!\array_key_exists($name, $proto) || $proto[$name] !== $v) {
+                if (!\array_key_exists($name, $proto) || $proto[$name] !== $v || "\x00Error\x00trace" === $name || "\x00Exception\x00trace" === $name) {
                     $properties[$c][$n] = $v;
                 }
             }
@@ -187,7 +187,7 @@ class Exporter
         return $values;
     }
 
-    public static function export($value, $indent = '')
+    public static function export($value, string $indent = '')
     {
         switch (true) {
             case \is_int($value) || \is_float($value): return var_export($value, true);
@@ -212,27 +212,28 @@ class Exporter
         $subIndent = $indent.'    ';
 
         if (\is_string($value)) {
-            $code = var_export($value, true);
+            $code = sprintf("'%s'", addcslashes($value, "'\\"));
 
-            if (false !== strpos($value, "\n") || false !== strpos($value, "\r")) {
-                $code = strtr($code, [
-                    "\r\n" => "'.\"\\r\\n\"\n".$subIndent.".'",
-                    "\r" => "'.\"\\r\"\n".$subIndent.".'",
-                    "\n" => "'.\"\\n\"\n".$subIndent.".'",
-                ]);
-            }
+            $code = preg_replace_callback('/([\0\r\n]++)(.)/', function ($m) use ($subIndent) {
+                $m[1] = sprintf('\'."%s".\'', str_replace(
+                    ["\0", "\r", "\n", '\n\\'],
+                    ['\0', '\r', '\n', '\n"'."\n".$subIndent.'."\\'],
+                    $m[1]
+                ));
 
-            if (false !== strpos($value, "\0")) {
-                $code = str_replace('\' . "\0" . \'', '\'."\0".\'', $code);
-                $code = str_replace('".\'\'."', '', $code);
-            }
+                if ("'" === $m[2]) {
+                    return substr($m[1], 0, -2);
+                }
 
-            if (false !== strpos($code, "''.")) {
-                $code = str_replace("''.", '', $code);
-            }
+                if ('n".\'' === substr($m[1], -4)) {
+                    return substr_replace($m[1], "\n".$subIndent.".'".$m[2], -2);
+                }
 
-            if (".''" === substr($code, -3)) {
-                $code = rtrim(substr($code, 0, -3));
+                return $m[1].$m[2];
+            }, $code, -1, $count);
+
+            if ($count && 0 === strpos($code, "''.")) {
+                $code = substr($code, 3);
             }
 
             return $code;
@@ -291,7 +292,7 @@ class Exporter
                 continue;
             }
             if (!Registry::$instantiableWithoutConstructor[$class]) {
-                if (is_subclass_of($class, 'Serializable')) {
+                if (is_subclass_of($class, 'Serializable') && !method_exists($class, '__unserialize')) {
                     $serializables[$k] = 'C:'.\strlen($class).':"'.$class.'":0:{}';
                 } else {
                     $serializables[$k] = 'O:'.\strlen($class).':"'.$class.'":0:{}';

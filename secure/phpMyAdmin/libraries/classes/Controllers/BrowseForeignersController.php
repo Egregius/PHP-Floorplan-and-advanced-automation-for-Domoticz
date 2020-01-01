@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Holds the PhpMyAdmin\Controllers\BrowseForeignersController
  *
@@ -33,8 +32,6 @@ class BrowseForeignersController extends AbstractController
     private $relation;
 
     /**
-     * BrowseForeignersController constructor.
-     *
      * @param Response          $response         Response instance
      * @param DatabaseInterface $dbi              DatabaseInterface instance
      * @param Template          $template         Template object
@@ -50,10 +47,20 @@ class BrowseForeignersController extends AbstractController
 
     /**
      * @param array $params Request parameters
+     *
      * @return string HTML
      */
     public function index(array $params): string
     {
+        if (! isset($params['db'], $params['table'], $params['field'])) {
+            return '';
+        }
+
+        $this->response->getFooter()->setMinimal();
+        $header = $this->response->getHeader();
+        $header->disableMenuAndConsole();
+        $header->setBodyId('body_browse_foreigners');
+
         $foreigners = $this->relation->getForeigners(
             $params['db'],
             $params['table']

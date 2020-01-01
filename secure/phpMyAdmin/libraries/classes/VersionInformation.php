@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Responsible for retrieving version information and notifiying about latest version
  *
@@ -10,13 +9,12 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Utils\HttpRequest;
-use \stdClass;
+use stdClass;
 
 /**
  * Responsible for retrieving version information and notifiying about latest version
  *
  * @package PhpMyAdmin
- *
  */
 class VersionInformation
 {
@@ -143,7 +141,7 @@ class VersionInformation
     {
         foreach ($releases as $release) {
             $phpVersions = $release->php_versions;
-            $phpConditions = explode(",", $phpVersions);
+            $phpConditions = explode(',', $phpVersions);
             foreach ($phpConditions as $phpCondition) {
                 if (! $this->evaluateVersionCondition('PHP', $phpCondition)) {
                     continue 2;
@@ -154,7 +152,7 @@ class VersionInformation
             // one server configured.
             if (count($GLOBALS['cfg']['Servers']) === 1) {
                 $mysqlVersions = $release->mysql_versions;
-                $mysqlConditions = explode(",", $mysqlVersions);
+                $mysqlConditions = explode(',', $mysqlVersions);
                 foreach ($mysqlConditions as $mysqlCondition) {
                     if (! $this->evaluateVersionCondition('MySQL', $mysqlCondition)) {
                         continue 2;
@@ -185,13 +183,13 @@ class VersionInformation
         $operator = null;
         $version = null;
         $operators = [
-            "<=",
-            ">=",
-            "!=",
-            "<>",
-            "<",
-            ">",
-            "=",
+            '<=',
+            '>=',
+            '!=',
+            '<>',
+            '<',
+            '>',
+            '=',
         ]; // preserve order
         foreach ($operators as $oneOperator) {
             if (strpos($condition, $oneOperator) === 0) {

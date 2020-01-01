@@ -1,11 +1,10 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
  * Session handling
  *
  * @package PhpMyAdmin
  *
- * @see     https://secure.php.net/session
+ * @see     https://www.php.net/manual/en/features.sessions.php
  */
 declare(strict_types=1);
 
@@ -111,6 +110,7 @@ class Session
      *
      * @param Config       $config       Configuration handler
      * @param ErrorHandler $errorHandler Error handler
+     *
      * @return void
      */
     public static function setUp(Config $config, ErrorHandler $errorHandler)
@@ -173,12 +173,12 @@ class Session
         // proxy servers
         session_cache_limiter('private');
 
-        $session_name = 'phpMyAdmin';
-        @session_name($session_name);
+        $httpCookieName = $config->getCookieName('phpMyAdmin');
+        @session_name($httpCookieName);
 
         // Restore correct sesion ID (it might have been reset by auto started session
-        if (isset($_COOKIE['phpMyAdmin'])) {
-            session_id($_COOKIE['phpMyAdmin']);
+        if ($config->issetCookie('phpMyAdmin')) {
+            session_id($config->getCookie('phpMyAdmin'));
         }
 
         // on first start of session we check for errors
@@ -190,7 +190,7 @@ class Session
         if ($session_result !== true
             || $orig_error_count != $errorHandler->countErrors(false)
         ) {
-            setcookie($session_name, '', 1);
+            setcookie($httpCookieName, '', 1);
             $errors = $errorHandler->sliceErrors($orig_error_count);
             self::sessionFailed($errors);
         }
