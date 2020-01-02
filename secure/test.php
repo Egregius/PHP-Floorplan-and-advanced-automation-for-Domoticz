@@ -12,11 +12,6 @@
 $start=microtime(true);
 require 'functions.php';
 
-NL('Druk 1 voor commerciële vragen, 2 voor technische ondersteuning, 3 om een medewerker te kiezen.');
-FR('Appuyez sur 1 pour les questions commerciales, 2 pour le support technique, 4 pour choisir une personne.');
-NL('Druk 5 voor Shani, 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Guy.');
-FR('Appuyez 5 pour Shani, 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
-NL('Onze kantoren zijn momenteel gesloten. We zijn elke werkdag bereikbaar van half negen tot vijf uur. Je kan ons steeds mailen op support@xafax.be.');
 FR('Nos bureaux sont actuellement fermés. Nous sommes disponibles tous les jours ouvrables de huit heures et demie à cinq heures. Vous pouvez toujours nous envoyer un e-mail à support@xafax.be.');
 
 
@@ -28,7 +23,7 @@ function NL($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
 	$client=new GuzzleHttp\Client();
-	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'nl-NL','name'=>'nl-NL-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'LINEAR16','pitch'=>0.00,'speakingRate'=>0.85,'effectsProfileId' => 'telephony-class-application']];
+	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'nl-NL','name'=>'nl-NL-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'LINEAR16','pitch'=>0.00,'speakingRate'=>0.92,'effectsProfileId' => 'telephony-class-application']];
 	try {
 		$response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
 		$fileData=json_decode($response->getBody()->getContents(), true);
@@ -44,7 +39,7 @@ function FR($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
 	$client=new GuzzleHttp\Client();
-	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'fr-FR','name'=>'fr-FR-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'LINEAR16','pitch'=>0.00,'speakingRate'=>0.85,'effectsProfileId' => 'telephony-class-application']];
+	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'fr-FR','name'=>'fr-FR-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'LINEAR16','pitch'=>0.00,'speakingRate'=>0.92,'effectsProfileId' => 'telephony-class-application']];
 	try {
 		$response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
 		$fileData=json_decode($response->getBody()->getContents(), true);
