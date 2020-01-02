@@ -23,7 +23,7 @@ function NL($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
 	$client=new GuzzleHttp\Client();
-	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'nl-NL','name'=>'nl-NL-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'MP3','pitch'=>0.00,'speakingRate'=>1.00,'effectsProfileId' => 'large-home-entertainment-class-device']];
+	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'nl-NL','name'=>'nl-NL-Wavenet-B','ssmlGender'=>'MALE'],'audioConfig'=>['audioEncoding'=>'MP3','pitch'=>0.00,'speakingRate'=>0.95,'effectsProfileId' => 'large-home-entertainment-class-device']];
 	try {
 		$response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
 		$fileData=json_decode($response->getBody()->getContents(), true);
@@ -39,7 +39,7 @@ function FR($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
 	$client=new GuzzleHttp\Client();
-	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'fr-FR','name'=>'fr-FR-Wavenet-B'],'audioConfig'=>['audioEncoding'=>'MP3','pitch'=>0.00,'speakingRate'=>1.00,'effectsProfileId' => 'large-home-entertainment-class-device']];
+	$requestData=['input'=>['text'=>$sound],'voice'=>['languageCode'=>'fr-FR','name'=>'fr-FR-Wavenet-B','ssmlGender'=>'MALE'],'audioConfig'=>['audioEncoding'=>'MP3','pitch'=>0.00,'speakingRate'=>0.95,'effectsProfileId' => 'large-home-entertainment-class-device']];
 	try {
 		$response=$client->request('POST', 'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key='.$googleTTSAPIKey, ['json'=>$requestData]);
 		$fileData=json_decode($response->getBody()->getContents(), true);
