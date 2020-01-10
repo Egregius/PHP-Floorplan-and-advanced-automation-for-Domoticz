@@ -334,9 +334,9 @@ if ($d['auto']['s']=='On') {
     }
     if ($d['auto']['m']) {
         if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
-            /*if ($d['jbl']['s']!='Off') {
+            if ($d['jbl']['s']!='Off') {
                 sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
-            }*/
+            }
             if ($d['bureel']['s']!='Off') {
                 sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
             }
