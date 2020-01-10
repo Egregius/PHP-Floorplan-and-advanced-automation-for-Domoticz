@@ -44,6 +44,12 @@ if ($home==true) {
         exit;
     } 
     
+    elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='imac') {
+    	if ($_REQUEST['command']=='wake') {
+    		shell_exec('secure/wakeimac.sh');
+    	}
+    } 
+    
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
     	if ($_REQUEST['command']=='volume') {
     		$vol=80-$_REQUEST['action'];
