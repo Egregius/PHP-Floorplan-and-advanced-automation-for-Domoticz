@@ -1030,3 +1030,28 @@ function createheader($page='')
     echo '
 	</head>';
 }
+/**
+ * Function daikinstatus
+ *
+ * Returns the status of a Daikin airco
+ *
+ * @param int $ip ip of the Daikin airco
+ *
+ * @return array();
+ */
+function daikinstatus($ip)
+{
+    $url= "http://192.168.2.$ip/aircon/get_control_info";
+	$data = @file_get_contents($url);
+	if($data === FALSE){
+		return FALSE;
+	}else{
+		$array=explode(",",$data);
+		$control_info= array();
+		foreach($array as $value){
+			$pair= explode("=",$value);
+			$control_info[$pair[0]]=$pair[1];
+		}
+	}
+	return $control_info;
+}
