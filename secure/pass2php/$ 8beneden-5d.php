@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['heating']['s']==2) {
+if ($d['heating']['s']<0) {
 	$level=85;
 } else {
 	$level=100;

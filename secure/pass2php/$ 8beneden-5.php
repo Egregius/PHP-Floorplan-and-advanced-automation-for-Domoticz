@@ -17,7 +17,7 @@ if ($status=='On') {
             if ($d['Rliving']['s']<40) {
                 sl('Rliving', 40, basename(__FILE__).':'.__LINE__);
             } else {
-                if ($d['heating']['s']==2) {
+                if ($d['heating']['s']<0) {
                     $level=85;
                 } else {
                     $level=100;
@@ -30,7 +30,7 @@ if ($status=='On') {
             if ($Rliving<25) {
                 sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
             } else {
-                if ($d['heating']['s']==2) {
+                if ($d['heating']['s']<0) {
                     $level=85;
                 } else {
                     $level=100;

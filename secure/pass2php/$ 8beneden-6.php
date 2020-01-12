@@ -29,7 +29,7 @@ if ($status=='On') {
                 sl($item, 30, basename(__FILE__).':'.__LINE__);
             }
         } else {
-            if ($d['heating']['s']==2) {
+            if ($d['heating']['s']<0) {
                 $level=85;
             } else {
                 $level=100;
@@ -62,7 +62,7 @@ if ($status=='On') {
                 sl($item, 30, basename(__FILE__).':'.__LINE__);
             }
         } else {
-            if ($d['heating']['s']==2) {
+            if ($d['heating']['s']<0) {
                 $level=85;
             } else {
                 $level=100;

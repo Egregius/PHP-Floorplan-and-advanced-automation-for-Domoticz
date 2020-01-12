@@ -29,7 +29,7 @@ $x=0;//Neutral
 if ($d['heatingauto']['s']=='On') {
     if ($d['buiten_temp']['s']>24||$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
     elseif ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
-    elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<12) $x=2;//Gas heating
+    elseif ($d['buiten_temp']['s']<20||$d['minmaxtemp']['m']<20||$d['minmaxtemp']['s']<20) $x=2;//Gas heating
     elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<18||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
     else $x=0;//Neutral
 }

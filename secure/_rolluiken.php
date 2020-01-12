@@ -78,7 +78,7 @@ if ($d['auto']['s']=='On') {
 	} 
 
 	elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
-		if ($heating==1&&$warm) {
+		if ($heating<0&&$warm) {
 			if($zon>2000) {
 				if ($d['Rtobi']['m']==0&&$d['raamtobi']['s']=='Closed'&&$d[$i]['s']!=81) sl('Rtobi', 81, basename(__FILE__).':'.__LINE__);
 				if ($d['Ralex']['m']==0&&$d['raamalex']['s']=='Closed'&&$d[$i]['s']!=81) sl('Ralex', 81, basename(__FILE__).':'.__LINE__);
@@ -94,13 +94,13 @@ if ($d['auto']['s']=='On') {
 	} 
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
-		if ($heating==1&&$warm) {
+		if ($heating<0&&$warm) {
 			if($zon>2000) {
 				if ($d['Rtobi']['m']==0&&$d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Rtobi', 81, basename(__FILE__).':'.__LINE__);
 				if ($d['Ralex']['m']==0&&$d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Ralex', 81, basename(__FILE__).':'.__LINE__);
 				if ($d['Rbureel']['m']==0&&$d['Rbureel']['s']<45) sl('Rbureel', 45, basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($heating>=3) {
+		} elseif ($heating>0) {
 			if ($d['buiten_temp']['s']<16) {
 				$items=array('tobi', 'alex');
 				foreach ($items as $i) {
@@ -120,7 +120,7 @@ if ($d['auto']['s']=='On') {
 	} 
 
 	elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
-		if ($heating>=3) {
+		if ($heating>0) {
 			if ($zon==0) {
 				foreach ($boven as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
@@ -147,7 +147,7 @@ if ($d['auto']['s']=='On') {
 					}
 				}
 			}
-		} elseif ($heating==2) {
+		} elseif ($heating>0) {
 			if ($zon==0&&$d['auto']['m']==false) {
 				foreach ($beneden as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
@@ -174,7 +174,7 @@ if ($d['auto']['s']=='On') {
 
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
-			if ($heating==1) {
+			if ($heating<0) {
 				foreach ($benedenall as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<84) sl($i, 84, basename(__FILE__).':'.__LINE__);
 				}
