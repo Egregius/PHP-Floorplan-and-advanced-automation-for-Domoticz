@@ -327,8 +327,10 @@ if ($home) {
                 <td>';
                 if ($row['s']==0) {
                     echo '0 Neutral';
-                } elseif ($row['s']==1) {
-                    echo '1 Cooling';
+                } elseif ($row['s']==-2) {
+                    echo '1 Active cooling';
+                } elseif ($row['s']==-1) {
+                    echo '1 Passive cooling';
                 } elseif ($row['s']==2) {
                     echo '2 Elec';
                 } elseif ($row['s']==3) {

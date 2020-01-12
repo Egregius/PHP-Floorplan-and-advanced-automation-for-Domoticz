@@ -1474,11 +1474,12 @@ function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');initview();">Gas</button>';
-	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Cooling</button>';
+	html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');initview();">Gas</button>';
+	html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
+    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
+    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
+    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');initview();">Passive cooling</button>';
+    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');initview();">Airco cooling</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
