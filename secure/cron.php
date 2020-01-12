@@ -12,10 +12,8 @@
 require 'functions.php';
 //lg('cron');
 $d=fetchdata();
-if (isset($_REQUEST['rolluiken'])) {
-    include '_rolluiken.php';
-}
 if (isset($_REQUEST['tempcontrol'])) {
+    include '_rolluiken.php';
     include '_tempcontrol.php';
 }
 if (isset($_REQUEST['cron10'])) {

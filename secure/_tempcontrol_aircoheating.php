@@ -106,7 +106,7 @@ foreach ($kamers as $kamer) {
     ${'Set'.$kamer}=$d[$kamer.'_set']['s'];
     if (${'dif'.$kamer}<=0) {
         $xxkamers[]=$kamer;
-        if ($kamer!='living') $d['heating']['s']=3;
+        if ($kamer!='living') $d['heating']['s']=2;
     }
 }
 $first=true;
@@ -202,7 +202,7 @@ foreach ($kamers as $kamer) {
     }
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
-if ($d['heating']['s']>=3) {
+if ($d['heating']['s']==2) {
     if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>300) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>600) sw('brander','On', basename(__FILE__).':'.__LINE__);
