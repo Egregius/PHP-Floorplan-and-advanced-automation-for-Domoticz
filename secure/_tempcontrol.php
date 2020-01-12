@@ -19,22 +19,19 @@ $user='heating';
 4 = Gas
 */
 /* Heating
--1 = Cooling
+-2 = Airco cooling
+-1 = Passive cooling
 0 = Neutral
-2 = Elec
-3 = Elec / Gas
-4 = Gas
+1 = Airco heating
+2 = Gas
 */
 $x=0;//Neutral
 if ($d['heatingauto']['s']=='On') {
-    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Cooling
-    elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
-        if ($d['jaarteller']['s']<1)$x=3;//Gas/Elec
-        else $x=4;//Gas
-    } elseif ($d['buiten_temp']['s']<15||$d['minmaxtemp']['m']<15||$d['minmaxtemp']['s']<10) {
-        if ($d['jaarteller']['s']<2)$x=3;//Gas/Elec
-        else $x=4;//Gas
-    } elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<20)$x=2;//Elec
+    if ($d['buiten_temp']['s']>24||$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
+    elseif ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
+    elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<12) $x=2;//Gas heating
+    elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<18||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
+    else $x=0;//Neutral
 }
 //lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {

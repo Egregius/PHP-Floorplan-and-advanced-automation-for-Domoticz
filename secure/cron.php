@@ -15,8 +15,8 @@ $d=fetchdata();
 if (isset($_REQUEST['rolluiken'])) {
     include '_rolluiken.php';
 }
-if (isset($_REQUEST['verwarming'])) {
-    include '_verwarming.php';
+if (isset($_REQUEST['tempcontrol'])) {
+    include '_tempcontrol.php';
 }
 if (isset($_REQUEST['cron10'])) {
     include '_cron10.php';
