@@ -328,16 +328,14 @@ if ($home) {
                 if ($row['s']==0) {
                     echo '0 Neutral';
                 } elseif ($row['s']==-2) {
-                    echo '1 Active cooling';
+                    echo '-2 Active cooling';
                 } elseif ($row['s']==-1) {
-                    echo '1 Passive cooling';
+                    echo '-1 Passive cooling';
+                } elseif ($row['s']==1) {
+                    echo '1 Airco heating';
                 } elseif ($row['s']==2) {
-                    echo '2 Elec';
-                } elseif ($row['s']==3) {
-                    echo '3 Gas/Elec';
-                } elseif ($row['s']==4) {
-                    echo '4 Gas';
-                }
+                    echo '2 Gas heating';
+                } 
                 echo '</td>
                 <td>Big diff '.number_format($row['m'], 1, ',', '').' °C</td>';
             } elseif ($row['n']=='jaarteller') {

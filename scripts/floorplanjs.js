@@ -309,8 +309,8 @@ function ajax(Update=$LastUpdateTime){
 								if($value==0)html+='';
 								else if($value==-2)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
 								else if($value==-1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
-								else if($value==2)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
-								else if($value==3){
+								else if($value==1)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
+								else if($value==2){
 									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/gaselec_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/gaselec_Off.png" class="i40" alt="Gas">';
 								}
@@ -327,9 +327,8 @@ function ajax(Update=$LastUpdateTime){
 								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span></td>';
 								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span></td>';
 								else if($value==-1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span></td>';
-								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span></td>';
-								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span></td>';
-								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas<br><span id="theating"></span></td>';
+								else if($value==1)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span></td>';
+								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span></td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
@@ -1476,12 +1475,11 @@ function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');initview();">Gas</button>';
-	html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');initview();">Gas/Elec</button>';
-    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Elec</button>';
-    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
-    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');initview();">Passive cooling</button>';
-    html+='<button class="btn huge6" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');initview();">Airco cooling</button>';
+	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Gas heating</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Airco heating</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');initview();">Passive cooling</button>';
+    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');initview();">Airco cooling</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
