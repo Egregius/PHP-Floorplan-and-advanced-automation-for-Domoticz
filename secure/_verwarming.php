@@ -18,9 +18,16 @@ $user='heating';
 3 = Elec / Gas
 4 = Gas
 */
+/* Heating
+-1 = Cooling
+0 = Neutral
+2 = Elec
+3 = Elec / Gas
+4 = Gas
+*/
 $x=0;//Neutral
 if ($d['heatingauto']['s']=='On') {
-    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=1;//Cooling
+    if ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Cooling
     elseif ($d['buiten_temp']['s']<12||$d['minmaxtemp']['m']<12||$d['minmaxtemp']['s']<6) {
         if ($d['jaarteller']['s']<1)$x=3;//Gas/Elec
         else $x=4;//Gas
@@ -31,7 +38,7 @@ if ($d['heatingauto']['s']=='On') {
 }
 //lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
-	store('heating', $x, basename(__FILE__).':'.__LINE__);//Cooling
+	store('heating', $x, basename(__FILE__).':'.__LINE__);
 	$d['heating']['s']=$x;
 }
 $Setkamer=4;
@@ -185,7 +192,7 @@ if ($d['Weg']['s']==0) {
         } elseif ($difliving>=$difheater2&&$d['heater2']['s']!='Off'&&past('heater2')>90||$d['el']['s']>8500) {
             sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
         }
-    } elseif ($d['heating']['s']==1) {//Cooling
+    } elseif ($d['heating']['s']<=0) {//Cooling or neutral
         if ($d['heater2']['s']!='Off') sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
     }
 } else {

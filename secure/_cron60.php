@@ -720,6 +720,8 @@ if (!empty($objauth)) {
     }
     curl_close($chconsumption);
 }
+
+
 //ping('192.168.2.11');
 //ping('192.168.2.12');
 //ping('192.168.2.13');

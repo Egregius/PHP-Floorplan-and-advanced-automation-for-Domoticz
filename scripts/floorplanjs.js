@@ -307,7 +307,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
 								if($value==0)html+='';
-								else if($value==1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
+								else if($value==-1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
 								else if($value==3){
 									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/gaselec_On.png" class="i40" id="branderfloorplan" alt="Gas">';
@@ -324,7 +324,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								html='<td></td><td width="65px">';
 								if($value==0)html+='<img src="images/fire_Off.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span></td>';
-								else if($value==1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span></td>';
+								else if($value==-1)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Cooling<br><span id="theating"></span></td>';
 								else if($value==2)html+='<img src="images/Elec.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Elec<br><span id="theating"></span></td>';
 								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas/Elec<br><span id="theating"></span></td>';
 								else if($value==4)html+='<img src="images/fire_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas<br><span id="theating"></span></td>';

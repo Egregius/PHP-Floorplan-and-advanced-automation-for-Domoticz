@@ -1055,3 +1055,22 @@ function daikinstatus($ip)
 	}
 	return $control_info;
 }
+/**
+ * Function daikincool
+ *
+ * Sets a Daikin airco in cooling mode to a temperature.
+ *
+ * @param int $ip ip of the Daikin airco
+ * @param int $power 0 = Off, 1 = On
+ * @param int $mode 0,1,7 = Auto, 2 = Dry, 3 = Cool, 4 = Heat, 6 = Fan only
+ * @param float $temp Temperature of the setpoint
+ * @param string $fan A = Auto, B = Silence, 3 = Level 1, 4 = Level 2, 5 = Level 3, 6 = Level 4, 7 = level 5
+ * @param int $swing 0 = all wings stopped, 1 = vertical wings motion, 2 = horizontal wings motion, 3 = vertical and horizontal wings motion
+ * @param int $hum 
+ *
+ * @return array();
+ */
+function daikinset($ip, $power, $mode, $temp, $fan, $swing, $hum=0)
+{
+	file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
+}
