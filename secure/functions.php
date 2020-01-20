@@ -82,6 +82,8 @@ function huisslapen()
  */
 function huisweg()
 {
+    global $d;
+    if(empty($d)) $d=fetchdata();
     huisslapen();
     foreach (array('Rtobi','Ralex','RkamerL','RkamerR') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
@@ -383,7 +385,7 @@ function sl($name,$level,$msg='')
     if(!isset($d))$d=fetchdata();
      if (is_array($name)) {
         foreach ($name as $i) {
-			if ($d[$i]['s']!=$action) {
+			if ($d[$i]['s']!=$level) {
 				sl($i, $level, $msg);
 				usleep(100000);
 			}
