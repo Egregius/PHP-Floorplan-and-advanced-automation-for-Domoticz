@@ -13,7 +13,6 @@ require 'functions.php';
 //lg('cron');
 $d=fetchdata();
 if (isset($_REQUEST['tempcontrol'])) {
-    include '_rolluiken.php';
 	$user='heating';
 	/* Temperature control
 	-2 = Airco cooling
