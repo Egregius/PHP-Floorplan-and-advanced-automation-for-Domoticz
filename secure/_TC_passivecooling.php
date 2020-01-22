@@ -10,8 +10,11 @@
  * @link     https://egregius.be
  **/
  
- 
- $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
+foreach	(array('heater1', 'heater2', 'brander', 'badkamervuur1', 'badkamervuur2', 'zoldervuur') as $i) {
+	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+}
+
+$boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;

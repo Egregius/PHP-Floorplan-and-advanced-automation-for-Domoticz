@@ -9,8 +9,12 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
- 
- $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
+
+foreach	(array('heater1', 'heater2', 'brander', 'badkamervuur1', 'badkamervuur2', 'zoldervuur') as $i) {
+	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+}
+
+$boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
@@ -91,32 +95,6 @@ if ($d['auto']['s']=='On') {
 				if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
-	} 
-
-	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
-		if ($heating<0&&$warm) {
-			if($zon>2000) {
-				if ($d['Rtobi']['m']==0&&$d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Rtobi', 81, basename(__FILE__).':'.__LINE__);
-				if ($d['Ralex']['m']==0&&$d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Ralex', 81, basename(__FILE__).':'.__LINE__);
-				if ($d['Rbureel']['m']==0&&$d['Rbureel']['s']<45) sl('Rbureel', 45, basename(__FILE__).':'.__LINE__);
-			}
-		} elseif ($heating>0) {
-			if ($d['buiten_temp']['s']<16) {
-				$items=array('tobi', 'alex');
-				foreach ($items as $i) {
-					if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<17&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
-						sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
-					}
-				}
-				$items=array('kamerL', 'kamerR');
-				foreach ($items as $i) {
-					if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<17&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<100) {
-						sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
-					}
-				}
-			}
-		} 
-	
 	} 
 
 	elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {

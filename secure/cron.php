@@ -34,12 +34,11 @@ if (isset($_REQUEST['tempcontrol'])) {
 		store('heating', $x, basename(__FILE__).':'.__LINE__);
 		$d['heating']['s']=$x;
 	}
-
-	if ($x==-2) include ('_TC_aircocooling.php');
-	elseif ($x==-1) include ('_TC_passivecooling.php');
-	elseif ($x==0) include ('_TC_neutral.php');
-	elseif ($x==1) include ('_TC_aircoheating.php');
-	elseif ($x==2) include ('_TC_gasheating.php');
+	    if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
+	elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
+	elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
+	elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
+	elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 }
 if (isset($_REQUEST['cron10'])) include '_cron10.php';
 if (isset($_REQUEST['cron60'])) include '_cron60.php';
