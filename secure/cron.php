@@ -14,7 +14,33 @@ require 'functions.php';
 $d=fetchdata();
 if (isset($_REQUEST['tempcontrol'])) {
     include '_rolluiken.php';
-    include '_tempcontrol.php';
+	$user='heating';
+	/* Temperature control
+	-2 = Airco cooling
+	-1 = Passive cooling
+	0 = Neutral
+	1 = Airco heating
+	2 = Gas heating
+	*/
+	$x=0;//Neutral
+	if ($d['heatingauto']['s']=='On') {
+		if ($d['buiten_temp']['s']>24||$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
+		elseif ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
+		elseif ($d['buiten_temp']['s']<20||$d['minmaxtemp']['m']<20||$d['minmaxtemp']['s']<20) $x=2;//Gas heating
+		elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<18||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
+		else $x=0;//Neutral
+	}
+	//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
+	if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
+		store('heating', $x, basename(__FILE__).':'.__LINE__);
+		$d['heating']['s']=$x;
+	}
+
+	if ($x==-2) include ('_TC_aircocooling.php');
+	elseif ($x==-1) include ('_TC_passivecooling.php');
+	elseif ($x==0) include ('_TC_neutral.php');
+	elseif ($x==1) include ('_TC_aircoheating.php');
+	elseif ($x==2) include ('_TC_gasheating.php');
 }
 if (isset($_REQUEST['cron10'])) {
     include '_cron10.php';
