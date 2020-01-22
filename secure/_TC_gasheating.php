@@ -479,7 +479,6 @@ if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=f
 if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 if ($d['auto']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
-$heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
 		$dow=date("w");
