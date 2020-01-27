@@ -11,8 +11,8 @@ function I(i){return document.getElementById(i);}
 //LIST OF TEST SERVERS. See documentation for details if needed
 var SPEEDTEST_SERVERS=[
 	{	
-		name:"Domoticz", //user friendly name for the server
-		server:"//home.egregius.be/speedtest/", //URL to the server. // at the beginning will be replaced with http:// or https:// automatically
+		name:"Speedtest Demo Server (Helsinki) sss", //user friendly name for the server
+		server:"//fi.openspeed.org/", //URL to the server. // at the beginning will be replaced with http:// or https:// automatically
 		dlURL:"garbage.php",  //path to download test on this server (garbage.php or replacement)
 		ulURL:"empty.php",  //path to upload test on this server (empty.php or replacement)
 		pingURL:"empty.php",  //path to ping/jitter test on this server (empty.php or replacement)
@@ -20,7 +20,7 @@ var SPEEDTEST_SERVERS=[
 	},
 	{	//this is my demo server, remove it
 		name:"Speedtest Demo Server (Helsinki) sss", //user friendly name for the server
-		server:"//home.egregius.be/speedtest/", //URL to the server. // at the beginning will be replaced with http:// or https:// automatically
+		server:"//fi.openspeed.org/", //URL to the server. // at the beginning will be replaced with http:// or https:// automatically
 		dlURL:"garbage.php",  //path to download test on this server (garbage.php or replacement)
 		ulURL:"empty.php",  //path to upload test on this server (empty.php or replacement)
 		pingURL:"empty.php",  //path to ping/jitter test on this server (empty.php or replacement)
@@ -31,7 +31,7 @@ var SPEEDTEST_SERVERS=[
 
 //INITIALIZE SPEEDTEST
 var s=new Speedtest(); //create speedtest object
-s.setParameter("telemetry_level","basic"); //enable telemetry
+s.setParameter("telemetry_level","none"); //enable telemetry
 s.addTestPoints(SPEEDTEST_SERVERS); //add list of servers
 
 //SERVER AUTO SELECTION
@@ -367,16 +367,15 @@ function initUI(){
 		}
 	}
 </style>
-<title>LibreSpeed Example</title>
+<title>Speedtest</title>
 </head>
 <body onload="initServers()">
-<h1>LibreSpeed Example</h1>
+<h1>Speedtest</h1>
 <div id="loading" class="visible">
 	<p id="message"><span class="loadCircle"></span>Selecting a server...</p>
 </div>
 <div id="testWrapper" class="hidden">
 	<div id="startStopBtn" onclick="startStop()"></div>
-	<a class="privacy" href="#" onclick="I('privacyPolicy').style.display=''">Privacy</a>
 	<div id="serverArea">
 		Server: <select id="server" onchange="s.setSelectedServer(SPEEDTEST_SERVERS[this.value])"></select>
 	</div>
@@ -417,45 +416,6 @@ function initUI(){
 			<img src="" id="resultsImg" />
 		</div>
 	</div>
-	<a href="https://github.com/librespeed/speedtest">Source code</a>
-</div>
-<div id="privacyPolicy" style="display:none">
-    <h2>Privacy Policy</h2>
-    <p>This HTML5 Speedtest server is configured with telemetry enabled.</p>
-    <h4>What data we collect</h4>
-    <p>
-        At the end of the test, the following data is collected and stored:
-        <ul>
-            <li>Test ID</li>
-            <li>Time of testing</li>
-            <li>Test results (download and upload speed, ping and jitter)</li>
-            <li>IP address</li>
-            <li>ISP information</li>
-            <li>Approximate location (inferred from IP address, not GPS)</li>
-            <li>User agent and browser locale</li>
-            <li>Test log (contains no personal information)</li>
-        </ul>
-    </p>
-    <h4>How we use the data</h4>
-    <p>
-        Data collected through this service is used to:
-        <ul>
-            <li>Allow sharing of test results (sharable image for forums, etc.)</li>
-            <li>To improve the service offered to you (for instance, to detect problems on our side)</li>
-        </ul>
-        No personal information is disclosed to third parties.
-    </p>
-    <h4>Your consent</h4>
-    <p>
-        By starting the test, you consent to the terms of this privacy policy.
-    </p>
-    <h4>Data removal</h4>
-    <p>
-        If you want to have your information deleted, you need to provide either the ID of the test or your IP address. This is the only way to identify your data, without this information we won't be able to comply with your request.<br/><br/>
-        Contact this email address for all deletion requests: <a href="mailto:PUT@YOUR_EMAIL.HERE">TO BE FILLED BY DEVELOPER</a>.
-    </p>
-    <br/><br/>
-    <a class="privacy" href="#" onclick="I('privacyPolicy').style.display='none'">Close</a><br/>
 </div>
 </body>
 </html>
