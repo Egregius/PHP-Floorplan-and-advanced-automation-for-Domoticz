@@ -12,7 +12,7 @@ span.loadCircle{display:inline-block;width:2em;height:2em;vertical-align:middle;
 #startStopBtn.running{background-color:#FF3030;border-color:#FF6060;color:#FFFFFF;}
 #startStopBtn:before{content:"Start";}
 #startStopBtn.running:before{content:"Abort";}
-#serverArea{margin-top:1em;}
+#serverArea{margin:2em 0 2em 0;}
 #server{font-size:1em;padding:0.2em;}
 #test{margin-top:2em;margin-bottom:12em;}
 div.testArea{display:inline-block;width:16em;height:12.5em;position:relative;box-sizing:border-box;}
