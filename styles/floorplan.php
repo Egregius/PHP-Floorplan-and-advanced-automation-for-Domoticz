@@ -138,7 +138,7 @@ td{text-align:center;font-size:1.1em;}
 #heater1{top:221px;left:86px;height:26px;width:auto;}
 #heater2{top:221px;left:108px;height:26px;width:auto;}
 
-#tbelknop{top:24px;left:466px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#tbelknop{top:24px;left:468px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}
 #tpirliving{top:230px;left:300px;}
 #tpirlivingR{top:230px;left:105px;}

@@ -331,7 +331,7 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating<br><span id="theating"></span></td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
-						}else if(device=="belknop"){
+						}else if(device=="$ belknop"){
 							localStorage.setItem("tijd_belknop", time);
 							try{
 								if(time>($currentTime-82800)){
