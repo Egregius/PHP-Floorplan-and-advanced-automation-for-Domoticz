@@ -993,7 +993,7 @@ function sirene($msg)
 }
 function createheader($page='')
 {
-    global $udevice;
+    global $udevice,$ipaddress;
     echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -1005,8 +1005,11 @@ function createheader($page='')
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+		if ($ipaddress=='192.168.2.37') echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+		else echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
 		<meta name="HandheldFriendly" content="true">
