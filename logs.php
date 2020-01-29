@@ -35,9 +35,10 @@ require 'secure/authentication.php';
             <a href="javascript:navigator_Go('log.php#Fail2Ban');" class="btn b2">Fail2Ban</a>
         </div>
         <div class="clear">
+        	
         </div>
         <div class="fix box box1" style="bottom:0px;left:0px;width:100%">
-        	<?php echo ''.$udevice.'<br>'.$_SERVER['REMOTE_ADDR'].'<br>'.$_SERVER['HTTP_USER_AGENT']; ?>
+        	<?php echo ''.$udevice.'<br>'.$ipaddress.'<br>'.$_SERVER['HTTP_USER_AGENT']; ?>
         </div>
         <script type="text/javascript">
             function navigator_Go(url) {window.location.assign(url);}

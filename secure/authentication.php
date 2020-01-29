@@ -17,9 +17,14 @@ elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) $udevice='iPhone';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')!==false) $udevice='iPad';
 else $udevice='other';
+if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$ipaddress=$_SERVER['HTTP_X_FORWARDED_FOR'];
+	$local=true;
+} else {
+	$ipaddress=$_SERVER['REMOTE_ADDR'];
+	$local=false;
+}
 
-if (substr($_SERVER['REMOTE_ADDR'], 0, 10)=='192.168.2.') $local=true;
-else $local=false;
 //header("Expires: on, 01 Jan 1970 00:00:00 GMT");
 //header("Last-Modified: Tue, 10 Dec 2025 14:50:27 GMT");
 //header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
