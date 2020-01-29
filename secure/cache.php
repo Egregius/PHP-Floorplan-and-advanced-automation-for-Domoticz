@@ -12,12 +12,12 @@
 require 'functions.php';
 $d=fetchdata();
 if (isset($_REQUEST['fetch'])) {
-	if ($_REQUEST['fetch']=='zon'&&$d[$_REQUEST['fetch']]==0) echo 0;
-	else echo $d[$_REQUEST['fetch']]['s'];
+    echo $d[$_REQUEST['fetch']]['s'];
 } elseif (isset($_REQUEST['s'])) {
     echo $d[$_REQUEST['s']]['s'];
 } if (isset($_REQUEST['m'])) {
-    echo $d[$_REQUEST['m']]['m'];
+	if ($_REQUEST['m']=='auto'&&$d['auto']['m']==0) echo 0;
+    else echo $d[$_REQUEST['m']]['m'];
 } elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
     if ($_REQUEST['store']=='nas') {
         if ($d['lgtv']['s']=='On') {
