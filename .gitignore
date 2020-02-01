@@ -5,11 +5,11 @@ hosts.txt
 client_secret.json
 homeegregius-6d02ff673a38.json
 service-account-credentials.json
+secure/gcal/google-api-php-client/*
 logs/*
 .well-known/*
 pychromecast/*
-secure/phpmyadmin/tmp/twig/*
-secure/phpMyAdmin/tmp/*
+secure/phpMyAdmin/*
 secure/*.mobileconfig
 3CX/*
 sounds/*
