@@ -41,7 +41,7 @@ if ($d['auto']['s']=='On') {
             }
         }
         if ($d['pirliving']['s']=='Off') {
-            $uit=3600;
+            $uit=6300;
             if (past('pirliving')>$uit) {
                 $items=array('bureel');
                 foreach ($items as $item) {
