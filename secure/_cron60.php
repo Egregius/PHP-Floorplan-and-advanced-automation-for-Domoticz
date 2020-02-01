@@ -208,8 +208,10 @@ if ($d['auto']['s']=='On') {
         $items=array('pirgarage','pirkeuken','pirliving','pirinkom','pirhall');
         foreach ($items as $item) {
             if ($d[$item]['s']!='Off') {
-                ud($item, 0, 'Off');
-                lg($item.' uitgeschakeld omdat we weg zijn');
+                if (past($item)>$uit) {
+					ud($item, 0, 'Off');
+					lg($item.' uitgeschakeld omdat we weg zijn');
+				}
             }
         }
         $items=array(
@@ -219,8 +221,6 @@ if ($d['auto']['s']=='On') {
             'kristal',
             'tuin',
             'voordeur',
-            'hall',
-            'inkom',
             'keuken',
             'werkblad1',
             'wasbak',
@@ -242,6 +242,8 @@ if ($d['auto']['s']=='On') {
         $items=array(
             'eettafel',
             'zithoek',
+            'hall',
+            'inkom',
             'kamer',
             'tobi',
             'alex',

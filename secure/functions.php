@@ -158,7 +158,7 @@ function roundUpToAny($n,$x=5) {
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	global $d, $googleTTSAPIKey;
 	if(empty($d)) $d=fetchdata();
-	lg($sound);
+	lg('boseplayinfo: '.$sound);
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
@@ -191,7 +191,6 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 function saytime($ip=101) {
 	$hour=strftime('%k', TIME);
 	$minute=(1*strftime('%M', TIME));
-	
 	if ($hour==0) {
 		if ($minute==0) $msg='Het is middernacht';
 		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over middernacht';
