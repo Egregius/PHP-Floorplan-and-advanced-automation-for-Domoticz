@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3.11-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -75,8 +75,9 @@ if ($d['auto']['s']=='On') {
 			fhall();
 		}
 	}
-	if (past('pirkeuken')>50
-		&&past('keuken')>70
+	if ($d['lgtv']['s']=='On') $uit=20; else $uit=50;
+	if (past('pirkeuken')>$uit
+		&&past('keuken')>$uit
 		&&$d['pirkeuken']['s']=='Off'
 		&&$d['wasbak']['s']=='Off'
 		&&$d['keuken']['s']=='On'

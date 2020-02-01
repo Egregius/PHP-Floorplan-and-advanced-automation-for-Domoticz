@@ -36,19 +36,19 @@ if [ "$STATUS" == "OK" ] ; then
 	echo $NOW   $MINUTE $CRON >> /run/cronlog
 	echo OK
 	#0
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10&tempcontrol$CRON&$DEBUG" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10$CRON&$DEBUG" >/dev/null 2>&1 &
 	sleep 8.859
 	#10
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#20
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&tempcontrol&$DEBUG" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#30
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#40
-	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&tempcontrol&$DEBUG" >/dev/null 2>&1 &
+	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG" >/dev/null 2>&1 &
 	sleep 9.998
 	#50
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG"

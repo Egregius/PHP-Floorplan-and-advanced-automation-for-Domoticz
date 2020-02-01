@@ -12,7 +12,7 @@
 require 'functions.php';
 //lg('cron');
 $d=fetchdata();
-if (isset($_REQUEST['tempcontrol'])) {
+if (isset($_REQUEST['cron10'])) {
 	$user='heating';
 	/* Temperature control
 	-2 = Airco cooling
@@ -39,8 +39,8 @@ if (isset($_REQUEST['tempcontrol'])) {
 	elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
 	elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
 	elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
+	include '_cron10.php';
 }
-if (isset($_REQUEST['cron10'])) include '_cron10.php';
 if (isset($_REQUEST['cron60'])) include '_cron60.php';
 if (isset($_REQUEST['cron120'])) include '_cron120.php';
 if (isset($_REQUEST['cron180'])) {
