@@ -12,3 +12,4 @@ secure/phpmyadmin/tmp/twig/*
 secure/phpMyAdmin/tmp/*
 secure/*.mobileconfig
 3CX/*
+sounds/*
