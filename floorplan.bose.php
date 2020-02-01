@@ -76,8 +76,7 @@ if ($home) {
         <div class="fix blackmedia" >
 			    <input type="hidden" name="ip" value="'.$bose.'">
 			    <div style="height:180px;" id="art"></div>
-			    <h4 id="source"></h4>
-			    <h4 id="artist"></h4>
+			    <h5 id="artist"></h5>
 			    <span id="track"></span><br>
 			    <div id="volume"></div>
 			    <div id="bass"></div>

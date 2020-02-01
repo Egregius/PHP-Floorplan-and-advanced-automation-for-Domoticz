@@ -1034,15 +1034,12 @@ function ajaxbose($ip){
 				if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
 				if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-					if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
-					if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
-					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
 					html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Mix</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Techno & Happy</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">Techno + T&K</button>';
@@ -1052,8 +1049,6 @@ function ajaxbose($ip){
 					if(document.getElementById("power").textContent!=html){
 						document.getElementById("power").innerHTML=html;
 					}
-				}else{
-					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
 				}
 				img='None';
 				try{
@@ -1076,7 +1071,6 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
-				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
 				document.getElementById("art").innerHTML="";
