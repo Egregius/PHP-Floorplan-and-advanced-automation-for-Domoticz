@@ -75,9 +75,8 @@ if ($d['auto']['s']=='On') {
 			fhall();
 		}
 	}
-	if ($d['lgtv']['s']=='On') $uit=20; else $uit=50;
-	if (past('pirkeuken')>$uit
-		&&past('keuken')>$uit
+	if (past('pirkeuken')>40
+		&&past('keuken')>40
 		&&$d['pirkeuken']['s']=='Off'
 		&&$d['wasbak']['s']=='Off'
 		&&$d['keuken']['s']=='On'

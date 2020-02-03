@@ -9,7 +9,13 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=="On"&&$d['auto']['s']=='On') {
-    fkeuken();
-    sirene('Beweging keuken');
+if ($d['auto']['s']=='On') {
+	if ($status=="On") {
+		fkeuken();
+		sirene('Beweging keuken');
+	} else {
+		if ($d['keuken']['s']=='On'&&$d['lgtv']['s']=='On') {
+			sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
