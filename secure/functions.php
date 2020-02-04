@@ -957,8 +957,8 @@ function fhall()
 				sl('hall', 31, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
-			if ($d['hall']['s']<26) {
-				sl('hall', 26, basename(__FILE__).':'.__LINE__);
+			if ($d['hall']['s']<27) {
+				sl('hall', 27, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
 			if ($d['hall']['s']<31) {

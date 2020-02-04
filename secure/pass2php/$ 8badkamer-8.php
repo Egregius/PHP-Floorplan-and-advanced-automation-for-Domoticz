@@ -19,8 +19,10 @@ if ($d['badkamer_set']['s']!=10) {
 sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['auto']['s']=='On') {
 	fhall();
-	finkom();
-	fliving();
+	if (TIME<strtotime('20:00')) {
+		finkom();
+		fliving();
+	}
 }
 if ($d['badkamer_set']['m']!=0) {
 	storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
