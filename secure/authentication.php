@@ -192,7 +192,7 @@ if (isset($_COOKIE[$cookie])) {
                     </tr>
                     <tr>
                         <td>
-                            <input type="password" name="password" placeholder="Wachtwoord" size="50" maxlength="20"/>
+                            <input type="password" name="password" placeholder="Wachtwoord" size="50" maxlength="200"/>
                         </td>
                     </tr>
                     <tr>
