@@ -644,6 +644,12 @@ function rookmelder($msg){
 	boseplayinfo($msg, 45);
     resetsecurity();
 }
+function ifttt($event, $value1, $value2='', $value3='')
+{
+	global $iftttkey;
+	$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
+	telegram($reply);
+}
 function koekje($user,$expirytime)
 {
     global $cookie,$domainname;
