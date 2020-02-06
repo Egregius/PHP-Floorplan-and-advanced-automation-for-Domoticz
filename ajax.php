@@ -136,10 +136,12 @@ if ($home==true) {
 					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				resetsecurity();
+				ifttt('easy_home');
 			} elseif ($_REQUEST['action']==1) {
 				huisslapen();
 			} elseif ($_REQUEST['action']==2) {
 				huisweg();
+				ifttt('easy_away');
 			}
         } elseif ($_REQUEST['command']=='dimmerwake') {
         	storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);
