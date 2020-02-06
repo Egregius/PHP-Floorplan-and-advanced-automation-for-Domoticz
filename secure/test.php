@@ -14,6 +14,13 @@ require 'functions.php';
 
 
 ifttt('easy', 20.5);
+sleep(4);
+ifttt('easy', 21);
+sleep(4);
+ifttt('easy', 20.5);
+sleep(4);
+ifttt('easy', 21);
+sleep(4);
 
 //NL('Welkom bij Xafax.');
 //FR('Bienvenue à Xafax.');

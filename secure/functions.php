@@ -644,7 +644,7 @@ function rookmelder($msg){
 	boseplayinfo($msg, 45);
     resetsecurity();
 }
-function ifttt($event, $value1, $value2='', $value3='')
+function ifttt($event, $value1='', $value2='', $value3='')
 {
 	global $iftttkey;
 	for ($x=1;$x<=10;$x++) {
