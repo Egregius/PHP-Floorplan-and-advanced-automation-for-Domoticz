@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 
 
-ifttt('easy', 23);
+ifttt('easy', 18);
 
 //NL('Welkom bij Xafax.');
 //FR('Bienvenue à Xafax.');
