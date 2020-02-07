@@ -11,9 +11,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
-	require 'secure/functions.php';
+require 'secure/functions.php';
+if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	telegram('IFTTT'.PHP_EOL.print_r($_REQUEST, true));
-	telegram('IFTTT'.PHP_EOL.print_r($_SERVER, true));
 	echo 'OK';
 }
