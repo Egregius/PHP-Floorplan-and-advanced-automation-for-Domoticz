@@ -64,6 +64,8 @@ if ($d['living_set']['m']==0) {
             if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
             elseif ($d['zon']['s']<2000) $Setliving=20.5;
         }
+    } else {
+    	if ($d['easymode']=='home'&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) ifttt('easy_away');
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);

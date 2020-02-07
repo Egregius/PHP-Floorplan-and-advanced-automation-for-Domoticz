@@ -16,6 +16,7 @@ if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_REQUEST['token'])&&$_REQUE
 	if (isset($_REQUEST['easymode'])) {
 		store('easymode', $_REQUEST['easymode']);
 	}
+	unset($_REQUEST['token']);
+	telegram('ifttt GET'.PHP_EOL.print_r($_GET, true));
 	echo 'OK';
 }
-telegram('ifttt GET'.PHP_EOL.print_r($_GET, true));
