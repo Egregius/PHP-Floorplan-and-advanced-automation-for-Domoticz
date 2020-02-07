@@ -12,11 +12,13 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
-if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
+if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_GET['token'])&&$_GET['token']==$ifttttoken) {
 	if (isset($_REQUEST['easymode'])) {
 		store('easymode', $_REQUEST['easymode']);
+	} elseif (isset($_REQUEST['humidity'])) {
+		store('easy_humidity', str_replace('%', '', $_REQUEST['humidity']));
 	}
-	unset($_REQUEST['token']);
-	telegram('ifttt GET'.PHP_EOL.print_r($_GET, true));
+	unset($_GET['token']);
+	telegram('ifttt'.PHP_EOL.print_r($_GET, true));
 	echo 'OK';
 }
