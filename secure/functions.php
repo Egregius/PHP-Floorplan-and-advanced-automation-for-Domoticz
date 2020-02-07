@@ -649,7 +649,11 @@ function ifttt($event, $value1='', $value2='', $value3='')
 	global $iftttkey;
 	for ($x=1;$x<=10;$x++) {
 		$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
-		if ($reply=="Congratulations! You've fired the $event event") break;
+		if ($reply=="Congratulations! You've fired the $event event") {
+			lg('ifttt '.$event.' executed');
+			break;
+		}
+		lg('ifttt '.$event.' '.$x.' failed');
 		sleep($x);
 	}
 }
