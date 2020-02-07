@@ -13,7 +13,9 @@
  **/
 require 'secure/functions.php';
 if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
-	
+	if (isset($_REQUEST['easymode'])) {
+		store('easymode', $_REQUEST['easymode']);
+	}
 	echo 'OK';
 }
 telegram('ifttt GET'.PHP_EOL.print_r($_GET, true));

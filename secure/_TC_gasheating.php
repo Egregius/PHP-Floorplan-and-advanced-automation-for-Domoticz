@@ -52,34 +52,14 @@ if ($d['alex_set']['m']==0) {
     }
 }
 
-$Setliving=10;
+$Setliving=15;
 if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
-        $Setliving=16;
-        if ($d['Weg']['s']==0) {
-            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-        } elseif ($d['Weg']['s']==1) {
-        	$dow=date("w");
-            if($dow==0||$dow==6) {
-				if (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=20;
-				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
-				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
-				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
-			} else {
-				if (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=20;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
-				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
-				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
-				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
-				elseif (TIME>=strtotime('3:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
-			}
-        }
+        if ($d['Weg']['s']<=1) {
+            if (TIME>=strtotime('6:30')&&TIME<strtotime('7:00')) $Setliving=19.5;
+			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+			if ($d['easymode']=='away') ifttt('easy_home');
+        } 
         if ($Setliving>19.5) {
             if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
             elseif ($d['zon']['s']<2000) $Setliving=20.5;
@@ -91,6 +71,7 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
+
 $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;
 $xxkamers=array();
