@@ -16,5 +16,4 @@ if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_REQUEST['token'])&&$_REQUE
 	
 	echo 'OK';
 }
-telegram('ifttt POST'.PHP_EOL.print_r($_POST, true));
 telegram('ifttt GET'.PHP_EOL.print_r($_GET, true));
