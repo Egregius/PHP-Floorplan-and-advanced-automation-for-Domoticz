@@ -58,7 +58,7 @@ if ($d['living_set']['m']==0) {
         if ($d['Weg']['s']<=1) {
             if (TIME>=strtotime('6:30')&&TIME<strtotime('7:00')) $Setliving=19.5;
 			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-			if ($d['easymode']=='away') ifttt('easy_home');
+			if ($d['easymode']['s']=='away') ifttt('easy_home');
         } 
         if ($Setliving>19.5) {
             if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
@@ -73,8 +73,7 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-if ($d['easymode']=='home'&&(($d['raamliving']=='Open'&&past('raamliving')>0)||($d['deurgarage']=='Open'&&past('deurgarage')>0)||($d['deurinkom']=='Open'&&past('deurinkom')>0))) ifttt('easy_away');
-ifttt('easy_home');
+if ($d['easymode']['s']=='home'&&(($d['raamliving']['s']=='Open'&&past('raamliving')>0)||($d['deurgarage']['s']=='Open'&&past('deurgarage')>0)||($d['deurinkom']['s']=='Open'&&past('deurinkom')>0))) ifttt('easy_away');
 
 $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;

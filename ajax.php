@@ -120,11 +120,13 @@ if ($home==true) {
         	/*if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
         		if ($_REQUEST['action']>16) $_REQUEST['action']=16;
         	}*/
+			if ($_REQUEST['device']=='living') {
+				ifttt('easy_settemp', $_REQUEST['action']);
+			}
         	store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 //			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
 //			$d[$_REQUEST['device'].'_set']['m']=1;
-//			include 'secure/_verwarming.php';
         } elseif ($_REQUEST['command']=='heating') {
         	store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='Weg') {
