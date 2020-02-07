@@ -11,5 +11,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/functions.php';
-telegram('IFTTT'.PHP_EOL.print_r($_REQUEST, true));
+//require 'secure/functions.php';
+//telegram('IFTTT'.PHP_EOL.print_r($_REQUEST, true));
+echo 'OK';
