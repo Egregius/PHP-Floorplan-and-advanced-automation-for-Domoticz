@@ -13,27 +13,15 @@ $start=microtime(true);
 require 'functions.php';
 
 
-ifttt('test_ifttt2home', 20.5);
-
-//NL('Welkom bij Xafax.');
-//FR('Bienvenue à Xafax.');
-//NL('Druk 1 voor Nederlands.');
-//FR('Appuyez sur 2 pour le français.');
-//NL('Druk 3 om een medewerker te kiezen.');
-//FR('Appuyez sur 4 pour choisir une personne.');
-
-//NL('Druk 1 voor commerciële vragen, 2 voor technische ondersteuning, 3 om een medewerker te kiezen, 0 om deel te nemen aan een conference call.');
-//FR('Appuyez sur 1 pour les questions commerciales, 2 pour le support technique, 4 pour choisir une personne, 0 pour participer à une conférence téléphonique.');
-//NL('Druk 5 voor Shani, 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
-//FR('Appuyez 5 pour Shani, 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
-//NL('Onze kantoren zijn momenteel gesloten. We zijn elke werkdag bereikbaar van half negen tot vijf uur. Je kan ons steeds mailen op support@xafax.be.');
-//FR('Nos bureaux sont actuellement fermés. Nous sommes disponibles tous les jours ouvrables de huit heures et demie à cinq heures. Vous pouvez toujours nous envoyer un e-mail à support@xafax.be.');
+ifttt('easy_test');
 
 
 
 echo '<pre>';
 /*-------------------------------------------------*/
-require_once 'gcal/google-api-php-client/vendor/autoload.php';
+//require_once 'gcal/google-api-php-client/vendor/autoload.php';
+//NL('Welkom bij Xafax.');
+//FR('Bienvenue à Xafax.');
 function NL($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
