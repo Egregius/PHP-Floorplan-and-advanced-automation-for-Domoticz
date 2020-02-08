@@ -21,6 +21,6 @@ if ($_SERVER['HTTP_X_FORWARDED_FOR']==$vpsip&&isset($_GET['token'])&&$_GET['toke
 		store('easy_temp', str_replace('\xb0C', '', $_GET['livingtemp']));
 	}
 	unset($_GET['token']);
-	telegram('ifttt'.PHP_EOL.print_r($_GET, true));
+	//telegram('ifttt'.PHP_EOL.print_r($_GET, true));
 	echo 'OK';
 }

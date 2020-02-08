@@ -17,6 +17,7 @@ if ($d['auto']['s']=='On') {
 }
 if ($d['Weg']['s']!=0) {
     store('Weg', 0, basename(__FILE__).':'.__LINE__);
+    ifttt('easy_home');
 }
 if ($d['auto']['s']!='On') {
     store('auto', 'On', basename(__FILE__).':'.__LINE__);
