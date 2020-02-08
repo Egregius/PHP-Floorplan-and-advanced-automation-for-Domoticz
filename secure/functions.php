@@ -644,16 +644,16 @@ function rookmelder($msg){
 	boseplayinfo($msg, 45);
     resetsecurity();
 }
-function ifttt($event, $value1='', $value2='', $value3='')
+function ifttt($event, $value1='', $value2='', $value3='', $msg='')
 {
 	global $iftttkey;
 	for ($x=1;$x<=10;$x++) {
 		$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
 		if ($reply=="Congratulations! You've fired the $event event") {
-			lg('ifttt '.$event.' executed');
+			lg('ifttt '.$event.' executed ('.$msg.')');
 			break;
 		}
-		lg('ifttt '.$event.' '.$x.' failed');
+		lg('ifttt '.$event.' '.$x.' failed ('.$msg.')');
 		sleep($x);
 	}
 }
