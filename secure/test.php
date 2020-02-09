@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 
 
-ifttt('easy_test');
+ifttt('mailtest');
 
 
 

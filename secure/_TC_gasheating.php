@@ -73,7 +73,7 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-if ($d['easymode']['s']=='home'&&(($d['raamliving']['s']=='Open'&&past('raamliving')>0)||($d['deurgarage']['s']=='Open'&&past('deurgarage')>0)||($d['deurinkom']['s']=='Open'&&past('deurinkom')>0))) ifttt('easy_away', null, null, null, basename(__FILE__).':'.__LINE__);
+if ($d['easymode']['s']=='home'&&(($d['raamliving']['s']=='Open'&&past('raamliving')>180)||($d['deurgarage']['s']=='Open'&&past('deurgarage')>180)||($d['deurinkom']['s']=='Open'&&past('deurinkom')>180))) ifttt('easy_away', null, null, null, basename(__FILE__).':'.__LINE__);
 
 $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;
