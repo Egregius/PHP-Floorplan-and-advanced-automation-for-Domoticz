@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3.11-1
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -38,8 +38,8 @@ if (!empty($smappee['report'])) {
             $result = $db->query(
                 "UPDATE devices SET s='$consumption',t='$time' WHERE n='el';"
             ) or trigger_error($db->error);
-            if ($consumption>8000) {
-                alert('Power', 'Power usage: '.$consumption.' W!', 120, false);
+            if ($consumption>8500) {
+                alert('Power', 'Power usage: '.$consumption.' W!', 300, false);
             }
         }
     }

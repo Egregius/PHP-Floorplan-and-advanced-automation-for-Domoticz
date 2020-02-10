@@ -14,3 +14,4 @@ if ($d['eettafel']['s']!=5) {
 } else {
 	sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
 }
+if ($d['eettafel']['m']>0) storemode('eettafel', 0, basename(__FILE__).':'.__LINE__);

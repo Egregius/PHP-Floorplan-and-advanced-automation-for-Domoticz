@@ -29,8 +29,17 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 if ($rainpast==0) $rainpast=1;
 if ($d['minmaxtemp']['m'] > -3) {
-	$pomppauze=round((86400/$rainpast)*$d['minmaxtemp']['m']*$d['minmaxtemp']['m'], 0);
-	if ($pomppauze<590) $pomppauze=590;
+	if ($rainpast>25000) $pomppauze=590;
+	elseif ($rainpast>22000) $pomppauze=890;
+	elseif ($rainpast>19000) $pomppauze=1190;
+	elseif ($rainpast>16000) $pomppauze=1490;
+	elseif ($rainpast>13000) $pomppauze=1790;
+	elseif ($rainpast>10000) $pomppauze=2090;
+	elseif ($rainpast>7000) $pomppauze=2390;
+	elseif ($rainpast>3000) $pomppauze=2990;
+	elseif ($rainpast>1000) $pomppauze=7990;
+	else $pomppauze=10790;
+
 	lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
 		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
