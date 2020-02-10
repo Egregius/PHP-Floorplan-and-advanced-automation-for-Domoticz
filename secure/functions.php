@@ -107,8 +107,8 @@ function douche()
 		$eurocent=round($euro*100, 0);
 		douchewarn($eurocent, 0);
 		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
-		echo $msg;
-		telegram($msg);
+		ifttt('douche', $douchegas, $douchewater, (($douchegas*0.004)+($douchewater*0.005)));
+		//telegram($msg);
 		store('douche', 0, basename(__FILE__).':'.__LINE__);
 		storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 		sleep(8);
@@ -148,8 +148,8 @@ function douchewarn($eurocent,$vol=0)
 				bosevolume($cv, 102);
 			}
 		}
-		if ($vol>0) telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol);
-		else telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.'));
+		//if ($vol>0) telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol);
+		//else telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.'));
 	}
 }
 function roundUpToAny($n,$x=5) {
