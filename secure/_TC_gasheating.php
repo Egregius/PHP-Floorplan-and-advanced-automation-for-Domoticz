@@ -52,32 +52,45 @@ if ($d['alex_set']['m']==0) {
     }
 }
 
-$Setliving=15;
+$Setliving=10;
 if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
-        if ($d['Weg']['s']<=1) {
-        	$togo=strtotime('7:00')-TIME;
-        	if ($togo>0&&$togo<7200) {
-        		$togo=round($togo/1200, 1);
-        		$target=20.5-$togo;
-        		lg('togo='.$togo.'	target='.$target);
-        		$Setliving=$target;
-        	} elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-        } 
+        $Setliving=16;
+        if ($d['Weg']['s']==0) {
+            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+        } elseif ($d['Weg']['s']==1) {
+        	$dow=date("w");
+            if($dow==0||$dow==6) {
+				if (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=20;
+				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
+				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
+			} else {
+				if (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=20;
+				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('12:00')) $Setliving=19.0;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('12:00')) $Setliving=18.5;
+				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('12:00')) $Setliving=18.0;
+				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('12:00')) $Setliving=17.5;
+				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('12:00')) $Setliving=17.0;
+				elseif (TIME>=strtotime('3:40')&&TIME<strtotime('12:00')) $Setliving=16.5;
+			}
+        }
         if ($Setliving>19.5) {
             if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
             elseif ($d['zon']['s']<2000) $Setliving=20.5;
         }
     }
-    	
-
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
         $living_set=$Setliving;
         $d['living_set']['s']=$Setliving;
     }
 }
-
 $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;
 $xxkamers=array();
@@ -186,20 +199,16 @@ foreach ($kamers as $kamer) {
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
 }
-$target=$d['living_temp']['s']-$bigdif-$bigdif;
-if ($d['easyset']['s']!=$target) {
-	if (ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__)) store('easyset', $target, basename(__FILE__).':'.__LINE__);
-}
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
-/*if ($d['heating']['s']==2) {
+if ($d['heating']['s']==2) {
     if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>300) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>600) sw('brander','On', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>180) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>300) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
     elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>900) sw('brander','Off', basename(__FILE__).':'.__LINE__);
-} elseif ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);*/
-if ($d['brander']['s']=='Off') sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+} elseif ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 
 if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbadkamer')>57|| $d['lichtbadkamer']['s']==0)) {
@@ -210,7 +219,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
     $b7=past('$ 8badkamer-7');
     $b7b=past('8Kamer-7');
     if ($b7b<$b7) $b7=$b7b;
-    $x=22.2;
+    $x=22.4;
     if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=1&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
         store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=$x;
@@ -218,73 +227,73 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
         if ($d['heating']['s']>1) {
 			if ($weekend==false) {
 				if (TIME>=strtotime('6:00')&&TIME<=strtotime('6:30')) {
-					$x=19.5;
+					$x=20;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:57')&&TIME<=strtotime('6:30')) {
-					$x=19;
+					$x=19.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:54')&&TIME<=strtotime('6:30')) {
-					$x=18.5;
+					$x=19;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:51')&&TIME<=strtotime('6:30')) {
-					$x=18;
+					$x=18.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:48')&&TIME<=strtotime('6:30')) {
-					$x=17.5;
+					$x=18;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:45')&&TIME<=strtotime('6:30')) {
-					$x=17;
+					$x=17.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:42')&&TIME<=strtotime('6:30')) {
-					$x=16.5;
+					$x=17;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:39')&&TIME<=strtotime('6:30')) {
-					$x=16;
+					$x=16.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:36')&&TIME<=strtotime('6:30')) {
-					$x=15.5;
+					$x=16;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:33')&&TIME<=strtotime('6:30')) {
-					$x=15;
+					$x=15.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:30')&&TIME<=strtotime('6:30')) {
-					$x=14.5;
+					$x=15;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
 					}
 				} elseif (TIME>=strtotime('5:27')&&TIME<=strtotime('6:30')) {
-					$x=14;
+					$x=14.5;
 					if ($d['badkamer_set']['s']!=$x) {
 						store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 						$d['badkamer_set']['s']=$x;
@@ -468,7 +477,7 @@ $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
 if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
+if ($d['auto']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
 if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {

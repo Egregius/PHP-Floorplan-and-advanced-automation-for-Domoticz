@@ -249,14 +249,14 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
-									$("#trgas").html('<td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
-									if($value>700)document.getElementById("tdgasvandaag").style.color="#FF0000";
-									else if($value>600)document.getElementById("tdgasvandaag").style.color="#FF4400";
-									else if($value>500)document.getElementById("tdgasvandaag").style.color="#FF8800";
-									else if($value>400)document.getElementById("tdgasvandaag").style.color="#FFAA00";
-									else if($value>300)document.getElementById("tdgasvandaag").style.color="#FFCC00";
-									else if($value>200)document.getElementById("tdgasvandaag").style.color="#FFFF00";
-									else document.getElementById("tdgasvandaag").style.color=null;
+									$("#trgas").html('<td id="tdgas">Gas:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									if($value>700)document.getElementById("trgas").style.color="#FF0000";
+									else if($value>600)document.getElementById("trgas").style.color="#FF4400";
+									else if($value>500)document.getElementById("trgas").style.color="#FF8800";
+									else if($value>400)document.getElementById("trgas").style.color="#FFAA00";
+									else if($value>300)document.getElementById("trgas").style.color="#FFCC00";
+									else if($value>200)document.getElementById("trgas").style.color="#FFFF00";
+									else document.getElementById("trgas").style.color=null;
 								}else $("#trgas").html("");
 							}catch{}
 							localStorage.setItem("tijd_gas", time);
@@ -390,9 +390,6 @@ function ajax(Update=$LastUpdateTime){
 								else html="";
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}
-						}else if(device=="easyset"){
-							localStorage.setItem(device, $value);
-							localStorage.setItem('tijd_'+device, time);
 						}else if(device=="brander"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
@@ -850,7 +847,7 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','easyset','heatingauto','heating','luifel'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','heatingauto','heating','luifel'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
@@ -1037,12 +1034,15 @@ function ajaxbose($ip){
 				if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
 				if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
+					if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
+					if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
+					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
 					html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Mix</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Techno & Happy</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">Techno + T&K</button>';
@@ -1052,6 +1052,8 @@ function ajaxbose($ip){
 					if(document.getElementById("power").textContent!=html){
 						document.getElementById("power").innerHTML=html;
 					}
+				}else{
+					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
 				}
 				img='None';
 				try{
@@ -1074,6 +1076,7 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
+				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
 				document.getElementById("art").innerHTML="";
@@ -1184,7 +1187,7 @@ function floorplanheating(){
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
-        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px"><span id="easyset"></span><br><span id="teasyset"></span></td></tr>';
+        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
         html+='<tr id="heatingauto"></tr>';
         html+='<tr id="trheating"></tr>';
         html+='</table></div>';
