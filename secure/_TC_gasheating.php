@@ -56,8 +56,13 @@ $Setliving=15;
 if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
         if ($d['Weg']['s']<=1) {
-            if (TIME>=strtotime('6:30')&&TIME<strtotime('7:00')) $Setliving=19.5;
-			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+        	$togo=strtotime('7:00')-TIME;
+        	if ($togo>0&&$togo<7200) {
+        		$togo=round($togo/1200, 1);
+        		$target=20.5-$togo;
+        		lg('togo='.$togo.'	target='.$target);
+        		$Setliving=$target;
+        	} elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
 			if ($d['easymode']['s']=='away') ifttt('easy_home', null, null, null, basename(__FILE__).':'.__LINE__);
         } 
         if ($Setliving>19.5) {
@@ -183,10 +188,9 @@ foreach ($kamers as $kamer) {
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
 }
-if (past('easy_set')>11) {
-	$target=$d['living_temp']['s']-$bigdif-$bigdif;
-	storemode('easy_set', $target, basename(__FILE__).':'.__LINE__);
-	ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__);
+$target=$d['living_temp']['s']-$bigdif-$bigdif;
+if ($d['easy_set']['s']!=$target) {
+	if (ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__)) store('easy_set', $target, basename(__FILE__).':'.__LINE__);
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 /*if ($d['heating']['s']==2) {

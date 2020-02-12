@@ -655,11 +655,13 @@ function ifttt($event, $value1='', $value2='', $value3='', $msg='')
 		$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
 		if ($reply=="Congratulations! You've fired the $event event") {
 			lg('ifttt '.$event.' executed '.$msg1.' ('.$msg.')');
+			return true;
 			break;
 		}
 		lg('ifttt '.$event.' '.$x.' failed '.$msg1.' ('.$msg.')');
 		sleep($x);
 	}
+	return false;
 }
 function koekje($user,$expirytime)
 {
