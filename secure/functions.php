@@ -647,13 +647,17 @@ function rookmelder($msg){
 function ifttt($event, $value1='', $value2='', $value3='', $msg='')
 {
 	global $iftttkey;
+	$msg1='';
+	if (!empty($value1))$msg1.='	value1='.$value1;
+	if (!empty($value2))$msg1.='	value2='.$value2;
+	if (!empty($value3))$msg1.='	value3='.$value3;
 	for ($x=1;$x<=10;$x++) {
 		$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
 		if ($reply=="Congratulations! You've fired the $event event") {
-			lg('ifttt '.$event.' executed ('.$msg.')');
+			lg('ifttt '.$event.' executed '.$msg1.' ('.$msg.')');
 			break;
 		}
-		lg('ifttt '.$event.' '.$x.' failed ('.$msg.')');
+		lg('ifttt '.$event.' '.$x.' failed '.$msg1.' ('.$msg.')');
 		sleep($x);
 	}
 }

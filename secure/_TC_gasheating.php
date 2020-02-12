@@ -183,6 +183,11 @@ foreach ($kamers as $kamer) {
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
 }
+if (past('easy_set')>11) {
+	$target=$d['living_temp']['s']-$bigdif-$bigdif;
+	storemode('easy_set', $target, basename(__FILE__).':'.__LINE__);
+	ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__);
+}
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 /*if ($d['heating']['s']==2) {
     if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
