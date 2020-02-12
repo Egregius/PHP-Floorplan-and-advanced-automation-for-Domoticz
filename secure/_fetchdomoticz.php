@@ -9,6 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+//require '/var/www/html/secure/functions.php';
+//$db=dbconnect();
+
 $domoticz=json_decode(
     file_get_contents(
         $domoticzurl.'/json.htm?type=devices&used=true'
@@ -80,6 +83,7 @@ if ($domoticz) {
             $time=TIME;
         }
         $db->query("INSERT INTO devices (n,i,s,t,dt) VALUES ('$name','$idx','$status','$time','$type') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time',dt='$type';");
-        echo $idx.' '.$name.' = '.$status.'<br>';
+        if (php_sapi_name() === 'cli') echo $idx.' '.$name.' = '.$status.PHP_EOL;
+        else echo $idx.' '.$name.' = '.$status.'<br>';
     }
 }

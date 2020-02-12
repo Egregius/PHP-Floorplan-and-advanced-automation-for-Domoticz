@@ -1181,7 +1181,7 @@ function floorplanheating(){
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
-        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
+        html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px"><span id="easy_settemp"></span><br><span id="tbrander"></span></td></tr>';
         html+='<tr id="heatingauto"></tr>';
         html+='<tr id="trheating"></tr>';
         html+='</table></div>';
