@@ -120,10 +120,7 @@ if ($home==true) {
         	/*if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
         		if ($_REQUEST['action']>16) $_REQUEST['action']=16;
         	}*/
-			if ($_REQUEST['device']=='living') {
-				ifttt('easy_settemp', $_REQUEST['action']);
-			}
-        	store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 //			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
 //			$d[$_REQUEST['device'].'_set']['m']=1;
@@ -138,12 +135,10 @@ if ($home==true) {
 					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				resetsecurity();
-				ifttt('easy_home');
 			} elseif ($_REQUEST['action']==1) {
 				huisslapen();
 			} elseif ($_REQUEST['action']==2) {
 				huisweg();
-				ifttt('easy_away');
 			}
         } elseif ($_REQUEST['command']=='dimmerwake') {
         	storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);

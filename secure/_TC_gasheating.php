@@ -63,7 +63,6 @@ if ($d['living_set']['m']==0) {
         		lg('togo='.$togo.'	target='.$target);
         		$Setliving=$target;
         	} elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-			if ($d['easymode']['s']=='away') ifttt('easy_home', null, null, null, basename(__FILE__).':'.__LINE__);
         } 
         if ($Setliving>19.5) {
             if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
@@ -78,7 +77,6 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-if ($d['easymode']['s']=='home'&&(($d['raamliving']['s']=='Open'&&past('raamliving')>180)||($d['deurgarage']['s']=='Open'&&past('deurgarage')>180)||($d['deurinkom']['s']=='Open'&&past('deurinkom')>180))) ifttt('easy_away', null, null, null, basename(__FILE__).':'.__LINE__);
 
 $kamers=array('living','kamer','tobi','alex');
 $bigdif=100;
@@ -189,8 +187,8 @@ foreach ($kamers as $kamer) {
     }
 }
 $target=$d['living_temp']['s']-$bigdif-$bigdif;
-if ($d['easy_set']['s']!=$target) {
-	if (ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__)) store('easy_set', $target, basename(__FILE__).':'.__LINE__);
+if ($d['easyset']['s']!=$target) {
+	if (ifttt('easy_settemp', $target, null, null, basename(__FILE__).':'.__LINE__)) store('easyset', $target, basename(__FILE__).':'.__LINE__);
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 /*if ($d['heating']['s']==2) {

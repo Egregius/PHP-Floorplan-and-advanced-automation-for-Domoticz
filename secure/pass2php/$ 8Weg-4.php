@@ -34,7 +34,6 @@ if ($status=='On') {
 		usleep(3000000);
 		bosekey("POWER", 0, 104);
         store('Weg', 2, basename(__FILE__).':'.__LINE__);
-        ifttt('easy_away');
     } else {
         sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
         if ($d['sirene']['s']!='Off') {

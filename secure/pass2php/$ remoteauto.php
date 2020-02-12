@@ -13,10 +13,8 @@ if ($status=='On') {
     sw('poortrf', 'On');
     store('Weg', 0);
     sw('voordeur', 'On');
-    ifttt('easy_home');
 } else {
     store('Weg', 2);
     sw('voordeur', 'Off');
     huisweg();
-    ifttt('easy_away');
 }
