@@ -1034,7 +1034,6 @@ function ajaxbose($ip){
 				if(document.getElementById("bass").innerHTML!=html)document.getElementById("bass").innerHTML=html;
 
 				if(data["nowplaying"]["@attributes"]["source"]=="SPOTIFY"){
-					if(document.getElementById("source").innerHTML!="Spotify")document.getElementById("source").innerHTML="Spotify";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
