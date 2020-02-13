@@ -249,14 +249,14 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
-									$("#trgas").html('<td id="tdgas">Gas:</td><td colspan="2">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
-									if($value>700)document.getElementById("trgas").style.color="#FF0000";
-									else if($value>600)document.getElementById("trgas").style.color="#FF4400";
-									else if($value>500)document.getElementById("trgas").style.color="#FF8800";
-									else if($value>400)document.getElementById("trgas").style.color="#FFAA00";
-									else if($value>300)document.getElementById("trgas").style.color="#FFCC00";
-									else if($value>200)document.getElementById("trgas").style.color="#FFFF00";
-									else document.getElementById("trgas").style.color=null;
+									$("#trgas").html('<td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									if($value>700)document.getElementById("tdgasvandaag").style.color="#FF0000";
+									else if($value>600)document.getElementById("tdgasvandaag").style.color="#FF4400";
+									else if($value>500)document.getElementById("tdgasvandaag").style.color="#FF8800";
+									else if($value>400)document.getElementById("tdgasvandaag").style.color="#FFAA00";
+									else if($value>300)document.getElementById("tdgasvandaag").style.color="#FFCC00";
+									else if($value>200)document.getElementById("tdgasvandaag").style.color="#FFFF00";
+									else document.getElementById("tdgasvandaag").style.color=null;
 								}else $("#trgas").html("");
 							}catch{}
 							localStorage.setItem("tijd_gas", time);
