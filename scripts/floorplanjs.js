@@ -1075,7 +1075,6 @@ function ajaxbose($ip){
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
 				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
-				document.getElementById("source").innerHTML="";
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
 				document.getElementById("art").innerHTML="";
