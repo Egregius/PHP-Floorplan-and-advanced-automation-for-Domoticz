@@ -9,4 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+
+double('dampkap', 'On');
+storemode('dampkap', 1);
 resetsecurity();

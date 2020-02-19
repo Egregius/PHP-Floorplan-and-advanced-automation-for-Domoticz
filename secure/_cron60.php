@@ -368,6 +368,11 @@ if ($d['auto']['s']=='On') {
         if ($d['dampkap']['s']=='On') {
             $tdampkap=past('dampkap');
             if ($d['dampkap']['m']==1) {
+                if ($tdampkap>600) {
+                    double('dampkap', 'Off');
+                    storemode('dampkap', 0, basename(__FILE__).':'.__LINE__);
+                }
+            } elseif ($d['dampkap']['m']==2) {
                 if ($tdampkap>1200) {
                     double('dampkap', 'Off');
                     storemode('dampkap', 0, basename(__FILE__).':'.__LINE__);

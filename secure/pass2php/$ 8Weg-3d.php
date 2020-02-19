@@ -9,4 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Weg-3.php');
+
+double('dampkap', 'On');
+storemode('dampkap', 2);
+resetsecurity();
