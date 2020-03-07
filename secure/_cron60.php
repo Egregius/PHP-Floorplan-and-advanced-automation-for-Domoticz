@@ -18,14 +18,14 @@ if ($d['auto']['s']=='On') {
 				if ($weekend==false) bosekey('PRESET_2', 0, 101);
 				else bosekey('PRESET_1', 0, 101);
         	}
-        	if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
+        	/*if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
         	elseif ($weekend==false&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
-        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());
+        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());*/
         }
         if ($d['pirkeuken']['s']=='Off') {
             $uit=235;
@@ -271,7 +271,7 @@ if ($d['auto']['s']=='On') {
                 7200
             );
         }
-        if ($d['voordeur']['s']=='On'&&past('voordeur')>598) {
+    if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) {
         sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
     }
 
@@ -732,7 +732,7 @@ if (!empty($objauth)) {
 //ping('192.168.2.11');
 //ping('192.168.2.12');
 //ping('192.168.2.13');
-//ping('192.168.2.14');
+if(!ping('192.168.2.14')) alert('Xiaomi', 'Xiaomi down', 7200);
 //ping('192.168.2.15');
 //ping('192.168.2.101');
 //ping('192.168.2.102');

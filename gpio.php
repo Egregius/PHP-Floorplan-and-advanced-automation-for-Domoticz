@@ -38,12 +38,10 @@ if (isset($_REQUEST['gpio'])) {
             store('poort', 'Closed', basename(__FILE__).':'.__LINE__);
         } else {
             store('poort', 'Open', basename(__FILE__).':'.__LINE__);
-            fgarage();
-            sw('voordeur', 'Off');
+            if ($d['voordeur']['s']=='On') sw('voordeur', 'Off',basename(__FILE__).':'.__LINE__);
+            if ($d['dampkap']['s']=='On') sw('dampkap', 'Off',basename(__FILE__).':'.__LINE__);
             sirene('Poort open');
-            if ($d['dampkap']['s']=='On') {
-                sw('dampkap', 'Off',basename(__FILE__).':'.__LINE__);
-            }
+            fgarage();
         }
     } else {
         die('Unknown');

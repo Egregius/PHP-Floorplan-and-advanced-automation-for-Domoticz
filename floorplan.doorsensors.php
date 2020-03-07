@@ -41,10 +41,12 @@ if ($home) {
 			.dpoort{top:270px;left:404px;width:60px;height:114px;}
 			.dachterdeur{top:265px;left:80px;width:60px;height:45px;}
 			.draamliving{top:46px;left:80px;width:60px;height:163px;}
+			.draamkeuken{top:179px;left:417px;width:60px;height:42px;}
 			.draamtobi{top:448px;left:80px;width:60px;height:44px;}
 			.draamalex{top:568px;left:80px;width:60px;height:44px;}
 			.draamkamer{top:586px;left:425px;width:60px;height:43px;text-align:left;}
 			.draamhall{top:396px;left:216px;width:55px;height:40px;}
+			.ddeurvoordeur{top:59px;left:418px;width:60px;height:44px;}
 			.ddeurbadkamer{top:420px;left:341px;width:60px;height:46px;}
 			.ddeurkamer{top:469px;left:290px;width:46px;height:33px;}
 			.ddeurtobi{top:448px;left:167px;width:44px;height:44px;}
@@ -217,6 +219,24 @@ if ($home) {
         </a>';
     }
 
+    if ($d['raamkeuken']['s']=='Open') {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=raamkeuken&action=Closed");\'>
+            <div class="fix red draamkeuken">
+                <br>
+                &nbsp;&nbsp;Open
+            </div>
+        </a>';
+    } else {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=raamkeuken&action=Open");\'>
+            <div class="fix green draamkeuken">
+                <br>
+                &nbsp;&nbsp;Closed
+            </div>
+        </a>';
+    }
+    
     if ($d['deurbadkamer']['s']=='Open') {
         echo '
         <a href=\'javascript:navigator_Go("?name=deurbadkamer&action=Closed");\'>
@@ -231,6 +251,24 @@ if ($home) {
             <div class="fix green ddeurbadkamer">
                 <br>
                 &nbsp;&nbsp;&nbsp;Closed
+            </div>
+        </a>';
+    }
+
+    if ($d['deurvoordeur']['s']=='Open') {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=deurvoordeur&action=Closed");\'>
+            <div class="fix red ddeurvoordeur">
+                <br>
+                &nbsp;Open
+            </div>
+        </a>';
+    } else {
+        echo '
+        <a href=\'javascript:navigator_Go("?name=deurvoordeur&action=Open");\'>
+            <div class="fix green ddeurvoordeur">
+                <br>
+                Closed
             </div>
         </a>';
     }

@@ -13,6 +13,7 @@ $start=microtime(true);
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home) {
+	$db=dbconnect();
     echo '
 <html>
 	<head>

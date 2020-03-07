@@ -94,12 +94,12 @@ td{text-align:center;font-size:1.1em;}
 #tvled{top:7px;left:87px;height:50px;width:auto;}
 #kristal{top:7px;left:89px;height:50px;width:auto;}
 #bureel{top:7px;left:207px;height:50px;width:auto;}
-#inkom{top:51px;left:349px;height:50px;width:auto;}
+#inkom{top:51px;left:351px;height:50px;width:auto;}
 #keuken{top:159px;left:390px;height:50px;width:auto;}
 #wasbak{top:145px;left:345px;height:40px;width:auto;}
 #kookplaat{top:115px;left:386px;height:40px;width:auto;}
 #werkblad1{top:208px;left:434px;height:40px;width:auto;}
-#voordeur{top:59px;left:442px;height:42px;width:auto;}
+#voordeur{top:59px;left:432px;height:42px;width:auto;}
 #hall{top:410px;left:252px;height:50px;width:auto;}
 #garage{top:305px;left:190px;height:60px;width:auto;}
 #garageled{top:315px;left:268px;height:42px;width:auto;}
@@ -168,6 +168,7 @@ td{text-align:center;font-size:1.1em;}
 
 
 #poort{top:261px;left:404px;width:25px;height:128px;z-index:-10;}#tpoort{top:315px;left:376px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#deurvoordeur{top:56px;left:471px;width:7px;height:50px;z-index:-10;}#tdeurvoordeur{top:70px;left:458px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #deurinkom{top:56px;left:338px;width:7px;height:46px;z-index:-10;}#tdeurinkom{top:70px;left:324px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #deurgarage{top:248px;left:341px;width:46px;height:8px;z-index:-10;}#tdeurgarage{top:244px;left:344px;}
 #deurkamer{top:468px;left:290px;width:42px;height:7px;z-index:-10;}#tdeurkamer{top:464px;left:293px;}
@@ -180,7 +181,9 @@ td{text-align:center;font-size:1.1em;}
 #traamtobi{top:462px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #traamalex{top:581px;left:75px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #traamkamer{top:598px;left:455px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
+#traamkeuken{top:191px;left:449px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 #raamliving{top:46px;left:87px;width:11px;height:163px;z-index:-10;}
+#raamkeuken{top:179px;left:459px;width:11px;height:42px;z-index:-10;}
 #raamtobi{top:448px;left:87px;width:11px;height:42px;z-index:-10;}
 #raamalex{top:568px;left:87px;width:11px;height:42px;z-index:-10;}
 #raamkamer{top:586px;left:467px;width:11px;height:42px;z-index:-10;}

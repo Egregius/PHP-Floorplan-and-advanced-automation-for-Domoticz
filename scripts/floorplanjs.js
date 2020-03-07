@@ -876,7 +876,7 @@ function ajax(Update=$LastUpdateTime){
 					}
                 }catch{}
             }
-            var items=['deurgarage','deurinkom','achterdeur','poort','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkamer','raamtobi','raamalex'];
+            var items=['deurgarage','deurinkom','achterdeur','poort','deurvoordeur','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamtobi','raamalex'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
@@ -1041,7 +1041,9 @@ function ajaxbose($ip){
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
-					document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
+					try{
+						document.getElementById("source").innerHTML=data["nowplaying"]["@attributes"]["source"];
+					}catch{};
 					html='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'1\')">Mix</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">Techno & Happy</button>';
 					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">Techno + T&K</button>';
@@ -1136,11 +1138,11 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
-		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
+		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
@@ -1168,13 +1170,13 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkamer','raamhall','achterdeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
 		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];        
         items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
-        items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkamer','traamtobi','traamalex','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
+        items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
         items=['kamerZ','tobiZ','alexZ'];
         items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
@@ -1214,7 +1216,7 @@ function floorplanmedia(){
         items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
         items.forEach(function(item){html+='<div class="fix z0" id="z'+item+'"></div>';});
-		items=['raamliving','deurinkom','deurgarage','deurwc'];
+		items=['raamliving','raamkeuken','deurvoordeur','deurinkom','deurgarage','deurwc'];
         items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
         html+='<div class="fix blackmedia" id="media"></div>';
         html+='<div class="fix" id="mediasidebar"><br><a href=\'javascript:navigator_Go("denon.php");\'><img src="https://home.egregius.be/images/denon.png" class="i48" alt=""></a><br><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Films</a><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Series</a><br><br><a href=\'javascript:navigator_Go("kodi.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Kodi<br>Control</a><br><br>';

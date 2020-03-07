@@ -11,17 +11,15 @@
  **/
 require '/var/www/config.php';
 $mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-$result = $mysqli->query("select n,i,s,UNIX_TIMESTAMP(t) as t,m from devices;") or trigger_error($mysqli->error." [$sql]");
+$result = $mysqli->query("select n,s,t from devices;") or trigger_error($mysqli->error." [$sql]");
 while ($row = $result->fetch_array()) {
-    $d[$row['n']]['i'] = $row['i'];
     $d[$row['n']]['s'] = $row['s'];
     $d[$row['n']]['t'] = $row['t'];
-    $d[$row['n']]['m'] = $row['m'];
 }
-
 $data=array();
 $data['Weg']=$d['Weg']['s'];
-$data['meldingen']=$d['auto']['s'];
 $data['poortrf']=$d['poortrf']['s'];
+$data['deurvoordeur']=$d['deurvoordeur']['s'];
+$data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
 echo serialize($data);
-shell_exec('curl -s "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
+if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed') shell_exec('curl -s "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
