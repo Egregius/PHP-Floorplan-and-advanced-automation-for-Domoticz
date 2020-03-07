@@ -15,9 +15,8 @@ $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 
 function dbconnect() {
-	global $db,$dbname,$dbuser,$dbpass;
-	if (isset($db)) return $db;
-	else return $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+	global $dbname,$dbuser,$dbpass;
+	return new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 }
 //$d=fetchdata();
 /**
@@ -509,12 +508,16 @@ function storeicon($name,$icon,$msg='')
 function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 {
     $db=dbconnect();
+    $last=0;
     $stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
-    $last=$stmt->fetch(PDO::FETCH_ASSOC);
-    if (isset($last['t'])) {
-        $last=$last['t'];
+
+    while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+		if (isset($row['t'])) {
+			$last=$row['t'];
+		}
     }
-    if ($last < TIME-$ttl) {
+
+	if ($last < TIME-$ttl) {
         if ($ios) {
 			shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
 		}

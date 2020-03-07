@@ -53,7 +53,7 @@ if [ "$STATUS" == "OK" ] ; then
 	#50
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&$DEBUG"
 	if [ $? -gt 0 ] ; then
-		service apache2 restart
+		/usr/sbin/service apache2 restart
 	fi
 else
 	sleep 20
@@ -68,8 +68,8 @@ else
 		if [ "$STATUS3" == "OK" ] ; then
 			exit
 		else
-			service domoticz stop
-			service domoticz start
+			/usr/sbin/service domoticz stop
+			/usr/sbin/service domoticz start
 			#shutdown -r now
 		fi
 	fi
@@ -77,8 +77,8 @@ fi
 
 ps cax | grep httpd
 if [ $? -eq 0 ] ; then
-	service apache2 stop
-	service apache2 start
+	/usr/sbin/service apache2 stop
+	/usr/sbin/service apache2 start
 fi
 
 
