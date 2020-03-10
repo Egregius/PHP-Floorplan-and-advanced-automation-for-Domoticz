@@ -443,7 +443,7 @@ if ($d['auto']['s']=='On') {
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.12.101:8090/now_playing"
+                        "http://192.168.2.101:8090/now_playing"
                     )
                 )
             ),
@@ -469,7 +469,7 @@ if ($d['auto']['s']=='On') {
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.12.102:8090/now_playing"
+                        "http://192.168.2.102:8090/now_playing"
                     )
                 )
             ),
@@ -497,7 +497,7 @@ if ($d['auto']['s']=='On') {
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.12.104:8090/now_playing"
+                        "http://192.168.2.104:8090/now_playing"
                     )
                 )
             ),
@@ -519,7 +519,7 @@ if ($d['auto']['s']=='On') {
             json_encode(
                 simplexml_load_string(
                     @file_get_contents(
-                        "http://192.168.12.$i:8090/now_playing"
+                        "http://192.168.2.$i:8090/now_playing"
                     )
                 )
             ),
