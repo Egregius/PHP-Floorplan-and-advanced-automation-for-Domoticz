@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 $ctx=stream_context_create(array('http'=>array('timeout' =>5)));
-$smappee=json_decode(file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
+$smappee=json_decode(file_get_contents('http://192.168.18.10/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
 if (!empty($smappee['report'])) {
     preg_match_all(
         "/ activePower=(\\d*.\\d*)/",
@@ -44,7 +44,7 @@ if (!empty($smappee['report'])) {
         }
     }
 } else {
-    if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {
+    if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.18.10/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {
         exit;
     }
 }
