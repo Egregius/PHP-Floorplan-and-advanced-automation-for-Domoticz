@@ -47,7 +47,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
             echo 'OK';
             lg(print_r($_SERVER, true));
             koekje($_POST['username'], 2147483647);
-            telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$_SERVER['REMOTE_ADDR'].PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
+            telegram('HOME '.$_POST['username'].' logged in.'.PHP_EOL.'IP '.$ipaddress.PHP_EOL.$_SERVER['HTTP_USER_AGENT'], false);
             sleep(2);
             if (!empty($_SESSION['referer'])) {
                 header("Location:/".$_SESSION['referer']);
@@ -57,7 +57,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
                 die("Redirecting to:/index.php");
             }
         } else {
-            fail2ban($_SERVER['REMOTE_ADDR'].' FAILED wrong password');
+            fail2ban($ipaddress.' FAILED wrong password');
             $msg="HOME Failed login attempt (Wrong password): ";
             if (isset($_POST['username'])) {
                 $msg.=PHP_EOL."USER=".$_POST['username'];
@@ -66,7 +66,7 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
                 $msg.=PHP_EOL."PSWD=".$_POST['password'];
             }
 
-            $msg.=PHP_EOL."IP=".$_SERVER['REMOTE_ADDR'];
+            $msg.=PHP_EOL."IP=".$ipaddress;
             if (isset($_SERVER['REQUEST_URI'])) {
                 $msg.=PHP_EOL."REQUEST=".$_SERVER['REQUEST_URI'];
             }

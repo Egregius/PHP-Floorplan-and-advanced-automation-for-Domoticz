@@ -47,8 +47,8 @@ if (past('$ 8badkamer-8')>3) {
 					echo $cv.'<br>';
 					bosevolume($cv, 102);
 					usleep($usleep);
-					$cv=$cv-3;
-					if ($cv<=3) {
+					$cv=$cv-4;
+					if ($cv<=4) {
 						break;
 					}
 				}
