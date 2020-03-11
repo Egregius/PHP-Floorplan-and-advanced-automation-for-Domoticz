@@ -13,8 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 
 
-ifttt('mailtest');
-
+telegram('test');
 
 
 echo '<pre>';
