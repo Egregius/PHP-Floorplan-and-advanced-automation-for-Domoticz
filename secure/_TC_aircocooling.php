@@ -56,12 +56,12 @@ if ($d['auto']['s']=='On') {
 			if ($d['Rtobi']['m']==0&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Ralex']['m']==0&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
-		if ($dag==true&&$zon==0) {
+		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['m']==0&&$d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
-		} elseif ($dag==true&&$zon>0) {
+		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
