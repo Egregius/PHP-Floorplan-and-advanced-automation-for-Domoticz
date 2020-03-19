@@ -128,15 +128,13 @@ td{text-align:center;font-size:1.1em;}
 #auto{top:280px;left:235px;height:48px;width:auto;}
 #meldingen{top:280px;left:350px;height:48px;width:auto;}
 #verbruik{top:652px;left:290px;width:200px;height:48px;width:auto;}
-#zoldervuur{top:670px;left:140px;height:48px;width:auto;}
-#zoldervuur2{top:783px;left:455px;height:48px;width:auto;}
 #water{top:100px;left:0px;height:48px;width:auto;}
 #regenpomp{top:180px;left:0px;height:48px;width:auto;}
 #zwembadfilter{top:260px;left:0px;height:48px;width:auto;}
 #zwembadwarmte{top:340px;left:0px;height:48px;width:auto;}
 #dampkap{top:280px;left:110px;height:48px;width:auto;}
-#heater1{top:221px;left:86px;height:26px;width:auto;}
-#heater2{top:221px;left:108px;height:26px;width:auto;}
+#zoldervuur1{top:670px;left:455px;height:26px;width:auto;}
+#zoldervuur2{top:670px;left:475px;height:26px;width:auto;}
 
 #tbelknop{top:24px;left:468px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}

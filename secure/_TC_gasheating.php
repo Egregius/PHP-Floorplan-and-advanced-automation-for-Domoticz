@@ -117,53 +117,7 @@ foreach ($xxkamers as $i) {
         $xxxkamers.=', '.$i;
     }
 }
-if ($d['Weg']['s']==0) {
-    if ($d['heating']['s']==0||$d['heating']['s']==1) {//Neutral of elec
-        $difheater1=0;
-        $difheater2=-0.2;
-        //lg ('difliving='.$difliving.' - difheater2 = '.$difheater2.' -  1='.$d['heater1']['s'].' 2='.$d['heater2']['s']);
-        if ($difliving>$difheater1&&$d['heater1']['s']!='Off'&&$d['heater2']['s']=='Off'&&past('heater1')>90&&past('heater2')>90) {
-            sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
-        }
-        if ($difliving<$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>90&&past('pirliving')<1800) {
-            if ($d['heater1']['s']!='On') {
-                sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
-            }
-            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-        } elseif ($difliving==$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>140&&$d['el']['s']<8000&&past('pirliving')<1800) {
-            if ($d['heater1']['s']!='On') {
-                sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
-            }
-            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-        } elseif ($difliving>=$difheater2&&$d['heater2']['s']!='Off'&&past('heater2')>110||$d['el']['s']>8500) {
-            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
-        }
-    } elseif ($d['heating']['s']==2) {//gas/elec
-        $difheater1=-0.3;
-        $difheater2=-0.6;
-        if ($difliving>$difheater2&&$d['heater1']['s']!='Off'&&$d['heater2']['s']=='Off'&&past('heater1')>90&&past('heater2')>90) {
-            sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
-        }
-        if ($difliving<$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>90&&$d['el']['s']<8000&&past('pirliving')<1800) {
-            if ($d['heater1']['s']!='On') {
-                sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
-            }
-            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-        } elseif ($difliving==$difheater2&&$d['heater2']['s']!='On'&&past('heater2')>180&&$d['el']['s']<8000&&past('pirliving')<1800) {
-            if ($d['heater1']['s']!='On') {
-                sw('heater1', 'On', basename(__FILE__).':'.__LINE__);
-            }
-            sw('heater2', 'On', basename(__FILE__).':'.__LINE__);
-        } elseif ($difliving>=$difheater2&&$d['heater2']['s']!='Off'&&past('heater2')>90||$d['el']['s']>8500&&past('pirliving')<1800) {
-            sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
-        }
-    } elseif ($d['heating']['s']<=0) {//Cooling or neutral
-        if ($d['heater2']['s']!='Off') sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
-    }
-} else {
-    //Niet thuis of slapen
-    if ($d['heater2']['s']!='Off') sw('heater2', 'Off', basename(__FILE__).':'.__LINE__);
-}
+
 if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
     if ($difliving<$difheater2+0.1) {
         lg(
@@ -443,24 +397,30 @@ if ($d['minmaxtemp']['m']>19) {
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
-if ($difzolder<=-0.2&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>90&&$d['el']['s']<4800&&$d['heating']['s']>=1&&$d['Weg']['s']==0) {
-    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif ($difzolder<=-0.1&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>180&&$d['el']['s']<4800&&$d['heating']['s']>=1&&$d['Weg']['s']==0) {
-    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif ($difzolder<= 0&&$d['zoldervuur']['s']!="On"&&past('zoldervuur')>270&&$d['el']['s']<4800&&$d['heating']['s']>=1&&$d['Weg']['s']==0) {
-    sw('zoldervuur', 'On', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>= 0&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>90)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
-    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>=-0.3&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>180)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
-    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
-} elseif (($difzolder>=-0.5&&$d['zoldervuur']['s']!="Off"&&past('zoldervuur')>270)||($d['zoldervuur']['s']!="Off"&&($d['el']['s']>6600 || $d['Weg']['s']>0))) {
-    sw('zoldervuur', 'Off', basename(__FILE__).':'.__LINE__);
-    lg('>>>>>>>>>> difzolder = '.$difzolder);
+if ($d['Weg']['s']==0) {
+    if ($difzolder>0&&$d['zoldervuur1']['s']!='Off'&&$d['zoldervuur2']['s']=='Off'&&past('zoldervuur1')>90&&past('zoldervuur2')>90) {
+		sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+	if ($difliving<$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90&&past('pirliving')<1800) {
+		if ($d['heater1']['s']!='On') {
+			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
+		}
+		sw('zoldervuur2', 'On', basename(__FILE__).':'.__LINE__);
+	} elseif ($difliving==$difheater2&&$d['heater2']['s']!='On'&&past('zoldervuur2')>140&&$d['el']['s']<8000&&past('pirliving')<1800) {
+		if ($d['zoldervuur1']['s']!='On') {
+			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
+		}
+		sw('zoldervuur2', 'On', basename(__FILE__).':'.__LINE__);
+	} elseif ($difliving>=$difheater2&&$d['zoldervuur2']['s']!='Off'&&past('zoldervuur2')>110||$d['el']['s']>8500) {
+		sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+	} elseif ($d['heating']['s']<=0) {//Cooling or neutral
+        if ($d['zoldervuur2']['s']!='Off') sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+	    if ($d['zoldervuur1']['s']!='Off') sw('zoldervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+    }
+} else {
+    //Niet thuis of slapen
+    if ($d['zoldervuur2']['s']!='Off') sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+    if ($d['zoldervuur1']['s']!='Off') sw('zoldervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /**
  * Function setradiator: calculates the setpoint for the Danfoss thermostat valve

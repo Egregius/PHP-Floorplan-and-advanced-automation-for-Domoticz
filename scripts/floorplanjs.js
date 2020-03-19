@@ -1134,7 +1134,7 @@ function floorplan(){
         html+='<div class="fix z1" id="zoldertrap"></div>';
         items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-        items=['jbl','diepvries','heater1','heater2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
+        items=['jbl','diepvries','zodlervuur1','zoldervuur2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
@@ -1166,7 +1166,7 @@ function floorplanheating(){
         html+='<div class="fix z2" id="sirene"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
-        items=['badkamervuur1','badkamervuur2','heater1','heater2','GroheRed'];
+        items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
         items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
