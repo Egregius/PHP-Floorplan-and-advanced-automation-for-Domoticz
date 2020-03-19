@@ -398,7 +398,9 @@ if ($d['minmaxtemp']['m']>19) {
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
 if ($d['Weg']['s']==0) {
-    if ($difzolder>0&&$d['zoldervuur1']['s']!='Off'&&$d['zoldervuur2']['s']=='Off'&&past('zoldervuur1')>90&&past('zoldervuur2')>90) {
+	$difheater1=0;
+	$difheater2=-0.2;
+    if ($difzolder>$difheater2&&$d['zoldervuur1']['s']!='Off'&&$d['zoldervuur2']['s']=='Off'&&past('zoldervuur1')>90&&past('zoldervuur2')>90) {
 		sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	if ($difliving<$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90&&past('pirliving')<1800) {

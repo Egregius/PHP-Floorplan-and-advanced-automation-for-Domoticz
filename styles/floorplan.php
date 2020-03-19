@@ -133,8 +133,8 @@ td{text-align:center;font-size:1.1em;}
 #zwembadfilter{top:260px;left:0px;height:48px;width:auto;}
 #zwembadwarmte{top:340px;left:0px;height:48px;width:auto;}
 #dampkap{top:280px;left:110px;height:48px;width:auto;}
-#zoldervuur1{top:670px;left:455px;height:26px;width:auto;}
-#zoldervuur2{top:670px;left:475px;height:26px;width:auto;}
+#zoldervuur1{top:797px;left:250px;height:26px;width:auto;}
+#zoldervuur2{top:797px;left:272px;height:26px;width:auto;}
 
 #tbelknop{top:24px;left:468px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}
