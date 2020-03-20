@@ -13,14 +13,14 @@ $start=microtime(true);
 require 'functions.php';
 
 
-telegram('test');
+//telegram('test');
 
 
 echo '<pre>';
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
-//NL('Welkom bij Xafax.');
-//FR('Bienvenue à Xafax.');
+NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
+FR('Appuyez 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
 function NL($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';

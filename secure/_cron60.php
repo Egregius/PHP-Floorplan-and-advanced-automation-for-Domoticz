@@ -598,13 +598,6 @@ if ($d['auto']['s']=='On') {
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {
 	sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['heater1']['s']!='Off'
-    &&$d['heater2']['s']=='Off'
-    &&past('heater1')>120
-    &&past('heater2')>90
-) {
-    sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
-}
 if ($d['diepvries']['s']!='On'
     &&$d['diepvries_temp']['s']>$d['diepvries_temp']['m']
     &&past('diepvries')>1780

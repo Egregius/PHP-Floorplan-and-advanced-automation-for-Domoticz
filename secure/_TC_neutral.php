@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 
-foreach	(array('heater1', 'heater2', 'brander', 'badkamervuur1', 'badkamervuur2', 'zoldervuur') as $i) {
+foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
 

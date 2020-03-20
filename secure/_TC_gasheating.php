@@ -397,23 +397,18 @@ if ($d['minmaxtemp']['m']>19) {
 }
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
-if ($d['Weg']['s']==0) {
+if ($d['Weg']['s']==0&&$difzolder<0) {
+	lg($difzolder);
 	$difheater1=0;
 	$difheater2=-0.2;
-    if ($difzolder>$difheater2&&$d['zoldervuur1']['s']!='Off'&&$d['zoldervuur2']['s']=='Off'&&past('zoldervuur1')>90&&past('zoldervuur2')>90) {
-		sw('heater1', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-	if ($difliving<$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90&&past('pirliving')<1800) {
-		if ($d['heater1']['s']!='On') {
-			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
-		}
-		sw('zoldervuur2', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif ($difliving==$difheater2&&$d['heater2']['s']!='On'&&past('zoldervuur2')>140&&$d['el']['s']<8000&&past('pirliving')<1800) {
+	if ($difzolder<=$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90) {
 		if ($d['zoldervuur1']['s']!='On') {
 			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		sw('zoldervuur2', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif ($difliving>=$difheater2&&$d['zoldervuur2']['s']!='Off'&&past('zoldervuur2')>110||$d['el']['s']>8500) {
+	} elseif ($difzolder<=$difheater1&&$d['zoldervuur1']['s']!='On'&&past('zoldervuur1')>140&&$d['el']['s']<8000) {
+		sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
+	} elseif ($difzolder>=$difheater2&&$d['zoldervuur2']['s']!='Off'&&past('zoldervuur2')>110||$d['el']['s']>8500) {
 		sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	} elseif ($d['heating']['s']<=0) {//Cooling or neutral
         if ($d['zoldervuur2']['s']!='Off') sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
