@@ -398,9 +398,8 @@ if ($d['minmaxtemp']['m']>19) {
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
 if ($d['Weg']['s']==0&&$difzolder<0) {
-	lg($difzolder);
 	$difheater1=0;
-	$difheater2=-0.2;
+	$difheater2=-2;
 	if ($difzolder<=$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90) {
 		if ($d['zoldervuur1']['s']!='On') {
 			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
