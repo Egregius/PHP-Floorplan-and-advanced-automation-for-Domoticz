@@ -1082,7 +1082,8 @@ function daikinstatus($device)
 			$control_info[$pair[0]]=$pair[1];
 		}
 	}
-	return json_encode($control_info);
+	if (isset($control_info)) return json_encode($control_info);
+	else return false;
 }
 /**
  * Function daikinset
