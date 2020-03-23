@@ -1065,8 +1065,11 @@ function createheader($page='')
  *
  * @return array();
  */
-function daikinstatus($ip)
+function daikinstatus($device)
 {
+    if ($device=='living') $ip=111;
+    elseif ($device=='kamer') $ip=112;
+    elseif ($device=='alex') $ip=113;
     $url= "http://192.168.2.$ip/aircon/get_control_info";
 	$data = @file_get_contents($url);
 	if($data === FALSE){
@@ -1082,7 +1085,7 @@ function daikinstatus($ip)
 	return $control_info;
 }
 /**
- * Function daikincool
+ * Function daikinset
  *
  * Sets a Daikin airco in cooling mode to a temperature.
  *
@@ -1096,7 +1099,10 @@ function daikinstatus($ip)
  *
  * @return array();
  */
-function daikinset($ip, $power, $mode, $temp, $fan, $swing, $hum=0)
+function daikinset($device, $power, $mode, $temp, $fan='A', $swing=3, $hum=0)
 {
-	file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
+	if ($device=='living') $ip=111;
+    elseif ($device=='kamer') $ip=112;
+    elseif ($device=='alex') $ip=113;
+    file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
 }
