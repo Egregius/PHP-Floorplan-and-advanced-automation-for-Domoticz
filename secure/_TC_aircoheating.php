@@ -12,7 +12,7 @@
 
 $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
-    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=10;
         if (TIME<strtotime('4:00')) $Setkamer=15.0;
         elseif (TIME>strtotime('21:00')) $Setkamer=15.0;
@@ -23,24 +23,9 @@ if ($d['kamer_set']['m']==0) {
     }
 }
 
-$Settobi=4;
-if ($d['tobi_set']['m']==0) {
-    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurtobi']['s']=='Closed'&&$d['raamtobi']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamtobi')>7198 || TIME>strtotime('20:00'))) {
-        $Settobi=10;
-        if ($d['gcal']['s']) {
-            if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Settobi=15.0;
-        }
-    }
-    if ($d['tobi_set']['s']!=$Settobi) {
-        store('tobi_set', $Settobi, true, basename(__FILE__).':'.__LINE__);
-        $tobi_set=$Settobi;
-        $d['tobi_set']['s']=$Settobi;
-    }
-}
-
 $Setalex=4;
 if ($d['alex_set']['m']==0) {
-    if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
+    if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=10;
         if (TIME<strtotime('4:30')) $Setalex=15.0;
         elseif (TIME>strtotime('19:00')) $Setalex=15.5;
@@ -54,7 +39,7 @@ if ($d['alex_set']['m']==0) {
 
 $Setliving=10;
 if ($d['living_set']['m']==0) {
-    if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
+    if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
         $Setliving=16;
         if ($d['Weg']['s']==0) {
             if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
@@ -91,75 +76,21 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-$kamers=array('living','kamer','tobi','alex');
-$bigdif=100;
-$xxkamers=array();
-foreach ($kamers as $kamer) {
-    ${'dif'.$kamer}=number_format(
-        $d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],
-        1
-    );
-    if (${'dif'.$kamer}>9.9) ${'dif'.$kamer}=9.9;
-    if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
-    ${'Set'.$kamer}=$d[$kamer.'_set']['s'];
-    if (${'dif'.$kamer}<=0) {
-        $xxkamers[]=$kamer;
-        if ($kamer!='living') $d['heating']['s']=2;
-    }
-}
-$first=true;
-$xxxkamers='';
-foreach ($xxkamers as $i) {
-    if ($first) {
-        $xxxkamers=$i;
-        $first=false;
-    } else {
-        $xxxkamers.=', '.$i;
-    }
+foreach (array('living', 'kamer', 'alex') as $k) {
+	if (${'Set'.$k}>=${$k.'_temp'}) {
+		if (${'daikin'.$k}!=${'Set'.$k}) {
+			daikinset($k, 1, 4, ${'Set'.$k});
+		}
+	} elseif (${'Set'.$k}<${$k.'_temp'}) {
+		if (${'daikin'.$k}!=${'Set'.$k}) {
+			daikinset($k, 0, 4, ${'Set'.$k});
+		}
+	}
 }
 
-if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
-    if ($difliving<$difheater2+0.1) {
-        lg(
-            'heater | Living Set = '.$Setliving
-            .' | Living temp = '.$living_temp
-            .' | Diff living = '.round($difliving, 2)
-            .' | Verbruik = '.$d['el']['s']
-            .' | Jaarteller = '.round($d['jaarteller']['s'], 3)
-            .' | kamers = '.$xxxkamers
-        );
-    }
-}
-$kamers=array('tobi','alex','kamer');
-foreach ($kamers as $kamer) {
-    if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
-        ${'RSet'.$kamer}=setradiator(
-            $kamer,
-            ${'dif'.$kamer},
-            true,
-            $d[$kamer.'_set']['s']
-        );
-    } else {
-        ${'RSet'.$kamer}=setradiator(
-            $kamer,
-            ${'dif'.$kamer},
-            false,
-            $d[$kamer.'_set']['s']
-        );
-    }
-    if (TIME>=strtotime('15:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
-        if ($kamer!='tobi') {
-            if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
-            elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
-            elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
-        } elseif ($kamer=='tobi'&&$d['gcal']['s']) {
-            if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
-            elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
-            elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
-        }
-    }
-    if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
-        ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+foreach (array('kamer', 'tobi', 'alex') as $k) {
+    if (round($d[$k.'Z']['s'], 1)>4) {
+        ud($k.'Z', 0, '4.0', basename(__FILE__).':'.__LINE__);
     }
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
