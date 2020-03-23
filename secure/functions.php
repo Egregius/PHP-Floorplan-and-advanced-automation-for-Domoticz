@@ -1061,7 +1061,7 @@ function createheader($page='')
  *
  * Returns the status of a Daikin airco
  *
- * @param int $ip ip of the Daikin airco
+ * @param string $device devicename of the Daikin airco
  *
  * @return array();
  */
@@ -1070,8 +1070,8 @@ function daikinstatus($device)
     if ($device=='living') $ip=111;
     elseif ($device=='kamer') $ip=112;
     elseif ($device=='alex') $ip=113;
-    $url= "http://192.168.2.$ip/aircon/get_control_info";
-	$data = @file_get_contents($url);
+    $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
+	$data = @file_get_contents("http://192.168.2.$ip/aircon/get_control_info", false, $ctx);
 	if($data === FALSE){
 		return FALSE;
 	}else{
@@ -1081,16 +1081,15 @@ function daikinstatus($device)
 			$pair= explode("=",$value);
 			$control_info[$pair[0]]=$pair[1];
 		}
+		return json_encode($control_info);
 	}
-	if (isset($control_info)) return json_encode($control_info);
-	else return false;
 }
 /**
  * Function daikinset
  *
  * Sets a Daikin airco in cooling mode to a temperature.
  *
- * @param int $ip ip of the Daikin airco
+ * @param string $device devicename of the Daikin airco
  * @param int $power 0 = Off, 1 = On
  * @param int $mode 0,1,7 = Auto, 2 = Dry, 3 = Cool, 4 = Heat, 6 = Fan only
  * @param float $temp Temperature of the setpoint

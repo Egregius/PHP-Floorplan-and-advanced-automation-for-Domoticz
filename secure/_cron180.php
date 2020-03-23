@@ -11,7 +11,6 @@
  **/
 $user='cron180';
 foreach (array('living', 'kamer', 'alex') as $k) {
-	echo $k;
 	$data=daikinstatus($k);
 	if ($data!=$d['daikin'.$k]['s']) store(${'daikin'.$k}, $data);
 }
