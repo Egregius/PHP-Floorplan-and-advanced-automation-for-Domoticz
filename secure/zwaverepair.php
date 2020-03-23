@@ -34,10 +34,10 @@ if (!empty($nodes['result'])) {
             echo 'Node Neighbour Update '.$idx.' '.$name.' '.
                 zwaveNodeNeighbourUpdate($idx).PHP_EOL;
             sleep(60);
-            zwavecancelaction();sleep(4);
+            /*zwavecancelaction();sleep(4);
             echo 'Refresh Node Information'.$idx.' '.$name.' '.
                 zwaveRefreshNode($idx).PHP_EOL;
-            sleep(60);
+            sleep(60);*/
         }
     }
 }
