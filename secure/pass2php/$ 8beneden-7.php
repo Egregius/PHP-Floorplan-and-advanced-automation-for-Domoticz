@@ -9,9 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['eettafel']['s']!=5) {
+if ($d['eettafel']['s']==0) {
 	sl('eettafel', 5, basename(__FILE__).':'.__LINE__);
 } else {
-	sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
+	sl('eettafel', floor($d['eettafel']['s']*0.95));
 }
 if ($d['eettafel']['m']>0) storemode('eettafel', 0, basename(__FILE__).':'.__LINE__);
