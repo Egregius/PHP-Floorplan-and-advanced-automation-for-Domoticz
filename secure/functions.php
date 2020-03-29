@@ -907,7 +907,7 @@ function strbefore($string, $substring)
 function fliving()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['denonpower']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+    if ($d['Weg']['s']==0&&$d['tv']['s']=='OFF'&&$d['lgtv']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
                 sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
