@@ -1401,7 +1401,6 @@ function dimmer(device,floorplan='floorplan'){
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\''+level+'\');initview();">'+level+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-
 	$('#placeholder').html(html);
 }
 
