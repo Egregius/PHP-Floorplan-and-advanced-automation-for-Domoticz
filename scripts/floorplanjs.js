@@ -1407,7 +1407,6 @@ function dimmer(device,floorplan='floorplan'){
 
 function roller(device,floorplan='floorplanheating'){
 	clearInterval(myAjax);
-	$mode=localStorage.getItem(device+'_$mode');
 	current=localStorage.getItem(device);
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	if(current==0){
@@ -1416,16 +1415,10 @@ function roller(device,floorplan='floorplanheating'){
 	} else if(current==100){
 		if(device=='luifel')html+='<h2>'+device+' Open</h2><div class="fix" style="top:90px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 		else html+='<h2>'+device+' Dicht</h2><div class="fix" style="top:90px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-	} else if(device!='Beneden'&&device!='Boven'&&$mode==1) html+='<h2>'+device+' '+current+' %</h2>';
+	} else if(device!='Beneden'&&device!='Boven') html+='<h2>'+device+' '+current+' %</h2>';
 	else html+='<h2>'+device+'</h2>';
 	html+='<div class="fix z" style="top:90px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
-	if(device!='Beneden'&&device!='Boven'&&$mode==1){
-		html+='<div class="fix btn btna" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'0\');initview();"><br>Auto</div>';
-	}else if(device!='Beneden'&&device!='Boven'){
-		html+='<div class="fix btn" style="top:105px;left:145px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
-		html+='<div class="fix btn btna" style="top:105px;left:255px;width:100px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'\',\'storemode\',\'0\');initview();"><br>Auto</div>';
-	}
+	
 	html+='<div class="fix z" style="top:90px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
 	html+='</div><div class="fix z" style="top:190px;left:0px;">';
 	levels=[5,10,15,20,25,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,85,90,95];
@@ -1436,7 +1429,6 @@ function roller(device,floorplan='floorplanheating'){
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'roller\',\''+level+'\');initview();">'+level+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-
 	$('#placeholder').html(html);
 }
 
