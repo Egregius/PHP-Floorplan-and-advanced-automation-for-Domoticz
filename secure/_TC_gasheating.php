@@ -480,27 +480,27 @@ if ($d['auto']['s']=='On') {
 		}
 		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1) {
 			foreach ($beneden as $i) {
-				if ($d[$i]['m']==0&&$d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['m']==0&&$d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1) {
 			foreach ($beneden as $i) {
-				if ($d[$i]['m']==0&&$d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['m']==0&&$d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&past($i)>7200) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	} 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
-		if ($d['buiten_temp']['s']<16) {
+		if ($d['buiten_temp']['s']<10) {
 			$items=array('tobi', 'alex');
 			foreach ($items as $i) {
-				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<17&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<16&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			$items=array('kamerL', 'kamerR');
 			foreach ($items as $i) {
-				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<17&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<16&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<100) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
@@ -511,12 +511,15 @@ if ($d['auto']['s']=='On') {
 			foreach ($boven as $i) {
 				if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
-			//foreach ($beneden as $i) {
-			//	if ($d[$i]['m']==0&&$d[$i]['s']<31) sl($i, 31, basename(__FILE__).':'.__LINE__);
-			//}
-			if ($d['auto']['m']==false) {
-				foreach ($beneden as $i) {
+			if ($d['Weg']['s']>0) {
+				foreach ($benedenall as $i) {
 					if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			} else {
+				if ($d['auto']['m']==false) {
+					foreach ($beneden as $i) {
+						if ($d[$i]['m']==0&&$d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					}
 				}
 			}
 		} elseif ($d['buiten_temp']['s']<16) {

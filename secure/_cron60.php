@@ -725,7 +725,12 @@ if (!empty($objauth)) {
 //ping('192.168.2.11');
 //ping('192.168.2.12');
 //ping('192.168.2.13');
-if(!ping('192.168.2.14')) alert('Xiaomi', 'Xiaomi down', 7200);
+if(!ping('192.168.2.14')) {
+	sleep(1);
+	if(!ping('192.168.2.14')) {
+		alert('Xiaomi', 'Xiaomi down', 7200);
+	}
+}
 //ping('192.168.2.15');
 //ping('192.168.2.101');
 //ping('192.168.2.102');
