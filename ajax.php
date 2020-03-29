@@ -180,9 +180,9 @@ if ($home==true) {
 			include 'secure/_fetchdomoticz.php';
 		} elseif ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
-				if ($d['denon']['s']!='On') {
+				/*if ($d['denon']['s']!='On') {
 					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-				}
+				}*/
 				if ($d['tv']['s']!='On') {
 					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
 				}

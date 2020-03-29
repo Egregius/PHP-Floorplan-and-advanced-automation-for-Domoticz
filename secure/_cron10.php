@@ -116,13 +116,13 @@ if ($d['tv']['s']=='On') {
 			) {
 				sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['denon']['s']!='On'
+			/*if ($d['denon']['s']!='On'
 				&&past('denon')>30
 				&&$d['Weg']['s']==0
 			) {
 				sw('denon', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
-			}
+			}*/
 			/*if ($d['nvidia']['s']!='On'
 				&&past('nvidia')>30
 				&&$d['Weg']['s']==0
