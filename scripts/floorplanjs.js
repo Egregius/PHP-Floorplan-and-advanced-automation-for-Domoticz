@@ -600,7 +600,6 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="rollers"){
 							localStorage.setItem(device, $value);
-							localStorage.setItem(device+'_$mode', $mode);
 							try{
 								opts=$icon.split(",");
 								stat=100 - $value;
@@ -640,13 +639,9 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									html='<img src="https://home.egregius.be/images/circlegrey.png" class="i48">';
 									html+='<div class="fix center dimmerlevel" style="position:absolute;top:17px;left:-2px;width:70px;letter-spacing:4;">';
-									if($mode == 2)html+='<font size="5" color="#F00">';
-									else if($mode == 1)html+='<font size="5" color="#222">';
-									else html+='<font size="5" color="#CCC">';
+									html+='<font size="5" color="#CCC">';
 									html+=$value+'</font></div>';
 								}
-								if($mode == 2)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fc8000;width:45px;height:45px;border-radius:45px;"></div>';
-								else if($mode == 1)html+='<div class="fix" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:45px;height:45px;border-radius:45px;"></div>';
 								html+='</div>';
 								if(time>($currentTime-82800)){
 									date=new Date(time*1000);

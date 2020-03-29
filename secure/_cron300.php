@@ -107,6 +107,7 @@ if (past('Weg')>14400
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
+if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 $items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
 foreach ($items as $i) {
 	if (past($i)>10800&&$d[$i]['m']!=0) {
