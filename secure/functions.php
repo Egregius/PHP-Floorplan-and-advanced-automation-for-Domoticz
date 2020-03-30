@@ -916,7 +916,7 @@ function fliving()
                 sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
             }
         }
-        if (TIME>=strtotime('5:30')&&TIME<strtotime('21:30')) {
+        if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) {
         	bosezone(101);
         }
     }
