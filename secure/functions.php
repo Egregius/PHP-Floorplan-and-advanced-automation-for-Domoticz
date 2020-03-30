@@ -802,10 +802,10 @@ function bosezone($ip,$vol='')
     elseif (TIME>strtotime('20:00')) $preset='PRESET_6';
     else  $preset='PRESET_2';
     if ($d['Weg']['s']<=1) {
-        if ($d['Weg']['s']==0&&$d['tv']['s']=='Off'&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+        if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
             sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
             bosekey($preset, 0, 101);
-            if ($d['tv']['s']=='On'||$d['lgtv']['s']=='On') bosevolume(0, 101);
+            if ($d['lgtv']['s']=='On') bosevolume(0, 101);
             else bosevolume(21, 101);
         } /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
             $volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
@@ -827,7 +827,7 @@ function bosezone($ip,$vol='')
             if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
                 sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
                 bosekey($preset, 0, 101);
-                if ($d['tc']['s']=='On'||$d['lgtv']['s']=='On') bosevolume(0, 101);
+                if ($d['lgtv']['s']=='On') bosevolume(0, 101);
                 else bosevolume(21, 101);
 
                 bosepost('setZone', $xml, 101);
@@ -904,7 +904,7 @@ function strbefore($string, $substring)
 function fliving()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['tv']['s']=='Off'&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+    if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
                 sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
@@ -961,7 +961,7 @@ function fkeuken()
     if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
         sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
     } elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-        if ($d['tv']['s']=='On'||$d['jbl']['s']=='On') {
+        if ($d['lgtv']['s']=='On'||$d['jbl']['s']=='On') {
             sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
