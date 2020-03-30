@@ -49,22 +49,14 @@ function huisslapen()
     foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/) as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
-    foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR','luifel') as $i) {
+    foreach (array('luifel') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
-    if (TIME>=strtotime('21:00')) {
-		foreach (array('Ralex','RkamerL','RkamerR') as $i) {
-			if ($d[$i]['m']!=2) storemode($i, 2, basename(__FILE__).':'.__LINE__);
-		}
-	}
-    if ($d['gcal']['s']==true) {
-        if ($d['Rtobi']['m']!=2) storemode('Rtobi', 2, basename(__FILE__).':'.__LINE__);
-    }
-    $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.104:8090/now_playing'))), true);
+    $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
     if (!empty($status)) {
         if (isset($status['@attributes']['source'])) {
             if ($status['@attributes']['source']!='STANDBY') {
-                bosekey("POWER", 0, 104);
+                bosekey("POWER", 0, 101);
             }
         }
     }
@@ -81,12 +73,10 @@ function huisslapen()
  */
 function huisweg()
 {
-    global $d;
-    if(empty($d)) $d=fetchdata();
+    //global $d;
+    //if(empty($d)) $d=fetchdata();
     huisslapen();
-    foreach (array('Rtobi','Ralex','RkamerL','RkamerR') as $i) {
-        if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-    }
+    
 }
 /**
  * Function douche
