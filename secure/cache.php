@@ -34,8 +34,17 @@ if (isset($_REQUEST['fetch'])) {
     echo $data;
     store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
 } elseif (isset($_REQUEST['refresh'])) {
-	for ($x=0;$x<15;$x++) {
+	$nodes=json_decode(
+		file_get_contents(
+			$domoticzurl.'/json.htm?type=openzwavenodes&idx='.$zwaveidx
+		),
+		true
+	);
+	lg(print_r($nodes, true));
+/*	for ($x=0;$x<15;$x++) {
 		zwaveCommand($_REQUEST['refresh'], 'Refresh');
 		usleep(500000);
+		lg('refresh '.$_REQUEST['refresh']);
 	}
+*/
 }

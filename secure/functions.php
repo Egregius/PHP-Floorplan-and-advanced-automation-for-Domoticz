@@ -394,7 +394,7 @@ function sl($name,$level,$msg='')
 			if ($d[$name]['s']!=$level) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 				if (startsWith($name,'R')) {
-					shell_exec('curl -s "http://127.0.0.1/secure/cache.php?refresh='.$d[$name]['i'].'" > /dev/null 2>/dev/null &');
+					shell_exec('curl -s "http://127.0.0.1/secure/cache.php?refresh='.$d[$name]['m'].'" > /dev/null 2>/dev/null &');
 				}
 			}
 			
