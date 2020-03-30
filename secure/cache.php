@@ -33,4 +33,9 @@ if (isset($_REQUEST['fetch'])) {
     $data=$d[$_REQUEST['count']]['s']+1;
     echo $data;
     store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
+} elseif (isset($_REQUEST['refresh'])) {
+	for ($x=0;$x<15;$x++) {
+		zwaveCommand($_REQUEST['refresh'], 'Refresh');
+		usleep(500000);
+	}
 }
