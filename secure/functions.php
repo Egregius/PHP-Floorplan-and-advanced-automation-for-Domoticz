@@ -393,12 +393,12 @@ function sl($name,$level,$msg='')
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-				if (startsWith($name,'R')) {
+				/*if (startsWith($name,'R')) {
 					for ($x=0;$x<20;$x++) {
 						sleep(1);
 						file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 					}
-				}
+				}*/
 			}
 			
 		} else {
