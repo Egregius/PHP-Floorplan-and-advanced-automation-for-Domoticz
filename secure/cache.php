@@ -40,11 +40,10 @@ if (isset($_REQUEST['fetch'])) {
 		),
 		true
 	);
-	lg(print_r($nodes, true));
-/*	for ($x=0;$x<15;$x++) {
+	//lg(print_r($nodes, true));
+	for ($x=0;$x<20;$x++) {
 		zwaveCommand($_REQUEST['refresh'], 'Refresh');
-		usleep(500000);
-		lg('refresh '.$_REQUEST['refresh']);
+		usleep(200000);
 	}
-*/
+
 }

@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     $item='Ralex';
-    if ($d['heating']['s']!=1) {
+    if ($d['heating']['s']>0) {
     	sl($item, 100, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
@@ -24,9 +24,6 @@ if ($status=='On') {
         } else {
             sl($item, 0, basename(__FILE__).':'.__LINE__);
         }
-    }
-    if ($d[$item]['m']==0) {
-        storemode($item, 1, basename(__FILE__).':'.__LINE__);
     }
     resetsecurity();
 }
