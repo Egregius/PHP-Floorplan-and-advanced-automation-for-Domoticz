@@ -25,8 +25,5 @@ if ($status=='On') {
             sl($item, 0, basename(__FILE__).':'.__LINE__);
         }
     }
-    if ($d[$item]['m']==0) {
-        storemode($item, 1, basename(__FILE__).':'.__LINE__);
-    }
     resetsecurity();
 }

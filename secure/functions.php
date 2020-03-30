@@ -393,9 +393,6 @@ function sl($name,$level,$msg='')
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-				if (startsWith($name,'R')) {
-					shell_exec('curl -s "http://127.0.0.1/secure/cache.php?refresh='.$d[$name]['m'].'" > /dev/null 2>/dev/null &');
-				}
 			}
 			
 		} else {
@@ -917,7 +914,7 @@ function strbefore($string, $substring)
 function fliving()
 {
     global $d;
-    if ($d['Weg']['s']==0&&$d['tv']['s']=='OFF'&&$d['lgtv']['s']=='OFF'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+    if ($d['Weg']['s']==0&&$d['tv']['s']=='Off'&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
             if ($d['keuken']['s']=='Off') {
                 sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
