@@ -385,7 +385,7 @@ if ($d['auto']['s']=='On') {
     if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) {
         sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    	if ($d['denon']['s']=='On') {
+    if ($d['denon']['s']=='On') {
 		$denonmain=json_decode(
 			json_encode(
 				simplexml_load_string(
@@ -437,7 +437,7 @@ if ($d['auto']['s']=='On') {
         &&$d['bose103']['s']=='Off'
         &&$d['bose104']['s']=='Off'
         &&$d['bose105']['s']=='Off'
-        &&($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On')
+        &&($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')
     ) {
         $status=json_decode(
             json_encode(
