@@ -847,7 +847,7 @@ function bosezone($ip,$vol='')
 			}
 		}
 	} elseif ($ip==105&&$d['bose105']['s']=='Off') {//Bose buiten
-		if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+		sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 		bosekey($preset, 0, 105);
 	}
 }
