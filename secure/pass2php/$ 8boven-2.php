@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     $item='RkamerR';
-    if ($d['heating']['s']!=1) {
+    if ($d['heating']['s']>=0) {
     	sl($item, 0, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
