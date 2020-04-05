@@ -801,7 +801,7 @@ function bosezone($ip,$vol='')
 	if (TIME<strtotime('9:00')) $preset='PRESET_4';
 	elseif (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
-	if ($d['bose105']['m']=='Offline'&&$ip!=105) {
+	if ($d['bose105']['m']=='Offline'/*&&$ip!=105*/) {
 		if ($d['Weg']['s']<=1) {
 			if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
