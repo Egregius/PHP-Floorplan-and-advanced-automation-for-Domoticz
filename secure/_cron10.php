@@ -196,7 +196,6 @@ if (ping('192.168.2.105')) {
             if (isset($status['@attributes']['source'])) {
                 if ($status['@attributes']['source']=='STANDBY') {
                     bosezone(105);
-                    sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
                 }
             }
         }
