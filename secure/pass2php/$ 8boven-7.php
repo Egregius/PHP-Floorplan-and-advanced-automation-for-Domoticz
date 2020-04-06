@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3.14
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -22,7 +22,7 @@ if ($status=='On') {
         } elseif ($itemstatus<$lijntjes) {
             sl($item, $lijntjes, basename(__FILE__).':'.__LINE__);
         } else {
-            sl($item, 0, basename(__FILE__).':'.__LINE__);
+            sl($item, 100, basename(__FILE__).':'.__LINE__);
         }
     }
     resetsecurity();
