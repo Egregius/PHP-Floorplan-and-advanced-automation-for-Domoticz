@@ -26,7 +26,7 @@ if ($d['auto']['s']=='On') {
 				alert('raamalex', 'Raam Alex dicht doen, '.$alex_temp.' °C.', 1800,	false);
 			}
 		}
-		if ($d['heating']['s']>=2) { //Heating
+		if ($d['heating']['s']>0) { //Heating
             if ($d['buiten_temp']['s']<$d['kamer_temp']['s']
                 &&$d['buiten_temp']['s']<$d['tobi_temp']['s']
                 &&$d['buiten_temp']['s']<$d['alex_temp']['s']
@@ -44,13 +44,13 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    10800,
+                    3600,
                     false,
                     2,
                     false
                 );
             }
-        } elseif ($d['heating']['s']==1) { //Cooling
+        } elseif ($d['heating']['s']<0) { //Cooling
             if (($d['buiten_temp']['s']>$d['kamer_temp']['s']+1
                 &&$d['buiten_temp']['s']>$d['tobi_temp']['s']+1
                 &&$d['buiten_temp']['s']>$d['alex_temp']['s']+1)
@@ -69,7 +69,7 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    10800,
+                    3600,
                     false,
                     2,
                     false
@@ -91,7 +91,7 @@ if ($d['auto']['s']=='On') {
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',
                     Alex = '.$d['alex_temp']['s'],
-                    10800,
+                    3600,
                     false,
                     2,
                     false

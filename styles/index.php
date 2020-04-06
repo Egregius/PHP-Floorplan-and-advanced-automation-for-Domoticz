@@ -18,7 +18,7 @@ if ($udevice=='other') {
     $css.="
 body{background-image:url('/images/_firework.jpg');background-size:contain;background-repeat: no-repeat;background-attachment: fixed;background-position: center bottom; }
 .grid-sizer,
-.grid-item{width:19.3%;padding:0px 2px 2px 2px;}
+.grid-item{width:18.2%;padding:0px 2px 2px 2px;}
 .btn{height:20px;font-size:1.1em;}
 .home{height:19px;font-size:1.1em;border:1px solid #800;}
 .logout{position:absolute;bottom:0px;right:0px;}
