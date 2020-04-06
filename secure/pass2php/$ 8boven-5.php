@@ -22,7 +22,7 @@ if ($status=='On') {
         } elseif ($itemstatus<$lijntjes) {
             sl($item, $lijntjes, basename(__FILE__).':'.__LINE__);
         } else {
-            sl($item, 0, basename(__FILE__).':'.__LINE__);
+            sl($item, 100, basename(__FILE__).':'.__LINE__);
         }
     }
     resetsecurity();
