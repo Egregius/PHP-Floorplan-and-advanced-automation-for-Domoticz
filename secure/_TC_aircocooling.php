@@ -16,7 +16,7 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 
 $Setkamer=30;
 if ($d['kamer_set']['m']==0) {
-    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=22.0;
         elseif (TIME>strtotime('21:00')) $Setkamer=22.0;

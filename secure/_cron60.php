@@ -726,13 +726,13 @@ if (!empty($objauth)) {
 //ping('192.168.2.12');
 //ping('192.168.2.13');
 if(!ping('192.168.2.14')) {
-	sleep(2);
+	sleep(3);
 	if(!ping('192.168.2.14')) {
-		sleep(2);
+		sleep(3);
 		if(!ping('192.168.2.14')) {
-			sleep(2);
+			sleep(3);
 			if(!ping('192.168.2.14')) {
-				sleep(2);
+				sleep(3);
 				if(!ping('192.168.2.14')) {
 					alert('Xiaomi', 'Xiaomi down', 7200);
 				}

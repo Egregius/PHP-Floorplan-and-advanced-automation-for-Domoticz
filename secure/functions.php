@@ -1116,7 +1116,7 @@ function daikinstatus($device)
  *
  * @return array();
  */
-function daikinset($device, $power, $mode, $temp, $fan='A', $swing=3, $hum=0)
+function daikinset($device, $power, $mode, $stemp, $fan='A', $swing=3, $hum=0)
 {
 	if ($device=='living') $ip=111;
     elseif ($device=='kamer') $ip=112;
