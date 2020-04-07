@@ -15,12 +15,15 @@ require 'functions.php';
 
 //telegram('test');
 
-
 echo '<pre>';
+print_r(daikinstatus('living'));
+
+
+
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
-NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
-FR('Appuyez 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
+//NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
+//FR('Appuyez 6 pour Geert, 7 pour Peter, 8 pour Sandro, 9 pour Guy.');
 function NL($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';

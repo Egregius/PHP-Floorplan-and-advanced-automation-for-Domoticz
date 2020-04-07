@@ -55,17 +55,17 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-foreach (array('living', 'kamer', 'alex') as $k) {
+/*foreach (array('living', 'kamer', 'alex') as $k) {
 	if (${'Set'.$k}<=${$k.'_temp'}) {
-		if (${'daikin'.$k}!=${'Set'.$k}) {
+		if ($d['daikin'.$k]['s']!=${'Set'.$k}) {
 			daikinset($k, 1, 3, ${'Set'.$k});
 		}
 	} elseif (${'Set'.$k}>${$k.'_temp'}) {
-		if (${'daikin'.$k}!=${'Set'.$k}) {
+		if ($d['daikin'.$k]['s']!=${'Set'.$k}) {
 			daikinset($k, 0, 3, ${'Set'.$k});
 		}
 	}
-}
+}*/
 
 foreach (array('kamer', 'tobi', 'alex') as $k) {
     if (round($d[$k.'Z']['s'], 1)>4) {
