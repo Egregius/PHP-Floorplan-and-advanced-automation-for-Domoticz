@@ -16,7 +16,7 @@ require 'functions.php';
 //telegram('test');
 
 echo '<pre>';
-print_r(daikinstatus('living'));
+print_r(json_decode(daikinstatus('living')));
 
 
 
