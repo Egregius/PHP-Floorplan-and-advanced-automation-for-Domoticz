@@ -258,6 +258,15 @@ if ($home==true) {
                 }
         }
     }
+    
+    elseif (isset($_REQUEST['daikin'])) {
+    	$t=$_SERVER['REQUEST_TIME'];
+    	$d=fetchdata();
+    	$d=array();
+        $d['t']=$t;
+        echo json_encode($d);
+        exit;
+    }
 } else {
 	echo json_encode('NOTAUTHENTICATED');
 }

@@ -1298,15 +1298,15 @@ function ajaxdaikin(){
 
 function floorplandaikin(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
-	localStorage.setItem('view', 'floorplanothers');
+	localStorage.setItem('view', 'floorplandaikin');
     ajaxdaikin(0);
-    myAjax=setInterval(ajaxdaikin, 999);
+    myAjax=setInterval(ajaxdaikin, 3000);
     //try{
 		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
 		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 		html+='<div class="fix z2" id="sirene"></div>';
 		
-		html+='<div class="fix blackmedia" id="media"></div>';
+		html+='<div class="fix blackdaikin" id="daikin"></div>';
 		html+='</div>';
 		$('#placeholder').html(html);
 	//}catch{}
