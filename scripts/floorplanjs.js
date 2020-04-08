@@ -1174,7 +1174,7 @@ function floorplanheating(){
         items=['living','badkamer','kamer','tobi','alex','zolder'];
 		items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="ajaxcontrol(\'saytime\',\'\',\'\')">Say Time</button></div>';
+        html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
@@ -1284,7 +1284,33 @@ function floorplanothers(){
         $('#placeholder').html(html);
     }catch{}
 }
+function ajaxdaikin(){
+    $.ajax({
+        url: '/ajax.php?daikin',
+        dataType : 'json',
+        async: true,
+        defer: true,
+        success: function(data){
+        	
+        }
+    });
+}
 
+function floorplandaikin(){
+	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
+	localStorage.setItem('view', 'floorplanothers');
+    ajaxdaikin(0);
+    myAjax=setInterval(ajaxdaikin, 999);
+    //try{
+		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
+		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+		html+='<div class="fix z2" id="sirene"></div>';
+		
+		html+='<div class="fix blackmedia" id="media"></div>';
+		html+='</div>';
+		$('#placeholder').html(html);
+	//}catch{}
+}
 function sidebar(){
     try{
 		tv=localStorage.getItem("tv");
