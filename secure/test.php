@@ -19,9 +19,13 @@ $data=file_get_contents('http://192.168.2.111/aircon/get_day_power_ex');
 $data=explode(',', $data);
 if ($data[0]=='ret=OK') {
 	$curr_day_heat=explode('=', $data[1]);
+	$curr_day_heat=explode('/', $curr_day_heat[1]);
 	$prev_1day_heat=explode('=', $data[2]);
+	$prev_1day_heat=explode('/', $prev_1day_heat[1]);
 	$curr_day_cool=explode('=', $data[3]);
+	$curr_day_cool=explode('/', $curr_day_cool[1]);
 	$prev_1day_cool=explode('=', $data[4]);
+	$prev_1day_cool=explode('/', $prev_1day_cool[1]);
 }
 //print_r($data);
 

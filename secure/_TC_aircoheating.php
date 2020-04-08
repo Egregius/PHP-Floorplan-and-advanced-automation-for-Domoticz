@@ -93,7 +93,7 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
     
-    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
+    //lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     
 	if ($d[$k.'_set']['s']>=$d[$k.'_temp']['s']/*+$corr*/) {
 		if ($daikin->stemp!=$set) {
