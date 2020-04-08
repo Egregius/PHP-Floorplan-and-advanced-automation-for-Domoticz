@@ -24,21 +24,21 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	$data=explode(',', $data);
 	if ($data[0]=='ret=OK') {
 		$curr_day_heat=explode('=', $data[1]);
-		${$k.'curr_day_heat'}=array_sum(explode('/', $curr_day_heat[1]));
+		${$k.'heat'}=array_sum(explode('/', $curr_day_heat[1]));
 		$prev_1day_heat=explode('=', $data[2]);
-		${$k.'prev_1day_heat'}=array_sum(explode('/', $prev_1day_heat[1]));
+		${$k.'prevheat'}=array_sum(explode('/', $prev_1day_heat[1]));
 		$curr_day_cool=explode('=', $data[3]);
-		${$k.'curr_day_cool'}=array_sum(explode('/', $curr_day_cool[1]));
+		${$k.'cool'}=array_sum(explode('/', $curr_day_cool[1]));
 		$prev_1day_cool=explode('=', $data[4]);
-		${$k.'prev_1day_cool'}=array_sum(explode('/', $prev_1day_cool[1]));
+		${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
 	}
 //print_r($data);
 }
+$date=strftime('%F', TIME);
 $db=dbconnect();
-$db->query("INSERT INTO daikin 
-			(date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool)
-	VALUES 	('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') 
-	ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
+$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
+$date=strftime('%F', TIME-86400);
+$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
