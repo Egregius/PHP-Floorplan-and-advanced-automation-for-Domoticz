@@ -1291,7 +1291,7 @@ function ajaxdaikin(){
         async: true,
         defer: true,
         success: function(data){
-        	
+        	console.log(data);
         }
     });
 }
