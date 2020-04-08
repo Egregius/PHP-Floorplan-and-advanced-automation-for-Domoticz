@@ -17,9 +17,8 @@ $d=fetchdata();
 
 echo '<pre>';
 foreach (array('living', 'kamer', 'alex') as $k) {
+	echo $k.'<br>';
 	$daikin=json_decode($d['daikin'.$k]['s']);
-	echo $daikin->pow;
-
 	print_r($daikin);
 	echo '<hr>';
 }

@@ -99,7 +99,6 @@ foreach ($kamers as $kamer) {
         $d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],
         1
     );
-    if (${'dif'.$kamer}>9.9) ${'dif'.$kamer}=9.9;
     if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
     ${'Set'.$kamer}=$d[$kamer.'_set']['s'];
     if (${'dif'.$kamer}<=0) {
