@@ -1343,7 +1343,7 @@ function floorplandaikin(){
             }catch{}
     try{
 		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
-		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 		html+='<div class="fix z2" id="sirene"></div>';
 		html+='<div class="fix blackdaikin" id="daikin"></div>';
 		html+='</div>';

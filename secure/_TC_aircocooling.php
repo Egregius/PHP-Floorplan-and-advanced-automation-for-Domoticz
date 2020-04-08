@@ -16,7 +16,7 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 
 $Setkamer=33;
 if ($d['kamer_set']['m']==0) {
-    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21/*&&$d['deurkamer']['s']=='Closed'*/&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=22.0;
         elseif (TIME>strtotime('21:00')) $Setkamer=22.0;
@@ -36,7 +36,7 @@ if ($d['kamer_set']['m']==0) {
 
 $Setalex=33;
 if ($d['alex_set']['m']==0) {
-    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
+    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21/*&&$d['deuralex']['s']=='Closed'*/&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=26;
         if (TIME<strtotime('4:00')) $Setkamer=22.0;
         elseif (TIME>strtotime('19:00')) $Setkamer=22.0;
@@ -56,7 +56,7 @@ if ($d['alex_set']['m']==0) {
 
 $Setliving=33;
 if ($d['living_set']['m']==0) {
-    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
+    if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['raamliving']['s']=='Closed'&&($d['deurinkom']['s']=='Closed'||past('deurinkom')<600)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')<600)) {
         $Setliving=25;
         if ($d['Weg']['s']==0) {
             if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=22.5;
