@@ -17,7 +17,13 @@ require 'functions.php';
 echo '<pre>';
 $data=file_get_contents('http://192.168.2.111/aircon/get_day_power_ex');
 $data=explode(',', $data);
-print_r($data);
+if ($data[0]=='ret=OK') {
+	$curr_day_heat=explode('=', $data[1]);
+	$prev_1day_heat=explode('=', $data[2]);
+	$curr_day_cool=explode('=', $data[3]);
+	$prev_1day_cool=explode('=', $data[4]);
+}
+//print_r($data);
 
 
 

@@ -77,12 +77,12 @@ if ($d['living_set']['m']==0) {
     }
 }
 $bigdif=100;
-$corliving=-1.5;
+$corliving=-1;
 $corkamer=-1;
 $coralex=-1;
 foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 	$corr=${'cor'.$k};
-	$set=$d[$k.'_set']['s']+$corr;
+	$set=$d[$k.'_set']['s']/*+$corr*/;
 	if($set<10)$set=10;
 	elseif($set>31)$set=31;
 	$set=floor($set*2)/2;
@@ -95,14 +95,13 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
     
     lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     
-	if ($d[$k.'_set']['s']>=$d[$k.'_temp']['s']+$corr) {
+	if ($d[$k.'_set']['s']>=$d[$k.'_temp']['s']/*+$corr*/) {
 		if ($daikin->stemp!=$set) {
 			daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d[$k.'_set']['s']<$d[$k.'_temp']['s']+$corr) {
+	} elseif ($d[$k.'_set']['s']<$d[$k.'_temp']['s']/*+$corr*/) {
 		if ($daikin->stemp!=$set) {
-//			daikinset($k, 0, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
-			daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__);
+			daikinset($k, 0, 4, $set, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
