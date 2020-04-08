@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 
-$Setkamer=4;
+$Setkamer=10;
 if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=10;
@@ -23,7 +23,7 @@ if ($d['kamer_set']['m']==0) {
     }
 }
 
-$Setalex=4;
+$Setalex=10;
 if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=10;
@@ -86,11 +86,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
     $daikin=json_decode($d['daikin'.$k]['s']);
 	if (${'Set'.$k}>=$d[$k.'_temp']['s']) {
 		if ($daikin->stemp!=${'Set'.$k}) {
-			daikinset($k, 1, 4, ${'Set'.$k});
+			daikinset($k, 1, 4, ${'Set'.$k}, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif (${'Set'.$k}<$d[$k.'_temp']['s']) {
 		if ($daikin->stemp!=${'Set'.$k}) {
-			daikinset($k, 0, 4, ${'Set'.$k});
+			daikinset($k, 0, 4, ${'Set'.$k}, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }

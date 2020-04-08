@@ -1116,11 +1116,11 @@ function daikinstatus($device)
  *
  * @return array();
  */
-function daikinset($device, $power, $mode, $stemp, $fan='A', $swing=3, $hum=0)
+function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=3, $hum=0)
 {
 	if ($device=='living') $ip=111;
     elseif ($device=='kamer') $ip=112;
     elseif ($device=='alex') $ip=113;
     file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
-    lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
+    lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing ($msg)");
 }
