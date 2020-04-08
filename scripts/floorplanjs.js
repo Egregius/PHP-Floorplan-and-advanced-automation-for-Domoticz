@@ -1297,9 +1297,18 @@ function ajaxdaikin(){
 			hours=date.getHours();
 			minutes="0"+date.getMinutes();
 			seconds="0"+date.getSeconds();
+			daikinliving=JSON.parse(data['daikinliving']['s']);
+			daikinkamer=JSON.parse(data['daikinkamer']['s']);
+			daikinalex=JSON.parse(data['daikinalex']['s']);
+			console.log(daikinliving);
 			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
 			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br>';
-			html+='Living: '+data['daikinliving']['s']+'<br>';
+			html+='Living: ';
+			if(daikinliving['pow']==0)html+='Off';
+			else html+='Off';
+			html+='<br>';
+			html+='Kamer: '+daikinkamer['pow']+'<br>';
+			html+='Alex: '+daikinalex['pow']+'<br>';
 			html+='</div>';
 			if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
         }
