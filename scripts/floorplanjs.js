@@ -1307,9 +1307,17 @@ function ajaxdaikin(){
 			items=['living','kamer','alex'];
        		items.forEach(function(item){
        			daikin=JSON.parse(data['daikin'+item]['s']);
-				html+='<tr><td>Living</td><td> ';
+				html+='<tr><td>'+item+'</td><td> ';
 				if(daikin['pow']==0)html+='Off';
 				else html+='Off';
+				html+='</td><td>';
+				if(daikin['mode']==0)html+='Auto';
+				else if(daikin['mode']==1)html+='Auto';
+				else if(daikin['mode']==2)html+='Dry';
+				else if(daikin['mode']==3)html+='Cool';
+				else if(daikin['mode']==4)html+='Heat';
+				else if(daikin['mode']==6)html+='Fan';
+				else if(daikin['mode']==7)html+='Auto';
 				html+='</td></tr>';
        		});
         	html+='</table>';
