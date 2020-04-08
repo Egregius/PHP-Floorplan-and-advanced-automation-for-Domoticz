@@ -10,7 +10,6 @@
  * @link     https://egregius.be
  **/
 require 'functions.php';
-//lg('cron');
 $d=fetchdata();
 if (isset($_REQUEST['cron10'])) {
 	$user='heating';
@@ -23,16 +22,17 @@ if (isset($_REQUEST['cron10'])) {
 	*/
 	$x=0;//Neutral
 	if ($d['heatingauto']['s']=='On') {
-		if ($d['buiten_temp']['s']>24||$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
-		elseif ($d['buiten_temp']['s']>20||$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
-		elseif ($d['buiten_temp']['s']<20||$d['minmaxtemp']['m']<20||$d['minmaxtemp']['s']<20) $x=2;//Gas heating
-		elseif ($d['buiten_temp']['s']<18||$d['minmaxtemp']['m']<18||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
+		if ($d['buiten_temp']['s']>22&&$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
+		elseif ($d['buiten_temp']['s']>19&&$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
+		elseif ($d['buiten_temp']['s']<4||$d['minmaxtemp']['m']<4||$d['minmaxtemp']['s']<4) $x=2;//Gas heating
+		elseif ($d['buiten_temp']['s']<17||$d['minmaxtemp']['m']<17||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
 		else $x=0;//Neutral
 	}
 	//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 	if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 		store('heating', $x, basename(__FILE__).':'.__LINE__);
 		$d['heating']['s']=$x;
+		lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 	}
 	    if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
 	elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
