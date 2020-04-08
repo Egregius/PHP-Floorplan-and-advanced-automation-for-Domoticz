@@ -1300,7 +1300,7 @@ function ajaxdaikin(){
 			daikinliving=JSON.parse(data['daikinliving']['s']);
 			daikinkamer=JSON.parse(data['daikinkamer']['s']);
 			daikinalex=JSON.parse(data['daikinalex']['s']);
-			//console.log(daikinliving);
+			console.log(daikinliving);
 			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
 			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br><br>';
 			html+='<table>';
@@ -1308,7 +1308,7 @@ function ajaxdaikin(){
        		items.forEach(function(item){
        			daikin=JSON.parse(data['daikin'+item]['s']);
 				html+='<tr><td>'+item+'</td><td> ';
-				if(daikin['pow']==0)html+='Off';
+				if(daikin['pow']==0)html+='Off'+daikin['pow'];
 				else html+='Off';
 				html+='</td><td>';
 				if(daikin['mode']==0)html+='Auto';

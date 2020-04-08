@@ -14,12 +14,19 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
 
-$Setkamer=30;
+$Setkamer=33;
 if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=22.0;
         elseif (TIME>strtotime('21:00')) $Setkamer=22.0;
+        elseif (TIME>strtotime('20:00')) $Setkamer=22.5;
+        elseif (TIME>strtotime('19:00')) $Setkamer=23.0;
+        elseif (TIME>strtotime('18:00')) $Setkamer=23.5;
+        elseif (TIME>strtotime('17:00')) $Setkamer=24.0;
+        elseif (TIME>strtotime('16:00')) $Setkamer=24.5;
+        elseif (TIME>strtotime('15:00')) $Setkamer=25.0;
+        elseif (TIME>strtotime('14:00')) $Setkamer=25.5;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -27,13 +34,19 @@ if ($d['kamer_set']['m']==0) {
     }
 }
 
-$Setalex=30;
+$Setalex=33;
 if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=26;
-        if (TIME<strtotime('4:00')) $Setalex=22.0;
-        elseif (TIME>strtotime('19:00')) $Setalex=22.0;
-    }
+        if (TIME<strtotime('4:00')) $Setkamer=22.0;
+        elseif (TIME>strtotime('19:00')) $Setkamer=22.0;
+        elseif (TIME>strtotime('18:00')) $Setkamer=22.5;
+        elseif (TIME>strtotime('17:00')) $Setkamer=23.0;
+        elseif (TIME>strtotime('16:00')) $Setkamer=23.5;
+        elseif (TIME>strtotime('15:00')) $Setkamer=24.0;
+        elseif (TIME>strtotime('14:00')) $Setkamer=24.5;
+        elseif (TIME>strtotime('13:00')) $Setkamer=25.0;
+        elseif (TIME>strtotime('12:00')) $Setkamer=25.5;    }
     if ($d['alex_set']['s']!=$Setalex) {
         ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);
         $alex_set=$Setalex;
@@ -41,7 +54,7 @@ if ($d['alex_set']['m']==0) {
     }
 }
 
-$Setliving=30;
+$Setliving=33;
 if ($d['living_set']['m']==0) {
     if ($d['buiten_temp']['s']>21&&$d['minmaxtemp']['m']>21&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
         $Setliving=25;
@@ -55,18 +68,47 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-/*foreach (array('living', 'kamer', 'alex') as $k) {
-	if (${'Set'.$k}<=${$k.'_temp'}) {
-		if ($d['daikin'.$k]['s']!=${'Set'.$k}) {
-			daikinset($k, 1, 3, ${'Set'.$k});
+$bigdif=100;
+$corliving=1.5;
+$corkamer=1;
+$coralex=1;
+foreach (array('living', 'kamer', 'alex') as $k) {
+	$corr=${'cor'.$k};
+	$set=$d[$k.'_set']['s']+$corr;
+	if($set<18)$set=18;
+	elseif($set>33)$set=33;
+	$set=floor($set*2)/2;
+	${'dif'.$k}=number_format(
+        $d[$k.'_temp']['s']-$d[$k.'_set']['s'],
+        1
+    );
+    if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
+    $daikin=json_decode($d['daikin'.$k]['s']);
+    
+//    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
+    
+	if ($set<32) {
+		if (${'dif'.$k}<0) {
+			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='B') {
+				daikinset($k, 1, 3, $set, basename(__FILE__).':'.__LINE__, 'B');
+			}
+		} else {
+			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='A') {
+				daikinset($k, 1, 3, $set, basename(__FILE__).':'.__LINE__, 'A');
+			}
 		}
-	} elseif (${'Set'.$k}>${$k.'_temp'}) {
-		if ($d['daikin'.$k]['s']!=${'Set'.$k}) {
-			daikinset($k, 0, 3, ${'Set'.$k});
+	} else {
+		if ($daikin->pow!=0) {
+			daikinset($k, 0, 3, $set, basename(__FILE__).':'.__LINE__);
 		}
 	}
-}*/
+}
 
+foreach (array('kamer', 'tobi', 'alex') as $k) {
+    if (round($d[$k.'Z']['s'], 1)>4) {
+        ud($k.'Z', 0, '4.0', basename(__FILE__).':'.__LINE__);
+    }
+}
 foreach (array('kamer', 'tobi', 'alex') as $k) {
     if (round($d[$k.'Z']['s'], 1)>4) {
         ud($k.'Z', 0, '4.0', basename(__FILE__).':'.__LINE__);
