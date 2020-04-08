@@ -1292,6 +1292,12 @@ function ajaxdaikin(){
         defer: true,
         success: function(data){
         	console.log(data);
+        	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
+			date=new Date($currentTime*1000);
+			hours=date.getHours();
+			minutes="0"+date.getMinutes();
+			seconds="0"+date.getSeconds();
+			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
         }
     });
 }
@@ -1300,15 +1306,23 @@ function floorplandaikin(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplandaikin');
     ajaxdaikin(0);
-    myAjax=setInterval(ajaxdaikin, 3000);
-    //try{
+    myAjax=setInterval(ajaxdaikin, 1000);
+    try{
+                $currentTime=parseInt(Math.round(new Date().getTime()/1000));
+                date=new Date($currentTime*1000);
+                hours=date.getHours();
+                minutes="0"+date.getMinutes();
+                seconds="0"+date.getSeconds();
+                $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
+            }catch{}
+    try{
 		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
 		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 		html+='<div class="fix z2" id="sirene"></div>';
 		html+='<div class="fix blackdaikin" id="daikin"></div>';
 		html+='</div>';
 		$('#placeholder').html(html);
-	//}catch{}
+	}catch{}
 }
 function sidebar(){
     try{
