@@ -272,8 +272,8 @@ if ($home==true) {
             $d[$row['n']]['s']=$row['s'];
         }
         $daikin=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-        
-        echo json_encode($d);
+        echo $daikin;
+//        echo json_encode($d);
         exit;
     }
 } else {
