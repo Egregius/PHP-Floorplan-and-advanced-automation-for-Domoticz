@@ -15,7 +15,7 @@
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home==true) {
-	if (!isset($_REQUEST['t'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])) {
+	if (!isset($_REQUEST['t'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 		$msg='';
 		foreach($_REQUEST as $k=>$v) {
 			$msg.='	'.$k.'='.$v;
@@ -261,9 +261,18 @@ if ($home==true) {
     
     elseif (isset($_REQUEST['daikin'])) {
     	$t=$_SERVER['REQUEST_TIME'];
-    	$d=fetchdata();
-    	$d=array();
+        $d=array();
         $d['t']=$t;
+        if($_REQUEST['daikin']==0)$t=0;
+        else $t=$t-1;
+    	$d=array();
+		$db=dbconnect();
+        $stmt=$db->query("SELECT n,s FROM devices WHERE t >= $t and n like 'daikin%';");
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $d[$row['n']]['s']=$row['s'];
+        }
+        $daikin=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+        
         echo json_encode($d);
         exit;
     }
