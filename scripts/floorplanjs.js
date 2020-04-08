@@ -1308,8 +1308,8 @@ function ajaxdaikin(){
        		items.forEach(function(item){
        			daikin=JSON.parse(data['daikin'+item]['s']);
 				html+='<tr><td>'+item+'</td><td> ';
-				if(daikin['pow']==0)html+='Off'+daikin['pow'];
-				else html+='Off';
+				if(daikin['pow']==0)html+='Off';
+				else html+='On';
 				html+='</td><td>';
 				if(daikin['mode']==0)html+='Auto';
 				else if(daikin['mode']==1)html+='Auto';
