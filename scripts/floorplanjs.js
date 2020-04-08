@@ -1305,7 +1305,6 @@ function floorplandaikin(){
 		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
 		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 		html+='<div class="fix z2" id="sirene"></div>';
-		
 		html+='<div class="fix blackdaikin" id="daikin"></div>';
 		html+='</div>';
 		$('#placeholder').html(html);
@@ -1368,6 +1367,7 @@ function initview(){
 	else if(view=="floorplanmedia")window["floorplanmedia"]();
 	else if(view=="floorplanheating")window["floorplanheating"]();
 	else if(view=="floorplanothers")window["floorplanothers"]();
+	else if(view=="floorplandaikin")window["floorplandaikin"]();
 	else window["floorplan"]();
 }
 
