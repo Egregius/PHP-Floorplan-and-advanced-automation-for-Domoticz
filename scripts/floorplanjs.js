@@ -1291,7 +1291,7 @@ function ajaxdaikin(){
         async: true,
         defer: true,
         success: function(data){
-        	console.log(data);
+        	//console.log(data);
         	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
 			date=new Date($currentTime*1000);
 			hours=date.getHours();
@@ -1300,9 +1300,9 @@ function ajaxdaikin(){
 			daikinliving=JSON.parse(data['daikinliving']['s']);
 			daikinkamer=JSON.parse(data['daikinkamer']['s']);
 			daikinalex=JSON.parse(data['daikinalex']['s']);
-			console.log(daikinliving);
+			//console.log(daikinliving);
 			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br>';
+			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br><br>';
 			html+='<table>';
 			items=['living','kamer','alex'];
        		items.forEach(function(item){
@@ -1318,12 +1318,10 @@ function ajaxdaikin(){
 				else if(daikin['mode']==4)html+='Heat';
 				else if(daikin['mode']==6)html+='Fan';
 				else if(daikin['mode']==7)html+='Auto';
+				html+='</td><td>'+daikin['stemp'];
 				html+='</td></tr>';
        		});
         	html+='</table>';
-        
-
-			
 			html+='</div>';
 				if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
 			}
@@ -1334,7 +1332,7 @@ function floorplandaikin(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplandaikin');
     ajaxdaikin(0);
-    myAjax=setInterval(ajaxdaikin, 1000);
+    myAjax=setInterval(ajaxdaikin, 2000);
     try{
                 $currentTime=parseInt(Math.round(new Date().getTime()/1000));
                 date=new Date($currentTime*1000);
