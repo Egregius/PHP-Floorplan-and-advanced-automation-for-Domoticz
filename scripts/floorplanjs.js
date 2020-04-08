@@ -1303,16 +1303,23 @@ function ajaxdaikin(){
 			console.log(daikinliving);
 			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
 			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br>';
-			html+='Living: ';
-			if(daikinliving['pow']==0)html+='Off';
-			else html+='Off';
-			html+='<br>';
-			html+='Kamer: '+daikinkamer['pow']+'<br>';
-			html+='Alex: '+daikinalex['pow']+'<br>';
+			html+='<table>';
+			items=['living','kamer','alex'];
+       		items.forEach(function(item){
+       			daikin=JSON.parse(data['daikin'+item]['s']);
+				html+='<tr><td>Living</td><td> ';
+				if(daikin['pow']==0)html+='Off';
+				else html+='Off';
+				html+='</td></tr>';
+       		});
+        	html+='</table>';
+        
+
+			
 			html+='</div>';
-			if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
-        }
-    });
+				if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
+			}
+		});
 }
 
 function floorplandaikin(){
