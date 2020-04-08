@@ -1298,6 +1298,10 @@ function ajaxdaikin(){
 			minutes="0"+date.getMinutes();
 			seconds="0"+date.getSeconds();
 			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
+			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br>';
+			html+='Living: '+data['daikinliving']['s']+'<br>';
+			html+='</div>';
+			if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
         }
     });
 }
