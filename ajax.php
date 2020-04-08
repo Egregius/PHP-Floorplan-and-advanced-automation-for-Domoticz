@@ -271,9 +271,19 @@ if ($home==true) {
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$row['n']]['s']=$row['s'];
         }
-        $daikin=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-        echo $daikin;
-//        echo json_encode($d);
+        $data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+        if($data === FALSE){
+			return FALSE;
+		}else{
+			$array=explode(",",$data);
+			$control_info= array();
+			foreach($array as $value){
+				$pair= explode("=",$value);
+				$control_info[$pair[0]]=$pair[1];
+			}
+			$d['daikin']=$control_info;
+		}
+        echo json_encode($d);
         exit;
     }
 } else {
