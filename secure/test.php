@@ -12,33 +12,21 @@
 $start=microtime(true);
 require 'functions.php';
 
-//$d=fetchdata();
+$d=fetchdata();
+//telegram('test');
 
 echo '<pre>';
 foreach (array('living', 'kamer', 'alex') as $k) {
-	if ($k=='living') $ip=111;
-	elseif ($k=='kamer') $ip=112;
-	elseif ($k=='alex') $ip=113;
-	else break;
-	$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_day_power_ex');
-	$data=explode(',', $data);
-	if ($data[0]=='ret=OK') {
-		$curr_day_heat=explode('=', $data[1]);
-		${$k.'heat'}=array_sum(explode('/', $curr_day_heat[1]));
-		$prev_1day_heat=explode('=', $data[2]);
-		${$k.'prevheat'}=array_sum(explode('/', $prev_1day_heat[1]));
-		$curr_day_cool=explode('=', $data[3]);
-		${$k.'cool'}=array_sum(explode('/', $curr_day_cool[1]));
-		$prev_1day_cool=explode('=', $data[4]);
-		${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
-	}
-//print_r($data);
+	echo $k.'<br>';
+	$corr=-1;
+	echo $d[$k.'_set']['s']+$corr.'<br>';
+	
+	$daikin=json_decode($d['daikin'.$k]['s']);
+	print_r($daikin);
+	echo '<hr>';
 }
-$date=strftime('%F', TIME);
-$db=dbconnect();
-$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
-$date=strftime('%F', TIME-86400);
-$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
+
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

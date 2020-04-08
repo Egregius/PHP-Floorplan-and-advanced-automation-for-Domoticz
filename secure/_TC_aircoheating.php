@@ -39,7 +39,7 @@ if ($d['alex_set']['m']==0) {
 
 $Setliving=10;
 if ($d['living_set']['m']==0) {
-    if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
+    if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<24&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
         $Setliving=16;
         if ($d['Weg']['s']==0) {
             if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
@@ -77,10 +77,10 @@ if ($d['living_set']['m']==0) {
     }
 }
 $bigdif=100;
-$corliving=-1;
+$corliving=-0.5;
 $corkamer=-1;
 $coralex=-1;
-foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
+foreach (array('living', 'kamer', 'alex') as $k) {
 	$corr=${'cor'.$k};
 	$set=$d[$k.'_set']['s']+$corr;
 	if($set<10)$set=10;
@@ -95,16 +95,18 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
     
     lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     
-	if ($set>=$d[$k.'_temp']['s']+$corr) {
-		lg(__LINE__);
-		if ($daikin->stemp!=$set||$daikin->pow!=1) {
-			lg(__LINE__);
-			daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__);
+	if ($set>10) {
+		if (${'dif'.$k}>0) {
+			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!=3) {
+				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, 3);
+			}
+		} else {
+			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='A') {
+				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__);
+			}
 		}
-	} elseif ($set<$d[$k.'_temp']['s']+$corr) {
-		lg(__LINE__);
+	} else {
 		if ($daikin->stemp!=$set||$daikin->pow!=0) {
-			lg(__LINE__);
 			daikinset($k, 0, 4, $set, basename(__FILE__).':'.__LINE__);
 		}
 	}
