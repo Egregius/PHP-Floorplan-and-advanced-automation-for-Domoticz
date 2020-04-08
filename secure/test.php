@@ -12,11 +12,11 @@
 $start=microtime(true);
 require 'functions.php';
 
-
+$d=fetchdata();
 //telegram('test');
 
 echo '<pre>';
-echo daikinstatus('living');
+echo $d['daikinliving']['s'];
 
 
 
