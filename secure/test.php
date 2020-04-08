@@ -34,7 +34,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	}
 //print_r($data);
 }
-
+$db=dbconnect();
+$db->query("INSERT INTO daikin 
+			(date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool)
+	VALUES 	('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') 
+	ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

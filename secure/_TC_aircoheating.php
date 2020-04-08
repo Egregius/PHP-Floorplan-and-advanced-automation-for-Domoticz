@@ -82,7 +82,7 @@ $corkamer=-1;
 $coralex=-1;
 foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 	$corr=${'cor'.$k};
-	$set=$d[$k.'_set']['s']/*+$corr*/;
+	$set=$d[$k.'_set']['s']+$corr;
 	if($set<10)$set=10;
 	elseif($set>31)$set=31;
 	$set=floor($set*2)/2;
@@ -93,14 +93,18 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
     
-    //lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
+    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     
-	if ($d[$k.'_set']['s']>=$d[$k.'_temp']['s']/*+$corr*/) {
-		if ($daikin->stemp!=$set) {
+	if ($set>=$d[$k.'_temp']['s']+$corr) {
+		lg(__LINE__);
+		if ($daikin->stemp!=$set||$daikin->pow!=1) {
+			lg(__LINE__);
 			daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d[$k.'_set']['s']<$d[$k.'_temp']['s']/*+$corr*/) {
-		if ($daikin->stemp!=$set) {
+	} elseif ($set<$d[$k.'_temp']['s']+$corr) {
+		lg(__LINE__);
+		if ($daikin->stemp!=$set||$daikin->pow!=0) {
+			lg(__LINE__);
 			daikinset($k, 0, 4, $set, basename(__FILE__).':'.__LINE__);
 		}
 	}
