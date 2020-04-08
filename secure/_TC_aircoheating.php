@@ -84,12 +84,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
     );
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
-	if (${'Set'.$k}>=$d[$k.'_temp']['s']) {
-		if ($daikin->stemp!=${'Set'.$k}) {
+	if ($d[$k.'_set']['s']>=$d[$k.'_temp']['s']) {
+		if ($daikin->stemp!=$d[$k.'_set']['s']) {
 			daikinset($k, 1, 4, ${'Set'.$k}, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif (${'Set'.$k}<$d[$k.'_temp']['s']) {
-		if ($daikin->stemp!=${'Set'.$k}) {
+	} elseif ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) {
+		if ($daikin->stemp!=$d[$k.'_set']['s']) {
 			daikinset($k, 0, 4, ${'Set'.$k}, basename(__FILE__).':'.__LINE__);
 		}
 	}

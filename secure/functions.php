@@ -1123,4 +1123,6 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=3, $
     elseif ($device=='alex') $ip=113;
     file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
     lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing ($msg)");
+    sleep(1);
+	store('daikin'.$device, daikinstatus($device));
 }
