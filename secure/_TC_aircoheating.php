@@ -77,11 +77,12 @@ if ($d['living_set']['m']==0) {
     }
 }
 foreach (array('living', 'kamer', 'alex') as $k) {
-	if (${'Set'.$k}>=${$k.'_temp'}) {
+	$daikin=json_decode($d['daikin'.$k]['s']);
+	if (${'Set'.$k}>=$d[$k.'_temp']['s']) {
 		if (${'daikin'.$k}!=${'Set'.$k}) {
 			daikinset($k, 1, 4, ${'Set'.$k});
 		}
-	} elseif (${'Set'.$k}<${$k.'_temp'}) {
+	} elseif (${'Set'.$k}<$d[$k.'_temp']['s']) {
 		if (${'daikin'.$k}!=${'Set'.$k}) {
 			daikinset($k, 0, 4, ${'Set'.$k});
 		}

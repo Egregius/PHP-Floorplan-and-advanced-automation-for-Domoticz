@@ -16,7 +16,13 @@ $d=fetchdata();
 //telegram('test');
 
 echo '<pre>';
-echo $d['daikinliving']['s'];
+foreach (array('living', 'kamer', 'alex') as $k) {
+	$daikin=json_decode($d['daikin'.$k]['s']);
+	echo $daikin->pow;
+
+	print_r($daikin);
+	echo '<hr>';
+}
 
 
 
