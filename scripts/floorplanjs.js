@@ -1523,11 +1523,11 @@ function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Gas heating</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Airco heating</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');initview();">Passive cooling</button>';
-    html+='<button class="btn huge5" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');initview();">Airco cooling</button>';
+	html+='<button class="btn huge5" style="background:url(images/fire_On.png) no-repeat;border:1px solid white" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');initview();">Gas heating</button>';
+    html+='<button class="btn huge5" style="background:url(images/fire_On.png) no-repeat;border:1px solid white" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');initview();">Airco heating</button>';
+    html+='<button class="btn huge5" style="background:url(images/fire_On.png) no-repeat;border:1px solid white" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');initview();">Neutral</button>';
+    html+='<button class="btn huge5" style="background:url(images/fire_On.png) no-repeat;border:1px solid white" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');initview();">Passive cooling</button>';
+    html+='<button class="btn huge5" style="background:url(images/fire_On.png) no-repeat;border:1px solid white" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');initview();">Airco cooling</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
