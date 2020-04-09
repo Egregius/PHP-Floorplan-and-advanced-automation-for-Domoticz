@@ -308,8 +308,8 @@ function ajax(Update=$LastUpdateTime){
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
 								if($value==0)html+='';
 								else if($value==-2)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
-								else if($value==-1)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
-								else if($value==1)html+='<img src="https://home.egregius.be/images/Elec.png" class="i40" alt="Elec">';
+								else if($value==-1)html+='<img src="https://home.egregius.be/images/Cooling_grey.png" class="i40" alt="Cooling">';
+								else if($value==1)html+='<img src="https://home.egregius.be/images/Cooling_red.png" class="i40" alt="Elec">';
 								else if($value==2){
 									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
