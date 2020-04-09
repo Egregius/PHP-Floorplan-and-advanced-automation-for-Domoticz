@@ -70,8 +70,8 @@ if ($d['living_set']['m']==0) {
 }
 $bigdif=100;
 $corliving=1.5;
-$corkamer=1;
-$coralex=1;
+$corkamer=1.5;
+$coralex=1.5;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$corr=${'cor'.$k};
 	$set=$d[$k.'_set']['s']+$corr;
