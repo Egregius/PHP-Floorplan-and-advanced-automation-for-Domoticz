@@ -15,17 +15,7 @@ require 'functions.php';
 $d=fetchdata();
 //telegram('test');
 
-echo '<pre>';
-foreach (array('living', 'kamer', 'alex') as $k) {
-	echo $k.'<br>';
-	$corr=-1;
-	echo $d[$k.'_set']['s']+$corr.'<br>';
-	
-	$daikin=json_decode($d['daikin'.$k]['s']);
-	print_r($daikin);
-	echo '<hr>';
-}
-
+include '_fetchdomoticz.php';
 
 
 /*-------------------------------------------------*/

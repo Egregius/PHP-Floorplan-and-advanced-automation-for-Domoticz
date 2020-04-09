@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 //require '/var/www/html/secure/functions.php';
-//$db=dbconnect();
+$db=dbconnect();
 
 $domoticz=json_decode(
     file_get_contents(
@@ -30,10 +30,10 @@ if ($domoticz) {
             $switchtype='none';
         }
         if($switchtype=='On/Off')$type='switch';
-        elseif($switchtype=='Contact')$type='contact';
-        elseif($switchtype=='Door Contact')$type='contact';
-        elseif($switchtype=='Motion Sensor')$type='pir';
-        elseif($switchtype=='Push On Button')$type='';
+        elseif($switchtype=='Contact'){$type='contact';$idx=null;}
+        elseif($switchtype=='Door Contact'){$type='contact';$idx=null;}
+        elseif($switchtype=='Motion Sensor'){$type='pir';$idx=null;}
+        elseif($switchtype=='Push On Button'){$type='';$idx=null;}
         elseif($switchtype=='X10 Siren')$type='';
         elseif($switchtype=='Smoke Detector')$type='';
         elseif($switchtype=='Selector')$type='';
