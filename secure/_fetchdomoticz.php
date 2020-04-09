@@ -42,11 +42,14 @@ if ($domoticz) {
         if ($dom['Type']=='Temp') {
             $status=$dom['Temp'];
             $type='thermometer';
+            $idx=null;
         } elseif ($dom['Type']=='Temp + Humidity') {
             $status=$dom['Temp'];
             $type='thermometer';
+            $idx=null;
         } elseif ($dom['TypeImg']=='current') {
             $status=str_replace(' Watt', '', $dom['Data']);
+            $idx=null;
         } elseif ($name=='luifel') {
             $status=str_replace('%', '', $dom['Level']);
             $type='luifel';

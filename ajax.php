@@ -174,8 +174,9 @@ if ($home==true) {
 			} else {
 				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+				if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 			}
-			if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+			
 		} elseif ($_REQUEST['command']=='mode') {
 			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='fetch') {
