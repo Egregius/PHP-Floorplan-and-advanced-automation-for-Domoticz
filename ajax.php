@@ -161,6 +161,7 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='dimmer') {
         	storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
         	sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+        	
 		} elseif ($_REQUEST['command']=='roller') {
 			if ($_REQUEST['device']=='Beneden') {
 				foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
@@ -174,6 +175,7 @@ if ($home==true) {
 				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 			}
+			if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='mode') {
 			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='fetch') {
