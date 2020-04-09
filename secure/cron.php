@@ -25,7 +25,7 @@ if (isset($_REQUEST['cron10'])) {
 		if ($d['buiten_temp']['s']>22&&$d['minmaxtemp']['m']>25)$x=-2;//Airco cooling
 		elseif ($d['buiten_temp']['s']>19&&$d['minmaxtemp']['m']>21)$x=-1;//Passive cooling
 		elseif ($d['buiten_temp']['s']<4||$d['minmaxtemp']['m']<4||$d['minmaxtemp']['s']<4) $x=2;//Gas heating
-		elseif ($d['buiten_temp']['s']<17||$d['minmaxtemp']['m']<17||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
+		elseif ($d['buiten_temp']['s']<16||$d['minmaxtemp']['m']<17||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
 		else $x=0;//Neutral
 	}
 	//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
