@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP 
- * php version 7.3.11-1
+ * php version 7.3
  *
  * @category Home_Automation
  * @package  Pass2PHP

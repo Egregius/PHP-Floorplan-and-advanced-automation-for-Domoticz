@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.11-1
+ * php version 7.3
  *
  * This file gives the status of the devices changed since $_REQUEST['t'] in json format.
  * It can also give statusses of different media devices in the house and controls the commands that need to be sent.
