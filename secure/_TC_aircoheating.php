@@ -26,63 +26,54 @@ $Setalex=10;
 if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         if (TIME<strtotime('4:30')) $Setalex=15.0;
-        elseif (TIME>strtotime('19:00')) $Setalex=15.5;
+        elseif (TIME>strtotime('19:00')) $Setalex=15.0;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);
-        $alex_set=$Setalex;
         $d['alex_set']['s']=$Setalex;
     }
 }
 
 $Setliving=10;
 if ($d['living_set']['m']==0) {
-    if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<24&&$d['raamliving']['s']=='Closed'&&($d['deurinkom']['s']=='Closed'||past('deurinkom')<300)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')<300)) {
+    if (
+    		$d['buiten_temp']['s']<20
+    	&&	$d['minmaxtemp']['m']<24
+    	&&	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
+    	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
+    	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
+    	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
+    ) {
         if ($d['Weg']['s']==0) {
-            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-        }
-        if ($Setliving>19.5) {
-            if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
+            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=18.0;
         }
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
-        $living_set=$Setliving;
         $d['living_set']['s']=$Setliving;
     }
 }
 $bigdif=100;
-$corliving=-2;
-$corkamer=-2;
-$coralex=-2;
 foreach (array('living', 'kamer', 'alex') as $k) {
-	$corr=${'cor'.$k};
-	$set=$d[$k.'_set']['s']+$corr;
-	if($set<10)$set=10;
-	elseif($set>31)$set=31;
-	$set=floor($set*2)/2;
-	${'dif'.$k}=number_format(
-        $d[$k.'_temp']['s']-$d[$k.'_set']['s'],
-        1
-    );
+	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
     
 //    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     
-	if ($set>10) {
+	if ($d[$k.'_set']['s']>10) {
 //		if (${'dif'.$k}>0) {
 //			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='B') {
 //				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, 'B');
 //			}
 //		} else {
-			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='A') {
-				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, 'A');
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='A') {
+				daikinset($k, 1, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'A');
 			}
 //		}
 	} else {
 		if ($daikin->pow!=0) {
-			daikinset($k, 0, 4, $set, basename(__FILE__).':'.__LINE__);
+			daikinset($k, 0, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
