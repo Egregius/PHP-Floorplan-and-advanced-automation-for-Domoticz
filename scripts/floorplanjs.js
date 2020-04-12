@@ -378,7 +378,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="smoke detector"){
 							try{
-								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'resetsecurity\',\'resetsecurity\',\'Off\')"><br>'+device;
+								if($value!="Off")html='<img src="images/smoke_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'resetsecurity\',\'resetsecurity\',\'Off\')"><br>'+device;
 								else html="";
 								document.getElementById("sirene").innerHTML=html;
 							}catch{}
@@ -415,8 +415,8 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="heatingauto"){
 							localStorage.setItem("tijd_"+device, time);
 							try{
-								if($value=="Off")html='<td></td><td width="65px"><img src="images/fire_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel<br><span id="theatingauto"></span></td>';
-								else html='<td></td><td width="65px"><img src="images/fire_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch<br><span id="theatingauto"></span></td>';
+								if($value=="Off")html='<td></td><td width="65px"><img src="images/smoke_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel<br><span id="theatingauto"></span></td>';
+								else html='<td></td><td width="65px"><img src="images/smoke_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch<br><span id="theatingauto"></span></td>';
 								document.getElementById("heatingauto").innerHTML=html;
 							}catch{}
 						}else if(device=="luifel"){

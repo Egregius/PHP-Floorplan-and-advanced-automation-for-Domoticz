@@ -50,7 +50,7 @@ td{text-align:center;font-size:1.1em;}
 .divbrander{top:165px;left:0px;width:420px;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander{width:99%;border-spacing:0;padding:0;margin-bottom:0px;}
 .tablebrander tr, .brander td{text-align:right;line-height:1.2;font-size:16px;margin-bottom:-30px;}
-.divsetpoints{top:644px;left:228px;border-spacing:0;padding:0;}
+.divsetpoints{top:648px;left:280px;width:200px;border-spacing:0;padding:0;}
 .tablesetpoints{width:99%;border-spacing:0;padding:0;margin:0;}
 .tablesetpoints tr{text-align:center;line-height:1.6;font-size:18px;}
 .bottom{position:fixed;bottom:0px;}
