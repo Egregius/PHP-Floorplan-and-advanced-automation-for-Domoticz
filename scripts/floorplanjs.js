@@ -299,10 +299,6 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById("trdwater").innerHTML="";
 								}
 							}catch{}
-						}else if(device=="bigdif"){
-							try{
-								document.getElementById("bigdif").innerHTML=$mode;
-							}catch{}
 						}else if(device=="heating"){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
@@ -1181,9 +1177,8 @@ function floorplanheating(){
         if(heatingset!=0&&heatingset!=-1)html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
-        html+='<tr><td width="65px" id="bigdif"></td>';
-        if(heatingset==2)html+='<td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td>';
-        html+='</tr><tr id="heatingauto"></tr>';
+        if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
+        html+='<tr id="heatingauto"></tr>';
         html+='<tr id="trheating"></tr>';
         html+='</table></div>';
         $('#placeholder').html(html);
