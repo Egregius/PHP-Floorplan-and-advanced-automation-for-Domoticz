@@ -109,6 +109,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
 //    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
+	if ($d[$k.'_set']['s']<20) $d[$k.'_set']['s']=20;
 	if ($d[$k.'_set']['s']<32) {
 		if (${'dif'.$k}<0) {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='B') {
