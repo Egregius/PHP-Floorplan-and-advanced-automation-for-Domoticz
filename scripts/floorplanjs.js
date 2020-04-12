@@ -1532,11 +1532,11 @@ function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(1000);initview();">Gas heating</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(1000);initview();">Airco heating</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(1000);initview();">Neutral</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(1000);initview();">Passive cooling</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(1000);initview();">Airco cooling</button>';
+	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(3000);initview();">Gas heating</button>';
+    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(3000);initview();">Airco heating</button>';
+    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(3000);initview();">Neutral</button>';
+    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(3000);initview();">Passive cooling</button>';
+    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(3000);initview();">Airco cooling</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
@@ -1562,6 +1562,11 @@ function formatDate(nowDate) {
 	return (day+'/'+month);			
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function sleep(millis)
+{
+    console.log('sleep = '+millis);
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
 }
