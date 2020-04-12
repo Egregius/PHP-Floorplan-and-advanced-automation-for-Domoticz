@@ -1149,7 +1149,7 @@ function floorplan(){
 function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
-    heating=localStorage.getItem('heating');
+    heatingset=localStorage.getItem('heating');
     ajax(0);
 	myAjax=setInterval(ajax, 500);
     try{
@@ -1172,13 +1172,13 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
         items=['kamerZ','tobiZ','alexZ'];
         items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
-        if(heating==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
-        else if(heating==1)items=['living','badkamer','kamer','alex','zolder'];
-        else if(heating==0)items=['badkamer'];
-        else if(heating<0)items=['living','kamer','alex'];
-		if(heating!=0)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
+        if(heatingset==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
+        else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
+        else if(heatingset==0)items=['badkamer'];
+        else if(heatingset<0)items=['living','kamer','alex'];
+		if(heatingset!=0)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        if(heating!=0)html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
+        if(heatingset!=0)html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
@@ -1418,7 +1418,7 @@ function initview(){
 function setpoint(device){
 	$mode=localStorage.getItem(device+'_set_$mode');
 	level=localStorage.getItem(device+'_set');
-	heating=localStorage.getItem('heating');
+	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
 	if($mode==1){
@@ -1428,7 +1428,7 @@ function setpoint(device){
 		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
 		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
-	if(heating>0){
+	if(heatingset>0){
 		if(device=='living'||device=='badkamer'){
 			temps=[14,15,16,17,17.5,18,18.5,19,19.2,19.5,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
 		}else if(device=='zolder'){
