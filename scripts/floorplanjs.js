@@ -1149,6 +1149,7 @@ function floorplan(){
 function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
+    heating=localStorage.getItem('heating');
     ajax(0);
 	myAjax=setInterval(ajax, 500);
     try{
@@ -1171,10 +1172,13 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
         items=['kamerZ','tobiZ','alexZ'];
         items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
-        items=['living','badkamer','kamer','tobi','alex','zolder'];
-		items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
+        if(heating==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
+        else if(heating==1)items=['living','badkamer','kamer','alex','zolder'];
+        else if(heating==0)items=['badkamer'];
+        else if(heating<0)items=['living','kamer','alex'];
+		if(heating!=0)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
+        if(heating!=0)html+='<div class="fix z" id="saytime"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         html+='<tr><td width="65px" id="bigdif"></td>';
