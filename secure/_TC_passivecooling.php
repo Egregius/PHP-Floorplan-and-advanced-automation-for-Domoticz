@@ -59,44 +59,39 @@ if ($d['auto']['s']=='On') {
 	elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
 		if ($warm) {
 			if($zon>2000) {
-				if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=81) sl('Rtobi', 81, basename(__FILE__).':'.__LINE__);
-				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Ralex', 81, basename(__FILE__).':'.__LINE__);
+				if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
+				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			if ($dag==true) {
-				if ($d['RkamerL']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['RkamerR']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
-			}
+			if ($d['RkamerL']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerR']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 	} 
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
 		if ($warm) {
 			if($zon>2000) {
-				if ($d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Rtobi', 81, basename(__FILE__).':'.__LINE__);
-				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=81) sl('Ralex', 81, basename(__FILE__).':'.__LINE__);
-				if ($d['Rbureel']['s']<50) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
+				if ($d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
+				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
+				if ($d['Rbureel']['s']<40) sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);
 			}
 		} 
 	} 
 
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
-			if ($heating<0) {
-				foreach ($benedenall as $i) {
-					if ($d[$i]['s']<84) sl($i, 84, basename(__FILE__).':'.__LINE__);
-				}
-				foreach ($boven as $i) {
+			foreach ($benedenall as $i) {
+				if ($d[$i]['s']<84) sl($i, 84, basename(__FILE__).':'.__LINE__);
+			}
+			foreach ($boven as $i) {
+				if ($i=='Rtobi') {
+					if ($d['deurtobi']['s']=='Closed'&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+				} elseif ($i=='RkamerL') {
+					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				} else {
 					if ($d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
-				}
-			} else {
-				foreach ($benedenall as $i) {
-					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
-				}
-				foreach ($boven as $i) {
-					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
