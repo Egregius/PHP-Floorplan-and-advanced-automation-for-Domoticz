@@ -51,13 +51,13 @@ if ($d['auto']['s']=='On') {
                 );
             }
         } elseif ($d['heating']['s']<0) { //Cooling
-            if (($d['buiten_temp']['s']>$d['kamer_temp']['s']+1
-                &&$d['buiten_temp']['s']>$d['tobi_temp']['s']+1
-                &&$d['buiten_temp']['s']>$d['alex_temp']['s']+1)
-                &&$d['buiten_temp']['s']>20
-                &&($d['kamer_temp']['s']>18
-                ||$d['tobi_temp']['s']>18
-                ||$d['alex_temp']['s']>18)
+            if (($d['buiten_temp']['s']>$d['kamer_temp']['s']
+                &&$d['buiten_temp']['s']>$d['tobi_temp']['s']
+                &&$d['buiten_temp']['s']>$d['alex_temp']['s'])
+                &&$d['buiten_temp']['s']>=18
+                &&($d['kamer_temp']['s']>=18
+                ||$d['tobi_temp']['s']>=18
+                ||$d['alex_temp']['s']>=18)
                 &&($d['raamkamer']['s']=='Open'
                 ||$d['raamtobi']['s']=='Open'
                 ||$d['raamalex']['s']=='Open')
