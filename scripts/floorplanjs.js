@@ -760,20 +760,26 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById(device).insertAdjacentHTML('beforeend', html);
 								}
 							}catch{}
+						}else if(type=="daikin"){
+							localStorage.setItem(device, $mode);
 						}else if(type=="thermostaat"){
+							heatingset=localStorage.getItem('heating');
 							localStorage.setItem(device+'_$mode', $mode);
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
 							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
-								if(dif>0.2)circle="hot";
-								else if(dif<0)circle="cold";
-								else circle="grey";
-								if($value>20.5)center="red";
-								else if($value>19)center="orange";
-								else if($value>14)center="grey";
-								else center="blue";
+								if(heatingset==2||device=='zolder'||device=='badkamer'){
+									if(dif>0.2)circle="hot";
+									else if(dif<0)circle="cold";
+									else circle="grey";
+									if($value>20.5)center="red";
+									else if($value>19)center="orange";
+									else if($value>14)center="grey";
+									else center="blue";
+								}else{
+								}
 								elem=document.getElementById(device);
 								html='<img src="https://home.egregius.be/images/thermo'+circle+center+'.png" class="i48" alt="">';
 								html+='<div class="fix center" style="top:32px;left:11px;width:26px;">';

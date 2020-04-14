@@ -69,11 +69,13 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //		} else {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='A') {
 				daikinset($k, 1, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'A');
+				storemode('daikin'.$k, 4);
 			}
 //		}
 	} else {
 		if ($daikin->pow!=0) {
 			daikinset($k, 0, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
+			storemode('daikin'.$k, 0);
 		}
 	}
 }
