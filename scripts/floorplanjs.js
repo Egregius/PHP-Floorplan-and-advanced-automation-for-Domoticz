@@ -786,14 +786,14 @@ function ajax(Update=$LastUpdateTime){
 									else if(daikin==3)circle="cold";
 									else circle="grey";
 									if(daikin==4){
-										if($value>17.5)center="red";
-										else if($value>19)center="orange";
-										else if($value>14)center="grey";
+										if($value>17.5)center="orange";
+										else if($value>18)center="red";
+										else if($value==10)center="grey";
 										else center="blue";
 									}else if(daikin==3){
-										if($value>20.5)center="red";
-										else if($value>19)center="orange";
-										else if($value>14)center="grey";
+										if($value==33)center="grey";
+										else if($value>25)center="red";
+										else if($value>21)center="orange";
 										else center="blue";
 									}else center="grey";
 								}
