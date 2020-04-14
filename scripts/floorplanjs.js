@@ -770,7 +770,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
-								if(heatingset==2||device=='zolder'||device=='badkamer'){
+								if(heatingset==2||device=='zolder_set'||device=='badkamer_set'){
 									if(dif>0.2)circle="hot";
 									else if(dif<0)circle="cold";
 									else circle="grey";
@@ -779,6 +779,23 @@ function ajax(Update=$LastUpdateTime){
 									else if($value>14)center="grey";
 									else center="blue";
 								}else{
+									if(device=='living_set')daikin=localStorage.getItem('daikinliving');
+									else if(device=='kamer_set')daikin=localStorage.getItem('daikinkamer');
+									else if(device=='alex_set')daikin=localStorage.getItem('daikinalex');
+									if(daikin==4)circle="hot";
+									else if(daikin==3)circle="cold";
+									else circle="grey";
+									if(daikin==4){
+										if($value>17.5)center="red";
+										else if($value>19)center="orange";
+										else if($value>14)center="grey";
+										else center="blue";
+									}else if(daikin==3){
+										if($value>20.5)center="red";
+										else if($value>19)center="orange";
+										else if($value>14)center="grey";
+										else center="blue";
+									}else center="grey";
 								}
 								elem=document.getElementById(device);
 								html='<img src="https://home.egregius.be/images/thermo'+circle+center+'.png" class="i48" alt="">';
