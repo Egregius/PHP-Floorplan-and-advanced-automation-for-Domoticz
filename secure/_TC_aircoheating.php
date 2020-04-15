@@ -13,8 +13,8 @@
 $Setkamer=10;
 if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
-        if (TIME<strtotime('4:00')) $Setkamer=15.0;
-        elseif (TIME>strtotime('21:00')) $Setkamer=15.0;
+        if (TIME<strtotime('4:00')) $Setkamer=12;
+        elseif (TIME>strtotime('21:00')) $Setkamer=12;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -25,8 +25,8 @@ if ($d['kamer_set']['m']==0) {
 $Setalex=10;
 if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
-        if (TIME<strtotime('4:30')) $Setalex=15.0;
-        elseif (TIME>strtotime('19:00')) $Setalex=15.0;
+        if (TIME<strtotime('4:30')) $Setalex=12;
+        elseif (TIME>strtotime('19:00')) $Setalex=12;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);

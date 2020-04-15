@@ -32,15 +32,15 @@ if ($d['kamer_set']['m']==0) {
     	)
     ) {
         $Setkamer=26;
-        if (TIME<strtotime('4:00')) $Setkamer=22.0;
-        elseif (TIME>strtotime('21:00')) $Setkamer=22.0;
-        elseif (TIME>strtotime('20:00')) $Setkamer=22.5;
-        elseif (TIME>strtotime('19:00')) $Setkamer=23.0;
-        elseif (TIME>strtotime('18:00')) $Setkamer=23.5;
-        elseif (TIME>strtotime('17:00')) $Setkamer=24.0;
-        elseif (TIME>strtotime('16:00')) $Setkamer=24.5;
-        elseif (TIME>strtotime('15:00')) $Setkamer=25.0;
-        elseif (TIME>strtotime('14:00')) $Setkamer=25.5;
+        if (TIME<strtotime('4:00')) $Setkamer=20;
+        elseif (TIME>strtotime('21:00')) $Setkamer=20;
+        elseif (TIME>strtotime('20:00')) $Setkamer=20.5;
+        elseif (TIME>strtotime('19:00')) $Setkamer=21;
+        elseif (TIME>strtotime('18:00')) $Setkamer=21.5;
+        elseif (TIME>strtotime('17:00')) $Setkamer=22;
+        elseif (TIME>strtotime('16:00')) $Setkamer=22.5;
+        elseif (TIME>strtotime('15:00')) $Setkamer=23;
+        elseif (TIME>strtotime('14:00')) $Setkamer=24;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -67,15 +67,15 @@ if ($d['alex_set']['m']==0) {
     	)
     ) {
         $Setalex=26;
-        if (TIME<strtotime('4:00')) $Setalex=22.0;
-        elseif (TIME>strtotime('21:00')) $Setalex=22.0;
-        elseif (TIME>strtotime('20:00')) $Setalex=22.5;
-        elseif (TIME>strtotime('19:00')) $Setalex=23.0;
-        elseif (TIME>strtotime('18:00')) $Setalex=23.5;
-        elseif (TIME>strtotime('17:00')) $Setalex=24.0;
-        elseif (TIME>strtotime('16:00')) $Setalex=24.5;
-        elseif (TIME>strtotime('15:00')) $Setalex=25.0;
-        elseif (TIME>strtotime('14:00')) $Setalex=25.5;
+        if (TIME<strtotime('4:00')) $Setkamer=20;
+        elseif (TIME>strtotime('20:00')) $Setkamer=20;
+        elseif (TIME>strtotime('19:00')) $Setkamer=20.5;
+        elseif (TIME>strtotime('18:00')) $Setkamer=21;
+        elseif (TIME>strtotime('17:00')) $Setkamer=21.5;
+        elseif (TIME>strtotime('16:00')) $Setkamer=22;
+        elseif (TIME>strtotime('15:00')) $Setkamer=22.5;
+        elseif (TIME>strtotime('14:00')) $Setkamer=23;
+        elseif (TIME>strtotime('13:00')) $Setkamer=24;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -95,7 +95,7 @@ if ($d['living_set']['m']==0) {
 	) {
 		$Setliving=26;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=24;
+			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=23;
 		} 
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
