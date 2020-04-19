@@ -1,7 +1,7 @@
 <?php
 /**
- * Pass2PHP Neutral
- * php version 7.3.4-2
+ * Pass2PHP Temperature Control Neutral
+ * php version 7.3
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -191,6 +191,9 @@ if ($d['auto']['s']=='On') {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 				foreach ($boven as $i) {
+				if ($i=='RkamerR') {
+					if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+				} else {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}

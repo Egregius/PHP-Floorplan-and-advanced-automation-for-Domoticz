@@ -1,7 +1,7 @@
 <?php
 /**
- * Pass2PHP Gas heating
- * php version 7.3.11-1
+ * Pass2PHP Temperature Control Gas heating
+ * php version 7.3
  *
  * @category Home_Automation
  * @package  Pass2PHP

@@ -948,7 +948,7 @@ function fbadkamer()
             	sl('lichtbadkamer', 9, basename(__FILE__).':'.__LINE__);
             }
         }
-        if (TIME>strtotime('5:30')&&TIME<strtotime('10:30')) {
+        if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
         	if ($d['bose102']['s']=='Off'&&past('bose102')>30) {
 				bosezone(102);
 				if ($d['bose102']['m']==0) {

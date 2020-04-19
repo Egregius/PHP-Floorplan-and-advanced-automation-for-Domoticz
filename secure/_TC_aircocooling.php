@@ -1,6 +1,6 @@
 <?php
 /**
- * Pass2PHP Airco cooling
+ * Pass2PHP Temperature Control Airco cooling
  * php version 7.3
  *
  * @category Home_Automation
@@ -208,6 +208,8 @@ if ($d['auto']['s']=='On') {
 					if ($d['deurtobi']['s']=='Closed'&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='RkamerL') {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				} elseif ($i=='RkamerR') {
+					if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				} else {
 					if ($d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pass2PHP Airco heating
+ * Pass2PHP Temperature Control Airco heating
  * php version 7.3
  *
  * @category Home_Automation
@@ -12,7 +12,7 @@
 
 $Setkamer=10;
 if ($d['kamer_set']['m']==0) {
-    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deurkamer']['s']=='Closed'&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+    if ($d['buiten_temp']['s']<14&&$d['kamer_temp']['s']<15.8&&$d['minmaxtemp']['m']<15&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<300))&&$d['raamkamer']['s']=='Closed'&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         if (TIME<strtotime('4:00')) $Setkamer=12;
         elseif (TIME>strtotime('21:00')) $Setkamer=12;
     }
@@ -24,7 +24,7 @@ if ($d['kamer_set']['m']==0) {
 
 $Setalex=10;
 if ($d['alex_set']['m']==0) {
-    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&$d['deuralex']['s']=='Closed'&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
+    if ($d['buiten_temp']['s']<14&&$d['alex_temp']['s']<15.8&&$d['minmaxtemp']['m']<15&&($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<300))&&$d['raamalex']['s']=='Closed'&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         if (TIME<strtotime('4:30')) $Setalex=12;
         elseif (TIME>strtotime('19:00')) $Setalex=12;
     }
@@ -38,6 +38,7 @@ $Setliving=10;
 if ($d['living_set']['m']==0) {
     if (
     		$d['buiten_temp']['s']<20
+    	&&	$d['living_temp']['s']<21
     	&&	$d['minmaxtemp']['m']<24
     	&&	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
