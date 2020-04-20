@@ -191,10 +191,11 @@ if ($d['auto']['s']=='On') {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 				foreach ($boven as $i) {
-				if ($i=='RkamerR') {
-					if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
-				} else {
-					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					if ($i=='RkamerR') {
+						if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+					} else {
+						if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					}
 				}
 			}
 		}

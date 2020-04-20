@@ -798,8 +798,8 @@ function bosepreset($pre,$ip=101)
 function bosezone($ip,$vol='')
 {
     $d=fetchdata();
-	if (TIME<strtotime('9:00')) $preset='PRESET_4';
-	elseif (TIME>strtotime('20:00')) $preset='PRESET_6';
+	/*if (TIME<strtotime('9:00')) $preset='PRESET_4';
+	else*/if (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
 	if ($d['bose105']['m']=='Offline'/*&&$ip!=105*/) {
 		if ($d['Weg']['s']<=1) {
