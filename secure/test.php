@@ -14,7 +14,7 @@ require 'functions.php';
 
 $d=fetchdata();
 //telegram('test');
-/*
+
 if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) $rgb=230;
 elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) $rgb=1;
 else $rgb=false;
@@ -32,12 +32,14 @@ if ($rgb!=false) {
 		}
 		$control_info['cmpfreq'].'<br>';
 		print_r($control_info);
+		rgb('Xlight', $rgb, $control_info['cmpfreq']);
 	}
 	rgb('Xlight', 1, 15);
 } else {
-	if ($d['Xlight']['s']>0
-}*/
-rgb('Xlight', 1, 15);
+	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+}
+
+
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
