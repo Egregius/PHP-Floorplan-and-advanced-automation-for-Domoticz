@@ -14,23 +14,30 @@ require 'functions.php';
 
 $d=fetchdata();
 //telegram('test');
+/*
+if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) $rgb=230;
+elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) $rgb=1;
+else $rgb=false;
 
-$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-if($data === FALSE){
-	return FALSE;
-}else{
-	$array=explode(",",$data);
-	$control_info= array();
-	foreach($array as $value){
-		$pair= explode("=",$value);
-		$control_info[$pair[0]]=$pair[1];
+if ($rgb!=false) {
+	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+	if($data === FALSE){
+		return FALSE;
+	}else{
+		$array=explode(",",$data);
+		$control_info= array();
+		foreach($array as $value){
+			$pair= explode("=",$value);
+			$control_info[$pair[0]]=$pair[1];
+		}
+		$control_info['cmpfreq'].'<br>';
+		print_r($control_info);
 	}
-	$control_info['cmpfreq'].'<br>';
-	print_r($control_info);
-}
-rgb('Xlight', 230, 15);
-
-
+	rgb('Xlight', 1, 15);
+} else {
+	if ($d['Xlight']['s']>0
+}*/
+rgb('Xlight', 1, 15);
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
