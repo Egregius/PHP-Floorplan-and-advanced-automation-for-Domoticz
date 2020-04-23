@@ -20,7 +20,6 @@ elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex'][
 else $rgb=false;
 
 if ($rgb!=false) {
-	echo 'true'.'<br>';
 	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
 	if($data === FALSE){
 		return FALSE;
@@ -39,7 +38,6 @@ if ($rgb!=false) {
 		}
 	}
 } else {
-	echo 'false';
 	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
