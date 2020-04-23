@@ -20,6 +20,7 @@ elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex'][
 else $rgb=false;
 
 if ($rgb!=false) {
+	echo 'true'.'<br>';
 	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
 	if($data === FALSE){
 		return FALSE;
@@ -30,12 +31,12 @@ if ($rgb!=false) {
 			$pair= explode("=",$value);
 			$control_info[$pair[0]]=$pair[1];
 		}
-		$control_info['cmpfreq'].'<br>';
+		echo $control_info['cmpfreq'].' '.$rgb.'<br>';
 		print_r($control_info);
 		rgb('Xlight', $rgb, $control_info['cmpfreq']);
 	}
-	rgb('Xlight', 1, 15);
 } else {
+	echo 'false';
 	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
