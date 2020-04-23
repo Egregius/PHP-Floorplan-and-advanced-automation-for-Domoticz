@@ -26,7 +26,10 @@ if($data === FALSE){
 		$control_info[$pair[0]]=$pair[1];
 	}
 	$control_info['cmpfreq'].'<br>';
+	print_r($control_info);
 }
+rgb('Xlight', 230, 15);
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
