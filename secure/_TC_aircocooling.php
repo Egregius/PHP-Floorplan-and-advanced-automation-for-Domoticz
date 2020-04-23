@@ -16,20 +16,46 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 
 $Setkamer=33;
 if ($d['kamer_set']['m']==0) {
-    if (		$d['kamer_temp']['s']>18
-    		&&	$d['buiten_temp']['s']>18
-    		&&	$d['minmaxtemp']['m']>18
-    		&&	(
-    				($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<300))
-    			||
+    if (
+			$d['kamer_temp']['s']>=16
+		&&	$d['buiten_temp']['s']>=17
+		&&	$d['minmaxtemp']['m']>=17
+		&&	
+			(
+					$d['raamkamer']['s']=='Closed'
+				||	$d['RkamerR']['s']>=80
+				
+			)
+		&&	
+			(
+					past('raamkamer')>900
+				||	TIME>strtotime('19:00')
+			)
+		&&	
+			(
+				(
+						$d['deurkamer']['s']=='Closed'
+					||
+						(
+								$d['deurkamer']['s']=='Open'
+							&&	past('deurkamer')<300
+						)
+				)
+			||
+				(
 					(
-							($d['deuralex']['s']=='Closed'||$d['raamalex']['s']=='Closed'||$d['Ralex']['s']>80)
-						&&	($d['deurtobi']['s']=='Closed'||$d['raamtobi']['s']=='Closed'||$d['Rtobi']['s']>80)
+							$d['deuralex']['s']=='Closed'
+						||	$d['raamalex']['s']=='Closed'
+						||	$d['Ralex']['s']>=80
+					)
+				&&
+					(
+							$d['deurtobi']['s']=='Closed'
+						||	$d['raamtobi']['s']=='Closed'
+						||	$d['Rtobi']['s']>=80
 					)
 				)
-			&&	($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']>80)
-			&&	(past('raamkamer')>7198 || TIME>strtotime('19:00')
-    	)
+    		)
     ) {
         $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=20;
@@ -40,7 +66,12 @@ if ($d['kamer_set']['m']==0) {
         elseif (TIME>strtotime('17:00')) $Setkamer=22;
         elseif (TIME>strtotime('16:00')) $Setkamer=22.5;
         elseif (TIME>strtotime('15:00')) $Setkamer=23;
-        elseif (TIME>strtotime('14:00')) $Setkamer=24;
+        elseif (TIME>strtotime('14:00')) $Setkamer=23.5;
+        elseif (TIME>strtotime('13:00')) $Setkamer=24;
+        elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
+        elseif (TIME>strtotime('11:00')) $Setkamer=25;
+        elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
+        elseif (TIME>strtotime('9:00')) $Setkamer=26;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -51,31 +82,59 @@ if ($d['kamer_set']['m']==0) {
 $Setalex=33;
 if ($d['alex_set']['m']==0) {
     if (
-    			$d['alex_temp']['s']>18
-    		&& 	$d['buiten_temp']['s']>18
-    		&&	$d['minmaxtemp']['m']>18
-    		&&	(
-    				($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<300))
-    			||
-    				(
-							($d['deurkamer']['s']=='Closed'||$d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']>80)
-						&&	($d['deurtobi']['s']=='Closed'||$d['raamtobi']['s']=='Closed'||$d['Rtobi']['s']>80)
+			$d['alex_temp']['s']>=16
+		&& 	$d['buiten_temp']['s']>=17
+		&&	$d['minmaxtemp']['m']>=17
+		&&	
+			(
+					$d['raamalex']['s']=='Closed'
+				||	$d['Ralex']['s']>80
+			)
+		&&
+			(
+					past('raamalex')>900
+				|| TIME>strtotime('19:00')
+			)
+		&&
+			(
+				(
+						$d['deuralex']['s']=='Closed'
+					||
+						(
+								$d['deuralex']['s']=='Open'
+							&&	past('deuralex')<300
+						)
+				)
+			||
+				(
+					(
+							$d['deurkamer']['s']=='Closed'
+						||	$d['raamkamer']['s']=='Closed'
+						||	$d['RkamerR']['s']>80
+					)
+				&&
+					(
+							$d['deurtobi']['s']=='Closed'
+						||	$d['raamtobi']['s']=='Closed'
+						||	$d['Rtobi']['s']>80
 					)
 				)
-			&&	($d['raamalex']['s']=='Closed'||$d['Ralex']['s']>80)
-			&&	(past('raamalex')>7198 || TIME>strtotime('19:00')
-    	)
+			)
     ) {
         $Setalex=26;
-        if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('20:00')) $Setkamer=20;
-        elseif (TIME>strtotime('19:00')) $Setkamer=20.5;
-        elseif (TIME>strtotime('18:00')) $Setkamer=21;
-        elseif (TIME>strtotime('17:00')) $Setkamer=21.5;
-        elseif (TIME>strtotime('16:00')) $Setkamer=22;
-        elseif (TIME>strtotime('15:00')) $Setkamer=22.5;
-        elseif (TIME>strtotime('14:00')) $Setkamer=23;
-        elseif (TIME>strtotime('13:00')) $Setkamer=24;
+        if (TIME<strtotime('4:00')) $Setalex=20;
+        elseif (TIME>strtotime('20:00')) $Setalex=20;
+        elseif (TIME>strtotime('19:00')) $Setalex=20.5;
+        elseif (TIME>strtotime('18:00')) $Setalex=21;
+        elseif (TIME>strtotime('17:00')) $Setalex=21.5;
+        elseif (TIME>strtotime('16:00')) $Setalex=22;
+        elseif (TIME>strtotime('15:00')) $Setalex=22.5;
+        elseif (TIME>strtotime('14:00')) $Setalex=23;
+        elseif (TIME>strtotime('13:00')) $Setalex=23.5;
+        elseif (TIME>strtotime('12:00')) $Setalex=24;
+        elseif (TIME>strtotime('11:00')) $Setalex=24.5;
+        elseif (TIME>strtotime('10:00')) $Setalex=25;
+        elseif (TIME>strtotime('9:00')) $Setalex=25.5;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -86,8 +145,9 @@ if ($d['alex_set']['m']==0) {
 $Setliving=33;
 if ($d['living_set']['m']==0) {
     if (
-    		$d['buiten_temp']['s']>18
-    	&&	$d['minmaxtemp']['m']>18
+    		$d['living_temp']['s']>=18
+   		&& 	$d['buiten_temp']['s']>=17
+    	&&	$d['minmaxtemp']['m']>=17
     	&&	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
     	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
@@ -177,8 +237,8 @@ if ($d['auto']['s']=='On') {
 	elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
 		if ($warm) {
 			if($zon>2000) {
-				if ($d['raamtobi']['s']=='Closed'&&$d[$i]['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
-				if ($d['raamalex']['s']=='Closed'&&$d[$i]['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
+				if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
+				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
 			if ($d['RkamerL']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);

@@ -45,6 +45,8 @@ if ($d['minmaxtemp']['m'] > -3) {
 		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 	}
 } 
+
+// Eerste blok voor zwembad
 /*if ($d['zwembadfilter']['s']=='On') {
 	if (past('zwembadfilter')>10700
 		&&TIME>strtotime("16:00")
@@ -70,6 +72,15 @@ if ($d['zwembadwarmte']['s']=='On') {
 		sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
 	}
 }*/
+
+// Tweede blok indien geen zwembad
+if ($d['achterdeur']['s']=='Open') {
+	if ($d['zwembadfilter']['s']=='Off') sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
+	if ($d['zwembadwarmte']['s']=='Off') sw('zwembadwarmte','On', basename(__FILE__).':'.__LINE__);
+} else {
+	if ($d['zwembadfilter']['s']=='On') sw('zwembadfilter','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['zwembadwarmte']['s']=='On') sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
+}
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
 foreach ($items as $i) {
     if (past($i)>900) {

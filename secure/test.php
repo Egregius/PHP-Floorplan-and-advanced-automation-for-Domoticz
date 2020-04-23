@@ -15,8 +15,18 @@ require 'functions.php';
 $d=fetchdata();
 //telegram('test');
 
-include '_fetchdomoticz.php';
-
+$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+if($data === FALSE){
+	return FALSE;
+}else{
+	$array=explode(",",$data);
+	$control_info= array();
+	foreach($array as $value){
+		$pair= explode("=",$value);
+		$control_info[$pair[0]]=$pair[1];
+	}
+	$control_info['cmpfreq'].'<br>';
+}
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
