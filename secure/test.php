@@ -31,9 +31,12 @@ if ($rgb!=false) {
 			$pair= explode("=",$value);
 			$control_info[$pair[0]]=$pair[1];
 		}
-		echo $control_info['cmpfreq'].' '.$rgb.'<br>';
-		print_r($control_info);
-		rgb('Xlight', $rgb, $control_info['cmpfreq']);
+		$level=$control_info['cmpfreq'];
+		if ($level>100)$level=100;
+		if ($d['Xlight']['s']!=$level) {
+			rgb('Xlight', $rgb, $level);
+			sl('Xlight', $level);
+		}
 	}
 } else {
 	echo 'false';
