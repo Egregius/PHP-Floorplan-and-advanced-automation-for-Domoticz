@@ -315,7 +315,7 @@ function ajax(Update=$LastUpdateTime){
 									$('#daikincmpfreq').css("width", width + "px");
 								}else{
 									$('#daikincmpfreq').html('');
-									$('#daikincmpfreq').css("width", "0px");
+									$('#daikincmpfreq').css("display", "none");
 								}
 							}catch{}
 						}else if(device=="heating"){

@@ -62,6 +62,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
     
 //    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
+    $d[$k.'_set']['s']=31;
 	if ($d[$k.'_set']['s']>10) {
 //		if (${'dif'.$k}>0) {
 //			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='B') {
