@@ -137,7 +137,7 @@ td{text-align:center;font-size:1.1em;}
 #zoldervuur1{top:797px;left:250px;height:26px;width:auto;}
 #zoldervuur2{top:797px;left:272px;height:26px;width:auto;}
 
-#daikincmpfreq{top:376px;left:88px;height:20px;width:316px;background-color:#F00;z-index:-1;}
+#daikincmpfreq{top:376px;left:88px;height:20px;z-index:-1;}
 
 #tbelknop{top:24px;left:468px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}
