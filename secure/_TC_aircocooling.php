@@ -17,10 +17,10 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 $Setkamer=33;
 if ($d['kamer_set']['m']==0) {
     if (
-			$d['kamer_temp']['s']>=16
+			/*$d['kamer_temp']['s']>=16
 		&&	$d['buiten_temp']['s']>=17
 		&&	$d['minmaxtemp']['m']>=17
-		&&	
+		&&	*/
 			(
 					$d['raamkamer']['s']=='Closed'
 				||	$d['RkamerR']['s']>=80
@@ -71,7 +71,6 @@ if ($d['kamer_set']['m']==0) {
         elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
         elseif (TIME>strtotime('11:00')) $Setkamer=25;
         elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
-        elseif (TIME>strtotime('9:00')) $Setkamer=26;
         if ($d['Weg']['s']==2) $Setkamer=$Setkamer+2;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
@@ -83,10 +82,10 @@ if ($d['kamer_set']['m']==0) {
 $Setalex=33;
 if ($d['alex_set']['m']==0) {
     if (
-			$d['alex_temp']['s']>=16
+			/*$d['alex_temp']['s']>=16
 		&& 	$d['buiten_temp']['s']>=17
 		&&	$d['minmaxtemp']['m']>=17
-		&&	
+		&&	*/
 			(
 					$d['raamalex']['s']=='Closed'
 				||	$d['Ralex']['s']>80
@@ -147,10 +146,10 @@ if ($d['alex_set']['m']==0) {
 $Setliving=33;
 if ($d['living_set']['m']==0) {
     if (
-    		$d['living_temp']['s']>=18
+    		/*$d['living_temp']['s']>=18
    		&& 	$d['buiten_temp']['s']>=17
     	&&	$d['minmaxtemp']['m']>=17
-    	&&	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
+    	&&	*/($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
     	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
@@ -158,8 +157,6 @@ if ($d['living_set']['m']==0) {
 		$Setliving=26;
 		if ($d['Weg']['s']==0) {
 			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=23;
-		} else {
-			$Setliving=25;
 		}
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {

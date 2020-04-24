@@ -595,39 +595,6 @@ if ($d['auto']['s']=='On') {
     }
 }
 
-    /* -------------------------------------------- ALTIJD BIJ THUIS ----------------------------*/
-
-if ($d['Weg']['s']==0){
-	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) $rgb=230;
-	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) $rgb=1;
-	else $rgb=false;
-
-	if ($rgb!=false) {
-		$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-		if($data === FALSE){
-			return FALSE;
-		}else{
-			$array=explode(",",$data);
-			$control_info= array();
-			foreach($array as $value){
-				$pair= explode("=",$value);
-				$control_info[$pair[0]]=$pair[1];
-			}
-			$level=$control_info['cmpfreq'];
-			if ($level>100)$level=100;
-			if ($d['Xlight']['s']!=$level) {
-				rgb('Xlight', $rgb, $level);
-				sl('Xlight', $level, basename(__FILE__).':'.__LINE__);
-			}
-		}
-	} else {
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-} else { /* -------------------------------------------- ALTIJD BIJ WEG OF SLAPEN ----------------------------*/
-	if ($d['Xlight']['s']>0) {
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}
 
     /* -------------------------------------------- ALTIJD ----------------------------*/
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {

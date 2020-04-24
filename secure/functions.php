@@ -1125,4 +1125,10 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $
     lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing ($msg)");
     sleep(1);
 	store('daikin'.$device, daikinstatus($device));
+	if ($power==0) {
+		storemode('daikin'.$k, 0, basename(__FILE__).':'.__LINE__);
+	} else {
+		storemode('daikin'.$k, $mode, basename(__FILE__).':'.__LINE__);
+	}
+
 }
