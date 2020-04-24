@@ -303,11 +303,13 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($mode>0) {
 									width = $mode * 3.16;
+									if (width<48) width=48;
 									$('#daikincmpfreq').html(' cmp=' + $mode);
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
 								}else if($mode<0) {
 									width = $mode * -3.16;
+									if (width<48) width=48;
 									$('#daikincmpfreq').html(' cmp=' + -$mode);
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
