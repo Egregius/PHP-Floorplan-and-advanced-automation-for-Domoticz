@@ -312,6 +312,7 @@ function ajax(Update=$LastUpdateTime){
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
 								}else{
+									$('#daikincmpfreq').html('');
 									$('#daikincmpfreq').css("width", "0px");
 								}
 							}catch{}
