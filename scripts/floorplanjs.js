@@ -302,13 +302,13 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="Xlight"){
 							try{
 								if($mode>0) {
-									width = $mode * 3.16;
+									width = ($mode * 3.16) / 0.7;
 									if (width<48) width=48;
 									$('#daikincmpfreq').html(' cmp=' + $mode);
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
 								}else if($mode<0) {
-									width = $mode * -3.16;
+									width = ($mode * -3.16) / 0.7;
 									if (width<48) width=48;
 									$('#daikincmpfreq').html(' cmp=' + -$mode);
 									$('#daikincmpfreq').css("background-color","blue");
