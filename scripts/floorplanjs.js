@@ -300,6 +300,7 @@ function ajax(Update=$LastUpdateTime){
 								}
 							}catch{}
 						}else if(device=="Xlight"){
+							console.log('XXXXXXXX LIght ' + $mode);
 							/*try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
 								if($value==0)html+='';
