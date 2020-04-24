@@ -307,8 +307,8 @@ function ajax(Update=$LastUpdateTime){
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
 								}else if($mode<0) {
-									width = $mode * 3.16;
-									$('#daikincmpfreq').html(' cmp=' + $mode);
+									width = $mode * -3.16;
+									$('#daikincmpfreq').html(' cmp=' + -$mode);
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
 								}else{

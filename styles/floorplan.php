@@ -163,7 +163,7 @@ td{text-align:center;font-size:1.1em;}
 /* Deuren */
 .red{background:rgba(255,0,0,1);}
 
-#achterdeur{top:264px;left:81px;width:30px;height:48px;z-index:-10;}#tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+#achterdeur{top:264px;left:80px;width:30px;height:48px;z-index:-10;}#tachterdeur{top:280px;left:70px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #deurbadkamer{top:421px;left:341px;width:7px;height:46px;z-index:-10;}#tdeurbadkamer{top:435px;left:329px;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
 
 
