@@ -300,23 +300,21 @@ function ajax(Update=$LastUpdateTime){
 								}
 							}catch{}
 						}else if(device=="Xlight"){
-							if($mode>0) {
-								width = $mode * 3.16;
-								$('#daikincmpfreq').html($mode);
-								$('#daikincmpfreq').css("background-color","red");
-								$('#daikincmpfreq').css("width", width + "px");
-							}else if($mode<0) {
-								width = $mode * 3.16;
-								$('#daikincmpfreq').html($mode);
-								$('#daikincmpfreq').css("background-color","blue");
-								$('#daikincmpfreq').css("width", width + "px");
-							}else{
-								width = 0;
-								$('#daikincmpfreq').html($mode);
-								$('#daikincmpfreq').css("width", width + "100px");
-							}
-							
-							
+							try{
+								if($mode>0) {
+									width = $mode * 3.16;
+									$('#daikincmpfreq').html(' cmp=' + $mode);
+									$('#daikincmpfreq').css("background-color","red");
+									$('#daikincmpfreq').css("width", width + "px");
+								}else if($mode<0) {
+									width = $mode * 3.16;
+									$('#daikincmpfreq').html(' cmp=' + $mode);
+									$('#daikincmpfreq').css("background-color","blue");
+									$('#daikincmpfreq').css("width", width + "px");
+								}else{
+									$('#daikincmpfreq').css("width", "0px");
+								}
+							}catch{}
 						}else if(device=="heating"){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
@@ -1194,6 +1192,7 @@ function floorplanheating(){
         html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
         html+='<div class="fix z2" id="sirene"></div>';
+        html+='<div class="fix z2" id="daikincmpfreq"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
         items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed'];
