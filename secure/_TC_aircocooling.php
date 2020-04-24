@@ -69,7 +69,7 @@ if ($d['kamer_set']['m']==0) {
         elseif (TIME>strtotime('14:00')) $Setkamer=23.5;
         elseif (TIME>strtotime('13:00')) $Setkamer=24;
         elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
-        elseif (TIME>strtotime('11:00')) $Setkamer=25;
+        elseif (TIME>strtotime('11:00')) $Setkamer=18;
         elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
         if ($d['Weg']['s']==2) $Setkamer=$Setkamer+2;
     }
@@ -132,7 +132,7 @@ if ($d['alex_set']['m']==0) {
         elseif (TIME>strtotime('14:00')) $Setalex=23;
         elseif (TIME>strtotime('13:00')) $Setalex=23.5;
         elseif (TIME>strtotime('12:00')) $Setalex=24;
-        elseif (TIME>strtotime('11:00')) $Setalex=24.5;
+        elseif (TIME>strtotime('11:00')) $Setalex=18;
         elseif (TIME>strtotime('10:00')) $Setalex=25;
         elseif (TIME>strtotime('9:00')) $Setalex=25.5;
         if ($d['Weg']['s']==2) $Setalex=$Setalex+2;
@@ -156,7 +156,7 @@ if ($d['living_set']['m']==0) {
 	) {
 		$Setliving=26;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=23;
+			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=18;
 		}
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
@@ -203,13 +203,11 @@ foreach (array('kamer', 'tobi', 'alex') as $k) {
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
-if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
-if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
-	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:15')) {
+	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
@@ -235,27 +233,18 @@ if ($d['auto']['s']=='On') {
 		}
 	} 
 
-	elseif (TIME>=strtotime('10:15')&&TIME<strtotime('15:00')) {
-		if ($warm) {
-			if($zon>2000) {
-				if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
-				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
-			}
-		} else {
-			if ($d['RkamerL']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['RkamerR']['s']>0&&($d['deurkamer']['s']=='Open'||$d['kamer']['s']>0)) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+	elseif (TIME>=strtotime('10:00')&&TIME<strtotime('15:00')) {
+		if($zon>2000) {
+			if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
+			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	} 
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
-		if ($warm) {
-			if($zon>2000) {
-				if ($d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
-				if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
-				if ($d['Rbureel']['s']<50) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
-			}
+		if($zon>2000) {
+			if ($d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
+			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
+			if ($d['Rbureel']['s']<50) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
