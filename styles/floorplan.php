@@ -214,12 +214,12 @@ td{text-align:center;font-size:1.1em;}
 .btnf{width:120px;height:40px}
 
 /* Zones */
-#zliving{top:51px;left:89px;width:249px;height:197px;}
-#zkeuken{top:115px;left:345px;width:129px;height:133px;}
-#zinkom{top:51px;left:345px;width:129px;height:56px;}
-#zgarage{top:256px;left:89px;width:315px;height:139px;}
-#zhalla{top:403px;left:214px;width:127px;height:66px;}
-#zhallb{top:469px;left:214px;width:44px;height:66px;}
+#zliving{top:51px;left:89px;width:249px;height:197px;z-index:-10;}
+#zkeuken{top:115px;left:345px;width:129px;height:133px;z-index:-10;}
+#zinkom{top:51px;left:345px;width:129px;height:56px;z-index:-10;}
+#zgarage{top:256px;left:89px;width:315px;height:139px;z-index:-10;}
+#zhalla{top:403px;left:214px;width:127px;height:66px;z-index:-10;}
+#zhallb{top:469px;left:214px;width:44px;height:66px;z-index:-10;}
 
 /* Setpoints */
 #kamerZ{top:513px;left:471px;text-align:left;transform:rotate(90deg);-webkit-transform:rotate(90deg);}
