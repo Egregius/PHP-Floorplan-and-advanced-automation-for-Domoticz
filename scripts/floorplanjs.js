@@ -299,6 +299,21 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById("trdwater").innerHTML="";
 								}
 							}catch{}
+						}else if(device=="Xlight"){
+							/*try{
+							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
+								if($value==0)html+='';
+								else if($value==-2)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
+								else if($value==-1)html+='<img src="https://home.egregius.be/images/Cooling_grey.png" class="i40" alt="Cooling">';
+								else if($value==1)html+='<img src="https://home.egregius.be/images/Cooling_red.png" class="i40" alt="Elec">';
+								else if($value==2){
+									if(d['brander']['s']=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
+									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
+								}
+								document.getElementById("daikincmpfreq").innerHTML=html;
+							}catch{}*/
+							
+							
 						}else if(device=="heating"){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
@@ -1141,6 +1156,7 @@ function floorplan(){
         html+='<div class="fix Weg" id="Weg"></div>';
         html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
         html+='<div class="fix z2" id="sirene"></div>';
+        html+='<div class="fix z2" id="daikincmpfreq"></div>';
         html+='<div class="fix z1" id="zoldertrap"></div>';
         items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
