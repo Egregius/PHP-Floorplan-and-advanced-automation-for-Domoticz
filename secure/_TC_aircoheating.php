@@ -64,11 +64,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
     if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
 //		if (${'dif'.$k}>0) {
-//			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->f_rate!='B') {
+//			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->mode!=4||$daikin->f_rate!='B') {
 //				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, 'B');
 //			}
 //		} else {
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='A') {
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->mode!=4||$daikin->f_rate!='A') {
 				daikinset($k, 1, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'A');
 				storemode('daikin'.$k, 4);
 			}

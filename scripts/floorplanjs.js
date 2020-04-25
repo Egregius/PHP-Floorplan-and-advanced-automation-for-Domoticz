@@ -307,12 +307,14 @@ function ajax(Update=$LastUpdateTime){
 									$('#daikincmpfreq').html(' cmp=' + $mode);
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
+									$('#daikincmpfreq').css("display", "inherit");
 								}else if($mode<0) {
 									width = ($mode * -3.16) / 0.7;
 									if (width<48) width=48;
 									$('#daikincmpfreq').html(' cmp=' + -$mode);
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
+									$('#daikincmpfreq').css("display", "inherit");
 								}else{
 									$('#daikincmpfreq').html('');
 									$('#daikincmpfreq').css("display", "none");

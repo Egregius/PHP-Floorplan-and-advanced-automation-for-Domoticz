@@ -21,7 +21,7 @@ if (TIME<=strtotime('9:00')) {
 		}
 	}
 }
-/*
+
 $db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
@@ -43,10 +43,9 @@ if ($d['minmaxtemp']['m'] > -3) {
 
 	lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
-		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+		//sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 	}
 } 
-*/
 
 // Eerste blok voor zwembad
 /*if ($d['zwembadfilter']['s']=='On') {

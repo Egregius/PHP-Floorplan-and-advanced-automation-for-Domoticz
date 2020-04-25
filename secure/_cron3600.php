@@ -19,6 +19,10 @@ $sql="SELECT id,date,value
         ORDER BY t2.date DESC
         LIMIT 1
     );";
+if (!isset($db)) {
+	$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
 if (!$result=$db->query($sql)) {
     die('There was an error running the query ['.$sql.' - '.$db->error.']');
 }

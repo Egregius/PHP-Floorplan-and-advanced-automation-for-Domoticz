@@ -69,7 +69,7 @@ if ($d['kamer_set']['m']==0) {
         elseif (TIME>strtotime('14:00')) $Setkamer=23.5;
         elseif (TIME>strtotime('13:00')) $Setkamer=24;
         elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
-        elseif (TIME>strtotime('11:00')) $Setkamer=18;
+        elseif (TIME>strtotime('11:00')) $Setkamer=25;
         elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
         if ($d['Weg']['s']==2) $Setkamer=$Setkamer+2;
     }
@@ -132,7 +132,7 @@ if ($d['alex_set']['m']==0) {
         elseif (TIME>strtotime('14:00')) $Setalex=23;
         elseif (TIME>strtotime('13:00')) $Setalex=23.5;
         elseif (TIME>strtotime('12:00')) $Setalex=24;
-        elseif (TIME>strtotime('11:00')) $Setalex=18;
+        elseif (TIME>strtotime('11:00')) $Setalex=24.5;
         elseif (TIME>strtotime('10:00')) $Setalex=25;
         elseif (TIME>strtotime('9:00')) $Setalex=25.5;
         if ($d['Weg']['s']==2) $Setalex=$Setalex+2;
@@ -156,7 +156,7 @@ if ($d['living_set']['m']==0) {
 	) {
 		$Setliving=26;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=18;
+			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=23;
 		}
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
@@ -172,15 +172,15 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	//if ($d[$k.'_set']['s']<20) $d[$k.'_set']['s']=20;
 	if ($d[$k.'_set']['s']<32) {
-		if (${'dif'.$k}<0) {
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='B') {
-				daikinset($k, 1, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'B');
-			}
-		} else {
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->f_rate!='A') {
+//		if (${'dif'.$k}<0) {
+//			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->mode!=3||$daikin->f_rate!='B') {
+//				daikinset($k, 1, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'B');
+//			}
+//		} else {
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->mode!=3||$daikin->f_rate!='A') {
 				daikinset($k, 1, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, 'A');
 			}
-		}
+//		}
 	} else {
 		if ($daikin->pow!=0) {
 			daikinset($k, 0, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
