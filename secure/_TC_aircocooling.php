@@ -59,18 +59,7 @@ if ($d['kamer_set']['m']==0) {
     ) {
         $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('21:00')) $Setkamer=20;
-        elseif (TIME>strtotime('20:00')) $Setkamer=20.5;
-        elseif (TIME>strtotime('19:00')) $Setkamer=21;
-        elseif (TIME>strtotime('18:00')) $Setkamer=21.5;
-        elseif (TIME>strtotime('17:00')) $Setkamer=22;
-        elseif (TIME>strtotime('16:00')) $Setkamer=22.5;
-        elseif (TIME>strtotime('15:00')) $Setkamer=23;
-        elseif (TIME>strtotime('14:00')) $Setkamer=23.5;
-        elseif (TIME>strtotime('13:00')) $Setkamer=24;
-        elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
-        elseif (TIME>strtotime('11:00')) $Setkamer=25;
-        elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
+        elseif (TIME>strtotime('12:00')) $Setkamer=20;
         if ($d['Weg']['s']==2) $Setkamer=$Setkamer+2;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
@@ -123,18 +112,7 @@ if ($d['alex_set']['m']==0) {
     ) {
         $Setalex=26;
         if (TIME<strtotime('4:00')) $Setalex=20;
-        elseif (TIME>strtotime('20:00')) $Setalex=20;
-        elseif (TIME>strtotime('19:00')) $Setalex=20.5;
-        elseif (TIME>strtotime('18:00')) $Setalex=21;
-        elseif (TIME>strtotime('17:00')) $Setalex=21.5;
-        elseif (TIME>strtotime('16:00')) $Setalex=22;
-        elseif (TIME>strtotime('15:00')) $Setalex=22.5;
-        elseif (TIME>strtotime('14:00')) $Setalex=23;
-        elseif (TIME>strtotime('13:00')) $Setalex=23.5;
-        elseif (TIME>strtotime('12:00')) $Setalex=24;
-        elseif (TIME>strtotime('11:00')) $Setalex=24.5;
-        elseif (TIME>strtotime('10:00')) $Setalex=25;
-        elseif (TIME>strtotime('9:00')) $Setalex=25.5;
+        elseif (TIME>strtotime('12:00')) $Setalex=20;
         if ($d['Weg']['s']==2) $Setalex=$Setalex+2;
     }
     if ($d['alex_set']['s']!=$Setalex) {

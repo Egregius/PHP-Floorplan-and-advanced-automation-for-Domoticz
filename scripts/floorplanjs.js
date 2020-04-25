@@ -304,14 +304,22 @@ function ajax(Update=$LastUpdateTime){
 								if($mode>0) {
 									width = ($mode * 3.16) / 0.7;
 									if (width<48) width=48;
-									$('#daikincmpfreq').html(' cmp=' + $mode);
+									if ($mode>40) power=$mode*23;
+									else if ($mode>28) power=$mode*22;
+									else if ($mode>16) power=$mode*18;
+									else power=$mode*16;
+									$('#daikincmpfreq').html(' cmp:'+$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
 									$('#daikincmpfreq').css("display", "inherit");
 								}else if($mode<0) {
 									width = ($mode * -3.16) / 0.7;
 									if (width<48) width=48;
-									$('#daikincmpfreq').html(' cmp=' + -$mode);
+									if ($mode>40) power=$mode*-23;
+									else if ($mode>28) power=$mode*-22;
+									else if ($mode>16) power=$mode*-18;
+									else power=$mode*-16;
+									$('#daikincmpfreq').html(' cmp:'+-$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
 									$('#daikincmpfreq').css("display", "inherit");
