@@ -945,7 +945,7 @@ function fbadkamer()
             if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) {
             	sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
             } else {
-            	sl('lichtbadkamer', 9, basename(__FILE__).':'.__LINE__);
+            	sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
             }
         }
         if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
