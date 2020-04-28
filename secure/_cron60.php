@@ -334,7 +334,7 @@ if ($d['auto']['s']=='On') {
     ) {
         sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    if ($d['auto']['m']) {
+    if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
         if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
             if ($d['jbl']['s']!='Off') {
                 sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
@@ -655,17 +655,7 @@ if ($d['water']['s']=='On') {
         sw('water', 'Off');
     }
 }
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
-    if ($d['auto']['m']!=true) {
-        storemode('auto', true, basename(__FILE__).':'.__LINE__);
-        $d['auto']['m']=true;
-    }
-} else {
-    if ($d['auto']['m']!=false ) {
-        storemode('auto', false, basename(__FILE__).':'.__LINE__);
-        $d['auto']['m']=false;
-    }
-}
+
 //SMAPPEE
 $timefrom=TIME-86400;
 $chauth = curl_init(
