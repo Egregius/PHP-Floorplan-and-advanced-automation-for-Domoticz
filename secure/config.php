@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 7.3
  *
  * Example config file
  * Can be placed in /var/www/config.php
