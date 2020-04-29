@@ -304,9 +304,9 @@ function ajax(Update=$LastUpdateTime){
 								if($mode>0) {
 									width = ($mode * 3.16) / 0.7;
 									if (width<48) width=48;
-									if ($mode>40) power=$mode*23;
-									else if ($mode>28) power=$mode*22;
-									else if ($mode>16) power=$mode*18;
+									if ($mode>40) power=$mode*20;
+									else if ($mode>28) power=$mode*18;
+									else if ($mode>16) power=$mode*17;
 									else power=$mode*16;
 									$('#daikincmpfreq').html(' cmp:'+$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","red");
@@ -315,9 +315,9 @@ function ajax(Update=$LastUpdateTime){
 								}else if($mode<0) {
 									width = ($mode * -3.16) / 0.7;
 									if (width<48) width=48;
-									if ($mode>40) power=$mode*-23;
-									else if ($mode>28) power=$mode*-22;
-									else if ($mode>16) power=$mode*-18;
+									if ($mode>40) power=$mode*-20;
+									else if ($mode>28) power=$mode*-18;
+									else if ($mode>16) power=$mode*-17;
 									else power=$mode*-16;
 									$('#daikincmpfreq').html(' cmp:'+-$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","blue");
