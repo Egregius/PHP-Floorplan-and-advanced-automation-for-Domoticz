@@ -180,9 +180,6 @@ if ($d['nvidia']['s']=='On') {
 if (ping('192.168.2.105')) {
 	sleep(1);
     if (ping('192.168.2.105')) {
-		if ($d['bose105']['m']!='Online') {
-			storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
-		}
 		if ($d['achterdeur']['s']=='Open') {
 			$status=json_decode(
 				json_encode(
@@ -195,9 +192,15 @@ if (ping('192.168.2.105')) {
 				true
 			);
 			if (!empty($status)) {
+				if ($d['bose105']['m']!='Online') {
+					storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
+					bosekey('SHUFFLE_ON', 0, '192.168.2.105');
+				}
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY') {
-						bosezone(105);
+						bosekey('PRESET_2', 0, 105);
+						sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
+						bosekey('SHUFFLE_ON', 0, '192.168.2.105');
 					}
 				}
 			}

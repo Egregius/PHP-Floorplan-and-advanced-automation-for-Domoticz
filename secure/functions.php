@@ -801,7 +801,7 @@ function bosezone($ip,$vol='')
 	/*if (TIME<strtotime('9:00')) $preset='PRESET_4';
 	else*/if (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
-	if ($d['bose105']['m']=='Offline'/*&&$ip!=105*/) {
+	if ($d['bose105']['s']=='Off'/*&&$ip!=105*/) {
 		if ($d['Weg']['s']<=1) {
 			if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
@@ -846,10 +846,10 @@ function bosezone($ip,$vol='')
 				}
 			}
 		}
-	} elseif ($ip==105&&$d['bose105']['s']=='Off') {//Bose buiten
+	} /*elseif ($ip==105&&$d['bose105']['s']=='Off') {//Bose buiten
 		sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
 		bosekey($preset, 0, 105);
-	}
+	}*/
 }
 function bosepost($method,$xml,$ip=101,$log=false)
 {
