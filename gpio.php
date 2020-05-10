@@ -25,7 +25,7 @@ if (isset($_REQUEST['gpio'])) {
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
                 sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
         } else {
-        	telegram('Gasverbruik '.$d['gasvandaag']['s']+1);
+        	telegram('Gasverbruik '. $d['gasvandaag']['s'] + 1 );
         }
         
     } elseif ($gpio==21) {

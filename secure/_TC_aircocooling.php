@@ -57,10 +57,8 @@ if ($d['kamer_set']['m']==0) {
 				)
     		)
     ) {
-        $Setkamer=26;
         if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('12:00')) $Setkamer=20;
-        if ($d['Weg']['s']==2) $Setkamer=$Setkamer+2;
+        elseif (TIME>strtotime('10:00')) $Setkamer=20;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -110,10 +108,8 @@ if ($d['alex_set']['m']==0) {
 				)
 			)
     ) {
-        $Setalex=26;
         if (TIME<strtotime('4:00')) $Setalex=20;
-        elseif (TIME>strtotime('12:00')) $Setalex=20;
-        if ($d['Weg']['s']==2) $Setalex=$Setalex+2;
+        elseif (TIME>strtotime('10:00')) $Setalex=20;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -132,10 +128,7 @@ if ($d['living_set']['m']==0) {
     	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
 	) {
-		$Setliving=26;
-		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('5:00')&&TIME<strtotime('21:15')) $Setliving=23;
-		}
+		$Setliving=23;
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
