@@ -1163,7 +1163,7 @@ function floorplan(){
 	myAjax=setInterval(ajax, 500);
     try{
         html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
-        html+='<div class="fix z0 afval" id="gcal"></div>';
+        html+='<div class="fix z1 afval" id="gcal"></div>';
         html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
         html+='<div class="fix picam2" id="picam2"></div>';
