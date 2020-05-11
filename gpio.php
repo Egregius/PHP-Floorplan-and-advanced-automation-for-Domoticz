@@ -24,10 +24,7 @@ if (isset($_REQUEST['gpio'])) {
             $d['douche']['s']=$d['douche']['s']+1;
         } elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) {
                 sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
-        } else {
-        	telegram('Gasverbruik '. $d['gasvandaag']['s'] + 1 );
-        }
-        
+        } 
     } elseif ($gpio==21) {
         store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
         if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80) {
