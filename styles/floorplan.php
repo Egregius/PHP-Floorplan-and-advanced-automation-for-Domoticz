@@ -59,13 +59,13 @@ td{text-align:center;font-size:1.1em;}
 .yellow{background:rgba(255,200,0,1);z-index:-10;}
 .stamp{width:38px;text-align:center;font-size:100%}
 .secured{background:repeating-linear-gradient(135deg,rgba(255,0,0,0),rgba(255,0,0,0) 7px,rgba(255,0,0,0) 8px,rgba(255,0,0,0.6) 15px);z-index:-1000;}
-.motion{background:rgba(255,0,0,0.4);z-index:-100;}
+.motion{background:rgba(255,0,0,0.4);z-index:-1000;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
 .huge2{width:100%;height:48%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge4{width:100%;height:24%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge5{width:100%;height:19.5%;margin:1% 0px 1% 0px;font-size:3em;}
-#afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;}
+#afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;z-index:10;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
 .dimmer{position:fixed;top:0px;left:0px;height:100%;width:100%;background:#000;z-index:100000;}
 .dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
@@ -137,7 +137,7 @@ td{text-align:center;font-size:1.1em;}
 #zoldervuur1{top:797px;left:250px;height:26px;width:auto;}
 #zoldervuur2{top:797px;left:272px;height:26px;width:auto;}
 
-#daikincmpfreq{top:376px;left:88px;height:20px;z-index:-10;text-align:left;color:#FFF!important}
+#daikincmpfreq{top:376px;left:88px;height:20px;z-index:0;text-align:left;color:#FFF}
 
 #tbelknop{top:24px;left:468px;transform:rotate(270deg);-webkit-transform:rotate(270deg);}
 #tpirgarage{top:256px;left:300px;}
