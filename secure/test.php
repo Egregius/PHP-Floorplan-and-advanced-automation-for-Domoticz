@@ -20,6 +20,9 @@ echo palindroom('madam');
 
 function palindroom($word) {
 	echo $word;
+	$array=str_split($word, 1);
+	$length=count($array);
+	echo ' = '.$length.' characters.';
 	echo '<br>';
 }
 
