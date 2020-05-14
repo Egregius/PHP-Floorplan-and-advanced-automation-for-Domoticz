@@ -14,8 +14,7 @@ $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<600))&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
         $Setkamer=10;
-        if (TIME<strtotime('4:00')) $Setkamer=15.0;
-        elseif (TIME>strtotime('21:00')) $Setkamer=15.0;
+        if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Setkamer=14;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -28,7 +27,7 @@ if ($d['tobi_set']['m']==0) {
     if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurtobi']['s']=='Closed'||($d['deurtobi']['s']=='Open'&&past('deurtobi')<600))&&$d['raamtobi']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamtobi')>7198 || TIME>strtotime('20:00'))) {
         $Settobi=10;
         if ($d['gcal']['s']) {
-            if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Settobi=15.0;
+            if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Settobi=14;
         }
     }
     if ($d['tobi_set']['s']!=$Settobi) {
@@ -42,8 +41,7 @@ $Setalex=4;
 if ($d['alex_set']['m']==0) {
     if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<600))&&$d['raamalex']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
         $Setalex=10;
-        if (TIME<strtotime('4:30')) $Setalex=15.0;
-        elseif (TIME>strtotime('19:00')) $Setalex=15.5;
+        if (TIME<strtotime('4:30')||TIME>strtotime('19:00')) $Setalex=14;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);
@@ -181,7 +179,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
     $b7=past('$ 8badkamer-7');
     $b7b=past('8Kamer-7');
     if ($b7b<$b7) $b7=$b7b;
-    $x=22;
+    $x=21;
     if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=1&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
         store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=$x;

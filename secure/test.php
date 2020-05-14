@@ -12,33 +12,15 @@
 $start=microtime(true);
 require 'functions.php';
 
-$d=fetchdata();
-//telegram('test');
 
-if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) $rgb=230;
-elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) $rgb=1;
-else $rgb=false;
+echo palindroom('test');
+echo palindroom('mama');
+echo palindroom('madam');
 
-if ($rgb!=false) {
-	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-	if($data === FALSE){
-		return FALSE;
-	}else{
-		$array=explode(",",$data);
-		$control_info= array();
-		foreach($array as $value){
-			$pair= explode("=",$value);
-			$control_info[$pair[0]]=$pair[1];
-		}
-		$level=$control_info['cmpfreq'];
-		if ($level>100)$level=100;
-		if ($d['Xlight']['s']!=$level) {
-			rgb('Xlight', $rgb, $level);
-			sl('Xlight', $level);
-		}
-	}
-} else {
-	sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+
+function palindroom($word) {
+	echo $word;
+	echo '<br>';
 }
 
 

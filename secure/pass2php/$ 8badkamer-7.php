@@ -14,7 +14,7 @@ if ($d['badkamervuur1']['s']=='On') {
 	if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
 	sw('badkamervuur1', 'Off');
 } elseif ($d['heating']['s']>=0) {
-	store('badkamer_set', 22.2, basename(__FILE__).':'.__LINE__);
+	store('badkamer_set', 21, basename(__FILE__).':'.__LINE__);
 	sw('badkamervuur1', 'On');
 	if ($d['badkamervuur2']['s']=='Off') sw('badkamervuur2', 'On');
 }

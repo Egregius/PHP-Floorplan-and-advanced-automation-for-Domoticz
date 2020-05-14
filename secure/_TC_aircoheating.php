@@ -66,7 +66,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if (${'dif'.$k}>=0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;}
 		elseif (${'dif'.$k}>=0.2) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;}
 		elseif (${'dif'.$k}>=0.1) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;}
-		elseif (${'dif'.$k}>=0) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;}
+		elseif (${'dif'.$k}>=0) {$rate='3';$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;}
 		elseif (${'dif'.$k}>=-0.1) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;}
 		elseif (${'dif'.$k}>=-0.2) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;}
 		elseif (${'dif'.$k}>=-0.3) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
@@ -109,7 +109,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
     $b7=past('$ 8badkamer-7');
     $b7b=past('8Kamer-7');
     if ($b7b<$b7) $b7=$b7b;
-    $x=22;
+    $x=21;
     if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=1&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
         store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=$x;
@@ -163,7 +163,6 @@ if ($d['minmaxtemp']['m']>19) {
 $difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
 if ($d['Weg']['s']==0&&$difzolder<0) {
-	lg($difzolder);
 	$difheater1=0;
 	$difheater2=-2;
 	if ($difzolder<=$difheater2&&$d['zoldervuur2']['s']!='On'&&past('zoldervuur2')>90) {
