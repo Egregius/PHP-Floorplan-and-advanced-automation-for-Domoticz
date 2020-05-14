@@ -13,21 +13,24 @@ $start=microtime(true);
 require 'functions.php';
 
 
-echo 'test '.palindroom('test').'<br>';
-echo 'madam '.palindroom('test').'<br>';
+echo 'test '.palindrome('test').'<br>';
+echo 'madam '.palindrome('madam').'<br>';
+echo 'kook '.palindrome('kook').'<br>';
+echo 'droommoord '.palindrome('droommoord').'<br>';
+echo 'droomoord '.palindrome('droomoord').'<br>';
 
 
-function palindroom($word) {
+function palindrome($word) {
 	$palindrome=true;
 	$array=str_split($word, 1);
 	$length=count($array);
-	for ($x=0;$x<$length;$x) {
+	for ($x=0;$x<=$length;$x) {
 		if ($array[$x]!=$array[$length-1-$x]) {
 			$palindrome=false;
 			break;
 		}
 		$x++;
-		if ($x>=floor($length/2)) break;
+		if ($x>floor($length/2)) break;
 	}
 	return $palindrome;
 }
