@@ -23,7 +23,13 @@ function palindroom($word) {
 	$array=str_split($word, 1);
 	$length=count($array);
 	echo ' = '.$length.' characters.';
-	echo '<br>';
+	for ($x=0;$x<$length;$x) {
+		echo $array[$x];
+		echo $array[$length-1-$x];
+		$x++;
+		if ($x>=floor($length/2)) break;
+	}
+	echo '<hr>';
 }
 
 
