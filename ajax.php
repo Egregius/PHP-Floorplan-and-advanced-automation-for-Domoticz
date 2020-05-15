@@ -183,11 +183,11 @@ if ($home==true) {
 			include 'secure/_fetchdomoticz.php';
 		} elseif ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
-				/*if ($d['denon']['s']!='On') {
+				if ($d['nvidia']['s']!='On') {
+					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['denon']['s']!='On') {
 					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-				}*/
-				if ($d['tv']['s']!='On') {
-					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				sleep(4);
 				lgcommand('on');
@@ -202,7 +202,11 @@ if ($home==true) {
 				}
 				if ($d['denon']['s']!='Off') {
 					sw('denon', 'Off',basename(__FILE__).':'.__LINE__);
-				}				
+				}
+				if ($d['nvidia']['s']!='Off') {
+					sleep(10);
+					sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+				}
 			}
 		} elseif ($_REQUEST['command']=='water') {
 			storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
