@@ -302,23 +302,27 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="Xlight"){
 							try{
 								if($mode>0) {
-									width = ($mode * 3.16) / 0.85;
+									width = ($mode * 3.16);
 									if (width<48) width=48;
-									if ($mode>40) power=$mode*20;
-									else if ($mode>28) power=$mode*18;
-									else if ($mode>16) power=$mode*17;
-									else power=$mode*16;
+									if ($mode>80) power=$mode*20;
+									else if ($mode>60) power=$mode*19;
+									else if ($mode>40) power=$mode*18;
+									else if ($mode>28) power=$mode*17;
+									else if ($mode>16) power=$mode*16;
+									else power=$mode*15;
 									$('#daikincmpfreq').html(' cmp:'+$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","red");
 									$('#daikincmpfreq').css("width", width + "px");
 									$('#daikincmpfreq').css("display", "inherit");
 								}else if($mode<0) {
-									width = ($mode * -3.16) / 0.85;
+									width = ($mode * -3.16);
 									if (width<48) width=48;
-									if ($mode>40) power=$mode*-20;
-									else if ($mode>28) power=$mode*-18;
-									else if ($mode>16) power=$mode*-17;
-									else power=$mode*-16;
+									if ($mode>80) power=$mode*-20;
+									else if ($mode>60) power=$mode*-19;
+									else if ($mode>40) power=$mode*-18;
+									else if ($mode>28) power=$mode*-17;
+									else if ($mode>16) power=$mode*-16;
+									else power=$mode*-15;
 									$('#daikincmpfreq').html(' cmp:'+-$mode+'='+power+'W');
 									$('#daikincmpfreq').css("background-color","blue");
 									$('#daikincmpfreq').css("width", width + "px");
