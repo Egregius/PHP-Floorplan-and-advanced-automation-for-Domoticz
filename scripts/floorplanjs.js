@@ -302,7 +302,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="Xlight"){
 							try{
 								if($mode>0) {
-									width = ($mode * 3.16) / 0.7;
+									width = ($mode * 3.16) / 0.85;
 									if (width<48) width=48;
 									if ($mode>40) power=$mode*20;
 									else if ($mode>28) power=$mode*18;
@@ -313,7 +313,7 @@ function ajax(Update=$LastUpdateTime){
 									$('#daikincmpfreq').css("width", width + "px");
 									$('#daikincmpfreq').css("display", "inherit");
 								}else if($mode<0) {
-									width = ($mode * -3.16) / 0.7;
+									width = ($mode * -3.16) / 0.85;
 									if (width<48) width=48;
 									if ($mode>40) power=$mode*-20;
 									else if ($mode>28) power=$mode*-18;
