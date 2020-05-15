@@ -186,9 +186,9 @@ if ($home==true) {
 				if ($d['nvidia']['s']!='On') {
 					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 				}
-				if ($d['denon']['s']!='On') {
+				/*if ($d['denon']['s']!='On') {
 					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-				}
+				}*/
 				sleep(4);
 				lgcommand('on');
 				for ($x=1;$x<=4;$x++) {
