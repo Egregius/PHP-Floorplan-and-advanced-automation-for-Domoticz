@@ -183,6 +183,9 @@ if ($home==true) {
 			include 'secure/_fetchdomoticz.php';
 		} elseif ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
+				if ($d['tv']['s']!='On') {
+					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
+				}
 				if ($d['nvidia']['s']!='On') {
 					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 				}
