@@ -18,7 +18,7 @@ if ($d['auto']['s']=='On') {
 		$x=$y+$x;
 		$windhist=round($x/4, 2);
 	}
-	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>20.5)||($d['heating']['s']==-2	&&$d['living_temp']['s']>19.5))&&$d['zon']['s']>2000&&TIME>=strtotime("10:00")) { //Cooling
+	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>=20.5)||($d['heating']['s']==-2	&&$d['living_temp']['s']>=19.5))&&$d['zon']['s']>2000&&TIME>=strtotime("10:00")) { //Cooling
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;

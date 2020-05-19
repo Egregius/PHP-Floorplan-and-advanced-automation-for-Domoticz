@@ -240,16 +240,16 @@ if ($d['Weg']['s']==0){
 			}
 		}
 	} else {
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-		storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
+		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
 } else {
 	if ($d['Xlight']['s']>0) {
 		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-		storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
+		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 
-if (past('wind')>86) {
+if (past('wind')>36) {
 	require('_weather.php');
 }

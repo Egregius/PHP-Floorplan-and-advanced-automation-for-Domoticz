@@ -16,12 +16,11 @@ if ($d['badkamervuur1']['s']=='On') {
 } elseif ($d['heating']['s']>=0) {
 	store('badkamer_set', 21, basename(__FILE__).':'.__LINE__);
 	sw('badkamervuur1', 'On');
-	if ($d['badkamervuur2']['s']=='Off') sw('badkamervuur2', 'On');
 }
 douche();
 resetsecurity();
 if ($d['bose102']['s']=='Off') bosezone(102);
-if ($d['bose102']['m']==0) {
+if ($d['bose102']['m']==0&&past('bose102')>300) {
 	boseplayinfo(saytime().sayweather());
 	storemode('bose102', 1);
 }

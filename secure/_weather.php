@@ -56,7 +56,7 @@ if (isset($ds)) {
         }
         if (isset($ds['hourly']['data'])) {
             foreach ($ds['hourly']['data'] as $i) {
-                if ($i['time']>TIME&&$i['time']<TIME+3600*6) {
+                if ($i['time']>TIME&&$i['time']<TIME+3600*12) {
                     if ($i['temperature']>$maxtemp) {
                         $maxtemp=$i['temperature'];
                     }
@@ -68,11 +68,11 @@ if (isset($ds)) {
                     $maxrain=$i['precipIntensity'];
                 }
             }
-            $mintemp=round($mintemp, 1);
-            $maxtemp=round($maxtemp, 1);
             if ($d['max']['m']!=$maxrain) {
 	            storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
 	        }
+	        $mintemp=round($mintemp, 1);
+	        $maxtemp=round($maxtemp, 1);
         }
     }
 }
@@ -121,16 +121,14 @@ if (isset($rains['forecasts'])) {
 	$buienradar=round($buienradar/7, 0);
     if ($buienradar>20) $maxrain=$buienradar;
 }
+$newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
 if (isset($ds['hourly']['data'])) {
-	$maxtemp=round($maxtemp, 1);
-    if ($temps['buiten_temp']>$maxtemp) $maxtemp=round($temps['buiten_temp'], 1);
-    $mintemp=round($mintemp, 1);
-    if ($temps['buiten_temp']<$mintemp) $mintemp=round($temps['buiten_temp'], 1);
+    if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
+    if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
     if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
     if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
 }
-$newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
 echo 'new = '.$newbuitentemp;
 if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
