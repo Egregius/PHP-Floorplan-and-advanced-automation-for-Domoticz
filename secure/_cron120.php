@@ -18,37 +18,35 @@ if ($d['auto']['s']=='On') {
 		$x=$y+$x;
 		$windhist=round($x/4, 2);
 	}
-	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>=20.5)||($d['heating']['s']==-2	&&$d['living_temp']['s']>=19.5))&&$d['zon']['s']>2000&&TIME>=strtotime("10:00")) { //Cooling
+	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>=20.5)||($d['heating']['s']==-2	&&$d['living_temp']['s']>=19.5))&&$d['zon']['s']>1000&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Cooling
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
 		elseif ($d['wind']['s']>=15) $luifel=35;
 		elseif ($d['wind']['s']>=10) $luifel=40;
 		else $luifel=45;
-	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>22&&$d['zon']['s']>3000&&TIME>=strtotime("10:00")) { //Neutral
+		if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>22&&$d['zon']['s']>2000&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Neutral
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
 		elseif ($d['wind']['s']>=15) $luifel=30;
 		elseif ($d['wind']['s']>=10) $luifel=30;
 		else $luifel=40;
-	} else {
-		$luifel=0;
-	}
-
-	if ($luifel>$d['luifel']['s']+45) $luifel=$d['luifel']['s']+45;
-	elseif ($luifel<$d['luifel']['s']-45&&$d['achterdeur']['s']=='Closed') $luifel=$d['luifel']['s']-45;
-	if ($d['buien']['s']>=10) 	 $luifel=0;
-	if ($luifel<10) $luifel=0;
-	elseif ($luifel>100) $luifel=100;
-
-
-	if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
-		sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
-	} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
-		sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
-	}
+		if (		past('luifel')>900&&$d['luifel']['s']<$luifel&&$d['luifel']['m']==0&&$d['wind']['s']<$windhist) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	} 
 	
+	if ($d['buien']['s']>=10) {
+		sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+	}
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') {
 			storemode('luifel', 0, basename(__FILE__).':'.__LINE__);

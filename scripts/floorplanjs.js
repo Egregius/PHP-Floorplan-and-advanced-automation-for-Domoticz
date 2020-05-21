@@ -1080,7 +1080,6 @@ function ajaxbose($ip){
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="TUNEIN"){
-					if(document.getElementById("source").innerHTML!="Internet Radio")document.getElementById("source").innerHTML="Internet Radio";
 					if(document.getElementById("artist").innerHTML!=data["nowplaying"]["artist"])document.getElementById("artist").innerHTML=data["nowplaying"]["artist"];
 					if(document.getElementById("track").innerHTML!=data["nowplaying"]["track"])document.getElementById("track").innerHTML=data["nowplaying"]["track"];
 				}else if(data["nowplaying"]["@attributes"]["source"]=="INVALID_SOURCE"){
