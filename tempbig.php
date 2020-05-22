@@ -34,6 +34,8 @@ if ($home===true) {
     }
     $f_startdate=$_SESSION['f_startdate'];
     $f_enddate=$_SESSION['f_enddate'];
+    $f_startdate='2020-05-21';
+    $f_enddate='2020-05-21';
     $r_startdate=date("Y-m-d", TIME);
     $r_enddate=date("Y-m-d", TIME);
     $week=date("Y-m-d", TIME-86400*6);
