@@ -72,7 +72,6 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=-0.3) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
 		elseif (${'dif'.$k}>=-0.4) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
 		else {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-		if (past('pirliving')>3600&&past('deurinkom')>3600&&past('deurgarage')>3600)$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;
 //		if (${'dif'.$k}>0) {
 //			if ($daikin->stemp!=$set||$daikin->pow!=1||$daikin->mode!=4||$daikin->f_rate!='B') {
 //				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, 'B');
