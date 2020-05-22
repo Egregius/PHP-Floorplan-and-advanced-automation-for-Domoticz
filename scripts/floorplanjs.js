@@ -849,7 +849,11 @@ function ajax(Update=$LastUpdateTime){
 								}
 								
 								// Daikin set point
-								html+='<br>'+$icon;
+								if(heatingset==-2){
+									if(device=='living_set'||device=='kamer_set'||device=='alex_set'){
+										html+='<br>'+$icon;
+									}
+								}
 								
 								document.getElementById(device).innerHTML=html;
 							}catch{}

@@ -140,11 +140,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
-	if (${'dif'.$k}>=1) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
-	elseif (${'dif'.$k}>=0.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-	elseif (${'dif'.$k}>=0.3) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
-	elseif (${'dif'.$k}>=0) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-	elseif (${'dif'.$k}>=-0.1) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
+	if (${'dif'.$k}>=1.2) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
+	elseif (${'dif'.$k}>=0.9) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+	elseif (${'dif'.$k}>=0.6) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+	elseif (${'dif'.$k}>=0.3) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
+	elseif (${'dif'.$k}>=0) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
+	elseif (${'dif'.$k}>=-0.1) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
 	elseif (${'dif'.$k}>=-0.2) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;}
 	elseif (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;}
 	else {$rate='B';$d[$k.'_set']['s']=32;}
