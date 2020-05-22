@@ -298,11 +298,48 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 
+
+if ($d['buiten_temp']['s']>5&&$d['buiten_temp']['s']<30) {
+	$low=40;
+	$high=50;
+} else {
+	$low=40;
+	$high=75;
+}
+
+if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
+	file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+} else {
+	file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+}
+if (TIME>=strtotime('8:00')&&TIME<strtotime('21:00')) {
+	file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+} else {
+	file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+}
+if (TIME>=strtotime('8:00')&&TIME<strtotime('19:00')) {
+	file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+} else {
+	file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	lg('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+}
+
+
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='living') $ip=111;
 	elseif ($k=='kamer') $ip=112;
 	elseif ($k=='alex') $ip=113;
-	else break;
+	if (TIME>strtotime('8:00')||TIME<strtotime('20:00')) {
+		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
+	} else {
+		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
+	}
+	sleep(2);
 	$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_day_power_ex');
 	$data=explode(',', $data);
 	if ($data[0]=='ret=OK') {
@@ -323,7 +360,14 @@ $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,a
 $date=strftime('%F', TIME-86400);
 $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 
-
+foreach (array('living', 'kamer', 'alex') as $k) {
+	if (TIME>strtotime('8:00')||TIME<strtotime('20:00')) {
+		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
+	} else {
+		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
+	}
+	sleep(2);
+}
 
 
 /* Clean old database records */

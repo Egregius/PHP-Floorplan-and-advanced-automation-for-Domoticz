@@ -847,6 +847,10 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									html+='<br><div id="t'+device+'">'+formatDate(time)+'</div>';
 								}
+								
+								// Daikin set point
+								html+='<br>'+$icon;
+								
 								document.getElementById(device).innerHTML=html;
 							}catch{}
 						}else if(type=="SetPoint"){
