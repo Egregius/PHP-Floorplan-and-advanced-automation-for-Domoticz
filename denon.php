@@ -123,15 +123,15 @@ if ($home) {
         echo '</div>
 <div class="box">';
         $sur=trim($denonmain['selectSurround']['value']);
-        $surrounds=array('STANDARD','STEREO','MOVIE','MUSIC','MATRIX','VIRTUAL','GAME','DIRECT','PURE DIRECT','DOLBY DIGITAL','DTS SURROUND','VIDEO GAME');
+        $surrounds=array('MOVIE','MUSIC','PURE DIRECT','DOLBY DIGITAL','DTS SURROUND');
         if (!in_array($sur, $surrounds)) {
-            echo '<button name="action" value="MainZone/index.put.asp?cmd0=PutSurroundMode/'.$sur.'" class="btn b4 btna">'.$sur.'</button>';
+            echo '<button name="action" value="MainZone/index.put.asp?cmd0=PutSurroundMode/'.$sur.'" class="btn b3 btna">'.$sur.'</button>';
         }
         foreach ($surrounds as $surround) {
             if ($sur==$surround) {
-                echo '<button name="surround" value="'.$surround.'" class="btn b4 btna">'.$surround.'</button>';
+                echo '<button name="surround" value="'.$surround.'" class="btn b3 btna">'.$surround.'</button>';
             } else {
-                echo '<button name="surround" value="'.$surround.'" class="btn b4">'.$surround.'</button>';
+                echo '<button name="surround" value="'.$surround.'" class="btn b3">'.$surround.'</button>';
             }
         }
         echo '

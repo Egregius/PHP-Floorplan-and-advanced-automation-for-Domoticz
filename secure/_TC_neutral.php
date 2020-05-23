@@ -18,6 +18,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	$daikin=json_decode($d['daikin'.$k]['s']);
 	if ($daikin->pow!=0) {
 		daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
+		storemode('daikin'.$k, 0);
+		storeicon($k.'_set', 'Off');
 	}
 }
 

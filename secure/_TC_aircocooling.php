@@ -17,10 +17,6 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 $Setkamer=33;
 if ($d['kamer_set']['m']==0) {
     if (
-			/*$d['kamer_temp']['s']>=16
-		&&	$d['buiten_temp']['s']>=17
-		&&	$d['minmaxtemp']['m']>=17
-		&&	*/
 			(
 					$d['raamkamer']['s']=='Closed'
 				||	$d['RkamerR']['s']>=80
@@ -28,7 +24,7 @@ if ($d['kamer_set']['m']==0) {
 			)
 		&&	
 			(
-					past('raamkamer')>9
+					past('raamkamer')>900
 				||	TIME>strtotime('19:00')
 			)
 		&&	
@@ -58,7 +54,7 @@ if ($d['kamer_set']['m']==0) {
     		)
     ) {
         if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('9:00')) $Setkamer=20;
+        elseif (TIME>strtotime('10:00')) $Setkamer=20;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -69,17 +65,13 @@ if ($d['kamer_set']['m']==0) {
 $Setalex=33;
 if ($d['alex_set']['m']==0) {
     if (
-			/*$d['alex_temp']['s']>=16
-		&& 	$d['buiten_temp']['s']>=17
-		&&	$d['minmaxtemp']['m']>=17
-		&&	*/
 			(
 					$d['raamalex']['s']=='Closed'
 				||	$d['Ralex']['s']>80
 			)
 		&&
 			(
-					past('raamalex')>9
+					past('raamalex')>900
 				|| TIME>strtotime('19:00')
 			)
 		&&
@@ -109,7 +101,7 @@ if ($d['alex_set']['m']==0) {
 			)
     ) {
         if (TIME<strtotime('4:00')) $Setalex=20;
-        elseif (TIME>strtotime('9:00')) $Setalex=20;
+        elseif (TIME>strtotime('10:00')) $Setalex=20;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -120,10 +112,7 @@ if ($d['alex_set']['m']==0) {
 $Setliving=33;
 if ($d['living_set']['m']==0) {
     if (
-    		/*$d['living_temp']['s']>=18
-   		&& 	$d['buiten_temp']['s']>=17
-    	&&	$d['minmaxtemp']['m']>=17
-    	&&	*/($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
+    	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
     	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
@@ -151,7 +140,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	else {$rate='B';$d[$k.'_set']['s']=32;}
 	if ($k=='kamer'||$k=='alex') {
 		if (TIME>=strtotime('8:00')&&TIME<strtotime('18:00')) {
-			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor($d[$k.'_temp']['s']*2)/2;
+			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor(($d[$k.'_temp']['s']-0.1)*2)/2;
+			if ($rate!='B'&&$rate>4) $rate=4;
 		}
 	}
 	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
@@ -161,13 +151,13 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->mode!=3||$daikin->f_rate!=$rate) {
 				daikinset($k, 1, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 3);
-				storeicon($k.'_set', $d[$k.'_set']['s']);
+				storeicon($k.'_set', $d[$k.'_set']['s'].'-'.$rate);
 			}
 	} else {
 		if ($daikin->pow!=0||$daikin->mode!=3) {
 			daikinset($k, 0, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
-			storeicon($k.'_set', 0);
+			storeicon($k.'_set', 'Off');
 		}
 	}
 }

@@ -215,41 +215,41 @@ if (ping('192.168.2.105')) {
 }
 
 
-if ($d['Weg']['s']==0){
-	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
-	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
-	else $rgb=false;
-	if ($rgb!=false) {
-		$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-		if($data === FALSE){
-			return FALSE;
-		}else{
-			$array=explode(",",$data);
-			$control_info= array();
-			foreach($array as $value){
-				$pair= explode("=",$value);
-				$control_info[$pair[0]]=$pair[1];
-			}
-			$level=$control_info['cmpfreq'];
-			if ($level>100)$level=100;
-			if ($d['Xlight']['s']!=$level) {
+if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
+elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
+else $rgb=false;
+if ($rgb!=false) {
+	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+	if($data === FALSE){
+		return FALSE;
+	}else{
+		$array=explode(",",$data);
+		$control_info= array();
+		foreach($array as $value){
+			$pair= explode("=",$value);
+			$control_info[$pair[0]]=$pair[1];
+		}
+		$level=$control_info['cmpfreq'];
+		if ($level>100)$level=100;
+		if ($d['Xlight']['s']!=$level) {
+			if ($d['Weg']['s']==0){
 				rgb('Xlight', $rgb, $level);
 				sl('Xlight', $level, basename(__FILE__).':'.__LINE__);
-				if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
-				elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
 			}
+			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
+			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
 		}
-	} else {
-		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
 } else {
+	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
+}
+if ($d['Weg']['s']>0){
 	if ($d['Xlight']['s']>0) {
 		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 
-if (past('wind')>36) {
+if (past('wind')>86) {
 	require('_weather.php');
 }
