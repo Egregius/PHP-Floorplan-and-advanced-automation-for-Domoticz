@@ -18,7 +18,7 @@ if ($d['auto']['s']=='On') {
 		$x=$y+$x;
 		$windhist=round($x/4, 2);
 	}
-	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>=20.5)||($d['heating']['s']==-2	&&$d['living_temp']['s']>=19.5))&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Cooling
+	if (	(($d['heating']['s']==-1&&$d['living_temp']['s']>=20)||($d['heating']['s']==-2	&&$d['living_temp']['s']>=19.5))&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Cooling
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
@@ -30,7 +30,7 @@ if ($d['auto']['s']=='On') {
 		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
 			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>22&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Neutral
+	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>21&&TIME>=strtotime("10:00")&&$d['buien']['s']<10) { //Neutral
 		if ($d['wind']['s']>=30) 	 $luifel=0;
 		elseif ($d['wind']['s']>=25) $luifel=25;
 		elseif ($d['wind']['s']>=20) $luifel=30;
@@ -42,9 +42,19 @@ if ($d['auto']['s']=='On') {
 		} elseif (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
 			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	} else {
+		if ($d['wind']['s']>=30) 	 $luifel=0;
+		elseif ($d['wind']['s']>=25) $luifel=25;
+		elseif ($d['wind']['s']>=20) $luifel=30;
+		elseif ($d['wind']['s']>=15) $luifel=30;
+		elseif ($d['wind']['s']>=10) $luifel=30;
+		else $luifel=40;
+		if (	past('luifel')>300&&$d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	}
 	
-	if ($d['buien']['s']>=10) {
+	if ($d['buien']['s']>=10||$d['Weg']['s']==1) {
 		sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['luifel']['m']==1) {

@@ -78,7 +78,7 @@ if ($d['auto']['s']=='On') {
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($benedenall as $i) {
-				if ($d[$i]['s']<84) sl($i, 84, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
 			}
 			foreach ($boven as $i) {
 				if ($i=='Rtobi') {

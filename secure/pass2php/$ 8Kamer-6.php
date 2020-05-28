@@ -15,7 +15,7 @@ if ($d['kamer']['m']==2) {
 	bosevolume((1+$volume['actualvolume']), 103);           
 } elseif ($status=='On') {
     $item='RkamerR';
-    if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']>19) {
+    if ($d['Weg']['s']<0) {
         if ($d[$item]['s']<70) {
             sl($item, 70, basename(__FILE__).':'.__LINE__);
         } elseif ($d[$item]['s']<81) {

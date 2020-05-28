@@ -53,8 +53,8 @@ if ($d['kamer_set']['m']==0) {
 				)
     		)
     ) {
-        if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('10:00')) $Setkamer=20;
+        if (TIME<strtotime('4:00')) $Setkamer=18;
+        elseif (TIME>strtotime('10:00')) $Setkamer=18;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -229,7 +229,7 @@ if ($d['auto']['s']=='On') {
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($benedenall as $i) {
-				if ($d[$i]['s']<85) sl($i, 85, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
 			}
 			foreach ($boven as $i) {
 				if ($i=='Rtobi') {

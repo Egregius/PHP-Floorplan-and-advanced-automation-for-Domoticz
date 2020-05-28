@@ -132,12 +132,7 @@ if ($home) {
                 <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
                 <td></td>';
             } elseif (endswith($row['n'], '_temp')) {
-                if ($row['n']=='diepvries_temp') {
-                    echo  '
-                <td>'.$row['n'].'</td>
-                <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
-                <td>Set '.number_format($row['m'], 1, ',', '').' °C</td>';
-                } elseif ($row['n']=='buiten_temp') {
+                if ($row['n']=='buiten_temp') {
                     echo  '
                 <td>'.$row['n'].'</td>
                 <td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>

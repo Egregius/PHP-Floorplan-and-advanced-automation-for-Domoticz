@@ -30,7 +30,7 @@ if ($status=='On') {
             }
         } else {
             if ($d['heating']['s']<0) {
-                $level=85;
+                $level=88;
             } else {
                 $level=100;
             }
@@ -63,7 +63,7 @@ if ($status=='On') {
             }
         } else {
             if ($d['heating']['s']<0) {
-                $level=85;
+                $level=88;
             } else {
                 $level=100;
             }

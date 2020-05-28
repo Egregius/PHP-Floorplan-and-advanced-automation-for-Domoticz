@@ -15,7 +15,7 @@ if ($status=='On') {
     	sl($item, 100, basename(__FILE__).':'.__LINE__);
     } else {
         $half=45;
-        $lijntjes=78;
+        $lijntjes=82;
         $itemstatus=$d[$item]['s'];
         if ($itemstatus<$half) {
             sl($item, $half, basename(__FILE__).':'.__LINE__);
