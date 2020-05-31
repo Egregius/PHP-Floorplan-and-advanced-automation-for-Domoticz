@@ -18,6 +18,7 @@ if (isset($_REQUEST['cron60'])) {
     }
     lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
 }
+if (isset($_REQUEST['cron60'])) include '_cron60.php';
 if (isset($_REQUEST['cron10'])) {
 	$user='heating';
 	/* Temperature control
@@ -48,7 +49,6 @@ if (isset($_REQUEST['cron10'])) {
 	elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 	include '_cron10.php';
 }
-if (isset($_REQUEST['cron60'])) include '_cron60.php';
 if (isset($_REQUEST['cron120'])) include '_cron120.php';
 if (isset($_REQUEST['cron180'])) include '_cron180.php';
 if (isset($_REQUEST['cron240'])) include '_cron240.php';
