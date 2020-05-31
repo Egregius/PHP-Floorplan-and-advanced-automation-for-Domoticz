@@ -12,7 +12,7 @@
 $user='cron240';
 if ($d['auto']['s']=='On') {
 	if ($d['Weg']['s']==0){
-		$devices=array('tobiZ','alexZ',/*'livingZ','livingZZ',*/'kamerZ');
+		$devices=array('tobiZ','alexZ','kamerZ');
         foreach ($devices as $device) {
             if (past($device)>43150) {
                 alert($device, $device.' geen communicatie sinds '.strftime("%k:%M:%S", $d[$device]['t']), 14400);
@@ -65,28 +65,6 @@ if ($d['auto']['s']=='On') {
                 alert(
                     'ramenboven',
                     'Ramen boven dicht doen, te warm buiten.
-                    Buiten = '.round($d['buiten_temp']['s'], 1).',
-                    kamer = '.$d['kamer_temp']['s'].',
-                    Tobi = '.$d['tobi_temp']['s'].',
-                    Alex = '.$d['alex_temp']['s'],
-                    3600,
-                    false,
-                    2,
-                    false
-                );
-            } elseif (($d['buiten_temp']['s']<=$d['kamer_temp']['s']-1
-                ||$d['buiten_temp']['s']<=$d['tobi_temp']['s']-1
-                ||$d['buiten_temp']['s']<=$d['alex_temp']['s']-1)
-                &&($d['kamer_temp']['s']>19
-                ||$d['tobi_temp']['s']>19
-                ||$d['alex_temp']['s']>19)
-                &&($d['raamkamer']['s']=='Closed'
-                ||($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']<100)
-                ||($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<100))
-            ) {
-                alert(
-                    'ramenboven',
-                    'Ramen boven open doen, te warm binnen.
                     Buiten = '.round($d['buiten_temp']['s'], 1).',
                     kamer = '.$d['kamer_temp']['s'].',
                     Tobi = '.$d['tobi_temp']['s'].',

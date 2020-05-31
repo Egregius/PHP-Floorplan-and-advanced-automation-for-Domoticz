@@ -62,13 +62,7 @@ if ($status>=$avg+0.5) {
 		storeicon($n.'_temp', '', basename(__FILE__).':'.__LINE__);
 	}
 }
-if (TIME>=strtotime('17:00')&&$d['heating']['s']<0&&$d['Weg']['s']==0&&$status<$avg&&past('gasvandaag')>7200) {
-	if ($d['kamer_temp']['s']>16||$d['tobi_temp']['s']>16) {
-		if (($d['raamkamer']['s']=='Closed'||$d['deurkamer']['s']=='Closed')||($d['raamtobi']['s']=='Closed'||$d['deurtobi']['s']=='Closed')) {
-			alert('afkoelen','Ramen en deuren boven open doen, badkamer aan het afkoelen.',3600,false,2,false);
-		}
-	}
-}
+
 $prev=$d[$n.'_temp']['s'];
 $set=$d[$n.'_set']['s'];
 $tbadkamervuur=$d['badkamervuur1']['t'];

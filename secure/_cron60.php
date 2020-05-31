@@ -606,26 +606,18 @@ if ($d['auto']['s']=='On') {
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {
 	sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['Zon']['s']>$d['el']['s']+500) {
-	$set=-22;
+if ($d['zon']['s']>$d['el']['s']+500) {
+	$set=-24;
 } else {
 	$set=-18.5;
 }
 
-if ($d['diepvries']['s']!='On'
-    &&$d['diepvries_temp']['s']>$set
-    &&past('diepvries')>1780
-) {
-    sw('diepvries', 'On', basename(__FILE__).':'.__LINE__);
-} elseif ($d['diepvries']['s']!='Off'
-    &&$d['diepvries_temp']['s']<=set
-    &&past('diepvries')>280
-) {
-    sw('diepvries', 'Off', basename(__FILE__).':'.__LINE__);
-} elseif ($d['diepvries']['s']!='Off'
-    &&past('diepvries')>7200
-) {
-    sw('diepvries', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) {
+    sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
+} elseif ($d['diepvries']['s']!='Off'&&$d['diepvries_temp']['s']<=$set &&past('diepvries')>280) {
+    sw('diepvries', 'Off', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
+} elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) {
+    sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
 }
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     $stamp=sprintf("%s", date("Y-m-d H:i"));
@@ -661,7 +653,7 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     if (!$result = $db->query($query)) {
         die('There was an error running the query ['.$query.' - '.$db->error.']');
     }
-    lg($stamp.' Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
+    lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
 }
 if ($d['water']['s']=='On') {
     if (past('water')>$d['water']['m']) {

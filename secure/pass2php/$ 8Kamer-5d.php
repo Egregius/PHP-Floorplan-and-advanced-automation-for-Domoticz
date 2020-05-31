@@ -15,8 +15,6 @@ if ($d['kamer']['m']==2) {
 	bosevolume((1+$volume['actualvolume']), 103);           
 } elseif ($status=='On') {
     $item='RkamerL';
-    if ($d[$item]['s']<100) {
-        sl($item, 100, basename(__FILE__).':'.__LINE__);
-    }
+    if ($d[$item]['s']<100) sl($item, 100, basename(__FILE__).':'.__LINE__);
 }
 resetsecurity();

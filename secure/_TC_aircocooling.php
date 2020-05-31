@@ -50,11 +50,12 @@ if ($d['kamer_set']['m']==0) {
 						||	$d['raamtobi']['s']=='Closed'
 						||	$d['Rtobi']['s']>=80
 					)
+				&& $d['raamhall']['s']=='Closed'
 				)
     		)
     ) {
-        if (TIME<strtotime('4:00')) $Setkamer=18;
-        elseif (TIME>strtotime('10:00')) $Setkamer=18;
+        if (TIME<strtotime('4:00')) $Setkamer=20;
+        elseif (TIME>strtotime('10:00')) $Setkamer=20;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -67,7 +68,7 @@ if ($d['alex_set']['m']==0) {
     if (
 			(
 					$d['raamalex']['s']=='Closed'
-				||	$d['Ralex']['s']>80
+				||	$d['Ralex']['s']>=80
 			)
 		&&
 			(
@@ -89,14 +90,15 @@ if ($d['alex_set']['m']==0) {
 					(
 							$d['deurkamer']['s']=='Closed'
 						||	$d['raamkamer']['s']=='Closed'
-						||	$d['RkamerR']['s']>80
+						||	$d['RkamerR']['s']>=80
 					)
 				&&
 					(
 							$d['deurtobi']['s']=='Closed'
 						||	$d['raamtobi']['s']=='Closed'
-						||	$d['Rtobi']['s']>80
+						||	$d['Rtobi']['s']>=80
 					)
+				&& $d['raamhall']['s']=='Closed'
 				)
 			)
     ) {
@@ -114,7 +116,7 @@ if ($d['living_set']['m']==0) {
     if (
     	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
-    	&&	($d['deurinkom']['s']=='Closed'||($d['deurinkom']['s']=='Open'&&past('deurinkom')<300))
+    	&&	($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
 	) {
 		$Setliving=23;
