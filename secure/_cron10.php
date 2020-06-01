@@ -194,13 +194,13 @@ if (ping('192.168.2.105')) {
 			if (!empty($status)) {
 				if ($d['bose105']['m']!='Online') {
 					storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
-					bosekey('SHUFFLE_ON', 0, '192.168.2.105');
+					bosekey('SHUFFLE_ON', 0, '192.168.2.101');
 				}
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY') {
-						bosekey('PRESET_2', 0, 105);
+						bosezone(105);
 						sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, '192.168.2.105');
+						bosekey('SHUFFLE_ON', 0, '192.168.2.101');
 					}
 				}
 			}
