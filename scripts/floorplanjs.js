@@ -1561,7 +1561,8 @@ function roller(device,floorplan='floorplanheating'){
 	else html+='<h2>'+device+'</h2>';
 	if(device=='luifel'){
 		mode=localStorage.getItem(device+'_mode');
-		html+=mode;
+		if(mode==1)html+='<button class="btn" onclick="ajaxcontrol(\'luifel\',\'mode\',\'0\');initview();">Manueel</button>';
+		else html+='<button class="btn" onclick="ajaxcontrol(\'luifel\',\'mode\',\'1\');initview();">Auto</button>';
 	}
 	html+='<div class="fix z" style="top:90px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
 	
