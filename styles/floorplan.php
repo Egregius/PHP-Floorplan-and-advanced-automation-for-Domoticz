@@ -210,8 +210,9 @@ td{text-align:center;font-size:1.1em;}
 #RRkamerL{top:521px;left:419px;line-height:0.8em;}
 #RRkamerR{top:581px;left:419px;line-height:0.8em;}
 #zoldertrap{top:670px;left:145px;}
-#bovenbeneden{top:330px;left:110px;}
-.btnf{width:120px;height:40px}
+#bovenbeneden{top:330px;left:90px;}
+.btnf{width:105px;height:45px}
+.btnh{width:60px;height:45px}
 
 /* Zones */
 #zliving{top:51px;left:89px;width:249px;height:197px;z-index:-10;}

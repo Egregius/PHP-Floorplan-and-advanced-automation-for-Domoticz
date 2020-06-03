@@ -171,6 +171,7 @@ if ($home==true) {
 				foreach(array('RkamerL', 'RkamerR', 'Rtobi', 'Ralex') as $i) {
 					if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				}
+			} elseif ($_REQUEST['device']=='tv') {
 			} else {
 				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
