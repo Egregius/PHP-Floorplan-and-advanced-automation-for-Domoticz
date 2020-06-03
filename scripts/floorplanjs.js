@@ -455,7 +455,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="luifel"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
-							localStorage.setItem(device+'_$mode', $mode);
+							localStorage.setItem(device+'_mode', $mode);
 							try{
 								if($value==0)html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
 								else if($value==100)html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
@@ -1559,6 +1559,10 @@ function roller(device,floorplan='floorplanheating'){
 		else html+='<h2>'+device+' Dicht</h2><div class="fix" style="top:90px;left:30px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
 	} else if(device!='Beneden'&&device!='Boven') html+='<h2>'+device+' '+current+' %</h2>';
 	else html+='<h2>'+device+'</h2>';
+	if(device=='luifel'){
+		mode=localStorage.getItem(device+'_mode');
+		html+=mode;
+	}
 	html+='<div class="fix z" style="top:90px;left:30px;"><img src="images/arrowgreendown.png" class="i90" onclick="ajaxcontrol(\''+device+'\',\'roller\',\'100\');initview();"></div>';
 	
 	html+='<div class="fix z" style="top:90px;left:385px;"><img src="images/arrowgreenup.png" class="i90"  onclick="ajaxcontrol(\''+device+'\',\'roller\',\'0\');initview();"></div>';
@@ -1582,12 +1586,13 @@ function Weg(){
 	achterdeur=localStorage.getItem('achterdeur');
 	bureeltobi=localStorage.getItem('bureeltobi');
 	raamliving=localStorage.getItem('raamliving');
-	if(poort=='Open'||achterdeur=='Open'||raamliving=='Open'||bureeltobi=='On')html+='<h1>OPGELET!<br>';
+	if(poort=='Open'||achterdeur=='Open'||raamliving=='Open'||raamhall=='Open'||bureeltobi=='On')html+='<h1>OPGELET!<br>';
 	if(poort=='Open')html+='Poort OPEN<br>';
 	if(achterdeur=='Open')html+='Achterdeur OPEN<br>';
 	if(raamliving=='Open')html+='Raam Living OPEN<br>';
+	if(raamhall=='Open')html+='Raam Hall OPEN<br>';
 	if(bureeltobi=='On')html+='Bureel Tobi AAN<br>';
-	if(poort=='Open'||achterdeur=='Open'||raamliving=='Open'||bureeltobi=='On'){
+	if(poort=='Open'||achterdeur=='Open'||raamliving=='Open'||raamhall=='Open'||bureeltobi=='On'){
 		html+='</h1>';
 		huge='huge6';
 	}

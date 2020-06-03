@@ -54,8 +54,8 @@ if ($d['kamer_set']['m']==0) {
 				)
     		)
     ) {
-        if (TIME<strtotime('4:00')) $Setkamer=20;
-        elseif (TIME>strtotime('10:00')) $Setkamer=20;
+        if (TIME<strtotime('5:00')) $Setkamer=21;
+        elseif (TIME>strtotime('10:00')) $Setkamer=21;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -102,8 +102,8 @@ if ($d['alex_set']['m']==0) {
 				)
 			)
     ) {
-        if (TIME<strtotime('4:00')) $Setalex=20;
-        elseif (TIME>strtotime('10:00')) $Setalex=20;
+        if (TIME<strtotime('5:00')) $Setalex=21;
+        elseif (TIME>strtotime('10:00')) $Setalex=21;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -131,19 +131,20 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
-	if (${'dif'.$k}>=1.2) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
-	elseif (${'dif'.$k}>=0.9) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-	elseif (${'dif'.$k}>=0.6) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-	elseif (${'dif'.$k}>=0.3) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
+	if (${'dif'.$k}>=0.8) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
+	elseif (${'dif'.$k}>=0.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+	elseif (${'dif'.$k}>=0.4) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+	elseif (${'dif'.$k}>=0.2) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 	elseif (${'dif'.$k}>=0) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-	elseif (${'dif'.$k}>=-0.1) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-	elseif (${'dif'.$k}>=-0.2) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;}
+	elseif (${'dif'.$k}>=-0.1) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
+	elseif (${'dif'.$k}>=-0.2) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;}
 	elseif (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;}
 	else {$rate='B';$d[$k.'_set']['s']=32;}
 	if ($k=='kamer'||$k=='alex') {
 		if (TIME>=strtotime('8:00')&&TIME<strtotime('18:00')) {
 			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor(($d[$k.'_temp']['s']-0.1)*2)/2;
 			if ($rate!='B'&&$rate>4) $rate=4;
+			elseif ($rate=='B') $rate=3;
 		}
 	}
 	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
