@@ -172,6 +172,10 @@ if ($home==true) {
 					if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				}
 			} elseif ($_REQUEST['device']=='tv') {
+				if ($d['Rliving']['s']<34) sl('Rliving', 34, basename(__FILE__).':'.__LINE__);
+				if ($d['Rbureel']['s']<70) sl('Rbureel', 70, basename(__FILE__).':'.__LINE__);
+				if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);
+				if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
 			} else {
 				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
