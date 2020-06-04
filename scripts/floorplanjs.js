@@ -455,7 +455,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="luifel"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
-							localStorage.setItem(device+'_mode', $mode);
+							localStorage.setItem(device+'mode', $mode);
 							try{
 								if($value==0)html='<img src="https://home.egregius.be/images/arrowgreenup.png" class="i60">';
 								else if($value==100)html='<img src="https://home.egregius.be/images/arrowgreendown.png" class="i60">';
@@ -594,7 +594,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							localStorage.setItem(device, $value);
 							try{
-								//localStorage.setItem(device+'$mode', $mode);
+								//localStorage.setItem(device+'mode', $mode);
 							}catch{}
 						}else if(type=="bose"){
 							try{
@@ -615,7 +615,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="dimmer"){
 							localStorage.setItem(device, $value);
-							localStorage.setItem(device+'_$mode', $mode);
+							localStorage.setItem(device+'mode', $mode);
 							try{
 								if($value==0||$value=="Off"){
 									html='<img src="https://home.egregius.be/images/light_Off.png" class="'+$icon+'">';
@@ -630,6 +630,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="rollers"){
 							localStorage.setItem(device, $value);
+							localStorage.setItem(device+'mode', $mode);
 							try{
 								opts=$icon.split(",");
 								stat=100 - $value;
@@ -802,7 +803,7 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device, $mode);
 						}else if(type=="thermostaat"){
 							heatingset=localStorage.getItem('heating');
-							localStorage.setItem(device+'_$mode', $mode);
+							localStorage.setItem(device+'mode', $mode);
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
 							try{
@@ -1329,7 +1330,7 @@ function floorplanothers(){
 		html+='<div class="fix blackmedia">';
 		html+='<div class="fix" style="top:230px;left:0px;width:400px">';
 		water=localStorage.getItem('water');
-		water$mode=localStorage.getItem('water$mode');
+		water$mode=localStorage.getItem('watermode');
 		if(water=='On'){
 			if ($mode==300) {
             	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3 btna" id="water300">Water 5 min</button>';
@@ -1485,7 +1486,7 @@ function initview(){
 }
 
 function setpoint(device){
-	$mode=localStorage.getItem(device+'_set_$mode');
+	$mode=localStorage.getItem(device+'_setmode');
 	level=localStorage.getItem(device+'_set');
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
@@ -1532,7 +1533,7 @@ function setpoint(device){
 
 function dimmer(device,floorplan='floorplan'){
 	clearInterval(myAjax);
-	$mode=localStorage.getItem(device+'_$mode');
+	$mode=localStorage.getItem(device+'mode');
 	current=localStorage.getItem(device);
 	console.log(device+current+$mode);
 	html='<div class="dimmer" ><div style="min-height:140px">';
@@ -1569,7 +1570,7 @@ function roller(device,floorplan='floorplanheating'){
 	} else if(device!='Beneden'&&device!='Boven') html+='<h2>'+device+' '+current+' %</h2>';
 	else html+='<h2>'+device+'</h2>';
 	if(device=='luifel'){
-		mode=localStorage.getItem(device+'_mode');
+		mode=localStorage.getItem(device+'mode');
 		if(mode==1)html+='<button class="btn b4" onclick="ajaxcontrol(\'luifel\',\'mode\',\'1\');initview();">Manueel</button><button class="btn btna b4" onclick="ajaxcontrol(\'luifel\',\'mode\',\'0\');initview();">Auto</button>';
 		else html+='<button class="btn btna b4" onclick="ajaxcontrol(\'luifel\',\'mode\',\'1\');initview();">Manueel</button><button class="btn b4" onclick="ajaxcontrol(\'luifel\',\'mode\',\'0\');initview();">Auto</button>';
 	}
