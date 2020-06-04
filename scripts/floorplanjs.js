@@ -1259,14 +1259,21 @@ function floorplanmedia(){
     myAjax=setInterval(ajax, 800);
     myAjaxmedia=setInterval(ajaxmedia, 900);
     try{
-        html='<div class="fix jbl z1 i48" id="jbl"></div>';
+        tv=localStorage.getItem("tv");
+		lgtv=localStorage.getItem("lgtv");
+		html='<div class="fix jbl z1 i48" id="jbl"></div>';
         html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
         html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
         html+='<div class="fix z2" id="sirene"></div>';
         items=['eettafel','zithoek'];
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-        items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','lgtv','denon','nas','nvidia'];
+        items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
+		if(tv=="On"){
+			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i48" alt="lgtv" id="lgtvicon">';
+			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i48" alt="lgtv" id="lgtvicon">';
+		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i48" alt="lgtv" id="lgtvicon">';
+		
 		items=['bureel','keukenL','keukenR','living'];
         items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
