@@ -575,6 +575,11 @@ function ajax(Update=$LastUpdateTime){
 											if($value=='On')$('#lgtvicon').attr("src", "/images/lgtv_On.png");
 											else $('#lgtvicon').attr("src", "/images/lgtv_Off.png");
 										}catch{}
+									}else if(localStorage.getItem('view')=='floorplan'&&device=="tv"){
+										try{
+											if($value=='On')$('#tvicon').attr("src", "/images/tv_On.png");
+											else $('#tvicon').attr("src", "/images/tv_Off.png");
+										}catch{}
 									}
 								}else if(device=="bureeltobi"){
 									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="bureeltobi" onclick="bureeltobi()">';
@@ -589,7 +594,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							localStorage.setItem(device, $value);
 							try{
-								localStorage.setItem(device+'$mode', $mode);
+								//localStorage.setItem(device+'$mode', $mode);
 							}catch{}
 						}else if(type=="bose"){
 							try{
