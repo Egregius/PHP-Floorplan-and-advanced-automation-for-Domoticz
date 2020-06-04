@@ -653,7 +653,7 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
     if (!$result = $db->query($query)) {
         die('There was an error running the query ['.$query.' - '.$db->error.']');
     }
-    lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
+    //lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
 }
 if ($d['water']['s']=='On') {
     if (past('water')>$d['water']['m']) {

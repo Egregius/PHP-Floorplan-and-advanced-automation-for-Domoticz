@@ -11,13 +11,13 @@
  **/
 require 'functions.php';
 $d=fetchdata();
-if (isset($_REQUEST['cron60'])) {
+/*if (isset($_REQUEST['cron60'])) {
 	$items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
     foreach ($items as $i) {
         ${$i.'_temp'}=$d[$i.'_temp']['s'];
     }
     lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
-}
+}*/
 if (isset($_REQUEST['cron60'])) include '_cron60.php';
 if (isset($_REQUEST['cron10'])) {
 	$user='heating';
