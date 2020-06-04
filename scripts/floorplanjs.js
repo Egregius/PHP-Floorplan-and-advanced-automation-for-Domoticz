@@ -1269,11 +1269,8 @@ function floorplanmedia(){
         items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
         items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
-		if(tv=="On"){
-			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i48" alt="lgtv" id="lgtvicon">';
-			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i48" alt="lgtv" id="lgtvicon">';
-		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i48" alt="lgtv" id="lgtvicon">';
-		
+		if(tv=="On")html+='<div class="fix z1 i48" id="lgtv"></div>';
+		else if(tv=="Off")html+='<div class="fix z1 i48" id="tv"></div>';
 		items=['bureel','keukenL','keukenR','living'];
         items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
@@ -1434,7 +1431,7 @@ function sidebar(){
 		if(tv=="On"){
 			if(lgtv=="On")html+='<img src="https://home.egregius.be/images/lgtv_On.png" class="i60" alt="lgtv" id="lgtvicon">';
 			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
-		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
+		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="tv" id="tvicon">';
 		html+='<br>';
 		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
