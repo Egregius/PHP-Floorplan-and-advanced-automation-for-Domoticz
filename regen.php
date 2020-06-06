@@ -309,7 +309,7 @@ if ($home===true) {
                 barPadding: -50,
                 barMargin: -50
             }
-        },theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+        },theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"},bar:{groupWidth:100}';
         $chart=array_to_chart($pluvio, $args);
 		echo $chart['script'];
 		echo $chart['div'];
@@ -317,7 +317,6 @@ if ($home===true) {
 		echo '<h1>Pluviometer per maand</h1>';
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
-		$args['chart']='ComboChart';
 		
 		$chart=array_to_chart($pluviomaand, $args);
 		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
