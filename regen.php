@@ -178,6 +178,7 @@ if ($home===true) {
 		$buienradar='#FF1111';
 		$darksky='#FFFF44';
 		$buien='#44FF44';
+		echo '<h3>Voospellingen</h3>';
 		$legend='
 				<div style="width:379px;padding:15px 0px 10px 4px;">
 					&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buienradar.'">Buienradar</font></a>
@@ -278,7 +279,6 @@ if ($home===true) {
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		$result->free();
 		$chart=array_to_chart($graph, $args);
-		echo '<h1>Voospellingen</h1>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
@@ -297,7 +297,7 @@ if ($home===true) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 		}
 		$result->free();
-		echo '<h1>Pluviometer per dag</h1>';
+		echo '<h3>Pluviometer per dag</h3>';
 		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
 		$args['colors']=array('#4444CC');
@@ -314,13 +314,13 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		echo '<h1>Pluviometer per maand</h1>';
+		echo '<h3>Pluviometer per maand</h3>';
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
 		$args['raw_options']='
 			seriesType:"bars",
-			series: {0: {type: "line"}},
+			series: {0: {type: "line", pointShape:"triangle",rotation:180,pointSize:30}},
 			seriesDefaults: {
 				rendererOptions: {
 					barPadding: -50,
