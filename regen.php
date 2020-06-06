@@ -311,15 +311,11 @@ if ($home===true) {
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
-		$args['raw_options']='stackSeries:true,isStacked : true,seriesType: "bars", seriesDefaults: {
+		$args['raw_options']='seriesType: "bars", seriesDefaults: {
 
             rendererOptions: {
-                barPadding: 0,
-                barMargin: 10
-            },
-            pointLabels: {
-                show: true,
-                stackedValue: true
+                barPadding: -50,
+                barMargin: -50
             }
         }';
 		$chart=array_to_chart($pluviomaand, $args);
