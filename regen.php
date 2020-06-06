@@ -297,22 +297,32 @@ if ($home===true) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 		}
 		$result->free();
-		$args['chart']='ComboChart';
+		echo '<h1>Pluviometer per dag</h1>';
+		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
 		$args['colors']=array('#4444CC');
 		$args['hide_legend']=false;
 		$args['chart_div']='pluvioday';
 		$chart=array_to_chart($pluvio, $args);
-		echo '<h1>Pluviometer per dag</h1>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
+		echo '<h1>Pluviometer per maand</h1>';
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
-		//$args['raw_options']='isStacked:relative';
+		$args['chart']='ComboChart';
+		$args['raw_options']='stackSeries:true,isStacked : true,seriesType: "bars", seriesDefaults: {
 
+            rendererOptions: {
+                barPadding: 0,
+                barMargin: 10
+            },
+            pointLabels: {
+                show: true,
+                stackedValue: true
+            }
+        }';
 		$chart=array_to_chart($pluviomaand, $args);
-		echo '<h1>Pluviometer per maand</h1>';
 		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
