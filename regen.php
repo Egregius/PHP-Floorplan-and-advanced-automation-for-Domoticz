@@ -230,7 +230,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Mac') {
-			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),
+			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -268,15 +268,11 @@ if ($home===true) {
 		} else {
 			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
 		}
-		if (!$result=$db->query($query)) {
-			die('There was an error running the query ['.$query.' - '.$db->error.']');
-		}
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		if ($result->num_rows==0) {
 			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
 		}
-		while ($row=$result->fetch_assoc()) {
-			$graph[]=$row;
-		}
+		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		$result->free();
 		$chart=array_to_chart($graph, $args);
 		echo '<h1>Voospellingen</h1>';
@@ -284,21 +280,25 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		$query="SELECT date, rain FROM pluvio ORDER BY date ASC;";
-		if (!$result=$db->query($query)) {
-			die('There was an error running the query ['.$query.' - '.$db->error.']');
-		}
-		if ($result->num_rows==0) {
-			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
-		}
-		while ($row=$result->fetch_assoc()) {
-			$pluvio[]=$row;
-		}
-		
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
+		$query="SELECT DATE_FORMAT(date, '%Y-%m') as month, SUM(rain) as rain FROM pluvio GROUP BY DATE_FORMAT(date, '%Y-%m') ORDER BY date ASC;";
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+		while ($row=$result->fetch_assoc()) $pluviomaand[]=$row;
 		$result->free();
-		$args['chart_div']='pluvioday';
 		$args['chart']='ColumnChart';
+		$args['margins']=array(0,0,50,50);
+		$args['hide_legend']=false;
+		$args['chart_div']='pluvioday';
 		$chart=array_to_chart($pluvio, $args);
 		echo '<h1>Pluviometer per dag</h1>';
+		echo $chart['script'];
+		echo $chart['div'];
+		unset($chart);
+		$args['chart_div']='pluviomonth';
+		$chart=array_to_chart($pluviomaand, $args);
+		echo '<h1>Pluviometer per maand</h1>';
+		echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
