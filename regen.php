@@ -297,7 +297,7 @@ if ($home===true) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 		}
 		$result->free();
-		$args['chart']='ColumnChart';
+		$args['chart']='ComboChart';
 		$args['margins']=array(0,0,50,50);
 		$args['colors']=array('#4444CC');
 		$args['hide_legend']=false;
