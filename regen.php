@@ -285,9 +285,16 @@ if ($home===true) {
 		$query="SELECT date, rain FROM pluvio ORDER BY date ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
-		$query="SELECT DATE_FORMAT(date, '%Y-%m') as month, SUM(rain) as rain FROM pluvio GROUP BY DATE_FORMAT(date, '%Y-%m') ORDER BY date ASC;";
+		$query="SELECT month, rain FROM `pluvioklimaat`;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-		while ($row=$result->fetch_assoc()) $pluviomaand[]=$row;
+		while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
+		
+		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY date ASC;";
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+		while ($row=$result->fetch_assoc()) {
+			$pluviomaand[$row['month'].'-'.$row['year']]['month']=$row['month'].'-'.$row['year'];
+			$pluviomaand[$row['month'].'-'.$row['year']]['rain']=$row['rain'];
+		}
 		$result->free();
 		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
@@ -302,7 +309,7 @@ if ($home===true) {
 		$args['chart_div']='pluviomonth';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo '<h1>Pluviometer per maand</h1>';
-		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
