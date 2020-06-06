@@ -303,7 +303,14 @@ if ($home===true) {
 		$args['colors']=array('#4444CC');
 		$args['hide_legend']=true;
 		$args['chart_div']='pluvioday';
-		$chart=array_to_chart($pluvio, $args);
+		$args['raw_options']='seriesType:"bars",seriesDefaults: {
+
+            rendererOptions: {
+                barPadding: -50,
+                barMargin: -50
+            }
+        },theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+        $chart=array_to_chart($pluvio, $args);
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
@@ -311,13 +318,7 @@ if ($home===true) {
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
-		$args['raw_options']='seriesType:"bars",seriesDefaults: {
-
-            rendererOptions: {
-                barPadding: -50,
-                barMargin: -50
-            }
-        },theme:"maximized"';
+		
 		$chart=array_to_chart($pluviomaand, $args);
 		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
