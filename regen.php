@@ -13,6 +13,15 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
+	if (isset($_POST['addregen'])) {
+		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+		if ($db->connect_errno>0) {
+			die('Unable to connect to database [' . $db->connect_error . ']');
+		}
+		$date=date("Y-m-d", TIME);
+		
+		
+	}
 	if (isset($_REQUEST['add'])) {
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,8 +45,8 @@ if ($home===true) {
 					<input type="submit" class="btn b5" value="Temperaturen"/>
 				</form>
 				<form action="/regen.php">
-					<input type="submit" class="btn btna b5" value="Regen"/>
-					<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
+					<input type="submit" class="btn b5" value="Regen"/>
+					<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 				</form>';
 		} else {
 			echo '
@@ -49,14 +58,17 @@ if ($home===true) {
 					<input type="submit" class="btn b3" value="Temperaturen"/>
 				</form>
 				<form action="/regen.php">
-					<input type="submit" class="btn btna b3" value="Regen"/>
-					<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
+					<input type="submit" class="btn b3" value="Regen"/>
+					<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 				</form>';
 		}
-		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-		if ($db->connect_errno>0) {
-			die('Unable to connect to database [' . $db->connect_error . ']');
+		echo '<form action="/regen.php" method="POST">';
+		for ($x=1;$x<=30;$x++) {
+			echo '
+					<input type="submit" class="btn b5" name="addregen" value="'.$x.'" style="height:70px"/>';
 		}
+		echo '
+				</form>';
 	} else {
 		if ($user=='Guy') {
 			error_reporting(E_ALL);
