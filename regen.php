@@ -233,7 +233,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Mac') {
-			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -245,7 +245,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='S4') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -257,7 +257,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Stablet') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -269,7 +269,7 @@ if ($home===true) {
 								}
 								');
 		} else {
-			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
+			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
 		}
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		if ($result->num_rows==0) {
@@ -301,7 +301,7 @@ if ($home===true) {
 		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
 		$args['colors']=array('#4444CC');
-		$args['hide_legend']=false;
+		$args['hide_legend']=true;
 		$args['chart_div']='pluvioday';
 		$chart=array_to_chart($pluvio, $args);
 		echo $chart['script'];
@@ -311,13 +311,13 @@ if ($home===true) {
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
-		$args['raw_options']='seriesType: "bars", seriesDefaults: {
+		$args['raw_options']='seriesType:"bars",seriesDefaults: {
 
             rendererOptions: {
                 barPadding: -50,
                 barMargin: -50
             }
-        }';
+        },theme:"maximized"';
 		$chart=array_to_chart($pluviomaand, $args);
 		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
