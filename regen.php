@@ -13,13 +13,24 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
+	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+	if ($db->connect_errno>0) {
+		die('Unable to connect to database [' . $db->connect_error . ']');
+	}
+	for ($x=1;$x<=3650;$x++) {
+		$date=date("Y-m-d", (TIME+($x*86400)));
+		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
+		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
+	}
 	if (isset($_POST['addregen'])) {
 		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 		if ($db->connect_errno>0) {
 			die('Unable to connect to database [' . $db->connect_error . ']');
 		}
 		$date=date("Y-m-d", TIME);
-		
+		$value=$_POST['addregen'];
+		$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
+		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
 		
 	}
 	if (isset($_REQUEST['add'])) {
