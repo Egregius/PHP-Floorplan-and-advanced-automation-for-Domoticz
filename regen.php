@@ -174,7 +174,7 @@ if ($home===true) {
 		}
 		$eendag=TIME-86400*2;$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
 		$eenweek=TIME-86400*7;$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
-		$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d %H:%M:%S", $eenmaand);
+		$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
 		$buienradar='#FF1111';
 		$darksky='#FFFF44';
 		$buien='#44FF44';
@@ -198,7 +198,7 @@ if ($home===true) {
 								'chart_div'=>'graph',
 								'colors'=>$colors,
 								'margins'=>array(0,0,0,50),
-								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
+								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
 								'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 								 'raw_options'=>'vAxis: {
 									 viewWindowMode:\'explicit\',
@@ -220,8 +220,8 @@ if ($home===true) {
 								'chart_div'=>'graph',
 								'colors'=>$colors,
 								'margins'=>array(0,0,0,50),
-								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-								'text_style'=>array('fontSize'=>12,'color'=>'999999'),
+								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
+								'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 								'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -233,7 +233,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Mac') {
-			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -245,7 +245,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='S4') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -257,7 +257,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Stablet') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -269,7 +269,7 @@ if ($home===true) {
 								}
 								');
 		} else {
-			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
+			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
 		}
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		if ($result->num_rows==0) {
@@ -282,7 +282,7 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		$query="SELECT date, rain FROM pluvio ORDER BY date ASC;";
+		$query="SELECT date, rain FROM pluvio WHERE date > '$eenmaandstr' ORDER BY date ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
 		$query="SELECT month, rain FROM `pluvioklimaat`;";
