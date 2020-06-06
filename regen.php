@@ -41,6 +41,9 @@ if ($home===true) {
 				<title>Regenvoorspelling</title>
 				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 				<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
+				<style>
+					.btn{margin-left:0!important;}
+				</style>
 			</head>';
 		if ($udevice=='iPad') {
 			echo '
