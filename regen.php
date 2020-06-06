@@ -13,19 +13,15 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
-	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-	if ($db->connect_errno>0) {
-		die('Unable to connect to database [' . $db->connect_error . ']');
-	}
-	for ($x=1;$x<=3650;$x++) {
-		$date=date("Y-m-d", (TIME+($x*86400)));
-		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
-		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
-	}
 	if (isset($_POST['addregen'])) {
 		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 		if ($db->connect_errno>0) {
 			die('Unable to connect to database [' . $db->connect_error . ']');
+		}
+		for ($x=60;$x>=1;$x--) {
+			$date=date("Y-m-d", (TIME-($x*86400)));
+			$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
+			if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
 		}
 		$date=date("Y-m-d", TIME);
 		$value=$_POST['addregen'];
@@ -286,6 +282,23 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
+		$query="SELECT date, rain FROM pluvio ORDER BY date ASC;";
+		if (!$result=$db->query($query)) {
+			die('There was an error running the query ['.$query.' - '.$db->error.']');
+		}
+		if ($result->num_rows==0) {
+			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
+		}
+		while ($row=$result->fetch_assoc()) {
+			$pluvio[]=$row;
+		}
+		$result->free();
+		$args['chart_div']='pluvioday';
+		$chart=array_to_chart($pluvio, $args);
+		echo $chart['script'];
+		echo $chart['div'];
+		unset($chart);
+		
 		end:
 		if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
 			$togo=61-date("s");
