@@ -288,6 +288,7 @@ if ($home===true) {
 		$result->free();
 		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
+		$args['colors']=array('#4444CC');
 		$args['hide_legend']=false;
 		$args['chart_div']='pluvioday';
 		$chart=array_to_chart($pluvio, $args);
@@ -298,7 +299,7 @@ if ($home===true) {
 		$args['chart_div']='pluviomonth';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo '<h1>Pluviometer per maand</h1>';
-		echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
