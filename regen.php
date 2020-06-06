@@ -230,7 +230,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Mac') {
-			$args=array('width'=>500,'height'=>660,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),
+			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'999999'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
@@ -266,7 +266,7 @@ if ($home===true) {
 								}
 								');
 		} else {
-			$args=array('width'=>480,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
+			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#111','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
 		}
 		if (!$result=$db->query($query)) {
 			die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -279,6 +279,7 @@ if ($home===true) {
 		}
 		$result->free();
 		$chart=array_to_chart($graph, $args);
+		echo '<h1>Voospellingen</h1>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
@@ -292,9 +293,12 @@ if ($home===true) {
 		while ($row=$result->fetch_assoc()) {
 			$pluvio[]=$row;
 		}
+		
 		$result->free();
 		$args['chart_div']='pluvioday';
+		$args['chart']='ColumnChart';
 		$chart=array_to_chart($pluvio, $args);
+		echo '<h1>Pluviometer per dag</h1>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
