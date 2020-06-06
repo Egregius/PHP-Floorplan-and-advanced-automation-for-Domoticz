@@ -292,8 +292,9 @@ if ($home===true) {
 		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY date ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) {
-			$pluviomaand[$row['month'].'-'.$row['year']]['month']=$row['month'].'-'.$row['year'];
-			$pluviomaand[$row['month'].'-'.$row['year']]['rain']=$row['rain'];
+			$pluviomaand[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
+			$pluviomaand[$row['month'].'-'.$row['year']]['Normaal']=$klimaat[$row['month']];
+			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 		}
 		$result->free();
 		$args['chart']='ColumnChart';
@@ -306,10 +307,11 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
+		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo '<h1>Pluviometer per maand</h1>';
-		echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
