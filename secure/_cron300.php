@@ -40,9 +40,8 @@ if ($d['minmaxtemp']['m'] > -3) {
 	elseif ($rainpast>3000) $pomppauze=2990;
 	elseif ($rainpast>1000) $pomppauze=7990;
 	else $pomppauze=10790;
-
-	lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
+		//lg('Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 		//sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 	}
 } 

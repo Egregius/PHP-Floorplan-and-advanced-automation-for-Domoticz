@@ -12,9 +12,8 @@
 
 $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
-    if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<600))&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
-        $Setkamer=10;
-        if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Setkamer=14;
+    if ($d['buiten_temp']['s']<10&&$d['minmaxtemp']['m']<10&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<600))&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
+        if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Setkamer=10;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);

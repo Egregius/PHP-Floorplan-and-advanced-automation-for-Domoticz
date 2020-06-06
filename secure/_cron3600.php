@@ -301,10 +301,10 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 
 if ($d['buiten_temp']['s']>5&&$d['buiten_temp']['s']<30) {
 	$low=40;
-	$high=50;
+	$high=40;
 } else {
 	$low=40;
-	$high=75;
+	$high=50;
 }
 
 if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
@@ -355,7 +355,7 @@ $date=strftime('%F', TIME-86400);
 $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 
 foreach (array('living', 'kamer', 'alex') as $k) {
-	if (TIME>strtotime('5:00')||TIME<strtotime('20:00')) {
+	if (TIME>=strtotime('7:00')||TIME<strtotime('19:30')) {
 		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
 	} else {
 		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
@@ -367,7 +367,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 /* Clean old database records */
 $remove=strftime("%F %T", TIME-90000);
 $stmt=$db->query("delete from temp where stamp < '$remove'");
-lg(' Deleted '.$stmt->rowCount().' records from temp');
+//lg(' Deleted '.$stmt->rowCount().' records from temp');
 $remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
-lg(' Deleted '.$stmt->rowCount().' records from regen');
+//lg(' Deleted '.$stmt->rowCount().' records from regen');
