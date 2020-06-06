@@ -293,8 +293,8 @@ if ($home===true) {
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
-			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 			$pluviomaand[$row['month'].'-'.$row['year']]['Normaal']=$klimaat[$row['month']];
+			$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 		}
 		$result->free();
 		$args['chart']='ColumnChart';
@@ -309,7 +309,7 @@ if ($home===true) {
 		unset($chart);
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
-		$args['raw_options']='isStacked:true';
+		//$args['raw_options']='isStacked:relative';
 
 		$chart=array_to_chart($pluviomaand, $args);
 		echo '<h1>Pluviometer per maand</h1>';
