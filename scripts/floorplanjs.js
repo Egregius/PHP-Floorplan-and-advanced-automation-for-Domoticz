@@ -1245,7 +1245,6 @@ function floorplanheating(){
         else if(heatingset==-2)items=['living','kamer','alex'];
 		if(heatingset!=-1)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        if(heatingset!=0&&heatingset!=-1)html+='<div class="fix z" id="daikin"><button class="btn btnf" onclick="floorplandaikin();">Daikin</button></div>';
         html+='<div class="fix z" id="bovenbeneden"><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
@@ -1358,72 +1357,7 @@ function floorplanothers(){
         $('#placeholder').html(html);
     }catch{}
 }
-function ajaxdaikin(){
-    $.ajax({
-        url: '/ajax.php?daikin',
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(data){
-        	//console.log(data);
-        	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
-			date=new Date($currentTime*1000);
-			hours=date.getHours();
-			minutes="0"+date.getMinutes();
-			seconds="0"+date.getSeconds();
-			daikinliving=JSON.parse(data['daikinliving']['s']);
-			daikinkamer=JSON.parse(data['daikinkamer']['s']);
-			daikinalex=JSON.parse(data['daikinalex']['s']);
-			console.log(daikinliving);
-			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-			html='<div class="fix z1" style="top:100px;font-size:2em;">Compressor: '+data['daikin']['cmpfreq']+'<br><br>';
-			html+='<table>';
-			items=['living','kamer','alex'];
-       		items.forEach(function(item){
-       			daikin=JSON.parse(data['daikin'+item]['s']);
-				html+='<tr><td>'+item+'</td><td> ';
-				if(daikin['pow']==0)html+='Off';
-				else html+='On';
-				html+='</td><td>';
-				if(daikin['mode']==0)html+='Auto';
-				else if(daikin['mode']==1)html+='Auto';
-				else if(daikin['mode']==2)html+='Dry';
-				else if(daikin['mode']==3)html+='Cool';
-				else if(daikin['mode']==4)html+='Heat';
-				else if(daikin['mode']==6)html+='Fan';
-				else if(daikin['mode']==7)html+='Auto';
-				html+='</td><td>'+daikin['stemp'];
-				html+='</td></tr>';
-       		});
-        	html+='</table>';
-			html+='</div>';
-				if(document.getElementById("daikin").innerHTML!=html)document.getElementById("daikin").innerHTML=html;
-			}
-		});
-}
 
-function floorplandaikin(){
-	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
-	localStorage.setItem('view', 'floorplandaikin');
-    ajaxdaikin(0);
-    myAjax=setInterval(ajaxdaikin, 2000);
-    try{
-                $currentTime=parseInt(Math.round(new Date().getTime()/1000));
-                date=new Date($currentTime*1000);
-                hours=date.getHours();
-                minutes="0"+date.getMinutes();
-                seconds="0"+date.getSeconds();
-                $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-            }catch{}
-    try{
-		html='<div class="fix" id="clock" onclick="floorplandaikin();"></div>';
-		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-		html+='<div class="fix z2" id="sirene"></div>';
-		html+='<div class="fix blackdaikin" id="daikin"></div>';
-		html+='</div>';
-		$('#placeholder').html(html);
-	}catch{}
-}
 function sidebar(){
     try{
 		tv=localStorage.getItem("tv");
