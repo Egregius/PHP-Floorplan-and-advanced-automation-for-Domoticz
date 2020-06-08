@@ -22,4 +22,4 @@ $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
 $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
 echo serialize($data);
-if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed') shell_exec('curl -s "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
+if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&!isset($_REQUEST['silent'])) shell_exec('curl -s "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
