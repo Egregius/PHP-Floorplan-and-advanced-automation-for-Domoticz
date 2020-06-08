@@ -855,7 +855,7 @@ function ajax(Update=$LastUpdateTime){
 								}
 								
 								// Daikin set point
-								if(heatingset==-2){
+								if(heatingset==-2||heatingset>0){
 									if(device=='living_set'||device=='kamer_set'||device=='alex_set'){
 										html+='<br>'+$icon;
 									}

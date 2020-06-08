@@ -84,8 +84,8 @@ if [ $(($MINUTE%5)) -eq 0 ] ; then
 	echo $LAST>"/temp/timestampappcache.txt"
 	if [ "$LAST" != "$PREV" ]
 	then
-		awk -v timestamp=$(date +%s) 'NR == 2 { $2 = timestamp } 1' /var/www/html/floorplan.appcache > /temp/floorplan.appcache
-		mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
+		#awk -v timestamp=$(date +%s) 'NR == 2 { $2 = timestamp } 1' /var/www/html/floorplan.appcache > /temp/floorplan.appcache
+		#mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
 		cd /var/www/html/
 		/usr/bin/nice -n20 git add .
 		/usr/bin/nice -n20 git commit -am "Update"
