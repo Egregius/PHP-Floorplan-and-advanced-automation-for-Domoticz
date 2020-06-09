@@ -4,7 +4,7 @@ header("Content-type:text/css;charset:UTF-8");
 header("Expires:".gmdate("D, d M Y H:i:s",time()+2592000)." GMT");
 if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')!==false)$udevice='iPad';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
-elseif(strpos($_SERVER['HTTP_USER_AGENT'],'Intel Mac')!==false)$udevice='iMac';
+elseif(strpos($_SERVER['HTTP_USER_AGENT'],'Intel Mac')!==false)$udevice='mac';
 elseif(strpos($_SERVER['HTTP_USER_AGENT'],'10_15')!==false)$udevice='iPhone';
 else $udevice='other';
 $css="
