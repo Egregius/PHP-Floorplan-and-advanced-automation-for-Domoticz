@@ -321,7 +321,7 @@ if ($home===true) {
 		$args['chart']='ComboChart';
 		$args['raw_options']='
 			seriesType:"bars",
-			series: {0: {type: "line", pointShape:"triangle",rotation:180,pointSize:30,"fill-color":"#F00"}},
+			series: {0: {type: "area", pointShape:"triangle",rotation:180,pointSize:40,colors: ["#15A0C8"],"stroke-color":"#F00","fill-color":"#F00"}},
 			seriesDefaults: {
 				rendererOptions: {
 					barPadding: -50,
