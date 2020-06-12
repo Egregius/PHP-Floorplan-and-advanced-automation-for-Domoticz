@@ -208,6 +208,9 @@ if (!isset($dsbuien)) {
 if (!isset($newbuien)) {
     $newbuien=0;
 }
+if ($buienradar>100) $buienradar=100;
+if ($dsbuien>100) $dsbuien=100;
+if ($buien>100) $buien=100;
 $db->query(
     "INSERT IGNORE INTO `regen`
         (`buienradar`,`darksky`,`buien`)

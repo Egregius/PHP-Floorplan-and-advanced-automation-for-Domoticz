@@ -234,7 +234,7 @@ if ($home===true) {
 								}
 								');
 		} elseif ($udevice=='Mac') {
-			$args=array('width'=>460,'height'=>500,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			$args=array('width'=>460,'height'=>300,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 			'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}

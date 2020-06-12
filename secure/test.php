@@ -11,11 +11,12 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-
-$a=123;
+$y=0;
+$a=1234567;
 for ($x=$a-1;$x>1;$x--) {
+	$y++;
 	if ($a%$x==0) {
-		echo 'Grootste gemeenschappelijke deler van '.$a.'='.$x;
+		echo 'Grootste gemeenschappelijke deler van '.$a.'='.$x.'. Loop runned '.$y.' times.';
 		break;
 	}
 }
