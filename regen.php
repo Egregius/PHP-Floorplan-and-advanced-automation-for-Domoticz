@@ -213,7 +213,7 @@ if ($home===true) {
 								');
 		} elseif ($udevice=='iPhone') {
 			$args=array(
-								'width'=>340,
+								'width'=>360,
 								'height'=>240,
 								'hide_legend'=>true,
 								'responsive'=>false,
@@ -221,8 +221,9 @@ if ($home===true) {
 								'chart_div'=>'graph',
 								'colors'=>$colors,
 								'margins'=>array(0,0,0,50),
-								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
-								'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+								'y_axis_text_style'=>array('fontSize'=>20,'color'=>'FFF'),
+								'x_axis_text_style'=>array('fontSize'=>18,'color'=>'FFF'),
+								'text_style'=>array('fontSize'=>16,'color'=>'FFF'),
 								'raw_options'=>'vAxis: {
 								  viewWindowMode:\'explicit\',
 								  textStyle: {color: "#FFFFFF", fontSize: 18}
