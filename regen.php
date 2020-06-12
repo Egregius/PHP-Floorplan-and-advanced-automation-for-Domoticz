@@ -323,13 +323,12 @@ if ($home===true) {
 			seriesType:"steppedArea",
 			series: {
 				0: {type: "steppedArea", areaOpacity:0.5},
-				1: {type: "bars", areaOpacity:0.7}
+				1: {type: "bars", areaOpacity:0.7, groupWidth:60}
 			},
 	        theme:"maximized",
-	        chartArea:{left:0,top:0,width:"100%",height:"100%"},
-	        bar:{groupWidth:100}';
+	        chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 		$chart=array_to_chart($pluviomaand, $args);
-//		echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		// '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
