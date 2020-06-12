@@ -213,8 +213,8 @@ if ($home===true) {
 								');
 		} elseif ($udevice=='iPhone') {
 			$args=array(
-								'width'=>320,
-								'height'=>420,
+								'width'=>340,
+								'height'=>240,
 								'hide_legend'=>true,
 								'responsive'=>false,
 								'background_color'=>'#000',
@@ -331,11 +331,17 @@ if ($home===true) {
 	        chartArea:{left:0,top:0,width:"100%",height:"100%"},
 	        bar:{groupWidth:100}';
 		$chart=array_to_chart($pluviomaand, $args);
-		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
+//		echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		
+		$total=0;
+		$current=0;
+		foreach ($pluviomaand as $i) {
+			$total=$total+$i['Normaal'];
+			$current=$current+$i['Regen'];
+		}
+		echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
 		end:
 		if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
 			$togo=61-date("s");
