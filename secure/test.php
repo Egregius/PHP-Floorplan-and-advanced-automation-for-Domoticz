@@ -12,8 +12,13 @@
 $start=microtime(true);
 require 'functions.php';
 
-
-
+$a=123;
+for ($x=$a-1;$x>1;$x--) {
+	if ($a%$x==0) {
+		echo 'Grootste gemeenschappelijke deler van '.$a.'='.$x;
+		break;
+	}
+}
 
 
 /*-------------------------------------------------*/
