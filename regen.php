@@ -301,7 +301,7 @@ if ($home===true) {
 		echo '<h3>Pluviometer per dag</h3>';
 		$args['chart']='ColumnChart';
 		$args['margins']=array(0,0,50,50);
-		$args['colors']=array('#4444CC');
+		$args['colors']=array('#44C');
 		$args['hide_legend']=true;
 		$args['chart_div']='pluvioday';
 		$args['raw_options']='seriesType:"bars",seriesDefaults: {
@@ -316,21 +316,15 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		echo '<h3>Pluviometer per maand</h3>';
-		$args['colors']=array('#555555','#4444CC');
+		$args['colors']=array('#666','#44C');
 		$args['chart_div']='pluviomonth';
-		$args['chart']='SteppedAreaChart';
+		$args['chart']='ComboChart';
 		$args['raw_options']='
 			seriesType:"steppedArea",
 			series: {
-				0: {type: "steppedArea"},
-				1: {type: "steppedArea"}
+				0: {type: "steppedArea", areaOpacity:0.5},
+				1: {type: "bars", areaOpacity:0.7}
 			},
-			seriesDefaults: {
-				rendererOptions: {
-					barPadding: -50,
-					barMargin: -50
-				}
-	        },
 	        theme:"maximized",
 	        chartArea:{left:0,top:0,width:"100%",height:"100%"},
 	        bar:{groupWidth:100}';
