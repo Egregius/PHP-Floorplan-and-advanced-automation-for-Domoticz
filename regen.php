@@ -318,10 +318,13 @@ if ($home===true) {
 		echo '<h3>Pluviometer per maand</h3>';
 		$args['colors']=array('#555555','#4444CC');
 		$args['chart_div']='pluviomonth';
-		$args['chart']='ComboChart';
+		$args['chart']='SteppedAreaChart';
 		$args['raw_options']='
-			seriesType:"bars",
-			series: {0: {type: "area", pointShape:"triangle",rotation:180,pointSize:40,colors: ["#15A0C8"],"stroke-color":"#F00","fill-color":"#F00"}},
+			seriesType:"steppedArea",
+			series: {
+				0: {type: "steppedArea"},
+				1: {type: "steppedArea"}
+			},
 			seriesDefaults: {
 				rendererOptions: {
 					barPadding: -50,
