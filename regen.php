@@ -188,7 +188,7 @@ if ($home===true) {
 	';
 		echo $legend;
 		$colors=array($buienradar,$darksky,$buien);
-		$query="SELECT DATE_FORMAT(stamp, '%h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 		$args=array(
 				'width'=>1000,
 				'height'=>880,
@@ -210,7 +210,7 @@ if ($home===true) {
 					3:{lineDashStyle:[0,0],pointSize:5},
 				},
 				hAxis: {
-					showTextEvery: 60,
+					showTextEvery: 300,
 					textStyle: {color: "#DDD", fontSize: 0}
 				},
 				vAxis: {
@@ -299,8 +299,23 @@ if ($home===true) {
 				0: {type: "steppedArea", areaOpacity:0.5},
 				1: {type: "bars", areaOpacity:0.7, groupWidth:60}
 			},
-	        theme:"maximized",
-	        chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+				hAxis: {
+					showTextEvery: 1,
+					textStyle: {color: "#DDD", fontSize: 0}
+				},
+				vAxis: {
+					format:"#",
+					textStyle: {color: "#AAA", fontSize: 14},
+					Gridlines: {
+						multiple: 20
+					},
+					minorGridlines: {
+						multiple: 10
+					}
+				  },
+				theme:"maximized",
+				chartArea:{left:0,top:0,width:"100%",height:"100%"},
+				bar:{groupWidth:100}';
 		$chart=array_to_chart($pluviomaand, $args);
 		// '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
