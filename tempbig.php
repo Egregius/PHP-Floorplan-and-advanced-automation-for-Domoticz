@@ -116,7 +116,7 @@ if ($home===true) {
     	'raw_options'=>'
     		lineWidth:4,
     		crosshair:{trigger:"both"},
-    		curveType:"Function",
+    		/*curveType:"function",*/
     		hAxis: {
 				slantedText: true,
 				slantedTextAngle: 90,
@@ -128,7 +128,10 @@ if ($home===true) {
 				format:"# °C",
 				textStyle: {color: "#AAA", fontSize: 14},
 				Gridlines: {
-					interval: 2
+					multiple: 1
+				},
+				minorGridlines: {
+					multiple: 0.5
 				}
 			  },
 			theme:"maximized",
