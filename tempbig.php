@@ -124,7 +124,6 @@ if ($home===true) {
 				textStyle: {color: "#DDD", fontSize: 18}
 			},
 			vAxis: {
-				/*ticks: [20],*/
 				format:"# °C",
 				textStyle: {color: "#AAA", fontSize: 14},
 				Gridlines: {
