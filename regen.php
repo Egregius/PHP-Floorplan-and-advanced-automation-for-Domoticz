@@ -189,90 +189,31 @@ if ($home===true) {
 		echo $legend;
 		$colors=array($buienradar,$darksky,$buien);
 		$query="SELECT stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
-		if ($udevice=='iPad') {
-			$args=array(
-								'width'=>1000,
-								'height'=>880,
-								'hide_legend'=>true,
-								'responsive'=>false,
-								'background_color'=>'#000',
-								'chart_div'=>'graph',
-								'colors'=>$colors,
-								'margins'=>array(0,0,0,50),
-								'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
-								'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-								 'raw_options'=>'vAxis: {
-									 viewWindowMode:\'explicit\',
-									 textStyle: {color: "#FFFFFF", fontSize: 18}
-								},
-								series:{
-									0:{lineDashStyle:[2,2]},
-									1:{lineDashStyle:[2,2]},
-									3:{lineDashStyle:[0,0],pointSize:5},
-								}
-								');
-		} elseif ($udevice=='iPhone') {
-			$args=array(
-								'width'=>360,
-								'height'=>240,
-								'hide_legend'=>true,
-								'responsive'=>false,
-								'background_color'=>'#000',
-								'chart_div'=>'graph',
-								'colors'=>$colors,
-								'margins'=>array(0,0,0,50),
-								'y_axis_text_style'=>array('fontSize'=>20,'color'=>'FFF'),
-								'x_axis_text_style'=>array('fontSize'=>18,'color'=>'FFF'),
-								'text_style'=>array('fontSize'=>16,'color'=>'FFF'),
-								'raw_options'=>'vAxis: {
-								  viewWindowMode:\'explicit\',
-								  textStyle: {color: "#FFFFFF", fontSize: 18}
-								},
-								series:{
-									0:{lineDashStyle:[2,2]},
-									1:{lineDashStyle:[2,2]},
-									3:{lineDashStyle:[0,0],pointSize:5},
-								}
-								');
-		} elseif ($udevice=='Mac') {
-			$args=array('width'=>460,'height'=>300,'hide_legend'=>true,'responsive'=>true,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-			'raw_options'=>'vAxis: {
-								  viewWindowMode:\'explicit\',
-								  textStyle: {color: "#FFFFFF", fontSize: 18}
-								},
-								series:{
-									0:{lineDashStyle:[2,2]},
-									1:{lineDashStyle:[2,2]},
-									3:{lineDashStyle:[0,0],pointSize:5},
-								}
-								');
-		} elseif ($udevice=='S4') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-			'raw_options'=>'vAxis: {
-								  viewWindowMode:\'explicit\',
-								  textStyle: {color: "#FFFFFF", fontSize: 18}
-								},
-								series:{
-									0:{lineDashStyle:[2,2]},
-									1:{lineDashStyle:[2,2]},
-									3:{lineDashStyle:[0,0],pointSize:5},
-								}
-								');
-		} elseif ($udevice=='Stablet') {
-			$args=array('width'=>480,'height'=>500,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-			'raw_options'=>'vAxis: {
-								  viewWindowMode:\'explicit\',
-								  textStyle: {color: "#FFFFFF", fontSize: 18}
-								},
-								series:{
-									0:{lineDashStyle:[2,2]},
-									1:{lineDashStyle:[2,2]},
-									3:{lineDashStyle:[0,0],pointSize:5},
-								}
-								');
-		} else {
-			$args=array('width'=>460,'height'=>200,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),'x_axis_text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'));
-		}
+		$args=array(
+				'width'=>1000,
+				'height'=>880,
+				'hide_legend'=>true,
+				'responsive'=>false,
+				'background_color'=>'#000',
+				'chart_div'=>'graph',
+				'colors'=>$colors,
+				'margins'=>array(0,0,0,50),
+				'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
+				'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+				 'raw_options'=>'vAxis: {
+					 viewWindowMode:\'explicit\',
+					 textStyle: {color: "#FFFFFF", fontSize: 18}
+				},
+				series:{
+					0:{lineDashStyle:[2,2]},
+					1:{lineDashStyle:[2,2]},
+					3:{lineDashStyle:[0,0],pointSize:5},
+				},theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}
+				');
+		if ($udevice=='iPad') {$args['width']=1000;$args['height']=880;}
+		elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
+		elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
+		else {$args['width']=460;$args['height']=200;}
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		if ($result->num_rows==0) {
 			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
