@@ -290,7 +290,6 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		echo '<h3>Pluviometer per maand</h3>';
-		$args['colors']=array('#44C','#44C');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
 		$args['raw_options']='
