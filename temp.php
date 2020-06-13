@@ -207,7 +207,9 @@ if ($home===true) {
         enda:
     } elseif ($sensor=='binnen') {
         $args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
-        $line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
+        $argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
+        $args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
+        $argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
         $query="SELECT stamp,living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -248,11 +250,14 @@ if ($home===true) {
         $min=$sensor.'_min';
         $max=$sensor.'_max';
         $avg=$sensor.'_avg';
-        $line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
+        $args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
+        $argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
         if ($sensor=='badkamer') {
-            $colors=array(${$sensornaam},${$sensornaam},'#ffb400');
+            $args['colors']=array(${$sensornaam},${$sensornaam},'#ffb400');
+            $argshour['colors']=array('#00F','#F00','#0F0');
         } else {
-            $colors=array(${$sensornaam},${$sensornaam},'#FFFF00');
+            $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
+            $argshour['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
         }
         $query="SELECT stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
