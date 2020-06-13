@@ -104,8 +104,6 @@ if ($home===true) {
         		lineWidth:3,
         		crosshair:{trigger:"both"},
 				hAxis: {
-					slantedText: true,
-					slantedTextAngle: 90,
 					showTextEvery: 60,
 					textStyle: {color: "#DDD", fontSize: 0}
 				},
