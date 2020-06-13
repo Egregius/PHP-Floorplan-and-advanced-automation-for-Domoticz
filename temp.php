@@ -137,7 +137,7 @@ if ($home===true) {
 				hAxis: {
 					slantedText: true,
 					slantedTextAngle: 90,
-					showTextEvery: 60,
+					showTextEvery: 30,
 					textStyle: {color: "#DDD", fontSize: 0}
 				},
 				vAxis: {
@@ -168,6 +168,7 @@ if ($home===true) {
 	}
     if ($sensor=='alles') {
         $args['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
+        $argshour['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
         $args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
         $query="SELECT stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
@@ -210,7 +211,7 @@ if ($home===true) {
         $argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
         $args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
         $argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-        $query="SELECT stamp,living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+        $query="SELECT DATE_FORMAT(stamp, '%h:%i') as stamp, living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -227,7 +228,7 @@ if ($home===true) {
         unset($chart);
         echo '<br/>'.$legend;
         monthb:
-        $query="SELECT stamp,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
+        $query="SELECT DATE_FORMAT(stamp, '%W') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -257,7 +258,7 @@ if ($home===true) {
             $argshour['colors']=array('#00F','#F00','#0F0');
         } else {
             $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
-            $argshour['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
+            $argshour['colors']=array('#00F','#F00','#0F0');
         }
         $query="SELECT stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
