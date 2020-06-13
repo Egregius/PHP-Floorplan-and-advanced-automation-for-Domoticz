@@ -106,7 +106,7 @@ if ($home===true) {
         $colors=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
         $line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
         $query="SELECT stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
-        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
+        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},curveType:"Function",theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -125,7 +125,7 @@ if ($home===true) {
         $colors=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
         $line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
         $query="SELECT stamp,living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
-        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
+        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},curveType:"Function",theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -151,7 +151,7 @@ if ($home===true) {
             $colors=array(${$sensornaam},${$sensornaam},'#FFFF00');
         }
         $query="SELECT stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
-        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
+        $args=array('width'=>1880,'height'=>1000,'hide_legend'=>true,'responsive'=>false,'background_color'=>'#000','chart_div'=>'graph','colors'=>$colors,'margins'=>array(0,0,0,50),'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),'line_styles'=>$line_styles,'raw_options'=>'lineWidth:4,crosshair:{trigger:"both"},curveType:"Function",theme:"maximized",chartArea:{left:0,top:0,width:"100%",height:"100%"}');
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query .' - '.$db->error.']');
         }
