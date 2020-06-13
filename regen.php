@@ -290,13 +290,14 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		echo '<h3>Pluviometer per maand</h3>';
-		$args['colors']=array('#666','#44C');
+		$args['colors']=array('#44C','#44C');
 		$args['chart_div']='pluviomonth';
 		$args['chart']='ComboChart';
 		$args['raw_options']='
-			seriesType:"steppedArea",
+			lineWidth:3,
+        	seriesType:"steppedArea",
 			series: {
-				0: {type: "steppedArea", areaOpacity:0.5},
+				0: {type: "steppedArea", areaOpacity:0.2},
 				1: {type: "bars", areaOpacity:0.7, groupWidth:60}
 			},
 				hAxis: {
