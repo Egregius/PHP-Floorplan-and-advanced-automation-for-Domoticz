@@ -131,15 +131,16 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
-	if (${'dif'.$k}>=0.8) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
-	elseif (${'dif'.$k}>=0.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-	elseif (${'dif'.$k}>=0.4) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-	elseif (${'dif'.$k}>=0.2) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
-	elseif (${'dif'.$k}>=0) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-	elseif (${'dif'.$k}>=-0.1) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];}
-	elseif (${'dif'.$k}>=-0.2) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;}
-	elseif (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;}
-	else {$rate='B';$d[$k.'_set']['s']=32;}
+	if (${'dif'.$k}>=0.8) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
+	elseif (${'dif'.$k}>=0.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+	elseif (${'dif'.$k}>=0.4) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+	elseif (${'dif'.$k}>=0.2) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
+	elseif (${'dif'.$k}>=0) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
+	elseif (${'dif'.$k}>=-0.1) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
+	elseif (${'dif'.$k}>=-0.2) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;$power=1;}
+	elseif (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
+	elseif (${'dif'.$k}>=-0.4) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']+2;$power=1;}
+	else {$rate='B';$d[$k.'_set']['s']=32;$power=0;}
 	if ($k=='kamer'||$k=='alex') {
 		if (TIME>=strtotime('8:00')&&TIME<strtotime('18:00')) {
 			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor(($d[$k.'_temp']['s']-0.1)*2)/2;
@@ -151,14 +152,14 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
 	if ($d[$k.'_set']['s']<25) {	
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=1||$daikin->mode!=3||$daikin->f_rate!=$rate) {
-				daikinset($k, 1, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
+				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 3);
 				storeicon($k.'_set', $d[$k.'_set']['s'].'-'.$rate);
 			}
 	} else {
-		if ($daikin->pow!=0||$daikin->mode!=3) {
-			daikinset($k, 0, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
+		if ($daikin->pow!=$power||$daikin->mode!=3) {
+			daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
 			storeicon($k.'_set', 'Off');
 		}

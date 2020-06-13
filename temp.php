@@ -114,7 +114,7 @@ if ($home===true) {
 						multiple: 1
 					},
 					minorGridlines: {
-						multiple: 0.5
+						multiple: 1
 					}
 				  },
 				theme:"maximized",
@@ -145,7 +145,7 @@ if ($home===true) {
 						multiple: 1
 					},
 					minorGridlines: {
-						multiple: 0.5
+						multiple: 1
 					}
 				  },
 				theme:"maximized",
