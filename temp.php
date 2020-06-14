@@ -135,7 +135,7 @@ if ($home===true) {
 				hAxis: {
 					slantedText: true,
 					slantedTextAngle: 90,
-					showTextEvery: 30,
+					showTextEvery: 24,
 					textStyle: {color: "#DDD", fontSize: 0}
 				},
 				vAxis: {
