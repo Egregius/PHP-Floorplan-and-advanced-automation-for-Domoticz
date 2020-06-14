@@ -168,7 +168,7 @@ if ($home===true) {
         $args['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
         $argshour['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
         $args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-        $query="SELECT DATE_FORMAT(stamp, '%h:%i') as stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+        $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -209,7 +209,7 @@ if ($home===true) {
         $argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
         $args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
         $argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-        $query="SELECT DATE_FORMAT(stamp, '%h:%i') as stamp, living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+        $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query.' - '.$db->error.']');
         }
@@ -258,7 +258,7 @@ if ($home===true) {
             $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
             $argshour['colors']=array('#00F','#F00','#0F0');
         }
-        $query="SELECT DATE_FORMAT(stamp, '%h:%i') as stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+        $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
         if (!$result=$db->query($query)) {
             die('There was an error running the query ['.$query .' - '.$db->error.']');
         }
