@@ -30,6 +30,7 @@ if [ "$STATUS" == "OK" ] ; then
     fi
     if [ $MINUTE -eq 0 ] ; then
         CRON="$CRON&cron3600"
+        rsync -aP /temp/mysql/ /mysqldb/ 
     fi
 	#0
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10$CRON" >/dev/null 2>&1 &
