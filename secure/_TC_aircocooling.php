@@ -185,13 +185,13 @@ if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true;
 $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
-	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:00')) {
+	if (TIME>=strtotime('5:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Rtobi']['s']>0&&TIME>=strtotime('9:00')) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			//if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		} else {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('6:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:00')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
@@ -230,11 +230,12 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
+	elseif (TIME>=strtotime('22:00')||TIME<strtotime('5:00')) {
 		if ($d['Weg']['s']>0) {
-			foreach ($benedenall as $i) {
+			foreach ($beneden as $i) {
 				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
 			}
+			if ($d['Rliving']['s']<86) sl('Rbureel', 86, basename(__FILE__).':'.__LINE__);
 			foreach ($boven as $i) {
 				if ($i=='Rtobi') {
 					if ($d['deurtobi']['s']=='Closed'&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
