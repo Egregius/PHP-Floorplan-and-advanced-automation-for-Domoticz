@@ -686,7 +686,7 @@ function lg($msg)
 {
     global $log;
     if ($log==true) {
-		$fp=fopen('/var/log/domoticz.log', "a+");
+		$fp=fopen('/temp/domoticz.log', "a+");
 		$time=microtime(true);
 		$dFormat="Y-m-d H:i:s";
 		$mSecs=$time-floor($time);
@@ -703,7 +703,7 @@ function logwrite($msg,$msg2=null)
 		$dFormat="Y-m-d H:i:s";
 		$mSecs=$time-floor($time);
 		$mSecs=substr(number_format($mSecs, 3), 1);
-		$fp=fopen('/var/log/domoticz.log', "a+");
+		$fp=fopen('/temp/domoticz.log', "a+");
 		fwrite(
 			$fp,
 			sprintf(
@@ -723,7 +723,7 @@ function fail2ban($ip)
     $dFormat="Y-m-d H:i:s";
     $mSecs=$time-floor($time);
     $mSecs=substr(number_format($mSecs, 3), 1);
-    $fp=fopen('/var/log/home2ban.log', "a+");
+    $fp=fopen('/temp/home2ban.log', "a+");
     fwrite($fp, sprintf("%s %s\n", date($dFormat), $ip));
     fclose($fp);
 }

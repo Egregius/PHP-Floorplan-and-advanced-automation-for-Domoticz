@@ -241,7 +241,7 @@ if ($d['auto']['s']=='On') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']<86) sl('Rbureel', 86, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']<86) sl('Rliving', 86, basename(__FILE__).':'.__LINE__);
 			foreach ($boven as $i) {
 				if ($i=='Rtobi') {
 					if ($d['deurtobi']['s']=='Closed'&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
