@@ -54,8 +54,11 @@ if ($d['kamer_set']['m']==0) {
 				)
     		)
     ) {
-        if (TIME<strtotime('5:00')) $Setkamer=21;
-        elseif (TIME>strtotime('10:00')) $Setkamer=21;
+        if (TIME<strtotime('5:00')) $Setkamer=20;
+        elseif (TIME>strtotime('21:00')) $Setkamer=20;
+        elseif (TIME>strtotime('20:00')) $Setkamer=20.5;
+        elseif (TIME>strtotime('19:00')) $Setkamer=21;
+        elseif (TIME>strtotime('10:00')) $Setkamer=21.5;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -103,7 +106,10 @@ if ($d['alex_set']['m']==0) {
 			)
     ) {
         if (TIME<strtotime('5:00')) $Setalex=21;
-        elseif (TIME>strtotime('10:00')) $Setalex=21;
+        elseif (TIME>strtotime('19:00')) $Setalex=21;
+        elseif (TIME>strtotime('18:00')) $Setalex=21.5;
+        elseif (TIME>strtotime('17:00')) $Setalex=22;
+        elseif (TIME>strtotime('10:00')) $Setalex=22.5;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
