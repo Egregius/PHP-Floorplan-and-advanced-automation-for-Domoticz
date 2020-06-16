@@ -247,7 +247,7 @@ if ($home===true) {
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
 		
-		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY date ASC;";
+		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
