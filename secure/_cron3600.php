@@ -363,11 +363,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	sleep(2);
 }
 
-if (TIME<strtotime('3:00')) {
+if (TIME<strtotime('13:00')) {
 	for ($x=5;$x>=0;$x--) {
 		$date=date("Y-m-d", (TIME-($x*86400)));
 		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
-		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
+		lg($query);
+		if(!$result=$db->query($query)){lg($db->error);die('There was an error running the query ['.$query.'-'.$db->error.']');}
 	}
 }
 /* Clean old database records */

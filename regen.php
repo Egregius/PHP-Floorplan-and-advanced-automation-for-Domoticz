@@ -18,11 +18,11 @@ if ($home===true) {
 		if ($db->connect_errno>0) {
 			die('Unable to connect to database [' . $db->connect_error . ']');
 		}
-		for ($x=60;$x>=1;$x--) {
+		/*for ($x=60;$x>=1;$x--) {
 			$date=date("Y-m-d", (TIME-($x*86400)));
 			$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
 			if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
-		}
+		}*/
 		$date=date("Y-m-d", TIME);
 		$value=$_POST['addregen'];
 		$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
@@ -188,7 +188,7 @@ if ($home===true) {
 	';
 		echo $legend;
 		$colors=array($buienradar,$darksky,$buien);
-		$query="SELECT DATE_FORMAT(stamp, '%W %h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY stamp ASC";
 		$args=array(
 				'width'=>1000,
 				'height'=>880,
@@ -240,7 +240,7 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		$query="SELECT DATE_FORMAT(date, '%e/%c') as date, rain FROM pluvio WHERE date > '$eenmaandstr' ORDER BY date ASC;";
+		$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
 		$query="SELECT month, rain FROM `pluvioklimaat`;";
