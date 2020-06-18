@@ -14,14 +14,7 @@ require 'scripts/chart.php';
 session_start();
 		error_reporting(E_ALL);
 		ini_set("display_errors", "on");
-	$f_startdate=$_SESSION['f_startdate'];
-	$f_enddate=$_SESSION['f_enddate'];
-	$f_setpoints=$_SESSION['f_setpoints'];
-	$f_heater=$_SESSION['f_heater'];
-	$r_startdate=date("Y-m-d", TIME);
-	$r_enddate=date("Y-m-d", TIME);
-	$maand=date("Y-m", strtotime($f_startdate));
-	$jaar=date("Y", strtotime($f_startdate));
+	$f_startdate=date("Y-m-d", TIME-86400);
 	//if($user=='Guy'){echo '<pre>';print_r($_REQUEST);print_r($_SESSION);echo '</pre>';}
 
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -35,55 +28,14 @@ session_start();
 			<title>Regenvoorspelling</title>
 			<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 			<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
-		</head>';
-	if ($udevice=='iPad') {
-		echo '
-		<body style="width:800px">
-			<form action="/floorplan.php">
-				<input type="submit" class="btn b5" value="Plan"/>
-			</form>
-			<form action="/temp.php">
-				<input type="submit" class="btn b5" value="Temperaturen"/>
-			</form>
-			<form action="/regen.php">
-				<input type="submit" class="btn btna b5" value="Regen"/>
-				<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
-			</form>';
-	} else {
-		echo '
-		<body style="width:100%">
-			<form action="/floorplan.php">
-				<input type="submit" class="btn b3" value="Plan"/>
-			</form>
-			<form action="/temp.php">
-				<input type="submit" class="btn b3" value="Temperaturen"/>
-			</form>
-			<form action="/regen.php">
-				<input type="submit" class="btn btna b3" value="Regen"/>
-				<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
-			</form>';
-	}
+		</head>
+		<body style="width:100%">';
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) {
 		die('Unable to connect to database [' . $db->connect_error . ']');
 	}
-	$eendag=TIME-86400*2;$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
-	$eenweek=TIME-86400*7;$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
 	$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
-	$buienradar='#FF1111';
-	$darksky='#FFFF44';
-	$buien='#44FF44';
-	echo '<h3>Voospellingen</h3>';
-	$legend='
-			<div style="width:379px;padding:15px 0px 10px 4px;">
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buienradar.'">Buienradar</font></a>
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$darksky.'">DarkSky</font></a>
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buien.'">Buien</font></a>
-			</div>
-';
-	echo $legend;
-	$colors=array($buienradar,$darksky,$buien);
-	$query="SELECT DATE_FORMAT(stamp, '%W %h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY stamp ASC";
+
 	$args=array(
 			'width'=>1000,
 			'height'=>880,
@@ -91,7 +43,6 @@ session_start();
 			'responsive'=>false,
 			'background_color'=>'#000',
 			'chart_div'=>'graph',
-			'colors'=>$colors,
 			'margins'=>array(0,0,0,50),
 			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
 			'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
@@ -124,20 +75,7 @@ session_start();
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 	);
-	if ($udevice=='iPad') {$args['width']=1000;$args['height']=880;}
-	elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
-	elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
-	else {$args['width']=460;$args['height']=200;}
-	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
-	}
-	while ($row=$result->fetch_assoc()) $graph[]=$row;
-	$result->free();
-	$chart=array_to_chart($graph, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart);
+
 	$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $pluvio[]=$row;
@@ -232,12 +170,4 @@ session_start();
 	}
 	echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
 	end:
-	if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
-		$togo=61-date("s");
-		if ($togo<15) {
-			$togo=15;
-		}
-		$togo=$togo*1000+2000;
-		echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
-	}
 	$db->close();
