@@ -37,8 +37,8 @@ session_start();
 	$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
 
 	$args=array(
-			'width'=>1000,
-			'height'=>880,
+			'width'=>600,
+			'height'=>600,
 			'hide_legend'=>true,
 			'responsive'=>false,
 			'background_color'=>'#000',
@@ -76,7 +76,7 @@ session_start();
 			chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 	);
 
-	$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
+	$query="SELECT DATE_FORMAT(`date`, '%e/%c') as Datum, rain as Regen FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $pluvio[]=$row;
 	$query="SELECT month, rain FROM `pluvioklimaat`;";
@@ -91,7 +91,7 @@ session_start();
 		$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 	}
 	$result->free();
-	echo '<h3>Pluviometer per dag</h3>';
+	echo '<div style="float:left;margin:30px"><h3>Pluviometer per dag</h3>';
 	$args['chart']='ColumnChart';
 	$args['margins']=array(0,0,50,50);
 	$args['colors']=array('#44C');
@@ -125,7 +125,7 @@ session_start();
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart);
-	echo '<h3>Pluviometer per maand</h3>';
+	echo '</div><div style="float:left;margin:30px"><h3>Pluviometer per maand</h3>';
 	$args['chart_div']='pluviomonth';
 	$args['chart']='ComboChart';
 	$args['raw_options']='
@@ -168,6 +168,7 @@ session_start();
 		$total=$total+$i['Normaal'];
 		$current=$current+$i['Regen'];
 	}
-	echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
+	echo '
+	<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3></div>';
 	end:
 	$db->close();
