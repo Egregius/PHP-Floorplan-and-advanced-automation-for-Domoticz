@@ -202,6 +202,9 @@ if ($home===true) {
 				'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 				 'raw_options'=>'vAxis: {
 					 viewWindowMode:\'explicit\',
+					 viewWindow:{
+						min:0
+					  },
 					 textStyle: {color: "#FFFFFF", fontSize: 18}
 				},
 				series:{
@@ -311,7 +314,12 @@ if ($home===true) {
 					},
 					minorGridlines: {
 						multiple: 10
-					}
+					},
+					viewWindowMode:\'explicit\',
+					 viewWindow:{
+						min:0
+					  },
+					 
 				  },
 				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"},

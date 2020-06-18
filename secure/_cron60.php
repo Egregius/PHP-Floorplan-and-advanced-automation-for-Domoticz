@@ -10,6 +10,42 @@
  * @link     https://egregius.be
  **/
 $user='cron60  ';
+if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
+    $stamp=sprintf("%s", date("Y-m-d H:i"));
+    $items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
+    foreach ($items as $i) {
+        ${$i.'_temp'}=$d[$i.'_temp']['s'];
+    }
+    $query="INSERT IGNORE INTO `temp`
+        (
+            `stamp`,
+            `buiten`,
+            `living`,
+            `badkamer`,
+            `kamer`,
+            `tobi`,
+            `alex`,
+            `zolder`
+        )
+		VALUES (
+		    '$stamp',
+		    '$buiten_temp',
+		    '$living_temp',
+		    '$badkamer_temp',
+		    '$kamer_temp',
+		    '$tobi_temp',
+		    '$alex_temp',
+		    '$zolder_temp'
+		);";
+    $db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
+    if ($db->connect_errno>0) {
+        die('Unable to connect to database ['.$db->connect_error.']');
+    }
+    if (!$result = $db->query($query)) {
+        die('There was an error running the query ['.$query.' - '.$db->error.']');
+    }
+    //lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
+}
 if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS ----------------------------*/
     if ($d['Weg']['s']==0){
@@ -619,42 +655,7 @@ if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries'
 } elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) {
     sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
 }
-if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
-    $stamp=sprintf("%s", date("Y-m-d H:i"));
-    $items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
-    foreach ($items as $i) {
-        ${$i.'_temp'}=$d[$i.'_temp']['s'];
-    }
-    $query="INSERT IGNORE INTO `temp`
-        (
-            `stamp`,
-            `buiten`,
-            `living`,
-            `badkamer`,
-            `kamer`,
-            `tobi`,
-            `alex`,
-            `zolder`
-        )
-		VALUES (
-		    '$stamp',
-		    '$buiten_temp',
-		    '$living_temp',
-		    '$badkamer_temp',
-		    '$kamer_temp',
-		    '$tobi_temp',
-		    '$alex_temp',
-		    '$zolder_temp'
-		);";
-    $db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
-    if ($db->connect_errno>0) {
-        die('Unable to connect to database ['.$db->connect_error.']');
-    }
-    if (!$result = $db->query($query)) {
-        die('There was an error running the query ['.$query.' - '.$db->error.']');
-    }
-    //lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
-}
+
 if ($d['water']['s']=='On') {
     if (past('water')>$d['water']['m']) {
         sw('water', 'Off');

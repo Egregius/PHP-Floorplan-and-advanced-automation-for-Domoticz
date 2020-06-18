@@ -363,7 +363,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	sleep(2);
 }
 
-if (TIME<strtotime('13:00')) {
+if (TIME<strtotime('3:00')) {
 	for ($x=5;$x>=0;$x--) {
 		$date=date("Y-m-d", (TIME-($x*86400)));
 		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
