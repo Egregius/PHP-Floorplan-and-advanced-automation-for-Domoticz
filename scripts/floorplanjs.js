@@ -861,7 +861,7 @@ function ajax(Update=$LastUpdateTime){
 										var obj = JSON.parse($icon);
 										html+='<br>';
 										if(obj.power==0)html+='Off<br>';
-										else html+=obj.set+':'+obj.fan+'<br>';
+										else html+=obj.set+'  '+obj.fan+'<br>';
 									}
 								}
 								
@@ -1465,9 +1465,17 @@ function setpoint(device){
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-	var obj = JSON.parse(icon);
-	if(obj.power==0)html+='Power Off';
-	
+	if(heatingset<-1||heatingset>0){
+		if(device=='living'||device=='kamer'||device=='alex'){
+			html+='<div class="fix z" style="top:600px;left:5px;">';
+			var obj = JSON.parse(icon);
+			if(obj.powermode==0)html+='';
+			else html+='';
+			if(obj.power==0)html+='<h3>Power Off</h3>';
+			else html+='<h3>Set = '+obj.set+'</h3><h3>Fan = '+obj.fan+'</h3>';
+			html+='</div>';
+		}
+	}	
 	$('#placeholder').html(html);
 	
 }
