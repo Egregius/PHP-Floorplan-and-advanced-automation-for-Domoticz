@@ -804,6 +804,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(type=="thermostaat"){
 							heatingset=localStorage.getItem('heating');
 							localStorage.setItem(device+'mode', $mode);
+							localStorage.setItem(device+'_icon', $icon);
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
 							try{
@@ -1424,7 +1425,7 @@ function initview(){
 
 function setpoint(device){
 	level=localStorage.getItem(device+'_set');
-	icon=localStorage.getItem(device+'_icon');
+	icon=localStorage.getItem(device+'_set_icon');
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
@@ -1464,6 +1465,9 @@ function setpoint(device){
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	var obj = JSON.parse(icon);
+	if(obj.power==0)html+='Power Off';
+	
 	$('#placeholder').html(html);
 	
 }
