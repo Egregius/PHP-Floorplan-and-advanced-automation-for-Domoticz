@@ -801,6 +801,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(type=="daikin"){
 							localStorage.setItem(device, $mode);
+							localStorage.setItem(device+'_value', $value);
 						}else if(type=="thermostaat"){
 							heatingset=localStorage.getItem('heating');
 							localStorage.setItem(device+'mode', $mode);
@@ -1425,7 +1426,8 @@ function initview(){
 
 function setpoint(device){
 	level=localStorage.getItem(device+'_set');
-	icon=localStorage.getItem(device+'_set_icon');
+	icon=JSON.parse(localStorage.getItem(device+'_set_icon'));
+	daikin=JSON.parse(localStorage.getItem('daikin'+device));
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
@@ -1468,16 +1470,15 @@ function setpoint(device){
 	if(heatingset<-1||heatingset>0){
 		if(device=='living'||device=='kamer'||device=='alex'){
 			html+='<div class="fix z" style="top:600px;left:5px;">';
-			var obj = JSON.parse(icon);
-			if(obj.powermode==0){
+			if(icon.powermode==0){
 				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
 				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
 			} else {
 				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
 				html+='<div class="fix btn" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
 			}			
-			if(obj.power==0)html+='<h3>Power Off</h3>';
-			else html+='<h3>Set = '+obj.set+'</h3><h3>Fan = '+obj.fan+'</h3>';
+			if(icon.power==0)html+='<h3>Power Off</h3>';
+			else html+='<h3>Set = '+icon.set+'</h3><h3>Fan = '+icon.fan+'</h3>';
 			html+='</div>';
 		}
 	}	
