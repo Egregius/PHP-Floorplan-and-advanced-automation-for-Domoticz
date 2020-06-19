@@ -1470,11 +1470,11 @@ function setpoint(device){
 			html+='<div class="fix z" style="top:600px;left:5px;">';
 			var obj = JSON.parse(icon);
 			if(obj.powermode==0){
-				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Off</div>';
+				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
+				html+='<div class="fix btn" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
 			} else {
-				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Off</div>';
+				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
+				html+='<div class="fix btn" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
 			}			
 			if(obj.power==0)html+='<h3>Power Off</h3>';
 			else html+='<h3>Set = '+obj.set+'</h3><h3>Fan = '+obj.fan+'</h3>';

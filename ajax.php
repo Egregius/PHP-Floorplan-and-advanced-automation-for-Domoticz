@@ -229,6 +229,11 @@ if ($home==true) {
 				sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
 			}
+		} elseif ($_REQUEST['command']=='powermode') {
+			if ($_REQUEST['device']=='living_set') $ip=111;
+			elseif ($_REQUEST['device']=='kamer_set') $ip=112;
+			elseif ($_REQUEST['device']=='alex_set') $ip=113;
+			lg(print_r($_REQUEST, true));
 		} else {
 			if ($_REQUEST['device']=='nas') {
 				shell_exec('secure/wakenas.sh');
