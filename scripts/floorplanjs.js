@@ -1427,7 +1427,7 @@ function initview(){
 function setpoint(device){
 	level=localStorage.getItem(device+'_set');
 	icon=JSON.parse(localStorage.getItem(device+'_set_icon'));
-	daikin=JSON.parse(localStorage.getItem('daikin'+device));
+	daikin=JSON.parse(localStorage.getItem('daikin'+device+'_value'));
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
@@ -1469,6 +1469,13 @@ function setpoint(device){
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	if(heatingset<-1||heatingset>0){
 		if(device=='living'||device=='kamer'||device=='alex'){
+			console.log(device+' match adv = '+daikin.adv);
+			var adv = daikin.adv;
+			if (adv.match(/\/$/)) { 
+				console.log(device+' match adv = '+daikin.adv);
+			} else {
+				console.log(device+' adv = '+daikin.adv);
+			}
 			html+='<div class="fix z" style="top:600px;left:5px;">';
 			if(icon.powermode==0){
 				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
