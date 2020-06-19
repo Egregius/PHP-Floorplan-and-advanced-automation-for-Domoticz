@@ -433,6 +433,43 @@ function setradiator($name,$dif,$koudst=false,$set=14)
     return round($setpoint, 0);
 }
 
+
+foreach (array('living', 'kamer', 'alex') as $k) {
+	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
+    if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
+    $daikin=json_decode($d['daikin'.$k]['s']);
+    
+//    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
+    if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
+	if ($d[$k.'_set']['s']>10) {
+		if (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
+		elseif (${'dif'.$k}>=-0.6) {$rate='3';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=-0.9) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
+		elseif (${'dif'.$k}>=-1.2) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-1.5) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+		else {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
+		if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
+			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
+			storemode('daikin'.$k, 4);
+			storeicon($k.'_set', $d[$k.'_set']['s'].'-'.$rate);
+			sleep(1);
+			if ($k=='living') $ip=111;
+			elseif ($k=='kamer') $ip=112;
+			elseif ($k=='alex') $ip=113;
+			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) {
+				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
+			} else {
+				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
+			}
+		}
+	} else {
+		if ($daikin->pow!=$power||$daikin->mode!=4) {
+			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
+			storemode('daikin'.$k, 0);
+			storeicon($k.'_set', 'Off');
+		}
+	}
+}
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');

@@ -806,7 +806,7 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device+'mode', $mode);
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
-							try{
+							//try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
 								if(heatingset==2||device=='zolder_set'||device=='badkamer_set'){
@@ -857,12 +857,13 @@ function ajax(Update=$LastUpdateTime){
 								// Daikin set point
 								if(heatingset==-2||heatingset>0){
 									if(device=='living_set'||device=='kamer_set'||device=='alex_set'){
-										html+='<br>'+$icon;
+										var obj = JSON.parse($icon);
+										html+='<br>'+$obj.power;
 									}
 								}
 								
 								document.getElementById(device).innerHTML=html;
-							}catch{}
+							//}catch{}
 						}else if(type=="SetPoint"){
 							console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
 							try{

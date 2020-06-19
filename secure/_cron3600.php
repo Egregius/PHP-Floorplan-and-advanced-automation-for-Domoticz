@@ -328,11 +328,6 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='living') $ip=111;
 	elseif ($k=='kamer') $ip=112;
 	elseif ($k=='alex') $ip=113;
-	if (TIME>strtotime('8:00')||TIME<strtotime('20:00')) {
-		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
-	} else {
-		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
-	}
 	sleep(2);
 	$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_day_power_ex');
 	$data=explode(',', $data);
