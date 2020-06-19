@@ -239,6 +239,11 @@ if ($home==true) {
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode='.$_REQUEST['action'].'&spmode_kind=1');
 			
 			lg(print_r($_REQUEST, true));
+			sleep(2);
+			$data=daikinstatus($_REQUEST['device']);
+			if ($data&&$data!=$d['daikin'.$_REQUEST['device']]['s']) {
+				store('daikin'.$_REQUEST['device'], $data, basename(__FILE__).':'.__LINE__);
+			}
 		} else {
 			if ($_REQUEST['device']=='nas') {
 				shell_exec('secure/wakenas.sh');

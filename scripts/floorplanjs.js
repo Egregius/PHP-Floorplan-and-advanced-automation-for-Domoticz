@@ -1469,9 +1469,8 @@ function setpoint(device){
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	if(heatingset<-1||heatingset>0){
 		if(device=='living'||device=='kamer'||device=='alex'){
-			console.log(device+' match adv = '+daikin.adv);
 			var adv = daikin.adv;
-			if (adv.match(/\/$/)) { 
+			if (adv.match(/\//ig)) { 
 				console.log(device+' match adv = '+daikin.adv);
 			} else {
 				console.log(device+' adv = '+daikin.adv);
