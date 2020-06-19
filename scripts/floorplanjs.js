@@ -860,7 +860,7 @@ function ajax(Update=$LastUpdateTime){
 										var obj = JSON.parse($icon);
 										html+='<br>';
 										if(obj.power==0)html+='Off<br>';
-										else html+=obj.set+':'+obj.rate+'<br>';
+										else html+=obj.set+':'+obj.fan+'<br>';
 									}
 								}
 								

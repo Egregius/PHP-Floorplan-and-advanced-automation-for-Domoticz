@@ -29,7 +29,7 @@ if ($home==true) {
         $t=$_SERVER['REQUEST_TIME'];
         $d=array();
         $d['t']=$t;
-        if($_REQUEST['t']==0)$t=0;
+        if($_REQUEST['t']==0)$t=-1;
         else $t=$t-1;
         $db=dbconnect();
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
