@@ -29,8 +29,8 @@ if ($home==true) {
         $t=$_SERVER['REQUEST_TIME'];
         $d=array();
         $d['t']=$t;
-        if($_REQUEST['t']==0)$t=-1;
-        else $t=$t-1;
+        if($_REQUEST['t']==0)$t=0;
+        else $t=$t-2;
         $db=dbconnect();
         $stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
         while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {

@@ -49,7 +49,7 @@ function ajax(Update=$LastUpdateTime){
 						minutes="0"+date.getMinutes();
 						seconds="0"+date.getSeconds();
 						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-						if(log==true&&device!='el'&&device!='zon')console.log($LastUpdateTime+' '+$time+' '+device+' = '+ $value);
+						if(log==true&&device!='el'&&device!='zon')console.log($LastUpdateTime+' '+$time+' '+device+' = '+ $value + ' | icon = ' + $icon);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
@@ -867,7 +867,7 @@ function ajax(Update=$LastUpdateTime){
 								document.getElementById(device).innerHTML=html;
 							}catch{}
 						}else if(type=="SetPoint"){
-							console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
+							//console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
 							try{
 								//document.getElementById(device).innerHTML=$value.toString().replace(".0", "");
 								document.getElementById(device).innerHTML=$value * 1;
