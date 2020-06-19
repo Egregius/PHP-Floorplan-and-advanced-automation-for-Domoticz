@@ -46,10 +46,7 @@ function huisslapen()
     sl(array('hall','inkom','eettafel','zithoek','terras'), 0, basename(__FILE__).':'.__LINE__);
     sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
 	
-    foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek'/*,'dimactionkamer','dimactiontobi','dimactionalex'*/) as $i) {
-        if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-    }
-    foreach (array('luifel') as $i) {
+    foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
         if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
     }
     $status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
