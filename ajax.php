@@ -233,9 +233,9 @@ if ($home==true) {
 			if ($_REQUEST['device']=='living_set') $ip=111;
 			elseif ($_REQUEST['device']=='kamer_set') $ip=112;
 			elseif ($_REQUEST['device']=='alex_set') $ip=113;
-			$data=json_decode($d[$k.'_set']['icon'], true);
+			$data=json_decode($d[$_REQUEST['device']]['icon'], true);
 			$data['powermode']=$_REQUEST['action'];
-			storeicon($k.'_set', json_encode($data));
+			storeicon($_REQUEST['device'], json_encode($data));
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode='.$_REQUEST['action'].'&spmode_kind=1');
 			
 			lg(print_r($_REQUEST, true));
