@@ -1471,24 +1471,42 @@ function setpoint(device){
 		if(device=='living'||device=='kamer'||device=='alex'){
 			var adv = daikin.adv;
 			var adv = '2/13';
-			if (adv.match(/\//ig)) { 
+			if (adv == '') {
+				streamer=0;
+				powermode=0;
+			} else if (adv.match(/\//ig)) { 
 				var advs = adv.split("/");
 				console.log(advs);
 				if (advs[1]==13) streamer=1;
 				else if (adv[1]=='') streamer=0;
+				if (advs[0]==2) powermode=2;
+				else if (adv[0]==12) powermode=1;
+				else powermode=0;
 			} else {
-				if (adv==13) streamer=1;
-				else if (adv=='') streamer=0;
+				if (adv==13) {
+					streamer=1;
+				} else if (adv==12) {
+					streamer=0;
+					powermode=1;
+				} else if (adv==2) {
+					streamer=0;
+					powermode=2;
+				} else if (adv=='') {
+					streamer=0;
+					powermode=0;
+				}
 				
 			}
 			console.log(device+' streamer = '+streamer);
 			html+='<div class="fix z" style="top:600px;left:5px;">';
-			if(icon.powermode==0){
-				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
-				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
+			if(powermode==0){
+				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Eco\');initview();"><br>Eco</div>';
+				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Normal\');initview();"><br>Normal</div>';
+				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
 			} else {
-				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'0\');initview();"><br>Off</div>';
+				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Eco\');initview();"><br>Eco</div>';
+				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Normal\');initview();"><br>Normal</div>';
+				html+='<div class="fix btn btna" style="top:-3px;left:320px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
 			}			
 			if(icon.power==0)html+='<h3>Power Off</h3>';
 			else html+='<h3>Set = '+icon.set+'</h3><h3>Fan = '+icon.fan+'</h3>';
