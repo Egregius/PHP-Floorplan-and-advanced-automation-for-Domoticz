@@ -1513,11 +1513,11 @@ function setpoint(device){
 				html+='<div class="fix btn btna" style="top:-3px;left:364px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
 			}
 			if(streamer==0){
-				html+='<h3>Streamer</h3><div class="fix btn btna" style="top:-3px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:-3px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
+				html+='<br><h3>Streamer</h3><div class="fix btn" style="top:81px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
+				html+='<div class="fix btn btna" style="top:81px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
 			} else {
-				html+='<h3>Streamer</h3><div class="fix btn btna" style="top:-3px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:-3px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
+				html+='<br><h3>Streamer</h3><div class="fix btn btna" style="top:81px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
+				html+='<div class="fix btn" style="top:81px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
 			}
 			if(icon.power==0)html+='<h3>Power Off</h3>';
 			else html+='<h3>Set = '+icon.set+'</h3><h3>Fan = '+icon.fan+'</h3>';

@@ -239,8 +239,20 @@ if ($home==true) {
 			if ($_REQUEST['action']=='Normal') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1');
 			elseif ($_REQUEST['action']=='Eco') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
 			elseif ($_REQUEST['action']=='Power') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=1');
-			
-			lg(print_r($_REQUEST, true));
+			sleep(1);
+			$data=daikinstatus($daikin);
+			if ($data&&$data!=$d['daikin'.$daikin]['s']) {
+				store('daikin'.$daikin, $data, basename(__FILE__).':'.__LINE__);
+			}
+		} elseif ($_REQUEST['command']=='streamer') {
+			if ($_REQUEST['device']=='living_set') {$ip=111;$daikin='living';}
+			elseif ($_REQUEST['device']=='kamer_set') {$ip=112;$daikin='kamer';}
+			elseif ($_REQUEST['device']=='alex_set') {$ip=113;$daikin='alex';}
+			$data=json_decode($d[$_REQUEST['device']]['icon'], true);
+			$data['streamer']=$_REQUEST['action'];
+			storeicon($_REQUEST['device'], json_encode($data));
+			if ($_REQUEST['action']=='On') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
+			elseif ($_REQUEST['action']=='Off') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
 			sleep(1);
 			$data=daikinstatus($daikin);
 			if ($data&&$data!=$d['daikin'.$daikin]['s']) {
