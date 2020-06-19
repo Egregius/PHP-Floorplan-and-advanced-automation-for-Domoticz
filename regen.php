@@ -188,7 +188,7 @@ if ($home===true) {
 	';
 		echo $legend;
 		$colors=array($buienradar,$darksky,$buien);
-		$query="SELECT DATE_FORMAT(stamp, '%W %h:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY DATE_FORMAT(stamp, '%Y%m%%d%k%i') DESC";
+		$query="SELECT DATE_FORMAT(stamp, '%W %H:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY DATE_FORMAT(stamp, '%Y%m%d%H%i') ASC";
 		$args=array(
 				'width'=>1000,
 				'height'=>880,

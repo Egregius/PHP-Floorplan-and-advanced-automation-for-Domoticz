@@ -127,7 +127,7 @@ if ($d['living_set']['m']==0) {
 	) {
 		$Setliving=23;
     }
-    if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
+    if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
         $d['living_set']['s']=$Setliving;
     }
