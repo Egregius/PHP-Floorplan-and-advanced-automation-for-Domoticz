@@ -236,10 +236,12 @@ if ($home==true) {
 			$data=json_decode($d[$_REQUEST['device']]['icon'], true);
 			$data['powermode']=$_REQUEST['action'];
 			storeicon($_REQUEST['device'], json_encode($data));
-			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode='.$_REQUEST['action'].'&spmode_kind=1');
+			if ($_REQUEST['action']=='Normal') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1');
+			elseif ($_REQUEST['action']=='Eco') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
+			elseif ($_REQUEST['action']=='Power') file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=1');
 			
 			lg(print_r($_REQUEST, true));
-			sleep(2);
+			sleep(1);
 			$data=daikinstatus($daikin);
 			if ($data&&$data!=$d['daikin'.$daikin]['s']) {
 				store('daikin'.$daikin, $data, basename(__FILE__).':'.__LINE__);
