@@ -170,6 +170,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
 				$data['mode']=3;
+				$data['fan']=$rate;
 				$data['set']=$d[$k.'_set']['s'];
 				if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
 					sleep(1);
