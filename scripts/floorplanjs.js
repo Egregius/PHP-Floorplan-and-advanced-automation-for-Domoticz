@@ -1423,8 +1423,8 @@ function initview(){
 }
 
 function setpoint(device){
-	$mode=localStorage.getItem(device+'_setmode');
 	level=localStorage.getItem(device+'_set');
+	icon=localStorage.getItem(device+'_icon');
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
@@ -1456,7 +1456,7 @@ function setpoint(device){
 			temps=[10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17];
 		}
 	}else{
-		temps=[20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,27,27.5,28,28.5,29,33];
+		temps=[20,20.5,21,21.5,22,22.5,23,23.5,24,24.5,25,25.5,26,26.5,33];
 	}
 	html+='<div class="fix z" style="top:210px;left:10px;">';
 	temps.forEach(function(temp){
