@@ -230,9 +230,9 @@ if ($home==true) {
 				storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['command']=='powermode') {
-			if ($_REQUEST['device']=='living_set') $ip=111;
-			elseif ($_REQUEST['device']=='kamer_set') $ip=112;
-			elseif ($_REQUEST['device']=='alex_set') $ip=113;
+			if ($_REQUEST['device']=='living_set') {$ip=111;$daikin='living';}
+			elseif ($_REQUEST['device']=='kamer_set') {$ip=112;$daikin='kamer';}
+			elseif ($_REQUEST['device']=='alex_set') {$ip=113;$daikin='alex';}
 			$data=json_decode($d[$_REQUEST['device']]['icon'], true);
 			$data['powermode']=$_REQUEST['action'];
 			storeicon($_REQUEST['device'], json_encode($data));
@@ -240,9 +240,9 @@ if ($home==true) {
 			
 			lg(print_r($_REQUEST, true));
 			sleep(2);
-			$data=daikinstatus($_REQUEST['device']);
-			if ($data&&$data!=$d['daikin'.$_REQUEST['device']]['s']) {
-				store('daikin'.$_REQUEST['device'], $data, basename(__FILE__).':'.__LINE__);
+			$data=daikinstatus($daikin);
+			if ($data&&$data!=$d['daikin'.$daikin]['s']) {
+				store('daikin'.$daikin, $data, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
 			if ($_REQUEST['device']=='nas') {
