@@ -1470,12 +1470,18 @@ function setpoint(device){
 	if(heatingset<-1||heatingset>0){
 		if(device=='living'||device=='kamer'||device=='alex'){
 			var adv = daikin.adv;
-			var adv = '13';
+			var adv = '2/13';
 			if (adv.match(/\//ig)) { 
-				console.log(device+' match adv = '+daikin.adv);
+				var advs = adv.split("/");
+				console.log(advs);
+				if (advs[1]==13) streamer=1;
+				else if (adv[1]=='') streamer=0;
 			} else {
-				console.log(device+' adv = '+daikin.adv);
+				if (adv==13) streamer=1;
+				else if (adv=='') streamer=0;
+				
 			}
+			console.log(device+' streamer = '+streamer);
 			html+='<div class="fix z" style="top:600px;left:5px;">';
 			if(icon.powermode==0){
 				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:205px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'1\');initview();"><br>On</div>';
