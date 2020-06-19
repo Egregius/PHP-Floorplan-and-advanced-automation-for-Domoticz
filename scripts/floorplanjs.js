@@ -1470,6 +1470,7 @@ function setpoint(device){
 	if(heatingset<-1||heatingset>0){
 		if(device=='living'||device=='kamer'||device=='alex'){
 			var adv = daikin.adv;
+			var adv = '13';
 			if (adv.match(/\//ig)) { 
 				console.log(device+' match adv = '+daikin.adv);
 			} else {
