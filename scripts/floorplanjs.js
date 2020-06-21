@@ -798,7 +798,7 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device+'_value', $value);
 						}else if(type=="thermostaat"){
 							heatingset=localStorage.getItem('heating');
-							localStorage.setItem(device+'mode', $mode);
+							localStorage.setItem(device+'_mode', $mode);
 							localStorage.setItem(device+'_icon', $icon);
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
@@ -1426,7 +1426,7 @@ function setpoint(device){
 	daikin=JSON.parse(localStorage.getItem('daikin'+device+'_value'));
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
-	$mode=localStorage.getItem(device+'mode');
+	$mode=localStorage.getItem(device+'_set_mode');
 	console.log($mode);
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
 	if($mode==1){
