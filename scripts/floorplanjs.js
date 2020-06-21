@@ -1426,6 +1426,8 @@ function setpoint(device){
 	daikin=JSON.parse(localStorage.getItem('daikin'+device+'_value'));
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
+	$mode=localStorage.getItem(device+'mode');
+	console.log($mode);
 	html='<div class="fix dimmer" ><h2>'+device+' = '+temp+'°C</h2><h2>Set = '+level+'°C</h2>';
 	if($mode==1){
 		html+='<div class="fix btn btna" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';

@@ -158,7 +158,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$streamer=0;
 		$powermode=0;
 	} else if (strstr($daikin->adv, '/')) { 
-		$advs=explode("/", $daikin-adv);
+		$advs=explode("/", $daikin->adv);
 		if ($advs[1]==13) $streamer=1;
 		else if ($adv[1]=='') $streamer=0;
 		if ($advs[0]==2) $powermode=2;
