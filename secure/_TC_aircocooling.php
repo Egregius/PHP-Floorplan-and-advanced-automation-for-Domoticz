@@ -195,6 +195,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 					else $setstreamer=0;
 				
 					$data=json_decode($d[$k.'_set']['icon'], true);
+					$data=array();
 					$data['power']=$power;
 					$data['mode']=3;
 					$data['fan']=$rate;

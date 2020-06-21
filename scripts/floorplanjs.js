@@ -803,7 +803,7 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device, $value);
 							localStorage.setItem("tijd_"+device, time);
 							
-							//try{
+							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
 								if(heatingset==2||device=='zolder_set'||device=='badkamer_set'){
@@ -863,7 +863,7 @@ function ajax(Update=$LastUpdateTime){
 								}
 								
 								document.getElementById(device).innerHTML=html;
-							//}catch{}
+							}catch{}
 						}else if(type=="SetPoint"){
 							//console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
 							try{
