@@ -1,7 +1,7 @@
 #!/bin/bash
-service mariadb stop
+service mysql stop
 rsync -aP /mysqldb/ /temp/mysql/
-service mariadb start
+service mysql start
 touch /temp/domoticz.log
 touch /temp/phperror.log
 chmod 666 /temp/*.log
