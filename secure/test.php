@@ -13,8 +13,33 @@ $start=microtime(true);
 require 'functions.php';
 $d=fetchdata();
 $daikin=json_decode($d['daikinliving']['s']);
-echo $daikin->adv;
 
+if ($daikin->adv == '') {
+	$streamer=0;
+	$powermode=0;
+} else if (strstr($daikin->adv, '/')) { 
+	$advs=explode("/", $daikin-adv);
+	if ($advs[1]==13) $streamer=1;
+	else if ($adv[1]=='') $streamer=0;
+	if ($advs[0]==2) $powermode=2;
+	else if ($advs[0]==12) $powermode=1;
+	else $powermode=0;
+} else {
+	if ($daikin->adv==13) {
+		$streamer=1;
+		$powermode=0;
+	} else if ($daikin->adv==12) {
+		$streamer=0;
+		$powermode=1;
+	} else if ($daikin->adv==2) {
+		$streamer=0;
+		$powermode=2;
+	} else if ($daikin->adv=='') {
+		$streamer=0;
+		$powermode=0;
+	}
+	
+}
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -63,6 +88,9 @@ unset(
     $_POST,
     $_FILES,
     $_SERVER,
+    $d,
+    $iftttkey,
+    $ifttttoken,
     $start,
     $total,
     $users,
@@ -86,6 +114,7 @@ unset(
     $Usleep,
     $eendag,
     $Weg,
+    $garmintoken,
     $googleTTSAPIKey,
     $home,
     $log,

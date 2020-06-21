@@ -154,40 +154,67 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			elseif ($rate=='B') $rate=3;
 		}
 	}
+	if ($daikin->adv == '') {
+		$streamer=0;
+		$powermode=0;
+	} else if (strstr($daikin->adv, '/')) { 
+		$advs=explode("/", $daikin-adv);
+		if ($advs[1]==13) $streamer=1;
+		else if ($adv[1]=='') $streamer=0;
+		if ($advs[0]==2) $powermode=2;
+		else if ($advs[0]==12) $powermode=1;
+		else $powermode=0;
+	} else {
+		if ($daikin->adv==13) {
+			$streamer=1;
+			$powermode=0;
+		} else if ($daikin->adv==12) {
+			$streamer=0;
+			$powermode=1;
+		} else if ($daikin->adv==2) {
+			$streamer=0;
+			$powermode=2;
+		} else if ($daikin->adv=='') {
+			$streamer=0;
+			$powermode=0;
+		}
+	}
 	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
-	if ($d[$k.'_set']['s']<25) {	
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
-				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
-				storemode('daikin'.$k, 3);
-				if ($k=='living') $ip=111;
-				elseif ($k=='kamer') $ip=112;
-				elseif ($k=='alex') $ip=113;
-				if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=1;
-				else $streamer=0;
+	if ($powermode==0) {
+		if ($d[$k.'_set']['s']<25) {	
+				if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
+					daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
+					storemode('daikin'.$k, 3);
+					if ($k=='living') $ip=111;
+					elseif ($k=='kamer') $ip=112;
+					elseif ($k=='alex') $ip=113;
+					if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=1;
+					else $streamer=0;
 				
+					$data=json_decode($d[$k.'_set']['icon'], true);
+					$data['power']=$power;
+					$data['mode']=3;
+					$data['fan']=$rate;
+					$data['set']=$d[$k.'_set']['s'];
+					if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
+						sleep(1);
+						file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
+						$data['streamer']=$streamer;
+					}
+					storeicon($k.'_set', json_encode($data));
+				}
+		} else {
+			if ($daikin->pow!=$power||$daikin->mode!=3) {
+				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
+				storemode('daikin'.$k, 0);
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
 				$data['mode']=3;
-				$data['fan']=$rate;
 				$data['set']=$d[$k.'_set']['s'];
-				if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
-					sleep(1);
-					file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
-					$data['streamer']=$streamer;
-				}
 				storeicon($k.'_set', json_encode($data));
 			}
-	} else {
-		if ($daikin->pow!=$power||$daikin->mode!=3) {
-			daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
-			storemode('daikin'.$k, 0);
-			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
-			$data['mode']=3;
-			$data['set']=$d[$k.'_set']['s'];
-			storeicon($k.'_set', json_encode($data));
 		}
 	}
 }
