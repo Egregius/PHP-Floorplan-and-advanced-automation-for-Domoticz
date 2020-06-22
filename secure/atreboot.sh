@@ -1,11 +1,13 @@
 #!/bin/bash
 service mysql stop
+service domoticz stop
+service apache2 stop
 rsync -aP /mysqldb/ /temp/mysql/
-service mysql start
+rsync -aP /domoticz/ /temp/domoticz/
 touch /temp/domoticz.log
 touch /temp/phperror.log
 chmod 666 /temp/*.log
-service domoticz start
 mkdir -p /var/log/apache2/
-service apache2 stop
+service mysql start
 service apache2 start
+service domoticz start
