@@ -54,7 +54,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	
-	if ($d['buien']['s']>=10||$d['Weg']['s']==1) {
+	if (($d['buien']['s']>=10||$d['Weg']['s']==1)&&$d['achterdeur']['s']=='Open') {
 		sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['luifel']['m']==1) {

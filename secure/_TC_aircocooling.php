@@ -54,11 +54,13 @@ if ($d['kamer_set']['m']==0) {
 				)
     		)
     ) {
-        if (TIME<strtotime('5:00')) $Setkamer=20;
-        elseif (TIME>strtotime('21:00')) $Setkamer=20;
+        if (TIME<strtotime('5:00')) $Setkamer=20.5;
         elseif (TIME>strtotime('20:00')) $Setkamer=20.5;
-        elseif (TIME>strtotime('19:00')) $Setkamer=21;
-        elseif (TIME>strtotime('10:00')) $Setkamer=21.5;
+        elseif (TIME>strtotime('18:00')) $Setkamer=21;
+        elseif (TIME>strtotime('16:00')) $Setkamer=21.5;
+        elseif (TIME>strtotime('14:00')) $Setkamer=22;
+        elseif (TIME>strtotime('12:00')) $Setkamer=22.5;
+        elseif (TIME>strtotime('10:00')) $Setkamer=23;
     }
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
@@ -107,9 +109,10 @@ if ($d['alex_set']['m']==0) {
     ) {
         if (TIME<strtotime('5:00')) $Setalex=21;
         elseif (TIME>strtotime('19:00')) $Setalex=21;
-        elseif (TIME>strtotime('18:00')) $Setalex=21.5;
-        elseif (TIME>strtotime('17:00')) $Setalex=22;
-        elseif (TIME>strtotime('10:00')) $Setalex=22.5;
+        elseif (TIME>strtotime('17:00')) $Setalex=21.5;
+        elseif (TIME>strtotime('15:00')) $Setalex=22;
+        elseif (TIME>strtotime('13:00')) $Setalex=22.5;
+        elseif (TIME>strtotime('11:00')) $Setalex=23;
     }
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
@@ -180,9 +183,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
+	
 	if ($k=='living'&&$d['eettafel']['s']>0) $rate='B';
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
+	
 	if ($powermode==0) {
 		if ($d[$k.'_set']['s']<25) {	
 				if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
