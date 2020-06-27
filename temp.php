@@ -155,8 +155,8 @@ if ($home===true) {
 		$args['width']=1000;$args['height']=880;
 		$argshour['width']=1000;$argshour['height']=880;
 	} elseif ($udevice=='iPhone') {
-		$args['width']=300;$args['height']=440;
-		$argshour['width']=300;$argshour['height']=440;
+		$args['width']=375;$args['height']=460;
+		$argshour['width']=375;$argshour['height']=440;
 	} elseif ($udevice=='Mac') {
 		$args['width']=490;$args['height']=700;
 		$argshour['width']=490;$argshour['height']=700;
