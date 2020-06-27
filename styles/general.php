@@ -14,7 +14,8 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 	$ipaddress=$_SERVER['REMOTE_ADDR'];
 	$local=false;
 }
-if ($ipaddress=='192.168.2.199') $udevice='iPad';
+if ($ipaddress=='192.168.2.198') $udevice='iPhoneSE';
+elseif ($ipaddress=='192.168.2.199') $udevice='iPad';
 
 $css="
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
