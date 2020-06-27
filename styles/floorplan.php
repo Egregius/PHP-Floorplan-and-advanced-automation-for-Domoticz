@@ -79,7 +79,7 @@ td{text-align:center;font-size:1.1em;}
 .sd{top:30px;left:200px;}
 .zon{top:586px;left:0px;width:80px;text-align:center;}
 .weather{top:542px;left:15px;}
-
+#elecvandaag{white-space:nowrap; vertical-align:top;}
 #elec{min-width:60px;}
 #gcal{top:378px;left:88px;width:318px;font-size:1.1em;}
 #nas{top:120px;left:140px;}
