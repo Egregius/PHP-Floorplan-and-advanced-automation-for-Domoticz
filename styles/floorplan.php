@@ -67,11 +67,9 @@ td{text-align:center;font-size:1.1em;}
 .huge5{width:100%;height:19.5%;margin:1% 0px 1% 0px;font-size:3em;}
 #afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;z-index:10;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
-.dimmer{position:fixed;top:0px;left:0px;height:100%;width:100%;background:#000;z-index:100000;}
-.dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}";
-if ($udevice=='iPad') $css.=".dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18%;height:89px;}";
-else $css.=".dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}";
-$css.="
+.dimmer{position:fixed;top:0px;left:0px;height:100%;width:506px;background:#000;z-index:100000;}
+.dimmerlevel{top:20px;left:0px;width:100%;color:#000;font-size:90%;}
+.dimlevel{background-color:#333;color:#eee;font-size:300%;padding:0px;margin-bottom:2px;text-align:center;width:18.5%;height:89px;}
 .dimlevela{background-color:#ffba00;color:#000;}
 #clock{top:5px;left:266px;width:142px;text-align:center;font-size:33px;font-weight:500;color:#CCC;}
 .floorplan{cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;font-size:80%;font-family:Arial;padding:0px;text-align:center;background:#000;background-image:url(/images/HomeZw.png);background-repeat:no-repeat;background-position:-4px -15px;height:848px;width:486px;padding-top:0px;margin:0 auto;}

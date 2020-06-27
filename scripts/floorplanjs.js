@@ -1532,12 +1532,12 @@ function dimmer(device,floorplan='floorplan'){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	if(current==0)html+='<h2>'+device+' Off</h2>';
 	else html+='<h2>'+device+' '+current+' %</h2>';
-	html+='<div class="fix z" style="top:100px;left:30px;" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'0\');initview();"><img src="images/light_Off.png" class="i90"></div>';
-	html+='<div class="fix z" style="top:100px;left:150px;" onclick="ajaxcontrol(\''+device+'\',\'dimmersleep\',\'0\');initview();"><img src="images/Sleepy.png" class="i90"></div>';
-	if($mode==1)html+='<div class="fix" style="top:100px;left:150px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-	html+='<div class="fix z" style="top:100px;left:265px;" onclick="ajaxcontrol(\''+device+'\',\'dimmerwake\',\'0\');initview();"><img src="images/Wakeup.png" class="i90"></div>';
-	if($mode==2)html+='<div class="fix" style="top:100px;left:265px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
-	html+='<div class="fix z" style="top:100px;left:385px;" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'100\');initview();"><img src="images/light_On.png" class="i90"></div>';
+	html+='<div class="fix z" style="top:80px;left:30px;" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'0\');initview();"><img src="images/light_Off.png" class="i90"></div>';
+	html+='<div class="fix z" style="top:80px;left:150px;" onclick="ajaxcontrol(\''+device+'\',\'dimmersleep\',\'0\');initview();"><img src="images/Sleepy.png" class="i90"></div>';
+	if($mode==1)html+='<div class="fix" style="top:80px;left:150px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+	html+='<div class="fix z" style="top:80px;left:265px;" onclick="ajaxcontrol(\''+device+'\',\'dimmerwake\',\'0\');initview();"><img src="images/Wakeup.png" class="i90"></div>';
+	if($mode==2)html+='<div class="fix" style="top:80px;left:265px;z-index:-100;background:#ffba00;width:90px;height:90px;border-radius:45px;"></div>';
+	html+='<div class="fix z" style="top:80px;left:385px;" onclick="ajaxcontrol(\''+device+'\',\'dimmer\',\'100\');initview();"><img src="images/light_On.png" class="i90"></div>';
 	html+='</div><div>';
 	levels=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,35,40,45,50,55,60,65,70,75,80,85,90,95,100];
 	if(levels.includes(parseInt(current))){console.log('if');}else{console.log('false');if(current>0&&current<100)levels.push(current);}
