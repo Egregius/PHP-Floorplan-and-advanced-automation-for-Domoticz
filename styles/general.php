@@ -7,6 +7,15 @@ elseif(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone')!==false)$udevice='iPhone';
 //elseif(strpos($_SERVER['HTTP_USER_AGENT'],'Intel Mac')!==false)$udevice='mac';
 //elseif(strpos($_SERVER['HTTP_USER_AGENT'],'10_15')!==false)$udevice='iPhone';
 else $udevice='other';
+if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$ipaddress=$_SERVER['HTTP_X_FORWARDED_FOR'];
+	$local=true;
+} else {
+	$ipaddress=$_SERVER['REMOTE_ADDR'];
+	$local=false;
+}
+if ($ipaddress=='192.168.2.199') $udevice='iPad';
+
 $css="
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}

@@ -1034,24 +1034,24 @@ function createheader($page='')
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-		if ($ipaddress=='192.168.2.37') /* Iphone11 */ echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-		else echo '
+		if ($ipaddress=='192.168.2.37') /* Iphone11 initial-scale=0.755,*/ echo '
 		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
-    } elseif ($ipaddress=='192.168.2.199')  { //Nero
+		else echo /*initial-scale=0.655,*/'
+		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
+    } elseif ($ipaddress=='192.168.2.199')  { //Nero 
         echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-    } elseif ($ipaddress=='192.168.2.24')  { //Nokiatobi
+    } elseif ($ipaddress=='192.168.2.24')  { //Nokiatobi initial-scale=1.2,
         echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
     }
     echo '
 	    <link rel="manifest" href="/manifest.json">

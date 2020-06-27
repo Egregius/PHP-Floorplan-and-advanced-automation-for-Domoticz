@@ -24,6 +24,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 	$ipaddress=$_SERVER['REMOTE_ADDR'];
 	$local=false;
 }
+if ($ipaddress=='192.168.2.199') $udevice='iPad';
 
 //header("Expires: on, 01 Jan 1970 00:00:00 GMT");
 //header("Last-Modified: Tue, 10 Dec 2025 14:50:27 GMT");
