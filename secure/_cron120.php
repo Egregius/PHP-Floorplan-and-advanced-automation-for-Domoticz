@@ -60,10 +60,10 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') {
 			storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
-			$d['luifel']['m']=1;
+			$d['luifel']['m']=0;
 		} elseif (past('luifel')>28800) {
 			storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
-			$d['luifel']['m']=1;
+			$d['luifel']['m']=0;
 		}
 	}
 }
