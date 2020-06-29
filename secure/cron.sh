@@ -71,21 +71,20 @@ else
 	fi
 fi
 
+# Extra check that apache2 is running.
 ps cax | grep httpd
 if [ $? -eq 0 ] ; then
 	/usr/sbin/service apache2 stop
 	/usr/sbin/service apache2 start
 fi
 
-
+# Remove these lines as they only upload my files to gitbub.
 if [ $(($MINUTE%5)) -eq 0 ] ; then
-	LAST=$(find /var/www/html -type f ! -name 'floorplan.appcache' ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
+	LAST=$(find /var/www/html -type f ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"
 	if [ "$LAST" != "$PREV" ]
 	then
-		#awk -v timestamp=$(date +%s) 'NR == 2 { $2 = timestamp } 1' /var/www/html/floorplan.appcache > /temp/floorplan.appcache
-		#mv /temp/floorplan.appcache /var/www/html/floorplan.appcache
 		cd /var/www/html/
 		/usr/bin/nice -n20 git add .
 		/usr/bin/nice -n20 git commit -am "Update"
