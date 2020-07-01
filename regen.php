@@ -243,14 +243,14 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
+		$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
 		$query="SELECT month, rain FROM `pluvioklimaat`;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
 		
-		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%%m%d') ASC;";
+		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) {
 			$pluviomaand[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
