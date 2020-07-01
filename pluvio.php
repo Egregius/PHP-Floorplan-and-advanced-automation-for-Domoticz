@@ -79,7 +79,7 @@ session_start();
 	$query="SELECT DATE_FORMAT(`date`, '%e/%c') as Datum, rain as Regen FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $pluvio[]=$row;
-	echo '<pre>';print_r($pluvio);echo '</pre>';
+	//echo '<pre>';print_r($pluvio);echo '</pre>';
 	$query="SELECT month, rain FROM `pluvioklimaat`;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];

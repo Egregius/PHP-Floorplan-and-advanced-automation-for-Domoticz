@@ -226,7 +226,6 @@ if ($home===true) {
 						multiple: 10
 					}
 				  },
-				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"}'
         );
 		if ($udevice=='iPad') {$args['width']=1000;$args['height']=880;}
