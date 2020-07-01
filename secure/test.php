@@ -11,11 +11,7 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-$data['power']=$power;
-	$data['mode']=3;
-	$data['fan']=$rate;
-	$data['set']=$d[$k.'_set']['s'];
-	echo json_encode($data);
+echo strftime("%H:%M", strtotime('11:00'));
 	
 
 /*-------------------------------------------------*/
