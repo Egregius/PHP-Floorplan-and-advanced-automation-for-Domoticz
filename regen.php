@@ -174,7 +174,7 @@ if ($home===true) {
 		}
 		$eendag=TIME-86400*2;$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
 		$eenweek=TIME-86400*7;$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
-		$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
+		$eenmaand=TIME-86400*28;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
 		$buienradar='#FF1111';
 		$darksky='#FFFF44';
 		$buien='#44FF44';
@@ -242,9 +242,10 @@ if ($home===true) {
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
+		$query="SELECT DATE_FORMAT(`date`, '%e') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $pluvio[]=$row;
+		echo $query.'<br><pre>';print_r($pluvio);echo '</pre>';
 		$query="SELECT month, rain FROM `pluvioklimaat`;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
