@@ -19,7 +19,7 @@ if ($home==true) {
     createheader('floorplan');
     echo '
 	<body class="floorplan">
-	    <div class="fix" id="clock2">
+	    <div class="fix" id="clock">
 	    	<a href=\'javascript:location.reload(true);\' id="time">
 	    		Loading...
 			</a>
