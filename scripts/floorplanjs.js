@@ -300,6 +300,7 @@ function ajax(Update=$LastUpdateTime){
 								}
 							}catch{}
 						}else if(device=="Xlight"){
+							heatingset=localStorage.getItem('heating');
 							try{
 								if($mode>0) {
 									width = ($mode * 3.16);
@@ -324,7 +325,8 @@ function ajax(Update=$LastUpdateTime){
 									else if ($mode>16) power=$mode*-16;
 									else power=$mode*-15;
 									$('#daikincmpfreq').html(' cmp:'+-$mode+'='+power+'W');
-									$('#daikincmpfreq').css("background-color","blue");
+									if(heatingset==-2)$('#daikincmpfreq').css("background-color","blue");
+									else $('#daikincmpfreq').css("background-color","black");
 									$('#daikincmpfreq').css("width", width + "px");
 									$('#daikincmpfreq').css("display", "inherit");
 								}else{

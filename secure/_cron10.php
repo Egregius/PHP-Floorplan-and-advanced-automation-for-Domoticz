@@ -217,6 +217,7 @@ if (ping('192.168.2.105')) {
 
 if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
 elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
+elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
 else $rgb=false;
 if ($rgb!=false) {
 	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
@@ -238,6 +239,7 @@ if ($rgb!=false) {
 			}
 			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
+			elseif ($mode==2)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 		}
 	}
 } else {
