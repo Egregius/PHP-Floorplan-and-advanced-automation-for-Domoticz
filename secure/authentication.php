@@ -102,15 +102,15 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
 </html>');
         }
     } else {
-        fail2ban($_SERVER['REMOTE_ADDR'].' FAILED unknown user');
+        fail2ban($ipaddress.' FAILED unknown user');
         $msg="HOME Failed login attempt (Unknown user): ";
         if (isset($_POST['username'])) {
             $msg.="__USER=".$_POST['username'];
         }
-        if (isset($_REQ_POSTEST['password'])) {
+        if (isset($_POST['password'])) {
             $msg.="__PSWD=".$_POST['password'];
         }
-        $msg.="__IP=".$_SERVER['REMOTE_ADDR'];
+        $msg.="__IP=".$ipaddress;
         if (isset($_SERVER['REQUEST_URI'])) {
             $msg.=PHP_EOL."REQUEST=".$_SERVER['REQUEST_URI'];
         }
