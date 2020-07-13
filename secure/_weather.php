@@ -170,10 +170,6 @@ elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
 if ($wind!=$prevwind) store('wind', $wind, basename(__FILE__).':'.__LINE__);
-$windhist=json_decode($d['wind']['m']);
-$windhist[]=round($wind, 2);
-$windhist=array_slice($windhist, -4);
-storemode('wind', json_encode($windhist), basename(__FILE__).':'.__LINE__);
 $msg='Buiten temperaturen : ';
 foreach ($temps as $k=>$v) {
 	$msg.=$k.'='.$v.', ';
@@ -189,27 +185,15 @@ if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
 } elseif (isset($dsbuien)) {
     $newbuien=$dsbuien;
 }
-if (isset($newbuien)&&$newbuien>100) {
-    $newbuien=100;
-}
-if (isset($dsbuien)&&$dsbuien>100) {
-    $dsbuien=100;
-}
-if ($newbuien<1) {
-	$newbuien=0;
-}
+if (isset($newbuien)&&$newbuien>100) $newbuien=100;
+if (isset($dsbuien)&&$dsbuien>100) $dsbuien=100;
+if ($newbuien<1) $newbuien=0;
 $buien=round($newbuien, 0);
-if ($d['buien']['s']!=$buien) {
-	store('buien', $buien, basename(__FILE__).':'.__LINE__);
-}
-if (!isset($dsbuien)) {
-    $dsbuien=0;
-}
-if (!isset($newbuien)) {
-    $newbuien=0;
-}
+if ($d['buien']['s']!=$buien) store('buien', $buien, basename(__FILE__).':'.__LINE__);
+
+if (!isset($dsbuien)) $dsbuien=0;
+if (!isset($newbuien)) $newbuien=0;
 if ($buienradar>100) $buienradar=100;
-if ($dsbuien>100) $dsbuien=100;
 if ($buien>100) $buien=100;
 $db->query(
     "INSERT IGNORE INTO `regen`
@@ -219,6 +203,46 @@ $db->query(
 );
 if ($buienradar>0||$dsbuien>0||$buien>0) {
 	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
+}
+
+if ($d['auto']['s']=='On') {
+	if ($d['heating']['s']==-2	&&$d['living_temp']['s']>19&&TIME>=strtotime("10:00")&&$buien<10) { // Aircocooling
+		if ($wind>=30) 	 $luifel=0;
+		elseif ($wind>=20) $luifel=40;
+		else $luifel=50;
+		if ($d['luifel']['m']==0) {
+			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<10) { // Passive Cooling
+		if ($wind>=30) 	 $luifel=0;
+		elseif ($wind>=10) $luifel=35;
+		else $luifel=45;
+		if ($d['luifel']['m']==0) {
+			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>21&&TIME>=strtotime("10:00")&&$buien<10) { // Neutral
+		if ($wind>=30) 	 $luifel=0;
+		elseif ($wind>=10) $luifel=30;
+		else $luifel=40;
+		if ($d['luifel']['m']==0) {
+			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2500) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	} else {
+		$luifel=0;
+		if ($d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		}
+	}
+	
+	if (($buien>=10||$d['Weg']['s']==1)&&$d['achterdeur']['s']=='Closed') sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+
+	if ($d['luifel']['m']==1) {
+		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
+		elseif (past('luifel')>28800) storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
+	}
 }
 
 /*if ($d['achterdeur']['s']=='Closed') {

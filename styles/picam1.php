@@ -18,7 +18,7 @@ input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor
 	input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor:pointer;border:0px solid transparent;padding:2px;-webkit-appearance:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
 	.menu{top:0px;left:0px;width:100%;height:40px;z-index:10;}
 	.camera1{top:100px;left:0px;width:100%;height:100%;}
-	.camera2{top:600px;left:0px;width:100%;height:100%;}
+	.camera2{top:660px;left:0px;width:100%;height:100%;}
 	.camerai{width:100%;height:auto;}
 	.btn{height:80px;font-size:1.2em;}
 	.b6{width:101px;max-width:unset;}
@@ -29,7 +29,7 @@ input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor
 	input[type=submit]{color:#ccc;background-color:#555;display:inline-block;cursor:pointer;border:0px solid transparent;padding:2px;-webkit-appearance:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;;}
 	.menu{top:0px;left:0px;width:100%;height:40px;z-index:10;}
 	.camera1{top:80px;left:0px;width:100%;height:100%;}
-	.camera2{top:340px;left:0px;width:100%;height:100%;}
+	.camera2{top:360px;left:0px;width:100%;height:100%;}
 	.camerai{width:100%;height:auto;}
 	.btn{height:60px;font-size:2em;}
 	.b6{width:165px;max-width:unset;}
