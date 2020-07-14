@@ -155,8 +155,11 @@ if ($home===true) {
 		$args['width']=1000;$args['height']=880;
 		$argshour['width']=1000;$argshour['height']=880;
 	} elseif ($udevice=='iPhone') {
-		$args['width']=375;$args['height']=460;
-		$argshour['width']=375;$argshour['height']=440;
+		$args['width']=375;$args['height']=500;
+		$argshour['width']=375;$argshour['height']=500;
+	} elseif ($udevice=='iPhoneSE') {
+		$args['width']=375;$args['height']=510;
+		$argshour['width']=375;$argshour['height']=580;
 	} elseif ($udevice=='Mac') {
 		$args['width']=490;$args['height']=700;
 		$argshour['width']=490;$argshour['height']=700;
@@ -224,7 +227,6 @@ if ($home===true) {
         echo $chart['script'];
         echo $chart['div'];
         unset($chart);
-        echo '<br/>'.$legend;
         monthb:
         $query="SELECT DATE_FORMAT(stamp, '%W') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
         if (!$result=$db->query($query)) {
@@ -273,7 +275,6 @@ if ($home===true) {
         echo $chart['script'];
         echo $chart['div'];
         unset($chart);
-        echo $legend;
         month:
         $query="SELECT DATE_FORMAT(stamp, '%W') as stamp, $min, $max, $avg from `temp_hour` where stamp > '$week'";
         if (!$result=$db->query($query)) {
