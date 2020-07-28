@@ -32,10 +32,11 @@ if ($home) {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
     if ($udevice=='iPhone') {
-//        echo '
-//        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
         echo '
-        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui">';
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
+    } elseif ($udevice=='iPhoneSE') {
+        echo '
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.8,user-scalable=yes,minimal-ui">';
     } elseif ($udevice=='iPad') {
         echo '
         <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
@@ -84,7 +85,7 @@ if ($home) {
 			    <div id="bass"></div>
 			    <br>
 			    <br>
-                <div id="power"></div>
+                <div id="power"></div>'.$udevice.'
         </div>
     </body>
 </html>';
