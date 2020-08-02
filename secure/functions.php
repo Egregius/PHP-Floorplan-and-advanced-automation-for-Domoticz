@@ -989,10 +989,6 @@ function fhall()
 			if ($d['hall']['s']<27) {
 				sl('hall', 27, basename(__FILE__).':'.__LINE__);
 			}
-		} elseif (isset($device)&&$device!='pirhall'&&$d['Weg']['s']==1&&(TIME>strtotime('6:00')&&TIME<strtotime('8:00'))) {
-			if ($d['hall']['s']<31) {
-				sl('hall', 31, basename(__FILE__).':'.__LINE__);
-			}
 		}
 	}
 	if ($d['gcal']['s']==false&&TIME>=strtotime('6:00')&&TIME<strtotime('10:15')&&$d['Rtobi']['s']>0) {

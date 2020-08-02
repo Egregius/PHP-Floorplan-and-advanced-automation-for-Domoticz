@@ -21,7 +21,6 @@ if ($d['auto']['s']=='On') {
 	fhall();
 	if (TIME<strtotime('20:00')) {
 		finkom();
-		fliving();
 	}
 }
 if ($d['badkamer_set']['m']!=0) {
@@ -74,8 +73,6 @@ if (past('$ 8badkamer-8')>3) {
 	}
 }
 if ($d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
-	if ($d['Weg']['s']>0) {
-		store('Weg', 0, basename(__FILE__).':'.__LINE__);
-	}
+	store('Weg', 0, basename(__FILE__).':'.__LINE__);
 }
 resetsecurity();
