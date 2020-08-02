@@ -54,6 +54,9 @@ function huisslapen()
         if (isset($status['@attributes']['source'])) {
             if ($status['@attributes']['source']!='STANDBY') {
                 bosekey("POWER", 0, 101);
+                foreach (array(101,102,103,104,105) as $x) {
+                	if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
+                }
             }
         }
     }
