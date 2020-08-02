@@ -951,11 +951,11 @@ function fbadkamer()
         if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
         	if ($d['bose102']['s']=='Off'&&past('bose102')>30) {
 				bosezone(102);
-				if ($d['bose102']['m']==0) {
+				/*if ($d['bose102']['m']==0) {
 					sleep(2);
 					boseplayinfo(saytime().sayweather());
 					storemode('bose102', 1);
-				}
+				}*/
 			} 
         }
     }
