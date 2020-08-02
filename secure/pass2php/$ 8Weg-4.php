@@ -23,6 +23,10 @@ if ($status=='On') {
 			waarschuwing(' Let op . Raam hall open', 55);
 			exit('');
 		}
+		if ($d['raamkeuken']['s']!='Closed') {
+			waarschuwing(' Let op . Raam keuken open', 55);
+			exit('');
+		}
 		if ($d['bureeltobi']['s']=='On') {
 			waarschuwing(' Let op . bureel Tobi aan', 55);
 			exit('');

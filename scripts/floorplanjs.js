@@ -1598,6 +1598,7 @@ function Weg(){
 	if(achterdeur=='Open')html+='Achterdeur OPEN<br>';
 	if(raamliving=='Open')html+='Raam Living OPEN<br>';
 	if(raamhall=='Open')html+='Raam Hall OPEN<br>';
+	if(raamkeuken=='Open')html+='Raam Keuken OPEN<br>';
 	if(bureeltobi=='On')html+='Bureel Tobi AAN<br>';
 	if(poort=='Open'||achterdeur=='Open'||raamliving=='Open'||raamhall=='Open'||bureeltobi=='On'){
 		html+='</h1>';
