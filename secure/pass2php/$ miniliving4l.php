@@ -9,8 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg('script 4 L');
-if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off'*/) {
+if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'*/||$d['nvidia']['s']=='Off') {
     $items=array('tv'/*,'denon'*/,'nvidia');
     foreach ($items as $item) {
         if ($d[$item]['s']!='On') {
@@ -26,12 +25,12 @@ if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off'*/)
 			}
 		}
 	}
-	sleep(4);
+	/*sleep(4);
     lgcommand('on');
     for ($x=1;$x<=4;$x++) {
 		lgcommand('on');
 		sleep(2);
-	}
+	}*/
 } else {
     if ($d['lgtv']['s']=='On') {
         lgcommand('off');

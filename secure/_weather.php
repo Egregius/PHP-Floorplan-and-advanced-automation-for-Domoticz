@@ -169,7 +169,7 @@ elseif (isset($owwind)&&isset($dswind)) $wind=round(($owwind+$dswind)/2,1);
 elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
-if ($wind!=$prevwind) store('wind', $wind, basename(__FILE__).':'.__LINE__);
+store('wind', $wind, basename(__FILE__).':'.__LINE__);
 $msg='Buiten temperaturen : ';
 foreach ($temps as $k=>$v) {
 	$msg.=$k.'='.$v.', ';
