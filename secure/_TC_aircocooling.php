@@ -190,28 +190,28 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	
 	if ($powermode==0) {
 		if ($d[$k.'_set']['s']<25) {	
-				if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
-					daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
-					storemode('daikin'.$k, 3);
-					if ($k=='living') $ip=111;
-					elseif ($k=='kamer') $ip=112;
-					elseif ($k=='alex') $ip=113;
-					if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $setstreamer=1;
-					else $setstreamer=0;
-				
-					$data=json_decode($d[$k.'_set']['icon'], true);
-					$data=array();
-					$data['power']=$power;
-					$data['mode']=3;
-					$data['fan']=$rate;
-					$data['set']=$d[$k.'_set']['s'];
-					if ($streamer!=$setstreamer) {
-						sleep(1);
-						file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$setstreamer);
-						$data['streamer']=$setstreamer;
-					}
-					storeicon($k.'_set', json_encode($data));
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
+				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
+				storemode('daikin'.$k, 3);
+				if ($k=='living') $ip=111;
+				elseif ($k=='kamer') $ip=112;
+				elseif ($k=='alex') $ip=113;
+				if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $setstreamer=1;
+				else $setstreamer=0;
+			
+				$data=json_decode($d[$k.'_set']['icon'], true);
+				$data=array();
+				$data['power']=$power;
+				$data['mode']=3;
+				$data['fan']=$rate;
+				$data['set']=$d[$k.'_set']['s'];
+				if ($streamer!=$setstreamer) {
+					sleep(1);
+					file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$setstreamer);
+					$data['streamer']=$setstreamer;
 				}
+				storeicon($k.'_set', json_encode($data));
+			}
 		} else {
 			if ($daikin->pow!=$power||$daikin->mode!=3) {
 				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
