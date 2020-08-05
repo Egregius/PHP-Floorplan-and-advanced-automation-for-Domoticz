@@ -31,6 +31,14 @@ body{background-image:url('/images/_firework.jpg');background-size:contain;backg
 .home{height:23px;font-size:1.4em;border:1px solid #800;}
 .logout{position:absolute;bottom:0px;right:0px;}
 ";
+} elseif ($udevice=='iPhoneSE') {
+    $css.="
+.grid-sizer,
+.grid-item{width:99.5%;padding:0px 2px 2px 2px;}
+.btn{height:24px;font-size:1.4em;}
+.home{height:23px;font-size:1.4em;border:1px solid #800;}
+.logout{position:absolute;bottom:0px;right:0px;}
+";
 } elseif ($udevice=='iPad') {
     $css.="
 .btn{height:30px;font-size:1.4em;}
