@@ -67,6 +67,7 @@ if ($home) {
 		        	<th rowspan="2">Date</th>
 		        	<th colspan="3">Heat</th>
 		        	<th colspan="3">Cool</th>
+		        	<th rowspan="2">Sum</th>
 		        </tr>
 		        <tr class="border_bottom">
 		            <th>Living</th>
@@ -97,6 +98,7 @@ if ($home) {
         	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>
         </tr>';
         $livingheat=$livingheat+$row['livingheat'];
         $kamerheat=$kamerheat+$row['kamerheat'];
@@ -142,11 +144,50 @@ if ($home) {
 		        </tr>
 		    </thead>
 		    <tbody>';
-    $sql="SELECT LEFT(date,7) as month, SUM(livingheat), SUM(kamerheat), SUM(alexheat), SUM(livingcool), SUM(kamercool), SUM(alexcool) FROM `daikin` GROUP BY LEFT(date, 7) ORDER BY `date` DESC LIMIT 0,30";
+    $sql="SELECT LEFT(date,7) as date, SUM(livingheat) AS livingheat, SUM(kamerheat) AS kamerheat, SUM(alexheat) AS alexheat, SUM(livingcool) AS livingcool, SUM(kamercool) AS kamercool, SUM(alexcool) AS alexcool FROM `daikin` GROUP BY LEFT(date, 7) ORDER BY `date` DESC LIMIT 0,30";
     if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
+    $livingheat=0;
+    $kamerheat=0;
+    $alexheat=0;
+    $livingcool=0;
+    $kamercool=0;
+    $alexcool=0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    	print_r($row);
+        echo '
+        <tr class="border_bottom">
+        	<td nowrap>'.$row['date'].'</td>
+        	<td>'.($row['livingheat']>0?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['kamerheat']>0?number_format($row['kamerheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
+        </tr>';
+        $livingheat=$livingheat+$row['livingheat'];
+        $kamerheat=$kamerheat+$row['kamerheat'];
+        $alexheat=$alexheat+$row['alexheat'];
+        $livingcool=$livingcool+$row['livingcool'];
+        $kamercool=$kamercool+$row['kamercool'];
+        $alexcool=$alexcool+$row['alexcool'];
     }
+    echo '
+        </tbody>
+        <tfoot>
+        	<tr>
+        		<th>Sum</th>
+        		<th>'.($livingheat>0?number_format($livingheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($kamerheat>0?number_format($kamerheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($alexheat>0?number_format($alexheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($livingcool>0?number_format($livingcool*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($kamercool>0?number_format($kamercool*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($alexcool>0?number_format($alexcool*0.1, 1, ',', ''):'').'</th>
+        	</tr>
+        	<tr>
+        		<th>Total</th>
+        		<th colspan="6">'.number_format(($livingheat+$kamerheat+$alexheat+$livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
+        	<tr>
+        </tfoot>
+    </table>';
 }
 ?>
     </body>
