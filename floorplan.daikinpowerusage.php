@@ -93,32 +93,36 @@ if ($home) {
         echo '
         <tr class="border_bottom">
         	<td nowrap>'.$row['date'].'</td>
-        	<td>'.$row['livingheat']*0.1 .'</td>
-        	<td>'.$row['kamerheat']*0.1 .'</td>
-        	<td>'.$row['alexheat']*0.1 .'</td>
-        	<td>'.$row['livingcool']*0.1 .'</td>
-        	<td>'.$row['kamercool']*0.1 .'</td>
-        	<td>'.$row['alexcool']*0.1 .'</td>
+        	<td>'.($row['livingheat']>0?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['kamerheat']>0?number_format($row['kamerheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
         </tr>';
         $livingheat=$livingheat+$row['livingheat'];
         $kamerheat=$kamerheat+$row['kamerheat'];
-        $livingheat=$livingheat+$row['livingheat'];
-        $livingheat=$livingheat+$row['livingheat'];
-        $livingheat=$livingheat+$row['livingheat'];
-        $livingheat=$livingheat+$row['livingheat'];
+        $alexheat=$alexheat+$row['alexheat'];
+        $livingcool=$livingcool+$row['livingcool'];
+        $kamercool=$kamercool+$row['kamercool'];
+        $alexcool=$alexcool+$row['alexcool'];
     }
     echo '
         </tbody>
         <tfoot>
         	<tr>
         		<th>Sum</th>
-        		<th>'.$livingheat*0.1 .'</th>
-        		<th>'.$kamerheat*0.1 .'</th>
-        		<th>'.$alexheat*0.1 .'</th>
-        		<th>'.$livingcool*0.1 .'</th>
-        		<th>'.$kamercool*0.1 .'</th>
-        		<th>'.$alexcool*0.1 .'</th>
+        		<th>'.($livingheat>0?number_format($livingheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.number_format($kamerheat*0.1, 1, ',', '') .'</th>
+        		<th>'.number_format($alexheat*0.1, 1, ',', '') .'</th>
+        		<th>'.number_format($livingcool*0.1, 1, ',', '') .'</th>
+        		<th>'.number_format($kamercool*0.1, 1, ',', '') .'</th>
+        		<th>'.number_format($alexcool*0.1, 1, ',', '') .'</th>
         	</tr>
+        	<tr>
+        		<th>Total</th>
+        		<th colspan="6">'.number_format(($livingheat+$kamerheat+$alexheat+$livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
+        	<tr>
         </tfoot>
     </table>
     <br>
