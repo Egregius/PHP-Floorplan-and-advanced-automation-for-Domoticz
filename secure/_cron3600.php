@@ -304,7 +304,7 @@ if ($d['buiten_temp']['s']>5&&$d['buiten_temp']['s']<30) {
 	$high=40;
 } else {
 	$low=40;
-	$high=50;
+	$high=60;
 }
 
 if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {

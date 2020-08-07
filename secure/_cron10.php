@@ -232,10 +232,11 @@ if ($rgb!=false) {
 		}
 		$level=$control_info['cmpfreq'];
 		if ($level>100)$level=100;
-		if ($d['Xlight']['s']!=$level) {
+		$Xlight=round($level/3);
+		if ($d['Xlight']['s']!=$Xlight) {
 			if ($d['Weg']['s']==0){
-				rgb('Xlight', $rgb, $level);
-				sl('Xlight', $level, basename(__FILE__).':'.__LINE__);
+				rgb('Xlight', $rgb, $Xlight);
+				sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 			}
 			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);

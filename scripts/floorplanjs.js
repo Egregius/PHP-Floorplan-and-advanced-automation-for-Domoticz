@@ -1249,7 +1249,7 @@ function floorplanheating(){
         else if(heatingset==-2)items=['living','kamer','alex'];
 		if(heatingset!=-1)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" id="bovenbeneden"><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
+        html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
         if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
         html+='<tr id="heatingauto"></tr>';

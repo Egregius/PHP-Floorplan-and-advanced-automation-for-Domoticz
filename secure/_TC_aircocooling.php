@@ -189,7 +189,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
 	
 	if ($powermode==0) {
-		if ($d[$k.'_set']['s']<25) {	
+		if ($d[$k.'_set']['s']<25) {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
 				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 3);

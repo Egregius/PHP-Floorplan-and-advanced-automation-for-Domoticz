@@ -9,6 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
+if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('10:00')) {
     if ($d['Ralex']['s']>0) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 }
