@@ -39,14 +39,15 @@ if ($home) {
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}
-		    td{font-size:0.8em;text-align:left;}
+		    td{font-size:0.8em;text-align:center;}
+		    th{text-align:center;}
 		    .fix{width:320px;padding:0}
 		    .btn{width:300px;}
 		    .btnd{width:236px;}
 		    .b4{max-width:155px!important;}
 		    .b3{max-width:320px!important;}
 		    tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
-		    td{text-align:right;}
+		    .border_right {border-right:1pt dotted #777;}
         </style>
 	</head>
 	<body>';
@@ -64,18 +65,18 @@ if ($home) {
 		<table  id="table" cellpadding="2" cellspacing="0">
 		    <thead>
 		        <tr>
-		        	<th rowspan="2">Date</th>
-		        	<th colspan="3">Heat</th>
-		        	<th colspan="3">Cool</th>
-		        	<th rowspan="2">Sum</th>
+		        	<th rowspan="2" class="border_right">Date</th>
+		        	<th colspan="3" class="border_right">Heat</th>
+		        	<th colspan="3" class="border_right">Cool</th>
+		        	<th rowspan="2" class="border_right">Sum</th>
 		        </tr>
 		        <tr class="border_bottom">
 		            <th>Living</th>
 		            <th>Kamer</th>
-		            <th>Alex</th>
+		            <th class="border_right">Alex</th>
 		            <th>Living</th>
 		            <th>Kamer</th>
-		            <th>Alex</th>
+		            <th class="border_right">Alex</th>
 		        </tr>
 		    </thead>
 		    <tbody>';
@@ -91,14 +92,14 @@ if ($home) {
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         echo '
         <tr class="border_bottom">
-        	<td nowrap>'.$row['date'].'</td>
+        	<td nowrap class="border_right">'.$row['date'].'</td>
         	<td>'.($row['livingheat']>0?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamerheat']>0?number_format($row['kamerheat']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
+        	<td class="border_right">'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>
+        	<td class="border_right">'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
+        	<td class="border_right">'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>
         </tr>';
         $livingheat=$livingheat+$row['livingheat'];
         $kamerheat=$kamerheat+$row['kamerheat'];
@@ -111,17 +112,17 @@ if ($home) {
         </tbody>
         <tfoot>
         	<tr>
-        		<th>Sum</th>
+        		<th class="border_right">Sum</th>
         		<th>'.($livingheat>0?number_format($livingheat*0.1, 1, ',', ''):'').'</th>
         		<th>'.($kamerheat>0?number_format($kamerheat*0.1, 1, ',', ''):'').'</th>
-        		<th>'.($alexheat>0?number_format($alexheat*0.1, 1, ',', ''):'').'</th>
+        		<th class="border_right">'.($alexheat>0?number_format($alexheat*0.1, 1, ',', ''):'').'</th>
         		<th>'.($livingcool>0?number_format($livingcool*0.1, 1, ',', ''):'').'</th>
         		<th>'.($kamercool>0?number_format($kamercool*0.1, 1, ',', ''):'').'</th>
-        		<th>'.($alexcool>0?number_format($alexcool*0.1, 1, ',', ''):'').'</th>
+        		<th class="border_right">'.($alexcool>0?number_format($alexcool*0.1, 1, ',', ''):'').'</th>
         	</tr>
         	<tr>
-        		<th>Total</th>
-        		<th colspan="6">'.number_format(($livingheat+$kamerheat+$alexheat+$livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
+        		<th class="border_right">Total</th>
+        		<th colspan="6" class="border_right">'.number_format(($livingheat+$kamerheat+$alexheat+$livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
         	<tr>
         </tfoot>
     </table>
@@ -130,18 +131,18 @@ if ($home) {
     <table  id="table" cellpadding="2" cellspacing="0">
 		    <thead>
 		        <tr>
-		        	<th rowspan="2">Month</th>
-		        	<th colspan="3">Heat</th>
-		        	<th colspan="3">Cool</th>
-		        	<th rowspan="2">Sum</th>
+		        	<th rowspan="2" class="border_right">Month</th>
+		        	<th colspan="3" class="border_right">Heat</th>
+		        	<th colspan="3" class="border_right">Cool</th>
+		        	<th rowspan="2" class="border_right">Sum</th>
 		        </tr>
 		        <tr class="border_bottom">
 		            <th>Living</th>
 		            <th>Kamer</th>
-		            <th>Alex</th>
+		            <th class="border_right">Alex</th>
 		            <th>Living</th>
 		            <th>Kamer</th>
-		            <th>Alex</th>
+		            <th class="border_right">Alex</th>
 		        </tr>
 		    </thead>
 		    <tbody>';
@@ -156,14 +157,14 @@ if ($home) {
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         echo '
         <tr class="border_bottom">
-        	<td nowrap>'.$row['date'].'</td>
+        	<td nowrap class="border_right">'.$row['date'].'</td>
         	<td>'.($row['livingheat']>0?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamerheat']>0?number_format($row['kamerheat']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
+        	<td class="border_right">'.($row['alexheat']>0?number_format($row['alexheat']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
-        	<td>'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>   		
+        	<td class="border_right">'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
+        	<td class="border_right">'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>   		
         </tr>';
         $livingheat=$livingheat+$row['livingheat'];
         $kamerheat=$kamerheat+$row['kamerheat'];
@@ -185,7 +186,11 @@ if ($home) {
         		<th>'.($alexcool>0?number_format($alexcool*0.1, 1, ',', ''):'').'</th>
         	</tr>
         	<tr>
-        		<th>Total</th>
+        		<th rowspan="2">Total</th>
+        		<th colspan="3">'.number_format(($livingheat+$kamerheat+$alexheat)*0.1, 1, ',', '') .'</th>
+        		<th colspan="3">'.number_format(($livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
+        	</tr>
+        	<tr>
         		<th colspan="6">'.number_format(($livingheat+$kamerheat+$alexheat+$livingcool+$kamercool+$alexcool)*0.1, 1, ',', '') .'</th>
         	<tr>
         </tfoot>
