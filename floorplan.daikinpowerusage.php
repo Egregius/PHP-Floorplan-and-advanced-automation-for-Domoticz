@@ -34,23 +34,7 @@ if ($home) {
 	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
-		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.js"></script>
-		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
-		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		<script type="text/javascript" charset="utf-8">
-			var asInitVals = new Array();
-			$(document).ready(function() {
-				$(\'#table\').dataTable(
-				{
-					"bStateSave": true,
-					"bPaginate": false,
-                    "ordering": false,
-                    "fnInitComplete":function(){
-						$("#table_filter input").focus();}
-				});
-			});
-		</script>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style>
 		    html{width:320px!important;}
@@ -79,11 +63,18 @@ if ($home) {
 	    <div class="fix" style="top:82px;left:0px">
 		<table  id="table" cellpadding="2" cellspacing="0">
 		    <thead>
+		        <tr>
+		        	<th rowspan="2">Date</th>
+		        	<th colspan="3">Heat</th>
+		        	<th colspan="3">Cool</th>
+		        </tr>
 		        <tr class="border_bottom">
-		            <th>Date</th>
-		            <th>S</th>
-		            <th>M</th>
-		            <th>Time</th>
+		            <th>Living</th>
+		            <th>Kamer</th>
+		            <th>Alex</th>
+		            <th>Living</th>
+		            <th>Kamer</th>
+		            <th>Alex</th>
 		        </tr>
 		    </thead>
 		    <tbody>';
@@ -92,10 +83,16 @@ if ($home) {
     if (!$result=$db->query($sql)) {
         die('There was an error running the query ['.$sql.' - '.$db->error.']');
     }
+    $livingheat=0;
+    $kamerheat=0;
+    $alexheat=0;
+    $livingcool=0;
+    $kamercool=0;
+    $alexcool=0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         echo '
         <tr class="border_bottom">
-        	<td>'.$row['date'].'</td>
+        	<td nowrap>'.$row['date'].'</td>
         	<td>'.$row['livingheat']*0.1 .'</td>
         	<td>'.$row['kamerheat']*0.1 .'</td>
         	<td>'.$row['alexheat']*0.1 .'</td>
@@ -103,9 +100,26 @@ if ($home) {
         	<td>'.$row['kamercool']*0.1 .'</td>
         	<td>'.$row['alexcool']*0.1 .'</td>
         </tr>';
+        $livingheat=$livingheat+$row['livingheat'];
+        $kamerheat=$kamerheat+$row['kamerheat'];
+        $livingheat=$livingheat+$row['livingheat'];
+        $livingheat=$livingheat+$row['livingheat'];
+        $livingheat=$livingheat+$row['livingheat'];
+        $livingheat=$livingheat+$row['livingheat'];
     }
     echo '
         </tbody>
+        <tfoot>
+        	<tr>
+        		<th>Sum</th>
+        		<th>'.$livingheat*0.1 .'</th>
+        		<th>'.$kamerheat*0.1 .'</th>
+        		<th>'.$alexheat*0.1 .'</th>
+        		<th>'.$livingcool*0.1 .'</th>
+        		<th>'.$kamercool*0.1 .'</th>
+        		<th>'.$alexcool*0.1 .'</th>
+        	</tr>
+        </tfoot>
     </table>
     <br>
     <br>';
