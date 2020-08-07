@@ -133,6 +133,7 @@ if ($home) {
 		        	<th rowspan="2">Month</th>
 		        	<th colspan="3">Heat</th>
 		        	<th colspan="3">Cool</th>
+		        	<th rowspan="2">Sum</th>
 		        </tr>
 		        <tr class="border_bottom">
 		            <th>Living</th>
@@ -162,6 +163,7 @@ if ($home) {
         	<td>'.($row['livingcool']>0?number_format($row['livingcool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['kamercool']>0?number_format($row['kamercool']*0.1, 1, ',', ''):'').'</td>
         	<td>'.($row['alexcool']>0?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
+        	<td>'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>   		
         </tr>';
         $livingheat=$livingheat+$row['livingheat'];
         $kamerheat=$kamerheat+$row['kamerheat'];
