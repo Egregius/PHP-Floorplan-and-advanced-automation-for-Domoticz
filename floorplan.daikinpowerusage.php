@@ -79,10 +79,8 @@ if ($home) {
 		    </thead>
 		    <tbody>';
 	$d=fetchdata();
-    $sql="SELECT * FROM `daikin` ORDER BY `date` DESC LIMIT 0,10";
-    if (!$result=$db->query($sql)) {
-        die('There was an error running the query ['.$sql.' - '.$db->error.']');
-    }
+    $sql="SELECT * FROM `daikin` ORDER BY `date` DESC LIMIT 0,30";
+    if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
     $livingheat=0;
     $kamerheat=0;
     $alexheat=0;
@@ -113,11 +111,11 @@ if ($home) {
         	<tr>
         		<th>Sum</th>
         		<th>'.($livingheat>0?number_format($livingheat*0.1, 1, ',', ''):'').'</th>
-        		<th>'.number_format($kamerheat*0.1, 1, ',', '') .'</th>
-        		<th>'.number_format($alexheat*0.1, 1, ',', '') .'</th>
-        		<th>'.number_format($livingcool*0.1, 1, ',', '') .'</th>
-        		<th>'.number_format($kamercool*0.1, 1, ',', '') .'</th>
-        		<th>'.number_format($alexcool*0.1, 1, ',', '') .'</th>
+        		<th>'.($kamerheat>0?number_format($kamerheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($alexheat>0?number_format($alexheat*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($livingcool>0?number_format($livingcool*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($kamercool>0?number_format($kamercool*0.1, 1, ',', ''):'').'</th>
+        		<th>'.($alexcool>0?number_format($alexcool*0.1, 1, ',', ''):'').'</th>
         	</tr>
         	<tr>
         		<th>Total</th>
@@ -126,7 +124,29 @@ if ($home) {
         </tfoot>
     </table>
     <br>
-    <br>';
+    <br>
+    <table  id="table" cellpadding="2" cellspacing="0">
+		    <thead>
+		        <tr>
+		        	<th rowspan="2">Month</th>
+		        	<th colspan="3">Heat</th>
+		        	<th colspan="3">Cool</th>
+		        </tr>
+		        <tr class="border_bottom">
+		            <th>Living</th>
+		            <th>Kamer</th>
+		            <th>Alex</th>
+		            <th>Living</th>
+		            <th>Kamer</th>
+		            <th>Alex</th>
+		        </tr>
+		    </thead>
+		    <tbody>';
+    $sql="SELECT LEFT(date,7) as month, SUM(livingheat), SUM(kamerheat), SUM(alexheat), SUM(livingcool), SUM(kamercool), SUM(alexcool) FROM `daikin` GROUP BY LEFT(date, 7) ORDER BY `date` DESC LIMIT 0,30";
+    if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+    	print_r($row);
+    }
 }
 ?>
     </body>
