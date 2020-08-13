@@ -165,7 +165,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	
 	if ($k=='kamer'||$k=='alex') {
 		if (TIME>=strtotime('8:00')&&TIME<strtotime('17:00')&&$d[$k.'_set']['m']==0&&$d['buiten_temp']['s']<30) {
-			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor(($d[$k.'_temp']['s']-0.1)*2)/2;
+//			if ($d[$k.'_set']['s']<$d[$k.'_temp']['s']) $d[$k.'_set']['s']=floor(($d[$k.'_temp']['s']-0.1)*2)/2;
 //			if ($rate!='B'&&$rate>4) $rate=4;
 //			elseif ($rate=='B') $rate=3;
 		}
@@ -201,7 +201,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
 	//lg ($k.' = '.$powermode);
-	
+	//($k.'	$daikin->stemp:'.$daikin->stemp.'	_set:'.$d[$k.'_set']['s'].'	daikin->pow:'.$daikin->pow.'	$power:'.$power.'	daikin->mode:'.$daikin->mode.'	daikin->f_rate:'.$daikin->f_rate.'	$rate:'.$rate);
 	if ($powermode<2) {
 		if ($d[$k.'_set']['s']<30) {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {

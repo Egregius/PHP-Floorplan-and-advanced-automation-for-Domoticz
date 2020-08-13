@@ -9,7 +9,7 @@ touch /temp/phperror.log
 chmod 666 /temp/*.log
 mkdir -p /var/log/apache2/
 chmod 755 /var/log/apache2
-sleep 1
+sleep 2
 service mysql start
 service apache2 start
 service domoticz start
