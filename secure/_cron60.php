@@ -327,7 +327,7 @@ if ($d['auto']['s']=='On') {
     }
     $items=array('living_set','badkamer_set','kamer_set','tobi_set','alex_set');
     foreach ($items as $i) {
-        if ($d[$i]['m']!=0&&past($i)>7200) {
+        if ($d[$i]['m']!=0&&past($i)>43200) {
             storemode($i, 0, basename(__FILE__).':'.__LINE__);
         }
     }

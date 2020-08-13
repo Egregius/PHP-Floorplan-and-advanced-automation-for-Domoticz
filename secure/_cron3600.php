@@ -301,10 +301,10 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 
 if ($d['buiten_temp']['s']>5&&$d['buiten_temp']['s']<30) {
 	$low=40;
-	$high=40;
-} else {
-	$low=40;
 	$high=60;
+} else {
+	$low=50;
+	$high=70;
 }
 
 if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {

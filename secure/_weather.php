@@ -13,6 +13,7 @@ $user='weather';
 $prevwind=$d['wind']['s'];
 $prevbuien=$d['buien']['s'];
 $prevbuitentemp=$d['buiten_temp']['s'];
+
 $wind=$prevwind;
 $maxtemp=1;
 $mintemp=100;
@@ -26,12 +27,12 @@ if (isset($ds)) {
     $ds=@json_decode($ds, true);
     if (isset($ds['currently'])) {
         if (isset($ds['currently']['temperature'])) {
-            $temps['ds']=$ds['currently']['temperature'];
-            if ($temps['ds']>$temps['buiten_temp']+0.5) {
+            $temps['ds']=($ds['currently']['temperature']+$ds['currently']['apparentTemperature'])/2;
+            /*if ($temps['ds']>$temps['buiten_temp']+0.5) {
                 $temps['ds']=$temps['buiten_temp']+0.5;
             } elseif ($temps['ds']<$temps['buiten_temp']-0.5) {
                 $temps['ds']=$temps['buiten_temp']-0.5;
-            }
+            }*/
         }
         if (isset($ds['currently']['windSpeed'])) {
             $dswind=$ds['currently']['windSpeed'];
@@ -81,13 +82,18 @@ if (isset($ow)) {
     file_put_contents('/temp/ow.json', $ow);
     $ow=@json_decode($ow, true);
     if (isset($ow['main']['temp'])) {
-        $temps['ow']=$ow['main']['temp'];
-        if ($temps['ow']>$temps['buiten_temp']+0.5) {
+        $temps['ow']=($ow['main']['temp']+$ow['main']['feels_like'])/2;
+        /*if ($temps['ow']>$temps['buiten_temp']+0.5) {
             $temps['ow']=$temps['buiten_temp']+0.5;
         } elseif ($temps['ow']<$temps['buiten_temp']-0.5) {
             $temps['ow']=$temps['buiten_temp']-0.5;
-        }
+        }*/
         $owwind=$ow['wind']['speed'] * 3.6;
+        if (isset($ow['wind']['gust'])) {
+            if ($ow['wind']['gust'] * 3.6>$owwind) {
+                $owwind=$ow['wind']['gust'] * 3.6;
+            }
+        }
         if ($d['icon']['m']!=$ow['weather'][0]['id']) {
 	        storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
 	    }
@@ -99,12 +105,12 @@ if (isset($ow)) {
 
 $ob=json_decode(@file_get_contents('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob)) {
-	$temps['ob']=$ob['temperature'];
-	if ($temps['ob']>$temps['buiten_temp']+0.5) {
+	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
+	/*if ($temps['ob']>$temps['buiten_temp']+0.5) {
 		$temps['ob']=$temps['buiten_temp']+0.5;
 	} elseif ($temps['ob']<$temps['buiten_temp']-0.5) {
 		$temps['ob']=$temps['buiten_temp']-0.5;
-	}
+	}*/
 }
 
 
@@ -131,6 +137,12 @@ if (isset($ds['hourly']['data'])) {
 }
 
 echo 'new = '.$newbuitentemp;
+$msg='Buiten temperaturen : prevbuitentemp='.$prevbuitentemp.' ';
+foreach ($temps as $k=>$v) {
+	$msg.=$k.'='.$v.', ';
+}
+$msg.='newbuitentemp='.$newbuitentemp;
+
 if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
 
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
@@ -170,11 +182,7 @@ elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
 store('wind', $wind, basename(__FILE__).':'.__LINE__);
-$msg='Buiten temperaturen : ';
-foreach ($temps as $k=>$v) {
-	$msg.=$k.'='.$v.', ';
-}
-$msg.='newbuitentemp='.$newbuitentemp;
+
 if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
     $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
