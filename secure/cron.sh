@@ -33,7 +33,7 @@ if [ "$STATUS" == "OK" ] ; then
     fi
 	#0
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron60&cron10$CRON" >/dev/null 2>&1 &
-	sleep 8.859
+	sleep 8.867
 	#10
 	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
 	sleep 9.998

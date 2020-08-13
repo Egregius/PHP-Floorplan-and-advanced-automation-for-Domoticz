@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-
+lg('_TC_aircocooling');
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
@@ -183,13 +183,13 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	} else {
 		if ($daikin->adv==13) {
 			$streamer=1;
-			$powermode=0;
+			$powermode=0; //Normal
 		} else if ($daikin->adv==12) {
 			$streamer=0;
-			$powermode=1;
+			$powermode=1; // Eco
 		} else if ($daikin->adv==2) {
 			$streamer=0;
-			$powermode=2;
+			$powermode=2; // Power
 		} else if ($daikin->adv=='') {
 			$streamer=0;
 			$powermode=0;
@@ -200,8 +200,9 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='living'&&$d['eettafel']['s']>0) $rate='B';
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
+	//lg ($k.' = '.$powermode);
 	
-	if ($powermode==0||$powermode==1) {
+	if ($powermode<2) {
 		if ($d[$k.'_set']['s']<30) {
 			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
 				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
