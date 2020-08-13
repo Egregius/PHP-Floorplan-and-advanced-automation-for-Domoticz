@@ -88,7 +88,7 @@ if ($d['living_set']['m']==0) {
         $d['living_set']['s']=$Setliving;
     }
 }
-$kamers=array('living','kamer','tobi','alex');
+$kamers=array('living'/*,'kamer','tobi','alex'*/);
 $bigdif=100;
 $xxkamers=array();
 foreach ($kamers as $kamer) {
@@ -126,7 +126,7 @@ if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
         );
     }
 }
-$kamers=array('tobi','alex','kamer');
+/*$kamers=array('tobi','alex','kamer');
 foreach ($kamers as $kamer) {
     if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
         ${'RSet'.$kamer}=setradiator(
@@ -157,7 +157,7 @@ foreach ($kamers as $kamer) {
     if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
         ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
     }
-}
+}*/
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 if ($d['heating']['s']==2) {
     if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>180) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

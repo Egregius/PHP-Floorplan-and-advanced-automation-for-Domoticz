@@ -1241,8 +1241,6 @@ function floorplanheating(){
         items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
         items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
         items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
-        items=['kamerZ','tobiZ','alexZ'];
-        items.forEach(function(item){html+='<div class="fix " id="'+item+'"></div>';});
         if(heatingset==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
         else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
         else if(heatingset==0)items=['badkamer'];

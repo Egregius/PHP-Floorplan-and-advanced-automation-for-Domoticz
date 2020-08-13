@@ -106,11 +106,6 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 	}
 }
 
-foreach (array('kamer', 'tobi', 'alex') as $k) {
-    if (round($d[$k.'Z']['s'], 1)>4) {
-        ud($k.'Z', 0, '4.0', basename(__FILE__).':'.__LINE__);
-    }
-}
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 if ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
