@@ -12,7 +12,7 @@ input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor
 .camera2{top:80px;left:50%;width:50%;height:100%;}
 .camerai{width:100%;height:auto;}
 ";
-} elseif ($udevice=='iPhone') {
+} elseif ($udevice=='iPhone'||$udevice=='iPhoneSE') {
     $css.="
 @media only screen and (orientation: portrait) {
 	input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor:pointer;border:0px solid transparent;padding:2px;-webkit-appearance:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}

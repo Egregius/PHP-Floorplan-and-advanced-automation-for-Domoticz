@@ -23,7 +23,7 @@ if ($home) {
     <link rel="shortcut icon" href="/images/Camera.png"/>
     <link rel="apple-touch-icon" href="/images/Camera.png"/>
     <meta name="mobile-web-app-capable" content="yes"/>
-    <link href="/styles/picam1.php?v=5" rel="stylesheet" type="text/css"/>
+    <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/>
     </head><body>';
     if(isset($_POST['Record'])){
         file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
