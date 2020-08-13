@@ -370,12 +370,6 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById("t"+device).innerHTML=formatDate(tijd);
 								}
 							}catch{}
-						}else if(device=="picam2plug"){
-							try{
-								if($value=='On')html='<a href=\'javascript:navigator_Go("picam2/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a>';
-								else html='<img src="https://home.egregius.be/images/Camera_Off.png" class="i48" onclick="ajaxcontrol(\'picam2plug\',\'sw\',\'On\')""/>';
-								document.getElementById("picam2").innerHTML=html;
-							}catch{}
 						}else if(device=="zoldervuur"){
 							try{
 								if($value=="On")html='<img src="images/fire_On.png" width="28px" height="auto" alt="">';
@@ -1187,7 +1181,6 @@ function floorplan(){
         html+='<div class="fix z1 afval" id="gcal"></div>';
         html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
         html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
-        html+='<div class="fix picam2" id="picam2"></div>';
         html+='<div class="fix Weg" id="Weg"></div>';
         html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
         html+='<div class="fix z2" id="sirene"></div>';
