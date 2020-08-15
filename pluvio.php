@@ -171,5 +171,31 @@ session_start();
 	}
 	echo '
 	<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3></div>';
+	echo '
+			<table>
+				<thead>
+					<tr>
+						<th>Maand</th>
+						<th>Regen</th>
+						<th>Normaal</th>
+						<th>Procent</th>
+					</tr>
+				</thead>
+				<tbody>';
+		foreach ($pluviomaand as $i) {
+			echo '
+					<tr>
+						<td>'.$i['Maand'].'</td>
+						<td> '.$i['Regen'].' mm </td>
+						<td> '.$i['Normaal'].' mm </td>
+						<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 2, ',', '.').' % </td>
+					</tr>';
+		}
+		echo '
+				</tbody>
+			</table>
+			<br>
+			<br>
+			<br>';
 	end:
 	$db->close();

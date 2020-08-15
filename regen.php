@@ -140,7 +140,7 @@ if ($home===true) {
 				<title>Regenvoorspelling</title>
 				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 				<style>
-					td{text-align:center;}
+					td{text-align:center;width:24%;}
 				</style>
 				<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 			</head>';
@@ -336,7 +336,7 @@ if ($home===true) {
 			$current=$current+$i['Regen'];
 		}
 		echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
-		echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		//echo '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo '
 			<table>
 				<thead>
@@ -359,7 +359,10 @@ if ($home===true) {
 		}
 		echo '
 				</tbody>
-			</table>';
+			</table>
+			<br>
+			<br>
+			<br>';
 		end:
 		if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
 			$togo=61-date("s");
