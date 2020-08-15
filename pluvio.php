@@ -25,8 +25,11 @@ session_start();
 			<meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, minimal-ui"/>
 			<meta name="apple-mobile-web-app-capable" content="yes">
 			<meta name="apple-mobile-web-app-status-bar-style" content="black">
-			<title>Regenvoorspelling</title>
+			<title>Pluviometer</title>
 			<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+			<style>
+					td{text-align:center;width:24%;}
+				</style>
 			<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		</head>
 		<body style="width:100%">';

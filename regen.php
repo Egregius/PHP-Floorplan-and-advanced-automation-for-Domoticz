@@ -137,7 +137,7 @@ if ($home===true) {
 				<meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, minimal-ui"/>
 				<meta name="apple-mobile-web-app-capable" content="yes">
 				<meta name="apple-mobile-web-app-status-bar-style" content="black">
-				<title>Regenvoorspelling</title>
+				<title>Regenvoorspelling + Pluviometer</title>
 				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
 				<style>
 					td{text-align:center;width:24%;}
