@@ -139,6 +139,9 @@ if ($home===true) {
 				<meta name="apple-mobile-web-app-status-bar-style" content="black">
 				<title>Regenvoorspelling</title>
 				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+				<style>
+					td{text-align:center;}
+				</style>
 				<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 			</head>';
 		if ($udevice=='iPad') {
@@ -323,7 +326,6 @@ if ($home===true) {
 				chartArea:{left:0,top:0,width:"100%",height:"100%"},
 				bar:{groupWidth:100}';
 		$chart=array_to_chart($pluviomaand, $args);
-		// '<pre>';print_r($pluviomaand);echo '</pre>';
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
@@ -334,6 +336,30 @@ if ($home===true) {
 			$current=$current+$i['Regen'];
 		}
 		echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
+		echo '<pre>';print_r($pluviomaand);echo '</pre>';
+		echo '
+			<table>
+				<thead>
+					<tr>
+						<th>Maand</th>
+						<th>Regen</th>
+						<th>Normaal</th>
+						<th>Procent</th>
+					</tr>
+				</thead>
+				<tbody>';
+		foreach ($pluviomaand as $i) {
+			echo '
+					<tr>
+						<td>'.$i['Maand'].'</td>
+						<td> '.$i['Regen'].' mm </td>
+						<td> '.$i['Normaal'].' mm </td>
+						<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 2, ',', '.').' % </td>
+					</tr>';
+		}
+		echo '
+				</tbody>
+			</table>';
 		end:
 		if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
 			$togo=61-date("s");

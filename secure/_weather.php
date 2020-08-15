@@ -214,7 +214,7 @@ if ($buienradar>0||$dsbuien>0||$buien>0) {
 }
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2	&&$d['living_temp']['s']>19&&TIME>=strtotime("10:00")&&$buien<10) { // Aircocooling
+	if ($d['heating']['s']==-2	&&$d['living_temp']['s']>19&&TIME>=strtotime("10:00")&&$buien<5) { // Aircocooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=20) $luifel=40;
 		else $luifel=50;
@@ -222,7 +222,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<10) { // Passive Cooling
+	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<5) { // Passive Cooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=10) $luifel=35;
 		else $luifel=45;
@@ -230,7 +230,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>21&&TIME>=strtotime("10:00")&&$buien<10) { // Neutral
+	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>21&&TIME>=strtotime("10:00")&&$buien<5) { // Neutral
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=10) $luifel=30;
 		else $luifel=40;
@@ -245,7 +245,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	
-	if (($buien>=10||$d['Weg']['s']==1||TIME>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed') sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+	if (($buien>=15||$d['Weg']['s']==1||TIME>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed') sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);

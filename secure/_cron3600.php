@@ -350,11 +350,7 @@ $date=strftime('%F', TIME-86400);
 $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 
 foreach (array('living', 'kamer', 'alex') as $k) {
-	if (TIME>=strtotime('7:00')||TIME<strtotime('19:30')) {
-		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=1');
-	} else {
-		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
-	}
+	file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
 	sleep(2);
 }
 
