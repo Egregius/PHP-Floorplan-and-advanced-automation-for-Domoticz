@@ -350,7 +350,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
             $d['badkamer_set']['s']=10.0;
         }
     } elseif ($b7>900&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10)
-        || ($d['Weg']['s']==2&&$d['badkamer_set']['s']!=10)) {
+        || ($d['Weg']['s']>=2&&$d['badkamer_set']['s']!=10)) {
         store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=10.0;
     } elseif ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10) {

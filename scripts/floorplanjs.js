@@ -56,6 +56,7 @@ function ajax(Update=$LastUpdateTime){
 								if($value==0)html+='<img src="https://home.egregius.be/images/Thuis.png" id="Weg">';
 								else if($value==1)html+='<img src="https://home.egregius.be/images/Slapen.png" id="Weg">';
 								else if($value==2)html+='<img src="https://home.egregius.be/images/Weg.png" id="Weg">';
+								else if($value==3)html+='<img src="https://home.egregius.be/images/Vacation.png" id="Weg">';
 								html+='</div>';
 								document.getElementById('Weg').innerHTML=html;
 							}catch{}
@@ -1596,6 +1597,7 @@ function Weg(){
 		huge='huge6';
 	}
 	else huge='huge3';
+	html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'3\');initview();">Vacation</button>';
 	html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'2\');initview();">Weg</button>';
     html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'1\');initview();">Slapen</button>';
     html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'0\');initview();">Thuis</button>';

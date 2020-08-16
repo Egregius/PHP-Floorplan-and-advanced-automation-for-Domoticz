@@ -244,7 +244,7 @@ if ($d['auto']['s']=='On') {
         }
     }
     /* -------------------------------------------- WEG ----------------------------*/
-    if ($d['Weg']['s']==2) {
+    if ($d['Weg']['s']>=2) {
         $uit=600;
         $items=array('pirgarage','pirkeuken','pirliving','pirinkom','pirhall');
         foreach ($items as $item) {

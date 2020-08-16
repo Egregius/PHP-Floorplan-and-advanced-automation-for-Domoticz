@@ -42,7 +42,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
             $d['badkamer_set']['s']=10.0;
         }
     } elseif ($b7>900&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10)
-        || ($d['Weg']['s']==2&&$d['badkamer_set']['s']!=10)) {
+        || ($d['Weg']['s']>=2&&$d['badkamer_set']['s']!=10)) {
         store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
         $d['badkamer_set']['s']=10.0;
     } elseif ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10) {
@@ -182,7 +182,7 @@ if ($d['auto']['s']=='On') {
 				}
 				foreach ($boven as $i) {
 					if ($i=='RkamerR') {
-						if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+						if ($d['Weg']['s']>=2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 					} else {
 						if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 					}

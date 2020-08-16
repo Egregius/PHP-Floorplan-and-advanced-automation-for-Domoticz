@@ -86,7 +86,7 @@ if ($d['auto']['s']=='On') {
 				} elseif ($i=='RkamerL') {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='RkamerR') {
-					if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+					if ($d['Weg']['s']>=2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				} else {
 					if ($d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				}

@@ -14,7 +14,7 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 }
 
 $Setkamer=33;
-if ($d['kamer_set']['m']==0) {
+if ($d['kamer_set']['m']==0&&$d['Weg']['s']<=2) {
     if (
 			(
 					$d['raamkamer']['s']=='Closed'
@@ -78,7 +78,7 @@ if ($d['kamer_set']['m']==0) {
 }
 
 $Setalex=33;
-if ($d['alex_set']['m']==0) {
+if ($d['alex_set']['m']==0&&$d['Weg']['s']<=2) {
     if (
 			(
 					$d['raamalex']['s']=='Closed'
@@ -137,7 +137,7 @@ if ($d['alex_set']['m']==0) {
 }
 
 $Setliving=33;
-if ($d['living_set']['m']==0) {
+if ($d['living_set']['m']==0&&$d['Weg']['s']<=2) {
     if (
     	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
@@ -145,12 +145,12 @@ if ($d['living_set']['m']==0) {
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
 	) {
 		$Setliving=23;
+		if ($d['Weg']['s']>0) $Setliving=25;
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
         $d['living_set']['s']=$Setliving;
     }
-    if ($d['Weg']['s']>0) $d['living_set']['s']=$d['living_set']['s']+2;
 }
 foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
@@ -162,7 +162,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
 	elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
 	elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
-	elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
+	elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 	elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 	elseif (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;$power=1;}
 	elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
@@ -199,7 +199,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	}
 	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
 	
-	if ($k=='living'&&$d['eettafel']['s']>0) $rate='B';
+	//if ($k=='living'&&$d['eettafel']['s']>0) $rate='B';
 	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
 	//lg ($k.' = '.$powermode);
@@ -306,7 +306,7 @@ if ($d['auto']['s']=='On') {
 				} elseif ($i=='RkamerL') {
 					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='RkamerR') {
-					if ($d['Weg']['s']==2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
+					if ($d['Weg']['s']>=2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				} else {
 					if ($d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
 				}
