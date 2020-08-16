@@ -1596,11 +1596,11 @@ function Weg(){
 		html+='</h1>';
 		huge='huge6';
 	}
-	else huge='huge3';
-	html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'3\');initview();">Vacation</button>';
-	html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'2\');initview();">Weg</button>';
-    html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'1\');initview();">Slapen</button>';
-    html+='<button class="btn '+huge+'" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'0\');initview();">Thuis</button>';
+	else huge='huge4';
+	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Vacation.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'3\');initview();">Vacation</button>';
+	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Weg.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'2\');initview();">Weg</button>';
+    html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Slapen.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'1\');initview();">Slapen</button>';
+    html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'0\');initview();">Thuis</button>';
     html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);

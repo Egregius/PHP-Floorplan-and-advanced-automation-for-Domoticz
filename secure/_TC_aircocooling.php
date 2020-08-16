@@ -14,7 +14,7 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 }
 
 $Setkamer=33;
-if ($d['kamer_set']['m']==0&&$d['Weg']['s']<=2) {
+if ($d['kamer_set']['m']==0) {
     if (
 			(
 					$d['raamkamer']['s']=='Closed'
@@ -70,15 +70,15 @@ if ($d['kamer_set']['m']==0&&$d['Weg']['s']<=2) {
         elseif (TIME>strtotime('9:00')) $Setkamer=26.5;
         elseif (TIME>strtotime('8:00')) $Setkamer=27;
     }
+    if ($d['Weg']['s']>=3) $Setkamer=28;
     if ($d['kamer_set']['s']!=$Setkamer) {
         store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
         $d['kamer_set']['s']=$Setkamer;
     }
-    if ($d['Weg']['s']==2) $d['kamer_set']['s']=$d['kamer_set']['s']+2;
 }
 
 $Setalex=33;
-if ($d['alex_set']['m']==0&&$d['Weg']['s']<=2) {
+if ($d['alex_set']['m']==0) {
     if (
 			(
 					$d['raamalex']['s']=='Closed'
@@ -129,23 +129,26 @@ if ($d['alex_set']['m']==0&&$d['Weg']['s']<=2) {
         elseif (TIME>strtotime('10:00')) $Setalex=26;
         elseif (TIME>strtotime('9:00')) $Setalex=26.5;
     }
+    if ($d['Weg']['s']>=3) $Setalex=28;
     if ($d['alex_set']['s']!=$Setalex) {
         store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
         $d['alex_set']['s']=$Setalex;
     }
-    //if ($d['Weg']['s']==2) $d['alex_set']['s']=$d['alex_set']['s']+2;
 }
 
 $Setliving=33;
-if ($d['living_set']['m']==0&&$d['Weg']['s']<=2) {
+if ($d['living_set']['m']==0) {
     if (
     	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
     	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
     	&&	($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
+    	&& $d['Weg']['s']<=2
 	) {
 		$Setliving=23;
-		if ($d['Weg']['s']>0) $Setliving=25;
+		if ($d['Weg']['s']>=3) $Setliving=28;
+		elseif ($d['Weg']['s']>0) $Setliving=25;
+		
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
         store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
