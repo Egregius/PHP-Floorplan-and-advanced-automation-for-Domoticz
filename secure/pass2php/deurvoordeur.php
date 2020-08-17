@@ -12,5 +12,6 @@
 if ($status=="Open"&&$d['auto']['s']=='On') {
     if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
     finkom();
-    sirene('Voordeur open');
 }
+if ($status=='Open') sirene('Voordeur open');
+else sirene('Voordeur dicht');

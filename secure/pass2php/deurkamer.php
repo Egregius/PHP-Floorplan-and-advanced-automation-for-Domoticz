@@ -18,4 +18,4 @@ if ($d['kamer']['m']!=0&&$d['kamer']['s']==0&&past('kamer')<90) {
 	storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
 }
 if ($status=='Open') sirene('Deur kamer open');
-else sirene('Deur kamer open');
+else sirene('Deur kamer dicht');

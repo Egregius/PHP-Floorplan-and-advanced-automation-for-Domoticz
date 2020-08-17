@@ -9,6 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Open') {
-    sirene('Raam hall open');
-}
+if ($status=='Open') sirene('Raam hall open');
+else sirene('Raam hall dicht');

@@ -25,4 +25,4 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
     }
 }
 if ($status=='Open') sirene('Deur badkamer open');
-else sirene('Deur badkamer open');
+else sirene('Deur badkamer dicht');

@@ -19,3 +19,5 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
+if ($status=='Open') sirene('Deur Tobi open');
+else sirene('Deur Tobi dicht');

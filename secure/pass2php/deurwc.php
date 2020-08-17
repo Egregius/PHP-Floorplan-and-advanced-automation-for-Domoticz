@@ -15,5 +15,6 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
 	}
     finkom();
     fliving();
-    sirene('Deur wc open');
 }
+if ($status=='Open') sirene('Deur WC open');
+else sirene('Deur WC dicht');

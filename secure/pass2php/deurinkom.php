@@ -14,4 +14,4 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
     fliving();
 }
 if ($status=='Open') sirene('Deur inkom open');
-else sirene('Deur inkom open');
+else sirene('Deur inkom dicht');
