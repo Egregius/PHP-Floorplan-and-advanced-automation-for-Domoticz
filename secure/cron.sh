@@ -72,10 +72,16 @@ else
 fi
 
 # Extra check that apache2 is running.
-ps cax | grep httpd
-if [ $? -eq 0 ] ; then
+ps cax | grep apache2
+if [ $? -ne 0 ] ; then
 	/usr/sbin/service apache2 stop
 	/usr/sbin/service apache2 start
+fi
+
+ps cax | grep mysql
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service mysql stop
+	/usr/sbin/service mysql start
 fi
 
 # Remove these lines as they only upload my files to gitbub.
