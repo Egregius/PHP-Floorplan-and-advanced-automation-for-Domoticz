@@ -10,11 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='Open') {
-    if ($d['Weg']['s']==0&&$d['auto']['s']=='On') {
-        store('beweging', TIME, basename(__FILE__).':'.__LINE__);
-        if (past('beweging')<1800) {
-            sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-            telegram('Raam hall open om '.strftime("%k:%M:%S", TIME), false, 3);
-        }
-    }
+    sirene('Raam hall open');
 }

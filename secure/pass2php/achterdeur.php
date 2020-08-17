@@ -13,7 +13,7 @@ if ($status=="Open") {
     if ($d['dampkap']['s']=='On') {
         sw('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
     }
-    if ($d['bose105']['m']=='Online') {
+    if ($d['Weg']['s']==0&&$d['bose105']['m']=='Online') {
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
@@ -33,12 +33,13 @@ if ($status=="Open") {
             }
         }
     }
+    sirene('Achterdeur open');
  } else {
     if ($d['Weg']['s']>0&&$d['auto']['s']==1&&past('Weg')>178) {
             sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             telegram('Achterdeur open om '.strftime("%k:%M:%S", TIME), false, 3);
     }
-    if ($d['bose105']['m']=='Online') {
+    if ($d['Weg']['s']==0&&$d['bose105']['m']=='Online') {
         $status=json_decode(
             json_encode(
                 simplexml_load_string(
@@ -58,6 +59,7 @@ if ($status=="Open") {
             }
         }
     }
+    sirene('Achterdeur dicht');
 }
 
 // Indien geen zwembad
