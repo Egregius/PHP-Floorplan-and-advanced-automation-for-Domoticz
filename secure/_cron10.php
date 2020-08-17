@@ -105,6 +105,7 @@ if ($d['auto']['s']=='On') {
 				sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}
+	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
 	if (ping($lgtvip)) {

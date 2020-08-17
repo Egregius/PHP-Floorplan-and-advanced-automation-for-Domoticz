@@ -17,5 +17,8 @@ if ($d['auto']['s']=='On') {
 				sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
+		sirene('Deur Alex open');
+	} else {
+		sirene('Deur Alex dicht');
 	}
 }

@@ -24,3 +24,5 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
         require '_verwarming.php';
     }
 }
+if ($status=='Open') sirene('Deur badkamer open');
+else sirene('Deur badkamer open');

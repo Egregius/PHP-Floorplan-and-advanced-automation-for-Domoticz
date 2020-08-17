@@ -12,5 +12,6 @@
 if ($status=="Open"&&$d['auto']['s']=='On') {
     finkom();
     fliving();
-    sirene('Deur inkom open');
 }
+if ($status=='Open') sirene('Deur inkom open');
+else sirene('Deur inkom open');

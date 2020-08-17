@@ -13,5 +13,6 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
     fgarage();
     fkeuken();
     fliving();
-    sirene('Deur garage open');
 }
+if ($status=='Open') sirene('Deur garage open');
+else sirene('Deur garage open');
