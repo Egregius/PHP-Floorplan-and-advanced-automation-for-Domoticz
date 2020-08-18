@@ -26,7 +26,7 @@ if ($home) {
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.77,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPhoneSE') {
 	    echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.4,user-scalable=yes,minimal-ui"/>';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPad') {
 	    echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
