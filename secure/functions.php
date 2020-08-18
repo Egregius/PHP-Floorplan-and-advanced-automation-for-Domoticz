@@ -1001,7 +1001,7 @@ function fhall()
 function sirene($msg)
 {
     global $d,$device;
-    if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer'))) {
+    if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
         if ($d['Weg']['s']>=2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
             sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
             //shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
