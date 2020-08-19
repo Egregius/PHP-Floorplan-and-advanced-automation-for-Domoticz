@@ -16,9 +16,12 @@ echo strftime("%H:%M", strtotime('11:00'));
 
 require_once '/var/www/proxmox/vendor/autoload.php';
 $proxmox = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
+$nodes = new Corsinvest\ProxmoxVE\Api\PVEItemNodesNode("192.168.2.1", "proxmox");
+var_dump($nodes);
+
+$nodes->startall();
 
 if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
-	$proxmox->node("proxmox")->PVENodeNodesStartall();
 //	$retPippo=$proxmox->get("/pippo");
 //	  echo $retPippo->getStatusCode().'<br>';
 //	  echo $retPippo->getReasonPhrase().'<br>';
