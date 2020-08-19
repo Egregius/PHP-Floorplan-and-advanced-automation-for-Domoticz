@@ -28,9 +28,28 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 //	  }
 
 	  //loop vm
+	  echo '
+	  <table>
+	  	<thead>
+	  		<tr>
+	  			<th>id</th>
+	  			<th>Name</th>
+	  			<th>Status</th>
+	  		</tr>
+	  	</thead>
+	  	<tbody>';
 	  foreach ($client->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data as $vm) {
-		  echo $vm->vmid ." - " .$vm->name.'<br>';
+		  echo '
+		  	<tr>
+		  		<td>'.$vm->vmid .'</td>
+		  		<td>'.$vm->name.'</td>
+		  		<td>'.$vm->status.'</td>
+		  		<td>'.floor($vm->uptime/86400).'</td>
+		  	</tr>';
 	  }
+	  echo '
+	  	</tbody>
+	  </table>';
 }
 
 
