@@ -30,7 +30,9 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  //loop vm
 	  echo '
 	  <style>
+	  	table{border-collapse: collapse; }
 	  	tr{border:1px solid grey;}
+	  	th, td{border:1px solid grey;padding:5px;}
 	  	.right{text-align:right;}
 	  </style>
 	  <table>
@@ -39,8 +41,9 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  			<th>id</th>
 	  			<th>Name</th>
 	  			<th>Status</th>
-	  			<th></th>
-	  			<th></th>
+	  			<th>Days up</th>
+	  			<th>Hours</th>
+	  			<th>cpu</th>
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
@@ -50,7 +53,9 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 		  		<td>'.$vm->vmid .'</td>
 		  		<td>'.$vm->name.'</td>
 		  		<td>'.$vm->status.'</td>
-		  		<td class="right">'.floor($vm->uptime/86400).'d</td><td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
+		  		<td class="right">'.floor($vm->uptime/86400).'d</td>
+		  		<td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
+		  		<td class="right">'.number_format($vm->cpu, 2, ',', '').'</td>
 		  	</tr>';
 	  }
 	  echo '
