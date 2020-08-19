@@ -44,7 +44,7 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 		  		<td>'.$vm->vmid .'</td>
 		  		<td>'.$vm->name.'</td>
 		  		<td>'.$vm->status.'</td>
-		  		<td>'.floor($vm->uptime/86400).'</td>
+		  		<td>'.floor($vm->uptime/86400).' '.strftime("%H:%M %z", ($vm->uptime%86400)).'</td>
 		  	</tr>';
 	  }
 	  echo '
