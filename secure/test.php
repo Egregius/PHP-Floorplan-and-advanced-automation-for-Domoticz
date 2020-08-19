@@ -62,7 +62,7 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 		  		<td>'.$vm->status.'</td>
 		  		<td class="right">'.floor($vm->uptime/86400).'d</td>
 		  		<td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
-		  		<td class="right">'.number_format($vm->cpu, 2, ',', '').'</td>
+		  		<td class="right">'.number_format($vm->cpu, 2).'</td>
 		  		<td class="right">'.human_filesize($vm->mem).'/'.human_filesize($vm->maxmem).'</td>
 		  		<td class="right">'.human_filesize($vm->diskread).'</td>
 		  		<td class="right">'.human_filesize($vm->diskwrite).'</td>
