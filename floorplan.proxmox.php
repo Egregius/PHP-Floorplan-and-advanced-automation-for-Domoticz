@@ -134,11 +134,29 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 	  echo '
 	  	</tbody>
 	  </table>
-	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
+	  <br>
+	  <br>
+	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',20000);</script>';
 
 	$data = $proxmox->get('/nodes/proxmox/status');
-	var_dump($data);
-
+	$data=$data['data'];
+	echo '
+		<table>
+			<thead>
+				<tr>
+					<th>Uptime</th>
+					<th>cpu</th>
+					<th>memory</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>'.floor($data['uptime']/86400).'d '.gmdate("G:i:s", ($data['uptime']%86400)).'</td>
+					<td>'.number_format($data['cpu']*100, 0).' %</td>
+				</tr>
+			</tbody>
+		</table>';
+	echo '<pre>';print_r($data);echo '</pre>';
 	
 }
 function cmp($a, $b) {
