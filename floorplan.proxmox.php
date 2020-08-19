@@ -29,6 +29,9 @@ if ($home) {
 	if ($udevice=='iPhone') {
 	    echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+	} elseif ($udevice=='iPhoneSE') {
+	    echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.74,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPad') {
 	    echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
@@ -77,14 +80,14 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 			<thead>
 				<tr>
 					<th rowspan="2">id</th>
-					<th rowspan="2">Name</th>
+					<th rowspan="2">name</th>
 					<th>Status</th>
-					<th colspan="4">Action</th>
+					<th colspan="4">action</th>
 				</tr>
 				<tr>
-					<th nowrap>Uptime</th>
-					<th>CPU</th>
-					<th>Memory</th>
+					<th nowrap>uptime</th>
+					<th>cpu</th>
+					<th>memory</th>
 					<th>netin</th>
 					<th>netout</th>
 				</tr>
@@ -103,19 +106,18 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
 				if($vm['status']=='stopped') {
 					echo '
-							<input type="submit" name="action" value="start" class="btn">';
+							<input type="submit" name="action" value="start" class="btn"/>';
 				} else {
 					echo '
-							<input type="submit" name="action" value="stop">
-							<input type="submit" name="action" value="shutdown">';
+							<input type="submit" name="action" value="stop" class="btn b2"/>
+							<input type="submit" name="action" value="shutdown" class="btn b2"/>';
 				}
 				echo '
 						</form>
 					</td>
 				</tr>
 				<tr>
-					<td class="right">'.floor($vm['uptime']/86400).'d</td>
-					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
+					<td class="right">'.floor($vm['uptime']/86400).'d '.gmdate("G:i", ($vm['uptime']%86400)).'</td>
 					<td class="right">'.number_format($vm['cpu'], 2).'</td>
 					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
 					<td class="right">'.human_filesize($vm['netin']).'</td>
@@ -126,7 +128,8 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 		}
 	  echo '
 	  	</tbody>
-	  </table>';
+	  </table>
+	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
 
 
 
