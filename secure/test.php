@@ -18,19 +18,18 @@ require_once '/var/www/proxmox/vendor/autoload.php';
 $client = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
 
 if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
-	var_dump($client->get('/version')->getResponse());
-	$retPippo=$client->get("/pippo");
-	  echo "\n" . $retPippo->getStatusCode();
-	  echo "\n" . $retPippo->getReasonPhrase();
+//	$retPippo=$client->get("/pippo");
+//	  echo $retPippo->getStatusCode().'<br>';
+//	  echo $retPippo->getReasonPhrase().'<br>';
 
 	  //loop nodes
-	  foreach ($client->getNodes()->Index()->getResponse()->data as $node) {
-		echo "\n" . $node->id;
-	  }
+//	  foreach ($client->getNodes()->Index()->getResponse()->data as $node) {
+//		echo $node->id.'<br>';
+//	  }
 
 	  //loop vm
-	  foreach ($client->getNodes()->get("pve1")->getQemu()->Vmlist()->getResponse()->data as $vm) {
-		  echo "\n" . $vm->vmid ." - " .$vm->name;
+	  foreach ($client->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data as $vm) {
+		  echo $vm->vmid ." - " .$vm->name.'<br>';
 	  }
 }
 
