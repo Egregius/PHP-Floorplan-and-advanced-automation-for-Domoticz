@@ -20,9 +20,10 @@ use ProxmoxVE\Proxmox;
 $proxmox = new Proxmox($proxmoxcredentials);
 
 $data = $proxmox->get('/nodes/proxmox/qemu');
-uasort($data, "cmp");
+//uasort($datas, "cmp");
 
-print_r($data);
+var_dump($data);
+echo '<hr><hr><hr>';
 
 //$proxmox->create('/nodes/proxmox/qemu/112/status/start');
 
@@ -53,6 +54,7 @@ print_r($data);
 	  	</thead>
 	  	<tbody>';
 	  foreach ($data as $vm) {
+	  	echo '<pre>vm=';print_r($vm);echo '</pre><hr>';
 		  echo '
 		  	<tr>
 		  		<td>'.$vm['vmid'] .'</td>
@@ -199,7 +201,7 @@ unset(
     $urlfilms
     
     );
-echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
+//echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
 
