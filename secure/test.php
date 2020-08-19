@@ -16,17 +16,13 @@ echo strftime("%H:%M", strtotime('11:00'));
 
 require_once '/var/www/proxmox/vendor/autoload.php';
 use ProxmoxVE\Proxmox;
-
 $proxmox = new Proxmox($proxmoxcredentials);
 
+if (isset($_POST['vmid'])&&isset($_POST['action'])) {
+	$proxmox->create('/nodes/proxmox/qemu/'.$_POST['vmid'].'/status/'.$_POST['action']);
+}
+
 $data = $proxmox->get('/nodes/proxmox/qemu');
-
-
-var_dump($_POST);echo '<hr><hr><hr>';
-
-//$proxmox->create('/nodes/proxmox/qemu/112/status/start');
-
-
 
 	  echo '
 	  <style>

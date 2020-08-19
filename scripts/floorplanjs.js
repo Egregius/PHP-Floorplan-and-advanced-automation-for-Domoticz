@@ -1322,6 +1322,7 @@ function floorplanothers(){
 		html+='<div class="fix z1 center" style="top:600px;left:420px;"><a href=\'javascript:navigator_Go("floorplan.ontimemysql.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time<br>MySQL</a></div>';
 		html+='<div class="fix z1 center" style="top:700px;left:0px;width:300px;"><button onclick="ajaxcontrol(\'fetch\', \'fetch\', \'fetch\');floorplan();" class="btn b2">Fetch Domoticz</button></div>';
 		html+='<div class="fix z1 center" style="top:700px;left:150px;width:300px;"><button onclick="ajaxcontrol(\'imac\', \'wake\', \'wake\');" class="btn b2">Wake iMac</button></div>';
+		html+='<div class="fix z1 center" style="top:760px;left:75px;width:300px;"><a href=\'javascript:navigator_Go("floorplan.proxmox.php");\' class="btn b2">Proxmox</a></div>';
 		html+='<div class="fix blackmedia">';
 		html+='<div class="fix" style="top:230px;left:0px;width:400px">';
 		water=localStorage.getItem('water');
