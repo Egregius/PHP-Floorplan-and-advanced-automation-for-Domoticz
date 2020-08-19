@@ -45,7 +45,7 @@ if ($home) {
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}
-		    td{font-size:0.8em;text-align:center;}
+		    td{font-size:0.9em;text-align:center;}
 		    th{text-align:center;}
 		    .fix{width:320px;padding:0}
 		    .btn{width:300px;}
@@ -79,7 +79,6 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 		<table>
 			<thead>
 				<tr>
-					<th rowspan="2">id</th>
 					<th rowspan="2">name</th>
 					<th>Status</th>
 					<th colspan="4">action</th>
@@ -98,7 +97,6 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 			foreach ($node as $vm) {
 				echo '
 				<tr>
-					<td rowspan="2">'.$vm['vmid'] .'</td>
 					<td rowspan="2">'.substr($vm['name'], 2).'</td>
 					<td>'.$vm['status'].'</td>
 					<td colspan="4">
@@ -116,13 +114,16 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 						</form>
 					</td>
 				</tr>
-				<tr>
-					<td class="right">'.floor($vm['uptime']/86400).'d '.gmdate("G:i", ($vm['uptime']%86400)).'</td>
-					<td class="right">'.number_format($vm['cpu'], 2).'</td>
+				<tr>';
+				if($vm['status']!='stopped') {
+					echo '
+					<td class="right">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
+					<td class="right">'.number_format($vm['cpu']*100, 0).' %</td>
 					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
 					<td class="right">'.human_filesize($vm['netin']).'</td>
-					<td class="right">'.human_filesize($vm['netout']).'</td>
-					
+					<td class="right">'.human_filesize($vm['netout']).'</td>';
+				}
+				echo '
 				</tr>';
 			}
 		}
