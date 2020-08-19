@@ -68,6 +68,13 @@ if (isset($_POST['vmid'])&&isset($_POST['action'])) {
 }
 
 $data = $proxmox->get('/nodes/proxmox/qemu');
+$resources = $proxmox->get('/cluster/resources');
+$vms=array();
+foreach ($resources['data'] as $i) {
+	echo '<pre>';print_r($i);echo '</pre>';
+	$vms[$i['vmid']]['uptime']=$i['uptime'];
+}
+echo '<hr><pre>';print_r($vms);echo '</pre>';
 
 	  echo '
 		<br>
@@ -162,7 +169,8 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				</tr>
 			</tbody>
 		</table>';
-	echo '<pre>';print_r($data);echo '</pre>';
+	
+//	echo '<pre>';print_r($data);echo '</pre>';
 	
 }
 function cmp($a, $b) {
