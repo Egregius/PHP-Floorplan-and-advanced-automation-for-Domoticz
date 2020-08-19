@@ -47,7 +47,9 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
-	  foreach ($client->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data as $vm) {
+	  	$data=$client->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data;
+	  	uasort($data, "cmp");
+	  foreach ($data as $vm) {
 		  echo '
 		  	<tr>
 		  		<td>'.$vm->vmid .'</td>
@@ -56,6 +58,7 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 		  		<td class="right">'.floor($vm->uptime/86400).'d</td>
 		  		<td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
 		  		<td class="right">'.number_format($vm->cpu, 2, ',', '').'</td>
+		  		<td class="right">'.number_format($vm->mem, 2, ',', '').'/'.number_format($vm->maxmem, 2, ',', '').'</td>
 		  	</tr>';
 	  }
 	  echo '
@@ -63,7 +66,9 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  </table>';
 }
 
-
+function cmp($a, $b) {
+    return strcmp($a->name, $b->name);
+}
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
