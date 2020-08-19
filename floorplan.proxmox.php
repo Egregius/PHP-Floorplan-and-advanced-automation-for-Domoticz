@@ -51,7 +51,7 @@ if ($home) {
 		    .btn{width:300px;font-size:1.4em;height:50px;}
 			table{border-collapse: collapse; }
 			tr{border:1px solid grey;}
-			th, td{border:1px solid grey;padding:5px;height:50px;min-width:60px;}
+			th, td{border:1px solid grey;padding:5px;height:50px;min-width:55px;}
         </style>
 	</head>
 	<body>
@@ -93,24 +93,30 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 		foreach ($data as $node) {
 			uasort($node, "cmp");
 			foreach ($node as $vm) {
+				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
-					<td rowspan="2">'.substr($vm['name'], 2).'</td>
+					<td rowspan="2">'.$name.'</td>';
+				if($name!='Domoticz'&&$name!='pfSense') {
+					echo '
+					
 					<td>'.$vm['status'].'</td>
 					<td colspan="4">
 						<form method="POST">
 							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
-				if($vm['status']=='stopped') {
-					echo '
+					if($vm['status']=='stopped') {
+						echo '
 							<input type="submit" name="action" value="start" class="btn"/>';
-				} else {
-					echo '
+					} else {
+						echo '
 							<input type="submit" name="action" value="stop" class="btn b2"/>
 							<input type="submit" name="action" value="shutdown" class="btn b2"/>';
+					}
+					echo '
+						</form>
+					</td>';
 				}
 				echo '
-						</form>
-					</td>
 				</tr>
 				<tr>';
 				if($vm['status']!='stopped') {
@@ -130,7 +136,8 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 	  </table>
 	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
 
-
+	$data = $proxmox->get('/nodes/proxmox/status');
+	var_dump($data);
 
 	
 }
