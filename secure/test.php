@@ -58,7 +58,7 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				echo '
 				<tr>
 					<td>'.$vm['vmid'] .'</td>
-					<td>'.$vm['name'].'</td>
+					<td>'.substr($vm['name'], 2).'</td>
 					<td>'.$vm['status'].'</td>
 					<td class="right">'.floor($vm['uptime']/86400).'d</td>
 					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
@@ -118,7 +118,6 @@ function FR($sound){
 }    
 /*---------------------------*/
 echo '</pre>';
-$total=microtime(true)-$start;
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
     $_COOKIE,
@@ -132,7 +131,6 @@ unset(
     $iftttkey,
     $ifttttoken,
     $start,
-    $total,
     $users,
     $homes,
     $telegrambot,
