@@ -19,24 +19,14 @@ use ProxmoxVE\Proxmox;
 
 $proxmox = new Proxmox($proxmoxcredentials);
 
-$allNodes = $proxmox->get('/nodes');
+$allNodes = $proxmox->get('/nodes/proxmox/qemu');
 
 print_r($allNodes);
 
 
 exit;
 
-if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
-//	$retPippo=$proxmox->get("/pippo");
-//	  echo $retPippo->getStatusCode().'<br>';
-//	  echo $retPippo->getReasonPhrase().'<br>';
 
-	  //loop nodes
-//	  foreach ($proxmox->getNodes()->Index()->getResponse()->data as $node) {
-//		echo $node->id.'<br>';
-//	  }
-
-	  //loop vm
 	  echo '
 	  <style>
 	  	table{border-collapse: collapse; }
@@ -82,7 +72,7 @@ if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  echo '
 	  	</tbody>
 	  </table>';
-}
+
 
 function cmp($a, $b) {
     return strcmp($a->name, $b->name);
