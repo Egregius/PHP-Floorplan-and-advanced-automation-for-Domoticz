@@ -98,15 +98,15 @@ uasort($vms, "cmp");
 			<thead>
 				<tr>
 					<th rowspan="2">name</th>
-					<th>Status</th>
-					<th colspan="4">action</th>
-				</tr>
-				<tr>
-					<th nowrap>uptime</th>
+					<th colspan="2">uptime</th>
 					<th>&nbsp;cpu&nbsp;</th>
 					<th>memory</th>
-					<th>netin</th>
-					<th>netout</th>
+				</tr>
+				<tr>
+					<th nowrap>disk read</th>
+					<th nowrap>disk write</th>
+					<th>net in</th>
+					<th>net out</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -114,11 +114,9 @@ uasort($vms, "cmp");
 				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
-					<td rowspan="2" nowrap>'.$name.'</td>';
+					<td rowspan="3" nowrap>'.$name.'</td>';
 				if($name!='Domoticz'&&$name!='pfSense') {
 					echo '
-					
-					<td>'.$vm['status'].'</td>
 					<td colspan="4">
 						<form method="POST">
 							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
@@ -139,9 +137,17 @@ uasort($vms, "cmp");
 				<tr>';
 				if($vm['status']!='stopped') {
 					echo '
-					<td>'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
+					<td colspan="2">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
 					<td>'.number_format($vm['cpu']*100, 0).' %</td>
-					<td>'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>
+					<td>'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
+				}
+				echo '
+				</tr>
+				<tr>';
+				if($vm['status']!='stopped') {
+					echo '
+					<td>'.human_filesize($vm['diskread']).'</td>
+					<td>'.human_filesize($vm['diskwrite']).'</td>
 					<td>'.human_filesize($vm['netin']).'</td>
 					<td>'.human_filesize($vm['netout']).'</td>';
 				}
@@ -154,7 +160,7 @@ uasort($vms, "cmp");
 	  </table>
 	  <br>
 	  <br>
-	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',20000);</script>';
+	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
 
 	$data = $proxmox->get('/nodes/proxmox/status');
 	$data=$data['data'];
