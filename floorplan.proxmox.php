@@ -43,13 +43,13 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style>
-		    html{width:320px!important;}
-		    body{width:320px!important;}
+		    html{width:100%!important;}
+		    body{width:100%!important;}
 		    td{font-size:1.1em;text-align:center;}
 		    th{text-align:center;}
-		    .fix{width:320px;padding:0}
+		    .fix{width:100%;padding:0}
 		    .btn{width:300px;font-size:1.4em;height:50px;}
-			table{border-collapse: collapse; }
+			table{border-collapse:collapse;width:100%;}
 			tr{border:1px solid grey;}
 			th, td{border:1px solid grey;padding:5px;height:50px;min-width:55px;}
         </style>
@@ -96,7 +96,7 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
-					<td rowspan="2">'.$name.'</td>';
+					<td rowspan="2" nowrap>'.$name.'</td>';
 				if($name!='Domoticz'&&$name!='pfSense') {
 					echo '
 					
@@ -147,12 +147,18 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 					<th>Uptime</th>
 					<th>cpu</th>
 					<th>memory</th>
+					<th>load avg</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>'.floor($data['uptime']/86400).'d '.gmdate("G:i:s", ($data['uptime']%86400)).'</td>
 					<td>'.number_format($data['cpu']*100, 0).' %</td>
+					<td>'.human_filesize($data['memory']['used']).'<br>'.human_filesize($data['memory']['total']).'</td>
+					<td>';
+	foreach($data['loadavg'] as $i) echo $i.'<br>';
+	echo '
+					</td>
 				</tr>
 			</tbody>
 		</table>';
