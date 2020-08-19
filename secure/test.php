@@ -15,15 +15,16 @@ echo strftime("%H:%M", strtotime('11:00'));
 
 
 require_once '/var/www/proxmox/vendor/autoload.php';
-$client = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
+$proxmox = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
 
-if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
-//	$retPippo=$client->get("/pippo");
+if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
+	$proxmox->create->nodes("proxmox")->startall;
+//	$retPippo=$proxmox->get("/pippo");
 //	  echo $retPippo->getStatusCode().'<br>';
 //	  echo $retPippo->getReasonPhrase().'<br>';
 
 	  //loop nodes
-//	  foreach ($client->getNodes()->Index()->getResponse()->data as $node) {
+//	  foreach ($proxmox->getNodes()->Index()->getResponse()->data as $node) {
 //		echo $node->id.'<br>';
 //	  }
 
@@ -52,7 +53,7 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
-	  	$data=$client->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data;
+	  	$data=$proxmox->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data;
 	  	uasort($data, "cmp");
 	  foreach ($data as $vm) {
 		  echo '
