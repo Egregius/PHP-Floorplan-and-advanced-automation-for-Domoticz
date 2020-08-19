@@ -13,3 +13,7 @@ sleep 5
 service mysql start
 service apache2 start
 service domoticz start
+sleep 5
+service mysql start
+service apache2 start
+service domoticz start
