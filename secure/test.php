@@ -12,7 +12,29 @@
 $start=microtime(true);
 require 'functions.php';
 echo strftime("%H:%M", strtotime('11:00'));
-	
+
+
+require_once '/var/www/proxmox/vendor/autoload.php';
+$client = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
+
+if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
+	var_dump($client->get('/version')->getResponse());
+	$retPippo=$client->get("/pippo");
+	  echo "\n" . $retPippo->getStatusCode();
+	  echo "\n" . $retPippo->getReasonPhrase();
+
+	  //loop nodes
+	  foreach ($client->getNodes()->Index()->getResponse()->data as $node) {
+		echo "\n" . $node->id;
+	  }
+
+	  //loop vm
+	  foreach ($client->getNodes()->get("pve1")->getQemu()->Vmlist()->getResponse()->data as $vm) {
+		  echo "\n" . $vm->vmid ." - " .$vm->name;
+	  }
+}
+
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -62,6 +84,7 @@ unset(
     $_FILES,
     $_SERVER,
     $d,
+    $dow,
     $iftttkey,
     $ifttttoken,
     $start,
@@ -128,6 +151,8 @@ unset(
     $appleid,
     $applepass,
     $vurl,
+    $vpsip,
+    $weekend,
     $urlnas,
     $urlnas2,
     $urlfilms
