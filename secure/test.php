@@ -18,7 +18,7 @@ require_once '/var/www/proxmox/vendor/autoload.php';
 $proxmox = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
 
 if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
-	$proxmox->node("proxmox")->PVENodeNodesStartall;
+	$proxmox->node("proxmox")->PVENodeNodesStartall();
 //	$retPippo=$proxmox->get("/pippo");
 //	  echo $retPippo->getStatusCode().'<br>';
 //	  echo $retPippo->getReasonPhrase().'<br>';
