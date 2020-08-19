@@ -19,13 +19,13 @@ use ProxmoxVE\Proxmox;
 
 $proxmox = new Proxmox($proxmoxcredentials);
 
-$allNodes = $proxmox->get('/nodes/proxmox/qemu');
+$data = $proxmox->get('/nodes/proxmox/qemu');
+uasort($data, "cmp");
 
-print_r($allNodes);
+print_r($data);
 
-$proxmox->create('/nodes/proxmox/qemu/112/status/start');
+//$proxmox->create('/nodes/proxmox/qemu/112/status/start');
 
-exit;
 
 
 	  echo '
@@ -52,22 +52,20 @@ exit;
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
-	  	$data=$proxmox->getNodes()->get("proxmox")->getQemu()->Vmlist()->getResponse()->data;
-	  	uasort($data, "cmp");
 	  foreach ($data as $vm) {
 		  echo '
 		  	<tr>
-		  		<td>'.$vm->vmid .'</td>
-		  		<td>'.$vm->name.'</td>
-		  		<td>'.$vm->status.'</td>
-		  		<td class="right">'.floor($vm->uptime/86400).'d</td>
-		  		<td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
-		  		<td class="right">'.number_format($vm->cpu, 2).'</td>
-		  		<td class="right">'.human_filesize($vm->mem).'/'.human_filesize($vm->maxmem).'</td>
-		  		<td class="right">'.human_filesize($vm->diskread).'</td>
-		  		<td class="right">'.human_filesize($vm->diskwrite).'</td>
-		  		<td class="right">'.human_filesize($vm->netin).'</td>
-		  		<td class="right">'.human_filesize($vm->netout).'</td>
+		  		<td>'.$vm['vmid'] .'</td>
+		  		<td>'.$vm['name'].'</td>
+		  		<td>'.$vm['status'].'</td>
+		  		<td class="right">'.floor($vm['uptime']/86400).'d</td>
+		  		<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
+		  		<td class="right">'.number_format($vm['cpu'], 2).'</td>
+		  		<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
+		  		<td class="right">'.human_filesize($vm['diskread']).'</td>
+		  		<td class="right">'.human_filesize($vm['diskwrite']).'</td>
+		  		<td class="right">'.human_filesize($vm['netin']).'</td>
+		  		<td class="right">'.human_filesize($vm['netout']).'</td>
 		  	</tr>';
 	  }
 	  echo '
