@@ -22,7 +22,7 @@ $proxmox = new Proxmox($proxmoxcredentials);
 $data = $proxmox->get('/nodes/proxmox/qemu');
 
 
-//var_dump($data);echo '<hr><hr><hr>';
+var_dump($_POST);echo '<hr><hr><hr>';
 
 //$proxmox->create('/nodes/proxmox/qemu/112/status/start');
 
@@ -45,10 +45,9 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 	  			<th>Hours</th>
 	  			<th>CPU</th>
 	  			<th>Memory</th>
-	  			<th>diskread</th>
-	  			<th>diskwrite</th>
 	  			<th>netin</th>
 	  			<th>netout</th>
+	  			<th>Action</th>
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
@@ -64,10 +63,22 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
 					<td class="right">'.number_format($vm['cpu'], 2).'</td>
 					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
-					<td class="right">'.human_filesize($vm['diskread']).'</td>
-					<td class="right">'.human_filesize($vm['diskwrite']).'</td>
 					<td class="right">'.human_filesize($vm['netin']).'</td>
 					<td class="right">'.human_filesize($vm['netout']).'</td>
+					<td>
+						<form method="POST">
+							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
+				if($vm['status']=='stopped') {
+					echo '
+							<input type="submit" name="action" value="start">';
+				} else {
+					echo '
+							<input type="submit" name="action" value="stop">
+							<input type="submit" name="action" value="shutdown">';
+				}
+				echo '
+						</form>
+					</td>
 				</tr>';
 			}
 		}
