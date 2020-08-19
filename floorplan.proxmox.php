@@ -71,10 +71,23 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 $resources = $proxmox->get('/cluster/resources');
 $vms=array();
 foreach ($resources['data'] as $i) {
-	echo '<pre>';print_r($i);echo '</pre>';
-	$vms[$i['vmid']]['uptime']=$i['uptime'];
+	//echo '<pre>';print_r($i);echo '</pre>';
+	if (isset($i['vmid'])) {
+		$vms[$i['vmid']]['vmid']=$i['vmid'];
+		$vms[$i['vmid']]['name']=$i['name'];
+		$vms[$i['vmid']]['uptime']=$i['uptime'];
+		$vms[$i['vmid']]['status']=$i['status'];
+		$vms[$i['vmid']]['mem']=$i['mem'];
+		$vms[$i['vmid']]['maxmem']=$i['maxmem'];
+		$vms[$i['vmid']]['diskread']=$i['diskread'];
+		$vms[$i['vmid']]['diskwrite']=$i['diskwrite'];
+		$vms[$i['vmid']]['cpu']=$i['cpu'];
+		$vms[$i['vmid']]['netin']=$i['netin'];
+		$vms[$i['vmid']]['netout']=$i['netout'];
+	}
 }
-echo '<hr><pre>';print_r($vms);echo '</pre>';
+uasort($vms, "cmp");
+//echo '<hr><pre>';print_r($vms);echo '</pre>';
 
 	  echo '
 		<br>
@@ -97,9 +110,7 @@ echo '<hr><pre>';print_r($vms);echo '</pre>';
 				</tr>
 			</thead>
 			<tbody>';
-		foreach ($data as $node) {
-			uasort($node, "cmp");
-			foreach ($node as $vm) {
+			foreach ($vms as $vm) {
 				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
@@ -137,7 +148,7 @@ echo '<hr><pre>';print_r($vms);echo '</pre>';
 				echo '
 				</tr>';
 			}
-		}
+
 	  echo '
 	  	</tbody>
 	  </table>
