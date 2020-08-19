@@ -23,6 +23,7 @@ $allNodes = $proxmox->get('/nodes/proxmox/qemu');
 
 print_r($allNodes);
 
+$proxmox->create('/nodes/proxmox/qemu/112/status/start');
 
 exit;
 
