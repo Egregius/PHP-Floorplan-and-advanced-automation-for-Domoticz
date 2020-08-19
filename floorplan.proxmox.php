@@ -45,15 +45,13 @@ if ($home) {
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}
-		    td{font-size:0.9em;text-align:center;}
+		    td{font-size:1.1em;text-align:center;}
 		    th{text-align:center;}
 		    .fix{width:320px;padding:0}
-		    .btn{width:300px;}
-		    .btnd{width:236px;}
+		    .btn{width:300px;font-size:1.4em;height:50px;}
 			table{border-collapse: collapse; }
 			tr{border:1px solid grey;}
-			th, td{border:1px solid grey;padding:5px;}
-			.right{text-align:right;}
+			th, td{border:1px solid grey;padding:5px;height:50px;min-width:60px;}
         </style>
 	</head>
 	<body>
@@ -85,7 +83,7 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				</tr>
 				<tr>
 					<th nowrap>uptime</th>
-					<th>cpu</th>
+					<th>&nbsp;cpu&nbsp;</th>
 					<th>memory</th>
 					<th>netin</th>
 					<th>netout</th>
@@ -117,11 +115,11 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				<tr>';
 				if($vm['status']!='stopped') {
 					echo '
-					<td class="right">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
-					<td class="right">'.number_format($vm['cpu']*100, 0).' %</td>
-					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
-					<td class="right">'.human_filesize($vm['netin']).'</td>
-					<td class="right">'.human_filesize($vm['netout']).'</td>';
+					<td>'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
+					<td>'.number_format($vm['cpu']*100, 0).' %</td>
+					<td>'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>
+					<td>'.human_filesize($vm['netin']).'</td>
+					<td>'.human_filesize($vm['netout']).'</td>';
 				}
 				echo '
 				</tr>';
