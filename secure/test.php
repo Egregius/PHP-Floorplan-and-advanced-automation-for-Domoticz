@@ -20,10 +20,9 @@ use ProxmoxVE\Proxmox;
 $proxmox = new Proxmox($proxmoxcredentials);
 
 $data = $proxmox->get('/nodes/proxmox/qemu');
-//uasort($datas, "cmp");
 
-var_dump($data);
-echo '<hr><hr><hr>';
+
+//var_dump($data);echo '<hr><hr><hr>';
 
 //$proxmox->create('/nodes/proxmox/qemu/112/status/start');
 
@@ -53,30 +52,32 @@ echo '<hr><hr><hr>';
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
-	  foreach ($data as $vm) {
-	  	echo '<pre>vm=';print_r($vm);echo '</pre><hr>';
-		  echo '
-		  	<tr>
-		  		<td>'.$vm['vmid'] .'</td>
-		  		<td>'.$vm['name'].'</td>
-		  		<td>'.$vm['status'].'</td>
-		  		<td class="right">'.floor($vm['uptime']/86400).'d</td>
-		  		<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
-		  		<td class="right">'.number_format($vm['cpu'], 2).'</td>
-		  		<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
-		  		<td class="right">'.human_filesize($vm['diskread']).'</td>
-		  		<td class="right">'.human_filesize($vm['diskwrite']).'</td>
-		  		<td class="right">'.human_filesize($vm['netin']).'</td>
-		  		<td class="right">'.human_filesize($vm['netout']).'</td>
-		  	</tr>';
-	  }
+		foreach ($data as $node) {
+			uasort($node, "cmp");
+			foreach ($node as $vm) {
+				echo '
+				<tr>
+					<td>'.$vm['vmid'] .'</td>
+					<td>'.$vm['name'].'</td>
+					<td>'.$vm['status'].'</td>
+					<td class="right">'.floor($vm['uptime']/86400).'d</td>
+					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
+					<td class="right">'.number_format($vm['cpu'], 2).'</td>
+					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
+					<td class="right">'.human_filesize($vm['diskread']).'</td>
+					<td class="right">'.human_filesize($vm['diskwrite']).'</td>
+					<td class="right">'.human_filesize($vm['netin']).'</td>
+					<td class="right">'.human_filesize($vm['netout']).'</td>
+				</tr>';
+			}
+		}
 	  echo '
 	  	</tbody>
 	  </table>';
 
 
 function cmp($a, $b) {
-    return strcmp($a->name, $b->name);
+    return strcmp($a['name'], $b['name']);
 }
 
 /*-------------------------------------------------*/
