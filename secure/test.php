@@ -15,9 +15,15 @@ echo strftime("%H:%M", strtotime('11:00'));
 
 
 require_once '/var/www/proxmox/vendor/autoload.php';
-$proxmox = new Corsinvest\ProxmoxVE\Api\PveClient("192.168.2.1");
-$test=$proxmox->getNodes()->get("proxmox")->startall();
-var_dump($test);
+use ProxmoxVE\Proxmox;
+
+$proxmox = new Proxmox($proxmoxcredentials);
+
+$allNodes = $proxmox->get('/nodes');
+
+print_r($allNodes);
+
+
 exit;
 
 if($proxmox->login($proxmoxuser,$proxmoxpassw,'pam')){
