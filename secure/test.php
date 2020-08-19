@@ -43,7 +43,12 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 	  			<th>Status</th>
 	  			<th>Days up</th>
 	  			<th>Hours</th>
-	  			<th>cpu</th>
+	  			<th>CPU</th>
+	  			<th>Memory</th>
+	  			<th>diskread</th>
+	  			<th>diskwrite</th>
+	  			<th>netin</th>
+	  			<th>netout</th>
 	  		</tr>
 	  	</thead>
 	  	<tbody>';
@@ -58,7 +63,11 @@ if($client->login($proxmoxuser,$proxmoxpassw,'pam')){
 		  		<td class="right">'.floor($vm->uptime/86400).'d</td>
 		  		<td class="right">'.gmdate("G:i", ($vm->uptime%86400)).'</td>
 		  		<td class="right">'.number_format($vm->cpu, 2, ',', '').'</td>
-		  		<td class="right">'.number_format($vm->mem, 2, ',', '').'/'.number_format($vm->maxmem, 2, ',', '').'</td>
+		  		<td class="right">'.human_filesize($vm->mem).'/'.human_filesize($vm->maxmem).'</td>
+		  		<td class="right">'.human_filesize($vm->diskread).'</td>
+		  		<td class="right">'.human_filesize($vm->diskwrite).'</td>
+		  		<td class="right">'.human_filesize($vm->netin).'</td>
+		  		<td class="right">'.human_filesize($vm->netout).'</td>
 		  	</tr>';
 	  }
 	  echo '
