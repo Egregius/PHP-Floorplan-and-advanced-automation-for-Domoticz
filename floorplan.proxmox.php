@@ -47,14 +47,14 @@ if ($home) {
 		    .fix{width:320px;padding:0}
 		    .btn{width:300px;}
 		    .btnd{width:236px;}
-		    .b4{max-width:155px!important;}
-		    .b3{max-width:320px!important;}
-		    tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
-		    .border_right {border-right:1pt dotted #777;}
+			table{border-collapse: collapse; }
+			tr{border:1px solid grey;}
+			th, td{border:1px solid grey;padding:5px;}
+			.right{text-align:right;}
         </style>
 	</head>
 	<body>
-	<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
+		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
 			<a href=\'javascript:navigator_Go("floorplan.proxmox.php");\'>
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
@@ -69,48 +69,41 @@ if (isset($_POST['vmid'])&&isset($_POST['action'])) {
 $data = $proxmox->get('/nodes/proxmox/qemu');
 
 	  echo '
-	  <style>
-	  	table{border-collapse: collapse; }
-	  	tr{border:1px solid grey;}
-	  	th, td{border:1px solid grey;padding:5px;}
-	  	.right{text-align:right;}
-	  </style>
-	  <table>
-	  	<thead>
-	  		<tr>
-	  			<th>id</th>
-	  			<th>Name</th>
-	  			<th>Status</th>
-	  			<th>Days up</th>
-	  			<th>Hours</th>
-	  			<th>CPU</th>
-	  			<th>Memory</th>
-	  			<th>netin</th>
-	  			<th>netout</th>
-	  			<th>Action</th>
-	  		</tr>
-	  	</thead>
-	  	<tbody>';
+		<br>
+		<br>
+		<br>
+		<br>
+		<table>
+			<thead>
+				<tr>
+					<th rowspan="2">id</th>
+					<th rowspan="2">Name</th>
+					<th>Status</th>
+					<th colspan="4">Action</th>
+				</tr>
+				<tr>
+					<th nowrap>Uptime</th>
+					<th>CPU</th>
+					<th>Memory</th>
+					<th>netin</th>
+					<th>netout</th>
+				</tr>
+			</thead>
+			<tbody>';
 		foreach ($data as $node) {
 			uasort($node, "cmp");
 			foreach ($node as $vm) {
 				echo '
 				<tr>
-					<td>'.$vm['vmid'] .'</td>
-					<td>'.substr($vm['name'], 2).'</td>
+					<td rowspan="2">'.$vm['vmid'] .'</td>
+					<td rowspan="2">'.substr($vm['name'], 2).'</td>
 					<td>'.$vm['status'].'</td>
-					<td class="right">'.floor($vm['uptime']/86400).'d</td>
-					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
-					<td class="right">'.number_format($vm['cpu'], 2).'</td>
-					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
-					<td class="right">'.human_filesize($vm['netin']).'</td>
-					<td class="right">'.human_filesize($vm['netout']).'</td>
-					<td>
+					<td colspan="4">
 						<form method="POST">
 							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
 				if($vm['status']=='stopped') {
 					echo '
-							<input type="submit" name="action" value="start">';
+							<input type="submit" name="action" value="start" class="btn">';
 				} else {
 					echo '
 							<input type="submit" name="action" value="stop">
@@ -119,6 +112,15 @@ $data = $proxmox->get('/nodes/proxmox/qemu');
 				echo '
 						</form>
 					</td>
+				</tr>
+				<tr>
+					<td class="right">'.floor($vm['uptime']/86400).'d</td>
+					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
+					<td class="right">'.number_format($vm['cpu'], 2).'</td>
+					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
+					<td class="right">'.human_filesize($vm['netin']).'</td>
+					<td class="right">'.human_filesize($vm['netout']).'</td>
+					
 				</tr>';
 			}
 		}
