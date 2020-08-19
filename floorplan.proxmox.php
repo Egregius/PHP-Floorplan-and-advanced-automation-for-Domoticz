@@ -56,6 +56,11 @@ if ($home) {
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
+			<a href=\'javascript:navigator_Go("floorplan.php");\'>
+				<img src="/images/close.png" width="50px" height="50px"/>
+			</a>
+		</div>
+		<div class="fix" style="top:0px;left:100px;height:50px;width:50px;background-color:#CCC">
 			<a href=\'javascript:navigator_Go("floorplan.proxmox.php");\'>
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
@@ -90,7 +95,6 @@ uasort($vms, "cmp");
 //echo '<hr><pre>';print_r($vms);echo '</pre>';
 
 	  echo '
-		<br>
 		<br>
 		<br>
 		<br>
