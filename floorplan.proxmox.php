@@ -184,7 +184,9 @@ uasort($vms, "cmp");
 					<td>'.number_format($data['cpu']*100, 0).' %</td>
 					<td>'.human_filesize($data['memory']['used']).'<br>'.human_filesize($data['memory']['total']).'</td>
 					<td>';
-	foreach($data['loadavg'] as $i) echo $i.'<br>';
+	foreach($data['loadavg'] as $i) {
+		echo $i.' - '.number_format(($i/4)*100, 2) .'%<br>';
+	}
 	echo '
 					</td>
 				</tr>
