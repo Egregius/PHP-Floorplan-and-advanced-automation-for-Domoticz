@@ -116,6 +116,7 @@ $css.="
 #bureeltobi{top:798px;left:375px;height:28px;width:auto;}
 #tvtobi{top:798px;left:152px;height:28px;width:auto;}
 #bureeltobikwh{top:811px;left:420px;text-align:left;min-width:60px;}
+#powermeter{top:10px;left:140px;text-align:right;min-width:60px;}
 #tvtobikwh{top:811px;left:89px;text-align:right;min-width:60px;}
 #badkamervuur1{top:403px;left:346px;height:24px;width:auto;}
 #badkamervuur2{top:403px;left:360px;height:24px;width:auto;}
