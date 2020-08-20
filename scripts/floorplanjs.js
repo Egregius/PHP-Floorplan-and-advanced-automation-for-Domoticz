@@ -400,6 +400,22 @@ function ajax(Update=$LastUpdateTime){
 								else if(item>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
 							}catch{}
+						}else if(device=="powermeter"){
+							try{
+								elem=$value.split(";");
+								item=parseInt(Math.round(elem[0]));
+								if(item>0)html=item+" W"
+								else html="";
+								elem=document.getElementById("powermeter");
+								elem.innerHTML=html;
+								if(item>600)elem.style.color="#FF0000";
+								else if(item>500)elem.style.color="#FF4400";
+								else if(item>400)elem.style.color="#FF8800";
+								else if(item>300)elem.style.color="#FFAA00";
+								else if(item>200)elem.style.color="#FFCC00";
+								else if(item>100)elem.style.color="#FFFF00";
+								else elem.style.color=null;
+							}catch{}
 						}else if(device=="sirene"){
 							try{
 								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device;
@@ -1193,7 +1209,7 @@ function floorplan(){
         items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
         items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','powermeter','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
         items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
         items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
         items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
