@@ -283,13 +283,8 @@ if ($home) {
                 echo '
                 <td>'.$row['n'].'</td>
                 <td>'.number_format($row['s'], 1, ',', '').' km/u</td>';
-                $hist=json_decode($row['m']);
                 echo '
-                <td>';
-                foreach ($hist as $i) {
-                    echo number_format($i, 1, ',', '').' km/u<br>';
-                }
-                echo '</td>';
+                <td></td>';
             } elseif ($row['n']=='auto') {
                 echo '
                 <td>'.$row['n'].'</td>';

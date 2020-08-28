@@ -36,7 +36,14 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-
+	if ($d['pirzolder']['s']=='Off'
+		&&$d['zolderg']['s']=='On'
+		&&past('pirzolder')>120
+		&&past('zolderg')>120
+		
+	) {
+		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 	if ($d['pirinkom']['s']=='Off'
 		&&past('pirinkom')>=19
 		&&$d['pirhall']['s']=='Off'

@@ -54,7 +54,6 @@ if ($d['kamer_set']['m']==0) {
     		)
     ) {
         if (TIME<strtotime('6:30')) $Setkamer=20.5;
-        elseif (TIME>strtotime('22:00')) $Setkamer=20.5;
         elseif (TIME>strtotime('21:00')) $Setkamer=20.5;
         elseif (TIME>strtotime('20:00')) $Setkamer=21;
         elseif (TIME>strtotime('19:00')) $Setkamer=21.5;
@@ -116,19 +115,19 @@ if ($d['alex_set']['m']==0) {
 				)
 			)
     ) {
-        if (TIME<strtotime('6:30')) $Setalex=21;
-        elseif (TIME>strtotime('19:00')) $Setalex=21;
-        elseif (TIME>strtotime('18:00')) $Setalex=21.5;
-        elseif (TIME>strtotime('17:00')) $Setalex=22;
-        elseif (TIME>strtotime('16:00')) $Setalex=22.5;
-        elseif (TIME>strtotime('15:00')) $Setalex=23;
-        elseif (TIME>strtotime('14:00')) $Setalex=23.5;
-        elseif (TIME>strtotime('13:00')) $Setalex=24;
-        elseif (TIME>strtotime('12:00')) $Setalex=24.5;
-        elseif (TIME>strtotime('11:00')) $Setalex=25;
-        elseif (TIME>strtotime('10:00')) $Setalex=25.5;
-        elseif (TIME>strtotime('9:00')) $Setalex=26;
-        elseif (TIME>strtotime('8:00')) $Setalex=26.5;
+        if (TIME<strtotime('6:30')) $Setalex=21.5;
+        elseif (TIME>strtotime('19:00')) $Setalex=21.5;
+        elseif (TIME>strtotime('18:00')) $Setalex=22;
+        elseif (TIME>strtotime('17:00')) $Setalex=22.5;
+        elseif (TIME>strtotime('16:00')) $Setalex=23;
+        elseif (TIME>strtotime('15:00')) $Setalex=23.5;
+        elseif (TIME>strtotime('14:00')) $Setalex=24;
+        elseif (TIME>strtotime('13:00')) $Setalex=24.5;
+        elseif (TIME>strtotime('12:00')) $Setalex=25;
+        elseif (TIME>strtotime('11:00')) $Setalex=25.5;
+        elseif (TIME>strtotime('10:00')) $Setalex=26;
+        elseif (TIME>strtotime('9:00')) $Setalex=26.5;
+        elseif (TIME>strtotime('8:00')) $Setalex=27;
     }
     if ($d['Weg']['s']>=3) $Setalex=28;
     if ($d['alex_set']['s']!=$Setalex) {
@@ -158,20 +157,20 @@ if ($d['living_set']['m']==0) {
 foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
 	if (${'dif'.$k}>=0.8) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=1;}
-	elseif (${'dif'.$k}>=0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-	elseif (${'dif'.$k}>=0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
-	elseif (${'dif'.$k}>=0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-	elseif (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
-	elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
-	elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
-	elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+	elseif (${'dif'.$k}>=0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
+	elseif (${'dif'.$k}>=0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+	elseif (${'dif'.$k}>=0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
+	elseif (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+	elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+	elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
+	elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
 	elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
 	elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 	elseif (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;$power=1;}
 	elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
-	elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+2;$power=1;}
-	elseif (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+3;$power=1;}
-	elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+4;$power=1;}
+	elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1.5;$power=1;}
+	elseif (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+2;$power=1;}
+	elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+2.5;$power=1;}
 	else {$d[$k.'_set']['s']=32;$power=0;}
 	$rate='A';
 	$daikin=json_decode($d['daikin'.$k]['s']);
