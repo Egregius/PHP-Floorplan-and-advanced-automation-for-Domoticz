@@ -1,12 +1,4 @@
 function navigator_Go(url){window.location.assign(url);}
-window.addEventListener('load', function(e) {
-    window.applicationCache.addEventListener('updateready', function(e) {
-        if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-            window.applicationCache.swapCache();
-            setTimeout(window.location.reload(), 0);
-        }
-    }, false);
-}, false);
 $LastUpdateTime=parseInt(0);
 function ajax(Update=$LastUpdateTime){
     if(Update==0)$LastUpdateTime=0;
@@ -401,11 +393,11 @@ function ajax(Update=$LastUpdateTime){
 								else elem.style.color=null;
 							}catch{}
 						}else if(device=="powermeter"){
-							try{
+							//try{
+								console.log(device+' '+$value);
 								elem=$value.split(";");
-								item=elem[0];
-								if(item>0)html=item+" W"
-								else html="";
+								html=elem[0]+" W";
+								if(elem[1]>0)html+="<br>"+elem[1]+" kWh";
 								elem=document.getElementById("powermeter");
 								elem.innerHTML=html;
 								if(item>600)elem.style.color="#FF0000";
@@ -415,7 +407,7 @@ function ajax(Update=$LastUpdateTime){
 								else if(item>200)elem.style.color="#FFCC00";
 								else if(item>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
-							}catch{}
+							//}catch{}
 						}else if(device=="sirene"){
 							try{
 								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device;
