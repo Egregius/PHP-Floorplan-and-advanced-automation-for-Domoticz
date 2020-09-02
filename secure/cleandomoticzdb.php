@@ -13,10 +13,10 @@ $db = new SQLite3('/domoticz/domoticz.db');
 define('TIME', $_SERVER['REQUEST_TIME']);
 $clean = strftime("%G-%m-%d %k:%M:%S", TIME-3600*24);
 $tables = array( 'LightingLog',
-                'MultiMeter',
+               /* 'MultiMeter',
                 'MultiMeter_Calendar',
                 'Meter',
-                'Meter_Calendar',
+                'Meter_Calendar',*/
                 'Percentage',
                 'Percentage_Calendar',
                 'Rain',
