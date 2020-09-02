@@ -393,7 +393,7 @@ function ajax(Update=$LastUpdateTime){
 								else elem.style.color=null;
 							}catch{}
 						}else if(device=="powermeter"){
-							//try{
+							try{
 								console.log(device+' '+$value);
 								elem=$value.split(";");
 								html=Math.round(elem[0]*100)/100+" W";
@@ -407,7 +407,7 @@ function ajax(Update=$LastUpdateTime){
 								else if(item>200)elem.style.color="#FFCC00";
 								else if(item>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
-							//}catch{}
+							}catch{}
 						}else if(device=="sirene"){
 							try{
 								if($value!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device;
