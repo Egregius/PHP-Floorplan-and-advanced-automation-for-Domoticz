@@ -403,7 +403,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="powermeter"){
 							try{
 								elem=$value.split(";");
-								item=parseInt(Math.round(elem[0]));
+								item=elem[0];
 								if(item>0)html=item+" W"
 								else html="";
 								elem=document.getElementById("powermeter");
