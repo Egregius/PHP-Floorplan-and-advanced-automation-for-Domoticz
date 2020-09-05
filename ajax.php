@@ -85,7 +85,12 @@ if ($home==true) {
     elseif (isset($_REQUEST['bose'])) {
     	$bose=$_REQUEST['bose'];
 		$d=array();
-		$d['time']=time();
+		$d['time']=$_SERVER['REQUEST_TIME'];
+		$db=dbconnect();
+        $stmt=$db->query("SELECT m FROM devices WHERE n like 'bose101';");
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $d['bose101mode']=$row['m'];
+        }
 		$d['nowplaying']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
 		$d['volume']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 		$d['bass']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);

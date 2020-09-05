@@ -1148,7 +1148,7 @@ function ajaxbose($ip){
 				
 			}
 			if ($ip==101) {
-				html+='<br>';
+				html+='<br><br>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Manual</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Auto</button>';
 			}
