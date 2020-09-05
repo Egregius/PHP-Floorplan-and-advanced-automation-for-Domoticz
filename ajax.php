@@ -316,6 +316,8 @@ if ($home==true) {
                     	}
                     }
                 }
+        } elseif ($_REQUEST['command']=='mode') {
+    		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
         }
     }
     

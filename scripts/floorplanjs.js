@@ -1149,8 +1149,13 @@ function ajaxbose($ip){
 			}
 			if ($ip==101) {
 				html+='<br><br>';
-				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Manual</button>';
-				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Auto</button>';
+				if (data["bose101mode"]==1) {
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'mode\',\'0\')">Manual</button>';
+					html+='<button class="btn b2 btna" onclick="ajaxcontrolbose('+$ip+',\'mode\',\'1\')">Auto</button>';
+				} else {
+					html+='<button class="btn b2 btna" onclick="ajaxcontrolbose('+$ip+',\'mode\',\'0\')">Manual</button>';
+					html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'mode\',\'1\')">Auto</button>';
+				}
 			}
 			if(document.getElementById("power").innerHTML!=html){
 				document.getElementById("power").innerHTML=html;
