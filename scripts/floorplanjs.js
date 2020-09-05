@@ -1138,7 +1138,6 @@ function ajaxbose($ip){
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Ballads & Pop</button>';
 				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'6\')">Ballads</button>';
 				html+='<br><br><br><br><button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'Off\');ajaxbose('+$ip+');myAjaxMedia=setInterval( function() { ajaxbose('+$ip+'); }, 500 );">Power Off</button><br><br>';
-				if(document.getElementById("power").innerHTML!=html)document.getElementById("power").innerHTML=html;
 			}else{
 				document.getElementById("artist").innerHTML="";
 				document.getElementById("track").innerHTML="";
@@ -1146,9 +1145,15 @@ function ajaxbose($ip){
 				document.getElementById("volume").innerHTML="";
 				document.getElementById("bass").innerHTML="";
 				html='<button class="btn b1" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Power On</button>';
-				if(document.getElementById("power").innerHTML!=html){
-					document.getElementById("power").innerHTML=html;
-				}
+				
+			}
+			if ($ip==101) {
+				html+='<br>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Manual</button>';
+				html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'power\',\'On\')">Auto</button>';
+			}
+			if(document.getElementById("power").innerHTML!=html){
+				document.getElementById("power").innerHTML=html;
 			}
         }
     })
