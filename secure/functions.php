@@ -642,10 +642,10 @@ function rookmelder($msg){
 			}
 		}
 	}
-	bosezone(101);
-	bosezone(102);
-	bosezone(103);
-	bosezone(104);
+	bosezone(101, true);
+	bosezone(102, true);
+	bosezone(103, true);
+	bosezone(104, true);
 	boseplayinfo($msg, 45);
 	sleep(5);
 	boseplayinfo($msg, 45);
@@ -795,14 +795,14 @@ function bosepreset($pre,$ip=101)
     if ($pre<1||$pre>6) return;
     bosekey("PRESET_$pre", 0, $ip, true);
 }
-function bosezone($ip,$vol='')
+function bosezone($ip,$forced=false)
 {
     $d=fetchdata();
 	/*if (TIME<strtotime('9:00')) $preset='PRESET_4';
 	else*/if (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
 	//if ($d['bose105']['s']=='Off'/*&&$ip!=105*/) {
-		if ($d['Weg']['s']<=1) {
+		if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 			if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($preset, 0, 101);
