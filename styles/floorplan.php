@@ -22,6 +22,9 @@ h4{font-size:18px;}
 .z{z-index:1;}
 .z1{z-index:2;}
 .z2{z-index:3;}
+.btnh50{height:50px;}
+.btnh75{height:75px;}
+.btnh100{height:100px;}
 .fontred{color:#FF0000;}
 .fontFF4400e{color:#FF4400;}
 .fontFF8800{color:#FF8800;}
