@@ -1041,10 +1041,10 @@ function ajaxmedia($ip){
             		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3 btnh75">'+input+'</button> ';
             		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh75">'+input+'</button> ';
             	});
-				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button>';
+				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button>';
 				
             }
-            html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button>';
+            html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button>';
             if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
         }
     });

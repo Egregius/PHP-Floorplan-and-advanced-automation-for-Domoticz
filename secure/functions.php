@@ -458,6 +458,8 @@ function sw($name,$action='Toggle',$msg='')
 }
 function fvolume($cmd) {
 	global $d;
+	if (!isset($d)) $d=fetchdata();
+	lg('fvolume '.$cmd);
 	if ($cmd=='down') {
 		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
 			denon('MVDOWN');
