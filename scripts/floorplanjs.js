@@ -1045,19 +1045,20 @@ function ajaxmedia($ip){
 				}
             }
             if(lgtv=='On'){
+            	html+='<br>';
             	if(data['lgtv']=='com.webos.app.hdmi1')data['lgtv']='Shield';
             	else if(data['lgtv']=='youtube.leanback.v4')data['lgtv']='YouTube';
             	else if(data['lgtv']=='netflix')data['lgtv']='Netflix';
             	inputs=['Shield','Netflix','YouTube'];
             	inputs.forEach(function(input){
-            		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3 btnh50">'+input+'</button> ';
-            		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh50">'+input+'</button> ';
+            		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3 btnh75">'+input+'</button> ';
+            		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh75">'+input+'</button> ';
             	});
-				playpause='<br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1 btnh75">Play</button><br><br><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1 btnh75">Pause</button>';
+				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button>';
 				if(denon=='Off'){
-					playpause+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b1 btnh75">Up</button><br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b1 btnh75">Down</button>';
+					html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button>';
 				}
-				if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
+				//if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
             }
             if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
         }
