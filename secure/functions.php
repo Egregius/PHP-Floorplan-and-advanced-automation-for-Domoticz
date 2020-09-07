@@ -535,9 +535,9 @@ function lgcommand($action,$msg='')
 {
     global $lgtvip, $lgtvmac;
     if ($action=='on') {
-        exec('python3 /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+        exec('sudo /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
     } else {
-        shell_exec('python3 lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
+        shell_exec('sudo /var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
     }
 }
 function store($name,$status,$msg='',$idx=null,$force=true)
