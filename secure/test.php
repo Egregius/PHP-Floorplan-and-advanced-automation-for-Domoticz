@@ -14,7 +14,7 @@ require 'functions.php';
 
 
 
-echo exec('python3 /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
+echo exec('echo ok | /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
 
 
 
