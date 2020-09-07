@@ -63,21 +63,21 @@ if ($home==true) {
     elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='lgtv') {
     	if ($_REQUEST['command']=='input') {
     		if($_REQUEST['action']=='Netflix') {
-				shell_exec('/var/www/html/secure/lgtv.py -c app -a netflix '.$lgtvip);
+				shell_exec('sudo /var/www/html/secure/lgtv.py -c app -a netflix '.$lgtvip);
 			} elseif ($_REQUEST['action']=='YouTube') {
-				shell_exec('/var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
+				shell_exec('sudo /var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
 			} elseif ($_REQUEST['action']=='HDMI 2') {
-				shell_exec('/var/www/html/secure/lgtv.py -c set-input -a com.webos.app.hdmi2 '.$lgtvip);
+				shell_exec('sudo /var/www/html/secure/lgtv.py -c set-input -a com.webos.app.hdmi1 '.$lgtvip);
 			}
     	} elseif ($_REQUEST['command']=='play') {
-			shell_exec('/var/www/html/secure/lgtv.py -c play '.$lgtvip);
+			shell_exec('sudo /var/www/html/secure/lgtv.py -c play '.$lgtvip);
     	} elseif ($_REQUEST['command']=='pause') {
-			shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
+			shell_exec('sudo /var/www/html/secure/lgtv.py -c pause '.$lgtvip);
     	} if ($_REQUEST['command']=='sw') {
 			if ($_REQUEST['action']=='On') {
-				exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+				exec('sudo /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
 			} elseif ($_REQUEST['action']=='Off') {
-				shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
+				shell_exec('sudo /var/www/html/secure/lgtv.py -c off '.$lgtvip);
 			}
 		}
     }
@@ -109,7 +109,7 @@ if ($home==true) {
 			$data['denon']['vol']=$denon['MasterVolume']['value'];
 		}
     	if ($d['lgtv']['s']=='On') {			
-			$data['lgtv']=trim(shell_exec('/var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
+			$data['lgtv']=trim(shell_exec('sudo /var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
 		}
     	echo json_encode($data);
     	exit;

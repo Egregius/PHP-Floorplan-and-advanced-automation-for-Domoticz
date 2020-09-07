@@ -14,8 +14,8 @@ require 'functions.php';
 
 
 
-echo shell_exec('echo ok | /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
-
+//echo shell_exec('echo ok | /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
+echo exec('sudo /var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
 
 
 /*-------------------------------------------------*/
