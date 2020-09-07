@@ -1053,11 +1053,12 @@ function ajaxmedia($ip){
             		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3">'+input+'</button> ';
             		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3">'+input+'</button> ';
             	});
-				playpause='<button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1">Play</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1">Pause</button>';
-				if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
+				playpause='<br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1">Play</button><br><br><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1">Pause</button>';
 				if(denon=='Off'){
-					html+='<br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1">Up</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1">Down</button>';
+					playpause+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b1">Up</button><br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b1">Down</button>';
 				}
+				if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
+				
 				
             }
             if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
