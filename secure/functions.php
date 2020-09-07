@@ -456,6 +456,79 @@ function sw($name,$action='Toggle',$msg='')
         }
     }
 }
+function fvolume($cmd) {
+	global $d;
+	if ($cmd=='down') {
+		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
+			denon('MVDOWN');
+			denon('MVDOWN');
+			denon('MVDOWN');
+			denon('MVDOWN');
+			denon('MVDOWN');
+			denon('MVDOWN');
+		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
+			exec('sudo /var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
+			exec('sudo /var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
+		} elseif ($d['bose101']['s']=='On') {
+			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if ($nowplaying['@attributes']['source']!='STANDBY') {
+						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+						$cv=$volume['actualvolume'];
+						if ($cv>50) {
+							bosevolume($cv-5);
+						} elseif ($cv>30) {
+							bosevolume($cv-4);
+						} elseif ($cv>20) {
+							bosevolume($cv-3);
+						} elseif ($cv>10) {
+							bosevolume($cv-2);
+						} else {
+							bosevolume($cv-1);
+						}
+					}
+				}
+			}
+		}
+	} elseif ($cmd=='up') {
+		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
+			denon('MVUP');
+			denon('MVUP');
+			denon('MVUP');
+			denon('MVUP');
+			denon('MVUP');
+			denon('MVUP');
+		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
+			exec('sudo /var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
+			exec('sudo /var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
+		} elseif ($d['bose101']['s']=='On') {
+			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if ($nowplaying['@attributes']['source']!='STANDBY') {
+						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+						$cv=$volume['actualvolume'];
+						if ($cv>80) {
+							exit;
+						}
+						if ($cv>50) {
+							bosevolume($cv+5);
+						} elseif ($cv>30) {
+							bosevolume($cv+4);
+						} elseif ($cv>20) {
+							bosevolume($cv+3);
+						} elseif ($cv>10) {
+							bosevolume($cv+2);
+						} else {
+							bosevolume($cv+1);
+						}
+					}
+				}
+			}
+		}
+	}
+}
 function lgcommand($action,$msg='')
 {
     global $lgtvip, $lgtvmac;
