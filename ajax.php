@@ -74,8 +74,8 @@ if ($home==true) {
     	} elseif ($_REQUEST['command']=='pause') {
 			shell_exec('sudo /var/www/html/secure/lgtv.py -c pause '.$lgtvip);
      	} elseif ($_REQUEST['command']=='volume') {
-     		exec('sudo /var/www/html/secure/lgtv.py -c volume-'.$_REQUEST['action'].' '.$lgtvip);
-     		exec('sudo /var/www/html/secure/lgtv.py -c volume-'.$_REQUEST['action'].' '.$lgtvip);
+     		if ($_REQUEST['action']=='up') fvolume('up');
+     		elseif ($_REQUEST['action']=='down') fvolume('down');
 	   	} elseif ($_REQUEST['command']=='sw') {
 			if ($_REQUEST['action']=='On') {
 				exec('sudo /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);

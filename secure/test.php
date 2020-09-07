@@ -14,9 +14,9 @@ require 'functions.php';
 
 
 
-//echo shell_exec('echo ok | /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
-echo exec('sudo /var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
-echo exec('sudo /var/www/html/secure/lgtv.py -c set-input -a HDMI_1 192.168.2.27');
+fvolume('up');
+
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

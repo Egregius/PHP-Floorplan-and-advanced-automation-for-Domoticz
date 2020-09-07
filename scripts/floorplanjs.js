@@ -1030,19 +1030,6 @@ function ajaxmedia($ip){
             if(denon=='Off'&&lgtv=='Off')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'media\', \'On\')">Media Power On</button>';
             if(denon=='On'){
             	if(data['denon']['power']!='ON')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'power\', \'denon\', \'On\')">Denon Power On</button>';
-            	if(data['denon']['vol']!=='undefined'){
-            		if(data['denon']['vol']=='--')data['denon']['vol']=0;
-					let cv=80+parseInt(data['denon']['vol']);
-					if(data['denon']['vol']==0)cv=0;
-					levels=[-10,-5,-3,-2,-1,0,1,2,3,5,10];
-					levels.forEach(function(level){
-						let newlevel=parseInt(cv+level);
-						if(newlevel>=0&&newlevel<=70){
-							if(cv==newlevel)html+='<button onclick="ajaxcontrol(\'denonset\', \'volume\', \''+newlevel+'\')" class="btn btna volume">'+newlevel+'</button> ';
-							else html+='<button onclick="ajaxcontrol(\'denonset\', \'volume\', \''+newlevel+'\')" class="btn volume">'+newlevel+'</button> ';
-						}
-					});
-				}
             }
             if(lgtv=='On'){
             	html+='<br>';
@@ -1055,11 +1042,9 @@ function ajaxmedia($ip){
             		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh75">'+input+'</button> ';
             	});
 				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button>';
-				if(denon=='Off'){
-					html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button>';
-				}
-				//if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
+				
             }
+            html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button>';
             if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
         }
     });
