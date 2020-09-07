@@ -944,7 +944,7 @@ function fbadkamer()
 		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
             if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) {
             	sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
-            } else {
+            } elseif ($d['lichtbadkamer']['s']<8) {
             	sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
             }
         }

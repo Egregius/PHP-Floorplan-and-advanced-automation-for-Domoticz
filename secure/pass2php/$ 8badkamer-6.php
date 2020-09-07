@@ -11,12 +11,10 @@
  **/
 if ($status=='On') {
     store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-    sl('lichtbadkamer', 100, basename(__FILE__).':'.__LINE__);
+    sl('lichtbadkamer', 60, basename(__FILE__).':'.__LINE__);
     douche();
     resetsecurity();
-    if ($d['bose102']['s']=='Off') bosezone(102);
-   	if ($d['bose102']['m']==0&&past('bose102')>300) {
-   		boseplayinfo(saytime().sayweather());
-   		storemode('bose102', 1);
-   	}
+    if (TIME>=strtotime('5:30')&&TIME<strtotime('21:30')) {
+    	if ($d['bose102']['s']=='Off') bosezone(102);
+    }
 }
