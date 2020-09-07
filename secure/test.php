@@ -11,81 +11,12 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-echo strftime("%H:%M", strtotime('11:00'));
 
 
-require_once '/var/www/proxmox/vendor/autoload.php';
-use ProxmoxVE\Proxmox;
-$proxmox = new Proxmox($proxmoxcredentials);
 
-if (isset($_POST['vmid'])&&isset($_POST['action'])) {
-	$proxmox->create('/nodes/proxmox/qemu/'.$_POST['vmid'].'/status/'.$_POST['action']);
-}
-
-$data = $proxmox->get('/nodes/proxmox/qemu');
-
-	  echo '
-	  <style>
-	  	table{border-collapse: collapse; }
-	  	tr{border:1px solid grey;}
-	  	th, td{border:1px solid grey;padding:5px;}
-	  	.right{text-align:right;}
-	  </style>
-	  <table>
-	  	<thead>
-	  		<tr>
-	  			<th>id</th>
-	  			<th>Name</th>
-	  			<th>Status</th>
-	  			<th>Days up</th>
-	  			<th>Hours</th>
-	  			<th>CPU</th>
-	  			<th>Memory</th>
-	  			<th>netin</th>
-	  			<th>netout</th>
-	  			<th>Action</th>
-	  		</tr>
-	  	</thead>
-	  	<tbody>';
-		foreach ($data as $node) {
-			uasort($node, "cmp");
-			foreach ($node as $vm) {
-				echo '
-				<tr>
-					<td>'.$vm['vmid'] .'</td>
-					<td>'.substr($vm['name'], 2).'</td>
-					<td>'.$vm['status'].'</td>
-					<td class="right">'.floor($vm['uptime']/86400).'d</td>
-					<td class="right">'.gmdate("G:i", ($vm['uptime']%86400)).'</td>
-					<td class="right">'.number_format($vm['cpu'], 2).'</td>
-					<td class="right">'.human_filesize($vm['mem']).'/'.human_filesize($vm['maxmem']).'</td>
-					<td class="right">'.human_filesize($vm['netin']).'</td>
-					<td class="right">'.human_filesize($vm['netout']).'</td>
-					<td>
-						<form method="POST">
-							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
-				if($vm['status']=='stopped') {
-					echo '
-							<input type="submit" name="action" value="start">';
-				} else {
-					echo '
-							<input type="submit" name="action" value="stop">
-							<input type="submit" name="action" value="shutdown">';
-				}
-				echo '
-						</form>
-					</td>
-				</tr>';
-			}
-		}
-	  echo '
-	  	</tbody>
-	  </table>';
+echo exec('python3 /var/www/html/secure/lgtv.py -c current-app 192.168.2.27');
 
 
-function cmp($a, $b) {
-    return strcmp($a['name'], $b['name']);
-}
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

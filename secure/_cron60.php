@@ -367,6 +367,9 @@ if ($d['auto']['s']=='On') {
             }
         }
     }
+    if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600&&past('Weg')>3600) {
+		sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
+	}
     if ($d['poort']['s']=='Closed'
         &&past('poort')>120
         &&past('poortrf')>120
