@@ -66,8 +66,8 @@ if ($home==true) {
 				shell_exec('sudo /var/www/html/secure/lgtv.py -c app -a netflix '.$lgtvip);
 			} elseif ($_REQUEST['action']=='YouTube') {
 				shell_exec('sudo /var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
-			} elseif ($_REQUEST['action']=='HDMI 2') {
-				shell_exec('sudo /var/www/html/secure/lgtv.py -c set-input -a com.webos.app.hdmi1 '.$lgtvip);
+			} elseif ($_REQUEST['action']=='Shield') {
+				shell_exec('sudo /var/www/html/secure/lgtv.py -c set-input -a HDMI_1 '.$lgtvip);
 			}
     	} elseif ($_REQUEST['command']=='play') {
 			shell_exec('sudo /var/www/html/secure/lgtv.py -c play '.$lgtvip);

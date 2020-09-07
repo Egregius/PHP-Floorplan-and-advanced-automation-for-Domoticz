@@ -1045,16 +1045,20 @@ function ajaxmedia($ip){
 				}
             }
             if(lgtv=='On'){
-            	if(data['lgtv']=='com.webos.app.hdmi2')data['lgtv']='HDMI 2';
+            	if(data['lgtv']=='com.webos.app.hdmi1')data['lgtv']='Shield';
             	else if(data['lgtv']=='youtube.leanback.v4')data['lgtv']='YouTube';
             	else if(data['lgtv']=='netflix')data['lgtv']='Netflix';
-            	inputs=['HDMI 2','Netflix','YouTube'];
+            	inputs=['Shield','Netflix','YouTube'];
             	inputs.forEach(function(input){
             		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3">'+input+'</button> ';
             		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3">'+input+'</button> ';
             	});
 				playpause='<button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1">Play</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1">Pause</button>';
 				if(document.getElementById("playpause").innerHTML!=playpause)document.getElementById("playpause").innerHTML=playpause;
+				if(denon=='Off'){
+					html+='<br><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b1">Up</button><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b1">Down</button>';
+				}
+				
             }
             if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
         }
