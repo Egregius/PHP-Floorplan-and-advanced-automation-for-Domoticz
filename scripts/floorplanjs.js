@@ -1029,7 +1029,7 @@ function ajaxmedia($ip){
             html='';
             if(denon=='Off'&&lgtv=='Off')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'media\', \'On\')">Media Power On</button>';
             if(denon=='On'){
-            	if(data['denon']['power']!='ON')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'power\', \'denon\', \'On\')">Denon Power On</button>';
+            	if(data['denon']['power']!='ON')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'denon\', \'On\')">Denon Power On</button>';
             }
             if(lgtv=='On'){
             	html+='<br>';

@@ -202,43 +202,51 @@ if ($home==true) {
 			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='fetch') {
 			include 'secure/_fetchdomoticz.php';
-		} elseif ($_REQUEST['command']=='media') {
-			if ($_REQUEST['action']=='On') {
-				if ($d['tv']['s']!='On') {
-					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['nvidia']['s']!='On') {
-					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-				}
-				/*if ($d['denon']['s']!='On') {
-					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-				}*/
-				/*sleep(4);
-				lgcommand('on');
-				for ($x=1;$x<=4;$x++) {
+		} elseif ($_REQUEST['device']=='media') {
+			if ($_REQUEST['command']=='media') {
+				if ($_REQUEST['action']=='On') {
+					if ($d['tv']['s']!='On') {
+						sw('tv', 'On',basename(__FILE__).':'.__LINE__);
+					}
+					if ($d['nvidia']['s']!='On') {
+						sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+					}
+					/*if ($d['denon']['s']!='On') {
+						sw('denon', 'On',basename(__FILE__).':'.__LINE__);
+					}*/
+					/*sleep(4);
 					lgcommand('on');
-					sleep(2);
-				}*/
-				if ($d['bose101']['s']=='On') {
-					sw('bose101', 'Off');
-					bosekey("POWER");
-					foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
-						if ($d[$i]['s']=='On') {
-							sw($i, 'Off');
+					for ($x=1;$x<=4;$x++) {
+						lgcommand('on');
+						sleep(2);
+					}*/
+					if ($d['bose101']['s']=='On') {
+						sw('bose101', 'Off');
+						bosekey("POWER");
+						foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
+							if ($d[$i]['s']=='On') {
+								sw($i, 'Off');
+							}
 						}
 					}
+				} elseif ($_REQUEST['action']=='Off') {
+					if ($d['lgtv']['s']!='Off') {
+						shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
+						sleep(2);
+					}
+					if ($d['denon']['s']!='Off') {
+						sw('denon', 'Off',basename(__FILE__).':'.__LINE__);
+					}
+					if ($d['nvidia']['s']!='Off') {
+						sleep(10);
+						sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+					}
 				}
-			} elseif ($_REQUEST['action']=='Off') {
-				if ($d['lgtv']['s']!='Off') {
-					shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
-					sleep(2);
-				}
-				if ($d['denon']['s']!='Off') {
-					sw('denon', 'Off',basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['nvidia']['s']!='Off') {
-					sleep(10);
-					sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+			} elseif ($_REQUEST['command']=='denon') {
+				if ($d['denon']['s']=='On') {
+					denon('PWON');
+				} else {
+					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
 				}
 			}
 		} elseif ($_REQUEST['command']=='water') {
