@@ -49,20 +49,6 @@ if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
 if ($d['auto']['s']=='On') {
     /* -------------------------------------------- THUIS ----------------------------*/
     if ($d['Weg']['s']==0){
-    	if ($d['bose101']['s']=='On') {
-        	/*if (TIME>=strtotime('9:00')&&TIME<strtotime('9:01')) {
-				if ($weekend==false) bosekey('PRESET_2', 0, 101);
-				else bosekey('PRESET_1', 0, 101);
-        	}*/
-        	/*if ($weekend==false&&TIME>=strtotime('6:15')&&TIME<strtotime('6:16')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('6:30')&&TIME<strtotime('6:31')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('6:45')&&TIME<strtotime('6:46')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('7:15')&&TIME<strtotime('7:16')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('7:30')&&TIME<strtotime('7:31')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('7:45')&&TIME<strtotime('7:46')) boseplayinfo(saytime());
-        	elseif ($weekend==false&&TIME>=strtotime('8:15')&&TIME<strtotime('8:16')) boseplayinfo(saytime());
-        	elseif (strftime('%M', TIME)==0) boseplayinfo(saytime().sayweather());*/
-        }
         if ($d['pirkeuken']['s']=='Off') {
             $uit=235;
             if (past('pirkeuken')>$uit) {
@@ -471,16 +457,17 @@ if ($d['auto']['s']=='On') {
 	    //Bose
     if ($d['pirliving']['s']=='Off'
         &&$d['pirgarage']['s']=='Off'
-        &&past('bose101')>180
-        &&past('bose102')>90
-        &&past('bose103')>90
-        &&past('bose104')>90
-        &&past('bose105')>90
+        &&$d['bose101']['m']==1
         &&$d['bose101']['s']=='On'
         &&$d['bose102']['s']=='Off'
         &&$d['bose103']['s']=='Off'
         &&$d['bose104']['s']=='Off'
         &&$d['bose105']['s']=='Off'
+        &&past('bose101')>180
+        &&past('bose102')>90
+        &&past('bose103')>90
+        &&past('bose104')>90
+        &&past('bose105')>90
         &&($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')
     ) {
         $status=json_decode(

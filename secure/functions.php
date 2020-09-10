@@ -822,6 +822,7 @@ function bosekey($key,$sleep=75000,$ip=101)
     bosepost("key", $xml, $ip);
     if (startsWith($key,'PRESET')) {
     	$dontplayfirst=array(
+    		'Paul Kalkbrenner'=>'Cloud Rider',
 			'Cygnux X'=>'Superstring - Rank 1 Remix',
 			'Tiësto, Dzeko, Preme, Post Malone'=>'Jackie Chan',
 			'Pharrell Williams'=>'Happy - From "Despicable Me 2"',
@@ -883,6 +884,8 @@ function bosezone($ip,$forced=false)
 				bosekey($preset, 0, 101);
 				if ($d['lgtv']['s']=='On') bosevolume(0, 101);
 				else bosevolume(21, 101);
+				bosekey('SHUFFLE_ON', 0, '192.168.2.101');
+				bosekey("NEXT_TRACK", 0, '192.168.2.101');
 			} /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
 				$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
 				if (isset($volume['actualvolume'])) {

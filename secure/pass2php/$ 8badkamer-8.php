@@ -9,6 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
+	store('Weg', 0, basename(__FILE__).':'.__LINE__);
+}
 if ($d['badkamervuur1']['s']=='On') {
 	if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off');
 	sw('badkamervuur1', 'Off');
@@ -16,7 +19,9 @@ if ($d['badkamervuur1']['s']=='On') {
 if ($d['badkamer_set']['s']!=10) {
 	store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
 }
-sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['lichtbadkamer']['s']>0) {
+	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
+}
 if ($d['auto']['s']=='On') {
 	fhall();
 	if (TIME<strtotime('20:00')) {
@@ -72,7 +77,5 @@ if (past('$ 8badkamer-8')>3) {
 		}
 	}
 }
-if ($d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
-	store('Weg', 0, basename(__FILE__).':'.__LINE__);
-}
+
 resetsecurity();
