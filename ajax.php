@@ -313,8 +313,7 @@ if ($home==true) {
             }
         } elseif ($_REQUEST['command']=='power') {
                 if ($_REQUEST['action']=='On') {
-                    bosezone($_REQUEST['boseip']);
-                    sw('bose'.$_REQUEST['boseip'], 'On',basename(__FILE__).':'.__LINE__);
+                    bosezone($_REQUEST['boseip'], true);
                 } elseif ($_REQUEST['action']=='Off') {
                     bosekey("POWER", 0, $_REQUEST['boseip']);
                     sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);

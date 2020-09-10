@@ -876,8 +876,11 @@ function bosezone($ip,$forced=false)
     $d=fetchdata();
 	if (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
+	lg(__LINE__);
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+		lg(__LINE__);
+		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+			lg(__LINE__);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 0, 101);
 			if ($d['lgtv']['s']=='On') bosevolume(0, 101);
