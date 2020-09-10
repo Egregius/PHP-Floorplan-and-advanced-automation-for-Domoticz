@@ -132,9 +132,9 @@ function douchewarn($eurocent,$vol=0)
 			$cv=$volume['actualvolume'];
 			if ($cv<$vol) {
 				usleep(1550000);
-				bosevolume($vol, 102);
+				bosevolume($vol, 102, basename(__FILE__).':'.__LINE__);
 				usleep(3500000);
-				bosevolume($cv, 102);
+				bosevolume($cv, 102, basename(__FILE__).':'.__LINE__);
 			}
 		}
 		//if ($vol>0) telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol);
@@ -154,7 +154,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		$vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
 		bosepost('speaker', $xml);
-		bosevolume($volume['actualvolume'], 101);
+		bosevolume($volume['actualvolume'], 101, basename(__FILE__).':'.__LINE__);
 	} else {
 		require 'gcal/google-api-php-client/vendor/autoload.php';
 		$client=new GuzzleHttp\Client();
@@ -169,7 +169,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 				$vol=$volume['actualvolume'];
 				$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
 				bosepost('speaker', $xml);
-				bosevolume($volume['actualvolume'], 101);
+				bosevolume($volume['actualvolume'], 101, basename(__FILE__).':'.__LINE__);
 			}
 		} catch (Exception $e) {
 			exit('Something went wrong: ' . $e->getMessage());

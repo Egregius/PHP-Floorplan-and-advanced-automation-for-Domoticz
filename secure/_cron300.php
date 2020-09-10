@@ -150,7 +150,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
                     bosekey("POWER", 0, 103);
                     sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
                 } else {
-                    bosevolume($cv, 103);
+                    bosevolume($cv, 103, basename(__FILE__).':'.__LINE__);
                 }
             } else {
                 sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);

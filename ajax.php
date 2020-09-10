@@ -300,7 +300,7 @@ if ($home==true) {
     
     elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
         if ($_REQUEST['command']=='volume') {
-            bosevolume($_REQUEST['action'], $_REQUEST['boseip']);
+            bosevolume($_REQUEST['action'], $_REQUEST['boseip'], basename(__FILE__).':'.__LINE__);
         } elseif ($_REQUEST['command']=='bass') {
             bosebass($_REQUEST['action'], $_REQUEST['boseip']);
         } elseif ($_REQUEST['command']=='preset') {
