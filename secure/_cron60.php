@@ -348,12 +348,15 @@ if ($d['auto']['s']=='On') {
             if ($d['nvidia']['s']=='On'&&$d['nvidia']['m']=='Off'&&past('nvidia')>600) {
                 sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
             }
-            if ($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) {
+            if ($d['tv']['s']=='On'&&past('tv')>120&&past('lgtv')>120) {
                 sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
             }
         }
+        if ($d['tv']['s']=='On'&&past('tv')>120&&past('lgtv')>120&&past('Weg')>120) {
+			sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
+		}	
     }
-    if (($d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600&&past('Weg')>3600)||($d['Weg']['s']>0&&past('Weg')>3600)) {
+    if ($d['Weg']['s']>0&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600&&past('Weg')>3600) {
 		sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	}
     if ($d['poort']['s']=='Closed'
