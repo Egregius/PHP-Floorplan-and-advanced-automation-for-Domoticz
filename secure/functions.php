@@ -858,6 +858,7 @@ function bosevolume($vol,$ip=101)
         elseif ($vol>10) bosebass(-4, $ip);
         else bosebass(-5, $ip);
     }
+    lg('bosevolume '.$ip.' -> '.$vol);
 }
 function bosebass($bass,$ip=101)
 {
