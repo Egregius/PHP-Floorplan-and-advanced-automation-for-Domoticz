@@ -874,60 +874,44 @@ function bosepreset($pre,$ip=101)
 function bosezone($ip,$forced=false)
 {
     $d=fetchdata();
-	/*if (TIME<strtotime('9:00')) $preset='PRESET_4';
-	else*/if (TIME>strtotime('20:00')) $preset='PRESET_6';
+	if (TIME>strtotime('20:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
-	//if ($d['bose105']['s']=='Off'/*&&$ip!=105*/) {
-		if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-			if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
+		if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+			bosekey($preset, 0, 101);
+			if ($d['lgtv']['s']=='On') bosevolume(0, 101);
+			else bosevolume(21, 101);
+		}
+		if ($ip>101) {
+			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+
+				if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
+			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
+			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
+			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
+
+			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($preset, 0, 101);
 				if ($d['lgtv']['s']=='On') bosevolume(0, 101);
 				else bosevolume(21, 101);
-				bosekey('SHUFFLE_ON', 0, '192.168.2.101');
-				bosekey("NEXT_TRACK", 0, '192.168.2.101');
-			} /*elseif ($d['bose101']['s']=='On'&&$d['denonpower']['s']=='OFF') {
-				$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
-				if (isset($volume['actualvolume'])) {
-					$cv=$volume['actualvolume'];
-					if ($cv<10) {
-						bosevolume(10, 101);
-					}
-				}
-			}*/
-			if ($ip>101) {
-				if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 
-				    if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
-				elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
-				elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
-				elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
-
-				if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-					bosekey($preset, 0, 101);
-					if ($d['lgtv']['s']=='On') bosevolume(0, 101);
-					else bosevolume(21, 101);
-
-					bosepost('setZone', $xml, 101);
-					if ($vol=='') {
-						if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) bosevolume(30, $ip);
-						else bosevolume(22, $ip);
-					} else bosevolume($vol, $ip);
-				} elseif ($d['bose'.$ip]['s']=='Off') {
-					bosepost('setZone', $xml, 101);
-					store('bose'.$ip, 'On');
-					if ($vol=='') {
-						if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) bosevolume(30, $ip);
-						else bosevolume(20, $ip);
-					} else bosevolume($vol, $ip);
-				}
+				bosepost('setZone', $xml, 101);
+				if ($vol=='') {
+					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) bosevolume(30, $ip);
+					else bosevolume(22, $ip);
+				} else bosevolume($vol, $ip);
+			} elseif ($d['bose'.$ip]['s']=='Off') {
+				bosepost('setZone', $xml, 101);
+				store('bose'.$ip, 'On');
+				if ($vol=='') {
+					if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) bosevolume(30, $ip);
+					else bosevolume(20, $ip);
+				} else bosevolume($vol, $ip);
 			}
 		}
-	/*} elseif ($ip==105&&$d['bose105']['s']=='Off') {//Bose buiten
-		sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
-		bosekey($preset, 0, 105);
-	}*/
+	}
 }
 function bosepost($method,$xml,$ip=101,$log=false)
 {
@@ -940,10 +924,6 @@ function bosepost($method,$xml,$ip=101,$log=false)
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		$response=curl_exec($ch);
 		curl_close($ch);
-		if ($log) {
-			//lg($user.' >> Bose '.$ip.'	method='.$method.'	response='.$response);
-		}
-		//lg($user.' >> Bose '.$ip.'	method='.$method.'	response='.$response);
 		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
 		usleep(100000);
 	}
