@@ -14,8 +14,7 @@ require 'functions.php';
 
 
 
-fvolume('up');
-
+telegram('test');
 
 
 /*-------------------------------------------------*/
