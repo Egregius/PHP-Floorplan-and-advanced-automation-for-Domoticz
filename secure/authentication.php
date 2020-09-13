@@ -13,7 +13,7 @@ $authenticated=false;
 $home=false;
 if (!isset($_SERVER['HTTP_USER_AGENT'])) die('No user agent specified');
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Intel Mac')!==false) $udevice='Mac';
-elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
+//elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false) $udevice='iPhone';
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')!==false) $udevice='iPad';
 else $udevice='other';
@@ -24,8 +24,8 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 	$ipaddress=$_SERVER['REMOTE_ADDR'];
 	$local=false;
 }
-if ($ipaddress=='192.168.2.198') $udevice='iPhoneSE';
-elseif ($ipaddress=='192.168.2.199') $udevice='iPad';
+//if ($ipaddress=='192.168.2.198') $udevice='iPhoneSE';
+//elseif ($ipaddress=='192.168.2.199') $udevice='iPad';
 
 //header("Expires: on, 01 Jan 1970 00:00:00 GMT");
 //header("Last-Modified: Tue, 10 Dec 2025 14:50:27 GMT");
