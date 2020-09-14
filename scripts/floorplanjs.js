@@ -533,8 +533,13 @@ function ajax(Update=$LastUpdateTime){
 						}else if(type=="switch"){
 							try{
 								if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"||device=="nas"||device=="nvidia"){
-									if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
-									else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
+									if(device=="nvidia") {
+										if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="confirmSwitch('+device+')">';
+										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="confirmSwitch('+device+')">';
+									} else {
+										if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
+										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
+									}
 									html+='<br>'+device;
 									if(time>($currentTime-82800)){
 										date=new Date(time*1000);
@@ -1023,29 +1028,33 @@ function ajaxmedia($ip){
 			tv=localStorage.getItem('tv');
 			lgtv=localStorage.getItem('lgtv');
 			
-			html='<small>&#x21e7;</small> '+up+'<br><small>&#x21e9;</small>'+down;
-            document.getElementById("pfsense").innerHTML=html;
+			try{
+				html='<small>&#x21e7;</small> '+up+'<br><small>&#x21e9;</small>'+down;
+	            document.getElementById("pfsense").innerHTML=html;
+	        }catch{}
             
-            html='';
-            if(denon=='Off'&&lgtv=='Off')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'media\', \'On\')">Media Power On</button>';
-            if(denon=='On'){
-            	if(data['denon']['power']!='ON')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'denon\', \'On\')">Denon Power On</button>';
-            }
-            if(lgtv=='On'){
-            	html+='<br>';
-            	if(data['lgtv']=='com.webos.app.hdmi1')data['lgtv']='Shield';
-            	else if(data['lgtv']=='youtube.leanback.v4')data['lgtv']='YouTube';
-            	else if(data['lgtv']=='netflix')data['lgtv']='Netflix';
-            	inputs=['Shield','Netflix','YouTube'];
-            	inputs.forEach(function(input){
-            		if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3 btnh75">'+input+'</button> ';
-            		else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh75">'+input+'</button> ';
-            	});
-				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button>';
+            try{
+				html='';
+				if(denon=='Off'&&lgtv=='Off')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'media\', \'On\')">Media Power On</button>';
+				if(denon=='On'){
+					if(data['denon']['power']!='ON')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'denon\', \'On\')">Denon Power On</button>';
+				}
+				if(lgtv=='On'){
+					html+='<br>';
+					if(data['lgtv']=='com.webos.app.hdmi1')data['lgtv']='Shield';
+					else if(data['lgtv']=='youtube.leanback.v4')data['lgtv']='YouTube';
+					else if(data['lgtv']=='netflix')data['lgtv']='Netflix';
+					inputs=['Shield','Netflix','YouTube'];
+					inputs.forEach(function(input){
+						if(data['lgtv']==input)html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn btna b3 btnh75">'+input+'</button> ';
+						else html+='<button onclick="ajaxcontrol(\'lgtv\', \'input\', \''+input+'\')" class="btn b3 btnh75">'+input+'</button> ';
+					});
+					html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'pause\', \'\')" class="btn b2 btnh75">Pause</button><button onclick="ajaxcontrol(\'lgtv\', \'play\', \'\')" class="btn b2 btnh75">Play</button>';
 				
-            }
-            html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button>';
-            if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
+				}
+				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button>';
+				if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
+			 }catch{}
         }
     });
 }
@@ -1629,6 +1638,7 @@ function heating(){
 }
 
 function confirmSwitch(device){
+	console.log(device);
 	$value=localStorage.getItem(device);
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
