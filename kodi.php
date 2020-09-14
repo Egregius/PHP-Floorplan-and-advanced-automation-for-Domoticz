@@ -22,7 +22,7 @@ if ($home===true) {
     <meta name="HandheldFriendly" content="true" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=0.5, user-scalable=no, minimal-ui" />
+	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
     <title>Kodi</title>
     <link rel="icon" type="image/png" href="images/kodi.png">
     <link rel="shortcut icon" href="images/kodi.png" />
@@ -34,7 +34,7 @@ if ($home===true) {
         setTimeout(\'window.location.href=window.location.href;\', 4950);
         function navigator_Go(url) {window.location.assign(url);}
     </script>
-    <link href="/styles/kodi.php?v=6" rel="stylesheet" type="text/css"/>
+    <link href="/styles/kodi.php?v=7" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="content">

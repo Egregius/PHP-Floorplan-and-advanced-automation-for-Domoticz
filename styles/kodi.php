@@ -30,7 +30,7 @@ h1{font-size:2.5em;margin:0px;padding:0px;}
 h2{font-size:1.8em;margin:0px;padding:0px;}
 .navbar{position: fixed;top:0px;left:0px;float:left;min-height:38px;width:100%;padding:0px;z-index:10;background-color:#111;}
 .isotope{height:100%;min-height:80%;margin:0 auto;padding-top:95px;}
-.btn{height:45px;font-size:1.4em;}
+.btn{height:45px;font-size:1.3em;}
 .big{height:118px!important;}
 .volume{width:112px;}
 .active{background-color:#ffba00;color:#000;}
@@ -39,6 +39,8 @@ h2{font-size:1.8em;margin:0px;padding:0px;}
 .level{width:64px;}
 .surround{width:120px;}
 .title{margin-top:50px;}
+.b7{width:1500px;max-width:13.1%;background-color=#F00;}
+
 ";
 } elseif ($udevice=='iPad') {
     $css.="

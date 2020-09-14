@@ -17,7 +17,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 if ($ipaddress=='192.168.2.198') $udevice='iPhoneSE';
 elseif ($ipaddress=='192.168.2.199') $udevice='iPad';
 
-$css=$udevice."{}
+$css=$udevice."{padding:6}
 
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}
@@ -32,7 +32,7 @@ input[type=number]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 input[type=submit]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
 input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
-.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;/*padding:2px;*/margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;cursor:pointer;}
+.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;cursor:pointer;}
 .btna{color:#000;background-color:#ffba00;}
 .clear{clear:both;}
 .box{text-align:center;left:0px;background:#222;padding:6px;margin:6px;}
@@ -41,7 +41,7 @@ input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box
 .green{background-color:#0F0;}
 .blue{background-color:#00F;}
 .yellow{background-color:#FF0;}
-.content{/*height:100%;*/min-height:80%;margin:0 auto;padding-top:55px;}
+.content{min-height:80%;margin:0 auto;padding-top:55px;}
 .btn{height:32px;font-size:1.2em;}
 .b1{width:1500px;max-width:99%}
 .b2{width:1500px;max-width:48.55%}
