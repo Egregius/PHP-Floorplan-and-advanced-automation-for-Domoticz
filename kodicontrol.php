@@ -29,18 +29,17 @@ if ($home===true) {
     <link rel="icon" sizes="196x196" href="images/kodi.png">
     <link rel="icon" sizes="192x192" href="images/kodi.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/manifests/kodi.json">
-    <link href="/styles/kodi.php?v=2" rel="stylesheet" type="text/css"/>
+    <link href="/styles/kodi.php?v=5" rel="stylesheet" type="text/css"/>
   </head>
   <body>
   <div class="navbar">
     <form action="/floorplan.php"><input type="submit" class="btn big b7" value="Plan"/></form>
-    <form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
-    <form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
-	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b7" value="Films"/></form>
-	<form action="https://films.egregius.be/tobi.php"><input type="submit" class="btn b7" value="Tobi"/></form>
-	<form action="https://films.egregius.be/alex.php"><input type="submit" class="btn b7" value="Alex"/></form>
-	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b7" value="Series"/></form>
+    <form action="/denon.php"><input type="submit" class="btn big b7" value="Denon"/></form>
+    <form action="/kodi.php"><input type="submit" class="btn btna big b7" value="Kodi"/></form>
+	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn big b7" value="Films"/></form>
+	<form action="https://films.egregius.be/tobi.php"><input type="submit" class="btn big b7" value="Tobi"/></form>
+	<form action="https://films.egregius.be/alex.php"><input type="submit" class="btn big b7" value="Alex"/></form>
+	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn big b7" value="Series"/></form>
 	</div>
 	<div class="content">
     <div class="box"><form method="POST">';

@@ -30,12 +30,11 @@ if ($home===true) {
     <link rel="icon" sizes="196x196" href="images/kodi.png">
     <link rel="icon" sizes="192x192" href="images/kodi.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/manifests/kodi.json">
     <script type="text/javascript">
         setTimeout(\'window.location.href=window.location.href;\', 4950);
         function navigator_Go(url) {window.location.assign(url);}
     </script>
-    <link href="/styles/kodi.php?v=3" rel="stylesheet" type="text/css"/>
+    <link href="/styles/kodi.php?v=6" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="content">
@@ -280,21 +279,21 @@ if ($home===true) {
     }
     echo '
                 <div class="box">
-                    <input type="submit" name="kodicontrol" value="kodicontrol" class="btn b1"/><br>
-                    <input type="submit" name="VolumeDOWN" value="Down" class="btn b3"/>
-                    <input type="submit" name="Denon" value="Denon" class="btn b3"/>
-                    <input type="submit" name="VolumeUP" value="Up" class="btn b3"/>
+                    <input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
+                    <input type="submit" name="VolumeDOWN" value="Down" class="btn big b3"/>
+                    <input type="submit" name="Denon" value="Denon" class="btn big b3"/>
+                    <input type="submit" name="VolumeUP" value="Up" class="btn big b3"/>
                 </div>
                 <div class="box">Update Library:<br/>
-                    <input type="submit" name="UpdateKodi" value="Wij" class="btn b3"/>
-                    <input type="submit" name="UpdateKodi" value="Tobi" class="btn b3"/>
-                    <input type="submit" name="UpdateKodi" value="Alex" class="btn b3"/>
+                    <input type="submit" name="UpdateKodi" value="Wij" class="btn big b3"/>
+                    <input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3"/>
+                    <input type="submit" name="UpdateKodi" value="Alex" class="btn big b3"/>
                 </div>
                 <div class="box">
-                    <input type="submit" name="PowerOn" value="Shield On" class="btn b2"/>
-                    <input type="submit" name="TVKodi" value="TV Kodi" class="btn b2"/>
-                    <input type="submit" name="PowerOff" value="Shield Off" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
-                    <input type="submit" name="mediauit" value="Media uit" class="btn b2" onclick="return confirm(\'Are you sure?\');"/>
+                    <input type="submit" name="PowerOn" value="Shield On" class="btn big b2"/>
+                    <input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2"/>
+                    <input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
+                    <input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
                 </div>
             </form>
         </div>
