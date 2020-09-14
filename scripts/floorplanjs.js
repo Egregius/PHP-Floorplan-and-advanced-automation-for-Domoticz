@@ -1628,6 +1628,19 @@ function heating(){
 	$('#placeholder').html(html);
 }
 
+function confirmSwitch(device){
+	$value=localStorage.getItem(device);
+	html='<div class="dimmer" ><div style="min-height:140px">';
+	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+	html+='<div id="message" class="dimmer">';
+	html+='<br><h1>'+device+' = '+$value+'</h1><br>';
+	html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');initview();">On</button>';
+    html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');initview();">Off</button>';
+    html+='</div>';
+	html+='</div>';
+	$('#placeholder').html(html);
+}
+
 function bureeltobi(){
 	$value=localStorage.getItem('bureeltobi');
 	html='<div class="dimmer" ><div style="min-height:140px">';
