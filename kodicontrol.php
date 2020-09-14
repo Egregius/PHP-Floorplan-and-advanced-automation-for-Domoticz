@@ -34,7 +34,7 @@ if ($home===true) {
   </head>
   <body>
   <div class="navbar">
-    <form action="/floorplan.php"><input type="submit" class="btn b7" value="Plan"/></form>
+    <form action="/floorplan.php"><input type="submit" class="btn big b7" value="Plan"/></form>
     <form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
     <form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
 	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b7" value="Films"/></form>
