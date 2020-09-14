@@ -533,9 +533,9 @@ function ajax(Update=$LastUpdateTime){
 						}else if(type=="switch"){
 							try{
 								if(device=="dampkap"||device=="water"||device=="regenpomp"||device=="zwembadfilter"||device=="zwembadwarmte"||device=="auto"||device=="bosesoundlink"||device=="denon"||device=="tv"||device=="lgtv"||device=="nas"||device=="nvidia"){
-									if(device=="nvidia") {
-										if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="confirmSwitch('+device+')">';
-										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="confirmSwitch('+device+')">';
+									if(device=="denon"||device=="tv"||device=="lgtv"||device=="nvidia") {
+										if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="confirmSwitch(\''+device+'\')">';
+										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="confirmSwitch(\''+device+'\')">';
 									} else {
 										if($value=="On")html='<img src="https://home.egregius.be/images/'+$icon+'_On.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\')"/>';
 										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';

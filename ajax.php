@@ -211,16 +211,7 @@ if ($home==true) {
 					if ($d['nvidia']['s']!='On') {
 						sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 					}
-					/*if ($d['denon']['s']!='On') {
-						sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-					}*/
-					/*sleep(4);
-					lgcommand('on');
-					for ($x=1;$x<=4;$x++) {
-						lgcommand('on');
-						sleep(2);
-					}*/
-					if ($d['bose101']['s']=='On') {
+					if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
 						sw('bose101', 'Off');
 						bosekey("POWER");
 						foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
