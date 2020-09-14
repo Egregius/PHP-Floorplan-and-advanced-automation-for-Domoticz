@@ -17,7 +17,8 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 if ($ipaddress=='192.168.2.198') $udevice='iPhoneSE';
 elseif ($ipaddress=='192.168.2.199') $udevice='iPad';
 
-$css="
+$css=$udevice."{}
+
 html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
 body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}
 .navbar{position:fixed;top:0px;left:0px;width:100%;padding:2px 0px 2px 0px;z-index:100;background-color:#111;}
