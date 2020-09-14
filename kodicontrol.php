@@ -120,6 +120,9 @@ if ($home===true) {
 	<br>
 	<input type="submit" name="Imgup" value="Imgup" class="btn big b2"/>
 	<input type="submit" name="Imgdown" value="Imgdown" class="btn big b2"/>
+	<br>
+	<br>
+	<a href="/styles/kodi.php?v=2">CSS '.$udevice.'</a>
 	';
 } else {
     header("Location: index.php");
