@@ -11,10 +11,11 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-
+echo '<pre>';
 
 
 foreach (array('living', 'kamer', 'alex') as $k) {
+	echo $k.'<br>';
 	if ($k=='living') $ip=111;
 	elseif ($k=='kamer') $ip=112;
 	elseif ($k=='alex') $ip=113;
