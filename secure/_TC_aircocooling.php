@@ -282,14 +282,14 @@ if ($d['auto']['s']=='On') {
 	} 
 
 	elseif (TIME>=strtotime('10:00')&&TIME<strtotime('15:00')) {
-		if($zon>2000) {
+		if($zon>1500) {
 			if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	} 
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
-		if($zon>2000) {
+		if($zon>1500) {
 			if ($d['raamtobi']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<50) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);
