@@ -122,10 +122,10 @@ uasort($vms, "cmp");
 				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
-					<td rowspan="3" nowrap class="bordertoptick borderlefttick">'.$name.'</td>';
+					<td rowspan="3" nowrap class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
 				if($name!='Domoticz'&&$name!='pfSense') {
 					echo '
-					<td colspan="4">
+					<td colspan="4"  class="borderbottomtick borderrighttick">
 						<form method="POST">
 							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
 					if($vm['status']=='stopped') {
@@ -147,17 +147,17 @@ uasort($vms, "cmp");
 					echo '
 					<td colspan="2" class="bordertoptick">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
 					<td class="bordertoptick">'.number_format($vm['cpu']*100, 0).' %</td>
-					<td class="bordertoptick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
+					<td class="bordertoptick borderrighttick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
 				}
 				echo '
 				</tr>
 				<tr>';
 				if($vm['status']!='stopped') {
 					echo '
-					<td class="bordertoptick">'.human_filesize($vm['diskread']).'</td>
-					<td class="bordertoptick">'.human_filesize($vm['diskwrite']).'</td>
-					<td class="bordertoptick">'.human_filesize($vm['netin']).'</td>
-					<td class="bordertoptick">'.human_filesize($vm['netout']).'</td>';
+					<td class="borderbottomtick">'.human_filesize($vm['diskread']).'</td>
+					<td class="borderbottomtick">'.human_filesize($vm['diskwrite']).'</td>
+					<td class="borderbottomtick">'.human_filesize($vm['netin']).'</td>
+					<td class="borderbottomtick borderrighttick">'.human_filesize($vm['netout']).'</td>';
 				}
 				echo '
 				</tr>';
