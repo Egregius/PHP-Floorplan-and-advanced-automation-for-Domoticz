@@ -43,16 +43,20 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
 		<style>
-		    html{width:100%!important;}
-		    body{width:100%!important;}
-		    td{font-size:1.1em;text-align:center;}
-		    th{text-align:center;}
-		    .fix{width:100%;padding:0}
-		    .btn{width:300px;font-size:1.4em;height:50px;}
+			html{width:100%!important;}
+			body{width:100%!important;}
+			td{font-size:1.1em;text-align:center;}
+			th{text-align:center;}
+			.fix{width:100%;padding:0}
+			.btn{width:300px;font-size:1.4em;height:50px;}
 			table{border-collapse:collapse;width:100%;}
 			tr{border:1px solid grey;}
 			th, td{border:1px solid grey;padding:5px;height:50px;min-width:55px;}
-        </style>
+			.borderlefttick{border-left: 3px solid white;}
+			.borderrighttick{border-right: 3px solid white;}
+			.borderbottomtick{border-bottom: 3px solid white;}
+			.bordertoptick{border-top: 3px solid white;}
+		</style>
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
@@ -101,16 +105,16 @@ uasort($vms, "cmp");
 		<table>
 			<thead>
 				<tr>
-					<th rowspan="2">name</th>
-					<th colspan="2">uptime</th>
-					<th>&nbsp;cpu&nbsp;</th>
-					<th>memory</th>
+					<th rowspan="2" class="borderlefttick bordertoptick">name</th>
+					<th colspan="2" class="bordertoptick">uptime</th>
+					<th class="bordertoptick">&nbsp;cpu&nbsp;</th>
+					<th class="borderrighttick bordertoptick">memory</th>
 				</tr>
 				<tr>
 					<th nowrap>disk read</th>
 					<th nowrap>disk write</th>
 					<th>net in</th>
-					<th>net out</th>
+					<th class="borderrighttick">net out</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -118,7 +122,7 @@ uasort($vms, "cmp");
 				$name=substr($vm['name'], 2);
 				echo '
 				<tr>
-					<td rowspan="3" nowrap>'.$name.'</td>';
+					<td rowspan="3" nowrap class="bordertoptick borderlefttick">'.$name.'</td>';
 				if($name!='Domoticz'&&$name!='pfSense') {
 					echo '
 					<td colspan="4">
@@ -141,19 +145,19 @@ uasort($vms, "cmp");
 				<tr>';
 				if($vm['status']!='stopped') {
 					echo '
-					<td colspan="2">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
-					<td>'.number_format($vm['cpu']*100, 0).' %</td>
-					<td>'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
+					<td colspan="2" class="bordertoptick">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
+					<td class="bordertoptick">'.number_format($vm['cpu']*100, 0).' %</td>
+					<td class="bordertoptick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
 				}
 				echo '
 				</tr>
 				<tr>';
 				if($vm['status']!='stopped') {
 					echo '
-					<td>'.human_filesize($vm['diskread']).'</td>
-					<td>'.human_filesize($vm['diskwrite']).'</td>
-					<td>'.human_filesize($vm['netin']).'</td>
-					<td>'.human_filesize($vm['netout']).'</td>';
+					<td class="bordertoptick">'.human_filesize($vm['diskread']).'</td>
+					<td class="bordertoptick">'.human_filesize($vm['diskwrite']).'</td>
+					<td class="bordertoptick">'.human_filesize($vm['netin']).'</td>
+					<td class="bordertoptick">'.human_filesize($vm['netout']).'</td>';
 				}
 				echo '
 				</tr>';
