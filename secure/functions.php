@@ -599,9 +599,10 @@ function kodi($json)
     $ch=curl_init($kodiurl.'/jsonrpc');
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $result=curl_exec($ch);
+    curl_close($ch);
     return $result;
 }
 function ud($name,$nvalue,$svalue,$check=false,$smg='')
@@ -923,7 +924,7 @@ function bosepost($method,$xml,$ip=101,$log=false)
     for($x=1;$x<=100;$x++) {
 		$ch=curl_init("http://192.168.2.$ip:8090/$method");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		$response=curl_exec($ch);

@@ -81,6 +81,16 @@ if ($d['achterdeur']['s']=='Open') {
 	if ($d['zwembadfilter']['s']=='On') sw('zwembadfilter','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['zwembadwarmte']['s']=='On') sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
 }
+
+if (past('diepvries_temp')>7200) {
+	alert(
+		'diepvriestemp',
+		'Diepvries temp not updated since '.
+		strftime("%k:%M:%S", $d['diepvries_temp']['t']),
+		7200
+	);
+}
+
 $items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
 foreach ($items as $i) {
     if (past($i)>900) {

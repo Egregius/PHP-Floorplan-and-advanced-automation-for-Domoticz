@@ -290,14 +290,6 @@ if ($d['auto']['s']=='On') {
     }
 
     /* -------------------------------------------- ALTIJD BIJ AUT0----------------------------*/
-    if (past('diepvries_temp')>7200) {
-        alert(
-                'diepvriestemp',
-                'Diepvries temp not updated since '.
-                strftime("%k:%M:%S", $d['diepvries_temp']['t']),
-                7200
-            );
-        }
     if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) {
         sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
     }
@@ -640,6 +632,7 @@ if ($d['zon']['s']>$d['el']['s']+500) {
 } else {
 	$set=-18.5;
 }
+//$set=-30;
 
 if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) {
     sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
