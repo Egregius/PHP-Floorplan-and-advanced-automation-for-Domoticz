@@ -1095,10 +1095,7 @@ function createheader($page='')
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-		if ($ipaddress=='192.168.2.37') /* Iphone11 initial-scale=0.755,*/ echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.7,user-scalable=yes,minimal-ui">';
-		else echo /*initial-scale=0.655,*/'
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
     } elseif ($ipaddress=='192.168.2.199')  { //Nero 
         echo '
