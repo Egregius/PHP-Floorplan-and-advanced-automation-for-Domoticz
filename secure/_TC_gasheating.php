@@ -488,7 +488,7 @@ if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=f
 if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
-if ($d['auto']['s']=='On') {
+if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	if (TIME>=strtotime('5:30')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
@@ -578,4 +578,6 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
+} elseif ($d['auto']['s']=='On'&&$d['Weg']['s']==3) {
+	include('_Rolluiken_Vakantie.php');
 }

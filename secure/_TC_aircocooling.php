@@ -250,7 +250,7 @@ $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
-if ($d['auto']['s']=='On') {
+if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	if (TIME>=strtotime('5:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
@@ -315,4 +315,6 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
+} elseif ($d['auto']['s']=='On'&&$d['Weg']['s']==3) {
+	include('_Rolluiken_Vakantie.php');
 }

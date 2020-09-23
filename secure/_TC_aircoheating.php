@@ -221,7 +221,7 @@ if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true;
 
 $zon=$d['zon']['s'];
 
-if ($d['auto']['s']=='On') {
+if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	if (TIME>=strtotime('5:30')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
@@ -311,4 +311,6 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
+} elseif ($d['auto']['s']=='On'&&$d['Weg']['s']==3) {
+	include('_Rolluiken_Vakantie.php');
 }
