@@ -116,7 +116,7 @@ session_start();
 				format:"#",
 				textStyle: {color: "#AAA", fontSize: 14},
 				Gridlines: {
-					multiple: 4
+					multiple: 2
 				},
 				minorGridlines: {
 					multiple: 0
