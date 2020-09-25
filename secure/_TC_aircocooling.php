@@ -214,8 +214,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if ($k=='living') $ip=111;
 				elseif ($k=='kamer') $ip=112;
 				elseif ($k=='alex') $ip=113;
-				if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $setstreamer=1;
-				else $setstreamer=0;
+				$setstreamer=0;
 			
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data=array();

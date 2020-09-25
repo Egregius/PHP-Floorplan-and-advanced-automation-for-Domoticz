@@ -299,9 +299,12 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 
 
 
-if ($d['buiten_temp']['s']>5&&$d['buiten_temp']['s']<30) {
+if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 	$low=40;
-	$high=60;
+	$high=40;
+} elseif ($d['buiten_temp']['s']< -5||$d['buiten_temp']['s']>35) {
+	$low=60;
+	$high=100;
 } else {
 	$low=50;
 	$high=70;

@@ -274,19 +274,20 @@ if ($home===true) {
             }
         },
 				hAxis: {
-					showTextEvery: 1,
-					textStyle: {color: "#DDD", fontSize: 0}
+					showTextEvery: 100,
+					textStyle: {color: "#000", fontSize: 1}
 				},
 				vAxis: {
 					format:"#",
 					textStyle: {color: "#AAA", fontSize: 14},
 					Gridlines: {
-						multiple: 20
+						multiple: 2
 					},
 					minorGridlines: {
-						multiple: 10
+						multiple: 0
 					}
 				  },
+				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"},
 				bar:{groupWidth:100}';
         $chart=array_to_chart($pluvio, $args);

@@ -109,17 +109,17 @@ session_start();
 		}
 	},
 			hAxis: {
-				showTextEvery: 1,
-				textStyle: {color: "#DDD", fontSize: 0}
+				showTextEvery: 100,
+				textStyle: {color: "#DDD", fontSize: 1}
 			},
 			vAxis: {
 				format:"#",
 				textStyle: {color: "#AAA", fontSize: 14},
 				Gridlines: {
-					multiple: 20
+					multiple: 4
 				},
 				minorGridlines: {
-					multiple: 10
+					multiple: 0
 				}
 			  },
 			theme:"maximized",

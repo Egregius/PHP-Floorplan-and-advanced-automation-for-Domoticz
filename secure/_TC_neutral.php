@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-include('_Rolluiken_Vakantie.php');
+
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
