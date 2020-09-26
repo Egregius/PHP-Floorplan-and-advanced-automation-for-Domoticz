@@ -1255,7 +1255,7 @@ function floorplanheating(){
         else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
         else if(heatingset==0)items=['badkamer'];
         else if(heatingset==-2)items=['living','kamer','alex'];
-		if(heatingset!=-1)items.forEach(function(item){html+='<div class="fix z1 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
+		if(heatingset!=-1)items.forEach(function(item){html+='<div class="fix z2 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
         html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
         html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
         html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
