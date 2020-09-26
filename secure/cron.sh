@@ -78,6 +78,12 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service apache2 start
 fi
 
+ps cax | grep php-fpm7.3
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service php-fpm7.3 stop
+	/usr/sbin/service php-fpm7.3 start
+fi
+
 ps cax | grep mysql
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop

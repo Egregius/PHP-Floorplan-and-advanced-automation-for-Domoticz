@@ -46,7 +46,7 @@ if ($d['living_set']['m']==0) {
     	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
     ) {
         if ($d['Weg']['s']==0) {
-            if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+            if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
         }
     }
     if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
@@ -63,9 +63,11 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 //    lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
     if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
-		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		if (${'dif'.$k}>=0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-6;$power=0;}
+		elseif (${'dif'.$k}>=0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=1;}
+		elseif (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
+		elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
 		elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
 		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
@@ -76,11 +78,12 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		else {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
-	$rate='A';
-	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
-	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
+
+		$rate='A';
+		if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
+		if ($k=='alex'&&(TIME>strtotime('19:45')||TIME<strtotime('08:00'))) $rate='B';
 	
-	if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
+		if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
 			storemode('daikin'.$k, 4);
 			if ($k=='living') $ip=111;
@@ -101,6 +104,7 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 			storeicon($k.'_set', json_encode($data));
 		}
 	} else {
+		$power=0;
 		if ($daikin->pow!=$power||$daikin->mode!=4) {
 			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);

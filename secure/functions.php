@@ -873,7 +873,7 @@ function bosepreset($pre,$ip=101)
     if ($pre<1||$pre>6) return;
     bosekey("PRESET_$pre", 0, $ip, true);
 }
-function bosezone($ip,$forced=false)
+function bosezone($ip,$forced=false,$vol='')
 {
     $d=fetchdata();
 	if (TIME>strtotime('20:00')) $preset='PRESET_6';
