@@ -816,7 +816,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								temp=localStorage.getItem(device.toString().replace("_set", "_temp"));
 								dif=temp-$value;
-								if(heatingset==2||device=='zolder_set'||device=='badkamer_set'){
+								if(heatingset>=1||device=='zolder_set'||device=='badkamer_set'){
 									if(dif>0.2)circle="hot";
 									else if(dif<0)circle="cold";
 									else circle="grey";
@@ -1434,7 +1434,9 @@ function initview(){
 
 function setpoint(device){
 	level=localStorage.getItem(device+'_set');
-	icon=JSON.parse(localStorage.getItem(device+'_set_icon'));
+	try{
+		icon=JSON.parse(localStorage.getItem(device+'_set_icon'));
+	}catch{}
 	daikin=JSON.parse(localStorage.getItem('daikin'+device+'_value'));
 	heatingset=localStorage.getItem('heating');
 	temp=localStorage.getItem(device+'_temp');
