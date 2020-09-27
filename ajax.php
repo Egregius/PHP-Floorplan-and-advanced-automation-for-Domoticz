@@ -260,8 +260,26 @@ if ($home==true) {
 			storeicon($_REQUEST['device'], json_encode($data));
 			if ($_REQUEST['action']=='Normal') {
 				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1');
+				if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
+					$low=40;
+				} elseif ($d['buiten_temp']['s']< -5||$d['buiten_temp']['s']>35) {
+					$low=60;
+				} else {
+					$low=50;
+				}
+				sleep(1);
+				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
 			} elseif ($_REQUEST['action']=='Eco') {
 				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
+				if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
+					$low=40;
+				} elseif ($d['buiten_temp']['s']< -5||$d['buiten_temp']['s']>35) {
+					$low=60;
+				} else {
+					$low=50;
+				}
+				sleep(1);
+				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
 			} elseif ($_REQUEST['action']=='Power') {
 				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=1');
 				sleep(1);
