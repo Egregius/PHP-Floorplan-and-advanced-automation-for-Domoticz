@@ -13,7 +13,6 @@ crontab -e
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then
-    NOW=$(date +"%Y-%m-%d %H:%M:%S")
     MINUTE=$(date +"%M")
     CRON=""
     if [ $(($MINUTE%2)) -eq 0 ] ; then
@@ -66,7 +65,6 @@ else
 		else
 			/usr/sbin/service domoticz stop
 			/usr/sbin/service domoticz start
-			#shutdown -r now
 		fi
 	fi
 fi
