@@ -863,13 +863,11 @@ function ajax(Update=$LastUpdateTime){
 								
 								// Daikin set point
 								if(heatingset==-2||heatingset>0){
-									console.log(device+' ok');
 									if(device=='alex_set'||device=='living_set'||device=='kamer_set'){
 										var obj = JSON.parse($icon);
 										html+='<br>';
 										if(obj.power==0)html+='Off<br>';
 										else html+=obj.set+'  '+obj.fan+'<br>';
-										console.log(device+' ok in if');
 									}
 								}
 								
