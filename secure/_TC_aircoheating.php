@@ -67,7 +67,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=1;}
 		elseif (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
 		elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
+		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
 		elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
 		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
@@ -79,34 +79,62 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		else {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
 		
-		if ($d[$k.'_temp']['icon']>0.15) $d[$k.'_set']['s']=$d[$k.'_set']['s']-1;
-		elseif ($d[$k.'_temp']['icon']>0.05) $d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;
-		elseif ($d[$k.'_temp']['icon']<0.15) $d[$k.'_set']['s']=$d[$k.'_set']['s']+1;
-		elseif ($d[$k.'_temp']['icon']<0.05) $d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;
+		if ($d[$k.'_temp']['icon']>0.15&&${'dif'.$k}>=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']-1;
+		elseif ($d[$k.'_temp']['icon']>0.05&&${'dif'.$k}>=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;
+		elseif ($d[$k.'_temp']['icon']<0.2&&${'dif'.$k}<=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']+1;
+		elseif ($d[$k.'_temp']['icon']<0.1&&${'dif'.$k}<=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;
 		
 		$rate='A';
 		if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 		if ($k=='alex'&&(TIME>strtotime('19:45')||TIME<strtotime('08:00'))) $rate='B';
 	
-		if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
-			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
-			storemode('daikin'.$k, 4);
-			if ($k=='living') $ip=111;
-			elseif ($k=='kamer') $ip=112;
-			elseif ($k=='alex') $ip=113;
+		$daikin=json_decode($d['daikin'.$k]['s']);
+		if ($daikin->adv == '') {
 			$streamer=0;
-			
-			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
-			$data['mode']=4;
-			$data['fan']=$rate;
-			$data['set']=$d[$k.'_set']['s'];
-			if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
-				sleep(1);
-				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
-				$data['streamer']=$streamer;
+			$powermode=0;
+		} else if (strstr($daikin->adv, '/')) { 
+			$advs=explode("/", $daikin->adv);
+			if ($advs[1]==13) $streamer=1;
+			else if ($adv[1]=='') $streamer=0;
+			if ($advs[0]==2) $powermode=2;
+			else if ($advs[0]==12) $powermode=1;
+			else $powermode=0;
+		} else {
+			if ($daikin->adv==13) {
+				$streamer=1;
+				$powermode=0; //Normal
+			} else if ($daikin->adv==12) {
+				$streamer=0;
+				$powermode=1; // Eco
+			} else if ($daikin->adv==2) {
+				$streamer=0;
+				$powermode=2; // Power
+			} else if ($daikin->adv=='') {
+				$streamer=0;
+				$powermode=0;
 			}
-			storeicon($k.'_set', json_encode($data));
+		}
+		if ($powermode<2) {
+			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
+				daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
+				storemode('daikin'.$k, 4);
+				if ($k=='living') $ip=111;
+				elseif ($k=='kamer') $ip=112;
+				elseif ($k=='alex') $ip=113;
+				$streamer=0;
+			
+				$data=json_decode($d[$k.'_set']['icon'], true);
+				$data['power']=$power;
+				$data['mode']=4;
+				$data['fan']=$rate;
+				$data['set']=$d[$k.'_set']['s'];
+				if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
+					sleep(1);
+					file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
+					$data['streamer']=$streamer;
+				}
+				storeicon($k.'_set', json_encode($data));
+			}
 		}
 	} else {
 		$power=0;

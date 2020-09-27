@@ -15,19 +15,25 @@ echo '<pre>';
 
 
 //$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+speakToGoogleMini();
 
-	if (!isset($db)) $db=dbconnect();
-	$result=$db->query("SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(tobi) AS tobi, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` ORDER BY `stamp`  DESC LIMIT 0,15");
-	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-		$avg=$row;
-	}
-	print_r($avg);/*
-	$diff=$status-$avg;
-	if ($d[$n.'_temp']['icon']!=$diff) {
-		storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
-	}*/
-	
-	
+function speakToGoogleMini()
+{
+	$jsonString = json_encode(array("text" => "testje"));
+
+	// You can directly replace your JSON string with $jsonString variable.
+	$ch = curl_init('http://192.168.1.143/hello-form');
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+	curl_setopt($ch, CURLOPT_PORT, 1880);
+    	curl_setopt($ch, CURLOPT_POST, 1);
+	//curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, "text=testje");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+	$result = curl_exec($ch);
+	curl_close($ch);
+}	
 	
 
 /*-------------------------------------------------*/

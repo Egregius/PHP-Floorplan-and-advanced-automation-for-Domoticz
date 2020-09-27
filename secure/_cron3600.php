@@ -309,23 +309,69 @@ if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 	$low=50;
 	$high=70;
 }
-
-if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
-	file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+$daikin=json_decode($d['daikinliving']['s']);
+if ($daikin->adv == '') {
+	$powermode=0;
+} else if (strstr($daikin->adv, '/')) { 
+	$advs=explode("/", $daikin->adv);
+	if ($advs[0]==2) $powermode=2;
+	else if ($advs[0]==12) $powermode=1;
+	else $powermode=0;
 } else {
-	file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	if ($daikin->adv==13)  $powermode=0; //Normal
+	else if ($daikin->adv==12)  $powermode=1; // Eco
+	else if ($daikin->adv==2)  $powermode=2; // Power
+	else if ($daikin->adv=='')  $powermode=0;
 }
-if (TIME>=strtotime('5:00')&&TIME<strtotime('21:00')) {
-	file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+if ($powermode<2) {
+	if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
+		file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	} else {
+		file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	}
+}
+$daikin=json_decode($d['daikinkamer']['s']);
+if ($daikin->adv == '') {
+	$powermode=0;
+} else if (strstr($daikin->adv, '/')) { 
+	$advs=explode("/", $daikin->adv);
+	if ($advs[0]==2) $powermode=2;
+	else if ($advs[0]==12) $powermode=1;
+	else $powermode=0;
 } else {
-	file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	if ($daikin->adv==13)  $powermode=0; //Normal
+	else if ($daikin->adv==12)  $powermode=1; // Eco
+	else if ($daikin->adv==2)  $powermode=2; // Power
+	else if ($daikin->adv=='')  $powermode=0;
 }
-if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) {
-	file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+if ($powermode<2) {
+	if (TIME>=strtotime('5:00')&&TIME<strtotime('21:00')) {
+		file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	} else {
+		file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	}
+}
+$daikin=json_decode($d['daikinalex']['s']);
+if ($daikin->adv == '') {
+	$powermode=0;
+} else if (strstr($daikin->adv, '/')) { 
+	$advs=explode("/", $daikin->adv);
+	if ($advs[0]==2) $powermode=2;
+	else if ($advs[0]==12) $powermode=1;
+	else $powermode=0;
 } else {
-	file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	if ($daikin->adv==13)  $powermode=0; //Normal
+	else if ($daikin->adv==12)  $powermode=1; // Eco
+	else if ($daikin->adv==2)  $powermode=2; // Power
+	else if ($daikin->adv=='')  $powermode=0;
 }
-
+if ($powermode<2) {
+	if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) {
+		file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	} else {
+		file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	}
+}
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='living') $ip=111;

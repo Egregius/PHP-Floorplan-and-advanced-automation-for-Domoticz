@@ -13,10 +13,11 @@ $user='cron120';
 
 $items=array('buiten', 'living', 'badkamer', 'kamer', 'tobi', 'alex', 'zolder');
 
-if (!isset($db)) $db=dbconnect();
 $stamp=strftime("%F %T", TIME-900);
 echo $stamp.'<br>';
-$result=$db->query("SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(tobi) AS tobi, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'");
+$sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(tobi) AS tobi, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
+$db=dbconnect();
+$result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row;
 }
