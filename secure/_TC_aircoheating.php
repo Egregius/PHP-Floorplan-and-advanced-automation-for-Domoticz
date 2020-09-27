@@ -70,7 +70,7 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
 		elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}

@@ -789,16 +789,16 @@ function ajax(Update=$LastUpdateTime){
 									else if($value>22)elem.style.color="#F88";
 									else if($value>20)elem.style.color="#FAA";
 									else elem.style.color=null;
-									if($icon=="up")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendup.png" height="14px" width="15px"></div>';
-									else if($icon=="down")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trenddown.png" height="14px" width="15px"></div>';
-									else if($icon=="red")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="14px" width="15px"></div>';
-									else if($icon=="blue")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="14px" width="15px"></div>';
-									else if($icon=="red3")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="28px" width="15px"></div>';
-									else if($icon=="blue3")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="28px" width="15px"></div>';
-									else if($icon=="red4")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="42px" width="15px"></div>';
-									else if($icon=="blue4")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="42px" width="15px"></div>';
-									else if($icon=="red5")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="56px" width="15px"></div>';
-									else if($icon=="blue5")html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="56px" width="15px"></div>';
+									if($icon==0.5)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="56px" width="15px"></div>';
+									else if($icon==0.4)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="42px" width="15px"></div>';
+									else if($icon==0.3)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="28px" width="15px"></div>';
+									else if($icon==0.2)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendred.png" height="14px" width="15px"></div>';
+									else if($icon==0.1)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendup.png" height="14px" width="15px"></div>';
+									else if($icon==-0.1)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trenddown.png" height="14px" width="15px"></div>';
+									else if($icon==-0.2)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="14px" width="15px"></div>';
+									else if($icon==-0.3)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="28px" width="15px"></div>';
+									else if($icon==-0.4)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="42px" width="15px"></div>';
+									else if($icon==-0.5)html='<div class="fix" style="top:10px;left:13px;"><img src="https://home.egregius.be/images/trendblue.png" height="56px" width="15px"></div>';
 									else html="";
 									document.getElementById(device).insertAdjacentHTML('beforeend', html);
 								}
