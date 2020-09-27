@@ -14,26 +14,21 @@ require 'functions.php';
 echo '<pre>';
 
 
-foreach (array('living', 'kamer', 'alex') as $k) {
-	echo $k.'<br>';
-	if ($k=='living') $ip=111;
-	elseif ($k=='kamer') $ip=112;
-	elseif ($k=='alex') $ip=113;
-	sleep(2);
-	$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_week_power_ex');
-	$data=explode(',', $data);
-	/*if ($data[0]=='ret=OK') {
-		$curr_day_heat=explode('=', $data[1]);
-		${$k.'heat'}=array_sum(explode('/', $curr_day_heat[1]));
-		$prev_1day_heat=explode('=', $data[2]);
-		${$k.'prevheat'}=array_sum(explode('/', $prev_1day_heat[1]));
-		$curr_day_cool=explode('=', $data[3]);
-		${$k.'cool'}=array_sum(explode('/', $curr_day_cool[1]));
-		$prev_1day_cool=explode('=', $data[4]);
-		${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
+//$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+
+	if (!isset($db)) $db=dbconnect();
+	$result=$db->query("SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(tobi) AS tobi, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` ORDER BY `stamp`  DESC LIMIT 0,15");
+	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+		$avg=$row;
+	}
+	print_r($avg);/*
+	$diff=$status-$avg;
+	if ($d[$n.'_temp']['icon']!=$diff) {
+		storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 	}*/
-	print_r($data);
-}
+	
+	
+	
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
