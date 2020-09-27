@@ -91,17 +91,6 @@ if (past('diepvries_temp')>7200) {
 	);
 }
 
-$items=array('buiten_temp', 'living_temp', 'badkamer_temp', 'kamer_temp', 'tobi_temp', 'alex_temp', 'zolder_temp');
-foreach ($items as $i) {
-    if (past($i)>900) {
-        storeicon($i, 0, basename(__FILE__).':'.__LINE__);
-    }
-}
-foreach ($items as $i) {
-	if ($d[$i]['m']==1&&past($i)>21600) {
-		storemode($i, 0, basename(__FILE__).':'.__LINE__);
-	}
-}
 if ($d['auto']['s']!='On') {
 	if (past('auto')>10795) {
 		sw('auto', 'On', basename(__FILE__).':'.__LINE__);

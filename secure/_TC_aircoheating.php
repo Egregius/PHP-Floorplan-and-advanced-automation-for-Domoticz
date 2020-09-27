@@ -55,7 +55,7 @@ if ($d['living_set']['m']==0) {
     }
 }
 $bigdif=100;
-foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
+foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
     if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
     $daikin=json_decode($d['daikin'.$k]['s']);
@@ -78,7 +78,10 @@ foreach (array('living'/*, 'kamer', 'alex'*/) as $k) {
 		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		else {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
-
+		
+		if ($d[$k.'_temp']['icon']>0.05) $d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;
+		elseif ($d[$k.'_temp']['icon']<0.05) $d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;
+		
 		$rate='A';
 		if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
 		if ($k=='alex'&&(TIME>strtotime('19:45')||TIME<strtotime('08:00'))) $rate='B';
