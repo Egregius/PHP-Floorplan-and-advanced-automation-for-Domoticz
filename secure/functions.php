@@ -1193,7 +1193,20 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $
 
 }
 
-
+function RefreshZwave($node){
+	$devices=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=openzwavenodes&idx=3',false),true);
+	foreach($devices['result'] as $devozw)
+		if($devozw['NodeID']==$node){
+			$device=$devozw['Description'].' '.$devozw['Name'];
+			break;
+		}
+	if(!isset($device))exit;
+	for($k=1;$k<=5;$k++){
+		$result=file_get_contents('http://127.0.0.1:8080/ozwcp/refreshpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'racp','node'=>$node)),),)));
+		if($result==='OK')break;
+		sleep(1);
+	}
+}
 function human_filesize($bytes,$dec=2){
 	$size=array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
 	$factor=floor((strlen($bytes)-1)/3);
