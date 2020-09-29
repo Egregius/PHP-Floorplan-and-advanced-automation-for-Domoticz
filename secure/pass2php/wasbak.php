@@ -13,10 +13,10 @@ if ($status=='On') {
     if ($d['keuken']['s']=='On') {
         sw('keuken', 'Off',basename(__FILE__).':'.__LINE__);
     }
+    if ($d['GroheRed']['s']=='Off') {
+    	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+    }
 } else {
-    /*if ($d['pirkeuken']['s']=='Off') {
-        ud('pirkeuken', 0, 'On');
-    }*/
     if ($d['zon']['s']<$zonkeuken&&$d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['auto']['s']) {
         sw('keuken', 'On',basename(__FILE__).':'.__LINE__);
     }

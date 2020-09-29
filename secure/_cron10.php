@@ -46,14 +46,8 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['pirinkom']['s']=='Off'
 		&&past('pirinkom')>=19
-		&&$d['pirhall']['s']=='Off'
-		&&past('pirhall')>=19
 		&&past('deurwc')>=19
 		&&past('deurinkom')>=19
-		&&past('deurkamer')>=19
-		&&past('deurbadkamer')>=19
-		&&past('deurtobi')>=19
-		&&past('deuralex')>=19
 		&&past('inkom')>=19
 		&&past('hall')>=19
 	) {
@@ -64,6 +58,22 @@ if ($d['auto']['s']=='On') {
 				break;
 			}
 		}
+	} else {
+		if ($d['pirinkom']['s']=='On'
+			&&$d['zon']['s']==0
+		) {
+			finkom();
+		}
+	}
+	if ($d['pirhall']['s']=='Off'
+		&&past('pirhall')>=19
+		&&past('deurkamer')>=19
+		&&past('deurbadkamer')>=19
+		&&past('deurtobi')>=19
+		&&past('deuralex')>=19
+		&&past('hall')>=19
+	) {
+		$items=array(31,28,25,22,0);
 		foreach ($items as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
@@ -71,11 +81,6 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['pirinkom']['s']=='On'
-			&&$d['zon']['s']==0
-		) {
-			finkom();
-		}
 		if ($d['pirhall']['s']=='On'
 			&&$d['zon']['s']==0
 		) {
@@ -95,13 +100,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['GroheRed']['s']=='On') {
 		if ($d['wasbak']['s']=='Off'
 			&&$d['kookplaat']['s']=='Off'
-			&&past('GroheRed')>110
 			&&$d['GroheRed']['m']==0
 		) {
 			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-		}
-		if (past('GroheRed')>1200) {
-			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		if (past('GroheRed')>120
