@@ -9,13 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/functions.php';
-$d=fetchdata();
-if ($d['Weg']['s']>0) {
-    die('Slapen of niet thuis');
-}
-if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken/*&&past('deurbel')>15*/) {
-	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion') {
+
+if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
+	require 'secure/functions.php';
+	$d=fetchdata();
+	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion'&&$d['Weg']['s']==0) {
 		if ($d['lgtv']['s']=='On') {
 		    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging voordeur" 192.168.2.27');
 		}
