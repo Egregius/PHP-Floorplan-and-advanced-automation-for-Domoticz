@@ -14,20 +14,17 @@ $d=fetchdata();
 if ($d['Weg']['s']>0) {
     die('Slapen of niet thuis');
 }
-if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken&&past('deurbel')>15) {
+if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken/*&&past('deurbel')>15*/) {
 	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion') {
 		if ($d['lgtv']['s']=='On') {
 		    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging voordeur" 192.168.2.27');
 		}
-		if ($d['Xvol']['s']!=5) {
-		    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-		}
-		if (past('Xbel')>60) {
+//		if (past('Xbel')>60) {
 			if ($d['Xvol']['s']!=5) {
 			    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 			}
 			sl('Xbel', 20, basename(__FILE__).':'.__LINE__);
-		}
+//		}
 
 	} else {
 		shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
