@@ -14,10 +14,7 @@ $d=fetchdata();
 if ($d['Weg']['s']>0) {
     die('Slapen of niet thuis');
 }
-if (past('Xlight')<60) {
-    die('To soon');
-}
-if (past('belknop')<60) {
+if (past('XBel')<60) {
     die('To soon');
 }
 if ($d['poortrf']['s']=='On') {
