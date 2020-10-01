@@ -25,9 +25,9 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		}
 	} else {
 		echo 'Doorbell';
-		shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
 		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
 		shell_exec('curl -s "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
 		telegram('Deurbel', true, 2);
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
