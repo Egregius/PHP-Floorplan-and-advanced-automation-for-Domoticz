@@ -15,25 +15,14 @@ echo '<pre>';
 
 
 //$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-speakToGoogleMini();
 
-function speakToGoogleMini()
-{
-	$jsonString = json_encode(array("text" => "testje"));
-
-	// You can directly replace your JSON string with $jsonString variable.
-	$ch = curl_init('http://192.168.1.143/hello-form');
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-	curl_setopt($ch, CURLOPT_PORT, 1880);
-    	curl_setopt($ch, CURLOPT_POST, 1);
-	//curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, "text=testje");
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-	$result = curl_exec($ch);
-	curl_close($ch);
-}	
+$hour=date("H");
+echo $hour;
+if ($hour%2==0) {
+	echo 'Even hour';
+} else {
+	echo 'Odd hour';
+}
 	
 
 /*-------------------------------------------------*/
