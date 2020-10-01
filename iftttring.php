@@ -9,11 +9,11 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-
+require 'secure/functions.php';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
-	require 'secure/functions.php';
 	$d=fetchdata();
 	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion'&&$d['Weg']['s']==0) {
+		echo 'Motion';
 		if ($d['lgtv']['s']=='On') {
 		    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging voordeur" 192.168.2.27');
 		}
@@ -23,8 +23,9 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			}
 			sl('Xbel', 20, basename(__FILE__).':'.__LINE__);
 //		}
-
+		
 	} else {
+		echo 'Doorbell';
 		shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
 		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
 		shell_exec('curl -s "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
