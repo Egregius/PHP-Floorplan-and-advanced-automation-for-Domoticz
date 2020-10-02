@@ -44,14 +44,8 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['pirinkom']['s']=='Off'
-		&&past('pirinkom')>=19
-		&&past('deurwc')>=19
-		&&past('deurinkom')>=19
-		&&past('inkom')>=19
-		&&past('hall')>=19
-	) {
-		$items=array(31,28,25,22,0);
+	$items=array(32,31,30,29,28,27,26,25,24,23,22,0);
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0) {
 		foreach ($items as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -59,21 +53,11 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['pirinkom']['s']=='On'
-			&&$d['zon']['s']==0
-		) {
+		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']<50) {
 			finkom();
 		}
 	}
-	if ($d['pirhall']['s']=='Off'
-		&&past('pirhall')>=19
-		&&past('deurkamer')>=19
-		&&past('deurbadkamer')>=19
-		&&past('deurtobi')>=19
-		&&past('deuralex')>=19
-		&&past('hall')>=19
-	) {
-		$items=array(31,28,25,22,0);
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0) {
 		foreach ($items as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
@@ -81,9 +65,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['pirhall']['s']=='On'
-			&&$d['zon']['s']==0
-		) {
+		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) {
 			fhall();
 		}
 	}

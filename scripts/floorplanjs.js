@@ -1020,13 +1020,15 @@ function ajaxmedia($ip){
         async: true,
         defer: true,
         success: function(data){
-        	up=human_kb(data['pfsense']['up']*1024);
-        	down=human_kb(data['pfsense']['down']*1024);
+        	try{
+        		up=human_kb(data['pfsense']['up']*1024);
+        		down=human_kb(data['pfsense']['down']*1024);
+        	}catch{}
         	denon=localStorage.getItem('denon');
-			tv=localStorage.getItem('tv');
-			lgtv=localStorage.getItem('lgtv');
+		tv=localStorage.getItem('tv');
+		lgtv=localStorage.getItem('lgtv');
 			
-			try{
+		try{
 				html='<small>&#x21e7;</small> '+up+'<br><small>&#x21e9;</small>'+down;
 	            document.getElementById("pfsense").innerHTML=html;
 	        }catch{}

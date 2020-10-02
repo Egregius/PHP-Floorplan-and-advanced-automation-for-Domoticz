@@ -77,7 +77,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
 		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
-		else {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
+		else {$power=1;}
 		
 		if ($d[$k.'_temp']['icon']>0.15&&${'dif'.$k}>=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']-1;
 		elseif ($d[$k.'_temp']['icon']>0.05&&${'dif'.$k}>=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;
