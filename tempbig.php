@@ -103,8 +103,8 @@ if ($home===true) {
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.strftime("%k:%M:%S", TIME).'</font></a></center></div>';
     echo $legend;
     $args=array(
-    	'width'=>1880,
-    	'height'=>1000,
+    	'width'=>3170,
+    	'height'=>1700,
     	'hide_legend'=>true,
     	'responsive'=>false,
     	'background_color'=>'#000',
