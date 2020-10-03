@@ -14,29 +14,34 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion'&&$d['Weg']['s']==0) {
 		echo 'Motion';
-		shell_exec('curl -s "http://192.168.2.11/telegram.php?beweging=true" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.13/telegram.php?beweging=true" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
-		if ($d['lgtv']['s']=='On') {
-		    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging voordeur" 192.168.2.27');
-		}
-		if (past('Xbel')>60) {
-			if ($d['Xvol']['s']!=5) {
-			    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-			}
-			sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
-		}
-	} else {
-		echo 'Doorbell';
-		shell_exec('curl -s "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.13/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
-		shell_exec('curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
-		telegram('Deurbel', true, 2);
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
+		shell_exec('curl -s "http://192.168.2.11/telegram.php?action=beweging" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.13/telegram.php?action=beweging" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
+		if ($d['Weg']['s']==0) {
+			if ($d['lgtv']['s']=='On') {
+			    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging voordeur" 192.168.2.27');
+			}
+			if (past('Xbel')>60) {
+				if ($d['Xvol']['s']!=5) {
+				    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
+				}
+				sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
+			}
+		}
+	} else {
+		echo 'Doorbell';
+		if ($d['zon']['s']==0) {
+			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+		}
+		shell_exec('curl -s "http://192.168.2.11/telegram.php?action=deurbel" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.13/telegram.php?action=deurbel" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
+		shell_exec('curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
+		telegram('Deurbel', true, 2);
 		if ($d['Weg']['s']==0) {
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['lgtv']['s']=='On') {
@@ -47,8 +52,9 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			    usleep(10000);
 			}
 			sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
+			sleep(2);
+			sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 		}
-		sleep(2);
-		sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
+		
 	}
 }
