@@ -10,11 +10,15 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
+echo __FILE__.'-'.__LINE__.'<br>';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
+	echo __FILE__.'-'.__LINE__.'<br>';
 	$d=fetchdata();
-	if (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='motion') {
+	if (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
+		echo __FILE__.'-'.__LINE__.'<br>';
 		echo 'Motion';
 		if ($d['zon']['s']==0) {
+			echo __FILE__.'-'.__LINE__.'<br>';
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		shell_exec('curl -s "http://192.168.2.11/telegram.php?action=Beweging" > /dev/null 2>/dev/null &');
@@ -22,17 +26,19 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
 		shell_exec('curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &');
 		if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed') {
+			echo __FILE__.'-'.__LINE__.'<br>';
 			if ($d['lgtv']['s']=='On') {
 			    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 			}
 			if (past('Xbel')>60) {
+				echo __FILE__.'-'.__LINE__.'<br>';
 				if ($d['Xvol']['s']!=5) {
 				    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 				}
 				sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
 			}
 		}
-	} elseif (isset($_REQUEST['action'])&&$_REQUEST['action']=='doorbell') {
+	} elseif (isset($_REQUEST['action'])&&$_REQUEST['action']=='Deurbel') {
 		echo 'Doorbell';
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
