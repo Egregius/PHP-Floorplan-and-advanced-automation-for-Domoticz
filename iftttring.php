@@ -12,7 +12,7 @@
 require 'secure/functions.php';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
-	if (isset($_REQUEST['action'])&&$_REQUEST['action']=='motion') {
+	if (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='motion') {
 		echo 'Motion';
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
