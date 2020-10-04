@@ -11,6 +11,9 @@
  **/
 $authenticated=false;
 $home=false;
+session_start();
+if (isset($_SESSION['fails'])&&$_SESSION['fails']>2) die('To many failed attempts');
+
 if (!isset($_SERVER['HTTP_USER_AGENT'])) die('No user agent specified');
 elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Intel Mac')!==false) $udevice='Mac';
 //elseif (strpos($_SERVER['HTTP_USER_AGENT'], '10_15')!==false) $udevice='iPhone';
@@ -59,7 +62,9 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
                 die("Redirecting to:/index.php");
             }
         } else {
-            fail2ban($ipaddress.' FAILED wrong password');
+            if (!isset($_SESSION['fails'])) $_SESSION['fails']=1;
+        	else $_SESSION['fails']=$_SESSION['fails']+1;
+        	fail2ban($ipaddress.' FAILED wrong password');
             $msg="HOME Failed login attempt (Wrong password): ";
             if (isset($_POST['username'])) {
                 $msg.=PHP_EOL."USER=".$_POST['username'];
@@ -102,7 +107,9 @@ if (isset($_POST['username'])&&isset($_POST['password'])) {
 </html>');
         }
     } else {
-        fail2ban($ipaddress.' FAILED unknown user');
+        if (!isset($_SESSION['fails'])) $_SESSION['fails']=1;
+        	else $_SESSION['fails']=$_SESSION['fails']+1;
+        	fail2ban($ipaddress.' FAILED unknown user');
         $msg="HOME Failed login attempt (Unknown user): ";
         if (isset($_POST['username'])) {
             $msg.="__USER=".$_POST['username'];
