@@ -39,8 +39,8 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
 			}
 		}
-	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Deurbel') {
-		echo 'Deurbel';
+	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
+		echo 'DEURBEL';
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -52,7 +52,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['lgtv']['s']=='On') {
-				shell_exec('python3 ../lgtv.py -c send-message -a "Deurbel" 192.168.2.27 > /dev/null 2>/dev/null &');
+				shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
 			}
 			if ($d['Xvol']['s']!=40) {
 			    sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
