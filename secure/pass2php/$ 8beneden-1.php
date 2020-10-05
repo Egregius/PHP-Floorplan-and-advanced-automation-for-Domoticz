@@ -32,4 +32,3 @@ if ($d['zon']['s']==0) {
 		}
 	}
 }
-boseplayinfo(boseplayinfo(saytime().sayweather()));

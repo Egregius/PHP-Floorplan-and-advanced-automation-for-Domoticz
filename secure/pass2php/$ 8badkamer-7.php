@@ -19,8 +19,3 @@ if ($d['badkamervuur1']['s']=='On') {
 }
 douche();
 resetsecurity();
-if ($d['bose102']['s']=='Off') bosezone(102);
-if ($d['bose102']['m']==0&&past('bose102')>300) {
-	boseplayinfo(saytime().sayweather());
-	storemode('bose102', 1);
-}
