@@ -31,13 +31,13 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			if ($d['lgtv']['s']=='On') {
 			    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 			}
-			if (past('Xbel')>60) {
+			//if (past('Xbel')>60) {
 				echo __FILE__.'-'.__LINE__.'<br>';
 				if ($d['Xvol']['s']!=5) {
 				    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 				}
 				sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
-			}
+			//}
 		}
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
 		echo 'DEURBEL';
