@@ -20,7 +20,7 @@ if($home===true) {
 		<meta name="mobile-web-app-capable" content="yes"/>
 		<!-- <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/> -->
 		<style>
-			.item{float:left;background-color:#FF0;margin:20px;width:300px;height:200px;}
+			.item{float:left;background-color:#FF0;margin:20px;width:150px;height:150px;}
 		</style>
 	</head>
 	<body>
@@ -32,9 +32,12 @@ if($home===true) {
 	echo '<pre>';print_r($thumbs);echo '</pre>';
 	foreach ($thumbs as $t) {
 		$th=str_replace('/var/www/html', '', $t);
+		$f=str_replace('.th.jpg', '.jpg', str_replace('.thumbs/', '', $th));
 		echo '
 			<div class="item">
-				<img src="'.$th.'">
+				<a href="'.$f.'">
+					<img src="'.$th.'">
+				</a>
 			</div>';
 	}
 }
