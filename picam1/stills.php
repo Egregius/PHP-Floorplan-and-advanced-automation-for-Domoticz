@@ -18,7 +18,7 @@ if($home===true) {
 		<link rel="shortcut icon" href="/images/Camera.png"/>
 		<link rel="apple-touch-icon" href="/images/Camera.png"/>
 		<meta name="mobile-web-app-capable" content="yes"/>
-		<link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/>
+		<!-- <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/> -->
 	</head>
 	<body>
 		<div class="navbar" role="navigation">
