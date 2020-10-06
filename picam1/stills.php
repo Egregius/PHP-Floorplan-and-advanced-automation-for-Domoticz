@@ -19,6 +19,7 @@ if($home===true) {
 		<link rel="apple-touch-icon" href="/images/Camera.png"/>
 		<meta name="mobile-web-app-capable" content="yes"/>
 		<!-- <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/> -->
+		<link rel="stylesheet" href="/picam1/js-css/simple-lightbox.min.css" />
 		<style>
 			.item{float:left;background-color:#FF0;margin:20px;width:150px;height:150px;}
 		</style>
@@ -27,19 +28,25 @@ if($home===true) {
 		<div class="navbar" role="navigation">
 		        <form method="POST" action="../floorplan.php">
 				<input type="submit" value="Plan" class="btn b7" />
-			</form>';
+			</form>
+		</div>
+		<div class="gallery">';
 	$thumbs=rglob('/var/www/html/picam1/stills/.thumbs/*.jpg');
 	echo '<pre>';print_r($thumbs);echo '</pre>';
 	foreach ($thumbs as $t) {
 		$th=str_replace('/var/www/html', '', $t);
 		$f=str_replace('.th.jpg', '.jpg', str_replace('.thumbs/', '', $th));
+		$t=str_replace('/picam1/stills/motion_', '', $f);
 		echo '
 			<div class="item">
 				<a href="'.$f.'">
 					<img src="'.$th.'">
 				</a>
+				'.$t.'
 			</div>';
 	}
+	echo '
+		</div>';
 }
 
 
@@ -51,3 +58,9 @@ function rglob($pattern, $flags = 0) {
     return $files;
 }
 ?>
+<script src="/picam1/js-css/simple-lightbox.min.js"></script>
+<script>
+    (function() {
+        var $gallery = new SimpleLightbox('.gallery a', {});
+    })();
+</script>
