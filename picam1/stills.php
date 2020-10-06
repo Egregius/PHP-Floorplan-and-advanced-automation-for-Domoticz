@@ -19,15 +19,24 @@ if($home===true) {
 		<link rel="apple-touch-icon" href="/images/Camera.png"/>
 		<meta name="mobile-web-app-capable" content="yes"/>
 		<!-- <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/> -->
+		<style>
+			.item{float:left;background-color:#FF0;margin:20px;width:300px;height:200px;}
+		</style>
 	</head>
 	<body>
 		<div class="navbar" role="navigation">
 		        <form method="POST" action="../floorplan.php">
 				<input type="submit" value="Plan" class="btn b7" />
 			</form>';
-	$thumbs=rglob('/var/www/html/picam1/stills/*.jpg');
+	$thumbs=rglob('/var/www/html/picam1/stills/.thumbs/*.jpg');
 	echo '<pre>';print_r($thumbs);echo '</pre>';
-
+	foreach ($thumbs as $t) {
+		$th=str_replace('/var/www/html', '', $t);
+		echo '
+			<div class="item">
+				<img src="'.$th.'">
+			</div>';
+	}
 }
 
 
