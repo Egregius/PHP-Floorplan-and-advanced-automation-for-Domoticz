@@ -22,7 +22,7 @@ if($home===true) {
 		<link rel="stylesheet" href="/picam1/js-css/simple-lightbox.min.css" />
 		<style>
 			img{width:350px;heigt:auto}
-			.item{float:left;background-color:#333;margin:2px;width:350px;height:305px;font-size:1.4em;}
+			.item{float:left;background-color:#333;margin:2px;width:350px;height:295px;font-size:1.4em;}
 			.gallery{margin-top:80px;}
 		</style>
 	</head>
