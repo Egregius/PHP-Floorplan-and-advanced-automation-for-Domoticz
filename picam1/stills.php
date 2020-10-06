@@ -22,7 +22,7 @@ if($home===true) {
 		<link rel="stylesheet" href="/picam1/js-css/simple-lightbox.min.css" />
 		<style>
 			img{width:350px;heigt:auto}
-			.item{float:left;background-color:#333;margin:2px;width:350px;height:136px;font-size:0.8em;}
+			.item{float:left;background-color:#333;margin:2px;width:350px;height:305px;font-size:1.4em;}
 			.gallery{margin-top:80px;}
 		</style>
 	</head>
@@ -34,6 +34,7 @@ if($home===true) {
 		</div>
 		<div class="gallery">';
 	$thumbs=rglob('/var/www/html/picam1/stills/.thumbs/*.jpg');
+	rsort($thumbs);
 	//echo '<pre>';print_r($thumbs);echo '</pre>';
 	foreach ($thumbs as $t) {
 		$th=str_replace('/var/www/html', '', $t);
