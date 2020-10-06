@@ -55,8 +55,8 @@ if ($home) {
         </form>
         <form method="POST">
           <input type="submit" value="Record" name="Record" class="btn b8"/>
-          <input type="submit" value="Foto" name="Foto" class="btn b8"/>
-          <input type="submit" value="Licht" name="Licht" class="btn b8"/>
+          <input type="submit" value="Foto" name="Foto" class="btn b9"/>
+          <input type="submit" value="Licht" name="Licht" class="btn b9"/>
           <input type="submit" value="Motion" name="Motion" class="btn b8"/>
           <input type="submit" value="Refresh" name="Refresh" class="btn b8"/>
         </form>
@@ -67,7 +67,7 @@ if ($home) {
             <input type="hidden" name="d0" value="'.date("j",time()-86400).'"/>
             <input type="hidden" name="m1" value="'.date("n").'"/>
             <input type="hidden" name="d1" value="'.date("j").'"/>
-            <input type="submit" value="Archief" name="Archief" class="btn b7"/>
+            <input type="submit" value="Archief" name="Archief" class="btn b8"/>
         </form>
         <form method="POST" action="stills.php">
             <input type="hidden" name="type" value="videos"/>
@@ -76,7 +76,7 @@ if ($home) {
             <input type="hidden" name="d0" value="'.date("j",time()-86400).'"/>
             <input type="hidden" name="m1" value="'.date("n").'"/>
             <input type="hidden" name="d1" value="'.date("j").'"/>
-            <input type="submit" value="Stills" name="Stills" class="btn b7"/>
+            <input type="submit" value="Stills" name="Stills" class="btn b8"/>
         </form>
         </div>
         <div class="fix camera1">

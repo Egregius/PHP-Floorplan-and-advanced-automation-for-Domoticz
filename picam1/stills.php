@@ -369,9 +369,9 @@ function restart_page($selected)
 			      </a>";
 		else if ("$scrolled"=="yes") {
 			$thumb_path = $media_array[$index]['thumb_path'];
-			echo "<div style='width:100%; max-width:960px'><video controls width='100%'><source src=\"$file_path\" type='video/mp4'>Your browser does not support the video tag.</video></div>";
-			if (is_file($thumb_path)) echo "<img src=\"$thumb_path\" class='thumbimage'>";
-			else echo "<img src=\"$background_image\" class='thumbimage'>";
+			//echo "<div style='width:100%; max-width:960px'><video controls width='100%'><source src=\"$file_path\" type='video/mp4'>Your browser does not support the video tag.</video></div>";
+			//if (is_file($thumb_path)) echo "<img src=\"$thumb_path\" class='thumbimage'>";
+			//else echo "<img src=\"$background_image\" class='thumbimage'>";
 		}
 		if ("$scrolled"=="yes")	{
 			echo "<div style='margin: auto; overflow: visible;'>";
