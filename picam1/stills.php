@@ -8,7 +8,7 @@ require 'config.php';
 if($home===true) {
 	echo '<html>
 	<head>
-		<title>Oprit</title>
+		<title>Voordeur - Oprit</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,8 +25,8 @@ if($home===true) {
 		        <form method="POST" action="../floorplan.php">
 				<input type="submit" value="Plan" class="btn b7" />
 			</form>';
-	$thumbs=glob('/var/www/html/picam1/archive/*');
-	
+	$years=glob('/var/www/html/picam1/archive/*');
+	foreach ($ 
 	echo '<pre>';print_r($thumbs);echo '</pre>';
 
 }
