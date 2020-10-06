@@ -21,7 +21,8 @@ if($home===true) {
 		<link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/>
 		<link rel="stylesheet" href="/picam1/js-css/simple-lightbox.min.css" />
 		<style>
-			.item{float:left;background-color:#333;margin:2px;width:150px;height:136px;font-size:0.8em;}
+			img{width:350px;heigt:auto}
+			.item{float:left;background-color:#333;margin:2px;width:350px;height:136px;font-size:0.8em;}
 			.gallery{margin-top:80px;}
 		</style>
 	</head>
