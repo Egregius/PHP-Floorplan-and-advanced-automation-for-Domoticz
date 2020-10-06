@@ -60,9 +60,3 @@ function rglob($pattern, $flags = 0) {
     return $files;
 }
 ?>
-<script src="/picam1/js-css/simple-lightbox.min.js"></script>
-<script>
-    (function() {
-        var $gallery = new SimpleLightbox('.gallery a', {});
-    })();
-</script>
