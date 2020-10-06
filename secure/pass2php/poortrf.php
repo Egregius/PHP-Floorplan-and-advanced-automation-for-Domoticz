@@ -11,7 +11,7 @@
  **/
 if ($status=='On') {
     store('Weg', 0, basename(__FILE__).':'.__LINE__);
-    for ($k=1;$k<=60;$k++) {
+    /*for ($k=1;$k<=60;$k++) {
         file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20off');
         if ($http_response_header[0]=='HTTP/1.1 200 OK') {
             break;
@@ -24,9 +24,9 @@ if ($status=='On') {
             break;
         }
         sleep(5);
-    }
+    }*/
 } else {
-    for ($k=1;$k<=60;$k++) {
+   /* for ($k=1;$k<=60;$k++) {
         file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20on');
         if ($http_response_header[0]=='HTTP/1.1 200 OK') {
             break;
@@ -39,5 +39,5 @@ if ($status=='On') {
             break;
         }
         sleep(5);
-    }
+    }*/
 }

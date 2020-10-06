@@ -25,7 +25,7 @@ if($home===true) {
 		        <form method="POST" action="../floorplan.php">
 				<input type="submit" value="Plan" class="btn b7" />
 			</form>';
-	$thumbs=rglob('/var/www/html/picam1/archive/*.jpg');
+	$thumbs=rglob('/var/www/html/picam1/stills/*.jpg');
 	echo '<pre>';print_r($thumbs);echo '</pre>';
 
 }
