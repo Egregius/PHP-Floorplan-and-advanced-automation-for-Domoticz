@@ -25,9 +25,17 @@ if($home===true) {
 		        <form method="POST" action="../floorplan.php">
 				<input type="submit" value="Plan" class="btn b7" />
 			</form>';
-	$years=glob('/var/www/html/picam1/archive/*');
-	foreach ($ 
+	$thumbs=rglob('/var/www/html/picam1/archive/*.jpg');
 	echo '<pre>';print_r($thumbs);echo '</pre>';
 
+}
+
+
+function rglob($pattern, $flags = 0) {
+    $files = glob($pattern, $flags); 
+    foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        $files = array_merge($files, rglob($dir.'/'.basename($pattern), $flags));
+    }
+    return $files;
 }
 ?>
