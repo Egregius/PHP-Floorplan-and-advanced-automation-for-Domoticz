@@ -8,8 +8,8 @@ if ($udevice=='other') {
     $css.="
 input[type=submit]{	color:#ccc;background-color:#555;display:inline-block;cursor:pointer;border:0px solid transparent;-webkit-appearance:none;-webkit-user-select:none;	-moz-user-select:none;-ms-user-select:none;user-select:none;}
 .menu{top:0px;left:0px;width:90%;height:40px;}
-.camera1{top:80px;left:0px;width:50%;height:100%;}
-.camera2{top:80px;left:50%;width:50%;height:100%;}
+.camera1{top:80px;left:0px;width:50%;height:90%;}
+.camera2{top:80px;left:50%;width:50%;height:90%;}
 .camerai{width:100%;height:auto;}
 ";
 } elseif ($udevice=='iPhone'||$udevice=='iPhoneSE') {
