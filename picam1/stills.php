@@ -18,10 +18,11 @@ if($home===true) {
 		<link rel="shortcut icon" href="/images/Camera.png"/>
 		<link rel="apple-touch-icon" href="/images/Camera.png"/>
 		<meta name="mobile-web-app-capable" content="yes"/>
-		<!-- <link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/> -->
+		<link href="/styles/picam1.php?v=6" rel="stylesheet" type="text/css"/>
 		<link rel="stylesheet" href="/picam1/js-css/simple-lightbox.min.css" />
 		<style>
-			.item{float:left;background-color:#FF0;margin:20px;width:150px;height:150px;}
+			.item{float:left;background-color:#333;margin:2px;width:150px;height:136px;font-size:0.8em;}
+			.gallery{margin-top:80px;}
 		</style>
 	</head>
 	<body>
@@ -32,11 +33,11 @@ if($home===true) {
 		</div>
 		<div class="gallery">';
 	$thumbs=rglob('/var/www/html/picam1/stills/.thumbs/*.jpg');
-	echo '<pre>';print_r($thumbs);echo '</pre>';
+	//echo '<pre>';print_r($thumbs);echo '</pre>';
 	foreach ($thumbs as $t) {
 		$th=str_replace('/var/www/html', '', $t);
 		$f=str_replace('.th.jpg', '.jpg', str_replace('.thumbs/', '', $th));
-		$t=str_replace('/picam1/stills/motion_', '', $f);
+		$t=str_replace('_', ' ', str_replace('/picam1/stills/motion_', '', str_replace('.jpg', '', $f)));
 		echo '
 			<div class="item">
 				<a href="'.$f.'">
