@@ -1,13 +1,6 @@
 #!/bin/sh
-wakeonlan -i 192.168.2.10 -p 9 00:11:32:2c:b7:21
-wakeonlan -i 192.168.2.10 -p 9 00:11:32:2c:b7:22
-wakeonlan -i 192.168.2.10 -p 9 00:11:32:2c:b7:23
-wakeonlan -i 192.168.2.10 -p 1599 00:11:32:2c:b7:21
-wakeonlan -i 192.168.2.10 -p 1599 00:11:32:2c:b7:22
-wakeonlan -i 192.168.2.10 -p 1599 00:11:32:2c:b7:23
-wakeonlan -i 192.168.2.255 -p 9 00:11:32:2c:b7:21
-wakeonlan -i 192.168.2.255 -p 9 00:11:32:2c:b7:22
-wakeonlan -i 192.168.2.255 -p 9 00:11:32:2c:b7:23
-wakeonlan -i 192.168.2.255 -p 1599 00:11:32:2c:b7:21
-wakeonlan -i 192.168.2.255 -p 1599 00:11:32:2c:b7:22
-wakeonlan -i 192.168.2.255 -p 1599 00:11:32:2c:b7:23
+action=$1
+curl -s "http://192.168.2.11/telegram.php?action=$action" > /dev/null 2>/dev/null &
+curl -s "http://192.168.2.13/telegram.php?action=$action" > /dev/null 2>/dev/null &
+curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &
+curl -s "http://192.168.2.13/fifo_command.php?cmd=record%20on%2015%2055" > /dev/null 2>/dev/null &
