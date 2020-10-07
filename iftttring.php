@@ -40,7 +40,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		if ($d['zon']['s']==0) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
-		shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
+		shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
 		telegram('Deurbel', true, 2);
 		if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
