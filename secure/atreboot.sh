@@ -1,4 +1,5 @@
 #!/bin/bash
+touch /var/log/fail2ban.log
 service mysql stop
 service domoticz stop
 service apache2 stop
