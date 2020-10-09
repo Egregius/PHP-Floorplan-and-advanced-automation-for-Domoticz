@@ -1018,6 +1018,7 @@ function fbadkamer()
 			} 
         }
     }
+    RefreshZwave(104);
 }
 function fkeuken()
 {
@@ -1029,6 +1030,9 @@ function fkeuken()
             sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
+    RefreshZwave(4);sleep(1);
+    RefreshZwave(6);sleep(1);
+    RefreshZwave(7);sleep(1);
 }
 function finkom()
 {

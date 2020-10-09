@@ -235,12 +235,8 @@ if ($d['Weg']['s']>0){
 if (past('wind')>86) {
 	require('_weather.php');
 }
-if ($d['pirkeuken']['s']=='On') RefreshZwave(4);
-sleep(1);
-if ($d['pirkeuken']['s']=='On') RefreshZwave(6);
-sleep(1);
-if ($d['pirkeuken']['s']=='On') RefreshZwave(7);
-sleep(1);
-if ($d['pirinkom']['s']=='On') RefreshZwave(20);
-sleep(1);
-if ($d['lichtbadkamer']['s']>0) RefreshZwave(104);
+//if ($d['pirkeuken']['s']=='On') RefreshZwave(4);sleep(1);
+//if ($d['pirkeuken']['s']=='On') RefreshZwave(6);sleep(1);
+//if ($d['pirkeuken']['s']=='On') RefreshZwave(7);sleep(1);
+//if ($d['pirinkom']['s']=='On') RefreshZwave(20);sleep(1);
+//if ($d['lichtbadkamer']['s']>0) RefreshZwave(104);
