@@ -1296,9 +1296,11 @@ class Ring {
         
         $response = $this->_httpCall('POST', $this->_urlSession, $postData, $username, $password);
         
-        print "Authenticated as ".$response->profile->first_name.' '.$response->profile->last_name."\n";
-        print "Authentication token is ".$response->profile->authentication_token."\n";
-        $this->_authToken = $response->profile->authentication_token;
+        if(isset($response->profile->first_name)) {
+		print "Authenticated as ".$response->profile->first_name.' '.$response->profile->last_name."\n";
+		print "Authentication token is ".$response->profile->authentication_token."\n";
+		$this->_authToken = $response->profile->authentication_token;
+	}
     }
 
     function poll() {
@@ -1308,22 +1310,23 @@ class Ring {
         $data['auth_token']  = $this->_authToken;
         $response = $this->_httpCall('GET', $this->_urlDings, $data);
 
-        foreach($response as $status) {
-            foreach($status as $k => $v) {
-                $result[$status->id][$k] = $v;
-            }
-            $result[$status->id]['is_motion']   = false;
-            $result[$status->id]['is_ding']     = false;
-            if ($status->state == 'ringing') {
-                if ($status->kind == 'motion') {
-                    $result[$status->id]['is_motion'] = true;
-                }
-                if ($status->kind =='ding') {
-                    $result[$status->id]['is_ding'] = true;
-                }
-            }
+        if($response) {
+		foreach($response as $status) {
+		    foreach($status as $k => $v) {
+			$result[$status->id][$k] = $v;
+		    }
+		    $result[$status->id]['is_motion']   = false;
+		    $result[$status->id]['is_ding']     = false;
+		    if ($status->state == 'ringing') {
+			if ($status->kind == 'motion') {
+			    $result[$status->id]['is_motion'] = true;
+			}
+			if ($status->kind =='ding') {
+			    $result[$status->id]['is_ding'] = true;
+			}
+		    }
+		}
         }
-        
         if ($result) {
             return $result;
         } else {
