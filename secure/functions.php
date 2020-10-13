@@ -970,13 +970,13 @@ function fliving()
     global $d;
     if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
         if ($d['zon']['s']==0) {
-            if ($d['keuken']['s']=='Off') {
+            if ($d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) {
                 sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
             }
-            if ($d['bureel']['s']=='Off') {
+            if ($d['bureel']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) {
                 sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
             }
-            if ($d['jbl']['s']=='Off') {
+            if ($d['jbl']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) {
                 sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
             }
         }
