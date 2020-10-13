@@ -632,7 +632,7 @@ if ($d['zon']['s']>$d['el']['s']+500) {
 } else {
 	$set=-18.5;
 }
-//$set=-30;
+//$set=-40;
 
 if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) {
     sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
