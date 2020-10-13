@@ -24,7 +24,7 @@ print "My devices:\n";
 var_dump($bell->devices());
 
 print "Start polling for motion or dings...\n";
-for($x=1;$x<=10;$x++) {
+for($x=1;$x<=1;$x++) {
 	$states = $bell->poll();
 	if ($states) {
 	    foreach($states as $state) {
@@ -37,7 +37,7 @@ for($x=1;$x<=10;$x++) {
 		}
 	    }
 	}
-	sleep(5);
+//	sleep(5);
 }
 	
 
