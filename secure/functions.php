@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 7.4
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -1018,7 +1018,6 @@ function fbadkamer()
 			} 
         }
     }
-    RefreshZwave(104);
 }
 function fkeuken()
 {
@@ -1030,9 +1029,6 @@ function fkeuken()
             sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
         }
     }
-    RefreshZwave(4);sleep(1);
-    RefreshZwave(6);sleep(1);
-    RefreshZwave(7);sleep(1);
 }
 function finkom()
 {
