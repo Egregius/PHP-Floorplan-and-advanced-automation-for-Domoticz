@@ -1279,7 +1279,7 @@ class Ring {
 
     function authenticate($username, $password) {
         $postData['device[os]']                             = 'android';
-        $postData['device[hardware_id]']                    = '180940d0-7285-3366-8c64-6ea91491982b';
+        $postData['device[hardware_id]']                    = '480950d0-7285-3366-8c64-6ea91491982b';
         $postData['device[app_brand]']                      = 'ring';
         $postData['device[metadata][device_model]']         = 'VirtualBox';
         $postData['device[metadata][resolution]']           = '600x800';
