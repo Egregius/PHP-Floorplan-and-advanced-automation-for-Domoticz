@@ -103,37 +103,34 @@ if (!empty($data)) {
     }
 }
 
-$sunrise=json_decode(
-    file_get_contents(
-        'https://api.sunrise-sunset.org/json?lat='
-        .$lat.'&lng='
-        .$lon.'&date=today&formatted=0'
-    ),
-    true
-);
-if (isset($sunrise['results']['civil_twilight_begin'])) {
-    if (strtotime($sunrise['results']['civil_twilight_begin'])!=$d['civil_twilight']['s']) {
-        store('civil_twilight', strtotime($sunrise['results']['civil_twilight_begin']), basename(__FILE__).':'.__LINE__);
-    }
-    if (strtotime($sunrise['results']['civil_twilight_end'])!=$d['civil_twilight']['m']) {
-        storemode('civil_twilight', strtotime($sunrise['results']['civil_twilight_end']), basename(__FILE__).':'.__LINE__);
-    }
-    if (TIME>$d['civil_twilight']['s']&&TIME<$d['civil_twilight']['m']) {
-        $uv=json_decode(
-            shell_exec(
-                "curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"
-            ),
-            true
-        );
-        if (isset($uv['result'])) {
-            if ($uv['result']['uv']!=$d['uv']['s']) {
-                store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
-            }
-            if ($uv['result']['uv_max']!=$d['uv']['m']) {
-                storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
-            }
-        }
-    }
+$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
+if (isset($data['CivTwilightStart'])) {
+	$time=TIME;
+	$name='civil_twilight';
+	$status=strtotime($data['CivTwilightStart']);
+	$mode=strtotime($data['CivTwilightEnd']);
+	$db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$status','$mode','$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', t='$time';");
+	$name='Sun';
+	$status=strtotime($data['Sunrise']);
+	$mode=strtotime($data['Sunset']);
+	$icon=strtotime($data['SunAtSouth']);
+	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
+	if (TIME>$status&&TIME<$mode) {
+		$uv=json_decode(
+			shell_exec(
+				"curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"
+			),
+			true
+		);
+		if (isset($uv['result'])) {
+			if ($uv['result']['uv']!=$d['uv']['s']) {
+				store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
+			}
+			if ($uv['result']['uv_max']!=$d['uv']['m']) {
+				storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
+			}
+		}
+	}
 }
 
 //Update and clean SQL database

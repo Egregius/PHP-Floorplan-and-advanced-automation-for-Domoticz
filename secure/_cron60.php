@@ -392,15 +392,9 @@ if ($d['auto']['s']=='On') {
     ) {
         if ($d['dampkap']['s']=='On') {
             $tdampkap=past('dampkap');
-            if ($d['dampkap']['m']==1) {
+            if (TIME>$d['dampkap']['m']) {
                 if ($tdampkap>600) {
                     double('dampkap', 'Off');
-                    storemode('dampkap', 0, basename(__FILE__).':'.__LINE__);
-                }
-            } elseif ($d['dampkap']['m']==2) {
-                if ($tdampkap>1200) {
-                    double('dampkap', 'Off');
-                    storemode('dampkap', 0, basename(__FILE__).':'.__LINE__);
                 }
             } elseif (past('dampkap')>350) {
                 double('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
