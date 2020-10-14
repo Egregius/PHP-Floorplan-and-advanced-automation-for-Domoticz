@@ -16,29 +16,8 @@ echo '<pre>';
 
 //$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 
-$bell = new Ring();
-print "Authenticating...\n";
-$bell->authenticate($ringusername, $ringpassword);
-
-print "My devices:\n";
-var_dump($bell->devices());
-
-print "Start polling for motion or dings...\n";
-for($x=1;$x<=1;$x++) {
-	$states = $bell->poll();
-	if ($states) {
-	    foreach($states as $state) {
-		if ($state['is_ding']) {
-		    print "Somebody pushed the button!\n";
-		}
-	
-		if ($state['is_motion']) {
-		    print "There's motion in the ocean!\n";
-		}
-	    }
-	}
-//	sleep(5);
-}
+$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
+print_r($data);
 	
 
 /*-------------------------------------------------*/
