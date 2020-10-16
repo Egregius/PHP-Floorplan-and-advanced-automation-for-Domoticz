@@ -360,7 +360,7 @@ if ($d['auto']['s']=='On') {
         sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
     }
     if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
-        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>40) {
+        if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>0) {
             if ($d['jbl']['s']!='Off') {
                 sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
             }
