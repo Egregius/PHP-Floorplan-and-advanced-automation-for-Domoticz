@@ -37,7 +37,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		}
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
 		echo 'DEURBEL';
-		if ($d['zon']['s']==0) {
+		if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');

@@ -241,9 +241,9 @@ if ($home) {
                 <td>Elec</td>
                 <td class="right">'.number_format($row['s'], 0).' W</td>
                 <td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
-            } elseif ($row['n']=='civil_twilight') {
+            } elseif ($row['n']=='civil_twilight'||$row['n']=='Sun') {
                 echo '
-                <td>civil_twilight</td>
+                <td>'.$row['n'].'</td>
                 <td>'.strftime("%k:%M:%S", $row['s']).'</td>
                 <td>'.strftime("%k:%M:%S", $row['m']).'</td>';
             } elseif ($row['n']=='icon') {
