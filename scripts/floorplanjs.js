@@ -344,11 +344,11 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem('tijd_'+device, time);
 							try{
 								html='<td></td><td width="65px">';
-								if($value==0)html+='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral<br><span id="theating"></span></td>';
-								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco cooling<br><span id="theating"></span></td>';
-								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive cooling<br><span id="theating"></span></td>';
-								else if($value==1)html+='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco heating<br><span id="theating"></span></td>';
-								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating<br><span id="theating"></span></td>';
+								if($value==0)html+='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>';
+								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco cooling</td>';
+								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive cooling</td>';
+								else if($value==1)html+='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco heating</td>';
+								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="$ belknop"){
@@ -447,8 +447,8 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="heatingauto"){
 							localStorage.setItem("tijd_"+device, time);
 							try{
-								if($value=="Off")html='<td></td><td width="65px"><img src="images/smoke_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel<br><span id="theatingauto"></span></td>';
-								else html='<td></td><td width="65px"><img src="images/smoke_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch<br><span id="theatingauto"></span></td>';
+								if($value=="Off")html='<td></td><td width="65px"><img src="images/smoke_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>';
+								else html='<td></td><td width="65px"><img src="images/smoke_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch</td>';
 								document.getElementById("heatingauto").innerHTML=html;
 							}catch{}
 						}else if(device=="luifel"){
@@ -914,7 +914,7 @@ function ajax(Update=$LastUpdateTime){
                 else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
                 else elem.style.color=null;
             }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','heatingauto','heating','luifel'];
+            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','luifel'];
             var arrayLength=items.length;
             for (var i=0; i < arrayLength; i++) {
                 try{
