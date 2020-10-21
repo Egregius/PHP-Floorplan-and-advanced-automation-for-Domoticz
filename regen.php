@@ -73,7 +73,7 @@ if ($home===true) {
 				</form>';
 		}
 		echo '<form action="/regen.php" method="POST">';
-		$items=array(1);
+		$items=array(0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40);
 		foreach ($items as $i) {
 			echo '
 					<input type="submit" class="btn b5" name="addregen" value="'.$i.'" style="height:70px"/>';
@@ -326,7 +326,7 @@ if ($home===true) {
 				  },
 				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"},
-				bar:{groupWidth:100}';
+				bar:{groupWidth:60}';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo $chart['script'];
 		echo $chart['div'];
