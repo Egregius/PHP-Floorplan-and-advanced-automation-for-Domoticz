@@ -354,9 +354,9 @@ if ($home===true) {
 			echo '
 					<tr>
 						<td>'.$i['Maand'].'</td>
-						<td> '.$i['Regen'].' mm </td>
+						<td> '.number_format($i['Regen'], 0).' mm </td>
 						<td> '.$i['Normaal'].' mm </td>
-						<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 2, ',', '.').' % </td>
+						<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 0, ',', '.').' % </td>
 					</tr>';
 		}
 		echo '
