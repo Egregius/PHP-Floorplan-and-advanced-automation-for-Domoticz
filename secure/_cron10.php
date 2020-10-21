@@ -45,7 +45,7 @@ if ($d['auto']['s']=='On') {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	$items=array(32,31,30,29,28,27,26,25,24,23,22,0);
-	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('pirinkom')>30) {
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
 		foreach ($items as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -57,7 +57,7 @@ if ($d['auto']['s']=='On') {
 			finkom();
 		}
 	}
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('pirhall')>30) {
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('pirhall')>30&&past('deurbadkamer')>30&&past('deurkamer')>30&&past('deurtobi')>30&&past('deuralex')>30) {
 		foreach ($items as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);

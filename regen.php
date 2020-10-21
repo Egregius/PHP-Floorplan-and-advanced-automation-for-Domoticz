@@ -73,9 +73,10 @@ if ($home===true) {
 				</form>';
 		}
 		echo '<form action="/regen.php" method="POST">';
-		for ($x=1;$x<=30;$x++) {
+		$items=array(1);
+		foreach ($items as $i) {
 			echo '
-					<input type="submit" class="btn b5" name="addregen" value="'.$x.'" style="height:70px"/>';
+					<input type="submit" class="btn b5" name="addregen" value="'.$i.'" style="height:70px"/>';
 		}
 		echo '
 				</form>';
