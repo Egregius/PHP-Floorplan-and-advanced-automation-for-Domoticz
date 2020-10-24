@@ -16,9 +16,9 @@ echo '<pre>';
 
 //$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 
-$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
-print_r($data);
-	
+echo 'TIME='.TIME.' M='.strtotime($d['dampkap']['m']);
+
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
