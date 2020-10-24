@@ -13,10 +13,11 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
+$d=fetchdata();
 
 //$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-
-echo 'TIME='.TIME.' M='.strtotime($d['dampkap']['m']);
+echo __LINE__.' '.$d['dampkap']['m'];
+echo 'TIME='.TIME.' M='.$d['dampkap']['m'];
 
 
 

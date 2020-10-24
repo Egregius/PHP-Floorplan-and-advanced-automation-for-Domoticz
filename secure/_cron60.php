@@ -393,8 +393,8 @@ if ($d['auto']['s']=='On') {
 		||$d['achterdeur']['s']=='Open'
 	) {
 		if ($d['dampkap']['s']=='On') {
-			if (TIME>strtotime($d['dampkap']['m'])) {
-					lg('TIME='.TIME.' M='.strtotime($d['dampkap']['m']));
+			if (TIME>$d['dampkap']['m']) {
+					lg('TIME='.TIME.' M='.$d['dampkap']['m']);
 					double('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}

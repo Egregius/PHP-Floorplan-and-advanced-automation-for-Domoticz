@@ -81,7 +81,7 @@ function getStringFromPropertyAndValue($property, $value)
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OPcache DiskStation</title>
+    <title>OPcache Domoticz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="//www.php.net/favicon.ico">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
