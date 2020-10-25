@@ -310,6 +310,9 @@ if ($home==true) {
 				shell_exec('secure/wakenas.sh');
 			} else {
 				call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
+				if ($_REQUEST['device']=='dampkap'&&$_REQUEST['action']=='On') {
+					storemode('dampkap', TIME+1800);
+				}
 			}			
 		}
     } 

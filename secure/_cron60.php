@@ -619,12 +619,12 @@ if ($d['auto']['s']=='On') {
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {
 	sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 }
+
 if ($d['zon']['s']>$d['el']['s']+500) {
-	$set=-24;
+	$set=$d['diepvries']['m']-5;
 } else {
-	$set=-18.5;
+	$set=$d['diepvries']['m'];
 }
-//$set=-40;
 
 if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) {
 	sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);

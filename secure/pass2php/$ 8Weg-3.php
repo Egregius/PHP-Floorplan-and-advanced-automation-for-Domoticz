@@ -11,6 +11,6 @@
  **/
 
 double('dampkap', 'On');
-if (TIME>$d['dampkap']['m']) storemode('dampkap', TIME+300);
-else storemode('dampkap', $d['dampkap']['m']+300);
+if (TIME>$d['dampkap']['m']) storemode('dampkap', TIME+900);
+else storemode('dampkap', $d['dampkap']['m']+900);
 resetsecurity();
