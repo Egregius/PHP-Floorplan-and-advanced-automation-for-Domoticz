@@ -53,6 +53,7 @@ foreach ($xml['Node'] as $node) {
                 if ($value>100) {
                     $value=100;
                 }
+//                echo $id.' '.$name.' '.$value.'<br><pre>';print_r($cmd);echo '</pre>';
                 if (!in_array($id, $batterydevices)) {
                     $query="INSERT INTO `batterydevices` (`id`,`name`)
                         VALUES ('$id','$name')

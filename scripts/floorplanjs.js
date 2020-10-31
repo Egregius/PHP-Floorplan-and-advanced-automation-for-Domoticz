@@ -90,7 +90,7 @@ function ajax(Update=$LastUpdateTime){
 									try{
 										document.getElementById("zhallb").classList.remove("secured");
 									}catch{}
-								}else if($value==2){
+								}else if($value>=2){
 									try{
 										document.getElementById("zliving").classList.add("secured");
 									}catch{}
