@@ -699,6 +699,7 @@ function double($name, $action, $msg='')
 
 function rookmelder($msg){
 	global $d;
+	if ($d['Weg']['s']<=1) {
     alert($device, 	$msg, 	300, false, 2, true);
     foreach (array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
         if ($d[$i]['s']>0) {
@@ -724,6 +725,7 @@ function rookmelder($msg){
 	boseplayinfo($msg, 45);
 	sleep(5);
 	boseplayinfo($msg, 45);
+	}
     resetsecurity();
 }
 function ifttt($event, $value1='', $value2='', $value3='', $msg='')
