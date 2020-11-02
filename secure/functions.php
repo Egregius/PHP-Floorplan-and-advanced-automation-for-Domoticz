@@ -700,31 +700,31 @@ function double($name, $action, $msg='')
 function rookmelder($msg){
 	global $d;
 	if ($d['Weg']['s']<=1) {
-	alert($device, 	$msg, 	300, false, 2, true);
-	foreach (array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
-		if ($d[$i]['s']>0) {
-			sl($i, 0, basename(__FILE__).':'.__LINE__);
-		}
-	}
-	if ($d['zon']['s']<500) {
-		foreach (array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer', 'terras') as $i) {
-			if ($d[$i]['s']<100) {
-				sl($i, 100, basename(__FILE__).':'.__LINE__);
+		alert($device, 	$msg, 	300, false, 2, true);
+		foreach (array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
+			if ($d[$i]['s']>0) {
+				sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
-		foreach (array('keuken','garage','jbl','bureel', 'tuin') as $i) {
-			if ($d[$i]['s']!='On') {
-				sw($i, 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['zon']['s']<500) {
+			foreach (array('hall','inkom','kamer','tobi',/*'alex',*/'eettafel','zithoek','lichtbadkamer', 'terras') as $i) {
+				if ($d[$i]['s']<100) {
+					sl($i, 100, basename(__FILE__).':'.__LINE__);
+				}
+			}
+			foreach (array('keuken','garage','jbl','bureel', 'tuin') as $i) {
+				if ($d[$i]['s']!='On') {
+					sw($i, 'On', basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
-	}
-	bosezone(101, true);
-	bosezone(102, true);
-	bosezone(103, true);
-	bosezone(104, true);
-	boseplayinfo($msg, 45);
-	sleep(5);
-	boseplayinfo($msg, 45);
+		bosezone(101, true);
+		bosezone(102, true);
+		bosezone(103, true);
+		bosezone(104, true);
+		boseplayinfo($msg, 45);
+		sleep(5);
+		boseplayinfo($msg, 45);
 	}
 	resetsecurity();
 }
