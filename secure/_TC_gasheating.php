@@ -445,9 +445,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=-1.2) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
 		elseif (${'dif'.$k}>=-1.5) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
 		else {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
-		if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
-			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
-			storemode('daikin'.$k, 4);
+		$set=ceil($d[$k.'_set']['s'] * 2) / 2;
+		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
+			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
+			if ($power==1&&$d[$k.'_set']['m']!=4) storemode('daikin'.$k, 4);
+			elseif ($power==0&&$d[$k.'_set']['m']!=0) storemode('daikin'.$k, 0);
 			if ($k=='living') $ip=111;
 			elseif ($k=='kamer') $ip=112;
 			elseif ($k=='alex') $ip=113;
@@ -458,7 +460,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['power']=$power;
 			$data['mode']=3;
 			$data['fan']=$rate;
-			$data['set']=$d[$k.'_set']['s'];
+			$data['set']=$set;
 			if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
 				sleep(1);
 				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
@@ -467,13 +469,13 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			storeicon($k.'_set', json_encode($data));
 		}
 	} else {
-		if ($daikin->pow!=$power||$daikin->mode!=4) {
-			daikinset($k, $power, 4, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
+		if ($daikin->pow!=0||$daikin->mode!=4) {
+			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
 			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
+			$data['power']=0;
 			$data['mode']=4;
-			$data['set']=$d[$k.'_set']['s'];
+			$data['set']=10;
 			storeicon($k.'_set', json_encode($data));
 		}
 	}
