@@ -14,11 +14,16 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) {
 		$last=apcu_fetch($_REQUEST['kind']);
+		apcu_store($_REQUEST['kind'], $new);
 		$new=strtotime($_REQUEST['time']);
 		if ($last>0&&$new>$last) {
-			telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$_REQUEST['kind'].' '.strtotime($_REQUEST['time']));
+			if ($_REQUEST['kind']=='motion') {
+				telegram('Python RING motion '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new);
+			} elseif ($_REQUEST['kind']=='ding') {
+				telegram('Python RING ding '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.strtotime($_REQUEST['time']));
+			}
 		}
-		apcu_store($_REQUEST['kind'], $new);
+		
 		if ($_REQUEST['battery']<60) {
 			alert(
                             'BatterijRingDeurbel',
