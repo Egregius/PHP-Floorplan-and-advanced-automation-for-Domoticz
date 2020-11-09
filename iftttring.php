@@ -26,7 +26,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					}
 		
 					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
-						//shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
+						shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 						if ($d['lgtv']['s']=='On') {
 						    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 						}
