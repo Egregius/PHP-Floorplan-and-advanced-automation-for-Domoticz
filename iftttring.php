@@ -13,15 +13,12 @@ require 'secure/functions.php';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) {
-		print_r($_REQUEST);
 		$last=apcu_fetch($_REQUEST['kind']);
 		$new=strtotime($_REQUEST['time']);
-		echo 'last = '.$last.' new='.$new;
 		if ($last>0&&$new>$last) {
 			telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$_REQUEST['kind'].' '.strtotime($_REQUEST['time']));
 		}
 		apcu_store($_REQUEST['kind'], $new);
-		
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
 		echo 'Motion';
 		telegram('IFTTT RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
