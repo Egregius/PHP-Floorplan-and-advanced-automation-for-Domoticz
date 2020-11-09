@@ -15,50 +15,50 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	if (isset($_REQUEST['RING'])) {
 		$last=apcu_fetch($_REQUEST['kind']);
 		$new=strtotime($_REQUEST['time']);
-		apcu_store($_REQUEST['kind'], $new);
-		
-		if ($last>0&&$new>$last) {
-			print_r($_REQUEST);
-			if ($_REQUEST['kind']=='motion') {
-				telegram('Python RING motion '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new);
-				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
-					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-				}
-		
-				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
-					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
-					if ($d['lgtv']['s']=='On') {
-					    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
+		if ($last!=$new) {
+			apcu_store($_REQUEST['kind'], $new);
+			if ($new>$last) {
+				print_r($_REQUEST);
+				if ($_REQUEST['kind']=='motion') {
+					telegram('Python RING motion '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new);
+					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
-					if (past('Xbel')>60) {
-						if ($d['Xvol']['s']!=5) {
-						    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
+		
+					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
+						//shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
+						if ($d['lgtv']['s']=='On') {
+						    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 						}
-						sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
+						if (past('Xbel')>60) {
+							if ($d['Xvol']['s']!=5) {
+							    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
+							}
+							sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
+						}
 					}
-				}
-			} elseif ($_REQUEST['kind']=='ding') {
-				telegram('Python RING ding '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new, true, 2);
-				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
-					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-				}
-				shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
-				if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
-					sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
-					if ($d['lgtv']['s']=='On') {
-						shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
+				} elseif ($_REQUEST['kind']=='ding') {
+					telegram('Python RING ding '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new, true, 2);
+					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
-					if ($d['Xvol']['s']!=40) {
-					    sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
-					    usleep(10000);
+					shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
+					if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
+						sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
+						if ($d['lgtv']['s']=='On') {
+							shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
+						}
+						if ($d['Xvol']['s']!=40) {
+						    sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
+						    usleep(10000);
+						}
+						sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
+						sleep(2);
+						sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 					}
-					sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
-					sleep(2);
-					sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
-		
 		if ($_REQUEST['battery']<60) {
 			alert(
                             'BatterijRingDeurbel',
