@@ -14,9 +14,10 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) {
 		echo 'OK';
-		telegram('RING '.$_REQUEST['RING']);
+		telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
 		echo 'Motion';
+		telegram('IFTTT RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
 		if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
