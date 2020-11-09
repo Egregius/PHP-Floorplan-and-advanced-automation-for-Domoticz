@@ -16,6 +16,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['kind']);
 		apcu_store($_REQUEST['kind'], $new);
 		$new=strtotime($_REQUEST['time']);
+		print_r($_REQUEST);
 		if ($last>0&&$new>$last) {
 			if ($_REQUEST['kind']=='motion') {
 				telegram('Python RING motion '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new);
