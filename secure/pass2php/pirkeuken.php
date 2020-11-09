@@ -14,7 +14,7 @@ if ($d['auto']['s']=='On') {
 		fkeuken();
 		sirene('Beweging keuken');
 	} else {
-		if ($d['keuken']['s']=='On'&&$d['lgtv']['s']=='On') {
+		if ($d['keuken']['s']=='On'&&$d['lgtv']['s']=='On'&&TIME>=strtotime('19:00')) {
 			sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
