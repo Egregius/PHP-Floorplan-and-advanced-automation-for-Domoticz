@@ -13,8 +13,8 @@ require 'secure/functions.php';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) {
-		echo 'OK';
-		telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
+		print_r($_REQUEST);
+		telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$_REQUEST['kind']);
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
 		echo 'Motion';
 		telegram('IFTTT RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
