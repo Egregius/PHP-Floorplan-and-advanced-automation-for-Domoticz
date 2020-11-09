@@ -16,11 +16,11 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['kind']);
 		$new=strtotime($_REQUEST['time']);
 		if ($last!=$new) {
-			apcu_store($_REQUEST['kind'], $new);
 			if ($new>$last) {
+				apcu_store($_REQUEST['kind'], $new);
 				print_r($_REQUEST);
 				if ($_REQUEST['kind']=='motion') {
-					telegram('Python RING motion '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new);
+					telegram('Python RING motion '.strftime("%T", $_SERVER['REQUEST_TIME']).' '.$new);
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
@@ -38,7 +38,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						}
 					}
 				} elseif ($_REQUEST['kind']=='ding') {
-					telegram('Python RING ding '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$new, true, 2);
+					telegram('Python RING ding '.strftime("%T", $_SERVER['REQUEST_TIME']).' '.$new, true, 2);
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
