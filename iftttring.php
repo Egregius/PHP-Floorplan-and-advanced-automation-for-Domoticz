@@ -19,6 +19,13 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			telegram('Python RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']).' '.$_REQUEST['kind'].' '.strtotime($_REQUEST['time']));
 		}
 		apcu_store($_REQUEST['kind'], $new);
+		if ($_REQUEST['battery']<60) {
+			alert(
+                            'BatterijRingDeurbel',
+                            'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
+                            172800
+                        );
+                }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
 		echo 'Motion';
 		telegram('IFTTT RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
