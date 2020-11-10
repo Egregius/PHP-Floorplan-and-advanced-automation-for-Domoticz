@@ -10,6 +10,7 @@
  * @link     https://egregius.be
  **/
 require 'secure/functions.php';
+echo __FILE__.'-'.__LINE__.'<br>';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) {
@@ -67,6 +68,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
                         );
                 }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
+		echo __FILE__.'-'.__LINE__.'<br>'; 
 		$last=apcu_fetch($_REQUEST['ring']);
 		$new=strtotime($_REQUEST['time']);
 		if ($last!=$new) {
