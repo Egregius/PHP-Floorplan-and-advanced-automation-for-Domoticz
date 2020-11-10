@@ -64,18 +64,13 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			alert(
                             'BatterijRingDeurbel',
                             'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
-                            172800
+                            3600
                         );
                 }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
-		echo __FILE__.'-'.__LINE__.'<br>'; 
 		$last=apcu_fetch($_REQUEST['ring']);
-		echo __FILE__.'-'.__LINE__.' last '.$last.'<br>';
-		echo __FILE__.'-'.__LINE__.' time '.$_REQUEST['time'].'<br>';
 		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
-		echo '<pre>';print_r($split);echo '</pre>';
-		$new=strtotime($_REQUEST['time']);
-		echo __FILE__.'-'.__LINE__.' new '.$new.'<br>';
+		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
 		if ($last!=$new) {
 			if ($new>$last) {
 				apcu_store($_REQUEST['ring'], $new);
