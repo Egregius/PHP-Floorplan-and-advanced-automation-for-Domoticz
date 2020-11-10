@@ -103,8 +103,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		telegram('egregius.be/iftttring.php IFTTT'.PHP_EOL.print_r($_REQUEST, true));
 		echo 'DEURBEL';
 		$last=apcu_fetch('ding');
-		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
-		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
+		$new=ceil($_REQUEST['time']);
 		if ($last!=$new) {
 			if ($new>$last) {
 				apcu_store('ding', $new);
