@@ -70,7 +70,10 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
 		echo __FILE__.'-'.__LINE__.'<br>'; 
 		$last=apcu_fetch($_REQUEST['ring']);
+		echo __FILE__.'-'.__LINE__.' last '.$last.'<br>';
+		echo __FILE__.'-'.__LINE__.' time '.$_REQUEST['time'].'<br>';
 		$new=strtotime($_REQUEST['time']);
+		echo __FILE__.'-'.__LINE__.' new '.$new.'<br>';
 		if ($last!=$new) {
 			if ($new>$last) {
 				apcu_store($_REQUEST['ring'], $new);
