@@ -17,9 +17,9 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	if (isset($_REQUEST['RING'])) {
 		echo '-'.__LINE__;
 		$last=apcu_fetch($_REQUEST['RING']);
-		$new=strtotime($_REQUEST['time']);
+		$new=ceil($_REQUEST['time']);
 		unset($_REQUEST['token']);
-		//telegram('egregius.be/iftttring.php PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new);
+		telegram('egregius.be/iftttring.php PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new);
 		if ($last!=$new) {
 			echo '-'.__LINE__;
 			if ($new>$last) {
@@ -34,7 +34,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 		
-					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
+					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'/*&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
 						echo '-'.__LINE__;
 						shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 						if ($d['lgtv']['s']=='On') {
@@ -55,7 +55,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 					shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
-					if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
+					if ($d['Weg']['s']==0/*&&$d['deurvoordeur']['s']=='Closed'*/) {
 						echo '-'.__LINE__;
 						sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 						if ($d['lgtv']['s']=='On') {
@@ -95,7 +95,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
 		
-				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
+				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'/*&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
 					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 					if ($d['lgtv']['s']=='On') {
 					    shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
@@ -114,7 +114,8 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		telegram('egregius.be/iftttring.php IFTTT'.PHP_EOL.print_r($_REQUEST, true));
 		echo 'DEURBEL';
 		$last=apcu_fetch('ding');
-		$new=ceil($_REQUEST['time']);
+		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
+		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
 		if ($last!=$new) {
 			if ($new>$last) {
 				apcu_store('ding', $new);
@@ -123,7 +124,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 				shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
 		
-				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed') {
+				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'/*&&$d['deurvoordeur']['s']=='Closed'*/) {
 					telegram('Deurbel', true, 2);
 					sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 					if ($d['lgtv']['s']=='On') {
