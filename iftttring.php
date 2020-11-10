@@ -72,6 +72,8 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['ring']);
 		echo __FILE__.'-'.__LINE__.' last '.$last.'<br>';
 		echo __FILE__.'-'.__LINE__.' time '.$_REQUEST['time'].'<br>';
+		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
+		echo '<pre>';print_r($split);echo '</pre>';
 		$new=strtotime($_REQUEST['time']);
 		echo __FILE__.'-'.__LINE__.' new '.$new.'<br>';
 		if ($last!=$new) {
