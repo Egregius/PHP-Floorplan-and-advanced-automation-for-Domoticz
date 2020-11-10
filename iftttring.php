@@ -68,6 +68,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
                         );
                 }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
+		telegram('egregius.be/iftttring.php'.PHP_EOL.print_r($_REQUEST, true));
 		$last=apcu_fetch($_REQUEST['ring']);
 		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
@@ -95,6 +96,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			}
 		}
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
+		telegram('egregius.be/iftttring.php'.PHP_EOL.print_r($_REQUEST, true));
 		echo 'DEURBEL';
 		$last=apcu_fetch($_REQUEST['ring']);
 		$new=strtotime($_REQUEST['time']);
