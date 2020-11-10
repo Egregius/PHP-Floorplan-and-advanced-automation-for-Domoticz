@@ -28,7 +28,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				print_r($_REQUEST);
 				if ($_REQUEST['RING']=='motion') {
 					echo '-'.__LINE__;
-					telegram('Python RING motion '.strftime("%T", $_SERVER['REQUEST_TIME']).' '.$new);
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 						echo '-'.__LINE__;
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
@@ -49,7 +48,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					}
 				} elseif ($_REQUEST['RING']=='ding') {
 					echo '-'.__LINE__;
-					telegram('Python RING ding '.strftime("%T", $_SERVER['REQUEST_TIME']).' '.$new, true, 2);
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 						echo '-'.__LINE__;
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
@@ -90,7 +88,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			if ($new>($last+60)) {
 				apcu_store('motion', $new);
 				echo 'Motion';
-				telegram('IFTTT RING '.strftime("%d/%m/%y %T", $_SERVER['REQUEST_TIME']));
 				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
@@ -111,11 +108,11 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		}
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
 		unset($_REQUEST['token']);
-		telegram('egregius.be/iftttring.php IFTTT'.PHP_EOL.print_r($_REQUEST, true));
 		echo 'DEURBEL';
 		$last=apcu_fetch('ding');
 		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
+		telegram('egregius.be/iftttring.php IFTTT'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
 				apcu_store('ding', $new);
