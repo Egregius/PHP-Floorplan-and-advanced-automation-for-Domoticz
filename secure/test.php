@@ -13,11 +13,8 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-$d=fetchdata();
+$data="November 11, 2020 at 09:55AM";
 
-//$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
-echo __LINE__.' '.$d['dampkap']['m'];
-echo 'TIME='.TIME.' M='.$d['dampkap']['m'];
 
 
 
