@@ -15,7 +15,9 @@ echo '<pre>';
 
 $data="November 11, 2020 at 09:55AM";
 
-
+$split = preg_split('/[\ \n\,]+/', $data);
+$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
+echo $new;
 
 
 /*-------------------------------------------------*/
