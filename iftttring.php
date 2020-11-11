@@ -20,7 +20,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
 		unset($_REQUEST['token']);
-		$msg.=('egregius.be/iftttring.php PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new);
+		$msg.=(' PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 		if ($last!=$new) {
 			$msg.='-'.__LINE__;
 			if ($new>($last+60)) {
@@ -84,7 +84,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
 		unset($_REQUEST['token']);
-		$msg.=('egregius.be/iftttring.php IFTTT'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new);
+		$msg.=(' IFTTT'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
 				apcu_store('motion', $new);
