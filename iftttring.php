@@ -14,7 +14,7 @@ $msg=__FILE__.PHP_EOL;
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$msg.=__LINE__.PHP_EOL;
 	$d=fetchdata();
-	if (isset($_REQUEST['RING'])) {
+	if (isset($_REQUEST['RING'])) { // PYTHON
 		$msg.=__LINE__.PHP_EOL;
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
@@ -82,7 +82,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
                             86400
                         );
                 }
-	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') {
+	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') { //IFTTT
 		$msg.=__LINE__.PHP_EOL;
 		$last=apcu_fetch('motion');
 		$split = preg_split('/[\ \n\,]+/', $_REQUEST['time']);
@@ -116,7 +116,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			}
 		}
-	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') {
+	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
 		$msg.=__LINE__.PHP_EOL;
 		unset($_REQUEST['token']);
 		$last=apcu_fetch('ding');
