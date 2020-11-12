@@ -29,9 +29,6 @@ $page=basename($_SERVER['PHP_SELF']);
 $domoticzurl='http://127.0.0.1:8080';
 $denonurl='192.168.2.6';
 $lgtvip='192.168.2.27';
-$boseip2='192.168.2.2';
-$boseip3='192.168.2.3';
-$boseip4='192.168.2.4';
 
 $LogFile='/var/log/floorplanlog.log';
 $users=array('user1'=>'pass1','user2'=>'pass2','user3'=>'pass3');
