@@ -19,27 +19,24 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		unset($_REQUEST['token']);
 		$msg.=(' PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 		if ($last!=$new) {
-			$msg.=__LINE__.PHP_EOL;
 			if ($new>($last+60)) {
-				$msg.=__LINE__.PHP_EOL;
+				$msg.=__LINE__.' newer'.PHP_EOL;
 				apcu_store($_REQUEST['RING'], $new);
 				print_r($_REQUEST);
 				if ($_REQUEST['RING']=='motion') {
-					$msg.=__LINE__.PHP_EOL;
+					$msg.=__LINE__.' motion'.PHP_EOL;
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' voordeur aan'.PHP_EOL;
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 		
 					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' Notificatie'.PHP_EOL;
 						shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 						if ($d['lgtv']['s']=='On') {
-							$msg.=__LINE__.PHP_EOL;
 							shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 						}
 						if (past('Xbel')>60) {
-							$msg.=__LINE__.PHP_EOL;
 							if ($d['Xvol']['s']!=5) {
 							    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 							}
