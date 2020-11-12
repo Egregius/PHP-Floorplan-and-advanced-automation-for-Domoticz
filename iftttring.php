@@ -17,7 +17,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
 		unset($_REQUEST['token']);
-		$msg.=(' PYTHON'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		$msg.=('PYTHON '.$_REQUEST['RING'].PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
 				$msg.=__LINE__.' newer'.PHP_EOL;
@@ -136,7 +136,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
 					}
 					if ($d['Xvol']['s']!=40) {
-						$msg.=__LINE__.' XVOL'PHP_EOL;
+						$msg.=__LINE__.' XVOL'.PHP_EOL;
 						sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
 						usleep(10000);
 					}
