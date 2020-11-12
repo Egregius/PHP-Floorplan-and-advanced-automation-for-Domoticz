@@ -30,7 +30,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 		
-					if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
+					if ($d['Weg']['s']==0/*&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
 						$msg.=__LINE__.' Notificatie'.PHP_EOL;
 						shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 						if ($d['lgtv']['s']=='On') {
@@ -50,7 +50,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 					shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
-					if ($d['Weg']['s']==0&&$d['deurvoordeur']['s']=='Closed') {
+					if ($d['Weg']['s']==0/*&&$d['deurvoordeur']['s']=='Closed'*/) {
 						$msg.=__LINE__.PHP_EOL;
 						sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 						if ($d['lgtv']['s']=='On') {
@@ -78,7 +78,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
                         );
                 }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') { //IFTTT
-		$msg.=__LINE__.PHP_EOL;
 		$last=apcu_fetch('motion');
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
@@ -94,7 +93,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
 		
-				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90) {
+				if ($d['Weg']['s']==0/*&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
 					$msg.=__LINE__.' Notification'.PHP_EOL;
 					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 					if ($d['lgtv']['s']=='On') {
@@ -112,7 +111,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			}
 		}
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
-		$msg.=__LINE__.PHP_EOL;
 		unset($_REQUEST['token']);
 		$last=apcu_fetch('ding');
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
@@ -129,7 +127,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 				shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
 		
-				if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed') {
+				if ($d['Weg']['s']==0/*&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'*/) {
 					$msg.=__LINE__.' Notification'.PHP_EOL;
 					telegram('DEURBEL', true, 2);
 					sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
@@ -150,6 +148,5 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		}
 	}
 }
-$msg.=__LINE__.PHP_EOL;
 echo $msg;
 telegram($msg);
