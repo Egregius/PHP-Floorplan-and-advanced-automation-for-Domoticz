@@ -70,7 +70,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			}
 		}
 		if ($_REQUEST['battery']<60) {
-			$msg.=__LINE__.PHP_EOL;
+			$msg.=__LINE__.' Battery '.$_REQUEST['battery'].' %'.PHP_EOL;
 			alert(
                             'BatterijRingDeurbel',
                             'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
