@@ -552,7 +552,7 @@ if ($d['auto']['s']=='On') {
 				} else {
 					if ($d['bose'.$i]['s']!='On') {
 						store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, '192.168.2.'.$i);
+						bosekey('SHUFFLE_ON', 0, $i);
 					}
 				}
 			}

@@ -12,10 +12,8 @@
 require 'secure/functions.php';
 $msg=__FILE__.PHP_EOL;
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
-	$msg.=__LINE__.PHP_EOL;
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) { // PYTHON
-		$msg.=__LINE__.PHP_EOL;
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
 		unset($_REQUEST['token']);
