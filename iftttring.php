@@ -97,11 +97,11 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					$msg.=__LINE__.' Notification'.PHP_EOL;
 					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
 					if ($d['lgtv']['s']=='On') {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' LGTV'.PHP_EOL;
 						shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
 					}
 					if (past('Xbel')>60) {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' XBEL'.PHP_EOL;
 						if ($d['Xvol']['s']!=5) {
 						    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 						}
@@ -132,11 +132,11 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					telegram('DEURBEL', true, 2);
 					sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 					if ($d['lgtv']['s']=='On') {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' LGTV'.PHP_EOL;
 						shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
 					}
 					if ($d['Xvol']['s']!=40) {
-						$msg.=__LINE__.PHP_EOL;
+						$msg.=__LINE__.' XVOL'PHP_EOL;
 						sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
 						usleep(10000);
 					}
