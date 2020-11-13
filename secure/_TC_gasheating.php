@@ -449,11 +449,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=-0.3) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=-0.6) {$rate='3';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=-0.9) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
-		elseif (${'dif'.$k}>=-1.2) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-1.5) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+		if (${'dif'.$k}>=-0.4) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
+		elseif (${'dif'.$k}>=-0.7) {$rate='3';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=-1.0) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-1.3) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=-1.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
 		else {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		$set=ceil($d[$k.'_set']['s'] * 2) / 2;
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
