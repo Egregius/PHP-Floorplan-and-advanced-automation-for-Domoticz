@@ -344,7 +344,7 @@ if ($d['auto']['s']=='On') {
 				sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}
-		if ($d['tv']['s']=='On'&&past('tv')>120&&past('lgtv')>120&&past('Weg')>120) {
+		if ($d['tv']['s']=='On'&&past('tv')>1200000000&&past('lgtv')>120&&past('Weg')>120) {
 			sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 		}	
 	}
