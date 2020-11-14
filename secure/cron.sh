@@ -69,12 +69,12 @@ else
 	fi
 fi
 
-# Extra check that apache2 is running.
-#ps cax | grep apache2
-#if [ $? -ne 0 ] ; then
-#	/usr/sbin/service apache2 stop
-#	/usr/sbin/service apache2 start
-#fi
+# Extra check that nginx is running.
+ps cax | grep nginx
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service nginx stop
+	/usr/sbin/service nginx start
+fi
 
 #ps cax | grep php-fpm7.4
 #if [ $? -ne 0 ] ; then

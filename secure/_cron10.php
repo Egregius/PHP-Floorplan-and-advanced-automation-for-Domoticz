@@ -157,9 +157,9 @@ if ($d['nvidia']['s']=='On') {
 		}
 	}
 }
-if (ping('192.168.2.105')) {
+if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
-	if (ping('192.168.2.105')) {
+	if (pingport('192.168.2.105', 80)==1) {
 		if ($d['achterdeur']['s']=='Open') {
 			$status=json_decode(
 				json_encode(
@@ -188,7 +188,7 @@ if (ping('192.168.2.105')) {
 	}
 } else {
 	sleep(1);
-	if (!ping('192.168.2.105')&&$d['bose105']['m']!='Offline') {
+	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['m']!='Offline') {
 		storemode('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
 		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 	}
