@@ -76,10 +76,10 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx start
 fi
 
-ps cax | grep php-fpm8.0
+ps cax | grep php-fpm7.4
 if [ $? -ne 0 ] ; then
-	/usr/sbin/service php8.0-fpm stop
-	/usr/sbin/service php8.0-fpm start
+	/usr/sbin/service php7.4-fpm stop
+	/usr/sbin/service php7.4-fpm start
 fi
 
 ps cax | grep mysql
