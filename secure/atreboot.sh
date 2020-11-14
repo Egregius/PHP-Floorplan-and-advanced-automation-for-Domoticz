@@ -10,6 +10,8 @@ touch /temp/phperror.log
 chmod 666 /temp/*.log
 mkdir -p /var/log/nginx/
 chmod 755 /var/log/nginx
+touch /var/log/nginx/access.log
+touch /var/log/nginx/error.log
 sleep 5
 service mysql start
 service nginx start

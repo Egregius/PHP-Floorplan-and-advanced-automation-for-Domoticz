@@ -82,11 +82,11 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service php7.4-fpm start
 fi
 
-#ps cax | grep mysql
-#if [ $? -ne 0 ] ; then
-#	/usr/sbin/service mysql stop
-#	/usr/sbin/service mysql start
-#fi
+ps cax | grep mysql
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service mysql stop
+	/usr/sbin/service mysql start
+fi
 
 # Remove these lines as they only upload my files to gitbub.
 if [ $(($MINUTE%5)) -eq 0 ] ; then
