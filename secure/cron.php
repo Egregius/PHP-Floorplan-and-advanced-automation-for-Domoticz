@@ -42,11 +42,11 @@ if (isset($_REQUEST['cron10'])) {
 		$d['heating']['s']=$x;
 		lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 	}
-//	    if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
-//	elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
-//	elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
-//	elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
-//	elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
+	    if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
+	elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
+	elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
+	elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
+	elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 	include '_cron10.php';
 }
 if (isset($_REQUEST['cron120'])) include '_cron120.php';

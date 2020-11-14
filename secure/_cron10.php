@@ -99,6 +99,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
+	lg(__FILE__/.':'.__LINE__);
 	if (ping($lgtvip)) {
 		usleep(300000);
 		if (ping($lgtvip)) {
