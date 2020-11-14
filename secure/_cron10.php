@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
- lg('cron10');
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
 	if ($d['pirgarage']['s']=='Off'
@@ -98,8 +97,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['tv']['s']=='On') {
-	lg(__FILE__/.':'.__LINE__);
+if ($d['tv']['s']=='On'&&1==2) {
 	if (ping($lgtvip)) {
 		usleep(300000);
 		if (ping($lgtvip)) {
@@ -147,6 +145,7 @@ if ($d['tv']['s']=='On') {
 		}
 	}
 }
+
 if ($d['nvidia']['s']=='On') {
     if (pingport($shieldip, 9080)==1) {
         if ($d['nvidia']['m']=='Off') {
