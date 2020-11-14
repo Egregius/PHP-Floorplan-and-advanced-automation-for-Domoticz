@@ -13,7 +13,8 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-echo pingport('192.168.2.27', 1263);
+echo strftime("%T %F", TIME);
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

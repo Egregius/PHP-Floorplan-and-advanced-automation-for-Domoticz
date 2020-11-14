@@ -97,7 +97,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['tv']['s']=='On'&&1==2) {
+if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.27', 1263)==1) {
 		usleep(300000);
 		if (pingport('192.168.2.27', 1263)==1) {
