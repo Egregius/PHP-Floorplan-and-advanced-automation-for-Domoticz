@@ -63,8 +63,8 @@ else
 		if [ "$STATUS3" == "OK" ] ; then
 			exit
 		else
-			/usr/sbin/service domoticz stop
-			/usr/sbin/service domoticz start
+			/usr/sbin/service domoticzzzz stop
+			/usr/sbin/service domoticzzzz start
 		fi
 	fi
 fi
