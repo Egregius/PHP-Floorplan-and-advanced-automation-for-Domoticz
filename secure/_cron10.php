@@ -7,7 +7,7 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
@@ -98,9 +98,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On'&&1==2) {
-	if (ping($lgtvip)) {
+	if (pingport('192.168.2.27', 1159)==1) {
 		usleep(300000);
-		if (ping($lgtvip)) {
+		if (pingport('192.168.2.27', 1159)==1) {
 			if ($d['lgtv']['s']!='On'
 				&&past('lgtv')>10
 				&&$d['Weg']['s']==0
@@ -123,11 +123,11 @@ if ($d['tv']['s']=='On'&&1==2) {
 		}
 	} else {
 		usleep(300000);
-		if (!ping($lgtvip)) {
+		if (pingport('192.168.2.27', 1159)!=1) {
 			usleep(300000);
-			if (!ping($lgtvip)) {
+			if (pingport('192.168.2.27', 1159)!=1) {
 				usleep(300000);
-				if (!ping($lgtvip)) {
+				if (pingport('192.168.2.27', 1159)!=1) {
 					if ($d['lgtv']['s']!='Off'&&past('lgtv')>120) {
 						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 					}
@@ -147,19 +147,19 @@ if ($d['tv']['s']=='On'&&1==2) {
 }
 
 if ($d['nvidia']['s']=='On') {
-    if (pingport($shieldip, 9080)==1) {
-        if ($d['nvidia']['m']=='Off') {
-            storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-        }
-    } else {
-        if ($d['nvidia']['m']=='On') {
-            storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-        }
-    }
+	if (pingport($shieldip, 9080)==1) {
+		if ($d['nvidia']['m']=='Off') {
+			storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
+		}
+	} else {
+		if ($d['nvidia']['m']=='On') {
+			storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
 if (ping('192.168.2.105')) {
 	sleep(1);
-    if (ping('192.168.2.105')) {
+	if (ping('192.168.2.105')) {
 		if ($d['achterdeur']['s']=='Open') {
 			$status=json_decode(
 				json_encode(
@@ -187,11 +187,11 @@ if (ping('192.168.2.105')) {
 		}
 	}
 } else {
-    sleep(1);
-    if (!ping('192.168.2.105')&&$d['bose105']['m']!='Offline') {
-        storemode('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
-        sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
-    }
+	sleep(1);
+	if (!ping('192.168.2.105')&&$d['bose105']['m']!='Offline') {
+		storemode('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 }
 
 
