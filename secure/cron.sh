@@ -76,17 +76,17 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx start
 fi
 
-#ps cax | grep php-fpm7.4
-#if [ $? -ne 0 ] ; then
-#	/usr/sbin/service php-fpm7.4 stop
-#	/usr/sbin/service php-fpm7.4 start
-#fi
+ps cax | grep php-fpm8.0
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service php8.0-fpm stop
+	/usr/sbin/service php8.0-fpm start
+fi
 
-#ps cax | grep mysql
-#if [ $? -ne 0 ] ; then
-#	/usr/sbin/service mysql stop
-#	/usr/sbin/service mysql start
-#fi
+ps cax | grep mysql
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service mysql stop
+	/usr/sbin/service mysql start
+fi
 
 # Remove these lines as they only upload my files to gitbub.
 if [ $(($MINUTE%5)) -eq 0 ] ; then
