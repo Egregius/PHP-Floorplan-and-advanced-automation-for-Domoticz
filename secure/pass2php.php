@@ -42,4 +42,4 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
     }
 }
 store($device, $status, 'Pass2PHP');
-@require 'pass2php/'.$device.'.php';
+@include 'pass2php/'.$device.'.php';

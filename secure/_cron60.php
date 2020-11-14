@@ -333,7 +333,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['lgtv']['s']=='Off') {
-		if (past('lgtv')>600) {
+		if (past('lgtv')>60000000) {
 			if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='OFF'&&past('denon')>600) {
 				sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
 			}

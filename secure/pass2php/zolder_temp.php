@@ -22,4 +22,3 @@ if ($d[$n.'_temp']['icon']!=$diff) {
 	storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 }
 $d[$n.'_temp']['s']=$status;
-require '_verwarming.php';
