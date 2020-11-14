@@ -59,7 +59,7 @@ if ($home) {
         denon('PSDELAY '.$x);
     }
     $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-    $denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.time, false, $ctx))), true);
+    $denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
     if (!$denonmain) {
         echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
     }
