@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'functions.php';
+require '/var/www/html/secure/functions.php';
 if (isset($argv[1])) {
 	$device=$argv[1];
 	$status=$argv[2];
