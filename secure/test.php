@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-echo strftime("%T %F", TIME);
+echo pingport('192.168.2.27', 1975);
 
 
 /*-------------------------------------------------*/
