@@ -389,7 +389,7 @@ $opcache = (new Service($options))->handle();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>7.4 OPcache statistics on <?= $opcache->getData('version', 'host'); ?></title>
+    <title>OPcache statistics on <?= $opcache->getData('version', 'host'); ?></title>
     <script src="//unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="//unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
     <script src="//unpkg.com/axios/dist/axios.min.js" crossorigin></script>
