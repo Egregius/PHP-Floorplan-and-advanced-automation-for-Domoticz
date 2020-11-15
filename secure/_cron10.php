@@ -98,9 +98,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
-	if (pingport('192.168.2.27', 1263)==1) {
+	if (pingport('192.168.2.27', 1975)==1) {
 		usleep(300000);
-		if (pingport('192.168.2.27', 1263)==1) {
+		if (pingport('192.168.2.27', 1975)==1) {
 			if ($d['lgtv']['s']!='On'
 				&&past('lgtv')>10
 				&&$d['Weg']['s']==0
@@ -123,11 +123,11 @@ if ($d['tv']['s']=='On') {
 		}
 	} else {
 		usleep(300000);
-		if (pingport('192.168.2.27', 1263)!=1) {
+		if (pingport('192.168.2.27', 1975)!=1) {
 			usleep(300000);
-			if (pingport('192.168.2.27', 1263)!=1) {
+			if (pingport('192.168.2.27', 1906)!=1) {
 				usleep(300000);
-				if (pingport('192.168.2.27', 1263)!=1) {
+				if (pingport('192.168.2.27', 1858)!=1) {
 					if ($d['lgtv']['s']!='Off'&&past('lgtv')>120) {
 						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 					}
