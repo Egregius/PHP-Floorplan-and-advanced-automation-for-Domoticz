@@ -468,8 +468,8 @@ function fvolume($cmd) {
 			denon('MVDOWN');
 			denon('MVDOWN');
 		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('sudo /var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
-			exec('sudo /var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.27');
 		} elseif ($d['bose101']['s']=='On') {
 			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
 			if (!empty($nowplaying)) {
@@ -534,9 +534,9 @@ function lgcommand($action,$msg='')
 {
 	global $lgtvip, $lgtvmac;
 	if ($action=='on') {
-		exec('sudo /var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+		exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
 	} else {
-		shell_exec('sudo /var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
+		shell_exec('/var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
 	}
 }
 function store($name,$status,$msg='',$idx=null,$force=true)
