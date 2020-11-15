@@ -10,8 +10,13 @@
  * @link     https://egregius.be
  **/
 require 'functions.php';
-$device=$_REQUEST['d'];
-$status=$_REQUEST['s'];
+if (isset($argv[1])) {
+	$device=$argv[1];
+	$status=$argv[2];
+} else {
+	$device=$_REQUEST['d'];
+	$status=$_REQUEST['s'];
+}
 if (endswith($device, '_Temperature')) die('Nothing to do');
 elseif (endswith($device, '_Utility')) die('Nothing to do');
 elseif ($device=='$ belknop') die('Nothing to do');
@@ -42,4 +47,5 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
     }
 }
 store($device, $status, 'Pass2PHP');
-@include 'pass2php/'.$device.'.php';
+echo $device.'	'.$status.PHP_EOL;
+@include '/var/www/html/secure/pass2php/'.$device.'.php';
