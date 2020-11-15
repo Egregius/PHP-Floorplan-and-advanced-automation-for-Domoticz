@@ -501,8 +501,8 @@ function fvolume($cmd) {
 			denon('MVUP');
 			denon('MVUP');
 		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('sudo /var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
-			exec('sudo /var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.27');
 		} elseif ($d['bose101']['s']=='On') {
 			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
 			if (!empty($nowplaying)) {
