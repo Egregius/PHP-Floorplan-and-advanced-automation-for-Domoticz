@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-echo trim(shell_exec('/var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
+echo ping('192.168.2.27');
 
 
 /*-------------------------------------------------*/
