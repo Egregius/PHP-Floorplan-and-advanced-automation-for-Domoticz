@@ -90,13 +90,10 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
-	if (pingport('192.168.2.27', 1975)==1) {
-		usleep(300000);
-		if (pingport('192.168.2.27', 1975)==1) {
-			if ($d['lgtv']['s']!='On'
-				&&past('lgtv')>10
-				&&$d['Weg']['s']==0
-			) {
+	if (pingport('192.168.2.27', 3000)==1) {
+		usleep(400000);
+		if (pingport('192.168.2.27', 3000)==1) {
+			if ($d['lgtv']['s']!='On'	) {
 				sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 			}
 			/*if ($d['denon']['s']!='On'
@@ -106,21 +103,18 @@ if ($d['tv']['s']=='On') {
 				sw('denon', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
 			}*/
-			/*if ($d['nvidia']['s']!='On'
-				&&past('nvidia')>30
-				&&$d['Weg']['s']==0
-			) {
+			if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
 				sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-			}*/
+			}
 		}
 	} else {
-		usleep(300000);
-		if (pingport('192.168.2.27', 1975)!=1) {
-			usleep(300000);
-			if (pingport('192.168.2.27', 1906)!=1) {
-				usleep(300000);
-				if (pingport('192.168.2.27', 1858)!=1) {
-					if ($d['lgtv']['s']!='Off'&&past('lgtv')>120) {
+		usleep(400000);
+		if (pingport('192.168.2.27', 3000)!=1) {
+			usleep(400000);
+			if (pingport('192.168.2.27', 3000)!=1) {
+				usleep(400000);
+				if (pingport('192.168.2.27', 3000)!=1) {
+					if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
 						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 					}
 					/*if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {

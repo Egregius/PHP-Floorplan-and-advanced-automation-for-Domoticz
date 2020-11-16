@@ -29,7 +29,7 @@ if [ $MINUTE -eq 0 ] ; then
 	CRON="$CRON&cron3600"
 fi
 #0
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&$CRON >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&cron60&$CRON >/dev/null 2>&1 &
 sleep 9.998
 #10
 /usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
