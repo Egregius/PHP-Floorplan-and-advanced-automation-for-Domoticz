@@ -13,8 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-echo ping('192.168.2.27');
-
+if(date('i')%2==0) echo 'even';
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
