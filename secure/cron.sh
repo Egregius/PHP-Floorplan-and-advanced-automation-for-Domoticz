@@ -14,7 +14,7 @@ DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.h
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then
     MINUTE=$(date +"%M")
-    CRON="cron10"
+    CRON=""
     if [ $(($MINUTE%2)) -eq 0 ] ; then
         CRON="$CRON&cron120"
     fi
@@ -32,27 +32,27 @@ if [ "$STATUS" == "OK" ] ; then
     fi
 	#0
 	#curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&cron60$CRON" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
-	sleep 8.867
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&$CRON >/dev/null 2>&1 &
+	sleep 9.998
 	#10
 #	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
 	sleep 9.998
 	#20
 #	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
 	sleep 9.998
 	#30
 #	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
 	sleep 9.998
 	#40
 #	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
 	sleep 9.998
 	#50
 #	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10"
-	/usr/bin/php8.0 /var/www/html/secure/cron.php $CRON >/dev/null 2>&1 &
+	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
 #	if [ $? -gt 0 ] ; then
 #		/usr/sbin/service apache2 restart
 #	fi

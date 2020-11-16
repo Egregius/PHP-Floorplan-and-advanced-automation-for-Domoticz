@@ -20,7 +20,6 @@ $d=fetchdata();
 }*/
 if (isset($argv[1])) {
 	$cron=explode('&', $argv[1]);
-	lg(print_r($cron, true));
 	foreach ($cron as $c) $_REQUEST[$c]=true;
 }
 if (isset($_REQUEST['cron60'])) include '_cron60.php';
