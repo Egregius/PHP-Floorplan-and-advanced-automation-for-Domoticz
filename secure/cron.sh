@@ -10,72 +10,42 @@ crontab -e
 */5 * * * * /usr/bin/nice -n20 /var/www/html/secure/cleandisk.sh >/dev/null 2>&1
 '
 
-DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
-STATUS=`echo $DOMOTICZ | jq -r '.status'`
-if [ "$STATUS" == "OK" ] ; then
-    MINUTE=$(date +"%M")
-    CRON=""
-    if [ $(($MINUTE%2)) -eq 0 ] ; then
-        CRON="$CRON&cron120"
-    fi
-    if [ $(($MINUTE%3)) -eq 0 ] ; then
-        CRON="$CRON&cron180"
-    fi
-    if [ $(($MINUTE%4)) -eq 0 ] ; then
-        CRON="$CRON&cron240"
-    fi
-    if [ $(($MINUTE%5)) -eq 0 ] ; then
-        CRON="$CRON&cron300"
-    fi
-    if [ $MINUTE -eq 0 ] ; then
-        CRON="$CRON&cron3600"
-    fi
-	#0
-	#curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10&cron60$CRON" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&$CRON >/dev/null 2>&1 &
-	sleep 9.998
-	#10
-#	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
-	sleep 9.998
-	#20
-#	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
-	sleep 9.998
-	#30
-#	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
-	sleep 9.998
-	#40
-#	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10" >/dev/null 2>&1 &
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
-	sleep 9.998
-	#50
-#	curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php?cron10"
-	/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
-#	if [ $? -gt 0 ] ; then
-#		/usr/sbin/service apache2 restart
-#	fi
-else
-	sleep 20
-	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
-	STATUS2=`echo $DOMOTICZ | jq -r '.status'`
-	if [ "$STATUS2" == "OK" ] ; then
-		exit
-	else
-		sleep 20
-		DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
-		STATUS3=`echo $DOMOTICZ | jq -r '.status'`
-		if [ "$STATUS3" == "OK" ] ; then
-			exit
-		else
-			/usr/sbin/service domoticzzzz stop
-			/usr/sbin/service domoticzzzz start
-		fi
-	fi
-fi
 
-# Extra check that nginx is running.
+MINUTE=$(date +"%M")
+CRON=""
+if [ $(($MINUTE%2)) -eq 0 ] ; then
+	CRON="$CRON&cron120"
+fi
+if [ $(($MINUTE%3)) -eq 0 ] ; then
+	CRON="$CRON&cron180"
+fi
+if [ $(($MINUTE%4)) -eq 0 ] ; then
+	CRON="$CRON&cron240"
+fi
+if [ $(($MINUTE%5)) -eq 0 ] ; then
+	CRON="$CRON&cron300"
+fi
+if [ $MINUTE -eq 0 ] ; then
+	CRON="$CRON&cron3600"
+fi
+#0
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&$CRON >/dev/null 2>&1 &
+sleep 9.998
+#10
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+sleep 9.998
+#20
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+sleep 9.998
+#30
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+sleep 9.998
+#40
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+sleep 9.998
+#50
+/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
@@ -105,5 +75,28 @@ if [ $(($MINUTE%5)) -eq 0 ] ; then
 		/usr/bin/nice -n20 git add .
 		/usr/bin/nice -n20 git commit -am "Update"
 		/usr/bin/nice -n20 git push origin master
+	fi
+fi
+
+DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+STATUS=`echo $DOMOTICZ | jq -r '.status'`
+if [ "$STATUS" == "OK" ] ; then
+	exit
+else
+	sleep 20
+	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+	STATUS2=`echo $DOMOTICZ | jq -r '.status'`
+	if [ "$STATUS2" == "OK" ] ; then
+		exit
+	else
+		sleep 20
+		DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+		STATUS3=`echo $DOMOTICZ | jq -r '.status'`
+		if [ "$STATUS3" == "OK" ] ; then
+			exit
+		else
+			/usr/sbin/service domoticz stop
+			/usr/sbin/service domoticz start
+		fi
 	fi
 fi
