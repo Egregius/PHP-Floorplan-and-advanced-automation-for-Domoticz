@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP Temperature Control Gas heating
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-
 $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
 	if ($d['buiten_temp']['s']<10&&$d['minmaxtemp']['m']<10&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<600))&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {

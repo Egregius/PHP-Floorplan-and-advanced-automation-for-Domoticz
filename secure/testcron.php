@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-include '_cron'.$_REQUEST['cron'].'60.php';
+include 'functions.php';
+$d=fetchdata();
+include '_cron'.$_REQUEST['cron'].'.php';

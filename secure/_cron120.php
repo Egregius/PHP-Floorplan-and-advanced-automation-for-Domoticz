@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg('cron120');
 $user='cron120';
 
 $items=array('buiten', 'living', 'badkamer', 'kamer', 'tobi', 'alex', 'zolder');

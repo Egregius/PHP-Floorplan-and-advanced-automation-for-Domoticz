@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg('cron180');
 $user='cron180';
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$data=daikinstatus($k);

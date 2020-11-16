@@ -28,7 +28,6 @@ if ($d['heatingauto']['s']=='On') {
 	elseif ($d['buiten_temp']['s']<16||$d['minmaxtemp']['m']<17||$d['minmaxtemp']['s']<15) $x=1;//Airco heating
 	else $x=0;//Neutral
 }
-//lg('HEATING >>>	heatingauto = '.$d['heatingauto']['s'].'	buiten_temp='.$d['buiten_temp']['s'].'	minmax m='.$d['minmaxtemp']['m'].'	minmax s='.$d['minmaxtemp']['s'].'	jaarteller='.$d['jaarteller']['s'].'	$x='.$x);
 if ($d['heatingauto']['s']=='On'&&$d['heating']['s']!=$x) {
 	store('heating', $x, basename(__FILE__).':'.__LINE__);
 	$d['heating']['s']=$x;
@@ -41,17 +40,16 @@ elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
 elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 include '_cron10.php';
 if(date('s')<10) {
+	include '_cron60.php';
 	$m=date('i');
-	if (in_array('cron60', $cron)) include '_cron60.php';
-
 	if ($m%2==0) include '_cron120.php';
 	if ($m%2==3) include '_cron180.php';
 	if ($m%2==4) include '_cron240.php';
 	if ($m%2==5) {
 		include '_cron300.php';
-	    include 'gcal/gcal.php';
-	    include 'gcal/tobibeitem.php';
-	    include 'gcal/mirom.php';
+		include 'gcal/gcal.php';
+		include 'gcal/tobibeitem.php';
+		include 'gcal/mirom.php';
 	}
 	if ($m==0) include '_cron3600.php';
 }
