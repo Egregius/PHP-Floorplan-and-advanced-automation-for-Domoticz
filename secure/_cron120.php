@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP 
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+lg('cron120');
 $user='cron120';
 
 $items=array('buiten', 'living', 'badkamer', 'kamer', 'tobi', 'alex', 'zolder');

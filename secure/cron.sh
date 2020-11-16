@@ -10,41 +10,23 @@ crontab -e
 */5 * * * * /usr/bin/nice -n20 /var/www/html/secure/cleandisk.sh >/dev/null 2>&1
 '
 
-
-MINUTE=$(date +"%M")
-CRON=""
-if [ $(($MINUTE%2)) -eq 0 ] ; then
-	CRON="$CRON&cron120"
-fi
-if [ $(($MINUTE%3)) -eq 0 ] ; then
-	CRON="$CRON&cron180"
-fi
-if [ $(($MINUTE%4)) -eq 0 ] ; then
-	CRON="$CRON&cron240"
-fi
-if [ $(($MINUTE%5)) -eq 0 ] ; then
-	CRON="$CRON&cron300"
-fi
-if [ $MINUTE -eq 0 ] ; then
-	CRON="$CRON&cron3600"
-fi
 #0
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10&cron60&$CRON >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 sleep 9.998
 #10
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 sleep 9.998
 #20
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 sleep 9.998
 #30
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 sleep 9.998
 #40
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 sleep 9.998
 #50
-/usr/bin/php8.0 /var/www/html/secure/cron.php cron10 >/dev/null 2>&1 &
+/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
 
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
@@ -65,7 +47,8 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Remove these lines as they only upload my files to gitbub.
-if [ $(($MINUTE%5)) -eq 0 ] ; then
+MINUTE=$(date +"%M")
+if [ $(($MINUTE%10)) -eq 0 ] ; then
 	LAST=$(find /var/www/html -type f ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"
