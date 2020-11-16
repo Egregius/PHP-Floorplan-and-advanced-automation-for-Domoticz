@@ -79,22 +79,14 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['GroheRed']['s']=='On') {
-		if ($d['wasbak']['s']=='Off'
-			&&$d['kookplaat']['s']=='Off'
-			&&$d['GroheRed']['m']==0
-		) {
-			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-		}
-	} else {
-		if (past('GroheRed')>120
-			&&(
-			($d['wasbak']['s']=='On'&&past('wasbak')>10)
-			||($d['kookplaat']['s']=='On'&&past('kookplaat')>10))
-		) {
-				sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
-		}
+	if ($d['GroheRed']['s']=='Off'&&past('GroheRed')>120
+		&&(
+		($d['wasbak']['s']=='On'&&past('wasbak')>10)
+		||($d['kookplaat']['s']=='On'&&past('kookplaat')>10))
+	) {
+		sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 	}
+	
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {

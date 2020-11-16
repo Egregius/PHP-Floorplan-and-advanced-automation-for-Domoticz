@@ -20,10 +20,7 @@ if ($status=='On') {
     if ($d['zon']['s']<$zonkeuken&&$d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['auto']['s']) {
         sw('keuken', 'On',basename(__FILE__).':'.__LINE__);
     }
-    if ($d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['m']==1) {
-    	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-    }
-    if ($d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['s']=='On') {
+    if ($d['keuken']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['GroheRed']['s']=='On'&&$d['GroheRed']['m']==0) {
     	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
