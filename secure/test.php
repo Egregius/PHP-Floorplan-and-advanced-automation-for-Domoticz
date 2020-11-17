@@ -14,6 +14,8 @@ require 'functions.php';
 echo '<pre>';
 
 if(date('i')%2==0) echo 'even';
+bosezone(101, true);
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
