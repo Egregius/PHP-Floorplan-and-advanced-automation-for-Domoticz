@@ -570,7 +570,7 @@ function storeicon($name,$icon,$msg='')
 		lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
 }
-function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
+function alert($name,$msg,$ttl,$silent=true,$to=1)
 {
 	$db=dbconnect();
 	$last=0;
@@ -581,11 +581,7 @@ function alert($name,$msg,$ttl,$silent=true,$to=1,$ios=false)
 			$last=$row['t'];
 		}
 	}
-
 	if ($last < TIME-$ttl) {
-		if ($ios) {
-			//shell_exec('./ios.sh "'.$msg.'" >/dev/null 2>/dev/null &');
-		}
 		$time=TIME;
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
 		telegram($msg, $silent, $to);
@@ -1065,13 +1061,11 @@ function sirene($msg)
 	if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
 		if ($d['Weg']['s']>=2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-			//shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
 			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
 		}
 	} else {
 		if ($d['Weg']['s']>=1&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-			//shell_exec('../ios.sh "'.$msg.'" > /dev/null 2>/dev/null &');
 			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
 		}
 	}
