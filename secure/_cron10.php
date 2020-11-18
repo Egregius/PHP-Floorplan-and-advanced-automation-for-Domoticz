@@ -118,7 +118,7 @@ if ($d['tv']['s']=='On') {
 					if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
 						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 					}
-					/*if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {
+					if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {
 						sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
 					}
 					if ($d['nvidia']['s']!='Off'&&past('lgtv')>120&&past('nvidia')>120) {
@@ -126,7 +126,7 @@ if ($d['tv']['s']=='On') {
 					}
 					if ($d['kristal']['s']!='Off'&&past('lgtv')>120&&past('kristal')>120) {
 						sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
-					}*/
+					}
 				}
 			}
 		}

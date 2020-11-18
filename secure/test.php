@@ -13,8 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-if(date('i')%2==0) echo 'even';
-bosezone(101, true);
+echo shell_exec('/var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
 
 
 /*-------------------------------------------------*/

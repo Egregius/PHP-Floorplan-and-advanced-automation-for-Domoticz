@@ -7,6 +7,7 @@ import socket
 import struct
 import asyncio
 logging.basicConfig(filename='/var/log/lgtv-error.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logging.info('lgtv.py executed')
 class LgCommand (object):
     def __init__(self, ip):
         self.client = WebOsClient(ip)
@@ -184,11 +185,13 @@ def main():
         print(cmd.run(args.command, args.arg))
     else:
         cmd.check()
+        logging.info("TV is on.")
         print("TV is on.")
 
 try:
     main()
 except asyncio.TimeoutError as te:
+    logging.info("TimeoutError() occurred, is the TV off? ")
     print("TimeoutError() occurred, is the TV off? ")
 except:
     logging.exception("Oops:")
