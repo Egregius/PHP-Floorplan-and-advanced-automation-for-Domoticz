@@ -115,9 +115,9 @@ if ($d['tv']['s']=='On') {
 			if (pingport('192.168.2.27', 3000)!=1) {
 				usleep(400000);
 				if (pingport('192.168.2.27', 3000)!=1) {
-					if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
+					/*if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
 						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-					}
+					}*/
 					if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {
 						sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
 					}
