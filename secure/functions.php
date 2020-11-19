@@ -1040,16 +1040,20 @@ function finkom()
 function fhall()
 {
 	global $d,$device;
-	if ($d['hall']['s']<31) {
-		if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-			if ($d['hall']['s']<31) {
-				sl('hall', 31, basename(__FILE__).':'.__LINE__);
-			}
-		} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
-			if ($d['hall']['s']<27) {
-				sl('hall', 27, basename(__FILE__).':'.__LINE__);
+	if (TIME>strtotime('7:30')&&TIME<=strtotime('21:00')) {
+		if ($d['hall']['s']<31) {
+			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
+				if ($d['hall']['s']<31) {
+					sl('hall', 31, basename(__FILE__).':'.__LINE__);
+				}
+			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
+				if ($d['hall']['s']<27) {
+					sl('hall', 27, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
+	} else {
+		finkom();
 	}
 	/*if ($d['gcal']['s']==false&&TIME>=strtotime('6:00')&&TIME<strtotime('10:00')&&$d['Rtobi']['s']>0) {
 		sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);

@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-lg(__FILE__);
+//lg(__FILE__);
 $Setkamer=4;
 if ($d['kamer_set']['m']==0) {
 	if ($d['buiten_temp']['s']<10&&$d['minmaxtemp']['m']<10&&($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<600))&&$d['raamkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamkamer')>7198 || TIME>strtotime('21:00'))) {
@@ -499,6 +499,7 @@ if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true;
 $zon=$d['zon']['s'];
 if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	if (TIME>=strtotime('5:30')&&TIME<strtotime('10:00')) {
+		
 		$dow=date("w");
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);

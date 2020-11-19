@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-lg('cron10');
+//lg('cron10');
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
 	if ($d['pirgarage']['s']=='Off'
@@ -45,7 +45,7 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	$items=array(32,31,30,29,28,27,26,25,24,23,22,0);
+	$items=array(32,31,30,29,28,27,26,25,24,0);
 	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
 		foreach ($items as $i) {
 			if ($d['inkom']['s']>$i) {
