@@ -60,6 +60,9 @@ function huisslapen()
 			}
 		}
 	}
+	foreach(array('tobi', 'alex') as $i) {
+		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
+	}
 	if ($d['auto']['s']=='Off') {
 		sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	}

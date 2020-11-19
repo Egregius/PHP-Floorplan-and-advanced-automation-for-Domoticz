@@ -13,9 +13,10 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 $tail=new PHPTail(
     array(
-    "Domoticz"=>"/var/log/domoticz.log",
-    "Ajax"=>"/temp/ajax.log",
-    "www error"=>"/var/log/apache2/phperror.log",
+    "Domoticz"=>"/temp/domoticz.log",
+    "php8.0-fpm"=>"/var/log/php8.0-fpm.log",
+    "nginxaccess"=>"/var/log/nginx/access.log",
+    "nginxerror"=>"/var/log/nginx/error.log",
     "Fail2Ban"=>"/var/log/fail2ban.log",
     )
 );
@@ -191,7 +192,7 @@ console.log(e);
 </head>
 <body>
     <div class="fix z1" style="position:sticky;top:5px;left:5px;">
-        <a href="javascript:navigator_Go('floorplan.php');">
+        <a href="javascript:navigator_Go('logs.php');">
             <img src="/images/close.png" width="72px" height="72px"/>
         </a>
     </div>
