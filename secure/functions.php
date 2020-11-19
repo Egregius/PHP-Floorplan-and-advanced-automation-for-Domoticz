@@ -14,7 +14,7 @@ require_once '/var/www/config.php';
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 
-function dbconnect2() {
+function dbconnect() {
 	global $dbname,$dbuser,$dbpass;
 	return new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 }
@@ -28,7 +28,7 @@ function dbconnect2() {
  */
 function fetchdata()
 {
-	$db=dbconnect2();
+	$db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 	return $d;
@@ -449,7 +449,7 @@ function sw($name,$action='Toggle',$msg='')
 		} else {
    			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','heater1','heater2','regenpomp','zoldervuur'))) {
    				$stamp=TIME;
-   				$db=dbconnect2();
+   				$db=dbconnect();
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
    			}
 		}
@@ -544,7 +544,7 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 	global $d, $user;
 	if (!isset($d)) $d=fetchdata();
 	$time=time();
-	$db=dbconnect2();
+	$db=dbconnect();
 	if ($idx>0) {
 		$db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	} else {
@@ -556,7 +556,7 @@ function storemode($name,$mode,$msg='',$time=0)
 {
 	global $user;
 	$time=time()+$time;
-	$db=dbconnect2();
+	$db=dbconnect();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg(' (STOREMODE)	'.$user.'	=> '.$name.'	=> '.$mode.'	('.$msg.')');
 }
@@ -565,14 +565,14 @@ function storeicon($name,$icon,$msg='')
 	global $d, $user;
 	$time=TIME;
 	if ($d[$name]['icon']!=$icon) {
-		$db=dbconnect2();
+		$db=dbconnect();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1)
 {
-	$db=dbconnect2();
+	$db=dbconnect();
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 

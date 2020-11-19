@@ -19,7 +19,7 @@ if (isset($_GET['reset'])) {
 }
 $config = opcache_get_configuration();
 $status = opcache_get_status();
-function size_for_humanss($bytes)
+function size_for_humans($bytes)
 {
     if ($bytes > 1048576) {
         return sprintf("%.0f&nbsp;MB", $bytes/1048576);
@@ -29,7 +29,7 @@ function size_for_humanss($bytes)
         return sprintf("%d&nbsp;bytes", $bytes);
     }
 }
-function getOffsetWhereStringsAreEqual2($a, $b)
+function getOffsetWhereStringsAreEqual($a, $b)
 {
     $i = 0;
     while (strlen($a) && strlen($b) && strlen($a) > $i && $a[$i] === $b[$i]) {
@@ -37,7 +37,7 @@ function getOffsetWhereStringsAreEqual2($a, $b)
     }
     return $i;
 }
-function getSuggestionMessage2($property, $value)
+function getSuggestionMessage($property, $value)
 {
     switch ($property) {
     case 'opcache_enabled':
@@ -65,7 +65,7 @@ function getStringFromPropertyAndValue($property, $value)
     case 'free_memory':
     case 'wasted_memory':
     case 'opcache.memory_consumption':
-        return size_for_humanss($value);
+        return size_for_humans($value);
             break;
     case 'current_wasted_percentage':
     case 'opcache_hit_rate':
@@ -139,7 +139,7 @@ function getStringFromPropertyAndValue($property, $value)
     ?>
 
     <div style="float:left;width:48%;">
-    <h2 id="memory">Memory: <?php echo size_for_humanss($wastedMemory + $usedMemory) ?> of <?php echo size_for_humanss($totalMemory) ?></h2>
+    <h2 id="memory">Memory: <?php echo size_for_humans($wastedMemory + $usedMemory) ?> of <?php echo size_for_humans($totalMemory) ?></h2>
     <div class="progress progress-striped">
         <div class="progress-bar progress-bar-danger" style="width: <?php echo round(($wastedMemory / $totalMemory) * 100, 0) ?>%">
             <span class="sr-only">Wasted memory</span>
@@ -175,7 +175,7 @@ function getStringFromPropertyAndValue($property, $value)
             <th>Options</th>
             <th>Hits</th>
             <th>Memory</th>
-            <th>qqqPath</th>
+            <th>Path</th>
         </tr>
         <?php
         uasort(
@@ -188,7 +188,7 @@ function getStringFromPropertyAndValue($property, $value)
         $previousKey = null;
         foreach ($status['scripts'] as $key => $data) {
             $offset = min(
-                getOffsetWhereStringsAreEqual2(
+                getOffsetWhereStringsAreEqual(
                     (null === $previousKey) ? $key : $previousKey,
                     $key
                 ),
@@ -202,8 +202,8 @@ function getStringFromPropertyAndValue($property, $value)
             <tr>
                 <td><a href="?invalidate=<?php echo $data['full_path'] ?>">Invalidate</a></td>
                 <td><?php echo $data['hits'] ?></td>
-                <td><?php echo size_for_humanss($data['memory_consumption']) ?></td>
-                <td>qqq<?php echo $data['full_path']; ?></td>
+                <td><?php echo size_for_humans($data['memory_consumption']) ?></td>
+                <td><?php echo substr($data['full_path'], $offset - 1) ?></td>
             </tr>
         <?php } ?>
     </table>
@@ -219,18 +219,13 @@ function getStringFromPropertyAndValue($property, $value)
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
                         $v = getStringFromPropertyAndValue($k, $v);
-                        $m = getSuggestionMessage2($k, $v);
-                        ?>
-                        	<tr class="<?php echo $m ? 'danger' : '' ?>">
-                        		<th align="left"><?php echo $k ?></th>
-                        		<td align="right"><?php print_r($v) ?></td>
-                        		<td>xxx<?php echo $m ?></td>
-                        	</tr><?php
+                        $m = getSuggestionMessage($k, $v);
+                        ?><tr class="<?php echo $m ? 'danger' : '' ?>"><th align="left"><?php echo $k ?></th><td align="right"><?php echo $v ?></td><td><?php echo $m ?></td></tr><?php
                     }
                     continue;
                 }
 
-                $mess = getSuggestionMessage2($key, $value);
+                $mess = getSuggestionMessage($key, $value);
                 $value = getStringFromPropertyAndValue($key, $value);
                 ?><tr class="<?php echo $mess ? 'danger' : '' ?>"><th align="left"><?php echo $key ?></th><td align="right"><?php echo $value ?></td><td><?php echo $mess ?></td></tr><?php
             }
@@ -242,7 +237,7 @@ function getStringFromPropertyAndValue($property, $value)
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <?php foreach ($config['directives'] as $key => $value) {
-                $mess = getSuggestionMessage2($key, $value);
+                $mess = getSuggestionMessage($key, $value);
                 ?>
                 <tr class="<?php echo $mess ? 'danger' : '' ?>" >
                     <th align="left"><?php echo $key ?></th>
