@@ -11,22 +11,22 @@ crontab -e
 '
 
 #0
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.698
 #10
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
 #20
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
 #30
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
 #40
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
 #50
-/usr/bin/php8.0 /var/www/html/secure/cron.php >/dev/null 2>&1 &
+curl -s --connect-timeout 2 --max-time 30 "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
