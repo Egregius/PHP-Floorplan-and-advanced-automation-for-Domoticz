@@ -14,7 +14,7 @@
  * @link     https://egregius.be
  **/
 if (isset($_REQUEST['gpio'])) {
-    include 'secure/functions.php';
+    require_once 'secure/functions.php';
     $d=fetchdata();
     $gpio=$_REQUEST['gpio'];
     if ($gpio==20) {

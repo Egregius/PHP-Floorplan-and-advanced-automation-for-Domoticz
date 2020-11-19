@@ -37,7 +37,7 @@ function getOffsetWhereStringsAreEqual2($a, $b)
     }
     return $i;
 }
-function getSuggestionMessage($property, $value)
+function getSuggestionMessage2($property, $value)
 {
     switch ($property) {
     case 'opcache_enabled':
@@ -175,7 +175,7 @@ function getStringFromPropertyAndValue($property, $value)
             <th>Options</th>
             <th>Hits</th>
             <th>Memory</th>
-            <th>Path</th>
+            <th>qqqPath</th>
         </tr>
         <?php
         uasort(
@@ -219,7 +219,7 @@ function getStringFromPropertyAndValue($property, $value)
                 if (is_array($value)) {
                     foreach ($value as $k => $v) {
                         $v = getStringFromPropertyAndValue($k, $v);
-                        $m = getSuggestionMessage($k, $v);
+                        $m = getSuggestionMessage2($k, $v);
                         ?>
                         	<tr class="<?php echo $m ? 'danger' : '' ?>">
                         		<th align="left"><?php echo $k ?></th>
@@ -230,7 +230,7 @@ function getStringFromPropertyAndValue($property, $value)
                     continue;
                 }
 
-                $mess = getSuggestionMessage($key, $value);
+                $mess = getSuggestionMessage2($key, $value);
                 $value = getStringFromPropertyAndValue($key, $value);
                 ?><tr class="<?php echo $mess ? 'danger' : '' ?>"><th align="left"><?php echo $key ?></th><td align="right"><?php echo $value ?></td><td><?php echo $mess ?></td></tr><?php
             }
@@ -242,7 +242,7 @@ function getStringFromPropertyAndValue($property, $value)
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <?php foreach ($config['directives'] as $key => $value) {
-                $mess = getSuggestionMessage($key, $value);
+                $mess = getSuggestionMessage2($key, $value);
                 ?>
                 <tr class="<?php echo $mess ? 'danger' : '' ?>" >
                     <th align="left"><?php echo $key ?></th>
