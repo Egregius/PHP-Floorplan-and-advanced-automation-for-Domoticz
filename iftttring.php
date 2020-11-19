@@ -111,6 +111,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			}
 		}
+		$msg.='ip='.$_REQUEST['ip'];
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
 		unset($_REQUEST['token']);
 		$last=apcu_fetch('ding');
@@ -147,6 +148,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			}
 		}
+		$msg.='ip='.$_REQUEST['ip'];
 	}
 }
 echo $msg;

@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+lg(__FILE__);
 $user='cron300';
 if (TIME<=strtotime('9:00')) {
 	if ($d['nas']['s']!='On') {

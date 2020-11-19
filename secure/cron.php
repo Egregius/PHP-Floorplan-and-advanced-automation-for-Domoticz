@@ -13,6 +13,7 @@
 require 'functions.php';
 $d=fetchdata();
 $user='heating';
+$s=date('s');
 /* Temperature control
 -2 = Airco cooling
 -1 = Passive cooling
@@ -39,7 +40,7 @@ elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
 elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
 elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 include '_cron10.php';
-if(date('s')<10) {
+if($s<10) {
 	include '_cron60.php';
 	$m=date('i');
 	if ($m%2==0) include '_cron120.php';
