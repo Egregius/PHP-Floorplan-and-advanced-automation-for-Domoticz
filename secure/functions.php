@@ -1230,6 +1230,120 @@ function setradiator($name,$dif,$koudst=false,$set=14)
 	return round($setpoint, 0);
 }
 
+/**
+ * Function zwaveNodeNeighbourUpdate
+ * Updates the neighbours of a node
+ *
+ * @param int $node idx of the node
+ *
+ * @return string result
+ */
+function zwaveNodeNeighbourUpdate($node)
+{
+    global $domoticzurl;
+    for ($k=1;$k<=5;$k++) {
+        sleep(1);
+        $result=file_get_contents(
+            $domoticzurl.'/ozwcp/admpost.html',
+            false,
+            stream_context_create(
+                array(
+                    'http'=>array(
+                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+                        'method'=>'POST',
+                        'content'=>http_build_query(
+                            array(
+                                'fun'=>'reqnnu',
+                                'node'=>'node'.$node
+                            )
+                        ),
+                    ),
+                )
+            )
+        );
+        if ($result=='OK') {
+            break;
+        }
+        sleep(1);
+    }
+    return $result;
+}
+/**
+ * Function zwaveRefreshNode
+ * Refreshes the config of a node
+ *
+ * @param int $node idx of the node
+ *
+ * @return string result
+ */
+function zwaveRefreshNode($node)
+{
+    global $domoticzurl;
+    for ($k=1;$k<=5;$k++) {
+        sleep(1);
+        $result=file_get_contents(
+            $domoticzurl.'/ozwcp/admpost.html',
+            false,
+            stream_context_create(
+                array(
+                    'http'=>array(
+                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+                        'method'=>'POST',
+                        'content'=>http_build_query(
+                            array(
+                                'fun'=>'refreshnode',
+                                'node'=>'node'.$node
+                            )
+                        ),
+                    ),
+                )
+            )
+        );
+        if ($result=='OK') {
+            break;
+        }
+        sleep(1);
+    }
+    return $result;
+}
+
+/**
+ * Function zwaveHasnodefailed
+ * Tries to revive a dead node
+ *
+ * @param int $node idx of the node
+ *
+ * @return null
+ */
+function zwaveHasnodefailed($node)
+{
+    global $domoticzurl;
+    for ($k=1;$k<=5;$k++) {
+        sleep(1);
+        $result=file_get_contents(
+            $domoticzurl.'/ozwcp/admpost.html',
+            false,
+            stream_context_create(
+                array(
+                    'http'=>array(
+                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+                        'method'=>'POST',
+                        'content'=>http_build_query(
+                            array(
+                                'fun'=>'hnf',
+                                'node'=>'node'.$node
+                            )
+                        ),
+                    ),
+                )
+            )
+        );
+        if ($result=='OK') {
+            break;
+        }
+        sleep(1);
+    }
+}
 
 class Ring {
 	private $_apiProto	  = 'https://';
