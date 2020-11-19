@@ -1211,6 +1211,24 @@ function human_filesize($bytes,$dec=2){
 	$factor=floor((strlen($bytes)-1)/3);
 	return sprintf("%.{$dec}f",$bytes/pow(1024,$factor)).@$size[$factor];
 }
+/**
+ * Function setradiator: calculates the setpoint for the Danfoss thermostat valve
+ *
+ * @param string  $name   Not used anymore
+ * @param int	 $dif	Difference in temperature
+ * @param boolean $koudst Is it the coldest room of all?
+ * @param int	 $set	default setpoint
+ *
+ * @return null
+ */
+function setradiator($name,$dif,$koudst=false,$set=14)
+{
+	if ($koudst==true) $setpoint=28;
+	else $setpoint=$set-ceil($dif*4);
+	if ($setpoint>28) $setpoint=28;
+	elseif ($setpoint<4) $setpoint=4;
+	return round($setpoint, 0);
+}
 
 
 class Ring {

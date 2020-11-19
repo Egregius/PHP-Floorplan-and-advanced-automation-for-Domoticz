@@ -243,14 +243,14 @@ if ($d['Weg']['s']==0&&$difzolder<0&&TIME>=strtotime('7:00')&&TIME<strtotime('21
  *
  * @return null
  */
-function setradiator($name,$dif,$koudst=false,$set=14)
+/*function setradiator($name,$dif,$koudst=false,$set=14)
 {
     if ($koudst==true) $setpoint=28;
     else $setpoint=$set-ceil($dif*4);
     if ($setpoint>28) $setpoint=28;
     elseif ($setpoint<4) $setpoint=4;
     return round($setpoint, 0);
-}
+}*/
 
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');

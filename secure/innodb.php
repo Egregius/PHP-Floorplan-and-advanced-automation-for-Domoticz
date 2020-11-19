@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require '/var/www/config.php';
+require '/var/www/html/secure/functions.php';
 $db=new mysqli('localhost', $dbuser, $dbpass);
 if ($db->connect_errno>0) {
     die('Unable to connect to database ['.$db->connect_error.']');
@@ -65,21 +65,3 @@ echo '
 	</tbody>
 </table><hr>';
 echo '<pre>'.$status;
-function strafter($string,$substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return $string;
-    } else {
-        return(substr($string, $pos+strlen($substring)));
-    }
-}
-function strbefore($string,$substring)
-{
-    $pos=strpos($string, $substring);
-    if ($pos===false) {
-        return $string;
-    } else {
-        return(substr($string, 0, $pos));
-    }
-}

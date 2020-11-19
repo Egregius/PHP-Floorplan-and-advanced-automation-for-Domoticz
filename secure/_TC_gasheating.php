@@ -421,24 +421,6 @@ if ($d['Weg']['s']==0&&$difzolder<0&&TIME>=strtotime('7:00')&&TIME<strtotime('21
 	if ($d['zoldervuur2']['s']!='Off') sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['zoldervuur1']['s']!='Off') sw('zoldervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 }
-/**
- * Function setradiator: calculates the setpoint for the Danfoss thermostat valve
- *
- * @param string  $name   Not used anymore
- * @param int	 $dif	Difference in temperature
- * @param boolean $koudst Is it the coldest room of all?
- * @param int	 $set	default setpoint
- *
- * @return null
- */
-function setradiator($name,$dif,$koudst=false,$set=14)
-{
-	if ($koudst==true) $setpoint=28;
-	else $setpoint=$set-ceil($dif*4);
-	if ($setpoint>28) $setpoint=28;
-	elseif ($setpoint<4) $setpoint=4;
-	return round($setpoint, 0);
-}
 
 
 foreach (array('living', 'kamer', 'alex') as $k) {

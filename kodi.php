@@ -250,9 +250,9 @@ if ($home===true) {
 					foreach ($prop['subtitles'] as $subtitle) {
 						echo $subtitle['index']===$prop['currentsubtitle']['index']
 						?'
-							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>'
+							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>'
 						:'
-							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2">'.lang($subtitle['language']).' '.$subtitle['name'].'</button>';
+							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>';
 					}
 					echo '
 							<br>
@@ -303,7 +303,7 @@ if ($home===true) {
     header("Location: index.php");
     die("Redirecting to: index.php");
 }
-function lang($lang)
+function langu($lang)
 {
     switch($lang){
     case 'dut': $taal='&nbsp;NL&nbsp;';
