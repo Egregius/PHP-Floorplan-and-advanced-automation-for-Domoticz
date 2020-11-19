@@ -10,13 +10,9 @@
  * @link     https://egregius.be
  **/
 require '/var/www/html/secure/functions.php';
-if (isset($argv[1])) {
-	$device=$argv[1];
-	$status=$argv[2];
-} else {
-	$device=$_REQUEST['d'];
-	$status=$_REQUEST['s'];
-}
+$device=$_REQUEST['d'];
+$status=$_REQUEST['s'];
+
 if (endswith($device, '_Temperature')) die('Nothing to do');
 elseif (endswith($device, '_Utility')) die('Nothing to do');
 elseif ($device=='$ belknop') die('Nothing to do');
