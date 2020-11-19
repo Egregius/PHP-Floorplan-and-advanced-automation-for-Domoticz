@@ -1136,7 +1136,7 @@ function ajaxbose($ip){
 					else html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'2\')">EDM & Pop</button>';
 					if(data["nowplaying"]["ContentItem"]["itemName"]=='EDM + T&K') html+='<button class="btn btna b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">EDM + T&K</button>';
 					else html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'3\')">EDM + T&K</button>';
-					if(data["nowplaying"]["ContentItem"]["itemName"]=='Mix') html+='<button class="btn btna b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">MNM</button>';
+					if(data["nowplaying"]["ContentItem"]["itemName"]=='MNM') html+='<button class="btn btna b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">MNM</button>';
 					else html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'4\')">MNM</button>';
 					if(data["nowplaying"]["ContentItem"]["itemName"]=='Ballads and Pop') html+='<button class="btn btna b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Ballads & Pop</button>';
 					else html+='<button class="btn b2" onclick="ajaxcontrolbose('+$ip+',\'preset\',\'5\')">Ballads & Pop</button>';
