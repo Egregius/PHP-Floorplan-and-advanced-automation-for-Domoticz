@@ -41,12 +41,14 @@ elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
 elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
 include '_cron10.php';
 if($s<10) {
+	lg(__FILE__.':'.__LINE__);
 	include '_cron60.php';
 	$m=date('i');
 	if ($m%2==0) include '_cron120.php';
-	if ($m%2==3) include '_cron180.php';
-	if ($m%2==4) include '_cron240.php';
-	if ($m%2==5) {
+	if ($m%3==0) include '_cron180.php';
+	if ($m%4==0) include '_cron240.php';
+	if ($m%5==0) {
+		lg(__FILE__.':'.__LINE__);
 		include '_cron300.php';
 		include 'gcal/gcal.php';
 		include 'gcal/tobibeitem.php';
