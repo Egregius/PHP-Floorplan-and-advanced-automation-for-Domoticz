@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -12,24 +12,6 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-
-//echo shell_exec('/var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
-var_dump(ctype_xdigit('123456789'));  // false
-var_dump(ctype_xdigit('ABCDEF')); // false
-var_dump(ctype_xdigit('8059A5E2E92D041321654984654654876546F-'));  // false
-var_dump(ctype_xdigit('2012-2-25'));   // false
-var_dump(ctype_xdigit('2013-12-01'));  // true
-var_dump(ctype_xdigit('1970-12-01'));  // true
-var_dump(ctype_xdigit('2012-02-29'));  // true
-var_dump(ctype_xdigit('2012', 'Y'));   // true
-var_dump(ctype_xdigit('12012', 'Y'));  // false
-
-function validateDate($date, $format = 'Y-m-d')
-{
-    $d = DateTime::createFromFormat($format, $date);
-    // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-    return $d && $d->format($format) === $date;
-}
 
 
 /*-------------------------------------------------*/
@@ -161,17 +143,4 @@ function Human_kb($bytes,$dec=2)
     $size=array('kb','Mb','Gb');
     $factor=floor((strlen($bytes)-1)/3);
     return sprintf("%.{$dec}f", $bytes/pow(1000, $factor)).@$size[$factor];
-}
-
-function Get_data($url)
-{
-    $ch = curl_init();
-    $timeout = 5;
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.17 Safari/537.36');
-    $data = curl_exec($ch);
-    curl_close($ch);
-    return $data;
 }
