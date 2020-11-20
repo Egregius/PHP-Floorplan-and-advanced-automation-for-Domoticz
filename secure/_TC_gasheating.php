@@ -431,13 +431,14 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=-0.4) {$rate='B';$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=-0.7) {$rate='3';$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=-1.0) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-1.3) {$rate=5;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-1.6) {$rate=6;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
-		else {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
+		if (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
+		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=-1.0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-1.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=-1.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+		else {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		$set=ceil($d[$k.'_set']['s'] * 2) / 2;
+		$rate='A';
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 			if ($power==1&&$d[$k.'_set']['m']!=4) storemode('daikin'.$k, 4);
@@ -450,7 +451,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=$power;
-			$data['mode']=3;
+			$data['mode']=4;
 			$data['fan']=$rate;
 			$data['set']=$set;
 			if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
@@ -458,7 +459,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
 				$data['streamer']=$streamer;
 			}
-			storeicon($k.'_set', json_encode($data));
+			if ($d[$k.'_set']['icon']!=json_encode($data)) storeicon($k.'_set', json_encode($data));
 		}
 	} else {
 		if ($daikin->pow!=0||$daikin->mode!=4) {

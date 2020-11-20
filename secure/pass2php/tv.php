@@ -9,10 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    lgcommand('on');
-    lg('lgtv.php On');
-} elseif ($status=='Off') {
-    lgcommand('off');
-    lg('lgtv.php Off');
+if ($status=='Off') {
+	if ($d['lgtv']['d']!='Off') store('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 }

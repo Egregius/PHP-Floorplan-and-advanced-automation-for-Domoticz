@@ -17,7 +17,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
 		unset($_REQUEST['token']);
-		$msg.=('PYTHON '.$_REQUEST['RING'].PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		$msg.=('PYTHON '.$_REQUEST['RING'].PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.' '.strftime("%e-%m %T", $last).PHP_EOL.'new='.$new.' '.strftime("%e-%m %T", $new).PHP_EOL);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
 				$msg.='newer'.PHP_EOL;
@@ -83,7 +83,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
 		unset($_REQUEST['token']);
-		$msg.=('IFTTT Beweging'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		$msg.=('IFTTT Beweging'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.'last='.$last.' '.strftime("%e-%m %T", $last).PHP_EOL.'new='.$new.' '.strftime("%e-%m %T", $new).PHP_EOL);
 		if ($last!=$new) {
 			$msg.='last!=new'.PHP_EOL;
 			if ($new>($last+60)) {
@@ -111,13 +111,12 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			}
 		}
-		$msg.='ip='.$_REQUEST['ip'];
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
 		unset($_REQUEST['token']);
 		$last=apcu_fetch('ding');
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
-		$msg.=('IFTTT DEURBEL'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.print_r($split, true).PHP_EOL.'time='.$split[1].' '.$split[0].' '.$split[2].' '.$split[4].PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		$msg.=('IFTTT DEURBEL'.PHP_EOL.print_r($_REQUEST, true).PHP_EOL.print_r($split, true).PHP_EOL.'time='.$split[1].' '.$split[0].' '.$split[2].' '.$split[4].PHP_EOL.'last='.$last.' '.strftime("%e-%m %T", $last).PHP_EOL.'new='.$new.' '.strftime("%e-%m %T", $new).PHP_EOL);
 		if ($last!=$new) {
 			$msg.='last!=new'.PHP_EOL;
 			if ($new>($last+60)) {
@@ -148,7 +147,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			}
 		}
-		$msg.='ip='.$_REQUEST['ip'];
 	}
 }
 echo $msg;
