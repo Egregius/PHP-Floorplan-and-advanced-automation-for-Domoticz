@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -10,11 +10,11 @@
  * @link     https://egregius.be
  **/
 if ($status=='On'&&$d['auto']['s']=='On'&&past('$ belknop')>15) {
-    shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
-    shell_exec('curl -s "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
-    shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
-    telegram('Deurbel', true, 2);
-    if ($d['zon']['s']==0) {
+    shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
+    shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?action=deurbel" > /dev/null 2>/dev/null &');
+    shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+    telegram('Deurbel belknop', true, 2);
+    if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
         sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
     }
     if ($d['Weg']['s']==0) {
@@ -24,10 +24,10 @@ if ($status=='On'&&$d['auto']['s']=='On'&&past('$ belknop')>15) {
             usleep(10000);
         }
         sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
-       /* if ($d['bose101']['s']=='On') {
+        if ($d['bose101']['s']=='On') {
 		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
 	}
-	if ($d['bose102']['s']=='On') {
+	/*if ($d['bose102']['s']=='On') {
 		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
 	}
 	if ($d['bose103']['s']=='On') {

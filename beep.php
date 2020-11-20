@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -14,7 +14,7 @@ $d=fetchdata();
 if ($d['Weg']['s']>0) {
     die('Slapen of niet thuis');
 }
-if (past('XBel')<60) {
+if (past('XBel')<120) {
     die('To soon');
 }
 if ($d['poortrf']['s']=='On') {

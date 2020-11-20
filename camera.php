@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -22,4 +22,4 @@ $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
 $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
 echo serialize($data);
-if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&!isset($_REQUEST['silent'])) shell_exec('curl -s "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
+if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&(!isset($_REQUEST['silent'])||(isset($_REQUEST['silent'])&&$_REQUEST['silent']==true))) shell_exec('wget -O /dev/null -o /dev/null "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');
