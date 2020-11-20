@@ -14,15 +14,15 @@ require 'functions.php';
 echo '<pre>';
 
 //echo shell_exec('/var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
-var_dump(validateDate('2013-13-01'));  // false
-var_dump(validateDate('20132-13-01')); // false
-var_dump(validateDate('2013-11-32'));  // false
-var_dump(validateDate('2012-2-25'));   // false
-var_dump(validateDate('2013-12-01'));  // true
-var_dump(validateDate('1970-12-01'));  // true
-var_dump(validateDate('2012-02-29'));  // true
-var_dump(validateDate('2012', 'Y'));   // true
-var_dump(validateDate('12012', 'Y'));  // false
+var_dump(ctype_xdigit('123456789'));  // false
+var_dump(ctype_xdigit('ABCDEF')); // false
+var_dump(ctype_xdigit('8059A5E2E92D041321654984654654876546F-'));  // false
+var_dump(ctype_xdigit('2012-2-25'));   // false
+var_dump(ctype_xdigit('2013-12-01'));  // true
+var_dump(ctype_xdigit('1970-12-01'));  // true
+var_dump(ctype_xdigit('2012-02-29'));  // true
+var_dump(ctype_xdigit('2012', 'Y'));   // true
+var_dump(ctype_xdigit('12012', 'Y'));  // false
 
 function validateDate($date, $format = 'Y-m-d')
 {
