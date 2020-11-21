@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if (($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status)) {
+if ((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status)) {
 	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	}
@@ -47,5 +47,6 @@ if (($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status))
 			sleep(2);
 			sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 		}
+		if (isset($status)) lg('Zwave Deurbel');
 	}
 }

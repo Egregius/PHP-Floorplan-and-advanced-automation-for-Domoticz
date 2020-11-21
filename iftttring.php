@@ -28,6 +28,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				}
 			} elseif ($_REQUEST['RING']=='ding') {
 				require 'secure/pass2php/belknop.php';
+				lg('PYTHON Deurbel');
 			}
 		}
 		if ($_REQUEST['battery']<60) {
@@ -60,6 +61,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			if ($new>($last+60)) {
 				apcu_store('ding', $new);
 				require 'secure/pass2php/belknop.php';
+				lg('IFTTT Deurbel');
 			}
 		}
 	}
