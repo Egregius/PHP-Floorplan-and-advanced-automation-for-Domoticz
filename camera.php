@@ -22,4 +22,3 @@ $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
 $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
 echo serialize($data);
-if ($d['Weg']['s']==0&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&(!isset($_REQUEST['silent'])||(isset($_REQUEST['silent'])&&$_REQUEST['silent']==true))) shell_exec('wget -O /dev/null -o /dev/null "http://127.0.0.1/beep.php" > /dev/null 2>/dev/null &');

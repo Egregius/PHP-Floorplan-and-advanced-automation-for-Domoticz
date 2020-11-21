@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3.4-2
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -17,26 +17,16 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$new=ceil($_REQUEST['time']);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
-				$msg.='newer'.PHP_EOL;
 				apcu_store($_REQUEST['RING'], $new);
 				print_r($_REQUEST);
 				if ($_REQUEST['RING']=='motion') {
-					$msg.='motion'.PHP_EOL;
 					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
-					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
-					if ($d['Weg']['s']==0/*&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
-						if ($d['lgtv']['s']=='On') {
-							shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
-						}
-						if (past('Xbel')>60) {
-							$msg.='XBEL'.PHP_EOL;
-							if ($d['Xvol']['s']!=5) {
-							    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-							}
-							sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
-						}
+					if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
+						shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
+						shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
+						shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 					}
 				} elseif ($_REQUEST['RING']=='ding') {
 					require 'secure/pass2php/belknop.php';
@@ -54,27 +44,16 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		$last=apcu_fetch('motion');
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
 		$new=strtotime($split[1].' '.$split[0].' '.$split[2].' '.$split[4]);
-		unset($_REQUEST['token']);
 		if ($last!=$new) {
 			if ($new>($last+60)) {
 				apcu_store('motion', $new);
 				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
-		
-				if ($d['Weg']['s']==0/*&&$d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90*/) {
-					$msg.='Notification'.PHP_EOL;
-					shell_exec('secure/picams.sh Beweging > /dev/null 2>/dev/null &');
-					if ($d['lgtv']['s']=='On') {
-						shell_exec('python3 secure/lgtv.py -c send-message -a "Beweging Ring" 192.168.2.27');
-					}
-					if (past('Xbel')>60) {
-						$msg.='XBEL'.PHP_EOL;
-						if ($d['Xvol']['s']!=5) {
-						    sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-						}
-						sl('Xbel', 30, basename(__FILE__).':'.__LINE__);
-					}
+				if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 				}
 			}
 		}
