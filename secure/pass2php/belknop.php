@@ -9,16 +9,18 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if (($status=='On'&&$d['auto']['s']=='On'&&past('$ belknop')>15)||!isset($status)) {
+if (($status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status)) {
 	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	telegram('Deurbel belknop', true, 2);
-	shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
-	shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?deurbel" > /dev/null 2>/dev/null &');
-	shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
-	if ($d['Weg']['s']==0) {
-		if (past('deurbel')>60) {
+	if (!isset($last)) $last=apcu_fetch('ding');
+	if (!isset($new)) $new=TIME;
+	if ($last!=$new&&$new>($last+60)) {
+		telegram('Deurbel belknop', true, 2);
+		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
+		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?deurbel" > /dev/null 2>/dev/null &');
+		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+		if ($d['Weg']['s']==0) {
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['Xvol']['s']!=40) {
 				sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
@@ -42,8 +44,8 @@ if (($status=='On'&&$d['auto']['s']=='On'&&past('$ belknop')>15)||!isset($status
 			if ($d['lgtv']['s']=='On') {
 				shell_exec('python3 ../lgtv.py -c send-message -a "Deurbel" 192.168.2.27 > /dev/null 2>/dev/null &');
 			}
+			sleep(2);
+			sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 		}
-		sleep(2);
-		sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 	}
 }
