@@ -13,10 +13,6 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel=true" > /dev/null 2>/dev/null &');
-    shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?snapshot=true" > /dev/null 2>/dev/null &');
-    shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
-    telegram('Deurbel belknop', true, 2);
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
