@@ -11,7 +11,8 @@
  **/
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
-$status=$_REQUEST['s'];
+if ($device='pirkeuken') $status='On';
+else $status=$_REQUEST['s'];
 
 if (endswith($device, '_Temperature')) die('Nothing to do');
 elseif (endswith($device, '_Utility')) die('Nothing to do');
