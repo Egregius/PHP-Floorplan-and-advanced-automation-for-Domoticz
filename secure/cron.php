@@ -13,7 +13,7 @@
 require 'functions.php';
 $d=fetchdata();
 $user='heating';
-$s=(int)date('s');
+$s=(int)strftime("%S", TIME);
 /* Temperature control
 -2 = Airco cooling
 -1 = Passive cooling

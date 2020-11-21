@@ -16,9 +16,14 @@ if ((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||
 	if (!isset($last)) $last=apcu_fetch('ding');
 	if (!isset($new)) $new=TIME;
 	if ($last!=$new&&$new>($last+60)) {
-		telegram('Deurbel belknop', true, 2);
-		lg('Belknop'.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
-		
+		if (isset($status)) {
+			telegram('Deurbel belknop', true, 2);
+			lg('Belknop'.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		} else {
+			telegram('Deurbel Ring', true, 2);
+			lg('Belknop Ring'.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
+		}
+
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
@@ -26,6 +31,7 @@ if ((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['Xvol']['s']!=40) {
 				sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
+				usleep(10000);
 			}
 			sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['bose101']['s']=='On') {
@@ -49,7 +55,11 @@ if ((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||
 			sleep(2);
 			sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 		}
-		if (isset($status)) lg('Zwave Deurbel');
-		if ($d['belknop']['s']!='Off') sw('belknop', 'Off', basename(__FILE__).':'.__LINE__);
+		if (isset($status)) {
+			lg('Zwave Deurbel');
+			sw('belknop', 'Off', basename(__FILE__).':'.__LINE__);
+		}
+	} else {
+		lg('Belknop cancelled '.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 	}
 }

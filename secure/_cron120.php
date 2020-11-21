@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+lg(__FILE__.':'.$s);
 $user='cron120';
 
 $items=array('buiten', 'living', 'badkamer', 'kamer', 'tobi', 'alex', 'zolder');

@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-//lg('cron10');
+lg(__FILE__.':'.$s);
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
 	if ($d['pirgarage']['s']=='Off'
