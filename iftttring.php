@@ -45,28 +45,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 						}
 					}
 				} elseif ($_REQUEST['RING']=='ding') {
-					$msg.=PHP_EOL;
-					if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
-						$msg.='Licht voordeur';
-						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-					}
-					shell_exec('secure/picams.sh DEURBEL > /dev/null 2>/dev/null &');
-					if ($d['Weg']['s']==0/*&&$d['deurvoordeur']['s']=='Closed'*/) {
-						$msg.='Notification'.PHP_EOL;
-						sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
-						if ($d['lgtv']['s']=='On') {
-							$msg.='LGTV'.PHP_EOL;
-							shell_exec('python3 ../lgtv.py -c send-message -a "DEURBEL" 192.168.2.27 > /dev/null 2>/dev/null &');
-						}
-						if ($d['Xvol']['s']!=40) {
-							$msg.='XVOL'.PHP_EOL;
-							sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
-							usleep(10000);
-						}
-						sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
-						sleep(2);
-						sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-					}
+					require 'secure/pass2php/belknop.php';
 				}
 			}
 		}
