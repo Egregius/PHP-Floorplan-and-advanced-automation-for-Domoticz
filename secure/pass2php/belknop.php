@@ -22,7 +22,6 @@ if (($status=='On'&&$d['auto']['s']=='On'&&past('$ belknop')>15)||!isset($status
 			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['Xvol']['s']!=40) {
 				sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
-				usleep(10000);
 			}
 			sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['bose101']['s']=='On') {
