@@ -553,7 +553,7 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 	} else {
 		$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
-	lg(' (STORE)	'.$user.'	=> '.$name.'	=> '.$status.'	('.$msg.')');
+	if (!endswith($name, '_temp')) lg(' (STORE)	'.$user.'	=> '.$name.'	=> '.$status.'	('.$msg.')');
 }
 function storemode($name,$mode,$msg='',$time=0)
 {
@@ -570,7 +570,7 @@ function storeicon($name,$icon,$msg='')
 	if ($d[$name]['icon']!=$icon) {
 		$db=dbconnect();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
+		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1)
