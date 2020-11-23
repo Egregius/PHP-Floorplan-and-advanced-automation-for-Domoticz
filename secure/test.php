@@ -30,7 +30,20 @@ echo '<table padding="10px">
 for ($x=15;$x>=0;$x--) {
 	$y=strrev(str_pad(decbin($x),4,"0", STR_PAD_LEFT));
 	$z=str_split($y);
-	echo '<tr><td>'.$x.'</td><td>'.$y.'</td><td>'.$z[0].'</td><td>'.$z[1].'</td><td>'.$z[2].'</td><td>'.$z[3].'</td><td>'.print_r($z, true).'</td></tr>';
+	$CardStatus=15;
+		if ($z[0]==1) {
+			$CardStatus=$CardStatus-1;
+		}
+		if ($z[1]==1) {
+			$CardStatus=$CardStatus-2;
+		}
+		if ($z[2]==1) {
+			$CardStatus=$CardStatus-4;
+		}
+		if ($z[3]==1) {
+			$CardStatus=$CardStatus-8;
+		}
+	echo '<tr><td>'.$x.'</td><td>'.$CardStatus.'</td><td>'.$y.'</td><td>'.$z[0].'</td><td>'.$z[1].'</td><td>'.$z[2].'</td><td>'.$z[3].'</td><td>'.print_r($z, true).'</td></tr>';
 }
 
 echo '</table>';
