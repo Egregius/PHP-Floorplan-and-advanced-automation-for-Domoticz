@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg(__FILE__.':'.$s);
+//lg(__FILE__.':'.$s);
 $user='cron180';
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$data=daikinstatus($k);

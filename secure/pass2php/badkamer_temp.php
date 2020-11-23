@@ -22,9 +22,9 @@ if ($d[$n.'_temp']['icon']!=$diff) {
 	storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 }
 
-if ($status>$d[$n.'_temp']['s']&&$status>$d[$n.'_set']['s']&&passed('badkamervuur1')>900) {
+if ($status>$d[$n.'_temp']['s']&&$status>$d[$n.'_set']['s']&&past('badkamervuur1')>900) {
     sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
     sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
-} elseif ($status<$d[$n.'_temp']['s']&&$status<$d[$n.'_set']['s']&&passed('badkamervuur1')>900) {
+} elseif ($status<$d[$n.'_temp']['s']&&$status<$d[$n.'_set']['s']&&past('badkamervuur1')>900) {
     sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 }

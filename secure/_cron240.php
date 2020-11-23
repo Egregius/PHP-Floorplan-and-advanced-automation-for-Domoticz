@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-lg(__FILE__.':'.$s);
+//lg(__FILE__.':'.$s);
 $user='cron240';
 if ($d['auto']['s']=='On') {
 	if ($d['Weg']['s']==0){

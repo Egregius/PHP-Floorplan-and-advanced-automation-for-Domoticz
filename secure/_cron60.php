@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-lg(__FILE__.':'.$s);
+//lg(__FILE__.':'.$s);
 $user='cron60  ';
 if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
 	$stamp=sprintf("%s", date("Y-m-d H:i"));
