@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+apcu_inc('pass2php_raw');
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
