@@ -11,16 +11,29 @@
  **/
 $start=microtime(true);
 require 'functions.php';
-echo '<pre>';
+//echo '<pre>';
 
 
-
+echo '<table padding="10px">
+	<thead>
+		<tr>
+			<th>Value</th>
+			<th>decbin</th>
+			<th>0</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th>print_r</th>
+		</tr>
+	</thead>';
 
 for ($x=15;$x>=0;$x--) {
-	$y=str_split(str_pad(decbin($x),4,"0", STR_PAD_LEFT));
-	echo $x.'	'.print_r($y).'<br>';
+	$y=strrev(str_pad(decbin($x),4,"0", STR_PAD_LEFT));
+	$z=str_split($y);
+	echo '<tr><td>'.$x.'</td><td>'.$y.'</td><td>'.$z[0].'</td><td>'.$z[1].'</td><td>'.$z[2].'</td><td>'.$z[3].'</td><td>'.print_r($z, true).'</td></tr>';
 }
 
+echo '</table>';
 
 
 
