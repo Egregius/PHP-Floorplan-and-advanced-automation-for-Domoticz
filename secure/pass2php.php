@@ -14,9 +14,11 @@ require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
 
-if (endswith($device, '_Temperature')) die('Nothing to do');
-elseif (endswith($device, '_Utility')) die('Nothing to do');
+if (endswith($device, '_Temperature')) die('Ignore these doubles');
+elseif (endswith($device, '_Utility')) die('Ignore these doubles');
 //elseif ($device=='$ belknop') die('Nothing to do');
+apcu_inc('pass2php_net');
+apcu_inc($device);
 
 $d=fetchdata();
 if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
@@ -44,4 +46,4 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
 	}
 }
 store($device, $status, 'Pass2PHP');
-@include '/var/www/html/secure/pass2php/'.$device.'.php';
+if(@include '/var/www/html/secure/pass2php/'.$device.'.php')apcu_inc('pass2php_effective');
