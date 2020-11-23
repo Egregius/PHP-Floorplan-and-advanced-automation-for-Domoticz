@@ -13,6 +13,24 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
+
+
+
+for ($x=15;$x>=0;$x--) {
+	$y=str_split(str_pad(decbin($x),4,"0", STR_PAD_LEFT));
+	echo $x.'	'.print_r($y).'<br>';
+}
+
+
+
+
+
+
+
+
+
+
+
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
