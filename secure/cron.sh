@@ -28,6 +28,12 @@ sleep 9.998
 #50
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 
+ps cax | grep domoticz
+if [ $? -ne 0 ] ; then
+	/usr/sbin/service domoticz.sh stop
+	/usr/sbin/service domoticz.sh start
+fi
+
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
