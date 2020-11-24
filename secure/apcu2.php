@@ -22,9 +22,9 @@ var asInitVals = new Array();
 		var Table = $('#Table').DataTable(
 		{
 			"paging": false,
-			"scrollY": 890,
+			"scrollY": 1520,
 			"stateSave": true,
-			"order": [[ 3, 'desc' ]],
+			"order": [[ 2, 'desc' ]],
 		});
 		$('#search').keyup(function ()
 		{
@@ -33,26 +33,30 @@ var asInitVals = new Array();
 	});
 function ConfirmDelete(){return confirm('Are you sure?');}
 </script>
-<div style="position:absolute;top:0px;left:300px;"><a href="apcu2.php" class="btn" style="width:400px">Refresh</a></div>
+<div style="top:0px;width:400px;margin:0 auto"><a href="apcu2.php" class="btn" style="width:400px;padding:18px;">Refresh</a></div>
 <?php
 $apcu=apcu_cache_info();
 $running=time()-$apcu['start_time'];
+$days=strftime("%j",$running)-1;
+$time=strftime("%H:%M:%S",$running-3600);
 ?>
 <style>
 th{font-weight:bold;}
 td{padding:2px 10px;}
 </style>
+<div style="position:absolute;top:0px;width:400px;">
 <table>
 	<tr><th align="right">Start time</td><td align="right"><?php echo strftime("%Y-%m-%d %H:%M:%S",$apcu['start_time']);?></td></tr>
-	<tr><th align="right">Run time</th><td align="right"><?php echo strftime("%j %H:%M:%S",$running);?></td></tr>
+	<tr><th align="right">Run time</th><td align="right"><?php echo $days.' '.$time; ?></td></tr>
 	<tr><th align="right">entries</th><td align="right"><?php echo $apcu['num_entries'];?></td></tr>
 	<tr><th align="right">misses</th><td align="right"><?php echo $apcu['num_misses'];?></td><td align="right"><?php echo round($apcu['num_misses']/$running,2);?>/sec</td></tr>
 	<tr><th align="right">updates</th><td align="right"><?php echo $apcu['num_inserts'];?></td><td align="right"><?php echo round($apcu['num_inserts']/$running,2);?>/sec</td></tr>
 	<tr><th align="right">hits</th><td align="right"><?php echo $apcu['num_hits'];?></td><td align="right"><?php echo round($apcu['num_hits']/$running,2);?>/sec</td></tr>
 </table>
+</div>
 <pre>
 <?php //print_r($apcu);?>
-<div id="dataTables_wrapper" style="width:1400px;">
+<div id="dataTables_wrapper" style="width:1400px;margin:0 auto;">
 <table id="Table" class="pretty" BORDER="1" CELLPADDING="3" CELLSPACING="0">
 	<thead>
 		<tr>
