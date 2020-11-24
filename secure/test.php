@@ -13,6 +13,9 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
+$db=dbconnect();
+
+$db->query("ALTER TABLE `devices` CHANGE `i` `i` INT(11) NULL;");
 
 include '_fetchdomoticz.php';
 
