@@ -33,7 +33,7 @@ var asInitVals = new Array();
 	});
 function ConfirmDelete(){return confirm('Are you sure?');}
 </script>
-<div style="position:absolute;top:0px;left:300px;"><a href="apcu.php" class="btn" style="width:400px">Refresh</a></div>
+<div style="position:absolute;top:0px;left:300px;"><a href="apcu2.php" class="btn" style="width:400px">Refresh</a></div>
 <?php
 $apcu=apcu_cache_info();
 $running=time()-$apcu['start_time'];
