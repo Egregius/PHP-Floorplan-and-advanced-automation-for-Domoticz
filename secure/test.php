@@ -14,37 +14,7 @@ require 'functions.php';
 //echo '<pre>';
 
 
-echo '<table padding="10px">
-	<thead>
-		<tr>
-			<th>Value</th>
-			<th>CardStatus</th>
-			<th>bindec</th>
-			<th>decbin</th>
-			<th>0</th>
-			<th>1</th>
-			<th>2</th>
-			<th>3</th>
-			<th>print_r</th>
-		</tr>
-	</thead>';
-
-for ($x=15;$x>=0;$x--) {
-	$y=strrev(str_pad(decbin($x),4,"0", STR_PAD_LEFT));
-	$CS=str_split(strrev(str_pad(decbin($x),4,"0", STR_PAD_LEFT)));
-	$CardStatus=0;
-	if ($CS[0]==1) $CardStatus=$CardStatus+1;
-	if ($CS[1]==1) $CardStatus=$CardStatus+2;
-	if ($CS[2]==1) $CardStatus=$CardStatus+4;
-	if ($CS[3]==1) $CardStatus=$CardStatus+8;
-	echo '<tr><td>'.$x.'</td><td>'.$CardStatus.'</td><td>'.bindec($z[0].$z[1].$z[2].$z[3]).'</td><td>'.$y.'</td><td>'.$z[0].'</td><td>'.$z[1].'</td><td>'.$z[2].'</td><td>'.$z[3].'</td><td>'.print_r($z, true).'</td></tr>';
-}
-
-echo '</table>';
-
-
-
-
+include '_fetchdomoticz.php';
 
 
 
