@@ -30,7 +30,7 @@ if ($d['tobi_set']['m']==0) {
 		}
 	}
 	if ($d['tobi_set']['s']!=$Settobi) {
-		store('tobi_set', $Settobi, true, basename(__FILE__).':'.__LINE__);
+		store('tobi_set', $Settobi, basename(__FILE__).':'.__LINE__);
 		$tobi_set=$Settobi;
 		$d['tobi_set']['s']=$Settobi;
 	}
@@ -43,7 +43,7 @@ if ($d['alex_set']['m']==0) {
 		if (TIME<strtotime('4:30')||TIME>strtotime('19:00')) $Setalex=14;
 	}
 	if ($d['alex_set']['s']!=$Setalex) {
-		ud('alex_set', 0, $Setalex, true, basename(__FILE__).':'.__LINE__);
+		store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
 		$alex_set=$Setalex;
 		$d['alex_set']['s']=$Setalex;
 	}
@@ -495,7 +495,7 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			if ($d['Rtobi']['s']>0&&TIME>=strtotime('8:00')) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
-		if ($dag==true||$d['pirhall']['s']=='On') {
+		if ($dag==true||($d['pirhall']['s']=='On'&&TIME>strtotime('7:30'))) {
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
