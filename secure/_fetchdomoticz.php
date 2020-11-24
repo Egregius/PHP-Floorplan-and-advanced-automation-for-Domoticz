@@ -20,7 +20,7 @@ $domoticz=json_decode(
 );
 if ($domoticz) {
 	foreach ($domoticz['result'] as $dom) {
-		if ($dom['idx']!=1366) {
+//		if ($dom['idx']>2000) {
 			$name=$dom['Name'];
 			$idx=(int)$dom['idx'];
 			if (isset($dom['SwitchType'])) {
@@ -87,18 +87,10 @@ if ($domoticz) {
 				$time=TIME;
 			}
 			echo $idx.' '.$name.' = ';
-			$db->query("INSERT INTO devices (n,i,s,t,dt) VALUES ('$name','$idx','$status','$time','$type') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time',dt='$type';");
+			$db->query("INSERT INTO devices (n,s,dt) VALUES ('$name','$status','$type') ON DUPLICATE KEY UPDATE i='$idx',s='$status',dt='$type';");
 			if (php_sapi_name() === 'cli') $status.PHP_EOL;
 			else $status.'<br>';
-		}
+			echo php_sapi_name();
+//		}
 	}
 }
-
-function shutdownHandler()
-{
-    $error = error_get_last();
-    if ($error['type'] == E_ERROR) {
-        your code goes here;
-    }
-}
-register_shutdown_function('shutdownHandler');

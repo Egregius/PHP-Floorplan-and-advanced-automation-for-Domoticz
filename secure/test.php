@@ -15,7 +15,6 @@ require 'functions.php';
 
 $db=dbconnect();
 
-$db->query("ALTER TABLE `devices` CHANGE `i` `i` INT(11) NULL;");
 
 include '_fetchdomoticz.php';
 
