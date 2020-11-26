@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status)) {
+if (((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)||!isset($status))&&past('voordeur')>5) {
 	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	}

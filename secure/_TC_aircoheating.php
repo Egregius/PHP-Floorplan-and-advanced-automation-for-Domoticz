@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP Temperature Control Airco heating
- * php version 7.4
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -296,13 +296,13 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 		if ($d['buiten_temp']['s']<10) {
 			$items=array('tobi', 'alex');
 			foreach ($items as $i) {
-				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<16&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<16&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<60) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			$items=array('kamerL', 'kamerR');
 			foreach ($items as $i) {
-				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<16&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<16&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<60) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
@@ -312,29 +312,29 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 		if ($zon==0) {
 			foreach ($boven as $i) {
-				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<60) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Weg']['s']>0) {
 				foreach ($benedenall as $i) {
-					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					if ($d[$i]['s']<60) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			} else {
 				if ($dag==false) {
 					foreach ($beneden as $i) {
-						if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+						if ($d[$i]['s']<60) sl($i, 100, basename(__FILE__).':'.__LINE__);
 					}
 				}
 			}
 		} elseif ($d['buiten_temp']['s']<15) {
 			$items=array('tobi', 'alex');
 			foreach ($items as $i) {
-				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<16&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<16&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<60) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 			$items=array('kamerL', 'kamerR');
 			foreach ($items as $i) {
-				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<16&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<100) {
+				if ($d['raamkamer']['s']=='Open'&&$d['kamer_temp']['s']<16&&past('R'.$i)>14400&&past('raamkamer')>14400&&$d['R'.$i]['s']<60) {
 					sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
@@ -344,10 +344,10 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($benedenall as $i) {
-				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<60) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			foreach ($boven as $i) {
-				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<60) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}
