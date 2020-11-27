@@ -13,7 +13,8 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-echo curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
+$data=curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
+echo $data;
 
 
 
@@ -132,12 +133,15 @@ unset(
     $vurl,
     $vpsip,
     $weekend,
+    $ringusername,
+    $ringpassword,
+    $proxmoxcredentials,
     $urlnas,
     $urlnas2,
     $urlfilms
     
     );
-//echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
+echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
 
@@ -150,10 +154,9 @@ function Human_kb($bytes,$dec=2)
 
 function curl($url)
 {
-	$headers=array('Content-Type: application/json');
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,$headers);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json'));
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,TRUE);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
