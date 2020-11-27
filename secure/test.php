@@ -12,8 +12,8 @@
 $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
-
-$data=curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
+$url='https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon;
+$data=curl($url);
 echo $data;
 
 
@@ -157,8 +157,8 @@ function curl($url)
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
 	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json'));
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,TRUE);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
 	$data=curl_exec($ch);
 	curl_close($ch);
