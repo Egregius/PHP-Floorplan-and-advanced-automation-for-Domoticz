@@ -13,10 +13,11 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 $url='https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon;
-$data=curl($url);
-echo $data;
-
-
+//$data=curl($url);
+//echo $data;
+include('curl.php');
+$curl = new Curl\Curl();
+$curl->get($url);
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -164,3 +165,5 @@ function curl($url)
 	curl_close($ch);
 	return $data;
 }
+
+
