@@ -12,12 +12,8 @@
 $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
-$url='https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon;
-//$data=curl($url);
-//echo $data;
-include('curl.php');
-$curl = new Curl\Curl();
-$curl->get($url);
+
+echo curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -152,18 +148,3 @@ function Human_kb($bytes,$dec=2)
     $factor=floor((strlen($bytes)-1)/3);
     return sprintf("%.{$dec}f", $bytes/pow(1000, $factor)).@$size[$factor];
 }
-
-function curl($url)
-{
-	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json'));
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
-	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$data=curl_exec($ch);
-	curl_close($ch);
-	return $data;
-}
-
-
