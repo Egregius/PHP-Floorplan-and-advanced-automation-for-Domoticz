@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-echo curl_test('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
+echo curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
 
 
 
@@ -148,20 +148,16 @@ function Human_kb($bytes,$dec=2)
     return sprintf("%.{$dec}f", $bytes/pow(1000, $factor)).@$size[$factor];
 }
 
-function curly($url) {
-	$ch = curl_init(); 
-	curl_setopt($ch, CURLOPT_URL, $url); 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-	$output = curl_exec($ch); 
+function curl($url)
+{
+	$headers=array('Content-Type: application/json');
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,$url);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,$headers);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,TRUE);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$data=curl_exec($ch);
 	curl_close($ch);
-	return $output;
+	return $data;
 }
-
-function curl_test($setopt_content)
-    {
-        $ch = curl_init();
-        curl_setopt_array($ch, $setopt_content);
-        $result_data = curl_exec($ch);
-        curl_close($ch);
-        return $result_data;
-    }
