@@ -54,7 +54,14 @@ if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
 		$Setliving=16;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+			if (TIME>=strtotime('18:00')&&TIME<strtotime('18:15')) $Setliving=21.0;
+			elseif (TIME>=strtotime('17:45')&&TIME<strtotime('18:15')) $Setliving=20.9;
+			elseif (TIME>=strtotime('17:30')&&TIME<strtotime('18:15')) $Setliving=20.8;
+			elseif (TIME>=strtotime('17:15')&&TIME<strtotime('18:15')) $Setliving=20.7;
+			elseif (TIME>=strtotime('17:00')&&TIME<strtotime('18:15')) $Setliving=20.6;
+			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
+			elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:15')) $Setliving=20.3;
+			elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.1;
 		} elseif ($d['Weg']['s']==1) {
 			$dow=date("w");
 			if($dow==0||$dow==6) {
@@ -87,10 +94,7 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('3:00')&&TIME<strtotime('12:00')) $Setliving=14.0;
 			}
 		}
-		if ($Setliving>19.5) {
-			if (TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
-			elseif ($d['zon']['s']<2000) $Setliving=20.5;
-		}
+		if ($Setliving>19.5&&TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
 	}
 	if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
 		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
@@ -430,12 +434,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
-	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
+		if (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
+		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
 		elseif (${'dif'.$k}>=-1.0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-1.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-1.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-1.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=-1.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
 		else {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		$set=ceil($d[$k.'_set']['s'] * 2) / 2;
 		$rate='A';
