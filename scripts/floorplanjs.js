@@ -19,6 +19,8 @@ function ajax(Update=$LastUpdateTime){
                         if($LastUpdateTime>100){
 							if($LastUpdateTime<=$currentTime-3610){// -10 in zomertijd, -3610 in wintertijd
 								console.log("Last more than 10 seconds ago, fetching everything.");
+								console.log(LastUpdateTime);
+								console.log(d['t']);
 								ajax(0);
 								log=false;
 							}else{
