@@ -16,6 +16,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		echo __LINE__.'<br>';
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
+		echo $new.'<br>';
 		if ($last!=$new&&$new>($last+60)) {
 			echo __LINE__.'<br>';
 			apcu_store($_REQUEST['RING'], $new);
@@ -33,6 +34,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				require 'secure/pass2php/belknop.php';
 				lg('PYTHON Deurbel');
 			}
+			telegram($_REQUEST['RING'].PHP_EOL.'python');
 		}
 		if ($_REQUEST['battery']<60) {
 			alert(
@@ -56,6 +58,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 			}
 		}
+		telegram($_REQUEST['ring'].PHP_EOL.'ifttt');
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
 		$last=apcu_fetch('ding');
 		$split = preg_split('/[\ \n\,]+/', trim($_REQUEST['time']));
@@ -67,5 +70,6 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				lg('IFTTT Deurbel');
 			}
 		}
+		telegram($_REQUEST['ring'].PHP_EOL.'ifttt');
 	}
 }
