@@ -13,11 +13,14 @@ require 'secure/functions.php';
 if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 	$d=fetchdata();
 	if (isset($_REQUEST['RING'])) { // PYTHON
+		echo __LINE__.'<br>';
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
 		if ($last!=$new&&$new>($last+60)) {
+			echo __LINE__.'<br>';
 			apcu_store($_REQUEST['RING'], $new);
 			if ($_REQUEST['RING']=='motion') {
+				echo __LINE__.'<br>';
 				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
