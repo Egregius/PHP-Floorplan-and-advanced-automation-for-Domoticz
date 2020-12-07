@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-echo curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
+telegram('test');
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
