@@ -33,7 +33,7 @@ if ($home===true) {
 		<link rel="icon" href="images/temperatures.png"/>
 		<link rel="shortcut icon" href="images/temperatures.png"/>
 		<link rel="apple-touch-icon" href="images/temperatures.png"/>
-		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+		<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		</head>';
     if ($udevice=='iPad') {
