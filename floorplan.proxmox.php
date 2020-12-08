@@ -41,7 +41,7 @@ if ($home) {
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 			html{width:100%!important;}
 			body{width:100%!important;}

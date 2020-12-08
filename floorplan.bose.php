@@ -49,7 +49,7 @@ if ($home) {
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style type="text/css">
 			.btn{height:48px;margin:3px;}
 			.b2{margin:1px;}

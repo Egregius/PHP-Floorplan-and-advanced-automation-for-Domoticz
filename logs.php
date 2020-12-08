@@ -17,7 +17,7 @@ require 'secure/authentication.php';
 <head>
     <title>Logs</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><meta name="HandheldFriendly" content="true"/><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui"/><link rel="icon" type="image/png" href="images/domoticzphp48.png"/><link rel="shortcut icon" href="images/domoticzphp48.png"/><link rel="apple-touch-startup-image" href="images/domoticzphp450.png"/><link rel="apple-touch-icon" href="images/domoticzphp48.png"/><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="images/domoticzphp48.png"><meta name="msapplication-config" content="browserconfig.xml"><meta name="mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+    <link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
     <style>
         .btn{min-height:75px;}
     </style>

@@ -51,7 +51,7 @@ if ($home) {
 	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}

@@ -50,7 +50,7 @@ if ($home) {
 				});
 			});
 		</script>
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 		    html{width:480px!important;}
 		    body{width:480px!important;}

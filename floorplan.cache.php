@@ -51,7 +51,7 @@ if ($home) {
 				});
 			});
 		</script>
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.php">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 		    html{width:320px!important;}
 		    body{width:320px!important;}
@@ -254,7 +254,7 @@ if ($home) {
             } elseif ($row['n']=='icon') {
                 echo '
                 <td>icon</td>
-                <td><img src="https://openweathermap.org/img/w/'.$d['icon']['s'].'.png" alt="icon"></td>
+                <td><img src="/images/'.$d['icon']['s'].'.png" alt="icon"></td>
                 <td>'.$row['m'].'% Humidity</td>';
             } elseif ($row['n']=='gcal') {
                 echo '
