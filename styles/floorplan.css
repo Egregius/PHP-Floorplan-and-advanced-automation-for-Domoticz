@@ -1,6 +1,39 @@
-<?php
-include "general.php";
-$css="
+html{padding:0;margin:0;color:#ccc;font-family:sans-serif;height:100%;}
+body{padding:0;margin:0;background:#000;/*width:100%;height:100%;*/}
+.navbar{position:fixed;top:0px;left:0px;width:100%;padding:2px 0px 2px 0px;z-index:100;background-color:#111;}
+a:link{text-decoration:none;color:#ccc}
+a:visited{text-decoration:none;color:#ccc}
+a:hover{text-decoration:none;color:#ccc;}
+a:active{text-decoration:none;color:#ccc}
+form{display:inline;margin:0px;padding:0px;}
+input[type=text]  {cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+input[type=number]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+input[type=submit]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+input[type=date]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;cursor:pointer;}
+.btna{color:#000;background-color:#ffba00;}
+.clear{clear:both;}
+.box{text-align:center;left:0px;background:#222;padding:6px;margin:6px;}
+.right{text-align:right;}
+.red{background-color:#F00;}
+.green{background-color:#0F0;}
+.blue{background-color:#00F;}
+.yellow{background-color:#FF0;}
+.content{min-height:80%;margin:0 auto;padding-top:55px;}
+.btn{height:32px;font-size:1.2em;}
+.b1{width:1500px;max-width:99%}
+.b2{width:1500px;max-width:48.55%}
+.b3{width:1500px;max-width:31%}
+.b4{width:1500px;max-width:23.8%}
+.b5{width:1500px;max-width:19%}
+.b6{width:1500px;max-width:15.7%}
+.b7{width:1500px;max-width:13.2%}
+.b8{width:1500px;max-width:12%}
+.b9{width:1500px;max-width:10%}
+.b10{width:1500px;max-width:10%}
+@media (hover: hover) {btn:hover{color:#000;background-color:#ff3a00;cursor:pointer;}}
+
 html{padding:0px;margin:0px;color:#ccc;font-family:sans-serif;}
 body{margin:0px;background:#000;width:100%}
 h2{font-size:36px;}
@@ -66,10 +99,9 @@ td{text-align:center;font-size:1.1em;}
 .motionr{background:rgba(255,0,0,0.8);z-index:-100;}
 .huge2{width:100%;height:48%;margin:1% 0px 1% 0px;font-size:3em;}
 .huge3{width:100%;height:31%;margin:1% 0px 1% 0px;font-size:3em;}
-.huge4{width:100%;height:24%;margin:1% 0px 1% 0px;font-size:3em;}";
-if ($udevice=='iPad') $css.=".huge5{width:100%;height:15%;margin:1% 0px 1% 0px;font-size:3em;}";
-else $css.=".huge5{width:100%;height:19.5%;margin:1% 0px 1% 0px;font-size:3em;}";
-$css.="
+.huge4{width:100%;height:24%;margin:1% 0px 1% 0px;font-size:3em;}
+.huge5{width:100%;height:19.5%;margin:1% 0px 1% 0px;font-size:3em;}
+
 #afval{top:370px;left:88px;padding:0;width:317px;font-size:1.7em;textalign:center;z-index:10;}
 .huge6{width:100%;height:15.5%;margin:1% 0px 1% 0px;font-size:3em;}
 .dimmer{position:fixed;top:0px;left:0px;height:100%;width:506px;background:#000;z-index:100000;}
@@ -239,8 +271,3 @@ $css.="
 #tobi_set{top:475px;left:145px;line-height:0.8em;}
 #alex_set{top:563px;left:200px;line-height:0.8em;}
 #zolder_set{top:705px;left:175px;line-height:0.8em;}
-";
-//$css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
-//$css = str_replace(': ', ':', $css);
-//$css = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $css);
-echo($css);
