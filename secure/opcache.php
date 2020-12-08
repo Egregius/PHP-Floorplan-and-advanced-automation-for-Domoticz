@@ -84,7 +84,7 @@ function getStringFromPropertyAndValue($property, $value)
     <title>OPcache Domoticz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="//www.php.net/favicon.ico">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/bootstrap.min.css" rel="stylesheet">
     <style>
         body { padding-top: 70px; }
         h2 {
@@ -251,7 +251,7 @@ function getStringFromPropertyAndValue($property, $value)
 
 </div>
 <script type="text/javascript">setTimeout('window.location.href=window.location.href;',19963);function navigator_Go(url){window.location.assign(url);}</script>
-<script src="//code.jquery.com/jquery.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+<script src="/scripts/jquery-2.1.4.min.js"></script>
+<script src="/scripts/bootstrap.min.js"></script>
 </body>
 </html>

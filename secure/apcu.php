@@ -445,21 +445,6 @@ span.red { background:#D06030; padding:0 0.5em 0 0.5em }
 input {background:rgb(153,153,204);border:solid rgb(102,102,153) 2px;color:white;font-weight:bold;margin-right:1em;padding:0.1em 0.5em 0.1em 0.5em;}
 //-->
 </style>
-<!-- Matomo -->
-		<script type="text/javascript">
-		  var _paq = window._paq || [];
-		  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-		  _paq.push(['trackPageView']);
-		  _paq.push(['enableLinkTracking']);
-		  (function() {
-		    var u="https://mynetpay.be/matomo/";
-		    _paq.push(['setTrackerUrl', u+'matomo.php']);
-		    _paq.push(['setSiteId', '28']);
-		    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-		    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-		  })();
-		</script>
-		<!-- End Matomo Code -->
 </head>
 <body>
 <?php
