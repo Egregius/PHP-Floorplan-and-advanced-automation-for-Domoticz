@@ -33,6 +33,13 @@ function fetchdata()
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 	return $d;
 }
+function fetch($n)
+{
+	$db=dbconnect();
+	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE n='$n';");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+	return $d;
+}
 /**
  * Function huisslapen
  *
