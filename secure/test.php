@@ -13,10 +13,10 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-$m = new Memcached();
-$m->addServer('localhost', 11211);
+$memcache_obj = memcache_connect("localhost", 11211);
 
-print_r($m->getStats());
+
+print_r($memcache_obj->getStats());
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
