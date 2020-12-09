@@ -13,10 +13,29 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-$memcache_obj = memcache_connect("localhost", 11211);
+$z=1000;
+$memcache_obj = memcache_connect("127.0.0.1", 11211);
+
+$memcache=microtime(true);
+for ($x=0;$x<=$z;$x++) {
+	memcache_set($memcache_obj, 'test'.$x, 'some variable', 0, 30);
+}
+for ($x=0;$x<=$z;$x++) {
+	$y=memcache_get($memcache_obj, 'test'.$x);
+}
+echo '<hr>memcache Time:'.number_format(((microtime(true)-$memcache)*1000), 6);
+
+$apcu=microtime(true);
+for ($x=0;$x<=$z;$x++) {
+	apcu_store('test'.$x, 'some variable', 30);
+}
+for ($x=0;$x<=$z;$x++) {
+	apcu_fetch('test'.$x);
+}
+echo '<hr>APCu Time:'.number_format(((microtime(true)-$apcu)*1000), 6);
 
 
-print_r($memcache_obj->getStats());
+
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');

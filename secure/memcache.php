@@ -31,7 +31,7 @@ define('MAX_ITEM_DUMP',50);
 if (file_exists("servers.php")) {
 	include_once("servers.php");
 } else {
-	$MEMCACHE_SERVERS[] = 'localhost:11211';
+	$MEMCACHE_SERVERS[] = '127.0.0.1:11211';
 }
 
 ////////// END OF DEFAULT CONFIG AREA /////////////////////////////////////////////////////////////
@@ -506,12 +506,12 @@ input {
 //-->
 </style>
 
-<link rel="stylesheet" href="js/style.css" type="text/css" />
+<!--<link rel="stylesheet" href="js/style.css" type="text/css" />
 <link rel="stylesheet" href="js/vtip/css/vtip.css" type="text/css" />
 
 <script type="text/javascript" src="js/jquery.min.js"></script> 
 <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
-<script type="text/javascript" src="js/vtip/vtip-min.js"></script> 
+<script type="text/javascript" src="js/vtip/vtip-min.js"></script>  -->
 
 <script type="text/javascript">
     function must_confirm(txt, link){
@@ -790,7 +790,7 @@ EOB;
         foreach($MEMCACHE_SERVERS as $server){
             echo '<table cellspacing=0><tbody>';
             echo '<tr class=tr-0><td class=td-0>'.$server.'</td><td>
-                  <button onclick="javascript:must_confirm(\'Delete all content on the server?!\',\''.$PHP_SELF.'&server='.($_GET["server"] ? $_GET["server"] : array_search($server,$MEMCACHE_SERVERS)).'&op=6\');">[<b>Flush server</b>]</button>
+                  <button onclick="javascript:must_confirm(\'Delete all content on the server?!\',\''.$PHP_SELF.'&server='.array_search($server,$MEMCACHE_SERVERS).'&op=6\');">[<b>Flush server</b>]</button>
                   </td></tr>';
             echo "<tr class=tr-1><td class=td-0>Memcache Version</td><td>".($memcacheVersion[$server])."</td></tr>";
             
@@ -811,7 +811,7 @@ EOB;
     		echo '<tr class=tr-1><td class=td-0>Threads</td><td>',(int)($memcacheStatsSingle[$server]['STAT']['threads']),'</td></tr>';
     		
             echo '<tr class=tr-0><td class=td-0>'.$server.'</td><td>
-                  <button onclick="javascript:must_confirm(\'Clear stats on the server?!\',\''.$PHP_SELF.'&server='.($_GET["server"] ? $_GET["server"] : array_search($server,$MEMCACHE_SERVERS)).'&op=7\');">[<b>Reset stats</b>]</button>
+                  <button onclick="javascript:must_confirm(\'Clear stats on the server?!\',\''.$PHP_SELF.'&server='.array_search($server,$MEMCACHE_SERVERS).'&op=7\');">[<b>Reset stats</b>]</button>
                   </td></tr>';
             
     		echo '</tbody></table>';
