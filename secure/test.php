@@ -13,16 +13,15 @@ $start=microtime(true);
 require 'functions.php';
 //echo '<pre>';
 
-$z=10000;
+$z=1;
 $memcache_obj = memcache_connect("127.0.0.1", 11211);
 
 $mysql=microtime(true);
 for ($x=0;$x<=$z;$x++) {
 	store('test'.$x, 'some variable');
 }
-for ($x=0;$x<=$z;$x++) {
-	$y=fetch('test'.$x);
-}
+$d=fetchdata();
+
 echo '<hr>mysql Time:'.number_format(((microtime(true)-$mysql)*1000), 6);
 
 $memcache=microtime(true);
