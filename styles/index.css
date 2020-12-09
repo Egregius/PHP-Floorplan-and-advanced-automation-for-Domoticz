@@ -53,3 +53,7 @@ body{background-image:url('/images/_firework.jpg');background-size:contain;backg
 .btn{height:20px;font-size:1.1em;}
 .home{height:19px;font-size:1.1em;border:1px solid #800;}
 .logout{position:absolute;bottom:0px;right:0px;}
+
+@media screen and (max-width:575.98px){
+	.grid-item{min-width:100%;}
+}
