@@ -24,7 +24,8 @@ if ($home) {
     <link rel="apple-touch-icon" href="/images/Camera.png"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <link href="/styles/picam1.css" rel="stylesheet" type="text/css"/>
-    </head><body>';
+    </head>
+    <body>';
     if(isset($_POST['Record'])){
         file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
         file_get_contents("http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055");
