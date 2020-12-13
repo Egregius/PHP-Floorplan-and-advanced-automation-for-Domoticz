@@ -26,9 +26,10 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
-					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
-					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 				}
 			} elseif ($_REQUEST['RING']=='ding') {
 				require 'secure/pass2php/belknop.php';
@@ -56,6 +57,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging" > /dev/null 2>/dev/null &');
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 			}
 			telegram($_REQUEST['ring'].PHP_EOL.'ifttt');
 		}

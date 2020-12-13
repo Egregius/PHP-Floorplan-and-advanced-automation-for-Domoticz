@@ -256,7 +256,7 @@ function restart_page($selected)
 		$header .= "<title>Voordeur-Oprit Archive</title>";
 	else
 		$header .= "<title>Voordeur-Oprit Media</title>";
-	$header .= "<link rel=\"stylesheet\" href=\"/styles/picamarchief.php\"/>";
+	$header .= "<link rel=\"stylesheet\" href=\"/styles/picamarchief.css\"/>";
 	$header .= "</head>";
 	$header .= "<body>";
 	echo $header;
