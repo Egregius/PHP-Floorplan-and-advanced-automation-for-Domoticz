@@ -507,12 +507,12 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&$d['deuralex']['s']=='Open') sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1&&$d['tv']['s']=='Off') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&$d['deuralex']['s']=='Open') sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
 	

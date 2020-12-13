@@ -362,9 +362,9 @@ if ($d['auto']['s']=='On') {
 	}
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
 		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&$d['zon']['s']>0) {
-			if ($d['jbl']['s']!='Off') {
+			/*if ($d['jbl']['s']!='Off') {
 				sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
-			}
+			}*/
 			if ($d['bureel']['s']!='Off') {
 				sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			}
