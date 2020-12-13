@@ -15,7 +15,10 @@ if (((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)|
 	}
 	if (!isset($last)) $last=apcu_fetch('ding');
 	if (!isset($new)) $new=TIME;
-	if ($last!=$new/*&&$new>($last+60)*/) {
+	if ($last!=$new&&$new>($last+60)) {
+		if ($d['Weg']['s']==0) {
+			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
+		}
 		if (isset($status)&&$status=='On') {
 			telegram('Deurbel belknop', true, 2);
 			lg('Belknop'.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
@@ -23,12 +26,11 @@ if (((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)|
 			telegram('Deurbel Ring', true, 2);
 			lg('Belknop Ring'.PHP_EOL.'last='.$last.PHP_EOL.'new='.$new.PHP_EOL);
 		}
-
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+		shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 		if ($d['Weg']['s']==0) {
-			sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['Xvol']['s']!=40) {
 				sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
 				usleep(10000);

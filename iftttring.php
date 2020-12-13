@@ -35,7 +35,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				require 'secure/pass2php/belknop.php';
 				lg('PYTHON Deurbel');
 			}
-			telegram($_REQUEST['RING'].PHP_EOL.'python');
+			//telegram($_REQUEST['RING'].PHP_EOL.'python');
 		}
 		if ($_REQUEST['battery']<60) {
 			alert(
@@ -59,7 +59,7 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 				shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 			}
-			telegram($_REQUEST['ring'].PHP_EOL.'ifttt');
+			//telegram($_REQUEST['ring'].PHP_EOL.'ifttt');
 		}
 		
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='DEURBEL') { //IFTTT
