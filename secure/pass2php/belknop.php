@@ -39,18 +39,6 @@ if (((isset($status)&&$status=='On'&&$d['auto']['s']=='On'&&past('belknop')>15)|
 			if ($d['bose101']['s']=='On') {
 				shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php?deurbel" > /dev/null 2>/dev/null &');
 			}
-			/*if ($d['bose102']['s']=='On') {
-				shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
-			}
-			if ($d['bose103']['s']=='On') {
-				shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
-			}
-			if ($d['bose104']['s']=='On') {
-				shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
-			}
-			if ($d['bose105']['s']=='On') {
-				shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php?deurbel'.$url.'" > /dev/null 2>/dev/null &');
-			}*/
 			if ($d['lgtv']['s']=='On') {
 				shell_exec('python3 ../lgtv.py -c send-message -a "Deurbel" 192.168.2.27 > /dev/null 2>/dev/null &');
 			}
