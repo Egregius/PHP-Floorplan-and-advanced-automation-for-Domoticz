@@ -97,52 +97,16 @@ function douche()
 	if ($douchegas>0||$douchewater>0) {
 		$euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 		$eurocent=round($euro*100, 0);
-		douchewarn($eurocent, 0);
-		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
-		//telegram($msg);
+		if ($d['gcal']['s']==true) {
+			$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
+			telegram($msg);
+		}
 		store('douche', 0, basename(__FILE__).':'.__LINE__);
 		storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 		sleep(8);
 	}
 }
-/**
- * Function douchewarn
- *
- * Calculates the gas and water consumption of the shower, sents a telegram
- * and resets the gas and water counters
- *
- * @param int $euro current amount of shower costs
- * @param int $vol  Volume of the notification sound
- *
- * @return null
- */
-function douchewarn($eurocent,$vol=0)
-{
-	lg('Douchewarn '.$eurocent);
-	global $boseipbadkamer, $d;
-	if ($d['douche']['icon']<TIME-30) {
-		storeicon('douche', TIME);
-		if ($vol>0) $volume=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/volume'))), true);
-		if ($eurocent<100) boseplayinfo('Douche. '.$eurocent.' cent', 40);
-		else {
-			$euro=floor($eurocent/100);
-			$cent=$eurocent%($euro*100);
-			if ($cent==0) boseplayinfo('Douche. '.$euro.' euro', 40);
-			else boseplayinfo('Douche. '.$euro.' euro '.$cent.' cent', 40);
-		}
-		if ($vol>0) {
-			$cv=$volume['actualvolume'];
-			if ($cv<$vol) {
-				usleep(1550000);
-				bosevolume($vol, 102, basename(__FILE__).':'.__LINE__);
-				usleep(3500000);
-				bosevolume($cv, 102, basename(__FILE__).':'.__LINE__);
-			}
-		}
-		//if ($vol>0) telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.').' geluid op vol '.$vol);
-		//else telegram('Douche € '.number_format(($eurocent/100), 2, ',', '.'));
-	}
-}
+
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
 }
