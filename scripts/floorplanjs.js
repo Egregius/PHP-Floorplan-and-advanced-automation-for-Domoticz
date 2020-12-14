@@ -428,9 +428,24 @@ function ajax(Update=$LastUpdateTime){
 								else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">';
 								document.getElementById("brander").innerHTML=html;
 							}catch{}
+							heatingmode=localStorage.getItem('heating');
+							try{
+							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
+								if(heatingmode==0)html+='';
+								else if(heatingmode==-2)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
+								else if(heatingmode==-1)html+='<img src="https://home.egregius.be/images/Cooling_grey.png" class="i40" alt="Cooling">';
+								else if(heatingmode==1)html+='<img src="https://home.egregius.be/images/Cooling_red.png" class="i40" alt="Elec">';
+								else if(heatingmode==2){
+									if($value=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
+									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
+								}
+								document.getElementById("heating").innerHTML=html;
+							}catch{}
+							
+							
 							//try{
 								//BRANDERFLOORPLAN
-								heatingmode=localStorage.getItem('heating');
+								
 								if(heatingmode==4){
 									if($value=="Off"){
 										$('#branderfloorplan').attr("src", "/images/fire_Off.png");
