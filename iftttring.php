@@ -26,8 +26,8 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
-					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'" > /dev/null 2>/dev/null &');
-					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
+					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 				}
@@ -38,11 +38,14 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 			//telegram($_REQUEST['RING'].PHP_EOL.'python');
 		}
 		if ($_REQUEST['battery']<60) {
-			alert(
-                            'BatterijRingDeurbel',
-                            'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
-                            86400
-                        );
+                        if ($d['ringdoorbell']['s']=='Off') {
+                        	sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
+				alert(
+				    'BatterijRingDeurbel',
+				    'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
+				    28800
+	                        );
+                        }
                 }
 	} elseif (isset($_REQUEST['ring'])&&$_REQUEST['ring']=='Beweging') { //IFTTT
 		$last=apcu_fetch('motion');

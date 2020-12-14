@@ -163,3 +163,9 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
         }
     }
 }
+
+if (TIME>=strtotime('7:00')&&TIME<=strtotime('21:00')) {
+	if ($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
+} else {
+	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__);
+}
