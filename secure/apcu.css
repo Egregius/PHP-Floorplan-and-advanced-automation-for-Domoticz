@@ -22,8 +22,8 @@ table.pretty tfoot {display: table-header-group;}
 table.pretty tfoot th{}
 table.pretty tfoot td{text-align:center;font-weight:bold;}
 div.dataTables_wrapper{}
-table.pretty thead th.sorting_asc{background:#999 url('https://urbexforum.org/map/images/sort_asc.png') no-repeat right center;}
-table.pretty thead th.sorting_desc{background:#999 url('https://urbexforum.org/map/images/sort_desc.png') no-repeat right center;}
+table.pretty thead th.sorting_asc{background:#999 url('/images/sort_asc.png') no-repeat right center;}
+table.pretty thead th.sorting_desc{background:#999 url('/images/sort_desc.png') no-repeat right center;}
 table.pretty thead th.sorting{background:#999}
 a.paginate_button,
 a.paginate_active{display:inline-block;background-color:#BBB;padding:2px 6px;margin-left:2px;cursor:pointer;cursor:hand;}

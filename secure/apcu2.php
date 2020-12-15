@@ -12,10 +12,10 @@ if(isset($_POST['Remove'])){
 }
 ?>
 <link rel="stylesheet" type="text/css" href="apcu.css">
-<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://urbexforum.org/Themes/default/scripts/js/jQuery.dataTables.columnFilter.js"></script>
-<script type="text/javascript" language="javascript" src="https://urbexforum.org/Themes/default/scripts/js/jQuery.datesort.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.columnFilter.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/jQuery.datesort.js"></script>
 <script type="text/javascript" charset="utf-8">
 var asInitVals = new Array();
 	$(document).ready(function() {

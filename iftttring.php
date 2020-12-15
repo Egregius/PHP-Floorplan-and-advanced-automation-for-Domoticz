@@ -16,28 +16,33 @@ if (isset($_REQUEST['token'])&&$_REQUEST['token']==$ifttttoken) {
 		echo __LINE__.'<br>';
 		$last=apcu_fetch($_REQUEST['RING']);
 		$new=ceil($_REQUEST['time']);
-		echo $new.'<br>';
+		echo 'last='.$last.'<br>';
+		echo 'new='.$new.'<br>';
 		if ($last!=$new&&$new>($last+60)) {
 			echo __LINE__.'<br>';
 			apcu_store($_REQUEST['RING'], $new);
 			if ($_REQUEST['RING']=='motion') {
 				echo __LINE__.'<br>';
 				if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+					echo __LINE__.'<br>';
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
+					echo __LINE__.'<br>';
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging&battery='.$_REQUEST['battery'].'&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 					shell_exec('wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 				}
 			} elseif ($_REQUEST['RING']=='ding') {
+				echo __LINE__.'<br>';
 				belknop();
 				lg('PYTHON Deurbel');
 			}
 			//telegram($_REQUEST['RING'].PHP_EOL.'python');
 		}
 		if ($_REQUEST['battery']<60) {
+			echo __LINE__.'<br>';
                         if ($d['ringdoorbell']['s']=='Off') {
                         	sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
 				alert(
