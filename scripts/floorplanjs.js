@@ -1,37 +1,38 @@
 function navigator_Go(url){window.location.assign(url);}
 $LastUpdateTime=parseInt(0);
 function ajax(Update=$LastUpdateTime){
-    if(Update==0)$LastUpdateTime=0;
-    $.ajax({
-        url: '/ajax.php?t='+$LastUpdateTime,
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(d){
-        	$currentTime=parseInt(Math.round(new Date().getTime()/1000));
-        	if(d=='NOTAUTHENTICATED'){
-        		document.getElementById('placeholder').insertAdjacentHTML('beforeend', 'NOT AUTHENTICATED');
-        		navigator_Go('index.php');
-        	}
-            for (device in d){
-                if(d.hasOwnProperty(device)){
-                     if(device=="t"){
-                        if($LastUpdateTime>100){
-							if($LastUpdateTime<=$currentTime-10){// -10 in zomertijd, -3610 in wintertijd
+	if(Update==0)$LastUpdateTime=0;
+	$.ajax({
+		url: '/ajax.php?t='+$LastUpdateTime,
+		dataType : 'json',
+		async: true,
+		defer: true,
+		success: function(d){
+			$currentTime=parseInt(Math.round(new Date().getTime()/1000));
+			if(d=='NOTAUTHENTICATED'){
+				document.getElementById('placeholder').insertAdjacentHTML('beforeend', 'NOT AUTHENTICATED');
+				navigator_Go('index.php');
+			}
+			for (device in d){
+				if(d.hasOwnProperty(device)){
+					 if(device=="t"){
+					 	$currentTime=parseInt(d['t']);
+						if($LastUpdateTime>100){
+							if($LastUpdateTime<=d[device]['t']-10){// -10 in zomertijd, -3610 in wintertijd
 								console.log("Last more than 10 seconds ago, fetching everything.");
 								ajax(0);
 								log=false;
 							}else{
-                        		$LastUpdateTime=parseInt(d['t']);
-                        		log=true;
+								$LastUpdateTime=parseInt(d['t']);
+								log=true;
 							}
-                        }else{
-                        	console.log("LastUpdateTime = " + $LastUpdateTime);
-                        	$LastUpdateTime=parseInt(d['t']);
-                        	log=false;
-                        }
-                    }else{
-                    	$value=d[device]['s'];
+						}else{
+							console.log("LastUpdateTime = " + $LastUpdateTime);
+							$LastUpdateTime=parseInt(d['t']);
+							log=false;
+						}
+					}else{
+						$value=d[device]['s'];
 						$mode=d[device]['m'];
 						type=d[device]['dt'];
 						$icon=d[device]['ic'];
@@ -630,7 +631,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							try{
 								if($value=="On"){$('#'+device).attr("src", "/images/bose_On.png");}
-							    else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
+								else if($value=="Off"){$('#'+device).attr("src", "/images/bose_Off.png");}
 							}catch{}
 						}else if(type=="dimmer"){
 							localStorage.setItem(device, $value);
@@ -898,44 +899,44 @@ function ajax(Update=$LastUpdateTime){
 							//console.log(type+" -> "+device+" -> "+$value+" -> "+time+" -> "+$mode);
 						}
 					}
-                }
-            }
-            try{
-                date=new Date($currentTime*1000);
-                hours=date.getHours();
-                minutes="0"+date.getMinutes();
-                seconds="0"+date.getSeconds();
-                $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
-            }catch{}
-            try{
-                tijd=localStorage.getItem("tijd_water");
-                elem=document.getElementById("tdwater");
-                if(tijd>$currentTime-15)elem.style.color="#FF0000";
-                else if(tijd>$currentTime-30)elem.style.color="#FF4400";
-                else if(tijd>$currentTime-60)elem.style.color="#FF8800";
-                else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-                else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-                else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-                else elem.style.color=null;
-            }catch{}
-            try{
-                tijd=localStorage.getItem("tijd_gas");
-                elem=document.getElementById("tdgas");
-                if(tijd>$currentTime-15)elem.style.color="#FF0000";
-                else if(tijd>$currentTime-30)elem.style.color="#FF4400";
-                else if(tijd>$currentTime-60)elem.style.color="#FF8800";
-                else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-                else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-                else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-                else elem.style.color=null;
-            }catch{}
-            var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','luifel'];
-            var arrayLength=items.length;
-            for (var i=0; i < arrayLength; i++) {
-                try{
-                    tijd=localStorage.getItem("tijd_"+items[i]);
-                    $value=localStorage.getItem(items[i]);
-                    elem=document.getElementById("t"+items[i]);
+				}
+			}
+			try{
+				date=new Date($currentTime*1000);
+				hours=date.getHours();
+				minutes="0"+date.getMinutes();
+				seconds="0"+date.getSeconds();
+				$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
+			}catch{}
+			try{
+				tijd=localStorage.getItem("tijd_water");
+				elem=document.getElementById("tdwater");
+				if(tijd>$currentTime-15)elem.style.color="#FF0000";
+				else if(tijd>$currentTime-30)elem.style.color="#FF4400";
+				else if(tijd>$currentTime-60)elem.style.color="#FF8800";
+				else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
+				else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
+				else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+				else elem.style.color=null;
+			}catch{}
+			try{
+				tijd=localStorage.getItem("tijd_gas");
+				elem=document.getElementById("tdgas");
+				if(tijd>$currentTime-15)elem.style.color="#FF0000";
+				else if(tijd>$currentTime-30)elem.style.color="#FF4400";
+				else if(tijd>$currentTime-60)elem.style.color="#FF8800";
+				else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
+				else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
+				else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+				else elem.style.color=null;
+			}catch{}
+			var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','luifel'];
+			var arrayLength=items.length;
+			for (var i=0; i < arrayLength; i++) {
+				try{
+					tijd=localStorage.getItem("tijd_"+items[i]);
+					$value=localStorage.getItem(items[i]);
+					elem=document.getElementById("t"+items[i]);
 					date=new Date(tijd*1000);
 					hours=date.getHours();
 					minutes="0"+date.getMinutes();
@@ -956,99 +957,99 @@ function ajax(Update=$LastUpdateTime){
 						html=formatDate(tijd);
 						if(elem.innerHTML!=html)elem.innerHTML=html;
 					}
-                }catch{}
-            }
-            var items=['deurgarage','deurinkom','achterdeur','poort','deurvoordeur','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamtobi','raamalex'];
-            var arrayLength=items.length;
-            for (var i=0; i < arrayLength; i++) {
-                try{
-                    tijd=localStorage.getItem("tijd_"+items[i]);
-                    $value=localStorage.getItem(items[i]);
-                    elem=document.getElementById("t"+items[i]);
-                    if($value=="Closed"){
-                        if(tijd>$currentTime-60)elem.style.color="#FF8800";
-                        else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-                        else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-                        else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-                        else if(tijd>$currentTime-7200)elem.style.color="#CCC";
-                        else if(tijd>$currentTime-14400)elem.style.color="#BBB";
-                        else if(tijd>$currentTime-21600)elem.style.color="#AAA";
-                        else if(tijd>$currentTime-28800)elem.style.color="#999";
-                        else if(tijd>$currentTime-36000)elem.style.color="#888";
-                        else if(tijd>$currentTime-82800)elem.style.color="#777";
-                        else {
-                        	elem.style.color="#777";
-                        	html=formatDate(tijd);
-                        	if(elem.innerHTML!=html)elem.innerHTML=html;
-                        }
-                    }else{
-                        if(tijd>$currentTime-82800)elem.style.color=null;
-                        else {
-                        	html=formatDate(tijd);
-                        	if(elem.innerHTML!=html)elem.innerHTML=html;
-                        }
-                        elem.style.color="#FFF";
-                    }
-                }catch{}
-            }
-            var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
-            var arrayLength=items.length;
-            for (var i=0; i < arrayLength; i++) {
-                try{
-                    tijd=localStorage.getItem("tijd_"+items[i]);
-                    $value=localStorage.getItem(items[i]);
-                    elem=document.getElementById("t"+items[i]);
-                    if($value=="Off"){
-                        if(tijd>$currentTime-60)elem.style.color="#FF8800";
-                        else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-                        else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-                        else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-                        else if(tijd>$currentTime-7200)elem.style.color="#CCC";
-                        else if(tijd>$currentTime-14400)elem.style.color="#BBB";
-                        else if(tijd>$currentTime-21600)elem.style.color="#AAA";
-                        else if(tijd>$currentTime-28800)elem.style.color="#999";
-                        else if(tijd>$currentTime-36000)elem.style.color="#888";
-                        else if(tijd>$currentTime-82800)elem.style.color="#777";
-                        else {
-                        	elem.style.color="#777";
-                        	html=formatDate(tijd);
-                        	if(elem.innerHTML!=html)elem.innerHTML=html;
-                        }
-                    }else{
-                        if(tijd>$currentTime-82800)elem.style.color="#FFF";
-                        else {
-                        	elem.style.color="#FFF";
-                        	html=formatDate(tijd);
-                        	if(elem.innerHTML!=html)elem.innerHTML=html;
-                        }
-                    }
-                }catch{}
-            }
-        }
-    });
+				}catch{}
+			}
+			var items=['deurgarage','deurinkom','achterdeur','poort','deurvoordeur','deurbadkamer','deurkamer','deurtobi','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamtobi','raamalex'];
+			var arrayLength=items.length;
+			for (var i=0; i < arrayLength; i++) {
+				try{
+					tijd=localStorage.getItem("tijd_"+items[i]);
+					$value=localStorage.getItem(items[i]);
+					elem=document.getElementById("t"+items[i]);
+					if($value=="Closed"){
+						if(tijd>$currentTime-60)elem.style.color="#FF8800";
+						else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
+						else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
+						else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+						else if(tijd>$currentTime-7200)elem.style.color="#CCC";
+						else if(tijd>$currentTime-14400)elem.style.color="#BBB";
+						else if(tijd>$currentTime-21600)elem.style.color="#AAA";
+						else if(tijd>$currentTime-28800)elem.style.color="#999";
+						else if(tijd>$currentTime-36000)elem.style.color="#888";
+						else if(tijd>$currentTime-82800)elem.style.color="#777";
+						else {
+							elem.style.color="#777";
+							html=formatDate(tijd);
+							if(elem.innerHTML!=html)elem.innerHTML=html;
+						}
+					}else{
+						if(tijd>$currentTime-82800)elem.style.color=null;
+						else {
+							html=formatDate(tijd);
+							if(elem.innerHTML!=html)elem.innerHTML=html;
+						}
+						elem.style.color="#FFF";
+					}
+				}catch{}
+			}
+			var items=['pirliving','pirinkom','pirhall','pirkeuken','pirgarage'];
+			var arrayLength=items.length;
+			for (var i=0; i < arrayLength; i++) {
+				try{
+					tijd=localStorage.getItem("tijd_"+items[i]);
+					$value=localStorage.getItem(items[i]);
+					elem=document.getElementById("t"+items[i]);
+					if($value=="Off"){
+						if(tijd>$currentTime-60)elem.style.color="#FF8800";
+						else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
+						else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
+						else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+						else if(tijd>$currentTime-7200)elem.style.color="#CCC";
+						else if(tijd>$currentTime-14400)elem.style.color="#BBB";
+						else if(tijd>$currentTime-21600)elem.style.color="#AAA";
+						else if(tijd>$currentTime-28800)elem.style.color="#999";
+						else if(tijd>$currentTime-36000)elem.style.color="#888";
+						else if(tijd>$currentTime-82800)elem.style.color="#777";
+						else {
+							elem.style.color="#777";
+							html=formatDate(tijd);
+							if(elem.innerHTML!=html)elem.innerHTML=html;
+						}
+					}else{
+						if(tijd>$currentTime-82800)elem.style.color="#FFF";
+						else {
+							elem.style.color="#FFF";
+							html=formatDate(tijd);
+							if(elem.innerHTML!=html)elem.innerHTML=html;
+						}
+					}
+				}catch{}
+			}
+		}
+	});
 }
 
 function ajaxmedia($ip){
-    $.ajax({
-        url: '/ajax.php?media',
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(data){
-        	try{
-        		up=human_kb(data['pfsense']['up']*1024);
-        		down=human_kb(data['pfsense']['down']*1024);
-        	}catch{}
-        	denon=localStorage.getItem('denon');
+	$.ajax({
+		url: '/ajax.php?media',
+		dataType : 'json',
+		async: true,
+		defer: true,
+		success: function(data){
+			try{
+				up=human_kb(data['pfsense']['up']*1024);
+				down=human_kb(data['pfsense']['down']*1024);
+			}catch{}
+			denon=localStorage.getItem('denon');
 		tv=localStorage.getItem('tv');
 		lgtv=localStorage.getItem('lgtv');
 			
 		try{
 				html='<small>&#x21e7;</small> '+up+'<br><small>&#x21e9;</small>'+down;
-	            document.getElementById("pfsense").innerHTML=html;
-	        }catch{}
-            
-            try{
+				document.getElementById("pfsense").innerHTML=html;
+			}catch{}
+			
+			try{
 				html='';
 				if(denon=='Off'&&lgtv=='Off')html+='<button class="btn b1 btnh100" onclick="ajaxcontrol(\'media\', \'media\', \'On\')">Media Power On</button>';
 				if(denon=='On'){
@@ -1070,23 +1071,23 @@ function ajaxmedia($ip){
 				html+='<br><br><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'down\')" class="btn b2 btnh75">Stiller</button><button onclick="ajaxcontrol(\'lgtv\', \'volume\', \'up\')" class="btn b2 btnh75">Luider</button>';
 				if(document.getElementById("media").innerHTML!=html)document.getElementById("media").innerHTML=html;
 			 }catch{}
-        }
-    });
+		}
+	});
 }
 
 function ajaxbose($ip){
-    try{clearInterval(myAjax);}catch{};
-    $.ajax({
-        url: '/ajax.php?bose='+$ip,
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(data){
-            date=new Date(data["time"]*1000);
-            hours=date.getHours();
-            minutes="0"+date.getMinutes();
-            seconds="0"+date.getSeconds();
-            $("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
+	try{clearInterval(myAjax);}catch{};
+	$.ajax({
+		url: '/ajax.php?bose='+$ip,
+		dataType : 'json',
+		async: true,
+		defer: true,
+		success: function(data){
+			date=new Date(data["time"]*1000);
+			hours=date.getHours();
+			minutes="0"+date.getMinutes();
+			seconds="0"+date.getSeconds();
+			$("#time").html(hours+':'+minutes.substr(-2)+':'+seconds.substr(-2));
 			if(data["nowplaying"]["@attributes"]["source"]!="STANDBY"){
 				let volume=parseInt(data["volume"]["actualvolume"], 10);
 				levels=[-10, -7, -4, -2, -1, 0, 1, 2, 4, 7, 10];
@@ -1182,70 +1183,70 @@ function ajaxbose($ip){
 			if(document.getElementById("power").innerHTML!=html){
 				document.getElementById("power").innerHTML=html;
 			}
-        }
-    })
+		}
+	})
 }
 
 function ajaxcontrol(device,command,action){
-    console.log(device,command,action);
-    $.ajax({
-        url: '/ajax.php?device='+device+'&command='+command+'&action='+action,
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(data){
-            console.log(data);
-        }
-    })
+	console.log(device,command,action);
+	$.ajax({
+		url: '/ajax.php?device='+device+'&command='+command+'&action='+action,
+		dataType : 'json',
+		async: true,
+		defer: true,
+		success: function(data){
+			console.log(data);
+		}
+	})
 }
 
 function ajaxcontrolbose(ip,command,action){
-    console.log(ip,command,action);
-    $.ajax({
-        url: '/ajax.php?boseip='+ip+'&command='+command+'&action='+action,
-        dataType : 'json',
-        async: true,
-        defer: true,
-        success: function(data){
-            console.log(data);
-        }
-    })
+	console.log(ip,command,action);
+	$.ajax({
+		url: '/ajax.php?boseip='+ip+'&command='+command+'&action='+action,
+		dataType : 'json',
+		async: true,
+		defer: true,
+		success: function(data){
+			console.log(data);
+		}
+	})
 }
 
 function floorplan(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplan');
-    ajax(0);
+	ajax(0);
 	myAjax=setInterval(ajax, 500);
-    try{
-        html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
-        html+='<div class="fix z1 afval" id="gcal"></div>';
-        html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
-        html+='<div class="fix Weg" id="Weg"></div>';
-        html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
-        html+='<div class="fix z2" id="sirene"></div>';
-        html+='<div class="fix z2" id="daikincmpfreq"></div>';
-        html+='<div class="fix z1" id="zoldertrap"></div>';
-        items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
-        items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-        items=['jbl','diepvries','zoldervuur1','zoldervuur2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
-        items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
+	try{
+		html='<div class="fix leftbuttons" id="heating" onclick="floorplanheating();"></div><div class="fix" id="clock" onclick="floorplan();"></div>';
+		html+='<div class="fix z1 afval" id="gcal"></div>';
+		html+='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+		html+='<div class="fix picam1" id="picam1"><a href=\'javascript:navigator_Go("picam1/index.php");\'><img src="https://home.egregius.be/images/Camera.png" class="i48" alt="cam"></a></div>';
+		html+='<div class="fix Weg" id="Weg"></div>';
+		html+='<div class="fix z0 diepvries_temp" id="diepvries_temp"></div>';
+		html+='<div class="fix z2" id="sirene"></div>';
+		html+='<div class="fix z2" id="daikincmpfreq"></div>';
+		html+='<div class="fix z1" id="zoldertrap"></div>';
+		items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
+		items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
+		items=['jbl','diepvries','zoldervuur1','zoldervuur2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
+		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
-        items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','powermeter','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
-        items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
-        items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
-        items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
+		items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
+		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','powermeter','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+		items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
+		items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
+		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
 		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
-        items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
+		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
-        items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
-        html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
-        watertuin=localStorage.getItem('watertuin');
+		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
+		html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
+		watertuin=localStorage.getItem('watertuin');
 			if(watertuin!='undefined')html+='<tr><td>Tuin</td><td id="watertuin">'+watertuin+' L</td></tr>';
 		html+='</table></div>';
-        $('#placeholder').html(html).fadeIn(3000);
+		$('#placeholder').html(html).fadeIn(3000);
    }catch{}
    sidebar();
 }
@@ -1253,109 +1254,109 @@ function floorplan(){
 function floorplanheating(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanheating');
-    heatingset=localStorage.getItem('heating');
-    ajax(0);
+	heatingset=localStorage.getItem('heating');
+	ajax(0);
 	myAjax=setInterval(ajax, 500);
-    try{
-        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
-        html+='<div class="fix z2" id="sirene"></div>';
-        html+='<div class="fix z2" id="daikincmpfreq"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-        html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
-        items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed'];
-        items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
-        items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
-        items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-        items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
-        items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
+	try{
+		html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+		html+='<div class="fix" id="clock" onclick="floorplanheating();"></div>';
+		html+='<div class="fix z2" id="sirene"></div>';
+		html+='<div class="fix z2" id="daikincmpfreq"></div>';
+		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+		html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
+		items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed'];
+		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
+		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
+		items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
+		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
-        items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
-		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];        
-        items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
-        items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
-        items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
-        if(heatingset==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
-        else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
-        else if(heatingset==0)items=['badkamer'];
-        else if(heatingset==-2)items=['living','kamer','alex'];
+		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
+		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];		
+		items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
+		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
+		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
+		if(heatingset==2)items=['living','badkamer','kamer','tobi','alex','zolder'];
+		else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
+		else if(heatingset==0)items=['badkamer'];
+		else if(heatingset==-2)items=['living','kamer','alex'];
 		if(heatingset!=-1)items.forEach(function(item){html+='<div class="fix z2 '+item+'_set" onclick="setpoint(\''+item+'\');" id="'+item+'_set"></div>';});
-        html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
-        html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
-        html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
-        if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
-        html+='<tr id="heatingauto"></tr>';
-        html+='<tr id="trheating"></tr>';
-        html+='</table></div>';
-        $('#placeholder').html(html);
-    }catch{}
-    sidebar();
+		html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
+		html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
+		html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
+		if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
+		html+='<tr id="heatingauto"></tr>';
+		html+='<tr id="trheating"></tr>';
+		html+='</table></div>';
+		$('#placeholder').html(html);
+	}catch{}
+	sidebar();
 }
 
 function floorplanmedia(){
-    for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
+	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanmedia');
-    ajax(0);
-    ajaxmedia();
-    myAjax=setInterval(ajax, 800);
-    myAjaxmedia=setInterval(ajaxmedia, 900);
-    try{
-        tv=localStorage.getItem("tv");
+	ajax(0);
+	ajaxmedia();
+	myAjax=setInterval(ajax, 800);
+	myAjaxmedia=setInterval(ajaxmedia, 900);
+	try{
+		tv=localStorage.getItem("tv");
 		lgtv=localStorage.getItem("lgtv");
 		html='<div class="fix jbl z1 i48" id="jbl"></div>';
-        html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-        html+='<div class="fix z2" id="sirene"></div>';
-        items=['eettafel','zithoek'];
-        items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-        items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
-        items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
+		html+='<div class="fix" id="clock" onclick="floorplanmedia();"></div>';
+		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
+		html+='<div class="fix z2" id="sirene"></div>';
+		items=['eettafel','zithoek'];
+		items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
+		items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
+		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		if(tv=="On")html+='<div class="fix z1 i48" id="lgtv"></div>';
 		else if(tv=="Off")html+='<div class="fix z1 i48" id="tv"></div>';
 		items=['bureel','keukenL','keukenR','living'];
-        items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
+		items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
-        items.forEach(function(item){html+='<div class="fix z0" id="z'+item+'"></div>';});
+		items.forEach(function(item){html+='<div class="fix z0" id="z'+item+'"></div>';});
 		items=['raamliving','raamkeuken','deurvoordeur','deurinkom','deurgarage','deurwc'];
-        items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
-        html+='<div class="fix blackmedia" id="media"></div>';
-        html+='<div class="fix" id="mediasidebar"><br><a href=\'javascript:navigator_Go("denon.php");\'><img src="https://home.egregius.be/images/denon.png" class="i48" alt=""></a><br><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Films</a><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Series</a><br><br><a href=\'javascript:navigator_Go("kodi.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Kodi<br>Control</a><br><br>';
-        html+='<div id="playpause"></div>';
-        html+='<div id="pfsense"></div></div>';
-        $('#placeholder').html(html);
-    }catch{}
+		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
+		html+='<div class="fix blackmedia" id="media"></div>';
+		html+='<div class="fix" id="mediasidebar"><br><a href=\'javascript:navigator_Go("denon.php");\'><img src="https://home.egregius.be/images/denon.png" class="i48" alt=""></a><br><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/films.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Films</a><br><br><a href=\'javascript:navigator_Go("https://films.egregius.be/series.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Series</a><br><br><a href=\'javascript:navigator_Go("kodi.php");\'><img src="https://home.egregius.be/images/kodi.png" class="i48" alt=""><br>Kodi<br>Control</a><br><br>';
+		html+='<div id="playpause"></div>';
+		html+='<div id="pfsense"></div></div>';
+		$('#placeholder').html(html);
+	}catch{}
 }
 
 function floorplanbose(){
-    for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
+	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	ajaxbose($ip)();
-    myAjaxmedia=setInterval(function(){ajaxbose($ip);}, 999);
-    try{
+	myAjaxmedia=setInterval(function(){ajaxbose($ip);}, 999);
+	try{
 	}catch{}
 }
 
 function floorplanothers(){
 	for (var i = 1; i < 99999; i++){try{window.clearInterval(i);}catch{};}
 	localStorage.setItem('view', 'floorplanothers');
-    ajax(0);
-    myAjax=setInterval(ajax, 999);
-    try{
-        html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
-        html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
-        html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px"/></div>';
-        items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
-        items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
-        html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="https://home.egregius.be/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
-        gcal=localStorage.getItem('gcal');
-        if(gcal==true)html+='Tobi: Beitem';
-        else html+='Tobi: Ingelmunster';
-        html+='</div>';
-        low=localStorage.getItem('regenputleeg');
-        high=localStorage.getItem('regenputvol');
-        if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputrood.png"></div>';
-        else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputblauw.png"></div>';
-        else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputgroen.png"></div>';
-        html+='<div class="fix z1 center" style="top:600px;left:20px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
+	ajax(0);
+	myAjax=setInterval(ajax, 999);
+	try{
+		html='<div class="fix floorplan2icon" onclick="floorplanothers();"><img src="https://home.egregius.be/images/plus.png" class="i60" alt="plus"></div>';
+		html+='<div class="fix" id="clock" onclick="floorplanothers();"></div>';
+		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px"/></div>';
+		items=['auto','tv','nvidia','bosesoundlink','denon','water','regenpomp','zwembadfilter','zwembadwarmte','dampkap'];
+		items.forEach(function(item){html+='<div class="fix z1 i48" style="width:70px;" id="'+item+'"></div>';});
+		html+='<div class="fix z1 center" style="top:370px;left:410px;"><a href=\'javascript:navigator_Go("bat.php");\'><img src="https://home.egregius.be/images/verbruik.png" width="40px" height="40px"/><br/>&nbsp;Bats</a></div><div class="fix z1 center" style="top:20px;left:130px;">';
+		gcal=localStorage.getItem('gcal');
+		if(gcal==true)html+='Tobi: Beitem';
+		else html+='Tobi: Ingelmunster';
+		html+='</div>';
+		low=localStorage.getItem('regenputleeg');
+		high=localStorage.getItem('regenputvol');
+		if(low=='Off'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputrood.png"></div>';
+		else if(low=='On'&&high=='Off')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputblauw.png"></div>';
+		else if(low=='On'&&high=='On')html+='<div class="fix" id="regenput"><img src="https://home.egregius.be/images/regenputgroen.png"></div>';
+		html+='<div class="fix z1 center" style="top:600px;left:20px;"><a href=\'javascript:navigator_Go("logs.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Log</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:120px;"><a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Cache</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:220px;"><a href=\'javascript:navigator_Go("floorplan.sounds.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>Sounds</a></div>';
 		html+='<div class="fix z1 center" style="top:600px;left:320px;"><a href=\'javascript:navigator_Go("floorplan.ontime.php");\'><img src="https://home.egregius.be/images/log.png" width="40px" height="40px"/><br>On-Time</a></div>';
@@ -1369,34 +1370,34 @@ function floorplanothers(){
 		water$mode=localStorage.getItem('watermode');
 		if(water=='On'){
 			if ($mode==300) {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3 btna" id="water300">Water 5 min</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3 btna" id="water300">Water 5 min</button>';
 			} else {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
 			}
 			if ($mode==1800) {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3 btna" id="water1800">Water 30 min</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3 btna" id="water1800">Water 30 min</button>';
 			} else {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
 			}
 			if ($mode==7200) {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3 btna" id="water7200">Water 2 uur</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3 btna" id="water7200">Water 2 uur</button>';
 			} else {
-            	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
+				html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 			}
 		}else{
 			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 300);" class="btn b3" id="water300">Water 5 min</button>';
-        	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
-        	html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
+			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 1800);" class="btn b3" id="water1800">Water 30 min</button>';
+			html+='<button onclick="ajaxcontrol(\'water\', \'water\', 7200);" class="btn b3" id="water7200">Water 2 uur</button>';
 		}
 		watertuin=localStorage.getItem('watertuin');
 		if(watertuin!='undefined')html+='<br><span id="watertuin">'+watertuin+' L</span>';
 		html+='<div class="fix z1 bottom" style="right:0px"><form method="POST"><input type="hidden" name="username" $value="logout"/><input type="submit" name="logout" $value="Logout" class="btn" style="padding:0px;margin:0px;width:90px;height:35px;"/></form><br/><br/></div>';
-        $('#placeholder').html(html);
-    }catch{}
+		$('#placeholder').html(html);
+	}catch{}
 }
 
 function sidebar(){
-    try{
+	try{
 		tv=localStorage.getItem("tv");
 		lgtv=localStorage.getItem("lgtv");
 		denonpower=localStorage.getItem("denonpower");
@@ -1416,32 +1417,32 @@ function sidebar(){
 }
 
 function pad(n, length){
-    len=length - (''+n).length;
-    return (len>0 ? new Array(++len).join('0') : '')+n
+	len=length - (''+n).length;
+	return (len>0 ? new Array(++len).join('0') : '')+n
 }
 
 function toggle_visibility(id){
-    e=document.getElementById(id);
-    if(e.style.display=='inherit') e.style.display='none';
-    else e.style.display='inherit';
+	e=document.getElementById(id);
+	if(e.style.display=='inherit') e.style.display='none';
+	else e.style.display='inherit';
 }
 
 function fix(){
-    var el=this;
-    var par=el.parentNode;
-    var next=el.nextSibling;
-    par.removeChild(el);
-    setTimeout(function() {par.insertBefore(el, next);}, 0)
+	var el=this;
+	var par=el.parentNode;
+	var next=el.nextSibling;
+	par.removeChild(el);
+	setTimeout(function() {par.insertBefore(el, next);}, 0)
 }
 
 function human_kb(fileSizeInBytes) {
-    var i = -1;
-    var byteUnits = [' kbps', ' Mbps', ' Gbps', ' Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
-    do {
-        fileSizeInBytes = fileSizeInBytes / 1024;
-        i++;
-    } while (fileSizeInBytes > 1024);
-    return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+	var i = -1;
+	var byteUnits = [' kbps', ' Mbps', ' Gbps', ' Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
+	do {
+		fileSizeInBytes = fileSizeInBytes / 1024;
+		i++;
+	} while (fileSizeInBytes > 1024);
+	return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 };
 
 
@@ -1642,9 +1643,9 @@ function Weg(){
 	else huge='huge4';
 	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Vacation.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'3\');initview();">Vacation</button>';
 	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Weg.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'2\');initview();">Weg</button>';
-    html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Slapen.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'1\');initview();">Slapen</button>';
-    html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'0\');initview();">Thuis</button>';
-    html+='</div>';
+	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Slapen.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'1\');initview();">Slapen</button>';
+	html+='<button class="btn '+huge+'" style="display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'Weg\',\'Weg\',\'0\');initview();">Thuis</button>';
+	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
 }
@@ -1654,11 +1655,11 @@ function heating(){
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
 	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Gas heating</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
-    html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
-    html+='</div>';
+	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
+	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
+	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
+	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
+	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
 }
@@ -1671,8 +1672,8 @@ function confirmSwitch(device){
 	html+='<div id="message" class="dimmer">';
 	html+='<br><h1>'+device+' = '+$value+'</h1><br>';
 	html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');initview();">On</button>';
-    html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');initview();">Off</button>';
-    html+='</div>';
+	html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');initview();">Off</button>';
+	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
 }
@@ -1684,8 +1685,8 @@ function bureeltobi(){
 	html+='<div id="message" class="dimmer">';
 	html+='<br><h1>Bureel Tobi = '+$value+'</h1><br>';
 	html+='<button class="btn huge3" onclick="ajaxcontrol(\'bureeltobi\',\'sw\',\'On\');initview();">On</button>';
-    html+='<button class="btn huge3" onclick="ajaxcontrol(\'bureeltobi\',\'sw\',\'Off\');initview();">Off</button>';
-    html+='</div>';
+	html+='<button class="btn huge3" onclick="ajaxcontrol(\'bureeltobi\',\'sw\',\'Off\');initview();">Off</button>';
+	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);
 }
@@ -1699,9 +1700,9 @@ function formatDate(nowDate) {
 
 function sleep(millis)
 {
-    console.log('sleep = '+millis);
-    var date = new Date();
-    var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis);
+	console.log('sleep = '+millis);
+	var date = new Date();
+	var curDate = null;
+	do { curDate = new Date(); }
+	while(curDate-date < millis);
 }
