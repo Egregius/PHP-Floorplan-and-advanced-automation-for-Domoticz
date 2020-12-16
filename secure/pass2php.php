@@ -44,6 +44,8 @@ if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']
 	} else {
 		$status='Off';
 	}
+} elseif ($device=='ringdoorbell') {
+	if (past('voordeur')<60) exit;
 }
 store($device, $status, 'Pass2PHP');
 if(@include '/var/www/html/secure/pass2php/'.$device.'.php')apcu_inc('pass2php_effective');
