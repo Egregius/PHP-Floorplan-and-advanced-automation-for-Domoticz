@@ -13,7 +13,7 @@ if(isset($_POST['Remove'])){
 ?>
 <link rel="stylesheet" type="text/css" href="apcu.css">
 <script type="text/javascript" language="javascript" src="/scripts/jquery-3.5.1.min.js"></script>
-<script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/datatables-1.10.22.min.js"></script>
 <script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.columnFilter.js"></script>
 <script type="text/javascript" language="javascript" src="/scripts/jQuery.datesort.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -22,7 +22,7 @@ var asInitVals = new Array();
 		var Table = $('#Table').DataTable(
 		{
 			"paging": false,
-			"scrollY": 1520,
+			"scrollY": 1020,
 			"stateSave": true,
 			"order": [[ 2, 'desc' ]],
 		});

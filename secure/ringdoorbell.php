@@ -21,7 +21,9 @@ if ($last!=$new) {
 	apcu_store($_REQUEST['RING'], $new);
 	if ($_REQUEST['kind']=='motion') {
 		echo __LINE__.'<br>';
-		if ($d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			echo __LINE__.'<br>';
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -54,7 +56,9 @@ if ($_REQUEST['battery']<60) {
 
 function belknop() {
 	global $d;
-	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+	if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	if (!isset($last)) $last=apcu_fetch('ding');
