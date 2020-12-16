@@ -26,7 +26,7 @@ session_start();
 			<meta name="apple-mobile-web-app-capable" content="yes">
 			<meta name="apple-mobile-web-app-status-bar-style" content="black">
 			<title>Pluviometer</title>
-			<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+			<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 			<style>
 					td{text-align:center;width:24%;}
 				</style>

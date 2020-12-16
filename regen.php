@@ -39,7 +39,7 @@ if ($home===true) {
 				<meta name="apple-mobile-web-app-capable" content="yes">
 				<meta name="apple-mobile-web-app-status-bar-style" content="black">
 				<title>Regenvoorspelling</title>
-				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+				<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 				<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 				<style>
 					.btn{margin-left:0!important;}
@@ -139,7 +139,7 @@ if ($home===true) {
 				<meta name="apple-mobile-web-app-capable" content="yes">
 				<meta name="apple-mobile-web-app-status-bar-style" content="black">
 				<title>Regenvoorspelling + Pluviometer</title>
-				<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+				<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 				<style>
 					td{text-align:center;width:24%;}
 				</style>
