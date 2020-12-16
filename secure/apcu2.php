@@ -12,7 +12,7 @@ if(isset($_POST['Remove'])){
 }
 ?>
 <link rel="stylesheet" type="text/css" href="apcu.css">
-<script type="text/javascript" language="javascript" src="/scripts/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" language="javascript" src="/scripts/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="/scripts/jQuery.dataTables.columnFilter.js"></script>
 <script type="text/javascript" language="javascript" src="/scripts/jQuery.datesort.js"></script>
