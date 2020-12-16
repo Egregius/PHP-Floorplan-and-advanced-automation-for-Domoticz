@@ -163,9 +163,10 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
         }
     }
 }
+$battery=apcu_fetch('ringdoorbellbattery');
 
-if (TIME>=strtotime('8:00')&&TIME<=strtotime('20:00')) {
+if ((TIME>=strtotime('8:00')&&TIME<=strtotime('20:00'))||$battery>85) {
 	if ($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
-} else {
+} elseif ($battery<70) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__);
 }
