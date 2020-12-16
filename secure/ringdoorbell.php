@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require 'secure/functions.php';
+require '/var/www/html/secure/functions.php';
 $d=fetchdata();
 echo __LINE__.'<br>';
 $last=apcu_fetch($_REQUEST['kind']);
@@ -18,7 +18,7 @@ echo 'last='.$last.'<br>';
 echo 'new='.$new.'<br>';
 if ($last!=$new) {
 	echo __LINE__.'<br>';
-	apcu_store($_REQUEST['RING'], $new);
+	apcu_store($_REQUEST['kind'], $new);
 	if ($_REQUEST['kind']=='motion') {
 		echo __LINE__.'<br>';
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
@@ -39,7 +39,7 @@ if ($last!=$new) {
 		belknop();
 		lg('PYTHON Deurbel');
 	}
-	telegram('Python Ring Doorbell'.PHP_EOL.$_REQUEST['kind'].PHP_EOL.$_REQUEST['source']);
+	telegram('Python Ring '.$_REQUEST['kind'].PHP_EOL.$_REQUEST['source']);
 }
 if ($_REQUEST['battery']<60) {
 	echo __LINE__.'<br>';
