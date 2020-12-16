@@ -29,7 +29,7 @@ if ($home===true) {
     <link rel="icon" sizes="196x196" href="images/kodi.png">
     <link rel="icon" sizes="192x192" href="images/kodi.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <link href="/styles/kodi.php?v=5" rel="stylesheet" type="text/css"/>
+    <link href="/styles/kodi.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
   <div class="navbar">
@@ -121,7 +121,6 @@ if ($home===true) {
 	<input type="submit" name="Imgdown" value="Imgdown" class="btn big b2"/>
 	<br>
 	<br>
-	<a href="/styles/kodi.php?v=2">CSS '.$udevice.'</a>
 	';
 } else {
     header("Location: index.php");

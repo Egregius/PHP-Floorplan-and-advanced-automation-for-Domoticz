@@ -34,7 +34,7 @@ if ($home===true) {
         setTimeout(\'window.location.href=window.location.href;\', 4950);
         function navigator_Go(url) {window.location.assign(url);}
     </script>
-    <link href="/styles/kodi.php?v=7" rel="stylesheet" type="text/css"/>
+    <link href="/styles/kodi.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="content">
