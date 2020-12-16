@@ -41,10 +41,12 @@ $days=strftime("%j",$running)-1;
 $time=strftime("%H:%M:%S",$running-3600);
 ?>
 <style>
+table{width:100%;}
+table.pretty{width:100%;}
 th{font-weight:bold;}
 td{padding:2px 10px;}
 </style>
-<div style="position:absolute;top:0px;width:400px;">
+<div style="width:400px;">
 <table>
 	<tr><th align="right">Start time</td><td align="right"><?php echo strftime("%Y-%m-%d %H:%M:%S",$apcu['start_time']);?></td></tr>
 	<tr><th align="right">Run time</th><td align="right"><?php echo $days.' '.$time; ?></td></tr>
@@ -54,9 +56,8 @@ td{padding:2px 10px;}
 	<tr><th align="right">hits</th><td align="right"><?php echo $apcu['num_hits'];?></td><td align="right"><?php echo round($apcu['num_hits']/$running,2);?>/sec</td></tr>
 </table>
 </div>
-<pre>
 <?php //print_r($apcu);?>
-<div id="dataTables_wrapper" style="width:1400px;margin:0 auto;">
+<div id="dataTables_wrapper" style="width:1100px;margin:0 auto;">
 <table id="Table" class="pretty" BORDER="1" CELLPADDING="3" CELLSPACING="0">
 	<thead>
 		<tr>

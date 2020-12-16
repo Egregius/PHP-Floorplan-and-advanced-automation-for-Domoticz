@@ -10,4 +10,4 @@
  * @link     https://egregius.be
  **/
 
-//RefreshZwave(127);
+RefreshZwave(127);
