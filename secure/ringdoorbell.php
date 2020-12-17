@@ -11,7 +11,7 @@
  **/
 
 if (apcu_fetch('ring'.$_REQUEST['kind'])!=$_REQUEST['id']) {
-	apcu_store('ring'.$_REQUEST['kind'], $new);
+	apcu_store('ring'.$_REQUEST['kind'], $_REQUEST['id']);
 	require_once '/var/www/html/secure/functions.php';
 	$d=fetchdata();
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
