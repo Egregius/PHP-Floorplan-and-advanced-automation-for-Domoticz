@@ -56,7 +56,7 @@ if ($last!=$new) {
 			sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	
+	apcu_inc('ringsource'.$_REQUEST['source']);
 }
 apcu_store('ringdoorbellbattery', $_REQUEST['battery']);
 if ($_REQUEST['battery']<60) {
