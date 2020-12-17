@@ -44,7 +44,7 @@ if ($d['minmaxtemp']['m'] > -3) {
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
 		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 	}
-} 
+}
 
 // Eerste blok voor zwembad
 /*if ($d['zwembadfilter']['s']=='On') {
@@ -165,8 +165,8 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
 }
 $battery=apcu_fetch('ringdoorbellbattery');
 
-if ((TIME>=strtotime('10:00')&&TIME<=strtotime('20:00'))||$battery<60) {
-	if ($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
-} elseif (TIME<strtotime('8:00')||TIME>strtotime('20:00')||$battery>80) {
+if ((TIME>=strtotime('10:00')&&TIME<=strtotime('20:00'))||$battery<50) {
+	if (($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800)||$battery<50) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
+} elseif (TIME<strtotime('6:00')||TIME>strtotime('22:00')||$battery>80) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__);
 }

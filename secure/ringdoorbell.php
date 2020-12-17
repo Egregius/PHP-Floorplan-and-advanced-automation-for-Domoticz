@@ -9,15 +9,11 @@
  * @license	GNU GPLv3
  * @link		https://egregius.be
  **/
-require '/var/www/html/secure/functions.php';
-$d=fetchdata();
-$last=apcu_fetch('ring'.$_REQUEST['kind']);
-$new=$_REQUEST['id'];
-echo 'last='.$last.'<br>';
-echo 'new='.$new.'<br>';
-if ($last!=$new) {
-	echo __LINE__.'<br>';
+
+if (apcu_fetch('ring'.$_REQUEST['kind'])!=$_REQUEST['id']) {
 	apcu_store('ring'.$_REQUEST['kind'], $new);
+	require_once '/var/www/html/secure/functions.php';
+	$d=fetchdata();
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 	if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
@@ -61,8 +57,9 @@ if ($last!=$new) {
 	apcu_inc('ringdt'.$_REQUEST['dt']);
 }
 apcu_store('ringdoorbellbattery', $_REQUEST['battery']);
-if ($_REQUEST['battery']<60) {
-	echo __LINE__.'<br>';
+if ($_REQUEST['battery']<50) {
+	require_once '/var/www/html/secure/functions.php';
+	if (!isset($d)) $d=fetchdata();
 	if ($d['ringdoorbell']['s']=='Off') {
 		sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
 		alert(
