@@ -3,11 +3,11 @@
  * Pass2PHP
  * php version 8.0
  *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @category	Home_Automation
+ * @package	Pass2PHP
+ * @author	Guy Verschuere <guy@egregius.be>
+ * @license	GNU GPLv3
+ * @link		https://egregius.be
  **/
 require '/var/www/html/secure/functions.php';
 $d=fetchdata();
@@ -24,7 +24,7 @@ if ($last!=$new) {
 		echo __LINE__.'<br>';
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if ($_REQUEST['kind']=='motion') {
+	if ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 		echo __LINE__.'<br>';
 		if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
 			echo __LINE__.'<br>';
@@ -57,6 +57,8 @@ if ($last!=$new) {
 		}
 	}
 	apcu_inc('ringsource'.$_REQUEST['source']);
+	apcu_inc('ringkind'.$_REQUEST['kind']);
+	apcu_inc('ringdt'.$_REQUEST['dt']);
 }
 apcu_store('ringdoorbellbattery', $_REQUEST['battery']);
 if ($_REQUEST['battery']<60) {
@@ -64,9 +66,9 @@ if ($_REQUEST['battery']<60) {
 	if ($d['ringdoorbell']['s']=='Off') {
 		sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
 		alert(
-		    'BatterijRingDeurbel',
-		    'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
-		    28800
+			'BatterijRingDeurbel',
+			'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
+			28800
 		);
 	}
 }
