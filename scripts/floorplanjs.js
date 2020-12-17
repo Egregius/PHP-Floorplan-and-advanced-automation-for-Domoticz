@@ -16,7 +16,6 @@ function ajax(Update=$LastUpdateTime){
 			for (device in d){
 				if(d.hasOwnProperty(device)){
 					 if(device=="t"){
-					 	$currentTime=parseInt(d['t']);
 						if($LastUpdateTime>100){
 							if($LastUpdateTime<=d[device]['t']-10){// -10 in zomertijd, -3610 in wintertijd
 								console.log("Last more than 10 seconds ago, fetching everything.");

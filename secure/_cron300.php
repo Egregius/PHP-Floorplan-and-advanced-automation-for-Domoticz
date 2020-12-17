@@ -7,7 +7,7 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 //lg(__FILE__.':'.$s);
 $user='cron300';
@@ -131,42 +131,42 @@ foreach ($items as $i) {
 }
 
 if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
-    $nowplaying=json_decode(
-        json_encode(
-            simplexml_load_string(
-                file_get_contents('http://192.168.2.103:8090/now_playing')
-            )
-        ),
-        true
-    );
-    if (!empty($nowplaying)) {
-        if (isset($nowplaying['@attributes']['source'])) {
-            if ($nowplaying['@attributes']['source']!='STANDBY') {
-                $volume=json_decode(
-                    json_encode(
-                        simplexml_load_string(
-                            file_get_contents("http://192.168.2.103:8090/volume")
-                        )
-                    ),
-                    true
-                );
-                $cv=$volume['actualvolume']-1;
-                if ($cv<=8) {
-                    bosekey("POWER", 0, 103);
-                    sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-                } else {
-                    bosevolume($cv, 103, basename(__FILE__).':'.__LINE__);
-                }
-            } else {
-                sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-            }
-        }
-    }
+	$nowplaying=json_decode(
+		json_encode(
+			simplexml_load_string(
+				file_get_contents('http://192.168.2.103:8090/now_playing')
+			)
+		),
+		true
+	);
+	if (!empty($nowplaying)) {
+		if (isset($nowplaying['@attributes']['source'])) {
+			if ($nowplaying['@attributes']['source']!='STANDBY') {
+				$volume=json_decode(
+					json_encode(
+						simplexml_load_string(
+							file_get_contents("http://192.168.2.103:8090/volume")
+						)
+					),
+					true
+				);
+				$cv=$volume['actualvolume']-1;
+				if ($cv<=8) {
+					bosekey("POWER", 0, 103);
+					sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+				} else {
+					bosevolume($cv, 103, basename(__FILE__).':'.__LINE__);
+				}
+			} else {
+				sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+			}
+		}
+	}
 }
 $battery=apcu_fetch('ringdoorbellbattery');
 
-if ((TIME>=strtotime('8:00')&&TIME<=strtotime('20:00'))||$battery>85) {
+if ((TIME>=strtotime('10:00')&&TIME<=strtotime('20:00'))||$battery<60) {
 	if ($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
-} elseif ($battery<70) {
+} elseif (TIME<strtotime('8:00')||TIME>strtotime('20:00')||$battery>80) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__);
 }
