@@ -54,3 +54,6 @@ if($s<10) {
 	}
 	if ($m==0) include '_cron3600.php';
 }
+if (isset($_REQUEST['cron'])) {
+	include '_'.$_REQUEST['cron'].'.php';
+}
