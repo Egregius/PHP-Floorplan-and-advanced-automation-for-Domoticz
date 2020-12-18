@@ -62,11 +62,11 @@ if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$_REQUEST['id']) {
 }
 apcu_store('ring-battery', $_REQUEST['battery']);
 if ($_REQUEST['battery']<50) {
-	echo __LINE__.'| ';
+	echo ' | '.__LINE__.' | ';
 	require_once '/var/www/html/secure/functions.php';
 	if (!isset($d)) $d=fetchdata();
 	if ($d['ringdoorbell']['s']=='Off') {
-		echo ' | '.__LINE__.' Battery low - Power ON';
+		echo __LINE__.' Battery low - Power ON';
 		sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
 		alert(
 			'BatterijRingDeurbel',
