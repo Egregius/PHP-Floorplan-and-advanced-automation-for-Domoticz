@@ -431,7 +431,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
 	if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
 	$daikin=json_decode($d['daikin'.$k]['s']);
-	
+
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
@@ -452,7 +452,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			elseif ($k=='alex') $ip=113;
 			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=1;
 			else $streamer=0;
-			
+
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=4;
@@ -486,7 +486,7 @@ if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true;
 $zon=$d['zon']['s'];
 if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 	if (TIME>=strtotime('5:30')&&TIME<strtotime('10:00')) {
-		
+
 		$dow=date("w");
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
@@ -499,7 +499,7 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			if ($d['Rtobi']['s']>0&&TIME>=strtotime('8:00')) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
-		if ($dag==true||($d['pirhall']['s']=='On'&&TIME>strtotime('7:30'))) {
+		if ($dag==true||TIME>strtotime('7:30')||($d['pirhall']['s']=='On'&&TIME>strtotime('7:30'))) {
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
@@ -515,7 +515,7 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			if ($d['Rliving']['s']>0&&$d['deuralex']['s']=='Open') sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	
+
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {
 		if ($d['buiten_temp']['s']<10) {
 			$items=array('tobi', 'alex');
@@ -532,7 +532,7 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			}
 		}
 	}
-	
+
 	elseif (TIME>=strtotime('17:00')&&TIME<strtotime('22:00')) {
 		if ($zon==0) {
 			foreach ($boven as $i) {
@@ -563,8 +563,8 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 				}
 			}
 		}
-	} 
-	
+	}
+
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($benedenall as $i) {
