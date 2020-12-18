@@ -163,7 +163,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
 		}
 	}
 }
-$battery=apcu_fetch('ringdoorbellbattery');
+$battery=apcu_fetch('ring-battery');
 
 if ((TIME>=strtotime('10:00')&&TIME<=strtotime('20:00'))||$battery<50) {
 	if (($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800)||$battery<50) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
