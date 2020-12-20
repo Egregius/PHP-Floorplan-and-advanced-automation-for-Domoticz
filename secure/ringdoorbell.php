@@ -77,4 +77,6 @@ if (isset($_REQUEST['source'])) {
 			);
 		}
 	}
+} else {
+	apcu_inc('ring-source-nosource');
 }
