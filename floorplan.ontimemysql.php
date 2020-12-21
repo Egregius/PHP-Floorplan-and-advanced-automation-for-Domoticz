@@ -52,7 +52,7 @@ if ($home) {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$devices[]=$row['device'];
 	}
-	if (!isset($_REQUEST['device']))$device='heater1';
+	if (!isset($_REQUEST['device']))$device='brander';
 	else $device=$_REQUEST['device'];
     foreach ($devices as $d) {
         if ($device==$d) {
@@ -77,7 +77,7 @@ if ($home) {
     echo '
             </div>
 		</form>';
-   
+
     echo '
 		<div style="margin-top:40px">
 		    <table>';
@@ -85,7 +85,7 @@ if ($home) {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$datas[]=$row;
 	}
-	
+
 	//print_r($datas);
 
     $status='';$tijdprev=TIME;$totalon=0;
