@@ -19,7 +19,7 @@ if ($home) {
 	<meta name="HandheldFriendly" content="true"/>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,initial-scale=0.5,minimal-ui" />
+	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,initial-scale=1,minimal-ui" />
 	<link rel="icon" type="image/png" href="/images/Camera.png"/>
 	<link rel="shortcut icon" href="/images/Camera.png"/>
 	<link rel="apple-touch-icon" href="/images/Camera.png"/>
@@ -70,15 +70,6 @@ if ($home) {
 			<input type="hidden" name="m1" value="'.date("n").'"/>
 			<input type="hidden" name="d1" value="'.date("j").'"/>
 			<input type="submit" value="Archief" name="Archief" class="btn b8"/>
-		</form>
-		<form method="POST" action="stills.php">
-			<input type="hidden" name="type" value="videos"/>
-			<input type="hidden" name="year" value="'.date("Y").'"/>
-			<input type="hidden" name="m0" value="'.date("n",time()-86400).'"/>
-			<input type="hidden" name="d0" value="'.date("j",time()-86400).'"/>
-			<input type="hidden" name="m1" value="'.date("n").'"/>
-			<input type="hidden" name="d1" value="'.date("j").'"/>
-			<input type="submit" value="Stills" name="Stills" class="btn b8"/>
 		</form>
 		</div>
 		<div class="fix camera1">
