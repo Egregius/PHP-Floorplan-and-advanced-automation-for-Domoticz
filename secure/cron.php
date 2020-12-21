@@ -14,7 +14,6 @@ require 'functions.php';
 $d=fetchdata();
 $user='heating';
 $s=(int)strftime("%S", TIME);
-$x=0;//Neutral
 if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
 elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
 elseif ($d['heating']['s']==0) include ('_TC_neutral.php');

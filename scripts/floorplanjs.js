@@ -343,7 +343,7 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
 							try{
-								html='<td></td><td width="65px">';
+								html='<td>';
 								if($value==0)html+='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>';
 								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco cooling</td>';
 								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive cooling</td>';
@@ -459,13 +459,6 @@ function ajax(Update=$LastUpdateTime){
 									$('#branderfloorplan').attr("src", "");
 								}
 							//}catch{}
-						}else if(device=="heatingauto"){
-							localStorage.setItem("tijd_"+device, time);
-							try{
-								if($value=="Off")html='<td></td><td width="65px"><img src="images/smoke_Off.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'On\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Manueel</td>';
-								else html='<td></td><td width="65px"><img src="images/smoke_On.png" onclick="ajaxcontrol(\'heatingauto\',\'sw\',\'Off\')"></td><td align="right" height="60" width="100px" style="line-height:18px">Automatisch</td>';
-								document.getElementById("heatingauto").innerHTML=html;
-							}catch{}
 						}else if(device=="luifel"){
 							localStorage.setItem(device, $value);
 							localStorage.setItem('tijd_'+device, time);
@@ -1283,8 +1276,7 @@ function floorplanheating(){
 		html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
 		html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
 		html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
-		if(heatingset==2)html+='<tr><td width="65px" id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
-		html+='<tr id="heatingauto"></tr>';
+		if(heatingset==2)html+='<tr><td id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
 		html+='<tr id="trheating"></tr>';
 		html+='</table></div>';
 		$('#placeholder').html(html);

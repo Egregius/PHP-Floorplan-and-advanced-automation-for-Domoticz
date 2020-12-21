@@ -24,7 +24,7 @@ if ($home==true) {
 			}
 		}
 		lg(' (AJAX)	'.$_SERVER['REMOTE_ADDR'].'	'.$udevice.'	'.$user.$msg);
-	} 
+	}
 	if (isset($_REQUEST['t'])) {
 		$t=$_SERVER['REQUEST_TIME'];
 		$d=array();
@@ -42,21 +42,21 @@ if ($home==true) {
 		}
 		echo json_encode($d);
 		exit;
-	} 
-	
+	}
+
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='imac') {
 		if ($_REQUEST['command']=='wake') {
 			shell_exec('secure/wakeimac.sh');
 		}
-	} 
-	
+	}
+
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
 		if ($_REQUEST['command']=='volume') {
 			$vol=80-$_REQUEST['action'];
 			@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
 		}
 	}
-	
+
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
 		resetsecurity();
 	}
@@ -90,7 +90,7 @@ if ($home==true) {
 			}
 		}
 	}
-	
+
 	elseif (isset($_REQUEST['bose'])) {
 		$bose=$_REQUEST['bose'];
 		$d=array();
@@ -105,8 +105,8 @@ if ($home==true) {
 		$d['bass']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);
 		echo json_encode($d);
 		exit;
-	} 
-	
+	}
+
 	elseif (isset($_REQUEST['media'])) {
 		$d=fetchdata();
 		$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
@@ -117,12 +117,12 @@ if ($home==true) {
 			$data['denon']['power']=$denon['Power']['value'];
 			$data['denon']['vol']=$denon['MasterVolume']['value'];
 		}
-		if ($d['lgtv']['s']=='On') {			
+		if ($d['lgtv']['s']=='On') {
 			$data['lgtv']=trim(shell_exec('/var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
 		}
 		echo json_encode($data);
 		exit;
-	} 
+	}
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='saytime') {
 		$d=fetchdata();
 		boseplayinfo(saytime().'Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101, true);
@@ -143,8 +143,6 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='Weg') {
 			store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['action']==0) {
-				$db=dbconnect();
-				$db->query("UPDATE devices set t='1' WHERE n='heating';");
 				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
 					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);
 				}
@@ -175,7 +173,7 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='dimmer') {
 			storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			
+
 		} elseif ($_REQUEST['command']=='roller') {
 			if ($_REQUEST['device']=='Beneden') {
 				foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
@@ -195,7 +193,7 @@ if ($home==true) {
 				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 				if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 			}
-			
+
 		} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 			storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='mode') {
@@ -313,10 +311,10 @@ if ($home==true) {
 				if ($_REQUEST['device']=='dampkap'&&$_REQUEST['action']=='On') {
 					storemode('dampkap', TIME+1800);
 				}
-			}			
+			}
 		}
-	} 
-	
+	}
+
 	elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
 		if ($_REQUEST['command']=='volume') {
 			bosevolume($_REQUEST['action'], $_REQUEST['boseip'], basename(__FILE__).':'.__LINE__);
@@ -355,9 +353,9 @@ if ($home==true) {
 			storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		}
 	}
-	
+
 	elseif (isset($_REQUEST['daikin'])) {
-		
+
 	}
 } else {
 	echo json_encode('NOTAUTHENTICATED');

@@ -7,17 +7,16 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($status==0) {
-    if ($d['pirhall']['s']!='Off') {
-        store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
-    }
+	if ($d['pirhall']['s']!='Off') {
+		store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 } else {
-    if ($d['Weg']['s']==1) {
-        if ($d['Weg']['s']>0) {
-        	store('Weg', 0, basename(__FILE__).':'.__LINE__);
-        	//$db->query("UPDATE devices set t='0' WHERE n='heating';");
-        }
-    }
+	if ($d['Weg']['s']==1) {
+		if ($d['Weg']['s']>0) {
+			store('Weg', 0, basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
