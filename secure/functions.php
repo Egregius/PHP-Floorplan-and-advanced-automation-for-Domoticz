@@ -45,7 +45,7 @@ function huisslapen()
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
-	
+
 	foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -79,7 +79,7 @@ function huisweg()
 	//global $d;
 	//if(empty($d)) $d=fetchdata();
 	huisslapen();
-	
+
 }
 /**
  * Function douche
@@ -140,7 +140,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		} catch (Exception $e) {
 			exit('Something went wrong: ' . $e->getMessage());
 		}
-		
+
 	}
 }
 function saytime($ip=101) {
@@ -195,7 +195,7 @@ function saytime($ip=101) {
 		elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
 		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
 		else $msg='Het is '.$hour.' uur '.$minute;
-	} 
+	}
 	return $msg.'. ';
 }
 function sayweather($ip=101) {
@@ -350,7 +350,7 @@ function sl($name,$level,$msg='')
 			if ($d[$name]['s']!=$level) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			}
-			
+
 		} else {
 			store($name, $level, $msg);
 		}
@@ -414,7 +414,7 @@ function sw($name,$action='Toggle',$msg='')
 				storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','heater1','heater2','regenpomp','zoldervuur'))) {
+   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2'))) {
    				$stamp=TIME;
    				$db=dbconnect();
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
@@ -949,7 +949,7 @@ function fliving()
 			bosezone(101);
 		}
 	}
-	
+
 }
 function fgarage()
 {
@@ -980,7 +980,7 @@ function fbadkamer()
 					boseplayinfo(saytime().sayweather());
 					storemode('bose102', 1);
 				}*/
-			} 
+			}
 		}
 	}
 }
@@ -1060,7 +1060,7 @@ function createheader($page='')
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.199')  { //Nero 
+	} elseif ($ipaddress=='192.168.2.199')  { //Nero
 		echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
@@ -1138,7 +1138,7 @@ function daikinstatus($device)
  * @param float $temp Temperature of the setpoint
  * @param string $fan A = Auto, B = Silence, 3 = Level 1, 4 = Level 2, 5 = Level 3, 6 = Level 4, 7 = level 5
  * @param int $swing 0 = all wings stopped, 1 = vertical wings motion, 2 = horizontal wings motion, 3 = vertical and horizontal wings motion
- * @param int $hum 
+ * @param int $hum
  *
  * @return array();
  */
@@ -1330,8 +1330,8 @@ class Ring {
 		$headers = array();
 		$headers[] = 'Accept-Encoding: gzip, deflate';
 		$headers[] = 'User-Agent: Dalvik/1.6.0 (Linux; U; Android 4.4.4; Build/KTU84Q)';
-		
-		
+
+
 		$ch = curl_init();
 		if ($method == 'POST') {
 			$headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
@@ -1341,7 +1341,7 @@ class Ring {
 		} else {
 			$urlParameters = '?'.$this->_arrayToUrlString($data);
 		}
-		
+
 		$url = $this->_apiProto.$this->_apiHost.$call.$urlParameters;
 		print "Call: ".$url."\n";
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -1349,7 +1349,7 @@ class Ring {
 		if (isset($username) || isset($password)) {
 			curl_setopt($ch, CURLOPT_USERPWD,  $username.":".$password);
 		}
-			
+
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_ENCODING , "gzip, deflate");
@@ -1364,7 +1364,7 @@ class Ring {
 		$httpCode	   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		//var_dump($serverResponse);
 		curl_close ($ch);
-		
+
 		// Try JSON Decode
 		$json = json_decode($serverResponse);
 
@@ -1372,7 +1372,7 @@ class Ring {
 		if (gettype($json) == 'NULL') {
 			return $serverResponse;
 		}
-			
+
 		return $json;
 	}
 
@@ -1392,9 +1392,9 @@ class Ring {
 		$postData['api_version']							= $this->_apiVersion;
 
 		$headers = array();
-		
+
 		$response = $this->_httpCall('POST', $this->_urlSession, $postData, $username, $password);
-		
+
 		if(isset($response->profile->first_name)) {
 		print "Authenticated as ".$response->profile->first_name.' '.$response->profile->last_name."\n";
 		print "Authentication token is ".$response->profile->authentication_token."\n";
@@ -1432,7 +1432,7 @@ class Ring {
 			return false;
 		}
 	}
-	
+
 	function history() {
 		$result = array();
 		$data = array();
@@ -1468,7 +1468,7 @@ class Ring {
 		}
 		return substr($string,0, -1);
 	}
-	
+
 	private function _urlTemplate($url, $data) {
 		foreach($data as $k => $v) {
 			$url = str_replace('{'.$k.'}', $v, $url);

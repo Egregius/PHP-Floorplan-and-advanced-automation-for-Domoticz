@@ -7,9 +7,9 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($status=='On'&&$d['auto']['s']=='On') {
-    fliving();
-    sirene('Beweging living');
+	fliving();
+	sirene('Beweging living');
 }

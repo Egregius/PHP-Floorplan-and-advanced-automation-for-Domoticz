@@ -134,7 +134,7 @@ if ($d['auto']['s']=='On') {
 				);
 			}
 		}
-		
+
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {
@@ -186,7 +186,7 @@ if ($d['auto']['s']=='On') {
 	}
 	/* -------------------------------------------- SLAPEN --------------------------*/
 	if ($d['Weg']['s']==1) {
-		
+
 	}
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
@@ -320,7 +320,7 @@ if ($d['auto']['s']=='On') {
 		'Rtobi',
 		'Ralex'
 	);
-	
+
 	if (TIME<=strtotime('0:02')) {
 		store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 		store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
@@ -347,7 +347,7 @@ if ($d['auto']['s']=='On') {
 		}
 		if ($d['tv']['s']=='On'&&past('tv')>1200000000&&past('lgtv')>120&&past('Weg')>120) {
 			sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
-		}	
+		}
 	}
 	if ($d['Weg']['s']>0&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600&&past('Weg')>3600) {
 		sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
@@ -374,7 +374,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if (
-		(	
+		(
 			($d['garage']['s']=='On'&&past('garage')>180)
 			||
 			($d['pirgarage']['s']=='On'&&past('pirgarage')>180)
@@ -480,7 +480,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-	} 
+	}
 	if (past('deurbadkamer')>3600
 		&& $d['bose102']['s']=='0n'
 	) {
@@ -617,7 +617,7 @@ if ($d['auto']['s']=='On') {
 
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
-if ($d['regenpomp']['s']=='On'&&past('regenpomp')>70) {
+if ($d['regenpomp']['s']=='On'&&past('regenpomp')>40) {
 	sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
