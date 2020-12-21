@@ -72,10 +72,10 @@ if ($home) {
 			<input type="submit" value="Archief" name="Archief" class="btn b8"/>
 		</form>
 		</div>
-		<div class="fix camera1">
+		<div class="camera1">
 			<img class="camerai" id="mjpeg_dest" src="jpg.php"/>
 		</div>
-		<div class="fix camera2">
+		<div class="camera2">
 			<img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
 		</div>
 		<script type="text/javascript">
