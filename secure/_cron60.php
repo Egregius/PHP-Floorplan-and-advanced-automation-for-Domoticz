@@ -639,10 +639,6 @@ if ($d['water']['s']=='On') {
 	if (past('water')>$d['water']['m']) {
 		sw('water', 'Off');
 	}
-} elseif ($d['water']['s']=='Off') {
-	if (past('water')>300&&$d['watertuin']['m']>0) {
-		storemode('watertuin', 0);
-	}
 }
 
 //SMAPPEE
