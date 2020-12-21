@@ -24,7 +24,7 @@ if ($home) {
 	<link rel="shortcut icon" href="/images/Camera.png"/>
 	<link rel="apple-touch-icon" href="/images/Camera.png"/>
 	<meta name="mobile-web-app-capable" content="yes"/>
-	<link href="/styles/picam1.css" rel="stylesheet" type="text/css"/>
+	<link href="/styles/picam1.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>';
 	if(isset($_POST['Record'])){
