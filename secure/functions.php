@@ -26,8 +26,7 @@ function dbconnect() {
  *
  * @return array $d
  */
-function fetchdata()
-{
+function fetchdata() {
 	$db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
@@ -40,8 +39,7 @@ function fetchdata()
  *
  * @return null
  */
-function huisslapen()
-{
+function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
@@ -74,8 +72,7 @@ function huisslapen()
  *
  * @return null
  */
-function huisweg()
-{
+function huisweg() {
 	//global $d;
 	//if(empty($d)) $d=fetchdata();
 	huisslapen();
@@ -89,8 +86,7 @@ function huisweg()
  *
  * @return null
  */
-function douche()
-{
+function douche() {
 	global $d;
 	$douchegas=$d['douche']['s']*10;
 	$douchewater=$d['douche']['m']*1;
@@ -143,128 +139,6 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 
 	}
 }
-function saytime($ip=101) {
-	$hour=strftime('%k', TIME);
-	$minute=(1*strftime('%M', TIME));
-	if ($hour==0) {
-		if ($minute==0) $msg='Het is middernacht';
-		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over middernacht';
-		elseif ($minute==15) $msg='Het is kwart over middernacht';
-		elseif ($minute==20) $msg='Het is 20 over middernacht';
-		elseif ($minute==30) $msg='Het is half 1';
-		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half 1';
-		elseif ($minute==40) $msg='Het is 20 voor 1'.($hour+1);
-		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half 1';
-		elseif ($minute==45) $msg='Het is kwart voor 1';
-		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor 1';
-		else $msg='Het is '.$hour.' uur '.$minute;
-	} elseif ($hour<12) {
-		if ($minute==0) $msg='Het is '.$hour.' uur';
-		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hour;
-		elseif ($minute==15) $msg='Het is kwart over '.$hour;
-		elseif ($minute==20) $msg='Het is 20 over '.$hour;
-		elseif ($minute==30) $msg='Het is half '.($hour+1);
-		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
-		elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
-		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
-		elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
-		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
-		else $msg='Het is '.$hour.' uur '.$minute;
-	} elseif ($hour==12) {
-		if ($minute==0) $msg='Het is 12 uur';
-		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hour;
-		elseif ($minute==15) $msg='Het is kwart over '.$hour;
-		elseif ($minute==20) $msg='Het is 20 over '.$hour;
-		elseif ($minute==30) $msg='Het is half 1';
-		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half 1';
-		elseif ($minute==40) $msg='Het is 20 voor 1';
-		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half 1';
-		elseif ($minute==45) $msg='Het is kwart voor 1';
-		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor 1';
-		else $msg='Het is '.$hour.' uur '.$minute;
-	} elseif ($hour>=13) {
-		$hour=$hour-12;
-		if ($minute==0) $msg='Het is '.$hour.' uur';
-		elseif ($minute>0&&$minute<15) $msg='Het is '.$minute.' over '.$hour;
-		elseif ($minute==15) $msg='Het is kwart over '.$hour;
-		elseif ($minute==20) $msg='Het is 20 over '.$hour;
-		elseif ($minute==30) $msg='Het is half '.($hour+1);
-		elseif ($minute>30&&$minute<40) $msg='Het is '.($minute-30).' over half '.($hour+1);
-		elseif ($minute==40) $msg='Het is 20 voor '.($hour+1);
-		elseif ($minute>40&&$minute<45) $msg='Het is '.($minute-30).' over half '.($hour+1);
-		elseif ($minute==45) $msg='Het is kwart voor '.($hour+1);
-		elseif ($minute>=50) $msg='Het is '.(60-$minute).' voor '.($hour+1);
-		else $msg='Het is '.$hour.' uur '.$minute;
-	}
-	return $msg.'. ';
-}
-function sayweather($ip=101) {
-	global $d;
-	return ('Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden '.owcondition().'.');
-}
-function owcondition() {
-	global $d;
-	if (empty($d)) $d=fetchdata();
-	$c=array(
-		200=>' met onweer en lichte regen',
-		201=>' met onweer en regen',
-		202=>' met onweer en zware regen',
-		210=>' met licht onweer',
-		211=>' met een onweersbui',
-		212=>' met een zware onweersbui',
-		221=>' met een haveloze onweersbui',
-		230=>' met onweer en lichte motregen',
-		231=>' met onweer en motregen',
-		232=>' met onweer en zware motregen',
-		300=>' met lichte motregen',
-		301=>' met motregen',
-		302=>' met zware motregen',
-		310=>' met lichte motregen tot regen',
-		311=>' met motregen tot regen',
-		312=>' met zware motregen tot regen',
-		313=>' met regen en motregen',
-		314=>' met zware regenbui en motregen',
-		321=>' met motregen',
-		500=>' met lichte regen',
-		501=>' met lichte regen',
-		502=>' met zware regen',
-		503=>' met zeer zware regen',
-		504=>' met extreme regen',
-		511=>' met ijskoude regen',
-		520=>' met lichte regen',
-		521=>' met regen',
-		522=>' met een zware regenbui',
-		531=>' met haveloze regen',
-		600=>' met lichte sneeuw',
-		601=>' met sneeuw',
-		602=>' met zware sneeuw',
-		611=>' met lichte ijzel',
-		612=>' met ijzel',
-		613=>' met sterke ijzel',
-		615=>' met lichte regen en sneeuw',
-		616=>' met regen en sneeuw',
-		620=>' met lichte sneeuw',
-		621=>' met sneeuw',
-		622=>' met zware sneeuw',
-		701=>' met nevel',
-		711=>' met rook',
-		721=>' met nevel',
-		731=>' met zand / stof wervelt',
-		741=>' met mist',
-		751=>' met zand',
-		761=>' met stof',
-		762=>' met vulkanische as',
-		771=>' met rukwinden',
-		781=>' met tornado',
-		800=>' met heldere lucht',
-		801=>' met weinig wolken',
-		802=>' met verspreide wolken',
-		803=>' met veel wolken',
-		804=>' met zwaar bewolkt',
-	);
-	if (isset($c[$d['icon']['m']])) return $c[$d['icon']['m']];
-	else return '';
-}
 /**
  * Function waarschuwing
  *
@@ -276,8 +150,7 @@ function owcondition() {
  *
  * @return null
  */
-function waarschuwing($msg)
-{
+function waarschuwing($msg) {
 	global $d;
 	if ($d['bose101']['s']=='On') {
 		boseplayinfo($msg, 40);
@@ -314,8 +187,7 @@ function waarschuwing($msg)
  *
  * @return int
  */
-function past($name)
-{
+function past($name) {
 	global $d;
 	if (!empty($d[$name]['t'])) {
 		return TIME-$d[$name]['t'];
@@ -324,8 +196,7 @@ function past($name)
 	}
 }
 
-function idx($name)
-{
+function idx($name) {
 	global $d;
 	if ($d[$name]['i']>0) {
 		return $d[$name]['i'];
@@ -333,8 +204,7 @@ function idx($name)
 		return 0;
 	}
 }
-function sl($name,$level,$msg='')
-{
+function sl($name,$level,$msg='') {
 	global $user,$d,$domoticzurl;
 	if(!isset($d))$d=fetchdata();
 	 if (is_array($name)) {
@@ -356,8 +226,7 @@ function sl($name,$level,$msg='')
 		}
 	}
 }
-function rgb($name,$hue,$level,$check=false)
-{
+function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
 	lg(' (RGB)		'.$user.' =>	'.$name.'	'.$level);
 	if ($d[$name]['i']>0) {
@@ -372,8 +241,7 @@ function rgb($name,$hue,$level,$check=false)
 		store($name, $level);
 	}
 }
-function resetsecurity()
-{
+function resetsecurity() {
 	global $d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();
 	if ($d['sirene']['s']!='Off') {
@@ -388,8 +256,7 @@ function resetsecurity()
 		}
 	}
 }
-function sw($name,$action='Toggle',$msg='')
-{
+function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();
 	if (is_array($name)) {
@@ -497,8 +364,7 @@ function fvolume($cmd) {
 		}
 	}
 }
-function lgcommand($action,$msg='')
-{
+function lgcommand($action,$msg='') {
 	global $lgtvip, $lgtvmac;
 	if ($action=='on') {
 		exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
@@ -506,8 +372,7 @@ function lgcommand($action,$msg='')
 		shell_exec('/var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
 	}
 }
-function store($name,$status,$msg='',$idx=null,$force=true)
-{
+function store($name,$status,$msg='',$idx=null,$force=true) {
 	global $d, $user;
 	if (!isset($d)) $d=fetchdata();
 	$time=time();
@@ -519,16 +384,14 @@ function store($name,$status,$msg='',$idx=null,$force=true)
 	}
 	if (!endswith($name, '_temp')) lg(' (STORE)	'.$user.'	=> '.$name.'	=> '.$status.'	('.$msg.')');
 }
-function storemode($name,$mode,$msg='',$time=0)
-{
+function storemode($name,$mode,$msg='',$time=0) {
 	global $user;
 	$time=time()+$time;
 	$db=dbconnect();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg(' (STOREMODE)	'.$user.'	=> '.$name.'	=> '.$mode.'	('.$msg.')');
 }
-function storeicon($name,$icon,$msg='')
-{
+function storeicon($name,$icon,$msg='') {
 	global $d, $user;
 	$time=TIME;
 	if ($d[$name]['icon']!=$icon) {
@@ -537,12 +400,10 @@ function storeicon($name,$icon,$msg='')
 		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
 	}
 }
-function alert($name,$msg,$ttl,$silent=true,$to=1)
-{
+function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	$db=dbconnect();
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
-
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		if (isset($row['t'])) {
 			$last=$row['t'];
@@ -555,8 +416,7 @@ function alert($name,$msg,$ttl,$silent=true,$to=1)
 		lg('alert='.$last);
 	}
 }
-function kodi($json)
-{
+function kodi($json) {
 	global $kodiurl;
 	$ch=curl_init($kodiurl.'/jsonrpc');
 	curl_setopt($ch, CURLOPT_POST, 1);
@@ -567,8 +427,7 @@ function kodi($json)
 	curl_close($ch);
 	return $result;
 }
-function ud($name,$nvalue,$svalue,$check=false,$smg='')
-{
+function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $user,$d,$domoticzurl;
 	if ($d[$name]['i']>0) {
 		if ($check==true) {
@@ -584,8 +443,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='')
 	lg(' (udevice) | '.$user.'=>'.$name.'=>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
-function zwaveCommand($node,$command)
-{
+function zwaveCommand($node,$command) {
 	global $domoticzurl;
 	$cm=array('Refresh'=>'racp','AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');
 	$cm=$cm[$command];
@@ -599,14 +457,12 @@ function zwaveCommand($node,$command)
 	return $result;
 }
 function controllerBusy($retries){global $domoticzurl;for($k=1;$k<=$retries;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');$p=xml_parser_create();xml_parse_into_struct($p,$result,$vals,$index);xml_parser_free($p);foreach($vals as $val){if($val['tag']=='ADMIN'){$result=$val['attributes']['ACTIVE'];break;}}if($result=='false'){break;}if($k==$retries){zwaveCommand(1,'Cancel');break;}sleep(1);}}
-function convertToHours($time)
-{
+function convertToHours($time) {
 	if ($time<600) return substr(strftime('%k:%M:%S', $time-3600), 1);
 	elseif ($time>=600&&$time<3600) return strftime('%k:%M:%S', $time-3600);
 	else return strftime('%k:%M:%S', $time-3600);
 }
-function checkport($ip,$port='None')
-{
+function checkport($ip,$port='None') {
 	if ($port=='None') {
 		if (ping($ip)) {
 			$prevcheck=$d['ping'.$ip]['s'];
@@ -635,14 +491,12 @@ function checkport($ip,$port='None')
 		}
 	}
 }
-function ping($ip)
-{
+function ping($ip) {
 	$result=exec("/bin/ping -c1 -w1 $ip", $outcome, $status);
 	if ($status==0) return true;
 	else return false;
 }
-function pingport($ip,$port)
-{
+function pingport($ip,$port) {
 	$file=@fsockopen($ip, $port, $errno, $errstr, 5);
 	$status=0;
 	if (!$file) {
@@ -653,14 +507,13 @@ function pingport($ip,$port)
 	}
 	return $status;
 }
-function double($name, $action, $msg='')
-{
+function double($name, $action, $msg='') {
 	sw($name, $action, $msg);
 	usleep(2000000);
 	sw($name, $action, $msg);
 }
 
-function rookmelder($msg){
+function rookmelder($msg) {
 	global $d;
 	if ($d['Weg']['s']<=1) {
 		alert($device, 	$msg, 	300, false, 2, true);
@@ -691,39 +544,17 @@ function rookmelder($msg){
 	}
 	resetsecurity();
 }
-function ifttt($event, $value1='', $value2='', $value3='', $msg='')
-{
-	global $iftttkey;
-	$msg1='';
-	if (!empty($value1))$msg1.='	value1='.$value1;
-	if (!empty($value2))$msg1.='	value2='.$value2;
-	if (!empty($value3))$msg1.='	value3='.$value3;
-	for ($x=1;$x<=10;$x++) {
-		$reply=file_get_contents('https://maker.ifttt.com/trigger/'.$event.'/with/key/'.$iftttkey.'?value1='.$value1.'&value2='.$value2.'&value3='.$value3);
-		if ($reply=="Congratulations! You've fired the $event event") {
-			lg('ifttt '.$event.' executed '.$msg1.' ('.$msg.')');
-			return true;
-			break;
-		}
-		lg('ifttt '.$event.' '.$x.' failed '.$msg1.' ('.$msg.')');
-		sleep($x);
-	}
-	return false;
-}
-function koekje($user,$expirytime)
-{
+function koekje($user,$expirytime) {
 	global $cookie,$domainname;
 	setcookie($cookie, $user, $expirytime, '/', $domainname, true, true);
 }
-function telegram($msg,$silent=true,$to=1)
-{
+function telegram($msg,$silent=true,$to=1) {
 	if ($silent==true) $silent='true';
 	else $silent='false';
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 	lg('Telegram sent: '.$msg);
 }
-function lg($msg)
-{
+function lg($msg) {
 	global $log;
 	if ($log==true) {
 		$fp=fopen('/temp/domoticz.log', "a+");
@@ -735,8 +566,7 @@ function lg($msg)
 		fclose($fp);
 	}
 }
-function logwrite($msg,$msg2=null)
-{
+function logwrite($msg,$msg2=null) {
 	global $log;
 	if ($log==true) {
 		$time=microtime(true);
@@ -757,8 +587,7 @@ function logwrite($msg,$msg2=null)
 		fclose($fp);
 	}
 }
-function fail2ban($ip)
-{
+function fail2ban($ip) {
 	$time=microtime(true);
 	$dFormat="Y-m-d H:i:s";
 	$mSecs=$time-floor($time);
@@ -767,20 +596,17 @@ function fail2ban($ip)
 	fwrite($fp, sprintf("%s %s\n", date($dFormat), $ip));
 	fclose($fp);
 }
-function startsWith($haystack,$needle)
-{
+function startsWith($haystack,$needle) {
 	return $needle===""||strrpos($haystack, $needle, -strlen($haystack))!==false;
 }
-function endswith($string,$test)
-{
+function endswith($string,$test) {
 	$strlen=strlen($string);$testlen=strlen($test);
 	if ($testlen>$strlen) {
 		return false;
 	}
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
-function bosekey($key,$sleep=75000,$ip=101)
-{
+function bosekey($key,$sleep=75000,$ip=101) {
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
@@ -810,8 +636,7 @@ function bosekey($key,$sleep=75000,$ip=101)
 		}
 	}
 }
-function bosevolume($vol,$ip=101, $msg='')
-{
+function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
 	$xml="<volume>$vol</volume>";
 	bosepost("volume", $xml, $ip, true);
@@ -825,20 +650,17 @@ function bosevolume($vol,$ip=101, $msg='')
 	}
 	lg('bosevolume '.$ip.' -> '.$vol.' '.$msg);
 }
-function bosebass($bass,$ip=101)
-{
+function bosebass($bass,$ip=101) {
 	$bass=1*$bass;
 	$xml="<bass>$bass</bass>";
 	bosepost("bass", $xml, $ip);
 }
-function bosepreset($pre,$ip=101)
-{
+function bosepreset($pre,$ip=101) {
 	$pre=1*$pre;
 	if ($pre<1||$pre>6) return;
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
-function bosezone($ip,$forced=false,$vol='')
-{
+function bosezone($ip,$forced=false,$vol='') {
 	$d=fetchdata();
 	if (TIME>strtotime('21:00')) $preset='PRESET_6';
 	else  $preset='PRESET_2';
@@ -851,7 +673,6 @@ function bosezone($ip,$forced=false,$vol='')
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-
 				if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
 			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
 			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
@@ -862,7 +683,6 @@ function bosezone($ip,$forced=false,$vol='')
 				bosekey($preset, 0, 101);
 				if ($d['lgtv']['s']=='On') bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
-
 				bosepost('setZone', $xml, 101);
 				if ($vol=='') {
 					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
@@ -879,8 +699,7 @@ function bosezone($ip,$forced=false,$vol='')
 		}
 	}
 }
-function bosepost($method,$xml,$ip=101,$log=false)
-{
+function bosepost($method,$xml,$ip=101,$log=false) {
 	global $user;
 	for($x=1;$x<=100;$x++) {
 		$ch=curl_init("http://192.168.2.$ip:8090/$method");
@@ -895,16 +714,14 @@ function bosepost($method,$xml,$ip=101,$log=false)
 	}
 	return $response;
 }
-function denon($cmd)
-{
+function denon($cmd) {
 	for ($x=1;$x<=10;$x++) {
 		if (denontcp($cmd, $x)) {
 			break;
 		}
 	}
 }
-function denontcp($cmd, $x)
-{
+function denontcp($cmd, $x) {
 	$sleep=102000*$x;
 	$socket=fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
 	if ($socket) {
@@ -918,20 +735,17 @@ function denontcp($cmd, $x)
 		return false;
 	}
 }
-function strafter($string, $substring)
-{
+function strafter($string, $substring) {
 	$pos=strpos($string, $substring);
 	if ($pos===false) return '';
 	else return(substr($string, $pos+strlen($substring)));
 }
-function strbefore($string, $substring)
-{
+function strbefore($string, $substring) {
 	$pos=strpos($string, $substring);
 	if ($pos===false) return '';
 	else return(substr($string, 0, $pos));
 }
-function fliving()
-{
+function fliving() {
 	global $d;
 	if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
 		if ($d['zon']['s']==0) {
@@ -951,8 +765,7 @@ function fliving()
 	}
 
 }
-function fgarage()
-{
+function fgarage() {
 	global $d;
 	if ($d['Weg']['s']==0&&($d['zon']['s']<300||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') {
 		sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
@@ -961,8 +774,7 @@ function fgarage()
 		bosezone(104);
 	}
 }
-function fbadkamer()
-{
+function fbadkamer() {
 	global $d;
 	if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
@@ -975,17 +787,11 @@ function fbadkamer()
 		if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
 			if ($d['bose102']['s']=='Off'&&past('bose102')>30) {
 				bosezone(102);
-				/*if ($d['bose102']['m']==0) {
-					sleep(2);
-					boseplayinfo(saytime().sayweather());
-					storemode('bose102', 1);
-				}*/
 			}
 		}
 	}
 }
-function fkeuken()
-{
+function fkeuken() {
 	global $d;
 	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
@@ -995,8 +801,7 @@ function fkeuken()
 		}
 	}
 }
-function finkom()
-{
+function finkom() {
 	global $d;
 	if ($d['Weg']['s']==0&&$d['inkom']['s']<31&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
 		sl('inkom', 31, basename(__FILE__).':'.__LINE__);
@@ -1004,8 +809,7 @@ function finkom()
 		sl('inkom', 26, basename(__FILE__).':'.__LINE__);
 	}
 }
-function fhall()
-{
+function fhall() {
 	global $d,$device;
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')) {
 		if ($d['hall']['s']<31) {
@@ -1026,8 +830,7 @@ function fhall()
 		sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
 	}*/
 }
-function sirene($msg)
-{
+function sirene($msg) {
 	global $d,$device;
 	if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
 		if ($d['Weg']['s']>=2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
@@ -1044,8 +847,7 @@ function sirene($msg)
 		storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 	}
 }
-function createheader($page='')
-{
+function createheader($page='') {
 	global $udevice,$ipaddress;
 	echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -1108,8 +910,7 @@ function createheader($page='')
  *
  * @return array();
  */
-function daikinstatus($device)
-{
+function daikinstatus($device) {
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
@@ -1142,8 +943,7 @@ function daikinstatus($device)
  *
  * @return array();
  */
-function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $hum=0)
-{
+function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $hum=0) {
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
@@ -1188,8 +988,7 @@ function human_filesize($bytes,$dec=2){
  *
  * @return null
  */
-function setradiator($name,$dif,$koudst=false,$set=14)
-{
+function setradiator($name,$dif,$koudst=false,$set=14) {
 	if ($koudst==true) $setpoint=28;
 	else $setpoint=$set-ceil($dif*4);
 	if ($setpoint>28) $setpoint=28;
@@ -1205,35 +1004,34 @@ function setradiator($name,$dif,$koudst=false,$set=14)
  *
  * @return string result
  */
-function zwaveNodeNeighbourUpdate($node)
-{
-    global $domoticzurl;
-    for ($k=1;$k<=5;$k++) {
-        sleep(1);
-        $result=file_get_contents(
-            $domoticzurl.'/ozwcp/admpost.html',
-            false,
-            stream_context_create(
-                array(
-                    'http'=>array(
-                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
-                        'method'=>'POST',
-                        'content'=>http_build_query(
-                            array(
-                                'fun'=>'reqnnu',
-                                'node'=>'node'.$node
-                            )
-                        ),
-                    ),
-                )
-            )
-        );
-        if ($result=='OK') {
-            break;
-        }
-        sleep(1);
-    }
-    return $result;
+function zwaveNodeNeighbourUpdate($node) {
+	global $domoticzurl;
+	for ($k=1;$k<=5;$k++) {
+		sleep(1);
+		$result=file_get_contents(
+			$domoticzurl.'/ozwcp/admpost.html',
+			false,
+			stream_context_create(
+				array(
+					'http'=>array(
+						'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+						'method'=>'POST',
+						'content'=>http_build_query(
+							array(
+								'fun'=>'reqnnu',
+								'node'=>'node'.$node
+							)
+						),
+					),
+				)
+			)
+		);
+		if ($result=='OK') {
+			break;
+		}
+		sleep(1);
+	}
+	return $result;
 }
 /**
  * Function zwaveRefreshNode
@@ -1243,35 +1041,34 @@ function zwaveNodeNeighbourUpdate($node)
  *
  * @return string result
  */
-function zwaveRefreshNode($node)
-{
-    global $domoticzurl;
-    for ($k=1;$k<=5;$k++) {
-        sleep(1);
-        $result=file_get_contents(
-            $domoticzurl.'/ozwcp/admpost.html',
-            false,
-            stream_context_create(
-                array(
-                    'http'=>array(
-                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
-                        'method'=>'POST',
-                        'content'=>http_build_query(
-                            array(
-                                'fun'=>'refreshnode',
-                                'node'=>'node'.$node
-                            )
-                        ),
-                    ),
-                )
-            )
-        );
-        if ($result=='OK') {
-            break;
-        }
-        sleep(1);
-    }
-    return $result;
+function zwaveRefreshNode($node) {
+	global $domoticzurl;
+	for ($k=1;$k<=5;$k++) {
+		sleep(1);
+		$result=file_get_contents(
+			$domoticzurl.'/ozwcp/admpost.html',
+			false,
+			stream_context_create(
+				array(
+					'http'=>array(
+						'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+						'method'=>'POST',
+						'content'=>http_build_query(
+							array(
+								'fun'=>'refreshnode',
+								'node'=>'node'.$node
+							)
+						),
+					),
+				)
+			)
+		);
+		if ($result=='OK') {
+			break;
+		}
+		sleep(1);
+	}
+	return $result;
 }
 
 /**
@@ -1282,202 +1079,35 @@ function zwaveRefreshNode($node)
  *
  * @return null
  */
-function zwaveHasnodefailed($node)
-{
-    global $domoticzurl;
-    for ($k=1;$k<=5;$k++) {
-        sleep(1);
-        $result=file_get_contents(
-            $domoticzurl.'/ozwcp/admpost.html',
-            false,
-            stream_context_create(
-                array(
-                    'http'=>array(
-                        'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
-                        'method'=>'POST',
-                        'content'=>http_build_query(
-                            array(
-                                'fun'=>'hnf',
-                                'node'=>'node'.$node
-                            )
-                        ),
-                    ),
-                )
-            )
-        );
-        if ($result=='OK') {
-            break;
-        }
-        sleep(1);
-    }
-}
-
-class Ring {
-	private $_apiProto	  = 'https://';
-	private $_apiHost	   = "api.ring.com";
-	private $_apiVersion	= 9;
-
-	private $_urlSession	= '/clients_api/session';
-	private $_urlDings	  = '/clients_api/dings/active';
-	private $_urlDevices	= '/clients_api/ring_devices';
-	private $_urlHistory	= '/clients_api/doorbots/history';
-	private $_urlRecording  = '/clients_api/dings/{id}/recording';
-
-	private $_authToken	 = null;
-
-	private function _httpCall($method, $call, $data, $username = null, $password = null) {
-		$urlParameters = '';
-		$headers = array();
-		$headers[] = 'Accept-Encoding: gzip, deflate';
-		$headers[] = 'User-Agent: Dalvik/1.6.0 (Linux; U; Android 4.4.4; Build/KTU84Q)';
-
-
-		$ch = curl_init();
-		if ($method == 'POST') {
-			$headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
-			$postBody = $this->_arrayToUrlString($data);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $postBody);
-		} else {
-			$urlParameters = '?'.$this->_arrayToUrlString($data);
+function zwaveHasnodefailed($node) {
+	global $domoticzurl;
+	for ($k=1;$k<=5;$k++) {
+		sleep(1);
+		$result=file_get_contents(
+			$domoticzurl.'/ozwcp/admpost.html',
+			false,
+			stream_context_create(
+				array(
+					'http'=>array(
+						'header'=>'Content-Type: application/x-www-form-urlencoded\r\n',
+						'method'=>'POST',
+						'content'=>http_build_query(
+							array(
+								'fun'=>'hnf',
+								'node'=>'node'.$node
+							)
+						),
+					),
+				)
+			)
+		);
+		if ($result=='OK') {
+			break;
 		}
-
-		$url = $this->_apiProto.$this->_apiHost.$call.$urlParameters;
-		print "Call: ".$url."\n";
-		curl_setopt($ch, CURLOPT_URL, $url);
-
-		if (isset($username) || isset($password)) {
-			curl_setopt($ch, CURLOPT_USERPWD,  $username.":".$password);
-		}
-
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_ENCODING , "gzip, deflate");
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-		/*
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_VERBOSE, 1);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		*/
-		$serverResponse = curl_exec($ch);
-		$httpCode	   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		//var_dump($serverResponse);
-		curl_close ($ch);
-
-		// Try JSON Decode
-		$json = json_decode($serverResponse);
-
-		// If decoding fails, return original string
-		if (gettype($json) == 'NULL') {
-			return $serverResponse;
-		}
-
-		return $json;
-	}
-
-	function authenticate($username, $password) {
-		$postData['device[os]']							 = 'android';
-		$postData['device[hardware_id]']					= '480950d0-7285-3366-8c64-6ea91491982b';
-		$postData['device[app_brand]']					  = 'ring';
-		$postData['device[metadata][device_model]']		 = 'VirtualBox';
-		$postData['device[metadata][resolution]']		   = '600x800';
-		$postData['device[metadata][app_version]']		  = '1.7.29';
-		$postData['device[metadata][app_instalation_date]'] = '';
-		$postData['device[metadata][os_version]']		   = '4.4.4';
-		$postData['device[metadata][manufacturer]']		 = 'innotek GmbH';
-		$postData['device[metadata][is_tablet]']			= 'true';
-		$postData['device[metadata][linphone_initialized]'] = 'true';
-		$postData['device[metadata][language]']			 = 'en';
-		$postData['api_version']							= $this->_apiVersion;
-
-		$headers = array();
-
-		$response = $this->_httpCall('POST', $this->_urlSession, $postData, $username, $password);
-
-		if(isset($response->profile->first_name)) {
-		print "Authenticated as ".$response->profile->first_name.' '.$response->profile->last_name."\n";
-		print "Authentication token is ".$response->profile->authentication_token."\n";
-		$this->_authToken = $response->profile->authentication_token;
-	}
-	}
-
-	function poll() {
-		$result = array();
-		$data = array();
-		$data['api_version'] = $this->_apiVersion;
-		$data['auth_token']  = $this->_authToken;
-		$response = $this->_httpCall('GET', $this->_urlDings, $data);
-
-		if($response) {
-		foreach($response as $status) {
-			foreach($status as $k => $v) {
-			$result[$status->id][$k] = $v;
-			}
-			$result[$status->id]['is_motion']   = false;
-			$result[$status->id]['is_ding']	 = false;
-			if ($status->state == 'ringing') {
-			if ($status->kind == 'motion') {
-				$result[$status->id]['is_motion'] = true;
-			}
-			if ($status->kind =='ding') {
-				$result[$status->id]['is_ding'] = true;
-			}
-			}
-		}
-		}
-		if ($result) {
-			return $result;
-		} else {
-			return false;
-		}
-	}
-
-	function history() {
-		$result = array();
-		$data = array();
-		$data['api_version'] = $this->_apiVersion;
-		$data['auth_token']  = $this->_authToken;
-		$data['limit']	   = 30;
-		$response = $this->_httpCall('GET', $this->_urlHistory, $data);
-		return $response;
-	}
-
-	function recording($id) {
-		$result = array();
-		$data = array();
-		$data['api_version'] = $this->_apiVersion;
-		$data['auth_token']  = $this->_authToken;
-		$response = $this->_httpCall('GET', $this->_urlTemplate($this->_urlRecording, array('id' => $id)), $data);
-		return $response;
-	}
-
-	function devices() {
-		$result = array();
-		$data = array();
-		$data['api_version'] = $this->_apiVersion;
-		$data['auth_token']  = $this->_authToken;
-		$response = $this->_httpCall('GET', $this->_urlDevices, $data);
-		return $response;
-	}
-
-	private function _arrayToUrlString($array) {
-		$string = '';
-		foreach($array as $k => $v) {
-			$string .= urlencode($k).'='.urlencode($v).'&';
-		}
-		return substr($string,0, -1);
-	}
-
-	private function _urlTemplate($url, $data) {
-		foreach($data as $k => $v) {
-			$url = str_replace('{'.$k.'}', $v, $url);
-		}
-		return $url;
+		sleep(1);
 	}
 }
-function curl($url)
-{
+function curl($url) {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
 	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json'));

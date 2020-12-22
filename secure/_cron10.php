@@ -41,7 +41,6 @@ if ($d['auto']['s']=='On') {
 		&&$d['zolderg']['s']=='On'
 		&&past('pirzolder')>120
 		&&past('zolderg')>120
-		
 	) {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
@@ -87,7 +86,7 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	
+
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
@@ -188,12 +187,12 @@ elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex'][
 else $rgb=false;
 if ($rgb!=false) {
 	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-	if($data === FALSE){
+	if($data === FALSE) {
 		return FALSE;
 	}else{
 		$array=explode(",",$data);
 		$control_info= array();
-		foreach($array as $value){
+		foreach($array as $value) {
 			$pair= explode("=",$value);
 			$control_info[$pair[0]]=$pair[1];
 		}
@@ -201,7 +200,7 @@ if ($rgb!=false) {
 		if ($level>100)$level=100;
 		$Xlight=round($level/3);
 		if ($d['Xlight']['s']!=$Xlight) {
-			if ($d['Weg']['s']==0){
+			if ($d['Weg']['s']==0) {
 				rgb('Xlight', $rgb, $Xlight);
 				sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 			}
@@ -214,17 +213,11 @@ if ($rgb!=false) {
 	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['Weg']['s']>0){
+if ($d['Weg']['s']>0) {
 	if ($d['Xlight']['s']>0) {
 		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-
 if (past('wind')>86) {
 	require('_weather.php');
 }
-//if ($d['pirkeuken']['s']=='On') RefreshZwave(4);sleep(1);
-//if ($d['pirkeuken']['s']=='On') RefreshZwave(6);sleep(1);
-//if ($d['pirkeuken']['s']=='On') RefreshZwave(7);sleep(1);
-//if ($d['pirinkom']['s']=='On') RefreshZwave(20);sleep(1);
-//if ($d['lichtbadkamer']['s']>0) RefreshZwave(104);

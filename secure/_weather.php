@@ -1,13 +1,13 @@
 <?php
 /**
  * Pass2PHP functions
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 $user='weather';
 $prevwind=$d['wind']['s'];
@@ -23,84 +23,84 @@ $temps['buiten_temp']=$d['buiten_temp']['s'];
 echo 'Weather<hr>';
 $ds=@curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
-    file_put_contents('/temp/ds.json', $ds);
-    $ds=@json_decode($ds, true);
-    if (isset($ds['currently'])) {
-        if (isset($ds['currently']['temperature'])) {
-            $temps['ds']=($ds['currently']['temperature']+$ds['currently']['apparentTemperature'])/2;
-            /*if ($temps['ds']>$temps['buiten_temp']+0.5) {
-                $temps['ds']=$temps['buiten_temp']+0.5;
-            } elseif ($temps['ds']<$temps['buiten_temp']-0.5) {
-                $temps['ds']=$temps['buiten_temp']-0.5;
-            }*/
-        }
-        if (isset($ds['currently']['windSpeed'])) {
-            $dswind=$ds['currently']['windSpeed'];
-        }
-        if (isset($ds['currently']['windGust'])) {
-            if ($ds['currently']['windGust']>$dswind) {
-                $dswind=$ds['currently']['windGust'];
-            }
-        }
-        if (isset($dswind)) {
-            $dswind=$dswind * 1.609344;
-        }
-        if (isset($ds['minutely']['data'])) {
-            $dsbuien=0;
-            foreach ($ds['minutely']['data'] as $i) {
-                if ($i['time']>TIME&&$i['time']<TIME+1800) {
-                    if ($i['precipProbability']*50>$dsbuien) {
-                        $dsbuien=$i['precipProbability']*35;
-                    }
-                }
-            }
-        }
-        if (isset($ds['hourly']['data'])) {
-            foreach ($ds['hourly']['data'] as $i) {
-                if ($i['time']>TIME&&$i['time']<TIME+3600*12) {
-                    if ($i['temperature']>$maxtemp) {
-                        $maxtemp=$i['temperature'];
-                    }
-                    if ($i['temperature']<$mintemp) {
-                        $mintemp=$i['temperature'];
-                    }
-                }
-                if ($i['precipIntensity']>$maxrain) {
-                    $maxrain=$i['precipIntensity'];
-                }
-            }
-            if ($d['max']['m']!=$maxrain) {
-	            storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
-	        }
-	        $mintemp=round($mintemp, 1);
-	        $maxtemp=round($maxtemp, 1);
-        }
-    }
+	file_put_contents('/temp/ds.json', $ds);
+	$ds=@json_decode($ds, true);
+	if (isset($ds['currently'])) {
+		if (isset($ds['currently']['temperature'])) {
+			$temps['ds']=($ds['currently']['temperature']+$ds['currently']['apparentTemperature'])/2;
+			/*if ($temps['ds']>$temps['buiten_temp']+0.5) {
+				$temps['ds']=$temps['buiten_temp']+0.5;
+			} elseif ($temps['ds']<$temps['buiten_temp']-0.5) {
+				$temps['ds']=$temps['buiten_temp']-0.5;
+			}*/
+		}
+		if (isset($ds['currently']['windSpeed'])) {
+			$dswind=$ds['currently']['windSpeed'];
+		}
+		if (isset($ds['currently']['windGust'])) {
+			if ($ds['currently']['windGust']>$dswind) {
+				$dswind=$ds['currently']['windGust'];
+			}
+		}
+		if (isset($dswind)) {
+			$dswind=$dswind * 1.609344;
+		}
+		if (isset($ds['minutely']['data'])) {
+			$dsbuien=0;
+			foreach ($ds['minutely']['data'] as $i) {
+				if ($i['time']>TIME&&$i['time']<TIME+1800) {
+					if ($i['precipProbability']*50>$dsbuien) {
+						$dsbuien=$i['precipProbability']*35;
+					}
+				}
+			}
+		}
+		if (isset($ds['hourly']['data'])) {
+			foreach ($ds['hourly']['data'] as $i) {
+				if ($i['time']>TIME&&$i['time']<TIME+3600*12) {
+					if ($i['temperature']>$maxtemp) {
+						$maxtemp=$i['temperature'];
+					}
+					if ($i['temperature']<$mintemp) {
+						$mintemp=$i['temperature'];
+					}
+				}
+				if ($i['precipIntensity']>$maxrain) {
+					$maxrain=$i['precipIntensity'];
+				}
+			}
+			if ($d['max']['m']!=$maxrain) {
+				storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
+			}
+			$mintemp=round($mintemp, 1);
+			$maxtemp=round($maxtemp, 1);
+		}
+	}
 }
 $ow=@curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
 if (isset($ow)) {
-    file_put_contents('/temp/ow.json', $ow);
-    $ow=@json_decode($ow, true);
-    if (isset($ow['main']['temp'])) {
-        $temps['ow']=($ow['main']['temp']+$ow['main']['feels_like'])/2;
-        /*if ($temps['ow']>$temps['buiten_temp']+0.5) {
-            $temps['ow']=$temps['buiten_temp']+0.5;
-        } elseif ($temps['ow']<$temps['buiten_temp']-0.5) {
-            $temps['ow']=$temps['buiten_temp']-0.5;
-        }*/
-        $owwind=$ow['wind']['speed'] * 3.6;
-        if (isset($ow['wind']['gust'])) {
-            if ($ow['wind']['gust'] * 3.6>$owwind) {
-                $owwind=$ow['wind']['gust'] * 3.6;
-            }
-        }
-        if ($d['icon']['m']!=$ow['weather'][0]['id']) {
-	        storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
-	    }
-	    if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
-	        store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
-	    }
-    }
+	file_put_contents('/temp/ow.json', $ow);
+	$ow=@json_decode($ow, true);
+	if (isset($ow['main']['temp'])) {
+		$temps['ow']=($ow['main']['temp']+$ow['main']['feels_like'])/2;
+		/*if ($temps['ow']>$temps['buiten_temp']+0.5) {
+			$temps['ow']=$temps['buiten_temp']+0.5;
+		} elseif ($temps['ow']<$temps['buiten_temp']-0.5) {
+			$temps['ow']=$temps['buiten_temp']-0.5;
+		}*/
+		$owwind=$ow['wind']['speed'] * 3.6;
+		if (isset($ow['wind']['gust'])) {
+			if ($ow['wind']['gust'] * 3.6>$owwind) {
+				$owwind=$ow['wind']['gust'] * 3.6;
+			}
+		}
+		if ($d['icon']['m']!=$ow['weather'][0]['id']) {
+			storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
+		}
+		if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
+			store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
 
 $ob=json_decode(@curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
@@ -125,15 +125,15 @@ if (isset($rains['forecasts'])) {
 		if ($x==7) break;
 	}
 	$buienradar=round($buienradar/7, 0);
-    if ($buienradar>20) $maxrain=$buienradar;
+	if ($buienradar>20) $maxrain=$buienradar;
 }
 $newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
 if (isset($ds['hourly']['data'])) {
-    if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
-    if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
-    if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
-    if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
+	if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
+	if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
+	if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
+	if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
 }
 
 echo 'new = '.$newbuitentemp;
@@ -153,25 +153,25 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 if ($prevbuitentemp>$avg+0.5) {
 	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.4) {
-    if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.3) {
-    if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.2) {
-    if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp>$avg+0.1) {
-    if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.5) {
-    if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.4) {
-    if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.3) {
-    if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.2) {
-    if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
 } elseif ($prevbuitentemp<$avg-0.1) {
-    if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
 } else {
-    if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
 }
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) $wind=round(($prevwind+$owwind+$dswind)/3,1);
@@ -185,13 +185,13 @@ store('wind', $wind, basename(__FILE__).':'.__LINE__);
 
 if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
-    $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
+	$newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
 } elseif (isset($d['buien']['s'])&&isset($buienradar)) {
-    $newbuien=($d['buien']['s']+$buienradar)/2;
+	$newbuien=($d['buien']['s']+$buienradar)/2;
 } elseif (isset($d['buien']['s'])&&isset($dsbuien)) {
-    $newbuien=($d['buien']['s']+$dsbuien)/2;
+	$newbuien=($d['buien']['s']+$dsbuien)/2;
 } elseif (isset($dsbuien)) {
-    $newbuien=$dsbuien;
+	$newbuien=$dsbuien;
 }
 if (isset($newbuien)&&$newbuien>100) $newbuien=100;
 if (isset($dsbuien)&&$dsbuien>100) $dsbuien=100;
@@ -204,10 +204,10 @@ if (!isset($newbuien)) $newbuien=0;
 if ($buienradar>100) $buienradar=100;
 if ($buien>100) $buien=100;
 $db->query(
-    "INSERT IGNORE INTO `regen`
-        (`buienradar`,`darksky`,`buien`)
-    VALUES
-        ('$buienradar','$dsbuien','$buien');"
+	"INSERT IGNORE INTO `regen`
+		(`buienradar`,`darksky`,`buien`)
+	VALUES
+		('$buienradar','$dsbuien','$buien');"
 );
 if ($buienradar>0||$dsbuien>0||$buien>0) {
 	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
@@ -244,7 +244,7 @@ if ($d['auto']['s']=='On') {
 			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	
+
 	if (($buien>=15||$d['Weg']['s']==1||TIME>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed') sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 
 	if ($d['luifel']['m']==1) {
