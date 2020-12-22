@@ -11,41 +11,55 @@
  **/
 //lg(__FILE__.':'.$s);
 $user='cron60  ';
-if ($d['living_temp']['s']>0&&$d['badkamer_temp']['s']>0) {
-	$stamp=sprintf("%s", date("Y-m-d H:i"));
-	$items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
-	foreach ($items as $i) {
-		${$i.'_temp'}=$d[$i.'_temp']['s'];
+$stamp=sprintf("%s", date("Y-m-d H:i"));
+$items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
+foreach ($items as $i) {
+	${$i.'_temp'}=$d[$i.'_temp']['s'];
+}
+$query="INSERT IGNORE INTO `temp`
+	(
+		`stamp`,
+		`buiten`,
+		`living`,
+		`badkamer`,
+		`kamer`,
+		`tobi`,
+		`alex`,
+		`zolder`
+	)
+	VALUES (
+		'$stamp',
+		'$buiten_temp',
+		'$living_temp',
+		'$badkamer_temp',
+		'$kamer_temp',
+		'$tobi_temp',
+		'$alex_temp',
+		'$zolder_temp'
+	);";
+$db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
+if ($db->connect_errno>0) {
+	die('Unable to connect to database ['.$db->connect_error.']');
+}
+if (!$result = $db->query($query)) {
+	die('There was an error running the query ['.$query.' - '.$db->error.']');
+}
+//lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
+$items=array('living','badkamer','kamer','tobi','alex','zolder');
+foreach ($items as $i) {
+	$sum=@$sum+$d[$i.'_temp']['s'];
+}
+$avg=$sum/6;
+foreach ($items as $i) {
+	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) {
+		alert(
+			$i.'temp',
+			'OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,
+			7200,
+			false,
+			2
+		);
 	}
-	$query="INSERT IGNORE INTO `temp`
-		(
-			`stamp`,
-			`buiten`,
-			`living`,
-			`badkamer`,
-			`kamer`,
-			`tobi`,
-			`alex`,
-			`zolder`
-		)
-		VALUES (
-			'$stamp',
-			'$buiten_temp',
-			'$living_temp',
-			'$badkamer_temp',
-			'$kamer_temp',
-			'$tobi_temp',
-			'$alex_temp',
-			'$zolder_temp'
-		);";
-	$db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
-	if ($db->connect_errno>0) {
-		die('Unable to connect to database ['.$db->connect_error.']');
-	}
-	if (!$result = $db->query($query)) {
-		die('There was an error running the query ['.$query.' - '.$db->error.']');
-	}
-	//lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
 }
 if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- THUIS ----------------------------*/
