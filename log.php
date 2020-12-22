@@ -85,8 +85,8 @@ class PHPTail
 .contents {margin-top: 30px;}
 .results {padding-bottom: 20px;font-family: monospace;font-size: small;white-space: pre;}
 </style>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
+<script src="/scripts/jquery.2.0.0.min.js"></script>
+<script src="/scripts/jquery-ui.min.js"></script>
 <script type="text/javascript">
     /* <![CDATA[ */
     lastSize=0;
@@ -208,7 +208,7 @@ console.log(e);
             </div>
         </div>
     </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="/scripts/bootstrap.min.js"></script>
 </body>
 </html>
     <?php }
