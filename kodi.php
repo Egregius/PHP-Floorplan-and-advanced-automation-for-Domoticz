@@ -69,10 +69,9 @@ if ($home===true) {
 			} else {
 				@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['action'].'}}', false, $ctx);
 			}
-		} elseif (isset($_POST['VolumeDOWN'])) {
-			fvolume('down');
-		} elseif (isset($_POST['VolumeUP'])) {
-			fvolume('up');
+		} elseif ($_POST['cmd']=='Volume') {
+			lg('volume '.$_POST['action']);
+			fvolume($_POST['action']);
 		}
 		exit;
 	} elseif (isset($_POST['Denon'])) {
@@ -266,9 +265,9 @@ if ($home===true) {
 	echo '
 				<div class="box">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
-					<input type="submit" name="VolumeDOWN" value="Down" class="btn big b3" onclick="exec(\'VolumeDOWN\',\'Down\');"/>
+					<input type="submit" name="Volume" value="Down" class="btn big b3" onclick="exec(\'Volume\',\'down\');"/>
 					<input type="submit" name="Denon" value="Denon" class="btn big b3"/>
-					<input type="submit" name="VolumeUP" value="Up" class="btn big b3" onclick="exec(\'VolumeUP\',\'Up\');"/>
+					<input type="submit" name="Volume" value="Up" class="btn big b3" onclick="exec(\'Volume\',\'up\');"/>
 				</div>
 				<div class="box">Update Library:<br/>
 					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Wij\');"/>
