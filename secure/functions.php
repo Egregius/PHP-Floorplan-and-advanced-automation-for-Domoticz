@@ -662,7 +662,7 @@ function bosepreset($pre,$ip=101) {
 }
 function bosezone($ip,$forced=false,$vol='') {
 	$d=fetchdata();
-	if (TIME>strtotime('21:00')) $preset='PRESET_6';
+	if (TIME>strtotime('21:00')) $preset='PRESET_1';
 	else  $preset='PRESET_2';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {

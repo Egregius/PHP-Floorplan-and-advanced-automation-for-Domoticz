@@ -91,40 +91,46 @@ if ($d['auto']['s']=='On') {
 }
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.27', 3000)==1) {
-		usleep(400000);
-		if (pingport('192.168.2.27', 3000)==1) {
-			if ($d['lgtv']['s']!='On'	) {
-				sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-			}
-			/*if ($d['denon']['s']!='On'
-				&&past('denon')>30
-				&&$d['Weg']['s']==0
-			) {
-				sw('denon', 'On', basename(__FILE__).':'.__LINE__);
-				storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
-			}*/
-			if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
-				sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-			}
+		if ($d['lgtv']['s']!='On'	) {
+			sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+		}
+		/*if ($d['denon']['s']!='On'
+			&&past('denon')>30
+			&&$d['Weg']['s']==0
+		) {
+			sw('denon', 'On', basename(__FILE__).':'.__LINE__);
+			storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
+		}*/
+		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
+			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	} else {
-		usleep(400000);
+		sleep(1);
 		if (pingport('192.168.2.27', 3000)!=1) {
-			usleep(400000);
+			sleep(1);
 			if (pingport('192.168.2.27', 3000)!=1) {
-				usleep(400000);
+				sleep(1);
 				if (pingport('192.168.2.27', 3000)!=1) {
-					if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
-						sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {
-						sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['nvidia']['s']!='Off'&&past('lgtv')>120&&past('nvidia')>120) {
-						sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['kristal']['s']!='Off'&&past('lgtv')>120&&past('kristal')>120) {
-						sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
+					sleep(1);
+					if (pingport('192.168.2.27', 3000)!=1) {
+						sleep(1);
+						if (pingport('192.168.2.27', 3000)!=1) {
+							sleep(1);
+							if (pingport('192.168.2.27', 3000)!=1) {
+								if ($d['lgtv']['s']!='Off'&&past('lgtv')>600) {
+									sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+								}
+								if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>120&&past('denon')>300) {
+									sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
+								}
+								if ($d['nvidia']['s']!='Off'&&past('lgtv')>120&&past('nvidia')>120) {
+									sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
+								}
+								if ($d['kristal']['s']!='Off'&&past('lgtv')>120&&past('kristal')>120) {
+									sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
+								}
+							}
+						}
 					}
 				}
 			}
