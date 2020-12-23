@@ -12,75 +12,67 @@
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
-	if (is_array($_POST)) lg(print_r($_POST, true));
-
-	if (isset($_POST['mediauit'])) {
-		ud('miniliving4l', 0, 'On');
-	} elseif (isset($_POST['UpdateKodi'])) {
-		$profile=$_POST['UpdateKodi'];echo 'Wanted profile='.$profile.'<br/>';
-		profile:
-		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-		echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
-		if ($loadedprofile['result']['label']!==$profile) {
-			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
-			usleep(10000);
-			$profilereply=@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
-			echo 'profilereply='.$profilereply.'</pre><br/>';
-			$count=$count + 1;
-			if ($count>10) {
-				die('Die Endless loop');
+	if (isset($_POST['cmd'])) {
+		if ($_POST['cmd']=='mediauit') {
+			ud('miniliving4l', 0, 'On');
+		} elseif ($_POST['cmd']=='UpdateKodi') {
+			$profile=$_POST['action'];echo 'Wanted profile='.$profile.'<br/>';
+			profile:
+			$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+			echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
+			if ($loadedprofile['result']['label']!==$profile) {
+				kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+				usleep(10000);
+				$profilereply=@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
+				echo 'profilereply='.$profilereply.'</pre><br/>';
+				$count=$count + 1;
+				if ($count>10) {
+					die('Die Endless loop');
+				}
+				sleep(3);
+				goto profile;
+			} else {
+				kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Scan"}');
 			}
-			sleep(3);
-			goto profile;
-		} else {
-			kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Scan"}');
-		}
-		exit;
-	} elseif (isset($_POST['CleanKodi'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
-		exit;
-	} elseif (isset($_POST['PauseKodi'])) {
-		@file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
-		exit;
-	} elseif (isset($_POST['StopKodi'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
-		exit;
-	} elseif (isset($_POST['bigbackward'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
-		exit;
-	} elseif (isset($_POST['smallbackward'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
-		exit;
-	} elseif (isset($_POST['smallforward'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
-		exit;
-	} elseif (isset($_POST['bigforward'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
-		exit;
-	} elseif (isset($_POST['PowerOff'])) {
-		sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
-		exit;
-	} elseif (isset($_POST['PowerOn'])) {
-		sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-		exit;
-	} elseif (isset($_POST['TVKodi'])) {
-		if ($d['lgtv']['s']!='On') {
-			sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
-		}
-		if ($d['nvidia']['s']!='On') {
+		} elseif ($_POST['cmd']=='CleanKodi') {
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
+		} elseif ($_POST['cmd']=='PauseKodi') {
+			@file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+		} elseif ($_POST['cmd']=='StopKodi') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+		} elseif ($_POST['cmd']=='bigbackward') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
+		} elseif ($_POST['cmd']=='smallbackward') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
+		} elseif ($_POST['cmd']=='smallforward') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
+		} elseif ($_POST['cmd']=='bigforward') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
+		} elseif ($_POST['cmd']=='PowerOff') {
+			sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
+		} elseif ($_POST['cmd']=='PowerOn') {
 			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-		}
-		exit;
-	} elseif (isset($_POST['audio'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
-		exit;
-	} elseif (isset($_POST['subtitle'])) {
-		if ($_POST['subtitle']=='disable') {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
-		} elseif ($_POST['subtitle']=='enable') {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
-		} else {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['subtitle'].'}}', false, $ctx);
+		} elseif ($_POST['cmd']=='TVKodi') {
+			if ($d['lgtv']['s']!='On') {
+				sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
+			}
+			if ($d['nvidia']['s']!='On') {
+				sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+			}
+		} elseif ($_POST['cmd']=='audio') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
+		} elseif ($_POST['cmd']=='subtitle') {
+			if ($_POST['action']=='disable') {
+				@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
+			} elseif ($_POST['action']=='enable') {
+				@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
+			} else {
+				@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['action'].'}}', false, $ctx);
+			}
+		} elseif (isset($_POST['VolumeDOWN'])) {
+			fvolume('down');
+		} elseif (isset($_POST['VolumeUP'])) {
+			fvolume('up');
 		}
 		exit;
 	} elseif (isset($_POST['Denon'])) {
@@ -89,13 +81,8 @@ if ($home===true) {
 	} elseif (isset($_POST['kodicontrol'])) {
 		header("Location: ../kodicontrol.php");
 		die("Redirecting to: ../kodicontrol.php");
-	} elseif (isset($_POST['VolumeDOWN'])) {
-		fvolume('down');
-		exit;
-	} elseif (isset($_POST['VolumeUP'])) {
-		fvolume('up');
-		exit;
 	}
+
 	//error_reporting(E_ALL);ini_set("display_errors", "on");
 	$count=0;
 	$ctx=stream_context_create(array('http'=>array('timeout'=>4)));
@@ -117,14 +104,12 @@ if ($home===true) {
 	<script type="text/javascript">
 		setTimeout(\'window.location.href=window.location.href;\', 14950);
 		function navigator_Go(url) {window.location.assign(url);}
-		function exec($cmd, $action=""){
-			$.ajax({
-				type: \'POST\',
-				url: \'kodi.php\',
-				data: {
-					$cmd: $action,
-				},
-			});
+		function exec(cmd, action=""){
+			$.post("kodi.php",
+			{
+				cmd : cmd,
+				action : action
+			})
 		}
 	</script>
 	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
