@@ -12,60 +12,9 @@
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
-	//error_reporting(E_ALL);ini_set("display_errors", "on");
-	$count=0;
-	$ctx=stream_context_create(array('http'=>array('timeout'=>4)));
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="HandheldFriendly" content="true" />
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
-	<title>Kodi</title>
-	<link rel="icon" type="image/png" href="images/kodi.png">
-	<link rel="shortcut icon" href="images/kodi.png" />
-	<link rel="apple-touch-icon" href="images/kodi.png"/>
-	<link rel="icon" sizes="196x196" href="images/kodi.png">
-	<link rel="icon" sizes="192x192" href="images/kodi.png">
-	<meta name="mobile-web-app-capable" content="yes">
-	<script type="text/javascript">
-		setTimeout(\'window.location.href=window.location.href;\', 4950);
-		function navigator_Go(url) {window.location.assign(url);}
-	</script>
-	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
-	</head>
-	<body>
-		<div class="content">
-			<div class="navbar">
-				<form action="/floorplan.php">
-					<input type="submit" class="btn b7" value="Plan"/>
-				</form>
-				<form action="/denon.php">
-					<input type="submit" class="btn b7" value="Denon"/>
-				</form>
-				<form action="/kodi.php">
-					<input type="submit" class="btn btna b7" value="Kodi"/>
-				</form>
-				<form action="'.$urlfilms.'/films.php">
-					<input type="submit" class="btn b7" value="Films"/>
-				</form>
-				<form action="'.$urlfilms.'/tobi.php">
-					<input type="submit" class="btn b7" value="Tobi"/>
-				</form>
-				<form action="'.$urlfilms.'/alex.php">
-					<input type="submit" class="btn b7" value="Alex"/>
-				</form>
-				<form action="'.$urlfilms.'/series.php">
-					<input type="submit" class="btn b7" value="Series"/>
-				</form>
-			</div>
-			<form method="POST">';
 	if (isset($_POST['mediauit'])) {
 		ud('miniliving4l', 0, 'On');
-	}
-	if (isset($_POST['UpdateKodi'])) {
+	} elseif (isset($_POST['UpdateKodi'])) {
 		$profile=$_POST['UpdateKodi'];echo 'Wanted profile='.$profile.'<br/>';
 		profile:
 		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
@@ -153,6 +102,62 @@ if ($home===true) {
 			file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
 		}
 	}
+	//error_reporting(E_ALL);ini_set("display_errors", "on");
+	$count=0;
+	$ctx=stream_context_create(array('http'=>array('timeout'=>4)));
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+	<title>Kodi</title>
+	<link rel="icon" type="image/png" href="images/kodi.png">
+	<link rel="shortcut icon" href="images/kodi.png" />
+	<link rel="apple-touch-icon" href="images/kodi.png"/>
+	<link rel="icon" sizes="196x196" href="images/kodi.png">
+	<link rel="icon" sizes="192x192" href="images/kodi.png">
+	<meta name="mobile-web-app-capable" content="yes">
+	<script type="text/javascript">
+		setTimeout(\'window.location.href=window.location.href;\', 4950);
+		function navigator_Go(url) {window.location.assign(url);}
+		function exec(cmd, action=""){
+			$.post("kodi.php",
+			{
+				cmd: action
+			})
+		}
+	</script>
+	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<div class="navbar">
+			<form action="/floorplan.php">
+				<input type="submit" class="btn b7" value="Plan"/>
+			</form>
+			<form action="/denon.php">
+				<input type="submit" class="btn b7" value="Denon"/>
+			</form>
+			<form action="/kodi.php">
+				<input type="submit" class="btn btna b7" value="Kodi"/>
+			</form>
+			<form action="'.$urlfilms.'/films.php">
+				<input type="submit" class="btn b7" value="Films"/>
+			</form>
+			<form action="'.$urlfilms.'/tobi.php">
+				<input type="submit" class="btn b7" value="Tobi"/>
+			</form>
+			<form action="'.$urlfilms.'/alex.php">
+				<input type="submit" class="btn b7" value="Alex"/>
+			</form>
+			<form action="'.$urlfilms.'/series.php">
+				<input type="submit" class="btn b7" value="Series"/>
+			</form>
+		</div>
+		<form method="POST">';
+
 	$d=fetchdata();
 	if ($d['nvidia']['s']=='On') {
 		$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
