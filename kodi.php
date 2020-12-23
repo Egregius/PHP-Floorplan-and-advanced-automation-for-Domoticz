@@ -12,6 +12,8 @@
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
+	if (is_array($_POST)) lg(print_r($_POST, true));
+
 	if (isset($_POST['mediauit'])) {
 		ud('miniliving4l', 0, 'On');
 	} elseif (isset($_POST['UpdateKodi'])) {
@@ -115,14 +117,18 @@ if ($home===true) {
 	<script type="text/javascript">
 		setTimeout(\'window.location.href=window.location.href;\', 14950);
 		function navigator_Go(url) {window.location.assign(url);}
-		function exec(cmd, action=""){
-			$.post("kodi.php",
-			{
-				cmd: action
-			})
+		function exec($cmd, $action=""){
+			$.ajax({
+				type: \'POST\',
+				url: \'kodi.php\',
+				data: {
+					$cmd: $action,
+				},
+			});
 		}
 	</script>
 	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
+	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	</head>
 	<body>
 		<div class="navbar">
@@ -147,9 +153,7 @@ if ($home===true) {
 			<form action="'.$urlfilms.'/series.php">
 				<input type="submit" class="btn b7" value="Series"/>
 			</form>
-		</div>
-		<form method="POST">';
-
+		</div>';
 	$d=fetchdata();
 	if ($d['nvidia']['s']=='On') {
 		$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
@@ -217,16 +221,16 @@ if ($home===true) {
 					 ?'
 							<input type="submit" name="PauseKodi" value="Playing" class="btn b2" onclick="exec(\'PauseKodi\',\'Playing\');"/>'
 					 :'
-							<input type="submit" name="PauseKodi" value="Paused" class="btn b2"/>';
+							<input type="submit" name="PauseKodi" value="Paused" class="btn b2" onclick="exec(\'PauseKodi\',\'Paused\');"/>';
 					echo '
-							<input type="submit" name="StopKodi" value="STOP" class="btn b2"/>';
+							<input type="submit" name="StopKodi" value="STOP" class="btn b2" onclick="exec(\'StopKodi\',\'STOP\');"/>';
 					if ($prop['speed']==1) {
 						echo '
 							<br>
-							<input type="submit" name="bigbackward" value="<<" class="btn b4"/>
-							<input type="submit" name="smallbackward" value="<" class="btn b4"/>
-							<input type="submit" name="smallforward" value=">" class="btn b4"/>
-							<input type="submit" name="bigforward" value=">>" class="btn b4"/>';
+							<input type="submit" name="bigbackward" value="<<" class="btn b4" onclick="exec(\'bigbackward\',\'<<\');"/>
+							<input type="submit" name="smallbackward" value="<" class="btn b4" onclick="exec(\'smallbackward\',\'<\');"/>
+							<input type="submit" name="smallforward" value=">" class="btn b4" onclick="exec(\'smallforward\',\'>\');"/>
+							<input type="submit" name="bigforward" value=">>" class="btn b4" onclick="exec(\'bigforward\',\'>>\');"/>';
 					}
 					echo '
 						</div>';
@@ -236,9 +240,9 @@ if ($home===true) {
 					foreach ($prop['audiostreams'] as $audio) {
 						echo $audio['index']===$prop['currentaudiostream']['index']
 						?'
-							<button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b2">'.$audio['name'].'</button>'
+							<button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b2" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>'
 						:'
-							<button type="submit" name="audio" value="'.$audio['index'].'" class="btn b2">'.$audio['name'].'</button>';
+							<button type="submit" name="audio" value="'.$audio['index'].'" class="btn b2" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>';
 						$stream=$stream + 1;
 					}
 					echo '
@@ -247,13 +251,13 @@ if ($home===true) {
 					foreach ($prop['subtitles'] as $subtitle) {
 						echo $subtitle['index']===$prop['currentsubtitle']['index']
 						?'
-							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>'
+							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>'
 						:'
-							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>';
+							<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>';
 					}
 					echo '
 							<br>
-							<button type="submit" name="subtitle" value="enable" class="btn b2">Enable</button><button type="submit" name="subtitle" value="disable" class="btn b2">Disable</button>';
+							<button type="submit" name="subtitle" value="enable" class="btn b2" onclick="exec(\'subtitle\',\'enable\');">Enable</button><button type="submit" name="subtitle" value="disable" class="btn b2" onclick="exec(\'subtitle\',\'disable\');">Disable</button>';
 				} else {
 					echo '
 						</div>
@@ -292,7 +296,6 @@ if ($home===true) {
 					<input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
 					<input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
 				</div>
-			</form>
 		</div>
 	</body>
 </html>';
