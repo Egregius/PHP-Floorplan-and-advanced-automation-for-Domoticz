@@ -7,155 +7,155 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
-    //error_reporting(E_ALL);ini_set("display_errors", "on");
-    $count=0;
-    $ctx=stream_context_create(array('http'=>array('timeout'=>4)));
-    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	//error_reporting(E_ALL);ini_set("display_errors", "on");
+	$count=0;
+	$ctx=stream_context_create(array('http'=>array('timeout'=>4)));
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="HandheldFriendly" content="true" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
-    <title>Kodi</title>
-    <link rel="icon" type="image/png" href="images/kodi.png">
-    <link rel="shortcut icon" href="images/kodi.png" />
-    <link rel="apple-touch-icon" href="images/kodi.png"/>
-    <link rel="icon" sizes="196x196" href="images/kodi.png">
-    <link rel="icon" sizes="192x192" href="images/kodi.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <script type="text/javascript">
-        setTimeout(\'window.location.href=window.location.href;\', 4950);
-        function navigator_Go(url) {window.location.assign(url);}
-    </script>
-    <link href="/styles/kodi.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
-        <div class="content">
-            <div class="navbar">
-                <form action="/floorplan.php">
-                    <input type="submit" class="btn big b7" value="Plan"/>
-                </form>
-                <form action="/denon.php">
-                    <input type="submit" class="btn big b7" value="Denon"/>
-                </form>
-                <form action="/kodi.php">
-                    <input type="submit" class="btn btna big b7" value="Kodi"/>
-                </form>
-                <form action="'.$urlfilms.'/films.php">
-                    <input type="submit" class="btn big b7" value="Films"/>
-                </form>
-                <form action="'.$urlfilms.'/tobi.php">
-                    <input type="submit" class="btn big b7" value="Tobi"/>
-                </form>
-                <form action="'.$urlfilms.'/alex.php">
-                    <input type="submit" class="btn big b7" value="Alex"/>
-                </form>
-                <form action="'.$urlfilms.'/series.php">
-                    <input type="submit" class="btn big b7" value="Series"/>
-                </form>
-            </div>
-            <form method="POST">';
-    if (isset($_POST['mediauit'])) {
-        ud('miniliving4l', 0, 'On');
-    }
-    if (isset($_POST['UpdateKodi'])) {
-        $profile=$_POST['UpdateKodi'];echo 'Wanted profile='.$profile.'<br/>';
-        profile:
-        $loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-        echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
-        if ($loadedprofile['result']['label']!==$profile) {
-            kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
-            usleep(10000);
-            $profilereply=@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
-            echo 'profilereply='.$profilereply.'</pre><br/>';
-            $count=$count + 1;
-            if ($count>10) {
-                die('Die Endless loop');
-            }
-            sleep(3);
-            goto profile;
-        } else {
-            kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Scan"}');
-        }
-    } elseif (isset($_POST['CleanKodi'])) {
-        kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
-    } elseif (isset($_POST['PauseKodi'])) {
-        @file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
-    } elseif (isset($_POST['StopKodi'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
-    } elseif (isset($_POST['bigbackward'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
-    } elseif (isset($_POST['smallbackward'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
-    } elseif (isset($_POST['smallforward'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
-    } elseif (isset($_POST['bigforward'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
-    } elseif (isset($_POST['PowerOff'])) {
-        sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
-    } elseif (isset($_POST['PowerOn'])) {
-        sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-    } elseif (isset($_POST['TVKodi'])) {
-        if ($d['lgtv']['s']!='On') {
-            sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
-        }
-        if ($d['nvidia']['s']!='On') {
-            sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-        }
-    } elseif (isset($_POST['audio'])) {
-        @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
-    } elseif (isset($_POST['subtitle'])) {
-        if ($_POST['subtitle']=='disable') {
-            @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
-        } elseif ($_POST['subtitle']=='enable') {
-            @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
-        } else {
-            @kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['subtitle'].'}}', false, $ctx);
-        }
-    } elseif (isset($_POST['Denon'])) {
-        header("Location: ../denon.php");
-        die("Redirecting to: ../denon.php");
-    } elseif (isset($_POST['kodicontrol'])) {
-        header("Location: ../kodicontrol.php");
-        die("Redirecting to: ../kodicontrol.php");
-    } elseif (isset($_POST['VolumeDOWN'])) {
-        $denonmain=@simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
-        $denonmain=@json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
-        if ($denonmain) {
-            $denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
-            $setvalue=$setvalue-3;
-            if ($setvalue>-10) {
-                $setvalue=-10;
-            }if ($setvalue<-80) {
-                $setvalue=-80;
-            }
-            file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
-        }
-    } elseif (isset($_POST['VolumeUP'])) {
-        $denonmain=simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
-        $denonmain=json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
-        if ($denonmain) {
-            $denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
-            $setvalue=$setvalue+3;
-            if ($setvalue>-10) {
-                $setvalue=-10;
-            }
-            if ($setvalue<-80) {
-                $setvalue=-80;
-            }
-            file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
-        }
-    }
-    $d=fetchdata();
-    if ($d['nvidia']['s']=='On') {
-    	$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
+	<title>Kodi</title>
+	<link rel="icon" type="image/png" href="images/kodi.png">
+	<link rel="shortcut icon" href="images/kodi.png" />
+	<link rel="apple-touch-icon" href="images/kodi.png"/>
+	<link rel="icon" sizes="196x196" href="images/kodi.png">
+	<link rel="icon" sizes="192x192" href="images/kodi.png">
+	<meta name="mobile-web-app-capable" content="yes">
+	<script type="text/javascript">
+		setTimeout(\'window.location.href=window.location.href;\', 4950);
+		function navigator_Go(url) {window.location.assign(url);}
+	</script>
+	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<div class="content">
+			<div class="navbar">
+				<form action="/floorplan.php">
+					<input type="submit" class="btn b7" value="Plan"/>
+				</form>
+				<form action="/denon.php">
+					<input type="submit" class="btn b7" value="Denon"/>
+				</form>
+				<form action="/kodi.php">
+					<input type="submit" class="btn btna b7" value="Kodi"/>
+				</form>
+				<form action="'.$urlfilms.'/films.php">
+					<input type="submit" class="btn b7" value="Films"/>
+				</form>
+				<form action="'.$urlfilms.'/tobi.php">
+					<input type="submit" class="btn b7" value="Tobi"/>
+				</form>
+				<form action="'.$urlfilms.'/alex.php">
+					<input type="submit" class="btn b7" value="Alex"/>
+				</form>
+				<form action="'.$urlfilms.'/series.php">
+					<input type="submit" class="btn b7" value="Series"/>
+				</form>
+			</div>
+			<form method="POST">';
+	if (isset($_POST['mediauit'])) {
+		ud('miniliving4l', 0, 'On');
+	}
+	if (isset($_POST['UpdateKodi'])) {
+		$profile=$_POST['UpdateKodi'];echo 'Wanted profile='.$profile.'<br/>';
+		profile:
+		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+		echo 'loadedprofile='.$loadedprofile['result']['label'].'<br/>';
+		if ($loadedprofile['result']['label']!==$profile) {
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+			usleep(10000);
+			$profilereply=@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.LoadProfile","params":{"profile":"'.$profile.'"},"id":1}', false, $ctx);
+			echo 'profilereply='.$profilereply.'</pre><br/>';
+			$count=$count + 1;
+			if ($count>10) {
+				die('Die Endless loop');
+			}
+			sleep(3);
+			goto profile;
+		} else {
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Scan"}');
+		}
+	} elseif (isset($_POST['CleanKodi'])) {
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
+	} elseif (isset($_POST['PauseKodi'])) {
+		@file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+	} elseif (isset($_POST['StopKodi'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+	} elseif (isset($_POST['bigbackward'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
+	} elseif (isset($_POST['smallbackward'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
+	} elseif (isset($_POST['smallforward'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
+	} elseif (isset($_POST['bigforward'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
+	} elseif (isset($_POST['PowerOff'])) {
+		sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
+	} elseif (isset($_POST['PowerOn'])) {
+		sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+	} elseif (isset($_POST['TVKodi'])) {
+		if ($d['lgtv']['s']!='On') {
+			sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
+		}
+		if ($d['nvidia']['s']!='On') {
+			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+		}
+	} elseif (isset($_POST['audio'])) {
+		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
+	} elseif (isset($_POST['subtitle'])) {
+		if ($_POST['subtitle']=='disable') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
+		} elseif ($_POST['subtitle']=='enable') {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
+		} else {
+			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['subtitle'].'}}', false, $ctx);
+		}
+	} elseif (isset($_POST['Denon'])) {
+		header("Location: ../denon.php");
+		die("Redirecting to: ../denon.php");
+	} elseif (isset($_POST['kodicontrol'])) {
+		header("Location: ../kodicontrol.php");
+		die("Redirecting to: ../kodicontrol.php");
+	} elseif (isset($_POST['VolumeDOWN'])) {
+		$denonmain=@simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
+		$denonmain=@json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
+		if ($denonmain) {
+			$denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
+			$setvalue=$setvalue-3;
+			if ($setvalue>-10) {
+				$setvalue=-10;
+			}if ($setvalue<-80) {
+				$setvalue=-80;
+			}
+			file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
+		}
+	} elseif (isset($_POST['VolumeUP'])) {
+		$denonmain=simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
+		$denonmain=json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
+		if ($denonmain) {
+			$denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
+			$setvalue=$setvalue+3;
+			if ($setvalue>-10) {
+				$setvalue=-10;
+			}
+			if ($setvalue<-80) {
+				$setvalue=-80;
+			}
+			file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
+		}
+	}
+	$d=fetchdata();
+	if ($d['nvidia']['s']=='On') {
+		$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
 		if (isset($current['result']['item']['file'])) {
 			if (!empty($current['result']['item']['file'])) {
 				echo '
@@ -270,51 +270,51 @@ if ($home===true) {
 				 </div>';
 			}
 		} else {
-        echo '
-                </div>';
-        }
+		echo '
+				</div>';
+		}
 	} else {
-        echo '
-                </div>';
-    }
-    echo '
-                <div class="box">
-                    <input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
-                    <input type="submit" name="VolumeDOWN" value="Down" class="btn big b3"/>
-                    <input type="submit" name="Denon" value="Denon" class="btn big b3"/>
-                    <input type="submit" name="VolumeUP" value="Up" class="btn big b3"/>
-                </div>
-                <div class="box">Update Library:<br/>
-                    <input type="submit" name="UpdateKodi" value="Wij" class="btn big b3"/>
-                    <input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3"/>
-                    <input type="submit" name="UpdateKodi" value="Alex" class="btn big b3"/>
-                </div>
-                <div class="box">
-                    <input type="submit" name="PowerOn" value="Shield On" class="btn big b2"/>
-                    <input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2"/>
-                    <input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
-                    <input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
-                </div>
-            </form>
-        </div>
-    </body>
+		echo '
+				</div>';
+	}
+	echo '
+				<div class="box">
+					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
+					<input type="submit" name="VolumeDOWN" value="Down" class="btn big b3"/>
+					<input type="submit" name="Denon" value="Denon" class="btn big b3"/>
+					<input type="submit" name="VolumeUP" value="Up" class="btn big b3"/>
+				</div>
+				<div class="box">Update Library:<br/>
+					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b3"/>
+					<input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3"/>
+					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b3"/>
+				</div>
+				<div class="box">
+					<input type="submit" name="PowerOn" value="Shield On" class="btn big b2"/>
+					<input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2"/>
+					<input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
+					<input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
+				</div>
+			</form>
+		</div>
+	</body>
 </html>';
 } else {
-    header("Location: index.php");
-    die("Redirecting to: index.php");
+	header("Location: index.php");
+	die("Redirecting to: index.php");
 }
 function langu($lang)
 {
-    switch($lang){
-    case 'dut': $taal='&nbsp;NL&nbsp;';
-        break;
-    case 'eng': $taal='&nbsp;EN&nbsp;';
-        break;
-    case 'fre': $taal='&nbsp;FR&nbsp;';
-        break;
-    case '': $taal='N/A';
-        break;
-    default: $taal=$lang;
-    }
-    return $taal;
+	switch($lang){
+	case 'dut': $taal='&nbsp;NL&nbsp;';
+		break;
+	case 'eng': $taal='&nbsp;EN&nbsp;';
+		break;
+	case 'fre': $taal='&nbsp;FR&nbsp;';
+		break;
+	case '': $taal='N/A';
+		break;
+	default: $taal=$lang;
+	}
+	return $taal;
 }

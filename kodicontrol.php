@@ -33,13 +33,13 @@ if ($home===true) {
   </head>
   <body>
   <div class="navbar">
-    <form action="/floorplan.php"><input type="submit" class="btn big b7" value="Plan"/></form>
-    <form action="/denon.php"><input type="submit" class="btn big b7" value="Denon"/></form>
-    <form action="/kodi.php"><input type="submit" class="btn btna big b7" value="Kodi"/></form>
-	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn big b7" value="Films"/></form>
-	<form action="https://films.egregius.be/tobi.php"><input type="submit" class="btn big b7" value="Tobi"/></form>
-	<form action="https://films.egregius.be/alex.php"><input type="submit" class="btn big b7" value="Alex"/></form>
-	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn big b7" value="Series"/></form>
+    <form action="/floorplan.php"><input type="submit" class="btn b7" value="Plan"/></form>
+    <form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
+    <form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
+	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b7" value="Films"/></form>
+	<form action="https://films.egregius.be/tobi.php"><input type="submit" class="btn b7" value="Tobi"/></form>
+	<form action="https://films.egregius.be/alex.php"><input type="submit" class="btn b7" value="Alex"/></form>
+	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b7" value="Series"/></form>
 	</div>
 	<div class="content">
     <div class="box"><form method="POST">';
