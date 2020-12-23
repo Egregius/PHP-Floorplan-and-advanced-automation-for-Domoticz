@@ -33,24 +33,34 @@ if ($home===true) {
 		} else {
 			kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Scan"}');
 		}
+		exit;
 	} elseif (isset($_POST['CleanKodi'])) {
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
+		exit;
 	} elseif (isset($_POST['PauseKodi'])) {
 		@file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+		exit;
 	} elseif (isset($_POST['StopKodi'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+		exit;
 	} elseif (isset($_POST['bigbackward'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
+		exit;
 	} elseif (isset($_POST['smallbackward'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
+		exit;
 	} elseif (isset($_POST['smallforward'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
+		exit;
 	} elseif (isset($_POST['bigforward'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
+		exit;
 	} elseif (isset($_POST['PowerOff'])) {
 		sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
+		exit;
 	} elseif (isset($_POST['PowerOn'])) {
 		sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+		exit;
 	} elseif (isset($_POST['TVKodi'])) {
 		if ($d['lgtv']['s']!='On') {
 			sw('lgtv', 'On',basename(__FILE__).':'.__LINE__);
@@ -58,8 +68,10 @@ if ($home===true) {
 		if ($d['nvidia']['s']!='On') {
 			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 		}
+		exit;
 	} elseif (isset($_POST['audio'])) {
 		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
+		exit;
 	} elseif (isset($_POST['subtitle'])) {
 		if ($_POST['subtitle']=='disable') {
 			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
@@ -68,6 +80,7 @@ if ($home===true) {
 		} else {
 			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['subtitle'].'}}', false, $ctx);
 		}
+		exit;
 	} elseif (isset($_POST['Denon'])) {
 		header("Location: ../denon.php");
 		die("Redirecting to: ../denon.php");
@@ -75,32 +88,11 @@ if ($home===true) {
 		header("Location: ../kodicontrol.php");
 		die("Redirecting to: ../kodicontrol.php");
 	} elseif (isset($_POST['VolumeDOWN'])) {
-		$denonmain=@simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
-		$denonmain=@json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
-		if ($denonmain) {
-			$denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
-			$setvalue=$setvalue-3;
-			if ($setvalue>-10) {
-				$setvalue=-10;
-			}if ($setvalue<-80) {
-				$setvalue=-80;
-			}
-			file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
-		}
+		fvolume('down');
+		exit;
 	} elseif (isset($_POST['VolumeUP'])) {
-		$denonmain=simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx));
-		$denonmain=json_encode($denonmain);$denonmain=json_decode($denonmain, true);usleep(10000);
-		if ($denonmain) {
-			$denonmain['MasterVolume']['value']=='--'?$setvalue=-80:$setvalue=$denonmain['MasterVolume']['value'];
-			$setvalue=$setvalue+3;
-			if ($setvalue>-10) {
-				$setvalue=-10;
-			}
-			if ($setvalue<-80) {
-				$setvalue=-80;
-			}
-			file_get_contents('http://'.$denonip.'/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/'.$setvalue.'.0');
-		}
+		fvolume('up');
+		exit;
 	}
 	//error_reporting(E_ALL);ini_set("display_errors", "on");
 	$count=0;
@@ -121,7 +113,7 @@ if ($home===true) {
 	<link rel="icon" sizes="192x192" href="images/kodi.png">
 	<meta name="mobile-web-app-capable" content="yes">
 	<script type="text/javascript">
-		setTimeout(\'window.location.href=window.location.href;\', 4950);
+		setTimeout(\'window.location.href=window.location.href;\', 14950);
 		function navigator_Go(url) {window.location.assign(url);}
 		function exec(cmd, action=""){
 			$.post("kodi.php",
@@ -223,7 +215,7 @@ if ($home===true) {
 						<div class="box controls">';
 					echo $prop['speed']==1
 					 ?'
-							<input type="submit" name="PauseKodi" value="Playing" class="btn b2"/>'
+							<input type="submit" name="PauseKodi" value="Playing" class="btn b2" onclick="exec(\'PauseKodi\',\'Playing\');"/>'
 					 :'
 							<input type="submit" name="PauseKodi" value="Paused" class="btn b2"/>';
 					echo '
@@ -285,18 +277,18 @@ if ($home===true) {
 	echo '
 				<div class="box">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
-					<input type="submit" name="VolumeDOWN" value="Down" class="btn big b3"/>
+					<input type="submit" name="VolumeDOWN" value="Down" class="btn big b3" onclick="exec(\'VolumeDOWN\',\'Down\');"/>
 					<input type="submit" name="Denon" value="Denon" class="btn big b3"/>
-					<input type="submit" name="VolumeUP" value="Up" class="btn big b3"/>
+					<input type="submit" name="VolumeUP" value="Up" class="btn big b3" onclick="exec(\'VolumeUP\',\'Up\');"/>
 				</div>
 				<div class="box">Update Library:<br/>
-					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b3"/>
-					<input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3"/>
-					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b3"/>
+					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Wij\');"/>
+					<input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Tobi\');"/>
+					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Alex\');"/>
 				</div>
 				<div class="box">
-					<input type="submit" name="PowerOn" value="Shield On" class="btn big b2"/>
-					<input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2"/>
+					<input type="submit" name="PowerOn" value="Shield On" class="btn big b2" onclick="exec(\'PowerOn\',\'Shield On\');"/>
+					<input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2" onclick="exec(\'TVKodi\',\'TV Kodi\');"/>
 					<input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
 					<input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
 				</div>
