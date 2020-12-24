@@ -48,7 +48,7 @@ if ($home===true) {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>Temperaturen</title>
-		<link href="/styles/temp.php" rel="stylesheet" type="text/css"/>
+		<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 		</head>
 		<body style="width:100%">';
