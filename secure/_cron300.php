@@ -167,6 +167,6 @@ $battery=apcu_fetch('ring-battery');
 
 if ((TIME>=strtotime('11:00')&&TIME<strtotime('19:30'))||$battery<50) {
 	if (($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800)||($d['ringdoorbell']['s']=='Off'&&$battery<50)) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__.' battery='.$battery);
-} elseif ((TIME<strtotime('6:00')||TIME>=strtotime('22:00')||$battery>=80)&&$battery>60) {
+}/* elseif ((TIME<strtotime('6:00')||TIME>=strtotime('22:00')||$battery>=80)&&$battery>60) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__.' battery='.$battery);
-}
+}*/

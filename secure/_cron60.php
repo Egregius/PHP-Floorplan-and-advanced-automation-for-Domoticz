@@ -335,7 +335,7 @@ if ($d['auto']['s']=='On') {
 		'Ralex'
 	);
 
-	if (TIME<=strtotime('0:02')) {
+	if (TIME<=strtotime('0:03')) {
 		store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 		store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 	} elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {

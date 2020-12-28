@@ -298,11 +298,19 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
-		if (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=-1.0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-1.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-1.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+		if (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
+		elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.8) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=-0.9) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-1.0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.2;$power=1;}
+		elseif (${'dif'.$k}>=-1.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-1.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.8;$power=1;}
+		elseif (${'dif'.$k}>=-1.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.6;$power=1;}
+		elseif (${'dif'.$k}>=-1.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.4;$power=1;}
+		elseif (${'dif'.$k}>=-1.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.2;$power=1;}
 		else {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
 		$set=ceil($d[$k.'_set']['s'] * 2) / 2;
 		$rate='A';

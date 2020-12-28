@@ -310,7 +310,7 @@ if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 $daikin=json_decode($d['daikinliving']['s']);
 if ($daikin->adv == '') {
 	$powermode=0;
-} else if (strstr($daikin->adv, '/')) { 
+} else if (strstr($daikin->adv, '/')) {
 	$advs=explode("/", $daikin->adv);
 	if ($advs[0]==2) $powermode=2;
 	else if ($advs[0]==12) $powermode=1;
@@ -331,7 +331,7 @@ if ($powermode<2) {
 $daikin=json_decode($d['daikinkamer']['s']);
 if ($daikin->adv == '') {
 	$powermode=0;
-} else if (strstr($daikin->adv, '/')) { 
+} else if (strstr($daikin->adv, '/')) {
 	$advs=explode("/", $daikin->adv);
 	if ($advs[0]==2) $powermode=2;
 	else if ($advs[0]==12) $powermode=1;
@@ -352,7 +352,7 @@ if ($powermode<2) {
 $daikin=json_decode($d['daikinalex']['s']);
 if ($daikin->adv == '') {
 	$powermode=0;
-} else if (strstr($daikin->adv, '/')) { 
+} else if (strstr($daikin->adv, '/')) {
 	$advs=explode("/", $daikin->adv);
 	if ($advs[0]==2) $powermode=2;
 	else if ($advs[0]==12) $powermode=1;
@@ -416,3 +416,5 @@ $stmt=$db->query("delete from temp where stamp < '$remove'");
 $remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
 //lg(' Deleted '.$stmt->rowCount().' records from regen');
+
+RefreshZwave(128);
