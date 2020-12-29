@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8.0
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,4 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8badkamer-7.php');
+store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
+if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+douche();
+resetsecurity();

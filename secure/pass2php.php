@@ -14,8 +14,8 @@ require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
 
-if (endswith($device, '_Temperature')) exit;
-elseif (endswith($device, '_Utility')) exit;
+//if (endswith($device, '_Temperature')) exit;
+//elseif (endswith($device, '_Utility')) exit;
 
 $d=fetchdata();
 if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
