@@ -826,9 +826,6 @@ function fhall() {
 	} else {
 		finkom();
 	}
-	/*if ($d['gcal']['s']==false&&TIME>=strtotime('6:00')&&TIME<strtotime('10:00')&&$d['Rtobi']['s']>0) {
-		sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-	}*/
 }
 function sirene($msg) {
 	global $d,$device;

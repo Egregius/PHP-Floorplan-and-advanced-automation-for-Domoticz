@@ -24,9 +24,6 @@ if ($d['lichtbadkamer']['s']>0) {
 }
 if ($d['auto']['s']=='On') {
 	fhall();
-	if (TIME<strtotime('20:00')) {
-		finkom();
-	}
 }
 if ($d['badkamer_set']['m']!=0) {
 	storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
