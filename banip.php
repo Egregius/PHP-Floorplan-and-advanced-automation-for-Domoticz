@@ -1,2 +1,2 @@
 <?php
-include '/var/www/banip.php';
+require ('/var/www/banip.php');
