@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p /var/log
 touch /var/log/fail2ban.log
 service mysql stop
 service domoticz stop
@@ -27,3 +28,6 @@ sleep 5
 service mysql start
 service nginx start
 service domoticz start
+touch /var/log/amplify-agent.log
+chown www-data /var/log/amplify-agent.log
+service amplify-agent start
