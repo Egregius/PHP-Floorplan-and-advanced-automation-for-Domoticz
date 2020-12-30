@@ -469,7 +469,7 @@ if ($d['auto']['s']=='On') {
 		&&past('bose103')>90
 		&&past('bose104')>90
 		&&past('bose105')>90
-		&&($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')
+		&&(($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(
 			json_encode(
