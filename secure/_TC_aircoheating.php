@@ -64,11 +64,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
 		if (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
-		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
-		elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+		elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
+		elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
+		elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;$power=1;}
@@ -81,8 +81,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$rate='A';
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
-			if ($power==1&&$d[$k.'_set']['m']!=4) storemode('daikin'.$k, 4);
-			elseif ($power==0&&$d[$k.'_set']['m']!=0) storemode('daikin'.$k, 0);
+			//if ($power==1&&$d[$k.'_set']['m']!=4) storemode('daikin'.$k, 4, basename(__FILE__).':'.__LINE__);
+			//elseif ($power==0&&$d[$k.'_set']['m']!=0) storemode('daikin'.$k, 0, basename(__FILE__).':'.__LINE__);
 			if ($k=='living') $ip=111;
 			elseif ($k=='kamer') $ip=112;
 			elseif ($k=='alex') $ip=113;
@@ -104,12 +104,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	} else {
 		if ($daikin->pow!=0||$daikin->mode!=4) {
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
-			storemode('daikin'.$k, 0);
+			//storemode('daikin'.$k, 0, basename(__FILE__).':'.__LINE__);
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=0;
 			$data['mode']=4;
 			$data['set']=10;
-			storeicon($k.'_set', json_encode($data));
+			storeicon($k.'_set', json_encode($data), basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
