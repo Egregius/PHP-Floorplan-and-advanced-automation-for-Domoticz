@@ -64,20 +64,19 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
 		if (${'dif'.$k}>=0.3) {$set=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-4;$power=1;}
-		elseif (${'dif'.$k}>=0.1) {$set=$d[$k.'_set']['s']-3.5;$power=1;}
-		elseif (${'dif'.$k}>=0) {$set=$d[$k.'_set']['s']-3;$power=1;}
-		elseif (${'dif'.$k}>=-0.1) {$set=$d[$k.'_set']['s']-2.5;$power=1;}
-		elseif (${'dif'.$k}>=-0.2) {$set=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-0.3) {$set=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-0.4) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=0.1) {$set=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=0) {$set=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=-0.1) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.2) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.3) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.4) {$set=$d[$k.'_set']['s']-1;$power=1;}
 		elseif (${'dif'.$k}>=-0.5) {$set=$d[$k.'_set']['s']-1;$power=1;}
-		elseif (${'dif'.$k}>=-0.6) {$set=$d[$k.'_set']['s']-0.8;$power=1;}
-		elseif (${'dif'.$k}>=-0.7) {$set=$d[$k.'_set']['s']-0.6;$power=1;}
-		elseif (${'dif'.$k}>=-0.8) {$set=$d[$k.'_set']['s']-0.4;$power=1;}
-		elseif (${'dif'.$k}>=-0.9) {$set=$d[$k.'_set']['s']-0.2;$power=1;}
+		elseif (${'dif'.$k}>=-0.6) {$set=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-0.7) {$set=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-0.8) {$set=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-0.9) {$set=$d[$k.'_set']['s']-1;$power=1;}
 		else {$set=$d[$k.'_set']['s'];$power=1;}
-		$set=$d[$k.'_set']['s']-1.5;
 		$set=ceil($set * 2) / 2;
 		$rate='A';
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
