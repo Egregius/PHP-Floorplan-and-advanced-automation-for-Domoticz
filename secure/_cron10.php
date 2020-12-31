@@ -44,7 +44,7 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	$items=array(32,31,30,29,28,27,26,25,24,0);
+	$items=array(32,30,28,26,24,0);
 	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
 		foreach ($items as $i) {
 			if ($d['inkom']['s']>$i) {
@@ -176,11 +176,12 @@ if ($rgb!=false) {
 		}
 		$level=$control_info['cmpfreq'];
 		if ($level>100)$level=100;
-		$Xlight=round($level/3);
+		//$Xlight=round($level/3);
 		if ($d['Xlight']['s']!=$Xlight) {
 			if ($d['Weg']['s']==0) {
-				rgb('Xlight', $rgb, $Xlight);
-				sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
+				//rgb('Xlight', $rgb, $Xlight);
+				file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:3,%22b%22:0,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
+				//sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 			}
 			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
