@@ -64,7 +64,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
 		if (${'dif'.$k}>=0.3) {$set=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-2.5;$power=1;}
 		elseif (${'dif'.$k}>=0.1) {$set=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=0) {$set=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=-0.1) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
