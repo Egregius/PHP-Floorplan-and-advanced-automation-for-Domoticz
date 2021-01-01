@@ -64,14 +64,14 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10&&$d['Weg']['s']==0) {
 		if (${'dif'.$k}>=0.3) {$set=$d[$k.'_set']['s']-5;$power=0;}
-		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-2.5;$power=1;}
-		elseif (${'dif'.$k}>=0.1) {$set=$d[$k.'_set']['s']-2;$power=1;}
+		elseif (${'dif'.$k}>=0.2) {$set=$d[$k.'_set']['s']-3;$power=1;}
+		elseif (${'dif'.$k}>=0.1) {$set=$d[$k.'_set']['s']-2.5;$power=1;}
 		elseif (${'dif'.$k}>=0) {$set=$d[$k.'_set']['s']-2;$power=1;}
-		elseif (${'dif'.$k}>=-0.1) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.1) {$set=$d[$k.'_set']['s']-2;$power=1;}
 		elseif (${'dif'.$k}>=-0.2) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.3) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
-		elseif (${'dif'.$k}>=-0.4) {$set=$d[$k.'_set']['s']-1;$power=1;}
-		elseif (${'dif'.$k}>=-0.5) {$set=$d[$k.'_set']['s']-1;$power=1;}
+		elseif (${'dif'.$k}>=-0.4) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
+		elseif (${'dif'.$k}>=-0.5) {$set=$d[$k.'_set']['s']-1.5;$power=1;}
 		elseif (${'dif'.$k}>=-0.6) {$set=$d[$k.'_set']['s']-1;$power=1;}
 		elseif (${'dif'.$k}>=-0.7) {$set=$d[$k.'_set']['s']-1;$power=1;}
 		elseif (${'dif'.$k}>=-0.8) {$set=$d[$k.'_set']['s']-1;$power=1;}
@@ -86,7 +86,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if ($k=='living') $ip=111;
 			elseif ($k=='kamer') $ip=112;
 			elseif ($k=='alex') $ip=113;
-			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=1;
+			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=0;
 			else $streamer=0;
 
 			$data=json_decode($d[$k.'_set']['icon'], true);

@@ -113,7 +113,7 @@ if ($home==true) {
 		$data=array();
 		$data['pfsense']=json_decode(@file_get_contents('http://192.168.2.254:44300/egregius.php', false, $ctx), true);
 		if ($d['denon']['s']=='On') {
-			$denon=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.time, false, $ctx))), true);
+			$denon=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
 			$data['denon']['power']=$denon['Power']['value'];
 			$data['denon']['vol']=$denon['MasterVolume']['value'];
 		}
