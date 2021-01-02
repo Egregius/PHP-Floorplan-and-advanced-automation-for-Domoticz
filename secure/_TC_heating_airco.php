@@ -80,17 +80,14 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$rate='A';
 		if ($k=='living') $set=$d[$k.'_set']['s']-1;
 		elseif ($k=='kamer') $set=$d[$k.'_set']['s']-2;
-		elseif ($k=='alex') {$set=$d[$k.'_set']['s']-2;$power=1;$rate='B';}
+		elseif ($k=='alex') {
+			$set=$d[$k.'_set']['s']-2;
+			if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate='B';
+		}
 		$set=ceil($set * 2) / 2;
 
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
-			if ($k=='living') $ip=111;
-			elseif ($k=='kamer') $ip=112;
-			elseif ($k=='alex') $ip=113;
-			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=0;
-			else $streamer=0;
-
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=4;

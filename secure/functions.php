@@ -915,10 +915,10 @@ function daikinstatus($device) {
 	$data = @file_get_contents("http://192.168.2.$ip/aircon/get_control_info", false, $ctx);
 	if($data === FALSE){
 		return FALSE;
-	}else{
+	} else {
 		$array=explode(",",$data);
-		$control_info= array();
-		foreach($array as $value){
+		$control_info=array();
+		foreach ($array as $value){
 			$pair= explode("=",$value);
 			$control_info[$pair[0]]=$pair[1];
 		}
@@ -928,7 +928,7 @@ function daikinstatus($device) {
 /**
  * Function daikinset
  *
- * Sets a Daikin airco in cooling mode to a temperature.
+ * Sets a Daikin airco in a mode and a temperature.
  *
  * @param string $device devicename of the Daikin airco
  * @param int $power 0 = Off, 1 = On

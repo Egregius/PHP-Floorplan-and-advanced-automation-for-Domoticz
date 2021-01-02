@@ -158,7 +158,6 @@ if (pingport('192.168.2.105', 80)==1) {
 	}
 }
 
-/*
 if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$mode=3;}
 elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$mode=4;}
 elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$mode=2;}
@@ -183,7 +182,6 @@ if ($mode>0) {
 				if ($mode==4) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:3,%22b%22:0,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
 				elseif ($mode==2) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:243,%22b%22:5,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
 				elseif ($mode==3) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:18,%22g%22:31,%22b%22:255,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
-				//sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 			}
 			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
@@ -202,7 +200,7 @@ if ($d['Weg']['s']>0) {
 	if ($d['Xlight']['s']>0) {
 		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}*/
+}
 if (past('wind')>86) {
 	require('_weather.php');
 }
