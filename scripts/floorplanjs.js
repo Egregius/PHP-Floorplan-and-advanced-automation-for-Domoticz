@@ -431,7 +431,7 @@ function ajax(Update=$LastUpdateTime){
 								else if(heatingmode==-2)html+='<img src="https://home.egregius.be/images/Cooling.png" class="i40" alt="Cooling">';
 								else if(heatingmode==-1)html+='<img src="https://home.egregius.be/images/Cooling_grey.png" class="i40" alt="Cooling">';
 								else if(heatingmode==1)html+='<img src="https://home.egregius.be/images/Cooling_red.png" class="i40" alt="Elec">';
-								else if(heatingmode==2){
+								else if(heatingmode==4){
 									if($value=='On')html+='<img src="https://home.egregius.be/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">';
 									else html+='<img src="https://home.egregius.be/images/fire_Off.png" class="i40" alt="Gas">';
 								}
@@ -1270,7 +1270,7 @@ function floorplanheating(){
 		html+='<div class="fix z" onclick="roller(\'luifel\');" id="luifel"></div>';
 		html+='<div class="fix z" id="bovenbeneden"><a href=\'javascript:navigator_Go("floorplan.daikinpowerusage.php");\' class="btn">Daikin Power Usage</a><br><br><button class="btn btnh" onclick="ajaxcontrol(\'tv\',\'roller\',\'tv\');initview();">TV</button> &nbsp; <button class="btn btnf" onclick="roller(\'Beneden\');">Beneden</button> &nbsp; <button class="btn btnf" onclick="roller(\'Boven\');">Boven</button></div>';
 		html+='<div class="fix divsetpoints z"><table class="tablesetpoints">';
-		if(heatingset==2)html+='<tr><td id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
+		if(heatingset>=1)html+='<tr><td id="brander"></td><td align="left" height="60" width="80px" style="line-height:18px">Brander<br><span id="tbrander"></span></td></tr>';
 		html+='<tr id="trheating"></tr>';
 		html+='</table></div>';
 		$('#placeholder').html(html);
@@ -1458,27 +1458,17 @@ function setpoint(device){
 		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
 		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
-	if(heatingset>=2){
+	if(heatingset>0){
 		if(device=='badkamer'){
-			temps=[10,14,15,16,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22];
+			temps=[10,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
 		}else if(device=='living'){
-			temps=[15,16,17,17.5,18,18.5,19,19.5,20,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
+			temps=[15,16,16.5,17,17.5,18,18.5,19,19.5,20,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
 		}else if(device=='zolder'){
-			temps=[4,7,8,9,10,11,12,13,14,15,16,16.5,17,17.5,18,18.5,19,19.5,19.6,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5];
+			temps=[4,7,8,9,10,11,12,13,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,19.6,19.7,19.8,19.9,20,20.1,20.2,20.3,20.4,20.5];
 		}else{
 			temps=[10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17];
 		}
-	}else if(heatingset==1){
-		if(device=='badkamer'){
-			temps=[10,14,15,16,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22];
-		}else if(device=='living'){
-			temps=[10,16,17,17.5,18,18.5,19,19.5,20,20.5,20.6,20.7,20.8,20.9,21,21.1,21.2,21.3,21.4,21.5,21.6,21.7,21.8,21.9,22];
-		}else if(device=='zolder'){
-			temps=[4,14,14.5,15,15.5,16,16.5,17,17.5,18,18.5,19,19.5,20,20.5];
-		}else{
-			temps=[10,10.5,11,11.5,12,12.5,13,13.5,14,14.5,15,15.5,16,16.5,17];
-		}
-	}else{
+	}else {
 		temps=[17,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.5,24,33];
 	}
 	html+='<div class="fix z" style="top:210px;left:10px;">';
