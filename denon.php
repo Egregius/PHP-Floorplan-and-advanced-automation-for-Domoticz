@@ -34,7 +34,7 @@ if ($home) {
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 9950);</script>
+	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 1950);</script>
 	<link href="/styles/denon.css?v='.TIME.'" rel="stylesheet" type="text/css"/>
   </head>
 <body>';
@@ -93,8 +93,8 @@ if ($home) {
 				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5">'.$showvalue.'</button>';
 			}
 		}
-		echo '</div>
-<div class="box">';
+		echo '</div>';
+/*echo '<div class="box">';
 		$inp=$denonmain['InputFuncSelect']['value'];
 		$inputs=array('TUNER','TV','KODI','CAST');
 		if (!in_array($inp, $inputs)) {
@@ -119,8 +119,8 @@ if ($home) {
 				echo '<button name="input" value="'.$txt.'" class="btn b3">'.$input.'</button>';
 			}
 		}
-		echo '</div>
-<div class="box">';
+echo '</div>';*/
+echo '<div class="box">';
 		$sur=trim($denonmain['selectSurround']['value']);
 		$surrounds=array('MOVIE','MUSIC','PURE DIRECT','DOLBY DIGITAL','DTS SURROUND');
 		if (!in_array($sur, $surrounds)) {
@@ -141,9 +141,9 @@ if ($home) {
 		$delay=strbefore($delay, "'>");
 		for ($x=0;$x<=200;$x++) {
 			if ($x==$delay) echo '
-		<button name="delay" value="'.$x.'" class="btn btna delay">'.$x.'</button>';
+		<button name="delay" value="'.$x.'" class="btn btna b8">'.$x.'</button>';
 			else echo '
-		<button name="delay" value="'.$x.'" class="btn delay">'.$x.'</button>';
+		<button name="delay" value="'.$x.'" class="btn b8">'.$x.'</button>';
 		}
 		echo '
 </form>
