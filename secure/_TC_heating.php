@@ -54,17 +54,17 @@ if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
 		$Setliving=16;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('18:00')&&TIME<strtotime('18:15')) $Setliving=21.0;
-			elseif (TIME>=strtotime('17:30')&&TIME<strtotime('18:15')) $Setliving=20.9;
-			elseif (TIME>=strtotime('17:00')&&TIME<strtotime('18:15')) $Setliving=20.8;
-			elseif (TIME>=strtotime('16:30')&&TIME<strtotime('18:15')) $Setliving=20.7;
-			elseif (TIME>=strtotime('16:00')&&TIME<strtotime('18:15')) $Setliving=20.6;
-			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('18:15')) $Setliving=20.5;
-			elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:15')) $Setliving=20.4;
-			elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:15')) $Setliving=20.3;
-			elseif (TIME>=strtotime('5:30')&&TIME<strtotime('18:15')) $Setliving=20.2;
-			elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:15')) $Setliving=20.1;
-			elseif (TIME>=strtotime('4:30')&&TIME<strtotime('18:15')) $Setliving=20.0;
+			if (TIME>=strtotime('18:00')&&TIME<strtotime('19:00')) $Setliving=21.0;
+			elseif (TIME>=strtotime('17:30')&&TIME<strtotime('19:00')) $Setliving=20.9;
+			elseif (TIME>=strtotime('17:00')&&TIME<strtotime('19:00')) $Setliving=20.8;
+			elseif (TIME>=strtotime('16:30')&&TIME<strtotime('19:00')) $Setliving=20.7;
+			elseif (TIME>=strtotime('16:00')&&TIME<strtotime('19:00')) $Setliving=20.6;
+			elseif (TIME>=strtotime('7:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
+			elseif (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=20.4;
+			elseif (TIME>=strtotime('6:00')&&TIME<strtotime('19:00')) $Setliving=20.3;
+			elseif (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=20.2;
+			elseif (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.1;
+			elseif (TIME>=strtotime('4:30')&&TIME<strtotime('19:00')) $Setliving=20.0;
 		} elseif ($d['Weg']['s']==1) {
 			$dow=date("w");
 			if($dow==0||$dow==6) {
