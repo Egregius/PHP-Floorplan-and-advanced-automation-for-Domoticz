@@ -158,11 +158,11 @@ if (pingport('192.168.2.105', 80)==1) {
 	}
 }
 
-if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$mode=3;}
-elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$mode=4;}
-elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$mode=2;}
-else $mode=0;
-if ($mode>0) {
+if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
+elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
+elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
+else $rgb=false;
+if ($rgb!=false) {
 	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
 	if($data === FALSE) {
 		return FALSE;
@@ -175,21 +175,15 @@ if ($mode>0) {
 		}
 		$level=$control_info['cmpfreq'];
 		if ($level>100)$level=100;
-		//$Xlight=round($level/3);
-		$Xlight=round($level);
-		if ($d['Xlight']['s']!=$Xlight&&$level>0) {
+		$Xlight=round($level/3);
+		if ($d['Xlight']['s']!=$Xlight) {
 			if ($d['Weg']['s']==0) {
-				if ($mode==4) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:3,%22b%22:0,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
-				elseif ($mode==2) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:243,%22b%22:5,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
-				elseif ($mode==3) file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:18,%22g%22:31,%22b%22:255,%22cw%22:0,%22ww%22:0}&brightness='.$Xlight);
+				rgb('Xlight', $rgb, $Xlight);
+				sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 			}
 			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
 			elseif ($mode==2)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
-		} else {
-			if ($d['Xlight']['s']>0) {
-				sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-			}
 		}
 	}
 } else {
