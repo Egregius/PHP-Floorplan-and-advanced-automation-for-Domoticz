@@ -76,7 +76,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 }
 
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
-if ($d['brander']['s']=='On'&&past('brander')>300) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['brander']['s']=='On'&&past('brander')>420) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 

@@ -40,7 +40,7 @@ if ($home===true) {
   </head>
 <body>';
 if (isset($_POST['poweroff'])) {
-		denon('PWSTANDBY');
+	denon('PWSTANDBY');
 } elseif (isset($_POST['action'])) {
 	denon($_POST['action']);
 	denon($_POST['action']);
@@ -55,7 +55,7 @@ if (isset($_POST['poweroff'])) {
 </div>
 <div class="content">
 <form method="POST">
-<div class="box" style="width:95%">
+<div class="box" style="width:96%">
 	<table width="100%">
 	<tr><td width="30%"></td><td width="30%"></td><td width="30%"></td></tr>
 	<tr><td align="right"><b>Dialoog</b><td ><button name="action" value="CVC UP" class="btn" style="width:100%">UP</button></td><td><button name="action" value="CVC DOWN" class="btn" style="width:100%">DOWN</button></td></tr>
@@ -72,7 +72,7 @@ if (isset($_POST['poweroff'])) {
 	<tr><td></td><td></td><td></td></tr>
 	</table>
 </div>
-<div class="box" style="width:95%">
+<div class="box" style="width:96%">
 	<table width="100%">
 	<tr><td width="30%"></td><td width="30%"></td><td width="30%"></td></tr>
 	<tr><td align="right"><b>Bass</b><td ><button name="action" value="PSBAS UP" class="btn" style="width:100%">UP</button></td><td><button name="action" value="PSBAS DOWN" class="btn" style="width:100%">DOWN</button></td></tr>
