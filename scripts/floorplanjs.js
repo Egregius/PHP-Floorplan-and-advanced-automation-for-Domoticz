@@ -343,7 +343,9 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco cooling</td>';
 								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive cooling</td>';
 								else if($value==1)html+='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco heating</td>';
-								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>';
+								else if($value==2)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco-Gas heating</td>';
+								else if($value==3)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco heating</td>';
+								else if($value==4)html+='<img src="images/gaselec_On.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
 						}else if(device=="belknop"){
@@ -1636,11 +1638,13 @@ function heating(){
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Gas heating</button>';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
-	html+='<button class="btn huge5" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 58px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');sleep(500);initview();">Gas heating</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');sleep(500);initview();">Gas-Airco heating</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/fire_On.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Airco-Gas heating</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 42px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
+	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
 	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);

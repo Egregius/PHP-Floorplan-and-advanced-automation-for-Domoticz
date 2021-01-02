@@ -85,7 +85,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
-			/*if ($k=='living') $ip=111;
+			if ($k=='living') $ip=111;
 			elseif ($k=='kamer') $ip=112;
 			elseif ($k=='alex') $ip=113;
 			if (TIME>strtotime('8:00')||TIME<strtotime('19:00')) $streamer=0;
@@ -96,21 +96,16 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['mode']=4;
 			$data['fan']=$rate;
 			$data['set']=$set;
-			if ((isset($data['streamer'])&&$data['streamer']!=$streamer)||!isset($data['streamer'])) {
-				sleep(1);
-				file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$streamer);
-				$data['streamer']=$streamer;
-			}
-			if ($d[$k.'_set']['icon']!=json_encode($data)) storeicon($k.'_set', json_encode($data));*/
+			if ($d[$k.'_set']['icon']!=json_encode($data)) storeicon($k.'_set', json_encode($data));
 		}
 	} else {
 		if ($daikin->pow!=0||$daikin->mode!=4) {
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
-/*			$data=json_decode($d[$k.'_set']['icon'], true);
+			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=0;
 			$data['mode']=4;
 			$data['set']=10;
-			storeicon($k.'_set', json_encode($data), basename(__FILE__).':'.__LINE__);*/
+			storeicon($k.'_set', json_encode($data), basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
