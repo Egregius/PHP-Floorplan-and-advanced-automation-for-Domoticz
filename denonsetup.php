@@ -13,11 +13,7 @@ require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
 	if (isset($_POST['action'])) {
-		if ($_POST['action']=='poweroff') {
-			denon('PWSTANDBY');
-		} else {
-			denon($_POST['action']);
-		}
+		denon($_POST['action']);
 		exit;
 	}
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -128,14 +124,11 @@ if ($home===true) {
 	<tr><td></td><td></td><td></td></tr>
 	<tr>
 		<td align="right"><b>LFE</b></td>
-		<td><button class="btn" style="width:100%" onclick="exec('action','PSLEE UP');">UP</button></td>
-		<td><button class="btn" style="width:100%" onclick="exec('action','PSLEE DOWN');">DOWN</button></td>
+		<td><button class="btn" style="width:100%" onclick="exec('action','PSLFE UP');">UP</button></td>
+		<td><button class="btn" style="width:100%" onclick="exec('action','PSLFE DOWN');">DOWN</button></td>
 	</tr>
 	<tr><td></td><td></td><td></td></tr>
 	</table>
-</div>
-<div class="box">
-	<button class="btn b1" onclick="exec('action','poweroff');">Power Off</button>
 </div>
 </body>
 </html>

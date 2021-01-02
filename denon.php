@@ -19,7 +19,7 @@ if ($home) {
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=0.5, user-scalable=yes, minimal-ui" />
+	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 	<title>Denon</title>
 	<link rel="icon" type="image/png" href="images/denon.png">
 	<link rel="shortcut icon" href="images/denon.png" />
@@ -27,7 +27,6 @@ if ($home) {
 	<link rel="icon" sizes="196x196" href="images/denon.png">
 	<link rel="icon" sizes="192x192" href="images/denon.png">
 	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="manifest" href="/manifests/denon.json">
 	<link href="images/denon.png" media="(device-width: 320px)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"	rel="apple-touch-startup-image">
