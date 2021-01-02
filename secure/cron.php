@@ -18,7 +18,9 @@ if ($d['heating']['s']==-2) include ('_TC_aircocooling.php');
 elseif ($d['heating']['s']==-1) include ('_TC_passivecooling.php');
 elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
 elseif ($d['heating']['s']==1) include ('_TC_aircoheating.php');
-elseif ($d['heating']['s']==2) include ('_TC_gasheating.php');
+elseif ($d['heating']['s']==2) include ('_TC_aircogasheating.php');
+elseif ($d['heating']['s']==3) include ('_TC_gasaircoheating.php');
+elseif ($d['heating']['s']==4) include ('_TC_gasheating.php');
 include '_cron10.php';
 if($s<10) {
 	include '_cron60.php';

@@ -11,7 +11,7 @@
  **/
 //lg(__FILE__.':'.$s);
 $user='cron180';
-foreach (array('living', 'kamer', 'alex') as $k) {
+/*foreach (array('living', 'kamer', 'alex') as $k) {
 	$data=daikinstatus($k);
 	if ($data&&$data!=$d['daikin'.$k]['s']) {
 		store('daikin'.$k, $data, basename(__FILE__).':'.__LINE__);
@@ -22,6 +22,6 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif($data->pow==1) {
 			if ($data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
 		}
-		
+
 	}
-}
+}*/

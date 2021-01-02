@@ -295,7 +295,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	}
 }
 
-
+/*
 
 if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 	$low=40;
@@ -370,7 +370,7 @@ if ($powermode<2) {
 		file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$high.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
 	}
 }
-
+*/
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($k=='living') $ip=111;
 	elseif ($k=='kamer') $ip=112;
@@ -396,13 +396,13 @@ $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,a
 $date=strftime('%F', TIME-86400);
 $db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 
-foreach (array('living', 'kamer', 'alex') as $k) {
+/*foreach (array('living', 'kamer', 'alex') as $k) {
 	file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
 	sleep(2);
-}
+}*/
 
 if (TIME<strtotime('3:00')) {
-	for ($x=5;$x>=0;$x--) {
+	for ($x=3;$x>=0;$x--) {
 		$date=date("Y-m-d", (TIME-($x*86400)));
 		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
 		lg($query);
