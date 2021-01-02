@@ -35,9 +35,20 @@ if ($home===true) {
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 4950);</script>
+		<script type="text/javascript">
+		setTimeout(\'window.location.href=window.location.href;\', 14950);
+		function navigator_Go(url) {window.location.assign(url);}
+		function exec(cmd, action=""){
+			$.post("kodi.php",
+			{
+				cmd : cmd,
+				action : action
+			})
+		}
+	</script>
+	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
-  </head>
+</head>
 <body>';
 if (isset($_POST['poweroff'])) {
 	denon('PWSTANDBY');
