@@ -66,8 +66,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if (${'dif'.$k}>=0.3) {$power=0;}
 		else {$power=1;}
 		$rate='A';
-		if ($k=='living') $set=$d[$k.'_set']['s'];
-		elseif ($k=='kamer') $set=$d[$k.'_set']['s']-2;
+		if ($k=='living') $set=$d[$k.'_set']['s']+0.5;
+		elseif ($k=='kamer') {
+			$set=$d[$k.'_set']['s']-2;
+			if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
+		}
 		elseif ($k=='alex') {
 			$set=$d[$k.'_set']['s']-2;
 			if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate='B';

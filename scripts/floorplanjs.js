@@ -1458,7 +1458,7 @@ function setpoint(device){
 		html+='<div class="fix btn" style="top:105px;left:25px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'1\');initview();"><br>Manueel</div>';
 		html+='<div class="fix btn btna" style="top:105px;left:380px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'storemode\',\'0\');initview();"><br>Auto</div>';
 	}
-	if(heatingset==2){
+	if(heatingset>=2){
 		if(device=='badkamer'){
 			temps=[10,14,15,16,17,17.5,18,18.5,19,19.5,20,20.5,21,21.5,22];
 		}else if(device=='living'){
@@ -1487,61 +1487,6 @@ function setpoint(device){
 		else html+='<button class="dimlevel" onclick="ajaxcontrol(\''+device+'\',\'setpoint\',\''+temp+'\');floorplanheating();">'+temp+'</button>';
 	});
 	html+='</div><div class="fix z" style="top:5px;left:5px;" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
-	if(heatingset<-1||heatingset>0){
-		if(device=='living'||device=='kamer'||device=='alex'){
-			var adv = daikin.adv;
-			if (adv == '') {
-				streamer=0;
-				powermode=0;
-			} else if (adv.match(/\//ig)) { 
-				var advs = adv.split("/");
-				console.log(advs);
-				if (advs[1]==13) streamer=1;
-				else if (adv[1]=='') streamer=0;
-				if (advs[0]==2) powermode=2;
-				else if (advs[0]==12) powermode=1;
-				else powermode=0;
-			} else {
-				if (adv==13) {
-					streamer=1;
-					powermode=0;
-				} else if (adv==12) {
-					streamer=0;
-					powermode=1;
-				} else if (adv==2) {
-					streamer=0;
-					powermode=2;
-				} else if (adv=='') {
-					streamer=0;
-					powermode=0;
-				}
-				
-			}
-			console.log(device+' streamer = '+streamer+' powermode = '+powermode);
-			html+='<div class="fix z" style="top:670px;left:5px;">';
-			if(powermode==0){
-				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Eco\');initview();"><br>Eco</div>';
-				html+='<div class="fix btn btna" style="top:-3px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Normal\');initview();"><br>Normal</div>';
-				html+='<div class="fix btn" style="top:-3px;left:364px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
-			} else if(powermode==1){
-				html+='<h3>Powermode</h3><div class="fix btn btna" style="top:-3px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Eco\');initview();"><br>Eco</div>';
-				html+='<div class="fix btn" style="top:-3px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Normal\');initview();"><br>Normal</div>';
-				html+='<div class="fix btn" style="top:-3px;left:364px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
-			} else if(powermode==2){
-				html+='<h3>Powermode</h3><div class="fix btn" style="top:-3px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Eco\');initview();"><br>Eco</div>';
-				html+='<div class="fix btn" style="top:-3px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Normal\');initview();"><br>Normal</div>';
-				html+='<div class="fix btn btna" style="top:-3px;left:364px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'powermode\',\'Power\');initview();"><br>Power</div>';
-			}
-			if(streamer==0){
-				html+='<br><h3>Streamer</h3><div class="fix btn" style="top:81px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
-				html+='<div class="fix btn btna" style="top:81px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
-			} else {
-				html+='<br><h3>Streamer</h3><div class="fix btn btna" style="top:81px;left:140px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'On\');initview();"><br>On</div>';
-				html+='<div class="fix btn" style="top:81px;left:252px;width:110px;height:80px;font-size:2em" onclick="ajaxcontrol(\''+device+'_set\',\'streamer\',\'Off\');initview();"><br>Off</div>';
-			}
-			html+='</div>';
-		}
-	}	
 	$('#placeholder').html(html);
 	
 }
