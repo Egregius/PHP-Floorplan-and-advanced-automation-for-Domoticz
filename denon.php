@@ -35,7 +35,7 @@ if ($home) {
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 9950);</script>
-	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
+	<link href="/styles/denon.css?v='.TIME.'" rel="stylesheet" type="text/css"/>
   </head>
 <body>';
 	if (isset($_POST['vol'])) {
@@ -62,10 +62,10 @@ if ($home) {
 	if (!$denonmain) {
 		echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
 	}
-	echo '<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
-	<form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
-	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b5" value="Films"/></form>
-	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b5" value="Series"/></form>
+	echo '<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
+	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b4" value="Films"/></form>
+	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b4" value="Series"/></form>
 </div>
 		<div class="content">
 			<form method="POST">
@@ -88,9 +88,9 @@ if ($home) {
 				$showvalue = 0;
 			}
 			if ($k==$currentvolume) {
-				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn volume btna">'.$showvalue.'</button>';
+				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5 btna">'.$showvalue.'</button>';
 			} else {
-				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn volume">'.$showvalue.'</button>';
+				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5">'.$showvalue.'</button>';
 			}
 		}
 		echo '</div>
