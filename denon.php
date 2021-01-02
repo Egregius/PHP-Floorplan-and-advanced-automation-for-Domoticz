@@ -34,7 +34,7 @@ if ($home) {
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
-	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 1950);</script>
+	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 19950);</script>
 	<link href="/styles/denon.css?v='.TIME.'" rel="stylesheet" type="text/css"/>
   </head>
 <body>';
@@ -62,7 +62,8 @@ if ($home) {
 	if (!$denonmain) {
 		echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
 	}
-	echo '<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+	echo '<div class="navbar">
+	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
 	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b4" value="Films"/></form>
 	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b4" value="Series"/></form>
@@ -139,7 +140,7 @@ echo '<div class="box">';
 		$delay=file_get_contents('http://192.168.2.6/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
 		$delay=strafter($delay, "style='text-align:right;' value='");
 		$delay=strbefore($delay, "'>");
-		for ($x=0;$x<=200;$x++) {
+		for ($x=0;$x<=199;$x++) {
 			if ($x==$delay) echo '
 		<button name="delay" value="'.$x.'" class="btn btna b8">'.$x.'</button>';
 			else echo '
