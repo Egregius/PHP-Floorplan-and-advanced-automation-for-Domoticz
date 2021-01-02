@@ -35,7 +35,7 @@ if ($home) {
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<link href="images/denon.png" media="(device-width: 768px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 	<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\', 19950);</script>
-	<link href="/styles/denon.css?v='.TIME.'" rel="stylesheet" type="text/css"/>
+	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
   </head>
 <body>';
 	if (isset($_POST['vol'])) {

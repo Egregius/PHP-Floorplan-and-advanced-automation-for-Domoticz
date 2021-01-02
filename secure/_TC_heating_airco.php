@@ -20,20 +20,20 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=0.3)		{$power=0;$set=$d[$k.'_set']['s']+0;}
-		elseif (${'dif'.$k}>=0.2)	{$power=1;$set=$d[$k.'_set']['s']+0.5;}
-		elseif (${'dif'.$k}>=0.1)	{$power=1;$set=$d[$k.'_set']['s']+1;}
-		elseif (${'dif'.$k}>=0)	{$power=1;$set=$d[$k.'_set']['s']+1.5;}
+		if (${'dif'.$k}>=0.3)		{$power=0;$set=$d[$k.'_set']['s']+0.5;}
+		elseif (${'dif'.$k}>=0.2)	{$power=1;$set=$d[$k.'_set']['s']+1;}
+		elseif (${'dif'.$k}>=0.1)	{$power=1;$set=$d[$k.'_set']['s']+1.5;}
+		elseif (${'dif'.$k}>=0)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.1)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.2)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.3)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.4)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.5)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.6)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.7)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.8)	{$power=1;$set=$d[$k.'_set']['s']+3;}
-		elseif (${'dif'.$k}>=-0.9)	{$power=1;$set=$d[$k.'_set']['s']+3;}
-		elseif (${'dif'.$k}>=-1.0)	{$power=1;$set=$d[$k.'_set']['s']+3;}
+		elseif (${'dif'.$k}>=-0.6)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-0.7)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-0.8)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-0.9)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-1.0)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
 		elseif (${'dif'.$k}>=-1.1)	{$power=1;$set=$d[$k.'_set']['s']+3;}
 		elseif (${'dif'.$k}>=-1.2)	{$power=1;$set=$d[$k.'_set']['s']+3;}
 		elseif (${'dif'.$k}>=-1.3)	{$power=1;$set=$d[$k.'_set']['s']+3;}

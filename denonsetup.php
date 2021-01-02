@@ -49,7 +49,7 @@ if ($home===true) {
 		}
 	</script>
 	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
-	<link href="/styles/denon.css?v='.TIME.'" rel="stylesheet" type="text/css"/>
+	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>';
 
