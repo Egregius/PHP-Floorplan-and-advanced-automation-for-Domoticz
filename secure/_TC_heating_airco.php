@@ -88,10 +88,22 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 
 		if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
+			$data=json_decode($d[$k.'_set']['icon'], true);
+			$data['power']=$power;
+			$data['mode']=4;
+			$data['fan']=$rate;
+			$data['set']=$d[$k.'_set']['s'];
+			storeicon($k.'_set', json_encode($data));
 		}
 	} else {
 		if ($daikin->pow!=0||$daikin->mode!=4) {
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
+			$data=json_decode($d[$k.'_set']['icon'], true);
+			$data['power']=$power;
+			$data['mode']=4;
+			$data['fan']=$rate;
+			$data['set']=$d[$k.'_set']['s'];
+			storeicon($k.'_set', json_encode($data));
 		}
 	}
 }
@@ -139,17 +151,14 @@ if ($difbadkamer<=-1) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)
-		|| $d['el']['s']>7500) {
+	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)||$d['el']['s']>7500) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } else {
-	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)
-		|| $d['el']['s']>7500) {
+	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)||$d['el']['s']>7500) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if (($d['badkamervuur1']['s']!='Off'&&past('badkamervuur1')>30)
-		|| $d['el']['s']>8200) {
+	if (($d['badkamervuur1']['s']!='Off'&&past('badkamervuur1')>30)||$d['el']['s']>8200) {
 		sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
