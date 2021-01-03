@@ -108,7 +108,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //	lg($k.' corr='.$corr.' set='.$set.' temp='.$d[$k.'_temp']['s']);
 	if ($d[$k.'_set']['s']>22) $d[$k.'_set']['s']=22;
 	if ($d[$k.'_set']['s']>10) {
-		if (${'dif'.$k}>=0.3)		{$power=0;$set=$d[$k.'_set']['s']+0.5;}
+		if (${'dif'.$k}>=0.4)		{$power=0;$set=$d[$k.'_set']['s'];}
+		elseif (${'dif'.$k}>=0.3)	{$power=1;$set=$d[$k.'_set']['s']-3;}
 		elseif (${'dif'.$k}>=0.2)	{$power=1;$set=$d[$k.'_set']['s']+1;}
 		elseif (${'dif'.$k}>=0.1)	{$power=1;$set=$d[$k.'_set']['s']+1.5;}
 		elseif (${'dif'.$k}>=0)	{$power=1;$set=$d[$k.'_set']['s']+2;}
@@ -127,7 +128,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=-1.3)	{$power=1;$set=$d[$k.'_set']['s']+3;}
 		elseif (${'dif'.$k}>=-1.4)	{$power=1;$set=$d[$k.'_set']['s']+3;}
 		elseif (${'dif'.$k}>=-1.5)	{$power=1;$set=$d[$k.'_set']['s']+3;}
-		else {$power=1;$set=$d[$k.'_set']['s']+4;}
+		if (${'dif'.$k}>=1)		{$power=0;$set=$d[$k.'_set']['s'];}
+		else {$power=1;$set=$d[$k.'_set']['s']+1;}
 		$rate='A';
 		if ($k=='living') $set=$set;
 		elseif ($k=='kamer') $set=$set-2;
@@ -144,7 +146,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['power']=$power;
 			$data['mode']=4;
 			$data['fan']=$rate;
-			$data['set']=$d[$k.'_set']['s'];
+			$data['set']=$set;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 		}
@@ -154,7 +156,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['power']=$power;
 			$data['mode']=4;
 			$data['fan']=$rate;
-			$data['set']=$d[$k.'_set']['s'];
+			$data['set']=$set;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 		}

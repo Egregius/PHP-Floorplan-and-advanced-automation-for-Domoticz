@@ -44,21 +44,5 @@ if (isset($_REQUEST['gpio'])) {
 	} else {
 		die('Unknown');
 	}
-	if (($gpio==20||$gpio==21)&&($d['lichtbadkamer']['s']>0&&past('gasvandaag')<80&&past('watervandaag')<80)) {
-		$euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
-		$eurocent=round($euro*100, 0);
-		//lg('Douche = '.$euro.', round='.roundUpToAny($euro*100, 5));
-		if ($eurocent>0) {
-			if ($eurocent==450) douchewarn($eurocent, 56);
-			elseif ($eurocent==400) douchewarn($eurocent, 54);
-			elseif ($eurocent==350) douchewarn($eurocent, 52);
-			elseif ($eurocent==300) douchewarn($eurocent, 50);
-			elseif ($eurocent==250) douchewarn($eurocent, 48);
-			elseif ($eurocent==200) douchewarn($eurocent, 46);
-			elseif ($eurocent==150) douchewarn($eurocent, 44);
-			elseif ($eurocent==100) douchewarn($eurocent, 42);
-			elseif ($eurocent==50) douchewarn($eurocent, 40);
-		}
-	}
 	echo 'ok';
 }
