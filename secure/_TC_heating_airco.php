@@ -26,9 +26,9 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif (${'dif'.$k}>=0)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.1)	{$power=1;$set=$d[$k.'_set']['s']+2;}
 		elseif (${'dif'.$k}>=-0.2)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.3)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.4)	{$power=1;$set=$d[$k.'_set']['s']+2;}
-		elseif (${'dif'.$k}>=-0.5)	{$power=1;$set=$d[$k.'_set']['s']+2;}
+		elseif (${'dif'.$k}>=-0.3)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-0.4)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
+		elseif (${'dif'.$k}>=-0.5)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
 		elseif (${'dif'.$k}>=-0.6)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
 		elseif (${'dif'.$k}>=-0.7)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
 		elseif (${'dif'.$k}>=-0.8)	{$power=1;$set=$d[$k.'_set']['s']+2.5;}
@@ -47,7 +47,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
 		}
 		elseif ($k=='alex') {
-			$set=$d[$k.'_set']['s']-2;
+			$set=$d[$k.'_set']['s']-2.5;
 			if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate='B';
 		}
 		$set=ceil($set * 2) / 2;
