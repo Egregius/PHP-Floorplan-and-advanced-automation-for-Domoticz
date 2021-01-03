@@ -953,7 +953,8 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $
 	} else {
 		storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__);
 	}
-
+	usleep(100000);
+	file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
 }
 
 function RefreshZwave($node){
