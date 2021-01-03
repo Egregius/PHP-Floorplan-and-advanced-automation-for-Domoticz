@@ -1,14 +1,13 @@
 function navigator_Go(url){window.location.assign(url);}
-$LastUpdateTime=parseInt(0);
+$LastUpdateTime=localStorage.getItem("LastUpdateTime");
 function ajax(Update=$LastUpdateTime){
-	if(Update==0)$LastUpdateTime=0;
 	$.ajax({
-		url: '/ajax.php?t='+$LastUpdateTime,
+		url: '/ajax.php?t='+Update,
 		dataType : 'json',
 		async: true,
 		defer: true,
 		success: function(d){
-			$currentTime=parseInt(Math.round(new Date().getTime()/1000));
+			$LastUpdateTime=localStorage.getItem("LastUpdateTime");
 			if(d=='NOTAUTHENTICATED'){
 				document.getElementById('placeholder').insertAdjacentHTML('beforeend', 'NOT AUTHENTICATED');
 				navigator_Go('index.php');
@@ -16,32 +15,23 @@ function ajax(Update=$LastUpdateTime){
 			for (device in d){
 				if(d.hasOwnProperty(device)){
 					 if(device=="t"){
-						if($LastUpdateTime>100){
-							if($LastUpdateTime<=$currentTime-3610){// -10 in zomertijd, -3610 in wintertijd
-								console.log("Last more than 10 seconds ago, fetching everything.");
-								ajax(0);
-								log=false;
-							}else{
-								$LastUpdateTime=parseInt(d['t']);
-								log=true;
-							}
-						}else{
-							console.log("LastUpdateTime = " + $LastUpdateTime);
-							$LastUpdateTime=parseInt(d['t']);
-							log=false;
+					 	$newTime=parseInt(d['t']);
+						if(($newTime-$LastUpdateTime)>=3){
+							console.log("Fetching everything: last = " + $LastUpdateTime + ' new = ' + $newTime + ' diff = ' + ($newTime-$LastUpdateTime));
+							ajax(0);
 						}
+						localStorage.setItem("LastUpdateTime", $newTime);
 					}else{
 						$value=d[device]['s'];
 						$mode=d[device]['m'];
 						type=d[device]['dt'];
 						$icon=d[device]['ic'];
 						time=d[device]['t'];
-						date=new Date($currentTime*1000);
+						date=new Date($newTime*1000);
 						hours=date.getHours();
 						minutes="0"+date.getMinutes();
 						seconds="0"+date.getSeconds();
 						$time=hours+':'+minutes.substr(-2)+':'+seconds.substr(-2);
-						if(log==true&&device!='el'&&device!='zon')console.log($LastUpdateTime+' '+$time+' '+device+' = '+ $value + ' | icon = ' + $icon);
 						if(device=="Weg"){
 							try{
 								html='<div class="fix z" onclick="Weg();">';
@@ -350,7 +340,7 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="belknop"){
 							localStorage.setItem("tijd_belknop", time);
 							try{
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -487,7 +477,7 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									element.classList.remove("red");
 								}
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -545,7 +535,7 @@ function ajax(Update=$LastUpdateTime){
 										else if($value=="Off")html='<img src="https://home.egregius.be/images/'+$icon+'_Off.png" id="'+device+'" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\')""/>';
 									}
 									html+='<br>'+device;
-									if(time>($currentTime-82800)){
+									if(time>($LastUpdateTime-82800)){
 										date=new Date(time*1000);
 										hours=date.getHours();
 										minutes="0"+date.getMinutes();
@@ -682,7 +672,7 @@ function ajax(Update=$LastUpdateTime){
 									html+=$value+'</font></div>';
 								}
 								html+='</div>';
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -695,7 +685,7 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 							if(localStorage.getItem('view')=='floorplanheating'){
 								try{
-									if(time>($currentTime-82800)){
+									if(time>($LastUpdateTime-82800)){
 										date=new Date(time*1000);
 										hours=date.getHours();
 										minutes="0"+date.getMinutes();
@@ -727,7 +717,7 @@ function ajax(Update=$LastUpdateTime){
 										element.classList.remove("motion");
 									}
 								}
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -746,7 +736,7 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									element.classList.remove("red");
 								}
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -856,7 +846,7 @@ function ajax(Update=$LastUpdateTime){
 								}else{
 									html+='<font size="2" color="#CCC">'+$value.toString().replace(/[.]/, ",")+'</font></div>';
 								}
-								if(time>($currentTime-82800)){
+								if(time>($LastUpdateTime-82800)){
 									date=new Date(time*1000);
 									hours=date.getHours();
 									minutes="0"+date.getMinutes();
@@ -890,7 +880,7 @@ function ajax(Update=$LastUpdateTime){
 				}
 			}
 			try{
-				date=new Date($currentTime*1000);
+				date=new Date($LastUpdateTime*1000);
 				hours=date.getHours();
 				minutes="0"+date.getMinutes();
 				seconds="0"+date.getSeconds();
@@ -899,23 +889,23 @@ function ajax(Update=$LastUpdateTime){
 			try{
 				tijd=localStorage.getItem("tijd_water");
 				elem=document.getElementById("tdwater");
-				if(tijd>$currentTime-15)elem.style.color="#FF0000";
-				else if(tijd>$currentTime-30)elem.style.color="#FF4400";
-				else if(tijd>$currentTime-60)elem.style.color="#FF8800";
-				else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-				else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-				else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+				if(tijd>$LastUpdateTime-15)elem.style.color="#FF0000";
+				else if(tijd>$LastUpdateTime-30)elem.style.color="#FF4400";
+				else if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
+				else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
+				else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
+				else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
 				else elem.style.color=null;
 			}catch{}
 			try{
 				tijd=localStorage.getItem("tijd_gas");
 				elem=document.getElementById("tdgas");
-				if(tijd>$currentTime-15)elem.style.color="#FF0000";
-				else if(tijd>$currentTime-30)elem.style.color="#FF4400";
-				else if(tijd>$currentTime-60)elem.style.color="#FF8800";
-				else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-				else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-				else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
+				if(tijd>$LastUpdateTime-15)elem.style.color="#FF0000";
+				else if(tijd>$LastUpdateTime-30)elem.style.color="#FF4400";
+				else if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
+				else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
+				else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
+				else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
 				else elem.style.color=null;
 			}catch{}
 			var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','luifel'];
@@ -929,17 +919,17 @@ function ajax(Update=$LastUpdateTime){
 					hours=date.getHours();
 					minutes="0"+date.getMinutes();
 					html=hours+':'+minutes.substr(-2);
-					if(elem.innerHTML!=html&&tijd>$currentTime-82800)elem.innerHTML=html;
-					if(tijd>$currentTime-60)elem.style.color="#FF8800";
-					else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-					else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-					else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-					else if(tijd>$currentTime-7200)elem.style.color="#CCC";
-					else if(tijd>$currentTime-14400)elem.style.color="#BBB";
-					else if(tijd>$currentTime-21600)elem.style.color="#AAA";
-					else if(tijd>$currentTime-28800)elem.style.color="#999";
-					else if(tijd>$currentTime-36000)elem.style.color="#888";
-					else if(tijd>$currentTime-82800)elem.style.color="#777";
+					if(elem.innerHTML!=html&&tijd>$LastUpdateTime-82800)elem.innerHTML=html;
+					if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
+					else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
+					else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
+					else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
+					else if(tijd>$LastUpdateTime-7200)elem.style.color="#CCC";
+					else if(tijd>$LastUpdateTime-14400)elem.style.color="#BBB";
+					else if(tijd>$LastUpdateTime-21600)elem.style.color="#AAA";
+					else if(tijd>$LastUpdateTime-28800)elem.style.color="#999";
+					else if(tijd>$LastUpdateTime-36000)elem.style.color="#888";
+					else if(tijd>$LastUpdateTime-82800)elem.style.color="#777";
 					else {
 						elem.style.color="#777";
 						html=formatDate(tijd);
@@ -955,23 +945,23 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Closed"){
-						if(tijd>$currentTime-60)elem.style.color="#FF8800";
-						else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-						else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-						else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-						else if(tijd>$currentTime-7200)elem.style.color="#CCC";
-						else if(tijd>$currentTime-14400)elem.style.color="#BBB";
-						else if(tijd>$currentTime-21600)elem.style.color="#AAA";
-						else if(tijd>$currentTime-28800)elem.style.color="#999";
-						else if(tijd>$currentTime-36000)elem.style.color="#888";
-						else if(tijd>$currentTime-82800)elem.style.color="#777";
+						if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
+						else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
+						else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
+						else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
+						else if(tijd>$LastUpdateTime-7200)elem.style.color="#CCC";
+						else if(tijd>$LastUpdateTime-14400)elem.style.color="#BBB";
+						else if(tijd>$LastUpdateTime-21600)elem.style.color="#AAA";
+						else if(tijd>$LastUpdateTime-28800)elem.style.color="#999";
+						else if(tijd>$LastUpdateTime-36000)elem.style.color="#888";
+						else if(tijd>$LastUpdateTime-82800)elem.style.color="#777";
 						else {
 							elem.style.color="#777";
 							html=formatDate(tijd);
 							if(elem.innerHTML!=html)elem.innerHTML=html;
 						}
 					}else{
-						if(tijd>$currentTime-82800)elem.style.color=null;
+						if(tijd>$LastUpdateTime-82800)elem.style.color=null;
 						else {
 							html=formatDate(tijd);
 							if(elem.innerHTML!=html)elem.innerHTML=html;
@@ -988,23 +978,23 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Off"){
-						if(tijd>$currentTime-60)elem.style.color="#FF8800";
-						else if(tijd>$currentTime-90)elem.style.color="#FFAA00";
-						else if(tijd>$currentTime-300)elem.style.color="#FFCC00";
-						else if(tijd>$currentTime-600)elem.style.color="#FFFF00";
-						else if(tijd>$currentTime-7200)elem.style.color="#CCC";
-						else if(tijd>$currentTime-14400)elem.style.color="#BBB";
-						else if(tijd>$currentTime-21600)elem.style.color="#AAA";
-						else if(tijd>$currentTime-28800)elem.style.color="#999";
-						else if(tijd>$currentTime-36000)elem.style.color="#888";
-						else if(tijd>$currentTime-82800)elem.style.color="#777";
+						if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
+						else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
+						else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
+						else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
+						else if(tijd>$LastUpdateTime-7200)elem.style.color="#CCC";
+						else if(tijd>$LastUpdateTime-14400)elem.style.color="#BBB";
+						else if(tijd>$LastUpdateTime-21600)elem.style.color="#AAA";
+						else if(tijd>$LastUpdateTime-28800)elem.style.color="#999";
+						else if(tijd>$LastUpdateTime-36000)elem.style.color="#888";
+						else if(tijd>$LastUpdateTime-82800)elem.style.color="#777";
 						else {
 							elem.style.color="#777";
 							html=formatDate(tijd);
 							if(elem.innerHTML!=html)elem.innerHTML=html;
 						}
 					}else{
-						if(tijd>$currentTime-82800)elem.style.color="#FFF";
+						if(tijd>$LastUpdateTime-82800)elem.style.color="#FFF";
 						else {
 							elem.style.color="#FFF";
 							html=formatDate(tijd);
