@@ -33,7 +33,8 @@ if ($dif!=$d['bigdif']['m']) storemode('bigdif', $dif, basename(__FILE__).':'.__
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
-		if (($d[$k.'_temp']['s']-$d[$k.'_set']['s'])>1){$power=0;}
+		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
+		if ($dif>1){$power=0;}
 		else {$power=1;}
 		$rate='A';
 		if ($k=='living') {
