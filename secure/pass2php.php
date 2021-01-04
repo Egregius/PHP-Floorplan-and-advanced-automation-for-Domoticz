@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-apcu_inc('pass2php_raw');
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
@@ -47,6 +46,4 @@ if (isset($d[$device])) {
 	}
 }
 if (!startsWith('$', $device)) store($device, $status, 'Pass2PHP');
-if(@include '/var/www/html/secure/pass2php/'.$device.'.php')apcu_inc('pass2php_effective');
-apcu_inc('pass2php_net');
-apcu_inc($device);
+@include '/var/www/html/secure/pass2php/'.$device.'.php';
