@@ -19,9 +19,6 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	$data=json_decode($data);
 	if (isset($data->pow)) {
 		if ($data->pow==0&&$d['daikin'.$k]['m']!=0) storemode('daikin'.$k, 0);
-		elseif($data->pow==1) {
-			if ($data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
-		}
-
+		elseif($data->pow==1&&$data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
 	}
 }

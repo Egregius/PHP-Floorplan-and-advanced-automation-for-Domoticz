@@ -19,13 +19,13 @@ elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>300) sw('brander'
 elseif ($dif<= 0&&$d['brander']['s']=="Off"&&past('brander')>600) sw('brander','On', basename(__FILE__).':'.__LINE__);
 elseif ($dif>= 0&&$d['brander']['s']=="On"&&past('brander')>180) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($dif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>300) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>900) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>600) sw('brander','Off', basename(__FILE__).':'.__LINE__);
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>0) $power=0;
-		elseif ($dif<-0.3) $power=1;
+		elseif ($dif<=-0.5) $power=1;
 		if (isset($power)) {
 			$rate='A';
 			if ($k=='living') {
