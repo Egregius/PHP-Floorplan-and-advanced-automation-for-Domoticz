@@ -37,7 +37,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		else {$power=1;}
 		$rate='A';
 		if ($k=='living') {
-			$set=$d[$k.'_set']['s']-2;
+			$set=$d[$k.'_set']['s']-1.5;
 		} elseif ($k=='kamer') {
 			$set=$d[$k.'_set']['s']-3;
 			if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';

@@ -383,7 +383,7 @@ function ajax(Update=$LastUpdateTime){
 								console.log(device+' '+$value);
 								elem=$value.split(";");
 								html=Math.round(elem[0]*100)/100+" W";
-								if(elem[1]>0)html+="<br>"+elem[1]/1000 +" kWh";
+								if(elem[1]>0)html+="<br>"+Math.round(elem[1]*100)/100/1000 +" kWh";
 								elem=document.getElementById("powermeter");
 								elem.innerHTML=html;
 								if(item>600)elem.style.color="#FF0000";
