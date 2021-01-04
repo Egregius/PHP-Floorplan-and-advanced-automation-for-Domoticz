@@ -378,13 +378,13 @@ function ajax(Update=$LastUpdateTime){
 								else if(item>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
 							}catch{}
-						}else if(device=="daikin"){
+						}else if(device=="daikin_kWh"){
 							try{
 								console.log(device+' '+$value);
 								elem=$value.split(";");
 								html=Math.round(elem[0]*100)/100+" W";
 								if(elem[1]>0)html+="<br>"+Math.round(elem[1]*100)/100/1000 +" kWh";
-								elem=document.getElementById("daikin");
+								elem=document.getElementById("daikin_kWh");
 								elem.innerHTML=html;
 								if(item>600)elem.style.color="#FF0000";
 								else if(item>500)elem.style.color="#FF4400";
@@ -1212,7 +1212,7 @@ function floorplan(){
 		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
 		items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','daikin','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','daikin_kWh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
 		items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
 		items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
 		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});

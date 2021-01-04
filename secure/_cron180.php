@@ -22,3 +22,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif($data->pow==1&&$data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
 	}
 }
+if ($d['daikinliving']['m']==0&&$d['daikinkamer']['m']==0&&$d['daikinalex']['m']==0) {
+	$usage=explode(';', $d['daikin_kWh']['s']);
+	lg (print_r($usage, true));
+} else {
+	$usage=explode(';', $d['daikin_kWh']['s']);
+	lg (print_r($usage, true));
+
+}
