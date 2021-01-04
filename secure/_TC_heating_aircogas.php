@@ -59,6 +59,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$data['set']=$set;
 				storeicon($k.'_set', json_encode($data));
 				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
+				storemode('daikin'.$k, 4);
 			}
 		}
 	} else {
@@ -71,6 +72,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['set']=$set;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
+			storemode('daikin'.$k, 0);
 		}
 	}
 }
