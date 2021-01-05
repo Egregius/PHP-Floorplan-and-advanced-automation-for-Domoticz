@@ -7,7 +7,7 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -15,18 +15,18 @@ foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkam
 
 $Setkamer=33;
 if ($d['kamer_set']['m']==0) {
-    if (
+	if (
 			(
 					$d['raamkamer']['s']=='Closed'
 				||	$d['RkamerR']['s']>=80
-				
+
 			)
-		&&	
+		&&
 			(
 					past('raamkamer')>900
 				||	TIME>strtotime('19:00')
 			)
-		&&	
+		&&
 			(
 				(
 						$d['deurkamer']['s']=='Closed'
@@ -51,34 +51,34 @@ if ($d['kamer_set']['m']==0) {
 					)
 				&& $d['raamhall']['s']=='Closed'
 				)
-    		)
-    ) {
-        if (TIME<strtotime('6:30')) $Setkamer=20.5;
-        elseif (TIME>strtotime('21:00')) $Setkamer=20.5;
-        elseif (TIME>strtotime('20:00')) $Setkamer=21;
-        elseif (TIME>strtotime('19:00')) $Setkamer=21.5;
-        elseif (TIME>strtotime('18:00')) $Setkamer=22;
-        elseif (TIME>strtotime('17:00')) $Setkamer=22.5;
-        elseif (TIME>strtotime('16:00')) $Setkamer=23;
-        elseif (TIME>strtotime('15:00')) $Setkamer=23.5;
-        elseif (TIME>strtotime('14:00')) $Setkamer=24;
-        elseif (TIME>strtotime('13:00')) $Setkamer=24.5;
-        elseif (TIME>strtotime('12:00')) $Setkamer=25;
-        elseif (TIME>strtotime('11:00')) $Setkamer=25.5;
-        elseif (TIME>strtotime('10:00')) $Setkamer=26;
-        elseif (TIME>strtotime('9:00')) $Setkamer=26.5;
-        elseif (TIME>strtotime('8:00')) $Setkamer=27;
-    }
-    if ($d['Weg']['s']>=3) $Setkamer=28;
-    if ($d['kamer_set']['s']!=$Setkamer) {
-        store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
-        $d['kamer_set']['s']=$Setkamer;
-    }
+			)
+	) {
+		if (TIME<strtotime('6:30')) $Setkamer=20.5;
+		elseif (TIME>strtotime('21:00')) $Setkamer=20.5;
+		elseif (TIME>strtotime('20:00')) $Setkamer=21;
+		elseif (TIME>strtotime('19:00')) $Setkamer=21.5;
+		elseif (TIME>strtotime('18:00')) $Setkamer=22;
+		elseif (TIME>strtotime('17:00')) $Setkamer=22.5;
+		elseif (TIME>strtotime('16:00')) $Setkamer=23;
+		elseif (TIME>strtotime('15:00')) $Setkamer=23.5;
+		elseif (TIME>strtotime('14:00')) $Setkamer=24;
+		elseif (TIME>strtotime('13:00')) $Setkamer=24.5;
+		elseif (TIME>strtotime('12:00')) $Setkamer=25;
+		elseif (TIME>strtotime('11:00')) $Setkamer=25.5;
+		elseif (TIME>strtotime('10:00')) $Setkamer=26;
+		elseif (TIME>strtotime('9:00')) $Setkamer=26.5;
+		elseif (TIME>strtotime('8:00')) $Setkamer=27;
+	}
+	if ($d['Weg']['s']>=3) $Setkamer=28;
+	if ($d['kamer_set']['s']!=$Setkamer) {
+		store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
+		$d['kamer_set']['s']=$Setkamer;
+	}
 }
 
 $Setalex=33;
 if ($d['alex_set']['m']==0) {
-    if (
+	if (
 			(
 					$d['raamalex']['s']=='Closed'
 				||	$d['Ralex']['s']>=80
@@ -114,131 +114,90 @@ if ($d['alex_set']['m']==0) {
 				&& $d['raamhall']['s']=='Closed'
 				)
 			)
-    ) {
-        if (TIME<strtotime('6:30')) $Setalex=21.5;
-        elseif (TIME>strtotime('19:00')) $Setalex=21.5;
-        elseif (TIME>strtotime('18:00')) $Setalex=22;
-        elseif (TIME>strtotime('17:00')) $Setalex=22.5;
-        elseif (TIME>strtotime('16:00')) $Setalex=23;
-        elseif (TIME>strtotime('15:00')) $Setalex=23.5;
-        elseif (TIME>strtotime('14:00')) $Setalex=24;
-        elseif (TIME>strtotime('13:00')) $Setalex=24.5;
-        elseif (TIME>strtotime('12:00')) $Setalex=25;
-        elseif (TIME>strtotime('11:00')) $Setalex=25.5;
-        elseif (TIME>strtotime('10:00')) $Setalex=26;
-        elseif (TIME>strtotime('9:00')) $Setalex=26.5;
-        elseif (TIME>strtotime('8:00')) $Setalex=27;
-    }
-    if ($d['Weg']['s']>=3) $Setalex=28;
-    if ($d['alex_set']['s']!=$Setalex) {
-        store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
-        $d['alex_set']['s']=$Setalex;
-    }
+	) {
+		if (TIME<strtotime('6:30')) $Setalex=21.5;
+		elseif (TIME>strtotime('19:00')) $Setalex=21.5;
+		elseif (TIME>strtotime('18:00')) $Setalex=22;
+		elseif (TIME>strtotime('17:00')) $Setalex=22.5;
+		elseif (TIME>strtotime('16:00')) $Setalex=23;
+		elseif (TIME>strtotime('15:00')) $Setalex=23.5;
+		elseif (TIME>strtotime('14:00')) $Setalex=24;
+		elseif (TIME>strtotime('13:00')) $Setalex=24.5;
+		elseif (TIME>strtotime('12:00')) $Setalex=25;
+		elseif (TIME>strtotime('11:00')) $Setalex=25.5;
+		elseif (TIME>strtotime('10:00')) $Setalex=26;
+		elseif (TIME>strtotime('9:00')) $Setalex=26.5;
+		elseif (TIME>strtotime('8:00')) $Setalex=27;
+	}
+	if ($d['Weg']['s']>=3) $Setalex=28;
+	if ($d['alex_set']['s']!=$Setalex) {
+		store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
+		$d['alex_set']['s']=$Setalex;
+	}
 }
 
 $Setliving=33;
 if ($d['living_set']['m']==0) {
-    if (
-    	($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
-    	&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
-    	&&	($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
-    	&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
-    	&& $d['Weg']['s']<=2
+	if (
+		($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
+		&&	($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
+		&&	($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
+		&&	($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
+		&& $d['Weg']['s']<=2
 	) {
 		if ($d['Weg']['s']>=3) $Setliving=28;
 		elseif ($d['Weg']['s']>0) $Setliving=25;
 		else $Setliving=24;
-    }
-    if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
-        store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
-        $d['living_set']['s']=$Setliving;
-    }
+	}
+	if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
+		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
+		$d['living_set']['s']=$Setliving;
+	}
 }
 foreach (array('living', 'kamer', 'alex') as $k) {
-	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
-	if (${'dif'.$k}>=0.8) {$rate=7;$d[$k.'_set']['s']=$d[$k.'_set']['s']-5;$power=1;}
-	elseif (${'dif'.$k}>=0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4.5;$power=1;}
-	elseif (${'dif'.$k}>=0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-4;$power=1;}
-	elseif (${'dif'.$k}>=0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3.5;$power=1;}
-	elseif (${'dif'.$k}>=0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-3;$power=1;}
-	elseif (${'dif'.$k}>=0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2.5;$power=1;}
-	elseif (${'dif'.$k}>=0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;$power=1;}
-	elseif (${'dif'.$k}>=0) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;$power=1;}
-	elseif (${'dif'.$k}>=-0.1) {$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;$power=1;}
-	elseif (${'dif'.$k}>=-0.2) {$d[$k.'_set']['s']=$d[$k.'_set']['s'];$power=1;}
-	elseif (${'dif'.$k}>=-0.3) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;$power=1;}
-	elseif (${'dif'.$k}>=-0.4) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1;$power=1;}
-	elseif (${'dif'.$k}>=-0.5) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+1.5;$power=1;}
-	elseif (${'dif'.$k}>=-0.6) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+2;$power=1;}
-	elseif (${'dif'.$k}>=-0.7) {$d[$k.'_set']['s']=$d[$k.'_set']['s']+2.5;$power=1;}
-	else {$d[$k.'_set']['s']=32;$power=0;}
-	$rate='A';
-	$daikin=json_decode($d['daikin'.$k]['s']);
-	if ($daikin->adv == '') {
-		$streamer=0;
-		$powermode=0;
-	} else if (strstr($daikin->adv, '/')) { 
-		$advs=explode("/", $daikin->adv);
-		if ($advs[1]==13) $streamer=1;
-		else if ($adv[1]=='') $streamer=0;
-		if ($advs[0]==2) $powermode=2;
-		else if ($advs[0]==12) $powermode=1;
-		else $powermode=0;
-	} else {
-		if ($daikin->adv==13) {
-			$streamer=1;
-			$powermode=0; //Normal
-		} else if ($daikin->adv==12) {
-			$streamer=0;
-			$powermode=1; // Eco
-		} else if ($daikin->adv==2) {
-			$streamer=0;
-			$powermode=2; // Power
-		} else if ($daikin->adv=='') {
-			$streamer=0;
-			$powermode=0;
-		}
-	}
-	if ($d[$k.'_set']['s']<18) $d[$k.'_set']['s']=18;
-	
-	//if ($k=='living'&&$d['eettafel']['s']>0) $rate='B';
-	if ($k=='kamer'&&$d['Weg']['s']==1) $rate='B';
-	if ($k=='alex'&&(TIME>strtotime('20:00')||TIME<strtotime('08:00'))) $rate='B';
-	//lg ($k.' = '.$powermode);
-	//($k.'	$daikin->stemp:'.$daikin->stemp.'	_set:'.$d[$k.'_set']['s'].'	daikin->pow:'.$daikin->pow.'	$power:'.$power.'	daikin->mode:'.$daikin->mode.'	daikin->f_rate:'.$daikin->f_rate.'	$rate:'.$rate);
-	if ($powermode<2) {
-		if ($d[$k.'_set']['s']<30) {
-			if ($daikin->stemp!=$d[$k.'_set']['s']||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
-				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__, $rate);
-				storemode('daikin'.$k, 3);
-				if ($k=='living') $ip=111;
-				elseif ($k=='kamer') $ip=112;
-				elseif ($k=='alex') $ip=113;
-				$setstreamer=0;
-			
+	$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
+	if ($dif>=0.8) $power=1;
+	elseif ($dif<-0.5) $power=0;
+	if ($d[$k.'_set']['s']<32) {
+		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
+			$rate='A';
+			if ($k=='living') {
+				$set=$d[$k.'_set']['s']-1.5;
+			} elseif ($k=='kamer') {
+				$set=$d[$k.'_set']['s']-3;
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
+			} elseif ($k=='alex') {
+				$set=$d[$k.'_set']['s']-3;
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate='B';
+			}
+			$set=ceil($set * 2) / 2;
+			if ($set>25) $set=25;
+			elseif ($set<10) $set=10;
+			$daikin=json_decode($d['daikin'.$k]['s']);
+			if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=3||$daikin->f_rate!=$rate) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
-				$data=array();
 				$data['power']=$power;
 				$data['mode']=3;
 				$data['fan']=$rate;
-				$data['set']=$d[$k.'_set']['s'];
-				if ($streamer!=$setstreamer) {
-					sleep(1);
-					file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer='.$setstreamer);
-					$data['streamer']=$setstreamer;
-				}
+				$data['set']=$set;
 				storeicon($k.'_set', json_encode($data));
+				daikinset($k, $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate);
+				storemode('daikin'.$k, 3);
 			}
-		} else {
-			if ($daikin->pow!=$power||$daikin->mode!=3) {
-				daikinset($k, $power, 3, $d[$k.'_set']['s'], basename(__FILE__).':'.__LINE__);
-				storemode('daikin'.$k, 0);
-				$data=json_decode($d[$k.'_set']['icon'], true);
-				$data['power']=$power;
-				$data['mode']=3;
-				$data['set']=$d[$k.'_set']['s'];
-				storeicon($k.'_set', json_encode($data));
-			}
+		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
+			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+		}
+	} else {
+		$daikin=json_decode($d['daikin'.$k]['s']);
+		if ($daikin->pow!=0||$daikin->mode!=3) {
+			$data=json_decode($d[$k.'_set']['icon'], true);
+			$data['power']=$power;
+			$data['mode']=3;
+			$data['fan']=$rate;
+			$data['set']=$set;
+			storeicon($k.'_set', json_encode($data));
+			daikinset($k, 0, 3, 10, basename(__FILE__).':'.__LINE__);
+			storemode('daikin'.$k, 0);
 		}
 	}
 }
@@ -278,14 +237,14 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			}
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	}
 
 	elseif (TIME>=strtotime('10:00')&&TIME<strtotime('15:00')) {
 		if($zon>1500) {
 			if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']!=82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']!=82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	}
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
 		if($zon>1500) {

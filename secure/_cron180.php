@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-//lg(__FILE__.':'.$s);
 $user='cron180';
 if ($d['daikin']['s']=='On') {
 	foreach (array('living', 'kamer', 'alex') as $k) {
@@ -28,5 +27,5 @@ if ($d['daikinliving']['m']==0&&$d['daikinkamer']['m']==0&&$d['daikinalex']['m']
 	$usage=explode(';', $d['daikin_kWh']['s']);
 	if ($d['daikin']['s']=='On'&&$usage[0]<12&&past('daikin')>900&&past('daikinliving')>900&&past('daikinkamer')>900&&past('daikinalex')>900) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['daikin']['s']=='Off'&&past('daikin')>1800) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 }

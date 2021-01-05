@@ -157,40 +157,41 @@ if (pingport('192.168.2.105', 80)==1) {
 		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-
-if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
-elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
-elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
-else $rgb=false;
-if ($rgb!=false) {
-	$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-	if($data === FALSE) {
-		return FALSE;
-	}else{
-		$array=explode(",",$data);
-		$control_info= array();
-		foreach($array as $value) {
-			$pair= explode("=",$value);
-			$control_info[$pair[0]]=$pair[1];
-		}
-		$level=$control_info['cmpfreq'];
-		if ($level>100)$level=100;
-		$Xlight=round($level/3);
-		if ($d['Xlight']['s']!=$Xlight) {
-			if ($d['Weg']['s']==0) {
-				rgb('Xlight', $rgb, $Xlight);
-				sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
+if ($d['daikin']['s']=='On') {
+	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
+	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
+	elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
+	else $rgb=false;
+	if ($rgb!=false) {
+		$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
+		if($data === FALSE) {
+			return FALSE;
+		}else{
+			$array=explode(",",$data);
+			$control_info= array();
+			foreach($array as $value) {
+				$pair= explode("=",$value);
+				$control_info[$pair[0]]=$pair[1];
 			}
-			if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
-			elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
-			elseif ($mode==2)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
+			$level=$control_info['cmpfreq'];
+			if ($level>100)$level=100;
+			$Xlight=round($level/3);
+			if ($d['Xlight']['s']!=$Xlight) {
+				if ($d['Weg']['s']==0) {
+					rgb('Xlight', $rgb, $Xlight);
+					sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
+				}
+				if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
+				elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
+				elseif ($mode==2)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
+			}
 		}
+	} else {
+		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
-} else {
-	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['Weg']['s']>0) {
+if ($d['Weg']['s']>0||$d['daikin']['s']=='Off') {
 	if ($d['Xlight']['s']>0) {
 		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}

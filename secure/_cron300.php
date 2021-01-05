@@ -170,3 +170,30 @@ if ((TIME>=strtotime('11:00')&&TIME<strtotime('19:30'))||$battery<50) {
 }/* elseif ((TIME<strtotime('6:00')||TIME>=strtotime('22:00')||$battery>=80)&&$battery>60) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__.' battery='.$battery);
 }*/
+
+if ($d['daikin']['s']=='On'&&apst('daikin')>118) {
+	foreach (array('living', 'kamer', 'alex') as $k) {
+		if ($k=='living') $ip=111;
+		elseif ($k=='kamer') $ip=112;
+		elseif ($k=='alex') $ip=113;
+		sleep(2);
+		$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_day_power_ex');
+		$data=explode(',', $data);
+		if ($data[0]=='ret=OK') {
+			$curr_day_heat=explode('=', $data[1]);
+			${$k.'heat'}=array_sum(explode('/', $curr_day_heat[1]));
+			$prev_1day_heat=explode('=', $data[2]);
+			${$k.'prevheat'}=array_sum(explode('/', $prev_1day_heat[1]));
+			$curr_day_cool=explode('=', $data[3]);
+			${$k.'cool'}=array_sum(explode('/', $curr_day_cool[1]));
+			$prev_1day_cool=explode('=', $data[4]);
+			${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
+		}
+	//print_r($data);
+	}
+	$date=strftime('%F', TIME);
+	$db=dbconnect();
+	$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
+	$date=strftime('%F', TIME-86400);
+	$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
+}
