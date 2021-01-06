@@ -171,7 +171,7 @@ if ((TIME>=strtotime('11:00')&&TIME<strtotime('19:30'))||$battery<50) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__.' battery='.$battery);
 }*/
 
-if ($d['daikin']['s']=='On'&&apst('daikin')>118) {
+if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($k=='living') $ip=111;
 		elseif ($k=='kamer') $ip=112;
