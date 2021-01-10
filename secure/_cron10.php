@@ -44,9 +44,8 @@ if ($d['auto']['s']=='On') {
 	) {
 		sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	$items=array(32,30,28,26,24,0);
 	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
-		foreach ($items as $i) {
+		foreach (array(32,30,28,26,24,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -58,7 +57,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>30&&past('deurbadkamer')>30&&past('deurkamer')>30&&past('deurtobi')>30&&past('deuralex')>30) {
-		foreach ($items as $i) {
+		foreach (array(32,30,28,26,24,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -102,9 +101,7 @@ if ($d['tv']['s']=='On') {
 			sw('denon', 'On', basename(__FILE__).':'.__LINE__);
 			storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
 		}*/
-		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
-			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
 	}
@@ -112,29 +109,16 @@ if ($d['tv']['s']=='On') {
 
 if ($d['nvidia']['s']=='On') {
 	if (pingport($shieldip, 9080)==1) {
-		if ($d['nvidia']['m']=='Off') {
-			storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		if ($d['nvidia']['m']=='Off') 	storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['nvidia']['m']=='On') {
-			storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-		}
+		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
 	if (pingport('192.168.2.105', 80)==1) {
 		if ($d['achterdeur']['s']=='Open') {
-			$status=json_decode(
-				json_encode(
-					simplexml_load_string(
-						@file_get_contents(
-							"http://192.168.2.105:8090/now_playing"
-						)
-					)
-				),
-				true
-			);
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
 			if (!empty($status)) {
 				if ($d['bose105']['m']!='Online') {
 					storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
@@ -192,9 +176,7 @@ if ($d['daikin']['s']=='On') {
 	}
 }
 if ($d['Weg']['s']>0||$d['daikin']['s']=='Off') {
-	if ($d['Xlight']['s']>0) {
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if (past('wind')>86) {
 	require('_weather.php');

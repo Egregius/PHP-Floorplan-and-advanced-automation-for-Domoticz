@@ -12,10 +12,9 @@
 
 require 'functions.php';
 $d=fetchdata();
-$user='heating';
 $s=(int)strftime("%S", TIME);
-
 include '_TC_heating.php';
+$user='cron';
 include '_cron10.php';
 if($s<10) {
 	include '_cron60.php';
@@ -31,6 +30,4 @@ if($s<10) {
 	}
 	if ($m==0) include '_cron3600.php';
 }
-if (isset($_REQUEST['cron'])) {
-	include '_'.$_REQUEST['cron'].'.php';
-}
+if (isset($_REQUEST['cron'])) include '_'.$_REQUEST['cron'].'.php';

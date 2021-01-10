@@ -12,10 +12,7 @@
 //lg(__FILE__.':'.$s);
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
-$items=array('buiten','living','badkamer','kamer','tobi','alex','zolder');
-foreach ($items as $i) {
-	${$i.'_temp'}=$d[$i.'_temp']['s'];
-}
+foreach (array('buiten','living','badkamer','kamer','tobi','alex','zolder') as $i) ${$i.'_temp'}=$d[$i.'_temp']['s'];
 $query="INSERT IGNORE INTO `temp`
 	(
 		`stamp`,
@@ -38,19 +35,11 @@ $query="INSERT IGNORE INTO `temp`
 		'$zolder_temp'
 	);";
 $db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
-if ($db->connect_errno>0) {
-	die('Unable to connect to database ['.$db->connect_error.']');
-}
-if (!$result = $db->query($query)) {
-	die('There was an error running the query ['.$query.' - '.$db->error.']');
-}
-//lg('>>> Temperaturen buiten:'.$buiten_temp.'°, living:'.$living_temp.'°, badkamer:'.$badkamer_temp.'°, kamer:'.$kamer_temp.'°, tobi:'.$tobi_temp.'°, alex:'.$alex_temp.'°, zolder:'.$zolder_temp.'°');
-$items=array('living','badkamer','kamer','tobi','alex','zolder');
-foreach ($items as $i) {
-	$sum=@$sum+$d[$i.'_temp']['s'];
-}
+if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
+if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
+foreach (array('living','badkamer','kamer','tobi','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;
-foreach ($items as $i) {
+foreach (array('living','badkamer','kamer','tobi','alex','zolder') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) {
 		alert(
 			$i.'temp',
