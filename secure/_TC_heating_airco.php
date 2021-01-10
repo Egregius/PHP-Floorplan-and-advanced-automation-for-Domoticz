@@ -29,7 +29,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;
 			$daikin=json_decode($d['daikin'.$k]['s']);
-			if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
+			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
 				$data['mode']=4;
@@ -44,7 +44,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	} else {
 		$daikin=json_decode($d['daikin'.$k]['s']);
-		if ($daikin->pow!=0||$daikin->mode!=4) {
+		if ($daikin->power!=0||$daikin->mode!=4) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=4;

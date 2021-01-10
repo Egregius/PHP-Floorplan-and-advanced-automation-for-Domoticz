@@ -920,7 +920,11 @@ function daikinstatus($device) {
 		$ci=array();
 		foreach ($array as $value){
 			$pair= explode("=",$value);
-			$ci[$pair[0]]=$pair[1];
+			if ($pair[0]=='pow') $ci['power']=$pair[1];
+			elseif ($pair[0]=='mode') $ci['mode']=$pair[1];
+			elseif ($pair[0]=='adv') $ci['adv']=$pair[1];
+			elseif ($pair[0]=='stemp') $ci['set']=$pair[1];
+			elseif ($pair[0]=='f_rate') $ci['fan']=$pair[1];
 		}
 		return json_encode($ci);
 	}

@@ -15,9 +15,9 @@ if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 		$data=daikinstatus($k);
 		if ($data&&$data!=$d['daikin'.$k]['s']) store('daikin'.$k, $data, basename(__FILE__).':'.__LINE__);
 		$data=json_decode($data);
-		if (isset($data->pow)) {
-			if ($data->pow==0&&$d['daikin'.$k]['m']!=0) storemode('daikin'.$k, 0);
-			elseif($data->pow==1&&$data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
+		if (isset($data->power)) {
+			if ($data->power==0&&$d['daikin'.$k]['m']!=0) storemode('daikin'.$k, 0);
+			elseif($data->power==1&&$data->mode!=$d['daikin'.$k]['m']) storemode('daikin'.$k, $data->mode);
 		}
 	}
 }

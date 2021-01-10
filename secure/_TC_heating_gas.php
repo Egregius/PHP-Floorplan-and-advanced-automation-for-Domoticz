@@ -93,7 +93,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	${'dif'.$k}=number_format($d[$k.'_temp']['s']-$d[$k.'_set']['s'], 1);
 	if (${'dif'.$k}<$bigdif) $bigdif=${'dif'.$k};
 	$daikin=json_decode($d['daikin'.$k]['s']);
-	if ($daikin->pow!=0||$daikin->mode!=4) {
+	if ($daikin->power!=0||$daikin->mode!=4) {
 		daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 		$data=json_decode($d[$k.'_set']['icon'], true);
 		$data['power']=$power;
