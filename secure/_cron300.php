@@ -22,13 +22,9 @@ if (TIME<=strtotime('9:00')) {
 		}
 	}
 }
-
-$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db=dbconnect();
 $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-	$rainpast=$row['buien'];
-}
+while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];
 if ($rainpast==0) $rainpast=1;
 if ($d['minmaxtemp']['m'] > -3) {
 	if ($rainpast>25000) $pomppauze=3600;
@@ -41,9 +37,7 @@ if ($d['minmaxtemp']['m'] > -3) {
 	elseif ($rainpast>3000) $pomppauze=129600;
 	elseif ($rainpast>1000) $pomppauze=259200;
 	else $pomppauze=2592000;
-	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
-		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
-	}
+	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
 }
 
 // Eerste blok voor zwembad
@@ -92,9 +86,7 @@ if (past('diepvries_temp')>7200) {
 }
 
 if ($d['auto']['s']!='On') {
-	if (past('auto')>10795) {
-		sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-	}
+	if (past('auto')>10795) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
 if (past('Weg')>14400
 	&& $d['Weg']['s']==0
@@ -125,9 +117,7 @@ if ($d['GroheRed']['m']>0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>3600&&pas
 }
 $items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
 foreach ($items as $i) {
-	if (past($i)>10800&&$d[$i]['m']!=0) {
-		storemode($i, 0, basename(__FILE__).':'.__LINE__);
-	}
+	if (past($i)>10800&&$d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 }
 
 if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
@@ -154,12 +144,8 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
 				if ($cv<=8) {
 					bosekey("POWER", 0, 103);
 					sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-				} else {
-					bosevolume($cv, 103, basename(__FILE__).':'.__LINE__);
-				}
-			} else {
-				sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-			}
+				} else bosevolume($cv, 103, basename(__FILE__).':'.__LINE__);
+			} else sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
 }

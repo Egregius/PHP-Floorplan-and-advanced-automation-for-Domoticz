@@ -27,8 +27,6 @@ if ($d['Weg']['s']==1) {
 	elseif ($dif>=-0.7&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander','Off', basename(__FILE__).':'.__LINE__);
 }
 
-if ($dif!=$d['bigdif']['m']) storemode('bigdif', $dif, basename(__FILE__).':'.__LINE__);
-
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];

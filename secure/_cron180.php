@@ -13,9 +13,7 @@ $user='cron180';
 if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$data=daikinstatus($k);
-		if ($data&&$data!=$d['daikin'.$k]['s']) {
-			store('daikin'.$k, $data, basename(__FILE__).':'.__LINE__);
-		}
+		if ($data&&$data!=$d['daikin'.$k]['s']) store('daikin'.$k, $data, basename(__FILE__).':'.__LINE__);
 		$data=json_decode($data);
 		if (isset($data->pow)) {
 			if ($data->pow==0&&$d['daikin'.$k]['m']!=0) storemode('daikin'.$k, 0);

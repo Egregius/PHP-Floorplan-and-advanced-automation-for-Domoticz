@@ -22,8 +22,8 @@ elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander',
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-		if ($dif>0) $power=0;
-		elseif ($dif<=-0.5) $power=1;
+		if ($dif>=0) $power=0;
+		elseif ($dif<=-0.8) $power=1;
 		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
 			if ($k=='living') {

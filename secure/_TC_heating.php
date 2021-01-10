@@ -117,9 +117,7 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('3:15')&&TIME<strtotime('12:00')) $Setliving=15.5;
 				elseif (TIME>=strtotime('3:00')&&TIME<strtotime('12:00')) $Setliving=15.0;
 			}
-		} elseif ($d['Weg']['s']>=2) {
-			$Setliving=14.0;
-		}
+		} elseif ($d['Weg']['s']>=2) $Setliving=14.0;
 		if ($Setliving>19.5&&TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;
 	}
 	if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
@@ -129,14 +127,10 @@ if ($d['living_set']['m']==0) {
 	}
 }
 $bigdif=100;
-if ($d['heating']['s']==-2) include ('_TC_cooling_airco.php');
-elseif ($d['heating']['s']==-1) include ('_TC_cooling_passive.php');
-elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
-elseif ($d['heating']['s']==1) include ('_TC_heating_airco.php');
+if ($d['heating']['s']==1) include ('_TC_heating_airco.php');
 elseif ($d['heating']['s']==2) include ('_TC_heating_aircogas.php');
 elseif ($d['heating']['s']==3) include ('_TC_heating_gasairco.php');
 elseif ($d['heating']['s']==4) include ('_TC_heating_gas.php');
-if ($d['heating']['s']>0) {
-	include('_TC_heating_badk-zolder.php');
-	include('_Rolluiken_Heating.php');
-}
+include('_TC_heating_badk-zolder.php');
+include('_Rolluiken_Heating.php');
+

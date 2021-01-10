@@ -45,5 +45,4 @@ if (isset($d[$device])) {
 		if (past('voordeur')<60) exit;
 	}
 }
-if (!startsWith('$', $device)) store($device, $status, 'Pass2PHP');
 @include '/var/www/html/secure/pass2php/'.$device.'.php';
