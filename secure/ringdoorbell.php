@@ -56,14 +56,8 @@ if (isset($_REQUEST['source'])) {
 				sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
 			}
 		}
-		apcu_inc('ring-source-'.$_REQUEST['source']);
-		apcu_inc('ring-kind-'.$_REQUEST['kind']);
-		apcu_inc('ring-dt-'.$_REQUEST['dt']);
 		echo ' END';
-	} else {
-		apcu_inc('ring-source-tolate-'.$_REQUEST['source']);
 	}
-	apcu_store('ring-battery', $_REQUEST['battery']);
 	if ($_REQUEST['battery']<50) {
 		require_once '/var/www/html/secure/functions.php';
 		if (!isset($d)) $d=fetchdata();
@@ -77,6 +71,4 @@ if (isset($_REQUEST['source'])) {
 			);
 		}
 	}
-} else {
-	apcu_inc('ring-source-nosource');
 }
