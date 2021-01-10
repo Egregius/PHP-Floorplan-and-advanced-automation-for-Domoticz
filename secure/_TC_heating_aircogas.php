@@ -9,8 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-include('_TC_heating.php');
-
 $dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
 
 if ($d['Weg']['s']==1) {
@@ -39,7 +37,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
 			if ($k=='living') {
-				$set=$d[$k.'_set']['s']-1.5;
+				$set=$d[$k.'_set']['s']-2;
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
@@ -78,5 +76,3 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 }
-include('_TC_heating_badk-zolder.php');
-include('_Rolluiken_Heating.php');

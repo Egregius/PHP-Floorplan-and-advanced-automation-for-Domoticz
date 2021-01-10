@@ -10,8 +10,6 @@
  * @link	 https://egregius.be
  **/
 //lg(__FILE__);
-include('_TC_heating.php');
-
 $dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
 
 if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
@@ -25,12 +23,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>0) $power=0;
-		elseif ($dif<=-1) $power=1;
-		if (isset($power)) lg(__LINE__.$d['daikin']['s'].past('daikin'));
+		elseif ($dif<=-0.5) $power=1;
 		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
 			if ($k=='living') {
-				$set=$d[$k.'_set']['s']-2;
+				$set=$d[$k.'_set']['s']-3;
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
@@ -42,7 +39,6 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;
 			$daikin=json_decode($d['daikin'.$k]['s']);
-			lg(__LINE__);
 			if ($daikin->stemp!=$set||$daikin->pow!=$power||$daikin->mode!=4||$daikin->f_rate!=$rate) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
@@ -70,5 +66,4 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 }
-include('_TC_heating_badk-zolder.php');
-include('_Rolluiken_Heating.php');
+

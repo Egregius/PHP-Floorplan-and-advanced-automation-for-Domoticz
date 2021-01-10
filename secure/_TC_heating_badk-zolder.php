@@ -17,6 +17,8 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
 	$b7=past('$ 8badkamer-7');
 	$b7b=past('$ 8Kamer-7');
 	if ($b7b<$b7) $b7=$b7b;
+	$b7b=past('$ 8badkamer-7d');
+	if ($b7b<$b7) $b7=$b7b;
 	$x=21;
 	if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=1&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
 		store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);

@@ -10,8 +10,6 @@
  * @link	 https://egregius.be
  **/
 //lg(__FILE__);
-include('_TC_heating.php');
-
 $kamers=array('living'/*,'kamer','tobi','alex'*/);
 $xxkamers=array();
 foreach ($kamers as $kamer) {
@@ -105,5 +103,3 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		storeicon($k.'_set', json_encode($data));
 	}
 }
-include('_TC_heating_badk-zolder.php');
-include('_Rolluiken_Heating.php');

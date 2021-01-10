@@ -9,11 +9,9 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
- 
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
-
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$daikin=json_decode($d['daikin'.$k]['s']);
@@ -58,14 +56,14 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			}
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	}
 
 	elseif (TIME>=strtotime('10:00')&&TIME<strtotime('15:00')) {
 		if($zon>2000) {
 			if ($d['raamtobi']['s']=='Closed'&&$d['Rtobi']['s']<82) sl('Rtobi', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	}
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
 		if($zon>2000) {
@@ -73,7 +71,7 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<40) sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);
 		}
-	} 
+	}
 
 	elseif (TIME>=strtotime('22:00')||TIME<strtotime('6:00')) {
 		if ($d['Weg']['s']>0) {

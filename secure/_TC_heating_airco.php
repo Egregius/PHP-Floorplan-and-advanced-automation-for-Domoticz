@@ -9,9 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-
-include('_TC_heating.php');
-
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -85,5 +82,3 @@ include('_TC_heating_badk-zolder.php');
 	elseif ($setpoint<4) $setpoint=4;
 	return round($setpoint, 0);
 }*/
-
-include('_Rolluiken_Heating.php');

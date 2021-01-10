@@ -129,3 +129,14 @@ if ($d['living_set']['m']==0) {
 	}
 }
 $bigdif=100;
+if ($d['heating']['s']==-2) include ('_TC_cooling_airco.php');
+elseif ($d['heating']['s']==-1) include ('_TC_cooling_passive.php');
+elseif ($d['heating']['s']==0) include ('_TC_neutral.php');
+elseif ($d['heating']['s']==1) include ('_TC_heating_airco.php');
+elseif ($d['heating']['s']==2) include ('_TC_heating_aircogas.php');
+elseif ($d['heating']['s']==3) include ('_TC_heating_gasairco.php');
+elseif ($d['heating']['s']==4) include ('_TC_heating_gas.php');
+if ($d['heating']['s']>0) {
+	include('_TC_heating_badk-zolder.php');
+	include('_Rolluiken_Heating.php');
+}
