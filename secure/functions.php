@@ -257,7 +257,7 @@ function resetsecurity() {
 	}
 }
 function sw($name,$action='Toggle',$msg='') {
-	global $user,$d,$domoticzurl;
+	global $user,$d,$domoticzurl,$db;
 	if (!isset($d)) $d=fetchdata();
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -281,9 +281,9 @@ function sw($name,$action='Toggle',$msg='') {
 				storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2'))) {
+   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2','daikin'))) {
    				$stamp=TIME;
-   				$db=dbconnect();
+   				if (!isset($db)) $db=dbconnect();
    				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
    			}
 		}
