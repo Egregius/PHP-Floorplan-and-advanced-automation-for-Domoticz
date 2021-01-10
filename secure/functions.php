@@ -917,12 +917,12 @@ function daikinstatus($device) {
 		return FALSE;
 	} else {
 		$array=explode(",",$data);
-		$control_info=array();
+		$ci=array();
 		foreach ($array as $value){
 			$pair= explode("=",$value);
-			$control_info[$pair[0]]=$pair[1];
+			$ci[$pair[0]]=$pair[1];
 		}
-		return json_encode($control_info);
+		return json_encode($ci);
 	}
 }
 /**

@@ -7,42 +7,14 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 $start=microtime(true);
 require 'functions.php';
-//echo '<pre>';
+echo '<pre>';
 
-$z=1;
-$memcache_obj = memcache_connect("127.0.0.1", 11211);
-
-$mysql=microtime(true);
-for ($x=0;$x<=$z;$x++) {
-	store('test'.$x, 'some variable');
-}
-$d=fetchdata();
-
-echo '<hr>mysql Time:'.number_format(((microtime(true)-$mysql)*1000), 6);
-
-$memcache=microtime(true);
-for ($x=0;$x<=$z;$x++) {
-	memcache_set($memcache_obj, 'test'.$x, 'some variable', 0, 30);
-}
-for ($x=0;$x<=$z;$x++) {
-	$y=memcache_get($memcache_obj, 'test'.$x);
-}
-echo '<hr>memcache Time:'.number_format(((microtime(true)-$memcache)*1000), 6);
-
-
-$apcu=microtime(true);
-for ($x=0;$x<=$z;$x++) {
-	apcu_store('test'.$x, 'some variable', 30);
-}
-for ($x=0;$x<=$z;$x++) {
-	apcu_fetch('test'.$x);
-}
-echo '<hr>APCu Time:'.number_format(((microtime(true)-$apcu)*1000), 6);
-
+$data=daikinstatus('living');
+echo '<pre>';print_r($data);
 
 
 /*-------------------------------------------------*/
@@ -63,8 +35,8 @@ function NL($sound){
 		}
 	} catch (Exception $e) {
 		exit('Something went wrong: ' . $e->getMessage());
-	}    
-}    
+	}
+}
 function FR($sound){
 	global $googleTTSAPIKey;
 	require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -79,102 +51,102 @@ function FR($sound){
 		}
 	} catch (Exception $e) {
 		exit('Something went wrong: ' . $e->getMessage());
-	}    
-}    
+	}
+}
 /*---------------------------*/
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
-    $_COOKIE,
-    $_ENV,
-    $_GET,
-    $_POST,
-    $_FILES,
-    $_SERVER,
-    $d,
-    $dow,
-    $iftttkey,
-    $ifttttoken,
-    $start,
-    $users,
-    $homes,
-    $telegrambot,
-    $smappeeclient_id,
-    $smappeeclient_secret,
-    $smappeeusername,
-    $smappeepassword,
-    $smappeeserviceLocationId,
-    $LogFile,
-    $cookie,
-    $telegramchatid,
-    $telegramchatid2,
-    $smappeeip,
-    $authenticated,
-    $zongarage,
-    $zonkeuken,
-    $zoninkom,
-    $zonmedia,
-    $Usleep,
-    $eendag,
-    $Weg,
-    $garmintoken,
-    $googleTTSAPIKey,
-    $home,
-    $log,
-    $offline,
-    $page,
-    $udevice,
-    $local,
-    $user,
-    $ipaddress,
-    $timediff,
-    $domainname,
-    $domoticzurl,
-    $dbname,
-    $dbuser,
-    $dbpass,
-    $_SESSION,
-    $zwaveidx,
-    $db,
-    $denonip,
-    $lgtvip,
-    $lgtvmac,
-    $nasip,
-    $shieldip,
-    $kodiurl,
-    $dsapikey,
-    $owappid,
-    $openuv,
-    $owid,
-    $lat,
-    $lon,
-    $calendarApp,
-    $calendarId,
-    $calendarIdMirom,
-    $calendarIdTobi,
-    $calendarIdVerlof,
-    $telegramchatid1,
-    $appledevice,
-    $appleid,
-    $applepass,
-    $vurl,
-    $vpsip,
-    $weekend,
-    $ringusername,
-    $ringpassword,
-    $proxmoxcredentials,
-    $urlnas,
-    $urlnas2,
-    $urlfilms
-    
-    );
+	$_COOKIE,
+	$_ENV,
+	$_GET,
+	$_POST,
+	$_FILES,
+	$_SERVER,
+	$d,
+	$dow,
+	$iftttkey,
+	$ifttttoken,
+	$start,
+	$users,
+	$homes,
+	$telegrambot,
+	$smappeeclient_id,
+	$smappeeclient_secret,
+	$smappeeusername,
+	$smappeepassword,
+	$smappeeserviceLocationId,
+	$LogFile,
+	$cookie,
+	$telegramchatid,
+	$telegramchatid2,
+	$smappeeip,
+	$authenticated,
+	$zongarage,
+	$zonkeuken,
+	$zoninkom,
+	$zonmedia,
+	$Usleep,
+	$eendag,
+	$Weg,
+	$garmintoken,
+	$googleTTSAPIKey,
+	$home,
+	$log,
+	$offline,
+	$page,
+	$udevice,
+	$local,
+	$user,
+	$ipaddress,
+	$timediff,
+	$domainname,
+	$domoticzurl,
+	$dbname,
+	$dbuser,
+	$dbpass,
+	$_SESSION,
+	$zwaveidx,
+	$db,
+	$denonip,
+	$lgtvip,
+	$lgtvmac,
+	$nasip,
+	$shieldip,
+	$kodiurl,
+	$dsapikey,
+	$owappid,
+	$openuv,
+	$owid,
+	$lat,
+	$lon,
+	$calendarApp,
+	$calendarId,
+	$calendarIdMirom,
+	$calendarIdTobi,
+	$calendarIdVerlof,
+	$telegramchatid1,
+	$appledevice,
+	$appleid,
+	$applepass,
+	$vurl,
+	$vpsip,
+	$weekend,
+	$ringusername,
+	$ringpassword,
+	$proxmoxcredentials,
+	$urlnas,
+	$urlnas2,
+	$urlfilms
+
+	);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 
 
 function Human_kb($bytes,$dec=2)
 {
-    $size=array('kb','Mb','Gb');
-    $factor=floor((strlen($bytes)-1)/3);
-    return sprintf("%.{$dec}f", $bytes/pow(1000, $factor)).@$size[$factor];
+	$size=array('kb','Mb','Gb');
+	$factor=floor((strlen($bytes)-1)/3);
+	return sprintf("%.{$dec}f", $bytes/pow(1000, $factor)).@$size[$factor];
 }
