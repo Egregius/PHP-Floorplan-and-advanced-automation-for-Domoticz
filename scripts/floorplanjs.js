@@ -277,41 +277,6 @@ function ajax(Update=$LastUpdateTime){
 									document.getElementById("trdwater").innerHTML="";
 								}
 							}catch{}
-						}else if(device=="Xlight"){
-							heatingset=localStorage.getItem('heating');
-							try{
-								if($mode>0) {
-									width = ($mode * 3.16);
-									if (width<48) width=48;
-									if ($mode>80) power=$mode*20;
-									else if ($mode>60) power=$mode*19;
-									else if ($mode>40) power=$mode*18;
-									else if ($mode>28) power=$mode*17;
-									else if ($mode>16) power=$mode*16;
-									else power=$mode*15;
-									$('#daikincmpfreq').html(' cmp:'+$mode+'='+power+'W');
-									$('#daikincmpfreq').css("background-color","red");
-									$('#daikincmpfreq').css("width", width + "px");
-									$('#daikincmpfreq').css("display", "inherit");
-								}else if($mode<0) {
-									width = ($mode * -3.16);
-									if (width<48) width=48;
-									if ($mode>80) power=$mode*-20;
-									else if ($mode>60) power=$mode*-19;
-									else if ($mode>40) power=$mode*-18;
-									else if ($mode>28) power=$mode*-17;
-									else if ($mode>16) power=$mode*-16;
-									else power=$mode*-15;
-									$('#daikincmpfreq').html(' cmp:'+-$mode+'='+power+'W');
-									if(heatingset==-2)$('#daikincmpfreq').css("background-color","blue");
-									else $('#daikincmpfreq').css("background-color","black");
-									$('#daikincmpfreq').css("width", width + "px");
-									$('#daikincmpfreq').css("display", "inherit");
-								}else{
-									$('#daikincmpfreq').html('');
-									$('#daikincmpfreq').css("display", "none");
-								}
-							}catch{}
 						}else if(device=="heating"){
 							try{
 							   html='<img src="https://home.egregius.be/images/arrowdown.png" class="i60" alt="Open">';
@@ -382,16 +347,18 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								console.log(device+' '+$value);
 								elem=$value.split(";");
-								html=Math.round(elem[0]*100)/100+" W";
-								if(elem[1]>0)html+="<br>"+Math.round(elem[1]*100)/100/1000 +" kWh";
-								elem=document.getElementById("daikin_kWh");
-								elem.innerHTML=html;
-								if(item>600)elem.style.color="#FF0000";
-								else if(item>500)elem.style.color="#FF4400";
-								else if(item>400)elem.style.color="#FF8800";
-								else if(item>300)elem.style.color="#FFAA00";
-								else if(item>200)elem.style.color="#FFCC00";
-								else if(item>100)elem.style.color="#FFFF00";
+								if(elem[0]>0){
+									html=Math.round(elem[0]*100)/100+" W";
+									if(elem[1]>0)html+="<br>"+Math.round(elem[1]*100)/100/1000 +" kWh";
+									elem=document.getElementById("daikin_kWh");
+									elem.innerHTML=html;
+								}
+								if(elem[0]>600)elem.style.color="#FF0000";
+								else if(elem[0]>500)elem.style.color="#FF4400";
+								else if(elem[0]>400)elem.style.color="#FF8800";
+								else if(elem[0]>300)elem.style.color="#FFAA00";
+								else if(elem[0]>200)elem.style.color="#FFCC00";
+								else if(elem[0]>100)elem.style.color="#FFFF00";
 								else elem.style.color=null;
 							}catch{}
 						}else if(device=="sirene"){
@@ -1208,7 +1175,7 @@ function floorplan(){
 		html+='<div class="fix z1" id="zoldertrap"></div>';
 		items=['alex','eettafel','kamer','ledluifel','lichtbadkamer','terras','tobi','zithoek','zolder','inkom','hall'];
 		items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-		items=['jbl','diepvries','zoldervuur1','zoldervuur2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf'];
+		items=['jbl','diepvries','zoldervuur1','zoldervuur2','badkamervuur1','badkamervuur2','tvtobi','bureeltobi','tuin','kristal','bureel','keuken','wasbak','kookplaat','werkblad1','voordeur','wc','garage','garageled','zolderg','poortrf','daikin'];
 		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
 		items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
@@ -1240,12 +1207,12 @@ function floorplanheating(){
 		html+='<div class="fix z2" id="daikincmpfreq"></div>';
 		html+='<div class="fix z1" style="top:5px;left:5px;" onclick="floorplan();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 		html+='<div class="fix z1" style="top:290px;left:415px;"><a href=\'javascript:navigator_Go("floorplan.doorsensors.php");\'><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></a></div>';
-		items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed'];
+		items=['badkamervuur1','badkamervuur2','zoldervuur1','zoldervuur2','GroheRed','daikin'];
 		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
 		items=['Rbureel','RkeukenL','RkeukenR','Rliving','RkamerL','RkamerR','Rtobi','Ralex'];
 		items.forEach(function(item){html+='<div class="fix yellow" id="'+item+'"></div>';});
-		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
-		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
+		items=['raamalex','raamtobi','raamliving','raamkeuken','raamkamer','raamhall','achterdeur','deurvoordeur','deurbadkamer','deurinkom','deurgarage','deurwc','deurkamer','deurtobi','deuralex','poort','zoldervuur2','Usage_grohered','bureeltobikwh','daikin_kWh','zliving','zkeuken','zinkom','zgarage','zhalla','zhallb'];
+		items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
 		items=['living','badkamer','kamer','tobi','alex','zolder','buiten'];
 		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
 		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];		
@@ -1559,16 +1526,24 @@ function Weg(){
 }
 
 function heating(){
+	$heating=localStorage.getItem('heating');
 	html='<div class="dimmer" ><div style="min-height:140px">';
 	html+='<div class="fix" style="top:5px;left:5px;z-index:200000" onclick="floorplanheating();"><img src="https://home.egregius.be/images/close.png" width="72px" height="72px" alt="Close"></div>';
 	html+='<div id="message" class="dimmer">';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');sleep(500);initview();">Gas heating</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/GasAirco.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');sleep(500);initview();">Gas-Airco heating</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/AircoGas.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Airco-Gas heating</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
-	html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
+	if($heating==4) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');sleep(500);initview();">Gas heating</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'4\');sleep(500);initview();">Gas heating</button>';
+	if($heating==3) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/GasAirco.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');sleep(500);initview();">Gas-Airco heating</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/GasAirco.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');sleep(500);initview();">Gas-Airco heating</button>';
+	if($heating==2) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/AircoGas.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Airco-Gas heating</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/AircoGas.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');sleep(500);initview();">Airco-Gas heating</button>';
+	if($heating==1) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_red.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'1\');sleep(500);initview();">Airco heating</button>';
+	if($heating==0) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/close.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'0\');sleep(500);initview();">Neutral</button>';
+	if($heating==-1) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling_grey.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-1\');sleep(500);initview();">Passive cooling</button>';
+	if($heating==-2) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
+	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Cooling.png);background-repeat:no-repeat;background-position:center left 50px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'-2\');sleep(500);initview();">Airco cooling</button>';
 	html+='</div>';
 	html+='</div>';
 	$('#placeholder').html(html);

@@ -30,12 +30,12 @@ if ($d['Weg']['s']==1) {
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-		if ($dif>1) $power=0;
+		if ($dif>1.5) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
 			if ($k=='living') {
-				$set=$d[$k.'_set']['s']-2;
+				$set=$d[$k.'_set']['s']-2.5;
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
@@ -66,8 +66,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=4;
-			$data['fan']=$rate;
-			$data['set']=$set;
+			$data['fan']='A';
+			$data['set']=10;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);

@@ -165,14 +165,10 @@ if ($d['daikin']['s']=='On') {
 					rgb('Xlight', $rgb, $Xlight);
 					sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
 				}
-				if ($mode==3)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
-				elseif ($mode==4)storemode('Xlight', $level, basename(__FILE__).':'.__LINE__);
-				elseif ($mode==2)storemode('Xlight', -$level, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	} else {
 		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-		if ($d['Xlight']['m']!=0) storemode('Xlight', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['Weg']['s']>0||$d['daikin']['s']=='Off') {

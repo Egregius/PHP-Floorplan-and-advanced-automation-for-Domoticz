@@ -41,12 +41,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$daikin=json_decode($d['daikin'.$k]['s']);
 			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
-				$data['power']=$power;
+				$data['power']=1;
 				$data['mode']=4;
 				$data['fan']=$rate;
 				$data['set']=$set;
 				storeicon($k.'_set', json_encode($data));
-				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
+				daikinset($k, 1, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 4);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
@@ -56,10 +56,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
+			$data['power']=0;
 			$data['mode']=4;
-			$data['fan']=$rate;
-			$data['set']=$set;
+			$data['fan']='A';
+			$data['set']=10;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
