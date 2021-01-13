@@ -588,14 +588,14 @@ if ($d['auto']['s']=='On') {
 	) {
 		if ($d['alex']['m']!=1) storemode('alex', 1, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['eettafel']['s']>0
+	/*if ($d['eettafel']['s']>0
 		&&$d['Rbureel']['s']==0
 		&&$d['Rliving']['s']==0
 		&&$d['zon']['s']>100
 		&&past('eettafel')>7200
 	) {
 		if ($d['eettafel']['m']!=1) storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
-	}
+	}*/
 	if ($d['zithoek']['s']>0
 		&&$d['Rbureel']['s']==0
 		&&$d['Rliving']['s']==0
