@@ -613,21 +613,23 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	bosepost("key", $xml, $ip);
 	if (startsWith($key,'PRESET')) {
 		$msg='Bosekey '.$key;
-		bosekey('SHUFFLE_ON', 0, $ip);
 		$dontplayfirst=array('Cloud Rider','Jackie Chan','In My Mind','A Thousand Years');
 		for ($x=1;$x<=10;$x++) {
+			bosekey('SHUFFLE_ON', 0, $ip);
+			usleep(100000);
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
 				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
 					if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (in_array($dontplayfirst, trim($nowplaying['track'])) {
+						$msg.='| '.$nowplaying['track'];
+						if (in_array(trim($nowplaying['track']), $dontplayfirst)) {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 						}
 					}
 				}
 			}
-			sleep(1);
+			usleep(400000);
 		}
 		lg($msg);
 	}
