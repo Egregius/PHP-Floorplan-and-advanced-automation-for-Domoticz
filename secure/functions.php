@@ -612,21 +612,16 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
 	if (startsWith($key,'PRESET')) {
-		$dontplayfirst=array(
-			'Paul Kalkbrenner'=>'Cloud Rider',
-			'Cygnux X'=>'Superstring - Rank 1 Remix',
-			'Tiësto, Dzeko, Preme, Post Malone'=>'Jackie Chan',
-			'Pharrell Williams'=>'Happy - From "Despicable Me 2"',
-			'Christina Perri'=>'A Thousand Years',
-			'Sam Smith'=>'Stay With Me'
-		);
+		$msg='Bosekey '.$key;
+		bosekey('SHUFFLE_ON', 0, $ip);
+		$dontplayfirst=array('Cloud Rider','Jackie Chan','In My Mind','A Thousand Years');
 		for ($x=1;$x<=10;$x++) {
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
 				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])&&isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						if (array_key_exists(trim($nowplaying['artist']), $dontplayfirst)&&trim($nowplaying['track'])==$dontplayfirst[trim($nowplaying['artist'])]) {
+					if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
+						if (in_array($dontplayfirst, trim($nowplaying['track'])) {
 							bosekey("NEXT_TRACK", $sleep, $ip);
 						}
 					}
@@ -634,6 +629,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			}
 			sleep(1);
 		}
+		lg($msg);
 	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
@@ -670,6 +666,14 @@ function bosezone($ip,$forced=false,$vol='') {
 			bosekey($preset, 0, 101);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
+			for ($x=1;$x<=3;$x++) {
+				$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+				if (isset($status)&&($status['track']=='Cloud Rider'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) {
+					bosekey('NEXT_TRACK', 0, 101);
+				} else {
+					break;
+				}
+			}
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
