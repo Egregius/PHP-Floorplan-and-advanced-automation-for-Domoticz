@@ -52,11 +52,6 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql start
 fi
 
-ps cax | grep amplify-agent
-if [ $? -ne 0 ] ; then
-	/usr/sbin/service amplify-agent stop
-	/usr/sbin/service amplify-agent start
-fi
 # Remove these lines as they only upload my files to gitbub.
 MINUTE=$(date +"%M")
 if [ $(($MINUTE%10)) -eq 0 ] ; then
