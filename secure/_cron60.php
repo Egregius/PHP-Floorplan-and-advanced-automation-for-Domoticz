@@ -336,7 +336,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if (apcu_fetch('lgtv-offline')>90) {
+	if (apcu_fetch('lgtv-offline')>6) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 		}
