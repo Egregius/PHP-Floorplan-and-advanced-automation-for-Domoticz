@@ -43,7 +43,10 @@ if (isset($d[$device])) {
 		}
 	} elseif ($device=='ringdoorbell') {
 		if (past('voordeur')<60) exit;
+	} elseif ($d[$device]['dt']=='dimmer') {
+		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
+		elseif ($status>$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 	}
 }
 store($device, $status, 'Pass2PHP');
-@include '/var/www/html/secure/pass2php/'.$device.'.php';
+if (@include '/var/www/html/secure/pass2php/'.$device.'.php') lg($device.' = .'.$status;
