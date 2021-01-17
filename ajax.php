@@ -74,17 +74,14 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='pause') {
 			shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
 	 	} elseif ($_REQUEST['command']=='volume') {
-	 		echo __LINE__.'<br>';
 	 		if ($_REQUEST['action']=='up') {
 	 			fvolume('up');
-	 			echo __LINE__.'<br>';
 	 		} elseif ($_REQUEST['action']=='down') {
 	 			fvolume('down');
-	 			echo __LINE__.'<br>';
 	 		}
 	   	} elseif ($_REQUEST['command']=='sw') {
 			if ($_REQUEST['action']=='On') {
-				exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
+				shell_exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
 			} elseif ($_REQUEST['action']=='Off') {
 				shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
 			}

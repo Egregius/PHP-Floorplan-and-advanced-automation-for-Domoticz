@@ -542,8 +542,11 @@ function ajax(Update=$LastUpdateTime){
 										}catch{}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="tv"){
 										try{
-											if($value=='On')$('#tvicon').attr("src", "/images/tv_On.png");
-											else $('#tvicon').attr("src", "/images/tv_Off.png");
+											if($value=='On') {
+												$('#tvicon').attr("src", "/images/tv_On.png");
+											} else {
+												$('#tvicon').attr("src", "/images/tv_Off.png");
+											}
 										}catch{}
 									}
 								}else if(device=="bureeltobi"){
@@ -1251,10 +1254,8 @@ function floorplanmedia(){
 		html+='<div class="fix z2" id="sirene"></div>';
 		items=['eettafel','zithoek'];
 		items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
-		items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
+		items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia','tv','lgtv'];
 		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
-		html+='<div class="fix z1 i48" id="lgtv"></div>';
-		html+='<div class="fix z1 i48" id="tv"></div>';
 		items=['bureel','keukenL','keukenR','living'];
 		items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
