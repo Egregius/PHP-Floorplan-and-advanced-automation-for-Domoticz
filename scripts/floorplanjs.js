@@ -1253,8 +1253,8 @@ function floorplanmedia(){
 		items.forEach(function(item){html+='<div class="fix z" onclick="dimmer(\''+item+'\');" id="'+item+'"></div>';});
 		items=['kristal','bureel','keuken','wasbak','kookplaat','werkblad1','kristal','kristal','denon','nas','nvidia'];
 		items.forEach(function(item){html+='<div class="fix z1 i48" id="'+item+'"></div>';});
-		if(tv=="On")html+='<div class="fix z1 i48" id="lgtv"></div>';
-		else if(tv=="Off")html+='<div class="fix z1 i48" id="tv"></div>';
+		html+='<div class="fix z1 i48" id="lgtv"></div>';
+		html+='<div class="fix z1 i48" id="tv"></div>';
 		items=['bureel','keukenL','keukenR','living'];
 		items.forEach(function(item){html+='<div class="fix yellow" id="R'+item+'"></div>';});
 		items=['living','keuken','inkom'];
