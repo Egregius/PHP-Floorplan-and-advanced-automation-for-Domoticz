@@ -94,9 +94,9 @@ if (isset($ow)) {
 				$owwind=$ow['wind']['gust'] * 3.6;
 			}
 		}
-		if ($d['icon']['m']!=$ow['weather'][0]['id']) {
-			storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
-		}
+//		if ($d['icon']['m']!=$ow['weather'][0]['id']) {
+//			storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
+//		}
 		if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
 			store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
 		}
