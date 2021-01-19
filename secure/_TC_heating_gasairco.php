@@ -13,11 +13,11 @@
 $dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
 
 if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>598) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($dif<= 0&&$d['brander']['s']=="Off"&&past('brander')>898) sw('brander','On', basename(__FILE__).':'.__LINE__);
+elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>498) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+elseif ($dif<= 0&&$d['brander']['s']=="Off"&&past('brander')>748) sw('brander','On', basename(__FILE__).':'.__LINE__);
 elseif ($dif>= 0&&$d['brander']['s']=="On"&&past('brander')>298) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($dif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>598) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+elseif ($dif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>498) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>748) sw('brander','Off', basename(__FILE__).':'.__LINE__);
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {

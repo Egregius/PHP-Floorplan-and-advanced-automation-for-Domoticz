@@ -32,8 +32,8 @@ if ($d['auto']['s']=='On'&&$d['Weg']['s']<3) {
 			if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true||$d['pirhall']['s']=='On') {
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)&&TIME>=strtotime('7:30')) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)&&TIME>=strtotime('7:30')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rtobi']['s']>0&&($d['deurtobi']['s']=='Open'||$d['tobi']['s']>0)&&$d['deuralex']['s']=='Open'&&TIME>=strtotime('7:30')) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&$d['deuralex']['s']=='Open'&&TIME>=strtotime('7:30')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1&&$d['tv']['s']=='Off') {
 			foreach ($beneden as $i) {

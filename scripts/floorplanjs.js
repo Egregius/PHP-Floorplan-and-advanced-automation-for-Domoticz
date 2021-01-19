@@ -302,18 +302,6 @@ function ajax(Update=$LastUpdateTime){
 								else if($value==4)html+='<img src="images/Gas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
-						}else if(device=="belknop"){
-							localStorage.setItem("tijd_belknop", time);
-							try{
-								if(time>($LastUpdateTime-82800)){
-									date=new Date(time*1000);
-									hours=date.getHours();
-									minutes="0"+date.getMinutes();
-									document.getElementById("t"+device).innerHTML=hours+':'+minutes.substr(-2);
-								}else{
-									document.getElementById("t"+device).innerHTML=formatDate(tijd);
-								}
-							}catch{}
 						}else if(device=="zoldervuur"){
 							try{
 								if($value=="On")html='<img src="images/fire_On.png" width="28px" height="auto" alt="">';
@@ -878,7 +866,7 @@ function ajax(Update=$LastUpdateTime){
 				else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
 				else elem.style.color=null;
 			}catch{}
-			var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','belknop','brander','luifel'];
+			var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','brander','luifel'];
 			var arrayLength=items.length;
 			for (var i=0; i < arrayLength; i++) {
 				try{
@@ -1186,7 +1174,7 @@ function floorplan(){
 		items.forEach(function(item){html+='<div class="fix z0" id="'+item+'"></div>';});
 		items=['living_temp','badkamer_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp','buiten_temp'];
 		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'"></div>';});
-		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
+		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
 		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
 		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
@@ -1220,7 +1208,7 @@ function floorplanheating(){
 		items.forEach(function(item){html+='<div class="fix" onclick="location.href=\'temp.php\';" id="'+item+'_temp"></div>';});
 		items=['Rliving','Rbureel','RkeukenL','RkeukenR','RkamerL','RkamerR','Rtobi','Ralex'];		
 		items.forEach(function(item){html+='<div class="fix z" onclick="roller(\''+item+'\');" id="R'+item+'"></div>';});
-		items=['tbelknop','tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
+		items=['tpirliving','tpirkeuken','tpirgarage','tpirinkom','tpirhall','traamliving','traamkeuken','traamkamer','traamtobi','traamalex','tdeurvoordeur','tdeurbadkamer','tdeurinkom','tdeurgarage','tachterdeur','tpoort','tdeurkamer','tdeurtobi','tdeuralex','tdeurwc'];
 		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		if(heatingset>=2)items=['living','badkamer','kamer','tobi','alex','zolder'];
 		else if(heatingset==1)items=['living','badkamer','kamer','alex','zolder'];
