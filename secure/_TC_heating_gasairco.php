@@ -24,7 +24,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>=0) $power=0;
 		elseif ($dif<=-0.7) $power=1;
-		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
+		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
 			if ($k=='living') {
 				$set=$d[$k.'_set']['s']-3;
