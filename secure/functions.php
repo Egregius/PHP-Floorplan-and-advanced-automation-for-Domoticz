@@ -625,7 +625,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 						$msg.='| '.$nowplaying['track'];
 						if (in_array(trim($nowplaying['track']), $dontplayfirst)) {
 							bosekey("NEXT_TRACK", $sleep, $ip);
-						} else break;
+						}
 					}
 				}
 			}
