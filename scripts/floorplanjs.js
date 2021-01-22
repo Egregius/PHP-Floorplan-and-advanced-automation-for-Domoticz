@@ -165,25 +165,24 @@ function ajax(Update=$LastUpdateTime){
 							}catch{}
 						}else if(device=="uv"){
 							try{
-							   if($value<2)html='<font color="#99EE00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
-							   else if($value<4)html='<font color="#99CC00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
-							   else if($value<6)html='<font color="#FFCC00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
-							   else if($value<8)html='<font color="#FF6600">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
-							   else html='<font color="#FF2200">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
-							   if($mode<2)html+='<br><font color="#99EE00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
-							   else if($mode<4)html+='<br><font color="#99CC00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
-							   else if($mode<6)html+='<br><font color="#FFCC00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
-							   else if($mode<8)html+='<br><font color="#FF6600">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
-							   else html+='<br><font color="#FF2200">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
-							   $("#uv").html(html);
+								if($value<2)html='<font color="#99EE00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
+								else if($value<4)html='<font color="#99CC00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
+								else if($value<6)html='<font color="#FFCC00">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
+								else if($value<8)html='<font color="#FF6600">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
+								else html='<font color="#FF2200">UV: '+$value.toString().replace(/[.]/, ",")+'</font>';
+								if($mode<2)html+='<br><font color="#99EE00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
+								else if($mode<4)html+='<br><font color="#99CC00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
+								else if($mode<6)html+='<br><font color="#FFCC00">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
+								else if($mode<8)html+='<br><font color="#FF6600">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
+								else html+='<br><font color="#FF2200">max: '+$mode.toString().replace(/[.]/, ",")+'</font>';
+								$("#uv").html(html);
 							}catch{}
 						}else if(device=="el"){
 							localStorage.setItem(device, $value);
 							$zon=localStorage.getItem('zon');
-							$delta=$zon-$value;
-							//console.log($delta);
+							$delta=$value-$zon;
 //							try{
-								$("#trelec").html("<td>&Delta;</td><td id='delta'></td>"+$delta+" W<td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
+								$("#trelec").html("<td id='delta'>&Delta; "+$delta+" W</td><td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
 								if($value>6000)document.getElementById("elec").style.color="#FF0000";
 								else if($value>5000)document.getElementById("elec").style.color="#FF4400";
 								else if($value>4000)document.getElementById("elec").style.color="#FF8800";
@@ -198,11 +197,26 @@ function ajax(Update=$LastUpdateTime){
 								else if($mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
 								else if($mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
 								else document.getElementById("elecvandaag").style.color=null;
+								if($delta>4000)document.getElementById("delta").style.color="#FF2222";
+								else if($delta>3000)document.getElementById("delta").style.color="#FF4444";
+								else if($delta>2000)document.getElementById("delta").style.color="#FF6666";
+								else if($delta>1000)document.getElementById("delta").style.color="#FF8888";
+								else if($delta>500)document.getElementById("delta").style.color="#FFAAAA";
+								else if($delta>100)document.getElementById("delta").style.color="#FFCCCC";
+								else if($delta<-100)document.getElementById("delta").style.color="#CCFFCC";
+								else if($delta<-400)document.getElementById("delta").style.color="#AAFFAA";
+								else if($delta<-700)document.getElementById("delta").style.color="#88FF88";
+								else if($delta<-1000)document.getElementById("delta").style.color="#66FF66";
+								else if($delta<-1500)document.getElementById("delta").style.color="#44FF44";
+								else document.getElementById("delta").style.color=null;
 //							}catch{}
 						}else if(device=="zon"){
 							localStorage.setItem(device, $value);
+							$el=localStorage.getItem('el');
+							$delta=$el-$value;
 							try{
 								$("#zon").html($value+" W");
+								$("#delta").html("&Delta; "+$delta+" W");
 								if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
 								else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
 								else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
@@ -215,6 +229,18 @@ function ajax(Update=$LastUpdateTime){
 								else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
 								else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
 								else document.getElementById("zon").style.color=null;
+								if($delta>4000)document.getElementById("delta").style.color="#FF2222";
+								else if($delta>3000)document.getElementById("delta").style.color="#FF4444";
+								else if($delta>2000)document.getElementById("delta").style.color="#FF6666";
+								else if($delta>1000)document.getElementById("delta").style.color="#FF8888";
+								else if($delta>500)document.getElementById("delta").style.color="#FFAAAA";
+								else if($delta>100)document.getElementById("delta").style.color="#FFCCCC";
+								else if($delta<-100)document.getElementById("delta").style.color="#CCFFCC";
+								else if($delta<-400)document.getElementById("delta").style.color="#AAFFAA";
+								else if($delta<-700)document.getElementById("delta").style.color="#88FF88";
+								else if($delta<-1000)document.getElementById("delta").style.color="#66FF66";
+								else if($delta<-1500)document.getElementById("delta").style.color="#44FF44";
+								else document.getElementById("delta").style.color=null;
 							}catch{}
 						}else if(device=="zonvandaag"){
 							try{
@@ -237,7 +263,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
-									$("#trgas").html('<td></td><td></td><td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									$("#trgas").html('<td></td><td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
 									if($value>700)document.getElementById("tdgasvandaag").style.color="#FF0000";
 									else if($value>600)document.getElementById("tdgasvandaag").style.color="#FF4400";
 									else if($value>500)document.getElementById("tdgasvandaag").style.color="#FF8800";
@@ -252,7 +278,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=$value / 1000;
-									$("#trwater").html('<td></td><td></td><td id="tdwater">Water:</td><td colspan="2" id="watervandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									$("#trwater").html('<td></td><td id="tdwater">Water:</td><td colspan="2" id="watervandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
 									if($value>1000)document.getElementById("watervandaag").style.color="#FF0000";
 									else if($value>750)document.getElementById("watervandaag").style.color="#FF4400";
 									else if($value>500)document.getElementById("watervandaag").style.color="#FF8800";
@@ -1183,7 +1209,7 @@ function floorplan(){
 		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
 		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
-		html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td></td><td></td><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
+		html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td></td><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
 		html+='</table></div>';
 		$('#placeholder').html(html).fadeIn(3000);
    }catch{}
