@@ -10,7 +10,7 @@
  * @link     https://egregius.be
  **/
 if ($status=="Open"&&$d['auto']['s']=='On') {
-        $zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	finkom();
