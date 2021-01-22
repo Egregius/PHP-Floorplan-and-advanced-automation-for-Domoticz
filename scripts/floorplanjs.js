@@ -178,8 +178,12 @@ function ajax(Update=$LastUpdateTime){
 							   $("#uv").html(html);
 							}catch{}
 						}else if(device=="el"){
-							try{
-								$("#trelec").html("<td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
+							localStorage.setItem(device, $value);
+							$zon=localStorage.getItem('zon');
+							$delta=$zon-$value;
+							//console.log($delta);
+//							try{
+								$("#trelec").html("<td>&Delta;</td><td id='delta'></td>"+$delta+" W<td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
 								if($value>6000)document.getElementById("elec").style.color="#FF0000";
 								else if($value>5000)document.getElementById("elec").style.color="#FF4400";
 								else if($value>4000)document.getElementById("elec").style.color="#FF8800";
@@ -194,8 +198,9 @@ function ajax(Update=$LastUpdateTime){
 								else if($mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
 								else if($mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
 								else document.getElementById("elecvandaag").style.color=null;
-							}catch{}
+//							}catch{}
 						}else if(device=="zon"){
+							localStorage.setItem(device, $value);
 							try{
 								$("#zon").html($value+" W");
 								if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
@@ -232,7 +237,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
-									$("#trgas").html('<td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									$("#trgas").html('<td></td><td></td><td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
 									if($value>700)document.getElementById("tdgasvandaag").style.color="#FF0000";
 									else if($value>600)document.getElementById("tdgasvandaag").style.color="#FF4400";
 									else if($value>500)document.getElementById("tdgasvandaag").style.color="#FF8800";
@@ -247,7 +252,7 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								if($value>0){
 									item=$value / 1000;
-									$("#trwater").html('<td id="tdwater">Water:</td><td colspan="2" id="watervandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
+									$("#trwater").html('<td></td><td></td><td id="tdwater">Water:</td><td colspan="2" id="watervandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
 									if($value>1000)document.getElementById("watervandaag").style.color="#FF0000";
 									else if($value>750)document.getElementById("watervandaag").style.color="#FF4400";
 									else if($value>500)document.getElementById("watervandaag").style.color="#FF8800";
@@ -1178,7 +1183,7 @@ function floorplan(){
 		items.forEach(function(item){html+='<div class="fix stamp" id="'+item+'"></div>';});
 		items=['bose101','bose102','bose103','bose104','bose105'];
 		items.forEach(function(item){html+='<div class="fix" id="'+item+'"></div>';});
-		html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
+		html+='<div class="fix verbruik" onclick="location.href=\'https://verbruik.egregius.be/dag.php?Guy=on\';" id="verbruik"><table><tr id="trelec"></tr><tr id="trzon"><td></td><td></td><td>Zon:</td><td id="zon"></td><td id="zonvandaag"></td></tr><tr id="trgas"></tr><tr id="trwater"></tr><tr id="trdgas"></tr><tr id="trdwater"></tr>';
 		html+='</table></div>';
 		$('#placeholder').html(html).fadeIn(3000);
    }catch{}
