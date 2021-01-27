@@ -181,82 +181,50 @@ function ajax(Update=$LastUpdateTime){
 							localStorage.setItem(device, $value);
 							$zon=localStorage.getItem('zon');
 							$delta=$value-$zon;
-//							try{
+							$color=~~(256-($value/31.24999945));
+							$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+							$color="#FF"+$color+"00";
+							if($delta>0){
+								$dcolor=~~(256-($delta/31.25));
+								$dcolor=('00' + $dcolor.toString(16).toUpperCase()).slice(-2);
+								$dcolor="#FF"+$dcolor+"00";
+							} else if($delta<0){
+								$dcolor=~~(256-(-$delta/0.053710938));
+								$dcolor=('00' + $dcolor.toString(16).toUpperCase()).slice(-2);
+								$dcolor="#"+$dcolor+"FF"+$dcolor;
+							} else {
+								$color="00";
+							}
+							
+							try{
 								$("#trelec").html("<td id='delta'>&Delta; "+$delta+" W</td><td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
-								if($value>6000)document.getElementById("elec").style.color="#FF0000";
-								else if($value>5000)document.getElementById("elec").style.color="#FF4400";
-								else if($value>4000)document.getElementById("elec").style.color="#FF8800";
-								else if($value>3000)document.getElementById("elec").style.color="#FFAA00";
-								else if($value>2000)document.getElementById("elec").style.color="#FFCC00";
-								else if($value>1000)document.getElementById("elec").style.color="#FFFF00";
-								else document.getElementById("elec").style.color=null;
-								if($mode>20)document.getElementById("elecvandaag").style.color="#FF0000";
-								else if($mode>18)document.getElementById("elecvandaag").style.color="#FF4400";
-								else if($mode>16)document.getElementById("elecvandaag").style.color="#FF8800";
-								else if($mode>14)document.getElementById("elecvandaag").style.color="#FFAA00";
-								else if($mode>12)document.getElementById("elecvandaag").style.color="#FFCC00";
-								else if($mode>10)document.getElementById("elecvandaag").style.color="#FFFF00";
+								document.getElementById("elec").style.color=$color;
+								$color=~~(256-($mode/0.1171875));
+								$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+								$color="#FF"+$color+"00";
+								if($mode>0)document.getElementById("elecvandaag").style.color="#FF4400";
 								else document.getElementById("elecvandaag").style.color=null;
-								if($delta>4000)document.getElementById("delta").style.color="#FF2222";
-								else if($delta>3000)document.getElementById("delta").style.color="#FF4444";
-								else if($delta>2000)document.getElementById("delta").style.color="#FF6666";
-								else if($delta>1000)document.getElementById("delta").style.color="#FF8888";
-								else if($delta>500)document.getElementById("delta").style.color="#FFAAAA";
-								else if($delta>100)document.getElementById("delta").style.color="#FFCCCC";
-								else if($delta<-100)document.getElementById("delta").style.color="#CCFFCC";
-								else if($delta<-400)document.getElementById("delta").style.color="#AAFFAA";
-								else if($delta<-700)document.getElementById("delta").style.color="#88FF88";
-								else if($delta<-1000)document.getElementById("delta").style.color="#66FF66";
-								else if($delta<-1500)document.getElementById("delta").style.color="#44FF44";
-								else document.getElementById("delta").style.color=null;
-//							}catch{}
+								document.getElementById("delta").style.color=$dcolor;
+							}catch{}
 						}else if(device=="zon"){
 							localStorage.setItem(device, $value);
-							$el=localStorage.getItem('el');
-							$delta=$el-$value;
+							$color=$value/3.906250016;
+							$color=256-$color;
+							$color=~~$color;
+							$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+							$color="#"+$color+"FF"+$color;
 							try{
 								$("#zon").html($value+" W");
-								$("#delta").html("&Delta; "+$delta+" W");
-								if(d['zon']['s']>3500)document.getElementById("zon").style.color="#00FF00";
-								else if(d['zon']['s']>3000)document.getElementById("zon").style.color="#33FF00";
-								else if(d['zon']['s']>2700)document.getElementById("zon").style.color="#66FF00";
-								else if(d['zon']['s']>2400)document.getElementById("zon").style.color="#99FF00";
-								else if(d['zon']['s']>2100)document.getElementById("zon").style.color="#CCFF00";
-								else if(d['zon']['s']>1800)document.getElementById("zon").style.color="#EEFF00";
-								else if(d['zon']['s']>1500)document.getElementById("zon").style.color="#FFFF33";
-								else if(d['zon']['s']>1200)document.getElementById("zon").style.color="#FFFF66";
-								else if(d['zon']['s']>900)document.getElementById("zon").style.color="#FFFF99";
-								else if(d['zon']['s']>600)document.getElementById("zon").style.color="#FFFFCC";
-								else if(d['zon']['s']>300)document.getElementById("zon").style.color="#EEEECC";
-								else document.getElementById("zon").style.color=null;
-								if($delta>4000)document.getElementById("delta").style.color="#FF2222";
-								else if($delta>3000)document.getElementById("delta").style.color="#FF4444";
-								else if($delta>2000)document.getElementById("delta").style.color="#FF6666";
-								else if($delta>1000)document.getElementById("delta").style.color="#FF8888";
-								else if($delta>500)document.getElementById("delta").style.color="#FFAAAA";
-								else if($delta>100)document.getElementById("delta").style.color="#FFCCCC";
-								else if($delta<-100)document.getElementById("delta").style.color="#CCFFCC";
-								else if($delta<-400)document.getElementById("delta").style.color="#AAFFAA";
-								else if($delta<-700)document.getElementById("delta").style.color="#88FF88";
-								else if($delta<-1000)document.getElementById("delta").style.color="#66FF66";
-								else if($delta<-1500)document.getElementById("delta").style.color="#44FF44";
-								else document.getElementById("delta").style.color=null;
+								document.getElementById("zon").style.color=$color;
 							}catch{}
 						}else if(device=="zonvandaag"){
 							try{
 								zonvandaag=parseFloat(Math.round($value*10)/10).toFixed(1);
+								$dcolor=~~(256-(-$value/0.5859375));
+								$dcolor=('00' + $dcolor.toString(16).toUpperCase()).slice(-2);
+								$dcolor="#"+$dcolor+"FF"+$dcolor;
 								$("#zonvandaag").html(zonvandaag.toString().replace(/[.]/, ",")+" kWh");
-								if(d['zonvandaag']['m']>120)document.getElementById("zonvandaag").style.color="#00FF00";
-								else if(d['zonvandaag']['m']>110)document.getElementById("zonvandaag").style.color="#33FF00";
-								else if(d['zonvandaag']['m']>100)document.getElementById("zonvandaag").style.color="#66FF00";
-								else if(d['zonvandaag']['m']>90)document.getElementById("zonvandaag").style.color="#99FF00";
-								else if(d['zonvandaag']['m']>80)document.getElementById("zonvandaag").style.color="#CCFF00";
-								else if(d['zonvandaag']['m']>70)document.getElementById("zonvandaag").style.color="#EEFF00";
-								else if(d['zonvandaag']['m']>60)document.getElementById("zonvandaag").style.color="#FFFF33";
-								else if(d['zonvandaag']['m']>50)document.getElementById("zonvandaag").style.color="#FFFF66";
-								else if(d['zonvandaag']['m']>40)document.getElementById("zonvandaag").style.color="#FFFF99";
-								else if(d['zonvandaag']['m']>30)document.getElementById("zonvandaag").style.color="#FFFFCC";
-								else if(d['zonvandaag']['m']>20)document.getElementById("zonvandaag").style.color="#EEEECC";
+								if(d['zonvandaag']['m']>0)document.getElementById("zonvandaag").style.color=$dcolor;
 								else document.getElementById("zonvandaag").style.color=null;
 							}catch{}
 						}else if(device=="gasvandaag"){
@@ -264,12 +232,10 @@ function ajax(Update=$LastUpdateTime){
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
 									$("#trgas").html('<td></td><td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
-									if($value>700)document.getElementById("tdgasvandaag").style.color="#FF0000";
-									else if($value>600)document.getElementById("tdgasvandaag").style.color="#FF4400";
-									else if($value>500)document.getElementById("tdgasvandaag").style.color="#FF8800";
-									else if($value>400)document.getElementById("tdgasvandaag").style.color="#FFAA00";
-									else if($value>300)document.getElementById("tdgasvandaag").style.color="#FFCC00";
-									else if($value>200)document.getElementById("tdgasvandaag").style.color="#FFFF00";
+									$color=~~(256-($value/0,078125));
+									$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+									$color="#FF"+$color+"00";
+									if($value>0)document.getElementById("tdgasvandaag").style.color=$color;
 									else document.getElementById("tdgasvandaag").style.color=null;
 								}else $("#trgas").html("");
 							}catch{}
@@ -325,11 +291,11 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								html='<td>';
 								if($value==0)html+='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>';
-								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco cooling</td>';
-								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive cooling</td>';
-								else if($value==1)html+='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco heating</td>';
-								else if($value==2)html+='<img src="images/AircoGas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco-Gas heating</td>';
-								else if($value==3)html+='<img src="images/GasAirco.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco heating</td>';
+								else if($value==-2)html+='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>cooling</td>';
+								else if($value==-1)html+='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive<br>cooling</td>';
+								else if($value==1)html+='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>heating</td>';
+								else if($value==2)html+='<img src="images/AircoGas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco-Gas<br>heating</td>';
+								else if($value==3)html+='<img src="images/GasAirco.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco<br>heating</td>';
 								else if($value==4)html+='<img src="images/Gas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>';
 								document.getElementById("trheating").innerHTML=html;
 							}catch{}
@@ -372,12 +338,10 @@ function ajax(Update=$LastUpdateTime){
 									elem=document.getElementById("daikin_kWh");
 									elem.innerHTML=html;
 								}
-								if(elem[0]>600)elem.style.color="#FF0000";
-								else if(elem[0]>500)elem.style.color="#FF4400";
-								else if(elem[0]>400)elem.style.color="#FF8800";
-								else if(elem[0]>300)elem.style.color="#FFAA00";
-								else if(elem[0]>200)elem.style.color="#FFCC00";
-								else if(elem[0]>100)elem.style.color="#FFFF00";
+								$color=~~(256-(elem[0]/10));
+								$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+								$color="#FF"+$color+"00";
+								if(elem[0]>0)elem.style.color=$color;
 								else elem.style.color=null;
 							}catch{}
 						}else if(device=="sirene"){
@@ -878,23 +842,20 @@ function ajax(Update=$LastUpdateTime){
 			try{
 				tijd=localStorage.getItem("tijd_water");
 				elem=document.getElementById("tdwater");
-				if(tijd>$LastUpdateTime-15)elem.style.color="#FF0000";
-				else if(tijd>$LastUpdateTime-30)elem.style.color="#FF4400";
-				else if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
-				else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
-				else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
-				else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
+				$color=~~(256-($LastUpdateTime-tijd/3));
+				$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+				$color="#FF"+$color+"88";
+				if(tijd>$LastUpdateTime-15)elem.style.color=$color;
 				else elem.style.color=null;
 			}catch{}
 			try{
 				tijd=localStorage.getItem("tijd_gas");
 				elem=document.getElementById("tdgas");
-				if(tijd>$LastUpdateTime-15)elem.style.color="#FF0000";
-				else if(tijd>$LastUpdateTime-30)elem.style.color="#FF4400";
-				else if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
-				else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
-				else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
-				else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
+				$color=~~(($LastUpdateTime-tijd)/4);
+				$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+				$color="#FF"+$color+"00";
+				$color=~~(256-($LastUpdateTime-tijd/3));
+				if($LastUpdateTime-tijd<900)elem.style.color=$color;
 				else elem.style.color=null;
 			}catch{}
 			var items=['living_set','badkamer_set','kamer_set','tobi_set','alex_set','zolder_set','brander','luifel'];
@@ -934,16 +895,11 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Closed"){
-						if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
-						else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
-						else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
-						else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
-						else if(tijd>$LastUpdateTime-7200)elem.style.color="#CCC";
-						else if(tijd>$LastUpdateTime-14400)elem.style.color="#BBB";
-						else if(tijd>$LastUpdateTime-21600)elem.style.color="#AAA";
-						else if(tijd>$LastUpdateTime-28800)elem.style.color="#999";
-						else if(tijd>$LastUpdateTime-36000)elem.style.color="#888";
-						else if(tijd>$LastUpdateTime-82800)elem.style.color="#777";
+						$color=~~(($LastUpdateTime-tijd)/4);
+						$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+						$color="#FF"+$color+"00";
+						if($LastUpdateTime-tijd<900)elem.style.color=$color;
+						else if($LastUpdateTime-tijd<82800)elem.style.color="#777";
 						else {
 							elem.style.color="#777";
 							html=formatDate(tijd);
@@ -967,16 +923,11 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Off"){
-						if(tijd>$LastUpdateTime-60)elem.style.color="#FF8800";
-						else if(tijd>$LastUpdateTime-90)elem.style.color="#FFAA00";
-						else if(tijd>$LastUpdateTime-300)elem.style.color="#FFCC00";
-						else if(tijd>$LastUpdateTime-600)elem.style.color="#FFFF00";
-						else if(tijd>$LastUpdateTime-7200)elem.style.color="#CCC";
-						else if(tijd>$LastUpdateTime-14400)elem.style.color="#BBB";
-						else if(tijd>$LastUpdateTime-21600)elem.style.color="#AAA";
-						else if(tijd>$LastUpdateTime-28800)elem.style.color="#999";
-						else if(tijd>$LastUpdateTime-36000)elem.style.color="#888";
-						else if(tijd>$LastUpdateTime-82800)elem.style.color="#777";
+						$color=~~(($LastUpdateTime-tijd)/4);
+						$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+						$color="#FF"+$color+"00";
+						if($LastUpdateTime-tijd<900)elem.style.color=$color;
+						else if($LastUpdateTime-tijd<82800)elem.style.color="#777";
 						else {
 							elem.style.color="#777";
 							html=formatDate(tijd);

@@ -54,12 +54,10 @@ if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
 		$Setliving=14;
 		if ($d['Weg']['s']==0) {
-			if (TIME>=strtotime('17:00')&&TIME<strtotime('18:30')) $Setliving=21.1;
-			elseif (TIME>=strtotime('15:30')&&TIME<strtotime('18:30')) $Setliving=21.0;
-			elseif (TIME>=strtotime('14:00')&&TIME<strtotime('18:30')) $Setliving=20.9;
-			elseif (TIME>=strtotime('12:30')&&TIME<strtotime('18:30')) $Setliving=20.8;
-			elseif (TIME>=strtotime('11:00')&&TIME<strtotime('18:30')) $Setliving=20.7;
-			elseif (TIME>=strtotime('9:30')&&TIME<strtotime('18:30')) $Setliving=20.6;
+			if (TIME>=strtotime('17:00')&&TIME<strtotime('18:30')) $Setliving=20.9;
+			elseif (TIME>=strtotime('15:30')&&TIME<strtotime('18:30')) $Setliving=20.8;
+			elseif (TIME>=strtotime('14:00')&&TIME<strtotime('18:30')) $Setliving=20.7;
+			elseif (TIME>=strtotime('12:30')&&TIME<strtotime('18:30')) $Setliving=20.6;
 			elseif (TIME>=strtotime('8:00')&&TIME<strtotime('18:30')) $Setliving=20.5;
 			elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:30')) $Setliving=20.4;
 			elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=20.3;
