@@ -146,6 +146,17 @@ function ajax(Update=$LastUpdateTime){
 								minutes="0"+date.getMinutes();
 								document.getElementById("zononder").innerHTML=' '+hours+':'+minutes.substr(-2);
 							}catch{}
+						}else if(device=="Sun"){
+							try {
+								date=new Date($value*1000);
+								hours=date.getHours();
+								minutes="0"+date.getMinutes();
+								document.getElementById("sunop").innerHTML=' '+hours+':'+minutes.substr(-2);
+								date=new Date($mode*1000);
+								hours=date.getHours();
+								minutes="0"+date.getMinutes();
+								document.getElementById("sunonder").innerHTML=' '+hours+':'+minutes.substr(-2);
+							}catch{}
 						}else if(device=="wind"){
 							try{
 								elem=document.getElementById("wind");
@@ -1322,7 +1333,7 @@ function sidebar(){
 			else if(lgtv=="Off")html+='<img src="https://home.egregius.be/images/lgtv_Off.png" class="i60" alt="lgtv" id="lgtvicon">';
 		}else if(tv=="Off")html+='<img src="https://home.egregius.be/images/tv_Off.png" class="i60" alt="tv" id="tvicon">';
 		html+='<br>';
-		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
+		html+='<br></div><div class="fix center zon"><span id="maxtemp"></span><br><span id="mintemp"></span><br><a href=\'javascript:navigator_Go("regen.php");\'><span id="buien"></span></a><br><span id="wind"></span><br><br><img src="images/sunrise.png" alt="sunrise"><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e7;</small><span id="sunop"></span><br><small>&#x21e9;</small><span id="sunonder"></span><br><small>&#x21e9;</small><span id="zononder"></span><br><div id="uv"></div></div>';
 		document.getElementById('placeholder').insertAdjacentHTML('beforeend', html);
 	}catch{}
 }
