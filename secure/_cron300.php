@@ -76,18 +76,9 @@ if ($d['achterdeur']['s']=='Open') {
 	if ($d['zwembadwarmte']['s']=='On') sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
 }
 
-if (past('diepvries_temp')>7200) {
-	alert(
-		'diepvriestemp',
-		'Diepvries temp not updated since '.
-		strftime("%k:%M:%S", $d['diepvries_temp']['t']),
-		7200
-	);
-}
-
-if ($d['auto']['s']!='On') {
-	if (past('auto')>10795) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-}
+if (past('diepvries_temp')>7200) alert('diepvriestemp','Diepvries temp not updated since '.strftime("%k:%M:%S", $d['diepvries_temp']['t']),7200);
+if (TIME>=strtotime('9:00')&&TIME<=strtotime('16:00')&&($d['zon']['s']-$d['el']['s'])>300) alert(	'wasmachien','Wasmachien checken'.PHP_EOL.($d['zon']['s']-$d['el']['s']).' W overschot',43200);
+if ($d['auto']['s']!='On'&&past('auto')>10795) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>14400
 	&& $d['Weg']['s']==0
 	&& past('pirliving')>14400
