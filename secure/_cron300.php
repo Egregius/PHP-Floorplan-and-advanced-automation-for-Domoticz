@@ -147,7 +147,12 @@ if ((TIME>=strtotime('11:00')&&TIME<strtotime('19:30'))||$battery<50) {
 }/* elseif ((TIME<strtotime('6:00')||TIME>=strtotime('22:00')||$battery>=80)&&$battery>60) {
 	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__.' battery='.$battery);
 }*/
-
+$ctx=stream_context_create(array('http'=>array('timeout'=>10)));
+$data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
+if (!empty($data)) {
+	store('jaarteller', $data['jaarteller'], basename(__FILE__).':'.__LINE__);
+	if ($data['zonpercent']!=$d['zonvandaag']['m']) storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
+}
 if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($k=='living') $ip=111;

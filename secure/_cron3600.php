@@ -88,21 +88,7 @@ foreach ($xml['Node'] as $node) {
 	}
 }
 unset($xml);
-$ctx=stream_context_create(array('http'=>array('timeout'=>10)));
-$data=json_decode(
-	file_get_contents(
-		'https://verbruik.egregius.be/tellerjaar.php',
-		false,
-		$ctx
-	),
-	true
-);
-if (!empty($data)) {
-	store('jaarteller', $data['jaarteller'], basename(__FILE__).':'.__LINE__);
-	if ($data['zonpercent']!=$d['zonvandaag']['m']) {
-		storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
-	}
-}
+
 
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
