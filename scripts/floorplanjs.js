@@ -210,20 +210,22 @@ function ajax(Update=$LastUpdateTime){
 							try{
 								$("#trelec").html("<td id='delta'>&Delta; "+$delta+" W</td><td>Elec:</td><td id='elec'>"+$value+" W</td><td id='elecvandaag'>"+$mode.toString().replace(/[.]/, ",")+" kWh</td>");
 								document.getElementById("elec").style.color=$color;
-								$color=~~(256-($mode/0.1171875));
+								$color=~~(256-(($mode-10)/0.1171875));
 								$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
 								$color="#FF"+$color+"00";
-								if($mode>0)document.getElementById("elecvandaag").style.color="#FF4400";
+								if($mode>10)document.getElementById("elecvandaag").style.color=$color;
 								else document.getElementById("elecvandaag").style.color=null;
 								document.getElementById("delta").style.color=$dcolor;
 							}catch{}
 						}else if(device=="zon"){
 							localStorage.setItem(device, $value);
-							$color=$value/3.906250016;
-							$color=256-$color;
-							$color=~~$color;
-							$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
-							$color="#"+$color+"FF"+$color;
+							if($value>0){
+								$color=$value/3.906250016;
+								$color=256-$color;
+								$color=~~$color;
+								$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+								$color="#"+$color+"FF"+$color;
+							} else $color="#CCC";
 							try{
 								$("#zon").html($value+" W");
 								document.getElementById("zon").style.color=$color;
@@ -231,7 +233,8 @@ function ajax(Update=$LastUpdateTime){
 						}else if(device=="zonvandaag"){
 							try{
 								zonvandaag=parseFloat(Math.round($value*10)/10).toFixed(1);
-								$dcolor=~~(256-(-$value/0.5859375));
+								$dcolor=~~(256-(-$zonvandaag/0.5859375));
+								console.log($dcolor);
 								$dcolor=('00' + $dcolor.toString(16).toUpperCase()).slice(-2);
 								$dcolor="#"+$dcolor+"FF"+$dcolor;
 								$("#zonvandaag").html(zonvandaag.toString().replace(/[.]/, ",")+" kWh");
@@ -243,10 +246,12 @@ function ajax(Update=$LastUpdateTime){
 								if($value>0){
 									item=parseFloat(Math.round(($value/100)*100)/100).toFixed(3);
 									$("#trgas").html('<td></td><td id="tdgas">Gas:</td><td colspan="2" id="tdgasvandaag">'+item.toString().replace(/[.]/, ",")+' m<sup>3</sup>');
-									$color=~~(256-($value/0,078125));
-									$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
-									$color="#FF"+$color+"00";
-									if($value>0)document.getElementById("tdgasvandaag").style.color=$color;
+									if(item>3){
+										$color=~~(256-(item/0.078125));
+										$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
+										$color="#FF"+$color+"00";
+									} else $color="#CCC";
+									if($value>4)document.getElementById("tdgasvandaag").style.color=$color;
 									else document.getElementById("tdgasvandaag").style.color=null;
 								}else $("#trgas").html("");
 							}catch{}
@@ -345,7 +350,6 @@ function ajax(Update=$LastUpdateTime){
 								elem=$value.split(";");
 								if(elem[0]>0){
 									html=Math.round(elem[0]*100)/100+" W";
-									if(elem[1]>0)html+="<br>"+Math.round(elem[1]*100)/100/1000 +" kWh";
 									elem=document.getElementById("daikin_kWh");
 									elem.innerHTML=html;
 								}
@@ -524,6 +528,11 @@ function ajax(Update=$LastUpdateTime){
 												document.getElementById("water7200").classList.remove("btna");
 											}
 										}catch{}
+									}else if(device=="daikin") {
+										if (value=="Off") {
+											elem=document.getElementById("daikin_kWh");
+											elem.innerHTML="";
+										}
 									}else if(localStorage.getItem('view')=='floorplan'&&device=="denon"){
 										try{
 											if($value=='On')$('#denonicon').attr("src", "/images/denon_On.png");
@@ -906,7 +915,7 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Closed"){
-						$color=~~(($LastUpdateTime-tijd)/4);
+						$color=~~(($LastUpdateTime-tijd)/1.5);
 						$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
 						$color="#FF"+$color+"00";
 						if($LastUpdateTime-tijd<900)elem.style.color=$color;
@@ -934,7 +943,7 @@ function ajax(Update=$LastUpdateTime){
 					$value=localStorage.getItem(items[i]);
 					elem=document.getElementById("t"+items[i]);
 					if($value=="Off"){
-						$color=~~(($LastUpdateTime-tijd)/4);
+						$color=~~(($LastUpdateTime-tijd)/1.5);
 						$color=('00' + $color.toString(16).toUpperCase()).slice(-2);
 						$color="#FF"+$color+"00";
 						if($LastUpdateTime-tijd<900)elem.style.color=$color;
