@@ -13,7 +13,7 @@
 $user='cron120';
 $stamp=strftime("%F %T", TIME-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(tobi) AS tobi, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
-$db=dbconnect();
+if(isset($db)) $db=dbconnect();
 $result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
 foreach (array('buiten', 'living', 'badkamer', 'kamer', 'tobi', 'alex', 'zolder') as $i) {

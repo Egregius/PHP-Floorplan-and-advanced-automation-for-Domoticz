@@ -14,8 +14,7 @@ $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','tobi','alex','zolder') as $i) ${$i.'_temp'}=$d[$i.'_temp']['s'];
 $query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`tobi`,`alex`,`zolder`) VALUES ('$stamp','$buiten_temp','$living_temp','$badkamer_temp','$kamer_temp',	'$tobi_temp','$alex_temp','$zolder_temp');";
-$db = new mysqli('localhost', $dbuser, $dbpass, $dbname);
-if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
+if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','tobi','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;
@@ -279,9 +278,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if (past('deurbadkamer')>3600
-		&& $d['bose102']['s']=='0n'
-	) {
+	if (past('deurbadkamer')>3600&& $d['bose102']['s']=='0n') {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))),true);
 		if (!empty($status)) {
 			if (isset($status['@attributes']['source'])) {
@@ -292,15 +289,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if ($d['garage']['s']=='Off'
-		&&$d['pirgarage']['s']=='Off'
-		&&past('pirgarage')>90
-		&&past('bose104')>90
-		&&$d['poortrf']['s']=='Off'
-		&&$d['deurgarage']['s']=='Closed'
-		/*&&$d['achterdeur']['s']=='Closed'*/
-		&&$d['bose104']['s']=='On'
-	) {
+	if ($d['garage']['s']=='Off'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>90&&past('bose104')>90&&$d['poortrf']['s']=='Off'&&$d['deurgarage']['s']=='Closed'&&$d['bose104']['s']=='On') {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.104:8090/now_playing"))),true);
 		if (!empty($status)) {
 			if (isset($status['@attributes']['source'])) {
@@ -369,9 +358,7 @@ if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries'
 elseif ($d['diepvries']['s']!='Off'&&$d['diepvries_temp']['s']<=$set &&past('diepvries')>280) sw('diepvries', 'Off', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
 elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
 
-if ($d['water']['s']=='On') {
-	if (past('water')>$d['water']['m']) sw('water', 'Off');
-}
+if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
 
 //SMAPPEE
 $timefrom=TIME-86400;

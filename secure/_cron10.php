@@ -100,9 +100,8 @@ if ($d['daikin']['s']=='On') {
 	else $rgb=false;
 	if ($rgb!=false) {
 		$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-		if($data === FALSE) {
-			return FALSE;
-		}else{
+		if($data === FALSE) return FALSE;
+		else {
 			$array=explode(",",$data);
 			$control_info= array();
 			foreach($array as $value) {

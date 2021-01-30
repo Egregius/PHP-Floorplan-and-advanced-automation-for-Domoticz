@@ -10,39 +10,18 @@
  * @link	 https://egregius.be
  **/
 $user='cron3600';
-$sql="SELECT id,date,value
-	FROM battery t1
-	WHERE t1.date = (
-		SELECT t2.date
-		FROM battery t2
-		WHERE t2.id = t1.id
-		ORDER BY t2.date DESC
-		LIMIT 1
-	);";
+$sql="SELECT id,date,value FROM battery t1 WHERE t1.date = (SELECT t2.date FROM battery t2 WHERE t2.id = t1.id ORDER BY t2.date DESC LIMIT 1);";
 if (!isset($db)) {
 	$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
-if (!$result=$db->query($sql)) {
-	die('There was an error running the query ['.$sql.' - '.$db->error.']');
-}
+if (!$result=$db->query($sql)) die('There was an error running the query ['.$sql.' - '.$db->error.']');
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$batterydevices[]=$row['id'];
 	$items[$row['id']]=$row;
 }
 $date=strftime("%F", TIME);
-$xml=json_decode(
-	json_encode(
-		simplexml_load_string(
-			file_get_contents(
-				'/domoticz/Config/ozwcache_0xe9238f6e.xml'
-			),
-			"SimpleXMLElement",
-			LIBXML_NOCDATA
-		)
-	),
-	true
-);
+$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
 foreach ($xml['Node'] as $node) {
 	foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
 		if (isset($cmd['Value']['@attributes']['label'])) {
@@ -50,45 +29,23 @@ foreach ($xml['Node'] as $node) {
 				$id=$node['@attributes']['id'];
 				$name=$node['@attributes']['name'];
 				$value=$cmd['Value']['@attributes']['value'];
-				if ($value>100) {
-					$value=100;
-				}
-//				echo $id.' '.$name.' '.$value.'<br><pre>';print_r($cmd);echo '</pre>';
+				if ($value>100) 	$value=100;
 				if (!in_array($id, $batterydevices)) {
 					$query="INSERT INTO `batterydevices` (`id`,`name`)
 						VALUES ('$id','$name')
 						ON DUPLICATE KEY UPDATE `name`='$name';";
-					if (!$result=$db->query($query)) {
-						die(
-							'There was an error running the query ['
-							.$query.'-'.$db->error.']'
-						);
-					}
+					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');}
 				}
 				if (isset($items[$id]['value'])&&$items[$id]['value']!=$value) {
-					if ($value<50) {
-						alert(
-							'Batterij'.$name,
-							'Batterij '.$name.' '.$value.'%',
-							43200
-						);
-					}
-					$query="INSERT INTO `battery` (`date`,`id`,`value`)
-						VALUES ('$date','$id','$value')
-						ON DUPLICATE KEY UPDATE `value`='$value';";
-					if (!$result=$db->query($query)) {
-						die(
-							'There was an error running the query ['
-							.$query.'-'.$db->error.']'
-						);
-					}
+					if ($value<50) alert('Batterij'.$name,'Batterij '.$name.' '.$value.'%',43200);
+					$query="INSERT INTO `battery` (`date`,`id`,`value`) VALUES ('$date','$id','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
+					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 				}
 			}
 		}
 	}
 }
 unset($xml);
-
 
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
@@ -103,19 +60,10 @@ if (isset($data['CivTwilightStart'])) {
 	$icon=strtotime($data['SunAtSouth']);
 	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
 	if (TIME>$status&&TIME<$mode) {
-		$uv=json_decode(
-			shell_exec(
-				"curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"
-			),
-			true
-		);
+		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
 		if (isset($uv['result'])) {
-			if ($uv['result']['uv']!=$d['uv']['s']) {
-				store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
-			}
-			if ($uv['result']['uv_max']!=$d['uv']['m']) {
-				storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
-			}
+			if ($uv['result']['uv']!=$d['uv']['s']) store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
+			if ($uv['result']['uv_max']!=$d['uv']['m']) storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
@@ -261,9 +209,7 @@ $stmt = $db->query(
 	LIMIT 0,10"
 );
 $dbe=new mysqli('95.170.95.33', 'home', 'H0m€', 'verbruik');
-if ($dbe->connect_errno>0) {
-	die('Unable to connect to database ['.$dbe->connect_error.']');
-}
+if ($dbe->connect_errno>0) die('Unable to connect to database ['.$dbe->connect_error.']');
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$stamp=$row['stamp'];
 	$buiten_min=$row['buiten_min'];
