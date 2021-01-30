@@ -23,7 +23,7 @@ if ($d['auto']['s']=='On') {
 	} elseif ($d['pirgarage']['s']=='On'
 		&&$d['garageled']['s']=='Off'
 		&&$d['garage']['s']=='Off'
-		&&$d['zon']['s']<300
+		&&$d['zon']['s']==0
 	) {
 		sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 	}
