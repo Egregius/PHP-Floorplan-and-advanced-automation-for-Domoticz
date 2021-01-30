@@ -43,7 +43,6 @@ function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
-
 	foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -61,9 +60,7 @@ function huisslapen() {
 	foreach(array('tobi', 'alex') as $i) {
 		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['auto']['s']=='Off') {
-		sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
 /**
  * Function huisweg
@@ -152,25 +149,12 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
  */
 function waarschuwing($msg) {
 	global $d;
-	if ($d['bose101']['s']=='On') {
-		boseplayinfo($msg, 40);
-	}
-	if ($d['bose102']['s']=='On') {
-		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
-	}
-	if ($d['bose103']['s']=='On') {
-		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php" > /dev/null 2>/dev/null &');
-	}
-	if ($d['bose104']['s']=='On') {
-		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
-	}
-	if ($d['bose105']['s']=='On') {
-		shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php" > /dev/null 2>/dev/null &');
-	}
-
-	if ($d['Xvol']['s']!=25) {
-		sl('Xvol', 25, basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['bose101']['s']=='On') boseplayinfo($msg, 40);
+	if ($d['bose102']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
+	if ($d['bose103']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php" > /dev/null 2>/dev/null &');
+	if ($d['bose104']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+	if ($d['bose105']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php" > /dev/null 2>/dev/null &');
+	if ($d['Xvol']['s']!=25) sl('Xvol', 25, basename(__FILE__).':'.__LINE__);
 	sl('Xring', 30, basename(__FILE__).':'.__LINE__);
 	sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 	telegram($msg, false, 2);
@@ -189,20 +173,14 @@ function waarschuwing($msg) {
  */
 function past($name) {
 	global $d;
-	if (!empty($d[$name]['t'])) {
-		return TIME-$d[$name]['t'];
-	} else {
-		return 999999999;
-	}
+	if (!empty($d[$name]['t'])) return TIME-$d[$name]['t'];
+	else return 999999999;
 }
 
 function idx($name) {
 	global $d;
-	if ($d[$name]['i']>0) {
-		return $d[$name]['i'];
-	} else {
-		return 0;
-	}
+	if ($d[$name]['i']>0) return $d[$name]['i'];
+	else return 0;
 }
 function sl($name,$level,$msg='') {
 	global $user,$d,$domoticzurl;
@@ -217,29 +195,21 @@ function sl($name,$level,$msg='') {
 	} else {
 		lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
-			if ($d[$name]['s']!=$level) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-			}
-
-		} else {
-			store($name, $level, $msg);
-		}
+			if ($d[$name]['s']!=$level) 	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+		} else store($name, $level, $msg);
 	}
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
 	lg(' (RGB)		'.$user.' =>	'.$name.'	'.$level);
 	if ($d[$name]['i']>0) {
-		if ($check==false) {
-			file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
-		} else {
+		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
+		else {
 			if ($d[$name]['s']!=$$level) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 			}
 		}
-	} else {
-		store($name, $level);
-	}
+	} else store($name, $level);
 }
 function resetsecurity() {
 	global $d,$domoticzurl;
@@ -270,16 +240,10 @@ function sw($name,$action='Toggle',$msg='') {
 		$msg=' (SWITCH)		'.$user.'=>'.$name.'=>'.$action.' ('.$msg.')';
 		if ($d[$name]['i']>0) {
 			lg($msg);
-			if ($d[$name]['s']!=$action||$name=='deurbel') {
-				echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
-			}
-		} else {
-			store($name, $action, $msg);
-		}
+			if ($d[$name]['s']!=$action||$name=='deurbel') echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+		} else store($name, $action, $msg);
 		if ($name=='denon') {
-			if ($action=='Off') {
-				storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
-			}
+			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
 		} else {
    			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2','daikin'))) {
    				$stamp=TIME;
@@ -815,10 +779,10 @@ function finkom() {
 	global $d;
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if ($d['Weg']['s']==0&&$d['inkom']['s']<31&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-		sl('inkom', 31, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['Weg']['s']==0&&$d['inkom']['s']<26&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-		sl('inkom', 26, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['inkom']['s']<32&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+		sl('inkom', 32, basename(__FILE__).':'.__LINE__);
+	} elseif ($d['Weg']['s']==0&&$d['inkom']['s']<27&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+		sl('inkom', 27, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
@@ -826,10 +790,10 @@ function fhall() {
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$zonop||TIME>$zononder)) {
-		if ($d['hall']['s']<31) {
+		if ($d['hall']['s']<32) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-				if ($d['hall']['s']<31) {
-					sl('hall', 31, basename(__FILE__).':'.__LINE__);
+				if ($d['hall']['s']<32) {
+					sl('hall', 32, basename(__FILE__).':'.__LINE__);
 				}
 			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
 				if ($d['hall']['s']<27) {
