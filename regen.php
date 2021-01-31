@@ -296,14 +296,14 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		echo '<h3>Pluviometer per maand</h3>';
-		$args['colors']=array('#4C4','#44C');
+		$args['colors']=array('#44CC44','#4444CC');
 		$args['chart_div']='pluviomonth';
 		//$args['chart']='ComboChart';
 		$args['raw_options']='
 			lineWidth:3,
 			series: {
 				0: {type: "steppedArea", areaOpacity:0.3},
-				1: {type: "bars", areaOpacity:0.1, groupWidth:10}
+				1: {type: "bars", areaOpacity:0.1, groupWidth:40}
 			},
 			hAxis: {
 				showTextEvery: 1,
@@ -325,7 +325,7 @@ if ($home===true) {
 			},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
-			bar:{groupWidth:60}';
+			bar:{groupWidth:40}';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo $chart['script'];
 		echo $chart['div'];
