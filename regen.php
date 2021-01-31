@@ -27,7 +27,7 @@ if ($home===true) {
 		$value=$_POST['addregen'];
 		$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
 		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
-		
+
 	}
 	if (isset($_REQUEST['add'])) {
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -252,7 +252,7 @@ if ($home===true) {
 		$query="SELECT month, rain FROM `pluvioklimaat`;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
-		
+
 		$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 		while ($row=$result->fetch_assoc()) {
@@ -267,66 +267,65 @@ if ($home===true) {
 		$args['colors']=array('#44C');
 		$args['hide_legend']=true;
 		$args['chart_div']='pluvioday';
-		$args['raw_options']='seriesType:"bars",seriesDefaults: {
-
-            rendererOptions: {
-                barPadding: -50,
-                barMargin: -50
-            }
-        },
-				hAxis: {
-					showTextEvery: 100,
-					textStyle: {color: "#000", fontSize: 1}
+		$args['raw_options']='seriesType:"bars",
+			seriesDefaults: {
+				rendererOptions: {
+					barPadding: -50,
+					barMargin: -50
+				}
+			},
+			hAxis: {
+				showTextEvery: 100,
+				textStyle: {color: "#000", fontSize: 1}
+			},
+			vAxis: {
+				format:"#",
+				textStyle: {color: "#AAA", fontSize: 14},
+				Gridlines: {
+					multiple: 2
 				},
-				vAxis: {
-					format:"#",
-					textStyle: {color: "#AAA", fontSize: 14},
-					Gridlines: {
-						multiple: 2
-					},
-					minorGridlines: {
-						multiple: 0
-					}
-				  },
-				theme:"maximized",
-				chartArea:{left:0,top:0,width:"100%",height:"100%"},
-				bar:{groupWidth:100}';
-        $chart=array_to_chart($pluvio, $args);
+				minorGridlines: {
+					multiple: 0
+				}
+			  },
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"},
+			bar:{groupWidth:90}';
+		$chart=array_to_chart($pluvio, $args);
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
 		echo '<h3>Pluviometer per maand</h3>';
+		$args['colors']=array('#4C4','#44C');
 		$args['chart_div']='pluviomonth';
-		$args['chart']='ComboChart';
+		//$args['chart']='ComboChart';
 		$args['raw_options']='
 			lineWidth:3,
-        	seriesType:"steppedArea",
 			series: {
-				0: {type: "steppedArea", areaOpacity:0.2},
-				1: {type: "bars", areaOpacity:0.7, groupWidth:60}
+				0: {type: "steppedArea", areaOpacity:0.3},
+				1: {type: "bars", areaOpacity:0.1, groupWidth:10}
 			},
-				hAxis: {
-					showTextEvery: 1,
-					textStyle: {color: "#DDD", fontSize: 0}
+			hAxis: {
+				showTextEvery: 1,
+				textStyle: {color: "#EEE", fontSize: 0}
+			},
+			vAxis: {
+				format:"#",
+				textStyle: {color: "#CCC", fontSize: 14},
+				Gridlines: {
+					multiple: 10
 				},
-				vAxis: {
-					format:"#",
-					textStyle: {color: "#AAA", fontSize: 14},
-					Gridlines: {
-						multiple: 20
-					},
-					minorGridlines: {
-						multiple: 10
-					},
-					viewWindowMode:\'explicit\',
-					 viewWindow:{
-						min:0
-					  },
-					 
-				  },
-				theme:"maximized",
-				chartArea:{left:0,top:0,width:"100%",height:"100%"},
-				bar:{groupWidth:60}';
+				minorGridlines: {
+					multiple: 10
+				},
+				viewWindowMode:\'explicit\',
+				viewWindow:{
+					min:0
+				},
+			},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"},
+			bar:{groupWidth:60}';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo $chart['script'];
 		echo $chart['div'];
