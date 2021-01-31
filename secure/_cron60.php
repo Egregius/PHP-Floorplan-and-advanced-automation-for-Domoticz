@@ -105,11 +105,11 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		if ($d['Weg']['s']==0&&TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
-			if ($d['luchtwasser']['s']=='Off') sw('luchtwasser', 'On', basename(__FILE__).':'.__LINE__);
-		} else {
-			if ($d['luchtwasser']['s']=='On') sw('luchtwasser', 'Off', basename(__FILE__).':'.__LINE__);
-		}
+//		if ($d['Weg']['s']==0&&TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
+//			if ($d['luchtwasser']['s']=='Off') sw('luchtwasser', 'On', basename(__FILE__).':'.__LINE__);
+//		} else {
+//			if ($d['luchtwasser']['s']=='On') sw('luchtwasser', 'Off', basename(__FILE__).':'.__LINE__);
+//		}
 	}
 	/* -------------------------------------------- SLAPEN --------------------------*/
 	if ($d['Weg']['s']==1) {

@@ -17,7 +17,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>120&&past('poort')>90&&past('deurgarage')>90&&past('garage')>240&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>120&&past('zolderg')>120) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
-		foreach (array(32,30,28,26,24,0) as $i) {
+		foreach (array(30,28,26,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -46,13 +46,6 @@ if ($d['tv']['s']=='On') {
 			sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 			apcu_store('lgtv-offline', 0);
 		}
-		/*if ($d['denon']['s']!='On'
-			&&past('denon')>30
-			&&$d['Weg']['s']==0
-		) {
-			sw('denon', 'On', basename(__FILE__).':'.__LINE__);
-			storemode('denon', 'TV', basename(__FILE__).':'.__LINE__);
-		}*/
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
@@ -122,7 +115,5 @@ if ($d['daikin']['s']=='On') {
 		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($d['Weg']['s']>0||$d['daikin']['s']=='Off') {
-	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-}
+if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 if (past('wind')>86) require('_weather.php');

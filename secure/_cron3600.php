@@ -34,7 +34,7 @@ foreach ($xml['Node'] as $node) {
 					$query="INSERT INTO `batterydevices` (`id`,`name`)
 						VALUES ('$id','$name')
 						ON DUPLICATE KEY UPDATE `name`='$name';";
-					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');}
+					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 				}
 				if (isset($items[$id]['value'])&&$items[$id]['value']!=$value) {
 					if ($value<50) alert('Batterij'.$name,'Batterij '.$name.' '.$value.'%',43200);

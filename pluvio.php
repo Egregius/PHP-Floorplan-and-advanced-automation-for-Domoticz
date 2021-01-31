@@ -53,7 +53,7 @@ session_start();
 				 viewWindowMode:\'explicit\',
 				 viewWindow:{
 					min:0
-				  },
+				},
 				 textStyle: {color: "#FFFFFF", fontSize: 18}
 			},
 			series:{
@@ -86,7 +86,7 @@ session_start();
 	$query="SELECT month, rain FROM `pluvioklimaat`;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
-	
+
 	$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) {
@@ -130,6 +130,7 @@ session_start();
 	echo $chart['div'];
 	unset($chart);
 	echo '</div><div style="float:left;margin:30px"><h3>Pluviometer per maand</h3>';
+	$args['colors']=array('#FFC','#44C');
 	$args['chart_div']='pluviomonth';
 	$args['chart']='ComboChart';
 	$args['raw_options']='
@@ -156,7 +157,7 @@ session_start();
 				 viewWindow:{
 					min:0
 				  },
-				 
+
 			  },
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
