@@ -184,15 +184,10 @@ elseif (isset($dswind)) $wind=round($dswind,1);
 store('wind', $wind, basename(__FILE__).':'.__LINE__);
 
 if($newbuitentemp!=$prevbuitentemp) lg($msg);
-if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) {
-	$newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
-} elseif (isset($d['buien']['s'])&&isset($buienradar)) {
-	$newbuien=($d['buien']['s']+$buienradar)/2;
-} elseif (isset($d['buien']['s'])&&isset($dsbuien)) {
-	$newbuien=($d['buien']['s']+$dsbuien)/2;
-} elseif (isset($dsbuien)) {
-	$newbuien=$dsbuien;
-}
+if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
+elseif (isset($d['buien']['s'])&&isset($buienradar)) $newbuien=($d['buien']['s']+$buienradar)/2;
+elseif (isset($d['buien']['s'])&&isset($dsbuien)) $newbuien=($d['buien']['s']+$dsbuien)/2;
+elseif (isset($dsbuien)) $newbuien=$dsbuien;
 if (isset($newbuien)&&$newbuien>100) $newbuien=100;
 if (isset($dsbuien)&&$dsbuien>100) $dsbuien=100;
 if ($newbuien<1) $newbuien=0;
@@ -203,18 +198,11 @@ if (!isset($dsbuien)) $dsbuien=0;
 if (!isset($newbuien)) $newbuien=0;
 if ($buienradar>100) $buienradar=100;
 if ($buien>100) $buien=100;
-$db->query(
-	"INSERT IGNORE INTO `regen`
-		(`buienradar`,`darksky`,`buien`)
-	VALUES
-		('$buienradar','$dsbuien','$buien');"
-);
-if ($buienradar>0||$dsbuien>0||$buien>0) {
-	lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
-}
+$db->query("INSERT IGNORE INTO `regen` (`buienradar`,`darksky`,`buien`) VALUES ('$buienradar','$dsbuien','$buien');");
+if ($buienradar>0||$dsbuien>0||$buien>0) lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2	&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<5) { // Aircocooling
+	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<5) { // Aircocooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=20) $luifel=40;
 		else $luifel=50;
@@ -223,15 +211,15 @@ if ($d['auto']['s']=='On') {
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>21.5 &&TIME>=strtotime("10:00")&&$buien<5) { // Passive Cooling
-		if ($wind>=30) 	 $luifel=0;
+		if ($wind>=30)  $luifel=0;
 		elseif ($wind>=10) $luifel=35;
 		else $luifel=45;
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0	&&$d['living_temp']['s']>23&&TIME>=strtotime("10:00")&&$buien<5) { // Neutral
-		if ($wind>=30) 	 $luifel=0;
+	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>23&&TIME>=strtotime("10:00")&&$buien<5) { // Neutral
+		if ($wind>=30) 	$luifel=0;
 		elseif ($wind>=10) $luifel=30;
 		else $luifel=40;
 		if ($d['luifel']['m']==0) {

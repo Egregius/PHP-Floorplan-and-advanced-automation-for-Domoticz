@@ -47,7 +47,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['Weg']['s']>0) {
 				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			} else {
-				if ($dag==false) {
+				if (TIME<$d['civil_twilight']['s']||TIME>$d['civil_twilight']['m']) {
 					foreach (array('Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}

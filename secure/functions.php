@@ -696,7 +696,7 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
 	} elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		if ($d['jbl']['s']=='Off') sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
@@ -713,7 +713,7 @@ function fhall() {
 		if ($d['hall']['s']<32) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
 				if ($d['hall']['s']<32) sl('hall', 32, basename(__FILE__).':'.__LINE__);
-			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0) {
+			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0&&$d['hall']['s']<27) {
 				if ($d['hall']['s']<27) sl('hall', 27, basename(__FILE__).':'.__LINE__);
 			}
 		}
