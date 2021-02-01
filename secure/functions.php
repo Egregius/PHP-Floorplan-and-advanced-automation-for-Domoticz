@@ -696,9 +696,7 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))&&(TIME<$zonop||TIME>$zononder)) {
+	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 		sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
 	} elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['keuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['werkblad1']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		if ($d['jbl']['s']=='Off') sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
@@ -706,16 +704,12 @@ function fkeuken() {
 }
 function finkom() {
 	global $d;
-	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if ($d['Weg']['s']==0&&$d['inkom']['s']<32&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sl('inkom', 32, basename(__FILE__).':'.__LINE__);
-	elseif ($d['Weg']['s']==0&&$d['inkom']['s']<27&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sl('inkom', 27, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['inkom']['s']<32&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 32, basename(__FILE__).':'.__LINE__);
+	elseif ($d['Weg']['s']==0&&$d['inkom']['s']<27&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 27, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
-	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$zonop||TIME>$zononder)) {
+	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
 		if ($d['hall']['s']<32) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
 				if ($d['hall']['s']<32) sl('hall', 32, basename(__FILE__).':'.__LINE__);
