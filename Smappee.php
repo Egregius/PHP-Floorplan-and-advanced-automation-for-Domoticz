@@ -47,7 +47,7 @@ if ($home===true) {
 	echo '
 				</select>
 			</form>';
-	$colors=array('#FFFFFF','#FF0000','#00FF00','#0000FF','#FFFFFF','#FFFFFF');
+	$colors=array('#FFFFFF','#FF0000','#00FF00','#0000FF','#FFFF00');
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
 	$args=array(
@@ -92,7 +92,7 @@ if ($home===true) {
 	$time=time();
 	if ($_REQUEST['periode']=='kwartaal') $months=array('01'=>'Jan-Feb-Maa','04'=>'April-Mei-Jun','07'=>'Jul-Aug-Sep','10'=>'Okt-Nov-Dec');
 	else $months=array('01'=>'Januari','02'=>'Februari','03'=>'Maart','04'=>'April','05'=>'Mei','06'=>'Juni','07'=>'Juli','08'=>'Augustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'December');
-	for($y=2017;$y<=strftime("%Y",$time);$y++){
+	for($y=2018;$y<=strftime("%Y",$time);$y++){
 		foreach($months as $m=>$ms){
 			foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
 				${$t}[$m]['Maand']=$ms;
@@ -117,7 +117,11 @@ if ($home===true) {
 	$result->free();
 	foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
 		echo '<h1>'.$t.'</h1>';
-		foreach ($colors as $c) echo '<span style="color:'.$c.'">2017</span>';
+		$y=2017;
+		foreach ($colors as $c) {
+			echo ' <span style="color:'.$c.'"> '.$y.' </span> &nbsp; ';
+			$y++;
+		}
 		$args['chart_div']=$t;
 		$chart=array_to_chart(${$t}, $args);
 		echo $chart['script'];
