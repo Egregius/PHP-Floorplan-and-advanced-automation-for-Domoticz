@@ -47,13 +47,11 @@ if ($home===true) {
 	echo '
 				</select>
 			</form>';
-	$colors=array('#FFFFFF','#FF0000','#00FF00','#0000FF','#FFFF00');
+	$colors=array('#FF0000','#00FF00','#0000FF','#FFFF00');
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
 	$args=array(
-			'width'=>1100,
-			'height'=>1500,
-			'hide_legend'=>false,
+			'hide_legend'=>true,
 			'responsive'=>true,
 			'background_color'=>'#000',
 			'colors'=>$colors,
@@ -86,8 +84,8 @@ if ($home===true) {
 			'
 	);
 	if ($udevice=='iPad') {$args['width']=1000;$args['height']=880;}
-	elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
-	elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
+	elseif ($udevice=='iPhone') {$args['width']=400;$args['height']=550;}
+	elseif ($udevice=='Mac') {$args['width']=490;$args['height']=720;}
 	else {$args['width']=460;$args['height']=200;}
 	$time=time();
 	if ($_REQUEST['periode']=='kwartaal') $months=array('01'=>'Jan-Feb-Maa','04'=>'April-Mei-Jun','07'=>'Jul-Aug-Sep','10'=>'Okt-Nov-Dec');
@@ -104,7 +102,7 @@ if ($home===true) {
 	$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `$table` ORDER BY timestamp ASC";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
+		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';exit;
 	}
 	while ($row=$result->fetch_assoc()) {
 		$y=strftime("%Y", $row['timestamp']);
@@ -116,8 +114,8 @@ if ($home===true) {
 	}
 	$result->free();
 	foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
-		echo '<h1>'.$t.'</h1>';
-		$y=2017;
+		echo '<a href="Smappee.php?periode='.$_REQUEST['periode'].'"><h1>'.$t.'</h1></a>';
+		$y=2018;
 		foreach ($colors as $c) {
 			echo ' <span style="color:'.$c.'"> '.$y.' </span> &nbsp; ';
 			$y++;
@@ -128,124 +126,6 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart);
 		//echo '<pre>';print_r(${$t});echo '</pre>';
-	}
-	exit;
-
-
-
-
-
-	echo '<h3>Pluviometer per dag</h3>';
-	$args['chart']='ColumnChart';
-	$args['margins']=array(0,0,50,50);
-	$args['colors']=array('#44C');
-	$args['hide_legend']=true;
-	$args['chart_div']='pluvioday';
-	$args['raw_options']='seriesType:"bars",
-		seriesDefaults: {
-			rendererOptions: {
-				barPadding: -50,
-				barMargin: -50
-			}
-		},
-		hAxis: {
-			showTextEvery: 100,
-			textStyle: {color: "#000", fontSize: 1}
-		},
-		vAxis: {
-			format:"#",
-			textStyle: {color: "#AAA", fontSize: 14},
-			Gridlines: {
-				multiple: 2
-			},
-			minorGridlines: {
-				multiple: 0
-			}
-		  },
-		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		bar:{groupWidth:90}';
-	$chart=array_to_chart($pluvio, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart);
-	echo '<h3>Pluviometer per maand</h3>';
-	$args['colors']=array('#44CC44','#4444CC');
-	$args['chart_div']='pluviomonth';
-	//$args['chart']='ComboChart';
-	$args['raw_options']='
-		lineWidth:3,
-		series: {
-			0: {type: "steppedArea", areaOpacity:0.3},
-			1: {type: "bars", areaOpacity:0.1, groupWidth:40}
-		},
-		hAxis: {
-			showTextEvery: 1,
-			textStyle: {color: "#EEE", fontSize: 0}
-		},
-		vAxis: {
-			format:"#",
-			textStyle: {color: "#CCC", fontSize: 14},
-			Gridlines: {
-				multiple: 10
-			},
-			minorGridlines: {
-				multiple: 10
-			},
-			viewWindowMode:\'explicit\',
-			viewWindow:{
-				min:0
-			},
-		},
-		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		bar:{groupWidth:40}';
-	$chart=array_to_chart($pluviomaand, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart);
-	$total=0;
-	$current=0;
-	foreach ($pluviomaand as $i) {
-		$total=$total+$i['Normaal'];
-		$current=$current+$i['Regen'];
-	}
-	echo '<h3><center>'.$current.' mm / '.$total.' mm = '.(number_format(($current/$total)*100, 0)).' %</center></h3>';
-	//echo '<pre>';print_r($pluviomaand);echo '</pre>';
-	echo '
-		<table>
-			<thead>
-				<tr>
-					<th>Maand</th>
-					<th>Regen</th>
-					<th>Normaal</th>
-					<th>Procent</th>
-				</tr>
-			</thead>
-			<tbody>';
-	foreach ($pluviomaand as $i) {
-		echo '
-				<tr>
-					<td>'.$i['Maand'].'</td>
-					<td> '.number_format($i['Regen'], 0).' mm </td>
-					<td> '.$i['Normaal'].' mm </td>
-					<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 0, ',', '.').' % </td>
-				</tr>';
-	}
-	echo '
-			</tbody>
-		</table>
-		<br>
-		<br>
-		<br>';
-	end:
-	if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
-		$togo=61-date("s");
-		if ($togo<15) {
-			$togo=15;
-		}
-		$togo=$togo*1000+2000;
-		echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 	}
 	$db->close();
 } else {
