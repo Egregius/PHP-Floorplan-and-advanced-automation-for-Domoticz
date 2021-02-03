@@ -38,9 +38,13 @@ if ($home===true) {
 				<input type="submit" class="btn b2" value="Plan"/>
 			</form>
 			<form action="/Smappee.php">
-				<select name="f_jaren" class="btn b4 btna" onchange="this.form.submit()"/>';
+				<select name="periode" class="btn b4 btna" onchange="this.form.submit()"/>';
+	if (!isset($_REQUEST['periode'])) $_REQUEST['periode']='maand';
+	foreach (array('kwartaal', 'maand') as $k) {
+		if ($k==$_REQUEST['periode']) echo '<option value="'.$k.'" selected>'.$k.'</option>';
+		else echo '<option value="'.$k.'">'.$k.'</option>';
+	}
 	echo '
-
 				</select>
 			</form>';
 
@@ -49,10 +53,9 @@ if ($home===true) {
 	$args=array(
 			'width'=>1000,
 			'height'=>880,
-			'hide_legend'=>true,
+			'hide_legend'=>false,
 			'responsive'=>false,
 			'background_color'=>'#000',
-			'chart_div'=>'graph',
 			'colors'=>array('#FFFFFF','#FF0000','#00FF00','#0000FF','#FFFFFF','#FFFFFF'),
 			'margins'=>array(0,0,0,50),
 			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
@@ -93,11 +96,14 @@ if ($home===true) {
 	for($y=2017;$y<=strftime("%Y",$time);$y++){
 		$months=array('01'=>'Januari','02'=>'Februari','03'=>'Maart','04'=>'April','05'=>'Mei','06'=>'Juni','07'=>'Juli','08'=>'Augustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'December');
 		foreach($months as $m=>$ms){
-			$consumption[$m]['Maand']=$ms;
-			$consumption[$m][$y]=0;
+			foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+				${$t}[$m]['Maand']=$ms;
+				${$t}[$m][$y]=0;
+			}
 		}
 	}
-	$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `smappee_kwartaal` ORDER BY timestamp ASC";
+	$table='smappee_'.$_REQUEST['periode'];
+	$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `$table` ORDER BY timestamp ASC";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	if ($result->num_rows==0) {
 		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
@@ -105,14 +111,21 @@ if ($home===true) {
 	while ($row=$result->fetch_assoc()) {
 		$y=strftime("%Y", $row['timestamp']);
 		$m=strftime("%m", $row['timestamp']);
-		$consumption[$m][$y]=$row['consumption']/1000;
+		foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+			if (startsWith($t, 'self')) ${$t}[$m][$y]=$row[$t];
+			else ${$t}[$m][$y]=$row[$t]/1000;
+		}
 	}
 	$result->free();
-	$chart=array_to_chart($consumption, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart);
-	echo '<pre>';print_r($consumption);echo '</pre>';
+	foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+		echo '<h1>'.$t.'</h1>';
+		$args['chart_div']=$t;
+		$chart=array_to_chart(${$t}, $args);
+		echo $chart['script'];
+		echo $chart['div'];
+		unset($chart);
+		//echo '<pre>';print_r(${$t});echo '</pre>';
+	}
 	exit;
 
 
