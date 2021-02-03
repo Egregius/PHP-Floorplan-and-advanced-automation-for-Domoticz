@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-$timefrom=TIME-(86400*7);
+$timefrom=TIME-(86400*7000);
 //$timefrom=0;
 $chauth = curl_init(
 	'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
@@ -41,7 +41,7 @@ if (!empty($objauth)) {
 		$chconsumption,
 		CURLOPT_URL,
 		'https://app1pub.smappee.net/dev/v1/servicelocation/'.
-		$smappeeserviceLocationId.'/consumption?aggregation=2&from='.
+		$smappeeserviceLocationId.'/consumption?aggregation=5&from='.
 		$timefrom.'000&to='.
 		TIME.'000'
 	);
