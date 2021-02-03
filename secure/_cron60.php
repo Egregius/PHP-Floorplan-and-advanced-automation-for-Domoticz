@@ -27,34 +27,18 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirkeuken']['s']=='Off') {
 			$uit=235;
 			if (past('pirkeuken')>$uit) {
-				foreach (array('keuken','wasbak','kookplaat','werkblad1') as $i) {
-					if ($d[$i]['s']!='Off') {
-						if (past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-					}
-				}
+				foreach (array('keuken','wasbak','kookplaat','werkblad1') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureel') as $i) {
-					if ($d[$i]['s']!='Off') {
-						if (past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-					}
-				}
-				foreach (array('eettafel','zithoek') as $i) {
-					if ($d[$i]['s']>0) {
-						if (past($i)>$uit) storemode($i, 1, basename(__FILE__).':'.__LINE__);
-					}
-				}
+				foreach (array('bureel') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('eettafel','zithoek') as $i) if ($d[$i]['s']>0&&past($i)>$uit) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
-				foreach (array('tvled','kristal','jbl') as $i) {
-					if ($d[$i]['s']!='Off') {
-						if (past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-					}
-				}
+				foreach (array('tvled','kristal','jbl') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
@@ -359,54 +343,3 @@ elseif ($d['diepvries']['s']!='Off'&&$d['diepvries_temp']['s']<=$set &&past('die
 elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
 
 if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
-
-//SMAPPEE
-$timefrom=TIME-86400;
-$chauth = curl_init(
-	'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
-	$smappeeclient_id.'&client_secret='.
-	$smappeeclient_secret.'&username='.
-	$smappeeusername.'&password='.
-	$smappeepassword.''
-);
-curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
-curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
-curl_setopt($chauth, CURLOPT_VERBOSE, 0);
-curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
-$objauth=json_decode(curl_exec($chauth));
-if (!empty($objauth)) {
-	$access=$objauth->{'access_token'};
-	curl_close($chauth);
-	$chconsumption=curl_init('');
-	curl_setopt($chconsumption, CURLOPT_HEADER, 0);
-	$headers=array('Authorization: Bearer '.$access);
-	curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
-	curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
-	curl_setopt(
-		$chconsumption,
-		CURLOPT_URL,
-		'https://app1pub.smappee.net/dev/v1/servicelocation/'.
-		$smappeeserviceLocationId.'/consumption?aggregation=3&from='.
-		$timefrom.'000&to='.
-		TIME.'000'
-	);
-	curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
-	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
-	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
-	$data=json_decode(curl_exec($chconsumption), true);
-	if (!empty($data['consumptions'])) {
-		$vv=round($data['consumptions'][0]['consumption']/1000, 1);
-		if ($d['el']['m']!=$vv) storemode('el', $vv, basename(__FILE__).':'.__LINE__);
-		$zonvandaag=round($data['consumptions'][0]['solar']/1000, 1);
-		if ($d['zonvandaag']['s']!=$zonvandaag) store('zonvandaag', $zonvandaag, basename(__FILE__).':'.__LINE__);
-		$gas=$d['gasvandaag']['s']/100;
-		$water=$d['watervandaag']['s']/1000;
-
-		@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
-	}
-	curl_close($chconsumption);
-}
