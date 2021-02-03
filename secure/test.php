@@ -13,8 +13,55 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-echo '<pre>';print_r($data);
+$timefrom=TIME-(86400*7);
+//$timefrom=0;
+$chauth = curl_init(
+	'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
+	$smappeeclient_id.'&client_secret='.
+	$smappeeclient_secret.'&username='.
+	$smappeeusername.'&password='.
+	$smappeepassword.''
+);
+curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
+curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($chauth, CURLOPT_VERBOSE, 0);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
+$objauth=json_decode(curl_exec($chauth));
+if (!empty($objauth)) {
+	$access=$objauth->{'access_token'};
+	curl_close($chauth);
+	$chconsumption=curl_init('');
+	curl_setopt($chconsumption, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
+	curl_setopt(
+		$chconsumption,
+		CURLOPT_URL,
+		'https://app1pub.smappee.net/dev/v1/servicelocation/'.
+		$smappeeserviceLocationId.'/consumption?aggregation=2&from='.
+		$timefrom.'000&to='.
+		TIME.'000'
+	);
+	curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
+	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($chconsumption), true);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+		}
+		echo '<pre>';print_r($data);
+	}
+	curl_close($chconsumption);
+}
+
+
+
 
 
 /*-------------------------------------------------*/
