@@ -13,8 +13,6 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-$timefrom=TIME-(86400*7);
-//$timefrom=0;
 $chauth = curl_init('https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.$smappeeclient_id.'&client_secret='.$smappeeclient_secret.'&username='.$smappeeusername.'&password='.$smappeepassword.'');
 curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
 curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
@@ -24,8 +22,10 @@ curl_setopt($chauth, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
 $objauth=json_decode(curl_exec($chauth));
 if (!empty($objauth)) {
+	echo 'Kwartaal<br>';
 	$access=$objauth->{'access_token'};
 	curl_close($chauth);
+	$timefrom=TIME-(86400*185);
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
@@ -53,7 +53,8 @@ if (!empty($objauth)) {
 		}
 	}
 	curl_close($ch);
-	echo '<hr>';
+	echo '<hr>Maand<br>';
+	$timefrom=TIME-(86400*60);
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
@@ -81,7 +82,8 @@ if (!empty($objauth)) {
 		}
 	}
 	curl_close($ch);
-	echo '<hr>';
+	echo '<hr>Dag<br>';
+	$timefrom=TIME-(86400*3);
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
@@ -109,7 +111,8 @@ if (!empty($objauth)) {
 		}
 	}
 	curl_close($ch);
-	echo '<hr>';
+	echo '<hr>Uur<br>';
+	$timefrom=TIME-14400;
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
@@ -137,7 +140,8 @@ if (!empty($objauth)) {
 		}
 	}
 	curl_close($ch);
-	echo '<hr>';
+	echo '<hr>5min<br>';
+	$timefrom=TIME-7200;
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
