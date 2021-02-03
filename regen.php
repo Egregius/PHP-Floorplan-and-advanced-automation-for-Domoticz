@@ -15,9 +15,7 @@ require 'scripts/chart.php';
 if ($home===true) {
 	if (isset($_POST['addregen'])) {
 		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-		if ($db->connect_errno>0) {
-			die('Unable to connect to database [' . $db->connect_error . ']');
-		}
+		if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
 		/*for ($x=60;$x>=1;$x--) {
 			$date=date("Y-m-d", (TIME-($x*86400)));
 			$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
@@ -26,7 +24,7 @@ if ($home===true) {
 		$date=date("Y-m-d", TIME);
 		$value=$_POST['addregen'];
 		$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
-		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
+		if(!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 
 	}
 	if (isset($_REQUEST['add'])) {
@@ -45,8 +43,7 @@ if ($home===true) {
 					.btn{margin-left:0!important;}
 				</style>
 			</head>';
-		if ($udevice=='iPad') {
-			echo '
+		if ($udevice=='iPad') echo '
 			<body style="width:800px">
 				<form action="/floorplan.php">
 					<input type="submit" class="btn b5" value="Plan"/>
@@ -58,8 +55,7 @@ if ($home===true) {
 					<input type="submit" class="btn b5" value="Regen"/>
 					<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 				</form>';
-		} else {
-			echo '
+		else echo '
 			<body style="width:100%">
 				<form action="/floorplan.php">
 					<input type="submit" class="btn b3" value="Plan"/>
@@ -71,13 +67,9 @@ if ($home===true) {
 					<input type="submit" class="btn b3" value="Regen"/>
 					<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 				</form>';
-		}
 		echo '<form action="/regen.php" method="POST">';
-		$items=array(0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40);
-		foreach ($items as $i) {
-			echo '
+		foreach (array(0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40) as $i) echo '
 					<input type="submit" class="btn b5" name="addregen" value="'.$i.'" style="height:70px"/>';
-		}
 		echo '
 				</form>';
 	} else {
@@ -85,45 +77,17 @@ if ($home===true) {
 			error_reporting(E_ALL);
 			ini_set("display_errors", "on");
 		}
-		$sensor=998;
-		if (isset($_REQUEST['sensor'])) {
-			$sensor=$_REQUEST['sensor'];
-		}
-		if (isset($_REQUEST['f_startdate'])) {
-			$_SESSION['f_startdate']=$_REQUEST['f_startdate'];
-		}
-		if (isset($_REQUEST['f_enddate'])) {
-			$_SESSION['f_enddate']=$_REQUEST['f_enddate'];
-		}
-		if (isset($_REQUEST['f_setpoints'])) {
-			$_SESSION['f_setpoints']==0?$_SESSION['f_setpoints']=1:$_SESSION['f_setpoints']=0;
-		}
-		if (isset($_REQUEST['f_heater'])) {
-			$_SESSION['f_heater']==0?$_SESSION['f_heater']=1:$_SESSION['f_heater']=0;
-		}
-		if (!isset($_SESSION['f_startdate'])) {
-			$_SESSION['f_startdate']=date("Y-m-d", TIME-86400);
-		}
-		if (!isset($_SESSION['f_enddate'])) {
-			$_SESSION['f_enddate']=date("Y-m-d", TIME);
-		}
-		if (!isset($_SESSION['f_setpoints'])) {
-			$_SESSION['f_setpoints']=0;
-		}
-		if (!isset($_SESSION['f_heater'])) {
-			$_SESSION['f_heater']=0;
-		}
+		if (isset($_REQUEST['f_startdate'])) $_SESSION['f_startdate']=$_REQUEST['f_startdate'];
+		if (isset($_REQUEST['f_enddate'])) $_SESSION['f_enddate']=$_REQUEST['f_enddate'];
+		if (!isset($_SESSION['f_startdate'])) $_SESSION['f_startdate']=date("Y-m-d", TIME-86400);
+		if (!isset($_SESSION['f_enddate'])) $_SESSION['f_enddate']=date("Y-m-d", TIME);
 		if (isset($_REQUEST['clear'])) {
 			$_SESSION['f_startdate']=$_REQUEST['r_startdate'];
 			$_SESSION['f_startdate']=$_REQUEST['r_startdate'];
 		}
-		if ($_SESSION['f_startdate']>$_SESSION['f_enddate']) {
-			$_SESSION['f_enddate']=$_SESSION['f_startdate'];
-		}
+		if ($_SESSION['f_startdate']>$_SESSION['f_enddate']) $_SESSION['f_enddate']=$_SESSION['f_startdate'];
 		$f_startdate=$_SESSION['f_startdate'];
 		$f_enddate=$_SESSION['f_enddate'];
-		$f_setpoints=$_SESSION['f_setpoints'];
-		$f_heater=$_SESSION['f_heater'];
 		$r_startdate=date("Y-m-d", TIME);
 		$r_enddate=date("Y-m-d", TIME);
 		$maand=date("Y-m", strtotime($f_startdate));
@@ -145,8 +109,7 @@ if ($home===true) {
 				</style>
 				<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 			</head>';
-		if ($udevice=='iPad') {
-			echo '
+		if ($udevice=='iPad') echo '
 			<body style="width:800px">
 				<form action="/floorplan.php">
 					<input type="submit" class="btn b5" value="Plan"/>
@@ -158,8 +121,7 @@ if ($home===true) {
 					<input type="submit" class="btn btna b5" value="Regen"/>
 					<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
 				</form>';
-		} else {
-			echo '
+		else echo '
 			<body style="width:100%">
 				<form action="/floorplan.php">
 					<input type="submit" class="btn b3" value="Plan"/>
@@ -171,11 +133,8 @@ if ($home===true) {
 					<input type="submit" class="btn btna b3" value="Regen"/>
 					<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
 				</form>';
-		}
 		$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-		if ($db->connect_errno>0) {
-			die('Unable to connect to database [' . $db->connect_error . ']');
-		}
+		if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
 		$eendag=TIME-86400*2;$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
 		$eenweek=TIME-86400*7;$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
 		$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
@@ -188,58 +147,51 @@ if ($home===true) {
 					&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buienradar.'">Buienradar</font></a>
 					&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$darksky.'">DarkSky</font></a>
 					&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buien.'">Buien</font></a>
-				</div>
-	';
+				</div>';
 		echo $legend;
 		$colors=array($buienradar,$darksky,$buien);
 		$query="SELECT DATE_FORMAT(stamp, '%W %H:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY DATE_FORMAT(stamp, '%Y%m%d%H%i') ASC";
 		$args=array(
-				'width'=>1000,
-				'height'=>880,
-				'hide_legend'=>true,
-				'responsive'=>false,
-				'background_color'=>'#000',
-				'chart_div'=>'graph',
-				'colors'=>$colors,
-				'margins'=>array(0,0,0,50),
-				'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
-				'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-				 'raw_options'=>'vAxis: {
-					 viewWindowMode:\'explicit\',
-					 viewWindow:{
-						min:0
-					  },
-					 textStyle: {color: "#FFFFFF", fontSize: 18}
-				},
-				series:{
-					0:{lineDashStyle:[2,2]},
-					1:{lineDashStyle:[2,2]},
-					3:{lineDashStyle:[0,0],pointSize:5},
-				},
-				hAxis: {
-					showTextEvery: 300,
-					textStyle: {color: "#DDD", fontSize: 0}
-				},
-				vAxis: {
-					format:"#",
-					textStyle: {color: "#AAA", fontSize: 14},
-					Gridlines: {
-						multiple: 20
-					},
-					minorGridlines: {
-						multiple: 10
-					}
+			'width'=>1000,
+			'height'=>880,
+			'hide_legend'=>true,
+			'responsive'=>false,
+			'background_color'=>'#000',
+			'chart_div'=>'graph',
+			'colors'=>$colors,
+			'margins'=>array(0,0,0,50),
+			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
+			'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
+			 'raw_options'=>'vAxis:{
+				 viewWindowMode:\'explicit\',
+				 viewWindow:{
+					min:0
 				  },
-				chartArea:{left:0,top:0,width:"100%",height:"100%"}'
-        );
+				 textStyle:{color:"#FFFFFF", fontSize:18}
+			},
+			series:{
+				0:{lineDashStyle:[2,2]},
+				1:{lineDashStyle:[2,2]},
+				3:{lineDashStyle:[0,0],pointSize:5},
+			},
+			hAxis:{
+				showTextEvery:300,
+				textStyle:{color:"#DDD", fontSize:0}
+			},
+			vAxis:{
+				format:"#",
+				textStyle:{color:"#AAA", fontSize:14},
+				Gridlines:{	multiple:20},
+				minorGridlines:{	multiple:10}
+			  },
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}'
+		);
 		if ($udevice=='iPad') {$args['width']=1000;$args['height']=880;}
 		elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
 		elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
 		else {$args['width']=460;$args['height']=200;}
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-		if ($result->num_rows==0) {
-			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
-		}
+		if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;}
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		$result->free();
 		$chart=array_to_chart($graph, $args);
@@ -268,26 +220,9 @@ if ($home===true) {
 		$args['hide_legend']=true;
 		$args['chart_div']='pluvioday';
 		$args['raw_options']='seriesType:"bars",
-			seriesDefaults: {
-				rendererOptions: {
-					barPadding: -50,
-					barMargin: -50
-				}
-			},
-			hAxis: {
-				showTextEvery: 100,
-				textStyle: {color: "#000", fontSize: 1}
-			},
-			vAxis: {
-				format:"#",
-				textStyle: {color: "#AAA", fontSize: 14},
-				Gridlines: {
-					multiple: 2
-				},
-				minorGridlines: {
-					multiple: 0
-				}
-			  },
+			seriesDefaults:{rendererOptions:{barPadding:-50,barMargin:-50}},
+			hAxis:{showTextEvery:100,textStyle:{color:"#000", fontSize:1}},
+			vAxis:{format:"#",textStyle:{color:"#AAA", fontSize:14},Gridlines:{multiple:2},minorGridlines:{multiple:0}},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
 			bar:{groupWidth:90}';
@@ -301,31 +236,12 @@ if ($home===true) {
 		//$args['chart']='ComboChart';
 		$args['raw_options']='
 			lineWidth:3,
-			series: {
-				0: {type: "steppedArea", areaOpacity:0.3},
-				1: {type: "bars", areaOpacity:0.1, groupWidth:40}
-			},
-			hAxis: {
-				showTextEvery: 1,
-				textStyle: {color: "#EEE", fontSize: 0}
-			},
-			vAxis: {
-				format:"#",
-				textStyle: {color: "#CCC", fontSize: 14},
-				Gridlines: {
-					multiple: 10
-				},
-				minorGridlines: {
-					multiple: 10
-				},
-				viewWindowMode:\'explicit\',
-				viewWindow:{
-					min:0
-				},
-			},
+			series:{0:{type:"steppedArea", areaOpacity:0.3},1:{type:"bars", areaOpacity:0.1, groupWidth:30}},
+			hAxis:{showTextEvery:1,textStyle:{color:"#EEE", fontSize:0}},
+			vAxis:{format:"#",textStyle:{color:"#CCC", fontSize:14},Gridlines:{multiple:10},minorGridlines:{multiple:10},viewWindowMode:\'explicit\',viewWindow:{min:0}},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
-			bar:{groupWidth:40}';
+			bar:{groupWidth:30}';
 		$chart=array_to_chart($pluviomaand, $args);
 		echo $chart['script'];
 		echo $chart['div'];
@@ -349,15 +265,13 @@ if ($home===true) {
 					</tr>
 				</thead>
 				<tbody>';
-		foreach ($pluviomaand as $i) {
-			echo '
+		foreach ($pluviomaand as $i) echo '
 					<tr>
 						<td>'.$i['Maand'].'</td>
 						<td> '.number_format($i['Regen'], 0).' mm </td>
 						<td> '.$i['Normaal'].' mm </td>
 						<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 0, ',', '.').' % </td>
 					</tr>';
-		}
 		echo '
 				</tbody>
 			</table>
@@ -367,15 +281,13 @@ if ($home===true) {
 		end:
 		if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
 			$togo=61-date("s");
-			if ($togo<15) {
-				$togo=15;
-			}
+			if ($togo<15) $togo=15;
 			$togo=$togo*1000+2000;
 			echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 		}
 		$db->close();
 	}
 } else {
-    header("Location: index.php");
-    die("Redirecting to: index.php");
+	header("Location:index.php");
+	die("Redirecting to:index.php");
 }
