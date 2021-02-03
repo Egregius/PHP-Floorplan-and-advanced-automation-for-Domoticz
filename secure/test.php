@@ -15,13 +15,7 @@ echo '<pre>';
 
 $timefrom=TIME-(86400*7000);
 //$timefrom=0;
-$chauth = curl_init(
-	'https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.
-	$smappeeclient_id.'&client_secret='.
-	$smappeeclient_secret.'&username='.
-	$smappeeusername.'&password='.
-	$smappeepassword.''
-);
+$chauth = curl_init('https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.$smappeeclient_id.'&client_secret='.$smappeeclient_secret.'&username='.$smappeeusername.'&password='.$smappeepassword.'');
 curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
 curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($chauth, CURLOPT_FOLLOWLOCATION, 1);
@@ -37,14 +31,7 @@ if (!empty($objauth)) {
 	$headers=array('Authorization: Bearer '.$access);
 	curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
 	curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
-	curl_setopt(
-		$chconsumption,
-		CURLOPT_URL,
-		'https://app1pub.smappee.net/dev/v1/servicelocation/'.
-		$smappeeserviceLocationId.'/consumption?aggregation=5&from='.
-		$timefrom.'000&to='.
-		TIME.'000'
-	);
+	curl_setopt($chconsumption, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=5&from='.$timefrom.'000&to='.TIME.'000');
 	curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
 	curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
@@ -54,6 +41,15 @@ if (!empty($objauth)) {
 	if (!empty($data['consumptions'])) {
 		foreach ($data['consumptions'] as $i) {
 			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			$timestamp=$i['timestamp']/1000;
+			$consumption=$i['consumption'];
+			$solar=$i['solar'];
+			$alwaysOn=$i['alwaysOn'];
+			$gridImport=$i['gridImport'];
+			$gridExport=$i['gridExport'];
+			$selfConsumption=$i['selfConsumption'];
+			$selfSufficiency=$i['selfSufficiency'];
+			$db->query("INSERT INTO smappee_5 (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
 		}
 		echo '<pre>';print_r($data);
 	}
