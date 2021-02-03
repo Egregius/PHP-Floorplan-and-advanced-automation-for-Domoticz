@@ -13,7 +13,7 @@ $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
 
-$timefrom=TIME-(86400*7000);
+$timefrom=TIME-(86400*7);
 //$timefrom=0;
 $chauth = curl_init('https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.$smappeeclient_id.'&client_secret='.$smappeeclient_secret.'&username='.$smappeeusername.'&password='.$smappeepassword.'');
 curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
@@ -26,18 +26,18 @@ $objauth=json_decode(curl_exec($chauth));
 if (!empty($objauth)) {
 	$access=$objauth->{'access_token'};
 	curl_close($chauth);
-	$chconsumption=curl_init('');
-	curl_setopt($chconsumption, CURLOPT_HEADER, 0);
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);
-	curl_setopt($chconsumption, CURLOPT_HTTPHEADER, $headers);
-	curl_setopt($chconsumption, CURLOPT_AUTOREFERER, true);
-	curl_setopt($chconsumption, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=5&from='.$timefrom.'000&to='.TIME.'000');
-	curl_setopt($chconsumption, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($chconsumption, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt($chconsumption, CURLOPT_VERBOSE, 0);
-	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYHOST, false);
-	curl_setopt($chconsumption, CURLOPT_SSL_VERIFYPEER, false);
-	$data=json_decode(curl_exec($chconsumption), true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=5&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
 	if (!empty($data['consumptions'])) {
 		foreach ($data['consumptions'] as $i) {
 			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
@@ -49,16 +49,128 @@ if (!empty($objauth)) {
 			$gridExport=$i['gridExport'];
 			$selfConsumption=$i['selfConsumption'];
 			$selfSufficiency=$i['selfSufficiency'];
-			$db->query("INSERT INTO smappee_5 (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+			$db->query("INSERT INTO smappee_kwartaal (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
 		}
-		echo '<pre>';print_r($data);
 	}
-	curl_close($chconsumption);
+	curl_close($ch);
+	echo '<hr>';
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=4&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			$timestamp=$i['timestamp']/1000;
+			$consumption=$i['consumption'];
+			$solar=$i['solar'];
+			$alwaysOn=$i['alwaysOn'];
+			$gridImport=$i['gridImport'];
+			$gridExport=$i['gridExport'];
+			$selfConsumption=$i['selfConsumption'];
+			$selfSufficiency=$i['selfSufficiency'];
+			$db->query("INSERT INTO smappee_maand (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+		}
+	}
+	curl_close($ch);
+	echo '<hr>';
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=3&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			$timestamp=$i['timestamp']/1000;
+			$consumption=$i['consumption'];
+			$solar=$i['solar'];
+			$alwaysOn=$i['alwaysOn'];
+			$gridImport=$i['gridImport'];
+			$gridExport=$i['gridExport'];
+			$selfConsumption=$i['selfConsumption'];
+			$selfSufficiency=$i['selfSufficiency'];
+			$db->query("INSERT INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+		}
+	}
+	curl_close($ch);
+	echo '<hr>';
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=2&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			$timestamp=$i['timestamp']/1000;
+			$consumption=$i['consumption'];
+			$solar=$i['solar'];
+			$alwaysOn=$i['alwaysOn'];
+			$gridImport=$i['gridImport'];
+			$gridExport=$i['gridExport'];
+			$selfConsumption=$i['selfConsumption'];
+			$selfSufficiency=$i['selfSufficiency'];
+			$db->query("INSERT INTO smappee_uur (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+		}
+	}
+	curl_close($ch);
+	echo '<hr>';
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=1&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			$timestamp=$i['timestamp']/1000;
+			$consumption=$i['consumption'];
+			$solar=$i['solar'];
+			$alwaysOn=$i['alwaysOn'];
+			$gridImport=$i['gridImport'];
+			$gridExport=$i['gridExport'];
+			$selfConsumption=$i['selfConsumption'];
+			$selfSufficiency=$i['selfSufficiency'];
+			$db->query("INSERT INTO smappee_5min (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+		}
+	}
+	curl_close($ch);
+	echo '<hr>';
 }
 
 
 
-
+unset($data);
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
