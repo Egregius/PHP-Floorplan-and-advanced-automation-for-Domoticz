@@ -32,29 +32,20 @@ if ($home===true) {
 				td{text-align:center;width:24%;}
 			</style>
 			<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
-		</head>';
-	if ($udevice=='iPad') {
-		echo '
-		<body style="width:800px">
-			<form action="/floorplan.php">
-				<input type="submit" class="btn b2" value="Plan"/>
-			</form>
-			<form action="/Smappee.php">
-				<input type="submit" class="btn b2" value="Temperaturen"/>
-			</form>';
-	} else {
-		echo '
+		</head>
 		<body style="width:100%">
 			<form action="/floorplan.php">
 				<input type="submit" class="btn b2" value="Plan"/>
 			</form>
 			<form action="/Smappee.php">
-				<input type="submit" class="btn b2" value="Temperaturen"/>
+				<select name="f_jaren" class="btn b4 btna" onchange="this.form.submit()"/>';
+	echo '
+
+				</select>
 			</form>';
-	}
+
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
-	$colors=array('#FFFFFF');
 	$args=array(
 			'width'=>1000,
 			'height'=>880,
@@ -62,7 +53,7 @@ if ($home===true) {
 			'responsive'=>false,
 			'background_color'=>'#000',
 			'chart_div'=>'graph',
-			'colors'=>$colors,
+			'colors'=>array('#FFFFFF','#FF0000','#00FF00','#0000FF','#FFFFFF','#FFFFFF'),
 			'margins'=>array(0,0,0,50),
 			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
 			'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
@@ -98,9 +89,12 @@ if ($home===true) {
 	elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
 	elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
 	else {$args['width']=460;$args['height']=200;}
-	for($j=2017;$j<=strftime("%Y",$time);$j++){
+	$time=time();
+	for($y=2017;$y<=strftime("%Y",$time);$y++){
 		$months=array('01'=>'Januari','02'=>'Februari','03'=>'Maart','04'=>'April','05'=>'Mei','06'=>'Juni','07'=>'Juli','08'=>'Augustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'December');
 		foreach($months as $m=>$ms){
+			$consumption[$m]['Maand']=$ms;
+			$consumption[$m][$y]=0;
 		}
 	}
 	$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `smappee_kwartaal` ORDER BY timestamp ASC";
@@ -109,10 +103,9 @@ if ($home===true) {
 		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;
 	}
 	while ($row=$result->fetch_assoc()) {
-		$year=strftime("%Y", $row['timestamp']);
-		$i['time']=strftime("%F %T", $row['timestamp']);
-		$i[$year.'value']=$row['consumption']/1000;
-		$consumption[]=$i;
+		$y=strftime("%Y", $row['timestamp']);
+		$m=strftime("%m", $row['timestamp']);
+		$consumption[$m][$y]=$row['consumption']/1000;
 	}
 	$result->free();
 	$chart=array_to_chart($consumption, $args);
@@ -121,6 +114,11 @@ if ($home===true) {
 	unset($chart);
 	echo '<pre>';print_r($consumption);echo '</pre>';
 	exit;
+
+
+
+
+
 	echo '<h3>Pluviometer per dag</h3>';
 	$args['chart']='ColumnChart';
 	$args['margins']=array(0,0,50,50);
