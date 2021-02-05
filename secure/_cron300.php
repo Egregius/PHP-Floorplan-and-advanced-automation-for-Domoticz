@@ -257,5 +257,26 @@ if (!empty($objauth)) {
 		@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 	}
 	curl_close($ch);
+	$timefrom=TIME-600;
+	$ch=curl_init('');
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	$headers=array('Authorization: Bearer '.$access);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+	curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=1&from='.$timefrom.'000&to='.TIME.'000');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_VERBOSE, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$data=json_decode(curl_exec($ch), true);
+	print_r($data);
+	if (!empty($data['consumptions'])) {
+		foreach ($data['consumptions'] as $i) {
+			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
+			storeicon('el', $i['alwaysOn']);
+		}
+	}
+	curl_close($ch);
 }
 unset($data);

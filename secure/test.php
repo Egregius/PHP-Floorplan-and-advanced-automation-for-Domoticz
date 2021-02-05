@@ -24,7 +24,7 @@ $objauth=json_decode(curl_exec($chauth));
 $access=$objauth->{'access_token'};
 	curl_close($chauth);
 
-$timefrom=TIME-864000;
+$timefrom=TIME-600;
 	$ch=curl_init('');
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	$headers=array('Authorization: Bearer '.$access);

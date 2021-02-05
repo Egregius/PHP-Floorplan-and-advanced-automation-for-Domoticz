@@ -10,15 +10,15 @@
  * @link	 https://egregius.be
  **/
 $user='cron3600';
-$sql="SELECT id,date,value FROM battery t1 WHERE t1.date = (SELECT t2.date FROM battery t2 WHERE t2.id = t1.id ORDER BY t2.date DESC LIMIT 1);";
+$sql="SELECT name,date,value FROM battery t1 WHERE t1.date = (SELECT t2.date FROM battery t2 WHERE t2.name = t1.name ORDER BY t2.date DESC LIMIT 1);";
 if (!isset($db)) {
 	$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 if (!$result=$db->query($sql)) die('There was an error running the query ['.$sql.' - '.$db->error.']');
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-	$batterydevices[]=$row['id'];
-	$items[$row['id']]=$row;
+	$batterydevices[]=$row['name'];
+	$items[$row['name']]=$row;
 }
 $date=strftime("%F", TIME);
 $xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
@@ -30,12 +30,7 @@ foreach ($xml['Node'] as $node) {
 				$name=$node['@attributes']['name'];
 				$value=$cmd['Value']['@attributes']['value'];
 				if ($value>100) 	$value=100;
-				if (!in_array($id, $batterydevices)) {
-					$query="INSERT INTO `batterydevices` (`id`,`name`)
-						VALUES ('$id','$name')
-						ON DUPLICATE KEY UPDATE `name`='$name';";
-					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-				}
+
 				if (isset($items[$id]['value'])&&$items[$id]['value']!=$value) {
 					if ($value<50) alert('Batterij'.$name,'Batterij '.$name.' '.$value.'%',43200);
 					$query="INSERT INTO `battery` (`date`,`id`,`value`) VALUES ('$date','$id','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
@@ -46,6 +41,7 @@ foreach ($xml['Node'] as $node) {
 	}
 }
 unset($xml);
+exit;
 
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
