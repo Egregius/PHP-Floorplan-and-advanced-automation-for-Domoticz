@@ -17,7 +17,6 @@ if (!isset($db)) {
 }
 if (!$result=$db->query($sql)) die('There was an error running the query ['.$sql.' - '.$db->error.']');
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-	$batterydevices[]=$row['name'];
 	$items[$row['name']]=$row;
 }
 $date=strftime("%F", TIME);
@@ -26,14 +25,14 @@ foreach ($xml['Node'] as $node) {
 	foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
 		if (isset($cmd['Value']['@attributes']['label'])) {
 			if ($cmd['Value']['@attributes']['label']=='Battery Level') {
+				echo $node['@attributes']['name'].'='.$cmd['Value']['@attributes']['value'].'<br>';
 				$id=$node['@attributes']['id'];
 				$name=$node['@attributes']['name'];
 				$value=$cmd['Value']['@attributes']['value'];
 				if ($value>100) 	$value=100;
-
-				if (isset($items[$id]['value'])&&$items[$id]['value']!=$value) {
+				if ((isset($items[$name]['value'])&&$items[$name]['value']!=$value)||!isset($items[$name]['value'])) {
 					if ($value<50) alert('Batterij'.$name,'Batterij '.$name.' '.$value.'%',43200);
-					$query="INSERT INTO `battery` (`date`,`id`,`value`) VALUES ('$date','$id','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
+					$query="INSERT INTO `battery` (`date`,`name`,`value`) VALUES ('$date','$name','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
 					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 				}
 			}
