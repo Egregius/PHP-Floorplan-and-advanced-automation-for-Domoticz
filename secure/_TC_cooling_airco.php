@@ -159,11 +159,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($dif>=0.8) $power=1;
 	elseif ($dif<-0.5) $power=0;
 	if ($d[$k.'_set']['s']<32) {
-		if (isset($power)&&$d['daikin']['s']=='On'&&past('daikin')>120) {
+		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
-			if ($k=='living') {
-				$set=$d[$k.'_set']['s']-1.5;
-			} elseif ($k=='kamer') {
+			if ($k=='living') 	$set=$d[$k.'_set']['s']-1.5;
+			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
 			} elseif ($k=='alex') {
@@ -174,6 +173,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;
 			$daikin=json_decode($d['daikin'.$k]['s']);
+			if (!isset($power)) $power=$daikin->power;
 			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
