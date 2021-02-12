@@ -709,7 +709,7 @@ function finkom() {
 }
 function fhall() {
 	global $d,$device;
-	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) {
+	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&$d['Ralex']['s']==0) {
 		if ($d['hall']['s']<32) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
 				if ($d['hall']['s']<32) sl('hall', 32, basename(__FILE__).':'.__LINE__);

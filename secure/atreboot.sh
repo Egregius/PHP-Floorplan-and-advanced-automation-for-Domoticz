@@ -28,6 +28,3 @@ sleep 5
 service mysql start
 service nginx start
 service domoticz start
-touch /var/log/amplify-agent.log
-chown www-data /var/log/amplify-agent.log
-service amplify-agent start

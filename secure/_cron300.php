@@ -235,6 +235,7 @@ if (!empty($objauth)) {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	$data=json_decode(curl_exec($ch), true);
+
 	if (!empty($data['consumptions'])) {
 		foreach ($data['consumptions'] as $i) {
 			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
@@ -274,7 +275,10 @@ if (!empty($objauth)) {
 	if (!empty($data['consumptions'])) {
 		foreach ($data['consumptions'] as $i) {
 			echo strftime("%F %T", $i['timestamp']/1000).'<br>';
-			storeicon('el', $i['alwaysOn']);
+			if ($d['el']['icon']!=$i['alwaysOn']) {
+				storeicon('el', $i['alwaysOn']);
+				telegram('Always on = '.$i['alwaysOn'].'W');
+			}
 		}
 	}
 	curl_close($ch);

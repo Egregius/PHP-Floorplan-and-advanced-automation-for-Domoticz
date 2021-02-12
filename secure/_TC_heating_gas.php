@@ -96,10 +96,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($daikin->power!=0||$daikin->mode!=4) {
 		daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 		$data=json_decode($d[$k.'_set']['icon'], true);
-		$data['power']=$power;
+		$data['power']=0;
 		$data['mode']=4;
-		$data['fan']=$rate;
-		$data['set']=$d[$k.'_set']['s'];
+		$data['fan']='A';
+		$data['set']=10;
 		storeicon($k.'_set', json_encode($data));
 	}
 }
