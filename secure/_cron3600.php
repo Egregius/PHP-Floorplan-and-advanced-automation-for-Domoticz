@@ -40,7 +40,6 @@ foreach ($xml['Node'] as $node) {
 	}
 }
 unset($xml);
-exit;
 
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
