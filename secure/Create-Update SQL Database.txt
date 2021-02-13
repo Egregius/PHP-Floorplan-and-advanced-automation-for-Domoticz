@@ -36,12 +36,6 @@ CREATE TABLE IF NOT EXISTS `battery` (
   PRIMARY KEY (`date`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `batterydevices` (
-  `id` smallint(2) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `devices` (
   `n` varchar(50) NOT NULL,
   `i` smallint(6) DEFAULT NULL,

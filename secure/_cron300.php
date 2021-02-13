@@ -284,3 +284,126 @@ if (!empty($objauth)) {
 	curl_close($ch);
 }
 unset($data);
+//Putting temps min,avg,max into temp_hour
+$stmt=$db->query(
+	"SELECT left(stamp,13) as stamp,
+		min(buiten) as buiten_min,
+		max(buiten) as buiten_max,
+		avg(buiten) as buiten_avg,
+		min(living) as living_min,
+		max(living) as living_max,
+		avg(living) as living_avg,
+		min(badkamer) as badkamer_min,
+		max(badkamer) as badkamer_max,
+		avg(badkamer) as badkamer_avg,
+		min(kamer) as kamer_min,
+		max(kamer) as kamer_max,
+		avg(kamer) as kamer_avg,
+		min(tobi) as tobi_min,
+		max(tobi) as tobi_max,
+		avg(tobi) as tobi_avg,
+		min(alex) as alex_min,
+		max(alex) as alex_max,
+		avg(alex) as alex_avg,
+		min(zolder) as zolder_min,
+		max(zolder) as zolder_max,
+		avg(zolder) as zolder_avg
+	FROM temp
+	GROUP BY left(stamp,13)"
+);
+while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+	$stamp=$row['stamp'];
+	$buiten_min=$row['buiten_min'];
+	$buiten_max=$row['buiten_max'];
+	$buiten_avg=$row['buiten_avg'];
+	$living_min=$row['living_min'];
+	$living_max=$row['living_max'];
+	$living_avg=$row['living_avg'];
+	$badkamer_min=$row['badkamer_min'];
+	$badkamer_max=$row['badkamer_max'];
+	$badkamer_avg=$row['badkamer_avg'];
+	$kamer_min=$row['kamer_min'];
+	$kamer_max=$row['kamer_max'];
+	$kamer_avg=$row['kamer_avg'];
+	$tobi_min=$row['tobi_min'];
+	$tobi_max=$row['tobi_max'];
+	$tobi_avg=$row['tobi_avg'];
+	$alex_min=$row['alex_min'];
+	$alex_max=$row['alex_max'];
+	$alex_avg=$row['alex_avg'];
+	$zolder_min=$row['zolder_min'];
+	$zolder_max=$row['zolder_max'];
+	$zolder_avg=$row['zolder_avg'];
+	$db->query(
+		"INSERT INTO `temp_hour`
+			(`stamp`,
+				`buiten_min`,
+				`buiten_max`,
+				`buiten_avg`,
+				`living_min`,
+				`living_max`,
+				`living_avg`,
+				`badkamer_min`,
+				`badkamer_max`,
+				`badkamer_avg`,
+				`kamer_min`,
+				`kamer_max`,
+				`kamer_avg`,
+				`tobi_min`,
+				`tobi_max`,
+				`tobi_avg`,
+				`alex_min`,
+				`alex_max`,
+				`alex_avg`,
+				`zolder_min`,
+				`zolder_max`,
+				`zolder_avg`
+			)
+		VALUES
+			('$stamp',
+			'$buiten_min',
+			'$buiten_max',
+			'$buiten_avg',
+			'$living_min',
+			'$living_max',
+			'$living_avg',
+			'$badkamer_min',
+			'$badkamer_max',
+			'$badkamer_avg',
+			'$kamer_min',
+			'$kamer_max',
+			'$kamer_avg',
+			'$tobi_min',
+			'$tobi_max',
+			'$tobi_avg',
+			'$alex_min',
+			'$alex_max',
+			'$alex_avg',
+			'$zolder_min',
+			'$zolder_max',
+			'$zolder_avg'
+		)
+		ON DUPLICATE KEY UPDATE
+			`buiten_min`='$buiten_min',
+			`buiten_max`='$buiten_max',
+			`buiten_avg`='$buiten_avg',
+			`living_min`='$living_min',
+			`living_max`='$living_max',
+			`living_avg`='$living_avg',
+			`badkamer_min`='$badkamer_min',
+			`badkamer_max`='$badkamer_max',
+			`badkamer_avg`='$badkamer_avg',
+			`kamer_min`='$kamer_min',
+			`kamer_max`='$kamer_max',
+			`kamer_avg`='$kamer_avg',
+			`tobi_min`='$tobi_min',
+			`tobi_max`='$tobi_max',
+			`tobi_avg`='$tobi_avg',
+			`alex_min`='$alex_min',
+			`alex_max`='$alex_max',
+			`alex_avg`='$alex_avg',
+			`zolder_min`='$zolder_min',
+			`zolder_max`='$zolder_max',
+			`zolder_avg`='$zolder_avg';"
+	);
+}

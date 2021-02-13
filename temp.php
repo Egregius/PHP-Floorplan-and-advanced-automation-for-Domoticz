@@ -178,9 +178,9 @@ if ($home===true) {
 		unset($chart,$graph);
 		//echo '<br/>'.$legend;
 		montha:
-		$query="SELECT DATE_FORMAT(stamp, '%W') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-		if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste 5 dagen.';
+		if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		$result->free();
 		$chart=array_to_chart($graph, $argshour);
@@ -212,9 +212,9 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 		monthb:
-		$query="SELECT DATE_FORMAT(stamp, '%W') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-		if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 5 dagen';
+		if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		$result->free();
 		$chart=array_to_chart($graph, $argshour);
@@ -254,7 +254,7 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 		month:
-		$query="SELECT DATE_FORMAT(stamp, '%W') as stamp, $min, $max, $avg from `temp_hour` where stamp > '$week'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, $min, $max, $avg from `temp_hour` where stamp > '$week'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		if ($result->num_rows==0) {echo 'No data for last week<hr>';goto end;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graph for last week';
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
