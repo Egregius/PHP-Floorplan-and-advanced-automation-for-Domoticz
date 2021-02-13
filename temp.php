@@ -91,7 +91,7 @@ if ($home===true) {
 			'height'=>880,
 			'hide_legend'=>true,
 			'responsive'=>false,
-			'background_color'=>'#111',
+			'background_color'=>'#000',
 			'chart_div'=>'graph',
 			'margins'=>array(0,0,0,0),
 			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
@@ -99,20 +99,7 @@ if ($home===true) {
 			'raw_options'=>'
 				lineWidth:3,
 				crosshair:{trigger:"both"},
-				hAxis: {
-					showTextEvery: 60,
-					textStyle: {color: "#DDD", fontSize: 0}
-				},
-				vAxis: {
-					format:"# °C",
-					textStyle: {color: "#AAA", fontSize: 14},
-					Gridlines: {
-						multiple: 1
-					},
-					minorGridlines: {
-						multiple: 1
-					}
-				  },
+				vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},	minorGridlines: {multiple: 1}},
 				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 		);
@@ -121,29 +108,14 @@ if ($home===true) {
 			'height'=>880,
 			'hide_legend'=>true,
 			'responsive'=>false,
-			'background_color'=>'#111',
+			'background_color'=>'#000',
 			'chart_div'=>'graphhour',
 			'margins'=>array(0,0,0,0),
 			'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
 			'raw_options'=>'
 				lineWidth:3,
 				crosshair:{trigger:"both"},
-				hAxis: {
-					slantedText: true,
-					slantedTextAngle: 90,
-					showTextEvery: 24,
-					textStyle: {color: "#DDD", fontSize: 0}
-				},
-				vAxis: {
-					format:"# °C",
-					textStyle: {color: "#AAA", fontSize: 14},
-					Gridlines: {
-						multiple: 1
-					},
-					minorGridlines: {
-						multiple: 1
-					}
-				  },
+				vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},	minorGridlines: {multiple: 1}},
 				theme:"maximized",
 				chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 		);
