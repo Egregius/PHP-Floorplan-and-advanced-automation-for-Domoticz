@@ -9,12 +9,17 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+
+if ($d['kamer_set']['m']==0) $Setkamer=4;
+if ($d['tobi_set']['m']==0) $Settobi=4;
+if ($d['alex_set']['m']==0) $Setalex=4;
+
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
-		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
+		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
 			if ($k=='living') 	$set=$d[$k.'_set']['s']-3;
 			elseif ($k=='kamer') {
@@ -46,10 +51,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
+			$data['power']=0;
 			$data['mode']=4;
-			$data['fan']=$rate;
-			$data['set']=$set;
+			$data['fan']='A';
+			$data['set']=10;
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
@@ -57,25 +62,5 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 	}
 }
 
-if ($d['brander']['s']=='On'&&past('brander')>420) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-
+if ($d['brander']['s']=='On'&&past('brander')>230) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 include('_TC_heating_badk-zolder.php');
-
-/**
- * Function setradiator: calculates the setpoint for the Danfoss thermostat valve
- *
- * @param string  $name   Not used anymore
- * @param int	 $dif	Difference in temperature
- * @param boolean $koudst Is it the coldest room of all?
- * @param int	 $set	default setpoint
- *
- * @return null
- */
-/*function setradiator($name,$dif,$koudst=false,$set=14)
-{
-	if ($koudst==true) $setpoint=28;
-	else $setpoint=$set-ceil($dif*4);
-	if ($setpoint>28) $setpoint=28;
-	elseif ($setpoint<4) $setpoint=4;
-	return round($setpoint, 0);
-}*/

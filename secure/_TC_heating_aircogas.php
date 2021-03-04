@@ -9,6 +9,11 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+if ($d['kamer_set']['m']==0) $Setkamer=4;
+if ($d['tobi_set']['m']==0) $Settobi=4;
+if ($d['alex_set']['m']==0) $Setalex=4;
+
+
 $dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
 
 if ($d['Weg']['s']==1) {
@@ -32,7 +37,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1.5) $power=0;
 		elseif ($dif<=0.5) $power=1;
-		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
+		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
 			if ($k=='living') $set=$d[$k.'_set']['s']-3;
 			elseif ($k=='kamer') {
@@ -64,7 +69,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
+			$data['power']=0;
 			$data['mode']=4;
 			$data['fan']='A';
 			$data['set']=10;

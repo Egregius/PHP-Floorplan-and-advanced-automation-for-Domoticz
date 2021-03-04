@@ -92,13 +92,10 @@ function douche() {
 	if ($douchegas>0||$douchewater>0) {
 		$euro=($d['douche']['s']*10*0.004)+($d['douche']['m']*0.005);
 		$eurocent=round($euro*100, 0);
-		if ($d['gcal']['s']==true) {
-			$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
-			telegram($msg);
-		}
+		$msg='Douche__Gas: '.$douchegas.'L = '.($douchegas*0.004).'€__Water: '.$douchewater.'L = '.($douchewater*0.005).'€__Som = '.(($douchegas*0.004)+($douchewater*0.005)).'€';
+		telegram($msg);
 		store('douche', 0, basename(__FILE__).':'.__LINE__);
 		storemode('douche', 0, basename(__FILE__).':'.__LINE__);
-		sleep(8);
 	}
 }
 
@@ -674,6 +671,7 @@ function fliving() {
 			if ($d['jbl']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
+		apcu_store('living', TIME);
 	}
 
 }
@@ -721,7 +719,8 @@ function fhall() {
 }
 function sirene($msg) {
 	global $d,$device;
-	if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
+	if ($d['Weg']['s']==0) return false;
+	elseif (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
 		if ($d['Weg']['s']>=2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
@@ -732,7 +731,7 @@ function sirene($msg) {
 			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
 		}
 	}
-	if ($d['Weg']['s']>0) storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+	storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 }
 function createheader($page='') {
 	global $udevice,$ipaddress;

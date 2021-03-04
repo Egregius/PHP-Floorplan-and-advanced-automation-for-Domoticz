@@ -66,9 +66,9 @@ if ($home===true) {
 				textStyle: {color: "#FFFFFF", fontSize: 18}
 			},
 			series:{
-				0:{lineDashStyle:[0,0]},
-				1:{lineDashStyle:[0,0]},
-				3:{lineDashStyle:[0,0]},
+				0:{pointSize:5},
+				1:{pointSize:5},
+				3:{pointSize:5},
 			},
 			hAxis: {
 				showTextEvery: 300,
@@ -108,8 +108,11 @@ if ($home===true) {
 		$y=strftime("%Y", $row['timestamp']);
 		$m=strftime("%m", $row['timestamp']);
 		foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
-			if (startsWith($t, 'self')) ${$t}[$m][$y]=$row[$t];
-			else ${$t}[$m][$y]=$row[$t]/1000;
+			if (startsWith($t, 'self')) {
+				${$t}[$m][$y]=$row[$t];
+			} else {
+				${$t}[$m][$y]=$row[$t]/1000;
+			}
 		}
 	}
 	$result->free();

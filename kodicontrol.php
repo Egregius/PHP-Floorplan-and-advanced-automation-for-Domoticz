@@ -12,47 +12,27 @@
 require 'secure/functions.php';
 require 'secure/authentication.php';
 if ($home===true) {
-	if (isset($_POST['up'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Up"}');
-	} elseif (isset($_POST['right'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Right"}');
-	} elseif (isset($_POST['down'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Down"}');
-	} elseif (isset($_POST['left'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Left"}');
-	} elseif (isset($_POST['select'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Select"}');
-	} elseif (isset($_POST['back'])) {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-	} elseif (isset($_POST['home'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Home"}');
-	} elseif (isset($_POST['context'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ContextMenu"}');
-	} elseif (isset($_POST['OSD'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ShowOSD"}');
-	} elseif (isset($_POST['INFO'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Info"}');
-	} elseif (isset($_POST['Later'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayminus"}}');
-	} elseif (isset($_POST['SUBSYNC'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelay"}}');
-	} elseif (isset($_POST['Earlier'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayplus"}}');
-	} elseif (isset($_POST['AudioLater'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayminus"}}');
-	} elseif (isset($_POST['AUDIOSYNC'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelay"}}');
-	} elseif (isset($_POST['AudioEarlier'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayplus"}}');
-	} elseif (isset($_POST['Subup'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftup"}}');
-	} elseif (isset($_POST['Subdown'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftdown"}}');
-	} elseif (isset($_POST['Imgup'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftup"}}');
-	} elseif (isset($_POST['Imgdown'])) {
-		kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftdown"}}');
-	}
+	if (isset($_POST['up'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Up"}');
+	elseif (isset($_POST['right'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Right"}');
+	elseif (isset($_POST['down'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Down"}');
+	elseif (isset($_POST['left'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Left"}');
+	elseif (isset($_POST['select'])) 	kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Select"}');
+	elseif (isset($_POST['back'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+	elseif (isset($_POST['home'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Home"}');
+	elseif (isset($_POST['context'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ContextMenu"}');
+	elseif (isset($_POST['OSD'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ShowOSD"}');
+	elseif (isset($_POST['INFO'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Info"}');
+	elseif (isset($_POST['Later'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayminus"}}');
+	elseif (isset($_POST['SUBSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelay"}}');
+	elseif (isset($_POST['Earlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayplus"}}');
+	elseif (isset($_POST['AudioLater'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayminus"}}');
+	elseif (isset($_POST['AUDIOSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelay"}}');
+	elseif (isset($_POST['AudioEarlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayplus"}}');
+	elseif (isset($_POST['Subup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftup"}}');
+	elseif (isset($_POST['Subdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftdown"}}');
+	elseif (isset($_POST['Imgup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftup"}}');
+	elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftdown"}}');
+
 	//error_reporting(E_ALL);ini_set("display_errors", "on");
 	$count=0;$ctx=stream_context_create(array('http'=>array('timeout' => 2)));
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

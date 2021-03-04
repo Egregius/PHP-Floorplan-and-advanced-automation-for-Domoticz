@@ -35,18 +35,6 @@ foreach ($xxkamers as $i) {
 	}
 }
 
-if (isset($device)&&isset($difheater2)&&$device=='living_temp') {
-	if ($difliving<$difheater2+0.1) {
-		lg(
-			'heater | Living Set = '.$Setliving
-			.' | Living temp = '.$living_temp
-			.' | Diff living = '.round($difliving, 2)
-			.' | Verbruik = '.$d['el']['s']
-			.' | Jaarteller = '.round($d['jaarteller']['s'], 3)
-			.' | kamers = '.$xxxkamers
-		);
-	}
-}
 /*$kamers=array('tobi','alex','kamer');
 foreach ($kamers as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {

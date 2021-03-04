@@ -10,32 +10,31 @@
  * @link	 https://egregius.be
  **/
 $user='cron3600';
-if (!isset($db)) {
-	$db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
+if (!isset($db)) $db=dbconnect();
 $date=strftime("%F", TIME);
 $xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
-$msg='';
 foreach ($xml['Node'] as $node) {
 	foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
 		if (isset($cmd['Value']['@attributes']['label'])) {
 			if ($cmd['Value']['@attributes']['label']=='Battery Level') {
-				echo $node['@attributes']['name'].'='.$cmd['Value']['@attributes']['value'].'<br>';
 				$id=$node['@attributes']['id'];
 				$name=$node['@attributes']['name'];
 				$value=$cmd['Value']['@attributes']['value'];
 				if ($value>100) 	$value=100;
-				if ($value<50) $msg.=$name.' = '.$value.'%'.PHP_EOL;
+				if ($value<=100) $bats[$name]=$value;
 				$query="INSERT INTO `battery` (`date`,`name`,`value`) VALUES ('$date','$name','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
 				if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 			}
 		}
 	}
 }
-if (strlen($msg)>1) alert('Batterij', $msg,43200);
 unset($xml);
-
+ksort($bats);
+if (isset($bats)) {
+	$msg='';
+	foreach ($bats as $k=>$v) $msg.=$k.' = '.$v.'%'.PHP_EOL;
+	alert('Batterij', $msg,43200);
+}
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
 	$time=TIME;
@@ -59,9 +58,6 @@ if (isset($data['CivTwilightStart'])) {
 
 //Update and clean SQL database
 
-$limit=86400000;
-
-
 //Putting buiten temp to verbruik.egregius.be
 $stmt = $db->query(
 	"SELECT
@@ -74,7 +70,7 @@ $stmt = $db->query(
 	ORDER BY `stamp` DESC
 	LIMIT 0,10"
 );
-$dbe=new mysqli('95.170.95.33', 'home', 'H0m€', 'verbruik');
+$dbe=new mysqli('192.168.3.3', 'home', 'H0m€', 'verbruik');
 if ($dbe->connect_errno>0) die('Unable to connect to database ['.$dbe->connect_error.']');
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$stamp=$row['stamp'];
@@ -94,7 +90,6 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 /*
-
 if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 	$low=40;
 	$high=40;
@@ -169,7 +164,6 @@ if ($powermode<2) {
 	}
 }
 */
-
 /*foreach (array('living', 'kamer', 'alex') as $k) {
 	file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?en_streamer=0');
 	sleep(2);

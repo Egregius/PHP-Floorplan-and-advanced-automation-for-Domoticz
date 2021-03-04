@@ -66,7 +66,7 @@ if [ $(($MINUTE%10)) -eq 0 ] ; then
 		/usr/bin/nice -n20 git push origin master
 	fi
 fi
-#END Github
+END Github
 
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`

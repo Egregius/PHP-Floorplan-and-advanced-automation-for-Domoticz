@@ -9,6 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
-    if ($d['Rtobi']['s']>0) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
-}
+if ($status=='Open'&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')&&$d['Ralex']['s']==0&&$d['Rtobi']['s']>0) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);

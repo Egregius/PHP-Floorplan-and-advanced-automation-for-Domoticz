@@ -335,7 +335,7 @@ if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- ALTIJD ----------------------------*/
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>40) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['zon']['s']>$d['el']['s']+500) $set=$d['diepvries']['m']-10;
+if ($d['zon']['s']>$d['el']['s']+200) $set=$d['diepvries']['m']-10;
 else $set=$d['diepvries']['m'];
 
 if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);

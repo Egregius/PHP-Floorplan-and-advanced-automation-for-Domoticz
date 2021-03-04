@@ -191,7 +191,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=3) {
 			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=$power;
+			$data['power']=0;
 			$data['mode']=3;
 			$data['fan']=$rate;
 			$data['set']=$set;

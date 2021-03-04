@@ -9,12 +9,13 @@
  * @license	GNU GPLv3
  * @link		https://egregius.be
  **/
+require_once '/var/www/html/secure/functions.php';
 if (isset($_REQUEST['source'])) {
 	echo ' Start | ';
 	if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$_REQUEST['id']) {
 		echo ' new id | ';
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
-		require_once '/var/www/html/secure/functions.php';
+
 		$d=fetchdata();
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
@@ -34,7 +35,7 @@ if (isset($_REQUEST['source'])) {
 			//telegram('Ring beweging');
 		} elseif ($_REQUEST['kind']=='ding') {
 			echo ' Ding | ';
-			if ($d['Weg']['s']==0) {
+			if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 				echo __LINE__.' Voordeur On | ';
 				sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 			}

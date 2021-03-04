@@ -92,23 +92,15 @@ if ($d['daikin']['s']=='On') {
 	elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
 	else $rgb=false;
 	if ($rgb!=false) {
-		$data=file_get_contents('http://192.168.2.112/aircon/get_sensor_info');
-		if($data === FALSE) return FALSE;
-		else {
-			$array=explode(",",$data);
-			$control_info= array();
-			foreach($array as $value) {
-				$pair= explode("=",$value);
-				$control_info[$pair[0]]=$pair[1];
-			}
-			$level=$control_info['cmpfreq'];
-			if ($level>100)$level=100;
-			$Xlight=round($level/3);
-			if ($d['Xlight']['s']!=$Xlight) {
-				if ($d['Weg']['s']==0) {
-					rgb('Xlight', $rgb, $Xlight);
-					sl('Xlight', $Xlight, basename(__FILE__).':'.__LINE__);
-				}
+		$level=explode(';', $d['daikin_kWh']['s']);
+		$level=$level[0];
+		$level=round($level/20);
+		if ($level>100) $level=100;
+		elseif ($level<1) $level=1;
+		if ($d['Xlight']['s']!=$level) {
+			if ($d['Weg']['s']==0) {
+				rgb('Xlight', $rgb, $level);
+				sl('Xlight', $level, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	} else {
