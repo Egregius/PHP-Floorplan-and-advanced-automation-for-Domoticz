@@ -185,7 +185,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>120&&past('kristal')>120) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 	}
-	if ($d['Weg']['s']>0&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600&&past('Weg')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
 		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||(TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
@@ -278,7 +278,10 @@ if ($d['auto']['s']=='On') {
 		if (!empty($status)) {
 			if (isset($status['@attributes']['source'])) {
 				if ($status['@attributes']['source']!='STANDBY') {
-					if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+					if ($d['bose104']['s']!='Off') {
+						sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+						$d['bose104']['s']=='Off';
+					}
 					bosekey("POWER", 0, 104);
 				}
 			}

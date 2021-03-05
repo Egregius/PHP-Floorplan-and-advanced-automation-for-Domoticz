@@ -131,11 +131,7 @@ unset(
 	$weekend,
 	$ringusername,
 	$ringpassword,
-	$proxmoxcredentials,
-	$urlnas,
-	$urlnas2,
-	$urlfilms
-
+	$proxmoxcredentials
 	);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 

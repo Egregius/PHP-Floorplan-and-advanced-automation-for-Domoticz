@@ -11,17 +11,6 @@
  **/
 //lg(__FILE__.':'.$s);
 $user='cron300';
-if ($d['zon']['s']>$d['el']['s']+200&&TIME<=strtotime('16:00')) {
-	if ($d['nas']['s']!='On') {
-		if (file_get_contents($urlnas)>0) {
-			$k=file_get_contents($urlnas2);
-			if ($k<4000000000) {
-				shell_exec('./wakenas.sh');
-				lg('Wake NAS');
-			}
-		}
-	}
-}
 if(isset($db)) $db=dbconnect();
 $stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];

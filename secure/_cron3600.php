@@ -183,3 +183,5 @@ $remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
 
 //RefreshZwave(128);
+if ($d['buiten_temp']['s']<3&&$d['heating']['s']<4&&past('heating')>43200) store('heating', 4, basename(__FILE__).':'.__LINE__);
+elseif ($d['buiten_temp']['s']>15&&$d['heating']['s']>1&&past('heating')>43200) store('heating', 1, basename(__FILE__).':'.__LINE__);
