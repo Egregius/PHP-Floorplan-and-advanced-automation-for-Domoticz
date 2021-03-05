@@ -30,7 +30,6 @@ $domoticzurl='http://127.0.0.1:8080';
 $denonurl='192.168.2.6';
 $lgtvip='192.168.2.27';
 
-$LogFile='/var/log/floorplanlog.log';
 $users=array('user1'=>'pass1','user2'=>'pass2','user3'=>'pass3');
 $cookie='CookieName';
 

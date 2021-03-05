@@ -62,8 +62,6 @@ unset(
 	$_SERVER,
 	$d,
 	$dow,
-	$iftttkey,
-	$ifttttoken,
 	$start,
 	$users,
 	$homes,
@@ -73,7 +71,6 @@ unset(
 	$smappeeusername,
 	$smappeepassword,
 	$smappeeserviceLocationId,
-	$LogFile,
 	$cookie,
 	$telegramchatid,
 	$telegramchatid2,
@@ -127,10 +124,7 @@ unset(
 	$appleid,
 	$applepass,
 	$vurl,
-	$vpsip,
 	$weekend,
-	$ringusername,
-	$ringpassword,
 	$proxmoxcredentials
 	);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
