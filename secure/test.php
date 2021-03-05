@@ -112,7 +112,6 @@ unset(
 	$calendarIdTobi,
 	$calendarIdVerlof,
 	$telegramchatid1,
-	$appledevice,
 	$appleid,
 	$applepass,
 	$vurl,
