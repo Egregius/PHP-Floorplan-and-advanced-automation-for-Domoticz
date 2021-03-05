@@ -76,8 +76,6 @@ unset(
 	$telegramchatid2,
 	$smappeeip,
 	$authenticated,
-	$zonkeuken,
-	$zoninkom,
 	$eendag,
 	$googleTTSAPIKey,
 	$home,
