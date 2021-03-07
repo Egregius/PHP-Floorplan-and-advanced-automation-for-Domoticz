@@ -264,9 +264,13 @@ if ($home===true) {
 	}
 	echo '
 				<div class="box">
+					<form action="kodicontrol.php">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
+					</form>
 					<input type="submit" name="Volume" value="Down" class="btn big b3" onclick="exec(\'Volume\',\'down\');"/>
+					<form action="denon.php">
 					<input type="submit" name="Denon" value="Denon" class="btn big b3"/>
+					</form>
 					<input type="submit" name="Volume" value="Up" class="btn big b3" onclick="exec(\'Volume\',\'up\');"/>
 				</div>
 				<div class="box">Update Library:<br/>
