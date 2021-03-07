@@ -12,28 +12,29 @@
 $user='cron3600';
 if (!isset($db)) $db=dbconnect();
 $date=strftime("%F", TIME);
-$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
-foreach ($xml['Node'] as $node) {
-	foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
-		if (isset($cmd['Value']['@attributes']['label'])) {
-			if ($cmd['Value']['@attributes']['label']=='Battery Level') {
-				$id=$node['@attributes']['id'];
-				$name=$node['@attributes']['name'];
-				$value=$cmd['Value']['@attributes']['value'];
-				if ($value>100) 	$value=100;
-				if ($value<=100) $bats[$name]=$value;
-				$query="INSERT INTO `battery` (`date`,`name`,`value`) VALUES ('$date','$name','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
-				if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+if (strftime("%k", TIME)==19) {
+	$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
+	$msg='';
+	foreach ($xml['Node'] as $node) {
+		foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
+			if (isset($cmd['Value']['@attributes']['label'])) {
+				if ($cmd['Value']['@attributes']['label']=='Battery Level') {
+					$id=$node['@attributes']['id'];
+					$name=$node['@attributes']['name'];
+					$value=$cmd['Value']['@attributes']['value'];
+					if ($value>100) 	$value=100;
+					$stmt=$db->query("select value from battery WHERE name='$name' ORDER BY `date` DESC LIMIT 0,1;");
+					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row['value'];
+					if (isset( $prev)&&$value!=$prev) $msg.=$name.PHP_EOL.'  new = '.$value.', prev = '.$prev.PHP_EOL.PHP_EOL;
+					unset( $prev);
+					$query="INSERT INTO `battery` (`date`,`name`,`value`) VALUES ('$date','$name','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
+					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+				}
 			}
 		}
 	}
-}
-unset($xml);
-ksort($bats);
-if (isset($bats)) {
-	$msg='';
-	foreach ($bats as $k=>$v) $msg.=$k.' = '.$v.'%'.PHP_EOL;
-	alert('Batterij', $msg,43200);
+	unset($xml);
+	if (strlen($msg)>5) telegram($msg);
 }
 $data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
