@@ -1,8 +1,8 @@
 #!/bin/bash
 mkdir -p /var/log
 touch /var/log/fail2ban.log
-service domoticz stop
-service nginx stop
+/usr/sbin/service domoticz stop
+/usr/sbin/service nginx stop
 rsync -aP /domoticz/ /temp/domoticz/
 touch /temp/domoticz.log
 touch /temp/phperror.log
@@ -16,11 +16,11 @@ touch /var/log/nginx/error.log
 touch /var/log/lgtv-error.log
 chmod 666 /var/log/lgtv-error.log
 sleep 5
-service domoticz stop
-service nginx stop
-service mysql start
-service nginx start
-service domoticz start
+/usr/sbin/service domoticz stop
+/usr/sbin/service nginx stop
+/usr/sbin/service mysql start
+/usr/sbin/service nginx start
+/usr/sbin/service domoticz start
 sleep 5
-service nginx start
-service domoticz start
+/usr/sbin/service nginx start
+/usr/sbin/service domoticz start
