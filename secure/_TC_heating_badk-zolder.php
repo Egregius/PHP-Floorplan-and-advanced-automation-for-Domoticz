@@ -79,9 +79,9 @@ if ($d['Weg']['s']==0&&$difzolder<0&&TIME>=strtotime('7:00')&&TIME<strtotime('21
 			sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		sw('zoldervuur2', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif ($difzolder<=$difheater1&&$d['zoldervuur1']['s']!='On'&&past('zoldervuur1')>140&&$d['el']['s']<8000) {
+	} elseif ($difzolder<=$difheater1&&$d['zoldervuur1']['s']!='On'&&past('zoldervuur1')>140&&$d['el']['s']<5000) {
 		sw('zoldervuur1', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif ($difzolder>=$difheater2&&$d['zoldervuur2']['s']!='Off'&&past('zoldervuur2')>110||$d['el']['s']>8500) {
+	} elseif ($difzolder>=$difheater2&&$d['zoldervuur2']['s']!='Off'&&past('zoldervuur2')>110||$d['el']['s']>6000) {
 		sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } else {

@@ -581,7 +581,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 0, 101);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-			else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
+			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 			for ($x=1;$x<=3;$x++) {
 				$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
 				if (isset($status)&&($status['track']=='Cloud Rider'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) bosekey('NEXT_TRACK', 0, 101);
