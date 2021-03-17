@@ -75,7 +75,7 @@ if ($home===true) {
 	$kamer='#44FF44';
 	$tobi='00EEFF';
 	$alex='#EEEE00';
-	$garage='#2288FF';
+	$garage='#FF6600';
 	$zolder='#EE33EE';
 	$buiten='#FFFFFF';
 	$legend='<div style="width:420px;padding:20px 0px 10px 0px;">
@@ -154,7 +154,7 @@ if ($home===true) {
 		unset($chart,$graph);
 		//echo '<br/>'.$legend;
 		montha:
-		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,zolder_avg as zolder,garage_avg as garage from `temp_hour` where stamp > '$week'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -174,8 +174,8 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 	} elseif ($sensor=='binnen') {
-		$args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage,$living,$badkamer,$kamer,$tobi,$alex,$garage);
-		$argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage,$living,$badkamer,$kamer,$tobi,$alex,$garage);
+		$args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage);
+		$argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage);
 		$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 		$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 		$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,tobi,alex,garage from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
@@ -188,7 +188,7 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 		monthb:
-		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex from `temp_hour` where stamp > '$week'";
+		$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,tobi_avg as tobi,alex_avg as alex,garage_avg as garage from `temp_hour` where stamp > '$week'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -198,7 +198,7 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 		endb:
-		$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(tobi_avg) as tobi, AVG(alex_avg) as alex from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+		$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(tobi_avg) as tobi, AVG(alex_avg) as alex, AVG(garage_avg) as garage from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';

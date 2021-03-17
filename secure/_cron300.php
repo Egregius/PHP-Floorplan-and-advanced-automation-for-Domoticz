@@ -382,7 +382,10 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			'$alex_avg',
 			'$zolder_min',
 			'$zolder_max',
-			'$zolder_avg'
+			'$zolder_avg',
+			'$garage_min',
+			'$garage_max',
+			'$garage_avg'
 		)
 		ON DUPLICATE KEY UPDATE
 			`buiten_min`='$buiten_min',
