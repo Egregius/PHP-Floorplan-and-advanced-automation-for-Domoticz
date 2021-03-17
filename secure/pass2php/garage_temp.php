@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-$n='living';
+$n='garage';
 if ($status>$d[$n.'_temp']['s']+0.2) $status=$d[$n.'_temp']['s']+0.2;
 elseif ($status<$d[$n.'_temp']['s']-0.2) $status=$d[$n.'_temp']['s']-0.2;
 if (!isset($db)) $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
