@@ -26,7 +26,7 @@ if (isset($d[$device])) {
 		} else {
 			$status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
 		}
-	} elseif (in_array($device, array('badkamer_temp'))) {
+	} elseif (in_array($device, array('garage_temp'))) {
 		$status=explode(';', $status);
 		$status=$status[0];
 	} elseif ($device=='achterdeur') {
