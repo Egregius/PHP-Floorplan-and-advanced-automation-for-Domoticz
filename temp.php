@@ -60,6 +60,8 @@ if ($home===true) {
 			break;
 		case 244:$sensornaam='alex';
 			break;
+		case 245:$sensornaam='garage';
+			break;
 		case 998:$sensornaam='binnen';
 			break;
 		case 999:$sensornaam='alles';
@@ -73,15 +75,17 @@ if ($home===true) {
 	$kamer='#44FF44';
 	$tobi='00EEFF';
 	$alex='#EEEE00';
+	$garage='#2288FF';
 	$zolder='#EE33EE';
 	$buiten='#FFFFFF';
-	$legend='<div style="width:320px;padding:20px 0px 10px 0px;">
+	$legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=356");\'><font color="'.$tobi.'">Tobi</font></a>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
-		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a>
+		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=245");\'><font color="'.$garage.'">Garage</font></a>
+		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a><br>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a><br/><br/>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
 		&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=999");\'><font color="'.$buiten.'">Alles</font></a></div>';
@@ -136,10 +140,10 @@ if ($home===true) {
 		$argshour['width']=480;$argshour['height']=200;
 	}
 	if ($sensor=='alles') {
-		$args['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
-		$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
+		$args['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$garage,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
+		$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$garage,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
 		$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-		$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+		$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,tobi,alex,garage,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto montha;}
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -160,7 +164,7 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 		enda:
-		$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(buiten_avg) as buiten, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(tobi_avg) as tobi, AVG(alex_avg) as alex, AVG(zolder_avg) as zolder from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+		$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(buiten_avg) as buiten, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(tobi_avg) as tobi, AVG(alex_avg) as alex, AVG(garage_avg) as garage, AVG(zolder_avg) as zolder from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		while ($row=$result->fetch_assoc()) $graph[]=$row;
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
@@ -170,11 +174,11 @@ if ($home===true) {
 		echo $chart['div'];
 		unset($chart,$graph);
 	} elseif ($sensor=='binnen') {
-		$args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
-		$argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
+		$args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage,$living,$badkamer,$kamer,$tobi,$alex,$garage);
+		$argshour['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$garage,$living,$badkamer,$kamer,$tobi,$alex,$garage);
 		$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 		$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-		$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+		$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,tobi,alex,garage from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 		if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto monthb;}
 		while ($row=$result->fetch_assoc()) $graph[]=$row;

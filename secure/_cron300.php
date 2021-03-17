@@ -299,7 +299,10 @@ $stmt=$db->query(
 		avg(alex) as alex_avg,
 		min(zolder) as zolder_min,
 		max(zolder) as zolder_max,
-		avg(zolder) as zolder_avg
+		avg(zolder) as zolder_avg,
+		min(garage) as garage_min,
+		max(garage) as garage_max,
+		avg(garage) as garage_avg
 	FROM temp
 	GROUP BY left(stamp,13)"
 );
@@ -326,6 +329,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$zolder_min=$row['zolder_min'];
 	$zolder_max=$row['zolder_max'];
 	$zolder_avg=$row['zolder_avg'];
+	$garage_min=$row['garage_min'];
+	$garage_max=$row['garage_max'];
+	$garage_avg=$row['garage_avg'];
 	$db->query(
 		"INSERT INTO `temp_hour`
 			(`stamp`,
@@ -349,7 +355,10 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 				`alex_avg`,
 				`zolder_min`,
 				`zolder_max`,
-				`zolder_avg`
+				`zolder_avg`,
+				`garage_min`,
+				`garage_max`,
+				`garage_avg`
 			)
 		VALUES
 			('$stamp',
@@ -396,6 +405,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			`alex_avg`='$alex_avg',
 			`zolder_min`='$zolder_min',
 			`zolder_max`='$zolder_max',
-			`zolder_avg`='$zolder_avg';"
+			`zolder_avg`='$zolder_avg',
+			`garage_min`='$garage_min',
+			`garage_max`='$garage_max',
+			`garage_avg`='$garage_avg';"
 	);
 }
