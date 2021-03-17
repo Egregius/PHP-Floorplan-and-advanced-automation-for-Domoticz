@@ -71,7 +71,7 @@ $stmt = $db->query(
 	ORDER BY `stamp` DESC
 	LIMIT 0,10"
 );
-$dbe=new mysqli('192.168.3.3', 'home', 'H0m€', 'verbruik');
+$dbe=new mysqli('192.168.2.20', 'home', 'H0m€', 'verbruik');
 if ($dbe->connect_errno>0) die('Unable to connect to database ['.$dbe->connect_error.']');
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$stamp=$row['stamp'];
