@@ -123,7 +123,7 @@ if (isset($resources['data'])) {
 					$name=substr($vm['name'], 2);
 					echo '
 					<tr>
-						<td rowspan="3" nowrap class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
+						<td rowspan="3"  class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
 					if($name!='Domoticz'&&$name!='pfSense') {
 						echo '
 						<td colspan="4"  class="borderbottomtick borderrighttick">
