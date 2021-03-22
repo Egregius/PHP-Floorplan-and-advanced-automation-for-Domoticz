@@ -7,7 +7,7 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 $start=microtime(true);
 require 'secure/functions.php';
@@ -17,7 +17,7 @@ use ProxmoxVE\Proxmox;
 
 if ($home) {
 	$db=dbconnect();
-    echo '
+	echo '
 <html>
 	<head>
 		<title>Floorplan</title>
@@ -27,17 +27,17 @@ if ($home) {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
 	if ($udevice=='iPhone') {
-	    echo '
+		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPhoneSE') {
-	    echo '
+		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.74,user-scalable=yes,minimal-ui"/>';
 	} elseif ($udevice=='iPad') {
-	    echo '
+		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
 	}
 	echo '
-	    <link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
@@ -79,130 +79,131 @@ if (isset($_POST['vmid'])&&isset($_POST['action'])) {
 $data = $proxmox->get('/nodes/proxmox/qemu');
 $resources = $proxmox->get('/cluster/resources');
 $vms=array();
-foreach ($resources['data'] as $i) {
-	//echo '<pre>';print_r($i);echo '</pre>';
-	if (isset($i['vmid'])) {
-		$vms[$i['vmid']]['vmid']=$i['vmid'];
-		$vms[$i['vmid']]['name']=$i['name'];
-		$vms[$i['vmid']]['uptime']=$i['uptime'];
-		$vms[$i['vmid']]['status']=$i['status'];
-		$vms[$i['vmid']]['mem']=$i['mem'];
-		$vms[$i['vmid']]['maxmem']=$i['maxmem'];
-		$vms[$i['vmid']]['diskread']=$i['diskread'];
-		$vms[$i['vmid']]['diskwrite']=$i['diskwrite'];
-		$vms[$i['vmid']]['cpu']=$i['cpu'];
-		$vms[$i['vmid']]['netin']=$i['netin'];
-		$vms[$i['vmid']]['netout']=$i['netout'];
+if (isset($resources['data'])) {
+	foreach ($resources['data'] as $i) {
+		//echo '<pre>';print_r($i);echo '</pre>';
+		if (isset($i['vmid'])) {
+			$vms[$i['vmid']]['vmid']=$i['vmid'];
+			$vms[$i['vmid']]['name']=$i['name'];
+			$vms[$i['vmid']]['uptime']=$i['uptime'];
+			$vms[$i['vmid']]['status']=$i['status'];
+			$vms[$i['vmid']]['mem']=$i['mem'];
+			$vms[$i['vmid']]['maxmem']=$i['maxmem'];
+			$vms[$i['vmid']]['diskread']=$i['diskread'];
+			$vms[$i['vmid']]['diskwrite']=$i['diskwrite'];
+			$vms[$i['vmid']]['cpu']=$i['cpu'];
+			$vms[$i['vmid']]['netin']=$i['netin'];
+			$vms[$i['vmid']]['netout']=$i['netout'];
+		}
 	}
-}
-uasort($vms, "cmp");
-//echo '<hr><pre>';print_r($vms);echo '</pre>';
+	uasort($vms, "cmp");
+	//echo '<hr><pre>';print_r($vms);echo '</pre>';
 
-	  echo '
-		<br>
-		<br>
-		<br>
-		<table>
-			<thead>
-				<tr>
-					<th rowspan="2" class="borderlefttick bordertoptick">name</th>
-					<th colspan="2" class="bordertoptick">uptime</th>
-					<th class="bordertoptick">&nbsp;cpu&nbsp;</th>
-					<th class="borderrighttick bordertoptick">memory</th>
-				</tr>
-				<tr>
-					<th nowrap>disk read</th>
-					<th nowrap>disk write</th>
-					<th>net in</th>
-					<th class="borderrighttick">net out</th>
-				</tr>
-			</thead>
-			<tbody>';
-			foreach ($vms as $vm) {
-				$name=substr($vm['name'], 2);
-				echo '
-				<tr>
-					<td rowspan="3" nowrap class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
-				if($name!='Domoticz'&&$name!='pfSense') {
+		  echo '
+			<br>
+			<br>
+			<br>
+			<table>
+				<thead>
+					<tr>
+						<th rowspan="2" class="borderlefttick bordertoptick">name</th>
+						<th colspan="2" class="bordertoptick">uptime</th>
+						<th class="bordertoptick">&nbsp;cpu&nbsp;</th>
+						<th class="borderrighttick bordertoptick">memory</th>
+					</tr>
+					<tr>
+						<th nowrap>disk read</th>
+						<th nowrap>disk write</th>
+						<th>net in</th>
+						<th class="borderrighttick">net out</th>
+					</tr>
+				</thead>
+				<tbody>';
+				foreach ($vms as $vm) {
+					$name=substr($vm['name'], 2);
 					echo '
-					<td colspan="4"  class="borderbottomtick borderrighttick">
-						<form method="POST">
-							<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
-					if($vm['status']=='stopped') {
+					<tr>
+						<td rowspan="3" nowrap class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
+					if($name!='Domoticz'&&$name!='pfSense') {
 						echo '
-							<input type="submit" name="action" value="start" class="btn"/>';
-					} else {
+						<td colspan="4"  class="borderbottomtick borderrighttick">
+							<form method="POST">
+								<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
+						if($vm['status']=='stopped') {
+							echo '
+								<input type="submit" name="action" value="start" class="btn"/>';
+						} else {
+							echo '
+								<input type="submit" name="action" value="stop" class="btn b2"/>
+								<input type="submit" name="action" value="shutdown" class="btn b2"/>';
+						}
 						echo '
-							<input type="submit" name="action" value="stop" class="btn b2"/>
-							<input type="submit" name="action" value="shutdown" class="btn b2"/>';
+							</form>
+						</td>';
 					}
 					echo '
-						</form>
-					</td>';
-				}
-				echo '
-				</tr>
-				<tr>';
-				if($vm['status']!='stopped') {
+					</tr>
+					<tr>';
+					if($vm['status']!='stopped') {
+						echo '
+						<td colspan="2" class="bordertoptick">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
+						<td class="bordertoptick">'.number_format($vm['cpu']*100, 0).' %</td>
+						<td class="bordertoptick borderrighttick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
+					}
 					echo '
-					<td colspan="2" class="bordertoptick">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
-					<td class="bordertoptick">'.number_format($vm['cpu']*100, 0).' %</td>
-					<td class="bordertoptick borderrighttick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
-				}
-				echo '
-				</tr>
-				<tr>';
-				if($vm['status']!='stopped') {
+					</tr>
+					<tr>';
+					if($vm['status']!='stopped') {
+						echo '
+						<td class="borderbottomtick">'.human_filesize($vm['diskread']).'</td>
+						<td class="borderbottomtick">'.human_filesize($vm['diskwrite']).'</td>
+						<td class="borderbottomtick">'.human_filesize($vm['netin']).'</td>
+						<td class="borderbottomtick borderrighttick">'.human_filesize($vm['netout']).'</td>';
+					}
 					echo '
-					<td class="borderbottomtick">'.human_filesize($vm['diskread']).'</td>
-					<td class="borderbottomtick">'.human_filesize($vm['diskwrite']).'</td>
-					<td class="borderbottomtick">'.human_filesize($vm['netin']).'</td>
-					<td class="borderbottomtick borderrighttick">'.human_filesize($vm['netout']).'</td>';
+					</tr>';
 				}
-				echo '
-				</tr>';
-			}
 
-	  echo '
-	  	</tbody>
-	  </table>
-	  <br>
-	  <br>
-	  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
-
-	$data = $proxmox->get('/nodes/proxmox/status');
-	$data=$data['data'];
-	echo '
-		<table>
-			<thead>
-				<tr>
-					<th>Uptime</th>
-					<th>cpu</th>
-					<th>memory</th>
-					<th>load avg</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>'.floor($data['uptime']/86400).'d '.gmdate("G:i:s", ($data['uptime']%86400)).'</td>
-					<td>'.number_format($data['cpu']*100, 0).' %</td>
-					<td>'.human_filesize($data['memory']['used']).'<br>'.human_filesize($data['memory']['total']).'</td>
-					<td>';
-	foreach($data['loadavg'] as $i) {
-		echo $i.' - '.number_format(($i/4)*100, 2) .'%<br>';
-	}
-	echo '
-					</td>
-				</tr>
+		  echo '
 			</tbody>
-		</table>';
-	
+		  </table>
+		  <br>
+		  <br>
+		  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
+
+		$data = $proxmox->get('/nodes/proxmox/status');
+		$data=$data['data'];
+		echo '
+			<table>
+				<thead>
+					<tr>
+						<th>Uptime</th>
+						<th>cpu</th>
+						<th>memory</th>
+						<th>load avg</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>'.floor($data['uptime']/86400).'d '.gmdate("G:i:s", ($data['uptime']%86400)).'</td>
+						<td>'.number_format($data['cpu']*100, 0).' %</td>
+						<td>'.human_filesize($data['memory']['used']).'<br>'.human_filesize($data['memory']['total']).'</td>
+						<td>';
+		foreach($data['loadavg'] as $i) {
+			echo $i.' - '.number_format(($i/4)*100, 2) .'%<br>';
+		}
+		echo '
+						</td>
+					</tr>
+				</tbody>
+			</table>';
+} else echo 'NO CONNECTION WITH PROXMOX';
 //	echo '<pre>';print_r($data);echo '</pre>';
-	
+
 }
 function cmp($a, $b) {
-    return strcmp($a['name'], $b['name']);
+	return strcmp($a['name'], $b['name']);
 }
 ?>
-    </body>
+	</body>
 </html>
