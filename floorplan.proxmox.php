@@ -197,7 +197,7 @@ if (isset($resources['data'])) {
 					</tr>
 				</tbody>
 			</table>';
-} else echo 'NO CONNECTION WITH PROXMOX';
+} else echo '<br><br><br><br><br>NO CONNECTION WITH PROXMOX';
 //	echo '<pre>';print_r($data);echo '</pre>';
 
 }
