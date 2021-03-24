@@ -718,20 +718,26 @@ function fhall() {
 	} else finkom();
 }
 function sirene($msg) {
-	global $d,$device;
+	global $d,$device,$status;
 	if ($d['Weg']['s']==0) return false;
-	elseif (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
-		if ($d['Weg']['s']>=2&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
-			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
-		}
-	} else {
-		if ($d['Weg']['s']>=1&&$d['Weg']['m']>TIME-178&&$d['poortrf']['s']=='Off') {
-			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-			telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
+		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
+			if ($d['Weg']['s']>=2&&past('Weg')>178) {
+				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+				telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
+				storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+			}
+		} else {
+			if ($d['Weg']['s']>=1&&past('Weg')>178) {
+				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+				telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
+				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
+				storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
-	storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
+
 }
 function createheader($page='') {
 	global $udevice,$ipaddress;
