@@ -722,18 +722,16 @@ function sirene($msg) {
 	if ($d['Weg']['s']==0) return false;
 	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
 		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurtobi', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamtobi', 'raamalex'))) {
-			if ($d['Weg']['s']>=2&&past('Weg')>178) {
+			if ($d['Weg']['s']>=2) {
 				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 				telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
 				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
-				storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			if ($d['Weg']['s']>=1&&past('Weg')>178) {
+			if ($d['Weg']['s']>=1) {
 				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 				telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);
 				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
-				storemode('Weg', TIME, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}
