@@ -19,13 +19,13 @@ if (isset($_REQUEST['gpio'])) {
 	$gpio=$_REQUEST['gpio'];
 	if ($gpio==20) {
 		store('gasvandaag', $d['gasvandaag']['s']+1, basename(__FILE__).':'.__LINE__);
-		if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<120&&past('watervandaag')<120) {
+		if ($d['lichtbadkamer']['s']>0&&((past('gasvandaag')<240&&past('watervandaag')<240&&$d['heating']['s']>=2)||$d['heating']['s']<=1)) {
 			store('douche', $d['douche']['s']+1, basename(__FILE__).':'.__LINE__);
 			$d['douche']['s']=$d['douche']['s']+1;
-		} elseif ($d['brander']['s']=='Off'&&$d['living_temp']['s']>$d['living_set']['s']) sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
+		} elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$d['living_set']['s']) sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
 	} elseif ($gpio==21) {
 		store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
-		if ($d['lichtbadkamer']['s']>0&&past('gasvandaag')<120&&past('watervandaag')<120) {
+		if ($d['lichtbadkamer']['s']>0&&((past('gasvandaag')<240&&past('watervandaag')<240&&$d['heating']['s']>=2)||$d['heating']['s']<=1)) {
 			storemode('douche', $d['douche']['m']+1, basename(__FILE__).':'.__LINE__, 1);
 			$d['douche']['m']=$d['douche']['m']+1;
 		}
