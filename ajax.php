@@ -206,7 +206,7 @@ if ($home==true) {
 					if ($d['nvidia']['s']!='On') {
 						sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 					}
-					if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
+					if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0) {
 						sw('bose101', 'Off');
 						bosekey("POWER");
 						foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {

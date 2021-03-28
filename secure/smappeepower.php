@@ -25,7 +25,7 @@ if (!empty($smappee['report'])) {
 		if (!empty($matches[1][2])) {
 			$consumption=round($matches[1][2], 0);
 			$result = $db->query("UPDATE devices SET s='$consumption',t='".TIME."' WHERE n='el';") or trigger_error($db->error);
-			if ($consumption>8500) alert('Power', 'Power usage: '.$consumption.' W!', 600, false);
+			if ($consumption-$newzon>8500) alert('Power', 'Power usage: '.$consumption-$newzon.' W!', 600, false);
 		}
 	}
 } else {
