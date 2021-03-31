@@ -60,7 +60,7 @@ if ($d['nvidia']['s']=='On') {
 if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
 	if (pingport('192.168.2.105', 80)==1) {
-		if ($d['achterdeur']['s']=='Open') {
+		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
 			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
 			if (!empty($status)) {
 				if ($d['bose105']['m']!='Online') {

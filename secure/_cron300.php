@@ -12,7 +12,7 @@
 //lg(__FILE__.':'.$s);
 $user='cron300';
 if(isset($db)) $db=dbconnect();
-$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
+/*$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen;");
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];
 if ($rainpast==0) $rainpast=1;
 if ($d['minmaxtemp']['m'] > -3) {
@@ -27,7 +27,7 @@ if ($d['minmaxtemp']['m'] > -3) {
 	elseif ($rainpast>1000) $pomppauze=258910;
 	else $pomppauze=2591990;
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
-}
+}*/
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['zwembadfilter']['s']=='On') {
