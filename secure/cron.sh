@@ -40,10 +40,10 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx start
 fi
 
-ps cax | grep php-fpm7.4
-if [ $? -ne 0 ] ; then
-	/usr/sbin/service php7.4-fpm stop
-	/usr/sbin/service php7.4-fpm start
+PHP=$(ps -C php-fpm8.0 | wc -l)
+if [ $PHP -le 1 ] || [ $PHP -ge 50 ] ; then
+	/usr/sbin/service php8.0-fpm stop
+	/usr/sbin/service php8.0-fpm start
 fi
 
 ps cax | grep mysql
@@ -66,7 +66,7 @@ if [ $(($MINUTE%10)) -eq 0 ] ; then
 		/usr/bin/nice -n20 git push origin master
 	fi
 fi
-END Github
+# END Github
 
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
