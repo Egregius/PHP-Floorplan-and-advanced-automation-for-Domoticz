@@ -22,7 +22,7 @@ if (isset($_REQUEST['gpio'])) {
 		if ($d['lichtbadkamer']['s']>0&&((past('gasvandaag')<240&&past('watervandaag')<240&&$d['heating']['s']>=2)||$d['heating']['s']<=1)) {
 			store('douche', $d['douche']['s']+1, basename(__FILE__).':'.__LINE__);
 			$d['douche']['s']=$d['douche']['s']+1;
-		} elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$d['living_set']['s']) sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
+		} elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$d['living_set']['s']&&past('brander')>298) sw('brander', 'Off',basename(__FILE__).':'.__LINE__);
 	} elseif ($gpio==21) {
 		store('watervandaag', $d['watervandaag']['s']+1, basename(__FILE__).':'.__LINE__);
 		if ($d['lichtbadkamer']['s']>0&&((past('gasvandaag')<240&&past('watervandaag')<240&&$d['heating']['s']>=2)||$d['heating']['s']<=1)) {
