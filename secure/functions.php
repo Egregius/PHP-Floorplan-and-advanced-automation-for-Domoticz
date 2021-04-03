@@ -9,7 +9,6 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-//session_start();
 require_once '/var/www/config.php';
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
@@ -42,7 +41,6 @@ function fetchdata() {
  * @return null
  */
 function huisslapen() {
-	exit;
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','media','bureel','jbl','tuin','keuken','werkblad1','wasbak','kookplaat','zolderg','voordeur','wc','dampkap','GroheRed'), 'Off', basename(__FILE__).':'.__LINE__);
@@ -73,11 +71,7 @@ function huisslapen() {
  * @return null
  */
 function huisweg() {
-	exit;
-	//global $d;
-	//if(empty($d)) $d=fetchdata();
 	huisslapen();
-
 }
 /**
  * Function douche
@@ -194,7 +188,7 @@ function sl($name,$level,$msg='') {
 	} else {
 		lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
-			if ($d[$name]['s']!=$level) 	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+			if ($d[$name]['s']!=$level)	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 		} else store($name, $level, $msg);
 	}
 }
@@ -244,11 +238,11 @@ function sw($name,$action='Toggle',$msg='') {
 		if ($name=='denon') {
 			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
 		} else {
-   			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2','daikin'))) {
-   				$stamp=TIME;
-   				if (!isset($db)) $db=dbconnect();
-   				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
-   			}
+  			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2','daikin'))) {
+  				$stamp=TIME;
+  				if (!isset($db)) $db=dbconnect();
+  				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
+  			}
 		}
 	}
 }
@@ -449,7 +443,7 @@ function double($name, $action, $msg='') {
 function rookmelder($msg) {
 	global $d;
 	if ($d['Weg']['s']<=1) {
-		alert($device, 	$msg, 	300, false, 2, true);
+		alert($device,	$msg,	300, false, 2, true);
 		foreach (array(/*'Ralex',*/'Rtobi','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
 			if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 		}
@@ -666,7 +660,7 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) 	sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['keuken']['s']=='Off'&&TIME<strtotime('21:30'))	sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['jbl']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
 		}

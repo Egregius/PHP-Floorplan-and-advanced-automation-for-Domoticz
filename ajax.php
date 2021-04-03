@@ -43,20 +43,17 @@ if ($home==true) {
 		echo json_encode($d);
 		exit;
 	}
-
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='imac') {
 		if ($_REQUEST['command']=='wake') {
 			shell_exec('secure/wakeimac.sh');
 		}
 	}
-
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
 		if ($_REQUEST['command']=='volume') {
 			$vol=80-$_REQUEST['action'];
 			@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
 		}
 	}
-
 	elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
 		resetsecurity();
 	}
@@ -73,13 +70,13 @@ if ($home==true) {
 			shell_exec('/var/www/html/secure/lgtv.py -c play '.$lgtvip);
 		} elseif ($_REQUEST['command']=='pause') {
 			shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
-	 	} elseif ($_REQUEST['command']=='volume') {
-	 		if ($_REQUEST['action']=='up') {
-	 			fvolume('up');
-	 		} elseif ($_REQUEST['action']=='down') {
-	 			fvolume('down');
-	 		}
-	   	} elseif ($_REQUEST['command']=='sw') {
+		} elseif ($_REQUEST['command']=='volume') {
+			if ($_REQUEST['action']=='up') {
+				fvolume('up');
+			} elseif ($_REQUEST['action']=='down') {
+				fvolume('down');
+			}
+		} elseif ($_REQUEST['command']=='sw') {
 			if ($_REQUEST['action']=='On') {
 				shell_exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
 			} elseif ($_REQUEST['action']=='Off') {
@@ -87,7 +84,6 @@ if ($home==true) {
 			}
 		}
 	}
-
 	elseif (isset($_REQUEST['bose'])) {
 		$bose=$_REQUEST['bose'];
 		$d=array();
@@ -103,7 +99,6 @@ if ($home==true) {
 		echo json_encode($d);
 		exit;
 	}
-
 	elseif (isset($_REQUEST['media'])) {
 		$d=fetchdata();
 		$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
@@ -126,15 +121,9 @@ if ($home==true) {
 	}
 	elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
 		$d=fetchdata();
-		//if ($user=='Tobi'&&$_REQUEST['device']!='poortrf') exit;
 		if ($_REQUEST['command']=='setpoint') {
-			/*if ($_REQUEST['device']=='zolder'&&$user=='Tobi') {
-				if ($_REQUEST['action']>16) $_REQUEST['action']=16;
-			}*/
 			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
-//			$d[$_REQUEST['device'].'_set']['s']=$_REQUEST['action'];
-//			$d[$_REQUEST['device'].'_set']['m']=1;
 		} elseif ($_REQUEST['command']=='heating') {
 			store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='Weg') {
@@ -170,7 +159,6 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='dimmer') {
 			storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-
 		} elseif ($_REQUEST['command']=='roller') {
 			if ($_REQUEST['device']=='Beneden') {
 				foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
@@ -187,10 +175,8 @@ if ($home==true) {
 				if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
 			} else {
 				sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-				//storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 				if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 			}
-
 		} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 			storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='mode') {
@@ -311,7 +297,6 @@ if ($home==true) {
 			}
 		}
 	}
-
 	elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
 		if ($_REQUEST['command']=='volume') {
 			bosevolume($_REQUEST['action'], $_REQUEST['boseip'], basename(__FILE__).':'.__LINE__);
@@ -349,10 +334,6 @@ if ($home==true) {
 		} elseif ($_REQUEST['command']=='mode') {
 			storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		}
-	}
-
-	elseif (isset($_REQUEST['daikin'])) {
-
 	}
 } else {
 	echo json_encode('NOTAUTHENTICATED');
