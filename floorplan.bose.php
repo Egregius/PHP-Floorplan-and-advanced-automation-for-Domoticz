@@ -62,7 +62,7 @@ if ($home) {
 			function navigator_Go(url){window.location.assign(url)}
 			$(document).ready(function() {
 				ajaxbose('.$bose.')
-				myAjaxMedia=$.setInterval(ajaxbose('.$bose.'), 999)
+				myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
 			});
 		</script>
 	</head>
