@@ -64,16 +64,6 @@ function huisslapen() {
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
 /**
- * Function huisweg
- *
- * Switches off everything that should be off while not at home
- *
- * @return null
- */
-function huisweg() {
-	huisslapen();
-}
-/**
  * Function douche
  *
  * Calculates the gas and water consumption of the shower, sents a telegram

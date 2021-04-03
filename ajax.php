@@ -128,15 +128,8 @@ if ($home==true) {
 			store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='Weg') {
 			store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			if ($_REQUEST['action']==0) {
-				if ($d['Weg']['s']!=1&&$d['poortrf']['s']=='Off') {
-					sw('poortrf', 'On',basename(__FILE__).':'.__LINE__);
-				}
-				resetsecurity();
-			} elseif ($_REQUEST['action']==1) {
+			if ($_REQUEST['action']>=1) {
 				huisslapen();
-			} elseif ($_REQUEST['action']==2) {
-				huisweg();
 			}
 		} elseif ($_REQUEST['command']=='dimmerwake') {
 			storemode($_REQUEST['device'], 2, basename(__FILE__).':'.__LINE__);
