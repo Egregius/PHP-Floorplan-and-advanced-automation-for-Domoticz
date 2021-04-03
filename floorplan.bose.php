@@ -59,10 +59,10 @@ if ($home) {
 		<script type="text/javascript" src="/scripts/jQuery.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 		<script type="text/javascript">
-			function navigator_Go(url){window.location.assign(url);}
+			function navigator_Go(url){window.location.assign(url)}
 			$(document).ready(function() {
-				ajaxbose('.$bose.');
-				myAjaxMedia=setInterval( function() { ajaxbose('.$bose.'); }, 500 );
+				ajaxbose('.$bose.')
+				myAjaxMedia=$.setInterval(ajaxbose('.$bose.'), 999)
 			});
 		</script>
 	</head>

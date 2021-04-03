@@ -40,11 +40,11 @@ if ($d['auto']['s']=='On') {
 			if (past('pirliving')>$uit) {
 				foreach (array('tvled','kristal','jbl') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
-			$uit=10800;
+			$uit=14400;
 			if (past('pirliving')>$uit) {
 				if ($d['denon']['s']=='On'||$d['lgtv']['s']=='On') {
 					ud('miniliving4l', 1, 'On');
-					lg('miniliving4l pressed omdat er al 3 uur geen beweging is');
+					lg('miniliving4l pressed omdat er al 4 uur geen beweging is');
 				}
 			}
 		}
@@ -55,7 +55,6 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
-
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {

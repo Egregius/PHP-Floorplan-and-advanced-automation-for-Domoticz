@@ -69,9 +69,9 @@ if ($d['achterdeur']['s']=='Open') {
 if (past('diepvries_temp')>7200) alert('diepvriestemp','Diepvries temp not updated since '.strftime("%k:%M:%S", $d['diepvries_temp']['t']),7200);
 if ($d['Weg']['s']==0&&TIME<=strtotime('16:00')&&($d['zon']['s']-$d['el']['s'])>300) alert('wasmachien','Wasmachien checken'.PHP_EOL.($d['zon']['s']-$d['el']['s']).' W overschot',43200);
 if ($d['auto']['s']!='On'&&past('auto')>10795) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-if (past('Weg')>14400&& $d['Weg']['s']==0&& past('pirliving')>14400&& past('pirkeuken')>14400&& past('pirinkom')>14400&& past('pirhall')>14400&& past('pirgarage')>14400) {
+if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);
-	telegram('Slapen ingeschakeld na 4 uur geen beweging', false, 2);
+	telegram('Slapen ingeschakeld na 5 uur geen beweging', false, 2);
 } elseif (past('Weg')>36000&& $d['Weg']['s']==1&& past('pirliving')>36000&& past('pirkeuken')>36000&& past('pirinkom')>36000&& past('pirhall')>36000&& past('pirgarage')>36000) {
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
