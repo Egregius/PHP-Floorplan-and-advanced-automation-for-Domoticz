@@ -128,7 +128,9 @@ if ($home==true) {
 			store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['command']=='Weg') {
 			store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			if ($_REQUEST['action']>=1) {
+			if ($_REQUEST['action']==0) {
+				huisthuis();
+			} elseif ($_REQUEST['action']>=1) {
 				huisslapen();
 			}
 		} elseif ($_REQUEST['command']=='dimmerwake') {

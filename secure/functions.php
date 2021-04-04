@@ -68,7 +68,6 @@ function huisthuis() {
 	store('Weg', 0);
 	if ($d['buiten_temp']['s']<4&&$d['heating']['s']<4) store('heating', 4, basename(__FILE__).':'.__LINE__);
 	elseif ($d['buiten_temp']['s']>10&&$d['heating']['s']>1) store('heating', 1, basename(__FILE__).':'.__LINE__);
-
 }
 /**
  * Function douche
@@ -520,7 +519,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	bosepost("key", $xml, $ip);
 	if (startsWith($key,'PRESET')) {
 		$msg='Bosekey '.$key;
-		$dontplayfirst=array('Cloud Rider','Jackie Chan','In My Mind','A Thousand Years','Feed Your Head');
+		$dontplayfirst=array('Paul Kalkbrenner', 'Christina Perri');
 		for ($x=1;$x<=10;$x++) {
 			bosekey('SHUFFLE_ON', 0, $ip);
 			usleep(200000);
@@ -528,9 +527,9 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			if (!empty($nowplaying)) {
 				bosekey('SHUFFLE_ON', 0, $ip);
 				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['track'])&&!is_array($nowplaying['track'])) {
-						$msg.='| '.$nowplaying['track'];
-						if (in_array(trim($nowplaying['track']), $dontplayfirst)) bosekey("NEXT_TRACK", $sleep, $ip);
+					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
+						$msg.='| '.$nowplaying['artist'];
+						if (in_array(trim($nowplaying['artist']), $dontplayfirst)) bosekey("NEXT_TRACK", $sleep, $ip);
 					}
 				}
 			}
