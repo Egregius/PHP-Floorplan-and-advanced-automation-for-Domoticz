@@ -334,7 +334,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off') {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
-		if ($level[0]<10&&past('kookplaatpower_kWh')>600) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($level[0]<10&&past('kookplaatpower_kWh')>900) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 

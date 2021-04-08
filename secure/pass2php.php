@@ -29,6 +29,9 @@ if (isset($d[$device])) {
 	} elseif (in_array($device, array('garage_temp'))) {
 		$status=explode(';', $status);
 		$status=$status[0];
+		$old=$status;
+		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
+		elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 	} elseif ($device=='achterdeur') {
 		if ($status=='Open') {
 			$status='Closed';
