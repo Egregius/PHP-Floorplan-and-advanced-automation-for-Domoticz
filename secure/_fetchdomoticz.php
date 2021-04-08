@@ -31,10 +31,10 @@ if ($domoticz) {
 				$switchtype='none';
 			}
 			if($switchtype=='On/Off')$type='switch';
-			elseif($switchtype=='Contact'){$type='contact';$idx=null;}
-			elseif($switchtype=='Door Contact'){$type='contact';$idx=null;}
-			elseif($switchtype=='Motion Sensor'){$type='pir';$idx=null;}
-			elseif($switchtype=='Push On Button'){$type='';$idx=null;}
+			elseif($switchtype=='Contact'){$type='contact';$idx=0;}
+			elseif($switchtype=='Door Contact'){$type='contact';$idx=0;}
+			elseif($switchtype=='Motion Sensor'){$type='pir';$idx=0;}
+			elseif($switchtype=='Push On Button'){$type='';$idx=0;}
 			elseif($switchtype=='X10 Siren')$type='';
 			elseif($switchtype=='Smoke Detector')$type='';
 			elseif($switchtype=='Selector')$type='';
@@ -87,7 +87,9 @@ if ($domoticz) {
 				$time=TIME;
 			}
 			echo $idx.' '.$name.' = ';
-			$db->query("INSERT INTO devices (n,s,dt) VALUES ('$name','$status','$type') ON DUPLICATE KEY UPDATE i='$idx',s='$status',dt='$type';");
+			$query="INSERT INTO devices (n,i,s,dt) VALUES ('$name','$idx','$status','$type') ON DUPLICATE KEY UPDATE i='$idx',s='$status',dt='$type';";
+			lg($query);
+			$db->query($query);
 			if (php_sapi_name() === 'cli') $status.PHP_EOL;
 			else $status.'<br>';
 			echo php_sapi_name();

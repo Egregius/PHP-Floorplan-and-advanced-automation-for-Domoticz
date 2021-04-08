@@ -32,7 +32,7 @@ if ($home==true) {
 		if($_REQUEST['t']==0)$t=0;
 		else $t=$t-1;
 		$db=dbconnect();
-		$stmt=$db->query("SELECT n,i,s,t,m,dt,icon FROM devices WHERE t >= $t;");
+		$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE t >= $t;");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			$d[$row['n']]['s']=$row['s'];
 			$d[$row['n']]['t']=$row['t'];
