@@ -10,12 +10,9 @@
  * @link	 https://egregius.be
  **/
 if ($status=='On') {
-	if ($d['keuken']['s']=='On') {
-		sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['GroheRed']['s']=='Off') {
-		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
+
 } else {
 	/*if ($d['pirkeuken']['s']=='Off') {
 		ud('pirkeuken', 0, 'On');

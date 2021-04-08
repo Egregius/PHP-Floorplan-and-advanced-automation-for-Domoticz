@@ -332,6 +332,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
+	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off'&&$d['kookplaatpower_W']['s']<10&&past('kookplaatpower_W')>600) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
