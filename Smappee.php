@@ -40,7 +40,7 @@ if ($home===true) {
 			<form action="/Smappee.php">
 				<select name="periode" class="btn b2 btna" onchange="this.form.submit()"/>';
 	if (!isset($_REQUEST['periode'])) $_REQUEST['periode']='maand';
-	foreach (array('kwartaal', 'maand','dag') as $k) {
+	foreach (array('kwartaal', 'maand','dag','AlwaysOn') as $k) {
 		if ($k==$_REQUEST['periode']) echo '<option value="'.$k.'" selected>'.$k.'</option>';
 		else echo '<option value="'.$k.'">'.$k.'</option>';
 	}
@@ -88,47 +88,71 @@ if ($home===true) {
 	elseif ($udevice=='Mac') {$args['width']=490;$args['height']=720;}
 	else {$args['width']=460;$args['height']=200;}
 	$time=time();
-	if ($_REQUEST['periode']=='kwartaal') $months=array('01'=>'Jan-Feb-Maa','04'=>'April-Mei-Jun','07'=>'Jul-Aug-Sep','10'=>'Okt-Nov-Dec');
-	else $months=array('01'=>'Januari','02'=>'Februari','03'=>'Maart','04'=>'April','05'=>'Mei','06'=>'Juni','07'=>'Juli','08'=>'Augustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'December');
-	for($y=2018;$y<=strftime("%Y",$time);$y++){
-		foreach($months as $m=>$ms){
-			foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
-				${$t}[$m]['Maand']=$ms;
-				${$t}[$m][$y]=0;
-			}
+	if ($_REQUEST['periode']=='AlwaysOn') {
+		$table='smappee_dag';
+		$query="SELECT timestamp,alwaysOn from `$table` ORDER BY timestamp DESC limit 0,180";
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+		if ($result->num_rows==0) {
+			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';exit;
 		}
-	}
-	$table='smappee_'.$_REQUEST['periode'];
-	$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `$table` ORDER BY timestamp ASC";
-	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';exit;
-	}
-	while ($row=$result->fetch_assoc()) {
-		$y=strftime("%Y", $row['timestamp']);
-		$m=strftime("%m", $row['timestamp']);
-		foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
-			if (startsWith($t, 'self')) {
-				${$t}[$m][$y]=$row[$t];
-			} else {
-				${$t}[$m][$y]=$row[$t]/1000;
-			}
+		while ($row=$result->fetch_assoc()) {
+			$temp['Date']=strftime("%F", $row['timestamp']);
+			$temp['AlwaysOn']=$row['alwaysOn']/10000;
+			$data[]=$temp;
 		}
-	}
-	$result->free();
-	foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
-		echo '<a href="Smappee.php?periode='.$_REQUEST['periode'].'"><h1>'.$t.'</h1></a>';
+		$result->free();
+		echo '<a href="Smappee.php?periode='.$_REQUEST['periode'].'"><h1>AlwaysOn</h1></a>';
 		$y=2018;
-		foreach ($colors as $c) {
-			echo ' <span style="color:'.$c.'"> '.$y.' </span> &nbsp; ';
-			$y++;
-		}
-		$args['chart_div']=$t;
-		$chart=array_to_chart(${$t}, $args);
+		sort($data);
+		$args['chart_div']='AlwaysOn';
+		$chart=array_to_chart($data, $args);
 		echo $chart['script'];
 		echo $chart['div'];
 		unset($chart);
-		//echo '<pre>';print_r(${$t});echo '</pre>';
+		echo '<pre>';print_r($data);echo '</pre>';
+	} else {
+		if ($_REQUEST['periode']=='kwartaal') $months=array('01'=>'Jan-Feb-Maa','04'=>'April-Mei-Jun','07'=>'Jul-Aug-Sep','10'=>'Okt-Nov-Dec');
+		else $months=array('01'=>'Januari','02'=>'Februari','03'=>'Maart','04'=>'April','05'=>'Mei','06'=>'Juni','07'=>'Juli','08'=>'Augustus','09'=>'September','10'=>'Oktober','11'=>'November','12'=>'December');
+		for($y=2018;$y<=strftime("%Y",$time);$y++){
+			foreach($months as $m=>$ms){
+				foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+					${$t}[$m]['Maand']=$ms;
+					${$t}[$m][$y]=0;
+				}
+			}
+		}
+		$table='smappee_'.$_REQUEST['periode'];
+		$query="SELECT timestamp,consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency from `$table` ORDER BY timestamp ASC";
+		if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+		if ($result->num_rows==0) {
+			echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';exit;
+		}
+		while ($row=$result->fetch_assoc()) {
+			$y=strftime("%Y", $row['timestamp']);
+			$m=strftime("%m", $row['timestamp']);
+			foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+				if (startsWith($t, 'self')) {
+					${$t}[$m][$y]=$row[$t];
+				} else {
+					${$t}[$m][$y]=$row[$t]/1000;
+				}
+			}
+		}
+		$result->free();
+		foreach (array('consumption','solar','alwaysOn','gridImport','gridExport','selfConsumption','selfSufficiency') as $t) {
+			echo '<a href="Smappee.php?periode='.$_REQUEST['periode'].'"><h1>'.$t.'</h1></a>';
+			$y=2018;
+			foreach ($colors as $c) {
+				echo ' <span style="color:'.$c.'"> '.$y.' </span> &nbsp; ';
+				$y++;
+			}
+			$args['chart_div']=$t;
+			$chart=array_to_chart(${$t}, $args);
+			echo $chart['script'];
+			echo $chart['div'];
+			unset($chart);
+			//echo '<pre>';print_r(${$t});echo '</pre>';
+		}
 	}
 	$db->close();
 } else {
