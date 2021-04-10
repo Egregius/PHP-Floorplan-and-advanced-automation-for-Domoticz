@@ -523,7 +523,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 		$dontplayfirst=array('Paul Kalkbrenner', 'Christina Perri');
 		for ($x=1;$x<=10;$x++) {
 			bosekey('SHUFFLE_ON', 0, $ip);
-			usleep(200000);
+			usleep(300000);
 			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
 			if (!empty($nowplaying)) {
 				bosekey('SHUFFLE_ON', 0, $ip);
