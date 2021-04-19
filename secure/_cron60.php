@@ -169,10 +169,7 @@ if ($d['auto']['s']=='On') {
 		if ($d[$i]['m']!=0&&past($i)>14400) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 
-	if (TIME<=strtotime('0:03')) {
-		store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
-		store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
-	} elseif (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
+	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
 		foreach (array('RkamerL','RkamerR','Rtobi','Ralex') as $i) {
 			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 		}
@@ -334,11 +331,15 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off') {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
-		if ($level[0]<20&&past('kookplaatpower_kWh')>900) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($level[0]<20&&past('kookplaatpower_kWh')>2400) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
+if (TIME<=strtotime('0:03')) {
+	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
+	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
+}
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>40) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
 /*if ($d['zon']['s']-$d['el']['s']<-200) $set=$d['diepvries']['m']-10;
