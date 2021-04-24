@@ -9,7 +9,13 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+
 require_once '/var/www/config.php';
+require_once '/var/www/TwoFactorAuth/demo/loader.php';
+Loader::register('../lib','RobThree\\Auth');
+use \RobThree\Auth\TwoFactorAuth;
+$tfa = new TwoFactorAuth($domainname);
+
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 
