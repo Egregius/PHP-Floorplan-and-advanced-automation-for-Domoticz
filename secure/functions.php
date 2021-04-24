@@ -11,8 +11,9 @@
  **/
 
 require_once '/var/www/config.php';
-require_once '/var/www/TwoFactorAuth/lib/TwoFactorAuth.php';
-//Loader::register('../lib','RobThree\\Auth');
+
+require_once '/var/www/html/secure/TwoFactorAuth/demo/loader.php';
+Loader::register('../lib','RobThree\\Auth');
 use \RobThree\Auth\TwoFactorAuth;
 $tfa = new TwoFactorAuth($domainname);
 

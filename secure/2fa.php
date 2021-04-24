@@ -14,8 +14,8 @@ if (isset($_POST['password'])) {
 echo '<hr>';
 if (isset($_POST['secret'])&&isset($_POST['2FAcode'])) {
 	if ($tfa->verifyCode($_POST['secret'], $_POST['2FAcode']) === true) {
-		$stmt=$db->prepare("UPDATE users SET 2FA = :2FA WHERE username=:username");
-		$stmt->execute(array(':2FA'=>$_POST['secret'],':username'=>$_POST['username']));
+		$stmt=$db->prepare("UPDATE users SET 2fa = :2fa WHERE user=:user");
+		$stmt->execute(array(':2fa'=>$_POST['secret'],':user'=>$_POST['user']));
 		echo '2FA Enabled<br><br>';
 	} else {
 		echo 'Code invalid<br><br>';
@@ -27,6 +27,8 @@ $secret = $tfa->createSecret(160);
 echo $secret;
 echo '<form method="POST">
 				<input type="hidden" name="secret" value="'.$secret.'"/>
-				<center><input type="number" name="2FAcode" value="" min="0" max="999999" style="width: 100px;text-align:center;"/></center><br><br>
-				<button type="submit" class="button success" >'.$_SESSION['txt']['Button']['Save'].'</button>
+				Username:<input type="text" name="user">
+				Code:<input type="number" name="2FAcode" value="" min="0" max="999999" style="width: 100px;text-align:center;"/>
+				<br><br>
+				<button type="submit" class="button success" >Save</button>
 			</form>';
