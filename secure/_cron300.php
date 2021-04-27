@@ -81,6 +81,8 @@ if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('
 if ($d['GroheRed']['m']>0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>3600&&past('pirkeuken')>3600) {
 	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+} elseif ($d['GroheRed']['m']=0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>3600&&past('pirkeuken')>600) {
+	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 }
 $items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
 foreach ($items as $i) {
@@ -416,3 +418,5 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			`garage_avg`='$garage_avg';"
 	);
 }
+if ($d['buiten_temp']['s']<4&&$d['heating']['s']<4&&past('heating')>7200&&TIME<strtotime('7:00')) store('heating', 4, basename(__FILE__).':'.__LINE__);
+elseif ($d['buiten_temp']['s']>7&&$d['heating']['s']>1&&past('heating')>7200) store('heating', 1, basename(__FILE__).':'.__LINE__);

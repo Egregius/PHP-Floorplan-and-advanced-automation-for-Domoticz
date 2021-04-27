@@ -9,4 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8beneden-4.php');
+foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
+	if ($d[$i]['s']!=0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+}
