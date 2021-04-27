@@ -12,6 +12,7 @@
 header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
+require '/var/www/session.php';
 echo '<pre>';
 if (!isset($_SESSION['User'])) {
 	echo '
