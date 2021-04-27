@@ -15,15 +15,11 @@ require 'functions.php';
 require '/var/www/session.php';
 echo '<pre>';
 if (!isset($_SESSION['User'])) {
-	echo '
-	Session Not set, fetching<br>
-	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
-	<script type=\'text/javascript\'>
-		$(document).ready(function(){
-			console.log("test")
-			$.get("https://login.egregius.be/remote.php")
-		});
-	</script>';
+	if (!isset($_COOKIE['__Secure-Egregius'])) {
+		echo 'cookie not set';
+	} else {
+		echo 'cookie set';
+	}
 }
 echo '<pre>Session:';print_r($_SESSION);echo '</pre>';
 
