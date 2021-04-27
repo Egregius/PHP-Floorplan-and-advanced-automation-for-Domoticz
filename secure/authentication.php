@@ -12,12 +12,11 @@
 session_name("__Secure-Session-Egregiushome");
 session_set_cookie_params(['lifetime' => 0,'path' => '/','domain' =>'.egregius.be','secure' => true,'httponly' => true,'samesite' => 'Lax']);
 session_start();
-$_SESSION['redirect']='https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 if (!isset($_SESSION['User'])) {
 	if (!isset($_COOKIE['__Secure-Egregius'])) {
-		header("Location: https://login.egregius.be");
+		header("Location: https://login.egregius.be/?redirect=https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		header('HTTP/1.1 301 Redirect');
-		die("Redirecting to: https://login.egregius.be");
+		die("Redirecting to: https://login.egregius.be/?redirect=https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 	} else {
 		$_SESSION['User']=json_decode(file_get_contents('https://login.egregius.be/remote.php?cookie='.$_COOKIE['__Secure-Egregius']), true);
 	}
