@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
@@ -19,11 +20,11 @@ if (!isset($_SESSION['User'])) {
 	<script type=\'text/javascript\'>
 		$(document).ready(function(){
 			console.log("test")
-			console.log($.get("https://login.egregius.be/remote.php"))
+			$.get("https://login.egregius.be/remote.php")
 		});
 	</script>';
 }
-
+echo '<pre>Session:';print_r($_SESSION);echo '</pre>';
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
