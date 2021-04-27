@@ -7,14 +7,14 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 require 'scripts/chart.php';
 if ($home===true) {
-    $items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
-    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
+	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -57,7 +57,7 @@ if ($home===true) {
 		else echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
 				<label for="'.$i.'" class="kamer b5" >'.$i.'</label>';
-			
+
 		if (isset($_REQUEST[$i])) $kamers[]=$i;
 	}
 	if (!isset($kamers)) $kamers=array('buiten');
@@ -69,7 +69,7 @@ if ($home===true) {
 		else echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
 				<label for="'.$i.'" class="uur">'.$i.'</label>';
-		
+
 		if (isset($_REQUEST[$i])) $hours[$i]=$i;
 	}
 	if (!isset($hours)) {
@@ -82,8 +82,8 @@ if ($home===true) {
 			</form>
 			<br>
 			<br>';
-    $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-    if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
+	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+	if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
    $query="SELECT stamp";
 	foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
 	$query.=" FROM temp_hour WHERE stamp like '2019-05%' OR stamp like '2019-06%' OR stamp like '2019-07%' OR stamp like '2019-08%' OR stamp like '2019-09%'";
@@ -165,10 +165,10 @@ if ($home===true) {
 	echo '
 		</tbody>
 	</table>';
-    $db->close();
-    
+	$db->close();
+
 } else {
-    header("Location: index.php");
-    die("Redirecting to: index.php");
+	header("Location: index.php");
+	die("Redirecting to: index.php");
 }
 ?>

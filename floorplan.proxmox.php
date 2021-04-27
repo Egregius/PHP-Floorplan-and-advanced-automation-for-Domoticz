@@ -11,7 +11,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 require '/var/www/proxmox/vendor/autoload.php';
 use ProxmoxVE\Proxmox;
 

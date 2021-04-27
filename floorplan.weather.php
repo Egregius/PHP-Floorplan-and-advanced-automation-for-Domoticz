@@ -13,7 +13,7 @@
  * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 require 'scripts/chart.php';
 if ($home) {
 	$d=fetchdata();

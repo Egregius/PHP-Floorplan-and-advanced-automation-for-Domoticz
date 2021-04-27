@@ -1,25 +1,25 @@
 <script>
-    function scroll_to_selected() {document.getElementById("selected").scrollIntoView(true);}
-    function select_all(source)	{
-        checkboxes = document.getElementsByName('file_list[]');
-        for (var c in checkboxes) {checkboxes[c].checked = source.checked;}
-        checkboxlist = document.getElementsByName('checkbox_list[]');
-        for (var c in checkboxlist)	{checkboxlist[c].checked = source.checked;}
-    }
-    function select_day(source, ymd){
-        checkboxes = document.getElementsByName('file_list[]');
-        for (var c in checkboxes) {
-            var val = checkboxes[c].value;
-            if (val.substring(0, 10)==ymd)
-                checkboxes[c].checked = source.checked;
-            }
-        }
-    function navigator_Go(url) {window.location.assign(url);}
+	function scroll_to_selected() {document.getElementById("selected").scrollIntoView(true);}
+	function select_all(source)	{
+		checkboxes = document.getElementsByName('file_list[]');
+		for (var c in checkboxes) {checkboxes[c].checked = source.checked;}
+		checkboxlist = document.getElementsByName('checkbox_list[]');
+		for (var c in checkboxlist)	{checkboxlist[c].checked = source.checked;}
+	}
+	function select_day(source, ymd){
+		checkboxes = document.getElementsByName('file_list[]');
+		for (var c in checkboxes) {
+			var val = checkboxes[c].value;
+			if (val.substring(0, 10)==ymd)
+				checkboxes[c].checked = source.checked;
+			}
+		}
+	function navigator_Go(url) {window.location.assign(url);}
 </script>
 <style type="text/css">a.anchor {display: block; position: relative; top: -250px; visibility: hidden;}</style>
 <?php
 require '../secure/functions.php';
-require '../secure/authentication.php';
+require '/var/www/authentication.php';
 require 'config.php';
 if ($home===true) {
 function eng_filesize($bytes, $decimals = 1){$sz='BKMGTP';$factor=floor((strlen($bytes)-1)/3);return sprintf("%.{$decimals}f", $bytes / pow(1000, $factor)) . @$sz[$factor];}
@@ -57,20 +57,20 @@ function media_dir_array_create($media_dir)	{
 					$short_name = date('H:i:s', $mtime);
 				}
 				$media_array[] = array('file_name' => $file_name,
-								'media_dir'        => "$media_dir",
-								'file_path'        => "$media_dir" . "/videos/" . "$file_name",
-								'thumb_path'       => "$media_dir" . "/thumbs/" . "$thumb_name",
-								'mtime'            => $mtime,
-								'date'             => $ymd,
-								'short_name'       => $short_name);
+								'media_dir'		=> "$media_dir",
+								'file_path'		=> "$media_dir" . "/videos/" . "$file_name",
+								'thumb_path'	   => "$media_dir" . "/thumbs/" . "$thumb_name",
+								'mtime'			=> $mtime,
+								'date'			 => $ymd,
+								'short_name'	   => $short_name);
 				} else {
 					$short_name = date('H:i:s', $mtime) . "$extension";
 					$media_array[] = array('file_name' => $file_name,
-									'media_dir'        => "$media_dir",
-									'file_path'        => "$media_dir" . "/stills/" . "$file_name",
-									'mtime'            => $mtime,
-									'date'             => $ymd,
-									'short_name'       => $short_name);
+									'media_dir'		=> "$media_dir",
+									'file_path'		=> "$media_dir" . "/stills/" . "$file_name",
+									'mtime'			=> $mtime,
+									'date'			 => $ymd,
+									'short_name'	   => $short_name);
 				}
 			}
 		}
@@ -352,8 +352,8 @@ function restart_page($selected)
 		if ("$media_type"=="stills") echo "<a href=$file_path target='_blank'>
 					<img src=\"$file_path\"
 					style='max-width:100%;'
-				    style='border:4px groove silver;'>
-			      </a>";
+					style='border:4px groove silver;'>
+				  </a>";
 		else if ("$scrolled"=="yes") {
 			$thumb_path = $media_array[$index]['thumb_path'];
 			echo "<div style='width:100%; max-width:1280px'><video controls width='100%'><source src=\"$file_path\" type='video/mp4'>Your browser does not support the video tag.</video></div>";

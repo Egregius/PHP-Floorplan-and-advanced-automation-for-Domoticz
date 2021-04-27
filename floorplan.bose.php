@@ -12,7 +12,7 @@
  * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home) {
 	if (!isset($_SESSION['referer'])) {
 		$_SESSION['referer']='floorplan.php';

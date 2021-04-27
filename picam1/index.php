@@ -11,7 +11,7 @@
  **/
 require '../secure/functions.php';
 $_SESSION['referer']='picam1/index.php';
-require '../secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home) {
 	echo '<html>
 	<head><title>Oprit</title>

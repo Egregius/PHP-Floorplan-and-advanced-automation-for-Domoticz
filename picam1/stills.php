@@ -3,7 +3,7 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 // error_reporting(-1);
 require '../secure/functions.php';
-require '../secure/authentication.php';
+require '/var/www/authentication.php';
 require 'config.php';
 if($home===true) {
 	echo '<html>
@@ -54,7 +54,7 @@ if($home===true) {
 
 
 function rglob($pattern, $flags = 0) {
-    $files = glob($pattern, $flags); 
+    $files = glob($pattern, $flags);
     foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
         $files = array_merge($files, rglob($dir.'/'.basename($pattern), $flags));
     }

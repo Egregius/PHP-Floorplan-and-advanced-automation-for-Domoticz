@@ -11,7 +11,7 @@
  **/
 $start=microtime(true);
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home) {
     echo '
 <html>

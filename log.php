@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 $tail=new PHPTail(
 	array(
 	"Domoticz"=>"/temp/domoticz.log",

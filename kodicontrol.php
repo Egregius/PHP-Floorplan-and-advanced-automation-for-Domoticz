@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home===true) {
 	if (isset($_POST['up'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Up"}');
 	elseif (isset($_POST['right'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Right"}');

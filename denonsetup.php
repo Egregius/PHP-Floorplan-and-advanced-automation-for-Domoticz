@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 require 'secure/functions.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home===true) {
 	if (isset($_POST['action'])) {
 		denon($_POST['action']);

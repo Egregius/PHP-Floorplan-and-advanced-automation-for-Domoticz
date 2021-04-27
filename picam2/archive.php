@@ -2,7 +2,7 @@
 <script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 <?php
 require '../secure/functions.php';
-require '../secure/authentication.php';
+require '/var/www/authentication.php';
 require 'config.php';
 if ($home===true) {
 $day_bg_color="#222";
