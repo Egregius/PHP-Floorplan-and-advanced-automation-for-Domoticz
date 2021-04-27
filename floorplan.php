@@ -14,7 +14,7 @@
  **/
 require 'secure/functions.php';
 $_SESSION['referer']='floorplan.php';
-require 'secure/authentication.php';
+require '/var/www/authentication.php';
 if ($home==true) {
 	createheader('floorplan');
 	echo '

@@ -12,8 +12,8 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-require_once 'secure/functions.php';
-require_once 'secure/authentication.php';
+require 'secure/functions.php';
+require '/var/www/authentication.php';
 if ($home==true) {
 	if (!isset($_REQUEST['t'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 		$msg='';
