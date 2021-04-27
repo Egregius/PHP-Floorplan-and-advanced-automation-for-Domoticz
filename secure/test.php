@@ -13,12 +13,15 @@ header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/session.php';
+
 echo '<pre>';
 if (!isset($_SESSION['User'])) {
 	if (!isset($_COOKIE['__Secure-Egregius'])) {
-		echo 'cookie not set';
+		header("Location: https://login.egregius.be");
+		header('HTTP/1.1 301 Redirect');
+		die("Redirecting to: https://login.egregius.be");
 	} else {
-		echo 'cookie set';
+		$_SESSION['User']=json_decode(file_get_contents('https://login.egregius.be/remote.php?cookie='.$_COOKIE['__Secure-Egregius']), true);
 	}
 }
 echo '<pre>Session:';print_r($_SESSION);echo '</pre>';

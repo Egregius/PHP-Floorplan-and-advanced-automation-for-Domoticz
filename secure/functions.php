@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 
-require_once '/var/www/config.php';
+require '/var/www/config.php';
 
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
