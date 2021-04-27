@@ -12,9 +12,17 @@
 $start=microtime(true);
 require 'functions.php';
 echo '<pre>';
-
-
-echo file_get_contents('https://login.egregius.be/remote.php');
+if (!isset($_SESSION['User'])) {
+	echo '
+	Session Not set, fetching<br>
+	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
+	<script type=\'text/javascript\'>
+		$(document).ready(function(){
+			console.log("test")
+			console.log($.get("https://login.egregius.be/remote.php"))
+		});
+	</script>';
+}
 
 
 /*-------------------------------------------------*/
