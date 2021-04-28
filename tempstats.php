@@ -12,9 +12,8 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
-if ($home===true) {
-	$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -50,125 +49,118 @@ if ($home===true) {
 			<a href="https://home.egregius.be/tempstats.php?alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
 			<br>
 			<form method="GET">';
-	foreach ($items as $i) {
-		if(isset($_REQUEST[$i])) echo '
+foreach ($items as $i) {
+	if(isset($_REQUEST[$i])) echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
 				<label for="'.$i.'" class="kamer b5" >'.$i.'</label>';
-		else echo '
+	else echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
 				<label for="'.$i.'" class="kamer b5" >'.$i.'</label>';
 
-		if (isset($_REQUEST[$i])) $kamers[]=$i;
-	}
-	if (!isset($kamers)) $kamers=array('buiten');
-	echo '<br><br>';
-	for ($i=0;$i<=23;$i++) {
-		if(isset($_REQUEST[$i])) echo '
+	if (isset($_REQUEST[$i])) $kamers[]=$i;
+}
+if (!isset($kamers)) $kamers=array('buiten');
+echo '<br><br>';
+for ($i=0;$i<=23;$i++) {
+	if(isset($_REQUEST[$i])) echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()" checked>
 				<label for="'.$i.'" class="uur">'.$i.'</label>';
-		else echo '
+	else echo '
 				<input type="checkbox" name="'.$i.'" id="'.$i.'" onChange="this.form.submit()">
 				<label for="'.$i.'" class="uur">'.$i.'</label>';
-
-		if (isset($_REQUEST[$i])) $hours[$i]=$i;
+	if (isset($_REQUEST[$i])) $hours[$i]=$i;
+}
+if (!isset($hours)) {
+	for ($x=0;$x<=23;$x++) {
+		$hours[$x]=$x;
 	}
-	if (!isset($hours)) {
-		for ($x=0;$x<=23;$x++) {
-			$hours[$x]=$x;
-		}
-	}
-	//print_r($hours);
-	echo '
+}
+//print_r($hours);
+echo '
 			</form>
 			<br>
 			<br>';
-	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-	if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
-   $query="SELECT stamp";
-	foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
-	$query.=" FROM temp_hour WHERE stamp like '2019-05%' OR stamp like '2019-06%' OR stamp like '2019-07%' OR stamp like '2019-08%' OR stamp like '2019-09%'";
-	$result=$db->query($query);
-	while ($row=$result->fetch_assoc()) $datas[]=$row;
+$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
+$query="SELECT stamp";
+foreach ($kamers as $i) $query.=", ".$i."_avg as $i";
+$query.=" FROM temp_hour WHERE stamp like '2019-05%' OR stamp like '2019-06%' OR stamp like '2019-07%' OR stamp like '2019-08%' OR stamp like '2019-09%'";
+$result=$db->query($query);
+while ($row=$result->fetch_assoc()) $datas[]=$row;
 
-	//print_r($datas);
-	foreach ($kamers as $i) {
-		for ($x=40;$x>=-20;$x--) ${$i.$x}=0;
-	}
-	foreach ($datas as $a) {
-		$hour=substr($a['stamp'], 11, 2) * 1;
-		$day=substr($a['stamp'], 0, 10);
-		if (in_array($hour, $hours)) {
-			foreach ($kamers as $i) {
-				for ($x=40;$x>=-20;$x--) {
-					if ($a[$i]>=$x) {
-						${$i.$x}++;
-						@$dag[$i.$x][$day]=true;
-					}
+//print_r($datas);
+foreach ($kamers as $i) {
+	for ($x=40;$x>=-20;$x--) ${$i.$x}=0;
+}
+foreach ($datas as $a) {
+	$hour=substr($a['stamp'], 11, 2) * 1;
+	$day=substr($a['stamp'], 0, 10);
+	if (in_array($hour, $hours)) {
+		foreach ($kamers as $i) {
+			for ($x=40;$x>=-20;$x--) {
+				if ($a[$i]>=$x) {
+					${$i.$x}++;
+					@$dag[$i.$x][$day]=true;
 				}
 			}
-			//echo $a['stamp'].' = '.$hour.'<br>';
-			//print_r($a);
 		}
+		//echo $a['stamp'].' = '.$hour.'<br>';
+		//print_r($a);
 	}
-	//unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
-	echo '
-	Statestieken mei -> september 2019
-	<table>
-		<thead>
-			<tr>
-				<th></th>';
-	foreach ($kamers as $i) echo '
-				<th colspan="4">'.ucfirst($i).'</th>';
-	echo '
-			</tr>
-			<tr>
-				<th></th>';
-	foreach ($kamers as $i) echo '
-				<th colspan="2">Dagen</th><th colspan="2">Uren</th>';
-	echo '
-			</tr>
-			<tr>
-				<th>Temp</th>';
-	foreach ($kamers as $i) echo '
-				<th>Aantal</th><th>Percent</th><th>Aantal</th><th>Percent</th>';
-	echo '
-			</tr>
-		</thead>
-		<tbody>';
-	$aantaluren=0;
-	foreach ($kamers as $i) {
-		if (${$i.'-20'}>$aantaluren) $aantaluren = ${$i.'-20'};
-	}
-	$aantaldagen=0;
-	foreach ($kamers as $i) {
-		if (count($dag[$i.'-20'])>$aantaldagen) $aantaldagen = count($dag[$i.'-20']);
-	}
-	if (isset($_REQUEST['buiten'])) $start=40; else $start=26;
-	for ($x=$start;$x>=18;$x--) {
-		if ($x%2==0) echo '
-			<tr class="even">';
-		else  echo '
-			<tr>';
-		echo '
-				<td class="borderright1">'.$x.' °C </td>';
-		foreach ($kamers as $i) {
-			isset($dag[$i.$x])?$aantal=count($dag[$i.$x]):$aantal=0;
-			echo '
-				<td class="borderleft1">'.$aantal.'</td>
-				<td class="borderright2">'.number_format(($aantal/$aantaldagen)*100, 2, ',', '').' %</td>
-				<td class="borderleft2">'.${$i.$x}.'</td>
-				<td class="borderright2">'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
-		}
-		echo '
-			</tr>';
-	}
-	echo '
-		</tbody>
-	</table>';
-	$db->close();
-
-} else {
-	header("Location: index.php");
-	die("Redirecting to: index.php");
 }
-?>
+//unset ($datas);echo '<pre>';print_r(GET_DEFINED_VARS());echo '</pre>';exit;
+echo '
+Statestieken mei -> september 2019
+<table>
+	<thead>
+		<tr>
+			<th></th>';
+foreach ($kamers as $i) echo '
+			<th colspan="4">'.ucfirst($i).'</th>';
+echo '
+		</tr>
+		<tr>
+			<th></th>';
+foreach ($kamers as $i) echo '
+			<th colspan="2">Dagen</th><th colspan="2">Uren</th>';
+echo '
+		</tr>
+		<tr>
+			<th>Temp</th>';
+foreach ($kamers as $i) echo '
+			<th>Aantal</th><th>Percent</th><th>Aantal</th><th>Percent</th>';
+echo '
+		</tr>
+	</thead>
+	<tbody>';
+$aantaluren=0;
+foreach ($kamers as $i) {
+	if (${$i.'-20'}>$aantaluren) $aantaluren = ${$i.'-20'};
+}
+$aantaldagen=0;
+foreach ($kamers as $i) {
+	if (count($dag[$i.'-20'])>$aantaldagen) $aantaldagen = count($dag[$i.'-20']);
+}
+if (isset($_REQUEST['buiten'])) $start=40; else $start=26;
+for ($x=$start;$x>=18;$x--) {
+	if ($x%2==0) echo '
+		<tr class="even">';
+	else  echo '
+		<tr>';
+	echo '
+			<td class="borderright1">'.$x.' °C </td>';
+	foreach ($kamers as $i) {
+		isset($dag[$i.$x])?$aantal=count($dag[$i.$x]):$aantal=0;
+		echo '
+			<td class="borderleft1">'.$aantal.'</td>
+			<td class="borderright2">'.number_format(($aantal/$aantaldagen)*100, 2, ',', '').' %</td>
+			<td class="borderleft2">'.${$i.$x}.'</td>
+			<td class="borderright2">'.number_format((${$i.$x}/$aantaluren)*100, 2, ',', '').' %</td>';
+	}
+	echo '
+		</tr>';
+}
+echo '
+	</tbody>
+</table>';
+$db->close();

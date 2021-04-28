@@ -4,7 +4,6 @@
 require '../secure/functions.php';
 require '/var/www/authentication.php';
 require 'config.php';
-if ($home===true) {
 $day_bg_color="#222";
 $today_bg_color="#555";
 $weekday_bg_color="#444";
@@ -16,8 +15,7 @@ $today_year=date("Y");
 $week_m0=1;
 $week_d0=1;
 $week_number=1;
-function build_month_html($year, $month, $type)
-{
+function build_month_html($year, $month, $type) {
 	global $day_bg_color,$today_bg_color,$weekday_bg_color,$monthname_bg_color,$link_color,$today_day,$today_month,$today_year,$week_m0,$week_d0,$week_number;
 	$archive_root = ARCHIVE_DIR;
 	$month_name_style = "style=\"font-size: 1.0em; background-color: $monthname_bg_color;\"";
@@ -121,7 +119,3 @@ else if ("$archive_initial_view" == "thumbs") $next_view = "stills";
 else if ("$archive_initial_view" == "stills") $next_view = "videos";
 else $next_view = "videos";
 echo "</div></body></html>";
-} else {
-    header("Location: ../index.php");
-    die("Redirecting to: ../index.php");
-}

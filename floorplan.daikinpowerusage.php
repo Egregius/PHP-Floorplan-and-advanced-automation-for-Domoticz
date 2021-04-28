@@ -12,9 +12,8 @@
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if ($home) {
-	$db=dbconnect();
-	echo '
+$db=dbconnect();
+echo '
 <html>
 	<head>
 		<title>Floorplan</title>
@@ -23,14 +22,14 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
+if ($udevice=='iPhone') {
 	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+} elseif ($udevice=='iPad') {
+	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+}
+echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
@@ -51,8 +50,7 @@ if ($home) {
 		</style>
 	</head>
 	<body>';
-
-	echo '
+echo '
 		<div class="fix" style="top:0px;right:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
@@ -80,17 +78,17 @@ if ($home) {
 				</tr>
 			</thead>
 			<tbody>';
-	$d=fetchdata();
-	$sql="SELECT * FROM `daikin` ORDER BY `date` DESC LIMIT 0,30";
-	if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
-	$livingheat=0;
-	$kamerheat=0;
-	$alexheat=0;
-	$livingcool=0;
-	$kamercool=0;
-	$alexcool=0;
-	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-		echo '
+$d=fetchdata();
+$sql="SELECT * FROM `daikin` ORDER BY `date` DESC LIMIT 0,30";
+if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
+$livingheat=0;
+$kamerheat=0;
+$alexheat=0;
+$livingcool=0;
+$kamercool=0;
+$alexcool=0;
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+	echo '
 		<tr class="border_bottom">
 			<td nowrap class="border_right">'.$row['date'].'</td>
 			<td>'.($row['livingheat']>1?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
@@ -101,14 +99,14 @@ if ($home) {
 			<td class="border_right">'.($row['alexcool']>1?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
 			<td class="border_right">'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>
 		</tr>';
-		$livingheat=$livingheat+$row['livingheat'];
-		$kamerheat=$kamerheat+$row['kamerheat'];
-		$alexheat=$alexheat+$row['alexheat'];
-		$livingcool=$livingcool+$row['livingcool'];
-		$kamercool=$kamercool+$row['kamercool'];
-		$alexcool=$alexcool+$row['alexcool'];
-	}
-	echo '
+	$livingheat=$livingheat+$row['livingheat'];
+	$kamerheat=$kamerheat+$row['kamerheat'];
+	$alexheat=$alexheat+$row['alexheat'];
+	$livingcool=$livingcool+$row['livingcool'];
+	$kamercool=$kamercool+$row['kamercool'];
+	$alexcool=$alexcool+$row['alexcool'];
+}
+echo '
 		</tbody>
 		<tfoot>
 			<tr>
@@ -146,16 +144,16 @@ if ($home) {
 				</tr>
 			</thead>
 			<tbody>';
-	$sql="SELECT LEFT(date,7) as date, SUM(livingheat) AS livingheat, SUM(kamerheat) AS kamerheat, SUM(alexheat) AS alexheat, SUM(livingcool) AS livingcool, SUM(kamercool) AS kamercool, SUM(alexcool) AS alexcool FROM `daikin` GROUP BY LEFT(date, 7) ORDER BY `date` DESC LIMIT 0,30";
-	if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
-	$livingheat=0;
-	$kamerheat=0;
-	$alexheat=0;
-	$livingcool=0;
-	$kamercool=0;
-	$alexcool=0;
-	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-		echo '
+$sql="SELECT LEFT(date,7) as date, SUM(livingheat) AS livingheat, SUM(kamerheat) AS kamerheat, SUM(alexheat) AS alexheat, SUM(livingcool) AS livingcool, SUM(kamercool) AS kamercool, SUM(alexcool) AS alexcool FROM `daikin` GROUP BY LEFT(date, 7) ORDER BY `date` DESC LIMIT 0,30";
+if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
+$livingheat=0;
+$kamerheat=0;
+$alexheat=0;
+$livingcool=0;
+$kamercool=0;
+$alexcool=0;
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+	echo '
 		<tr class="border_bottom">
 			<td nowrap class="border_right">'.$row['date'].'</td>
 			<td>'.($row['livingheat']>1?number_format($row['livingheat']*0.1, 1, ',', ''):'').'</td>
@@ -166,14 +164,14 @@ if ($home) {
 			<td class="border_right">'.($row['alexcool']>1?number_format($row['alexcool']*0.1, 1, ',', ''):'').'</td>
 			<td class="border_right">'.(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])>0?number_format(($row['livingheat']+$row['kamerheat']+$row['alexheat']+$row['livingcool']+$row['kamercool']+$row['alexcool'])*0.1, 1, ',', ''):'').'</td>
 		</tr>';
-		$livingheat=$livingheat+$row['livingheat'];
-		$kamerheat=$kamerheat+$row['kamerheat'];
-		$alexheat=$alexheat+$row['alexheat'];
-		$livingcool=$livingcool+$row['livingcool'];
-		$kamercool=$kamercool+$row['kamercool'];
-		$alexcool=$alexcool+$row['alexcool'];
-	}
-	echo '
+	$livingheat=$livingheat+$row['livingheat'];
+	$kamerheat=$kamerheat+$row['kamerheat'];
+	$alexheat=$alexheat+$row['alexheat'];
+	$livingcool=$livingcool+$row['livingcool'];
+	$kamercool=$kamercool+$row['kamercool'];
+	$alexcool=$alexcool+$row['alexcool'];
+}
+echo '
 		</tbody>
 		<tfoot>
 			<tr>
@@ -195,7 +193,7 @@ if ($home) {
 			<tr>
 		</tfoot>
 	</table>';
-}
+
 ?>
 	</body>
 </html>

@@ -27,12 +27,6 @@ echo '<html><head>
 		setTimeout(\'window.location.href=window.location.href;\',900000);
 	</script>-->
 </head>';
-if($home===true) {
-	if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== false) {
-		echo '<img style="width:1200px;height:auto" id="mjpeg_dest" src="jpg.php">';
-	}
-	else echo '<img style="width:896px;height:auto" id="mjpeg_dest" src="jpg.php">';
-} else {
-	header("Location: index.php");
-	die("Redirecting to: index.php");
-}
+if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== false) {
+	echo '<img style="width:1200px;height:auto" id="mjpeg_dest" src="jpg.php">';
+} else echo '<img style="width:896px;height:auto" id="mjpeg_dest" src="jpg.php">';
