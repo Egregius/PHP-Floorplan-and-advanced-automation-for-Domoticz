@@ -20,24 +20,22 @@ echo '
 <style type="text/css">body{margin:0 auto;}form,table{display:inline;margin:0px;padding:0px;}</style>
 <script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 </head>';
-if($home===true) {
-	if(isset($_POST['Licht'])) file_get_contents("http://127.0.0.1:8084/json.htm?type=command&param=switchlight&idx=124&switchcmd=Toggle&passcode=");
-	if(isset($_POST['Rvoordeur'])) file_get_contents("http://192.168.0.11/fifo_command.php?cmd=record%20on%205%2055");
-	if(isset($_POST['Roprit'])) file_get_contents("http://192.168.0.13/fifo_command.php?cmd=record%20on%205%2055");
-	echo '
-	<div class="navbar" role="navigation">
-        <form method="POST" action="../floorplan.php"><input type="submit" value="Floorplan" class="btn" style="min-width:5em"/></form>
-        <form method="POST"><input type="submit" value="Licht" name="Licht" class="btn" style="min-width:5em"/></form>
-	    <form method="POST" action="media-archive.php?type=videos&year='.date("Y").'&label= &m0='.date("n",time()-86400).'&d0='.date("j",time()-86400).'&m1='.date("n").'&d1='.date("j").'"><input type="submit" value="A Voordeur" class="btn" style="min-width:5em"/></form>
-	    <form method="POST" action="../picam3/media-archive.php?type=videos&year='.date("Y").'&label= &m0='.date("n",time()-86400).'&d0='.date("j",time()-86400).'&m1='.date("n").'&d1='.date("j").'"><input type="submit" value="A Oprit" class="btn" style="min-width:5em"/></form>
-	    <form method="POST"><input type="submit" value="Rvoordeur" name="Rvoordeur" class="btn" style="min-width:5em"/></form>
-	    <form method="POST"><input type="submit" value="Roprit" name="Roprit" class="btn" style="min-width:5em"/></form>
-	</div>
-	<div class="clear"></div>';
-	if($udevice=='iPad') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-	else if($udevice=='iPhone') echo '<img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-	else if($udevice=='Mac') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-	else if($udevice=='S4') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-	else if($udevice=='Stablet') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-	else echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';   
-} else {header("Location: ../index.php");die("Redirecting to: ../index.php");}
+if(isset($_POST['Licht'])) file_get_contents("http://127.0.0.1:8084/json.htm?type=command&param=switchlight&idx=124&switchcmd=Toggle&passcode=");
+if(isset($_POST['Rvoordeur'])) file_get_contents("http://192.168.0.11/fifo_command.php?cmd=record%20on%205%2055");
+if(isset($_POST['Roprit'])) file_get_contents("http://192.168.0.13/fifo_command.php?cmd=record%20on%205%2055");
+echo '
+<div class="navbar" role="navigation">
+<form method="POST" action="../floorplan.php"><input type="submit" value="Floorplan" class="btn" style="min-width:5em"/></form>
+<form method="POST"><input type="submit" value="Licht" name="Licht" class="btn" style="min-width:5em"/></form>
+<form method="POST" action="media-archive.php?type=videos&year='.date("Y").'&label= &m0='.date("n",time()-86400).'&d0='.date("j",time()-86400).'&m1='.date("n").'&d1='.date("j").'"><input type="submit" value="A Voordeur" class="btn" style="min-width:5em"/></form>
+<form method="POST" action="../picam3/media-archive.php?type=videos&year='.date("Y").'&label= &m0='.date("n",time()-86400).'&d0='.date("j",time()-86400).'&m1='.date("n").'&d1='.date("j").'"><input type="submit" value="A Oprit" class="btn" style="min-width:5em"/></form>
+<form method="POST"><input type="submit" value="Rvoordeur" name="Rvoordeur" class="btn" style="min-width:5em"/></form>
+<form method="POST"><input type="submit" value="Roprit" name="Roprit" class="btn" style="min-width:5em"/></form>
+</div>
+<div class="clear"></div>';
+if($udevice=='iPad') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+else if($udevice=='iPhone') echo '<img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+else if($udevice=='Mac') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+else if($udevice=='S4') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+else if($udevice=='Stablet') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+else echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';

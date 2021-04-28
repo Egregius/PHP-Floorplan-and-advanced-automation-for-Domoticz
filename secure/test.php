@@ -15,7 +15,6 @@ require 'functions.php';
 
 echo '<pre>';
 
-echo '<pre>Session:';print_r($_SESSION);echo '</pre>';
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
@@ -66,8 +65,6 @@ unset(
 	$d,
 	$dow,
 	$start,
-	$users,
-	$homes,
 	$telegrambot,
 	$smappeeclient_id,
 	$smappeeclient_secret,
@@ -78,10 +75,8 @@ unset(
 	$telegramchatid,
 	$telegramchatid2,
 	$smappeeip,
-	$authenticated,
 	$eendag,
 	$googleTTSAPIKey,
-	$home,
 	$log,
 	$page,
 	$udevice,

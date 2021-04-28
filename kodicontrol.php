@@ -11,33 +11,30 @@
  **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if ($home===true) {
-	if (isset($_POST['up'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Up"}');
-	elseif (isset($_POST['right'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Right"}');
-	elseif (isset($_POST['down'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Down"}');
-	elseif (isset($_POST['left'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Left"}');
-	elseif (isset($_POST['select'])) 	kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Select"}');
-	elseif (isset($_POST['back'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-	elseif (isset($_POST['home'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Home"}');
-	elseif (isset($_POST['context'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ContextMenu"}');
-	elseif (isset($_POST['OSD'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ShowOSD"}');
-	elseif (isset($_POST['INFO'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Info"}');
-	elseif (isset($_POST['Later'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayminus"}}');
-	elseif (isset($_POST['SUBSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelay"}}');
-	elseif (isset($_POST['Earlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayplus"}}');
-	elseif (isset($_POST['AudioLater'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayminus"}}');
-	elseif (isset($_POST['AUDIOSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelay"}}');
-	elseif (isset($_POST['AudioEarlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayplus"}}');
-	elseif (isset($_POST['Subup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftup"}}');
-	elseif (isset($_POST['Subdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftdown"}}');
-	elseif (isset($_POST['Imgup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftup"}}');
-	elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftdown"}}');
-
-	//error_reporting(E_ALL);ini_set("display_errors", "on");
-	$count=0;$ctx=stream_context_create(array('http'=>array('timeout' => 2)));
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+if (isset($_POST['up'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Up"}');
+elseif (isset($_POST['right'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Right"}');
+elseif (isset($_POST['down'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Down"}');
+elseif (isset($_POST['left'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Left"}');
+elseif (isset($_POST['select'])) 	kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Select"}');
+elseif (isset($_POST['back'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+elseif (isset($_POST['home'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Home"}');
+elseif (isset($_POST['context'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ContextMenu"}');
+elseif (isset($_POST['OSD'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ShowOSD"}');
+elseif (isset($_POST['INFO'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Info"}');
+elseif (isset($_POST['Later'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayminus"}}');
+elseif (isset($_POST['SUBSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelay"}}');
+elseif (isset($_POST['Earlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayplus"}}');
+elseif (isset($_POST['AudioLater'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayminus"}}');
+elseif (isset($_POST['AUDIOSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelay"}}');
+elseif (isset($_POST['AudioEarlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayplus"}}');
+elseif (isset($_POST['Subup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftup"}}');
+elseif (isset($_POST['Subdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftdown"}}');
+elseif (isset($_POST['Imgup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftup"}}');
+elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"verticalshiftdown"}}');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,9 +48,9 @@ if ($home===true) {
 	<link rel="icon" sizes="192x192" href="images/kodi.png">
 	<meta name="mobile-web-app-capable" content="yes">
 	<link href="/styles/kodi.css" rel="stylesheet" type="text/css"/>
-  </head>
-  <body>
-  <div class="navbar">
+</head>
+<body>
+<div class="navbar">
 	<form action="/floorplan.php"><input type="submit" class="btn b7" value="Plan"/></form>
 	<form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
 	<form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
@@ -62,16 +59,8 @@ if ($home===true) {
 	<form action="https://films.egregius.be/alex.php"><input type="submit" class="btn b7" value="Alex"/></form>
 	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b7" value="Series"/></form>
 	</div>
-	<div class="box"><form method="POST">';
-	/*
-
-	5.6.5 Input.Home
-	5.6.6 Input.Info
-	5.6.10 Input.SendText
-	5.6.11 Input.ShowCodec
-	*/
-
-	echo '<br>
+	<div class="box"><form method="POST">
+	<br>
 	<input type="submit" name="back" value="Back" class="btn big b3"/>
 	<input type="submit" name="up" value="UP" class="btn big b3"/>
 	<input type="submit" name="context" value="Context" class="btn big b3"/>
@@ -100,8 +89,3 @@ if ($home===true) {
 	<input type="submit" name="Imgdown" value="Imgdown" class="btn big b2"/>
 	<br>
 	<br>
-	';
-} else {
-	header("Location: index.php");
-	die("Redirecting to: index.php");
-}

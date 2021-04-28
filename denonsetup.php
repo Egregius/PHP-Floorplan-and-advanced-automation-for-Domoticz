@@ -11,12 +11,12 @@
  **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if ($home===true) {
-	if (isset($_POST['action'])) {
-		denon($_POST['action']);
-		exit;
-	}
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+if (isset($_POST['action'])) {
+	denon($_POST['action']);
+	exit;
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -51,9 +51,7 @@ if ($home===true) {
 	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
 </head>
-<body>';
-
-?>
+<body>
 <div class="navbar">
 	<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
 	<form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
@@ -132,5 +130,3 @@ if ($home===true) {
 </div>
 </body>
 </html>
-<?php
-}

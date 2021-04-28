@@ -23,7 +23,6 @@
 require '../secure/functions.php';
 require '/var/www/authentication.php';
 require 'config.php';
-if($home===true) {
 function eng_filesize($bytes, $decimals = 1)
 {
 	$sz='BKMGTP';
@@ -533,4 +532,3 @@ function restart_page($selected)
 	echo "</span></div>";
 	if ("$media_subdir"=="thumbs") echo "</form>";
 	echo "</div></body></html>";
-} else {header("Location: ../index.php");die("Redirecting to: ../index.php");}

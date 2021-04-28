@@ -12,27 +12,26 @@
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if ($home) {
-	$d=fetchdata();
-	$perpage=37;
-	if (isset($_REQUEST['device'])) {
-		$device=$_REQUEST['device'];
-	}
-	$modes=array(
-		'auto_mode'=>'DST',
-		'buiten_temp_mode'=>'buiten',
-		'civil_twilight_mode'=>'civil_twilight_mode',
-		'denon_mode'=>'denon input',
-		'elec_mode'=>'elec vandaag',
-		'gcal_mode'=>'gcal_mode',
-		'heating_mode'=>'bigdif',
-		'icon_mode'=>'humidity',
-		'max_mode'=>'max regen',
-		'Weg_mode'=>'Beweging',
-		'wind_mode'=>'wind hist',
-		'zonvandaag_mode'=>'zonvandaag percent',
-	);
-	echo '<html>
+$d=fetchdata();
+$perpage=37;
+if (isset($_REQUEST['device'])) {
+	$device=$_REQUEST['device'];
+}
+$modes=array(
+	'auto_mode'=>'DST',
+	'buiten_temp_mode'=>'buiten',
+	'civil_twilight_mode'=>'civil_twilight_mode',
+	'denon_mode'=>'denon input',
+	'elec_mode'=>'elec vandaag',
+	'gcal_mode'=>'gcal_mode',
+	'heating_mode'=>'bigdif',
+	'icon_mode'=>'humidity',
+	'max_mode'=>'max regen',
+	'Weg_mode'=>'Beweging',
+	'wind_mode'=>'wind hist',
+	'zonvandaag_mode'=>'zonvandaag percent',
+);
+echo '<html>
 	<head>
 		<title>Floorplan</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -40,14 +39,14 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
+if ($udevice=='iPhone') {
 	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui"/>';
+} elseif ($udevice=='iPad') {
+	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+}
+echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
@@ -79,18 +78,18 @@ if ($home) {
 				<img src="/images/restart.png" width="50px" height="50px"/>
 			</a>
 		</div>';
-	if (isset($_REQUEST['realstatus'])) {
-		echo '
+if (isset($_REQUEST['realstatus'])) {
+	echo '
 		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php'.(isset($_REQUEST['page'])?'?page='.$_REQUEST['page']:'').'\';">
 			Real status
 		</div>';
-	} else {
-		echo '
+} else {
+	echo '
 		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.history.php?realstatus'.(isset($_REQUEST['page'])?'&page='.$_REQUEST['page']:'').'\';">
 			Nice status
 		</div>';
-	}
-	echo '
+}
+echo '
 		<div class="fix" style="top:0px;right:0px;">
 			<a href=\'javascript:navigator_Go("floorplan.others.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
@@ -100,110 +99,107 @@ if ($home) {
 		<br>
 		<br>
 		<div class="fix" style="top:52px;left:0px;">';
-
-	if (isset($device)) {
-		echo '
-		<button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$device.'</button>';
-	} else {
-		echo '
-		<button class="btn btnd" onclick="toggle_visibility(\'devices\');" >All</button>';
-	}
+if (isset($device)) {
 	echo '
+		<button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$device.'</button>';
+} else {
+	echo '
+		<button class="btn btnd" onclick="toggle_visibility(\'devices\');" >All</button>';
+}
+echo '
 		</div>
 		<div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">
 		<form method="GET" id="filter" action="floorplan.history.php">';
-	$sql="SELECT DISTINCT device FROM log ORDER BY device ASC;";
-	if (!$result=$db->query($sql)) {
-		die('There was an error running the query ['.$sql.' - '.$db->error.']');
-	}
-	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-		echo '
-				<button name="device" value="'.$row['device'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$row['device'].'</button><br>';
-	}
+$sql="SELECT DISTINCT device FROM log ORDER BY device ASC;";
+if (!$result=$db->query($sql)) {
+	die('There was an error running the query ['.$sql.' - '.$db->error.']');
+}
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	echo '
+				<button name="device" value="'.$row['device'].'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$row['device'].'</button><br>';
+}
+echo '
 		</div>
 		</form>
 		</div>
 		<div class="fix" style="top:82px;left:0px">
 		<table>';
-	if (isset($_REQUEST['start'])) {
-		$offset=$_REQUEST['start'];
-	} else {
-		$offset=0;
-	}
-	if (isset($device)) {
-		$sql="SELECT *  FROM `log` WHERE `device` = '$device' ORDER BY timestamp DESC LIMIT $offset,$perpage;";
-	} else {
-		$sql="SELECT *  FROM `log` ORDER BY timestamp DESC LIMIT $offset,$perpage;";
-	}
-	if (!$result=$db->query($sql)) {
-		die('There was an error running the query ['.$sql.' - '.$db->error.']');
-	}
-	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-		//print_r($row);
-		$name=strtr($row['device'], $modes);
-		$status=$row['status'];
-		if (isset($_REQUEST['realstatus'])) {
-			if (endsWith($name, '_temp')) {
-				$status=number_format($status, 1, ',', '').' °C';
-			} elseif (endsWith($name, 'Z')) {
-				$status=number_format($status, 1, ',', '').' °C';
-			} elseif ($name=='bigdif') {
-				$status=number_format($status, 1, ',', '').' °C';
-			} elseif ($name=='elec vandaag') {
-				$status=number_format($status, 1, ',', '').' kWh';
-			} elseif ($name=='humidity') {
-				$status=$status.' %';
-			} else {
-				$status=substr($row['status'], 0, 15);
-			}
+if (isset($_REQUEST['start'])) {
+	$offset=$_REQUEST['start'];
+} else {
+	$offset=0;
+}
+if (isset($device)) {
+	$sql="SELECT *  FROM `log` WHERE `device` = '$device' ORDER BY timestamp DESC LIMIT $offset,$perpage;";
+} else {
+	$sql="SELECT *  FROM `log` ORDER BY timestamp DESC LIMIT $offset,$perpage;";
+}
+if (!$result=$db->query($sql)) {
+	die('There was an error running the query ['.$sql.' - '.$db->error.']');
+}
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+	//print_r($row);
+	$name=strtr($row['device'], $modes);
+	$status=$row['status'];
+	if (isset($_REQUEST['realstatus'])) {
+		if (endsWith($name, '_temp')) {
+			$status=number_format($status, 1, ',', '').' °C';
+		} elseif (endsWith($name, 'Z')) {
+			$status=number_format($status, 1, ',', '').' °C';
+		} elseif ($name=='bigdif') {
+			$status=number_format($status, 1, ',', '').' °C';
+		} elseif ($name=='elec vandaag') {
+			$status=number_format($status, 1, ',', '').' kWh';
+		} elseif ($name=='humidity') {
+			$status=$status.' %';
+		} else {
+			$status=substr($row['status'], 0, 15);
 		}
-		echo '
+	}
+	echo '
 		<tr>
 			<td nowrap>'.substr($row['timestamp'], 8, 2).'-'.substr($row['timestamp'], 5, 2).'-'.substr($row['timestamp'], 0, 4).' '.substr($row['timestamp'], 10, 9).'</td>';
-		if (!isset($device)) {
-			echo '
-			<td nowrap>'.$name.'</td>';
-		}
+	if (!isset($device)) {
 		echo '
-			<td nowrap>&nbsp;'.$status.'&nbsp;</td>
-			<td nowrap>&nbsp;'.$row['user'].'</td>
-			<td nowrap>&nbsp;'.$row['info'].'</td>
-		</tr>';
-		@$count++;
+		<td nowrap>'.$name.'</td>';
 	}
 	echo '
-	</table>';
-	if (isset($count)&&($count>=$perpage||isset($_POST['start']))) {
+		<td nowrap>&nbsp;'.$status.'&nbsp;</td>
+		<td nowrap>&nbsp;'.$row['user'].'</td>
+		<td nowrap>&nbsp;'.$row['info'].'</td>
+	</tr>';
+	@$count++;
+}
+echo '
+</table>';
+if (isset($count)&&($count>=$perpage||isset($_POST['start']))) {
+	echo '
+	<form method="GET">';
+	if (isset($device)) {
 		echo '
-		<form method="GET">';
-		if (isset($device)) {
-			echo '
-			<input type="hidden" name="device" value="'.$device.'"/>';
-		}
-		if ($offset==0&&$count==$perpage) {
-			echo '
-			<br>
-			<button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b3" >Next</button>';
-		} elseif ($offset>0&&$count<$perpage) {
-			echo '
-			<br>
-			<button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b3" >Prev</button>';
-		} else {
-			echo '
-			<br>
-			<button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b4" >Prev</button>
-			<button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b4" >Next</button>';
-		}
+		<input type="hidden" name="device" value="'.$device.'"/>';
+	}
+	if ($offset==0&&$count==$perpage) {
 		echo '
-		</form>
-		</div>'.$udevice;
+		<br>
+		<button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b3" >Next</button>';
+	} elseif ($offset>0&&$count<$perpage) {
+		echo '
+		<br>
+		<button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b3" >Prev</button>';
+	} else {
+		echo '
+		<br>
+		<button type="submit" name="start" value="'.($offset-$perpage).'" class="btn b4" >Prev</button>
+		<button type="submit" name="start" value="'.($offset+$perpage).'" class="btn b4" >Next</button>';
 	}
 	echo '
+	</form>
+	</div>'.$udevice;
+}
+?>
 	<script type="text/javascript">
 			function navigator_Go(url) {window.location.assign(url);}
 		</script>';
-}
-?>
 	</body>
 </html>
