@@ -216,7 +216,7 @@ if (TIME>strtotime('0:10')) {
 		}
 		curl_close($ch);
 		echo '<hr>Dag<br>';
-		$timefrom=TIME-(86400*3);
+		$timefrom=TIME-(86400*4);
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$headers=array('Authorization: Bearer '.$access);
@@ -231,6 +231,7 @@ if (TIME>strtotime('0:10')) {
 		$data=json_decode(curl_exec($ch), true);
 
 		if (!empty($data['consumptions'])) {
+			echo '<pre>';print_r($data['consumptions']);echo '</pre>';
 			foreach ($data['consumptions'] as $i) {
 				echo strftime("%F %T", $i['timestamp']/1000).'<br>';
 				$timestamp=$i['timestamp']/1000;
@@ -243,9 +244,9 @@ if (TIME>strtotime('0:10')) {
 				$selfSufficiency=$i['selfSufficiency'];
 				$db->query("INSERT INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
 			}
-			$vv=round($data['consumptions'][2]['consumption']/1000, 1);
+			if (isset($data['consumptions'][2]['consumption'])) $vv=round($data['consumptions'][2]['consumption']/1000, 1); else $vv=0;
 			if ($d['el']['m']!=$vv) storemode('el', $vv, basename(__FILE__).':'.__LINE__);
-			$zonvandaag=round($data['consumptions'][2]['solar']/1000, 1);
+			if (isset($data['consumptions'][2]['solar'])) $zonvandaag=round($data['consumptions'][2]['solar']/1000, 1); else $zonvandaag=0;
 			if ($d['zonvandaag']['s']!=$zonvandaag) store('zonvandaag', $zonvandaag, basename(__FILE__).':'.__LINE__);
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;

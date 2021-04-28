@@ -87,9 +87,9 @@ function douche() {
 	if ($douchegas>=1&&$douchewater>=1) {
 		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*0.005, 2, ',', '').'€__Water: '.$douchewater.'L = '.number_format($douchewater*0.001269216, 2, ',', '').'€__Som = '.number_format(($douchegas*0.005)+($douchewater*0.001269216), 2, ',', '').'€';
 		telegram($msg);
-		store('douche', 0, basename(__FILE__).':'.__LINE__);
-		storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 	}
+	store('douche', 0, basename(__FILE__).':'.__LINE__);
+	storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 }
 
 function roundUpToAny($n,$x=5) {
