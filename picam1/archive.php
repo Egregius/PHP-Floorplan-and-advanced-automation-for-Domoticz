@@ -4,7 +4,6 @@
 require '../secure/functions.php';
 require '/var/www/authentication.php';
 require 'config.php';
-if ($home===true) {
 $day_bg_color="#222";
 $today_bg_color="#555";
 $weekday_bg_color="#444";
@@ -121,4 +120,3 @@ else if ("$archive_initial_view" == "thumbs") $next_view = "stills";
 else if ("$archive_initial_view" == "stills") $next_view = "videos";
 else $next_view = "videos";
 echo "</div></body></html>";
-} else {header("Location: ../index.php");die("Redirecting to: ../index.php");}

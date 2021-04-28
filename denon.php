@@ -11,8 +11,7 @@
  **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if ($home) {
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -38,31 +37,31 @@ if ($home) {
 	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
   </head>
 <body>';
-	if (isset($_POST['vol'])) {
-		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');usleep(120000);
-	} elseif (isset($_POST['input'])) {
-		storemode('denon', $_POST['input'], basename(__FILE__).':'.__LINE__);
-		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
-		usleep(120000);
-	} elseif (isset($_POST['surround'])) {
-		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');usleep(120000);
-	} elseif (isset($_POST['poweron'])) {
-		$d=fetchdata();
-		if ($d['denon']['s']=='On') {
-			denon('PWON');
-		} else {
-			sw('denon', 'On',basename(__FILE__).':'.__LINE__);
-		}
-	} elseif (isset($_POST['delay'])) {
-		$x=str_pad($_POST['delay'], 3, 0, STR_PAD_LEFT);
-		denon('PSDELAY '.$x);
+if (isset($_POST['vol'])) {
+	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');usleep(120000);
+} elseif (isset($_POST['input'])) {
+	storemode('denon', $_POST['input'], basename(__FILE__).':'.__LINE__);
+	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
+	usleep(120000);
+} elseif (isset($_POST['surround'])) {
+	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');usleep(120000);
+} elseif (isset($_POST['poweron'])) {
+	$d=fetchdata();
+	if ($d['denon']['s']=='On') {
+		denon('PWON');
+	} else {
+		sw('denon', 'On',basename(__FILE__).':'.__LINE__);
 	}
-	$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-	$denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
-	if (!$denonmain) {
-		echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
-	}
-	echo '<div class="navbar">
+} elseif (isset($_POST['delay'])) {
+	$x=str_pad($_POST['delay'], 3, 0, STR_PAD_LEFT);
+	denon('PSDELAY '.$x);
+}
+$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
+$denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
+if (!$denonmain) {
+	echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
+}
+echo '<div class="navbar">
 	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
 	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b4" value="Films"/></form>
@@ -71,30 +70,30 @@ if ($home) {
 		<div class="content">
 			<form method="POST">
 					<div class="box">';
-			$currentvolume=80+$denonmain['MasterVolume']['value'];
-	if ($currentvolume==80) {
-		$currentvolume=0;
+$currentvolume=80+$denonmain['MasterVolume']['value'];
+if ($currentvolume==80) {
+	$currentvolume=0;
+}
+if ($denonmain['ZonePower']['value']=='ON') {
+		$levels=array(10,12,14,16,18,20,22,24,26,28,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,56,58);
+	if (!in_array($currentvolume, $levels)) {
+		$levels[]=$currentvolume;
 	}
-	if ($denonmain['ZonePower']['value']=='ON') {
-			$levels=array(10,12,14,16,18,20,22,24,26,28,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,56,58);
-		if (!in_array($currentvolume, $levels)) {
-			$levels[]=$currentvolume;
+	asort($levels);
+	$levels=array_slice($levels, 0, 36);
+	foreach ($levels as $k) {
+		$setvalue = 80-$k;
+		$showvalue = $k;
+		if ($showvalue == 80) {
+			$showvalue = 0;
 		}
-		asort($levels);
-		$levels=array_slice($levels, 0, 36);
-		foreach ($levels as $k) {
-			$setvalue = 80-$k;
-			$showvalue = $k;
-			if ($showvalue == 80) {
-				$showvalue = 0;
-			}
-			if ($k==$currentvolume) {
-				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5 btna">'.$showvalue.'</button>';
-			} else {
-				echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5">'.$showvalue.'</button>';
-			}
+		if ($k==$currentvolume) {
+			echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5 btna">'.$showvalue.'</button>';
+		} else {
+			echo '<button name="vol" value="'.$setvalue.'" type="submit" class="btn b5">'.$showvalue.'</button>';
 		}
-		echo '</div>';
+	}
+	echo '</div>';
 /*echo '<div class="box">';
 		$inp=$denonmain['InputFuncSelect']['value'];
 		$inputs=array('TUNER','TV','KODI','CAST');
@@ -120,8 +119,8 @@ if ($home) {
 				echo '<button name="input" value="'.$txt.'" class="btn b3">'.$input.'</button>';
 			}
 		}
-echo '</div>';*/
-echo '<div class="box">';
+	echo '</div>';*/
+	echo '<div class="box">';
 		$sur=trim($denonmain['selectSurround']['value']);
 		$surrounds=array('MOVIE','MUSIC','PURE DIRECT','DOLBY DIGITAL','DTS SURROUND');
 		if (!in_array($sur, $surrounds)) {
@@ -135,8 +134,8 @@ echo '<div class="box">';
 			}
 		}
 		echo '
-</div>
-<div class="box">';
+	</div>
+	<div class="box">';
 		$delay=file_get_contents('http://192.168.2.6/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
 		$delay=strafter($delay, "style='text-align:right;' value='");
 		$delay=strbefore($delay, "'>");
@@ -147,14 +146,13 @@ echo '<div class="box">';
 		<button name="delay" value="'.$x.'" class="btn b8">'.$x.'</button>';
 		}
 		echo '
-</form>
-<div class="box">
-	<form action="/denonsetup.php"><input type="submit" class="btn b1" value="Setup"/></form>
-</div>
-</div>
-</div>';
-	} else {
-		echo '<button name="poweron" value="poweron" class="btn b1">Power On</button>';
-	}
-	echo '</div></div></div></body></html>';
+	</form>
+	<div class="box">
+		<form action="/denonsetup.php"><input type="submit" class="btn b1" value="Setup"/></form>
+	</div>
+	</div>
+	</div>';
+} else {
+	echo '<button name="poweron" value="poweron" class="btn b1">Power On</button>';
 }
+echo '</div></div></div></body></html>';

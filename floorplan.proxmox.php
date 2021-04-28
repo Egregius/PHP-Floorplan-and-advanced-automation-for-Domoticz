@@ -14,10 +14,8 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 require '/var/www/proxmox/vendor/autoload.php';
 use ProxmoxVE\Proxmox;
-
-if ($home) {
-	$db=dbconnect();
-	echo '
+$db=dbconnect();
+echo '
 <html>
 	<head>
 		<title>Floorplan</title>
@@ -26,17 +24,17 @@ if ($home) {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	if ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPhoneSE') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.74,user-scalable=yes,minimal-ui"/>';
-	} elseif ($udevice=='iPad') {
-		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-	}
+if ($udevice=='iPhone') {
 	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
+} elseif ($udevice=='iPhoneSE') {
+	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.74,user-scalable=yes,minimal-ui"/>';
+} elseif ($udevice=='iPad') {
+	echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
+}
+echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
@@ -99,7 +97,7 @@ if (isset($resources['data'])) {
 	uasort($vms, "cmp");
 	//echo '<hr><pre>';print_r($vms);echo '</pre>';
 
-		  echo '
+	echo '
 			<br>
 			<br>
 			<br>
@@ -119,61 +117,59 @@ if (isset($resources['data'])) {
 					</tr>
 				</thead>
 				<tbody>';
-				foreach ($vms as $vm) {
-					$name=substr($vm['name'], 2);
-					echo '
+	foreach ($vms as $vm) {
+		$name=substr($vm['name'], 2);
+		echo '
 					<tr>
 						<td rowspan="3"  class="bordertoptick borderlefttick borderbottomtick">'.$name.'</td>';
-					if($name!='Domoticz'&&$name!='pfSense') {
-						echo '
+		if($name!='Domoticz'&&$name!='pfSense') {
+			echo '
 						<td colspan="4"  class="borderbottomtick borderrighttick">
 							<form method="POST">
 								<input type="hidden" name="vmid" value="'.$vm['vmid'].'"/>';
-						if($vm['status']=='stopped') {
-							echo '
+			if($vm['status']=='stopped') {
+				echo '
 								<input type="submit" name="action" value="start" class="btn"/>';
-						} else {
-							echo '
+			} else {
+				echo '
 								<input type="submit" name="action" value="stop" class="btn b2"/>
 								<input type="submit" name="action" value="shutdown" class="btn b2"/>';
-						}
-						echo '
+			}
+			echo '
 							</form>
 						</td>';
-					}
-					echo '
+		}
+		echo '
 					</tr>
 					<tr>';
-					if($vm['status']!='stopped') {
-						echo '
+		if($vm['status']!='stopped') {
+			echo '
 						<td colspan="2" class="bordertoptick">'.floor($vm['uptime']/86400).'d '.gmdate("G:i:s", ($vm['uptime']%86400)).'</td>
 						<td class="bordertoptick">'.number_format($vm['cpu']*100, 0).' %</td>
 						<td class="bordertoptick borderrighttick">'.human_filesize($vm['mem']).'<br>'.human_filesize($vm['maxmem']).'</td>';
-					}
-					echo '
+		}
+		echo '
 					</tr>
 					<tr>';
-					if($vm['status']!='stopped') {
-						echo '
+		if($vm['status']!='stopped') {
+			echo '
 						<td class="borderbottomtick">'.human_filesize($vm['diskread']).'</td>
 						<td class="borderbottomtick">'.human_filesize($vm['diskwrite']).'</td>
 						<td class="borderbottomtick">'.human_filesize($vm['netin']).'</td>
 						<td class="borderbottomtick borderrighttick">'.human_filesize($vm['netout']).'</td>';
-					}
-					echo '
-					</tr>';
-				}
-
-		  echo '
-			</tbody>
-		  </table>
-		  <br>
-		  <br>
-		  <script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
-
-		$data = $proxmox->get('/nodes/proxmox/status');
-		$data=$data['data'];
+		}
 		echo '
+					</tr>';
+	}
+	echo '
+			</tbody>
+		</table>
+		<br>
+		<br>
+		<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\',2000);</script>';
+	$data = $proxmox->get('/nodes/proxmox/status');
+	$data=$data['data'];
+	echo '
 			<table>
 				<thead>
 					<tr>
@@ -189,10 +185,10 @@ if (isset($resources['data'])) {
 						<td>'.number_format($data['cpu']*100, 0).' %</td>
 						<td>'.human_filesize($data['memory']['used']).'<br>'.human_filesize($data['memory']['total']).'</td>
 						<td>';
-		foreach($data['loadavg'] as $i) {
-			echo $i.' - '.number_format(($i/4)*100, 2) .'%<br>';
-		}
-		echo '
+	foreach($data['loadavg'] as $i) {
+		echo $i.' - '.number_format(($i/4)*100, 2) .'%<br>';
+	}
+	echo '
 						</td>
 					</tr>
 				</tbody>
@@ -200,7 +196,6 @@ if (isset($resources['data'])) {
 } else echo '<br><br><br><br><br>NO CONNECTION WITH PROXMOX';
 //	echo '<pre>';print_r($data);echo '</pre>';
 
-}
 function cmp($a, $b) {
 	return strcmp($a['name'], $b['name']);
 }
