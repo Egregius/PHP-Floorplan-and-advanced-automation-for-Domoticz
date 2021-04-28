@@ -1,26 +1,12 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.11-1
- *
- * This is the main floorplan.
- * It handles all the lighting and shows status of heating and rollers.
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 require 'secure/functions.php';
-$_SESSION['referer']='floorplan.php';
+$_SESSION['redirect']='https://home.egregius.be/floorplan.php';
 require '/var/www/authentication.php';
-if ($home==true) {
-	createheader('floorplan');
-	echo '
+createheader('floorplan');
+?>
 	<body class="floorplan">
 		<div class="fix" id="clock">
-			<a href=\'javascript:location.reload(true);\' id="time">
+			<a href='javascript:location.reload(true);' id="time">
 				Loading...
 			</a>
 		</div>
@@ -38,9 +24,6 @@ if ($home==true) {
 				<br>
 				<a href="/index.php">Menu</a>
 			</div>
-		</div>';
-}
-?>
-
+		</div>
 	</body>
 </html>
