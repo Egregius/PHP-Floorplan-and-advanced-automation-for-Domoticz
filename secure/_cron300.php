@@ -158,7 +158,7 @@ if (TIME>strtotime('0:10')) {
 		echo 'Kwartaal<br>';
 		$access=$objauth->{'access_token'};
 		curl_close($chauth);
-		$timefrom=TIME-(86400*185);
+		$timefrom=strtotime(date("Y-m-d", strtotime("-185 days")));
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$headers=array('Authorization: Bearer '.$access);
@@ -187,7 +187,7 @@ if (TIME>strtotime('0:10')) {
 		}
 		curl_close($ch);
 		echo '<hr>Maand<br>';
-		$timefrom=TIME-(86400*60);
+		$timefrom=strtotime(date("Y-m-d", strtotime("-60 days")));
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$headers=array('Authorization: Bearer '.$access);
@@ -216,7 +216,7 @@ if (TIME>strtotime('0:10')) {
 		}
 		curl_close($ch);
 		echo '<hr>Dag<br>';
-		$timefrom=TIME-(86400*4);
+		$timefrom=strtotime(date("Y-m-d", strtotime("-2 days")));
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$headers=array('Authorization: Bearer '.$access);
@@ -280,7 +280,7 @@ if (TIME>strtotime('0:10')) {
 		unset($data);
 	}
 }
-
+if (!isset($db)) $db=dbconnect();
 //Putting temps min,avg,max into temp_hour
 $stmt=$db->query(
 	"SELECT left(stamp,13) as stamp,

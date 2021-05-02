@@ -104,7 +104,7 @@ if (isset($ow)) {
 }
 
 $ob=json_decode(@curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
-if (isset($ob)) {
+if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
 	/*if ($temps['ob']>$temps['buiten_temp']+0.5) {
 		$temps['ob']=$temps['buiten_temp']+0.5;

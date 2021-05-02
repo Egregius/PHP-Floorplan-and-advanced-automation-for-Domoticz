@@ -14,7 +14,7 @@ $start=microtime(true);
 require 'functions.php';
 
 echo '<pre>';
-
+echo date("Y-m-d H:i:s", strtotime("-2 days"));
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
