@@ -78,10 +78,10 @@ if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirk
 }
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['GroheRed']['m']>0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>3600&&past('pirkeuken')>3600) {
+if ($d['GroheRed']['m']>0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>1800&&past('pirkeuken')>1800) {
 	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-} elseif ($d['GroheRed']['m']=0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>3600&&past('pirkeuken')>600) {
+} elseif ($d['GroheRed']['m']=0&&$d['GroheRed']['s']=='On'&&past('GroheRed')>1800&&past('pirkeuken')>600) {
 	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 }
 $items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
