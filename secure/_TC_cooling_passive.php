@@ -12,15 +12,17 @@
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
-
-foreach (array('living', 'kamer', 'alex') as $k) {
-	$daikin=json_decode($d['daikin'.$k]['s']);
-	if ($daikin->pow!=0&&$daikin->mode!=2) {
-		daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
-		storemode('daikin'.$k, 0);
-		storeicon($k.'_set', 'Off');
+if ($d['daikin']['s']=='On') {
+	foreach (array('living', 'kamer', 'alex') as $k) {
+		$daikin=json_decode($d['daikin'.$k]['s']);
+		if ($daikin->pow!=0&&$daikin->mode!=2) {
+			daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
+			storemode('daikin'.$k, 0);
+			storeicon($k.'_set', 'Off');
+		}
 	}
 }
+
 $boven=array('Rtobi','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
