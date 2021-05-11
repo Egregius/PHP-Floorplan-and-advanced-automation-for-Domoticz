@@ -36,7 +36,9 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']=='Off'&&$d['keuken']['s']=='On'&&$d['kookplaat']['s']=='Off'&&$d['werkblad1']['s']=='Off') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+	if (past('pirkeuken')>40&&past('wasbak')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&$d['keuken']['s']=='On') sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
+
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {

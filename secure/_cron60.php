@@ -27,7 +27,9 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirkeuken']['s']=='Off') {
 			$uit=235;
 			if (past('pirkeuken')>$uit) {
-				foreach (array('keuken','wasbak','kookplaat','werkblad1') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('keuken') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('wasbak') as $i) if ($d[$i]['s']>0&&past($i)>$uit) storemode($i, 1, basename(__FILE__).':'.__LINE__);
+
 			}
 		}
 		if ($d['pirliving']['s']=='Off') {

@@ -17,5 +17,8 @@ if ($d['auto']['s']=='On') {
 		if ($d['keuken']['s']=='On'&&$d['lgtv']['s']=='On'&&TIME>=strtotime('19:00')) {
 			sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 		}
+		if ($d['wasbak']['s']>0&&$d['lgtv']['s']=='On'&&TIME>=strtotime('19:00')) {
+			sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
+		}
 	}
 }
