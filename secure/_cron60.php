@@ -107,7 +107,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','keuken','werkblad1','wasbak','kookplaat','zolderg','dampkap') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','keuken','zolderg','dampkap') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -115,7 +115,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','hall','inkom','terras') as $i) {
+		foreach (array('eettafel','zithoek','wasbak','hall','inkom','terras') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -135,7 +135,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','keuken','werkblad1','wasbak','kookplaat','badkamervuur2','badkamervuur1','zolderg') as $i) {
+		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','keuken','badkamervuur2','badkamervuur1','zolderg') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']!='Off') {
@@ -145,7 +145,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','hall','inkom','kamer','tobi','alex','terras','lichtbadkamer') as $i) {
+		foreach (array('eettafel','zithoek','wasbak','hall','inkom','kamer','tobi','alex','terras','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {
@@ -325,7 +325,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']=='Off'&&$d['kookplaat']['s']=='Off') {
+	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']==0) {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
 		if ($level[0]<20&&past('kookplaatpower_kWh')>2400) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 	}
