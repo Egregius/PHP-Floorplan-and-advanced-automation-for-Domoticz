@@ -12,8 +12,9 @@
 header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
+$d=fetchdata();
 
-rgb('Xlight', 1, 100);
+rgb('Xlight', 255, 100);
 sl('Xlight', 100, basename(__FILE__).':'.__LINE__);
 
 
