@@ -689,8 +689,8 @@ function fkeuken() {
 	global $d;
 	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<30&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 30, basename(__FILE__).':'.__LINE__);
-	} elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<10&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		if ($d['jbl']['s']=='Off') sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+	} elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		if ($d['jbl']['s']=='Off') sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom() {
