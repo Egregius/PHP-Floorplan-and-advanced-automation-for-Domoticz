@@ -194,7 +194,10 @@ function sl($name,$level,$msg='') {
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
 	lg(' (RGB)		'.$user.' =>	'.$name.'	'.$level);
-	if ($d[$name]['i']>0) {
+	print_r($d);
+	if (
+		$d[$name]['i']
+		>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 		else {
 			if ($d[$name]['s']!=$$level) {

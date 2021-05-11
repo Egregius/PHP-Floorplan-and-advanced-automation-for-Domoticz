@@ -13,8 +13,10 @@ header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 
-echo '<pre>';
-echo date("Y-m-d H:i:s", strtotime("-2 days"));
+rgb('Xlight', 1, 100);
+sl('Xlight', 100, basename(__FILE__).':'.__LINE__);
+
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
