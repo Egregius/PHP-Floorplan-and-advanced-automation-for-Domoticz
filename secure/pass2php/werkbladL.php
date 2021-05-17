@@ -5,3 +5,10 @@ if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LI
 if ($d['kookplaatpower']['s']=='On') sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 if ($status=='On') sw('werkbladL', 'Off', basename(__FILE__).':'.__LINE__);
 */
+/*if ($status=='On') {
+	if (past('werkbladL')>2&&past('werkbladR')>2) {
+		sw('keuken', 'On');
+	}
+	sw('werkbladL', 'Off', basename(__FILE__).':'.__LINE__);
+}
+*/
