@@ -18,4 +18,5 @@ if ($status>0) {
 	if ($d['keuken']['s']=='Off'&&$d['GroheRed']['s']=='On'&&$d['GroheRed']['m']==0) {
 		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
+	storemode('wasbak', 0, basename(__FILE__).':'.__LINE__);
 }

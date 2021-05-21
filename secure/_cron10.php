@@ -37,7 +37,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
 	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
-	if (past('pirkeuken')>40&&past('wasbak')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0) sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
+	if (past('pirkeuken')>40&&past('wasbak')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
 
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
