@@ -151,7 +151,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
-		storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
+		if ($_REQUEST['device']=='wasbak') {
+			storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		} else storemode($_REQUEST['device'], 0, basename(__FILE__).':'.__LINE__);
 		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
