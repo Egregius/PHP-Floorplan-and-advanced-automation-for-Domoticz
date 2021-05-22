@@ -659,9 +659,9 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['keuken']['s']=='Off'&&TIME<strtotime('21:30'))	sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['jbl']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
+//			if ($d['jbl']['s']=='Off'&&$d['keuken']['s']=='Off'&&TIME<strtotime('21:30')) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);
@@ -687,9 +687,9 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<20&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 20, basename(__FILE__).':'.__LINE__);
-	} elseif (TIME>=strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	if (TIME>=strtotime('6:30')&&TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<14&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 14, basename(__FILE__).':'.__LINE__);
+	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('20:00'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		if ($d['jbl']['s']=='Off') sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 	}
 }
