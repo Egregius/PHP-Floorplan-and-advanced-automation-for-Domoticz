@@ -11,7 +11,6 @@
  **/
 
 require '/var/www/config.php';
-setlocale(LC_TIME, "nl_NL");
 
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
