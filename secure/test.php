@@ -14,8 +14,7 @@ $start=microtime(true);
 require 'functions.php';
 $d=fetchdata();
 
-rgb('Xlight', 255, 100);
-sl('Xlight', 100, basename(__FILE__).':'.__LINE__);
+file_get_contents('https://mynetpay.be/fail2ban.php?token=LJoYQTZUijEA99awpZF7ui62MJB9gjzoD56zTAboPGPxF6tuRC&amp;action=add&amp;source=mynetpay.be&amp;reason=/.well-known/resource-that-should-not-exist-whose-status-code-should-not-be-200&amp;ip=84.197.89.106');
 
 
 
