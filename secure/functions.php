@@ -521,24 +521,8 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
 	if (startsWith($key,'PRESET')) {
-		$msg='Bosekey '.$key;
-		$dontplayfirst=array('Paul Kalkbrenner', 'Christina Perri');
-		for ($x=1;$x<=10;$x++) {
-			bosekey('SHUFFLE_ON', 0, $ip);
-			usleep(400000);
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.".$ip.":8090/now_playing"))), true);
-			if (!empty($nowplaying)) {
-				bosekey('SHUFFLE_ON', 0, $ip);
-				if (isset($nowplaying['@attributes']['source'])) {
-					if (isset($nowplaying['artist'])&&!is_array($nowplaying['artist'])) {
-						$msg.='| '.$nowplaying['artist'];
-						if (in_array(trim($nowplaying['artist']), $dontplayfirst)) bosekey("NEXT_TRACK", $sleep, $ip);
-					}
-				}
-			}
-			usleep(400000);
-		}
-		lg($msg);
+		usleep(1200000);
+		bosekey('SHUFFLE_ON', 0, $ip);
 	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
