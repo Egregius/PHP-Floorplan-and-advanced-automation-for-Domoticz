@@ -516,14 +516,11 @@ function endswith($string,$test) {
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
 function bosekey($key,$sleep=75000,$ip=101) {
+	lg('bosekey '.$key);
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
-	if (startsWith($key,'PRESET')) {
-		usleep(1200000);
-		bosekey('SHUFFLE_ON', 0, $ip);
-	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
@@ -555,14 +552,14 @@ function bosezone($ip,$forced=false,$vol='') {
 	else  $preset='PRESET_2';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
-			if ($d['bose101']['s']=='Off') bosekey("POWER", 0, 101);
+			bosekey("POWER", 0, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			sleep(1);
+			usleep(50000);
 			bosekey('SHUFFLE_ON', 0, $ip);
-			sleep(1);
+			usleep(50000);
 			bosekey($preset, 0, 101);
-			sleep(1);
-			bosekey('SHUFFLE_ON', 0, $ip);
+//			usleep(100000);
+//			bosekey('SHUFFLE_ON', 0, $ip);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 /*			for ($x=1;$x<=3;$x++) {
@@ -579,7 +576,11 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
 
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
+				bosekey("POWER", 0, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+				usleep(100000);
+				bosekey('SHUFFLE_ON', 0, $ip);
+				usleep(100000);
 				bosekey($preset, 0, 101);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
