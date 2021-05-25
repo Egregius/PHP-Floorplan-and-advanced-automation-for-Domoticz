@@ -582,8 +582,10 @@ function bosezone($ip,$forced=false,$vol='') {
 				bosekey('SHUFFLE_ON', 0, $ip);
 				usleep(100000);
 				bosekey($preset, 0, 101);
+				usleep(100000);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
+				usleep(100000);
 				bosepost('setZone', $xml, 101);
 				if ($vol=='') {
 					if (TIME>strtotime('6:00')&&TIME<strtotime('20:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
