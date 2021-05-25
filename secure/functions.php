@@ -555,15 +555,21 @@ function bosezone($ip,$forced=false,$vol='') {
 	else  $preset='PRESET_2';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
+			if ($d['bose101']['s']=='Off') bosekey("POWER", 0, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+			sleep(1);
+			bosekey('SHUFFLE_ON', 0, $ip);
+			sleep(1);
 			bosekey($preset, 0, 101);
+			sleep(1);
+			bosekey('SHUFFLE_ON', 0, $ip);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
-			for ($x=1;$x<=3;$x++) {
+/*			for ($x=1;$x<=3;$x++) {
 				$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
 				if (isset($status)&&($status['track']=='Cloud Rider'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) bosekey('NEXT_TRACK', 0, 101);
 				else break;
-			}
+			}*/
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
