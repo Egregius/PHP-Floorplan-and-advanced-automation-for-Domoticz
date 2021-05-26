@@ -570,7 +570,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-				if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
+			      if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
 			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
 			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
 			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
@@ -684,9 +684,10 @@ function fkeuken() {
 		sl('wasbak', 14, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('20:00'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		if ($d['jbl']['s']=='Off') sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
-		if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
-			if ($d['bose102']['s']=='Off') bosezone(102);
-		}
+	}
+	if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
+		lg('fkeuken tijd ok');
+		if ($d['bose102']['s']=='Off') bosezone(102, false, 30);
 	}
 }
 function finkom() {

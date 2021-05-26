@@ -39,7 +39,7 @@ if ($d['auto']['s']=='On') {
 	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off') {
 		if ($d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['wasbak']['s']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
-		if ($d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off') {
+		if ($d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose102')>90) {
 			sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
 			bosekey('POWER', 0, 102);
 		}

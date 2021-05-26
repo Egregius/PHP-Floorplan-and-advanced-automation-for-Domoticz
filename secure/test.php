@@ -15,7 +15,7 @@ require 'functions.php';
 $d=fetchdata();
 
 
-
+fkeuken();
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
