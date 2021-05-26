@@ -36,8 +36,14 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
-	if (past('pirkeuken')>40&&past('wasbak')>40&&$d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
+	if (past('pirkeuken')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off') {
+		if ($d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
+		if ($d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off') {
+			sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+			bosekey('POWER', 0, 102);
+		}
+	}
 
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
@@ -80,13 +86,13 @@ if (pingport('192.168.2.105', 80)==1) {
 			if (!empty($status)) {
 				if ($d['bose105']['m']!='Online') {
 					storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
-					bosekey('SHUFFLE_ON', 0, '192.168.2.101');
+					bosekey('SHUFFLE_ON', 0, 101);
 				}
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY') {
 						bosezone(105);
 						sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, '192.168.2.101');
+						bosekey('SHUFFLE_ON', 0, 101);
 					}
 				}
 			}

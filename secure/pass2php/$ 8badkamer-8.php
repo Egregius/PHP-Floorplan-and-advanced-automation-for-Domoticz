@@ -35,7 +35,7 @@ if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 }
-if (past('$ 8badkamer-8')>3) {
+/*if (past('$ 8badkamer-8')>3) {
 	$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/now_playing'))), true);
 	if (!empty($nowplaying)) {
 		if (isset($nowplaying['@attributes']['source'])) {
@@ -73,6 +73,6 @@ if (past('$ 8badkamer-8')>3) {
 			}
 		}
 	}
-}
+}*/
 
 resetsecurity();

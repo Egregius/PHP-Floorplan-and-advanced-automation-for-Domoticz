@@ -673,9 +673,9 @@ function fbadkamer() {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
-		if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
-			if ($d['bose102']['s']=='Off'&&past('bose102')>30) bosezone(102);
-		}
+//		if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
+//			if ($d['bose102']['s']=='Off'&&past('bose102')>30) bosezone(102);
+//		}
 	}
 }
 function fkeuken() {
@@ -684,6 +684,9 @@ function fkeuken() {
 		sl('wasbak', 14, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('20:00'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		if ($d['jbl']['s']=='Off') sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
+		if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
+			if ($d['bose102']['s']=='Off') bosezone(102);
+		}
 	}
 }
 function finkom() {
