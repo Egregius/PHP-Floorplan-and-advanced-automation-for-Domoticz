@@ -554,9 +554,9 @@ function bosezone($ip,$forced=false,$vol='') {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
 			bosekey("POWER", 0, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			usleep(75000);
+			usleep(750000);
 			bosekey('SHUFFLE_ON', 0, $ip);
-			usleep(75000);
+			usleep(750000);
 			bosekey($preset, 0, 101);
 //			usleep(100000);
 //			bosekey('SHUFFLE_ON', 0, $ip);
