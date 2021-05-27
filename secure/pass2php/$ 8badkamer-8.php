@@ -35,44 +35,4 @@ if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 }
-/*if (past('$ 8badkamer-8')>3) {
-	$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.102:8090/now_playing'))), true);
-	if (!empty($nowplaying)) {
-		if (isset($nowplaying['@attributes']['source'])) {
-			if ($nowplaying['@attributes']['source']!='STANDBY') {
-				$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.102:8090/volume"))), true);
-				$cv=$volume['actualvolume'];
-				echo 'cv='.$cv.'<br>';
-				$usleep=(6000000/$cv)/2;
-				while (1) {
-					echo $cv.'<br>';
-					bosevolume($cv, 102);
-					usleep($usleep);
-					$cv=$cv-4;
-					if ($cv<=4) {
-						break;
-					}
-				}
-				bosekey("POWER", 0, 102);
-				if ($d['bose102']['s']!='Off') {
-					sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
-				}
-			}
-		}
-	}
-	if ($d['Weg']['s']==1&&TIME>strtotime('20:00')) {
-		$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-		if (!empty($nowplaying)) {
-			if (isset($nowplaying['@attributes']['source'])) {
-				if ($nowplaying['@attributes']['source']!='STANDBY') {
-					if ($d['bose101']['s']!='Off') {
-						sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
-					}
-					bosekey("POWER", 0, 101);
-				}
-			}
-		}
-	}
-}*/
-
 resetsecurity();
