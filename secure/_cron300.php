@@ -421,3 +421,4 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 if ($d['buiten_temp']['s']<4&&$d['heating']['s']<4&&past('heating')>7200&&TIME<strtotime('7:00')) store('heating', 4, basename(__FILE__).':'.__LINE__);
 elseif ($d['buiten_temp']['s']>7&&$d['heating']['s']>1&&past('heating')>7200) store('heating', 1, basename(__FILE__).':'.__LINE__);
+

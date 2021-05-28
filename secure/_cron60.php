@@ -346,3 +346,6 @@ elseif ($d['diepvries']['s']!='Off'&&$d['diepvries_temp']['s']<=$set &&past('die
 elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
 
 if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
+
+if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
+elseif ($d['bose101']['s']=='Off'&&$d['bose103']['s']=='On'&&past('bose103')<300) bosekey('SHUFFLE_ON', 0, 103);
