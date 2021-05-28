@@ -522,6 +522,16 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
 	if ($sleep>0) usleep($sleep);
+	if (startsWith($key,'PRESET')) {
+		bosekey('SHUFFLE_ON', 750000, $ip);
+		for ($x=1;$x<=10;$x++) {
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
+			if (isset($status)&&($status['artist']=='Paul Kalkbrenner'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) {
+				bosekey('SHUFFLE_ON', 750000, $ip);
+				bosekey('NEXT_TRACK', 750000, $ip);
+			} else break;
+		}
+	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
@@ -553,11 +563,9 @@ function bosezone($ip,$forced=false,$vol='') {
 	else  $preset='PRESET_2';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {
-			bosekey("POWER", 750000, 101);
+			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			bosekey('SHUFFLE_ON', 750000, $ip);
 			bosekey($preset, 750000, 101);
-			bosekey('SHUFFLE_ON', 750000, $ip);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 /*			for ($x=1;$x<=3;$x++) {
@@ -574,13 +582,9 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
 
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-				bosekey("POWER", 0, 101);
+				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				usleep(100000);
-				bosekey('SHUFFLE_ON', 0, $ip);
-				usleep(100000);
-				bosekey($preset, 0, 101);
-				usleep(100000);
+				bosekey($preset, 750000, 101);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
