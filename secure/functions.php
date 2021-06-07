@@ -689,7 +689,7 @@ function fkeuken() {
 	}
 	if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
 		lg('fkeuken tijd ok');
-		if ($d['bose102']['s']=='Off') bosezone(102, false, 30);
+		if ($d['bose102']['s']=='Off') bosezone(102, false, 27);
 	}
 }
 function finkom() {

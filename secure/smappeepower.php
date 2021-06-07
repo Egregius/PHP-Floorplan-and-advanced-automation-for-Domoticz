@@ -11,8 +11,8 @@
  **/
 require '/var/www/html/secure/functions.php';
 $ctx=stream_context_create(array('http'=>array('timeout' =>5)));
-$smappee=json_decode(file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
-if (!empty($smappee['report'])) {
+$smappee=@json_decode(@file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
+if (isset($smappee['report'])&&!empty($smappee['report'])) {
 	preg_match_all("/ activePower=(\\d*.\\d*)/",$smappee['report'],$matches);
 	if (!empty($matches[1][1])) {
 	$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
