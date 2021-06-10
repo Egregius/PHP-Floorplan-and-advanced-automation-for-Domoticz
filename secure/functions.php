@@ -836,8 +836,8 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $
 	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing ($msg)");
 	sleep(1);
 	store('daikin'.$device, daikinstatus($device));
-	if ($power==0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__);
-	else storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__);
+	if ($power==0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
+	else storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
 	usleep(100000);
 	file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
 }
