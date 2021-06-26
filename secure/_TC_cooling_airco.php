@@ -31,20 +31,21 @@ if ($d['kamer_set']['m']==0) {
 				)
 			)
 	) {
-		if (TIME<strtotime('5:45')) $Setkamer=20;
-		elseif (TIME>strtotime('21:00')) $Setkamer=20;
-		elseif (TIME>strtotime('20:00')) $Setkamer=20.5;
-		elseif (TIME>strtotime('19:00')) $Setkamer=21;
-		elseif (TIME>strtotime('18:00')) $Setkamer=21.5;
-		elseif (TIME>strtotime('17:00')) $Setkamer=22;
-		elseif (TIME>strtotime('16:00')) $Setkamer=22.5;
-		elseif (TIME>strtotime('15:00')) $Setkamer=23;
-		elseif (TIME>strtotime('14:00')) $Setkamer=23.5;
-		elseif (TIME>strtotime('13:00')) $Setkamer=24;
-		elseif (TIME>strtotime('12:00')) $Setkamer=24.5;
-		elseif (TIME>strtotime('11:00')) $Setkamer=25;
-		elseif (TIME>strtotime('10:00')) $Setkamer=25.5;
-		elseif (TIME>strtotime('9:00')) $Setkamer=26;
+		$base=20;
+		if (TIME<strtotime('5:45')) $Setkamer=$base;
+		elseif (TIME>strtotime('21:00')) $Setkamer=$base;
+		elseif (TIME>strtotime('20:00')) $Setkamer=$base+0.5;
+		elseif (TIME>strtotime('19:00')) $Setkamer=$base+1;
+		elseif (TIME>strtotime('18:00')) $Setkamer=$base+1.5;
+		elseif (TIME>strtotime('16:00')) $Setkamer=$base+2;
+		elseif (TIME>strtotime('15:00')) $Setkamer=$base+2.5;
+		elseif (TIME>strtotime('14:00')) $Setkamer=$base+3;
+		elseif (TIME>strtotime('13:00')) $Setkamer=$base+3.5;
+		elseif (TIME>strtotime('12:00')) $Setkamer=$base+4;
+		elseif (TIME>strtotime('11:00')) $Setkamer=$base+4.5;
+		elseif (TIME>strtotime('10:00')) $Setkamer=$base+5;
+		elseif (TIME>strtotime('8:00')) $Setkamer=$base+5.5;
+		elseif (TIME>strtotime('6:00')) $Setkamer=$base+6;
 	}
 	if ($d['Weg']['s']>=3) $Setkamer=28;
 	if ($d['kamer_set']['s']!=$Setkamer) {
@@ -110,16 +111,17 @@ if ($d['alex_set']['m']==0) {
 				)
 			)
 	) {
-		if (TIME<strtotime('6:30')) $Setalex=23;
-		elseif (TIME>strtotime('18:00')) $Setalex=23;
-		elseif (TIME>strtotime('17:00')) $Setalex=23.5;
-		elseif (TIME>strtotime('16:00')) $Setalex=24;
-		elseif (TIME>strtotime('15:00')) $Setalex=24.5;
-		elseif (TIME>strtotime('14:00')) $Setalex=25;
-		elseif (TIME>strtotime('13:00')) $Setalex=25.5;
-		elseif (TIME>strtotime('12:00')) $Setalex=26;
-		elseif (TIME>strtotime('11:00')) $Setalex=27.5;
-		elseif (TIME>strtotime('10:00')) $Setalex=28;
+		$base=23.5;
+		if (TIME<strtotime('6:30')) $Setalex=$base;
+		elseif (TIME>strtotime('18:00')) $Setalex=$base;
+		elseif (TIME>strtotime('17:00')) $Setalex=$base+0.5;
+		elseif (TIME>strtotime('16:00')) $Setalex=$base+1;
+		elseif (TIME>strtotime('15:00')) $Setalex=$base+1.5;
+		elseif (TIME>strtotime('14:00')) $Setalex=$base+2;
+		elseif (TIME>strtotime('13:00')) $Setalex=$base+2.5;
+		elseif (TIME>strtotime('12:00')) $Setalex=$base+3;
+		elseif (TIME>strtotime('11:00')) $Setalex=$base+3.5;
+		elseif (TIME>strtotime('10:00')) $Setalex=$base+4;
 	}
 	if ($d['Weg']['s']>=3) $Setalex=28;
 	if ($d['alex_set']['s']!=$Setalex) {
