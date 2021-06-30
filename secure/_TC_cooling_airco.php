@@ -256,7 +256,7 @@ if ($d['auto']['s']=='On') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&$d['Ralex']['s']==0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
