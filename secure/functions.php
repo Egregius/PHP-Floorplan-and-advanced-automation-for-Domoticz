@@ -527,6 +527,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 		for ($x=1;$x<=10;$x++) {
 			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
 			if (isset($status)&&($status['artist']=='Paul Kalkbrenner'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) {
+				lg(print_r($status, true));
 				bosekey('SHUFFLE_ON', 750000, $ip);
 				bosekey('NEXT_TRACK', 750000, $ip);
 			} else break;
