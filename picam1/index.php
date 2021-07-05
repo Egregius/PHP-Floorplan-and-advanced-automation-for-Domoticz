@@ -74,12 +74,12 @@ echo '<div class="navbar" role="navigation">
 	<div class="camera1">
 		<img class="camerai" id="mjpeg_dest" src="jpg.php"/>
 	</div>
-	<!--<div class="camera2">
+	<div class="camera2">
 		<img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
-	</div>-->
+	</div>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		//mypicam=setInterval(getpic, 500);
+		mypicam=setInterval(getpic, 500);
 		mypicam2=setInterval(getpic2, 500);
 		function getpic(){
 			try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
