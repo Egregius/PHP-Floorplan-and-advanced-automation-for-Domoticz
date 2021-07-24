@@ -66,7 +66,20 @@ if ($d['kamer_set']['s']<32) {
 		elseif ($set<10) $set=10;
 		$daikin=json_decode($d['daikinkamer']['s']);
 		if (!isset($power)) $power=$daikin->power;
-		if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate) {
+		if ($daikin->adv == '') {
+			$powermode=0;
+		} else if (strstr($daikin->adv, '/')) {
+			$advs=explode("/", $daikin->adv);
+			if ($advs[0]==2) $powermode=2;
+			else if ($advs[0]==12) $powermode=1;
+			else $powermode=0;
+		} else {
+			if ($daikin->adv==13)  $powermode=0; //Normal
+			else if ($daikin->adv==12)  $powermode=1; // Eco
+			else if ($daikin->adv==2)  $powermode=2; // Power
+			else if ($daikin->adv=='')  $powermode=0;
+		}
+		if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
 			$data=json_decode($d['kamer_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=3;
@@ -142,7 +155,20 @@ if ($d['alex_set']['s']<32) {
 		elseif ($set<10) $set=10;
 		$daikin=json_decode($d['daikinalex']['s']);
 		if (!isset($power)) $power=$daikin->power;
-		if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate) {
+		if ($daikin->adv == '') {
+			$powermode=0;
+		} else if (strstr($daikin->adv, '/')) {
+			$advs=explode("/", $daikin->adv);
+			if ($advs[0]==2) $powermode=2;
+			else if ($advs[0]==12) $powermode=1;
+			else $powermode=0;
+		} else {
+			if ($daikin->adv==13)  $powermode=0; //Normal
+			else if ($daikin->adv==12)  $powermode=1; // Eco
+			else if ($daikin->adv==2)  $powermode=2; // Power
+			else if ($daikin->adv=='')  $powermode=0;
+		}
+		if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
 			$data=json_decode($d['alex_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=3;
@@ -198,7 +224,20 @@ if ($d['living_set']['s']<32) {
 		elseif ($set<10) $set=10;
 		$daikin=json_decode($d['daikinliving']['s']);
 		if (!isset($power)) $power=$daikin->power;
-		if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate) {
+		if ($daikin->adv == '') {
+			$powermode=0;
+		} else if (strstr($daikin->adv, '/')) {
+			$advs=explode("/", $daikin->adv);
+			if ($advs[0]==2) $powermode=2;
+			else if ($advs[0]==12) $powermode=1;
+			else $powermode=0;
+		} else {
+			if ($daikin->adv==13)  $powermode=0; //Normal
+			else if ($daikin->adv==12)  $powermode=1; // Eco
+			else if ($daikin->adv==2)  $powermode=2; // Power
+			else if ($daikin->adv=='')  $powermode=0;
+		}
+		if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
 			$data=json_decode($d['living_set']['icon'], true);
 			$data['power']=$power;
 			$data['mode']=3;
