@@ -15,7 +15,9 @@ require 'functions.php';
 $d=fetchdata();
 
 
-fkeuken();
+	rgb('Xlight', 126, 100);
+	sleep(2);
+	rgb('Xlight', 126, 0);
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
