@@ -124,7 +124,7 @@ session_start();
 			  },
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
-			bar:{groupWidth:50}';
+			bar:{groupWidth:90}';
 	$chart=array_to_chart($pluvio, $args);
 	echo $chart['script'];
 	echo $chart['div'];
@@ -161,7 +161,7 @@ session_start();
 			  },
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"},
-			bar:{groupWidth:40}';
+			bar:{groupWidth:20}';
 	$chart=array_to_chart($pluviomaand, $args);
 	// '<pre>';print_r($pluviomaand);echo '</pre>';
 	echo $chart['script'];
