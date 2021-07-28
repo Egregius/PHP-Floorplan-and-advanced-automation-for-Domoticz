@@ -203,8 +203,9 @@ if (isset($_REQUEST['add'])) {
 	$query="SELECT month, rain FROM `pluvioklimaat`;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $klimaat[$row['month']]=$row['rain'];
-
-	$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
+	$eenjaarstr=date('Y-m-d', strtotime('last day of this month last year'));
+	//echo $eenjaarstr;
+	$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio WHERE `date` > '$eenjaarstr'  GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) {
 		$pluviomaand[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
@@ -240,7 +241,7 @@ if (isset($_REQUEST['add'])) {
 		vAxis:{format:"#",textStyle:{color:"#CCC", fontSize:14},Gridlines:{multiple:10},minorGridlines:{multiple:10},viewWindowMode:\'explicit\',viewWindow:{min:0}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		bar:{groupWidth:10}';
+		bar:{groupWidth:20}';
 	$chart=array_to_chart($pluviomaand, $args);
 	echo $chart['script'];
 	echo $chart['div'];
