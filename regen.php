@@ -224,7 +224,7 @@ if (isset($_REQUEST['add'])) {
 		vAxis:{format:"#",textStyle:{color:"#AAA", fontSize:14},Gridlines:{multiple:2},minorGridlines:{multiple:0}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		bar:{groupWidth:90}';
+		bar:{groupWidth:30}';
 	$chart=array_to_chart($pluvio, $args);
 	echo $chart['script'];
 	echo $chart['div'];
@@ -240,7 +240,7 @@ if (isset($_REQUEST['add'])) {
 		vAxis:{format:"#",textStyle:{color:"#CCC", fontSize:14},Gridlines:{multiple:10},minorGridlines:{multiple:10},viewWindowMode:\'explicit\',viewWindow:{min:0}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		bar:{groupWidth:30}';
+		bar:{groupWidth:10}';
 	$chart=array_to_chart($pluviomaand, $args);
 	echo $chart['script'];
 	echo $chart['div'];
