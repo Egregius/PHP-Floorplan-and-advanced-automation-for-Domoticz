@@ -739,27 +739,27 @@ function createheader($page='') {
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Floorplan</title>';
-	if ($udevice=='iPhone') {
+	if ($ipaddress=='192.168.2.198')  { //Aarde
 		echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.768,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.199')  { //Nero
 		echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.24')  { //Nokiatobi initial-scale=1.2,
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.205,user-scalable=yes,minimal-ui">';
+	} elseif ($udevice=='iPhone') {
 		echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
 	} else {
 		echo '
 		<meta name="HandheldFriendly" content="true">
