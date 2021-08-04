@@ -687,7 +687,7 @@ function fkeuken() {
 	if (TIME>=strtotime('6:30')&&TIME<strtotime('20:00')&&$d['Weg']['s']==0&&$d['wasbak']['s']<14&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 14, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('20:00'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		if ($d['jbl']['s']=='Off') sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
+		sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 	}
 	if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
 		lg('fkeuken tijd ok');

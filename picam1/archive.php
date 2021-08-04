@@ -86,7 +86,7 @@ $title = TITLE_STRING;
 echo "<!DOCTYPE html><html><head>
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 <title>Voordeur-Oprit Calendar</title>
-<link rel=\"stylesheet\" href=\"js-css/pikrellcam.css\" /><link rel=\"stylesheet\" href=\"../style.css\"/>
+<link rel=\"stylesheet\" href=\"js-css/pikrellcam.css\" /><link rel=\"stylesheet\" href=\"../styles/picam1.css\"/>
 </head>
 <body>
 <div><div class='text-center'>

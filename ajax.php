@@ -196,7 +196,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 							sw($i, 'Off');
 						}
 					}
-				} elseif ($d['bose101']['s']=='On'&&&&$d['bose101']['m']==1) {
+				} elseif ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
 					bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				}
 			} elseif ($_REQUEST['action']=='Off') {

@@ -254,18 +254,8 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if (past('deurbadkamer')>3600&& $d['bose102']['s']=='0n') {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))),true);
-		if (!empty($status)) {
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']!='STANDBY') {
-					if ($d['bose102']['s']!='Off') sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
-					bosekey("POWER", 0, 102);
-				}
-			}
-		}
-	}
-	if ($d['garage']['s']=='Off'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>90&&past('deurgarage')>90&&past('bose104')>90&&$d['poortrf']['s']=='Off'&&$d['deurgarage']['s']=='Closed'&&$d['bose104']['s']=='On') {
+
+	if ($d['garage']['s']=='Off'&&$d['pirgarage']['s']=='Off'&&$d['bose101']['m']==1&&past('pirgarage')>90&&past('deurgarage')>90&&past('bose104')>90&&$d['poortrf']['s']=='Off'&&$d['deurgarage']['s']=='Closed'&&$d['bose104']['s']=='On') {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.104:8090/now_playing"))),true);
 		if (!empty($status)) {
 			if (isset($status['@attributes']['source'])) {
@@ -273,8 +263,8 @@ if ($d['auto']['s']=='On') {
 					if ($d['bose104']['s']!='Off') {
 						sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
 						$d['bose104']['s']=='Off';
+						bosekey("POWER", 0, 104);
 					}
-					bosekey("POWER", 0, 104);
 				}
 			}
 		}

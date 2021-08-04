@@ -39,7 +39,7 @@ if ($d['auto']['s']=='On') {
 	if (past('pirkeuken')>40&&past('wasbak')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off') {
 		if ($d['wasbak']['s']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['wasbak']['s']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
-		if ($d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose102')>90) {
+		if ($d['bose101']['m']==1&&$d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose102')>90) {
 			sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
 			bosekey('POWER', 0, 102);
 		}
@@ -55,14 +55,14 @@ if ($d['tv']['s']=='On') {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 
-		if ($d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
 	}
 	if (apcu_fetch('lgtv-offline')>=3) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['jbl']['s']=='Off'&&$d['zon']['s']==0) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['auto']['s']=='On'&&$d['jbl']['s']=='Off'&&$d['zon']['s']==0) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>900&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
