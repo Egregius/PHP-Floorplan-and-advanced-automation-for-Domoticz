@@ -131,7 +131,7 @@ if ($udevice=='iPad') {
 } elseif ($udevice=='iPhoneSE') {
 	$args['width']=375;$args['height']=510;
 	$argshour['width']=375;$argshour['height']=580;
-} elseif ($udevice=='Mac') {
+} elseif ($udevice=='iMac') {
 	$args['width']=490;$args['height']=700;
 	$argshour['width']=490;$argshour['height']=700;
 } else {
@@ -256,6 +256,6 @@ if ($sensor=='alles') {
 $togo=61-date("s");
 if ($togo<15) $togo=15;
 $togo=$togo*1000+62000;
-echo "<br>refreshing in ".$togo/1000 ." seconds";
+echo "<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
 echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();
