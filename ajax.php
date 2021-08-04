@@ -188,7 +188,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				if ($d['nvidia']['s']!='On') {
 					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 				}
-				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose105']['s']=='Off') {
+				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
 					sw('bose101', 'Off');
 					bosekey("POWER");
 					foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
@@ -196,7 +196,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 							sw($i, 'Off');
 						}
 					}
-				} elseif ($d['bose101']['s']=='On') {
+				} elseif ($d['bose101']['s']=='On'&&&&$d['bose101']['m']==1) {
 					bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				}
 			} elseif ($_REQUEST['action']=='Off') {
