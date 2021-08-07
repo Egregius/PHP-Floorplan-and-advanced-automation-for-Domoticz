@@ -64,7 +64,7 @@ if ($d['kamer_set']['s']<32) {
 		elseif($d['kamer_set']['s']==3) $rate=5;
 		elseif($d['kamer_set']['s']==4) $rate=6;
 		elseif($d['kamer_set']['s']==5) $rate=7;
-		$set=$d['kamer_set']['s']-1;
+		$set=$d['kamer_set']['s']-0.5;
 		if (TIME<strtotime('8:30')||$d['Weg']['s']==1&&$set>10)$rate='B';
 		$set=ceil($set * 2) / 2;
 		if ($set>30) $set=30;

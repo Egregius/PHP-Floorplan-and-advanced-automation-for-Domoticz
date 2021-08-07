@@ -116,25 +116,19 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<body>
 		<div class="navbar">
 			<form action="/floorplan.php">
-				<input type="submit" class="btn b7" value="Plan"/>
+				<input type="submit" class="btn b5" value="Plan"/>
 			</form>
 			<form action="/denon.php">
-				<input type="submit" class="btn b7" value="Denon"/>
+				<input type="submit" class="btn b5" value="Denon"/>
 			</form>
 			<form action="/kodi.php">
-				<input type="submit" class="btn btna b7" value="Kodi"/>
+				<input type="submit" class="btn btna b5" value="Kodi"/>
 			</form>
 			<form action="'.$urlfilms.'/films.php">
-				<input type="submit" class="btn b7" value="Films"/>
-			</form>
-			<form action="'.$urlfilms.'/tobi.php">
-				<input type="submit" class="btn b7" value="Tobi"/>
-			</form>
-			<form action="'.$urlfilms.'/alex.php">
-				<input type="submit" class="btn b7" value="Alex"/>
+				<input type="submit" class="btn b5" value="Films"/>
 			</form>
 			<form action="'.$urlfilms.'/series.php">
-				<input type="submit" class="btn b7" value="Series"/>
+				<input type="submit" class="btn b5" value="Series"/>
 			</form>
 		</div>';
 $d=fetchdata();
