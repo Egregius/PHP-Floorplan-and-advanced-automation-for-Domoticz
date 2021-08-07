@@ -62,10 +62,11 @@ if (!$denonmain) {
 	echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
 }
 echo '<div class="navbar">
-	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
-	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
-	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b4" value="Films"/></form>
-	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b4" value="Series"/></form>
+	<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
+	<form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
+	<form action="/kodi.php"><input type="submit" class="btn b5" value="Kodi"/></form>
+	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b5" value="Films"/></form>
+	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b5" value="Series"/></form>
 </div>
 		<div class="content">
 			<form method="POST">

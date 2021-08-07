@@ -267,9 +267,8 @@ echo '
 					<input type="submit" name="Volume" value="Up" class="btn big b3" onclick="exec(\'Volume\',\'up\');"/>
 				</div>
 				<div class="box">Update Library:<br/>
-					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Wij\');"/>
-					<input type="submit" name="UpdateKodi" value="Tobi" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Tobi\');"/>
-					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b3" onclick="exec(\'UpdateKodi\',\'Alex\');"/>
+					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b2" onclick="exec(\'UpdateKodi\',\'Wij\');"/>
+					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b2" onclick="exec(\'UpdateKodi\',\'Alex\');"/>
 				</div>
 				<div class="box">
 					<input type="submit" name="PowerOn" value="Shield On" class="btn big b2" onclick="exec(\'PowerOn\',\'Shield On\');"/>
