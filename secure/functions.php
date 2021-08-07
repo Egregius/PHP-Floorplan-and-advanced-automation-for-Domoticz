@@ -85,7 +85,7 @@ function douche() {
 	$douchegas=$d['douche']['s']*10;
 	$douchewater=$d['douche']['m']*1;
 	if ($douchegas>=1&&$douchewater>=1) {
-		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*0.005, 2, ',', '').'€__Water: '.$douchewater.'L = '.number_format($douchewater*0.001269216, 2, ',', '').'€__Som = '.number_format(($douchegas*0.005)+($douchewater*0.001269216), 2, ',', '').'€';
+		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*0.005, 2, ',', '').'€__Water: '.$douchewater.'L = '.number_format($douchewater*0.0018529, 2, ',', '').'€__Som = '.number_format(($douchegas*0.005)+($douchewater*0.0018529), 2, ',', '').'€';
 		telegram($msg);
 	}
 	store('douche', 0, basename(__FILE__).':'.__LINE__);
