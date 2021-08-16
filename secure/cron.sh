@@ -46,7 +46,7 @@ if [ $PHP -le 1 ] || [ $PHP -ge 50 ] ; then
 	/usr/sbin/service php8.0-fpm start
 fi
 
-ps cax | grep mysql
+ps cax | grep mariadbd
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
