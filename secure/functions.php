@@ -17,7 +17,7 @@ if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 
 function dbconnect() {
 	global $dbname,$dbuser,$dbpass;
-	return new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
 $db=dbconnect();
 //$d=fetchdata();
