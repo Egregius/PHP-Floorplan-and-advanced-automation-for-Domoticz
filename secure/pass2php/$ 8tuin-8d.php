@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,6 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['zolder']['s']<100) {
-	sl('zolder', 100);
-}
+sw('water', 'On', basename(__FILE__).':'.__LINE__);
+storemode('water', 7200, basename(__FILE__).':'.__LINE__);

@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,7 +9,3 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($d['zolder']['s']<100) {
-	if ($d['zolder']['s']==0) $d['zolder']['s']=1;
-	sl('zolder', ceil($d['zolder']['s']*1.05));
-}

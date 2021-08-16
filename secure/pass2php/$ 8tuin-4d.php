@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,4 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('bureeltobi', 'On', basename(__FILE__).':'.__LINE__);
+sw('water', 'On', basename(__FILE__).':'.__LINE__);
+storemode('water', 1800, basename(__FILE__).':'.__LINE__);

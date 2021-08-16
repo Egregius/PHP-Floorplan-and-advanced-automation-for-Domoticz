@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Zolder-4.php');
+sw('water', 'Off', basename(__FILE__).':'.__LINE__);

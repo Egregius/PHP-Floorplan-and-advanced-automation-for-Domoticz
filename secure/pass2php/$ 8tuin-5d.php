@@ -1,7 +1,7 @@
 <?php
 /**
  * Pass2PHP
- * php version 7.3
+ * php version 8
  *
  * @category Home_Automation
  * @package  Pass2PHP
@@ -9,4 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-sw('bureeltobi', 'Off', basename(__FILE__).':'.__LINE__);
+sl('luifel', 100, basename(__FILE__).':'.__LINE__);
+storemode('luifel', 1, basename(__FILE__).':'.__LINE__);
