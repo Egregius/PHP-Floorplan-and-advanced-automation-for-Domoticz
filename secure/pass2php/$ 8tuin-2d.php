@@ -9,3 +9,6 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+sw('tuin', 'Off');
+sl('terras', 0);
+sl('luifel', 0);

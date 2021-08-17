@@ -9,3 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($d['terras']['s']>=10) sl('terras', $d['terras']['s']-10);
