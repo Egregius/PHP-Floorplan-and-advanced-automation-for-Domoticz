@@ -11,14 +11,17 @@
  **/
 require '/var/www/config.php';
 $mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-$result = $mysqli->query("select n,s,t from devices WHERE n in ('Weg', 'poortrf', 'deurvoordeur');") or trigger_error($mysqli->error." [$sql]");
+$result = $mysqli->query("select n,s,t,m from devices WHERE n in ('Weg', 'poortrf', 'deurvoordeur','civil_twilight');") or trigger_error($mysqli->error." [$sql]");
 while ($row = $result->fetch_array()) {
 	$d[$row['n']]['s'] = $row['s'];
 	$d[$row['n']]['t'] = $row['t'];
+	$d[$row['n']]['m'] = $row['m'];
 }
 $data=array();
 $data['Weg']=$d['Weg']['s'];
 $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
 $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
+if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $data['zonop']=1;
+else $data['zonop']=0;
 echo serialize($data);
