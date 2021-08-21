@@ -23,7 +23,8 @@ if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'*/||$d['nvidia']['s']=='Off')
 			if ($d[$i]['s']=='On') {
 				sw($i, 'Off');
 			}
-		} elseif ($d['bose101']['s']=='On'&&&&$d['bose101']['m']==1) {
+		}
+		if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
 			bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 		}
 	}
