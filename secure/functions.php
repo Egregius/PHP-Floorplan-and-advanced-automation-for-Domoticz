@@ -524,11 +524,11 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	if ($sleep>0) usleep($sleep);
 	if (startsWith($key,'PRESET')) {
 		for ($x=1;$x<=10;$x++) {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
-			lg(print_r($status, true));
-			if (isset($status)) {
-				if ($status['shuffleSetting']!='SHUFFLE_ON') bosekey('SHUFFLE_ON', 750000, $ip);
-				if ($status['artist']=='Paul Kalkbrenner'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider') {
+			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
+			lg(print_r($data, true));
+			if (isset($data)) {
+				if (isset($data['shuffleSetting'])&&$data['shuffleSetting']!='SHUFFLE_ON') bosekey('SHUFFLE_ON', 750000, $ip);
+				if (isset($data['artist'])&&($data['artist']=='Paul Kalkbrenner'||$data['track']=='Cloud Rider'||$data['track']=='Cloud Rider')) {
 					bosekey('NEXT_TRACK', 750000, $ip);
 				} else break;
 			}

@@ -17,10 +17,10 @@ if ($d['kamer']['m']==2) {
 	if (TIME>strtotime('20:00')) {
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 		if ($d['bose101']['s']=='On') {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-			if (!empty($status)) {
-				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']!='STANDBY') {
+			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+			if (!empty($data)) {
+				if (isset($data['@attributes']['source'])) {
+					if ($data['@attributes']['source']!='STANDBY') {
 						bosekey("POWER", 0, 101);
 						sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 						sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
@@ -30,10 +30,10 @@ if ($d['kamer']['m']==2) {
 				}
 			}
 		}
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
+		$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
+		if (!empty($data)) {
+			if (isset($data['@attributes']['source'])) {
+				if ($data['@attributes']['source']=='STANDBY') {
 					bosekey("POWER", 0, 103);
 					sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 					usleep(100000);
