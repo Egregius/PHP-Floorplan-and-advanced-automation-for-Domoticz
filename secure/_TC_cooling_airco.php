@@ -102,8 +102,8 @@ if ($d['kamer_set']['s']<32) {
 		$data=json_decode($d['kamer_set']['icon'], true);
 		$data['power']=0;
 		$data['mode']=3;
-		$data['fan']=$rate;
-		$data['set']=$set;
+		$data['fan']='A';
+		$data['set']=33;
 		storeicon('kamer_set', json_encode($data));
 		daikinset('kamer', 0, 3, 10, basename(__FILE__).':'.__LINE__);
 	}
@@ -196,8 +196,8 @@ if ($d['alex_set']['s']<32) {
 		$data=json_decode($d['alex_set']['icon'], true);
 		$data['power']=0;
 		$data['mode']=3;
-		$data['fan']=$rate;
-		$data['set']=$set;
+		$data['fan']='A';
+		$data['set']=33;
 		storeicon('alex_set', json_encode($data));
 		daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__);
 	}
@@ -270,8 +270,8 @@ if ($d['living_set']['s']<32) {
 		$data=json_decode($d['living_set']['icon'], true);
 		$data['power']=0;
 		$data['mode']=3;
-		$data['fan']=$rate;
-		$data['set']=$set;
+		$data['fan']='A';
+		$data['set']=33;
 		storeicon('living_set', json_encode($data));
 		daikinset('living', 0, 3, 10, basename(__FILE__).':'.__LINE__);
 	}

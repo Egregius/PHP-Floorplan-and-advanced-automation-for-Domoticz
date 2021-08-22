@@ -49,10 +49,10 @@ function huisslapen() {
 	foreach (array('living_set','tobi_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	$status=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-	if (!empty($status)) {
-		if (isset($status['@attributes']['source'])) {
-			if ($status['@attributes']['source']!='STANDBY') {
+	$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+	if (!empty($data)) {
+		if (isset($data['@attributes']['source'])) {
+			if ($data['@attributes']['source']!='STANDBY') {
 				bosekey("POWER", 0, 101);
 				foreach (array(101,102,103,104,105) as $x) {
 					if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
@@ -419,19 +419,19 @@ function checkport($ip,$port='None') {
 	}
 }
 function ping($ip) {
-	$result=exec("/bin/ping -c1 -w1 $ip", $outcome, $status);
-	if ($status==0) return true;
+	$result=exec("/bin/ping -c1 -w1 $ip", $outcome, $reply);
+	if ($reply==0) return true;
 	else return false;
 }
 function pingport($ip,$port) {
 	$file=@fsockopen($ip, $port, $errno, $errstr, 5);
-	$status=0;
-	if (!$file) $status=-1;
+	$reply=0;
+	if (!$file) $reply=-1;
 	else {
 		fclose($file);
-		$status=1;
+		$reply=1;
 	}
-	return $status;
+	return $reply;
 }
 function double($name, $action, $msg='') {
 	sw($name, $action, $msg);
@@ -570,11 +570,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			bosekey($preset, 750000, 101);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
-/*			for ($x=1;$x<=3;$x++) {
-				$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-				if (isset($status)&&($status['track']=='Cloud Rider'||$status['track']=='Cloud Rider'||$status['track']=='Cloud Rider')) bosekey('NEXT_TRACK', 0, 101);
-				else break;
-			}*/
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
