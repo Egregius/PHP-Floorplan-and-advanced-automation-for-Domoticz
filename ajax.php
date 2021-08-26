@@ -43,8 +43,8 @@ if (isset($_REQUEST['t'])) {
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
-	if ($_REQUEST['runsync']=='wake') {
-		lg('Runninc syncs');
+	if ($_REQUEST['command']=='runsync') {
+		lg('Running syncs');
 	}
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
