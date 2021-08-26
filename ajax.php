@@ -45,6 +45,7 @@ if (isset($_REQUEST['t'])) {
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 	if ($_REQUEST['command']=='runsync') {
 		lg('Running syncs');
+		file_get_contents('http://192.168.2.20/secure/runsync.php');
 	}
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
