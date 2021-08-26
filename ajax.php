@@ -42,9 +42,9 @@ if (isset($_REQUEST['t'])) {
 	echo json_encode($d);
 	exit;
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='imac') {
-	if ($_REQUEST['command']=='wake') {
-		shell_exec('secure/wakeimac.sh');
+elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
+	if ($_REQUEST['runsync']=='wake') {
+		lg('Runninc syncs');
 	}
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
