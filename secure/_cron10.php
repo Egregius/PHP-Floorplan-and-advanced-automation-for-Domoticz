@@ -55,7 +55,7 @@ if ($d['tv']['s']=='On') {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 
-		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
 	}
