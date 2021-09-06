@@ -14,10 +14,7 @@ $start=microtime(true);
 require 'functions.php';
 $d=fetchdata();
 
-
-	rgb('Xlight', 126, 100);
-	sleep(2);
-	rgb('Xlight', 126, 0);
+telegram('Test');
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
