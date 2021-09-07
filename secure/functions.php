@@ -684,9 +684,8 @@ function fkeuken() {
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('20:00'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<3&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 	}
-	if (TIME>strtotime('6:30')&&TIME<strtotime('20:00')) {
-		lg('fkeuken tijd ok');
-		if ($d['bose102']['s']=='Off') bosezone(102, false, 27);
+	if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0&&TIME>strtotime('6:30')&&TIME<strtotime('19:00')) {
+		if ($d['bose102']['s']=='Off'&&$d['lgtv']['s']=='Off') bosezone(102, false, 27);
 	}
 }
 function finkom() {

@@ -13,6 +13,8 @@ if ($status=='On') {
 	sw('poortrf', 'On');
 	sw('voordeur', 'On');
 	huisthuis();
+	sleep(2);
+	sw('voordeur', 'On');
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
 		waarschuwing(' Let op . Achterdeur open', 55);
