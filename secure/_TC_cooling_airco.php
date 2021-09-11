@@ -233,7 +233,7 @@ if ($d['living_set']['s']<32) {
 		elseif($d['living_set']['s']==3) $rate=5;
 		elseif($d['living_set']['s']==4) $rate=6;
 		elseif($d['living_set']['s']==5) $rate=7;
-		$set=$d['living_set']['s']-1.5;
+		$set=$d['living_set']['s']-0.5;
 		$set=ceil($set * 2) / 2;
 		if ($set>30) $set=30;
 		elseif ($set<18) $set=18;

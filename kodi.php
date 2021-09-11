@@ -217,9 +217,9 @@ if ($d['nvidia']['s']=='On') {
 				foreach ($prop['audiostreams'] as $audio) {
 					echo $audio['index']===$prop['currentaudiostream']['index']
 					?'
-						<button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b2" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>'
+						<button type="submit" name="audio" value="'.$audio['index'].'" class="btn btna b1" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>'
 					:'
-						<button type="submit" name="audio" value="'.$audio['index'].'" class="btn b2" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>';
+						<button type="submit" name="audio" value="'.$audio['index'].'" class="btn b1" onclick="exec(\'audio\',\''.$audio['index'].'\');">'.$audio['name'].'</button>';
 					$stream=$stream + 1;
 				}
 				echo '
@@ -228,13 +228,14 @@ if ($d['nvidia']['s']=='On') {
 				foreach ($prop['subtitles'] as $subtitle) {
 					echo $subtitle['index']===$prop['currentsubtitle']['index']
 					?'
-						<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b2" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>'
+						<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn btna b1" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>'
 					:'
-						<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b2" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>';
+						<button type="submit" name="subtitle" value="'.$subtitle['index'].'" class="btn b1" onclick="exec(\'subtitle\',\''.$subtitle['index'].'\');">'.langu($subtitle['language']).' '.$subtitle['name'].'</button>';
 				}
 				echo '
 						<br>
-						<button type="submit" name="subtitle" value="enable" class="btn b2" onclick="exec(\'subtitle\',\'enable\');">Enable</button><button type="submit" name="subtitle" value="disable" class="btn b2" onclick="exec(\'subtitle\',\'disable\');">Disable</button>';
+						<button type="submit" name="subtitle" value="enable" class="btn b2" onclick="exec(\'subtitle\',\'enable\');">Enable</button>
+						<button type="submit" name="subtitle" value="disable" class="btn b2" onclick="exec(\'subtitle\',\'disable\');">Disable</button>';
 			} else {
 				echo '
 					</div>
