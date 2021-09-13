@@ -26,9 +26,6 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 	if ($d['speelkamer_set']['m']==0) {
 		if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurspeelkamer']['s']=='Closed'||($d['deurspeelkamer']['s']=='Open'&&past('deurspeelkamer')<600))&&$d['raamspeelkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamspeelkamer')>7198 || TIME>strtotime('20:00'))) {
 			$Setspeelkamer=10;
-			if ($d['gcal']['s']) {
-				if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Setspeelkamer=14;
-			}
 		}
 		if ($d['speelkamer_set']['s']!=$Setspeelkamer) {
 			store('speelkamer_set', $Setspeelkamer, basename(__FILE__).':'.__LINE__);
