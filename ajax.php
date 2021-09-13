@@ -162,7 +162,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Boven') {
-			foreach(array('RkamerL', 'RkamerR', 'Rtobi', 'Ralex') as $i) {
+			foreach(array('RkamerL', 'RkamerR', 'Rspeelkamer', 'Ralex') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='tv') {

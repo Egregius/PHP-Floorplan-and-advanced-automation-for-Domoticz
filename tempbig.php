@@ -62,7 +62,7 @@ case 246:$setpoint=13;$radiator=13;$sensornaam='badkamer';
 	break;
 case 278:$setpoint=14;$radiator=181;$sensornaam='kamer';
 	break;
-case 356:$setpoint=15;$radiator=183;$sensornaam='tobi';
+case 356:$setpoint=15;$radiator=183;$sensornaam='speelkamer';
 	break;
 case 293:$setpoint=0;$radiator=0;$sensornaam='zolder';
 	break;
@@ -85,7 +85,7 @@ $sensor=$sensornaam;
 $living='#FF1111';
 $badkamer='#6666FF';
 $kamer='#44FF44';
-$tobi='00EEFF';
+$speelkamer='00EEFF';
 $alex='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
@@ -93,7 +93,7 @@ $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=356");\'><font color="'.$tobi.'">Tobi</font></a>
+	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=356");\'><font color="'.$speelkamer.'">speelkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
@@ -136,9 +136,9 @@ $args=array(
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 );
 if ($sensor=='alles') {
-	$args['colors']=array($buiten,$living,$badkamer,$kamer,$tobi,$alex,$zolder,$living,$badkamer,$kamer,$tobi,$alex);
+	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,tobi,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) {
 		die('There was an error running the query ['.$query.' - '.$db->error.']');
 	}
@@ -154,9 +154,9 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart);
 } elseif ($sensor=='binnen') {
-	$args['colors']=array($living,$badkamer,$kamer,$tobi,$alex,$living,$badkamer,$kamer,$tobi,$alex);
+	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,living,badkamer,kamer,tobi,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) {
 		die('There was an error running the query ['.$query.' - '.$db->error.']');
 	}
