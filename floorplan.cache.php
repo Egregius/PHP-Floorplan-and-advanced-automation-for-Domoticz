@@ -195,7 +195,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 				<td>Manueel</td>';
 			}
-		} elseif (in_array($row['n'], array('eettafel','zithoek','kamer','tobi','alex','lichtbadkamer'))) {
+		} elseif (in_array($row['n'], array('eettafel','zithoek','kamer','speelkamer','alex','lichtbadkamer'))) {
 			echo '
 				<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {
@@ -260,10 +260,10 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				<td>Gcal</td>';
 			if ($row['s']==1) {
 				echo '
-				<td>Tobi Beitem</td>';
+				<td>speelkamer Beitem</td>';
 			} else {
 				echo '
-				<td>Tobi Rumbeke</td>';
+				<td>speelkamer Rumbeke</td>';
 			}
 			echo '
 				<td>'.$row['m'].'</td>';

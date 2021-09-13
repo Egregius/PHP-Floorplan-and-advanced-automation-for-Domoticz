@@ -12,13 +12,13 @@
 //lg(__FILE__.':'.$s);
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
-foreach (array('buiten','living','badkamer','kamer','tobi','alex','zolder','garage') as $i) ${$i}=$d[$i.'_temp']['s'];
-$query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`tobi`,`alex`,`zolder`,`garage`) VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$tobi','$alex','$zolder','$garage');";
+foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) ${$i}=$d[$i.'_temp']['s'];
+$query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`speelkamer`,`alex`,`zolder`,`garage`) VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$garage');";
 if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-foreach (array('living','badkamer','kamer','tobi','alex','zolder','garage') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
+foreach (array('living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;
-foreach (array('living','badkamer','kamer','tobi','alex','zolder','garage') as $i) {
+foreach (array('living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,7200,false,2);
 }
 if ($d['auto']['s']=='On') {
@@ -51,16 +51,16 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		$avg=0;
-		foreach (array('living_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]['s'];
+		foreach (array('living_temp','kamer_temp','speelkamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]['s'];
 		$avg=$avg/5;
-		foreach (array('living_temp','kamer_temp','tobi_temp','alex_temp','zolder_temp') as $i) {
+		foreach (array('living_temp','kamer_temp','speelkamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {
-		foreach (array('eettafel','zithoek','tobi','kamer','alex','zolder') as $i) {
+		foreach (array('eettafel','zithoek','speelkamer','kamer','alex','zolder') as $i) {
 			if ($d[$i]['s']!=0) {
 				if (past($i)>58) {
 					if ($d[$i]['m']==1) {
@@ -145,7 +145,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','wasbak','hall','inkom','kamer','tobi','alex','terras','lichtbadkamer') as $i) {
+		foreach (array('eettafel','zithoek','wasbak','hall','inkom','kamer','speelkamer','alex','terras','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {
@@ -167,12 +167,12 @@ if ($d['auto']['s']=='On') {
 			sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	foreach (array('living_set','badkamer_set','kamer_set','tobi_set','alex_set') as $i) {
+	foreach (array('living_set','badkamer_set','kamer_set','speelkamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>14400) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 
 	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
-		foreach (array('RkamerL','RkamerR','Rtobi','Ralex') as $i) {
+		foreach (array('RkamerL','RkamerR','Rspeelkamer','Ralex') as $i) {
 			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -291,8 +291,8 @@ if ($d['auto']['s']=='On') {
 		if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) sl('kamer', 0, basename(__FILE__).':'.__LINE__);
 		elseif (past('kamer')>900) if ($d['kamer']['m']!=1) storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['tobi']['s']>0&&$d['zon']['s']>200&&$d['Rtobi']['s']==0&&past('tobi')>900	) {
-		if ($d['tobi']['m']!=1) storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['speelkamer']['s']>0&&$d['zon']['s']>200&&$d['Rspeelkamer']['s']==0&&past('speelkamer')>900	) {
+		if ($d['speelkamer']['m']!=1) storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['alex']['s']>0&&$d['zon']['s']>200&&$d['Ralex']['s']==0&&past('alex')>900) {
 		if ($d['alex']['m']!=1) storemode('alex', 1, basename(__FILE__).':'.__LINE__);

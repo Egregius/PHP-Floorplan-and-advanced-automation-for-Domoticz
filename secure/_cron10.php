@@ -26,7 +26,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>30&&past('deurbadkamer')>30&&past('deurkamer')>30&&past('deurtobi')>30&&past('deuralex')>30) {
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>30&&past('deurbadkamer')>30&&past('deurkamer')>30&&past('deurspeelkamer')>30&&past('deuralex')>30) {
 		foreach (array(30,28,26,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);

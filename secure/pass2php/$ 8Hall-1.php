@@ -18,8 +18,8 @@ if ($status=='On') {
         waarschuwing('Let op. Raam Living open', 55);
         exit('');
     }
-    if ($d['bureeltobi']['s']=='On') {
-        waarschuwing('Let op. Bureel Tobi aan', 55);
+    if ($d['bureelspeelkamer']['s']=='On') {
+        waarschuwing('Let op. Bureel speelkamer aan', 55);
         exit('');
     }
     if ($d['bose105']['m']=='Online') {

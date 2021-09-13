@@ -301,9 +301,9 @@ $stmt=$db->query(
 		min(kamer) as kamer_min,
 		max(kamer) as kamer_max,
 		avg(kamer) as kamer_avg,
-		min(tobi) as tobi_min,
-		max(tobi) as tobi_max,
-		avg(tobi) as tobi_avg,
+		min(speelkamer) as speelkamer_min,
+		max(speelkamer) as speelkamer_max,
+		avg(speelkamer) as speelkamer_avg,
 		min(alex) as alex_min,
 		max(alex) as alex_max,
 		avg(alex) as alex_avg,
@@ -330,9 +330,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$kamer_min=$row['kamer_min'];
 	$kamer_max=$row['kamer_max'];
 	$kamer_avg=$row['kamer_avg'];
-	$tobi_min=$row['tobi_min'];
-	$tobi_max=$row['tobi_max'];
-	$tobi_avg=$row['tobi_avg'];
+	$speelkamer_min=$row['speelkamer_min'];
+	$speelkamer_max=$row['speelkamer_max'];
+	$speelkamer_avg=$row['speelkamer_avg'];
 	$alex_min=$row['alex_min'];
 	$alex_max=$row['alex_max'];
 	$alex_avg=$row['alex_avg'];
@@ -357,9 +357,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 				`kamer_min`,
 				`kamer_max`,
 				`kamer_avg`,
-				`tobi_min`,
-				`tobi_max`,
-				`tobi_avg`,
+				`speelkamer_min`,
+				`speelkamer_max`,
+				`speelkamer_avg`,
 				`alex_min`,
 				`alex_max`,
 				`alex_avg`,
@@ -384,9 +384,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			'$kamer_min',
 			'$kamer_max',
 			'$kamer_avg',
-			'$tobi_min',
-			'$tobi_max',
-			'$tobi_avg',
+			'$speelkamer_min',
+			'$speelkamer_max',
+			'$speelkamer_avg',
 			'$alex_min',
 			'$alex_max',
 			'$alex_avg',
@@ -410,9 +410,9 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			`kamer_min`='$kamer_min',
 			`kamer_max`='$kamer_max',
 			`kamer_avg`='$kamer_avg',
-			`tobi_min`='$tobi_min',
-			`tobi_max`='$tobi_max',
-			`tobi_avg`='$tobi_avg',
+			`speelkamer_min`='$speelkamer_min',
+			`speelkamer_max`='$speelkamer_max',
+			`speelkamer_avg`='$speelkamer_avg',
 			`alex_min`='$alex_min',
 			`alex_max`='$alex_max',
 			`alex_avg`='$alex_avg',

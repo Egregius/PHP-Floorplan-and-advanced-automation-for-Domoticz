@@ -12,8 +12,8 @@
 if ($d['auto']['s']=='On') {
 	if ($status=='Open') {
 		fhall();
-		if (TIME>strtotime('6:00')&&TIME<strtotime('10:00')&&$d['Ralex']['s']==0&&$d['Rtobi']>0) sl('Rtobi', 0, basename(__FILE__).':'.__LINE__);
+		if (TIME>strtotime('6:00')&&TIME<strtotime('10:00')&&$d['Ralex']['s']==0&&$d['Rspeelkamer']>0) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($status=='Open') sirene('Deur Tobi open');
-else sirene('Deur Tobi dicht');
+if ($status=='Open') sirene('Deur speelkamer open');
+else sirene('Deur speelkamer dicht');

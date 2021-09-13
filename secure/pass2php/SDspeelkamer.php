@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    rookmelder('Rook gedecteerd in kamer Tobi!');
+    rookmelder('Rook gedecteerd in kamer speelkamer!');
 }

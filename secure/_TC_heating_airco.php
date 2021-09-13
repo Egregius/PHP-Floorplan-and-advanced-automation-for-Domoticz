@@ -11,7 +11,7 @@
  **/
 
 if ($d['kamer_set']['m']==0) $Setkamer=4;
-if ($d['tobi_set']['m']==0) $Settobi=4;
+if ($d['speelkamer_set']['m']==0) $Setspeelkamer=4;
 if ($d['alex_set']['m']==0) $Setalex=4;
 
 foreach (array('living', 'kamer', 'alex') as $k) {

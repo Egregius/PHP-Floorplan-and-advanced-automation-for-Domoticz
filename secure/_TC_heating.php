@@ -11,7 +11,7 @@
  **/
 $user='heating';
 $Setkamer=4;
-$Settobi=4;
+$Setspeelkamer=4;
 $Setalex=4;
 if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 	if ($d['kamer_set']['m']==0) {
@@ -23,17 +23,17 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 			$d['kamer_set']['s']=$Setkamer;
 		}
 	}
-	if ($d['tobi_set']['m']==0) {
-		if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurtobi']['s']=='Closed'||($d['deurtobi']['s']=='Open'&&past('deurtobi')<600))&&$d['raamtobi']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamtobi')>7198 || TIME>strtotime('20:00'))) {
-			$Settobi=10;
+	if ($d['speelkamer_set']['m']==0) {
+		if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurspeelkamer']['s']=='Closed'||($d['deurspeelkamer']['s']=='Open'&&past('deurspeelkamer')<600))&&$d['raamspeelkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamspeelkamer')>7198 || TIME>strtotime('20:00'))) {
+			$Setspeelkamer=10;
 			if ($d['gcal']['s']) {
-				if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Settobi=14;
+				if (TIME<strtotime('4:30')||TIME>strtotime('21:00')) $Setspeelkamer=14;
 			}
 		}
-		if ($d['tobi_set']['s']!=$Settobi) {
-			store('tobi_set', $Settobi, basename(__FILE__).':'.__LINE__);
-			$tobi_set=$Settobi;
-			$d['tobi_set']['s']=$Settobi;
+		if ($d['speelkamer_set']['s']!=$Setspeelkamer) {
+			store('speelkamer_set', $Setspeelkamer, basename(__FILE__).':'.__LINE__);
+			$speelkamer_set=$Setspeelkamer;
+			$d['speelkamer_set']['s']=$Setspeelkamer;
 		}
 	}
 	if ($d['alex_set']['m']==0) {

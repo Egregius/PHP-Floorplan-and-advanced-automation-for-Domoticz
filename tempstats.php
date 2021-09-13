@@ -12,7 +12,7 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
-$items=array('buiten', 'living', 'kamer', 'tobi', 'alex');
+$items=array('buiten', 'living', 'kamer', 'speelkamer', 'alex');
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
@@ -45,7 +45,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 		<body style="width:100%">
 			<a href="https://home.egregius.be/tempstats.php?buiten=on&living=on&10=on&11=on&12=on&13=on&14=on&15=on&16=on&17=on&18=on&19=on&20=on&21=on" class="btn b7">Living</a>
 			<a href="https://home.egregius.be/tempstats.php?kamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Kamer</a>
-			<a href="https://home.egregius.be/tempstats.php?tobi=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">Tobi</a>
+			<a href="https://home.egregius.be/tempstats.php?speelkamer=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&22=on&23=on" class="btn b7">speelkamer</a>
 			<a href="https://home.egregius.be/tempstats.php?alex=on&0=on&1=on&2=on&3=on&4=on&5=on&6=on&20=on&21=on&22=on&23=on" class="btn b7">Alex</a>
 			<br>
 			<form method="GET">';

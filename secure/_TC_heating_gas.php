@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 //lg(__FILE__);
-$kamers=array('living'/*,'kamer','tobi','alex'*/);
+$kamers=array('living'/*,'kamer','speelkamer','alex'*/);
 $xxkamers=array();
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format(
@@ -35,7 +35,7 @@ foreach ($xxkamers as $i) {
 	}
 }
 
-/*$kamers=array('tobi','alex','kamer');
+/*$kamers=array('speelkamer','alex','kamer');
 foreach ($kamers as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
 		${'RSet'.$kamer}=setradiator(
@@ -53,11 +53,11 @@ foreach ($kamers as $kamer) {
 		);
 	}
 	if (TIME>=strtotime('15:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
-		if ($kamer!='tobi') {
+		if ($kamer!='speelkamer') {
 			if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
 			elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
 			elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
-		} elseif ($kamer=='tobi'&&$d['gcal']['s']) {
+		} elseif ($kamer=='speelkamer'&&$d['gcal']['s']) {
 			if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
 			elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
 			elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;

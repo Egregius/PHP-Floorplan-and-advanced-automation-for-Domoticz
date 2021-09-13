@@ -10,10 +10,10 @@
  * @link     https://egregius.be
  **/
 if ($status=='On') {
-    sl('tobi', 8, basename(__FILE__).':'.__LINE__);
-    storemode('tobi', 1, basename(__FILE__).':'.__LINE__);
-    if ($d['Rtobi']['s']<70) {
-    	sl('Rtobi', 100);
+    sl('speelkamer', 8, basename(__FILE__).':'.__LINE__);
+    storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
+    if ($d['Rspeelkamer']['s']<70) {
+    	sl('Rspeelkamer', 100);
     }
     resetsecurity();
 }
