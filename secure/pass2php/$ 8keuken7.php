@@ -1,0 +1,2 @@
+<?php
+sw('GroheRed', 'Off');

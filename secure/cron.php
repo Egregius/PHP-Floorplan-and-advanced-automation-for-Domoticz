@@ -28,7 +28,7 @@ if($s<9) {
 	if ($m%5==0) include '_cron300.php';
 	if ($m==0) {
 		include '_cron3600.php';
-		include 'gcal/mirom.php';
+//		include 'gcal/mirom.php';
 	}
 }
 if (isset($_REQUEST['cron'])) include '_'.$_REQUEST['cron'].'.php';
