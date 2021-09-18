@@ -142,10 +142,10 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 function waarschuwing($msg) {
 	global $d;
 	if ($d['bose101']['s']=='On') boseplayinfo($msg, 50);
-	if ($d['bose102']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
-	if ($d['bose103']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php" > /dev/null 2>/dev/null &');
-	if ($d['bose104']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
-	if ($d['bose105']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php" > /dev/null 2>/dev/null &');
+//	if ($d['bose102']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose102.php" > /dev/null 2>/dev/null &');
+//	if ($d['bose103']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose103.php" > /dev/null 2>/dev/null &');
+//	if ($d['bose104']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose104.php" > /dev/null 2>/dev/null &');
+//	if ($d['bose105']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose105.php" > /dev/null 2>/dev/null &');
 	if ($d['Xvol']['s']!=25) sl('Xvol', 25, basename(__FILE__).':'.__LINE__);
 	sl('Xring', 30, basename(__FILE__).':'.__LINE__);
 	sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);

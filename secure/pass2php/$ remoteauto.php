@@ -17,27 +17,27 @@ if ($status=='Off') {
 	if ($d['zon']['s']>0) sw('voordeur', 'Off');
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
-		waarschuwing(' Let op . Achterdeur open', 55);
+		waarschuwing(' Let op . Achterdeur open');
 		exit;
 	}
 	if ($d['deurvoordeur']['s']!='Closed') {
-		waarschuwing(' Let op . Voordeur open', 55);
+		waarschuwing(' Let op . Voordeur open');
 		exit;
 	}
 	if ($d['raamliving']['s']!='Closed') {
-		waarschuwing(' Let op . Raam Living open', 55);
+		waarschuwing(' Let op . Raam Living open');
 		exit;
 	}
 	if ($d['raamhall']['s']!='Closed') {
-		waarschuwing(' Let op . Raam hall open', 55);
+		waarschuwing(' Let op . Raam hall open');
 		exit;
 	}
 	if ($d['raamkeuken']['s']!='Closed') {
-		waarschuwing(' Let op . Raam keuken open', 55);
+		waarschuwing(' Let op . Raam keuken open');
 		exit;
 	}
 	if ($d['bose105']['m']=='Online') {
-		waarschuwing(' Let op . Bose buiten', 55);
+		waarschuwing(' Let op . Bose buiten');
 		exit;
 	}
 	store('Weg', 2);
