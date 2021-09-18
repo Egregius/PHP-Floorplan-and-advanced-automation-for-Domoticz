@@ -113,8 +113,8 @@ if ($d['daikin']['s']=='On') {
 	if ($rgb!=false) {
 		$level=explode(';', $d['daikin_kWh']['s']);
 		$level=$level[0];
-		$level=round($level/20);
-		if ($level>100) $level=100;
+		$level=round($level/25);
+		if ($level>100) $level=80;
 		elseif ($level<1) $level=1;
 		if ($d['Xlight']['s']!=$level) {
 			if ($d['Weg']['s']==0) {

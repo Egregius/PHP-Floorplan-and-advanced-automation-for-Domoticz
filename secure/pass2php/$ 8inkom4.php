@@ -1,34 +1,34 @@
 <?php
 if ($status=='On') {
 	if ($d['achterdeur']['s']!='Closed') {
-		waarschuwing(' Let op . Achterdeur open', 55);
+		waarschuwing(' Let op . Achterdeur open');
+		exit;
+	}
+	if ($d['poort']['s']!='Closed') {
+		waarschuwing(' Let op . Poort open');
 		exit;
 	}
 	if ($d['raamliving']['s']!='Closed') {
-		waarschuwing(' Let op . Raam Living open', 55);
+		waarschuwing(' Let op . Raam Living open');
 		exit;
 	}
 	if ($d['raamhall']['s']!='Closed') {
-		waarschuwing(' Let op . Raam hall open', 55);
+		waarschuwing(' Let op . Raam hall open');
 		exit;
 	}
 	if ($d['raamkeuken']['s']!='Closed') {
-		waarschuwing(' Let op . Raam keuken open', 55);
-		exit;
-	}
-	if ($d['bureelspeelkamer']['s']=='On') {
-		waarschuwing(' Let op . bureel speelkamer aan', 55);
+		waarschuwing(' Let op . Raam keuken open');
 		exit;
 	}
 	if ($d['bose105']['m']=='Online') {
-		waarschuwing(' Let op . Bose buiten', 55);
+		waarschuwing(' Let op . Bose buiten');
 		exit;
 	}
-	boseplayinfo(' Alles ok . Vertrek maar', 50);
+	boseplayinfo(' Alles ok . Vertrek maar', 60);
 	usleep(380000);
-	bosevolume(55, 104);
+	bosevolume(60, 101);
 	usleep(3000000);
-	bosekey("POWER", 0, 104);
+	bosekey("POWER", 0, 101);
 	huisslapen();
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 }

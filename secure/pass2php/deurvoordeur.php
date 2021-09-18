@@ -13,7 +13,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-	else sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+	elseif ($d['voordeur']['s']=='On'&&$d['zon']['s']>0) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	finkom();
 	for ($k=1;$k<=60;$k++) {
 		file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20off');

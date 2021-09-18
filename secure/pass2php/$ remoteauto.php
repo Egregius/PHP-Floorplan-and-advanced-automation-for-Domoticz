@@ -9,15 +9,19 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($status=='On') {
+if ($status=='Off') {
 	sw('poortrf', 'On');
 	sw('voordeur', 'On');
 	huisthuis();
 	sleep(2);
-	sw('voordeur', 'On');
+	if ($d['zon']['s']>0) sw('voordeur', 'Off');
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
 		waarschuwing(' Let op . Achterdeur open', 55);
+		exit;
+	}
+	if ($d['deurvoordeur']['s']!='Closed') {
+		waarschuwing(' Let op . Voordeur open', 55);
 		exit;
 	}
 	if ($d['raamliving']['s']!='Closed') {
@@ -30,10 +34,6 @@ if ($status=='On') {
 	}
 	if ($d['raamkeuken']['s']!='Closed') {
 		waarschuwing(' Let op . Raam keuken open', 55);
-		exit;
-	}
-	if ($d['bureelspeelkamer']['s']=='On') {
-		waarschuwing(' Let op . bureel speelkamer aan', 55);
 		exit;
 	}
 	if ($d['bose105']['m']=='Online') {
