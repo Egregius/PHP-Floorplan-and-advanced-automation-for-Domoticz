@@ -81,7 +81,7 @@ $legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=356");\'><font color="'.$speelkamer.'">speelkamer</font></a>
+	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=356");\'><font color="'.$speelkamer.'">Speelkmr</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=245");\'><font color="'.$garage.'">Garage</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a><br>
