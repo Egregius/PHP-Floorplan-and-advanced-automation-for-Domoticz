@@ -523,7 +523,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	bosepost("key", $xml, $ip);
 	if ($sleep>0) usleep($sleep);
 	if (startsWith($key,'PRESET')) {
-		for ($x=1;$x<=10;$x++) {
+		for ($x=1;$x<=15;$x++) {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
 			lg(print_r($data, true));
 			if (isset($data)) {
