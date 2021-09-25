@@ -12,13 +12,13 @@
 //lg(__FILE__.':'.$s);
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
-foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) ${$i}=$d[$i.'_temp']['s'];
-$query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`speelkamer`,`alex`,`zolder`,`garage`) VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$garage');";
+foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
+$query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`speelkamer`,`alex`,`zolder`) VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder');";
 if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-foreach (array('living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
+foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;
-foreach (array('living','badkamer','kamer','speelkamer','alex','zolder','garage') as $i) {
+foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,7200,false,2);
 }
 if ($d['auto']['s']=='On') {

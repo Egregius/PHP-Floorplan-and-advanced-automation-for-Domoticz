@@ -59,8 +59,6 @@ switch($sensor){
 		break;
 	case 244:$sensornaam='alex';
 		break;
-	case 245:$sensornaam='garage';
-		break;
 	case 998:$sensornaam='binnen';
 		break;
 	case 999:$sensornaam='alles';
@@ -74,7 +72,6 @@ $badkamer='#6666FF';
 $kamer='#44FF44';
 $speelkamer='00EEFF';
 $alex='#EEEE00';
-$garage='#FF6600';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
 $legend='<div style="width:420px;padding:20px 0px 10px 0px;">
@@ -83,7 +80,6 @@ $legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=356");\'><font color="'.$speelkamer.'">Speelkmr</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=245");\'><font color="'.$garage.'">Garage</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a><br>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a><br/><br/>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
@@ -139,10 +135,10 @@ if ($udevice=='iPad') {
 	$argshour['width']=480;$argshour['height']=200;
 }
 if ($sensor=='alles') {
-	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$garage,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
-	$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$garage,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
+	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
+	$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,garage,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto montha;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -153,7 +149,7 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	//echo '<br/>'.$legend;
 	montha:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex,zolder_avg as zolder,garage_avg as garage from `temp_hour` where stamp > '$week'";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -163,7 +159,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	enda:
-	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(buiten_avg) as buiten, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex, AVG(garage_avg) as garage, AVG(zolder_avg) as zolder from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(buiten_avg) as buiten, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex, AVG(zolder_avg) as zolder from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
@@ -173,11 +169,11 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 } elseif ($sensor=='binnen') {
-	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex,$garage);
-	$argshour['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex,$garage);
+	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex);
+	$argshour['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex);
 	$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex,garage from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto monthb;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -187,7 +183,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	monthb:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex,garage_avg as garage from `temp_hour` where stamp > '$week'";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex from `temp_hour` where stamp > '$week'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -197,7 +193,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	endb:
-	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex, AVG(garage_avg) as garage from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';

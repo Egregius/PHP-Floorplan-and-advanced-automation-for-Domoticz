@@ -309,10 +309,7 @@ $stmt=$db->query(
 		avg(alex) as alex_avg,
 		min(zolder) as zolder_min,
 		max(zolder) as zolder_max,
-		avg(zolder) as zolder_avg,
-		min(garage) as garage_min,
-		max(garage) as garage_max,
-		avg(garage) as garage_avg
+		avg(zolder) as zolder_avg
 	FROM temp
 	GROUP BY left(stamp,13)"
 );
@@ -365,10 +362,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 				`alex_avg`,
 				`zolder_min`,
 				`zolder_max`,
-				`zolder_avg`,
-				`garage_min`,
-				`garage_max`,
-				`garage_avg`
+				`zolder_avg`
 			)
 		VALUES
 			('$stamp',
@@ -392,10 +386,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			'$alex_avg',
 			'$zolder_min',
 			'$zolder_max',
-			'$zolder_avg',
-			'$garage_min',
-			'$garage_max',
-			'$garage_avg'
+			'$zolder_avg'
 		)
 		ON DUPLICATE KEY UPDATE
 			`buiten_min`='$buiten_min',
@@ -418,10 +409,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			`alex_avg`='$alex_avg',
 			`zolder_min`='$zolder_min',
 			`zolder_max`='$zolder_max',
-			`zolder_avg`='$zolder_avg',
-			`garage_min`='$garage_min',
-			`garage_max`='$garage_max',
-			`garage_avg`='$garage_avg';"
+			`zolder_avg`='$zolder_avg';"
 	);
 }
 if ($d['buiten_temp']['s']<4&&$d['heating']['s']<4&&past('heating')>7200&&TIME<strtotime('7:00')) store('heating', 4, basename(__FILE__).':'.__LINE__);
