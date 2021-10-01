@@ -320,6 +320,7 @@ if ($d['auto']['s']=='On') {
 		if ($level[0]<200&&past('kookplaatpower_kWh')>2400) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
+if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
 if (TIME<=strtotime('0:03')) {

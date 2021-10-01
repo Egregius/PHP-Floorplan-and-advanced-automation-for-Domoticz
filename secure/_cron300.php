@@ -336,9 +336,6 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$zolder_min=$row['zolder_min'];
 	$zolder_max=$row['zolder_max'];
 	$zolder_avg=$row['zolder_avg'];
-	$garage_min=$row['garage_min'];
-	$garage_max=$row['garage_max'];
-	$garage_avg=$row['garage_avg'];
 	$db->query(
 		"INSERT INTO `temp_hour`
 			(`stamp`,

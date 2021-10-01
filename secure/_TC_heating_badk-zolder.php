@@ -69,7 +69,7 @@ if ($d['minmaxtemp']['m']>19) {
 	}
 
 }
-$difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
+/*$difzolder=number_format($d['zolder_temp']['s']-$d['zolder_set']['s'], 1);
 
 if ($d['Weg']['s']==0&&$difzolder<0&&TIME>=strtotime('7:00')&&TIME<strtotime('21:30')) {
 	$difheater1=0;
@@ -88,4 +88,4 @@ if ($d['Weg']['s']==0&&$difzolder<0&&TIME>=strtotime('7:00')&&TIME<strtotime('21
 	//Niet thuis of slapen
 	if ($d['zoldervuur2']['s']!='Off') sw('zoldervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['zoldervuur1']['s']!='Off') sw('zoldervuur1', 'Off', basename(__FILE__).':'.__LINE__);
-}
+}*/

@@ -10,9 +10,9 @@
  * @link	 https://egregius.be
  **/
 
-if ($d['kamer_set']['m']==0) $Setkamer=4;
-if ($d['speelkamer_set']['m']==0) $Setspeelkamer=4;
-if ($d['alex_set']['m']==0) $Setalex=4;
+if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
+if ($d['speelkamer_set']['m']==0) $d['speelkamer_set']['s']=4;
+if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
 
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
@@ -21,7 +21,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
-			if ($k=='living') 	$set=$d[$k.'_set']['s']-3;
+			if ($k=='living') 	$set=$d[$k.'_set']['s']-3.5;
 			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00'))$rate='B';
