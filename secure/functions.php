@@ -528,9 +528,9 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			lg(print_r($data, true));
 			if (isset($data)) {
 				if (isset($data['shuffleSetting'])&&$data['shuffleSetting']!='SHUFFLE_ON') bosekey('SHUFFLE_ON', 750000, $ip);
-				if (isset($data['artist'])&&($data['artist']=='Paul Kalkbrenner'||$data['artist']=='Florian Appl'||$data['track']=='Cloud Rider'||$data['track']=='Sky and Sand'||$data['track']=='Burg Hohenzollern')) {
-					bosekey('NEXT_TRACK', 750000, $ip);
-				} else break;
+				if (isset($data['artist'])&&($data['artist']!='Paul Kalkbrenner'&&$data['artist']!='Florian Appl'&&$data['track']!='Cloud Rider'&&$data['track']!='Sky and Sand'&&$data['track']!='Burg Hohenzollern')) {
+					break;
+				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') bosekey('NEXT_TRACK', 750000, $ip);
 			}
 		}
 	}
