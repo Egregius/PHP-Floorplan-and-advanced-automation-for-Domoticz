@@ -13,7 +13,6 @@ if ($d['auto']['s']=='On') {
 	$d['Weg']['s']==0;
 	fhall();
 	finkom();
-	fliving();
 }
 if ($d['Weg']['s']!=0) store('Weg', 0, basename(__FILE__).':'.__LINE__);
 if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
