@@ -1,2 +1,5 @@
 <?php
-require('$ 8inkom8.php');
+if (past('$ 8inkom8')<10) {
+	huisthuis();
+	resetsecurity();
+}

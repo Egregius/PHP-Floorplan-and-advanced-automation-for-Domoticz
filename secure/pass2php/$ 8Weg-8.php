@@ -9,8 +9,4 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($status=='On') {
-	sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
-	huisthuis();
-	resetsecurity();
-}
+

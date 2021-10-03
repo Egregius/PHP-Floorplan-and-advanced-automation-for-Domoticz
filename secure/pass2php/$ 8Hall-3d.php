@@ -9,4 +9,5 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Hall-3.php');
+store('auto', 'On');
+resetsecurity();

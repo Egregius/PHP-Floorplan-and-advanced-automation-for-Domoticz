@@ -525,13 +525,14 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	if (startsWith($key,'PRESET')) {
 		for ($x=1;$x<=30;$x++) {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
-			lg(print_r($data, true));
+			lg('Bosekey '.$key.' '.$ip.' '.$x.' data='.print_r($data, true));
 			if (isset($data)) {
 				if (isset($data['shuffleSetting'])&&$data['shuffleSetting']!='SHUFFLE_ON') bosekey('SHUFFLE_ON', 750000, $ip);
-				if (isset($data['artist'])&&($data['artist']!='Paul Kalkbrenner'&&$data['artist']!='Florian Appl'&&$data['track']!='Cloud Rider'&&$data['track']!='Sky and Sand'&&$data['track']!='Burg Hohenzollern')) {
+				if (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE'&&isset($data['artist'])&&($data['artist']!='Paul Kalkbrenner'&&$data['artist']!='Florian Appl'&&$data['track']!='Cloud Rider'&&$data['track']!='Sky and Sand'&&$data['track']!='Burg Hohenzollern')) {
 					break;
 				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') bosekey('NEXT_TRACK', 750000, $ip);
 			}
+			sleep(1);
 		}
 	}
 }

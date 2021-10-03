@@ -9,4 +9,10 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Weg-8.php');
+if (past('$ 8Weg-8')<10) {
+	if ($status=='On') {
+		sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
+		huisthuis();
+		resetsecurity();
+	}
+}

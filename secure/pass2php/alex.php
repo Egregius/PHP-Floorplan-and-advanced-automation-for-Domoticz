@@ -13,7 +13,7 @@ if ($status>0) {
 	if ($d['alex']['m']!=0&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
 		storemode('alex', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if (TIME>strtotime('7:30')&&TIME<strtotime('10:00')) {
+	if ($d['auto']['s']=='On'&&TIME>strtotime('7:30')&&TIME<strtotime('10:00')) {
 		if ($d['Ralex']['s']>0) {
 			sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
