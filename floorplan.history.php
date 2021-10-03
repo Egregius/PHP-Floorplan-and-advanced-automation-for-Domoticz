@@ -23,7 +23,6 @@ $modes=array(
 	'civil_twilight_mode'=>'civil_twilight_mode',
 	'denon_mode'=>'denon input',
 	'elec_mode'=>'elec vandaag',
-	'gcal_mode'=>'gcal_mode',
 	'heating_mode'=>'bigdif',
 	'icon_mode'=>'humidity',
 	'max_mode'=>'max regen',

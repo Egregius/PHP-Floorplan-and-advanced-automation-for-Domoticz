@@ -46,6 +46,5 @@ elec               s = moment              m = vandaag
 zonvandaag   s = kWh                    m = percent
 Weg              s = modus weg          m = timestamp beweging
 max              s = temp                   m = regen
-gcal               s = Tobi Beitem         m = afval
 icon               s = icon                    m = humidity
 douche          s = gas                     m = water

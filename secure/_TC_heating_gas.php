@@ -57,7 +57,7 @@ foreach ($kamers as $kamer) {
 			if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
 			elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
 			elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
-		} elseif ($kamer=='speelkamer'&&$d['gcal']['s']) {
+		} elseif ($kamer=='speelkamer') {
 			if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
 			elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
 			elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;

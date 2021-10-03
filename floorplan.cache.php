@@ -255,18 +255,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				<td>icon</td>
 				<td><img src="/images/'.$d['icon']['s'].'.png" alt="icon"></td>
 				<td>'.$row['m'].'% Humidity</td>';
-		} elseif ($row['n']=='gcal') {
-			echo '
-				<td>Gcal</td>';
-			if ($row['s']==1) {
-				echo '
-				<td>speelkamer Beitem</td>';
-			} else {
-				echo '
-				<td>speelkamer Rumbeke</td>';
-			}
-			echo '
-				<td>'.$row['m'].'</td>';
 		} elseif ($row['n']=='Weg') {
 			echo '
 				<td>Weg</td>';
