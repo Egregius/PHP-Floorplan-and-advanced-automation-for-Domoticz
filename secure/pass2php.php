@@ -58,4 +58,4 @@ if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 		if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
 		else lg($device.' = '.$status);
 	}
-}
+} else lg('IGNORING '.$device.' = '.$status);
