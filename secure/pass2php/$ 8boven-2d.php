@@ -7,9 +7,9 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($status=='On') {
-    $item='RkamerR';
-    sl($item, 0, basename(__FILE__).':'.__LINE__);
+	$item='RkamerR';
+	sl($item, 0, basename(__FILE__).':'.__LINE__);
 }

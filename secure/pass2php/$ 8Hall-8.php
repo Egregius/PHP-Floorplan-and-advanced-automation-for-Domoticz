@@ -7,13 +7,12 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($status=='On') {
-    sl('speelkamer', 8, basename(__FILE__).':'.__LINE__);
-    storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
-    if ($d['Rspeelkamer']['s']<70) {
-    	sl('Rspeelkamer', 100);
-    }
-    resetsecurity();
+	sl('speelkamer', 8, basename(__FILE__).':'.__LINE__);
+	storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['Rspeelkamer']['s']<70) {
+		sl('Rspeelkamer', 100);
+	}
 }

@@ -7,8 +7,8 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($status=='On') {
-    sw('tuin');
+	sw('tuin');
 }

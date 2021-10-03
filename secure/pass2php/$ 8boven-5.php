@@ -25,5 +25,4 @@ if ($status=='On') {
 			sl($item, 100, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	resetsecurity();
 }

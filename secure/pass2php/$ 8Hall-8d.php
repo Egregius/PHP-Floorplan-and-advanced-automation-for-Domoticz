@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Hall-8.php');
+if (past('$ 8Hall-8')<10) resetsecurity();

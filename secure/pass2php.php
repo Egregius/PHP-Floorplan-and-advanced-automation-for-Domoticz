@@ -52,8 +52,10 @@ if (isset($d[$device])) {
 		elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 	}
 }
-store($device, $status, 'Pass2PHP');
-if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
-	if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
-	else lg($device.' = '.$status);
+if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+	store($device, $status, 'Pass2PHP');
+	if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
+		if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
+		else lg($device.' = '.$status);
+	}
 }

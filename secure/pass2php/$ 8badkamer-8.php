@@ -34,4 +34,3 @@ if (TIME>strtotime('20:00')&&$d['Weg']['s']==1&&$d['kamer']['s']>0) {
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 }
-resetsecurity();

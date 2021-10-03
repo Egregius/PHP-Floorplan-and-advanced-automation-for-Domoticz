@@ -179,15 +179,16 @@ function sl($name,$level,$msg='') {
 	if(!isset($d))$d=fetchdata();
 	 if (is_array($name)) {
 		foreach ($name as $i) {
-//			if ($d[$i]['s']!=$level) {
+			if ($d[$i]['s']!=$level) {
 				sl($i, $level, $msg);
 				usleep(100000);
-//			}
+			}
 		}
 	} else {
 		lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
-			/*if ($d[$name]['s']!=$level)*/	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+			if ($d[$name]['s']!=$level) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+			if (str_starts_with($name, 'R')) store($name, $level, $msg);
 		} else store($name, $level, $msg);
 	}
 }

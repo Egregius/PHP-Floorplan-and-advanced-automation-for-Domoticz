@@ -10,4 +10,3 @@
  * @link     https://egregius.be
  **/
 sw('zolderg', 'Off');
-resetsecurity();

@@ -15,6 +15,10 @@ if ($status=='On') {
 			waarschuwing(' Let op . Achterdeur open', 55);
 			exit;
 		}
+		if ($d['deurvoordeur']['s']!='Closed') {
+			waarschuwing(' Let op . Raam Living open', 55);
+			exit;
+		}
 		if ($d['raamliving']['s']!='Closed') {
 			waarschuwing(' Let op . Raam Living open', 55);
 			exit;

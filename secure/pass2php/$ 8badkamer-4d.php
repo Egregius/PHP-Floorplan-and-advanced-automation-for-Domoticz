@@ -13,5 +13,4 @@ if ($status=='On') {
 	sl('lichtbadkamer', 40, basename(__FILE__).':'.__LINE__);
 	store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
 	douche();
-	resetsecurity();
 }

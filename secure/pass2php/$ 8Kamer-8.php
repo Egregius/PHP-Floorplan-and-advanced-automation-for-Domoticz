@@ -14,4 +14,3 @@ if ($d['kamer']['s']>0) {
 	sl('kamer', $new, basename(__FILE__).':'.__LINE__);
 }
 if ($d['kamer']['m']>0) storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
-resetsecurity();

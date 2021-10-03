@@ -7,10 +7,8 @@
  * @package  Pass2PHP
  * @author   Guy Verschuere <guy@egregius.be>
  * @license  GNU GPLv3
- * @link     https://egregius.be
+ * @link	 https://egregius.be
  **/
 if ($d['raamhall']['s']=='Closed') {
-    sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
-    store('Weg', 0, basename(__FILE__).':'.__LINE__);
-    resetsecurity();
+	sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
 }

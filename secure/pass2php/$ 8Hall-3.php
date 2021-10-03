@@ -10,4 +10,3 @@
  * @link     https://egregius.be
  **/
 store('auto', 'Off');
-resetsecurity();

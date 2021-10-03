@@ -50,4 +50,3 @@ if ($d['kamer']['m']==2) {
 		bosezone(103);
 	}
 }
-resetsecurity();
