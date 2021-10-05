@@ -26,6 +26,9 @@ if (isset($d[$device])) {
 		} else {
 			$status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
 		}
+		if ($device=='Xlight') {
+			if (!is_int($status)) exit;
+		}
 	} elseif (in_array($device, array('garage_temp'))) {
 		$status=explode(';', $status);
 		$status=$status[0];

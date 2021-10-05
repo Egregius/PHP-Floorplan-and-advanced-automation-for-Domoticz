@@ -29,7 +29,6 @@ if ($d['auto']['s']=='On') {
 			if (past('pirkeuken')>$uit) {
 				foreach (array('keuken') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 				foreach (array('wasbak') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, $d[$i]['m'], basename(__FILE__).':'.__LINE__);
-
 			}
 		}
 		if ($d['pirliving']['s']=='Off') {
@@ -315,7 +314,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']==0) {
+	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off') {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
 		if ($level[0]<200&&past('kookplaatpower_kWh')>2400) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
 	}
