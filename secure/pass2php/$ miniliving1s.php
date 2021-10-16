@@ -23,7 +23,7 @@ if (past('$ miniliving1s')>2) {
 	} else {
 		if ($d['bose101']['s']=='Off') {
 			sw('bose101', 'On');
-			bosekey("POWER");
+			bosekey("PRESET_2", 0, 101);
 		} else {
 			sw('bose101', 'Off');
 			bosekey("POWER");
