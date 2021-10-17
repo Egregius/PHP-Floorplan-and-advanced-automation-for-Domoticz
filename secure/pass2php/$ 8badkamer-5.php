@@ -9,8 +9,4 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($status=='On') {
-	sl('lichtbadkamer', 44, basename(__FILE__).':'.__LINE__);
-	store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-	douche();
-}
+bosezone(105, true);

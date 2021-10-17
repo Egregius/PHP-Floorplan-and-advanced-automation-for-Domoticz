@@ -9,8 +9,4 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($status=='On') {
-	sl('lichtbadkamer', 40, basename(__FILE__).':'.__LINE__);
-	store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-	douche();
-}
+require('$ 8badkamer-4.php');

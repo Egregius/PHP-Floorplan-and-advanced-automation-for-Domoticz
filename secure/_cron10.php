@@ -78,6 +78,8 @@ if ($d['nvidia']['s']=='On') {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
+
+/* // BOSE BUITEN
 if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
 	if (pingport('192.168.2.105', 80)==1) {
@@ -105,6 +107,8 @@ if (pingport('192.168.2.105', 80)==1) {
 		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
+*/ // END BOSE BUITEN
+
 /*if ($d['daikin']['s']=='On') {
 	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
 	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}

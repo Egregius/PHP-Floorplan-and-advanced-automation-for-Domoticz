@@ -9,8 +9,12 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($status=='On') {
-	store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-	sl('lichtbadkamer', 60, basename(__FILE__).':'.__LINE__);
-	douche();
+if ($d['heating']['s']>=0) {
+	store('badkamer_set', 20, basename(__FILE__).':'.__LINE__);
+	if ($d['badkamervuur1']['s']=='Off') {
+		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+		sleep(2);
+		if ($d['badkamervuur2']['s']=='Off') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
+	}
 }
+douche();
