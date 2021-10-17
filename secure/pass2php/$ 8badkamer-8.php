@@ -9,6 +9,14 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
+if ($d['lichtbadkamer']['s']>0) {
+	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
+}
+if ($d['bose105']['s']=='On') {
+	bosekey("POWER", 0, 105);
+	sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
+}
+
 if ($d['auto']['s']=='On'&&$d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
 	store('Weg', 0, basename(__FILE__).':'.__LINE__);
 }
@@ -17,11 +25,9 @@ if ($d['badkamervuur1']['s']=='On') {
 	sw('badkamervuur1', 'Off');
 }
 if ($d['badkamer_set']['s']!=10) {
-	store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
+	store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
 }
-if ($d['lichtbadkamer']['s']>0) {
-	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
-}
+
 if ($d['auto']['s']=='On') {
 	fhall();
 }
