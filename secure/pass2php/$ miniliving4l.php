@@ -16,6 +16,7 @@ if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'*/||$d['nvidia']['s']=='Off')
 			sw($item, 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}
+	if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
 	if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
 		sw('bose101', 'Off');
 		bosekey("POWER");
