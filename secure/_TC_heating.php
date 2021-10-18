@@ -62,7 +62,7 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=20.1;
 				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=20.0;
 			} else {
-				if (TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) $Setliving=20.5;
+				if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
 				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
 			}
 		} elseif ($d['Weg']['s']==1&&$d['heating']['s']>=3) {

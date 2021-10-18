@@ -10,11 +10,13 @@
  * @link	 https://egregius.be
  **/
 if ($status=='Off') {
-	sw('poortrf', 'On');
+	if (past('$ remoteauto')<60) sw('poortrf', 'On');
 	sw('voordeur', 'On');
 	huisthuis();
-	sleep(2);
-	if ($d['zon']['s']>0) sw('voordeur', 'Off');
+	if ($d['zon']['s']>0) {
+		sleep(2);
+		sw('voordeur', 'Off');
+	}
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
 		waarschuwing(' Let op . Achterdeur open');

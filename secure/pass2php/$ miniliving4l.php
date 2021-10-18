@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 if ($d['tv']['s']=='Off'/*||$d['denon']['s']=='Off'*/||$d['nvidia']['s']=='Off') {
-	$items=array('tv'/*,'denon'*/,'nvidia');
+	$items=array('tv','nvidia');
 	foreach ($items as $item) {
 		if ($d[$item]['s']!='On') {
 			sw($item, 'On', basename(__FILE__).':'.__LINE__);

@@ -14,7 +14,7 @@ if ($d['kamer']['m']==2) {
 	$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/volume'))), true);
 	bosevolume((1+$volume['actualvolume']), 103);
 } elseif ($status=='On') {
-	if (TIME>strtotime('20:00')) {
+	if (TIME>strtotime('20:00')||TIME<strtotime('4:00')||$d['Weg']['s']==1) {
 		storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 		if ($d['bose101']['s']=='On') {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
