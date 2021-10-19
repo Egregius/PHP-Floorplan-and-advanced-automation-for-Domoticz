@@ -10,9 +10,10 @@
  * @link	 https://egregius.be
  **/
 if ($d['heating']['s']>=0) {
-	store('badkamer_set', 20, basename(__FILE__).':'.__LINE__);
 	if ($d['badkamervuur1']['s']=='Off') {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
+	store('badkamer_set', 20, basename(__FILE__).':'.__LINE__);
+	storemode('badkamer_set', 1, basename(__FILE__).':'.__LINE__);
 }
 douche();
