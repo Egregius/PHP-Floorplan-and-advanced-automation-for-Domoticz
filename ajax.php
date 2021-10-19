@@ -124,6 +124,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	if ($_REQUEST['command']=='setpoint') {
 		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
+	} elseif ($_REQUEST['command']=='setpoint2') {
+		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='Weg') {
