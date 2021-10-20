@@ -47,7 +47,8 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 }
 $Setliving=10;
 if ($d['living_set']['m']==0) {
-	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<20&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
+
+	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed') {
 		$Setliving=14;
 		if ($d['Weg']['s']==0) {
 			if ($d['heating']['s']>=3) {
