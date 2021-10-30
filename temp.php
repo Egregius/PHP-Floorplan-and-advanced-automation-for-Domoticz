@@ -74,7 +74,7 @@ $speelkamer='00EEFF';
 $alex='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
-$legend='<div style="width:420px;padding:20px 0px 10px 0px;">'.$dag.'
+$legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
