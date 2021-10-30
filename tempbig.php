@@ -13,31 +13,9 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
 $sensor=998;
-if (isset($_REQUEST['sensor'])) {
-	$sensor=$_REQUEST['sensor'];
-}
-if (isset($_REQUEST['f_startdate'])) {
-	$_SESSION['f_startdate']=$_REQUEST['f_startdate'];
-}
-if (isset($_REQUEST['f_enddate'])) {
-	$_SESSION['f_enddate']=$_REQUEST['f_enddate'];
-}
-/*if(!isset($_SESSION['f_startdate']))*/$_SESSION['f_startdate']=date("Y-m-d", TIME);
-/*if(!isset($_SESSION['f_enddate']))*/$_SESSION['f_enddate']=date("Y-m-d", TIME);
-if (isset($_REQUEST['clear'])) {
-	$_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-	$_SESSION['f_startdate']=$_REQUEST['r_startdate'];
-}
-if ($_SESSION['f_startdate']>$_SESSION['f_enddate']) {
-	$_SESSION['f_enddate']=$_SESSION['f_startdate'];
-}
-$f_startdate=$_SESSION['f_startdate'];
-$f_enddate=$_SESSION['f_enddate'];
-//$f_startdate='2020-05-21';
-//$f_enddate='2020-05-21';
-$r_startdate=date("Y-m-d", TIME);
-$r_enddate=date("Y-m-d", TIME);
-$week=date("Y-m-d", TIME-86400*6);
+if (isset($_REQUEST['sensor'])) $sensor=$_REQUEST['sensor'];
+
+$dag=date("Y-m-d H:i:00", TIME-86400);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -138,12 +116,12 @@ $args=array(
 if ($sensor=='alles') {
 	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) {
 		die('There was an error running the query ['.$query.' - '.$db->error.']');
 	}
 	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';
+		echo 'No data<hr>';
 	}
 	while ($row=$result->fetch_assoc()) {
 		$graph[]=$row;
@@ -156,12 +134,12 @@ if ($sensor=='alles') {
 } elseif ($sensor=='binnen') {
 	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) {
 		die('There was an error running the query ['.$query.' - '.$db->error.']');
 	}
 	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';
+		echo 'No data<hr>';
 	}
 	while ($row=$result->fetch_assoc()) {
 		$graph[]=$row;
@@ -181,12 +159,12 @@ if ($sensor=='alles') {
 	} else {
 		$args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
 	}
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) {
 		die('There was an error running the query ['.$query .' - '.$db->error.']');
 	}
 	if ($result->num_rows==0) {
-		echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';
+		echo 'No data<hr>';
 	}
 	while ($row=$result->fetch_assoc()) {
 		$graph[]=$row;
@@ -197,12 +175,10 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart);
 }
-if ($f_startdate==$r_startdate&&$f_enddate==$r_enddate) {
-	$togo=61-date("s");
-	if ($togo<15) {
-		$togo=15;
-	}
-	$togo=$togo*1000+2000;
-	echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
+$togo=61-date("s");
+if ($togo<15) {
+	$togo=15;
 }
+$togo=$togo*1000+2000;
+echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();

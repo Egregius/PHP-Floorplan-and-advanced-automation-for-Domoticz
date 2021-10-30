@@ -14,7 +14,6 @@ require '/var/www/authentication.php';
 require 'scripts/chart.php';
 $sensor=998;
 if (isset($_REQUEST['sensor'])) $sensor=$_REQUEST['sensor'];
-$f_startdate=date("Y-m-d", TIME);
 $f_enddate=date("Y-m-d", TIME);
 $dag=date("Y-m-d H:i:00", TIME-86400);
 $week=date("Y-m-d", TIME-86400*6);
@@ -141,7 +140,7 @@ if ($sensor=='alles') {
 	$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto montha;}
+	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
@@ -176,7 +175,7 @@ if ($sensor=='alles') {
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto monthb;}
+	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto monthb;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
@@ -216,9 +215,9 @@ if ($sensor=='alles') {
 		$args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
 		$argshour['colors']=array('#00F','#F00','#0F0');
 	}
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query .' - '.$db->error.']');
-	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto month;}
+	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto month;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
