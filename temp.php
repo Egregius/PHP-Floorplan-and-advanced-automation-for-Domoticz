@@ -16,6 +16,7 @@ $sensor=998;
 if (isset($_REQUEST['sensor'])) $sensor=$_REQUEST['sensor'];
 $f_startdate=date("Y-m-d", TIME);
 $f_enddate=date("Y-m-d", TIME);
+$dag=date("Y-m-d H:i:00", TIME-86400);
 $week=date("Y-m-d", TIME-86400*6);
 $maand=date("Y-m-d", TIME-86400*60);
 echo '
@@ -74,7 +75,7 @@ $speelkamer='00EEFF';
 $alex='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
-$legend='<div style="width:420px;padding:20px 0px 10px 0px;">
+$legend='<div style="width:420px;padding:20px 0px 10px 0px;">'.$dag.'
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
@@ -138,7 +139,7 @@ if ($sensor=='alles') {
 	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto montha;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -173,7 +174,7 @@ if ($sensor=='alles') {
 	$argshour['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex);
 	$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$f_startdate 00:00:00' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto monthb;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
