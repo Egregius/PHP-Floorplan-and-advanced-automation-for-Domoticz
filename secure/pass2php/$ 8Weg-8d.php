@@ -11,7 +11,6 @@
  **/
 if (past('$ 8Weg-8')<10) {
 	if ($status=='On') {
-		sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
 		huisthuis();
 		resetsecurity();
 	}
