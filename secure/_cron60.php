@@ -179,7 +179,7 @@ if ($d['auto']['s']=='On') {
 	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
-		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||(TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
+		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||($d['zon']['s']>20&&TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
 			if ($d['jbl']['s']!='Off') sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);

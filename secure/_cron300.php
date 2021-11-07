@@ -285,7 +285,7 @@ if (TIME>strtotime('0:10')) {
 		unset($data);
 	}
 }
-if (!isset($db)) $db=dbconnect();
+$db=dbconnect();
 //Putting temps min,avg,max into temp_hour
 $stmt=$db->query(
 	"SELECT left(stamp,13) as stamp,
