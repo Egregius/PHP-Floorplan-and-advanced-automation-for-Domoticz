@@ -149,8 +149,7 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	//echo '<br/>'.$legend;
 	montha:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp,buiten_avg as buiten,living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
-	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten) as buiten, AVG(living) as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex,zolder_avg as zolder from `temp_hour` where stamp > '$week'";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten), AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex),AVG(zolder) from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -160,7 +159,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	enda:
-	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(buiten_avg) as buiten, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex, AVG(zolder_avg) as zolder from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten), AVG(living), AVG(badkamer), AVG(kamer), AVG(speelkamer), AVG(alex), AVG(zolder) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
@@ -184,7 +183,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	monthb:
-//	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, living_avg as living,badkamer_avg as badkamer,kamer_avg as kamer,speelkamer_avg as speelkamer,alex_avg as alex from `temp_hour` where stamp > '$week'";
+//	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex) from `temp` where stamp > '$week'";
 	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(living), AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(speelkamer) as speelkamer, AVG(alex) as alex from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
@@ -195,7 +194,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	endb:
-//	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+//	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex from `temp` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
 	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(speelkamer) as speelkamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -206,9 +205,6 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 } else {
-	$min=$sensor.'_min';
-	$max=$sensor.'_max';
-	$avg=$sensor.'_avg';
 	$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	if ($sensor=='badkamer') {
@@ -228,7 +224,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	month:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, $min, $max, $avg from `temp_hour` where stamp > '$week'";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto end;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graph for last week';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -238,10 +234,8 @@ if ($sensor=='alles') {
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart,$graph);
-	$min=$sensor.'_min';
-	$avg=$sensor.'_avg';
-	$max=$sensor.'_max';
-	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, MIN($min) as min, MAX($max) as max, AVG($avg) as Avg from `temp_hour` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';

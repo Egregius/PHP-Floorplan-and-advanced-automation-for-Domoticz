@@ -57,38 +57,7 @@ if (isset($data['CivTwilightStart'])) {
 	}
 }
 
-//Update and clean SQL database
 
-//Putting buiten temp to verbruik.egregius.be
-$stmt = $db->query(
-	"SELECT
-		left(stamp,10) as stamp,
-		min(buiten_min) as buiten_min,
-		max(buiten_max) as buiten_max,
-		avg(buiten_avg) as buiten_avg
-	FROM temp_hour
-	GROUP BY left(stamp,10)
-	ORDER BY `stamp` DESC
-	LIMIT 0,10"
-);
-$dbe=new mysqli('192.168.2.20', 'home', 'H0m€', 'verbruik');
-if ($dbe->connect_errno>0) die('Unable to connect to database ['.$dbe->connect_error.']');
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-	$stamp=$row['stamp'];
-	$buiten_min=$row['buiten_min'];
-	$buiten_max=$row['buiten_max'];
-	$buiten_avg=$row['buiten_avg'];
-	$query = "
-		INSERT INTO `temp_buiten`
-			(`stamp`,`min`,`max`,`avg`)
-		VALUES
-			('$stamp','$buiten_min','$buiten_max','$buiten_avg')
-		ON DUPLICATE KEY UPDATE
-			`min`='$buiten_min',`max`='$buiten_max',`avg`='$buiten_avg';";
-	if (!$result = $dbe->query($query)) {
-		die('There was an error running the query ['.$query.'-'.$dbe->error.']');
-	}
-}
 
 /*
 if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
