@@ -285,6 +285,7 @@ if (TIME>strtotime('0:10')) {
 		unset($data);
 	}
 }
+/*
 $db=dbconnect();
 //Putting temps min,avg,max into temp_hour
 $stmt=$db->query(
@@ -408,7 +409,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			`zolder_max`='$zolder_max',
 			`zolder_avg`='$zolder_avg';"
 	);
-}
+}*/
 if ($d['buiten_temp']['s']<0&&$d['heating']['s']<0&&past('heating')>7200&&TIME<strtotime('7:00')) store('heating', 4, basename(__FILE__).':'.__LINE__);
 elseif ($d['buiten_temp']['s']>8&&$d['heating']['s']>1&&past('heating')>7200) store('heating', 1, basename(__FILE__).':'.__LINE__);
 

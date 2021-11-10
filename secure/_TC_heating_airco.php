@@ -21,7 +21,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
-			if ($k=='living') 	$set=$d[$k.'_set']['s']-3;
+			if ($k=='living') 	$set=$d[$k.'_set']['s']-2.5;
 			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00'))$rate='B';
