@@ -14,7 +14,7 @@ if ($d['speelkamer_set']['m']==0) $Setspeelkamer=4;
 if ($d['alex_set']['m']==0) $Setalex=4;
 
 
-$dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
+$dif=$d['living_temp']['s']-$d['living_set']['s'];
 
 if ($d['Weg']['s']==1) {
 	if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
@@ -39,7 +39,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
-			if ($k=='living') $set=$d[$k.'_set']['s']-3;
+			if ($k=='living') $set=$d[$k.'_set']['s']-2.5;
 			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
