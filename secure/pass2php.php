@@ -47,8 +47,6 @@ if (isset($d[$device])) {
 		} else {
 			$status='Off';
 		}
-	} elseif ($device=='ringdoorbell') {
-		if (past('voordeur')<60) exit;
 	} elseif ($d[$device]['dt']=='thermometer') {
 		$old=$status;
 		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
