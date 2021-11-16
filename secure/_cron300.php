@@ -109,13 +109,7 @@ if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
 		}
 	}
 }
-$battery=apcu_fetch('ring-battery');
 
-if ((TIME>=strtotime('11:00')&&TIME<strtotime('19:30'))||$battery<50||$d['zon']['s']>$d['el']['s']) {
-	if (($d['ringdoorbell']['s']=='Off'&&past('ringdoorbell')>28800)||($d['ringdoorbell']['s']=='Off'&&$battery<50)) sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__.' battery='.$battery);
-} elseif ((TIME<strtotime('6:00')||TIME>=strtotime('22:00')||$battery>=80)&&$battery>60) {
-	if ($d['ringdoorbell']['s']=='On'&&past('ringdoorbell')>28800) sw('ringdoorbell', 'Off', basename(__FILE__).':'.__LINE__.' battery='.$battery);
-}
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
 if (!empty($data)) {

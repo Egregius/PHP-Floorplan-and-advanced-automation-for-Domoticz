@@ -59,17 +59,4 @@ if (isset($_REQUEST['source'])) {
 		}
 		echo ' END';
 	}
-	if ($_REQUEST['battery']<50) {
-		require_once '/var/www/html/secure/functions.php';
-		if (!isset($d)) $d=fetchdata();
-		if ($d['ringdoorbell']['s']=='Off') {
-			echo ' | Battery low - Power ON';
-			sw('ringdoorbell', 'On', basename(__FILE__).':'.__LINE__);
-			alert(
-				'BatterijRingDeurbel',
-				'Batterij Ring Deurbel '.$_REQUEST['battery'].' %',
-				28800
-			);
-		}
-	}
 }
