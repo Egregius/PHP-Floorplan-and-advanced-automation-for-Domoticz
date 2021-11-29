@@ -52,15 +52,16 @@ if ($d['living_set']['m']==0) {
 		$Setliving=14;
 		if ($d['Weg']['s']==0) {
 			if ($d['heating']['s']>=3) {
-				if (TIME>=strtotime('17:00')&&TIME<strtotime('18:30')) $Setliving=20.9;
-				elseif (TIME>=strtotime('15:30')&&TIME<strtotime('18:30')) $Setliving=20.8;
-				elseif (TIME>=strtotime('14:00')&&TIME<strtotime('18:30')) $Setliving=20.7;
-				elseif (TIME>=strtotime('12:30')&&TIME<strtotime('18:30')) $Setliving=20.6;
-				elseif (TIME>=strtotime('8:00')&&TIME<strtotime('18:30')) $Setliving=20.5;
-				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:30')) $Setliving=20.4;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=20.3;
-				elseif (TIME>=strtotime('5:30')&&TIME<strtotime('18:30')) $Setliving=20.2;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=20.1;
+				if (TIME>=strtotime('17:00')&&TIME<strtotime('18:30')) $Setliving=21.0;
+				elseif (TIME>=strtotime('14:30')&&TIME<strtotime('18:30')) $Setliving=20.9;
+				elseif (TIME>=strtotime('12:00')&&TIME<strtotime('18:30')) $Setliving=20.8;
+				elseif (TIME>=strtotime('10:30')&&TIME<strtotime('18:30')) $Setliving=20.7;
+				elseif (TIME>=strtotime('8:30')&&TIME<strtotime('18:30')) $Setliving=20.6;
+				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('18:30')) $Setliving=20.5;
+				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=20.4;
+				elseif (TIME>=strtotime('5:30')&&TIME<strtotime('18:30')) $Setliving=20.3;
+				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=20.2;
+				elseif (TIME>=strtotime('4:30')&&TIME<strtotime('18:30')) $Setliving=20.1;
 				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=20.0;
 			} else {
 				if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
@@ -69,12 +70,12 @@ if ($d['living_set']['m']==0) {
 		} elseif ($d['Weg']['s']==1&&$d['heating']['s']>=3) {
 			$dow=date("w");
 			if($dow==0||$dow==6) {
-				if (TIME>=strtotime('8:00')&&TIME<strtotime('12:00')) $Setliving=20.0;
-				elseif (TIME>=strtotime('7:50')&&TIME<strtotime('12:00')) $Setliving=19.9;
-				elseif (TIME>=strtotime('7:40')&&TIME<strtotime('12:00')) $Setliving=19.8;
-				elseif (TIME>=strtotime('7:30')&&TIME<strtotime('12:00')) $Setliving=19.7;
-				elseif (TIME>=strtotime('7:20')&&TIME<strtotime('12:00')) $Setliving=19.6;
-				elseif (TIME>=strtotime('7:10')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				if (TIME>=strtotime('8:00')&&TIME<strtotime('12:00')) $Setliving=20.3;
+				elseif (TIME>=strtotime('7:50')&&TIME<strtotime('12:00')) $Setliving=20.2;
+				elseif (TIME>=strtotime('7:40')&&TIME<strtotime('12:00')) $Setliving=20.1;
+				elseif (TIME>=strtotime('7:30')&&TIME<strtotime('12:00')) $Setliving=20.0;
+				elseif (TIME>=strtotime('7:20')&&TIME<strtotime('12:00')) $Setliving=19.8;
+				elseif (TIME>=strtotime('7:10')&&TIME<strtotime('12:00')) $Setliving=19.6;
 				elseif (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=19.4;
 				elseif (TIME>=strtotime('6:50')&&TIME<strtotime('12:00')) $Setliving=19.3;
 				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=19.2;
@@ -97,12 +98,12 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('3:15')&&TIME<strtotime('12:00')) $Setliving=15.3;
 				elseif (TIME>=strtotime('3:00')&&TIME<strtotime('12:00')) $Setliving=15.0;
 			} else {
-				if (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=20.0;
-				elseif (TIME>=strtotime('6:50')&&TIME<strtotime('12:00')) $Setliving=19.9;
-				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=19.8;
-				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('12:00')) $Setliving=19.7;
-				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('12:00')) $Setliving=19.6;
-				elseif (TIME>=strtotime('6:10')&&TIME<strtotime('12:00')) $Setliving=19.5;
+				if (TIME>=strtotime('7:00')&&TIME<strtotime('12:00')) $Setliving=20.3;
+				elseif (TIME>=strtotime('6:50')&&TIME<strtotime('12:00')) $Setliving=20.2;
+				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('12:00')) $Setliving=20.1;
+				elseif (TIME>=strtotime('6:30')&&TIME<strtotime('12:00')) $Setliving=20.0;
+				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('12:00')) $Setliving=19.8;
+				elseif (TIME>=strtotime('6:10')&&TIME<strtotime('12:00')) $Setliving=19.6;
 				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('12:00')) $Setliving=19.4;
 				elseif (TIME>=strtotime('5:50')&&TIME<strtotime('12:00')) $Setliving=19.3;
 				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('12:00')) $Setliving=19.2;

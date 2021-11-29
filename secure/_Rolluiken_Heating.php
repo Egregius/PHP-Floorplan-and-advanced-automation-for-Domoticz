@@ -11,7 +11,6 @@
  **/
 $boven=array('Rspeelkamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
-$benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
 $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
@@ -22,13 +21,9 @@ if ($d['auto']['s']=='On') {
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-			//if ($d['Rspeelkamer']['s']>0&&TIME>=strtotime('9:00')) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
-			//if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		} else {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('6:30')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:30')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-			//if ($d['Rspeelkamer']['s']>0&&TIME>=strtotime('8:00')) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
-			//if ($d['Ralex']['s']>0&&TIME>=strtotime('9:00')) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true||$d['pirhall']['s']=='On') {
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rspeelkamer']['s']>0&&TIME>=strtotime('7:30')&&($d['deurspeelkamer']['s']=='Open'||$d['speelkamer']['s']>0)) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
@@ -38,7 +33,7 @@ if ($d['auto']['s']=='On') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0&&$d['tv']['s']=='Off'&&($d['Ralex']['s']==0||TIME>=strtotime('7:30'))) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&$d['tv']['s']=='Off'&&$d['Ralex']['s']==0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1&&$d['tv']['s']=='Off') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
