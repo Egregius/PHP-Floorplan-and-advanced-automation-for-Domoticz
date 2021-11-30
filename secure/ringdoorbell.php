@@ -19,7 +19,7 @@ if (isset($_REQUEST['source'])) {
 		$d=fetchdata();
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+		if ($d['auto']['s']=='On'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			echo ' Voordeur On | ';
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
