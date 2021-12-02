@@ -26,7 +26,7 @@ if ($d['minmaxtemp']['m'] > -5) {
 	elseif ($rainpast>3000) $pomppauze=172800;
 	elseif ($rainpast>1000) $pomppauze=216000;
 	else $pomppauze=31536000;
-	$pomppauze=$pomppauze/10;
+	$pomppauze=$pomppauze/30;if ($pomppauze>43200) $pomppauze=43200;
 	//$msg=$stamp.PHP_EOL.'rainpast = '.$rainpast.PHP_EOL.'pomppauze = '.$pomppauze.' = '.date("H:i", $pomppauze-3600);
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
 		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);

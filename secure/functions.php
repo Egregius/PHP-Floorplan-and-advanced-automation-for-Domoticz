@@ -700,9 +700,17 @@ function fhall() {
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45'))) {
 		if ($d['hall']['s']<32) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-				if ($d['hall']['s']<32) sl('hall', 32, basename(__FILE__).':'.__LINE__);
+				if ($d['hall']['s']<32) {
+					sl('hall', 32, basename(__FILE__).':'.__LINE__);
+					sleep(1);
+					sl('hall', 32, basename(__FILE__).':'.__LINE__);
+				}
 			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0&&$d['hall']['s']<27) {
-				if ($d['hall']['s']<27) sl('hall', 27, basename(__FILE__).':'.__LINE__);
+				if ($d['hall']['s']<27) {
+					sl('hall', 27, basename(__FILE__).':'.__LINE__);
+					sleep(1);
+					sl('hall', 27, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	} else finkom();
