@@ -141,8 +141,22 @@ if ($sensor=='alles') {
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
+	$min=99999999999;
+	$max=0;
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
+	foreach ($graph as $t) {
+		foreach (array('buiten') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+		}
+	}
 	$result->free();
+	$args['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.$max.',min:'.$min.'}},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+//	vAxis:{viewWindowMode:"explicit",viewWindow:{max:'.$max.',min:'.$min.'},gridlines:{count:0}}
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];
