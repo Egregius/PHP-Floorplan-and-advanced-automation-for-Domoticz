@@ -70,18 +70,17 @@ $sensor=$sensornaam;
 $living='#FF1111';
 $badkamer='#6666FF';
 $kamer='#44FF44';
-$speelkamer='00EEFF';
-$alex='#EEEE00';
+$alex='#00EEFF';
+$speelkamer='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
 $legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
+	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badk</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=356");\'><font color="'.$speelkamer.'">Speelkmr</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a><br>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a><br/><br/>
+	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a>
+	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=999");\'><font color="'.$buiten.'">Alles</font></a></div>';
 echo $legend;
@@ -94,13 +93,7 @@ $args=array(
 		'chart_div'=>'graph',
 		'margins'=>array(0,0,0,0),
 		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
-		'raw_options'=>'
-			lineWidth:3,
-			crosshair:{trigger:"both"},
-			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},	minorGridlines: {multiple: 1}},
-			theme:"maximized",
-			chartArea:{left:0,top:0,width:"100%",height:"100%"}'
+		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
 	);
 $argshour=array(
 		'width'=>1000,
@@ -110,13 +103,7 @@ $argshour=array(
 		'background_color'=>'#000',
 		'chart_div'=>'graphhour',
 		'margins'=>array(0,0,0,0),
-		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-		'raw_options'=>'
-			lineWidth:3,
-			crosshair:{trigger:"both"},
-			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},	minorGridlines: {multiple: 1}},
-			theme:"maximized",
-			chartArea:{left:0,top:0,width:"100%",height:"100%"}'
+		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999')
 	);
 if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=880;
@@ -141,16 +128,23 @@ if ($sensor=='alles') {
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
-	$min=99999999999;
-	$max=0;
+	$min=9999;
+	$max=-1000;
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
+	$result->free();
 	foreach ($graph as $t) {
-		foreach (array('buiten') as $i) {
+		foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
 			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
 		}
 	}
-	$result->free();
 	$args['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.$max.',min:'.$min.'}},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+	$argshour['raw_options']='
 			lineWidth:3,
 			crosshair:{trigger:"both"},
 			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.$max.',min:'.$min.'}},
@@ -183,15 +177,35 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 } elseif ($sensor=='binnen') {
-	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex);
-	$argshour['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex);
+	$args['colors']=array($living,$badkamer,$kamer,$alex);
+	$argshour['colors']=array($living,$badkamer,$kamer,$alex);
 	$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp, living,badkamer,kamer,alex from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto monthb;}
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
+	$min=9999;
+	$max=-1000;
+	foreach ($graph as $t) {
+		foreach (array('living','badkamer','kamer','alex') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
+		}
+	}
+	$args['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.$max.',min:'.$min.'}},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+	$argshour['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.$max.',min:'.$min.'}},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];
