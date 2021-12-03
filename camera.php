@@ -11,7 +11,7 @@
  **/
 require '/var/www/config.php';
 $mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-$result = $mysqli->query("select n,s,t,m from devices WHERE n in ('Weg', 'poortrf', 'deurvoordeur','civil_twilight');") or trigger_error($mysqli->error." [$sql]");
+$result = $mysqli->query("select n,s,t,m from devices WHERE n in ('Weg', 'poortrf', 'deurvoordeur','civil_twilight', 'Sun', 'zon', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 while ($row = $result->fetch_array()) {
 	$d[$row['n']]['s'] = $row['s'];
 	$d[$row['n']]['t'] = $row['t'];
@@ -25,3 +25,6 @@ $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $data['zonop']=1;
 else $data['zonop']=0;
 echo serialize($data);
+if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+}
