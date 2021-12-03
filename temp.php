@@ -212,7 +212,7 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	monthb:
 //	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex) from `temp` where stamp > '$week'";
-	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(living), AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(speelkamer) as speelkamer, AVG(alex) as alex from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(living), AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -223,7 +223,7 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	endb:
 //	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex from `temp` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(speelkamer) as speelkamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
