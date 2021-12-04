@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 //lg(__FILE__);
-$kamers=array('living'/*,'kamer','speelkamer','alex'*/);
+$kamers=array('living','kamer','alex');
 $xxkamers=array();
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format(
@@ -35,7 +35,7 @@ foreach ($xxkamers as $i) {
 	}
 }
 
-/*$kamers=array('alex','kamer');
+$kamers=array('alex','kamer');
 foreach ($kamers as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
 		${'RSet'.$kamer}=setradiator(
@@ -60,7 +60,7 @@ foreach ($kamers as $kamer) {
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
 		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 	}
-}*/
+}
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
 if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>178) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

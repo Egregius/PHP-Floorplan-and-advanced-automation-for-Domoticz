@@ -130,8 +130,13 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			} elseif ($d['heating']['s']==-1) {//passive cooling
 			} elseif ($d['heating']['s']==0) {// Neutral
 			} elseif ($d['heating']['s']==1) {//heating airco
+				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==2) {//heating airco gas
+				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==3) {//heating gas airco
+				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==4) {//heating gas
 				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 				elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$_REQUEST['action']) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);

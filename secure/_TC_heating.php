@@ -23,7 +23,7 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 			$d['kamer_set']['s']=$Setkamer;
 		}
 	}
-	if ($d['speelkamer_set']['m']==0) {
+/*	if ($d['speelkamer_set']['m']==0) {
 		if ($d['buiten_temp']['s']<14&&$d['minmaxtemp']['m']<15&&($d['deurspeelkamer']['s']=='Closed'||($d['deurspeelkamer']['s']=='Open'&&past('deurspeelkamer')<600))&&$d['raamspeelkamer']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamspeelkamer')>7198 || TIME>strtotime('20:00'))) {
 			$Setspeelkamer=10;
 		}
@@ -32,7 +32,7 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 			$speelkamer_set=$Setspeelkamer;
 			$d['speelkamer_set']['s']=$Setspeelkamer;
 		}
-	}
+	}*/
 	if ($d['alex_set']['m']==0) {
 		if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<600))&&$d['raamalex']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
 			$Setalex=10;
