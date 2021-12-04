@@ -11,7 +11,6 @@
  **/
 //lg(__FILE__);
 $kamers=array('living','kamer','alex');
-$xxkamers=array();
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format(
 		$d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],
@@ -20,45 +19,26 @@ foreach ($kamers as $kamer) {
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
 	${'Set'.$kamer}=$d[$kamer.'_set']['s'];
 	if (${'dif'.$kamer}<=0) {
-		$xxkamers[]=$kamer;
-		if ($kamer!='living') $d['heating']['s']=2;
-	}
-}
-$first=true;
-$xxxkamers='';
-foreach ($xxkamers as $i) {
-	if ($first) {
-		$xxxkamers=$i;
-		$first=false;
-	} else {
-		$xxxkamers.=', '.$i;
+		if ($kamer!='living') $d['heating']['s']=4;
 	}
 }
 
 $kamers=array('alex','kamer');
 foreach ($kamers as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
-		${'RSet'.$kamer}=setradiator(
-			$kamer,
-			${'dif'.$kamer},
-			true,
-			$d[$kamer.'_set']['s']
-		);
+		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
 	} else {
-		${'RSet'.$kamer}=setradiator(
-			$kamer,
-			${'dif'.$kamer},
-			false,
-			$d[$kamer.'_set']['s']
-		);
+		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
 	}
 	if (TIME>=strtotime('15:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
-		if ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=18;
-		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=17;
-		elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
+		if ($d[$kamer.'_temp']['s']<14) ${'RSet'.$kamer}=18;
+		elseif ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=17;
+		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=16;
 	}
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
+//		lg(basename(__FILE__).':'.__LINE__);
 //		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+//		sl($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 	}
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
