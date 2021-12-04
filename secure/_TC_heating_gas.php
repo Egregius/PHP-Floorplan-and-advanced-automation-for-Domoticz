@@ -58,7 +58,7 @@ foreach ($kamers as $kamer) {
 		elseif ($d[$kamer.'_temp']['s']<17) ${'RSet'.$kamer}=16;
 	}
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
-		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+//		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 	}
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
