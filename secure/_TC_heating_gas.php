@@ -37,7 +37,8 @@ foreach ($kamers as $kamer) {
 	}
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
 //		lg(basename(__FILE__).':'.__LINE__);
-//		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
 //		sl($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 	}
 }
