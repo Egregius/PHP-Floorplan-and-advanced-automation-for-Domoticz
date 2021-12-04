@@ -126,12 +126,15 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['device']=='living') {
 			if ($d['heating']['s']==-2) {//airco cooling
+				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==-1) {//passive cooling
 			} elseif ($d['heating']['s']==0) {// Neutral
 			} elseif ($d['heating']['s']==1) {//heating airco
 			} elseif ($d['heating']['s']==2) {//heating airco gas
 			} elseif ($d['heating']['s']==3) {//heating gas airco
 			} elseif ($d['heating']['s']==4) {//heating gas
+				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+				elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$_REQUEST['action']) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='badkamer') {
 			if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
