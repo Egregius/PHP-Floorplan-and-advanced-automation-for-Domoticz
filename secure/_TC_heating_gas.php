@@ -30,7 +30,7 @@ foreach ($kamers as $kamer) {
 	} else {
 		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
 	}
-	if (TIME>=strtotime('15:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
+	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
 		if ($d[$kamer.'_temp']['s']<14) ${'RSet'.$kamer}=18;
 		elseif ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=17;
 		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=16;

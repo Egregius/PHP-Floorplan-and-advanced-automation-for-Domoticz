@@ -29,14 +29,14 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbad
 	}
 }
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-if ($difbadkamer<=-2) {
+if ($difbadkamer<=-1) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On'&&past('badkamervuur2')>30&&$d['el']['s']<6800&&($d['lichtbadkamer']['s']>30||$d['badkamer_set']['m']==2)) {
 		sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 	}
-} elseif ($difbadkamer<=-1) {
+} elseif ($difbadkamer<=-0.5) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
