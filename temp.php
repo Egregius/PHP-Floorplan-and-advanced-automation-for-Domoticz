@@ -109,17 +109,17 @@ if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=880;
 	$argshour['width']=1000;$argshour['height']=880;
 } elseif ($udevice=='iPhone') {
-	$args['width']=420;$args['height']=500;
-	$argshour['width']=420;$argshour['height']=500;
+	$args['width']=420;$args['height']=610;
+	$argshour['width']=420;$argshour['height']=710;
 } elseif ($udevice=='iPhoneSE') {
-	$args['width']=420;$args['height']=510;
-	$argshour['width']=420;$argshour['height']=580;
+	$args['width']=420;$args['height']=610;
+	$argshour['width']=420;$argshour['height']=610;
 } elseif ($udevice=='iMac') {
-	$args['width']=490;$args['height']=700;
-	$argshour['width']=490;$argshour['height']=700;
+	$args['width']=490;$args['height']=780;
+	$argshour['width']=490;$argshour['height']=780;
 } else {
-	$args['width']=480;$args['height']=200;
-	$argshour['width']=480;$argshour['height']=200;
+	$args['width']=480;$args['height']=610;
+	$argshour['width']=480;$argshour['height']=610;
 }
 if ($sensor=='alles') {
 	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
@@ -177,7 +177,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	enda:
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(speelkamer) AS speelkamer, AVG(alex) AS alex, AVG(zolder) AS zolder from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(speelkamer) AS speelkamer, AVG(alex) AS alex, AVG(zolder) AS zolder from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
@@ -259,7 +259,7 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	endb:
 //	$query="SELECT DATE_FORMAT(stamp, '%Y-%m-%d') as stamp, AVG(living_avg) as living, AVG(badkamer_avg) as badkamer, AVG(kamer_avg) as kamer, AVG(speelkamer_avg) as speelkamer, AVG(alex_avg) as alex from `temp` where stamp > '$maand' 	GROUP BY DATE_FORMAT(stamp, '%Y%m%d')";
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
@@ -328,7 +328,7 @@ if ($sensor=='alles') {
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart,$graph);
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
