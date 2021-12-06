@@ -145,13 +145,6 @@ if ($sensor=='alles') {
 			hAxis:{textPosition:"none"},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
-	$argshour['raw_options']='
-			lineWidth:3,
-			crosshair:{trigger:"both"},
-			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
-			hAxis:{textPosition:"none"},
-			theme:"maximized",
-			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 //	vAxis:{viewWindowMode:"explicit",viewWindow:{max:'.ceil($max).',min:'.floor($min).'},gridlines:{count:0}}
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
@@ -159,19 +152,50 @@ if ($sensor=='alles') {
 	unset($chart,$graph);
 	//echo '<br/>'.$legend;
 	montha:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten), AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex),AVG(zolder) from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living,AVG(badkamer) AS badkamer,AVG(kamer) AS kamer,AVG(speelkamer) AS speelkamer,AVG(alex) AS alex,AVG(zolder) AS zolder from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
+	$min=9999;
+	$max=-1000;
+	foreach ($graph as $t) {
+		foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
+		}
+	}
+	$args['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+			hAxis:{textPosition:"none"},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $argshour);
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart,$graph);
 	enda:
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten), AVG(living), AVG(badkamer), AVG(kamer), AVG(speelkamer), AVG(alex), AVG(zolder) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(speelkamer) AS speelkamer, AVG(alex) AS alex, AVG(zolder) AS zolder from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
+	$result->free();
+	$min=9999;
+	$max=-1000;
+	foreach ($graph as $t) {
+		foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
+		}
+	}
+	$args['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+			hAxis:{textPosition:"none"},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
 	$argshour['chart_div']='chart_div';
 	$chart=array_to_chart($graph, $argshour);
@@ -203,6 +227,25 @@ if ($sensor=='alles') {
 			hAxis:{textPosition:"none"},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+	$chart=array_to_chart($graph, $args);
+	echo $chart['script'];
+	echo $chart['div'];
+	unset($chart,$graph);
+	monthb:
+//	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex) from `temp` where stamp > '$week'";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(living) AS living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
+	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
+	while ($row=$result->fetch_assoc()) $graph[]=$row;
+	$result->free();
+	$min=9999;
+	$max=-1000;
+	foreach ($graph as $t) {
+		foreach (array('living','badkamer','kamer','alex') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
+		}
+	}
 	$argshour['raw_options']='
 			lineWidth:3,
 			crosshair:{trigger:"both"},
@@ -210,17 +253,6 @@ if ($sensor=='alles') {
 			hAxis:{textPosition:"none"},
 			theme:"maximized",
 			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
-	$chart=array_to_chart($graph, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart,$graph);
-	monthb:
-//	$query="SELECT DATE_FORMAT(stamp, '%W %k') as stamp, AVG(living),AVG(badkamer),AVG(kamer),AVG(speelkamer),AVG(alex) from `temp` where stamp > '$week'";
-	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(living), AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 1800";
-	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto endb;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste week';
-	while ($row=$result->fetch_assoc()) $graph[]=$row;
-	$result->free();
 	$chart=array_to_chart($graph, $argshour);
 	echo $chart['script'];
 	echo $chart['div'];
@@ -230,6 +262,22 @@ if ($sensor=='alles') {
 	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(living) as living, AVG(badkamer) as badkamer, AVG(kamer) as kamer, AVG(alex) as alex from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
+	$result->free();
+	$min=9999;
+	$max=-1000;
+	foreach ($graph as $t) {
+		foreach (array('living','badkamer','kamer','alex') as $i) {
+			if ($t[$i]<$min) $min=$t[$i];
+			if ($t[$i]>$max) $max=$t[$i];
+		}
+	}
+	$argshour['raw_options']='
+			lineWidth:3,
+			crosshair:{trigger:"both"},
+			vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+			hAxis:{textPosition:"none"},
+			theme:"maximized",
+			chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 60 dagen';
 	$argshour['chart_div']='chart_div';
 	$chart=array_to_chart($graph, $argshour);
@@ -237,6 +285,20 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 } else {
+	$args['raw_options']='
+		lineWidth:3,
+		crosshair:{trigger:"both"},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1}},
+		hAxis:{textPosition:"none"},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+	$argshour['raw_options']='
+		lineWidth:3,
+		crosshair:{trigger:"both"},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1}},
+		hAxis:{textPosition:"none"},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$args['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	$argshour['line_styles']=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	if ($sensor=='badkamer') {
@@ -256,7 +318,7 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart,$graph);
 	month:
-	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 900";
+	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	if ($result->num_rows==0) {echo 'No data for last week<hr>';goto end;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graph for last week';
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -266,7 +328,7 @@ if ($sensor=='alles') {
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart,$graph);
-	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+	$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, MIN($sensor), MAX($sensor), AVG($sensor) from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 43200";
 
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
