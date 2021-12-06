@@ -15,7 +15,7 @@ require 'scripts/chart.php';
 $sensor=998;
 if (isset($_REQUEST['sensor'])) $sensor=$_REQUEST['sensor'];
 
-$dag=date("Y-m-d H:i:00", TIME-86400);
+$dag=date("Y-m-d H:i:00", TIME-86400*2);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -53,12 +53,6 @@ case 999:$setpoint=999;$radiator=999;$sensornaam='alles';
 default:$setpoint=0;$radiator=0;$sensornaam='buiten';
 	break;
 }
-$eendag=TIME-86400;
-$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
-$eenweek=TIME-86400*7;
-$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
-$eenmaand=TIME-86400*31;
-$eenmaandstr=strftime("%Y-%m-%d %H:%M:%S", $eenmaand);
 $sensor=$sensornaam;
 $living='#FF1111';
 $badkamer='#6666FF';
@@ -93,39 +87,17 @@ $args=array(
 	'raw_options'=>'
 		lineWidth:4,
 		crosshair:{trigger:"both"},
-		/*curveType:"function",*/
-		hAxis: {
-			slantedText: true,
-			slantedTextAngle: 90,
-			showTextEvery: 60,
-			textStyle: {color: "#DDD", fontSize: 18}
-		},
-		vAxis: {
-			format:"# °C",
-			textStyle: {color: "#AAA", fontSize: 14},
-			Gridlines: {
-				multiple: 1
-			},
-			minorGridlines: {
-				multiple: 1
-			}
-		  },
+		hAxis:{textPosition:"None"},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 );
 if ($sensor=='alles') {
 	$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag'";
-	if (!$result=$db->query($query)) {
-		die('There was an error running the query ['.$query.' - '.$db->error.']');
-	}
-	if ($result->num_rows==0) {
-		echo 'No data<hr>';
-	}
-	while ($row=$result->fetch_assoc()) {
-		$graph[]=$row;
-	}
+	$query="SELECT stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag'";
+	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
+	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
@@ -134,41 +106,21 @@ if ($sensor=='alles') {
 } elseif ($sensor=='binnen') {
 	$args['colors']=array($living,$badkamer,$kamer,$speelkamer,$alex,$living,$badkamer,$kamer,$speelkamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag'";
-	if (!$result=$db->query($query)) {
-		die('There was an error running the query ['.$query.' - '.$db->error.']');
-	}
-	if ($result->num_rows==0) {
-		echo 'No data<hr>';
-	}
-	while ($row=$result->fetch_assoc()) {
-		$graph[]=$row;
-	}
+	$query="SELECT stamp,living,badkamer,kamer,speelkamer,alex from `temp` where stamp >= '$dag'";
+	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
+	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart);
 } else {
-	$min=$sensor.'_min';
-	$max=$sensor.'_max';
-	$avg=$sensor.'_avg';
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
-	if ($sensor=='badkamer') {
-		$args['colors']=array(${$sensornaam},${$sensornaam},'#ffb400');
-	} else {
-		$args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
-	}
+	if ($sensor=='badkamer') $args['colors']=array(${$sensornaam},${$sensornaam},'#ffb400');
+	else $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$dag'";
-	if (!$result=$db->query($query)) {
-		die('There was an error running the query ['.$query .' - '.$db->error.']');
-	}
-	if ($result->num_rows==0) {
-		echo 'No data<hr>';
-	}
-	while ($row=$result->fetch_assoc()) {
-		$graph[]=$row;
-	}
+	if (!$result=$db->query($query)) die('There was an error running the query ['.$query .' - '.$db->error.']');
+	while ($row=$result->fetch_assoc())	$graph[]=$row;
 	$result->free();
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
