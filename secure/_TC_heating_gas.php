@@ -46,9 +46,9 @@ foreach ($kamers as $kamer) {
 if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>178) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>598) sw('brander','On', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>298) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>418) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>328) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>492) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>984) sw('brander','Off', basename(__FILE__).':'.__LINE__);
 
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 
