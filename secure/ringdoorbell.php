@@ -9,20 +9,20 @@
  * @license	GNU GPLv3
  * @link		https://egregius.be
  **/
+
 require_once '/var/www/html/secure/functions.php';
+
 if (isset($_REQUEST['source'])) {
+
 	echo ' Start | ';
 	if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$_REQUEST['id']) {
 		echo ' new id | ';
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
-
+		echo 'ok';exit;
 		$d=fetchdata();
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			echo ' Voordeur On | ';
-			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 			echo ' Motion human | ';
 			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
