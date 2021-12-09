@@ -10,7 +10,7 @@
  * @link		https://egregius.be
  **/
 require_once '/var/www/html/secure/functions.php';
-if (isset($_REQUEST['source'])) {
+if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='CKgSwM01pQibqgAzWfUsdE5nUlzT1wnNdtz09EO2') {
 	echo ' Start | ';
 	if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$_REQUEST['id']) {
 		echo ' new id | ';
