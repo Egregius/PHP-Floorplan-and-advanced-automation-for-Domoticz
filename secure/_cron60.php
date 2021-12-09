@@ -106,7 +106,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','keuken','zolderg','dampkap') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','keuken','zolderg','dampkap','jbl') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);

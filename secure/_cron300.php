@@ -95,7 +95,7 @@ foreach ($items as $i) {
 	if (past($i)>10800&&$d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 }
 
-if ($d['bose103']['s']=='On'&&$d['Weg']['s']==1) {
+if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
 	if (!empty($nowplaying)) {
 		if (isset($nowplaying['@attributes']['source'])) {
