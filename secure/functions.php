@@ -230,7 +230,7 @@ function sw($name,$action='Toggle',$msg='') {
 			}
 		}
 	} else {
-		$msg=' (SWITCH)		'.$user.'=>'.$name.'=>'.$action.' ('.$msg.')';
+		$msg=' (SWITCH)'.str_pad($user, 17, ' ', STR_PAD_LEFT).' => '.$name.' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>0) {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$name=='deurbel') echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);

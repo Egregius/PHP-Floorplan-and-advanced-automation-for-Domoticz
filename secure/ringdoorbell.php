@@ -56,3 +56,4 @@ if (isset($_REQUEST['source'])) {
 		echo ' END';
 	}
 }
+telegram(print_r($_REQUEST, true), true, 1);
