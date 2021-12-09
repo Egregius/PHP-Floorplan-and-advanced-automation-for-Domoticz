@@ -185,7 +185,7 @@ function sl($name,$level,$msg='') {
 			}
 		}
 	} else {
-		lg(' (SETLEVEL)	'.$user.'=>'.$name.'=>'.$level.' ('.$msg.')');
+		lg(' (SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
@@ -194,7 +194,7 @@ function sl($name,$level,$msg='') {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
-	lg(' (RGB)		'.$user.' =>	'.$name.'	'.$level);
+	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 		else {
@@ -230,7 +230,7 @@ function sw($name,$action='Toggle',$msg='') {
 			}
 		}
 	} else {
-		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.$name.' => '.$action.' ('.$msg.')';
+		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>0) {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$name=='deurbel') echo file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
@@ -249,7 +249,7 @@ function sw($name,$action='Toggle',$msg='') {
 function fvolume($cmd) {
 	global $d;
 	if (!isset($d)) $d=fetchdata();
-	lg('fvolume '.$cmd);
+//	lg('fvolume '.$cmd);
 	if ($cmd=='down') {
 		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
 			denon('MVDOWN');
@@ -319,14 +319,14 @@ function store($name,$status,$msg='',$idx=null,$force=true) {
 	if(!isset($db)) $db=dbconnect();
 	if ($idx>0) $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-	if (!endswith($name, '_temp')) lg(' (STORE)	'.$user.'	=> '.$name.'	=> '.$status.'	('.$msg.')');
+	/*if (!endswith($name, '_temp')) */lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.'	('.$msg.')');
 }
 function storemode($name,$mode,$msg='',$time=0) {
 	global $db, $user;
 	$time=time()+$time;
 	if(!isset($db)) $db=dbconnect();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg(' (STOREMODE)	'.$user.'	=> '.$name.'	=> '.$mode.'	('.$msg.')');
+	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.'	('.$msg.')');
 }
 function storeicon($name,$icon,$msg='') {
 	global $d, $db, $user;
@@ -334,7 +334,7 @@ function storeicon($name,$icon,$msg='') {
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.$name.'	=> '.$icon.'	('.$msg.')');
+		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.'	('.$msg.')');
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -373,7 +373,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 			}
 		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
-	lg(' (udevice) | '.$user.'=>'.$name.'=>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
+	lg(' (udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
 function zwaveCommand($node,$command) {

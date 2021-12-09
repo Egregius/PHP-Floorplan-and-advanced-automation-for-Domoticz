@@ -183,7 +183,7 @@ elseif (isset($dswind)) $wind=round($dswind,1);
 
 store('wind', $wind, basename(__FILE__).':'.__LINE__);
 
-if($newbuitentemp!=$prevbuitentemp) lg($msg);
+//if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
 elseif (isset($d['buien']['s'])&&isset($buienradar)) $newbuien=($d['buien']['s']+$buienradar)/2;
 elseif (isset($d['buien']['s'])&&isset($dsbuien)) $newbuien=($d['buien']['s']+$dsbuien)/2;
@@ -199,7 +199,7 @@ if (!isset($newbuien)) $newbuien=0;
 if ($buienradar>100) $buienradar=100;
 if ($buien>100) $buien=100;
 $db->query("INSERT IGNORE INTO `regen` (`buienradar`,`darksky`,`buien`) VALUES ('$buienradar','$dsbuien','$buien');");
-if ($buienradar>0||$dsbuien>0||$buien>0) lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
+//if ($buienradar>0||$dsbuien>0||$buien>0) lg('Buienradar:'.$buienradar.' dsbuien:'.$dsbuien.' buien:'.$buien.' newbuien='.round($newbuien,2));
 
 if ($d['auto']['s']=='On') {
 	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$buien<5) { // Aircocooling
