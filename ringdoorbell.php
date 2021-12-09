@@ -16,9 +16,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		echo ' new id | ';
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
 		$d=fetchdata();
-		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['voordeur']['s']=='Off'/*&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)*/) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 			echo ' Motion human | ';
 			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
