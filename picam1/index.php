@@ -28,13 +28,13 @@ echo '<html>
 <body>';
 if(isset($_POST['Record'])){
 	file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
-	file_get_contents("http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055");
+	file_get_contents("http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055");
 }elseif(isset($_POST['Foto'])){
 	shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
-	shell_exec('curl -s "http://192.168.2.13/telegram.php?snapshot=true" &');
+	shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" &');
 }elseif(isset($_POST['Motion'])){
 	for ($k=1;$k<=60;$k++) {
-		file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20toggle');
+		file_get_contents('http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle');
 		if ($http_response_header[0]=='HTTP/1.1 200 OK') {
 			break;
 		}

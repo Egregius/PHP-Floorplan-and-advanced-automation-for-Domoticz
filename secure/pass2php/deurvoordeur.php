@@ -17,7 +17,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 	finkom();
 	if ($d['Weg']['s']==0) {
 		for ($k=1;$k<=60;$k++) {
-			file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20off');
+			file_get_contents('http://192.168.2.12/fifo_command.php?cmd=motion_enable%20off');
 			if ($http_response_header[0]=='HTTP/1.1 200 OK') {
 				break;
 			}
@@ -33,7 +33,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 	}
 } else {
 	for ($k=1;$k<=60;$k++) {
-		file_get_contents('http://192.168.2.13/fifo_command.php?cmd=motion_enable%20on');
+		file_get_contents('http://192.168.2.12/fifo_command.php?cmd=motion_enable%20on');
 		if ($http_response_header[0]=='HTTP/1.1 200 OK') {
 			break;
 		}
