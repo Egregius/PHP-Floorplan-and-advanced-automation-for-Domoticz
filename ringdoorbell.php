@@ -17,7 +17,17 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
 		$d=fetchdata();
 		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-		if ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
+		if ($_REQUEST['kind']=='on_demand') {
+			echo ' On demand | ';
+			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
+				echo ' Picams | ';
+				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&source=ondemand_'.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
+				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?ringbeweging&source=ondemand_'.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
+				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.13/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
+			}
+			telegram('Ring on demand '.$_REQUEST['source'], true, 1);
+		} elseif ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 			echo ' Motion human | ';
 			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
 				echo ' Picams | ';
