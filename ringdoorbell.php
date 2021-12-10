@@ -18,7 +18,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		$d=fetchdata();
 		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['kind']=='on_demand') {
-			echo ' On demand | ';
+/*			echo ' On demand | ';
 			telegram('Ring ON DEMAND '.$_REQUEST['source'], false, 1);
 			shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 			shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.13/telegram.php?deurbel" > /dev/null 2>/dev/null &');
@@ -35,7 +35,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 				if ($d['lgtv']['s']=='On') shell_exec('python3 /var/www/html/secure/lgtv.py -c send-message -a "Deurbel" 192.168.2.27 > /dev/null 2>/dev/null &');
 				sleep(2);
 				sl('Xvol', 5, basename(__FILE__).':'.__LINE__);
-			}
+			}*/
 		} elseif ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 			echo ' Motion human | ';
 			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
@@ -69,4 +69,4 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		echo ' END';
 	}
 }
-telegram(print_r($_REQUEST, true), true, 1);
+//telegram(print_r($_REQUEST, true), true, 1);
