@@ -22,7 +22,7 @@ set_time_limit(0);
 ob_start();
 echo "--$boundary\r\n";
 echo "Content-type: image/jpeg\r\n";
-$fileContents=@file_get_contents("http://192.168.2.13/mjpeg_read.php", false, $ctx);
+$fileContents=@file_get_contents("http://192.168.2.12/mjpeg_read.php", false, $ctx);
 $fileLength=strlen($fileContents);
 echo "Content-Length:".$fileLength."\r\n";
 echo "\r\n";

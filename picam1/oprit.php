@@ -22,7 +22,7 @@ echo '
 </head>';
 if(isset($_POST['Licht'])) file_get_contents("http://127.0.0.1:8084/json.htm?type=command&param=switchlight&idx=124&switchcmd=Toggle&passcode=");
 if(isset($_POST['Rvoordeur'])) file_get_contents("http://192.168.0.11/fifo_command.php?cmd=record%20on%205%2055");
-if(isset($_POST['Roprit'])) file_get_contents("http://192.168.0.13/fifo_command.php?cmd=record%20on%205%2055");
+if(isset($_POST['Roprit'])) file_get_contents("http://192.168.0.12/fifo_command.php?cmd=record%20on%205%2055");
 echo '
 <div class="navbar" role="navigation">
 <form method="POST" action="../floorplan.php"><input type="submit" value="Floorplan" class="btn" style="min-width:5em"/></form>
