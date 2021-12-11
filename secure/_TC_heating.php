@@ -64,6 +64,10 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=20.3;
 				elseif (TIME>=strtotime('4:30')&&TIME<strtotime('18:30')) $Setliving=20.2;
 				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=20.1;
+				elseif (TIME>=strtotime('3:30')&&TIME<strtotime('18:30')) $Setliving=20.0;
+				elseif (TIME>=strtotime('3:00')&&TIME<strtotime('18:30')) $Setliving=19.9;
+				elseif (TIME>=strtotime('2:30')&&TIME<strtotime('18:30')) $Setliving=19.8;
+				elseif (TIME>=strtotime('2:00')&&TIME<strtotime('18:30')) $Setliving=19.7;
 			} else {
 				if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
 				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
