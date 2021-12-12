@@ -68,8 +68,6 @@ function huisslapen() {
 function huisthuis() {
 	global $d;
 	store('Weg', 0);
-	if ($d['buiten_temp']['s']<4&&$d['heating']['s']<4) store('heating', 4, basename(__FILE__).':'.__LINE__);
-	elseif ($d['buiten_temp']['s']>10&&$d['heating']['s']>1) store('heating', 1, basename(__FILE__).':'.__LINE__);
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
 /**
