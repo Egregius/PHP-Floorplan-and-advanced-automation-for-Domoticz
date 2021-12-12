@@ -181,7 +181,7 @@ elseif (isset($owwind)&&isset($dswind)) $wind=round(($owwind+$dswind)/2,1);
 elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
-store('wind', $wind, basename(__FILE__).':'.__LINE__);
+if ($d['wind']['s']!=$wind) store('wind', $wind, basename(__FILE__).':'.__LINE__);
 
 //if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
