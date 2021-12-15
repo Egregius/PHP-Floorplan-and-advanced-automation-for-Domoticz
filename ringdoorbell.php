@@ -16,7 +16,9 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		echo ' new id | ';
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
 		$d=fetchdata();
-		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			echo ' licht voordeur aan | ';
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -25,7 +27,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 			telegram('Ring on demand '.$_REQUEST['source'], true, 1);
 		} elseif ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
 			echo ' Motion human | ';
-			if ($d['poortrf']['s']=='Off'/*&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90*/) {
+			if ($d['poortrf']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&past('deurvoordeur')>90&&past('poortrf')>90) {
 				echo ' Picams | ';
 				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringbeweging&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
 				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.12/telegram.php?ringbeweging&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
