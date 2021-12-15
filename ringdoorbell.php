@@ -16,7 +16,10 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		echo ' new id | ';
 		apcu_store('ring-'.$_REQUEST['kind'], $_REQUEST['id']);
 		$d=fetchdata();
-		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0) {
+			echo ' licht voordeur aan | ';
+			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+		}
 		if ($_REQUEST['kind']=='on_demand') {
 			echo ' On demand | ';
 			telegram('Ring on demand '.$_REQUEST['source'], true, 1);
