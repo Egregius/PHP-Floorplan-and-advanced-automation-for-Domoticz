@@ -18,7 +18,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 		$d=fetchdata();
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			echo ' licht voordeur aan | ';
 			sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 		}
