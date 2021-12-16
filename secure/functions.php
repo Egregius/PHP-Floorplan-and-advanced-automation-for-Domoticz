@@ -445,7 +445,7 @@ function rookmelder($msg) {
 	global $d;
 	if ($d['Weg']['s']<=1) {
 		alert($device,	$msg,	300, false, 2, true);
-		foreach (array(/*'Ralex',*/'Rspeelkamer','RkamerL','RkeukenL','RkamerR','Rliving','RkeukenR','Rbureel') as $i) {
+		foreach (array(/*'Ralex',*/'RkamerL','RkeukenL','RkamerR','Rspeelkamer','Rliving','RkeukenR','Rbureel') as $i) {
 			if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['zon']['s']<500) {
