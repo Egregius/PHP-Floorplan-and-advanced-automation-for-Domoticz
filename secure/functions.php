@@ -449,7 +449,7 @@ function rookmelder($msg) {
 			if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['zon']['s']<500) {
-			foreach (array('hall','inkom','kamer','speelkamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer', 'terras') as $i) {
+			foreach (array('hall','inkom','kamer','speelkamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
 				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			foreach (array('keuken','garage','jbl','bureel', 'tuin') as $i) {
