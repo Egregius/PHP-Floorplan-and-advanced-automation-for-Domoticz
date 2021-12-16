@@ -48,7 +48,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['tv']['s']=='On') {
-	if (pingport('192.168.2.5', 3000)==1) {
+	if (pingport('192.168.2.6', 3000)==1) {
 		if ($d['lgtv']['s']!='On') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
