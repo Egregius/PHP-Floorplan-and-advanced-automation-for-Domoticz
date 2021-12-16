@@ -214,11 +214,11 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['denon']['s']=='On') {
-		$denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME,false,$ctx))),true);
+		$denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formMainZone_MainZoneXml.xml?_='.TIME,false,$ctx))),true);
 		if (!empty($denonmain)) {
 			if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) storemode('denon', $denonmain['InputFuncSelect']['value'], basename(__FILE__).':'.__LINE__);
 			if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) store('denonpower', $denonmain['ZonePower']['value'], basename(__FILE__).':'.__LINE__);
-			$denonsec=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,false,$ctx))),true);
+			$denonsec=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,false,$ctx))),true);
 			if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') denon('Z2ON');
 			elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') denon('Z2OFF');
 		}

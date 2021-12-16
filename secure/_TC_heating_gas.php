@@ -43,8 +43,8 @@ foreach ($kamers as $kamer) {
 	}
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
-$aanna=(1/(21-$d['buiten_temp']['s']))*6500;
-$uitna=(21-$d['buiten_temp']['s'])*30;
+$aanna=(1/(21-$d['buiten_temp']['s']))*6500; if ($aanna<300) $aanna=300;
+$uitna=(21-$d['buiten_temp']['s'])*30; if ($uitna<300) $uitna=300;
 //lg(' aanna = '.$aanna.' uitna = '.$uitna);
 if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);

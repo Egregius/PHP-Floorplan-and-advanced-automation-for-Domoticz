@@ -257,8 +257,8 @@ function fvolume($cmd) {
 			denon('MVDOWN');
 			denon('MVDOWN');
 		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.5');
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.5');
 		} elseif ($d['bose101']['s']=='On') {
 			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
 			if (!empty($nowplaying)) {
@@ -284,8 +284,8 @@ function fvolume($cmd) {
 			denon('MVUP');
 			denon('MVUP');
 		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.5');
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.5');
 		} elseif ($d['bose101']['s']=='On') {
 			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
 			if (!empty($nowplaying)) {
@@ -626,7 +626,7 @@ function denon($cmd) {
 }
 function denontcp($cmd, $x) {
 	$sleep=102000*$x;
-	$socket=fsockopen("192.168.2.6", "23", $errno, $errstr, 2);
+	$socket=fsockopen("192.168.2.5", "23", $errno, $errstr, 2);
 	if ($socket) {
 		fputs($socket, "$cmd\r\n");
 		fclose($socket);

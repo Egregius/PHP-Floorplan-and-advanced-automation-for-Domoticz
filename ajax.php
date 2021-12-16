@@ -51,7 +51,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
 	if ($_REQUEST['command']=='volume') {
 		$vol=80-$_REQUEST['action'];
-		@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
+		@file_get_contents('http://192.168.2.5/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
 	}
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {

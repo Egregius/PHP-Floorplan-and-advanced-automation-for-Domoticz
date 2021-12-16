@@ -38,13 +38,13 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
   </head>
 <body>';
 if (isset($_POST['vol'])) {
-	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');usleep(120000);
+	@file_get_contents('http://192.168.2.5/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($_POST['vol'], 0).'.0');usleep(120000);
 } elseif (isset($_POST['input'])) {
 	storemode('denon', $_POST['input'], basename(__FILE__).':'.__LINE__);
-	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
+	@file_get_contents('http://192.168.2.5/MainZone/index.put.asp?cmd0=PutZone_InputFunction/'.$_POST['input'].'&cmd1=aspMainZone_WebUpdateStatus%2F');
 	usleep(120000);
 } elseif (isset($_POST['surround'])) {
-	@file_get_contents('http://192.168.2.6/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');usleep(120000);
+	@file_get_contents('http://192.168.2.5/MainZone/index.put.asp?cmd0=PutSurroundMode/'.$_POST['surround'].'&cmd1=aspMainZone_WebUpdateStatus%2F');usleep(120000);
 } elseif (isset($_POST['poweron'])) {
 	$d=fetchdata();
 	if ($d['denon']['s']=='On') {
@@ -57,7 +57,7 @@ if (isset($_POST['vol'])) {
 	denon('PSDELAY '.$x);
 }
 $ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-$denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.6/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
+$denonmain=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
 if (!$denonmain) {
 	echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
 }
@@ -137,7 +137,7 @@ if ($denonmain['ZonePower']['value']=='ON') {
 		echo '
 	</div>
 	<div class="box">';
-		$delay=file_get_contents('http://192.168.2.6/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
+		$delay=file_get_contents('http://192.168.2.5/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
 		$delay=strafter($delay, "style='text-align:right;' value='");
 		$delay=strbefore($delay, "'>");
 		for ($x=0;$x<=199;$x++) {
