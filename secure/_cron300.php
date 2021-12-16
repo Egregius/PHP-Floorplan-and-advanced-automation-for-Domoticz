@@ -111,12 +111,6 @@ if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 	}
 }
 
-if ($d['heating']['s']>=3&&TIME<=strtotime('6:00')) {
-	$i=(21-$d['living_temp']['s'])*3600;
-	$i=ceil($i/300)*300;
-	$i=strftime("%k:%M", strtotime('6:30')-$i);
-	if ($i!=$d['heating']['m']) storemode('heating', $i, basename(__FILE__).':'.__LINE__);
-}
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
 if (!empty($data)) {

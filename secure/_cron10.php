@@ -130,4 +130,4 @@ if (pingport('192.168.2.105', 80)==1) {
 		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }*/
-if (past('wind')>86) require('_weather.php');
+if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');

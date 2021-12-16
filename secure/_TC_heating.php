@@ -41,17 +41,19 @@ if ($d['living_set']['m']==0) {
 		$Setliving=10;
 		if ($d['Weg']['s']==0) {
 			if ($d['heating']['s']>=3) {
-				if (TIME>=strtotime($d['heating']['m'])&&TIME<strtotime('18:30')) $Setliving=21.0;
+				$Setliving=18;
+				if (TIME>=strtotime('4:00')&&TIME<strtotime('18:30')) $Setliving=21.0;
 			} else {
-				if (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
+				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
 				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
 			}
-		} elseif ($d['Weg']['s']==1&&$d['heating']['s']>=3) {
+		} elseif ($d['Weg']['s']<3&&$d['heating']['s']>=3) {
+			$Setliving=18;
 			$dow=date("w");
 			if($dow==0||$dow==6) {
-				if (TIME>=strtotime($d['heating']['m'])+3600&&TIME<strtotime('12:00')) $Setliving=20.0;
+				if (TIME>=strtotime('6:30')&&TIME<strtotime('8:00')) $Setliving=21.0;
 			} else {
-				if (TIME>=strtotime($d['heating']['m'])&&TIME<strtotime('12:00')) $Setliving=20.0;
+				if (TIME>=strtotime('5:30')&&TIME<strtotime('8:00')) $Setliving=21.0;
 			}
 		}
 		if ($Setliving>19.5&&TIME>=strtotime('11:00')&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15) $Setliving=19.5;

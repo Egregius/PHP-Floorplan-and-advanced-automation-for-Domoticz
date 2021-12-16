@@ -43,12 +43,15 @@ foreach ($kamers as $kamer) {
 	}
 }
 //lg('bigdif='.$bigdif.'|brander='.$d['brander']['s'].'|timebrander='.past('brander'));
-if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>178) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>598) sw('brander','On', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>338) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>522) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>984) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+$aanna=(1/(21-$d['buiten_temp']['s']))*6500;
+$uitna=(21-$d['buiten_temp']['s'])*30;
+//lg(' aanna = '.$aanna.' uitna = '.$uitna);
+if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*1.5) sw('brander', 'Off', 'Uit na = '.$uitna*1.5 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*2) sw('brander','Off', 'Uit na = '.$uitna*2 .' '.basename(__FILE__).':'.__LINE__);
 
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 
