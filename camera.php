@@ -24,12 +24,13 @@ $data['Weg']=$d['Weg']['s'];
 $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
 $data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $data['zonop']=1;
-else $data['zonop']=0;
-echo serialize($data);
+$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+	$data['zonop']=1;
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-}
+} else $data['zonop']=0;
+echo serialize($data);
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl,$db;
 	if (!isset($d)) $d=fetchdata();
