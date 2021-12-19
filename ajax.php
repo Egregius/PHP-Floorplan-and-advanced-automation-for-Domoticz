@@ -14,7 +14,7 @@
  **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if (!isset($_REQUEST['t'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
+if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
 	foreach($_REQUEST as $k=>$v) {
 		$msg.='	'.$k.'='.$v;
@@ -41,6 +41,8 @@ if (isset($_REQUEST['t'])) {
 	}
 	echo json_encode($d);
 	exit;
+} elseif (isset($_REQUEST['q'])) {
+	if ($_REQUEST['q']=='aftellen') echo $_SERVER['REQUEST_TIME'];
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 	if ($_REQUEST['command']=='runsync') {
