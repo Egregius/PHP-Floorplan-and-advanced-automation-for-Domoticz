@@ -79,8 +79,8 @@ echo '<div class="navbar" role="navigation">
 	</div>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		mypicam=setInterval(getpic, 500);
-		mypicam2=setInterval(getpic2, 500);
+		mypicam=setInterval(getpic, 2500);
+		mypicam2=setInterval(getpic2, 2500);
 		function getpic(){
 			try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
 		}
