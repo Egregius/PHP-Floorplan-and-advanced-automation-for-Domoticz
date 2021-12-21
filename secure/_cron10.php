@@ -44,9 +44,10 @@ if ($d['auto']['s']=='On') {
 			bosekey('POWER', 0, 102);
 		}
 	}
-	if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>60&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
+if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>60&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.6', 3000)==1) {
 		if ($d['lgtv']['s']!='On') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);

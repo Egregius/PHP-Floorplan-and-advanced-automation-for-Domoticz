@@ -44,9 +44,9 @@ if ($d['living_set']['m']==0) {
 				$Setliving=18;
 				$dow=date("w");
 				if($dow==0||$dow==6) {
-					if (TIME>=strtotime('6:00')&&TIME<strtotime('18:30')) $Setliving=21.0;
+					if (TIME>=strtotime('5:30')&&TIME<strtotime('18:30')) $Setliving=21.0;
 				} else {
-					if (TIME>=strtotime('5:00')&&TIME<strtotime('18:30')) $Setliving=21.0;
+					if (TIME>=strtotime('4:30')&&TIME<strtotime('18:30')) $Setliving=21.0;
 				}
 			} else {
 				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=21.0;

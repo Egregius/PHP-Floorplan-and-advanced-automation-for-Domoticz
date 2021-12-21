@@ -33,9 +33,9 @@ echo '
 <form method="POST"><input type="submit" value="Roprit" name="Roprit" class="btn" style="min-width:5em"/></form>
 </div>
 <div class="clear"></div>';
-if($udevice=='iPad') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-else if($udevice=='iPhone') echo '<img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-else if($udevice=='Mac') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-else if($udevice=='S4') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-else if($udevice=='Stablet') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
-else echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam3/jpg.php">';
+if($udevice=='iPad') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
+else if($udevice=='iPhone') echo '<img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:100%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
+else if($udevice=='Mac') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
+else if($udevice=='S4') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
+else if($udevice=='Stablet') echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
+else echo '<img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest" src="jpg.php"><img style="width:896px;max-width:50%;height:auto" id="mjpeg_dest2" src="../picam2/jpg.php">';
