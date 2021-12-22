@@ -25,6 +25,9 @@ if(isset($_REQUEST['Record'])){
 	shell_exec('curl -s "http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle" &');
 	exit;
 }
+if ($_SERVER['REMOTE_ADDR']=='192.168.2.200') $refresh=100;
+$refresh=1000;
+
 echo '<html>
 <head><title>Oprit</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -70,8 +73,8 @@ echo '<div class="navbar" role="navigation">
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		mypicam=setInterval(getpic, 500);
-		mypicam2=setInterval(getpic2, 500);
+		mypicam=setInterval(getpic, '.$refresh.');
+		mypicam2=setInterval(getpic2, '.$refresh.');
 		function getpic(){
 			try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
 		}
