@@ -47,9 +47,9 @@ if(isset($_POST['Record'])){
 		}
 		sleep(5);
 	}
-}elseif(isset($_POST['Licht'])){
+}/*elseif(isset($_POST['Licht'])){
 	sw('voordeur');
-}
+}*/
 echo '<div class="navbar" role="navigation">
 	<form method="POST" action="../floorplan.php">
 	  <input type="submit" value="Plan" class="btn b7" />
@@ -57,7 +57,7 @@ echo '<div class="navbar" role="navigation">
 	<form method="POST">
 	  <input type="submit" value="Record" name="Record" class="btn b8"/>
 	  <input type="submit" value="Foto" name="Foto" class="btn b9"/>
-	  <input type="submit" value="Licht" name="Licht" class="btn b9"/>
+	  <input type="submit" value="Licht" name="Licht" class="btn b9" onclick="event.preventDefault();licht();"/>
 	  <input type="submit" value="Motion" name="Motion" class="btn b8"/>
 	  <input type="submit" value="Refresh" name="Refresh" class="btn b8"/>
 	</form>
@@ -77,15 +77,21 @@ echo '<div class="navbar" role="navigation">
 	<div class="camera2">
 		<img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
 	</div>
+	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		mypicam=setInterval(getpic, 2500);
-		mypicam2=setInterval(getpic2, 2500);
+		mypicam=setInterval(getpic, 500);
+		mypicam2=setInterval(getpic2, 500);
 		function getpic(){
 			try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
 		}
 		function getpic2(){
 			try{document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();}catch{}
+		}
+		function licht(){
+			console.log("Licht")
+			$.get("/ajax.php?device=voordeur&command=sw&action=toggle")
+			return false
 		}
 	</script>
 	</body></html>
