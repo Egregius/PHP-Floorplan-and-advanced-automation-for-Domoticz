@@ -86,6 +86,14 @@ echo '<div class="navbar" role="navigation">
 			$.get("?Record")
 			return false
 		}
+		function foto(){
+			$.get("?Foto")
+			return false
+		}
+		function motion(){
+			$.get("?Motion")
+			return false
+		}
 	</script>
 	</body></html>
 ';
