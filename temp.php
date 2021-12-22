@@ -35,10 +35,10 @@ echo '
 	<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 	</head>';
 if ($udevice=='iPad') echo '
-	<body style="width:800px">
-		<form action="floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btna b5" value="Temperaturen"/></form>
-		<form action="/regen.php"><input type="submit" class="btn b5" value="Regen"/></form>';
+	<body style="width:1010px">
+		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
+		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
+		<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
 elseif ($udevice=='iPhone') echo '
 	<body style="width:420px">
 		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
@@ -112,8 +112,8 @@ $argshour=array(
 		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999')
 	);
 if ($udevice=='iPad') {
-	$args['width']=1000;$args['height']=880;
-	$argshour['width']=1000;$argshour['height']=880;
+	$args['width']=1000;$args['height']=1230;
+	$argshour['width']=1000;$argshour['height']=1230;
 } elseif ($udevice=='iPhone') {
 	$args['width']=420;$args['height']=610;
 	$argshour['width']=420;$argshour['height']=710;
