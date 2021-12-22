@@ -12,6 +12,19 @@
 require '../secure/functions.php';
 $_SESSION['referer']='picam1/index.php';
 require '/var/www/authentication.php';
+if(isset($_REQUEST['Record'])){
+	file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
+	file_get_contents("http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055");
+	exit;
+}elseif(isset($_REQUEST['Foto'])){
+	shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
+	shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" &');
+	exit;
+}elseif(isset($_REQUEST['Motion'])){
+	shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=motion_enable%20toggle" &');
+	shell_exec('curl -s "http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle" &');
+	exit;
+}
 echo '<html>
 <head><title>Oprit</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -23,42 +36,19 @@ echo '<html>
 <link rel="shortcut icon" href="/images/Camera.png"/>
 <link rel="apple-touch-icon" href="/images/Camera.png"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<link href="/styles/picam1.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
+<link href="/styles/picam1.css?v=2" rel="stylesheet" type="text/css"/>
 </head>
 <body>';
-if(isset($_POST['Record'])){
-	file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
-	file_get_contents("http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055");
-}elseif(isset($_POST['Foto'])){
-	shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
-	shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" &');
-}elseif(isset($_POST['Motion'])){
-	for ($k=1;$k<=60;$k++) {
-		file_get_contents('http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle');
-		if ($http_response_header[0]=='HTTP/1.1 200 OK') {
-			break;
-		}
-		sleep(5);
-	}
-	for ($k=1;$k<=60;$k++) {
-		file_get_contents('http://192.168.2.11/fifo_command.php?cmd=motion_enable%20toggle');
-		if ($http_response_header[0]=='HTTP/1.1 200 OK') {
-			break;
-		}
-		sleep(5);
-	}
-}/*elseif(isset($_POST['Licht'])){
-	sw('voordeur');
-}*/
+
 echo '<div class="navbar" role="navigation">
 	<form method="POST" action="../floorplan.php">
 	  <input type="submit" value="Plan" class="btn b7" />
 	</form>
 	<form method="POST">
-	  <input type="submit" value="Record" name="Record" class="btn b8"/>
-	  <input type="submit" value="Foto" name="Foto" class="btn b9"/>
-	  <input type="submit" value="Licht" name="Licht" class="btn b9" onclick="event.preventDefault();licht();"/>
-	  <input type="submit" value="Motion" name="Motion" class="btn b8"/>
+	  <input type="submit" value="Record" name="Record" class="btn b8" onclick="event.preventDefault();record();"/>
+	  <input type="submit" value="Foto" name="Foto" class="btn b8" onclick="event.preventDefault();foto();"/>
+	  <input type="submit" value="Licht" name="Licht" class="btn b8" onclick="event.preventDefault();licht();"/>
+	  <input type="submit" value="Motion" name="Motion" class="btn b8" onclick="event.preventDefault();motion();"/>
 	  <input type="submit" value="Refresh" name="Refresh" class="btn b8"/>
 	</form>
 	<form method="POST" action="media-archive.php">
@@ -89,8 +79,11 @@ echo '<div class="navbar" role="navigation">
 			try{document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();}catch{}
 		}
 		function licht(){
-			console.log("Licht")
-			$.get("/ajax.php?device=voordeur&command=sw&action=toggle")
+			$.get("/ajax.php?device=voordeur&command=sw&action=Toggle")
+			return false
+		}
+		function record(){
+			$.get("?Record")
 			return false
 		}
 	</script>
