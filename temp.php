@@ -31,7 +31,7 @@ echo '
 	<link rel="icon" href="images/temperatures.png"/>
 	<link rel="shortcut icon" href="images/temperatures.png"/>
 	<link rel="apple-touch-icon" href="images/temperatures.png"/>
-	<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
+	<link href="/styles/temp.css?v=2" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 	</head>';
 if ($udevice=='iPad') echo '
@@ -39,7 +39,13 @@ if ($udevice=='iPad') echo '
 		<form action="floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b5" value="Temperaturen"/></form>
 		<form action="/regen.php"><input type="submit" class="btn b5" value="Regen"/></form>';
- else 	echo '
+elseif ($udevice=='iPhone') echo '
+	<body style="width:420px">
+		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
+		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
+		<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
+
+else 	echo '
 	<body style="width:100%">
 		<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
