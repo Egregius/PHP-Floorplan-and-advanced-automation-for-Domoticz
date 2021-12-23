@@ -13,9 +13,9 @@ require_once '/var/www/html/secure/functions.php';
 if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='CKgSwM01pQibqgAzWfUsdE5nUlzT1wnNdtz09EO2') {
 	echo ' Start | ';
 	$id=floor($_REQUEST['id']/60)*60;
-	if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$id) {
+//	if (apcu_fetch('ring-'.$_REQUEST['kind'])!=$id) {
 		echo ' new id | ';
-		apcu_store('ring-'.$_REQUEST['kind'], $id);
+//		apcu_store('ring-'.$_REQUEST['kind'], $id);
 		$d=fetchdata();
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
@@ -59,6 +59,6 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 			}
 		}
 		echo ' END';
-	}
+//	}
 }
 //telegram(print_r($_REQUEST, true), true, 1);
