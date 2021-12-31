@@ -11,7 +11,25 @@
  **/
 //lg(__FILE__);
 $dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
-
+$kamers=array('alex','kamer');
+foreach ($kamers as $kamer) {
+	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
+		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
+	} else {
+		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
+	}
+	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
+		if ($d[$kamer.'_temp']['s']<14) ${'RSet'.$kamer}=18;
+		elseif ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=17;
+		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=16;
+	}
+	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
+//		lg(basename(__FILE__).':'.__LINE__);
+		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
+//		sl($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+	}
+}
 if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>498) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 elseif ($dif<= 0&&$d['brander']['s']=="Off"&&past('brander')>748) sw('brander','On', basename(__FILE__).':'.__LINE__);
