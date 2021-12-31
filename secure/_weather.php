@@ -127,24 +127,25 @@ if (isset($rains['forecasts'])) {
 	$buienradar=round($buienradar/7, 0);
 	if ($buienradar>20) $maxrain=$buienradar;
 }
-$newbuitentemp=round(array_sum($temps)/count($temps), 1);
+if (count($temps)==4) {
+	$newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
-if (isset($ds['hourly']['data'])) {
-	if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
-	if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
-	if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
-	if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
+	if (isset($ds['hourly']['data'])) {
+		if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
+		if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
+		if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
+		if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
+	}
+
+	echo 'new = '.$newbuitentemp;
+	$msg='Buiten temperaturen : prevbuitentemp='.$prevbuitentemp.' ';
+	foreach ($temps as $k=>$v) {
+		$msg.=$k.'='.$v.', ';
+	}
+	$msg.='newbuitentemp='.$newbuitentemp;
+
+	if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
 }
-
-echo 'new = '.$newbuitentemp;
-$msg='Buiten temperaturen : prevbuitentemp='.$prevbuitentemp.' ';
-foreach ($temps as $k=>$v) {
-	$msg.=$k.'='.$v.', ';
-}
-$msg.='newbuitentemp='.$newbuitentemp;
-
-if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
-
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
