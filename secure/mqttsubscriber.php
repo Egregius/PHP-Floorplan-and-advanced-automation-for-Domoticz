@@ -26,7 +26,7 @@ $mqtt = new MqttClient($server, $port, $clientId);
 $mqtt->connect($connectionSettings, $clean_session);
 printf("client connected\n");
 
-$mqtt->subscribe('emqx/test', function ($topic, $message) {
+$mqtt->subscribe('#', function ($topic, $message) {
     printf("Received message on topic [%s]: %s\n", $topic, $message);
 }, 0);
 $mqtt->loop(true);
