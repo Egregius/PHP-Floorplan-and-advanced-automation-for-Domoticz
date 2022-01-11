@@ -40,8 +40,8 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 			echo ' Ding | ';
 //			telegram('Ring DEURBEL '.$_REQUEST['source'], false, 1);
 			if ($d['deurvoordeur']['s']=='Closed') {
-				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
-//				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.12/telegram.php?deurbel" > /dev/null 2>/dev/null &');
+				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?ringdeurbel&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
+//				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.12/telegram.php?ringdeurbel&source='.$_REQUEST['source'].'" > /dev/null 2>/dev/null &');
 				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 //				shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');
 			}
