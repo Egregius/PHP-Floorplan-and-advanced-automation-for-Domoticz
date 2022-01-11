@@ -240,7 +240,7 @@ class phpMQTT
         $string = $this->read(4);
 
         if (ord($string[0]) >> 4 === 2 && $string[3] === chr(0)) {
-            $this->_debugMessage('Connected to Broker');
+//            $this->_debugMessage('Connected to Broker');
         } else {
             $this->_errorMessage(
                 sprintf(
@@ -356,7 +356,7 @@ class phpMQTT
         $head .= chr(0x00);
         fwrite($this->socket, $head, 2);
         $this->timesinceping = time();
-//        $this->_debugMessage('ping sent');
+        $this->_debugMessage('ping sent');
     }
 
     /**
@@ -507,19 +507,17 @@ class phpMQTT
     public function proc(bool $loop = true)
     {
         if (feof($this->socket)) {
-            $this->_debugMessage('eof receive going to reconnect for good measure');
+//            $this->_debugMessage('eof receive going to reconnect for good measure');
             fclose($this->socket);
             $this->connect_auto(false);
-            if (count($this->topics)) {
-                $this->subscribe($this->topics);
-            }
+            $this->subscribe($this->topics);
         }
 
         $byte = $this->read(1, true);
 
         if ((string)$byte === '') {
             if ($loop === true) {
-                usleep(100000);
+                usleep(10000);
             }
         } else {
             $cmd = (int)(ord($byte) / 16);
