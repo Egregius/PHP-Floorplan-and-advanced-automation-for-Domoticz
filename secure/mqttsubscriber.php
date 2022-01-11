@@ -1,31 +1,33 @@
 <?php
-require('phpMQTT.php');
+require('/var/www/vendor/autoload.php');
+
+use \PhpMqtt\Client\MqttClient;
+use \PhpMqtt\Client\ConnectionSettings;
+
+$server   = '192.168.2.28';
+$port     = 1883;
+$clientId = rand(5, 15);
+$username = null;
+$password = null;
+$clean_session = false;
+
+$connectionSettings  = new ConnectionSettings();
+$connectionSettings
+  ->setUsername($username)
+  ->setPassword(null)
+  ->setKeepAliveInterval(60)
+  ->setLastWillTopic('emqx/test/last-will')
+  ->setLastWillMessage('client disconnect')
+  ->setLastWillQualityOfService(1);
 
 
-$server = '192.168.2.28';     // change if necessary
-$port = 1883;                     // change if necessary
-$username = '';                   // set your username
-$password = '';                   // set your password
-$client_id = 'phpMQTT-subscriber'; // make sure this is unique for connecting to sever - you could use uniqid()
+$mqtt = new MqttClient($server, $port, $clientId);
 
-$mqtt = new Bluerhinos\phpMQTT($server, $port, $client_id);
-if(!$mqtt->connect(true, NULL, $username, $password)) {
-	exit(1);
-}
+$mqtt->connect($connectionSettings, $clean_session);
+printf("client connected\n");
 
-$mqtt->debug = true;
-
-$topics['bluerhinos/phpMQTT/examples/publishtest'] = array('qos' => 0, 'function' => 'procMsg');
-$topics['domoticz'] = array('qos' => 0, 'function' => 'procMsg');
-$mqtt->subscribe($topics, 0);
-
-while($mqtt->proc()) {
-
-}
-
-$mqtt->close();
-
-function procMsg($topic, $msg){
-		echo $topic.'	'.$msg.PHP_EOL;
-}
-
+$mqtt->subscribe('emqx/test', function ($topic, $message) {
+    printf("Received message on topic [%s]: %s\n", $topic, $message);
+}, 0);
+$mqtt->loop(true);
+$mqtt->disconnect();

@@ -9,7 +9,7 @@ $client_id = 'phpMQTT-subscriber'; // make sure this is unique for connecting to
 $mqtt = new Bluerhinos\phpMQTT($server, $port, $client_id);
 
 if ($mqtt->connect(true, NULL, $username, $password)) {
-	$mqtt->publish('bluerhinos/phpMQTT/examples/publishtest', 'Hello World! at ' . date('r'), 0, false);
+	$mqtt->publish('domoticz/test', 'Hello World! at ' . date('r'), 0, false);
 	$mqtt->close();
 } else {
     echo "Time out!\n";
