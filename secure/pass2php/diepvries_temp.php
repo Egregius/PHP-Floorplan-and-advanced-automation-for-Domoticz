@@ -12,7 +12,3 @@
 if ($status> -15) {
     alert('Te warm in diepvries! '.$status.' °C', 1800);
 }
-$prev=$d['diepvries_temp']['s'];
-if ($prev==$status) {
-	die('notting to do');
-}

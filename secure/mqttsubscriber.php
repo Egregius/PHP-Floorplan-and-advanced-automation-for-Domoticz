@@ -22,6 +22,8 @@ $mqtt->subscribe('#', function ($topic, $message) {
 	if ($message['dtype']=='Light/Switch') {
 		if ($message['nvalue']==1) $status='On';
 		else $status='Off';
+	} elseif (in_array($message['dtype'], array('Lux'))) {
+		// IGNORING
 	} elseif (in_array($message['dtype'], array('Temp','Thermostat'))) {
 		$status=$message['svalue1'];
 	} else {
