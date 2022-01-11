@@ -1,30 +1,17 @@
 <?php
 require('/var/www/vendor/autoload.php');
 require '/var/www/html/secure/functions.php';
-
-
 use \PhpMqtt\Client\MqttClient;
 use \PhpMqtt\Client\ConnectionSettings;
-
-$server   = '192.168.2.28';
-$port     = 1883;
-$clientId = rand(5, 15);
-$username = null;
-$password = null;
 $clean_session = false;
 
 $connectionSettings  = new ConnectionSettings();
 $connectionSettings
-  ->setUsername($username)
-  ->setPassword(null)
   ->setKeepAliveInterval(60)
   ->setLastWillTopic('#')
   ->setLastWillMessage('client disconnect')
   ->setLastWillQualityOfService(1);
-
-
-$mqtt = new MqttClient($server, $port, $clientId);
-
+$mqtt = new MqttClient('192.168.2.28', 1883, rand(5,15));
 $mqtt->connect($connectionSettings, $clean_session);
 printf("client connected\n");
 
@@ -35,12 +22,14 @@ $mqtt->subscribe('#', function ($topic, $message) {
 	if ($message['dtype']=='Light/Switch') {
 		if ($message['nvalue']==1) $status='On';
 		else $status='Off';
-		echo $device.' = '.$status;
+	} elseif (in_array($message['dtype'], array('Temp','Thermostat'))) {
+		$status=$message['svalue1'];
 	} else {
 		echo $device.' >>> ';print_r($message);
 	}
 
 	if (isset($status)) {
+		echo $device.' = '.$status.PHP_EOL;
 		$d=fetchdata();
 		if (isset($d[$device])) {
 			if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
@@ -77,19 +66,16 @@ $mqtt->subscribe('#', function ($topic, $message) {
 				if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
 				elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 			}
+			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+				store($device, $status, 'Pass2PHP', $message['idx']);
+				if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
+					if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
+			//		else lg($device.' = '.$status);
+				}
+			} else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);
 		}
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-			store($device, $status, 'Pass2PHP');
-			if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
-				if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
-		//		else lg($device.' = '.$status);
-			}
-		} else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);
+
 	}
-
-
-
-
 }, 0);
 $mqtt->loop(true);
 $mqtt->disconnect();
