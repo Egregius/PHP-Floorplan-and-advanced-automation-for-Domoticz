@@ -31,9 +31,7 @@ foreach ($kamers as $kamer) {
 		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
 	}
 	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
-		if ($d[$kamer.'_temp']['s']<14) ${'RSet'.$kamer}=18;
-		elseif ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=17;
-		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=16;
+		if ($d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=16;
 	}
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
 //		lg(basename(__FILE__).':'.__LINE__);
