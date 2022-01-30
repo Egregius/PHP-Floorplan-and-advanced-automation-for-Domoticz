@@ -9,29 +9,30 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($d['kamer_set']['m']==0) $Setkamer=4;
-if ($d['speelkamer_set']['m']==0) $Setspeelkamer=4;
-if ($d['alex_set']['m']==0) $Setalex=4;
-
-
-$dif=$d['living_temp']['s']-$d['living_set']['s'];
-
-if ($d['Weg']['s']==1) {
-	if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>598) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif<=-0&&$d['brander']['s']=="Off"&&past('brander')>898) sw('brander','On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0&&$d['brander']['s']=="On"&&past('brander')>298) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>598) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander','Off', basename(__FILE__).':'.__LINE__);
-} else {
-	if ($dif<=-0.7&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif<=-0.6&&$d['brander']['s']=="Off"&&past('brander')>598) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif<=-0.5&&$d['brander']['s']=="Off"&&past('brander')>898) sw('brander','On', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0.5&&$d['brander']['s']=="On"&&past('brander')>298) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0.6&&$d['brander']['s']=="On"&&past('brander')>598) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-	elseif ($dif>=-0.7&&$d['brander']['s']=="On"&&past('brander')>898) sw('brander','Off', basename(__FILE__).':'.__LINE__);
+$kamers=array('living','kamer','alex');
+foreach ($kamers as $kamer) {
+	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
+	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
+//	${'Set'.$kamer}=$d[$kamer.'_set']['s'];
+//	if (${'dif'.$kamer}<=0) {if ($kamer!='living') $d['heating']['s']=4;}
 }
-
+$kamers=array('alex','kamer');
+foreach ($kamers as $kamer) {
+	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
+	else ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
+	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed'&&$d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=17;
+	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
+		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
+	}
+}
+$aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<295) $aanna=295;
+$uitna=(21-$d['buiten_temp']['s'])*40; if ($uitna<475) $uitna=475;
+if ($bigdif<= -0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.3&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
+if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -62,9 +63,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 4);
 			}
-		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
-			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {

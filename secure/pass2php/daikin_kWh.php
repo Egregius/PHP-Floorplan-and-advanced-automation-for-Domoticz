@@ -1,4 +1,5 @@
 <?php
+/*
 if ($d['Weg']['s']==0) {
 	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
 	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
@@ -20,3 +21,4 @@ if ($d['Weg']['s']==0) {
 } else {
 	if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 }
+*/

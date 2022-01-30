@@ -135,7 +135,6 @@ if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 			$prev_1day_cool=explode('=', $data[4]);
 			${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
 		}
-	//print_r($data);
 	}
 	if ($data[0]=='ret=OK'&&isset($livingheat)&&isset($kamerheat)&&isset($kamerheat)&&isset($kamercool)&&isset($alexheat)&&isset($alexcool)) {
 		$date=strftime('%F', TIME);
@@ -155,7 +154,6 @@ if (TIME>strtotime('0:10')) {
 	curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
 	$objauth=json_decode(curl_exec($chauth));
 	if (!empty($objauth)) {
-		echo 'Kwartaal<br>';
 		$access=$objauth->{'access_token'};
 		curl_close($chauth);
 		$timefrom=strtotime(date("Y-m-d", strtotime("-185 days")));
@@ -173,7 +171,6 @@ if (TIME>strtotime('0:10')) {
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
 			foreach ($data['consumptions'] as $i) {
-				echo strftime("%F %T", $i['timestamp']/1000).'<br>';
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
 				$solar=$i['solar'];
@@ -186,7 +183,6 @@ if (TIME>strtotime('0:10')) {
 			}
 		}
 		curl_close($ch);
-		echo '<hr>Maand<br>';
 		$timefrom=strtotime(date("Y-m-d", strtotime("-60 days")));
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -202,7 +198,6 @@ if (TIME>strtotime('0:10')) {
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
 			foreach ($data['consumptions'] as $i) {
-				echo strftime("%F %T", $i['timestamp']/1000).'<br>';
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
 				$solar=$i['solar'];
@@ -215,7 +210,6 @@ if (TIME>strtotime('0:10')) {
 			}
 		}
 		curl_close($ch);
-		echo '<hr>Dag<br>';
 		$timefrom=strtotime(date("Y-m-d", strtotime("-2 days")));
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -229,11 +223,8 @@ if (TIME>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
-
 		if (!empty($data['consumptions'])) {
-			echo '<pre>';print_r($data['consumptions']);echo '</pre>';
 			foreach ($data['consumptions'] as $i) {
-				echo strftime("%F %T", $i['timestamp']/1000).'<br>';
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
 				$solar=$i['solar'];
@@ -266,20 +257,13 @@ if (TIME>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
-		print_r($data);
 		if (!empty($data['consumptions'])) {
 			foreach ($data['consumptions'] as $i) {
-				echo strftime("%F %T", $i['timestamp']/1000).'<br>';
-				if ($d['el']['icon']!=$i['alwaysOn']) {
-					storeicon('el', $i['alwaysOn']);
-					telegram('Always on = '.$i['alwaysOn'].'W');
-				}
+				if ($d['el']['icon']!=$i['alwaysOn']) storeicon('el', $i['alwaysOn']);
 			}
 		}
 		curl_close($ch);
 		unset($data);
 	}
 }
-//if ($d['buiten_temp']['s']<0&&$d['heating']['s']<0&&past('heating')>7200&&TIME<strtotime('7:00')) store('heating', 4, basename(__FILE__).':'.__LINE__);
-//elseif ($d['buiten_temp']['s']>8&&$d['heating']['s']>1&&past('heating')>7200) store('heating', 1, basename(__FILE__).':'.__LINE__);
 

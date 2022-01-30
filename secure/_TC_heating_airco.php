@@ -9,11 +9,8 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-
 if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
-if ($d['speelkamer_set']['m']==0) $d['speelkamer_set']['s']=4;
 if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
-
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -21,7 +18,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
-			if ($k=='living') 	$set=$d[$k.'_set']['s']-2.5;
+			if ($k=='living') $set=$d[$k.'_set']['s']-2.5;
 			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00'))$rate='B';
@@ -44,9 +41,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 4);
 			}
-		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
-			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {
@@ -61,6 +56,4 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 }
-
 if ($d['brander']['s']=='On'&&past('brander')>230) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-include('_TC_heating_badk-zolder.php');

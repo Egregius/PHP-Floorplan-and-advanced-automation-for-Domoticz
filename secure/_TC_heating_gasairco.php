@@ -9,34 +9,32 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-//lg(__FILE__);
-$dif=number_format($d['living_temp']['s']-$d['living_set']['s'], 1);
+$kamers=array('living','kamer','alex');
+foreach ($kamers as $kamer) {
+	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
+	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
+//	${'Set'.$kamer}=$d[$kamer.'_set']['s'];
+//	if (${'dif'.$kamer}<=0) {if ($kamer!='living') $d['heating']['s']=4;}
+}
 $kamers=array('alex','kamer');
 foreach ($kamers as $kamer) {
-	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) {
-		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
-	} else {
-		${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
-	}
-	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
-		if ($d[$kamer.'_temp']['s']<14) ${'RSet'.$kamer}=18;
-		elseif ($d[$kamer.'_temp']['s']<15) ${'RSet'.$kamer}=17;
-		elseif ($d[$kamer.'_temp']['s']<16) ${'RSet'.$kamer}=16;
-	}
+	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
+	else ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
+	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed'&&$d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=17;
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
-//		lg(basename(__FILE__).':'.__LINE__);
 		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
-//		sl($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($dif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>298) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($dif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>498) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-elseif ($dif<= 0&&$d['brander']['s']=="Off"&&past('brander')>748) sw('brander','On', basename(__FILE__).':'.__LINE__);
-elseif ($dif>= 0&&$d['brander']['s']=="On"&&past('brander')>298) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($dif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>498) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($dif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>748) sw('brander','Off', basename(__FILE__).':'.__LINE__);
-
+$aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<295) $aanna=295;
+$uitna=(21-$d['buiten_temp']['s'])*40; if ($uitna<475) $uitna=475;
+if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
+if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -44,7 +42,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=-0.7) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
-			if ($k=='living') 	$set=$d[$k.'_set']['s']-3.5;
+			if ($k=='living') $set=$d[$k.'_set']['s']-3.5;
 			elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
@@ -67,9 +65,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
 				storemode('daikin'.$k, 4);
 			}
-		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
-			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-		}
+		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0||$daikin->mode!=4) {
@@ -84,4 +80,3 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 }
-

@@ -213,7 +213,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['denon']['s']=='On') {
+/*	if ($d['denon']['s']=='On') {
 		$denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formMainZone_MainZoneXml.xml?_='.TIME,false,$ctx))),true);
 		if (!empty($denonmain)) {
 			if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) storemode('denon', $denonmain['InputFuncSelect']['value'], basename(__FILE__).':'.__LINE__);
@@ -222,7 +222,7 @@ if ($d['auto']['s']=='On') {
 			if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') denon('Z2ON');
 			elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') denon('Z2OFF');
 		}
-	}
+	}*/
 		//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'
@@ -268,7 +268,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	foreach (array(101,102,103,104,105) as $i) {
+	foreach (array(101,102,103,104/*,105*/) as $i) {
 		echo 'Checking bose'.$i.'<br>';
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);
 		if (!empty($status)) {
