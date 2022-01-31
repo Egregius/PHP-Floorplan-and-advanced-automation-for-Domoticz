@@ -9,7 +9,9 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-$kamers=array('living','kamer','alex');
+${'difliving'}=number_format($d['living_temp']['s']-$d['living_set']['s']+0.5,1);
+if (${'difliving'}<$bigdif) $bigdif=${'difliving'};
+$kamers=array('kamer','alex');
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
@@ -28,10 +30,12 @@ foreach ($kamers as $kamer) {
 }
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<295) $aanna=295;
 $uitna=(21-$d['buiten_temp']['s'])*40; if ($uitna<475) $uitna=475;
-if ($bigdif<= -0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.3&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
+if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
