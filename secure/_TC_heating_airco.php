@@ -32,7 +32,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$set=$d[$k.'_set']['s']-2.5;
 				if ($d['lgtv']['s']=='On'||$d['eettafel']['s']>0) {
 					$rate='B';
-					$swing=3;
+					$swing=0;
 				}
 //				lg($dif.' - '.$rate);
 			} elseif ($k=='kamer') {

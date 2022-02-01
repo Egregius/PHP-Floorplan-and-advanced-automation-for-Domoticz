@@ -136,7 +136,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==2) {//heating airco gas
 				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 			} elseif ($d['heating']['s']==3) {//heating gas airco
 				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
@@ -222,6 +221,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				}
 				if ($d['nvidia']['s']!='On') {
 					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['denon']['s']!='On') {
+					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
 				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
