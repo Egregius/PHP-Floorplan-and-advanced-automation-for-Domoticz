@@ -216,14 +216,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['device']=='media') {
 		if ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
-				if ($d['tv']['s']!='On') {
-					sw('tv', 'On',basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['nvidia']['s']!='On') {
-					sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['denon']['s']!='On') {
-					sw('denon', 'On',basename(__FILE__).':'.__LINE__);
+				$items=array('tv','nvidia','denon','kenwood');
+				foreach ($items as $item) {
+					if ($d[$item]['s']!='On') {
+						sw($item, 'On', basename(__FILE__).':'.__LINE__);
+					}
 				}
 				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
 				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
