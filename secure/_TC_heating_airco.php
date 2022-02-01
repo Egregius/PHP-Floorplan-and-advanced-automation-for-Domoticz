@@ -19,14 +19,15 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			$rate='A';
 			if ($dif>0) $rate='B';
-			elseif ($dif<=0) $rate=3;
-			elseif ($dif<-0.1) $rate=4;
-			elseif ($dif<-0.2) $rate=5;
-			elseif ($dif<-0.3) $rate=6;
 			elseif ($dif<-0.4) $rate=7;
+			elseif ($dif<-0.3) $rate=6;
+			elseif ($dif<-0.2) $rate=5;
+			elseif ($dif<-0.1) $rate=4;
+			elseif ($dif<=0) $rate=3;
 			if ($k=='living') {
 				$set=$d[$k.'_set']['s']-2.5;
 				if ($d['lgtv']['s']=='On'||$d['eettafel']['s']>0) $rate='B';
+//				lg($dif.' - '.$rate);
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00'))$rate='B';
