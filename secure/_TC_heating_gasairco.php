@@ -35,34 +35,42 @@ elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brand
 elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
+$rates=array('B', 'B', 3, 3, 4, 5, 6, 7);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>=0) $power=0;
 		elseif ($dif<=-1) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
-			$rate='A';
-			if ($k=='living') $set=$d[$k.'_set']['s']-3.5;
-			elseif ($k=='kamer') {
+			if ($dif<=-0.5) $rate=7;
+			elseif ($dif<=-0.3) $rate=6;
+			elseif ($dif<=-0.1) $rate=5;
+			elseif ($dif<=0) $rate=4;
+			elseif ($dif<=0.1) $rate=3;
+			elseif ($dif>0.1) $rate=1;
+			if ($k=='living') {
+				$set=$d[$k.'_set']['s']-3.5;
+				if ($d['lgtv']['s']=='On'||$d['eettafel']['s']>0) $rate=$rate-1;
+			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate='B';
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:30'))$rate=0;
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate='B';
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:30'))$rate=0;
 			}
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;
 			$daikin=json_decode($d['daikin'.$k]['s']);
 			if (!isset($power)) $power=$daikin->power;
-			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate) {
+			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]) {
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
 				$data['mode']=4;
-				$data['fan']=$rate;
+				$data['fan']=$rates[$rate];
 				$data['set']=$set;
 				storeicon($k.'_set', json_encode($data));
-				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate);
+				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rates[$rate]);
 				storemode('daikin'.$k, 4);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);

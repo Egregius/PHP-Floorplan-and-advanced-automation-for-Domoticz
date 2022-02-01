@@ -835,12 +835,12 @@ function daikinstatus($device) {
  *
  * @return array();
  */
-function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $swing=0, $hum=0) {
+function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $adv='') {
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
-	file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing");
-	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=$hum&f_dir=$swing ($msg)");
+	file_get_contents("http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0&adv=$adv");
+	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0 ($msg)");
 	sleep(1);
 	store('daikin'.$device, daikinstatus($device));
 	if ($power==0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);

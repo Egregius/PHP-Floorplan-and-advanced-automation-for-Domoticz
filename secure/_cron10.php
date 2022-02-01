@@ -71,8 +71,8 @@ if ($d['tv']['s']=='On') {
 		}
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['denon']['s']!='Off'&&$d['denon']['m']=='TV'&&past('lgtv')>900&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['kenwood']['s']!='Off'&&$d['kenwood']['m']=='TV'&&past('lgtv')>900&&past('denon')>900) sw('kenwood', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['denon']['s']!='Off'&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['kenwood']['s']!='Off'&&past('kenwood')>900) sw('kenwood', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
