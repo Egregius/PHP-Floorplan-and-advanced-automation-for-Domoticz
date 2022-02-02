@@ -55,7 +55,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$data['mode']=4;
 				$data['fan']=$rates[$rate];
 				$data['set']=$set;
-		//		storeicon($k.'_set', json_encode($data));
+				storeicon($k.'_set', json_encode($data));
 				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rates[$rate]);
 				//storemode('daikin'.$k, 4, basename(__FILE__).':'.__LINE__);
 			}
