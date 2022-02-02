@@ -11,8 +11,8 @@
  **/
 if ($status=='On') {
     lgcommand('on');
-    lg('lgtv.php On');
+    if ($d['daikinliving']['m']>0) file_get_contents('http://192.168.2.111/aircon/set_special_mode?en_streamer=0');
 } elseif ($status=='Off') {
     lgcommand('off');
-    lg('lgtv.php Off');
+    if ($d['daikinliving']['m']>0&&$d['eettafel']['s']==0) file_get_contents('http://192.168.2.111/aircon/set_special_mode?en_streamer=0');
 }
