@@ -37,7 +37,7 @@ foreach ($tables as $table) {
 			sleep(1);
 		}
 	}
-
+/*
 	$query=$db->exec("DELETE FROM $table WHERE Date < '$clean'");
 	if ($query) {
 		$rows = $db->changes();
@@ -46,9 +46,9 @@ foreach ($tables as $table) {
 			sleep(1);
 		}
 	}
-
+*/
 }
-
+/*
 $query=$db->exec("DELETE FROM LightingLog WHERE DeviceRowID in (6,24,170,171,172,173,174,175,176,177,295,296,297,298,299,300,301,302)");
 if ($query) {
 	$rows = $db->changes();
@@ -65,7 +65,7 @@ if ($query) {
 		echo $rows." old rows removed from LightingLog".PHP_EOL;
 		sleep(1);
 	}
-}
+}*/
 //$sql = 'VACUUM;';
 //if(!$result = $db->exec($sql))
 //	die('There was an error running the query [' . $db->error . ']');

@@ -85,13 +85,13 @@ if ($d['kamer_set']['s']<32) {
 		} else if (strstr($daikin->adv, '/')) {
 			$advs=explode("/", $daikin->adv);
 			if ($advs[0]==2) $powermode=2;
-			else if ($advs[0]==12) $powermode=1;
+			elseif ($advs[0]==12) $powermode=1;
 			else $powermode=0;
 		} else {
 			if ($daikin->adv==13)  $powermode=0; //Normal
-			else if ($daikin->adv==12)  $powermode=1; // Eco
-			else if ($daikin->adv==2)  $powermode=2; // Power
-			else if ($daikin->adv=='')  $powermode=0;
+			elseif ($daikin->adv==12)  $powermode=1; // Eco
+			elseif ($daikin->adv==2)  $powermode=2; // Power
+			elseif ($daikin->adv=='')  $powermode=0;
 		}
 		if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
 			$data=json_decode($d['kamer_set']['icon'], true);
@@ -100,7 +100,7 @@ if ($d['kamer_set']['s']<32) {
 			$data['fan']=$rate;
 			$data['set']=$set;
 			storeicon('kamer_set', json_encode($data));
-			daikinset('kamer', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate);
+			daikinset('kamer', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
 		}
 	} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
 		if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -114,7 +114,7 @@ if ($d['kamer_set']['s']<32) {
 		$data['fan']='A';
 		$data['set']=33;
 		storeicon('kamer_set', json_encode($data));
-		daikinset('kamer', 0, 3, 10, basename(__FILE__).':'.__LINE__);
+		daikinset('kamer', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 	}
 }
 
@@ -194,7 +194,7 @@ if ($d['alex_set']['s']<32) {
 			$data['fan']=$rate;
 			$data['set']=$set;
 			storeicon('alex_set', json_encode($data));
-			daikinset('alex', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate);
+			daikinset('alex', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
 		}
 	} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
 		if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -208,7 +208,7 @@ if ($d['alex_set']['s']<32) {
 		$data['fan']='A';
 		$data['set']=33;
 		storeicon('alex_set', json_encode($data));
-		daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__);
+		daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 	}
 }
 
@@ -268,7 +268,7 @@ if ($d['living_set']['s']<32) {
 			$data['fan']=$rate;
 			$data['set']=$set;
 			storeicon('living_set', json_encode($data));
-			daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate);
+			daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
 		}
 	} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
 		if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -282,7 +282,7 @@ if ($d['living_set']['s']<32) {
 		$data['fan']='A';
 		$data['set']=33;
 		storeicon('living_set', json_encode($data));
-		daikinset('living', 0, 3, 10, basename(__FILE__).':'.__LINE__);
+		daikinset('living', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 	}
 }
 
