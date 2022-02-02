@@ -11,15 +11,15 @@
  **/
 ${'difliving'}=number_format($d['living_temp']['s']-$d['living_set']['s']+0.5,1);
 if (${'difliving'}<$bigdif) $bigdif=${'difliving'};
-$kamers=array('kamer','alex');
-foreach ($kamers as $kamer) {
+foreach (array('kamer','alex') as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
-//	${'Set'.$kamer}=$d[$kamer.'_set']['s'];
-//	if (${'dif'.$kamer}<=0) {if ($kamer!='living') $d['heating']['s']=4;}
 }
-$kamers=array('alex','kamer');
-foreach ($kamers as $kamer) {
+if ($bigdif<=-1) $maxpow=100;
+elseif ($bigdif<=-0.5) $maxpow=60;
+else $maxpow=40;
+
+foreach (array('kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
 	else ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
 	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed'&&$d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=17;
@@ -73,7 +73,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$data['fan']=$rates[$rate];
 				$data['set']=$rates[$rate];
 				storeicon($k.'_set', json_encode($data));
-				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rates[$rate], $spmode);
+				daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rates[$rate], $spmode, $maxpow);
 				//storemode('daikin'.$k, 4);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -86,7 +86,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$data['fan']='A';
 			$data['set']=10;
 			storeicon($k.'_set', json_encode($data));
-			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
+			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 			//storemode('daikin'.$k, 0);
 		}
 	}
