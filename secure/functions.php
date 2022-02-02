@@ -842,7 +842,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=0) 
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	lg($url);
 	file_get_contents($url);
-	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0 ($msg)");
+	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0 spmode=$spmode($msg)");
 	sleep(1);
 	store('daikin'.$device, daikinstatus($device));
 	if ($power==0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
