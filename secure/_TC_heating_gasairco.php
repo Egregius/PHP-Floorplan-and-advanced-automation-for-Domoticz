@@ -43,20 +43,21 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=-1) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
 			if ($dif<=-0.5)		{$rate=7;$spmode=1;}
-			elseif ($dif<=-0.3)	{$rate=6;$spmode=0;}
-			elseif ($dif<=-0.1)	{$rate=5;$spmode=-1;}
-			elseif ($dif<=0)	{$rate=4;$spmode=-1;}
-			elseif ($dif<=0.1)	{$rate=3;$spmode=-1;}
-			elseif ($dif>0.1)	{$rate=2;$spmode=-1;}
+			elseif ($dif<=-0.4)	{$rate=6;$spmode=0;}
+			elseif ($dif<=-0.3)	{$rate=5;$spmode=-1;}
+			elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;}
+			elseif ($dif<=-0.1)	{$rate=3;$spmode=-1;}
+			elseif ($dif<=0)	{$rate=2;$spmode=-1;}
+			elseif ($dif>0)		{$rate=1;$spmode=-1;}
 			if ($k=='living') {
 				$set=$d[$k.'_set']['s']-3.5;
-				if ($d['lgtv']['s']=='On'||$d['eettafel']['s']>0) {$rate=$rate-1;$adv='12';}
+				if ($d['lgtv']['s']=='On'||$d['eettafel']['s']>0) {$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('22:30')) {$rate=0;$adv='12';}
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {$rate=0;$adv='12';}
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
 			}
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
