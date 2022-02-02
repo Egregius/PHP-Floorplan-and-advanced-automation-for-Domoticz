@@ -851,6 +851,12 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1)
 	if ($spmode==0) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1'); // Normal
 	elseif ($spmode==-1) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2'); // Eco
 	elseif ($spmode==1) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=1'); // Power
+	sleep(1);
+	if ($spmode==1) {
+		foreach(array(111, 112, 113) as $ip) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow=100&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	} else {
+		foreach(array(111, 112, 113) as $ip) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow=40&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+	}
 }
 
 function RefreshZwave($node){
