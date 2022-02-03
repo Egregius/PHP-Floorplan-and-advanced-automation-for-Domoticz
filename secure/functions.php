@@ -836,6 +836,7 @@ function daikinstatus($device) {
  * @return array();
  */
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=40) {
+	global $d;
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
@@ -844,9 +845,10 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	file_get_contents($url);
 //	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0 spmode=$spmode ($msg)");
 	sleep(1);
-	store('daikin'.$device, daikinstatus($device));
-	if ($power==0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
-	else storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
+	$status=daikinstatus($device);
+	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status);
+	if ($power==0&&$d['daikin'.$device]['m']!=0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
+	elseif ($d['daikin'.$device]['s']!=$mode) storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
 	sleep(1);
 	if ($spmode==-1) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2'); // Eco
 	elseif ($spmode==0) file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1'); // Normal

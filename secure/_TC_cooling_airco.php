@@ -268,7 +268,7 @@ if ($d['living_set']['s']<32) {
 			$data['fan']=$rate;
 			$data['set']=$set;
 			storeicon('living_set', json_encode($data));
-			daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
+			daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $spmode, $maxpow);
 		}
 	} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
 		if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);

@@ -51,7 +51,7 @@ if ($d['living_set']['m']==0) {
 					if (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=20.6;
 				}
 			} elseif ($d['Weg']['s']==0) {
-				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
+				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=21;
 				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
 			}
 		}
