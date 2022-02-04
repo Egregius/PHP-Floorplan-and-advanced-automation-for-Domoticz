@@ -12,13 +12,14 @@
 if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
 if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
 $rates=array('B', 'B', 3, 3, 4, 5, 6, 7);
+$bigdif=0.9;
 foreach (array('living','kamer','alex') as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
-	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
+	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
-if     ($bigdif<=-1.2) $maxpow=100;
-elseif ($bigdif<=-0.6) $maxpow=60;
-else $maxpow=40;
+$maxpow=40*$bigdif;
+if ($maxpow<40) $maxpow=40;
+elseif ($maxpow>100) $maxpow=100;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -33,7 +34,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			elseif ($dif<=0)	{$rate=2;$spmode=-1;}
 			elseif ($dif>0)		{$rate=1;$spmode=-1;}
 			if ($k=='living') {
-				$set=$d[$k.'_set']['s']-1.5;
+				$set=$d[$k.'_set']['s']-2;
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0&&TIME>strtotime('18:00'))) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;

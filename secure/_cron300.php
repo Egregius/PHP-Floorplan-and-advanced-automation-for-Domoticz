@@ -114,7 +114,7 @@ if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
 if (!empty($data)) {
-	store('jaarteller', $data['jaarteller'], basename(__FILE__).':'.__LINE__);
+	if ($data['jaarteller']!=$d['jaarteller']['s']) store('jaarteller', $data['jaarteller'], basename(__FILE__).':'.__LINE__);
 	if ($data['zonpercent']!=$d['zonvandaag']['m']) storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
 }
 if ($d['daikin']['s']=='On'&&past('daikin')>118) {

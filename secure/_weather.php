@@ -69,9 +69,7 @@ if (isset($ds)) {
 					$maxrain=$i['precipIntensity'];
 				}
 			}
-			if ($d['max']['m']!=$maxrain) {
-				storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
-			}
+			if ($d['max']['m']!=$maxrain) storemode('max', $maxrain, basename(__FILE__).':'.__LINE__, 1);
 			$mintemp=round($mintemp, 1);
 			$maxtemp=round($maxtemp, 1);
 		}
@@ -89,28 +87,15 @@ if (isset($ow)) {
 			$temps['ow']=$temps['buiten_temp']-0.5;
 		}*/
 		$owwind=$ow['wind']['speed'] * 3.6;
-		if (isset($ow['wind']['gust'])) {
-			if ($ow['wind']['gust'] * 3.6>$owwind) {
-				$owwind=$ow['wind']['gust'] * 3.6;
-			}
-		}
-//		if ($d['icon']['m']!=$ow['weather'][0]['id']) {
-//			storemode('icon', $ow['weather'][0]['id'], basename(__FILE__).':'.__LINE__);
-//		}
-		if ($d['icon']['s']!=$ow['weather'][0]['icon']) {
-			store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
-		}
+		if (isset($ow['wind']['gust'])&&$ow['wind']['gust'] * 3.6>$owwind) $owwind=$ow['wind']['gust'] * 3.6;
+		if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
 	}
 }
 
 $ob=json_decode(@curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
-	/*if ($temps['ob']>$temps['buiten_temp']+0.5) {
-		$temps['ob']=$temps['buiten_temp']+0.5;
-	} elseif ($temps['ob']<$temps['buiten_temp']-0.5) {
-		$temps['ob']=$temps['buiten_temp']-0.5;
-	}*/
+
 }
 
 

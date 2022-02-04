@@ -856,6 +856,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	sleep(1);
 	foreach(array(111, 112, 113) as $ip) {
 		file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$maxpow.'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
+		usleep(100000);
 	}
 }
 
