@@ -12,22 +12,24 @@
 if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
 if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
 $rates=array('B', 'B', 3, 3, 4, 5, 6, 7);
-$bigdif=0.9;
+$bigdif=0;
 foreach (array('living','kamer','alex') as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
-$maxpow=40*$bigdif;
+$maxpow=floor(30*$bigdif);
+lg('bigdif='.$bigdif.' - maxpow='.$maxpow);
 if ($maxpow<40) $maxpow=40;
 elseif ($maxpow>100) $maxpow=100;
+lg('bigdif='.$bigdif.' - maxpow='.$maxpow);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
-			if     ($dif<=-0.8)	{$rate=7;$spmode=1;}
-			elseif ($dif<=-0.4)	{$rate=6;$spmode=0;}
+			if     ($dif<=-1)	{$rate=7;$spmode=1;}
+			elseif ($dif<=-0.6)	{$rate=6;$spmode=0;}
 			elseif ($dif<=-0.3)	{$rate=5;$spmode=-1;}
 			elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;}
 			elseif ($dif<=-0.1)	{$rate=3;$spmode=-1;}
