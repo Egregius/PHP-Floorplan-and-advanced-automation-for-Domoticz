@@ -18,16 +18,14 @@ foreach (array('living','kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
 $maxpow=floor(30*$bigdif);
-lg('bigdif='.$bigdif.' - maxpow='.$maxpow);
 if ($maxpow<40) $maxpow=40;
 elseif ($maxpow>100) $maxpow=100;
-lg('bigdif='.$bigdif.' - maxpow='.$maxpow);
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
-		if ($d['daikin']['s']=='On'&&past('daikin')>90) {
+		if ($d['daikin']['s']=='On'&&past('daikin')>80) {
 			if     ($dif<=-1)	{$rate=7;$spmode=1;}
 			elseif ($dif<=-0.6)	{$rate=6;$spmode=0;}
 			elseif ($dif<=-0.3)	{$rate=5;$spmode=-1;}
