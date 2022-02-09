@@ -12,10 +12,10 @@
 if ($d['lichtbadkamer']['s']>0) {
 	sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['bose105']['s']=='On') {
+/*if ($d['bose105']['s']=='On') {
 	bosekey("POWER", 0, 105);
 	sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
-}
+}*/
 
 if ($d['auto']['s']=='On'&&$d['Weg']['s']==1&&TIME>strtotime('6:00')&&TIME<strtotime('12:00')) {
 	store('Weg', 0, basename(__FILE__).':'.__LINE__);
