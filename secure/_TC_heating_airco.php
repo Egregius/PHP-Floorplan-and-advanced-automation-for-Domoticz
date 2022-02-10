@@ -26,7 +26,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>80) {
-			if     ($dif<=-2)	{$rate=7;$spmode=1;}
+			if     ($dif<=-2.5)	{$rate=7;$spmode=1;}
 			elseif ($dif<=-1)	{$rate=6;$spmode=0;}
 			elseif ($dif<=-0.3)	{$rate=5;$spmode=0;}
 			elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;}
