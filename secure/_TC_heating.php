@@ -19,15 +19,17 @@ if ($d['Weg']['s']<2&&$d['heating']['s']>=3) {
 			$Setkamer=12;
 			if (TIME<strtotime('2:00')||TIME>strtotime('19:00')) $Setkamer=15.3;
 		}
-	}
+	} else $Setkamer=$d['kamer_set']['s'];
 	if ($d['alex_set']['m']==0) {
 		if ($d['buiten_temp']['s']<16&&$d['minmaxtemp']['m']<15&&($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<600))&&$d['raamalex']['s']=='Closed'&&$d['heating']['s']>=1&&(past('raamalex')>1800 || TIME>strtotime('19:00'))) {
 			$Setalex=12;
 			if (TIME<strtotime('2:00')||TIME>strtotime('18:00')) $Setalex=15.3;
 		}
-
-	}
+	} else $Setalex=$d['alex_set']['s'];
 }
+if ($d['kamer_set']['m']==1) $Setkamer=$d['kamer_set']['s'];
+if ($d['alex_set']['m']==1) $Setalex=$d['alex_set']['s'];
+
 if ($d['kamer_set']['s']!=$Setkamer) {
 	store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
 	$d['kamer_set']['s']=$Setkamer;
