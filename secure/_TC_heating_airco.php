@@ -14,7 +14,7 @@ if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
 $rates=array('B', 'B', 3, 3, 4, 5, 6, 7);
 $bigdif=0;
 foreach (array('living','kamer','alex') as $kamer) {
-	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
+	${'dif'.$kamer}=$d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'];
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
 $maxpow=floor(30*$bigdif);
@@ -25,12 +25,12 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
-		if ($d['daikin']['s']=='On'&&past('daikin')>80) {
+		if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 			if     ($dif<=-2.5)	{$rate=7;$spmode=1;}
 			elseif ($dif<=-1)	{$rate=6;$spmode=0;}
-			elseif ($dif<=-0.3)	{$rate=5;$spmode=0;}
-			elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;}
-			elseif ($dif<=-0.1)	{$rate=3;$spmode=-1;}
+			elseif ($dif<=-0.3)	{$rate=5;$spmode=0;lg(__LINE__);}
+			elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;lg(__LINE__);}
+			elseif ($dif<=-0.1)	{$rate=3;$spmode=-1;lg(__LINE__);}
 			elseif ($dif<=0)	{$rate=2;$spmode=-1;}
 			elseif ($dif>0)		{$rate=1;$spmode=-1;}
 			if ($k=='living') {
@@ -43,6 +43,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$set=$d[$k.'_set']['s']-3;
 				if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
 			}
+			lg('dif='.$dif.' rate='.$rate);
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;

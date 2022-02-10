@@ -109,8 +109,13 @@ elseif (isset($_REQUEST['media'])) {
 	$data['pfsense']=json_decode(@file_get_contents('http://192.168.2.254:44300/egregius.php', false, $ctx), true);
 	if ($d['denon']['s']=='On') {
 		$denon=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
-		$data['denon']['power']=$denon['Power']['value'];
-		$data['denon']['vol']=$denon['MasterVolume']['value'];
+		if (isset($denon['Power']['value'])) {
+			$data['denon']['power']=$denon['Power']['value'];
+			$data['denon']['vol']=$denon['MasterVolume']['value'];
+		} else {
+			$data['denon']['power']='OFF';
+			$data['denon']['vol']=0;
+		}
 	}
 	if ($d['lgtv']['s']=='On') {
 		$data['lgtv']=trim(shell_exec('/var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
