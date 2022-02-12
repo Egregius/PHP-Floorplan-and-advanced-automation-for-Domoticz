@@ -27,17 +27,18 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 			if     ($dif<=-2.49)	{$rate=6;$spmode=1;$line=__LINE__;}
-			elseif ($dif<=-0.99)	{$rate=6;$spmode=0;$line=__LINE__;}
+			elseif ($dif<=-1.29)	{$rate=6;$spmode=0;$line=__LINE__;}
 			elseif ($dif<=-0.29)	{$rate=5;$spmode=0;$line=__LINE__;}
-//			elseif ($dif<=-0.19)	{$rate=4;$spmode=-1;$line=__LINE__;}
-			elseif ($dif<=-0.09)	{$rate=4;$spmode=-1;$line=__LINE__;}
-			elseif ($dif<=0)	{$rate=3;$spmode=-1;$line=__LINE__;}
-			elseif ($dif>0)		{$rate=2;$spmode=-1;$line=__LINE__;}
+			elseif ($dif<=-0.19)	{$rate=4;$spmode=-1;$line=__LINE__;}
+			elseif ($dif<=-0.09)	{$rate=3;$spmode=-1;$line=__LINE__;}
+			elseif ($dif<=0)	{$rate=2;$spmode=-1;$line=__LINE__;}
+			elseif ($dif>0)		{$rate=1;$spmode=-1;$line=__LINE__;}
+			elseif ($dif>0.2)		{$rate=1;$spmode=-1;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 			if ($k=='living') {
 				$set=$d[$k.'_set']['s']-2.5;
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
-				$set=$d[$k.'_set']['s']-3;
+				$set=$d[$k.'_set']['s']-3.5;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-3;
@@ -49,7 +50,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			$daikin=json_decode($d['daikin'.$k]['s']);
 			if (!isset($power)) $power=$daikin->power;
 			if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]) {
-				lg('DAIKIN SET '.$k.' line='.$line.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow);
+				lg('DAIKIN SET '.$k.' line='.$line.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
 				$data=json_decode($d[$k.'_set']['icon'], true);
 				$data['power']=$power;
 				$data['mode']=4;

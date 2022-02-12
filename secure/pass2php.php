@@ -48,6 +48,7 @@ if (isset($d[$device])) {
 			$status='Off';
 		}
 	} elseif ($d[$device]['dt']=='thermometer') {
+		$prev=$d[$device]['s'];
 		$old=$status;
 		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
 		elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
@@ -56,7 +57,7 @@ if (isset($d[$device])) {
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 	store($device, $status, 'Pass2PHP');
 	if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
-		if (isset($old)&&$old!=$status) lg($device.' = '.$status.' orig = '.$old);
+		if (isset($old)&&$old!=$status) lg($device.' new = '.$status.' orig = '.$old.' prev = '.$prev);
 //		else lg($device.' = '.$status);
 	}
 } //else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);
