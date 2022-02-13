@@ -14,6 +14,7 @@ if ($status=='Off') {
 	sw('voordeur', 'On');
 	huisthuis();
 	if ($d['zon']['s']>0) {
+		$d['voordeur']['s']='On';
 		sleep(2);
 		sw('voordeur', 'Off');
 	}
@@ -39,11 +40,20 @@ if ($status=='Off') {
 		exit;
 	}
 	if ($d['bose105']['m']=='Online') {
+		waarschuwing(' Let op . Bose badkamer');
+		exit;
+	}
+	if ($d['bose106']['m']=='Online') {
+		waarschuwing(' Let op . Bose buiten');
+		exit;
+	}
+	if ($d['bose107']['m']=='Online') {
 		waarschuwing(' Let op . Bose buiten');
 		exit;
 	}
 	store('Weg', 2);
 	sw('voordeur', 'On');
+	$d['voordeur']['s']='On';
 	sleep(2);
 	sw('voordeur', 'Off');
 	huisslapen();

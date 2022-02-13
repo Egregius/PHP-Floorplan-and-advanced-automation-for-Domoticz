@@ -54,7 +54,7 @@ function huisslapen() {
 		if (isset($data['@attributes']['source'])) {
 			if ($data['@attributes']['source']!='STANDBY') {
 				bosekey("POWER", 0, 101);
-				foreach (array(101,102,103,104,105) as $x) {
+				foreach (array(101,102,103,104,105,106,107) as $x) {
 					if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
 				}
 			}
@@ -580,6 +580,8 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
 			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
 			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
+			elseif ($ip==106) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">FC6947783758</member></zone>';
+			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">884AEA561367</member></zone>';
 
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				bosekey("POWER", 1500000, 101);

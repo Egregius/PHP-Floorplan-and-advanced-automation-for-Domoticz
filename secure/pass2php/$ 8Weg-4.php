@@ -36,6 +36,14 @@ if ($status=='On') {
 			exit;
 		}
 		if ($d['bose105']['m']=='Online') {
+			waarschuwing(' Let op . Bose badkamer', 55);
+			exit;
+		}
+		if ($d['bose106']['m']=='Online') {
+			waarschuwing(' Let op . Bose buiten', 55);
+			exit;
+		}
+		if ($d['bose107']['m']=='Online') {
 			waarschuwing(' Let op . Bose buiten', 55);
 			exit;
 		}
