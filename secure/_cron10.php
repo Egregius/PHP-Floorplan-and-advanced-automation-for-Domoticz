@@ -86,37 +86,6 @@ if ($d['nvidia']['s']=='On') {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-/*
-// BOSE BUITEN
-if (pingport('192.168.2.105', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.105', 80)==1) {
-		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
-			if (!empty($status)) {
-				if ($d['bose105']['m']!='Online') {
-					storemode('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
-					bosekey('SHUFFLE_ON', 0, 101);
-				}
-				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']=='STANDBY') {
-						bosezone(105);
-						sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, 101);
-					}
-				}
-			}
-		}
-	}
-} else {
-	sleep(1);
-	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['m']!='Offline') {
-		storemode('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
-		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}
-// END BOSE BUITEN
-*/
 // BOSE Badkamer
 if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
@@ -144,6 +113,63 @@ if (pingport('192.168.2.105', 80)==1) {
 	}
 }
 // END BOSE Badkamer
+
+// BOSE BUITEN
+if (pingport('192.168.2.106', 80)==1) {
+	sleep(1);
+	if (pingport('192.168.2.106', 80)==1) {
+		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
+			if (!empty($status)) {
+				if ($d['bose106']['m']!='Online') {
+					storemode('bose106', 'Online', basename(__FILE__).':'.__LINE__, 10);
+					bosekey('SHUFFLE_ON', 0, 101);
+				}
+				if (isset($status['@attributes']['source'])) {
+					if ($status['@attributes']['source']=='STANDBY') {
+						bosezone(106);
+						sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
+						bosekey('SHUFFLE_ON', 0, 101);
+					}
+				}
+			}
+		}
+	}
+} else {
+	sleep(1);
+	if (pingport('192.168.2.106', 80)!=1&&$d['bose106']['m']!='Offline') {
+		storemode('bose106', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose106', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}
+if (pingport('192.168.2.107', 80)==1) {
+	sleep(1);
+	if (pingport('192.168.2.107', 80)==1) {
+		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
+			if (!empty($status)) {
+				if ($d['bose107']['m']!='Online') {
+					storemode('bose107', 'Online', basename(__FILE__).':'.__LINE__, 10);
+					bosekey('SHUFFLE_ON', 0, 101);
+				}
+				if (isset($status['@attributes']['source'])) {
+					if ($status['@attributes']['source']=='STANDBY') {
+						bosezone(107);
+						sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
+						bosekey('SHUFFLE_ON', 0, 101);
+					}
+				}
+			}
+		}
+	}
+} else {
+	sleep(1);
+	if (pingport('192.168.2.107', 80)!=1&&$d['bose107']['m']!='Offline') {
+		storemode('bose107', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose107', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}
+// END BOSE BUITEN
 /*if ($d['daikin']['s']=='On') {
 	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
 	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}

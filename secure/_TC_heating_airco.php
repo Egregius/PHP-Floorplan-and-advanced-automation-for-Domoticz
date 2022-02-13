@@ -17,7 +17,7 @@ foreach (array('living','kamer','alex') as $kamer) {
 	${'dif'.$kamer}=$d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'];
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
-$maxpow=floor(30*$bigdif);
+$maxpow=floor(40*$bigdif);
 if ($maxpow<40) $maxpow=40;
 elseif ($maxpow>100) $maxpow=100;
 foreach (array('living', 'kamer', 'alex') as $k) {
@@ -26,7 +26,8 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>70) {
-			if     ($dif<=-2.49)	{$rate=6;$spmode=1;$line=__LINE__;}
+			if     ($dif<=-3.49)	{$rate=6;$spmode=0;$line=__LINE__;}
+			elseif ($dif<=-2.49)	{$rate=6;$spmode=0;$line=__LINE__;}
 			elseif ($dif<=-1.29)	{$rate=6;$spmode=0;$line=__LINE__;}
 			elseif ($dif<=-0.29)	{$rate=5;$spmode=0;$line=__LINE__;}
 			elseif ($dif<=-0.19)	{$rate=4;$spmode=-1;$line=__LINE__;}
