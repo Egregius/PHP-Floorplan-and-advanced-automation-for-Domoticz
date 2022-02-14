@@ -213,17 +213,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
-/*	if ($d['denon']['s']=='On') {
-		$denonmain=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formMainZone_MainZoneXml.xml?_='.TIME,false,$ctx))),true);
-		if (!empty($denonmain)) {
-			if ($denonmain['InputFuncSelect']['value']!=$d['denon']['m']) storemode('denon', $denonmain['InputFuncSelect']['value'], basename(__FILE__).':'.__LINE__);
-			if ($denonmain['ZonePower']['value']!=$d['denonpower']['s']) store('denonpower', $denonmain['ZonePower']['value'], basename(__FILE__).':'.__LINE__);
-			$denonsec=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://192.168.2.5/goform/formZone2_Zone2XmlStatusLite.xml?_='.TIME,false,$ctx))),true);
-			if ($denonmain['ZonePower']['value']=='ON'&&$denonsec['Power']['value']=='OFF') denon('Z2ON');
-			elseif ($denonmain['ZonePower']['value']=='OFF'&&$denonsec['Power']['value']=='ON') denon('Z2OFF');
-		}
-	}*/
-		//Bose
+	//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'
 		&&$d['bose101']['m']==1
@@ -232,11 +222,15 @@ if ($d['auto']['s']=='On') {
 		&&$d['bose103']['s']=='Off'
 		&&$d['bose104']['s']=='Off'
 		&&$d['bose105']['s']=='Off'
+		&&$d['bose106']['s']=='Off'
+		&&$d['bose107']['s']=='Off'
 		&&past('bose101')>180
 		&&past('bose102')>90
 		&&past('bose103')>90
 		&&past('bose104')>90
 		&&past('bose105')>90
+		&&past('bose106')>90
+		&&past('bose107')>90
 		&&(($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
@@ -249,6 +243,8 @@ if ($d['auto']['s']=='On') {
 					if ($d['bose103']['s']!='Off') sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['bose105']['s']!='Off') sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
+					if ($d['bose106']['s']!='Off') sw('bose106', 'Off', basename(__FILE__).':'.__LINE__);
+					if ($d['bose107']['s']!='Off') sw('bose107', 'Off', basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
@@ -268,17 +264,18 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	foreach (array(101,102,103,104/*,105*/) as $i) {
-		echo 'Checking bose'.$i.'<br>';
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);
-		if (!empty($status)) {
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
-					if ($d['bose'.$i]['s']!='Off') store('bose'.$i, 'Off', basename(__FILE__).':'.__LINE__);
-				} else {
-					if ($d['bose'.$i]['s']!='On') {
-						store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, $i);
+	foreach (array(101,102,103,104,105,106,107) as $i) {
+		if ($d['bose'.$i]['icon']!='Offline') {
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);
+			if (!empty($status)) {
+				if (isset($status['@attributes']['source'])) {
+					if ($status['@attributes']['source']=='STANDBY') {
+						if ($d['bose'.$i]['s']!='Off') store('bose'.$i, 'Off', basename(__FILE__).':'.__LINE__);
+					} else {
+						if ($d['bose'.$i]['s']!='On') {
+							store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
+							bosekey('SHUFFLE_ON', 0, $i);
+						}
 					}
 				}
 			}
@@ -304,7 +301,7 @@ if ($d['auto']['s']=='On') {
 	) {
 		if ($d['eettafel']['m']!=1) storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
 	}*/
-	if ($d['zithoek']['s']>0	&&$d['Rbureel']['s']==0&&$d['Rliving']['s']==0&&$d['zon']['s']>100&&past('zithoek')>7200) {
+	if ($d['zithoek']['s']>0&&$d['Rbureel']['s']==0&&$d['Rliving']['s']==0&&$d['zon']['s']>100&&past('zithoek')>7200) {
 		if ($d['zithoek']['m']!=1) storemode('zithoek', 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {

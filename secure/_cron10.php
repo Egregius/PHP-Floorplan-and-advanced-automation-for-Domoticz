@@ -107,21 +107,21 @@ if (pingport('192.168.2.101', 80)==1) {
 // END BOSE Living
 
 // BOSE Keuken
-if (pingport('192.168.2.102', 80)==1) {
+if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
-	if (pingport('192.168.2.102', 80)==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
+	if (pingport('192.168.2.105', 80)==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
 		if (!empty($status)) {
-			if ($d['bose102']['icon']!='Online') {
-				storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__, 10);
+			if ($d['bose105']['icon']!='Online') {
+				storeicon('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
 			}
 		}
 	}
 } else {
 	sleep(1);
-	if (pingport('192.168.2.102', 80)!=1&&$d['bose102']['icon']!='Offline') {
-		storeicon('bose102', 'Offline', basename(__FILE__).':'.__LINE__, 10);
-		sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['icon']!='Offline') {
+		storeicon('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 // END BOSE Keuken
@@ -167,19 +167,19 @@ if (pingport('192.168.2.104', 80)==1) {
 // END BOSE Garage
 
 // BOSE Badkamer
-if (pingport('192.168.2.105', 80)==1) {
+if (pingport('192.168.2.102', 80)==1) {
 	sleep(1);
-	if (pingport('192.168.2.105', 80)==1) {
+	if (pingport('192.168.2.102', 80)==1) {
 		if ($d['lichtbadkamer']['s']>0&&TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
+			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
 			if (!empty($status)) {
-				if ($d['bose105']['icon']!='Online') {
-					storeicon('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
+				if ($d['bose102']['icon']!='Online') {
+					storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__, 10);
 				}
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY') {
-						bosekey('PRESET_4', 0, 105);
-						sw('bose105', 'On', basename(__FILE__).':'.__LINE__);
+						bosekey('PRESET_4', 0, 102);
+						sw('bose102', 'On', basename(__FILE__).':'.__LINE__);
 					}
 				}
 			}
@@ -187,9 +187,9 @@ if (pingport('192.168.2.105', 80)==1) {
 	}
 } else {
 	sleep(1);
-	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['icon']!='Offline') {
-		storeicon('bose105', 'Offline', basename(__FILE__).':'.__LINE__, 10);
-		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
+	if (pingport('192.168.2.102', 80)!=1&&$d['bose102']['icon']!='Offline') {
+		storeicon('bose102', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 // END BOSE Badkamer
