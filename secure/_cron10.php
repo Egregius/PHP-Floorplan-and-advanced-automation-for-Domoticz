@@ -106,6 +106,66 @@ if (pingport('192.168.2.101', 80)==1) {
 }
 // END BOSE Living
 
+// BOSE Keuken
+if (pingport('192.168.2.102', 80)==1) {
+	sleep(1);
+	if (pingport('192.168.2.102', 80)==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose102']['icon']!='Online') {
+				storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__, 10);
+			}
+		}
+	}
+} else {
+	sleep(1);
+	if (pingport('192.168.2.102', 80)!=1&&$d['bose102']['icon']!='Offline') {
+		storeicon('bose102', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}
+// END BOSE Keuken
+
+// BOSE Kamer
+if (pingport('192.168.2.103', 80)==1) {
+	sleep(1);
+	if (pingport('192.168.2.103', 80)==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose103']['icon']!='Online') {
+				storeicon('bose103', 'Online', basename(__FILE__).':'.__LINE__, 10);
+			}
+		}
+	}
+} else {
+	sleep(1);
+	if (pingport('192.168.2.103', 80)!=1&&$d['bose103']['icon']!='Offline') {
+		storeicon('bose103', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}
+// END BOSE Kamer
+
+// BOSE Garage
+if (pingport('192.168.2.104', 80)==1) {
+	sleep(1);
+	if (pingport('192.168.2.104', 80)==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.104:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose104']['icon']!='Online') {
+				storeicon('bose104', 'Online', basename(__FILE__).':'.__LINE__, 10);
+			}
+		}
+	}
+} else {
+	sleep(1);
+	if (pingport('192.168.2.104', 80)!=1&&$d['bose104']['icon']!='Offline') {
+		storeicon('bose104', 'Offline', basename(__FILE__).':'.__LINE__, 10);
+		sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}
+// END BOSE Garage
+
 // BOSE Badkamer
 if (pingport('192.168.2.105', 80)==1) {
 	sleep(1);
