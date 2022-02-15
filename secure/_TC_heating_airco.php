@@ -18,32 +18,33 @@ foreach (array('living','kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
 $maxpow=floor(50*$bigdif);
-if ($maxpow<40) $maxpow=40;
-elseif ($maxpow>100) $maxpow=100;
+if ($maxpow<40) {$maxpow=40;$spmode=-1;}
+elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
+else $spmode=-1;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if ($dif>1) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>70) {
-			if     ($dif<=-3.49)	{$rate=6;$spmode=0;$line=__LINE__;}
-			elseif ($dif<=-2.49)	{$rate=6;$spmode=0;$line=__LINE__;}
-			elseif ($dif<=-1.29)	{$rate=6;$spmode=0;$line=__LINE__;}
-			elseif ($dif<=-0.29)	{$rate=5;$spmode=0;$line=__LINE__;}
-			elseif ($dif<=-0.19)	{$rate=4;$spmode=-1;$line=__LINE__;}
-			elseif ($dif<=-0.09)	{$rate=3;$spmode=-1;$line=__LINE__;}
-			elseif ($dif<=0)	{$rate=2;$spmode=-1;$line=__LINE__;}
-			elseif ($dif>0)		{$rate=1;$spmode=-1;$line=__LINE__;}
-			elseif ($dif>0.2)		{$rate=1;$spmode=-1;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
+			if     ($dif<=-3.49)	{$rate=6;$line=__LINE__;}
+			elseif ($dif<=-2.49)	{$rate=6;$line=__LINE__;}
+			elseif ($dif<=-1.29)	{$rate=6;$line=__LINE__;}
+			elseif ($dif<=-0.29)	{$rate=5;$line=__LINE__;}
+			elseif ($dif<=-0.19)	{$rate=4;$line=__LINE__;}
+			elseif ($dif<=-0.09)	{$rate=3;$line=__LINE__;}
+			elseif ($dif<=0)	{$rate=2;$line=__LINE__;}
+			elseif ($dif>0)		{$rate=1;$line=__LINE__;}
+			elseif ($dif>0.2)		{$rate=1;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 			if ($k=='living') {
 				$set=$d[$k.'_set']['s']-2.5;
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
-				$set=$d[$k.'_set']['s']-3.5;
-				if (TIME<strtotime('8:30')||TIME>strtotime('22:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
-			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {$rate=$rate-2;if ($rate<0)$rate=0;}
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {$rate=$rate-3;if ($rate<0)$rate=0;}
+			} elseif ($k=='alex') {
+				$set=$d[$k.'_set']['s']-2.5;
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {$rate=$rate-3;if ($rate<0)$rate=0;}
 			}
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
