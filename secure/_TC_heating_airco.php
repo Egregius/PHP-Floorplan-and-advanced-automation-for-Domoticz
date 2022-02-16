@@ -18,7 +18,7 @@ foreach (array('living','kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
 }
 $maxpow=floor(50*$bigdif);
-if ($maxpow<40) {$maxpow=40;$spmode=-1;}
+if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 else $spmode=-1;
 foreach (array('living', 'kamer', 'alex') as $k) {
@@ -41,10 +41,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {$rate=$rate-3;if ($rate<0)$rate=0;}
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {$rate=0;}
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-2.5;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {$rate=$rate-3;if ($rate<0)$rate=0;}
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {$rate=0;}
 			}
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
@@ -73,6 +73,15 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 			storeicon($k.'_set', json_encode($data));
 			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 		}
+	}
+}
+foreach (array('kamer','alex') as $kamer) {
+	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
+	else ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
+	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed'&&$d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=17;
+	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
+		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
+		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
 	}
 }
 if ($d['brander']['s']=='On'&&past('brander')>230) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);

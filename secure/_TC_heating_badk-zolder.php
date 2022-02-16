@@ -60,4 +60,4 @@ if ($difbadkamer<=-1) {
 		sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<15&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['heating']['s']>=1&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=15&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
