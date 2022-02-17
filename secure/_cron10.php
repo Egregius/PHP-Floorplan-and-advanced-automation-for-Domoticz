@@ -12,11 +12,11 @@
 //lg(__FILE__.':'.$s);
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>120&&past('poort')>90&&past('deurgarage')>90&&past('garageled')>120&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>90&&past('poort')>90&&past('deurgarage')>90&&past('garageled')>120&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
 	elseif ($d['pirgarage']['s']=='On'&&$d['garageled']['s']=='Off'&&$d['garage']['s']=='Off'&&$d['zon']['s']==0) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>120&&past('poort')>90&&past('deurgarage')>90&&past('garage')>240&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>90&&past('poort')>90&&past('deurgarage')>90&&past('garage')>240&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>120&&past('zolderg')>120) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>30&&past('deurwc')>30&&past('deurinkom')>30&&past('deurvoordeur')>30) {
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>20&&past('deurwc')>20&&past('deurinkom')>20&&past('deurvoordeur')>20) {
 		foreach (array(30,28,26,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -26,7 +26,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>30&&past('deurbadkamer')>30&&past('deurkamer')>30&&past('deurspeelkamer')>30&&past('deuralex')>30) {
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>20&&past('deurbadkamer')>20&&past('deurkamer')>20&&past('deurspeelkamer')>20&&past('deuralex')>20) {
 		foreach (array(30,28,26,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
@@ -39,7 +39,7 @@ if ($d['auto']['s']=='On') {
 	if (past('pirkeuken')>40&&past('wasbak')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off') {
 		if ($d['wasbak']['m']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['wasbak']['m']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
-		if ($d['bose101']['m']==1&&$d['bose102']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose102')>90&&past('pirkeuken')>10800) {
+		if ($d['bose101']['m']==1&&$d['bose105']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose105')>90&&past('pirkeuken')>10800) {
 			sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 			bosekey('POWER', 0, 105);
 		}

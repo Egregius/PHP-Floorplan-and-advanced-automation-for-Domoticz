@@ -75,13 +75,21 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 		}
 	}
 }
+$bigdif=99;
+foreach (array('kamer','alex') as $kamer) {
+	if ((TIME>=strtotime('15:00')||TIME<=strtotime('5:00'))&&$d[$kamer.'_set']['s']<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed') {
+		$d[$kamer.'_set']['s']=15;
+		${'dif'.$kamer}=$d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'];
+		if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
+	}
+}
 foreach (array('kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
 	else ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, false, $d[$kamer.'_set']['s']);
-	if (TIME>=strtotime('16:00')&&${'RSet'.$kamer}<15&&$d['raam'.$kamer]['s']=='Closed'&&$d['deur'.$kamer]['s']=='Closed'&&$d[$kamer.'_temp']['s']<18) ${'RSet'.$kamer}=17;
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
 		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 0).'.0', basename(__FILE__).':'.__LINE__);
 		store($kamer.'Z', round(${'RSet'.$kamer}, 0).'.0');
 	}
 }
-if ($d['brander']['s']=='On'&&past('brander')>230) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+$uitna=(21-$d['buiten_temp']['s'])*50; if ($uitna<295) $uitna=295;
+if ($d['brander']['s']=='On'&&past('brander')>$uitna) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
