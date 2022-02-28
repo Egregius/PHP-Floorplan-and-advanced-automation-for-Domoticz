@@ -47,6 +47,6 @@ if ($d['kamer']['m']==2) {
 			}
 		}
 	} else {
-		bosezone(103);
+		bosezone(103, true);
 	}
 }

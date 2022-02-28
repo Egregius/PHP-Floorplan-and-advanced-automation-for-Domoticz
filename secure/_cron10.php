@@ -178,7 +178,8 @@ if (pingport('192.168.2.102', 80)==1) {
 				}
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY') {
-						bosekey('PRESET_4', 0, 102);
+						if ($d['bose101']['s']=='On') bosezone(102);
+						else bosekey('PRESET_4', 0, 102);
 						sw('bose102', 'On', basename(__FILE__).':'.__LINE__);
 						bosevolume(20, 102);
 					}
