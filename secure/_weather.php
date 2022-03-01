@@ -21,10 +21,10 @@ $maxrain=-1;
 $temps=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
 echo 'Weather<hr>';
-$ds=@curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
+$ds=curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
 	file_put_contents('/temp/ds.json', $ds);
-	$ds=@json_decode($ds, true);
+	$ds=json_decode($ds, true);
 	if (isset($ds['currently'])) {
 		if (isset($ds['currently']['temperature'])) {
 			$temps['ds']=($ds['currently']['temperature']+$ds['currently']['apparentTemperature'])/2;
@@ -75,10 +75,10 @@ if (isset($ds)) {
 		}
 	}
 }
-$ow=@curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
+$ow=curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
 if (isset($ow)) {
 	file_put_contents('/temp/ow.json', $ow);
-	$ow=@json_decode($ow, true);
+	$ow=json_decode($ow, true);
 	if (isset($ow['main']['temp'])) {
 		$temps['ow']=($ow['main']['temp']+$ow['main']['feels_like'])/2;
 		/*if ($temps['ow']>$temps['buiten_temp']+0.5) {
@@ -92,7 +92,7 @@ if (isset($ow)) {
 	}
 }
 
-$ob=json_decode(@curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
+$ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
 
@@ -100,7 +100,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 
 
 $buienradar=0;
-$rains=json_decode(@curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
+$rains=json_decode(curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
 //lg(print_r($rains, true));
 if (isset($rains['forecasts'])) {
 	$x=1;

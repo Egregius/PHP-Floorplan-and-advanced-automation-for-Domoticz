@@ -221,6 +221,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['device']=='media') {
 		if ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
+				if ($d['nas']['s']=='Off') shell_exec('secure/wakenas.sh &');
 				$items=array('tv','nvidia','denon','kenwood');
 				foreach ($items as $item) {
 					if ($d[$item]['s']!='On') {
@@ -329,9 +330,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			shell_exec('secure/wakenas.sh');
 		} else {
 			call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
-			if ($_REQUEST['device']=='dampkap'&&$_REQUEST['action']=='On') {
-				storemode('dampkap', TIME+1800);
-			}
 		}
 	}
 }
