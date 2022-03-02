@@ -13,9 +13,9 @@ if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
 if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
 $rates=array('B', 'B', 3, 4, 5, 6, 7);
 $bigdif=0;
-foreach (array('living','kamer','alex') as $kamer) {
-	${'dif'.$kamer}=$d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'];
-	if (${'dif'.$kamer}<0&&$d[$kamer.'_set']['s']>10) $bigdif-=${'dif'.$kamer};
+foreach (array('living','kamer','alex') as $k) {
+	${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
+	if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 }
 $maxpow=floor(50*$bigdif);
 if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
@@ -41,11 +41,20 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
 				$set=$d[$k.'_set']['s']-3;
-				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {$rate=0;}
+				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {
+					$rate=0;
+				} else {
+					if ($rate<2) $rate=2;
+				}
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-2.5;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {$rate=0;}
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {
+					$rate=0;
+				} else {
+					if ($rate<2) $rate=2;
+				}
 			}
+//			lg ($k.' => rate'.$rate.'='.$rates[$rate]);
 			$set=ceil($set * 2) / 2;
 			if ($set>25) $set=25;
 			elseif ($set<10) $set=10;

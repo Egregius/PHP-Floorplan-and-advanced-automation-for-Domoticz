@@ -200,7 +200,7 @@ if (pingport('192.168.2.102', 80)==1) {
 if (pingport('192.168.2.106', 80)==1) {
 	sleep(1);
 	if (pingport('192.168.2.106', 80)==1) {
-		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
+		if ($d['bose101']['m']==1) {
 			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
 			if (!empty($status)) {
 				if ($d['bose106']['icon']!='Online') {
@@ -227,7 +227,7 @@ if (pingport('192.168.2.106', 80)==1) {
 if (pingport('192.168.2.107', 80)==1) {
 	sleep(1);
 	if (pingport('192.168.2.107', 80)==1) {
-		if ($d['bose101']['m']==1&&$d['achterdeur']['s']=='Open') {
+		if ($d['bose101']['m']==1) {
 			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
 			if (!empty($status)) {
 				if ($d['bose107']['icon']!='Online') {
