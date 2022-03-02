@@ -88,13 +88,10 @@ if ($d['nvidia']['s']=='On') {
 }
 // BOSE Living
 if (pingport('192.168.2.101', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.101', 80)==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose101']['icon']!='Online') {
-				storeicon('bose101', 'Online', basename(__FILE__).':'.__LINE__, 10);
-			}
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose101']['icon']!='Online') {
+			storeicon('bose101', 'Online', basename(__FILE__).':'.__LINE__, 10);
 		}
 	}
 } else {
@@ -108,13 +105,10 @@ if (pingport('192.168.2.101', 80)==1) {
 
 // BOSE Keuken
 if (pingport('192.168.2.105', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.105', 80)==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose105']['icon']!='Online') {
-				storeicon('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
-			}
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose105']['icon']!='Online') {
+			storeicon('bose105', 'Online', basename(__FILE__).':'.__LINE__, 10);
 		}
 	}
 } else {
@@ -128,13 +122,10 @@ if (pingport('192.168.2.105', 80)==1) {
 
 // BOSE Kamer
 if (pingport('192.168.2.103', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.103', 80)==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose103']['icon']!='Online') {
-				storeicon('bose103', 'Online', basename(__FILE__).':'.__LINE__, 10);
-			}
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose103']['icon']!='Online') {
+			storeicon('bose103', 'Online', basename(__FILE__).':'.__LINE__, 10);
 		}
 	}
 } else {
@@ -148,13 +139,10 @@ if (pingport('192.168.2.103', 80)==1) {
 
 // BOSE Garage
 if (pingport('192.168.2.104', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.104', 80)==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.104:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose104']['icon']!='Online') {
-				storeicon('bose104', 'Online', basename(__FILE__).':'.__LINE__, 10);
-			}
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.104:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose104']['icon']!='Online') {
+			storeicon('bose104', 'Online', basename(__FILE__).':'.__LINE__, 10);
 		}
 	}
 } else {
@@ -168,21 +156,18 @@ if (pingport('192.168.2.104', 80)==1) {
 
 // BOSE Badkamer
 if (pingport('192.168.2.102', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.102', 80)==1) {
-		if ($d['lichtbadkamer']['s']>0&&TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
-			if (!empty($status)) {
-				if ($d['bose102']['icon']!='Online') {
-					storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__, 10);
-				}
-				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']=='STANDBY') {
-						if ($d['bose101']['s']=='On') bosezone(102);
-						else bosekey('PRESET_4', 0, 102);
-						sw('bose102', 'On', basename(__FILE__).':'.__LINE__);
-						bosevolume(20, 102);
-					}
+	if ($d['lichtbadkamer']['s']>0&&TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose102']['icon']!='Online') {
+				storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__, 10);
+			}
+			if (isset($status['@attributes']['source'])) {
+				if ($status['@attributes']['source']=='STANDBY') {
+					if ($d['bose101']['s']=='On') bosezone(102, true);
+					else bosekey('PRESET_4', 0, 102);
+					sw('bose102', 'On', basename(__FILE__).':'.__LINE__);
+					bosevolume(20, 102);
 				}
 			}
 		}
@@ -198,21 +183,18 @@ if (pingport('192.168.2.102', 80)==1) {
 
 // BOSE BUITEN
 if (pingport('192.168.2.106', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.106', 80)==1) {
-		if ($d['bose101']['m']==1) {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
-			if (!empty($status)) {
-				if ($d['bose106']['icon']!='Online') {
-					storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__, 10);
+	if ($d['bose101']['m']==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose106']['icon']!='Online') {
+				storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__, 10);
+				bosekey('SHUFFLE_ON', 0, 101);
+			}
+			if (isset($status['@attributes']['source'])) {
+				if ($status['@attributes']['source']=='STANDBY') {
+					bosezone(106);
+					sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
 					bosekey('SHUFFLE_ON', 0, 101);
-				}
-				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']=='STANDBY') {
-						bosezone(106);
-						sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, 101);
-					}
 				}
 			}
 		}
@@ -225,21 +207,18 @@ if (pingport('192.168.2.106', 80)==1) {
 	}
 }
 if (pingport('192.168.2.107', 80)==1) {
-	sleep(1);
-	if (pingport('192.168.2.107', 80)==1) {
-		if ($d['bose101']['m']==1) {
-			$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
-			if (!empty($status)) {
-				if ($d['bose107']['icon']!='Online') {
-					storeicon('bose107', 'Online', basename(__FILE__).':'.__LINE__, 10);
+	if ($d['bose101']['m']==1) {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
+		if (!empty($status)) {
+			if ($d['bose107']['icon']!='Online') {
+				storeicon('bose107', 'Online', basename(__FILE__).':'.__LINE__, 10);
+				bosekey('SHUFFLE_ON', 0, 101);
+			}
+			if (isset($status['@attributes']['source'])) {
+				if ($status['@attributes']['source']=='STANDBY') {
+					bosezone(107);
+					sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
 					bosekey('SHUFFLE_ON', 0, 101);
-				}
-				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']=='STANDBY') {
-						bosezone(107);
-						sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, 101);
-					}
 				}
 			}
 		}

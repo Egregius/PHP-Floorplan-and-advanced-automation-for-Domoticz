@@ -428,7 +428,7 @@ function ping($ip) {
 	else return false;
 }
 function pingport($ip,$port) {
-	$file=@fsockopen($ip, $port, $errno, $errstr, 5);
+	$file=@fsockopen($ip, $port, $errno, $errstr, 2);
 	$reply=0;
 	if (!$file) $reply=-1;
 	else {

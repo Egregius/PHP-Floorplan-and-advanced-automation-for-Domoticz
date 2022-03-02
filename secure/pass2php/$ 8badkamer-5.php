@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-bosezone(105, true);
+bosezone(102, true);
