@@ -316,7 +316,6 @@ function store($name,$status,$msg='',$idx=null,$force=true) {
 	global $d, $db, $user;
 	if (!isset($d)) $d=fetchdata();
 	$time=time();
-	if(!isset($db)) $db=dbconnect();
 	if ($idx>0) $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	if ($name!='crypto'/*&&!endswith($name, '_temp')*/) lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.'	('.$msg.')');

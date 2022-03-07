@@ -20,7 +20,7 @@ $mintemp=100;
 $maxrain=-1;
 $temps=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
-echo 'Weather<hr>';
+lg('<<< Weather >>>');
 $ds=curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
 	file_put_contents('/temp/ds.json', $ds);
@@ -167,7 +167,7 @@ elseif (isset($owwind)&&isset($dswind)) $wind=round(($owwind+$dswind)/2,1);
 elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
-if ($d['wind']['s']!=$wind) store('wind', $wind, basename(__FILE__).':'.__LINE__);
+store('wind', $wind, basename(__FILE__).':'.__LINE__);
 
 //if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;

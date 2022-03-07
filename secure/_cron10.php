@@ -86,6 +86,8 @@ if ($d['nvidia']['s']=='On') {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
+if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
+
 // BOSE Living
 if (pingport('192.168.2.101', 80)==1) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
@@ -252,4 +254,3 @@ if (pingport('192.168.2.107', 80)==1) {
 		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }*/
-if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
