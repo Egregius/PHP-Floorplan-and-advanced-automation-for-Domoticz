@@ -52,37 +52,20 @@ $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
 
 $sensors=array(
-	'living'=>array(
-		'Naam'=>'Living',
-		'Color'=>'#FF1111'
-	),
-	'badkamer'=>array(
-		'Naam'=>'Badkamr',
-		'Color'=>'#6666FF'
-	),
-	'kamer'=>array(
-		'Naam'=>'Kamer',
-		'Color'=>'#44FF44'
-	),
-	'alex'=>array(
-		'Naam'=>'Alex',
-		'Color'=>'#00EEFF'
-	),
-	'speelkamer'=>array(
-		'Naam'=>'Splkamr',
-		'Color'=>'#EEEE00'
-	),
-	'zolder'=>array(
-		'Naam'=>'Zolder',
-		'Color'=>'#EE33EE'
-	),
-	'buiten'=>array(
-		'Naam'=>'Buiten',
-		'Color'=>'#FFFFFF'
-	),
+	'living'=>array('Naam'=>'Living','Color'=>'#FF1111'),
+	'badkamer'=>array('Naam'=>'Badkamr','Color'=>'#6666FF'),
+	'kamer'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
+	'alex'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
+	'speelkamer'=>array('Naam'=>'Splkamr','Color'=>'#EEEE00'),
+	'zolder'=>array('Naam'=>'Zolder','Color'=>'#EE33EE'),
+	'buiten'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
 foreach ($sensors as $k=>$v) {
 	if(isset($_GET[$k]))$_SESSION['sensors'][$k]=true;else $_SESSION['sensors'][$k]=false;
+}
+$aantalsensors=0;
+foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) $aantalsensors++;
 }
 echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
@@ -109,7 +92,8 @@ $argshour=array(
 		'background_color'=>'#000',
 		'chart_div'=>'graphhour',
 		'margins'=>array(0,0,0,0),
-		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999')
+		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
+		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
 	);
 if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=1230;
@@ -183,9 +167,11 @@ $result->free();
 $min=9999;
 $max=-1000;
 foreach ($graph as $t) {
-	foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
-		if ($t[$i]<$min) $min=$t[$i];
-		if ($t[$i]>$max) $max=$t[$i];
+	foreach ($_SESSION['sensors'] as $k=>$v) {
+		if ($v==1) {
+			if ($t[$k]<$min) $min=$t[$k];
+			if ($t[$k]>$max) $max=$t[$k];
+		}
 	}
 }
 $args['raw_options']='
@@ -200,16 +186,23 @@ echo $chart['script'];
 echo $chart['div'];
 unset($chart,$graph);
 enda:
-$query="SELECT DATE_FORMAT(stamp, '%d-%m-%Y %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(speelkamer) AS speelkamer, AVG(alex) AS alex, AVG(zolder) AS zolder from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
+$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
+foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) $query.=", AVG($k) AS $k";
+}
+
+$query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 while ($row=$result->fetch_assoc()) $graph[]=$row;
 $result->free();
 $min=9999;
 $max=-1000;
 foreach ($graph as $t) {
-	foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
-		if ($t[$i]<$min) $min=$t[$i];
-		if ($t[$i]>$max) $max=$t[$i];
+	foreach ($_SESSION['sensors'] as $k=>$v) {
+		if ($v==1) {
+			if ($t[$k]<$min) $min=$t[$k];
+			if ($t[$k]>$max) $max=$t[$k];
+		}
 	}
 }
 $args['raw_options']='
