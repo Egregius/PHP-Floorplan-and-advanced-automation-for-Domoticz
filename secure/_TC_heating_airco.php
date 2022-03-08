@@ -40,7 +40,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				$set=$d[$k.'_set']['s']-2.5;
 				if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 			} elseif ($k=='kamer') {
-				$set=$d[$k.'_set']['s']-3;
+				$set=$d[$k.'_set']['s']-2.5;
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {
 					$rate=0;
 				} else {

@@ -20,7 +20,7 @@ $mintemp=100;
 $maxrain=-1;
 $temps=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
-lg('<<< Weather >>>');
+//lg('<<< Weather >>>');
 $ds=curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
 	file_put_contents('/temp/ds.json', $ds);
