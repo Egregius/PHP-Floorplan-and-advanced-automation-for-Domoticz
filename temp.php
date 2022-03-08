@@ -80,7 +80,16 @@ $alex='#00EEFF';
 $speelkamer='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
-$legend='<div style="width:420px;padding:20px 0px 10px 0px;">
+$sensors=array(
+	'living'=>array(
+		'Naam'=>'Living',
+		'Color'=>'#FF1111'
+	)
+);
+foreach ($sensors as $k=>$v) {
+	if(isset($_GET[$k]))$_SESSION[$k]=true;else $_SESSION[$k]=false;
+}
+echo '<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badk</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
@@ -89,7 +98,10 @@ $legend='<div style="width:420px;padding:20px 0px 10px 0px;">
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=999");\'><font color="'.$buiten.'">Alles</font></a></div>';
-echo $legend;
+foreach ($sensors as $k=>$v) {
+	if($_SESSION[$k]) echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$u.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
+	else echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$k.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
+}
 $args=array(
 		'width'=>1000,
 		'height'=>880,
@@ -156,7 +168,6 @@ if ($sensor=='alles') {
 	echo $chart['script'];
 	echo $chart['div'];
 	unset($chart,$graph);
-	//echo '<br/>'.$legend;
 	montha:
 	$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living,AVG(badkamer) AS badkamer,AVG(kamer) AS kamer,AVG(speelkamer) AS speelkamer,AVG(alex) AS alex,AVG(zolder) AS zolder from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
