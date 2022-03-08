@@ -127,13 +127,22 @@ if ($udevice=='iPad') {
 	$args['width']=480;$args['height']=610;
 	$argshour['width']=480;$argshour['height']=610;
 }
-print_r($_SESSION['sensors']);
-exit;
 
-$args['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
-$argshour['colors']=array($buiten,$living,$badkamer,$kamer,$speelkamer,$alex,$zolder,$living,$badkamer,$kamer,$speelkamer,$alex);
+$args['colors']=array();
+$argshour['colors']=array();
+foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) {
+		array_push($args['colors'], $sensors[$k]['Color']);
+		array_push($argshour['colors'], $sensors[$k]['Color']);
+	}
+}
+
 $args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
+$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
+foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) $query.=', '.$k;
+}
+$query.=" from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
 $min=9999;
@@ -141,9 +150,11 @@ $max=-1000;
 while ($row=$result->fetch_assoc()) $graph[]=$row;
 $result->free();
 foreach ($graph as $t) {
-	foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
-		if ($t[$i]<$min) $min=$t[$i];
-		if ($t[$i]>$max) $max=$t[$i];
+	foreach ($_SESSION['sensors'] as $k=>$v) {
+		if ($v==1) {
+			if ($t[$k]<$min) $min=$t[$k];
+			if ($t[$k]>$max) $max=$t[$k];
+		}
 	}
 }
 $args['raw_options']='
@@ -159,7 +170,12 @@ echo $chart['script'];
 echo $chart['div'];
 unset($chart,$graph);
 montha:
-$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp, AVG(buiten) AS buiten, AVG(living) AS living,AVG(badkamer) AS badkamer,AVG(kamer) AS kamer,AVG(speelkamer) AS speelkamer,AVG(alex) AS alex,AVG(zolder) AS zolder from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
+foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) $query.=", AVG($k) AS $k";
+}
+
+$query.=" from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 while ($row=$result->fetch_assoc()) $graph[]=$row;
