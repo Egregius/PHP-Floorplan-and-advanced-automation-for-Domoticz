@@ -67,9 +67,14 @@ $aantalsensors=0;
 foreach ($_SESSION['sensors'] as $k=>$v) {
 	if ($v==1) $aantalsensors++;
 }
+$args['colors']=array();
+$argshour['colors']=array();
+if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
+elseif ($aantalsensors==0) $_SESSION['sensors']=array('living'=>1,'living'=>1);
+
 echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
-	if($_SESSION['sensors'][$k]) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
+	if(isset($_SESSION['sensors'][$k])&&$_SESSION['sensors'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
 	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
 }
 echo '</form>'.$aantalsensors;
@@ -112,15 +117,17 @@ if ($udevice=='iPad') {
 	$argshour['width']=480;$argshour['height']=610;
 }
 
-$args['colors']=array();
-$argshour['colors']=array();
+
 foreach ($_SESSION['sensors'] as $k=>$v) {
 	if ($v==1) {
-		array_push($args['colors'], $sensors[$k]['Color']);
-		array_push($argshour['colors'], $sensors[$k]['Color']);
+		if ($aantalsensors==1) {
+			array_push($args['colors'], $sensors[$k]['Color']);
+		} else {
+			array_push($args['colors'], $sensors[$k]['Color']);
+			array_push($argshour['colors'], $sensors[$k]['Color']);
+		}
 	}
 }
-
 $args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
@@ -156,7 +163,10 @@ unset($chart,$graph);
 montha:
 $query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
-	if ($v==1) $query.=", AVG($k) AS $k";
+	if ($v==1) {
+		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
+		else $query.=", AVG($k) AS $k";
+	}
 }
 
 $query.=" from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
@@ -169,8 +179,8 @@ $max=-1000;
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors'] as $k=>$v) {
 		if ($v==1) {
-			if ($t[$k]<$min) $min=$t[$k];
-			if ($t[$k]>$max) $max=$t[$k];
+			if ($t['MIN']<$min) $min=$t['MIN'];
+			if ($t['MAX']>$max) $max=$t['MAX'];
 		}
 	}
 }
@@ -188,8 +198,9 @@ unset($chart,$graph);
 enda:
 $query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
-	if ($v==1) $query.=", AVG($k) AS $k";
-}
+		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
+		else $query.=", AVG($k) AS $k";
+	}
 
 $query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -200,8 +211,8 @@ $max=-1000;
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors'] as $k=>$v) {
 		if ($v==1) {
-			if ($t[$k]<$min) $min=$t[$k];
-			if ($t[$k]>$max) $max=$t[$k];
+			if ($t['MIN']<$min) $min=$t['MIN'];
+			if ($t['MAX']>$max) $max=$t['MAX'];
 		}
 	}
 }
