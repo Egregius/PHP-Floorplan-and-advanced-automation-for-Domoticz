@@ -12,7 +12,6 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
-$f_enddate=date("Y-m-d", TIME);
 $dag=date("Y-m-d H:i:00", TIME-86400);
 $week=date("Y-m-d", TIME-86400*6);
 $maand=date("Y-m-d", TIME-86400*60);
@@ -70,7 +69,10 @@ foreach ($_SESSION['sensors'] as $k=>$v) {
 $args['colors']=array();
 $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) $_SESSION['sensors']=array('living'=>1,'living'=>1);
+elseif ($aantalsensors==0) {
+	$_SESSION['sensors']=array('living'=>1,'badkamer'=>1,'kamer'=>1,'alex'=>1);
+	$aantalsensors=4;
+}
 
 echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
@@ -116,7 +118,10 @@ if ($udevice=='iPad') {
 	$args['width']=480;$args['height']=610;
 	$argshour['width']=480;$argshour['height']=610;
 }
-
+$args['colors']=array();
+$argshour['colors']=array();
+if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
+elseif ($aantalsensors==0) $_SESSION['sensors']=array('living'=>1,'badkamer'=>1);
 
 foreach ($_SESSION['sensors'] as $k=>$v) {
 	if ($v==1) {
@@ -128,12 +133,12 @@ foreach ($_SESSION['sensors'] as $k=>$v) {
 		}
 	}
 }
-$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
+//$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
 	if ($v==1) $query.=', '.$k;
 }
-$query.=" from `temp` where stamp >= '$dag' AND stamp <= '$f_enddate 23:59:59'";
+$query.=" from `temp` where stamp >= '$dag'";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
 $min=9999;
@@ -179,8 +184,13 @@ $max=-1000;
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors'] as $k=>$v) {
 		if ($v==1) {
-			if ($t['MIN']<$min) $min=$t['MIN'];
-			if ($t['MAX']>$max) $max=$t['MAX'];
+			if ($aantalsensors==1) {
+				if ($t['MIN']<$min) $min=$t['MIN'];
+				if ($t['MAX']>$max) $max=$t['MAX'];
+			} else {
+				if ($t[$k]<$min) $min=$t[$k];
+				if ($t[$k]>$max) $max=$t[$k];
+			}
 		}
 	}
 }
@@ -198,9 +208,11 @@ unset($chart,$graph);
 enda:
 $query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
+	if ($v==1) {
 		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
 		else $query.=", AVG($k) AS $k";
 	}
+}
 
 $query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -211,8 +223,13 @@ $max=-1000;
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors'] as $k=>$v) {
 		if ($v==1) {
-			if ($t['MIN']<$min) $min=$t['MIN'];
-			if ($t['MAX']>$max) $max=$t['MAX'];
+			if ($aantalsensors==1) {
+				if ($t['MIN']<$min) $min=$t['MIN'];
+				if ($t['MAX']>$max) $max=$t['MAX'];
+			} else {
+				if ($t[$k]<$min) $min=$t[$k];
+				if ($t[$k]>$max) $max=$t[$k];
+			}
 		}
 	}
 }
