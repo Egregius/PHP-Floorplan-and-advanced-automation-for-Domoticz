@@ -84,24 +84,41 @@ $sensors=array(
 	'living'=>array(
 		'Naam'=>'Living',
 		'Color'=>'#FF1111'
-	)
+	),
+	'badkamer'=>array(
+		'Naam'=>'Badkamr',
+		'Color'=>'#6666FF'
+	),
+	'kamer'=>array(
+		'Naam'=>'Kamer',
+		'Color'=>'#44FF44'
+	),
+	'alex'=>array(
+		'Naam'=>'Alex',
+		'Color'=>'#00EEFF'
+	),
+	'speelkamer'=>array(
+		'Naam'=>'Splkamr',
+		'Color'=>'#EEEE00'
+	),
+	'zolder'=>array(
+		'Naam'=>'Zolder',
+		'Color'=>'#EE33EE'
+	),
+	'buiten'=>array(
+		'Naam'=>'Buiten',
+		'Color'=>'#FFFFFF'
+	),
 );
 foreach ($sensors as $k=>$v) {
-	if(isset($_GET[$k]))$_SESSION[$k]=true;else $_SESSION[$k]=false;
+	if(isset($_GET[$k]))$_SESSION['sensors'][$k]=true;else $_SESSION['sensors'][$k]=false;
 }
-echo '<div style="width:420px;padding:20px 0px 10px 0px;">
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=246");\'><font color="'.$badkamer.'">Badk</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("temp.php?sensor=999");\'><font color="'.$buiten.'">Alles</font></a></div>';
+echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
-	if($_SESSION[$k]) echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$u.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
-	else echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$k.' '.strftime("%e/%m",strtotime($users[$u]['maxdate'])).'</label>';
+	if($_SESSION['sensors'][$k]) echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
+	else echo '&nbsp;<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
 }
+echo '</form>';
 $args=array(
 		'width'=>1000,
 		'height'=>880,
