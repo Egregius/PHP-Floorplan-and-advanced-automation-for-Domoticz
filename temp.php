@@ -72,7 +72,7 @@ foreach ($sensors as $k=>$v) {
 	if($_SESSION['sensors'][$k]) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
 	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
 }
-echo '</form>';
+echo '</form>'.$aantalsensors;
 $args=array(
 		'width'=>1000,
 		'height'=>880,
@@ -144,7 +144,7 @@ foreach ($graph as $t) {
 $args['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
@@ -174,10 +174,10 @@ foreach ($graph as $t) {
 		}
 	}
 }
-$args['raw_options']='
+$argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
@@ -205,10 +205,10 @@ foreach ($graph as $t) {
 		}
 	}
 }
-$args['raw_options']='
+$argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 14},Gridlines: {multiple: 1},minorGridlines: {multiple: 1},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
