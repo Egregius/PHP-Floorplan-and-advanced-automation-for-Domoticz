@@ -11,15 +11,18 @@
  **/
 header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
-//require 'functions.php';
-//$d=fetchdata();
+require 'functions.php';
+$d=fetchdata();
 
-NL('Rook gedetecteerd in badkamer!');
+
+rgb('Xlight', 45, 100);
+
+/*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');
 NL('Rook gedetecteerd in speelkamer!');
 NL('Rook gedetecteerd op zolder!');
-NL('Rook gedetecteerd bij Alex!');
+NL('Rook gedetecteerd bij Alex!');*/
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';

@@ -47,6 +47,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='
 			}
 			if ($d['Weg']['s']==0) {
 				echo ' Deurbel | ';
+				rgb('Xlight', 50, 100);
 				if ($d['Xvol']['s']!=40) {
 					sl('Xvol', 40, basename(__FILE__).':'.__LINE__);
 					usleep(10000);
