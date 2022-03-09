@@ -30,12 +30,6 @@ if (isset($d[$device])) {
 			lg($status);
 			if (!is_int($status)) $status=101;
 		}
-	} elseif (in_array($device, array('garage_temp'))) {
-		$status=explode(';', $status);
-		$status=$status[0];
-		$old=$status;
-		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
-		elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 	} elseif ($device=='achterdeur') {
 		if ($status=='Open') {
 			$status='Closed';
@@ -48,17 +42,11 @@ if (isset($d[$device])) {
 		} else {
 			$status='Off';
 		}
-	} elseif ($d[$device]['dt']=='thermometer') {
-		$prev=$d[$device]['s'];
-		$old=$status;
-		if ($status>$d[$device]['s']+0.5) $status=$d[$device]['s']+0.5;
-		elseif ($status<$d[$device]['s']-0.5) $status=$d[$device]['s']-0.5;
 	}
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 	store($device, $status, 'Pass2PHP');
 	if (include '/var/www/html/secure/pass2php/'.$device.'.php') {
-		if (isset($old)&&$old!=$status) lg($device.' new = '.$status.' orig = '.$old.' prev = '.$prev);
-		else lg($device.' = '.$status);
+		//lg($device.' = '.$status);
 	}
 } //else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);
