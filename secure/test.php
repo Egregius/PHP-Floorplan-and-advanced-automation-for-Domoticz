@@ -15,7 +15,9 @@ require 'functions.php';
 $d=fetchdata();
 
 
-rgb('Xlight', 45, 100);
+rgb('Xlight', 50, 100);
+sleep(2);
+sw('Xlight', 'Off');
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');

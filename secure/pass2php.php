@@ -26,9 +26,10 @@ if (isset($d[$device])) {
 		} else {
 			$status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
 		}
-		if ($device=='Xlight') {
+/*		if ($device=='Xlight') {
+			lg($status);
 			if (!is_int($status)) exit;
-		}
+		}*/
 	} elseif (in_array($device, array('garage_temp'))) {
 		$status=explode(';', $status);
 		$status=$status[0];
@@ -56,7 +57,7 @@ if (isset($d[$device])) {
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 	store($device, $status, 'Pass2PHP');
-	if (@include '/var/www/html/secure/pass2php/'.$device.'.php') {
+	if (include '/var/www/html/secure/pass2php/'.$device.'.php') {
 		if (isset($old)&&$old!=$status) lg($device.' new = '.$status.' orig = '.$old.' prev = '.$prev);
 		else lg($device.' = '.$status);
 	}

@@ -47,6 +47,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 		sleep($k);
 	}
 }
+if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 /*if ($status=='Open') sirene('Voordeur open');
 else sirene('Voordeur dicht');*/
 

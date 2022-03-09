@@ -267,3 +267,4 @@ if (TIME>strtotime('0:10')) {
 	}
 }
 
+if ($d['Xlight']['s']>0&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
