@@ -17,7 +17,7 @@ $d=fetchdata();
 
 rgb('Xlight', 50, 100);
 sleep(2);
-sw('Xlight', 'Off');
+//sw('Xlight', 'Off');
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
