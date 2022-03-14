@@ -79,7 +79,7 @@ foreach ($sensors as $k=>$v) {
 	if(isset($_SESSION['sensors'][$k])&&$_SESSION['sensors'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
 	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
 }
-echo '</form>'.$aantalsensors;
+echo '</form>';
 $args=array(
 		'width'=>1000,
 		'height'=>880,

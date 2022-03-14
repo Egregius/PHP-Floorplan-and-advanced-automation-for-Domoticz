@@ -17,9 +17,9 @@ foreach (array('living','kamer','alex') as $k) {
 	${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 	if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 }
-$maxpow=floor(50*$bigdif);
+$maxpow=floor(40*$bigdif);
 if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
-elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
+elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
 else $spmode=-1;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
