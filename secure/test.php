@@ -22,14 +22,15 @@ print_r($_POST);
 <form method="post" id="test1">
 	<input type="hidden" name="test1" value="1">
 	<input type="submit">
+	<form method="post" id="test2">
+		<input form="test2" type="hidden" name="test2" value="2">
+		<input form="test2" type="submit">
+	</form>
 </form>
 
-<form method="post" id="test2">
-	<input type="hidden" name="test2" value="2">
-	<input type="submit">
-</form>
 
-<form method="post" id="test3">
+
+<form method="post">
 	<input form="test1" type="hidden" name="test3" value="3">
 	<input form="test1" type="submit">
 </form>
