@@ -13,11 +13,30 @@ header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 $d=fetchdata();
+echo '<pre>';
 
 
-rgb('Xlight', 50, 100);
-sleep(2);
-//sw('Xlight', 'Off');
+print_r($_POST);
+
+?>
+<form method="post" id="test1">
+	<input type="hidden" name="test1" value="1">
+	<input type="submit">
+</form>
+
+<form method="post" id="test2">
+	<input type="hidden" name="test2" value="2">
+	<input type="submit">
+</form>
+
+<form method="post" id="test3">
+	<input form="test1" type="hidden" name="test3" value="3">
+	<input form="test1" type="submit">
+</form>
+
+<?php
+
+
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
