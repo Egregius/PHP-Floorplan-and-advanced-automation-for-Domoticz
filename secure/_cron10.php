@@ -168,7 +168,7 @@ if (pingport('192.168.2.104', 80)==1) {
 
 // BOSE Badkamer
 if (pingport('192.168.2.102', 80)==1) {
-	if ($d['lichtbadkamer']['s']>0&&TIME>strtotime('6:00')&&TIME<strtotime('20:00')) {
+	if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.102:8090/now_playing"))), true);
 		if (!empty($status)) {
 			if ($d['bose102']['icon']!='Online') {

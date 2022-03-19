@@ -16,7 +16,7 @@ $zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
 
 if ($d['auto']['s']=='On') {
-	if (TIME>=strtotime('6:30')&&TIME<strtotime('10:00')) {
+	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);

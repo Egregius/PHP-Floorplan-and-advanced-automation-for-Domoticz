@@ -10,5 +10,5 @@
  * @link     https://egregius.be
  **/
 if ($status=='Off') {
-	if ($d['lgtv']['d']!='Off') store('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['lgtv']['s']!='Off') store('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 }

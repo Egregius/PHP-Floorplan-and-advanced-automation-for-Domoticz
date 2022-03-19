@@ -88,7 +88,10 @@ foreach (array('kamer','alex') as $kamer) {
 	if ((TIME>=strtotime('12:00')||TIME<=strtotime('4:00'))&&$d['raam'.$kamer]['s']=='Closed'&&past('raam'.$kamer)>1800&&($d['deur'.$kamer]['s']=='Closed'||($d['deur'.$kamer]['s']=='Open'&&past('deur'.$kamer)<900))) {
 		$RSetkamer=14.0;
 		$RSetalex=15.5;
-	} else ${'RSet'.$kamer}=4;
+	} else {
+		$RSetkamer=4;
+		$RSetalex=4;
+	}
 	if (round($d[$kamer.'Z']['s'], 1)!=round(${'RSet'.$kamer}, 1)) {
 		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 1), basename(__FILE__).':'.__LINE__);
 		store($kamer.'Z', round(${'RSet'.$kamer}, 1), basename(__FILE__).':'.__LINE__);
