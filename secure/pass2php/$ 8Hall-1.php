@@ -22,10 +22,6 @@ if ($status=='On') {
 		waarschuwing('Let op. Raam Living open', 55);
 		exit('');
 	}
-	if ($d['bureelspeelkamer']['s']=='On') {
-		waarschuwing('Let op. Bureel speelkamer aan', 55);
-		exit('');
-	}
 	if ($d['bose105']['m']=='Online') {
 		waarschuwing('Let op. Bose buiten', 55);
 		exit('');

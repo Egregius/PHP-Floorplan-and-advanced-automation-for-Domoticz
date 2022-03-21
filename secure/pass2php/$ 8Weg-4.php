@@ -31,10 +31,6 @@ if ($status=='On') {
 			waarschuwing(' Let op . Raam keuken open', 55);
 			exit;
 		}
-		if ($d['bureelspeelkamer']['s']=='On') {
-			waarschuwing(' Let op . bureel speelkamer aan', 55);
-			exit;
-		}
 		if ($d['bose105']['m']=='Online') {
 			waarschuwing(' Let op . Bose badkamer', 55);
 			exit;
