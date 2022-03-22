@@ -15,8 +15,7 @@ require 'functions.php';
 $d=fetchdata();
 echo '<pre>';
 
-
-print_r($_POST);
+if (pingport('192.168.2.106', 80)==1) echo 'OK';
 
 ?>
 <form method="post" id="test1">

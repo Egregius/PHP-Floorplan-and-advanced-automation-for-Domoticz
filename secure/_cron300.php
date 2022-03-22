@@ -268,3 +268,21 @@ if (TIME>strtotime('0:10')) {
 }
 
 if ($d['Xlight']['s']>0&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+
+foreach (array(101,102,103,104,105,106,107) as $i) {
+	if ($d['bose'.$i]['icon']!='Offline') {
+		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);
+		if (!empty($status)) {
+			if (isset($status['@attributes']['source'])) {
+				if ($status['@attributes']['source']=='STANDBY') {
+					if ($d['bose'.$i]['s']!='Off') store('bose'.$i, 'Off', basename(__FILE__).':'.__LINE__);
+				} else {
+					if ($d['bose'.$i]['s']!='On') {
+						store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
+						bosekey('SHUFFLE_ON', 0, $i);
+					}
+				}
+			}
+		}
+	}
+}

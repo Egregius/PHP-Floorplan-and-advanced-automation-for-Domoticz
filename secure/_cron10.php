@@ -130,7 +130,7 @@ if (pingport('192.168.2.103', 80)==1) {
 			if ($d['bose103']['icon']!='Online') {
 				storeicon('bose103', 'Online', basename(__FILE__).':'.__LINE__);
 				if (isset($status['@attributes']['source'])) {
-					if ($status['@attributes']['source']=='STANDBY') {
+					if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 						if ($d['bose101']['s']=='On') bosezone(103, true);
 						else bosekey('PRESET_3', 0, 103);
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
@@ -175,7 +175,7 @@ if (pingport('192.168.2.102', 80)==1) {
 				storeicon('bose102', 'Online', basename(__FILE__).':'.__LINE__);
 			}
 			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
+				if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 					if ($d['bose101']['s']=='On') bosezone(102, true);
 					else bosekey('PRESET_4', 0, 102);
 					sw('bose102', 'On', basename(__FILE__).':'.__LINE__);
@@ -195,19 +195,17 @@ if (pingport('192.168.2.102', 80)==1) {
 
 // BOSE BUITEN
 if (pingport('192.168.2.106', 80)==1) {
-	if ($d['bose101']['m']==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose106']['icon']!='Online') {
-				storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__);
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.106:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose106']['icon']!='Online') {
+			storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__);
+			bosekey('SHUFFLE_ON', 0, 101);
+		}
+		if (isset($status['@attributes']['source'])) {
+			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
+				bosezone(106);
+				sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey('SHUFFLE_ON', 0, 101);
-			}
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
-					bosezone(106);
-					sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
-					bosekey('SHUFFLE_ON', 0, 101);
-				}
 			}
 		}
 	}
@@ -219,19 +217,17 @@ if (pingport('192.168.2.106', 80)==1) {
 	}
 }
 if (pingport('192.168.2.107', 80)==1) {
-	if ($d['bose101']['m']==1) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
-		if (!empty($status)) {
-			if ($d['bose107']['icon']!='Online') {
-				storeicon('bose107', 'Online', basename(__FILE__).':'.__LINE__);
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.107:8090/now_playing"))), true);
+	if (!empty($status)) {
+		if ($d['bose107']['icon']!='Online') {
+			storeicon('bose107', 'Online', basename(__FILE__).':'.__LINE__);
+			bosekey('SHUFFLE_ON', 0, 101);
+		}
+		if (isset($status['@attributes']['source'])) {
+			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
+				bosezone(107);
+				sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey('SHUFFLE_ON', 0, 101);
-			}
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
-					bosezone(107);
-					sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
-					bosekey('SHUFFLE_ON', 0, 101);
-				}
 			}
 		}
 	}
