@@ -526,7 +526,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 	bosepost("key", $xml, $ip);
 	if ($sleep>0) usleep($sleep);
 	if (startsWith($key,'PRESET')&&$ip!=102) {
-		for ($x=1;$x<=30;$x++) {
+		for ($x=1;$x<=10;$x++) {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
 			lg('Bosekey '.$key.' '.$ip.' '.$x.' data='.print_r($data, true));
 			if (isset($data)) {
@@ -535,7 +535,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 					break;
 				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') bosekey('NEXT_TRACK', 750000, $ip);
 			}
-			sleep(1);
+			sleep(2);
 		}
 	}
 }
