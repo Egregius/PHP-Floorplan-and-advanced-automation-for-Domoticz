@@ -12,28 +12,33 @@
 //lg(__FILE__.':'.$s);
 $user='cron300';
 if(isset($db)) $db=dbconnect();
-$stamp=strftime("%F %T", TIME-129600);
-$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen WHERE stamp>'$stamp';");
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];
-if ($d['minmaxtemp']['m'] > -5) {
-	if ($rainpast>25000) $pomppauze=3600;
-	elseif ($rainpast>22000) $pomppauze=7200;
-	elseif ($rainpast>19000) $pomppauze=10800;
-	elseif ($rainpast>16000) $pomppauze=21600;
-	elseif ($rainpast>13000) $pomppauze=43200;
-	elseif ($rainpast>10000) $pomppauze=86400;
-	elseif ($rainpast>7000) $pomppauze=129600;
-	elseif ($rainpast>3000) $pomppauze=172800;
-	elseif ($rainpast>1000) $pomppauze=216000;
-	else $pomppauze=31536000;
-	$pomppauze=$pomppauze/30;if ($pomppauze>43200) $pomppauze=43200;
-	//$msg=$stamp.PHP_EOL.'rainpast = '.$rainpast.PHP_EOL.'pomppauze = '.$pomppauze.' = '.date("H:i", $pomppauze-3600);
-	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
-		sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
-		//$msg.=PHP_EOL.'Regenpomp aan';
+
+// Begin regenpomp
+if (1==2) {
+	$stamp=strftime("%F %T", TIME-129600);
+	$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen WHERE stamp>'$stamp';");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];
+	if ($d['minmaxtemp']['m'] > -5) {
+		if ($rainpast>25000) $pomppauze=3600;
+		elseif ($rainpast>22000) $pomppauze=7200;
+		elseif ($rainpast>19000) $pomppauze=10800;
+		elseif ($rainpast>16000) $pomppauze=21600;
+		elseif ($rainpast>13000) $pomppauze=43200;
+		elseif ($rainpast>10000) $pomppauze=86400;
+		elseif ($rainpast>7000) $pomppauze=129600;
+		elseif ($rainpast>3000) $pomppauze=172800;
+		elseif ($rainpast>1000) $pomppauze=216000;
+		else $pomppauze=31536000;
+		$pomppauze=$pomppauze/30;if ($pomppauze>43200) $pomppauze=43200;
+		//$msg=$stamp.PHP_EOL.'rainpast = '.$rainpast.PHP_EOL.'pomppauze = '.$pomppauze.' = '.date("H:i", $pomppauze-3600);
+		if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
+			sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
+			//$msg.=PHP_EOL.'Regenpomp aan';
+		}
+		//telegram($msg);
 	}
-	//telegram($msg);
 }
+// EINDE regenpomp
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['zwembadfilter']['s']=='On') {
