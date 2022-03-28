@@ -12,29 +12,11 @@
 header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
+require '/var/www/authentication.php';
 $d=fetchdata();
 echo '<pre>';
 
-if (pingport('192.168.2.106', 80)==1) echo 'OK';
-
-?>
-<form method="post" id="test1">
-	<input type="hidden" name="test1" value="1">
-	<input type="submit">
-	<form method="post" id="test2">
-		<input form="test2" type="hidden" name="test2" value="2">
-		<input form="test2" type="submit">
-	</form>
-</form>
-
-
-
-<form method="post">
-	<input form="test1" type="hidden" name="test3" value="3">
-	<input form="test1" type="submit">
-</form>
-
-<?php
+print_r($_SESSION);
 
 
 

@@ -88,6 +88,12 @@ if ($d['nvidia']['s']=='On') {
 }
 if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
 
+$el=$d['el']['s']-$d['zon']['s'];
+//lg($el);
+if ($d['Weg']['s']==0&&$d['GroheRed']['s']!='On'&&$el<-2000) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
+elseif (($d['Weg']['s']>0||$el>0)&&$d['GroheRed']['s']!='Off') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+
+
 // BOSE Living
 if (pingport('192.168.2.101', 80)==1) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
@@ -132,7 +138,7 @@ if (pingport('192.168.2.103', 80)==1) {
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 						if ($d['bose101']['s']=='On') bosezone(103, true);
-						else bosekey('PRESET_3', 0, 103);
+						else bosekey('PRESET_5', 0, 103);
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 						bosevolume(18, 103);
 					}
