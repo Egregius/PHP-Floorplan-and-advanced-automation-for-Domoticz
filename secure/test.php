@@ -15,7 +15,6 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 echo '<pre>';
-$_SESSION['testhome']=1;
 print_r($_SESSION);
 
 
