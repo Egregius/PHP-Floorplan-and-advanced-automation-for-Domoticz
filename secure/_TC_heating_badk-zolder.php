@@ -30,34 +30,34 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&past('deurbadk
 }
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 if ($difbadkamer<=-5) {
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
+	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On'&&past('badkamervuur2')>30&&$d['el']['s']<6800&&($d['lichtbadkamer']['s']>=20||$d['badkamer_set']['m']==2)) {
+	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']=='Off'&&past('badkamervuur2')>30&&$d['el']['s']<5800&&$d['badkamer_set']['m']==2) {
 		sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($difbadkamer<=-0.3) {
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
+	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On'&&past('badkamervuur2')>30&&$d['el']['s']<6800&&($d['lichtbadkamer']['s']>=20||$d['badkamer_set']['m']==2)) {
+	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']=='Off'&&past('badkamervuur2')>30&&$d['el']['s']<5800&&$d['badkamer_set']['m']==2) {
 		sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>90&&$d['badkamer_set']['m']==1)||$d['el']['s']>7500) {
+	} elseif (($d['badkamervuur2']['s']=='On'&&past('badkamervuur2')>90&&$d['badkamer_set']['m']==1)||$d['el']['s']>6200) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($difbadkamer<= 0) {
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) {
+	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['badkamervuur2']['s']!='Off'&&(past('badkamervuur2')>90||$d['badkamer_set']['m']==1||$d['el']['s']>7500)) {
+	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>90||$d['badkamer_set']['m']==1||$d['el']['s']>6200)) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } else {
-	if ($d['badkamervuur2']['s']!='Off'&&(past('badkamervuur2')>90||$d['badkamer_set']['m']==1||$d['el']['s']>7500)) {
+	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>60||$d['el']['s']>6200)) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['badkamervuur1']['s']!='Off'&&$d['el']['s']>8200) {
+	if ($d['badkamervuur1']['s']=='On'&&(past('badkamervuur1')>60||$d['el']['s']>7200)) {
 		sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-//if ($d['heating']['s']>=1&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=15&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=15&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

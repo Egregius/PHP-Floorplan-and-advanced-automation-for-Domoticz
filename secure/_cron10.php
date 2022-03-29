@@ -90,8 +90,8 @@ if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather
 
 $el=$d['el']['s']-$d['zon']['s'];
 //lg($el);
-if ($d['Weg']['s']==0&&$d['GroheRed']['s']!='On'&&$el<-2000) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
-elseif (($d['Weg']['s']>0||$el>0)&&$d['GroheRed']['s']!='Off') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['Weg']['s']==0&&$d['GroheRed']['s']=='Off'&&$el<-1800&&past('GroheRed')>120) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
+elseif (($d['Weg']['s']>0||$el>500)&&$d['GroheRed']['s']=='On'&&$d['GroheRed']['m']==0) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 
 
 // BOSE Living

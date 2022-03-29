@@ -15,8 +15,8 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 echo '<pre>';
-print_r($_SESSION);
-
+apcu_store('ringbeweging', $_SERVER['REQUEST_TIME']);
+echo apcu_fetch('ringbeweging');
 
 
 /*NL('Rook gedetecteerd in badkamer!');
