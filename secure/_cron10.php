@@ -137,6 +137,7 @@ if (pingport('192.168.2.103', 80)==1) {
 				storeicon('bose103', 'Online', basename(__FILE__).':'.__LINE__);
 				if (isset($status['@attributes']['source'])) {
 					if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
+						sleep(1);
 						if ($d['bose101']['s']=='On') bosezone(103, true);
 						else bosekey('PRESET_5', 0, 103);
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
