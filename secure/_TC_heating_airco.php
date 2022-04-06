@@ -24,7 +24,7 @@ else $spmode=-1;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	if ($d[$k.'_set']['s']>10) {
 		$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-		if ($dif>1) $power=0;
+		if ($dif>1.5) $power=0;
 		elseif ($dif<=0.5) $power=1;
 		if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 			if     ($dif<=-3.49)	{$rate=6;$line=__LINE__;}
@@ -44,14 +44,14 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {
 					$rate=0;
 				} else {
-					if ($rate<2) $rate=2;
+					if ($rate<3) $rate=3;
 				}
 			} elseif ($k=='alex') {
 				$set=$d[$k.'_set']['s']-2.5;
-				if (TIME<strtotime('8:30')||TIME>strtotime('19:25')) {
+				if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {
 					$rate=0;
 				} else {
-					if ($rate<2) $rate=2;
+					if ($rate<3) $rate=3;
 				}
 			}
 //			lg ($k.' => rate'.$rate.'='.$rates[$rate]);
