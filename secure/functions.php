@@ -258,6 +258,8 @@ function fvolume($cmd) {
 			denon('MVDOWN');
 			denon('MVDOWN');
 			denon('MVDOWN');
+			denon('MVDOWN');
+			denon('MVDOWN');
 		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
 			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
 			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
@@ -280,6 +282,8 @@ function fvolume($cmd) {
 		}
 	} elseif ($cmd=='up') {
 		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
+			denon('MVUP');
+			denon('MVUP');
 			denon('MVUP');
 			denon('MVUP');
 			denon('MVUP');
