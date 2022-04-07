@@ -268,11 +268,12 @@ function fvolume($cmd) {
 					if ($nowplaying['@attributes']['source']!='STANDBY') {
 						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 						$cv=$volume['actualvolume'];
-						if ($cv>50) bosevolume($cv-5);
-						elseif ($cv>30) bosevolume($cv-4);
-						elseif ($cv>20) bosevolume($cv-3);
-						elseif ($cv>10) bosevolume($cv-2);
-						else bosevolume($cv-1);
+						if ($cv==0) exit;
+						elseif ($cv>50) bosevolume($cv-6);
+						elseif ($cv>30) bosevolume($cv-5);
+						elseif ($cv>20) bosevolume($cv-4);
+						elseif ($cv>10) bosevolume($cv-3);
+						else bosevolume($cv-2);
 					}
 				}
 			}
@@ -296,11 +297,11 @@ function fvolume($cmd) {
 						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 						$cv=$volume['actualvolume'];
 						if ($cv>80) exit;
-						elseif ($cv>50) bosevolume($cv+5);
-						elseif ($cv>30) bosevolume($cv+4);
-						elseif ($cv>20) bosevolume($cv+3);
-						elseif ($cv>10) bosevolume($cv+2);
-						else bosevolume($cv+1);
+						elseif ($cv>50) bosevolume($cv+6);
+						elseif ($cv>30) bosevolume($cv+5);
+						elseif ($cv>20) bosevolume($cv+4);
+						elseif ($cv>10) bosevolume($cv+3);
+						else bosevolume($cv+2);
 					}
 				}
 			}
