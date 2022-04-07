@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 if (past('$ miniliving2s')>2) {
-	if ($d['keuken']['s']=='On') {
+	if ($d['snijplank']['s']=='On') {
 		if ($d['lgtv']['s']=='On') {
 			shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
 		}
@@ -19,8 +19,8 @@ if (past('$ miniliving2s')>2) {
 		if ($d['lgtv']['s']=='On') {
 			shell_exec('python3 secure/lgtv.py -c pause '.$lgtvip);
 		}
-		if ($d['keuken']['s']=='Off') {
-			sw('keuken', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['snijplank']['s']=='Off') {
+			sw('snijplank', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
@@ -40,7 +40,7 @@ function andereuit()
 			ud($item, 0, 'Off');
 		}
 	}
-	sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+	sw('snijplank', 'Off', basename(__FILE__).':'.__LINE__);
 	$items=array('zithoek','eettafel','wasbak');
 	foreach ($items as $item) {
 		if ($d[$item]['s']>0) {

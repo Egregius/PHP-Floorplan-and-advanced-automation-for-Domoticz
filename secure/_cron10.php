@@ -36,10 +36,10 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if (past('pirkeuken')>40&&past('wasbak')>40&&past('keuken')>40&&$d['pirkeuken']['s']=='Off') {
-		if ($d['wasbak']['m']==0&&$d['keuken']['s']=='On') sw('keuken', 'Off', basename(__FILE__).':'.__LINE__);
+	if (past('pirkeuken')>40&&past('wasbak')>40&&past('snijplank')>40&&$d['pirkeuken']['s']=='Off') {
+		if ($d['wasbak']['m']==0&&$d['snijplank']['s']=='On') sw('snijplank', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['wasbak']['m']>0) sl('wasbak', $d['wasbak']['m'], basename(__FILE__).':'.__LINE__);
-		if ($d['bose101']['m']==1&&$d['bose105']['s']=='On'&&$d['wasbak']['s']==0&&$d['keuken']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose105')>90&&past('pirkeuken')>10800) {
+		if ($d['bose101']['m']==1&&$d['bose105']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']=='Off'&&$d['kookplaatpower']['s']=='Off'&&past('bose105')>90&&past('pirkeuken')>10800) {
 			sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
 			bosekey('POWER', 0, 105);
 		}

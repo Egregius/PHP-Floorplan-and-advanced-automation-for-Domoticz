@@ -27,7 +27,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirkeuken']['s']=='Off') {
 			$uit=235;
 			if (past('pirkeuken')>$uit) {
-				foreach (array('keuken') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('snijplank') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 				foreach (array('wasbak') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, $d[$i]['m'], basename(__FILE__).':'.__LINE__);
 			}
 		}
@@ -106,7 +106,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','keuken','zolderg','dampkap','jbl') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','snijplank','zolderg','dampkap','jbl') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -134,7 +134,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','keuken','badkamervuur2','badkamervuur1','zolderg') as $i) {
+		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','snijplank','badkamervuur2','badkamervuur1','zolderg') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']!='Off') {
