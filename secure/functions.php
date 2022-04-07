@@ -543,6 +543,10 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			sleep(2);
 		}
 	}
+	if ($key=='POWER') {
+		if ($ip==101) sw('Bose Living', 'Off');
+		elseif ($ip==105) sw('Bose Keuken', 'Off');
+	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;

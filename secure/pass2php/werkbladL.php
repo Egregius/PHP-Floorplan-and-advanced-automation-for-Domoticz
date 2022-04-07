@@ -7,7 +7,7 @@ if ($status=='On') sw('werkbladL', 'Off', basename(__FILE__).':'.__LINE__);
 */
 /*if ($status=='On') {
 	if (past('werkbladL')>2&&past('werkbladR')>2) {
-		sw('keuken', 'On');
+		sw('snijplank', 'On');
 	}
 	sw('werkbladL', 'Off', basename(__FILE__).':'.__LINE__);
 }
