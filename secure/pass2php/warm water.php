@@ -1,3 +1,8 @@
 <?php
-sw('GroheRed', 'On');
-storemode('GroheRed', 1);
+if ($status=='On') {
+	sw('GroheRed', 'On');
+	storemode('GroheRed', 1);
+} else {
+	sw('GroheRed', 'Off');
+	storemode('GroheRed', 0);
+}
