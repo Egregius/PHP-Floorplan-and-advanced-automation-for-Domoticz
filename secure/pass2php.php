@@ -19,7 +19,6 @@ $status=$_REQUEST['s'];
 $d=fetchdata();
 if (isset($d[$device])) {
 	if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
-		lg($status);
 		if ($status=='Off'||$status=='Open') {
 			$status=0;
 		} elseif ($status=='On'||$status=='Closed') {

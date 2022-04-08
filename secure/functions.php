@@ -191,6 +191,9 @@ function sl($name,$level,$msg='') {
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
 		} else store($name, $level, $msg);
 	}
+	if ($name=='Rbureel') sl('rolluik bureel', $level, basename(__FILE__).':'.__LINE__);
+	elseif ($name=='Rliving') sl('rolluik achteraan', $level, basename(__FILE__).':'.__LINE__);
+	elseif ($name=='RkeukenL') sl('rolluik keuken', $level, basename(__FILE__).':'.__LINE__);
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
