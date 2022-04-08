@@ -295,9 +295,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['kookplaatpower']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off') {
+	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off') {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
-		if ($level[0]<200&&past('kookplaatpower_kWh')>2400) sw('kookplaatpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($level[0]<200&&past('kookplaatpower_kWh')>2400) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);

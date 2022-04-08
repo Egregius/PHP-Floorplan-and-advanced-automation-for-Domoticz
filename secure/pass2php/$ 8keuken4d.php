@@ -1,2 +1,2 @@
 <?php
-sw('kookplaatpower', 'On');
+sw('kookplaat', 'On');
