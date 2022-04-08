@@ -11,4 +11,5 @@
  **/
 if ($d['raamhall']['s']=='Closed') {
 	sw('zoldertrap', 'Off', basename(__FILE__).':'.__LINE__);
+	sl('zolder', 0, basename(__FILE__).':'.__LINE__);
 }

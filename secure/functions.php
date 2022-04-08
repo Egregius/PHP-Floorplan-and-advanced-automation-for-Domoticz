@@ -45,7 +45,7 @@ function fetchdata() {
 function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','jbl','tuin','snijplank','zolderg','voordeur','wc','dampkap','GroheRed','kookplaat','nvidia','kenwood'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','voordeur','wc','dampkap','GroheRed','kookplaat','nvidia','kenwood'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','speelkamer_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -456,7 +456,7 @@ function rookmelder($msg) {
 			foreach (array('hall','inkom','kamer','speelkamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
 				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
-			foreach (array('snijplank','garage','jbl','bureel', 'tuin') as $i) {
+			foreach (array('snijplank','garage','lamp kast','bureel', 'tuin') as $i) {
 				if ($d[$i]['s']!='On') sw($i, 'On', basename(__FILE__).':'.__LINE__);
 			}
 		}
@@ -665,7 +665,7 @@ function fliving() {
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-//			if ($d['jbl']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('jbl', 'On', basename(__FILE__).':'.__LINE__);
+//			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);

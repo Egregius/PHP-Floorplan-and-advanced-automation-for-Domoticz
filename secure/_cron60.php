@@ -39,7 +39,7 @@ if ($d['auto']['s']=='On') {
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
-				foreach (array('tvled','kristal','jbl') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('tvled','kristal','lamp kast') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 			$uit=14400;
 			if (past('pirliving')>$uit) {
@@ -106,7 +106,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','snijplank','zolderg','dampkap','jbl') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','snijplank','zolderg','dampkap','lamp kast') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -180,7 +180,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']&&TIME<=strtotime('16:00')) {
 		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||($d['zon']['s']>20&&TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
-			if ($d['jbl']['s']!='Off') sw('jbl', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
