@@ -366,6 +366,9 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 						sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
 					}
 				}
+			}  elseif ($_REQUEST['action']=='skippen') {
+				$status='On';
+				require('secure/pass2php/Bose verwijderen.php');
 			}
 	} elseif ($_REQUEST['command']=='mode') {
 		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
