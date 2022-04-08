@@ -240,14 +240,9 @@ function sw($name,$action='Toggle',$msg='') {
 		} else store($name, $action, $msg);
 		if ($name=='denon') {
 			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
-		} /*else {
-  			if (in_array($name, array('brander','badkamervuur1','badkamervuur2','regenpomp','zoldervuur1','zoldervuur2','daikin'))) {
-  				$stamp=TIME;
-  				if (!isset($db)) $db=dbconnect();
-  				$db->query("INSERT INTO ontime (device,stamp,status) VALUES ('$name','$stamp','$action');");
-  			}
-		}*/
+		} elseif ($name=='GroheRed'&&$d['warm water']['s']!=$action) sw('warm water', $action, basename(__FILE__).':'.__LINE__);
 	}
+
 }
 function fvolume($cmd) {
 	global $d;
