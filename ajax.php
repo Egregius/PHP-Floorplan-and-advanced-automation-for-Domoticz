@@ -96,7 +96,9 @@ elseif (isset($_REQUEST['bose'])) {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d['bose101mode']=$row['m'];
 	}
-	$d['nowplaying']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
+	$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
+	if (isset($nowplaying['isFavorite'])) $nowplaying['isFavorite']=1; else $nowplaying['isFavorite']=0;
+	$d['nowplaying']=$nowplaying;
 	$d['volume']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['bass']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);
 	echo json_encode($d);
@@ -362,6 +364,8 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 						sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
 					}
 				}
+			}  elseif ($_REQUEST['action']=='hartje') {
+				bosekey('THUMBS_UP');
 			}  elseif ($_REQUEST['action']=='skippen') {
 				$status='On';
 				require('secure/pass2php/Bose verwijderen.php');
