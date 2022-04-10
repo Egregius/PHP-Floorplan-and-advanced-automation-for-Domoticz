@@ -103,7 +103,6 @@ if (pingport('192.168.2.101', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.101', 80)!=1&&$d['bose101']['icon']!='Offline') {
 		storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
@@ -120,7 +119,6 @@ if (pingport('192.168.2.105', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['icon']!='Offline') {
 		storeicon('bose105', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
@@ -148,7 +146,6 @@ if (pingport('192.168.2.103', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.103', 80)!=1&&$d['bose103']['icon']!='Offline') {
 		storeicon('bose103', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
@@ -165,7 +162,6 @@ if (pingport('192.168.2.104', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.104', 80)!=1&&$d['bose104']['icon']!='Offline') {
 		storeicon('bose104', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
@@ -192,7 +188,6 @@ if (pingport('192.168.2.102', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.102', 80)!=1&&$d['bose102']['icon']!='Offline') {
 		storeicon('bose102', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
@@ -217,7 +212,6 @@ if (pingport('192.168.2.106', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.106', 80)!=1&&$d['bose106']['icon']!='Offline') {
 		storeicon('bose106', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose106', 'Off', basename(__FILE__).':'.__LINE__);
@@ -239,31 +233,9 @@ if (pingport('192.168.2.107', 80)==1) {
 		}
 	}
 } else {
-	sleep(1);
 	if (pingport('192.168.2.107', 80)!=1&&$d['bose107']['icon']!='Offline') {
 		storeicon('bose107', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose107', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 // END BOSE BUITEN
-/*if ($d['daikin']['s']=='On') {
-	if ($d['daikinliving']['m']==3||$d['daikinkamer']['m']==3||$d['daikinalex']['m']==3) {$rgb=230;$mode=3;}
-	elseif ($d['daikinliving']['m']==4||$d['daikinkamer']['m']==4||$d['daikinalex']['m']==4) {$rgb=1;$mode=4;}
-	elseif ($d['daikinliving']['m']==2||$d['daikinkamer']['m']==2||$d['daikinalex']['m']==2) {$rgb=56;$mode=2;}
-	else $rgb=false;
-	if ($rgb!=false) {
-		$level=explode(';', $d['daikin_kWh']['s']);
-		$level=$level[0];
-		$level=round($level/25);
-		if ($level>100) $level=80;
-		elseif ($level<1) $level=1;
-		if ($d['Xlight']['s']!=$level) {
-			if ($d['Weg']['s']==0) {
-				rgb('Xlight', $rgb, $level);
-				sl('Xlight', $level, basename(__FILE__).':'.__LINE__);
-			}
-		}
-	} else {
-		if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}*/
