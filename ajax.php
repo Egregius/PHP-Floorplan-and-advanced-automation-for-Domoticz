@@ -30,7 +30,7 @@ if (isset($_REQUEST['t'])) {
 	$d=array();
 	$d['t']=$t;
 	if($_REQUEST['t']==0)$t=0;
-	else $t=$t-1;
+	else $t=$t-2;
 	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -122,10 +122,6 @@ elseif (isset($_REQUEST['media'])) {
 	}
 	echo json_encode($data);
 	exit;
-}
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='saytime') {
-	$d=fetchdata();
-	boseplayinfo(saytime().'Het wordt tussen '.floor($d['minmaxtemp']['s']).' en '.ceil($d['minmaxtemp']['m']).' graden'.owcondition(), basename(__FILE__).':'.__LINE__, 101, true);
 }
 elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
 	$d=fetchdata();
