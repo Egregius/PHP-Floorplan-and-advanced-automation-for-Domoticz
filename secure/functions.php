@@ -241,6 +241,8 @@ function sw($name,$action='Toggle',$msg='') {
 		if ($name=='denon') {
 			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
 		} elseif ($name=='GroheRed'&&$d['warm water']['s']!=$action) sw('warm water', $action, basename(__FILE__).':'.__LINE__);
+		elseif ($name=='bose101'&&$d['Bose Living']['s']!=$action) sw('Bose Living', $action, basename(__FILE__).':'.__LINE__);
+		elseif ($name=='bose105'&&$d['Bose Keuken']['s']!=$action) sw('Bose Keuken', $action, basename(__FILE__).':'.__LINE__);
 	}
 
 }
