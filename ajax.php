@@ -26,7 +26,8 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 	lg(' (AJAX)	'.$_SERVER['REMOTE_ADDR'].'	'.$udevice.'	'.$user.$msg);
 }
 if (isset($_REQUEST['t'])) {
-	$t=$_SERVER['REQUEST_TIME'];
+	if ($_SERVER['REQUEST_TIME']=='undefined') $t=0;
+	else $t=$_SERVER['REQUEST_TIME'];
 	$d=array();
 	$d['t']=$t;
 	if($_REQUEST['t']==0)$t=0;
