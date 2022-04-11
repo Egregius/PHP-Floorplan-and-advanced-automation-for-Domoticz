@@ -26,12 +26,10 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 	lg(' (AJAX)	'.$_SERVER['REMOTE_ADDR'].'	'.$udevice.'	'.$user.$msg);
 }
 if (isset($_REQUEST['t'])) {
-	if ($_SERVER['t']=='undefined') $t=0;
-	else $t=$_SERVER['REQUEST_TIME'];
+	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
+	else $t=$_SERVER['REQUEST_TIME']-2;
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME'];
-	if($_REQUEST['t']==0)$t=0;
-	else $t=$t-2;
 	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
