@@ -50,7 +50,8 @@ if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoor
 
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.6', 3000)==1) {
-		if ($d['lgtv']['s']!='On') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['TV']['s']=='Off') sw('TV', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
 			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
@@ -67,18 +68,19 @@ if ($d['tv']['s']=='On') {
 	if (apcu_fetch('lgtv-offline')>=3) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['TV']['s']=='On') sw('TV', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['auto']['s']=='On'&&$d['lamp kast']['s']=='Off'&&$d['zon']['s']==0) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['denon']['s']!='Off'&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['DENON']['s']!='Off'&&past('DENON')>900) sw('DENON', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kenwood']['s']!='Off'&&past('kenwood')>900) sw('kenwood', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 	}
 }
-
 if ($d['nvidia']['s']=='On') {
 	if (pingport($shieldip, 9080)==1) {
 		if ($d['nvidia']['m']=='Off') 	storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
@@ -122,6 +124,7 @@ if (pingport('192.168.2.105', 80)==1) {
 	if (pingport('192.168.2.105', 80)!=1&&$d['bose105']['icon']!='Offline') {
 		storeicon('bose105', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
+		sw('Bose Keuken', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 // END BOSE Keuken
