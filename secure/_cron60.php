@@ -39,7 +39,7 @@ if ($d['auto']['s']=='On') {
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
-				foreach (array('tvled','kristal','lamp kast') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('kristal','lamp kast') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 			$uit=14400;
 			if (past('pirliving')>$uit) {

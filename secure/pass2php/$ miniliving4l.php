@@ -35,7 +35,7 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
 		lgcommand('off');
 		sleep(2);
 	}
-	$items=array('lgtv','bosesoundlink','kristal');
+	$items=array('lgtv','kristal');
 	foreach ($items as $item) {
 		if ($d[$item]['s']!='Off') {
 			sw($item, 'Off', basename(__FILE__).':'.__LINE__);
