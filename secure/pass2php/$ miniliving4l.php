@@ -30,7 +30,7 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
 			bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 		}
 	}
-} else {
+} /*else {
 	if ($d['lgtv']['s']=='On') {
 		lgcommand('off');
 		sleep(2);
@@ -45,5 +45,5 @@ if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
 		sleep(10);
 		sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}
+}*/
 store('Weg', 0, basename(__FILE__).':'.__LINE__);
