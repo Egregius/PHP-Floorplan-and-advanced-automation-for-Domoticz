@@ -25,7 +25,7 @@ if ($d['daikinliving']['m']==0&&$d['daikinkamer']['m']==0&&$d['daikinalex']['m']
 	$usage=explode(';', $d['daikin_kWh']['s']);
 	if ($d['daikin']['s']=='On'&&$usage[0]<12&&past('daikin')>1800&&past('daikinliving')>1800&&past('daikinkamer')>1800&&past('daikinalex')>1800) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+	//if ($d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 }
 
 

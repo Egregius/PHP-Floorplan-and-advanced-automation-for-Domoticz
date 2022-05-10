@@ -89,7 +89,7 @@ if ($d['nvidia']['s']=='On') {
 	}
 }
 if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
-
+$user='cron10  ';
 $el=$d['el']['s']-$d['zon']['s'];
 //lg($el);
 if ($d['Weg']['s']==0&&$d['GroheRed']['s']=='Off'&&$el<-1800&&past('GroheRed')>120) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
