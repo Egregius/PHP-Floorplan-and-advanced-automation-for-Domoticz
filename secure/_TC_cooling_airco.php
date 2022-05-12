@@ -238,7 +238,7 @@ if ($d['living_set']['m']==0) {
 $dif=$d['living_temp']['s']-$d['living_set']['s'];
 if ($dif>=0) $power=1;
 elseif ($dif<-1.5) $power=0;
-lg('dif living='.$dif);
+//lg('dif living='.$dif);
 if ($d['living_set']['s']<32) {
 	if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 		$rate='A';
@@ -303,9 +303,12 @@ $heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('5:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
-		if($dow==0||$dow==6) {
+		if ($dow==0||$dow==6) {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+		} elseif ($dow==2||$dow==5) {
+			if ($d['RkamerL']['s']>0&&TIME>=strtotime('6:45')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerR']['s']>0&&TIME>=strtotime('6:45')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 		} else {
 			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
