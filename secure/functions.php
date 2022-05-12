@@ -518,6 +518,7 @@ function endswith($string,$test) {
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
 function bosekey($key,$sleep=75000,$ip=101) {
+	global $d;
 	lg('bosekey '.$key);
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
@@ -538,8 +539,8 @@ function bosekey($key,$sleep=75000,$ip=101) {
 		}
 	}
 	if ($key=='POWER') {
-		if ($ip==101) sw('Bose Living', 'Off');
-		elseif ($ip==105) sw('Bose Keuken', 'Off');
+		if ($ip==101) sw('Bose Living', 'Off', basename(__FILE__).':'.__LINE__);
+		elseif ($ip==105) sw('Bose Keuken', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 function bosevolume($vol,$ip=101, $msg='') {
@@ -567,7 +568,8 @@ function bosepreset($pre,$ip=101) {
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip,$forced=false,$vol='') {
-	$d=fetchdata();
+	//$d=fetchdata();
+	global $d;
 	$preset='PRESET_5';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&TIME<strtotime('21:00')) {

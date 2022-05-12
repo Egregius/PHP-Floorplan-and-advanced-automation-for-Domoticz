@@ -274,7 +274,7 @@ if ($d['living_set']['s']<32) {
 				$data['fan']=$rate;
 				$data['set']=$set;
 				storeicon('living_set', json_encode($data));
-				daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $spmode, $maxpow);
+				daikinset('living', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, -1, $maxpow);
 			}
 			unset($daikin);
 		}
