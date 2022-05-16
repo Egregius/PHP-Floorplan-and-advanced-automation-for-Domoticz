@@ -190,6 +190,7 @@ if (pingport('192.168.2.102', 80)==1) {
 		}
 	}
 } else {
+	sleep(1);
 	if (pingport('192.168.2.102', 80)!=1&&$d['bose102']['icon']!='Offline') {
 		storeicon('bose102', 'Offline', basename(__FILE__).':'.__LINE__);
 		sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
