@@ -67,8 +67,6 @@ CREATE TABLE IF NOT EXISTS `temp` (
   `living` float(3,1) DEFAULT NULL,
   `badkamer` float(3,1) DEFAULT NULL,
   `kamer` float(3,1) DEFAULT NULL,
-  `tobi` float(3,1) DEFAULT NULL,
-  `alex` float(3,1) DEFAULT NULL,
   `zolder` float(3,1) DEFAULT NULL,
   PRIMARY KEY (`stamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -80,7 +78,6 @@ CREATE TABLE IF NOT EXISTS `temp_day` (
   `kamer_temp` float(3,1) DEFAULT NULL,
   `badkamer_temp` float(3,1) DEFAULT NULL,
   `tobi_temp` float(3,1) DEFAULT NULL,
-  `diepvries_temp` float(3,1) DEFAULT NULL,
   `zolder_temp` float(3,1) DEFAULT NULL,
   PRIMARY KEY (`stamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -99,12 +96,6 @@ CREATE TABLE IF NOT EXISTS `temp_hour` (
   `kamer_min` float(3,1) NOT NULL,
   `kamer_max` float(3,1) NOT NULL,
   `kamer_avg` float(3,1) NOT NULL,
-  `tobi_min` float(3,1) NOT NULL,
-  `tobi_max` float(3,1) NOT NULL,
-  `tobi_avg` float(3,1) NOT NULL,
-  `alex_min` float(3,1) NOT NULL,
-  `alex_max` float(3,1) NOT NULL,
-  `alex_avg` float(3,1) NOT NULL,
   `zolder_min` float(3,1) NOT NULL,
   `zolder_max` float(3,1) NOT NULL,
   `zolder_avg` float(3,1) NOT NULL,
@@ -125,12 +116,6 @@ CREATE TABLE IF NOT EXISTS `temp_month` (
   `badkamer_temp_min` float(3,1) DEFAULT NULL,
   `badkamer_temp_avg` float(3,1) DEFAULT NULL,
   `badkamer_temp_max` float(3,1) DEFAULT NULL,
-  `tobi_temp_min` float(3,1) DEFAULT NULL,
-  `tobi_temp_avg` float(3,1) DEFAULT NULL,
-  `tobi_temp_max` float(3,1) DEFAULT NULL,
-  `diepvries_temp_min` float(3,1) DEFAULT NULL,
-  `diepvries_temp_avg` float(3,1) DEFAULT NULL,
-  `diepvries_temp_max` float(3,1) DEFAULT NULL,
   `zolder_temp_min` float(3,1) DEFAULT NULL,
   `zolder_temp_avg` float(3,1) DEFAULT NULL,
   `zolder_temp_max` float(3,1) DEFAULT NULL,

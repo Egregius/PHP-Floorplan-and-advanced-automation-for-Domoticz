@@ -309,13 +309,6 @@ if (TIME<=strtotime('0:03')) {
 }
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>40) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
-/*if ($d['zon']['s']-$d['el']['s']<-200) $set=$d['diepvries']['m']-10;
-else */$set=$d['diepvries']['m'];
-
-if ($d['diepvries']['s']!='On'&&$d['diepvries_temp']['s']>$set&&past('diepvries')>1780) sw('diepvries', 'On', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
-elseif ($d['diepvries']['s']!='Off'&&$d['diepvries_temp']['s']<=$set &&past('diepvries')>280) sw('diepvries', 'Off', 'Zon: '.$d['zon']['s'].' El: '.$d['el']['s'].' '.'Set: '.$set.' - '.basename(__FILE__).':'.__LINE__);
-elseif ($d['diepvries']['s']!='Off'&&past('diepvries')>14400) sw('diepvries', 'Off', 'Diepvries meer dan 4 uur aan. - '.basename(__FILE__).':'.__LINE__);
-
 if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
 
 if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
