@@ -50,7 +50,7 @@ if (isset($content)) {
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
 	for ($x=1;$x<=10;$x++) {
 		$result=json_decode(curl_exec($ch), true);
-		if ($result['ok']===true) {
+		if (is_array($result)&&$result['ok']===true) {
 			break;
 		}
 		sleep($x*2);
@@ -73,7 +73,7 @@ if (isset($content)) {
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
 		for ($x=1;$x<=10;$x++) {
 			$result=json_decode(curl_exec($ch), true);
-			if ($result['ok']===true) {
+			if (is_array($result)&&$result['ok']===true) {
 				break;
 			}
 			sleep($x*2);
