@@ -206,7 +206,7 @@ echo $chart['script'];
 echo $chart['div'];
 unset($chart,$graph);
 enda:
-$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
+$query="SELECT DATE_FORMAT(stamp, '%a %e/%m %k:%i') as stamp";
 foreach ($_SESSION['sensors'] as $k=>$v) {
 	if ($v==1) {
 		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";

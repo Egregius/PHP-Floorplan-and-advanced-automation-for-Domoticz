@@ -131,7 +131,7 @@ if (pingport('192.168.2.105', 80)==1) {
 
 // BOSE Kamer
 if (pingport('192.168.2.103', 80)==1) {
-	if (TIME>strtotime('6:00')) {
+	if (TIME>strtotime('10:00')) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
 		if (!empty($status)) {
 			if ($d['bose103']['icon']!='Online') {
