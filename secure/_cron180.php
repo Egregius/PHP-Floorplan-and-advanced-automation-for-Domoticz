@@ -33,7 +33,7 @@ if ($d['bose101']['s']=='On') {
 	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
 	if ($d['Bose Living']['s']!=$volume['actualvolume']) sl('Bose Living', $volume['actualvolume'], basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['Bose Living']['s']!=0) sl('Bose Living', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['Bose Living']['s']!=1) sl('Bose Living', 1, basename(__FILE__).':'.__LINE__);
 }
 if ($d['bose105']['s']=='On') {
 	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.105:8090/volume"))), true);
