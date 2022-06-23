@@ -1,5 +1,5 @@
 <?php
-if($status>60)$status=30;
+if($status>80)$status=30;
 if ($d['bose105']['s']=='Off'&&$status>0) {
 	bosezone(105, true, $status);
 	sw('bose105', 'On',basename(__FILE__).':'.__LINE__);

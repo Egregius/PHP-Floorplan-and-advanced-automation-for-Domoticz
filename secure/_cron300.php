@@ -275,6 +275,20 @@ if (TIME>strtotime('0:10')) {
 
 if ($d['Xlight']['s']>0&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
+if ($d['zon']['s']>0) {
+	if (past('uv')>1200) {
+		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
+		print_r($uv);
+		if (isset($uv['result'])) {
+			if (round($uv['result']['uv'], 1)!=$d['uv']['s']) store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
+			if (round($uv['result']['uv_max'], 1)!=$d['uv']['m']) storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
+		}
+	}
+} else {
+	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
+}
+
 foreach (array(101,102,103,104,105,106,107) as $i) {
 	if ($d['bose'.$i]['icon']!='Offline') {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);

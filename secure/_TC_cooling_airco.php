@@ -73,7 +73,7 @@ if ($d['kamer_set']['s']<32) {
 		elseif($d['kamer_set']['s']==3) $rate=5;
 		elseif($d['kamer_set']['s']==4) $rate=6;
 		elseif($d['kamer_set']['s']==5) $rate=7;
-		$set=$d['kamer_set']['s']-0.5;
+		$set=$d['kamer_set']['s']-1;
 		if (TIME<strtotime('8:30')||$d['Weg']['s']==1&&$set>10)$rate='B';
 		$set=ceil($set * 2) / 2;
 		if ($set>30) $set=30;
@@ -139,17 +139,17 @@ if ($d['alex_set']['m']==0) {
 				)
 			)
 	) {
-		$base=23.5;
+		$base=22.5;
 		if (TIME<strtotime('6:30')) $Setalex=$base;
-		elseif (TIME>strtotime('18:00')) $Setalex=$base;
-		elseif (TIME>strtotime('17:00')) $Setalex=$base+0.5;
-		elseif (TIME>strtotime('16:00')) $Setalex=$base+1;
-		elseif (TIME>strtotime('15:00')) $Setalex=$base+1.5;
-		elseif (TIME>strtotime('14:00')) $Setalex=$base+2;
-		elseif (TIME>strtotime('13:00')) $Setalex=$base+2.5;
-		elseif (TIME>strtotime('12:00')) $Setalex=$base+3;
-		elseif (TIME>strtotime('11:00')) $Setalex=$base+3.5;
-		elseif (TIME>strtotime('10:00')) $Setalex=$base+4;
+		elseif (TIME>strtotime('18:30')) $Setalex=$base;
+		elseif (TIME>strtotime('17:30')) $Setalex=$base+0.5;
+		elseif (TIME>strtotime('16:30')) $Setalex=$base+1;
+		elseif (TIME>strtotime('15:30')) $Setalex=$base+1.5;
+		elseif (TIME>strtotime('14:30')) $Setalex=$base+2;
+		elseif (TIME>strtotime('13:30')) $Setalex=$base+2.5;
+		elseif (TIME>strtotime('12:30')) $Setalex=$base+3;
+		elseif (TIME>strtotime('11:30')) $Setalex=$base+3.5;
+		elseif (TIME>strtotime('10:30')) $Setalex=$base+4;
 	}
 	if ($d['Weg']['s']>=3) $Setalex=28;
 	if ($d['alex_set']['s']!=$Setalex) {
