@@ -29,6 +29,9 @@ if ($udevice=='iPhone') {
 	echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
 }
+if (isset($_GET['setauto'])) {
+	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
+}
 echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
@@ -50,13 +53,19 @@ echo '
 		</style>
 	</head>
 	<body>';
+$d=fetchdata();
 echo '
 		<div class="fix" style="top:0px;left:0px;width:100%">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
-			</a>
+			</a>';
+if ($d['daikin']['m']==1) echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3">Auto</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b3 btna">Auto</a>';
+else echo '
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3 btna">Manueel</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b3">Auto</a>';
+echo '
 		</div>
 		<br>
 		<br>
@@ -80,7 +89,6 @@ echo '
 				</tr>
 			</thead>
 			<tbody>';
-$d=fetchdata();
 $sql="SELECT * FROM `daikin` ORDER BY `date` DESC LIMIT 0,30";
 if (!$result=$db->query($sql)){die('There was an error running the query ['.$sql.'-'.$db->error.']');}
 $livingheat=0;
