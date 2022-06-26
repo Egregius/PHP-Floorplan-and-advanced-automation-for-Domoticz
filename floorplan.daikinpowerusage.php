@@ -44,17 +44,19 @@ echo '
 			.btn{width:300px;}
 			.btnd{width:236px;}
 			.b4{max-width:155px!important;}
-			.b3{max-width:320px!important;}
+			.b3{max-width:200px!important;}
 			tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
 			.border_right {border-right:1pt dotted #777;}
 		</style>
 	</head>
 	<body>';
 echo '
-		<div class="fix" style="top:0px;right:0px;">
+		<div class="fix" style="top:0px;left:0px;width:100%">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3">Manueel</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3">Auto</a>
 		</div>
 		<br>
 		<br>
