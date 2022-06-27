@@ -248,14 +248,14 @@ if (TIME>strtotime('0:10')) {
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
-//			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
+			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
 				$prev=0;
 				$stmt=$db->query("SELECT kwhimport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row['kwhimport'];
 
 				$kwhimport=($gridImport/1000)-$prev;
 				$db->query("INSERT INTO smappee_kwartier (stamp, kwhimport) VALUES ('".strftime("%F %T", $_SERVER['REQUEST_TIME'])."', '$kwhimport');");
-//			}
+			}
 		}
 		curl_close($ch);
 		$timefrom=TIME-600;
@@ -284,9 +284,9 @@ if (TIME>strtotime('0:10')) {
 if ($d['Xlight']['s']>0&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['zon']['s']>0) {
-	if (past('uv')>1200) {
+	if (past('uv')>1100) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
-		print_r($uv);
+		echo 'UV=';print_r($uv);
 		if (isset($uv['result'])) {
 			if (round($uv['result']['uv'], 1)!=$d['uv']['s']) store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
 			if (round($uv['result']['uv_max'], 1)!=$d['uv']['m']) storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
