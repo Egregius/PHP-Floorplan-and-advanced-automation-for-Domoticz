@@ -248,6 +248,14 @@ if (TIME>strtotime('0:10')) {
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
+//			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
+				$prev=0;
+				$stmt=$db->query("SELECT kwhimport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
+				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row['kwhimport'];
+
+				$kwhimport=($gridImport/1000)-$prev;
+				$db->query("INSERT INTO smappee_kwartier (stamp, kwhimport) VALUES ('".strftime("%F %T", $_SERVER['REQUEST_TIME'])."', '$kwhimport');");
+//			}
 		}
 		curl_close($ch);
 		$timefrom=TIME-600;

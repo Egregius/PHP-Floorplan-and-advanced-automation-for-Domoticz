@@ -32,3 +32,4 @@ if($s<9) {
 	}
 }
 if (isset($_REQUEST['cron'])) include '_'.$_REQUEST['cron'].'.php';
+$db=null;
