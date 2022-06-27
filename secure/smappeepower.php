@@ -15,18 +15,20 @@ $smappee=@json_decode(@file_get_contents('http://192.168.2.15/gateway/apipublic/
 if (isset($smappee['report'])&&!empty($smappee['report'])) {
 	preg_match_all("/ activePower=(\\d*.\\d*)/",$smappee['report'],$matches);
 	if (!empty($matches[1][1])) {
-	$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+		$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$newzon=round($matches[1][1], 0);
 		if ($newzon<0) $newzon=0;
-		if ($newzon==0 ) $result = $db->query("UPDATE devices SET s='$newzon' WHERE n='zon';") or trigger_error($db->error);
-		else $result = $db->query("UPDATE devices SET s='$newzon',t='".TIME."' WHERE n='zon';") or trigger_error($db->error);
+		if ($newzon==0 ) $db->query("UPDATE devices SET s='$newzon' WHERE n='zon';") or trigger_error($db->error);
+		else $db->query("UPDATE devices SET s='$newzon',t='".TIME."' WHERE n='zon';") or trigger_error($db->error);
 
 		if (!empty($matches[1][2])) {
 			$consumption=round($matches[1][2], 0);
-			$result = $db->query("UPDATE devices SET s='$consumption',t='".TIME."' WHERE n='el';") or trigger_error($db->error);
+			$db->query("UPDATE devices SET s='$consumption',t='".TIME."' WHERE n='el';") or trigger_error($db->error);
 			if ($consumption-$newzon>8500) alert('Power', 'Power usage: '.$consumption-$newzon.' W!', 600, false);
+			$db->query("INSERT IGNORE INTO smappee (stamp, value) VALUES ('".strftime("%F %T", $_SERVER['REQUEST_TIME'])."', '".$consumption-$newzon."');") or trigger_error($db->error);
 		}
+		$db=null;
 	}
 } else {
 	if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {

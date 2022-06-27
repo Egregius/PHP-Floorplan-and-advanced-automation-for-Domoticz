@@ -10,9 +10,6 @@
  * @link	 https://egregius.be
  **/
 if ($status=="Open") {
-	if ($d['dampkap']['s']=='On') {
-		sw('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
-	}
 	// BOSE BUITEN
 	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
 		$status=json_decode(
