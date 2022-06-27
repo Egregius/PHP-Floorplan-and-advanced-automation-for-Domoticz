@@ -26,7 +26,6 @@ if (isset($smappee['report'])&&!empty($smappee['report'])) {
 			$consumption=round($matches[1][2], 0);
 			$db->query("UPDATE devices SET s='$consumption',t='".TIME."' WHERE n='el';") or trigger_error($db->error);
 			if ($consumption-$newzon>8500) alert('Power', 'Power usage: '.$consumption-$newzon.' W!', 600, false);
-			$db->query("INSERT IGNORE INTO smappee (stamp, value) VALUES ('".strftime("%F %T", $_SERVER['REQUEST_TIME'])."', '".$consumption-$newzon."');") or trigger_error($db->error);
 		}
 		$db=null;
 	}
