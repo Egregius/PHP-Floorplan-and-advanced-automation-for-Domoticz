@@ -33,6 +33,7 @@ echo '
 	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 	<style type="text/css">
 		.btn{width:100%;height:60px;}
+		td{text-align:left}
 	</style>
 </head>
 <body>
@@ -46,40 +47,11 @@ echo '
 	<br>';
 $db=new PDO("mysql:host=localhost;dbname=$dbname;", $dbuser, $dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$stmt=$db->query("SELECT DISTINCT device FROM ontime ORDER BY device ASC");
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-	$devices[]=$row['device'];
-}
-if (!isset($_REQUEST['device']))$device='brander';
-else $device=$_REQUEST['device'];
-foreach ($devices as $d) {
-	if ($device==$d) {
-		echo '
-		<div class="fix" style="top:35px;left:75px;width:245px;">
-			<button class="btn btnd" onclick="toggle_visibility(\'devices\');" >'.$d.'</button>
-		</div>';
-	}
-}
-echo '
-	<form method="POST">
-		<div id="devices" class="fix devices" style="top:0px;left:0px;display:none;background-color:#000;z-index:100;">';
-foreach ($devices as $d) {
-	if ($device==$d) {
-		echo '
-			<button name="device" value="'.$d.'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d.'</button>';
-	} else {
-		echo '
-			<button name="device" value="'.$d.'" class="btn" onclick="toggle_visibility(\'devices\');" style="padding:7px;margin-bottom:0px;">'.$d.'</button>';
-	}
-}
-echo '
-		</div>
-	</form>';
 
 echo '
 	<div style="margin-top:40px">
 		<table>';
-$stmt=$db->query("SELECT stamp,status FROM ontime WHERE device='$device' ORDER BY stamp DESC");
+$stmt=$db->query("SELECT stamp,value FROM kWh_Meter ORDER BY stamp DESC");
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$datas[]=$row;
 }
@@ -89,10 +61,10 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 $status='';$tijdprev=TIME;$totalon=0;
 if (!empty($datas)) {
 	foreach ($datas as $data) {
-		$status=$data['status'];
-		$tijd=$data['stamp'];
+		$status=$data['value'];
+		$tijd=strtotime($data['stamp']);
 		$period=($tijdprev-$tijd);
-		if ($status=='Off') {
+		if ($status==0) {
 			$style="color:#1199FF";
 		} else {
 			$totalon=$totalon+$period;
@@ -101,7 +73,7 @@ if (!empty($datas)) {
 		$tijdprev=$tijd;
 		echo '
 		<tr>
-			<td style="'.$style.'">'.strftime("%F %T", $data['stamp']).'</td>
+			<td style="'.$style.'">'.$data['stamp'].'</td>
 			<td style="'.$style.'">&nbsp;'.$status.'&nbsp;</td>
 			<td style="'.$style.'">&nbsp;'.convertToHours($period).'</td>
 		</tr>';
@@ -110,7 +82,20 @@ if (!empty($datas)) {
 echo '
 	</table>
 	</div><br>
-	<div class="fix" style="top:0px;left:204px;width:60px;font-size:2em"><a href="?device='.$device.'">'.convertToHours($totalon).'</a></div>
+	<a href="floorplan.ontime.kWh_Meter.php">
+	<div class="fix" style="top:0px;left:75px;width:500px;font-size:2em">
+		<table>
+			<tr>
+				<td>On</td>
+				<td>'.convertToHours($totalon).' = '.round(($totalon/(TIME-$tijdprev))*100,2).'%</td>
+			</tr>
+			<tr>
+				<td>Totaal</td>
+				<td>'.convertToHours(TIME-$tijdprev).'</td>
+			</tr>
+		</table>
+	</div>
+	</a>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
 		function toggle_visibility(id){var e=document.getElementById(id);if(e.style.display==\'inherit\') e.style.display=\'none\';else e.style.display=\'inherit\';}
