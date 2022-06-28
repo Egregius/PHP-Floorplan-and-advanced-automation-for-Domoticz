@@ -388,8 +388,8 @@ function zwaveCommand($node,$command) {
 }
 function controllerBusy($retries){global $domoticzurl;for($k=1;$k<=$retries;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');$p=xml_parser_create();xml_parse_into_struct($p,$result,$vals,$index);xml_parser_free($p);foreach($vals as $val){if($val['tag']=='ADMIN'){$result=$val['attributes']['ACTIVE'];break;}}if($result=='false'){break;}if($k==$retries){zwaveCommand(1,'Cancel');break;}sleep(1);}}
 function convertToHours($time) {
-	if ($time<600) return substr(strftime('%k:%M:%S', $time-3600), 1);
-	elseif ($time>=600&&$time<3600) return strftime('%k:%M:%S', $time-3600);
+	if ($time<600) return substr(strftime('%M:%S', $time-3600), 1);
+	elseif ($time>=600&&$time<3600) return strftime('%M:%S', $time-3600);
 	else return strftime('%k:%M:%S', $time-3600);
 }
 function checkport($ip,$port='None') {

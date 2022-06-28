@@ -33,7 +33,10 @@ echo '
 	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 	<style type="text/css">
 		.btn{width:100%;height:60px;}
-		td{text-align:left}
+		td{text-align:left;font-size:1.2em}
+		.right{text-align:right;}
+		.blue{color:#1199FF;background:unset;}
+		.red{color:#FF4400;background:unset;}
 	</style>
 </head>
 <body>
@@ -50,7 +53,12 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 echo '
 	<div style="margin-top:40px">
-		<table>';
+		<table>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>';
 $stmt=$db->query("SELECT stamp,value FROM kWh_Meter ORDER BY stamp DESC");
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$datas[]=$row;
@@ -65,17 +73,17 @@ if (!empty($datas)) {
 		$tijd=strtotime($data['stamp']);
 		$period=($tijdprev-$tijd);
 		if ($status==0) {
-			$style="color:#1199FF";
+			$style="blue";
 		} else {
 			$totalon=$totalon+$period;
-			$style="color:#FF4400";
+			$style="red";
 		}
 		$tijdprev=$tijd;
 		echo '
 		<tr>
-			<td style="'.$style.'">'.$data['stamp'].'</td>
-			<td style="'.$style.'">&nbsp;'.$status.'&nbsp;</td>
-			<td style="'.$style.'">&nbsp;'.convertToHours($period).'</td>
+			<td class="'.$style.'">'.$data['stamp'].'</td>
+			<td class="'.$style.'">&nbsp;'.$status.'&nbsp;</td>
+			<td class="'.$style.' right">&nbsp;'.convertToHours($period).'</td>
 		</tr>';
 	}
 }
@@ -83,11 +91,11 @@ echo '
 	</table>
 	</div><br>
 	<a href="floorplan.ontime.kWh_Meter.php">
-	<div class="fix" style="top:0px;left:75px;width:500px;font-size:2em">
+	<div class="fix" style="top:0px;left:75px;">
 		<table>
 			<tr>
 				<td>On</td>
-				<td>'.convertToHours($totalon).' = '.round(($totalon/(TIME-$tijdprev))*100,2).'%</td>
+				<td>'.convertToHours($totalon).' = '.number_format(($totalon/(TIME-$tijdprev))*100,2,',','.').'%</td>
 			</tr>
 			<tr>
 				<td>Totaal</td>
