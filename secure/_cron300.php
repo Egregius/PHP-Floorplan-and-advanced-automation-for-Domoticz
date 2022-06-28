@@ -250,11 +250,14 @@ if (TIME>strtotime('0:10')) {
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
 				$prev=0;
-				$stmt=$db->query("SELECT kwhimport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
-				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row['kwhimport'];
+				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
+				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
 
-				$kwhimport=($gridImport/1000)-$prev;
-				$db->query("INSERT INTO smappee_kwartier (stamp, kwhimport) VALUES ('".strftime("%F %T", $_SERVER['REQUEST_TIME'])."', '$kwhimport');");
+				$kwhimport=($gridImport/1000)-$prev['import'];
+				$kwhexport=($gridExport/1000)-$prev['export'];
+				if ($kwhimport<0) $kwhimport=0;
+				$db->query("INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $_SERVER['REQUEST_TIME'])."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');");
+				if ($kwhimport>(2.5/4)) telegram ('Kwartpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
 			}
 		}
 		curl_close($ch);

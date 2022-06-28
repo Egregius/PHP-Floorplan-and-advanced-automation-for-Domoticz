@@ -36,6 +36,11 @@ if (isset($d[$device])) {
 		} else {
 			$status='Open';
 		}
+	} elseif ($device=='kWh_Meter') {
+		$status=explode(';', $status);
+		$status=$status[0];
+		if ($status>5) $status=1;
+		else $status=0;
 	} elseif ($device=='sirene') {
 		if ($status=='Group On') {
 			$status='On';
