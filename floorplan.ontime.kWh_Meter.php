@@ -13,7 +13,7 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 echo '<html>
 <head>
-	<title>Floorplan</title>
+	<title>kWh_Meter</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 	<meta name="HandheldFriendly" content="true"/>
 	<meta name="mobile-web-app-capable" content="yes">
