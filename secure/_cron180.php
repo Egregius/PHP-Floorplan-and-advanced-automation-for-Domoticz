@@ -29,7 +29,7 @@ if ($d['daikinliving']['m']==0&&$d['daikinkamer']['m']==0&&$d['daikinalex']['m']
 }
 
 
-if ($d['bose101']['s']=='On') {
+/*if ($d['bose101']['s']=='On') {
 	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/volume"))), true);
 	if ($d['Bose Living']['s']!=$volume['actualvolume']) sl('Bose Living', $volume['actualvolume'], basename(__FILE__).':'.__LINE__);
 } else {
@@ -41,3 +41,4 @@ if ($d['bose105']['s']=='On') {
 } else {
 	if ($d['Bose Keuken']['s']!=0) sl('Bose Keuken', 0, basename(__FILE__).':'.__LINE__);
 }
+*/

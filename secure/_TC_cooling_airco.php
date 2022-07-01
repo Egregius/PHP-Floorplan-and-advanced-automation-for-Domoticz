@@ -330,7 +330,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	elseif (TIME>=strtotime('10:00')&&TIME<strtotime('15:00')) {
+	elseif (TIME>=strtotime('11:00')&&TIME<strtotime('15:00')) {
 		if($zon>1500) {
 			if ($d['raamspeelkamer']['s']=='Closed'&&$d['Rspeelkamer']['s']<82&&past('Rspeelkamer')>3600) sl('Rspeelkamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
