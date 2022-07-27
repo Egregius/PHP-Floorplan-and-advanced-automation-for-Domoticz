@@ -40,8 +40,8 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=20;
-			if (TIME<strtotime('5:45')) $Setkamer=$base;
+			$base=20.5;
+			if (TIME<strtotime('6:30')) $Setkamer=$base;
 			elseif (TIME>strtotime('21:00')) $Setkamer=$base;
 			elseif (TIME>strtotime('20:00')) $Setkamer=$base+0.5;
 			elseif (TIME>strtotime('19:00')) $Setkamer=$base+1;
@@ -53,8 +53,8 @@ if ($d['daikin']['m']==1) {
 			elseif (TIME>strtotime('12:00')) $Setkamer=$base+4;
 			elseif (TIME>strtotime('11:00')) $Setkamer=$base+4.5;
 			elseif (TIME>strtotime('10:00')) $Setkamer=$base+5;
-			elseif (TIME>strtotime('8:00')) $Setkamer=$base+5.5;
-			elseif (TIME>strtotime('6:00')) $Setkamer=$base+6;
+			elseif (TIME>strtotime('9:00')) $Setkamer=$base+5.5;
+			elseif (TIME>strtotime('8:00')) $Setkamer=$base+6;
 		}
 		if ($d['Weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {
@@ -139,8 +139,8 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=22.5;
-			if (TIME<strtotime('6:30')) $Setalex=$base;
+			$base=21;
+			if (TIME<strtotime('7:00')) $Setalex=$base;
 			elseif (TIME>strtotime('18:30')) $Setalex=$base;
 			elseif (TIME>strtotime('17:30')) $Setalex=$base+0.5;
 			elseif (TIME>strtotime('16:30')) $Setalex=$base+1;
