@@ -64,12 +64,12 @@ function huisslapen() {
 		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-	if ($d['daikin']['m']!=1) storemode('daikin', 1, basename(__FILE__).':'.__LINE__);
+//	if ($d['daikin']['m']!=1) storemode('daikin', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis() {
 	global $d;
 	store('Weg', 0);
-	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
+	//if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
 /**
  * Function douche
