@@ -33,24 +33,24 @@ if ($d['auto']['s']=='On') {
 	if (TIME>=strtotime('6:00')&&TIME<strtotime('10:00')) {
 		$dow=date("w");
 		if($dow==0||$dow==6) {
-			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:30')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerL']['s']>1&&TIME>=strtotime('7:30')) sl('RkamerL', 1, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerR']['s']>1&&TIME>=strtotime('7:30')) sl('RkamerR', 1, basename(__FILE__).':'.__LINE__);
 		} else {
-			if ($d['RkamerL']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['RkamerR']['s']>0&&TIME>=strtotime('7:00')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerL']['s']>1&&TIME>=strtotime('7:00')) sl('RkamerL', 1, basename(__FILE__).':'.__LINE__);
+			if ($d['RkamerR']['s']>1&&TIME>=strtotime('7:00')) sl('RkamerR', 1, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true||$d['pirhall']['s']=='On') {
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rspeelkamer']['s']>0&&($d['deurspeelkamer']['s']=='Open'||$d['speelkamer']['s']>0)) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rspeelkamer']['s']>1&&($d['deurspeelkamer']['s']=='Open'||$d['speelkamer']['s']>1)) sl('Rspeelkamer', 1, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>1&&($d['deuralex']['s']=='Open'||$d['alex']['s']>1)) sl('Ralex', 1, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1&&$d['lgtv']['s']=='Off') {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>1) sl($i, 1, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1&&$d['tv']['s']=='Off') {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>1) sl($i, 1, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
