@@ -208,9 +208,9 @@ if (pingport('192.168.2.106', 80)==1) {
 		}
 		if (isset($status['@attributes']['source'])) {
 			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-				bosezone(106);
-				sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
-				bosekey('SHUFFLE_ON', 0, 101);
+				bosezone(106, true);
+//				sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
+//				bosekey('SHUFFLE_ON', 0, 101);
 			}
 		}
 	}
@@ -230,8 +230,8 @@ if (pingport('192.168.2.107', 80)==1) {
 		if (isset($status['@attributes']['source'])) {
 			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 				bosezone(107);
-				sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
-				bosekey('SHUFFLE_ON', 0, 101);
+//				sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
+//				bosekey('SHUFFLE_ON', 0, 101);
 			}
 		}
 	}
