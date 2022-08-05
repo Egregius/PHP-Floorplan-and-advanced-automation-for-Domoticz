@@ -604,6 +604,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone', $xml, 101);
 				store('bose'.$ip, 'On');
+				lg($xml);
 				if ($vol=='') {
 					if (TIME>strtotime('6:00')&&TIME<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);

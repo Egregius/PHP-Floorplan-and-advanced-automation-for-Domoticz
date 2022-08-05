@@ -249,10 +249,10 @@ if (TIME>strtotime('0:10')) {
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
-				$prev=0;
+				$prev=array();
 				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
-				if (isset($prev)) {
+				if (isset($prev['import'])) {
 					$kwhimport=($gridImport/1000)-$prev['import'];
 					$kwhexport=($gridExport/1000)-$prev['export'];
 					if ($kwhimport<0) $kwhimport=0;

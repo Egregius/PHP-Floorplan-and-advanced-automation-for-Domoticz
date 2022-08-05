@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-require('$ 8Kamer-1.php');
+sl('RkamerR', 1, basename(__FILE__).':'.__LINE__);
