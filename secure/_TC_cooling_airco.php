@@ -40,21 +40,21 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=20.5;
+			$base=21;
 			if (TIME<strtotime('6:30')) $Setkamer=$base;
-			elseif (TIME>strtotime('21:00')) $Setkamer=$base;
-			elseif (TIME>strtotime('20:00')) $Setkamer=$base+0.5;
-			elseif (TIME>strtotime('19:00')) $Setkamer=$base+1;
-			elseif (TIME>strtotime('18:00')) $Setkamer=$base+1.5;
-			elseif (TIME>strtotime('16:00')) $Setkamer=$base+2;
-			elseif (TIME>strtotime('15:00')) $Setkamer=$base+2.5;
-			elseif (TIME>strtotime('14:00')) $Setkamer=$base+3;
-			elseif (TIME>strtotime('13:00')) $Setkamer=$base+3.5;
-			elseif (TIME>strtotime('12:00')) $Setkamer=$base+4;
-			elseif (TIME>strtotime('11:00')) $Setkamer=$base+4.5;
-			elseif (TIME>strtotime('10:00')) $Setkamer=$base+5;
-			elseif (TIME>strtotime('9:00')) $Setkamer=$base+5.5;
-			elseif (TIME>strtotime('8:00')) $Setkamer=$base+6;
+			elseif (TIME>strtotime('22:00')) $Setkamer=$base;
+			elseif (TIME>strtotime('21:00')) $Setkamer=$base+0.5;
+			elseif (TIME>strtotime('20:00')) $Setkamer=$base+1;
+			elseif (TIME>strtotime('19:00')) $Setkamer=$base+1.5;
+			elseif (TIME>strtotime('18:00')) $Setkamer=$base+2;
+			elseif (TIME>strtotime('17:00')) $Setkamer=$base+2.5;
+			elseif (TIME>strtotime('16:00')) $Setkamer=$base+3;
+			elseif (TIME>strtotime('15:00')) $Setkamer=$base+3.5;
+			elseif (TIME>strtotime('14:00')) $Setkamer=$base+4;
+			elseif (TIME>strtotime('13:00')) $Setkamer=$base+4.5;
+			elseif (TIME>strtotime('12:00')) $Setkamer=$base+5;
+			elseif (TIME>strtotime('11:00')) $Setkamer=$base+5.5;
+			elseif (TIME>strtotime('10:00')) $Setkamer=$base+6;
 		}
 		if ($d['Weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {
@@ -118,7 +118,7 @@ if ($d['daikin']['m']==1) {
 			unset($daikin);
 		}
 	}
-
+	unset($power);
 	// ALEX
 
 	$Setalex=33;
@@ -141,15 +141,19 @@ if ($d['daikin']['m']==1) {
 		) {
 			$base=21;
 			if (TIME<strtotime('7:00')) $Setalex=$base;
-			elseif (TIME>strtotime('18:30')) $Setalex=$base;
-			elseif (TIME>strtotime('17:30')) $Setalex=$base+0.5;
-			elseif (TIME>strtotime('16:30')) $Setalex=$base+1;
-			elseif (TIME>strtotime('15:30')) $Setalex=$base+1.5;
-			elseif (TIME>strtotime('14:30')) $Setalex=$base+2;
-			elseif (TIME>strtotime('13:30')) $Setalex=$base+2.5;
-			elseif (TIME>strtotime('12:30')) $Setalex=$base+3;
-			elseif (TIME>strtotime('11:30')) $Setalex=$base+3.5;
-			elseif (TIME>strtotime('10:30')) $Setalex=$base+4;
+			elseif (TIME>strtotime('19:30')) $Setalex=$base;
+			elseif (TIME>strtotime('18:30')) $Setalex=$base+0.5;
+			elseif (TIME>strtotime('17:30')) $Setalex=$base+1;
+			elseif (TIME>strtotime('16:30')) $Setalex=$base+1.5;
+			elseif (TIME>strtotime('15:30')) $Setalex=$base+2;
+			elseif (TIME>strtotime('14:30')) $Setalex=$base+2.5;
+			elseif (TIME>strtotime('13:30')) $Setalex=$base+3;
+			elseif (TIME>strtotime('12:30')) $Setalex=$base+3.5;
+			elseif (TIME>strtotime('11:30')) $Setalex=$base+4;
+			elseif (TIME>strtotime('10:30')) $Setalex=$base+4.5;
+			elseif (TIME>strtotime('9:30')) $Setalex=$base+5;
+			elseif (TIME>strtotime('8:30')) $Setalex=$base+5.5;
+			elseif (TIME>strtotime('7:30')) $Setalex=$base+6;
 		}
 		if ($d['Weg']['s']>=3) $Setalex=28;
 		if ($d['alex_set']['s']!=$Setalex) {
@@ -215,7 +219,7 @@ if ($d['daikin']['m']==1) {
 			daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 		}
 	}
-
+	unset($power);
 	// LIVING
 	$Setliving=33;
 	if ($d['living_set']['m']==0) {
@@ -227,8 +231,8 @@ if ($d['daikin']['m']==1) {
 			&& $d['Weg']['s']<=2
 		) {
 			if ($d['Weg']['s']>=3) $Setliving=28;
-			elseif ($d['Weg']['s']>0) $Setliving=25;
-			else $Setliving=24;
+			elseif ($d['Weg']['s']>0) $Setliving=24;
+			else $Setliving=23;
 		}
 		if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
 			store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
@@ -247,7 +251,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['living_set']['s']==3) $rate=5;
 			elseif($d['living_set']['s']==4) $rate=6;
 			elseif($d['living_set']['s']==5) $rate=7;
-			$set=$d['living_set']['s']-0.5;
+			$set=$d['living_set']['s']-0;
 			$set=ceil($set * 2) / 2;
 			if ($set>30) $set=30;
 			elseif ($set<18) $set=18;

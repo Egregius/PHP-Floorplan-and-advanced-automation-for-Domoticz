@@ -69,7 +69,7 @@ if ($d['tv']['s']=='On') {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['TV']['s']=='On') sw('TV', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['auto']['s']=='On'&&$d['lamp kast']['s']=='Off'&&$d['zon']['s']==0) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['auto']['s']=='On'&&$d['lamp kast']['s']=='Off'&&$d['zon']['s']==0&&$d['Weg']['s']==0) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);

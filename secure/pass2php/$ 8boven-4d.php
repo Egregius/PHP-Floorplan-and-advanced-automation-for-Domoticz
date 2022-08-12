@@ -11,5 +11,5 @@
  **/
 if ($status=='On') {
 	$item='Rspeelkamer';
-	sl($item, 0, basename(__FILE__).':'.__LINE__);
+	sl($item, 1, basename(__FILE__).':'.__LINE__);
 }

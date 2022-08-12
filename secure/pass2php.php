@@ -41,6 +41,7 @@ if (isset($d[$device])) {
 		$status=$status[0];
 		if ($status>5) $status=1;
 		else $status=0;
+		if ($status==$d['kWh_Meter']['s']) die('exit');
 	} elseif ($device=='sirene') {
 		if ($status=='Group On') {
 			$status='On';
