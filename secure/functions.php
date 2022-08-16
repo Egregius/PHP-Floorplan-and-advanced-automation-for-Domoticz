@@ -443,7 +443,8 @@ function double($name, $action, $msg='') {
 }
 
 function rookmelder($msg) {
-	global $d,$device;
+	resetsecurity();
+//	global $d,$device;
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['Weg']['s']<=1) {
 
@@ -460,7 +461,6 @@ function rookmelder($msg) {
 //		}
 //		boseplayinfo($msg, 45);
 //	}
-	resetsecurity();
 }
 function koekje($user,$expirytime) {
 	global $cookie,$domainname;
