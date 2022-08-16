@@ -23,7 +23,10 @@ $data=array();
 $data['Weg']=$d['Weg']['s'];
 $data['poortrf']=$d['poortrf']['s'];
 $data['deurvoordeur']=$d['deurvoordeur']['s'];
-$data['tdeurvoordeur']=time()-$d['deurvoordeur']['t'];
+$times[]=TIME-$d['deurvoordeur']['t'];
+$times[]=TIME-$d['poortrf']['t'];
+$times[]=TIME-$d['Weg']['t'];
+$data['tdeurvoordeur']=min($times);
 $zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 $zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
