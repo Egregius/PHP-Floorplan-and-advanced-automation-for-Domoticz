@@ -251,6 +251,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['living_set']['s']==3) $rate=5;
 			elseif($d['living_set']['s']==4) $rate=6;
 			elseif($d['living_set']['s']==5) $rate=7;
+			if ($d['eettafel']['s']>0) $rate='B';
 			$set=$d['living_set']['s']-0;
 			$set=ceil($set * 2) / 2;
 			if ($set>30) $set=30;
