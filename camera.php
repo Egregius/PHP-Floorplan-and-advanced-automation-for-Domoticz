@@ -20,41 +20,33 @@ while ($row = $result->fetch_array()) {
 	$d[$row['n']]['m'] = $row['m'];
 }
 $data=array();
-$data['Weg']=$d['Weg']['s'];
-$data['poortrf']=$d['poortrf']['s'];
-$data['deurvoordeur']=$d['deurvoordeur']['s'];
+$data['w']=$d['Weg']['s'];
+$data['p']=$d['poortrf']['s'];
+$data['d']=$d['deurvoordeur']['s'];
 $times[]=TIME-$d['deurvoordeur']['t'];
 $times[]=TIME-$d['poortrf']['t'];
 $times[]=TIME-$d['Weg']['t'];
-$data['tdeurvoordeur']=min($times);
+
+$data['t']=min($times);
 $zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 $zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-	$data['zonop']=0;
+	$data['z']=0;
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-} else $data['zonop']=1;
+} else $data['z']=1;
 echo serialize($data);
+
 function sw($name,$action='Toggle',$msg='') {
-	global $user,$d,$domoticzurl,$db;
+	global $user,$d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();
-	if (is_array($name)) {
-		foreach ($name as $i) {
-			if ($d[$i]['s']!=$action) {
-				sw($i, $action, $msg);
-				usleep(100000);
-			}
-		}
-	} else {
-		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if ($d[$name]['i']>0) {
-			lg($msg);
-			if ($d[$name]['s']!=$action||$name=='deurbel') file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
-		} else store($name, $action, $msg);
-		if ($name=='denon') {
-			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
-		}
+	$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+	if ($d[$name]['i']>0) {
+		lg($msg);
+		if ($d[$name]['s']!=$action||$name=='deurbel') file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 	}
+
 }
+
 function lg($msg) {
 	global $log;
 	if ($log==true) {
