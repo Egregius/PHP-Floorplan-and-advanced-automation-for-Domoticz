@@ -9,18 +9,21 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-echo '<pre>';
+echo '<pre>mirom</pre>';
 require_once 'google-api-php-client/vendor/autoload.php';
 $client=getClient();
+echo '<pre>client';print_r($client);echo '</pre>';
 $service=new Google_Service_Calendar($client);
+echo '<pre>service';print_r($service);echo '</pre>';
 $timeMin=strftime("%Y-%m-%d",TIME).'T'.strftime("%H:%M:%S",TIME-7200).'+0000';
 $msg='GCAL time: '.$timeMin.PHP_EOL;
 $afval='';
-$optParams=array('maxResults'=>5,'orderBy'=>'startTime','singleEvents'=>TRUE,'timeMin'=>$timeMin);
+$optParams=array('maxResults'=>15,'orderBy'=>'startTime','singleEvents'=>TRUE,'timeMin'=>$timeMin);
 $results=$service->events->listEvents($calendarIdMirom, $optParams);
+echo '<pre>';print_r($results);echo '</pre>';
 if (count($results->getItems())>0) {
 	foreach ($results->getItems() as $event) {
-//		print_r($event);
+		print_r($event);
     	if (isset($event->start->dateTime))$start=strtotime($event->start->dateTime);
     	else $start=strtotime($event->start->date);
     	if (isset($event->end->dateTime))$end=strtotime($event->end->dateTime);
