@@ -36,6 +36,9 @@ if (strftime("%k", TIME)==19) {
 	unset($xml);
 	if (strlen($msg)>5) telegram($msg);
 }
+if (strftime("%k", TIME)==0) {
+	store ('winst', 0);
+}
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
 	$time=TIME;
