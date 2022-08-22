@@ -9,9 +9,9 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if (isset($_REQUEST['alert'])) {
+if (isset($_REQUEST['alert'],$_REQUEST['text'],$_REQUEST['time'])) {
 	include 'functions.php';
-	alert('googlehistory', 'Google History down', 43200);
+	alert($_REQUEST['alert'], str_replace('__', PHP_EOL, $_REQUEST['text']), $_REQUEST['time']);
 	exit;
 } else {
 	require '/var/www/config.php';
