@@ -10,7 +10,7 @@
  * @link		https://egregius.be
  **/
 require_once '/var/www/html/secure/functions.php';
-if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']=='CKgSwM01pQibqgAzWfUsdE5nUlzT1wnNdtz09EO2') {
+if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']==$ringtoken) {
 	echo ' Start | ';
 	$d=fetchdata();
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
