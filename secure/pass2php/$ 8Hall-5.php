@@ -14,5 +14,5 @@ if ($d['auto']['s']=='On') {
 	fhall();
 	finkom();
 }
-if ($d['Weg']['s']!=0) store('Weg', 0, basename(__FILE__).':'.__LINE__);
+store('Weg', 0, basename(__FILE__).':'.__LINE__);
 if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
