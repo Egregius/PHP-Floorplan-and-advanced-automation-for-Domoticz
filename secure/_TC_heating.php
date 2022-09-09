@@ -48,16 +48,16 @@ if ($d['living_set']['m']==0) {
 				$Setliving=18;
 				$dow=date("w");
 				if($dow==0||$dow==6) {
-					if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=20.0;
+					if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=19.0;
 				} else {
-					if (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=20.0;
+					if (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=19.0;
 				}
 			} elseif ($d['Weg']['s']==0) {
-				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.0;
-				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
+				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=19.0;
+				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=18.0;
 			}
 		}
-		if ($Setliving>19.5&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&TIME>=strtotime('11:00')) $Setliving=19.5;
+		if ($Setliving>19.5&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&TIME>=strtotime('11:00')) $Setliving=18.0;
 	}
 	if ($d['living_set']['s']!=$Setliving&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60) {
 		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);

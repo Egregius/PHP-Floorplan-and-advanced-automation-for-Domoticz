@@ -15,6 +15,8 @@ if ($d['auto']['s']=='On') {
 		if (TIME>=strtotime('7:30')&&TIME<strtotime('10:00')) {
 			if ($d['Ralex']>0) {
 				sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+				sleep(5);
+				sl('alex', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}

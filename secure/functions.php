@@ -83,7 +83,7 @@ function douche() {
 	global $d;
 	$douchegas=$d['douche']['s']*10;
 	$douchewater=$d['douche']['m']*1;
-	$gas=0.00137;
+	$gas=0.00111;
 	$water=0.00477;
 	if ($douchegas>=1&&$douchewater>=1) {
 		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*$gas, 2, ',', '').'€__Water: '.$douchewater.'L = '.number_format($douchewater*$water, 2, ',', '').'€__Som = '.number_format(($douchegas*$gas)+($douchewater*$water), 2, ',', '').'€';

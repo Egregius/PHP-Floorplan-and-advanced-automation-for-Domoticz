@@ -12,10 +12,10 @@
 foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['daikin']['s']=='On') {
+if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
-		if ($daikin->pow!=0&&$daikin->mode!=2) {
+		if (isset($daikin->pow)&&$daikin->pow!=0&&$daikin->mode!=2) {
 			daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
 			storeicon($k.'_set', 'Off');
@@ -44,16 +44,16 @@ if ($d['auto']['s']=='On') {
 		}
 		if ($dag==true||$d['pirhall']['s']=='On') {
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rspeelkamer']['s']>1&&($d['deurspeelkamer']['s']=='Open'||$d['speelkamer']['s']>0)) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>1&&($d['deuralex']['s']=='Open'||$d['alex']['s']>1)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>1&&($d['deuralex']['s']=='Open'||$d['alex']['s']>1)&&past('raamalex')>175) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1&&$d['lgtv']['s']=='Off') {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']>1) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>1&&past($i)>14400) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||TIME>=strtotime('7:30'))) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($dag==true&&$zon>0&&$d['Weg']['s']!=1&&$d['tv']['s']=='Off') {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']>1) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']>1&&past($i)>14400) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||TIME>=strtotime('7:30'))) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
