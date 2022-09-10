@@ -31,16 +31,20 @@ if ($status=='On') {
 			waarschuwing(' Let op . Raam keuken open', 55);
 			exit;
 		}
+		if ($d['bose104']['m']=='Online') {
+			waarschuwing(' Let op . Bose garage aan');
+			exit;
+		}
 		if ($d['bose105']['m']=='Online') {
 			waarschuwing(' Let op . Bose badkamer', 55);
 			exit;
 		}
 		if ($d['bose106']['m']=='Online') {
-			waarschuwing(' Let op . Bose buiten', 55);
+			waarschuwing(' Let op . Bose buiten20', 55);
 			exit;
 		}
 		if ($d['bose107']['m']=='Online') {
-			waarschuwing(' Let op . Bose buiten', 55);
+			waarschuwing(' Let op . Bose buiten10', 55);
 			exit;
 		}
 		boseplayinfo(' Alles ok . Vertrek maar', 50);
