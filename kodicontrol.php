@@ -51,11 +51,11 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 </head>
 <body>
 <div class="navbar">
-	<form action="/floorplan.php"><input type="submit" class="btn b7" value="Plan"/></form>
-	<form action="/denon.php"><input type="submit" class="btn b7" value="Denon"/></form>
-	<form action="/kodi.php"><input type="submit" class="btn btna b7" value="Kodi"/></form>
-	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b7" value="Films"/></form>
-	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b7" value="Series"/></form>
+	<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
+	<form action="/denon.php"><input type="submit" class="btn b5" value="Denon"/></form>
+	<form action="/kodi.php"><input type="submit" class="btn btna b5" value="Kodi"/></form>
+	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b5" value="Films"/></form>
+	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b5" value="Series"/></form>
 	</div>
 	<div class="box"><form method="POST">
 	<br>

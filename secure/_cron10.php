@@ -162,7 +162,9 @@ if (pingport('192.168.2.104', 80)==1) {
 	if (!empty($status)) {
 		if ($d['bose104']['icon']!='Online') {
 			storeicon('bose104', 'Online', basename(__FILE__).':'.__LINE__);
+			bosekey('SHUFFLE_ON', 0, 101);
 		}
+		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) bosezone(104);
 	}
 } else {
 	if (pingport('192.168.2.104', 80)!=1&&$d['bose104']['icon']!='Offline') {
@@ -206,13 +208,7 @@ if (pingport('192.168.2.106', 80)==1) {
 			storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__);
 			bosekey('SHUFFLE_ON', 0, 101);
 		}
-		if (isset($status['@attributes']['source'])) {
-			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-				bosezone(106, true);
-//				sw('bose106', 'On', basename(__FILE__).':'.__LINE__);
-//				bosekey('SHUFFLE_ON', 0, 101);
-			}
-		}
+		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) bosezone(106);
 	}
 } else {
 	if (pingport('192.168.2.106', 80)!=1&&$d['bose106']['icon']!='Offline') {
@@ -227,13 +223,7 @@ if (pingport('192.168.2.107', 80)==1) {
 			storeicon('bose107', 'Online', basename(__FILE__).':'.__LINE__);
 			bosekey('SHUFFLE_ON', 0, 101);
 		}
-		if (isset($status['@attributes']['source'])) {
-			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-				bosezone(107);
-//				sw('bose107', 'On', basename(__FILE__).':'.__LINE__);
-//				bosekey('SHUFFLE_ON', 0, 101);
-			}
-		}
+		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) bosezone(107);
 	}
 } else {
 	if (pingport('192.168.2.107', 80)!=1&&$d['bose107']['icon']!='Offline') {
