@@ -208,7 +208,7 @@ if (pingport('192.168.2.106', 80)==1) {
 		if ($d['bose106']['icon']!='Online') {
 			storeicon('bose106', 'Online', basename(__FILE__).':'.__LINE__);
 		}
-		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1)
+		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 			bosezone(106);
 			bosevolume(32, 106);
 		}
