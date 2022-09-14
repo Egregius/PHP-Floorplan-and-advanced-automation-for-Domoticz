@@ -1,3 +1,3 @@
 <?php
-sw('GroheRed', 'On');
-storemode('GroheRed', 1);
+include('$ miniliving4l.php');
+

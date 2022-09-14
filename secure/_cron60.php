@@ -27,8 +27,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirkeuken']['s']=='Off') {
 			$uit=235;
 			if (past('pirkeuken')>$uit) {
-				foreach (array('snijplank') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-				foreach (array('wasbak') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, $d[$i]['m'], basename(__FILE__).':'.__LINE__);
+				foreach (array('wasbak','snijplank') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, $d[$i]['m'], basename(__FILE__).':'.__LINE__);
 			}
 		}
 		if ($d['pirliving']['s']=='Off') {
@@ -106,7 +105,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','snijplank','zolderg','dampkap','lamp kast') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -114,7 +113,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','wasbak','hall','inkom','terras') as $i) {
+		foreach (array('eettafel','zithoek','wasbak','snijplank','hall','inkom','terras') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -134,7 +133,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','snijplank','badkamervuur2','badkamervuur1','zolderg') as $i) {
+		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','badkamervuur2','badkamervuur1','zolderg') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']!='Off') {
@@ -144,7 +143,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','wasbak','hall','inkom','kamer','speelkamer','alex','terras','lichtbadkamer') as $i) {
+		foreach (array('eettafel','zithoek','wasbak','snijplank','hall','inkom','kamer','speelkamer','alex','terras','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {

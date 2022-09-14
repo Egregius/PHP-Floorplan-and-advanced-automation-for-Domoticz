@@ -1,2 +1,2 @@
 <?php
-sw('kookplaat', 'Off');
+sw('GroheRed', 'Off');

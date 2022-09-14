@@ -3,7 +3,7 @@ if ($d['zon']['s']>0) {
 	if ($d['wasbak']['s']>=14) $level=ceil($d['wasbak']['s']*1.8);
 	else $level=14;
 } else {
-	if ($d['wasbak']['s']>=3) $level=ceil($d['wasbak']['s']*1.5);
+	if ($d['wasbak']['s']>=3) $level=ceil($d['wasbak']['s']*1.6);
 	else $level=3;
 }
 if ($level>100) $level=100;

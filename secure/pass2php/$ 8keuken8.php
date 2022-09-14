@@ -1,2 +1,3 @@
 <?php
-sw('kookplaat', 'Off');
+sw('GroheRed', 'On');
+storemode('GroheRed', 1);

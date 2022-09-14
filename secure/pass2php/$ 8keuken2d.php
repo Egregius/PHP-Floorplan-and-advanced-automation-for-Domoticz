@@ -1,5 +1,4 @@
 <?php
-if ($d['lgtv']['s']!='Off') {
-	shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
-	sleep(2);
+if ($d['snijplank']['s']<100) {
+	sl('snijplank', 100);
 }
