@@ -10,7 +10,8 @@
  * @link	 https://egregius.be
  **/
 if (past('$ miniliving2s')>2) {
-	if ($d['snijplank']['s']=='On') {
+	shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
+	/*if ($d['snijplank']['s']=='On') {
 		if ($d['lgtv']['s']=='On') {
 			shell_exec('python3 secure/lgtv.py -c play '.$lgtvip);
 		}
@@ -22,7 +23,7 @@ if (past('$ miniliving2s')>2) {
 		if ($d['snijplank']['s']=='Off') {
 			sw('snijplank', 'On', basename(__FILE__).':'.__LINE__);
 		}
-	}
+	}*/
 }
 /**
  * Function andereuit
