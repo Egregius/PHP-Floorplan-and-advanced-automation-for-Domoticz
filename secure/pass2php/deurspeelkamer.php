@@ -11,6 +11,9 @@
  **/
 if ($d['auto']['s']=='On') {
 	if ($status=='Open') {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if (($d['speelkamer']['s']<100&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder))||$d['Rspeelkamer']['s']>70) sl('speelkamer', 100, basename(__FILE__).':'.__LINE__);
 		fhall();
 		if (TIME>strtotime('6:00')&&TIME<strtotime('10:00')&&$d['Ralex']['s']==0&&$d['Rspeelkamer']>0) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
 	}
