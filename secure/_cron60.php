@@ -24,12 +24,7 @@ foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) 
 if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- THUIS ----------------------------*/
 	if ($d['Weg']['s']==0){
-		if ($d['pirkeuken']['s']=='Off') {
-			$uit=235;
-			if (past('pirkeuken')>$uit) {
-				foreach (array('wasbak','snijplank') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, $d[$i]['m'], basename(__FILE__).':'.__LINE__);
-			}
-		}
+
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {

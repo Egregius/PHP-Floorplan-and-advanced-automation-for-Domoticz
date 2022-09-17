@@ -1,31 +1,14 @@
 #!/bin/bash
-
-: '
-crontab -e
-# m h  dom mon dow   command
-* * * * * /usr/bin/nice -n20 /var/www/html/secure/cron.sh >/dev/null 2>&1
-* * * * * /usr/bin/nice -n20 /var/www/html/secure/cronsmappee.sh >/dev/null 2>&1
-0 0 * * * /usr/bin/nice -n20 curl -s "http://127.0.0.1/secure/cleandomoticzdb.php" >/dev/null 2>&1
-1 0 * * * /usr/bin/nice -n20 /var/www/_SQLBackup/sqldaily.sh >/dev/null 2>&1
-*/5 * * * * /usr/bin/nice -n20 /var/www/html/secure/cleandisk.sh >/dev/null 2>&1
-'
-
-#0
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.878
-#10
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
-#20
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
-#30
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
-#40
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
-#50
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 
 ps cax | grep domoticz
@@ -33,19 +16,16 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service domoticz.sh stop
 	/usr/sbin/service domoticz.sh start
 fi
-
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
 	/usr/sbin/service nginx start
 fi
-
 PHP=$(ps -C php-fpm8.0 | wc -l)
 if [ $PHP -le 1 ] || [ $PHP -ge 50 ] ; then
 	/usr/sbin/service php8.0-fpm stop
 	/usr/sbin/service php8.0-fpm start
 fi
-
 ps cax | grep mariadbd
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
@@ -53,8 +33,8 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Remove these lines as they only upload my files to gitbub.
-MINUTE=$(date +"%M")
-if [ $(($MINUTE%10)) -eq 0 ] ; then
+HOUR=$(date +"%H")
+if [ $(($HOUR%8)) -eq 0 ] ; then
 	LAST=$(find /var/www/html -type f ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"

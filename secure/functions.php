@@ -9,25 +9,14 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-
 require '/var/www/config.php';
-
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-
 function dbconnect() {
 	global $dbname,$dbuser,$dbpass;
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
 $db=dbconnect();
-//$d=fetchdata();
-/**
- * Function fetchdata
- *
- * Fetches all the data from the devices table
- *
- * @return array $d
- */
 function fetchdata() {
 	global $db;
 	if(!isset($db)) $db=dbconnect();
@@ -35,13 +24,6 @@ function fetchdata() {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 	return $d;
 }
-/**
- * Function huisslapen
- *
- * Switches off everything that should be off while sleeping
- *
- * @return null
- */
 function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
@@ -64,21 +46,11 @@ function huisslapen() {
 		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-//	if ($d['daikin']['m']!=1) storemode('daikin', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis() {
 	global $d;
 	store('Weg', 0);
-	//if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 }
-/**
- * Function douche
- *
- * Calculates the gas and water consumption of the shower, sents a telegram
- * and resets the gas and water counters
- *
- * @return null
- */
 function douche() {
 	global $d;
 	$douchegas=$d['douche']['s']*10;
@@ -92,7 +64,6 @@ function douche() {
 	store('douche', 0, basename(__FILE__).':'.__LINE__);
 	storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 }
-
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
 }
@@ -129,17 +100,6 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 
 	}
 }
-/**
- * Function waarschuwing
- *
- * Plays a sound on the Xiami doorbell and a regular doorbell
- * Says the message on the Bose Soundtouch speakers
- * and sents a telegram message
- *
- * @param string $msg Message to sent to telegram
- *
- * @return null
- */
 function waarschuwing($msg) {
 	global $d;
 	if ($d['bose101']['s']=='On') boseplayinfo($msg, 50);
@@ -151,21 +111,11 @@ function waarschuwing($msg) {
 	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
 	die($msg);
 }
-/**
- * Function past
- *
- * Calculates how long it's ago that this device was updated
- *
- * @param string $name Name of the device to check
- *
- * @return int
- */
 function past($name) {
 	global $d;
 	if (!empty($d[$name]['t'])) return TIME-$d[$name]['t'];
 	else return 999999999;
 }
-
 function idx($name) {
 	global $d;
 	if ($d[$name]['i']>0) return $d[$name]['i'];
@@ -237,14 +187,12 @@ function sw($name,$action='Toggle',$msg='') {
 		} else store($name, $action, $msg);
 		if ($name=='denon') {
 			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
-		} //elseif ($name=='GroheRed'&&$d['warm water']['s']!=$action) sw('warm water', $action, basename(__FILE__).':'.__LINE__);
+		}
 	}
-
 }
 function fvolume($cmd) {
 	global $d;
 	if (!isset($d)) $d=fetchdata();
-//	lg('fvolume '.$cmd);
 	if ($cmd=='down') {
 		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
 			denon('MVDOWN');
@@ -367,7 +315,6 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	if ($d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
-				//lg($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 				return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 			}
 		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
@@ -589,7 +536,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
 			elseif ($ip==106) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>';
 			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
-
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
@@ -644,7 +590,6 @@ function denontcp($cmd, $x) {
 		return true;
 	} else {
 		usleep($sleep);
-		echo 'sleeping '.$sleep.'<br>';
 		return false;
 	}
 }
@@ -666,7 +611,6 @@ function fliving() {
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-//			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);
@@ -684,9 +628,6 @@ function fbadkamer() {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
-//		if (TIME>strtotime('5:30')&&TIME<strtotime('8:00')) {
-//			if ($d['bose102']['s']=='Off'&&past('bose102')>30) bosezone(102);
-//		}
 	}
 }
 function fkeuken() {
@@ -696,9 +637,6 @@ function fkeuken() {
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<1&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
 	}
-//	if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0&&TIME>strtotime('6:30')&&TIME<strtotime('19:00')) {
-//		if ($d['bose102']['s']=='Off'&&$d['lgtv']['s']=='Off') bosezone(102, false, 27);
-//	}
 }
 function finkom() {
 	global $d;
@@ -724,6 +662,7 @@ function fhall() {
 			}
 		}
 	} else finkom();
+	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['Weg']['s']==0) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function sirene($msg) {
 	global $d,$device,$status;
@@ -743,7 +682,6 @@ function sirene($msg) {
 			}
 		}
 	}
-
 }
 function createheader($page='') {
 	global $udevice,$ipaddress;
@@ -799,15 +737,6 @@ function createheader($page='') {
 	echo '
 	</head>';
 }
-/**
- * Function daikinstatus
- *
- * Returns the status of a Daikin airco
- *
- * @param string $device devicename of the Daikin airco
- *
- * @return array();
- */
 function daikinstatus($device) {
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
@@ -829,30 +758,13 @@ function daikinstatus($device) {
 		return json_encode($ci);
 	}
 }
-/**
- * Function daikinset
- *
- * Sets a Daikin airco in a mode and a temperature.
- *
- * @param string $device devicename of the Daikin airco
- * @param int $power 0 = Off, 1 = On
- * @param int $mode 0,1,7 = Auto, 2 = Dry, 3 = Cool, 4 = Heat, 6 = Fan only
- * @param float $temp Temperature of the setpoint
- * @param string $fan A = Auto, B = Silence, 3 = Level 1, 4 = Level 2, 5 = Level 3, 6 = Level 4, 7 = level 5
- * @param int $swing 0 = all wings stopped, 1 = vertical wings motion, 2 = horizontal wings motion, 3 = vertical and horizontal wings motion
- * @param int $hum
- *
- * @return array();
- */
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=40) {
 	global $d;
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-//	lg($url);
 	file_get_contents($url);
-//	lg("Daikin $device pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0 spmode=$spmode ($msg)");
 	sleep(1);
 	$status=daikinstatus($device);
 	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status);
@@ -866,12 +778,10 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	foreach(array(111, 112, 113) as $ip) {
 		if ($maxpow==100) $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
 		else $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$maxpow.'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
-//		lg($url.' >> '.file_get_contents($url));
 		file_get_contents($url);
 		usleep(100000);
 	}
 }
-
 function RefreshZwave($node){
 	$devices=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=openzwavenodes&idx=3',false),true);
 	foreach($devices['result'] as $devozw)
@@ -891,16 +801,6 @@ function human_filesize($bytes,$dec=2){
 	$factor=floor((strlen($bytes)-1)/3);
 	return sprintf("%.{$dec}f",$bytes/pow(1024,$factor)).@$size[$factor];
 }
-/**
- * Function setradiator: calculates the setpoint for the Danfoss thermostat valve
- *
- * @param string  $name   Not used anymore
- * @param int	 $dif	Difference in temperature
- * @param boolean $koudst Is it the coldest room of all?
- * @param int	 $set	default setpoint
- *
- * @return null
- */
 function setradiator($name,$dif,$koudst=false,$set=14) {
 	if ($koudst==true) $setpoint=28;
 	else $setpoint=$set-ceil($dif*4);
@@ -908,15 +808,6 @@ function setradiator($name,$dif,$koudst=false,$set=14) {
 	elseif ($setpoint<4) $setpoint=4;
 	return round($setpoint, 0);
 }
-
-/**
- * Function zwaveNodeNeighbourUpdate
- * Updates the neighbours of a node
- *
- * @param int $node idx of the node
- *
- * @return string result
- */
 function zwaveNodeNeighbourUpdate($node) {
 	global $domoticzurl;
 	for ($k=1;$k<=5;$k++) {
@@ -927,14 +818,6 @@ function zwaveNodeNeighbourUpdate($node) {
 	}
 	return $result;
 }
-/**
- * Function zwaveRefreshNode
- * Refreshes the config of a node
- *
- * @param int $node idx of the node
- *
- * @return string result
- */
 function zwaveRefreshNode($node) {
 	global $domoticzurl;
 	for ($k=1;$k<=5;$k++) {
@@ -945,15 +828,6 @@ function zwaveRefreshNode($node) {
 	}
 	return $result;
 }
-
-/**
- * Function zwaveHasnodefailed
- * Tries to revive a dead node
- *
- * @param int $node idx of the node
- *
- * @return null
- */
 function zwaveHasnodefailed($node) {
 	global $domoticzurl;
 	for ($k=1;$k<=5;$k++) {
