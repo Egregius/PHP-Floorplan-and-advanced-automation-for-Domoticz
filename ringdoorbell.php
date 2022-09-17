@@ -22,7 +22,7 @@ if (isset($_REQUEST['source'])&&isset($_REQUEST['token'])&&$_REQUEST['token']==$
 	if ($_REQUEST['kind']=='on_demand') {
 		echo ' On demand | ';
 		telegram('Ring on demand '.$_REQUEST['source'], true, 1);
-	} elseif ($_REQUEST['kind']=='motion'&&$_REQUEST['dt']=='human') {
+	} elseif ($_REQUEST['kind']=='motion'/*&&$_REQUEST['dt']=='human'*/) {
 		echo ' Motion human | ';
 		if ($_SERVER['REQUEST_TIME']>apcu_fetch('ring_motion')+30) {
 			apcu_store('ring_motion', $_SERVER['REQUEST_TIME']);
