@@ -691,8 +691,8 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<5&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
+	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<1&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<1&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
 	}
@@ -702,22 +702,22 @@ function fkeuken() {
 }
 function finkom() {
 	global $d;
-	if ($d['Weg']['s']==0&&$d['inkom']['s']<32&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 32, basename(__FILE__).':'.__LINE__);
-	elseif ($d['Weg']['s']==0&&$d['inkom']['s']<27&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 27, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['inkom']['s']<30&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+	elseif ($d['Weg']['s']==0&&$d['inkom']['s']<25&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 25, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45'))) {
-		if ($d['hall']['s']<32) {
+		if ($d['hall']['s']<30) {
 			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-				if ($d['hall']['s']<32) {
-					sl('hall', 32, basename(__FILE__).':'.__LINE__);
+				if ($d['hall']['s']<30) {
+					sl('hall', 30, basename(__FILE__).':'.__LINE__);
 //					sleep(1);
 //					sl('hall', 32, basename(__FILE__).':'.__LINE__);
 				}
-			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0&&$d['hall']['s']<27) {
-				if ($d['hall']['s']<27) {
-					sl('hall', 27, basename(__FILE__).':'.__LINE__);
+			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0&&$d['hall']['s']<25) {
+				if ($d['hall']['s']<25) {
+					sl('hall', 25, basename(__FILE__).':'.__LINE__);
 //					sleep(1);
 //					sl('hall', 27, basename(__FILE__).':'.__LINE__);
 				}

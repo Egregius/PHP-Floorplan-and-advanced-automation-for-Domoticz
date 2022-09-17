@@ -58,7 +58,7 @@ if ($d['auto']['s']=='On') {
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {
-		foreach (array('eettafel','zithoek','speelkamer','kamer','alex','zolder') as $i) {
+		foreach (array('speelkamer','kamer','alex') as $i) {
 			if ($d[$i]['s']!=0) {
 				if (past($i)>58) {
 					if ($d[$i]['m']==1) {
@@ -67,35 +67,14 @@ if ($d['auto']['s']=='On') {
 						if ($level==20) $level=19;
 						sl($i, $level, basename(__FILE__).':'.__LINE__);
 						if ($level==0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-					} elseif ($d[$i]['m']==2) {
-						$level=$d[$i]['s']+1;
-						if ($level==20) $level=21;
-						if ($level>100) $level=100;
-						sl($i, $level, basename(__FILE__).':'.__LINE__);
-					}
-				}
-			} elseif ($d[$i]['s']==0&&$i=='alex') {
-				if ($d[$i]['m']==3) {
-					if ($d['raamalex']['s']=='Open') storemode('alex', 0, basename(__FILE__).':'.__LINE__);
-					else {
-						if (past($item)>10800) {
-							sl('alex', 2, basename(__FILE__).':'.__LINE__);
-							storemode($item, 2, basename(__FILE__).':'.__LINE__);
-						}
 					}
 				}
 			}
 		}
-//		if ($d['Weg']['s']==0&&TIME>=strtotime('5:00')&&TIME<strtotime('20:00')) {
-//			if ($d['luchtwasser']['s']=='Off') sw('luchtwasser', 'On', basename(__FILE__).':'.__LINE__);
-//		} else {
-//			if ($d['luchtwasser']['s']=='On') sw('luchtwasser', 'Off', basename(__FILE__).':'.__LINE__);
-//		}
 	}
 	/* -------------------------------------------- SLAPEN --------------------------*/
-	if ($d['Weg']['s']==1) {
-
-	}
+//	if ($d['Weg']['s']==1) {
+//	}
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
 		$uit=600;
@@ -165,10 +144,12 @@ if ($d['auto']['s']=='On') {
 			sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	foreach (array('living_set','badkamer_set','kamer_set','speelkamer_set','alex_set') as $i) {
+	foreach (array('living_set','badkamer_set') as $i) {
+		if ($d[$i]['m']!=0&&past($i)>7200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+	}
+	foreach (array('kamer_set','speelkamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-
 	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
 		foreach (array('RkamerL','RkamerR','Rspeelkamer','Ralex') as $i) {
 			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
