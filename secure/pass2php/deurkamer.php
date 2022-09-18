@@ -12,7 +12,7 @@
 if ($d['auto']['s']=='On') {
 	if ($status=='Open') {
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['kamer']['s']<5&&TIME>$zononder) sl('kamer', 5, basename(__FILE__).':'.__LINE__);
+		if ($d['kamer']['s']<5&&$d['Weg']['s']==0&&TIME>$zononder) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		fhall();
 	}
 }

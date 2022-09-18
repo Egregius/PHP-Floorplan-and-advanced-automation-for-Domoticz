@@ -662,7 +662,7 @@ function fhall() {
 			}
 		}
 	} else finkom();
-	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['Weg']['s']==0) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['Weg']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function sirene($msg) {
 	global $d,$device,$status;
