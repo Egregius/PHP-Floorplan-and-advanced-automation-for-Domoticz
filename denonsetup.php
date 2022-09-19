@@ -48,18 +48,21 @@ if (isset($_POST['action'])) {
 			})
 		}
 	</script>
+	<style>
+		.btn{height:60px!important;}
+	</style>
 	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	<link href="/styles/denon.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div class="navbar">
-	<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
-	<form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
-	<form action="/kodi.php"><input type="submit" class="btn b5" value="Kodi"/></form>
-	<form action="/films/films.php"><input type="submit" class="btn b5" value="Films"/></form>
-	<form action="/films/series.php"><input type="submit" class="btn b5" value="Series"/></form>
+	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
+	<form action="/kodi.php"><input type="submit" class="btn b4" value="Kodi"/></form>
+	<form action="/films/films.php"><input type="submit" class="btn b4" value="Films"/></form>
 </div>
 <div class="content">
+<br><br>
 <div class="box" style="width:96%">
 	<table width="100%">
 	<tr>
@@ -90,19 +93,6 @@ if (isset($_POST['action'])) {
 		<button class="btn" style="width:100%" onclick="exec('action','CVFR UP');">UP</button></td>
 		<td><button class="btn" style="width:100%" onclick="exec('action','CVFR DOWN');">DOWN</button></td>
 	</tr>
-	<tr><td></td><td></td><td></td></tr>
-	<tr>
-		<td align="right"><b>Rear L</b>
-		<td ><button class="btn" style="width:100%" onclick="exec('action','CVSL UP');">UP</button></td>
-		<td><button class="btn" style="width:100%" onclick="exec('action','CVSL DOWN');">DOWN</button></td>
-	</tr>
-	<tr><td></td><td></td><td></td></tr>
-	<tr>
-		<td align="right"><b>Rear R</b><td >
-		<button class="btn" style="width:100%" onclick="exec('action','CVSR UP');">UP</button></td>
-		<td><button class="btn" style="width:100%" onclick="exec('action','CVSR DOWN');">DOWN</button></td>
-	</tr>
-	<tr><td></td><td></td><td></td></tr>
 	</table>
 </div>
 <div class="box" style="width:96%">

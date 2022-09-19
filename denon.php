@@ -62,11 +62,10 @@ if (!$denonmain) {
 	echo '<div class="error">Kon geen verbinding maken met Denon.<br/>Geen real-time info beschikbaar</div>';
 }
 echo '<div class="navbar">
-	<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
-	<form action="/denon.php"><input type="submit" class="btn btna b5" value="Denon"/></form>
-	<form action="/kodi.php"><input type="submit" class="btn b5" value="Kodi"/></form>
-	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b5" value="Films"/></form>
-	<form action="'.$urlfilms.'/series.php"><input type="submit" class="btn b5" value="Series"/></form>
+	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+	<form action="/denon.php"><input type="submit" class="btn btna b4" value="Denon"/></form>
+	<form action="/kodi.php"><input type="submit" class="btn b4" value="Kodi"/></form>
+	<form action="'.$urlfilms.'/films.php"><input type="submit" class="btn b4" value="Films"/></form>
 </div>
 		<div class="content">
 			<form method="POST">
@@ -76,12 +75,12 @@ if ($currentvolume==80) {
 	$currentvolume=0;
 }
 if ($denonmain['ZonePower']['value']=='ON') {
-		$levels=array(10,12,14,16,18,20,22,24,26,28,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,56,58);
+		$levels=array(10,12,14,16,18,20,22,24,26,28,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,56,58,60,62,64,66,68);
 	if (!in_array($currentvolume, $levels)) {
 		$levels[]=$currentvolume;
 	}
 	asort($levels);
-	$levels=array_slice($levels, 0, 36);
+	$levels=array_slice($levels, 0, 40);
 	foreach ($levels as $k) {
 		$setvalue = 80-$k;
 		$showvalue = $k;
@@ -136,6 +135,9 @@ if ($denonmain['ZonePower']['value']=='ON') {
 		}
 		echo '
 	</div>
+	<div class="box">
+		<a href="/denonsetup.php" class="btn b1">Setup</a>
+	</div>
 	<div class="box">';
 		$delay=file_get_contents('http://192.168.2.5/SETUP/AUDIO/AUDIODELAY/d_audio.asp');
 		$delay=strafter($delay, "style='text-align:right;' value='");
@@ -148,9 +150,7 @@ if ($denonmain['ZonePower']['value']=='ON') {
 		}
 		echo '
 	</form>
-	<div class="box">
-		<form action="/denonsetup.php"><input type="submit" class="btn b1" value="Setup"/></form>
-	</div>
+
 	</div>
 	</div>';
 } else {
