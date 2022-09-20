@@ -80,7 +80,7 @@ if ($d['achterdeur']['s']=='Open') {
 $i=explode(';', $d['kookplaatpower_kWh']['s']);
 if ($i[0]<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['Weg']['s']==0&&TIME<=strtotime('16:00')&&($d['zon']['s']-$d['el']['s'])>300) alert('wasmachien','Wasmachien checken'.PHP_EOL.($d['zon']['s']-$d['el']['s']).' W overschot',43200);
+//if ($d['Weg']['s']==0&&TIME<=strtotime('16:00')&&($d['zon']['s']-$d['el']['s'])>300) alert('wasmachien','Wasmachien checken'.PHP_EOL.($d['zon']['s']-$d['el']['s']).' W overschot',43200);
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);
@@ -98,12 +98,12 @@ if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('
 	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 }*/
 
-$items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
+/*$items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
 foreach ($items as $i) {
 	if (past($i)>10800&&$d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-}
+}*/
 
-if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
+/*if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
 	if (!empty($nowplaying)) {
 		if (isset($nowplaying['@attributes']['source'])) {
@@ -117,7 +117,7 @@ if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 			} else sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-}
+}*/
 
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);

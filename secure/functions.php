@@ -609,7 +609,7 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
@@ -640,26 +640,15 @@ function fkeuken() {
 }
 function finkom() {
 	global $d;
-	if ($d['Weg']['s']==0&&$d['inkom']['s']<30&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-	elseif ($d['Weg']['s']==0&&$d['inkom']['s']<25&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 25, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45'))) {
-		if ($d['hall']['s']<30) {
-			if ($d['Weg']['s']==0&&TIME>strtotime('6:00')&&TIME<=strtotime('21:00')&&$d['zon']['s']==0) {
-				if ($d['hall']['s']<30) {
-					sl('hall', 30, basename(__FILE__).':'.__LINE__);
-//					sleep(1);
-//					sl('hall', 32, basename(__FILE__).':'.__LINE__);
-				}
-			} elseif ($d['Weg']['s']==0&&$d['zon']['s']==0&&$d['hall']['s']<25) {
-				if ($d['hall']['s']<25) {
-					sl('hall', 25, basename(__FILE__).':'.__LINE__);
-//					sleep(1);
-//					sl('hall', 27, basename(__FILE__).':'.__LINE__);
-				}
-			}
+		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$d['zon']['s']==0) {
+			sl('hall', 28, basename(__FILE__).':'.__LINE__);
+//			sleep(1);
+//			sl('hall', 27, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
 	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['Weg']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);

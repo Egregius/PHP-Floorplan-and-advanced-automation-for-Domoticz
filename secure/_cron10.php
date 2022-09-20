@@ -12,14 +12,15 @@
 //lg(__FILE__.':'.$s);
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
-	$uit=70;
+	$uit=40;
 	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$uit&&past('poort')>$uit&&past('deurgarage')>$uit&&past('garageled')>$uit&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
 	elseif ($d['pirgarage']['s']=='On'&&$d['garageled']['s']=='Off'&&$d['garage']['s']=='Off'&&$d['zon']['s']==0) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-	$uit=85;
+	$uit=40;
 	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$uit&&past('poort')>$uit&&past('deurgarage')>$uit&&past('garage')>$uit&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 	$uit=120;
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$uit&&past('zolderg')>$uit) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>12&&past('pirinkom')>20&&past('deurwc')>20&&past('deurinkom')>20&&past('deurvoordeur')>20) {
+	$uit=15;
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>$uit&&past('pirinkom')>$uit&&past('deurwc')>$uit&&past('deurinkom')>$uit&&past('deurvoordeur')>$uit) {
 		foreach (array(28,26,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -29,7 +30,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>12&&past('pirhall')>20&&past('deurbadkamer')>20&&past('deurkamer')>20&&past('deurspeelkamer')>20&&past('deuralex')>20) {
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$uit&&past('pirhall')>$uit&&past('deurbadkamer')>$uit&&past('deurkamer')>$uit&&past('deurspeelkamer')>$uit&&past('deuralex')>$uit) {
 		foreach (array(28,26,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
@@ -39,12 +40,13 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	$uit=85;
+	$uit=50;
 	if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&past('pirkeuken')>$uit&&past('wasbak')>$uit) sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&past('pirkeuken')>$uit&&past('snijplank')>$uit) sl('snijplank', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>55&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+$uit=50;
+if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$uit&&past('voordeur')>$uit) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.6', 3000)==1) {
