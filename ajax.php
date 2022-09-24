@@ -260,14 +260,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='water') {
 		storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		double('water', 'On');
-	} elseif ($_REQUEST['command']=='sw'&&$_REQUEST['device']=='GroheRed') {
-		if ($_REQUEST['action']=='On') {
-			sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
-			storemode('GroheRed', 1, basename(__FILE__).':'.__LINE__);
-		} else {
-			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-		}
 	} elseif ($_REQUEST['command']=='powermode') {
 		if ($_REQUEST['device']=='living_set') {$ip=111;$daikin='living';}
 		elseif ($_REQUEST['device']=='kamer_set') {$ip=112;$daikin='kamer';}

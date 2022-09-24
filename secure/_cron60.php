@@ -50,6 +50,8 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
+		$i=explode(';', $d['Grohered_kWh']['s']);
+		if ($d['GroheRed']['s']=='On'&&$i[0]<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {
@@ -72,6 +74,7 @@ if ($d['auto']['s']=='On') {
 //	}
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
+		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		$uit=600;
 		foreach (array('pirgarage','pirkeuken','pirliving','pirinkom') as $i) {
 			if ($d[$i]['s']!='Off') {

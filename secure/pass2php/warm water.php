@@ -1,8 +1,2 @@
 <?php
-if ($status=='On') {
-	sw('GroheRed', 'On');
-	storemode('GroheRed', 1);
-} else {
-	sw('GroheRed', 'Off');
-	storemode('GroheRed', 0);
-}
+sw('GroheRed', $status, basename(__FILE__).':'.__LINE__);

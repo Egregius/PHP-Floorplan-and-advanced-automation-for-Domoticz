@@ -213,6 +213,14 @@ if (isset($_REQUEST['add'])) {
 		$pluviomaand[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
 	}
 	$result->free();
+	$query="SELECT YEAR(date) as year, MONTH(date) as month, SUM(rain) as rain FROM pluvio GROUP BY YEAR(date), MONTH(date) ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
+	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
+	while ($row=$result->fetch_assoc()) {
+		$pluvioaltijd[$row['month'].'-'.$row['year']]['Maand']=$row['month'].'-'.$row['year'];
+		$pluvioaltijd[$row['month'].'-'.$row['year']]['Normaal']=$klimaat[$row['month']];
+		$pluvioaltijd[$row['month'].'-'.$row['year']]['Regen']=$row['rain'];
+	}
+	$result->free();
 	echo '<h3>Pluviometer per dag</h3>';
 	$args['chart']='ColumnChart';
 	$args['margins']=array(0,0,50,50);
@@ -237,7 +245,7 @@ if (isset($_REQUEST['add'])) {
 	$args['raw_options']='
 		lineWidth:3,
 		series:{0:{type:"steppedArea", areaOpacity:0.3},1:{type:"bars", areaOpacity:0.1, groupWidth:30}},
-		hAxis:{showTextEvery:1,textStyle:{color:"#EEE", fontSize:0}},
+		hAxis:{textPosition:"none"},
 		vAxis:{format:"#",textStyle:{color:"#CCC", fontSize:14},Gridlines:{multiple:10},minorGridlines:{multiple:10},viewWindowMode:\'explicit\',viewWindow:{min:0}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
@@ -266,6 +274,35 @@ if (isset($_REQUEST['add'])) {
 			</thead>
 			<tbody>';
 	foreach ($pluviomaand as $i) echo '
+				<tr>
+					<td>'.$i['Maand'].'</td>
+					<td> '.number_format($i['Regen'], 0).' mm </td>
+					<td> '.$i['Normaal'].' mm </td>
+					<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 0, ',', '.').' % </td>
+				</tr>';
+	echo '
+			</tbody>
+		</table>
+		<br>
+		<br>
+		<br>';
+	$args['chart_div']='pluvioaltijd';
+	$chart=array_to_chart($pluvioaltijd, $args);
+	echo $chart['script'];
+	echo $chart['div'];
+	unset($chart);
+	echo '
+		<table>
+			<thead>
+				<tr>
+					<th>Maand</th>
+					<th>Regen</th>
+					<th>Normaal</th>
+					<th>Procent</th>
+				</tr>
+			</thead>
+			<tbody>';
+	foreach ($pluvioaltijd as $i) echo '
 				<tr>
 					<td>'.$i['Maand'].'</td>
 					<td> '.number_format($i['Regen'], 0).' mm </td>

@@ -1,3 +1,2 @@
 <?php
-sw('GroheRed', 'On');
-storemode('GroheRed', 1);
+sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
