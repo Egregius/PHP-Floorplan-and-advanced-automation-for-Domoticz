@@ -50,8 +50,12 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
-		$i=explode(';', $d['Grohered_kWh']['s']);
-		if ($d['GroheRed']['s']=='On'&&$i[0]<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+
+		if ($d['GroheRed']['s']=='On') {
+			$i=explode(';', $d['Grohered_kWh']['s']);
+			if ($i[0]<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+			elseif (past('GroheRed')>1200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+		}
 	}
 	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
 	if ($d['Weg']['s']<=1) {
@@ -257,9 +261,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off') {
+	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
 		$level=explode(';', $d['kookplaatpower_kWh']['s']);
-		if ($level[0]<200&&past('kookplaatpower_kWh')>2400) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($level[0]<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);

@@ -96,7 +96,7 @@ foreach ($items as $i) {
 	if (past($i)>10800&&$d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 }*/
 
-/*if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
+if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
 	if (!empty($nowplaying)) {
 		if (isset($nowplaying['@attributes']['source'])) {
@@ -110,7 +110,7 @@ foreach ($items as $i) {
 			} else sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-}*/
+}
 
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
