@@ -57,25 +57,6 @@ if ($d['auto']['s']=='On') {
 			elseif (past('GroheRed')>1200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-	/* -------------------------------------------- THUIS OF SLAPEN --------------*/
-	if ($d['Weg']['s']<=1) {
-		foreach (array('speelkamer','kamer','alex') as $i) {
-			if ($d[$i]['s']!=0) {
-				if (past($i)>58) {
-					if ($d[$i]['m']==1) {
-						$level=floor($d[$i]['s']*0.95);
-						if ($level<2) $level=0;
-						if ($level==20) $level=19;
-						sl($i, $level, basename(__FILE__).':'.__LINE__);
-						if ($level==0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-					}
-				}
-			}
-		}
-	}
-	/* -------------------------------------------- SLAPEN --------------------------*/
-//	if ($d['Weg']['s']==1) {
-//	}
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
 		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);

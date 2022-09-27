@@ -103,7 +103,6 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 function waarschuwing($msg) {
 	global $d;
 	if ($d['bose101']['s']=='On') boseplayinfo($msg, 50);
-	if ($d['Xvol']['s']!=25) sl('Xvol', 25, basename(__FILE__).':'.__LINE__);
 	sl('Xring', 30, basename(__FILE__).':'.__LINE__);
 	sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 	telegram($msg, false, 2);
@@ -632,10 +631,10 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<1&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
-	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<1&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
+	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<2&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 2, basename(__FILE__).':'.__LINE__);
+	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<2&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 2, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom() {

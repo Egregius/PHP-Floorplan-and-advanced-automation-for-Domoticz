@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=4;
-if ($d['alex_set']['m']==0) $d['alex_set']['s']=4;
+if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=15;
+if ($d['alex_set']['m']==0) $d['alex_set']['s']=15;
 $rates=array('B', 'B', 3, 4, 5, 6, 7);
 $bigdif=0;
 foreach (array('living','kamer','alex') as $k) {
@@ -26,7 +26,7 @@ if ($d['daikin']['m']==1) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 			if ($dif>1.5) $power=0;
-			elseif ($dif<=0.5) $power=1;
+			elseif ($dif<=0.1) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 				if     ($dif<=-3.49)	{$rate=6;$line=__LINE__;}
 				elseif ($dif<=-2.49)	{$rate=6;$line=__LINE__;}
