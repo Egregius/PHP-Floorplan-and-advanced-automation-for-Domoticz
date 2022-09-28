@@ -45,7 +45,7 @@ if ($difbadkamer<=-5) {
 	} elseif (($d['badkamervuur2']['s']=='On'&&past('badkamervuur2')>90&&$d['badkamer_set']['m']==1)||$d['el']['s']>6200) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-} elseif ($difbadkamer<= 0) {
+} elseif ($difbadkamer< 0) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}

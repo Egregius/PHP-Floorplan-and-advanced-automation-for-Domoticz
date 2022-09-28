@@ -302,15 +302,29 @@ if (isset($_REQUEST['add'])) {
 				</tr>
 			</thead>
 			<tbody>';
-	foreach ($pluvioaltijd as $i) echo '
+	$totaal=0;
+	$normaal=0;
+	foreach ($pluvioaltijd as $i) {
+		$totaal+=$i['Regen'];
+		$normaal+=$i['Normaal'];
+		echo '
 				<tr>
 					<td>'.$i['Maand'].'</td>
 					<td> '.number_format($i['Regen'], 0).' mm </td>
 					<td> '.$i['Normaal'].' mm </td>
 					<td> '.number_format(($i['Regen']/$i['Normaal'])*100, 0, ',', '.').' % </td>
 				</tr>';
+	}
 	echo '
 			</tbody>
+			<tfoot>
+				<tr>
+					<th>Totaal</th>
+					<th>'.number_format($totaal, 1, ',', '').'</th>
+					<th>'.$normaal.'</th>
+					<th>'.number_format(($totaal/$normaal)*100, 0).' % </th>
+				</tr>
+			</tfoot>
 		</table>
 		<br>
 		<br>

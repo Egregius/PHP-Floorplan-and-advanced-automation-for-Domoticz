@@ -38,17 +38,17 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>0)		{$rate=1;$line=__LINE__;}
 				elseif ($dif>0.2)		{$rate=1;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 				if ($k=='living') {
-					$set=$d[$k.'_set']['s']-2.5;
-					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0/*&&TIME>strtotime('18:00')*/)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
+					$set=$d[$k.'_set']['s']-3;
+					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}
 				} elseif ($k=='kamer') {
-					$set=$d[$k.'_set']['s']-2.5;
+					$set=$d[$k.'_set']['s']-3;
 					if (TIME<strtotime('8:30')||TIME>strtotime('22:00')) {
 						$rate=0;
 					} else {
 						if ($rate<3) $rate=3;
 					}
 				} elseif ($k=='alex') {
-					$set=$d[$k.'_set']['s']-2.5;
+					$set=$d[$k.'_set']['s']-3;
 					if (TIME<strtotime('8:30')||TIME>strtotime('19:30')) {
 						$rate=0;
 					} else {

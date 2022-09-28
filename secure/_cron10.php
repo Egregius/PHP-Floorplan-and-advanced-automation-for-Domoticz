@@ -56,7 +56,6 @@ if ($d['tv']['s']=='On') {
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
 			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['denon']['s']!='On'&&past('denon')>30&&$d['Weg']['s']==0) sw('denon', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['kenwood']['s']!='On'&&past('kenwood')>30&&$d['Weg']['s']==0) sw('kenwood', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
@@ -75,7 +74,6 @@ if ($d['tv']['s']=='On') {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['denon']['s']!='Off'&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['DENON']['s']!='Off'&&past('DENON')>900) sw('DENON', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['kenwood']['s']!='Off'&&past('kenwood')>900) sw('kenwood', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);

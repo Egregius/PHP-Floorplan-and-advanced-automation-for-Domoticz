@@ -27,7 +27,7 @@ function fetchdata() {
 function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','voordeur','wc','dampkap','GroheRed','kookplaat','nvidia','kenwood'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','voordeur','wc','dampkap','GroheRed','kookplaat','nvidia'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','speelkamer_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}

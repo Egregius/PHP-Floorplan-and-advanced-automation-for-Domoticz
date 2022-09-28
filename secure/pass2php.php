@@ -55,7 +55,5 @@ if (isset($d[$device])) {
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 	store($device, $status, 'Pass2PHP');
-	if (include '/var/www/html/secure/pass2php/'.$device.'.php') {
-		lg($device.' = '.$status);
-	}
+	include '/var/www/html/secure/pass2php/'.$device.'.php';
 } //else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);

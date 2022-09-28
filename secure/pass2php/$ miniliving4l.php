@@ -11,7 +11,7 @@
  **/
 if ($d['tv']['s']=='Off'||$d['denon']['s']=='Off'||$d['nvidia']['s']=='Off') {
 	if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
-	$items=array('tv','nvidia','denon','kenwood');
+	$items=array('tv','nvidia','denon');
 	foreach ($items as $item) {
 		if ($d[$item]['s']!='On') {
 			sw($item, 'On', basename(__FILE__).':'.__LINE__);
