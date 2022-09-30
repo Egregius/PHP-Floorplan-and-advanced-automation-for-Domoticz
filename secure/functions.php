@@ -608,7 +608,7 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 1, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
@@ -631,8 +631,8 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<2&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 2, basename(__FILE__).':'.__LINE__);
+	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<5&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<2&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 2, basename(__FILE__).':'.__LINE__);
 	}
