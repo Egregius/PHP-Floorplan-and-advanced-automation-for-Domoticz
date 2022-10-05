@@ -10,12 +10,10 @@
  * @link	 https://egregius.be
  **/
 if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=5&&past('deurbadkamer')>57) {
-	if ($d['badkamer_set']['m']>5) store('badkamer_set', 5, basename(__FILE__).':'.__LINE__);
+	if ($d['badkamer_set']['s']>5) store('badkamer_set', 5, basename(__FILE__).':'.__LINE__);
 	$d['badkamer_set']['s']=5;
 	if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']>0) {
-
-	$x=21;
 	if (past('badkamer_set')>14400&&$d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<21&&$d['Weg']['s']<2) {
 		if ($d['badkamer_set']['s']>15) {
 			store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
@@ -58,6 +56,10 @@ if ($difbadkamer<=-5) {
 	}
 	if ($d['badkamervuur1']['s']=='On'&&(past('badkamervuur1')>60||$d['el']['s']>7200)) {
 		sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+	if ($difbadkamer>0.2&&$d['badkamer_set']['s']>19) {
+		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=15&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

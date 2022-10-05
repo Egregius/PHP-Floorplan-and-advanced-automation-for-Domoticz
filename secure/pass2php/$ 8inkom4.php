@@ -36,11 +36,10 @@ if ($d['deurvoordeur']['s']=='Open'&&$status=='On') {
 		waarschuwing(' Let op . Bose buiten10');
 		exit;
 	}
-	boseplayinfo(' Alles ok . Vertrek maar', 60);
-	usleep(380000);
-	bosevolume(60, 101);
-	usleep(3000000);
-	bosekey("POWER", 0, 101);
+	sl('Xring', 90, basename(__FILE__).':'.__LINE__);
+	sleep(4);
+	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
+	
 	huisslapen();
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 }

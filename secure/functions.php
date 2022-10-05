@@ -102,11 +102,11 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 }
 function waarschuwing($msg) {
 	global $d;
-	if ($d['bose101']['s']=='On') boseplayinfo($msg, 50);
-	sl('Xring', 30, basename(__FILE__).':'.__LINE__);
-	sw('deurbel', 'On', basename(__FILE__).':'.__LINE__);
 	telegram($msg, false, 2);
-	usleep(1500000);
+	sl('Xring', 40, basename(__FILE__).':'.__LINE__);
+	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+	sleep(3);
+	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
 	die($msg);
 }

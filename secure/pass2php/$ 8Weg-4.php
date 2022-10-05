@@ -47,11 +47,10 @@ if ($status=='On') {
 			waarschuwing(' Let op . Bose buiten10', 55);
 			exit;
 		}
-		boseplayinfo(' Alles ok . Vertrek maar', 50);
-		usleep(380000);
-		bosevolume(55, 104);
-		usleep(3000000);
-		bosekey("POWER", 0, 104);
+		sl('Xring', 90, basename(__FILE__).':'.__LINE__);
+		sleep(4);
+		sl('Xring', 0, basename(__FILE__).':'.__LINE__);
+	
 		huisslapen();
 		store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	} else {

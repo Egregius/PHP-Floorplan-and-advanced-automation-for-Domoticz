@@ -128,7 +128,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
 		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-		storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['device']=='living') {
 			if ($d['heating']['s']==-2) {//airco cooling
 				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -150,15 +149,16 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			elseif ($d['badkamervuur1']['s']=='On'&&$d['badkamer_temp']['s']>$_REQUEST['action']) sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['badkamervuur2']['s']=='On'&&$d['badkamer_temp']['s']>$_REQUEST['action']) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 		}
+		storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='setpoint2') {
 		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-		storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['device']=='badkamer') {
 			if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 			elseif ($d['badkamervuur1']['s']=='On'&&$d['badkamer_temp']['s']>$_REQUEST['action']) sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['badkamervuur2']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 			elseif ($d['badkamervuur2']['s']=='On'&&$d['badkamer_temp']['s']>$_REQUEST['action']) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 		}
+		storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='Weg') {

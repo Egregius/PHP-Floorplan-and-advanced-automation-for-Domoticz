@@ -15,10 +15,12 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 echo '<pre>';
-apcu_store('ringbeweging', $_SERVER['REQUEST_TIME']);
-echo apcu_fetch('ringbeweging');
 
-
+	sl('Xring', 90, basename(__FILE__).':'.__LINE__);
+	sleep(4);
+	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
+	
+	
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');
