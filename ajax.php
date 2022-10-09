@@ -310,6 +310,12 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset($_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skip') {
+		$db=dbconnect();
+		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
+		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+			$bose=$row['s'];
+		}
+		if ($bose=='On') $_REQUEST['boseip']=101;
 		if ($_REQUEST['action']=='prev') {
 			bosekey("PREV_TRACK", 0, $_REQUEST['boseip']);
 		} elseif ($_REQUEST['action']=='next') {
