@@ -29,7 +29,6 @@ echo '
 	<link rel="shortcut icon" href="images/temperatures.png"/>
 	<link rel="apple-touch-icon" href="images/temperatures.png"/>
 	<link href="/styles/temp.css?v=5" rel="stylesheet" type="text/css"/>
-	<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 	</head>';
 if ($udevice=='iPad') echo '
 	<body style="width:1010px">
@@ -251,5 +250,5 @@ $togo=61-date("s");
 if ($togo<15) $togo=15;
 $togo=$togo*1000+62000;
 echo "<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
-echo '<script type="text/javascript">setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
+echo '<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();

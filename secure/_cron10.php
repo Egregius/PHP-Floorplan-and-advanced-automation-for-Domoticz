@@ -40,8 +40,8 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&past('wasbak')>8) {
-		foreach (array(5,4,3,2,1,0) as $i) {
+	if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&past('wasbak')>5) {
+		foreach (array(4,3,2,1,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 				break;
