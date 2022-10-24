@@ -52,7 +52,7 @@ if ($d['auto']['s']=='On') {
 }
 $uit=50;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$uit&&past('voordeur')>$uit) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-/*
+
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.6', 3000)==1) {
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
@@ -69,7 +69,7 @@ if ($d['tv']['s']=='On') {
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
 	}
-	if (apcu_fetch('lgtv-offline')>=3) {
+	if (apcu_fetch('lgtv-offline')>=20) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['TV']['s']=='On') sw('TV', 'Off', basename(__FILE__).':'.__LINE__);
@@ -90,7 +90,7 @@ if ($d['nvidia']['s']=='On') {
 	} else {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}*/
+}
 if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
 $user='cron10  ';
 $el=$d['el']['s']-$d['zon']['s'];
