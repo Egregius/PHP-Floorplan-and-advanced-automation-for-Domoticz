@@ -61,6 +61,10 @@ if ($dif<=-1) {
 } else {
 	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)||$d['el']['s']>7500) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	if (($d['badkamervuur1']['s']!='Off'&&past('badkamervuur1')>30)||$d['el']['s']>8200) sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($dif>0.2&&$d['badkamer_set']['s']>19) {
+		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
+	}
 }
 
 $boven=array('Rspeelkamer','Ralex','RkamerL','RkamerR');

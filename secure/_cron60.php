@@ -67,7 +67,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast') as $i) {
+		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast','nvidia','switch') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -87,7 +87,7 @@ if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- WEG ----------------------------*/
 	if ($d['Weg']['s']>=2) {
 		$uit=600;
-		foreach (array('pirgarage','pirkeuken','pirliving','pirinkom','pirhall') as $i) {
+		foreach (array('pirhall') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					ud($i, 0, 'Off');
@@ -95,7 +95,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('garage','denon','bureel','kristal','tuin','voordeur','badkamervuur2','badkamervuur1','zolderg') as $i) {
+		foreach (array('badkamervuur2','badkamervuur1','zolderg') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']!='Off') {
@@ -105,7 +105,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','wasbak','snijplank','hall','inkom','kamer','speelkamer','alex','terras','lichtbadkamer') as $i) {
+		foreach (array('kamer','speelkamer','alex','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {
@@ -139,7 +139,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-//	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']&&TIME<=strtotime('16:00')) {
 		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||($d['zon']['s']>20&&TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
