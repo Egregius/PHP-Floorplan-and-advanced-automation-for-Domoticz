@@ -608,7 +608,7 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 3, basename(__FILE__).':'.__LINE__);
+			if ($d['snijplank']['s']==0&&TIME<strtotime('21:30')) sl('snijplank', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
