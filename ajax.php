@@ -198,7 +198,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		if ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
 				if ($d['nas']['s']=='Off') shell_exec('secure/wakenas.sh &');
-				$items=array('tv','nvidia','denon','kenwood');
+				$items=array('switch','tv','nvidia','denon','kenwood');
 				foreach ($items as $item) {
 					if ($d[$item]['s']!='On') {
 						sw($item, 'On', basename(__FILE__).':'.__LINE__);

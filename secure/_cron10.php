@@ -64,7 +64,6 @@ if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoor
 if ($d['tv']['s']=='On') {
 	if (pingport('192.168.2.6', 3000)==1) {
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-		if ($d['TV']['s']=='Off') sw('TV', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
 			if ($d['switch']['s']!='On'&&past('switch')>30) sw('switch', 'On', basename(__FILE__).':'.__LINE__);
@@ -81,14 +80,12 @@ if ($d['tv']['s']=='On') {
 	if (apcu_fetch('lgtv-offline')>=20) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['TV']['s']=='On') sw('TV', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['auto']['s']=='On'&&$d['lamp kast']['s']=='Off'&&$d['zon']['s']==0&&$d['Weg']['s']==0) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['switch']['s']!='Off'&&past('denon')>900) sw('switch', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['denon']['s']!='Off'&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['DENON']['s']!='Off'&&past('DENON')>900) sw('DENON', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
