@@ -18,7 +18,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
 			&&
-				(past('raamkamer')>900||TIME>strtotime('19:00'))
+				(past('raamkamer')>7200||TIME>strtotime('19:00'))
 			&&
 				(
 					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
@@ -40,7 +40,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
 			&&
-				(past('raamalex')>900|| TIME>strtotime('19:00'))
+				(past('raamalex')>7200|| TIME>strtotime('19:00'))
 			&&
 				(
 					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))

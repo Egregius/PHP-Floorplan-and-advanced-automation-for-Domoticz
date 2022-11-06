@@ -389,6 +389,7 @@ function double($name, $action, $msg='') {
 }
 
 function rookmelder($msg) {
+	global $device;
 	resetsecurity();
 //	global $d,$device;
 	alert($device,	$msg,	300, false, 2, true);
@@ -751,6 +752,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
+	storeicon('daikinliving', $maxpow);
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	file_get_contents($url);
 	sleep(1);

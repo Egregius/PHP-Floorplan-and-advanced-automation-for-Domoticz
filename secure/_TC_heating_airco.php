@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=15;
-if ($d['alex_set']['m']==0) $d['alex_set']['s']=15;
+//if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=15;
+//if ($d['alex_set']['m']==0) $d['alex_set']['s']=15;
 $rates=array('B', 'B', 3, 4, 5, 6, 7);
 $bigdif=0;
 foreach (array('living','kamer','alex') as $k) {
@@ -18,7 +18,7 @@ foreach (array('living','kamer','alex') as $k) {
 	if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 }
 if ($d['daikin']['m']==1) {
-	$maxpow=floor(40*$bigdif);
+	$maxpow=floor(30*$bigdif);
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
 	else $spmode=-1;
@@ -55,13 +55,14 @@ if ($d['daikin']['m']==1) {
 						if ($rate<3) $rate=3;
 					}
 				}
-	//			lg ($k.' => rate'.$rate.'='.$rates[$rate]);
+//				lg ($k.' => rate'.$rate.'='.$rates[$rate].' power='.$power);
 				$set=ceil($set * 2) / 2;
 				if ($set>25) $set=25;
 				elseif ($set<10) $set=10;
 				$daikin=json_decode($d['daikin'.$k]['s']);
 				if (!isset($power)) $power=$daikin->power;
-				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]) {
+//				lg ($k.' => rate'.$rate.'='.$rates[$rate].' dif='.$dif.' power='.$power);
+				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]||$d['daikinliving']['icon']!=$maxpow) {
 					lg('DAIKIN SET '.$k.' line='.$line.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
 					$data=json_decode($d[$k.'_set']['icon'], true);
 					$data['power']=$power;
@@ -84,6 +85,7 @@ if ($d['daikin']['m']==1) {
 				daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 			}
 		}
+		unset($power);
 	}
 }
 foreach (array('kamer','alex') as $kamer) {
