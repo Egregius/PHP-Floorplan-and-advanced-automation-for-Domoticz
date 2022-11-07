@@ -32,7 +32,8 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setkamer=15;
-//			if (TIME<strtotime('2:00')||TIME>strtotime('19:00')) $Setkamer=15.0;
+			if (TIME<strtotime('6:00')||TIME>strtotime('22:00')) $Setkamer=16.0;
+			elseif (TIME<strtotime('6:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 		if ($d['buiten_temp']['s']>14||$d['minmaxtemp']['m']>16) $Setkamer-=1;
 		} else $Setkamer=$d['kamer_set']['s'];
@@ -54,7 +55,8 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setalex=15;
-//			if (TIME<strtotime('2:00')||TIME>strtotime('18:00')) $Setalex=15.0;
+			if (TIME<strtotime('6:00')||TIME>strtotime('19:00')) $Setalex=16.0;
+			elseif (TIME<strtotime('6:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 		if ($d['buiten_temp']['s']>14||$d['minmaxtemp']['m']>16) $Setalex-=1;
 	} else $Setalex=$d['alex_set']['s'];
