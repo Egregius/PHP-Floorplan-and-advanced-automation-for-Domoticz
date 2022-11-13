@@ -41,7 +41,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
 	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&past('snijplank')>5) {
-		foreach (array(30,25,20,15,0) as $i) {
+		foreach (array(20,15,10,7,0) as $i) {
 			if ($d['snijplank']['s']>$i) {
 				sl('snijplank', $i, basename(__FILE__).':'.__LINE__);
 				break;

@@ -10,9 +10,9 @@
  * @link     https://egregius.be
  **/
 if ($d['eettafel']['s']==0) {
-	sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
+	sl('eettafel', 16, basename(__FILE__).':'.__LINE__);
 } else {
-	$new=ceil($d['eettafel']['s']*1.05);
+	$new=ceil($d['eettafel']['s']*1.08);
 	if ($new>100) $new=100;
 	sl('eettafel', $new);
 }

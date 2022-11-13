@@ -18,7 +18,7 @@ foreach (array('living','kamer','alex') as $k) {
 	if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 }
 if ($d['daikin']['m']==1) {
-	$maxpow=floor(30*$bigdif);
+	$maxpow=floor(20*$bigdif);
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
 	else $spmode=-1;
@@ -32,11 +32,11 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif<=-2.49)	{$rate=6;$line=__LINE__;}
 				elseif ($dif<=-1.29)	{$rate=6;$line=__LINE__;}
 				elseif ($dif<=-0.29)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-0.19)	{$rate=5;$line=__LINE__;}
-				elseif ($dif<=-0.09)	{$rate=4;$line=__LINE__;}
-				elseif ($dif<=0)	{$rate=3;$line=__LINE__;}
-				elseif ($dif>0)		{$rate=2;$line=__LINE__;}
-				elseif ($dif>0.2)		{$rate=1;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
+				elseif ($dif<=-0.19)	{$rate=6;$line=__LINE__;}
+				elseif ($dif<=-0.09)	{$rate=6;$line=__LINE__;}
+				elseif ($dif<=0)	{$rate=6;$line=__LINE__;}
+				elseif ($dif>0)		{$rate=5;$line=__LINE__;}
+				elseif ($dif>0.2)		{$rate=4;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-2.5;
 					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0)) {if ($rate>4)$rate=$rate-1;if ($rate<0)$rate=0;}

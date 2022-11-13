@@ -18,7 +18,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
 			&&
-				(past('raamkamer')>7200||TIME>strtotime('19:00'))
+				(past('raamkamer')>10800||TIME>strtotime('19:00'))
 			&&
 				(
 					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
@@ -32,16 +32,14 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setkamer=15;
-			if (TIME<strtotime('6:00')||TIME>strtotime('22:00')) $Setkamer=16.0;
-			elseif (TIME<strtotime('6:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
+			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
-		if ($d['buiten_temp']['s']>14||$d['minmaxtemp']['m']>16) $Setkamer-=1;
-		} else $Setkamer=$d['kamer_set']['s'];
+	} else $Setkamer=$d['kamer_set']['s'];
 	if ($d['alex_set']['m']==0) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
 			&&
-				(past('raamalex')>7200|| TIME>strtotime('19:00'))
+				(past('raamalex')>10800|| TIME>strtotime('19:00'))
 			&&
 				(
 					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))
@@ -55,10 +53,8 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setalex=15;
-			if (TIME<strtotime('6:00')||TIME>strtotime('19:00')) $Setalex=16.0;
-			elseif (TIME<strtotime('6:00')||TIME>strtotime('18:00')) $Setalex=15.5;
+			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
-		if ($d['buiten_temp']['s']>14||$d['minmaxtemp']['m']>16) $Setalex-=1;
 	} else $Setalex=$d['alex_set']['s'];
 } elseif ($d['heating']['s']>=1) {
 	$Setkamer=14;

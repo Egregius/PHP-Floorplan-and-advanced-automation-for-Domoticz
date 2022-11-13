@@ -15,9 +15,10 @@ foreach (array('kamer','alex') as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
 }
-if ($bigdif<=-1) $maxpow=100;
-elseif ($bigdif<=-0.5) $maxpow=60;
-else $maxpow=40;
+$maxpow=floor(20*$bigdif);
+if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
+elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
+else $spmode=-1;
 
 foreach (array('kamer','alex') as $kamer) {
 	if (${'dif'.$kamer}<=number_format(($bigdif+ 0.2), 1)&&${'dif'.$kamer}<=0.2) ${'RSet'.$kamer}=setradiator($kamer, ${'dif'.$kamer}, true, $d[$kamer.'_set']['s']);
