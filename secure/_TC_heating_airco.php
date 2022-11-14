@@ -88,7 +88,7 @@ if ($d['daikin']['m']==1) {
 		unset($power);
 	}
 }
-foreach (array('kamer','alex') as $kamer) {
+/*foreach (array('kamer','alex') as $kamer) {
 	if ((TIME>=strtotime('12:00')||TIME<=strtotime('4:00'))&&$d['raam'.$kamer]['s']=='Closed'&&past('raam'.$kamer)>1800&&($d['deur'.$kamer]['s']=='Closed'||($d['deur'.$kamer]['s']=='Open'&&past('deur'.$kamer)<900))) {
 		$RSetkamer=14.0;
 		$RSetalex=15.5;
@@ -100,6 +100,6 @@ foreach (array('kamer','alex') as $kamer) {
 		ud($kamer.'Z', 0, round(${'RSet'.$kamer}, 1), basename(__FILE__).':'.__LINE__);
 		store($kamer.'Z', round(${'RSet'.$kamer}, 1), basename(__FILE__).':'.__LINE__);
 	}
-}
+}*/
 $uitna=(21-$d['buiten_temp']['s'])*75; if ($uitna<295) $uitna=295;
 if ($d['brander']['s']=='On'&&past('brander')>$uitna) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
