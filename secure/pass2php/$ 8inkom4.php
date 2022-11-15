@@ -36,10 +36,9 @@ if ($d['deurvoordeur']['s']=='Open'&&$status=='On') {
 		waarschuwing(' Let op . Bose buiten10');
 		exit;
 	}
+	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	sl('Xring', 90, basename(__FILE__).':'.__LINE__);
+	huisslapen();
 	sleep(4);
 	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
-	
-	huisslapen();
-	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 }

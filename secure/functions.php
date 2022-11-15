@@ -101,7 +101,6 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function waarschuwing($msg) {
-	global $d;
 	telegram($msg, false, 2);
 	sl('Xring', 40, basename(__FILE__).':'.__LINE__);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
