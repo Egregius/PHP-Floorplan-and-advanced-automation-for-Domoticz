@@ -74,6 +74,7 @@ if ($d['tv']['s']=='On') {
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 
 		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
 	}
