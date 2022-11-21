@@ -180,7 +180,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				foreach ($items as $item) {
 					if ($d[$item]['s']!='On') {
 						sw($item, 'On', basename(__FILE__).':'.__LINE__);
-						sleep(1);
+						sleep(5);
 					}
 				}
 				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');

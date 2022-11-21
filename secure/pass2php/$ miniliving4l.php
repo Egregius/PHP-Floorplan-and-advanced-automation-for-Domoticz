@@ -15,7 +15,7 @@ if ($d['tv']['s']=='Off'||$d['sony']['s']=='Off'||$d['nvidia']['s']=='Off') {
 	foreach ($items as $item) {
 		if ($d[$item]['s']!='On') {
 			sw($item, 'On', basename(__FILE__).':'.__LINE__);
-			sleep(1);
+			sleep(5);
 		}
 		
 	}
