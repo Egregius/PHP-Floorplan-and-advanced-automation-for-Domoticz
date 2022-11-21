@@ -116,6 +116,7 @@ function past($name) {
 }
 function idx($name) {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['i']>0) return $d[$name]['i'];
 	else return 0;
 }
@@ -183,70 +184,54 @@ function sw($name,$action='Toggle',$msg='') {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$name=='deurbel') file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 		} else store($name, $action, $msg);
-		if ($name=='denon') {
-			if ($action=='Off') storemode('denon', 'UIT', basename(__FILE__).':'.__LINE__);
-		}
 	}
 }
 function fvolume($cmd) {
 	global $d;
 	if (!isset($d)) $d=fetchdata();
-	if ($cmd=='down') {
-		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-			denon('MVDOWN');
-		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-		} elseif ($d['bose101']['s']=='On') {
-			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-			if (!empty($nowplaying)) {
-				if (isset($nowplaying['@attributes']['source'])) {
-					if ($nowplaying['@attributes']['source']!='STANDBY') {
-						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-						$cv=$volume['actualvolume'];
-						if ($cv==0) exit;
-						elseif ($cv>50) bosevolume($cv-6);
-						elseif ($cv>30) bosevolume($cv-5);
-						elseif ($cv>20) bosevolume($cv-4);
-						elseif ($cv>10) bosevolume($cv-3);
-						else bosevolume($cv-2);
+	if ($d['sony']['s']=='On') {
+		if ($cmd<0) sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"'.$cmd.'","output":""}],"version":"1.1"}');
+		else sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+'.trim($cmd).'","output":""}],"version":"1.1"}');
+	} else {
+		if ($cmd=='down') {
+			if ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
+				exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
+				exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
+			} elseif ($d['bose101']['s']=='On') {
+				$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+				if (!empty($nowplaying)) {
+					if (isset($nowplaying['@attributes']['source'])) {
+						if ($nowplaying['@attributes']['source']!='STANDBY') {
+							$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+							$cv=$volume['actualvolume'];
+							if ($cv==0) exit;
+							elseif ($cv>50) bosevolume($cv-6);
+							elseif ($cv>30) bosevolume($cv-5);
+							elseif ($cv>20) bosevolume($cv-4);
+							elseif ($cv>10) bosevolume($cv-3);
+							else bosevolume($cv-2);
+						}
 					}
 				}
 			}
-		}
-	} elseif ($cmd=='up') {
-		if ($d['denon']['s']=='On'&&$d['denonpower']['s']=='ON') {
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-			denon('MVUP');
-		} elseif ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-		} elseif ($d['bose101']['s']=='On') {
-			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-			if (!empty($nowplaying)) {
-				if (isset($nowplaying['@attributes']['source'])) {
-					if ($nowplaying['@attributes']['source']!='STANDBY') {
-						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-						$cv=$volume['actualvolume'];
-						if ($cv>80) exit;
-						elseif ($cv>50) bosevolume($cv+6);
-						elseif ($cv>30) bosevolume($cv+5);
-						elseif ($cv>20) bosevolume($cv+4);
-						elseif ($cv>10) bosevolume($cv+3);
-						else bosevolume($cv+2);
+		} elseif ($cmd=='up') {
+			if ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
+				exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
+				exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
+			} elseif ($d['bose101']['s']=='On') {
+				$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+				if (!empty($nowplaying)) {
+					if (isset($nowplaying['@attributes']['source'])) {
+						if ($nowplaying['@attributes']['source']!='STANDBY') {
+							$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+							$cv=$volume['actualvolume'];
+							if ($cv>80) exit;
+							elseif ($cv>50) bosevolume($cv+6);
+							elseif ($cv>30) bosevolume($cv+5);
+							elseif ($cv>20) bosevolume($cv+4);
+							elseif ($cv>10) bosevolume($cv+3);
+							else bosevolume($cv+2);
+						}
 					}
 				}
 			}
@@ -300,6 +285,17 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 function kodi($json) {
 	global $kodiurl;
 	$ch=curl_init($kodiurl.'/jsonrpc');
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+	$result=curl_exec($ch);
+	curl_close($ch);
+	return $result;
+}
+function sony($lib,$json) {
+	global $kodiurl;
+	$ch=curl_init('http://192.168.2.5:10000/sony/'.$lib);
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -573,24 +569,6 @@ function bosepost($method,$xml,$ip=101,$log=false) {
 		usleep(100000);
 	}
 	return $response;
-}
-function denon($cmd) {
-	for ($x=1;$x<=10;$x++) {
-		if (denontcp($cmd, $x)) break;
-	}
-}
-function denontcp($cmd, $x) {
-	$sleep=102000*$x;
-	$socket=fsockopen("192.168.2.5", "23", $errno, $errstr, 2);
-	if ($socket) {
-		fputs($socket, "$cmd\r\n");
-		fclose($socket);
-		usleep($sleep);
-		return true;
-	} else {
-		usleep($sleep);
-		return false;
-	}
 }
 function strafter($string, $substring) {
 	$pos=strpos($string, $substring);

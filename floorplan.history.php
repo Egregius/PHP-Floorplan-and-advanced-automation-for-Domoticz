@@ -21,7 +21,6 @@ $modes=array(
 	'auto_mode'=>'DST',
 	'buiten_temp_mode'=>'buiten',
 	'civil_twilight_mode'=>'civil_twilight_mode',
-	'denon_mode'=>'denon input',
 	'elec_mode'=>'elec vandaag',
 	'heating_mode'=>'bigdif',
 	'icon_mode'=>'humidity',

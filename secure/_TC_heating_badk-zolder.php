@@ -40,21 +40,21 @@ if ($difbadkamer<=-5) {
 	}
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']=='Off'&&past('badkamervuur2')>30&&$d['el']['s']<5800&&$d['badkamer_set']['m']==2) {
 		sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
-	} elseif (($d['badkamervuur2']['s']=='On'&&past('badkamervuur2')>90&&$d['badkamer_set']['m']==1)||$d['el']['s']>6200) {
+	} elseif (($d['badkamervuur2']['s']=='On'&&past('badkamervuur2')>300&&$d['badkamer_set']['m']==1)||$d['el']['s']>6200) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($difbadkamer< 0) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>90||$d['badkamer_set']['m']==1||$d['el']['s']>6200)) {
+	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>300||$d['badkamer_set']['m']==1||$d['el']['s']>6200)) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } else {
-	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>60||$d['el']['s']>6200)) {
+	if ($d['badkamervuur2']['s']=='On'&&(past('badkamervuur2')>300||$d['el']['s']>6200)) {
 		sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['badkamervuur1']['s']=='On'&&(past('badkamervuur1')>60||$d['el']['s']>7200)) {
+	if ($d['badkamervuur1']['s']=='On'&&(past('badkamervuur1')>300||$d['el']['s']>7200)) {
 		sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	if ($difbadkamer>0.2&&$d['badkamer_set']['s']>19) {

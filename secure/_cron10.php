@@ -66,9 +66,8 @@ if ($d['tv']['s']=='On') {
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
-			if ($d['switch']['s']!='On'&&past('switch')>30) sw('switch', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['nvidia']['s']!='On') sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['denon']['s']!='On'&&past('denon')>30) sw('denon', 'On', basename(__FILE__).':'.__LINE__);
+			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['sony']['s']!='On'&&past('sony')>30) sw('sony', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
@@ -85,8 +84,7 @@ if ($d['tv']['s']=='On') {
 		}
 		if ($d['nvidia']['s']!='Off'&&past('lgtv')>900&&past('nvidia')>900) {
 			sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['switch']['s']!='Off'&&past('denon')>900) sw('switch', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['denon']['s']!='Off'&&past('denon')>900) sw('denon', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['sony']['s']!='Off'&&past('sony')>900) sw('sony', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);

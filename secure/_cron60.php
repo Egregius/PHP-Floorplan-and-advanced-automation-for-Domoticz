@@ -37,7 +37,7 @@ if ($d['auto']['s']=='On') {
 			}
 			$uit=14400;
 			if (past('pirliving')>$uit) {
-				if ($d['denon']['s']=='On'||$d['lgtv']['s']=='On') {
+				if ($d['sony']['s']=='On'||$d['lgtv']['s']=='On') {
 					ud('miniliving4l', 1, 'On');
 					lg('miniliving4l pressed omdat er al 4 uur geen beweging is');
 				}
@@ -67,7 +67,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','denon','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast','nvidia','switch') as $i) {
+		foreach (array('bureel','sony','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast','nvidia') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -194,7 +194,7 @@ if ($d['auto']['s']=='On') {
 		&&past('bose105')>90
 		&&past('bose106')>90
 		&&past('bose107')>90
-		&&(($d['Weg']['s']>0||$d['denonpower']['s']=='ON'||$d['denon']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
+		&&(($d['Weg']['s']>0||$d['sony']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 		if (!empty($status)) {

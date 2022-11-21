@@ -50,12 +50,6 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 		exec('curl -s http://192.168.2.20/secure/runsync.php &');
 	}
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='denonset') {
-	if ($_REQUEST['command']=='volume') {
-		$vol=80-$_REQUEST['action'];
-		@file_get_contents('http://192.168.2.5/MainZone/index.put.asp?cmd0=PutMasterVolumeSet/-'.number_format($vol, 0).'.0');
-	}
-}
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
 	resetsecurity();
 }
@@ -73,11 +67,8 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='lgtv') {
 	} elseif ($_REQUEST['command']=='pause') {
 		shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
 	} elseif ($_REQUEST['command']=='volume') {
-		if ($_REQUEST['action']=='up') {
-			fvolume('up');
-		} elseif ($_REQUEST['action']=='down') {
-			fvolume('down');
-		}
+		if ($_REQUEST['action']<0) fvolume($_REQUEST['action']);
+		else fvolume('+'.trim($_REQUEST['action']));
 	} elseif ($_REQUEST['command']=='sw') {
 		if ($_REQUEST['action']=='On') {
 			shell_exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
@@ -108,19 +99,6 @@ elseif (isset($_REQUEST['media'])) {
 	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
 	$data=array();
 	$data['pfsense']=json_decode(@file_get_contents('https://pfsense.egregius.be:44300/egregius.php', false, $ctx), true);
-	/*if ($d['denon']['s']=='On') {
-		$denon=json_decode(json_encode(simplexml_load_string(@file_get_contents('http://'.$denonip.'/goform/formMainZone_MainZoneXml.xml?_='.TIME, false, $ctx))), true);
-		if (isset($denon['Power']['value'])) {
-			$data['denon']['power']=$denon['Power']['value'];
-			$data['denon']['vol']=$denon['MasterVolume']['value'];
-		} else {
-			$data['denon']['power']='OFF';
-			$data['denon']['vol']=0;
-		}
-	}*/
-	/*if ($d['lgtv']['s']=='On') {
-		$data['lgtv']=trim(shell_exec('/var/www/html/secure/lgtv.py -c get-input '.$lgtvip));
-	}*/
 	echo json_encode($data);
 	exit;
 }
@@ -198,10 +176,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		if ($_REQUEST['command']=='media') {
 			if ($_REQUEST['action']=='On') {
 				if ($d['nas']['s']=='Off') shell_exec('secure/wakenas.sh &');
-				$items=array('switch','tv','nvidia','denon','kenwood');
+				$items=array('sony','tv','nvidia');
 				foreach ($items as $item) {
 					if ($d[$item]['s']!='On') {
 						sw($item, 'On', basename(__FILE__).':'.__LINE__);
+						sleep(1);
 					}
 				}
 				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
@@ -221,19 +200,13 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 					shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
 					sleep(2);
 				}
-				if ($d['denon']['s']!='Off') {
-					sw('denon', 'Off',basename(__FILE__).':'.__LINE__);
+				if ($d['sony']['s']!='Off') {
+					sw('sony', 'Off',basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['nvidia']['s']!='Off') {
 					sleep(10);
 					sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 				}
-			}
-		} elseif ($_REQUEST['command']=='denon') {
-			if ($d['denon']['s']=='On') {
-				denon('PWON');
-			} else {
-				sw('denon', 'On',basename(__FILE__).':'.__LINE__);
 			}
 		}
 	} elseif ($_REQUEST['command']=='water') {

@@ -14,12 +14,10 @@ $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
-echo '<pre>';
 
-	sl('Xring', 90, basename(__FILE__).':'.__LINE__);
-	sleep(4);
-	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
-	
+
+
+echo sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"-5","output":""}],"version":"1.1"}');	
 	
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
@@ -104,7 +102,6 @@ unset(
 	$_SESSION,
 	$zwaveidx,
 	$db,
-	$denonip,
 	$lgtvip,
 	$lgtvmac,
 	$nasip,

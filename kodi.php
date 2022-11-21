@@ -36,17 +36,17 @@ if (isset($_POST['cmd'])) {
 	} elseif ($_POST['cmd']=='CleanKodi') {
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
 	} elseif ($_POST['cmd']=='PauseKodi') {
-		@file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.idx('miniliving2s').'&nvalue=0&svalue=On');
+		file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx=2472&nvalue=0&svalue=On');
 	} elseif ($_POST['cmd']=='StopKodi') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
 	} elseif ($_POST['cmd']=='bigbackward') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigbackward"}}');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":{"seconds":-300}}}');
 	} elseif ($_POST['cmd']=='smallbackward') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallbackward"}}');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":{"seconds":-60}}}');
 	} elseif ($_POST['cmd']=='smallforward') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"smallforward"}}');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":{"seconds":60}}}');
 	} elseif ($_POST['cmd']=='bigforward') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":"bigforward"}}');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Seek","params":{"playerid":1,"value":{"seconds":300}}}');
 	} elseif ($_POST['cmd']=='PowerOff') {
 		sw('nvidia', 'Off',basename(__FILE__).':'.__LINE__);
 	} elseif ($_POST['cmd']=='PowerOn') {
@@ -59,23 +59,20 @@ if (isset($_POST['cmd'])) {
 			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_POST['cmd']=='audio') {
-		@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['audio'].'}}', false, $ctx);
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['action'].'}}', false, $ctx);
 	} elseif ($_POST['cmd']=='subtitle') {
 		if ($_POST['action']=='disable') {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
 		} elseif ($_POST['action']=='enable') {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"on"}}', false, $ctx);
 		} else {
-			@kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['action'].'}}', false, $ctx);
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['action'].'}}', false, $ctx);
 		}
 	} elseif ($_POST['cmd']=='Volume') {
 		lg('volume '.$_POST['action']);
 		fvolume($_POST['action']);
 	}
 	exit;
-} elseif (isset($_POST['Denon'])) {
-	header("Location: ../denon.php");
-	die("Redirecting to: ../denon.php");
 } elseif (isset($_POST['kodicontrol'])) {
 	header("Location: ../kodicontrol.php");
 	die("Redirecting to: ../kodicontrol.php");
@@ -110,25 +107,16 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 			})
 		}
 	</script>
-	<link href="/styles/kodi.css?v='.$_SERVER['REQUEST_TIME'].'" rel="stylesheet" type="text/css"/>
+	<link href="/styles/kodi.css?v=2" rel="stylesheet" type="text/css"/>
 	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	</head>
 	<body>
 		<div class="navbar">
 			<form action="/floorplan.php">
-				<input type="submit" class="btn b5" value="Plan"/>
-			</form>
-			<form action="/denon.php">
-				<input type="submit" class="btn b5" value="Denon"/>
+				<input type="submit" class="btn b2" value="Plan"/>
 			</form>
 			<form action="/kodi.php">
-				<input type="submit" class="btn btna b5" value="Kodi"/>
-			</form>
-			<form action="'.$urlfilms.'/films.php">
-				<input type="submit" class="btn b5" value="Films"/>
-			</form>
-			<form action="'.$urlfilms.'/series.php">
-				<input type="submit" class="btn b5" value="Series"/>
+				<input type="submit" class="btn btna b2" value="Kodi"/>
 			</form>
 		</div>';
 $d=fetchdata();
@@ -261,21 +249,8 @@ echo '
 					<form action="kodicontrol.php">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
 					</form>
-					<input type="submit" name="Volume" value="Down" class="btn big b3" onclick="exec(\'Volume\',\'down\');"/>
-					<form action="denon.php">
-					<input type="submit" name="Denon" value="Denon" class="btn big b3"/>
-					</form>
-					<input type="submit" name="Volume" value="Up" class="btn big b3" onclick="exec(\'Volume\',\'up\');"/>
-				</div>
-				<div class="box">Update Library:<br/>
-					<input type="submit" name="UpdateKodi" value="Wij" class="btn big b2" onclick="exec(\'UpdateKodi\',\'Wij\');"/>
-					<input type="submit" name="UpdateKodi" value="Alex" class="btn big b2" onclick="exec(\'UpdateKodi\',\'Alex\');"/>
-				</div>
-				<div class="box">
-					<input type="submit" name="PowerOn" value="Shield On" class="btn big b2" onclick="exec(\'PowerOn\',\'Shield On\');"/>
-					<input type="submit" name="TVKodi" value="TV Kodi" class="btn big b2" onclick="exec(\'TVKodi\',\'TV Kodi\');"/>
-					<input type="submit" name="PowerOff" value="Shield Off" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
-					<input type="submit" name="mediauit" value="Media uit" class="btn big b2" onclick="return confirm(\'Are you sure?\');"/>
+					<input type="submit" name="Volume" value="Down" class="btn big b2" onclick="exec(\'Volume\',\'down\');"/>
+					<input type="submit" name="Volume" value="Up" class="btn big b2" onclick="exec(\'Volume\',\'up\');"/>
 				</div>
 		</div>
 	</body>
