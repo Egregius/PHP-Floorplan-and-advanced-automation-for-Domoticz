@@ -18,7 +18,7 @@ if ($d['tv']['s']=='Off'||$d['sony']['s']=='Off'||$d['nvidia']['s']=='Off') {
 	if ($d['tv']['s']!='On') {
 		sw('tv', 'On', basename(__FILE__).':'.__LINE__);
 		sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-		sleep(30);
+		sleep(50);
 	}
 	if ($d['nvidia']['s']!='On') {
 		sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);

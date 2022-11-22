@@ -16,8 +16,8 @@ if ($d['auto']['s']=='On') {
 		fhall();
 	} else {
 		if ($d['daikin']['m']==0&&$d['daikin']['s']=='On') {
-			if ($d['heating']['s']<0) daikinset('kamer', 0, 3, 20, basename(__FILE__).':'.__LINE__, 'B', 40);
-			else daikinset('kamer', 0, 4, 12.5, basename(__FILE__).':'.__LINE__, 'B', 40);
+			if ($d['heating']['s']<0) daikinset('kamer', 1, 3, 20, basename(__FILE__).':'.__LINE__, 'B', 40);
+			else daikinset('kamer', 1, 4, 12.5, basename(__FILE__).':'.__LINE__, 'B', 40);
 		}
 	}
 }
