@@ -130,7 +130,7 @@ if ($d['auto']['s']=='On') {
 	foreach (array('living_set','badkamer_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>7200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	foreach (array('kamer_set','speelkamer_set','alex_set') as $i) {
+	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {

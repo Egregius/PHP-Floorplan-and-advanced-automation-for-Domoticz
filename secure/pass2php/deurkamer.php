@@ -14,6 +14,11 @@ if ($d['auto']['s']=='On') {
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['kamer']['s']<5&&$d['Weg']['s']==0&&TIME>$zononder) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		fhall();
+	} else {
+		if ($d['daikin']['m']==0&&$d['daikin']['s']=='On') {
+			if ($d['heating']['s']<0) daikinset('kamer', 0, 3, 20, basename(__FILE__).':'.__LINE__, 'B', 40);
+			else daikinset('kamer', 0, 4, 12.5, basename(__FILE__).':'.__LINE__, 'B', 40);
+		}
 	}
 }
 if ($d['kamer']['m']!=0&&$d['kamer']['s']==0&&past('kamer')<90) {
