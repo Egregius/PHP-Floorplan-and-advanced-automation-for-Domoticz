@@ -182,7 +182,7 @@ function sw($name,$action='Toggle',$msg='') {
 		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>0) {
 			lg($msg);
-			if ($d[$name]['s']!=$action||$name=='deurbel') file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+			if ($d[$name]['s']!=$action) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 		} else store($name, $action, $msg);
 	}
 }
@@ -477,7 +477,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			sleep(2);
 		}
 	}
-	if ($key=='POWER') {
+/*	if ($key=='POWER') {
 		if ($ip==101) {
 			if ($d['bose101']['s']=='On') sw('Bose Living', 'Off', basename(__FILE__).':'.__LINE__);
 			else sl('Bose Living', 17, basename(__FILE__).':'.__LINE__);
@@ -485,7 +485,7 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			if ($d['bose105']['s']=='On') sw('Bose Keuken', 'Off', basename(__FILE__).':'.__LINE__);
 			else sl('Bose Keuken', 17, basename(__FILE__).':'.__LINE__);
 		}
-	}
+	}*/
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;

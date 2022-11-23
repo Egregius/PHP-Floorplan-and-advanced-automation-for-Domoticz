@@ -122,8 +122,7 @@ unset(
 	$appleid,
 	$applepass,
 	$vurl,
-	$weekend,
-	$proxmoxcredentials
+	$weekend
 	);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
