@@ -155,6 +155,7 @@ if (TIME>strtotime('0:10')) {
 	curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
 	$objauth=json_decode(curl_exec($chauth));
 	if (!empty($objauth)) {
+		echo __LINE__.'<br>';
 		$access=$objauth->{'access_token'};
 		curl_close($chauth);
 		$timefrom=strtotime(date("Y-m-d", strtotime("-185 days")));
@@ -171,6 +172,7 @@ if (TIME>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
+			echo __LINE__.'<br>';
 			foreach ($data['consumptions'] as $i) {
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
@@ -180,7 +182,9 @@ if (TIME>strtotime('0:10')) {
 				$gridExport=$i['gridExport'];
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
-				$db->query("INSERT INTO smappee_kwartaal (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+				$sql="INSERT INTO smappee_kwartaal (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
+				echo __LINE__.' '.$sql.'<br>';
+				$db->query($sql);
 			}
 		}
 		curl_close($ch);
@@ -198,6 +202,7 @@ if (TIME>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
+			echo __LINE__.'<br>';
 			foreach ($data['consumptions'] as $i) {
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
@@ -207,7 +212,9 @@ if (TIME>strtotime('0:10')) {
 				$gridExport=$i['gridExport'];
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
-				$db->query("INSERT INTO smappee_maand (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+				$sql="INSERT INTO smappee_maand (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
+				echo __LINE__.' '.$sql.'<br>';
+				$db->query($sql);
 			}
 		}
 		curl_close($ch);
@@ -234,7 +241,9 @@ if (TIME>strtotime('0:10')) {
 				$gridExport=$i['gridExport'];
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
-				$db->query("INSERT INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';");
+				$sql="INSERT INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
+				echo __LINE__.' '.$sql.'<br>';
+				$db->query($sql);
 			}
 			if (isset($data['consumptions'][2]['consumption'])) $vv=round($data['consumptions'][2]['consumption']/1000, 1); else $vv=0;
 			if ($d['el']['m']!=$vv) storemode('el', $vv, basename(__FILE__).':'.__LINE__);
@@ -244,15 +253,24 @@ if (TIME>strtotime('0:10')) {
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
+				echo __LINE__.'<br>';
 				$prev=array();
 				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
-				if (isset($prev['import'])) {
-					$kwhimport=($gridImport/1000)-$prev['import'];
-					$kwhexport=($gridExport/1000)-$prev['export'];
-					if ($kwhimport<0) $kwhimport=0;
-					$db->query("INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $_SERVER['REQUEST_TIME'])."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');");
-					if ($kwhimport>(2.5/4)) telegram ('Kwartpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
+				if(!isset($prev['import'])) {$prev['import']=0;$prev['export'];}
+				$kwhimport=($gridImport/1000)-$prev['import'];
+				$kwhexport=($gridExport/1000)-$prev['export'];
+				if ($kwhimport<0) $kwhimport=0;
+				$sql="INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $_SERVER['REQUEST_TIME'])."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
+				echo __LINE__.' '.$sql.'<br>';
+				$db->query($sql);
+				if ($kwhimport>(2.5/4)) telegram ('Kwartierpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
+
+				$stmt=$db->query("SELECT LEFT(stamp, 7) AS maand, MAX(kwhimport)*4 AS max FROM smappee_kwartier GROUP BY LEFT(stamp, 7) ORDER BY stamp DESC LIMIT 0,20;");
+				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+					$sql="INSERT INTO smappee_maandpiek (maand, kWh) VALUES ('".$row['maand']."', '".$row['max']."') ON DUPLICATE KEY UPDATE kWh='".$row['max']."';";
+					echo __LINE__.' '.$sql.'<br>';
+					$db->query($sql);
 				}
 			}
 		}

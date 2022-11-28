@@ -99,6 +99,33 @@ if ($sensor=='alles') {
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
+	$min=99;
+	$max=0;
+	foreach ($graph as $i) {
+		if ($i['buiten']<$min) $min=$i['buiten'];
+		elseif ($i['buiten']>$max) $max=$i['buiten'];
+		if ($i['living']<$min) $min=$i['living'];
+		elseif ($i['living']>$max) $max=$i['living'];
+		if ($i['badkamer']<$min) $min=$i['badkamer'];
+		elseif ($i['badkamer']>$max) $max=$i['badkamer'];
+		if ($i['kamer']<$min) $min=$i['kamer'];
+		elseif ($i['kamer']>$max) $max=$i['kamer'];
+		if ($i['alex']<$min) $min=$i['alex'];
+		elseif ($i['alex']>$max) $max=$i['alex'];
+		if ($i['speelkamer']<$min) $min=$i['speelkamer'];
+		elseif ($i['speelkamer']>$max) $max=$i['speelkamer'];
+		if ($i['zolder']<$min) $min=$i['zolder'];
+		elseif ($i['zolder']>$max) $max=$i['zolder'];
+	}
+	$min=floor($min);
+	$max=ceil($max);
+	$args['raw_options']='
+		lineWidth:4,
+		crosshair:{trigger:"both"},
+		hAxis:{textPosition:"None"},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];
@@ -110,6 +137,27 @@ if ($sensor=='alles') {
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
+	$min=99;
+	$max=0;
+	foreach ($graph as $i) {
+		if ($i['living']<$min) $min=$i['living'];
+		elseif ($i['living']>$max) $max=$i['living'];
+		if ($i['badkamer']<$min) $min=$i['badkamer'];
+		elseif ($i['badkamer']>$max) $max=$i['badkamer'];
+		if ($i['kamer']<$min) $min=$i['kamer'];
+		elseif ($i['kamer']>$max) $max=$i['kamer'];
+		if ($i['alex']<$min) $min=$i['alex'];
+		elseif ($i['alex']>$max) $max=$i['alex'];
+	}
+	$min=floor($min);
+	$max=ceil($max);
+	$args['raw_options']='
+		lineWidth:4,
+		crosshair:{trigger:"both"},
+		hAxis:{textPosition:"None"},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];
@@ -118,10 +166,25 @@ if ($sensor=='alles') {
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	if ($sensor=='badkamer') $args['colors']=array(${$sensornaam},${$sensornaam},'#ffb400');
 	else $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
-	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor from `temp` where stamp >= '$dag'";
+	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor AS temp from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query .' - '.$db->error.']');
 	while ($row=$result->fetch_assoc())	$graph[]=$row;
 	$result->free();
+	$min=99;
+	$max=0;
+	foreach ($graph as $i) {
+		if ($i['temp']<$min) $min=$i['temp'];
+		elseif ($i['temp']>$max) $max=$i['temp'];
+	}
+	$min=floor($min);
+	$max=ceil($max);
+	$args['raw_options']='
+		lineWidth:4,
+		crosshair:{trigger:"both"},
+		hAxis:{textPosition:"None"},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];

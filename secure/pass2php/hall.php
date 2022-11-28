@@ -11,6 +11,6 @@
  **/
 if ($status==0) {
 	if ($d['pirhall']['s']!='Off') {
-		store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
+//		store('pirhall', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
