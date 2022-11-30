@@ -23,7 +23,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['daikin']['m']==0&&$d['daikin']['s']=='On') {
 			if ($d['heating']['s']<0) daikinset('alex', 1, 3, 20, basename(__FILE__).':'.__LINE__, 'B', 50);
-			else daikinset('alex', 1, 4, 13.5, basename(__FILE__).':'.__LINE__, 'B', 50);
+			else daikinset('alex', 1, 4, 10, basename(__FILE__).':'.__LINE__, 'B', 50);
 		}
 	}
 }

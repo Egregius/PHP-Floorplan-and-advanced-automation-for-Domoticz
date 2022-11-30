@@ -31,7 +31,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setkamer=15;
+			$Setkamer=13;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
@@ -52,8 +52,8 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setalex=15;
-			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
+			$Setalex=13;
+//			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 	} else $Setalex=$d['alex_set']['s'];
 } elseif ($d['heating']['s']>=1) {

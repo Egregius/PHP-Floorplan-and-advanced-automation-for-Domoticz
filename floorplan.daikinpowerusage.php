@@ -31,6 +31,11 @@ if ($udevice=='iPhone') {
 }
 if (isset($_GET['setauto'])) {
 	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
+} elseif (isset($_GET['setpower'])) {
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '111='.file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
+	echo '112='.file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
+	echo '113='.file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
 }
 echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
@@ -60,11 +65,15 @@ echo '
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>';
 if ($d['daikin']['m']==1) echo '
-			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b3 btna">Auto</a>';
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4">Manueel</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a>';
 else echo '
-			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b3 btna">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b3">Auto</a>';
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4 btna">Manueel</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4">Auto</a>';
+echo '
+			<br>';
+foreach (array(40,50,60,70,80,90,100) as $i) echo '
+			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn b8">'.$i.'</a>';
 echo '
 		</div>
 		<br>
