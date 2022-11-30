@@ -50,6 +50,7 @@ echo '
 			th{text-align:center;}
 			.fix{width:320px;padding:0}
 			.btn{width:300px;}
+			.btna{color:#000!important}
 			.btnd{width:236px;}
 			.b4{max-width:155px!important;}
 			.b3{max-width:200px!important;}
@@ -67,13 +68,25 @@ echo '
 if ($d['daikin']['m']==1) echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4">Manueel</a>
 			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a>';
-else echo '
+else {
+	if ($d['daikin']['s']=='On') $data=file_get_contents('http://192.168.2.111/aircon/get_demand_control');
+	$data=explode(',',$data);
+	foreach($data as $i) {
+		$i=explode('=', $i);
+		$daikin[$i[0]]=$i[1];
+	}
+	echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4 btna">Manueel</a>
 			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4">Auto</a>';
-echo '
+	echo '
 			<br>';
-foreach (array(40,50,60,70,80,90,100) as $i) echo '
+	foreach (array(40,50,60,70,80,90,100) as $i) {
+		if ($daikin['en_demand']==1 && $daikin['max_pow']==$i) echo '
+			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn btna b8">'.$i.'</a>';
+		else echo '
 			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn b8">'.$i.'</a>';
+	}
+}
 echo '
 		</div>
 		<br>
