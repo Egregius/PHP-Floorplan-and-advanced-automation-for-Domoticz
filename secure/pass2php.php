@@ -56,14 +56,17 @@ if (isset($d[$device])) {
 	lg($status);
 	$status=explode(';', $status);
 	storemode('kamer_temp', $status[1]);
+	exit;
 } elseif ($device=='alex_hum') {
 	lg($status);
 	$status=explode(';', $status);
 	storemode('alex_temp', $status[1]);
+	exit;
 } elseif ($device=='living_hum') {
 	lg($status);
 	$status=explode(';', $status);
 	storemode('living_temp', $status[1]);
+	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 	store($device, $status, 'Pass2PHP');
