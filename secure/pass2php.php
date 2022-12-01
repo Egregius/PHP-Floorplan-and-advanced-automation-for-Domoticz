@@ -51,6 +51,8 @@ if (isset($d[$device])) {
 		} else {
 			$status='Off';
 		}
+	} elseif ($device=='kamer_hum') {
+		lg($status);
 	}
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
