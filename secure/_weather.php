@@ -84,15 +84,17 @@ if (isset($ow)) {
 		$owwind=$ow['wind']['speed'] * 3.6;
 		if (isset($ow['wind']['gust'])&&$ow['wind']['gust'] * 3.6>$owwind) $owwind=$ow['wind']['gust'] * 3.6;
 		if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
+		$hum=$ow['main']['humidity'];
 	}
 }
 
 $ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
-
+	if (isset($hum)) $hum=round(($hum+$ob['humidity'])/2,0);
+	else $hum=$ob['humidity'];
 }
-
+if (isset($hum)) storemode('buiten_temp', $hum);
 
 $buienradar=0;
 $rains=json_decode(curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);

@@ -54,15 +54,15 @@ if (isset($d[$device])) {
 	} 
 } elseif ($device=='kamer_hum') {
 	$status=explode(';', $status);
-	storemode('kamer_temp', $status[1]+6);
+	storemode('kamer_temp', $status[1]+7);
 	exit;
 } elseif ($device=='alex_hum') {
 	$status=explode(';', $status);
-	storemode('alex_temp', $status[1]+5);
+	storemode('alex_temp', $status[1]+7);
 	exit;
 } elseif ($device=='living_hum') {
 	$status=explode(';', $status);
-	storemode('living_temp', $status[1]+6);
+	storemode('living_temp', $status[1]+7);
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
