@@ -57,9 +57,9 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		}
 	} else $Setalex=$d['alex_set']['s'];
 } elseif ($d['heating']['s']>=1) {
-	$Setkamer=14;
-	$Setspeelkamer=14;
-	$Setalex=14;
+	$Setkamer=12;
+	$Setspeelkamer=12;
+	$Setalex=12;
 }
 if ($d['kamer_set']['m']==1) $Setkamer=$d['kamer_set']['s'];
 if ($d['alex_set']['m']==1) $Setalex=$d['alex_set']['s'];
