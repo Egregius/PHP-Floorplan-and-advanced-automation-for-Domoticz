@@ -27,6 +27,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=5&&past('deurbadka
 	}
 }
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
+if ($d['badkamer_set']['s']==16.2&&$d['heating']['s']>=2) $difbadkamer+=1;
 if ($difbadkamer<=-5) {
 	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']=='Off'&&past('badkamervuur1')>30&&$d['el']['s']<6200) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
@@ -62,4 +63,5 @@ if ($difbadkamer<=-5) {
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=16.2&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=16.4&&$d['Weg']['s']<=2&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+elseif ($d['heating']['s']>=2&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_temp']['s']<=14&&$d['Weg']['s']==3&&$d['brander']['s']=="Off"&&past('brander')>900) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
