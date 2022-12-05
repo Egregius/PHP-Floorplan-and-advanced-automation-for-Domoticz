@@ -15,7 +15,9 @@ require 'scripts/chart.php';
 $dag=date("Y-m-d H:i:00", TIME-86400);
 $dag='2022-12-05 16:24:00';
 $week=date("Y-m-d", TIME-86400*6);
+$week='2022-12-05 16:24:00';
 $maand=date("Y-m-d", TIME-86400*60);
+$maand='2022-12-05 16:24:00';
 echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
