@@ -59,23 +59,23 @@ $sensors=array(
 	'buiten_hum'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
 foreach ($sensors as $k=>$v) {
-	if(isset($_GET[$k]))$_SESSION['sensors'][$k]=true;else $_SESSION['sensors'][$k]=false;
+	if(isset($_GET[$k]))$_SESSION['sensors_hum'][$k]=true;else $_SESSION['sensors_hum'][$k]=false;
 }
 $aantalsensors=0;
-foreach ($_SESSION['sensors'] as $k=>$v) {
+foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) $aantalsensors++;
 }
 $args['colors']=array();
 $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors']=array('living'=>1,'kamer'=>1,'alex'=>1);
+	$_SESSION['sensors_hum']=array('living'=>1,'kamer'=>1,'alex'=>1);
 	$aantalsensors=4;
 }
 
 echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
-	if(isset($_SESSION['sensors'][$k])&&$_SESSION['sensors'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
+	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
 	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
 }
 echo '</form>';
@@ -120,9 +120,9 @@ if ($udevice=='iPad') {
 $args['colors']=array();
 $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) $_SESSION['sensors']=array('living'=>1,'badkamer'=>1);
+elseif ($aantalsensors==0) $_SESSION['sensors_hum']=array('living'=>1,'badkamer'=>1);
 
-foreach ($_SESSION['sensors'] as $k=>$v) {
+foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) {
 		if ($aantalsensors==1) {
 			array_push($args['colors'], $sensors[$k]['Color']);
@@ -134,7 +134,7 @@ foreach ($_SESSION['sensors'] as $k=>$v) {
 }
 //$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
-foreach ($_SESSION['sensors'] as $k=>$v) {
+foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) $query.=', '.$k;
 }
 $query.=" from `temp` where stamp >= '$dag'";
@@ -145,7 +145,7 @@ $max=-1000;
 while ($row=$result->fetch_assoc()) $graph[]=$row;
 $result->free();
 foreach ($graph as $t) {
-	foreach ($_SESSION['sensors'] as $k=>$v) {
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
 			if ($t[$k]<$min) $min=$t[$k];
 			if ($t[$k]>$max) $max=$t[$k];
@@ -166,7 +166,7 @@ echo $chart['div'];
 unset($chart,$graph);
 montha:
 $query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
-foreach ($_SESSION['sensors'] as $k=>$v) {
+foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) {
 		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
 		else $query.=", AVG($k) AS $k";
@@ -181,7 +181,7 @@ $result->free();
 $min=9999;
 $max=-1000;
 foreach ($graph as $t) {
-	foreach ($_SESSION['sensors'] as $k=>$v) {
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
 			if ($aantalsensors==1) {
 				if ($t['MIN']<$min) $min=$t['MIN'];
@@ -206,7 +206,7 @@ echo $chart['div'];
 unset($chart,$graph);
 enda:
 $query="SELECT DATE_FORMAT(stamp, '%a %e/%m %k:%i') as stamp";
-foreach ($_SESSION['sensors'] as $k=>$v) {
+foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) {
 		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
 		else $query.=", AVG($k) AS $k";
@@ -220,7 +220,7 @@ $result->free();
 $min=9999;
 $max=-1000;
 foreach ($graph as $t) {
-	foreach ($_SESSION['sensors'] as $k=>$v) {
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
 			if ($aantalsensors==1) {
 				if ($t['MIN']<$min) $min=$t['MIN'];
