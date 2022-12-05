@@ -51,7 +51,7 @@ else 	echo '
 		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
-
+unset($_SESSION['sensors_hum']);
 $sensors=array(
 	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
 	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
@@ -120,8 +120,9 @@ if ($udevice=='iPad') {
 $args['colors']=array();
 $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) $_SESSION['sensors_hum']=array('living'=>1,'badkamer'=>1);
+elseif ($aantalsensors==0) $_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1);
 echo '<pre>';print_r($sensors);echo '</pre>';
+
 foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	echo $k.'<br>';
 	if ($v==1) {
