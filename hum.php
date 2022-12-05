@@ -122,6 +122,7 @@ $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) $_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1);
 //echo '<pre>';print_r($sensors);echo '</pre>';
+echo '<pre>';print_r($_SESSION['sensors_hum']);echo '</pre>';
 
 foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 //	echo $k.'<br>';
@@ -141,6 +142,7 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) $query.=', '.$k;
 }
 $query.=" from `temp` where stamp >= '$dag'";
+echo $query.'<br>';
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
 $min=9999;
