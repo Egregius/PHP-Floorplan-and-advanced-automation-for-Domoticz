@@ -13,6 +13,7 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
 $dag=date("Y-m-d H:i:00", TIME-86400);
+$dag='2022-12-05 16:24:00';
 $week=date("Y-m-d", TIME-86400*6);
 $maand=date("Y-m-d", TIME-86400*60);
 echo '
