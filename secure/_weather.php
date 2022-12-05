@@ -94,7 +94,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	if (isset($hum)) $hum=round(($hum+$ob['humidity'])/2,0);
 	else $hum=$ob['humidity'];
 }
-if (isset($hum)) storemode('buiten_temp', $hum);
+if (isset($hum)&&$hum!=$d['buiten_temp']['s']) storemode('buiten_temp', $hum);
 
 $buienradar=0;
 $rains=json_decode(curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);

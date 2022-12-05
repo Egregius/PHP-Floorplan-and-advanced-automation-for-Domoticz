@@ -257,7 +257,7 @@ if (TIME>strtotime('0:10')) {
 				$prev=array();
 				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
-				if(!isset($prev['import'])) {$prev['import']=0;$prev['export'];}
+				if(!isset($prev['import'])) {$prev['import']=0;$prev['export']=0;}
 				$kwhimport=($gridImport/1000)-$prev['import'];
 				$kwhexport=($gridExport/1000)-$prev['export'];
 				if ($kwhimport<0) $kwhimport=0;

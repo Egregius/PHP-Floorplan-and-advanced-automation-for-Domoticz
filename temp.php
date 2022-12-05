@@ -32,20 +32,23 @@ echo '
 	</head>';
 if ($udevice=='iPad') echo '
 	<body style="width:1010px">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
-		<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
+		<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+		<form action="/temp.php"><input type="submit" class="btn btna b4" value="Temperaturen"/></form>
+		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Hum"/></form>
+		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 elseif ($udevice=='iPhone') echo '
 	<body style="width:420px">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
-		<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
+		<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+		<form action="/temp.php"><input type="submit" class="btn btna b4" value="Temperaturen"/></form>
+		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Hum"/></form>
+		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 
 else 	echo '
 	<body style="width:100%">
-		<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
-		<form action="/regen.php"><input type="submit" class="btn b3" value="Regen"/></form>';
+		<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+		<form action="/temp.php"><input type="submit" class="btn btna b4" value="Temperaturen"/></form>
+		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Hum"/></form>
+		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
 

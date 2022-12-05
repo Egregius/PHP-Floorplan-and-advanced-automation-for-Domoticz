@@ -36,14 +36,18 @@ elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('b
 elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
 if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 if ($d['daikin']['m']==1) {
-	$rates=array('B', 'B', 3, 3, 4, 5, 6, 7);
+	$rates=array('B', 'B', 3, 4, 5, 6, 7);
+	$maxpow=floor(50*$bigdif);
+	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
+	elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
+	else $spmode=-1;
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 			if ($dif>=0) $power=0;
 			elseif ($dif<=-1) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>90) {
-				if ($dif<=-0.5)		{$rate=7;$spmode=1;}
+				if ($dif<=-0.5)		{$rate=6;$spmode=1;}
 				elseif ($dif<=-0.4)	{$rate=6;$spmode=0;}
 				elseif ($dif<=-0.3)	{$rate=5;$spmode=-1;}
 				elseif ($dif<=-0.2)	{$rate=4;$spmode=-1;}

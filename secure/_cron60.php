@@ -13,7 +13,9 @@
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
-$query="INSERT IGNORE INTO `temp` (`stamp`,`buiten`,`living`,`badkamer`,`kamer`,`speelkamer`,`alex`,`zolder`) VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder');";
+foreach (array('buiten','living','kamer','alex') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
+$query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder,living_hum,kamer_hum,alex_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$buiten_hum');";
+lg($query);
 if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
