@@ -27,7 +27,7 @@ echo '
 	<meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, minimal-ui"/>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<title>Temperaturen</title>
+	<title>Humidity</title>
 	<link rel="icon" href="images/temperatures.png"/>
 	<link rel="shortcut icon" href="images/temperatures.png"/>
 	<link rel="apple-touch-icon" href="images/temperatures.png"/>
@@ -37,20 +37,20 @@ if ($udevice=='iPad') echo '
 	<body style="width:1010px">
 		<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btn b4" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Hum"/></form>
+		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Humidity"/></form>
 		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 elseif ($udevice=='iPhone') echo '
 	<body style="width:420px">
 		<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btn b4" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Hum"/></form>
+		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Humidity"/></form>
 		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 
 else 	echo '
 	<body style="width:100%">
 		<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btn b4" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btna btn b4" value="Hum"/></form>
+		<form action="/hum.php"><input type="submit" class="btna btn b4" value="Humidity"/></form>
 		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
