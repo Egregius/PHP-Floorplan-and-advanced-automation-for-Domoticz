@@ -27,14 +27,14 @@ foreach (array('alex','kamer') as $kamer) {
 	}
 }
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<295) $aanna=295;
-$uitna=(21-$d['buiten_temp']['s'])*40; if ($uitna<475) $uitna=475;
+$uitna=(21-$d['buiten_temp']['s'])*60; if ($uitna<475) $uitna=475;
 if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<= 0&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif>= 0&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*6) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*12) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
-if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
+//if ($bigdif!=$d['bigdif']['m']) storemode('bigdif', $bigdif, basename(__FILE__).':'.__LINE__);
 if ($d['daikin']['m']==1) {
 	$rates=array('B', 'B', 3, 4, 5, 6, 7);
 	$maxpow=floor(50*$bigdif);

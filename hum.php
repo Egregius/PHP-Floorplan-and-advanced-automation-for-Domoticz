@@ -13,7 +13,7 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
 $dag=date("Y-m-d H:i:00", TIME-86400);
-$dag='2022-12-05 16:24:00';
+//$dag='2022-12-05 16:24:00';
 $week=date("Y-m-d", TIME-86400*6);
 $week='2022-12-05 16:24:00';
 $maand=date("Y-m-d", TIME-86400*60);
@@ -76,12 +76,17 @@ elseif ($aantalsensors==0) {
 	$aantalsensors=4;
 }
 
-echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
-foreach ($sensors as $k=>$v) {
-	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
-	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
+echo '<div style="padding:16px 0px 20px 0px;">';
+if ($aantalsensors==4) echo '
+	<a href="/hum.php?living_hum=on" class="btn Living">Living</a>
+	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
+	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
+	<a href="/hum.php?buiten_hum=on" class="btn Buiten">Buiten</a>';
+else foreach ($sensors as $k=>$v) {
+	$v=ucfirst(str_replace('_hum', '', $k));
+	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn '.$v.'">'.$v.'</a>';
+	else echo '<a href="/hum.php?'.$k.'=on" class="btn '.$v.'">'.$v.'</a>';
 }
-echo '</form>';
 $args=array(
 		'width'=>1000,
 		'height'=>880,
