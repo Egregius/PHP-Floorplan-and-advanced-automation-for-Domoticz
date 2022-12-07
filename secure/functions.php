@@ -726,6 +726,7 @@ function daikinstatus($device) {
 }
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=40) {
 	global $d;
+	$maxpow=$d['daikinliving']['icon'];
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;

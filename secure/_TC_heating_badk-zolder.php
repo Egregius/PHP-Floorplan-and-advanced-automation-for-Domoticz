@@ -25,7 +25,20 @@ if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=5&&past('deurbadka
 		$d['badkamer_set']['s']=5;
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
+} elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']>=1&&$d['heating']['s']<=3) {
+	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['Weg']['s']<2) {
+		if ($d['badkamer_set']['s']!=16.2) {
+			store('badkamer_set', 16.2, basename(__FILE__).':'.__LINE__);
+			$d['badkamer_set']['s']=16.2;
+		}
+	}
+} elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&($d['heating']['s']>=3||$d['heating']['s']<1)) {
+	if ($d['badkamer_set']['s']!=5) {
+		store('badkamer_set', 5, basename(__FILE__).':'.__LINE__);
+		$d['badkamer_set']['s']=5;
+	}
 }
+
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 if ($d['badkamer_set']['s']==16.2&&$d['heating']['s']>=2) $difbadkamer+=1;
 if ($difbadkamer<=-5) {

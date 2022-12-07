@@ -143,7 +143,7 @@ if (TIME<strtotime('1:05')) {
 	}
 }
 /* Clean old database records */
-$remove=strftime("%F %T", TIME-(86400*61));
+$remove=strftime("%F %T", TIME-(86400*101));
 $stmt=$db->query("delete from temp where stamp < '$remove'");
 $remove=strftime("%F %T", TIME-200000);
 $stmt=$db->query("delete from regen where stamp < '$remove'");
