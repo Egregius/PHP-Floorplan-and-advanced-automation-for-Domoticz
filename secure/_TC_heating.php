@@ -31,7 +31,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setkamer=20;
+			$Setkamer=21;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
@@ -52,7 +52,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setalex=20;
+			$Setalex=21;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 	} else $Setalex=$d['alex_set']['s'];

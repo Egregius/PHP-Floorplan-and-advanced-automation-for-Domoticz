@@ -772,7 +772,7 @@ function human_filesize($bytes,$dec=2){
 function setradiator($name,$dif,$koudst=false,$set=14) {
 	if ($koudst==true) $setpoint=28;
 	else $setpoint=$set-ceil($dif*6);
-	if ($setpoint>20) $setpoint=20;
+	if ($setpoint>28) $setpoint=28;
 	elseif ($setpoint<4) $setpoint=4;
 	return round($setpoint, 0);
 }
