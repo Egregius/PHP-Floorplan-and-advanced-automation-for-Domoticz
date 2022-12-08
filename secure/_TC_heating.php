@@ -18,10 +18,10 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
 			&&
-				(past('raamkamer')>10800||TIME>strtotime('19:00'))
+				(past('raamkamer')>10800||TIME>strtotime('19:00')||1==1)
 			&&
 				(
-					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
+					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900)||1==1)
 				||
 					(
 						($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900)||$d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
@@ -31,7 +31,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setkamer=12;
+			$Setkamer=20;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
@@ -39,10 +39,10 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
 			&&
-				(past('raamalex')>10800|| TIME>strtotime('19:00'))
+				(past('raamalex')>10800|| TIME>strtotime('19:00')||1==1)
 			&&
 				(
-					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))
+					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900)||1==1)
 				||
 					(
 						($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900)||$d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
@@ -52,7 +52,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setalex=13;
+			$Setalex=20;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 	} else $Setalex=$d['alex_set']['s'];
@@ -82,13 +82,13 @@ if ($d['living_set']['m']==0) {
 				$Setliving=17;
 				$dow=date("w");
 				if($dow==0||$dow==6) {
-					if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=19;
+					if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=20.2;
 				} else {
-					if (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=19;
+					if (TIME>=strtotime('5:30')&&TIME<strtotime('19:00')) $Setliving=20.2;
 				}
 			} elseif ($d['Weg']['s']==0) {
-				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=19;
-				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=18;
+				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.2;
+				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
 			}
 		}
 		if ($Setliving>19.5&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&TIME>=strtotime('11:00')) $Setliving=18;
