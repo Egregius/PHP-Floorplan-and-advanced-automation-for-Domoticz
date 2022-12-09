@@ -18,10 +18,10 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
 			&&
-				(past('raamkamer')>10800||TIME>strtotime('19:00')||1==1)
+				(past('raamkamer')>1080||TIME>strtotime('19:00'))
 			&&
 				(
-					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900)||1==1)
+					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
 				||
 					(
 						($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900)||$d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
@@ -31,7 +31,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setkamer=21;
+			$Setkamer=15;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
@@ -39,10 +39,10 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
 			&&
-				(past('raamalex')>10800|| TIME>strtotime('19:00')||1==1)
+				(past('raamalex')>1080|| TIME>strtotime('21:00'))
 			&&
 				(
-					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900)||1==1)
+					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))
 				||
 					(
 						($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900)||$d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
@@ -52,7 +52,7 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setalex=21;
+			$Setalex=15;
 //			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 	} else $Setalex=$d['alex_set']['s'];

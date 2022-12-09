@@ -770,11 +770,11 @@ function human_filesize($bytes,$dec=2){
 	return sprintf("%.{$dec}f",$bytes/pow(1024,$factor)).@$size[$factor];
 }
 function setradiator($name,$dif,$koudst=false,$set=14) {
-	if ($koudst==true) $setpoint=28;
-	else $setpoint=$set-ceil($dif*6);
-	if ($setpoint>28) $setpoint=28;
-	elseif ($setpoint<4) $setpoint=4;
-	return round($setpoint, 0);
+	if ($koudst==true) $set=20;
+	//else $set=$set-ceil($dif*2);
+	if ($set>20) $set=20;
+	elseif ($set<4) $set=4;
+	return round($set, 0);
 }
 function zwaveNodeNeighbourUpdate($node) {
 	global $domoticzurl;

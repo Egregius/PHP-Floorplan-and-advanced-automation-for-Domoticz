@@ -11,8 +11,8 @@
  **/
 if ($d['auto']['s']=='On') {
 	if ($status=='Open') {
-		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['kamer']['s']<5&&$d['Weg']['s']==0&&TIME>$zononder) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	//	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+//		if ($d['kamer']['s']<5&&$d['Weg']['s']==0&&TIME>$zononder) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		fhall();
 	} else {
 		if ($d['daikin']['m']==0&&$d['daikin']['s']=='On') {
@@ -20,9 +20,6 @@ if ($d['auto']['s']=='On') {
 			else daikinset('kamer', 1, 4, 10, basename(__FILE__).':'.__LINE__, 'B');
 		}
 	}
-}
-if ($d['kamer']['m']!=0&&$d['kamer']['s']==0&&past('kamer')<90) {
-	storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
 }
 if ($status=='Open') sirene('Deur kamer open');
 else sirene('Deur kamer dicht');
