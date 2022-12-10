@@ -1,4 +1,4 @@
-	<?php
+<?php
 /**
  * Pass2PHP
  * php version 8.0
@@ -54,18 +54,21 @@ if (isset($d[$device])) {
 	} 
 } elseif ($device=='kamer_hum') {
 	$status=explode(';', $status);
-	storemode('kamer_temp', $status[1]+3);
+	$status=$status[1]+3;
+	if($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 	exit;
 } elseif ($device=='alex_hum') {
 	$status=explode(';', $status);
-	storemode('alex_temp', $status[1]+3);
+	$status=$status[1]+3;
+	if($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
 	exit;
 } elseif ($device=='living_hum') {
 	$status=explode(';', $status);
-	storemode('living_temp', $status[1]+3);
+	$status=$status[1]+3;
+	if($status!=$d['living_temp']['m']) storemode('living_temp', $status);
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-	store($device, $status, 'Pass2PHP');
+	store($device, $status/*, 'Pass2PHP'*/);
 	include '/var/www/html/secure/pass2php/'.$device.'.php';
 } //else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);

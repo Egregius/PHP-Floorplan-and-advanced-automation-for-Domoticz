@@ -16,9 +16,9 @@ $Setalex=4;
 if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 	if ($d['kamer_set']['m']==0) {
 		if (
-				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']==100)
+				($d['raamkamer']['s']=='Closed'||($d['raamkamer']['s']=='Open'&&past('raamkamer')>900)||$d['RkamerR']['s']==100)
 			&&
-				(past('raamkamer')>1080||TIME>strtotime('19:00'))
+				(past('raamkamer')>3600||TIME>strtotime('19:00'))
 			&&
 				(
 					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
@@ -37,9 +37,9 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 	} else $Setkamer=$d['kamer_set']['s'];
 	if ($d['alex_set']['m']==0) {
 		if (
-				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']==100)
+				($d['raamalex']['s']=='Closed'||($d['raamalex']['s']=='Open'&&past('raamalex')>900)||$d['Ralex']['s']==100)
 			&&
-				(past('raamalex')>1080|| TIME>strtotime('21:00'))
+				(past('raamalex')>3600|| TIME>strtotime('21:00'))
 			&&
 				(
 					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))
@@ -101,6 +101,7 @@ if ($d['living_set']['m']==0) {
 }
 require('_Rolluiken_Heating.php');
 $bigdif=100;
+$difgas=100;
 if ($d['heating']['s']==1) require ('_TC_heating_airco.php');
 elseif ($d['heating']['s']==2) require ('_TC_heating_aircogas.php');
 elseif ($d['heating']['s']==3) require ('_TC_heating_gasairco.php');

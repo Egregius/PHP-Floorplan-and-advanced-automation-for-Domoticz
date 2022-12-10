@@ -249,14 +249,14 @@ function store($name,$status,$msg='',$idx=null,$force=true) {
 	$time=time();
 	if ($idx>0) $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
 	else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-	if ($name!='crypto'/*&&!endswith($name, '_temp')*/) lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.'	('.$msg.')');
+	if ($name!='crypto'/*&&!endswith($name, '_temp')*/&&strlen($msg>0)) lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 }
 function storemode($name,$mode,$msg='',$time=0) {
 	global $db, $user;
 	$time=time()+$time;
 	if(!isset($db)) $db=dbconnect();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.'	('.$msg.')');
+	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 }
 function storeicon($name,$icon,$msg='') {
 	global $d, $db, $user;
@@ -264,7 +264,7 @@ function storeicon($name,$icon,$msg='') {
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.'	('.$msg.')');
+		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -735,7 +735,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	file_get_contents($url);
 	sleep(1);
 	$status=daikinstatus($device);
-	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status);
+	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status, basename(__FILE__).':'.__LINE__.':'.$msg);
 	if ($power==0&&$d['daikin'.$device]['m']!=0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
 	elseif ($d['daikin'.$device]['s']!=$mode) storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
 	sleep(1);

@@ -83,7 +83,7 @@ if (isset($ow)) {
 		}*/
 		$owwind=$ow['wind']['speed'] * 3.6;
 		if (isset($ow['wind']['gust'])&&$ow['wind']['gust'] * 3.6>$owwind) $owwind=$ow['wind']['gust'] * 3.6;
-		if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon'], basename(__FILE__).':'.__LINE__);
+		if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon']);
 		$hum=$ow['main']['humidity'];
 	}
 }
@@ -94,7 +94,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	if (isset($hum)) $hum=round(($hum+$ob['humidity'])/2,0);
 	else $hum=$ob['humidity'];
 }
-if (isset($hum)&&$hum!=$d['buiten_temp']['s']) storemode('buiten_temp', $hum);
+if (isset($hum)&&$hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum);
 
 $buienradar=0;
 $rains=json_decode(curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
@@ -115,8 +115,8 @@ if (count($temps)==4) {
 	if (isset($ds['hourly']['data'])) {
 		if ($newbuitentemp>$maxtemp) $maxtemp=$newbuitentemp;
 		if ($newbuitentemp<$mintemp) $mintemp=$newbuitentemp;
-		if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp, basename(__FILE__).':'.__LINE__);
-		if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp, basename(__FILE__).':'.__LINE__);
+		if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
+		if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 	}
 
 	echo 'new = '.$newbuitentemp;
@@ -126,7 +126,7 @@ if (count($temps)==4) {
 	}
 	$msg.='newbuitentemp='.$newbuitentemp;
 
-	if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp, basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp);
 }
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
@@ -134,27 +134,27 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
 if ($prevbuitentemp>$avg+0.5) {
-	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5');
 } elseif ($prevbuitentemp>$avg+0.4) {
-	if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4');
 } elseif ($prevbuitentemp>$avg+0.3) {
-	if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3');
 } elseif ($prevbuitentemp>$avg+0.2) {
-	if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red');
 } elseif ($prevbuitentemp>$avg+0.1) {
-	if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up');
 } elseif ($prevbuitentemp<$avg-0.5) {
-	if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5');
 } elseif ($prevbuitentemp<$avg-0.4) {
-	if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4');
 } elseif ($prevbuitentemp<$avg-0.3) {
-	if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3');
 } elseif ($prevbuitentemp<$avg-0.2) {
-	if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue');
 } elseif ($prevbuitentemp<$avg-0.1) {
-	if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down');
 } else {
-	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '', basename(__FILE__).':'.__LINE__);
+	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '');
 }
 
 if (isset($prevwind)&&isset($owwind)&&isset($dswind)) $wind=round(($prevwind+$owwind+$dswind)/3,1);
@@ -164,7 +164,7 @@ elseif (isset($owwind)&&isset($dswind)) $wind=round(($owwind+$dswind)/2,1);
 elseif (isset($owwind)) $wind=round($owwind,1);
 elseif (isset($dswind)) $wind=round($dswind,1);
 
-store('wind', $wind, basename(__FILE__).':'.__LINE__);
+store('wind', $wind);
 
 //if($newbuitentemp!=$prevbuitentemp) lg($msg);
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
@@ -175,7 +175,7 @@ if (isset($newbuien)&&$newbuien>100) $newbuien=100;
 if (isset($dsbuien)&&$dsbuien>100) $dsbuien=100;
 if ($newbuien<1) $newbuien=0;
 $buien=round($newbuien, 0);
-if ($d['buien']['s']!=$buien) store('buien', $buien, basename(__FILE__).':'.__LINE__);
+if ($d['buien']['s']!=$buien) store('buien', $buien);
 
 if (!isset($dsbuien)) $dsbuien=0;
 if (!isset($newbuien)) $newbuien=0;
