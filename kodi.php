@@ -59,8 +59,10 @@ if (isset($_POST['cmd'])) {
 			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_POST['cmd']=='audio') {
+		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['action'].'}}', false, $ctx);
 	} elseif ($_POST['cmd']=='subtitle') {
+		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
 		if ($_POST['action']=='disable') {
 			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
 		} elseif ($_POST['action']=='enable') {
@@ -130,7 +132,7 @@ if ($d['nvidia']['s']=='On') {
 			//print_r($item);
 			if ($item['episode']>0) {
 				echo '
-					<h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1>';
+					<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 				echo '
 					<h1>'.$item['label'].'</h1>';
 			} else {

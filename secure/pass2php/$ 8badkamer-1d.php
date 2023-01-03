@@ -9,4 +9,4 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-require('$ 8badkamer-1.php');
+sw('luchtdroger', 'On');

@@ -40,14 +40,14 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&past('snijplank')>5) {
+/*	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&past('snijplank')>5) {
 		foreach (array(20,15,10,7,0) as $i) {
 			if ($d['snijplank']['s']>$i) {
 				sl('snijplank', $i, basename(__FILE__).':'.__LINE__);
 				break;
 			}
 		}
-	}
+	}*/
 	if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&past('wasbak')>5) {
 		foreach (array(10,6,4,2,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
@@ -62,7 +62,8 @@ $uit=50;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$uit&&past('voordeur')>$uit) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
-	if (pingport('192.168.2.6', 3000)==1) {
+//	if (pingport('192.168.2.6', 3000)==1) {
+	if (ping('192.168.2.6')==true) {
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
@@ -91,7 +92,8 @@ if ($d['tv']['s']=='On') {
 	}
 }
 if ($d['nvidia']['s']=='On') {
-	if (pingport($shieldip, 9080)==1) {
+//	if (pingport($shieldip, 9080)==1) {
+	if (ping($shieldip)==true) {
 		if ($d['nvidia']['m']=='Off') 	storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);

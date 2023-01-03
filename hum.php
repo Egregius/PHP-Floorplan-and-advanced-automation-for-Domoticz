@@ -15,7 +15,7 @@ require 'scripts/chart.php';
 $dag=date("Y-m-d H:i:00", TIME-86400);
 //$dag='2022-12-05 16:24:00';
 $week=date("Y-m-d", TIME-86400*6);
-$week='2022-12-05 16:24:00';
+//$week='2022-12-05 16:24:00';
 $maand=date("Y-m-d", TIME-86400*100);
 $maand='2022-12-05 16:24:00';
 echo '
@@ -68,13 +68,7 @@ $aantalsensors=0;
 foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) $aantalsensors++;
 }
-$args['colors']=array();
-$argshour['colors']=array();
-if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1,'buiten_hum'=>1);
-	$aantalsensors=4;
-}
+
 
 echo '<div style="padding:16px 0px 20px 0px;">';
 if ($aantalsensors==4) echo '
@@ -113,10 +107,10 @@ if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=1230;
 	$argshour['width']=1000;$argshour['height']=1230;
 } elseif ($udevice=='iPhone') {
-	$args['width']=462;$args['height']=610;
+	$args['width']=462;$args['height']=710;
 	$argshour['width']=462;$argshour['height']=710;
 } elseif ($udevice=='iPhoneSE') {
-	$args['width']=420;$args['height']=610;
+	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
 } elseif ($udevice=='iMac') {
 	$args['width']=490;$args['height']=780;
@@ -125,10 +119,13 @@ if ($udevice=='iPad') {
 	$args['width']=480;$args['height']=610;
 	$argshour['width']=480;$argshour['height']=610;
 }
-$args['colors']=array();
-$argshour['colors']=array();
-if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) $_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1);
+$args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
+$argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
+if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
+elseif ($aantalsensors==0) {
+	$_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
+	$aantalsensors=4;
+}
 //echo '<pre>';print_r($sensors);echo '</pre>';
 //echo '<pre>';print_r($_SESSION['sensors_hum']);echo '</pre>';
 
@@ -138,7 +135,6 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($aantalsensors==1) {
 			array_push($args['colors'], $sensors[$k]['Color']);
 		} else {
-			
 			array_push($args['colors'], $sensors[$k]['Color']);
 			array_push($argshour['colors'], $sensors[$k]['Color']);
 		}
@@ -155,7 +151,19 @@ if (!$result=$db->query($query)) die('There was an error running the query ['.$q
 if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
 $min=9999;
 $max=-1000;
-while ($row=$result->fetch_assoc()) $graph[]=$row;
+$x=0;
+while ($row=$result->fetch_assoc()) {
+	$graph[$x]['stamp']=$row['stamp'];
+	$graph[$x][40]=40;
+	$graph[$x][45]=45;
+	$graph[$x][50]=50;
+	$graph[$x][55]=55;
+	$graph[$x][60]=60;
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
+		if ($v==1) $graph[$x][$k]=$row[$k];
+	}
+	$x++;
+}
 $result->free();
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
@@ -165,13 +173,15 @@ foreach ($graph as $t) {
 		}
 	}
 }
+if ($min>50) $min=50;
 $args['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+		chartArea:{left:0,top:0,width:"100%",height:"100%"},
+		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
 //	vAxis:{viewWindowMode:"explicit",viewWindow:{max:'.ceil($max).',min:'.floor($min).'},gridlines:{count:0}}
 $chart=array_to_chart($graph, $args);
 echo $chart['script'];
@@ -189,7 +199,27 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 $query.=" from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
-while ($row=$result->fetch_assoc()) $graph[]=$row;
+$x=0;
+while ($row=$result->fetch_assoc()) {
+	$graph[$x]['stamp']=$row['stamp'];
+	$graph[$x][40]=40;
+	$graph[$x][45]=45;
+	$graph[$x][50]=50;
+	$graph[$x][55]=55;
+	$graph[$x][60]=60;
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
+		if ($v==1) {
+			if ($aantalsensors==1) {
+				$graph[$x]['MIN']=$row['MIN'];
+				$graph[$x]['AVG']=$row['AVG'];
+				$graph[$x]['MAX']=$row['MAX'];
+			} else {
+				$graph[$x][$k]=$row[$k];
+			}
+		}
+	}
+	$x++;
+}
 $result->free();
 $min=9999;
 $max=-1000;
@@ -206,13 +236,17 @@ foreach ($graph as $t) {
 		}
 	}
 }
+if ($min>50) $min=50;
+
 $argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+		chartArea:{left:0,top:0,width:"100%",height:"100%"},
+		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
+
 $chart=array_to_chart($graph, $argshour);
 echo $chart['script'];
 echo $chart['div'];
@@ -228,7 +262,27 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 
 $query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-while ($row=$result->fetch_assoc()) $graph[]=$row;
+$x=0;
+while ($row=$result->fetch_assoc()) {
+	$graph[$x]['stamp']=$row['stamp'];
+	$graph[$x][40]=40;
+	$graph[$x][45]=45;
+	$graph[$x][50]=50;
+	$graph[$x][55]=55;
+	$graph[$x][60]=60;
+	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
+		if ($v==1) {
+			if ($aantalsensors==1) {
+				$graph[$x]['MIN']=$row['MIN'];
+				$graph[$x]['AVG']=$row['AVG'];
+				$graph[$x]['MAX']=$row['MAX'];
+			} else {
+				$graph[$x][$k]=$row[$k];
+			}
+		}
+	}
+	$x++;
+}
 $result->free();
 $min=9999;
 $max=-1000;
@@ -245,13 +299,16 @@ foreach ($graph as $t) {
 		}
 	}
 }
+if ($min>50) $min=50;
+
 $argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+		chartArea:{left:0,top:0,width:"100%",height:"100%"},
+		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 100 dagen';
 $argshour['chart_div']='chart_div';
 $chart=array_to_chart($graph, $argshour);

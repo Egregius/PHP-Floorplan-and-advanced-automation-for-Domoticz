@@ -16,8 +16,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 	elseif ($d['voordeur']['s']=='On'&&$d['zon']['s']>0) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	finkom();
 	if ($d['Weg']['s']==0) {
-		lg($d['Xlight']['s']);
-		/*if ($d['Xlight']['s']>0) */sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['Xlight']['s']!='Off') sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 		for ($k=1;$k<=5;$k++) {
 			file_get_contents('http://192.168.2.12/fifo_command.php?cmd=motion_enable%20off');
 			if ($http_response_header[0]=='HTTP/1.1 200 OK') {

@@ -108,10 +108,10 @@ if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=1230;
 	$argshour['width']=1000;$argshour['height']=1230;
 } elseif ($udevice=='iPhone') {
-	$args['width']=462;$args['height']=610;
+	$args['width']=462;$args['height']=710;
 	$argshour['width']=462;$argshour['height']=710;
 } elseif ($udevice=='iPhoneSE') {
-	$args['width']=420;$args['height']=610;
+	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
 } elseif ($udevice=='iMac') {
 	$args['width']=490;$args['height']=780;

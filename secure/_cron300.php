@@ -298,7 +298,7 @@ if (TIME>strtotime('0:10')) {
 	}
 }
 
-if ($d['Xlight']['s']>0&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['Xlight']['s']!='Off'&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['zon']['s']>0) {
 	if (past('uv')>1100) {

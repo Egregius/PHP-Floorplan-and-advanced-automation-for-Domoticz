@@ -44,26 +44,20 @@ if (isset($_REQUEST['add'])) {
 		</head>';
 	if ($udevice=='iPad') echo '
 		<body style="width:800px">
-			<form action="/floorplan.php">
-				<input type="submit" class="btn b5" value="Plan"/>
-			</form>
-			<form action="/temp.php">
-				<input type="submit" class="btn b5" value="Temperaturen"/>
-			</form>
+			<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
+			<form action="/temp.php"><input type="submit" class="btn b5" value="Temperaturen"/></form>
+			<form action="/hum.php"><input type="submit" class="btn btn b4" value="Humidity"/></form>
 			<form action="/regen.php">
 				<input type="submit" class="btn b5" value="Regen"/>
 				<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 			</form>';
 	else echo '
 		<body style="width:100%">
-			<form action="/floorplan.php">
-				<input type="submit" class="btn b3" value="Plan"/>
-			</form>
-			<form action="/temp.php">
-				<input type="submit" class="btn b3" value="Temperaturen"/>
-			</form>
+			<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+			<form action="/temp.php"><input type="submit" class="btn b4" value="Temperaturen"/></form>
+			<form action="/hum.php"><input type="submit" class="btn b4" value="Humidity"/></form>
 			<form action="/regen.php">
-				<input type="submit" class="btn b3" value="Regen"/>
+				<input type="submit" class="btn b4" value="Regen"/>
 				<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 			</form>';
 	echo '<form action="/regen.php" method="POST">';
@@ -116,6 +110,7 @@ if (isset($_REQUEST['add'])) {
 			<form action="/temp.php">
 				<input type="submit" class="btn b5" value="Temperaturen"/>
 			</form>
+			<form action="/hum.php"><input type="submit" class="btn b4" value="Humidity"/></form>
 			<form action="/regen.php">
 				<input type="submit" class="btn btna b5" value="Regen"/>
 				<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
@@ -123,13 +118,14 @@ if (isset($_REQUEST['add'])) {
 	else echo '
 		<body style="width:100%">
 			<form action="/floorplan.php">
-				<input type="submit" class="btn b3" value="Plan"/>
+				<input type="submit" class="btn b4" value="Plan"/>
 			</form>
 			<form action="/temp.php">
-				<input type="submit" class="btn b3" value="Temperaturen"/>
+				<input type="submit" class="btn b4" value="Temperaturen"/>
 			</form>
+			<form action="/hum.php"><input type="submit" class="btn b4" value="Humidity"/></form>
 			<form action="/regen.php">
-				<input type="submit" class="btn btna b3" value="Regen"/>
+				<input type="submit" class="btn btna b4" value="Regen"/>
 				<input type="submit" class="btn b1" name="add" value="Regen invullen"/>
 			</form>';
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);

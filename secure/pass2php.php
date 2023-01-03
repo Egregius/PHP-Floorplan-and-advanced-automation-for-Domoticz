@@ -52,7 +52,8 @@ if (isset($d[$device])) {
 			$status='Off';
 		}
 	} 
-} elseif ($device=='kamer_hum') {
+} 
+if ($device=='kamer_hum') {
 	$status=explode(';', $status);
 	$status=$status[1]+3;
 	if($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
@@ -69,6 +70,6 @@ if (isset($d[$device])) {
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-	store($device, $status/*, 'Pass2PHP'*/);
+	store($device, $status, 'Pass2PHP');
 	include '/var/www/html/secure/pass2php/'.$device.'.php';
 } //else lg('			>>>	IGNORING	>>>	'.$device.' = '.$status);

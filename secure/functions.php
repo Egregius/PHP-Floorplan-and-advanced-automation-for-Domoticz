@@ -28,7 +28,7 @@ function huisslapen() {
 	global $d,$boseipbuiten;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','voordeur','wc','dampkap','GroheRed','kookplaat','nvidia'), 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
+	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel','luchtdroger') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
@@ -58,11 +58,11 @@ function douche() {
 	$gas=0.00111;
 	$water=0.00477;
 	if ($douchegas>=1&&$douchewater>=1) {
-		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*$gas, 2, ',', '').'â‚¬__Water: '.$douchewater.'L = '.number_format($douchewater*$water, 2, ',', '').'â‚¬__Som = '.number_format(($douchegas*$gas)+($douchewater*$water), 2, ',', '').'â‚¬';
+		$msg='Douche__Gas: '.$douchegas.'L = '.number_format($douchegas*$gas, 2, ',', '').'Û__Water: '.$douchewater.'L = '.number_format($douchewater*$water, 2, ',', '').'Û__Som = '.number_format(($douchegas*$gas)+($douchewater*$water), 2, ',', '').'Û';
 		telegram($msg, true, 2);
 	}
-	store('douche', 0, basename(__FILE__).':'.__LINE__);
-	storemode('douche', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['douche']['s']!=0) store('douche', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['douche']['m']!=0) storemode('douche', 0, basename(__FILE__).':'.__LINE__);
 }
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
@@ -127,7 +127,7 @@ function sl($name,$level,$msg='') {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
 				sl($i, $level, $msg);
-				usleep(100000);
+//				usleep(100000);
 			}
 		}
 	} else {
@@ -137,9 +137,9 @@ function sl($name,$level,$msg='') {
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
 		} else store($name, $level, $msg);
 	}
-	if ($name=='Rbureel') sl('rolluik bureel', $level, basename(__FILE__).':'.__LINE__);
-	elseif ($name=='Rliving') sl('rolluik achteraan', $level, basename(__FILE__).':'.__LINE__);
-	elseif ($name=='RkeukenL') sl('rolluik keuken', $level, basename(__FILE__).':'.__LINE__);
+//	if ($name=='Rbureel') sl('rolluik bureel', $level, basename(__FILE__).':'.__LINE__);
+//	elseif ($name=='Rliving') sl('rolluik achteraan', $level, basename(__FILE__).':'.__LINE__);
+//	elseif ($name=='RkeukenL') sl('rolluik keuken', $level, basename(__FILE__).':'.__LINE__);
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
@@ -175,7 +175,7 @@ function sw($name,$action='Toggle',$msg='') {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
-				usleep(100000);
+//				usleep(100000);
 			}
 		}
 	} else {
@@ -260,6 +260,7 @@ function storemode($name,$mode,$msg='',$time=0) {
 }
 function storeicon($name,$icon,$msg='') {
 	global $d, $db, $user;
+	if (!isset($d)) $d=fetchdata();
 	$time=TIME;
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
@@ -315,19 +316,6 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
 	lg(' (udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
-function zwavecancelaction(){global $domoticzurl;file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'cancel')),),)));}
-function zwaveCommand($node,$command) {
-	global $domoticzurl;
-	$cm=array('Refresh'=>'racp','AssignReturnRoute'=>'assrr','DeleteAllReturnRoutes'=>'delarr','NodeNeighbourUpdate'=>'reqnnu','RefreshNodeInformation'=>'refreshnode','RequestNetworkUpdate'=>'reqnu','HasNodeFailed'=>'hnf','Cancel'=>'cancel');
-	$cm=$cm[$command];
-	for($k=1;$k<=5;$k++){
-		$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>$cm,'node'=>'node'.$node)),),)));
-		if ($result=='OK') break;
-		sleep(1);
-	}
-	return $result;
-}
-function controllerBusy($retries){global $domoticzurl;for($k=1;$k<=$retries;$k++){$result=file_get_contents($domoticzurl.'/ozwcp/poll.xml');$p=xml_parser_create();xml_parse_into_struct($p,$result,$vals,$index);xml_parser_free($p);foreach($vals as $val){if($val['tag']=='ADMIN'){$result=$val['attributes']['ACTIVE'];break;}}if($result=='false'){break;}if($k==$retries){zwaveCommand(1,'Cancel');break;}sleep(1);}}
 function convertToHours($time) {
 	if ($time<600) return substr(strftime('%M:%S', $time-3600), 1);
 	elseif ($time>=600&&$time<3600) return strftime('%M:%S', $time-3600);
@@ -586,7 +574,7 @@ function fliving() {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
-			if ($d['snijplank']['s']==0&&TIME<strtotime('21:30')) sl('snijplank', 15, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
@@ -611,13 +599,13 @@ function fkeuken() {
 	global $d;
 	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<6&&$d['snijplank']['s']==0&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 7, basename(__FILE__).':'.__LINE__);
-	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']==0&&$d['snijplank']['s']<15&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('snijplank', 15, basename(__FILE__).':'.__LINE__);
+	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+		sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
 	}
 }
-function finkom() {
+function finkom($force=false) {
 	global $d;
-	if ($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m']))||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
@@ -724,14 +712,21 @@ function daikinstatus($device) {
 		return json_encode($ci);
 	}
 }
-function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=40) {
+function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=false) {
 	global $d;
-	$maxpow=$d['daikinliving']['icon'];
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
-	storeicon('daikinliving', $maxpow);
-	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+	
+	if ($maxpow==false) {
+		$maxpow=$d['daikinliving']['icon'];
+	} else {
+		storeicon('daikinliving', $maxpow);
+	}
+	
+	$fdir=0;
+	if ($device=='living'&&$d['lgtv']['s']=='Off') $fdir=3;
+	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=$fdir";
 	file_get_contents($url);
 	sleep(1);
 	$status=daikinstatus($device);
@@ -750,61 +745,10 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		usleep(100000);
 	}
 }
-function RefreshZwave($node){
-	$devices=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=openzwavenodes&idx=3',false),true);
-	foreach($devices['result'] as $devozw)
-		if($devozw['NodeID']==$node){
-			$device=$devozw['Description'].' '.$devozw['Name'];
-			break;
-		}
-	if(!isset($device))exit;
-	for($k=1;$k<=5;$k++){
-		$result=file_get_contents('http://127.0.0.1:8080/ozwcp/refreshpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'racp','node'=>$node)),),)));
-		if($result==='OK')break;
-		sleep(1);
-	}
-}
 function human_filesize($bytes,$dec=2){
 	$size=array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
 	$factor=floor((strlen($bytes)-1)/3);
 	return sprintf("%.{$dec}f",$bytes/pow(1024,$factor)).@$size[$factor];
-}
-function setradiator($name,$dif,$koudst=false,$set=14) {
-//	if ($koudst==true) $set=20;
-	//else $set=$set-ceil($dif*2);
-	$set+=1;
-	if ($set>20) $set=20;
-	elseif ($set<4) $set=4;
-	return round($set, 0);
-}
-function zwaveNodeNeighbourUpdate($node) {
-	global $domoticzurl;
-	for ($k=1;$k<=5;$k++) {
-		sleep(1);
-		$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'reqnnu','node'=>'node'.$node))))));
-		if ($result=='OK') break;
-		sleep(1);
-	}
-	return $result;
-}
-function zwaveRefreshNode($node) {
-	global $domoticzurl;
-	for ($k=1;$k<=5;$k++) {
-		sleep(1);
-		$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'refreshnode','node'=>'node'.$node))))));
-		if ($result=='OK') break;
-		sleep(1);
-	}
-	return $result;
-}
-function zwaveHasnodefailed($node) {
-	global $domoticzurl;
-	for ($k=1;$k<=5;$k++) {
-		sleep(1);
-		$result=file_get_contents($domoticzurl.'/ozwcp/admpost.html',false,stream_context_create(array('http'=>array('header'=>'Content-Type: application/x-www-form-urlencoded\r\n','method'=>'POST','content'=>http_build_query(array('fun'=>'hnf','node'=>'node'.$node))	))));
-		if ($result=='OK') break;
-		sleep(1);
-	}
 }
 function curl($url) {
 	$ch=curl_init();

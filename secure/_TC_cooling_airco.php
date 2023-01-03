@@ -20,6 +20,8 @@ foreach (array('living','kamer','alex') as $kamer) {
 if ($bigdif>=2) $maxpow=100;
 elseif ($bigdif>=0.5) $maxpow=60;
 else $maxpow=40;
+$maxpow=floor($maxpow/5)*5;
+
 if ($d['daikin']['m']==1) {
 	// KAMER
 	$Setkamer=33;

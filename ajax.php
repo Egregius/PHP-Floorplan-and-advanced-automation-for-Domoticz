@@ -153,6 +153,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
+		} elseif ($_REQUEST['device']=='RkeukenL') {
+			foreach(array('RkeukenL', 'RkeukenR') as $i) {
+				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			}
 		} elseif ($_REQUEST['device']=='Boven') {
 			foreach(array('RkamerL', 'RkamerR', 'Rspeelkamer', 'Ralex') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
@@ -164,7 +168,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
 		} else {
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			if($_REQUEST['device']=='luifel')storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+			if($_REQUEST['device']=='luifel') {
+				store($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 		storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
