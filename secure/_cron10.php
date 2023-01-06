@@ -48,8 +48,8 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}*/
-	if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&past('wasbak')>5) {
-		foreach (array(10,6,4,2,0) as $i) {
+	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&past('wasbak')>5) {
+		foreach (array(6,4,2,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 				break;

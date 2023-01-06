@@ -598,9 +598,9 @@ function fbadkamer() {
 function fkeuken() {
 	global $d;
 	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<6&&$d['snijplank']['s']==0&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 7, basename(__FILE__).':'.__LINE__);
+		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
-		sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
+		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {

@@ -1,10 +1,4 @@
 <?php
-if ($d['zon']['s']>0) {
-	if ($d['snijplank']['s']>=14) $level=ceil($d['snijplank']['s']*1.8);
-	else $level=15;
-} else {
-	if ($d['snijplank']['s']>=11) $level=ceil($d['snijplank']['s']*1.6);
-	else $level=12;
-}
-if ($level>100) $level=100;
-sl('snijplank', $level, basename(__FILE__).':'.__LINE__);
+if ($d['snijplank']['s']<10) sl('snijplank', 10, basename(__FILE__).':'.__LINE__);
+elseif ($d['snijplank']['s']<30) sl('snijplank', 30, basename(__FILE__).':'.__LINE__);
+else sl('snijplank', 100, basename(__FILE__).':'.__LINE__);
