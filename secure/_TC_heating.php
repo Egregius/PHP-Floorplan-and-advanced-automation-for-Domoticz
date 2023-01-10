@@ -98,10 +98,11 @@ if ($d['living_set']['m']==0) {
 					elseif (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=18.0;
 					elseif (TIME>=strtotime('3:30')&&TIME<strtotime('19:00')) $Setliving=17.5;
 				}
-			} elseif ($d['Weg']['s']==0) {
-				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
-				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
-			}
+				if ($d['Weg']['s']==0) {
+					if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=20.5;
+					if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=19;
+				}
+			} 
 		}
 		if ($Setliving>19.5&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&TIME>=strtotime('11:00')) $Setliving=19.5;
 	}

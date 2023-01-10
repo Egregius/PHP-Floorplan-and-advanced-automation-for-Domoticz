@@ -21,7 +21,7 @@ if ($bigdif>=2) $maxpow=100;
 elseif ($bigdif>=0.5) $maxpow=60;
 else $maxpow=40;
 $maxpow=floor($maxpow/5)*5;
-
+if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 if ($d['daikin']['m']==1) {
 	// KAMER
 	$Setkamer=33;

@@ -24,6 +24,7 @@ if ($d['daikin']['m']==1) {
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 	else $spmode=-1;
 	$maxpow=floor($maxpow/10)*10;
+	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
@@ -70,8 +71,8 @@ if ($d['daikin']['m']==1) {
 				if (!isset($power)) $power=$daikin->power;
 //				lg(print_r($daikin, true));
 //				lg ($k.' => rate'.$rate.'='.$rates[$rate].' dif='.$dif.' power='.$power);
-//				lg ($k.'	'.$daikin->set.' '.$set.'	'.$daikin->power.' '.$power.'	'.$daikin->mode.' '. 4 .'	'.$daikin->fan.' '.$rates[$rate].'	'.$d['daikinliving']['icon'].' '.$maxpow);
-				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]||$d['daikinliving']['icon']!=$maxpow) {
+//				lg ($k.'	'.$daikin->set.' '.$set.'	'.$daikin->power.' '.$power.'	'.$daikin->mode.' '. 4 .'	'.$daikin->fan.' '.$rates[$rate].'	'.$d['daikin_kWh']['icon'].' '.$maxpow);
+				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]||$d['daikin_kWh']['icon']!=$maxpow) {
 					lg('DAIKIN SET '.$k.' line='.$line.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
 					$data=json_decode($d[$k.'_set']['icon'], true);
 					$data['power']=$power;

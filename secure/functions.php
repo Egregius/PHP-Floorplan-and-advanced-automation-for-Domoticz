@@ -719,9 +719,9 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	elseif ($device=='alex') $ip=113;
 	
 	if ($maxpow==false) {
-		$maxpow=$d['daikinliving']['icon'];
+		$maxpow=$d['daikin_kWh']['icon'];
 	} else {
-		storeicon('daikinliving', $maxpow);
+		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
 	
 	$fdir=0;

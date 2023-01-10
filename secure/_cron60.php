@@ -144,7 +144,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['luchtdroger']['s']=='On') {
 		if ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']<17&&(TIME<=strtotime('4:00')||TIME>=strtotime('8:00'))) {
 			$i=explode(';', $d['luchtdroger_kWh']['s']);
-			if ($i[0]<100&&past('luchtdroger_kWh')>595) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($i[0]<100&&past('luchtdroger_kWh')>1595) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		if ($d['Weg']['s']<=1&&TIME>=strtotime('5:00')&&TIME<=strtotime('7:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__);
