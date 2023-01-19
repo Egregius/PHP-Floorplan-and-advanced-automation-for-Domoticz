@@ -48,7 +48,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}*/
-	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&past('wasbak')>5) {
+	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>5) {
 		foreach (array(6,4,2,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
@@ -99,6 +99,7 @@ if ($d['nvidia']['s']=='On') {
 		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
+if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
 $user='cron10  ';
 $el=$d['el']['s']-$d['zon']['s'];

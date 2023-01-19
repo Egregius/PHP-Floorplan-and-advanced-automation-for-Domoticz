@@ -43,6 +43,7 @@ if ($d['daikin']['m']==1) {
 	else $spmode=-1;
 	$maxpow=floor($maxpow/5)*5;
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
+	elseif ($d['Weg']['s']>0) $maxpow=40;
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];

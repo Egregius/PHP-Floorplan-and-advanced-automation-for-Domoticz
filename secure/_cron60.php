@@ -126,7 +126,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	foreach (array('living_set','badkamer_set') as $i) {
-		if ($d[$i]['m']!=0&&past($i)>7200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+		if ($d[$i]['m']!=0&&past($i)>14400) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
@@ -144,7 +144,10 @@ if ($d['auto']['s']=='On') {
 	if ($d['luchtdroger']['s']=='On') {
 		if ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']<17&&(TIME<=strtotime('4:00')||TIME>=strtotime('8:00'))) {
 			$i=explode(';', $d['luchtdroger_kWh']['s']);
-			if ($i[0]<100&&past('luchtdroger_kWh')>1595) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($i[0]<100&&past('luchtdroger_kWh')>895) {
+				sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__);
+				if ($d['heating']['s']>1&&$d['deurbadkamer']['s']=='Open') telegram('Deur badkamer dicht doen, luchtdroger klaar');
+			}
 		}
 	} else {
 		if ($d['Weg']['s']<=1&&TIME>=strtotime('5:00')&&TIME<=strtotime('7:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__);
@@ -257,7 +260,7 @@ if ($d['auto']['s']=='On') {
 		if ($level[0]<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']!='Off') sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
 if (TIME<=strtotime('0:03')) {

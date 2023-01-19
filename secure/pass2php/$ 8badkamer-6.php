@@ -10,7 +10,10 @@
  * @link	 https://egregius.be
  **/
 if ($d['heating']['s']>=0) {
-	if ($d['badkamervuur1']['s']=='Off') {
+	if ($d['luchtdroger']['s']=='Off') sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__);
+	$i=explode(';', $d['luchtdroger_kWh']['s']);
+	$luchtdroger=$i[0];
+	if ($d['badkamervuur1']['s']=='Off'&&$luchtdroger<100) {
 		sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	store('badkamer_set', 19, basename(__FILE__).':'.__LINE__);

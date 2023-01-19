@@ -11,13 +11,12 @@
  **/
 //if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=15;
 //if ($d['alex_set']['m']==0) $d['alex_set']['s']=15;
-
-$bigdif=0;
-foreach (array('living','kamer','alex') as $k) {
-	${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-	if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
-}
 if ($d['daikin']['m']==1) {
+	$bigdif=0;
+	foreach (array('living','kamer','alex') as $k) {
+		${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
+		if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
+	}
 	$rates=array('B', 'B', 3, 4, 5, 6, 7);
 	$maxpow=floor(60*$bigdif);
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
@@ -25,6 +24,7 @@ if ($d['daikin']['m']==1) {
 	else $spmode=-1;
 	$maxpow=floor($maxpow/10)*10;
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
+	elseif ($d['Weg']['s']>0) $maxpow=40;
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];

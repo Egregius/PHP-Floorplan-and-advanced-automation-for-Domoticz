@@ -13,7 +13,7 @@ header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
-$d=fetchdata();
+/*$d=fetchdata();
 $sl=array('kamer','lichtbadkamer','kamer','speelkamer','alex','hall','inkom','zithoek','eettafel','wasbak','snijplank','terras');
 $sw=array('wc','tuin','garage','garageled','zolderg','kristal','lamp kast','bureel');
 $cmd=0;
@@ -23,7 +23,11 @@ if ($cmd==1) {
 } else {
 	sl($sl, 0);
 	sw($sw, 'Off');
-}
+}*/
+
+
+echo sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+1","output":""}],"version":"1.1"}');
+
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');

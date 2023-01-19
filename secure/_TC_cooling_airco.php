@@ -9,20 +9,23 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-foreach (array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
-	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-}
-$bigdif=-100;
-foreach (array('living','kamer','alex') as $kamer) {
-	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
-	if (${'dif'.$kamer}>$bigdif) $bigdif=${'dif'.$kamer};
-}
-if ($bigdif>=2) $maxpow=100;
-elseif ($bigdif>=0.5) $maxpow=60;
-else $maxpow=40;
-$maxpow=floor($maxpow/5)*5;
-if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
+
 if ($d['daikin']['m']==1) {
+	foreach (array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
+		if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+	}
+	$bigdif=-100;
+	foreach (array('living','kamer','alex') as $kamer) {
+		${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
+		if (${'dif'.$kamer}>$bigdif) $bigdif=${'dif'.$kamer};
+	}
+	if ($bigdif>=2) $maxpow=100;
+	elseif ($bigdif>=0.5) $maxpow=60;
+	else $maxpow=40;
+	$maxpow=floor($maxpow/5)*5;
+	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
+	elseif ($d['Weg']['s']>0) $maxpow=40;
+	
 	// KAMER
 	$Setkamer=33;
 	if ($d['kamer_set']['m']==0) {
