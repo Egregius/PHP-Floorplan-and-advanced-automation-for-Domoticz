@@ -26,8 +26,6 @@ if ($cmd==1) {
 }*/
 
 
-echo sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+1","output":""}],"version":"1.1"}');
-
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
