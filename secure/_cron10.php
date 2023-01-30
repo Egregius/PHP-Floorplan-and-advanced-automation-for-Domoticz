@@ -12,16 +12,16 @@
 //lg(__FILE__.':'.$s);
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
-	$uit=40;
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$uit&&past('poort')>$uit&&past('deurgarage')>$uit&&past('garageled')>$uit&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
+	$i=40;
+	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garageled')>$i&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
 	elseif ($d['pirgarage']['s']=='On'&&$d['garageled']['s']=='Off'&&$d['garage']['s']=='Off'&&$d['zon']['s']==0) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-	$uit=40;
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$uit&&past('poort')>$uit&&past('deurgarage')>$uit&&past('garage')>$uit&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
-	$uit=120;
-	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$uit&&past('zolderg')>$uit) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
-	$uit=15;
-	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>$uit&&past('pirinkom')>$uit&&past('deurwc')>$uit&&past('deurinkom')>$uit&&past('deurvoordeur')>$uit) {
-		foreach (array(28,26,0) as $i) {
+	$i=40;
+	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garage')>$i&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
+	$i=120;
+	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
+	$i=5;
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>$i&&past('deurinkom')>$i&&past('deurvoordeur')>$i) {
+		foreach (array(24,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -30,8 +30,9 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$uit&&past('pirhall')>$uit&&past('deurbadkamer')>$uit&&past('deurkamer')>$uit&&past('deurspeelkamer')>$uit&&past('deuralex')>$uit) {
-		foreach (array(28,26,0) as $i) {
+	$i=5;
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurspeelkamer')>$i&&past('deuralex')>$i) {
+		foreach (array(24,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -48,8 +49,10 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}*/
-	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>5) {
-		foreach (array(6,4,2,0) as $i) {
+	if ($d['lgtv']=='On'&&TIME>strtotime('19:00')) $i=5;
+	else $i=35;
+	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
+		foreach (array(6,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -58,8 +61,8 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-$uit=50;
-if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$uit&&past('voordeur')>$uit) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+$i=50;
+if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
 //	if (pingport('192.168.2.6', 3000)==1) {
@@ -102,8 +105,7 @@ if ($d['nvidia']['s']=='On') {
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
 $user='cron10  ';
-$el=$d['el']['s']-$d['zon']['s'];
-//lg($el);
+//$el=$d['el']['s']-$d['zon']['s'];lg($el);
 
 // BOSE Living
 if (pingport('192.168.2.101', 80)==1) {
