@@ -45,6 +45,7 @@ function array_to_chart($data,$args=false) {
 	if ((!array_key_exists('jsapi_called',$GLOBALS)) || (!$GLOBALS['jsapi_called'])) {
 //		$script = '<script type="text/javascript" src="https://www.google.com/jsapi"></script>'.$lb;
 		$script = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>'.$lb;
+		$GLOBALS['jsapi_called']=true;
 	} else {
 		$script = ''; //we only need to call it once
 	}

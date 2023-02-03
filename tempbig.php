@@ -19,6 +19,8 @@ $dag=date("Y-m-d H:i:00", TIME-86400*2);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+	<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
+	<link rel="dns-prefetch" href="https://www.gstatic.com/" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="HandheldFriendly" content="true"/>
 	<meta name="viewport" content="width=device-width,height=device-height, user-scalable=yes, minimal-ui"/>
