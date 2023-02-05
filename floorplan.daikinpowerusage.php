@@ -67,9 +67,14 @@ echo '
 		<div class="fix" style="top:0px;left:0px;width:100%">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
-			</a>
+			</a>';
+if ($d['daikin']['m']==0) echo '
+			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4 btna">Manueel</a>
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4">Auto</a> '.$d['daikin_kWh']['icon'];
+else echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a> '.$d['daikin_kWh']['icon'].'
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a> '.$d['daikin_kWh']['icon'];
+echo '
 			<br>
 			<br>';
 
