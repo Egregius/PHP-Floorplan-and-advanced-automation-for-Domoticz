@@ -63,10 +63,10 @@ if ($device=='kamer_hum') {
 	$status=$status[1]+3;
 	if($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
 	exit;
-} elseif ($device=='living_hum') {
+} elseif ($device=='badkamer_hum') {
 	$status=explode(';', $status);
 	$status=$status[1]+3;
-	if($status!=$d['living_temp']['m']) storemode('living_temp', $status);
+	if($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
