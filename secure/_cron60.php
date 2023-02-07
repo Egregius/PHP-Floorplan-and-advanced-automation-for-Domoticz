@@ -13,8 +13,8 @@
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
-foreach (array('buiten','living','kamer','alex') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
-$query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder,living_hum,kamer_hum,alex_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$buiten_hum');";
+foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
+$query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
 
 if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');

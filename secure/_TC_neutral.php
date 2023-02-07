@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 
-foreach	(array('zoldervuur1', 'zoldervuur2', 'brander') as $i) {
+foreach	(array(/*'zoldervuur1', 'zoldervuur2', */'brander') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
 
@@ -178,3 +178,4 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
+require('_TC_badkamer.php');

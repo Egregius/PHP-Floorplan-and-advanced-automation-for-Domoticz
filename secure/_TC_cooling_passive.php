@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-foreach	(array('zoldervuur1', 'zoldervuur2', 'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
+foreach	(array(/*'zoldervuur1', 'zoldervuur2', */'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
 	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
@@ -93,3 +93,4 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
+require('_TC_badkamer.php');

@@ -61,6 +61,7 @@ $sensors=array(
 	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
 	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
 	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
+	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
 	'buiten_hum'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
 foreach ($sensors as $k=>$v) {
@@ -77,6 +78,7 @@ if ($aantalsensors==4) echo '
 	<a href="/hum.php?living_hum=on" class="btn Living">Living</a>
 	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
 	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
+	<a href="/hum.php?badkamer_hum=on" class="btn Kamer">Badk</a>
 	<a href="/hum.php?buiten_hum=on" class="btn Buiten">Buiten</a>';
 else foreach ($sensors as $k=>$v) {
 	$v=ucfirst(str_replace('_hum', '', $k));
@@ -125,7 +127,7 @@ $args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('living_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
+	$_SESSION['sensors_hum']=array('kamer_hum'=>1,'alex_hum'=>1);
 	$aantalsensors=4;
 }
 //echo '<pre>';print_r($sensors);echo '</pre>';
@@ -162,7 +164,10 @@ while ($row=$result->fetch_assoc()) {
 	$graph[$x][55]=55;
 	$graph[$x][60]=60;
 	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) $graph[$x][$k]=$row[$k];
+		if ($v==1) {
+			if ($row[$k]>0) $graph[$x][$k]=$row[$k];
+			else $graph[$x][$k]=50;
+		}
 	}
 	$x++;
 }
@@ -212,11 +217,15 @@ while ($row=$result->fetch_assoc()) {
 	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
 			if ($aantalsensors==1) {
-				$graph[$x]['MIN']=$row['MIN'];
-				$graph[$x]['AVG']=$row['AVG'];
-				$graph[$x]['MAX']=$row['MAX'];
+				if ($row['MIN']>0) $graph[$x]['MIN']=$row['MIN'];
+				else $graph[$x]['MIN']=50;
+				if ($row['AVG']>0) $graph[$x]['AVG']=$row['AVG'];
+				else $graph[$x]['AVG']=50;
+				if ($row['MAX']>0) $graph[$x]['MAX']=$row['MAX'];
+				else $graph[$x]['MAX']=50;
 			} else {
-				$graph[$x][$k]=$row[$k];
+				if ($row[$k]>0) $graph[$x][$k]=$row[$k];
+				else $graph[$x][$k]=50;
 			}
 		}
 	}
@@ -275,11 +284,15 @@ while ($row=$result->fetch_assoc()) {
 	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
 			if ($aantalsensors==1) {
-				$graph[$x]['MIN']=$row['MIN'];
-				$graph[$x]['AVG']=$row['AVG'];
-				$graph[$x]['MAX']=$row['MAX'];
+				if ($row['MIN']>0) $graph[$x]['MIN']=$row['MIN'];
+				else $graph[$x]['MIN']=50;
+				if ($row['AVG']>0) $graph[$x]['AVG']=$row['AVG'];
+				else $graph[$x]['AVG']=50;
+				if ($row['MAX']>0) $graph[$x]['MAX']=$row['MAX'];
+				else $graph[$x]['MAX']=50;
 			} else {
-				$graph[$x][$k]=$row[$k];
+				if ($row[$k]>0) $graph[$x][$k]=$row[$k];
+				else $graph[$x][$k]=50;
 			}
 		}
 	}
