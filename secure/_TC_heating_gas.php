@@ -9,7 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
-$kamers=array('living','kamer','alex','badkamer');
+$kamers=array('living'/*,'kamer','alex','badkamer'*/);
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};

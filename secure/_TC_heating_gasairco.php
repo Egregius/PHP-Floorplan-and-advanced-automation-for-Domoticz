@@ -20,7 +20,7 @@ if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 elseif ($maxpow>=80) {$maxpow=80;$spmode=0;}
 else $spmode=-1;
 
-foreach (array('living','badkamer') as $kamer) {
+foreach (array('living'/*,'badkamer'*/) as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$difgas) $difgas=${'dif'.$kamer};
 }
