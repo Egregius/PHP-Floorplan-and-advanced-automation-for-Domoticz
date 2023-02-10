@@ -93,16 +93,6 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('badkamervuur2','badkamervuur1','zolderg') as $i) {
-			if ($d[$i]['s']!='Off') {
-				if (past($i)>$uit) {
-					if ($d[$i]['s']!='Off') {
-						sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-						lg($i.' uitgeschakeld omdat we weg zijn');
-					}
-				}
-			}
-		}
 		foreach (array('kamer','speelkamer','alex','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {

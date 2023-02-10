@@ -10,9 +10,7 @@
  * @link	 https://egregius.be
  **/
 
-foreach	(array(/*'zoldervuur1', 'zoldervuur2', */'brander') as $i) {
-	if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-}
+if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['daikin']['s']=='On') {
 	foreach (array('living', 'kamer', 'alex') as $k) {
@@ -22,48 +20,6 @@ if ($d['daikin']['s']=='On') {
 			storemode('daikin'.$k, 0);
 			storeicon($k.'_set', 'Off');
 		}
-	}
-}
-if ($d['deurbadkamer']['s']=='Open'&&$d['badkamer_set']['s']!=10&&(past('deurbadkamer')>57|| $d['lichtbadkamer']['s']==0)) {
-	store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-	$d['badkamer_set']['s']=10.0;
-	if ($d['badkamer_set']['m']==1) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
-} elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0) {
-	$b7=past('$ 8badkamer-7');
-	$b7b=past('8Kamer-7');
-	if ($b7b<$b7) $b7=$b7b;
-	$x=22.2;
-	if ($d['buiten_temp']['s']<21&&$d['lichtbadkamer']['s']>0&&$d['badkamer_set']['s']!=$x&&($b7>900&&$d['heating']['s']>=1&&(TIME>strtotime('5:00')&& TIME<strtotime('7:30')))) {
-		store('badkamer_set', $x, basename(__FILE__).':'.__LINE__);
-		$d['badkamer_set']['s']=$x;
-	} elseif ($b7>900&&$d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<21&&$d['Weg']['s']<2) {
-		if ($d['heating']['s']>=0) {
-		} elseif ($d['badkamer_set']['s']!=10) {
-			store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-			$d['badkamer_set']['s']=10.0;
-		}
-	} elseif ($b7>900&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10)
-		|| ($d['Weg']['s']>=2&&$d['badkamer_set']['s']!=10)) {
-		store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-		$d['badkamer_set']['s']=10.0;
-	} elseif ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=10) {
-		store('badkamer_set', 10, basename(__FILE__).':'.__LINE__);
-		$d['badkamer_set']['s']=10.0;
-	}
-}
-$dif=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-if ($dif<=-1) {
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur2']['s']!='On'&&past('badkamervuur2')>30&&$d['lichtbadkamer']['s']>0&&$d['el']['s']<6800) sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
-} elseif ($dif<= 0) {
-	if ($d['deurbadkamer']['s']=='Closed'&&$d['badkamervuur1']['s']!='On'&&past('badkamervuur1')>30&&$d['el']['s']<7200) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
-	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)||$d['el']['s']>7500) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
-} else {
-	if (($d['badkamervuur2']['s']!='Off'&&past('badkamervuur2')>30)||$d['el']['s']>7500) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
-	if (($d['badkamervuur1']['s']!='Off'&&past('badkamervuur1')>30)||$d['el']['s']>8200) sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($dif>0.2&&$d['badkamer_set']['s']>19) {
-		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
-		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 

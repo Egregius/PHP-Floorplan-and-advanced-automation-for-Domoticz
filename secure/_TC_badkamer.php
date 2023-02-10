@@ -33,45 +33,65 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		}
 	}
 	if($dow==0||$dow==6) {
-		if (TIME>=strtotime('7:30')&&TIME<strtotime('7:45')) $set=$set+5.8;
-		elseif (TIME>=strtotime('7:20')&&TIME<strtotime('7:45')) $set=$set+5.5;
-		elseif (TIME>=strtotime('7:10')&&TIME<strtotime('7:45')) $set=$set+5.2;
-		elseif (TIME>=strtotime('7:00')&&TIME<strtotime('7:45')) $set=$set+4.9;
-		elseif (TIME>=strtotime('6:50')&&TIME<strtotime('7:45')) $set=$set+4.6;
-		elseif (TIME>=strtotime('6:40')&&TIME<strtotime('7:45')) $set=$set+4.3;
-		elseif (TIME>=strtotime('6:30')&&TIME<strtotime('7:45')) $set=$set+4;
-		elseif (TIME>=strtotime('6:20')&&TIME<strtotime('7:45')) $set=$set+3.7;
-		elseif (TIME>=strtotime('6:10')&&TIME<strtotime('7:45')) $set=$set+3.4;
-		elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:45')) $set=$set+3.1;
-		elseif (TIME>=strtotime('5:50')&&TIME<strtotime('7:45')) $set=$set+2.8;
-		elseif (TIME>=strtotime('5:40')&&TIME<strtotime('7:45')) $set=$set+2.5;
-		elseif (TIME>=strtotime('5:30')&&TIME<strtotime('7:45')) $set=$set+2.2;
-		elseif (TIME>=strtotime('5:20')&&TIME<strtotime('7:45')) $set=$set+1.9;
-		elseif (TIME>=strtotime('5:10')&&TIME<strtotime('7:45')) $set=$set+1.6;
-		elseif (TIME>=strtotime('5:00')&&TIME<strtotime('7:45')) $set=$set+1.3;
-		elseif (TIME>=strtotime('4:50')&&TIME<strtotime('7:45')) $set=$set+1;
-		elseif (TIME>=strtotime('4:40')&&TIME<strtotime('7:45')) $set=$set+0.7;
-		elseif (TIME>=strtotime('4:30')&&TIME<strtotime('7:45')) $set=$set+0.4;
+		if (TIME>=strtotime('7:30')&&TIME<strtotime('7:45')) {$set+=5.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('7:21')&&TIME<strtotime('7:45')) {$set+=5.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('7:12')&&TIME<strtotime('7:45')) {$set+=5.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('7:03')&&TIME<strtotime('7:45')) {$set+=4.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:54')&&TIME<strtotime('7:45')) {$set+=4.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:45')&&TIME<strtotime('7:45')) {$set+=4.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:36')&&TIME<strtotime('7:45')) {$set+=4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:27')&&TIME<strtotime('7:45')) {$set+=3.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:18')&&TIME<strtotime('7:45')) {$set+=3.4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:09')&&TIME<strtotime('7:45')) {$set+=3.1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:45')) {$set+=2.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:51')&&TIME<strtotime('7:45')) {$set+=2.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:42')&&TIME<strtotime('7:45')) {$set+=2.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:33')&&TIME<strtotime('7:45')) {$set+=1.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:24')&&TIME<strtotime('7:45')) {$set+=1.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:15')&&TIME<strtotime('7:45')) {$set+=1.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:06')&&TIME<strtotime('7:45')) {$set+=1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:57')&&TIME<strtotime('7:45')) {$set+=0.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:48')&&TIME<strtotime('7:45')) {$set+=0.4;$m.=' '.__LINE__;}
+	} elseif($dow==2||$dow==5) {
+		if (TIME>=strtotime('6:30')&&TIME<strtotime('7:15')) {$set+=5.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:21')&&TIME<strtotime('7:15')) {$set+=5.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:12')&&TIME<strtotime('7:15')) {$set+=5.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:03')&&TIME<strtotime('7:15')) {$set+=4.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:54')&&TIME<strtotime('7:15')) {$set+=4.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:45')&&TIME<strtotime('7:15')) {$set+=4.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:36')&&TIME<strtotime('7:15')) {$set+=4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:27')&&TIME<strtotime('7:15')) {$set+=3.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:18')&&TIME<strtotime('7:15')) {$set+=3.4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:09')&&TIME<strtotime('7:15')) {$set+=3.1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:00')&&TIME<strtotime('7:15')) {$set+=2.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:51')&&TIME<strtotime('7:15')) {$set+=2.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:42')&&TIME<strtotime('7:15')) {$set+=2.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:33')&&TIME<strtotime('7:15')) {$set+=1.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:24')&&TIME<strtotime('7:15')) {$set+=1.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:15')&&TIME<strtotime('7:15')) {$set+=1.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:06')&&TIME<strtotime('7:15')) {$set+=1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('3:57')&&TIME<strtotime('7:15')) {$set+=0.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('3:48')&&TIME<strtotime('7:15')) {$set+=0.4;$m.=' '.__LINE__;}
 	} else {
-		if (TIME>=strtotime('6:30')&&TIME<strtotime('7:15')) $set=$set+5.8;
-		elseif (TIME>=strtotime('6:20')&&TIME<strtotime('7:15')) $set=$set+5.5;
-		elseif (TIME>=strtotime('6:10')&&TIME<strtotime('7:15')) $set=$set+5.2;
-		elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:15')) $set=$set+4.9;
-		elseif (TIME>=strtotime('5:50')&&TIME<strtotime('7:15')) $set=$set+4.6;
-		elseif (TIME>=strtotime('5:40')&&TIME<strtotime('7:15')) $set=$set+4.3;
-		elseif (TIME>=strtotime('5:30')&&TIME<strtotime('7:15')) $set=$set+4;
-		elseif (TIME>=strtotime('5:20')&&TIME<strtotime('7:15')) $set=$set+3.7;
-		elseif (TIME>=strtotime('5:10')&&TIME<strtotime('7:15')) $set=$set+3.4;
-		elseif (TIME>=strtotime('5:00')&&TIME<strtotime('7:15')) $set=$set+3.1;
-		elseif (TIME>=strtotime('4:50')&&TIME<strtotime('7:15')) $set=$set+2.8;
-		elseif (TIME>=strtotime('4:40')&&TIME<strtotime('7:15')) $set=$set+2.5;
-		elseif (TIME>=strtotime('4:30')&&TIME<strtotime('7:15')) $set=$set+2.2;
-		elseif (TIME>=strtotime('4:20')&&TIME<strtotime('7:15')) $set=$set+1.9;
-		elseif (TIME>=strtotime('4:10')&&TIME<strtotime('7:15')) $set=$set+1.6;
-		elseif (TIME>=strtotime('4:00')&&TIME<strtotime('7:15')) $set=$set+1.3;
-		elseif (TIME>=strtotime('3:50')&&TIME<strtotime('7:15')) $set=$set+1;
-		elseif (TIME>=strtotime('3:40')&&TIME<strtotime('7:15')) $set=$set+0.7;
-		elseif (TIME>=strtotime('3:30')&&TIME<strtotime('7:15')) $set=$set+0.4;
+		if (TIME>=strtotime('6:45')&&TIME<strtotime('7:30')) {$set+=5.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:36')&&TIME<strtotime('7:30')) {$set+=5.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:27')&&TIME<strtotime('7:30')) {$set+=5.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:18')&&TIME<strtotime('7:30')) {$set+=4.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:09')&&TIME<strtotime('7:30')) {$set+=4.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:30')) {$set+=4.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:51')&&TIME<strtotime('7:30')) {$set+=4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:42')&&TIME<strtotime('7:30')) {$set+=3.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:33')&&TIME<strtotime('7:30')) {$set+=3.4;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:24')&&TIME<strtotime('7:30')) {$set+=3.1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:15')&&TIME<strtotime('7:30')) {$set+=2.8;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('5:06')&&TIME<strtotime('7:30')) {$set+=2.5;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:57')&&TIME<strtotime('7:30')) {$set+=2.2;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:48')&&TIME<strtotime('7:30')) {$set+=1.9;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:39')&&TIME<strtotime('7:30')) {$set+=1.6;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:30')&&TIME<strtotime('7:30')) {$set+=1.3;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:21')&&TIME<strtotime('7:30')) {$set+=1;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:12')&&TIME<strtotime('7:30')) {$set+=0.7;$m.=' '.__LINE__;}
+		elseif (TIME>=strtotime('4:03')&&TIME<strtotime('7:30')) {$set+=0.4;$m.=' '.__LINE__;}
 	}
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<1) {
 	if ($d['badkamer_set']['s']!=5) {
@@ -83,10 +103,59 @@ if (isset($set)) {
 	if ($set!=$d['badkamer_set']['s']) store('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
 	$d['badkamer_set']['s']=$set;
 }
-
+$hum=55;
+if($dow==0||$dow==6) {
+	if (TIME>=strtotime('7:30')&&TIME<strtotime('7:30')) {$hum-=30;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('7:21')&&TIME<strtotime('7:30')) {$hum-=28;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('7:12')&&TIME<strtotime('7:30')) {$hum-=26;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('7:03')&&TIME<strtotime('7:30')) {$hum-=24;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:54')&&TIME<strtotime('7:30')) {$hum-=22;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:45')&&TIME<strtotime('7:30')) {$hum-=20;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:36')&&TIME<strtotime('7:30')) {$hum-=18;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:27')&&TIME<strtotime('7:30')) {$hum-=16;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:18')&&TIME<strtotime('7:30')) {$hum-=14;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:09')&&TIME<strtotime('7:30')) {$hum-=12;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:30')) {$hum-=10;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:51')&&TIME<strtotime('7:30')) {$hum-=8;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:42')&&TIME<strtotime('7:30')) {$hum-=6;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:33')&&TIME<strtotime('7:30')) {$hum-=4;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:24')&&TIME<strtotime('7:30')) {$hum-=2;$m.=' '.__LINE__;}
+} elseif($dow==2||$dow==5)  {
+	if (TIME>=strtotime('6:30')&&TIME<strtotime('7:00')) {$hum-=30;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:21')&&TIME<strtotime('7:00')) {$hum-=28;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:12')&&TIME<strtotime('7:00')) {$hum-=26;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:03')&&TIME<strtotime('7:00')) {$hum-=24;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:54')&&TIME<strtotime('7:00')) {$hum-=22;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:45')&&TIME<strtotime('7:00')) {$hum-=20;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:36')&&TIME<strtotime('7:00')) {$hum-=18;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:27')&&TIME<strtotime('7:00')) {$hum-=16;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:18')&&TIME<strtotime('7:00')) {$hum-=14;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:09')&&TIME<strtotime('7:00')) {$hum-=12;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:00')&&TIME<strtotime('7:00')) {$hum-=10;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:51')&&TIME<strtotime('7:00')) {$hum-=8;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:42')&&TIME<strtotime('7:00')) {$hum-=6;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:33')&&TIME<strtotime('7:00')) {$hum-=4;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:24')&&TIME<strtotime('7:00')) {$hum-=2;$m.=' '.__LINE__;}
+} else {
+	if (TIME>=strtotime('6:45')&&TIME<strtotime('7:15')) {$hum-=30;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:36')&&TIME<strtotime('7:15')) {$hum-=28;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:27')&&TIME<strtotime('7:15')) {$hum-=26;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:18')&&TIME<strtotime('7:15')) {$hum-=24;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:09')&&TIME<strtotime('7:15')) {$hum-=22;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('6:00')&&TIME<strtotime('7:15')) {$hum-=20;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:51')&&TIME<strtotime('7:15')) {$hum-=18;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:42')&&TIME<strtotime('7:15')) {$hum-=16;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:33')&&TIME<strtotime('7:15')) {$hum-=14;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:24')&&TIME<strtotime('7:15')) {$hum-=12;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:15')&&TIME<strtotime('7:15')) {$hum-=10;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('5:06')&&TIME<strtotime('7:15')) {$hum-=8;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:57')&&TIME<strtotime('7:15')) {$hum-=6;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:48')&&TIME<strtotime('7:15')) {$hum-=4;$m.=' '.__LINE__;}
+	elseif (TIME>=strtotime('4:39')&&TIME<strtotime('7:15')) {$hum-=2;$m.=' '.__LINE__;}
+}
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 
-if ($d['badkamer_temp']['m']>=55&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>=55';}
+if ($d['badkamer_temp']['m']>=$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
 if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {
 	if ($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>=55)) {$l=1;$m.=' + '.__LINE__.' kamer_hum>=55';}
 	if ($d['deurspeelkamer']['s']=='Closed'||($d['deurspeelkamer']['s']=='Open'&&$d['raamspeelkamer']['s']=='Closed'&&$d['speelkamer_temp']['m']>=55)) {$l=1;$m.=' + '.__LINE__.' speelkamer_hum>=55';}
@@ -114,9 +183,9 @@ if ($d['badkamer_set']['m']==0&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' +
 elseif ($d['badkamer_set']['m']==1&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' + '.__LINE__.' slow';}
 
 
-if ($d['Weg']['s']>2) {$l=0;$m.=' + '.__LINE__.' base';}
+if ($d['Weg']['s']>2) {$l=0;$m.=' + '.__LINE__.' Weg';}
 
-//if (strlen($m)>5) lg($m);
+if (strlen($m)>5) lg('['.$m.']');
 
 if ($l==0) {
 	if ($d['luchtdroger']['s']=='On') {
@@ -143,3 +212,15 @@ if ($l==0) {
 		if ($d['luchtdroger2']['s']=='Off') sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } 
+
+if ($d['wasdroger']['s']=='On') {
+	if ($d['speelkamer_temp']['s']<16.5&&($d['deurspeelkamer']['s']=='Closed'||($d['deurspeelkamer']['s']=='Open'&&past('deurspeelkamer')<60))) {
+		if ($d['waskamervuur1']['s']=='Off'&&past('wakamervuur1')>295) sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+	} else {
+		if ($d['waskamervuur2']['s']=='On'&&past('wakamervuur1')>295) sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['waskamervuur1']['s']=='On'&&past('wakamervuur1')>295) sw('waskamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+} else {
+	if ($d['waskamervuur2']['s']=='On'&&past('wakamervuur1')>295) sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['waskamervuur1']['s']=='On'&&past('wakamervuur1')>295) sw('waskamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
+}

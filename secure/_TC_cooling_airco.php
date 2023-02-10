@@ -11,9 +11,7 @@
  **/
 
 if ($d['daikin']['m']==1) {
-	foreach (array(/*'zoldervuur1', 'zoldervuur2', */'brander', 'badkamervuur1', 'badkamervuur2') as $i) {
-		if ($d[$i]['s']!='Off') sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 	$bigdif=-100;
 	foreach (array('living','kamer','alex') as $kamer) {
 		${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);

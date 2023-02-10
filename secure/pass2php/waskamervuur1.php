@@ -9,8 +9,8 @@
  * @license  GNU GPLv3
  * @link     https://egregius.be
  **/
-if ($status=='On') {
-    if ($d['badkamervuur1']['s']!='On') {
-        sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+if ($status=='Off') {
+    if ($d['waskamervuur2']['s']!='Off') {
+        sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
     }
 }
