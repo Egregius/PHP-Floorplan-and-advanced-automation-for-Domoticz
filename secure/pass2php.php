@@ -60,7 +60,7 @@ if ($device=='living_hum') { // 5
 	exit;
 } elseif ($device=='kamer_hum') { // 1
 	$status=explode(';', $status);
-	$status=$status[1]+5;
+	$status=$status[1]+7;
 	if($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 	exit;
 } elseif ($device=='alex_hum') { // 2
@@ -70,7 +70,7 @@ if ($device=='living_hum') { // 5
 	exit;
 } elseif ($device=='badkamer_hum') { // 3
 	$status=explode(';', $status);
-	$status=$status[1]+18;
+	$status=$status[1]+17;
 	if($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 	exit;
 } elseif ($device=='waskamer_hum') { // 4
