@@ -11,25 +11,25 @@
  **/
 $m='';$m2='';
 $l=0;$m.=' base';
-if ($d['badkamer_set']['m']==0) {$set=16.2;$m2.=__LINE__.' ';}
+if ($d['badkamer_set']['m']==0) {$set=15.2;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>57) {
 	$set=5;$m2.=__LINE__.' ';
 } elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']>0) {
 	if (past('badkamer_set')>14400&&$d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<21&&$d['Weg']['s']<2) {
-		if ($d['badkamer_set']['s']>16.2) {
-			$set=16.2;$m2.=__LINE__.' ';
+		if ($d['badkamer_set']['s']>15.2) {
+			$set=15.2;$m2.=__LINE__.' ';
 			if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif (past('badkamer_set')>14400&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=16.2) || ($d['Weg']['s']>=2&&$d['badkamer_set']['s']!=16.2)) {
-		store('badkamer_set', 16.2, basename(__FILE__).':'.__LINE__);
-		$set=16.2;$m2.=__LINE__.' ';
+	} elseif (past('badkamer_set')>14400&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=15.2) || ($d['Weg']['s']>=2&&$d['badkamer_set']['s']!=15.2)) {
+		store('badkamer_set', 15.2, basename(__FILE__).':'.__LINE__);
+		$set=15.2;$m2.=__LINE__.' ';
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']>=1) {
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['Weg']['s']<2) {
-		if ($d['badkamer_set']['s']!=16.2) {
-			$set=16.2;$m2.=__LINE__.' ';
+		if ($d['badkamer_set']['s']!=15.2) {
+			$set=15.2;$m2.=__LINE__.' ';
 		}
 	}
 	if($dow==0||$dow==6) {
@@ -103,7 +103,7 @@ if (isset($set)) {
 	if ($set!=$d['badkamer_set']['s']) store('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
 	$d['badkamer_set']['s']=$set;
 }
-$hum=55;
+$hum=60;
 if($dow==0||$dow==6) {
 	if (TIME>=strtotime('7:30')&&TIME<strtotime('7:20')) {$hum-=30;$m.=' '.__LINE__;}
 	elseif (TIME>=strtotime('7:21')&&TIME<strtotime('7:20')) {$hum-=28;$m.=' '.__LINE__;}
@@ -157,17 +157,17 @@ $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 
 if ($d['badkamer_temp']['m']>=$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
 if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {
-	if ($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>=55)) {$l=1;$m.=' + '.__LINE__.' kamer_hum>=55';}
-	if ($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Closed'&&$d['waskamer_temp']['m']>=55)) {$l=1;$m.=' + '.__LINE__.' waskamer_hum>=55';}
-	if ($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Closed'&&$d['alex_temp']['m']>=55)) {$l=1;$m.=' + '.__LINE__.' alex_hum>=55';}
+	if ($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' kamer_hum>=55';}
+	if ($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Closed'&&$d['waskamer_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' waskamer_hum>=55';}
+	if ($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Closed'&&$d['alex_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' alex_hum>=55';}
 }
 if ($difbadkamer<=-0.6) {$l=3;$m.=' + '.__LINE__.' difbadkamer<=-0.6';}
 elseif ($difbadkamer<=-0.3) {$l=2;$m.=' + '.__LINE__.' difbadkamer<=-0.3';}
 elseif ($difbadkamer< 0) {$l=1;$m.=' + '.__LINE__.' difbadkamer<0';}
 else {
 	if ($difbadkamer>0.2&&$d['badkamer_set']['s']>19) {
-		if ($d['badkamer_set']['s']>16.2) {
-			store('badkamer_set', 16.2, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamer_set']['s']>15.2) {
+			store('badkamer_set', 15.2, basename(__FILE__).':'.__LINE__);
 		
 		}
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);

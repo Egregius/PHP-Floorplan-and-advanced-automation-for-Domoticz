@@ -30,7 +30,7 @@ echo '
 	<link rel="icon" href="images/temperatures.png"/>
 	<link rel="shortcut icon" href="images/temperatures.png"/>
 	<link rel="apple-touch-icon" href="images/temperatures.png"/>
-	<link href="/styles/temp.css?v=5" rel="stylesheet" type="text/css"/>
+	<link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
 	</head>';
 if ($udevice=='iPad') echo '
 	<body style="width:1010px">
