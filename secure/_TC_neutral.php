@@ -23,7 +23,7 @@ if ($d['daikin']['s']=='On') {
 	}
 }
 
-$boven=array('Rspeelkamer','Ralex','RkamerL','RkamerR');
+$boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
@@ -46,7 +46,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['RkamerR']['s']>1&&TIME>=strtotime('7:00')) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true||$d['pirhall']['s']=='On') {
-			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rspeelkamer']['s']>0&&TIME>=strtotime('7:30')&&($d['deurspeelkamer']['s']=='Open'||$d['speelkamer']['s']>0)) sl('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
+			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Rwaskamer']['s']>0&&TIME>=strtotime('7:30')&&($d['deurwaskamer']['s']=='Open'||$d['waskamer']['s']>0)) sl('Rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 			if (($d['Weg']['s']!=1||$d['pirhall']['s']=='On')&&$d['Ralex']['s']>0&&TIME>=strtotime('7:30')&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)&&past('raamalex')>175) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag==true&&$zon==0&&$d['Weg']['s']!=1&&$d['lgtv']['s']=='Off') {
@@ -73,7 +73,7 @@ if ($d['auto']['s']=='On') {
 					}
 				}
 			} elseif ($d['buiten_temp']['s']<16) {
-				$items=array('speelkamer', 'alex');
+				$items=array('waskamer', 'alex');
 				foreach ($items as $i) {
 					if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<17&&past('R'.$i)>14400&&past('raam'.$i)>14400&&$d['R'.$i]['s']<100) {
 						sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);

@@ -53,20 +53,35 @@ if (isset($d[$device])) {
 		}
 	} 
 } 
-if ($device=='kamer_hum') {
+if ($device=='living_hum') { // 5
 	$status=explode(';', $status);
-	$status=$status[1]+3;
+	$status=$status[1]+18;
+	if($status!=$d['living_temp']['m']) storemode('living_temp', $status);
+	exit;
+} elseif ($device=='kamer_hum') { // 1
+	$status=explode(';', $status);
+	$status=$status[1]+5;
 	if($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 	exit;
-} elseif ($device=='alex_hum') {
+} elseif ($device=='alex_hum') { // 2
 	$status=explode(';', $status);
-	$status=$status[1]+3;
+	$status=$status[1]+8;
 	if($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
 	exit;
-} elseif ($device=='badkamer_hum') {
+} elseif ($device=='badkamer_hum') { // 3
 	$status=explode(';', $status);
-	$status=$status[1]+3;
+	$status=$status[1]+18;
 	if($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
+	exit;
+} elseif ($device=='waskamer_hum') { // 4
+	$status=explode(';', $status);
+	$status=$status[1]+17;
+	if($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
+	exit;
+} elseif ($device=='buiten_hum') { // 6
+	$status=explode(';', $status);
+	$status=$status[1]+17;
+	if($status!=$d['buiten_temp']['m']) storemode('buiten_temp', $status);
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {

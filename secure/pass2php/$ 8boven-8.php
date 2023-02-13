@@ -10,7 +10,7 @@
  * @link	 https://egregius.be
  **/
 if ($status=='On') {
-	$item='Rspeelkamer';
+	$item='Rwaskamer';
 	if ($d['heating']['s']>=0) {
 		sl($item, 100, basename(__FILE__).':'.__LINE__);
 	} else {

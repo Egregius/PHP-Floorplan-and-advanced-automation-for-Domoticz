@@ -59,7 +59,7 @@ $sensors=array(
 	'badkamer'=>array('Naam'=>'Badkamr','Color'=>'#6666FF'),
 	'kamer'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
 	'alex'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
-	'speelkamer'=>array('Naam'=>'Splkamr','Color'=>'#EEEE00'),
+	'waskamer'=>array('Naam'=>'Waskamr','Color'=>'#EEEE00'),
 	'zolder'=>array('Naam'=>'Zolder','Color'=>'#EE33EE'),
 	'buiten'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );

@@ -10,6 +10,6 @@
  * @link	 https://egregius.be
  **/
 if ($status=='On') {
-	$item='Rspeelkamer';
+	$item='Rwaskamer';
 	sl($item, 1, basename(__FILE__).':'.__LINE__);
 }

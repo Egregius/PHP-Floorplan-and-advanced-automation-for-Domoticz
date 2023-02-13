@@ -195,7 +195,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 				<td>Manueel</td>';
 			}
-		} elseif (in_array($row['n'], array('eettafel','zithoek','kamer','speelkamer','alex','lichtbadkamer'))) {
+		} elseif (in_array($row['n'], array('eettafel','zithoek','kamer','waskamer','alex','lichtbadkamer'))) {
 			echo '
 				<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {

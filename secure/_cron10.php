@@ -31,7 +31,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
 	$i=5;
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurspeelkamer')>$i&&past('deuralex')>$i) {
+	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
 		foreach (array(24,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);

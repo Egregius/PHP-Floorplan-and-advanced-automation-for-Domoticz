@@ -19,13 +19,13 @@ if ($d['auto']['s']=='On') {
 		}
 		if ($d['heating']['s']>0) { //Heating
 			if ($d['buiten_temp']['s']<$d['kamer_temp']['s']
-				&&$d['buiten_temp']['s']<$d['speelkamer_temp']['s']
+				&&$d['buiten_temp']['s']<$d['waskamer_temp']['s']
 				&&$d['buiten_temp']['s']<$d['alex_temp']['s']
 				&&($d['raamkamer']['s']=='Open'
-				||$d['raamspeelkamer']['s']=='Open'
+				||$d['raamwaskamer']['s']=='Open'
 				||$d['raamalex']['s']=='Open')
 				&&($d['kamer_temp']['s']<10
-				||$d['speelkamer_temp']['s']<10
+				||$d['waskamer_temp']['s']<10
 				||$d['alex_temp']['s']<10)
 			) {
 				alert(
@@ -33,7 +33,7 @@ if ($d['auto']['s']=='On') {
 					'Ramen boven dicht doen, te koud buiten.
 					Buiten = '.round($d['buiten_temp']['s'], 1).',
 					kamer = '.$d['kamer_temp']['s'].',
-					speelkamer = '.$d['speelkamer_temp']['s'].',
+					waskamer = '.$d['waskamer_temp']['s'].',
 					Alex = '.$d['alex_temp']['s'],
 					3600,
 					false,
@@ -43,14 +43,14 @@ if ($d['auto']['s']=='On') {
 			}
 		} elseif ($d['heating']['s']<0) { //Cooling
 			if (($d['buiten_temp']['s']>$d['kamer_temp']['s']
-				&&$d['buiten_temp']['s']>$d['speelkamer_temp']['s']
+				&&$d['buiten_temp']['s']>$d['waskamer_temp']['s']
 				&&$d['buiten_temp']['s']>$d['alex_temp']['s'])
 				&&$d['buiten_temp']['s']>=18
 				&&($d['kamer_temp']['s']>=18
-				||$d['speelkamer_temp']['s']>=18
+				||$d['waskamer_temp']['s']>=18
 				||$d['alex_temp']['s']>=18)
 				&&($d['raamkamer']['s']=='Open'
-				||$d['raamspeelkamer']['s']=='Open'
+				||$d['raamwaskamer']['s']=='Open'
 				||$d['raamalex']['s']=='Open')
 			) {
 				alert(
@@ -58,7 +58,7 @@ if ($d['auto']['s']=='On') {
 					'Ramen boven dicht doen, te warm buiten.
 					Buiten = '.round($d['buiten_temp']['s'], 1).',
 					kamer = '.$d['kamer_temp']['s'].',
-					speelkamer = '.$d['speelkamer_temp']['s'].',
+					waskamer = '.$d['waskamer_temp']['s'].',
 					Alex = '.$d['alex_temp']['s'],
 					3600,
 					false,

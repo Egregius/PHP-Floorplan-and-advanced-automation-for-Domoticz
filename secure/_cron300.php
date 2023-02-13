@@ -313,6 +313,9 @@ if ($d['zon']['s']>0) {
 	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
 }
+/*foreach (array('living','badkamer','kamer','alex','waskamer','buiten') as $i) {
+	if (past($i.'_hum')>300) alert($i.'_hum','Batterij '.$i.'_hum checken',43200);
+}*/
 
 foreach (array(101,102,103,104,105,106,107) as $i) {
 	if ($d['bose'.$i]['icon']!='Offline') {

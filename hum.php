@@ -61,6 +61,7 @@ $sensors=array(
 	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
 	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
 	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
+	'waskamer_hum'=>array('Naam'=>'Wask','Color'=>'#6666FF'),
 	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
 	'buiten_hum'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
@@ -78,12 +79,14 @@ if ($aantalsensors==4) echo '
 	<a href="/hum.php?living_hum=on" class="btn Living">Living</a>
 	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
 	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
+	<a href="/hum.php?waskamer_hum=on" class="btn Kamer">Wask</a>
 	<a href="/hum.php?badkamer_hum=on" class="btn Kamer">Badk</a>
 	<a href="/hum.php?buiten_hum=on" class="btn Buiten">Buiten</a>';
 else foreach ($sensors as $k=>$v) {
-	$v=ucfirst(str_replace('_hum', '', $k));
-	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn '.$v.'">'.$v.'</a>';
-	else echo '<a href="/hum.php?'.$k.'=on" class="btn '.$v.'">'.$v.'</a>';
+//	print_r($v);
+//	$v=ucfirst(str_replace('_hum', '', $k));
+	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn '.$k.'">'.$v['Naam'].'</a>';
+	else echo '<a href="/hum.php?'.$k.'=on" class="btn '.$k.'">'.$v['Naam'].'</a>';
 }
 $args=array(
 		'width'=>1000,
@@ -127,7 +130,7 @@ $args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('kamer_hum'=>1,'alex_hum'=>1);
+	$_SESSION['sensors_hum']=array('living_hum'=>1,'waskamer_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1,'buiten_hum'=>1);
 	$aantalsensors=4;
 }
 //echo '<pre>';print_r($sensors);echo '</pre>';

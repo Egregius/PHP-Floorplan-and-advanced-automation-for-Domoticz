@@ -10,9 +10,9 @@
  * @link	 https://egregius.be
  **/
 if ($status=='On') {
-	sl('speelkamer', 8, basename(__FILE__).':'.__LINE__);
-	storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
-	if ($d['Rspeelkamer']['s']<70) {
-		sl('Rspeelkamer', 100);
+	sl('waskamer', 8, basename(__FILE__).':'.__LINE__);
+	storemode('waskamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['Rwaskamer']['s']<70) {
+		sl('Rwaskamer', 100);
 	}
 }

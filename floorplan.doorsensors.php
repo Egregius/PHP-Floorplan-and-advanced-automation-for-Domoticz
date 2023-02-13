@@ -44,14 +44,14 @@ echo '
 		.dachterdeur{top:265px;left:80px;width:60px;height:45px;}
 		.draamliving{top:46px;left:80px;width:60px;height:163px;}
 		.draamkeuken{top:179px;left:417px;width:60px;height:42px;}
-		.draamspeelkamer{top:448px;left:80px;width:60px;height:44px;}
+		.draamwaskamer{top:448px;left:80px;width:60px;height:44px;}
 		.draamalex{top:568px;left:80px;width:60px;height:44px;}
 		.draamkamer{top:586px;left:425px;width:60px;height:43px;text-align:left;}
 		.draamhall{top:396px;left:216px;width:55px;height:40px;}
 		.ddeurvoordeur{top:59px;left:418px;width:60px;height:44px;}
 		.ddeurbadkamer{top:420px;left:341px;width:60px;height:46px;}
 		.ddeurkamer{top:469px;left:290px;width:46px;height:33px;}
-		.ddeurspeelkamer{top:448px;left:167px;width:44px;height:44px;}
+		.ddeurwaskamer{top:448px;left:167px;width:44px;height:44px;}
 		.ddeuralex{top:535px;left:213px;width:43px;height:33px;}
 		.ddeurgarage{top:221px;left:341px;width:43px;height:33px;}
 		.ddeurinkom{top:56px;left:338px;width:43px;height:44px;}
@@ -64,8 +64,8 @@ if (isset($_REQUEST['name'])&&isset($_REQUEST['action'])) {
 		if ($_REQUEST['name']=='raamkamer') {
 			storemode('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			storemode('RkamerR', 0, basename(__FILE__).':'.__LINE__);
-		} elseif ($_REQUEST['name']=='raamspeelkamer') {
-			storemode('Rspeelkamer', 0, basename(__FILE__).':'.__LINE__);
+		} elseif ($_REQUEST['name']=='raamwaskamer') {
+			storemode('Rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['name']=='raamalex') {
 			storemode('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
@@ -149,18 +149,18 @@ if ($d['raamliving']['s']=='Open') {
 	</a>';
 }
 
-if ($d['raamspeelkamer']['s']=='Open') {
+if ($d['raamwaskamer']['s']=='Open') {
 	echo '
-	<a href=\'javascript:navigator_Go("?name=raamspeelkamer&action=Closed");\'>
-		<div class="fix red draamspeelkamer">
+	<a href=\'javascript:navigator_Go("?name=raamwaskamer&action=Closed");\'>
+		<div class="fix red draamwaskamer">
 			<br>
 			&nbsp;&nbsp;Open
 		</div>
 	</a>';
 } else {
 	echo '
-	<a href=\'javascript:navigator_Go("?name=raamspeelkamer&action=Open");\'>
-		<div class="fix green draamspeelkamer">
+	<a href=\'javascript:navigator_Go("?name=raamwaskamer&action=Open");\'>
+		<div class="fix green draamwaskamer">
 			<br>
 			&nbsp;&nbsp;Closed
 		</div>
@@ -293,18 +293,18 @@ if ($d['deurkamer']['s']=='Open') {
 	</a>';
 }
 
-if ($d['deurspeelkamer']['s']=='Open') {
+if ($d['deurwaskamer']['s']=='Open') {
 	echo '
-	<a href=\'javascript:navigator_Go("?name=deurspeelkamer&action=Closed");\'>
-		<div class="fix red ddeurspeelkamer">
+	<a href=\'javascript:navigator_Go("?name=deurwaskamer&action=Closed");\'>
+		<div class="fix red ddeurwaskamer">
 			<br>
 			&nbsp;&nbsp;Open
 		</div>
 	</a>';
 } else {
 	echo '
-	<a href=\'javascript:navigator_Go("?name=deurspeelkamer&action=Open");\'>
-		<div class="fix green ddeurspeelkamer">
+	<a href=\'javascript:navigator_Go("?name=deurwaskamer&action=Open");\'>
+		<div class="fix green ddeurwaskamer">
 			<br>
 			&nbsp;Closed
 		</div>

@@ -42,7 +42,7 @@ function huisslapen() {
 			}
 		}
 	}
-	foreach(array('speelkamer', 'alex') as $i) {
+	foreach(array('waskamer', 'alex') as $i) {
 		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
@@ -161,7 +161,7 @@ function resetsecurity() {
 		usleep(100000);
 		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	foreach (array('SDbadkamer','SDkamer','SDalex','SDspeelkamer','SDzolder','SDliving') as $i) {
+	foreach (array('SDbadkamer','SDkamer','SDalex','SDwaskamer','SDzolder','SDliving') as $i) {
 		if ($d[$i]['s']!='Off') {
 			file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
 			store($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -378,11 +378,11 @@ function rookmelder($msg) {
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['Weg']['s']<=1) {
 
-//		foreach (array(/*'Ralex',*/'RkamerL','RkeukenL','RkamerR','Rspeelkamer','Rliving','RkeukenR','Rbureel') as $i) {
+//		foreach (array(/*'Ralex',*/'RkamerL','RkeukenL','RkamerR','Rwaskamer','Rliving','RkeukenR','Rbureel') as $i) {
 //			if ($d[$i]['s']>0) sl($i, 1, basename(__FILE__).':'.__LINE__);
 //		}
 //		if ($d['zon']['s']<200) {
-//			foreach (array('hall','inkom','kamer','speelkamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
+//			foreach (array('hall','inkom','kamer','waskamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
 //				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 //			}
 //			foreach (array('snijplank','garage','lamp kast','bureel', 'tuin') as $i) {
@@ -622,7 +622,7 @@ function sirene($msg) {
 	global $d,$device,$status;
 	if ($d['Weg']['s']==0) return false;
 	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
-		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurspeelkamer', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamspeelkamer', 'raamalex'))) {
+		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurwaskamer', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamwaskamer', 'raamalex'))) {
 			if ($d['Weg']['s']>=2) {
 				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 				telegram($msg.' om '.strftime("%k:%M:%S", TIME), false, 2);

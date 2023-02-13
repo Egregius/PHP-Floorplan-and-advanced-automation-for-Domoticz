@@ -12,15 +12,15 @@
 //lg(__FILE__.':'.$s);
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
-foreach (array('buiten','living','badkamer','kamer','speelkamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
-foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
-$query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,speelkamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$speelkamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
+foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
+foreach (array('buiten','living','kamer','alex','waskamer','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
+$query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,waskamer_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$waskamer_hum','$badkamer_hum','$buiten_hum');";
 
 if(isset($db)) $db=dbconnect();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
+foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;
-foreach (array('living','badkamer','kamer','speelkamer','alex','zolder') as $i) {
+foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,7200,false,2);
 }
 if ($d['auto']['s']=='On') {
@@ -46,9 +46,9 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		$avg=0;
-		foreach (array('living_temp','kamer_temp','speelkamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]['s'];
+		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]['s'];
 		$avg=$avg/5;
-		foreach (array('living_temp','kamer_temp','speelkamer_temp','alex_temp','zolder_temp') as $i) {
+		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
@@ -93,7 +93,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('kamer','speelkamer','alex','lichtbadkamer') as $i) {
+		foreach (array('kamer','waskamer','alex','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {
@@ -122,7 +122,7 @@ if ($d['auto']['s']=='On') {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
-		foreach (array('RkamerL','RkamerR','Rspeelkamer','Ralex') as $i) {
+		foreach (array('RkamerL','RkamerR','Rwaskamer','Ralex') as $i) {
 			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -221,8 +221,8 @@ if ($d['auto']['s']=='On') {
 		if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) sl('kamer', 0, basename(__FILE__).':'.__LINE__);
 		elseif (past('kamer')>900) if ($d['kamer']['m']!=1) storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['speelkamer']['s']>0&&$d['zon']['s']>200&&$d['Rspeelkamer']['s']==0&&past('speelkamer')>900	) {
-		if ($d['speelkamer']['m']!=1) storemode('speelkamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['waskamer']['s']>0&&$d['zon']['s']>200&&$d['Rwaskamer']['s']==0&&past('waskamer')>900	) {
+		if ($d['waskamer']['m']!=1) storemode('waskamer', 1, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['alex']['s']>0&&$d['zon']['s']>200&&$d['Ralex']['s']==0&&past('alex')>900) {
 		if ($d['alex']['m']!=1) storemode('alex', 1, basename(__FILE__).':'.__LINE__);
