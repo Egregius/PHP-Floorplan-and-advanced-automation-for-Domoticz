@@ -61,7 +61,7 @@ $sensors=array(
 	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
 	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
 	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
-	'waskamer_hum'=>array('Naam'=>'Wask','Color'=>'#6666FF'),
+	'waskamer_hum'=>array('Naam'=>'Wask','Color'=>'#EEEE00'),
 	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
 	'buiten_hum'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
@@ -119,8 +119,8 @@ if ($udevice=='iPad') {
 } elseif ($udevice=='iPhoneSE') {
 	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
-} elseif ($udevice=='iMac') {
-	$args['width']=490;$args['height']=780;
+} elseif ($udevice=='Mac') {
+	$args['width']=490;$args['height']=788;
 	$argshour['width']=490;$argshour['height']=780;
 } else {
 	$args['width']=480;$args['height']=610;
@@ -152,7 +152,7 @@ $query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
 foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	if ($v==1) $query.=', '.$k;
 }
-$query.=" from `temp` where stamp >= '$dag'";
+$query.=" from `temp` where stamp >= '$dag' AND living_hum is not null";
 //echo $query.'<br>';
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
@@ -206,7 +206,7 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	}
 }
 
-$query.=" from `temp` where stamp > '$week' GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
+$query.=" from `temp` where stamp > '$week' AND living_hum is not null GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
 $x=0;
@@ -274,7 +274,7 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 	}
 }
 
-$query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
+$query.=" from `temp` where stamp > '$maand' AND living_hum is not null GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 $x=0;
 while ($row=$result->fetch_assoc()) {
@@ -337,6 +337,6 @@ unset($chart,$graph);
 $togo=61-date("s");
 if ($togo<15) $togo=15;
 $togo=$togo*1000+62000;
-echo "<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
+echo date("s")."<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
 echo '<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();

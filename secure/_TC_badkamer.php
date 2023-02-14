@@ -155,11 +155,11 @@ if($dow==0||$dow==6) {
 }
 $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 
-if ($d['badkamer_temp']['m']>=$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
+if ($d['badkamer_temp']['m']>$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
 if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {
-	if ($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' kamer_hum>=55';}
-	if ($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Closed'&&$d['waskamer_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' waskamer_hum>=55';}
-	if ($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Closed'&&$d['alex_temp']['m']>=60)) {$l=1;$m.=' + '.__LINE__.' alex_hum>=55';}
+	if ($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>60)) {$l=1;$m.=' + '.__LINE__.' kamer_hum>=55';}
+	if ($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Closed'&&$d['waskamer_temp']['m']>60)) {$l=1;$m.=' + '.__LINE__.' waskamer_hum>=55';}
+	if ($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Closed'&&$d['alex_temp']['m']>60)) {$l=1;$m.=' + '.__LINE__.' alex_hum>=55';}
 }
 if ($difbadkamer<=-0.6) {$l=3;$m.=' + '.__LINE__.' difbadkamer<=-0.6';}
 elseif ($difbadkamer<=-0.3) {$l=2;$m.=' + '.__LINE__.' difbadkamer<=-0.3';}
