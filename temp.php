@@ -74,7 +74,7 @@ $args['colors']=array();
 $argshour['colors']=array();
 if ($aantalsensors==1) $argshour['colors']=array('#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors']=array('living'=>1,'badkamer'=>1,'kamer'=>1,'alex'=>1);
+	$_SESSION['sensors']=array('living'=>1,'badkamer'=>1,'kamer'=>1,'alex'=>1,'waskamer'=>1);
 	$aantalsensors=4;
 }
 

@@ -12,6 +12,7 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 if (isset($_POST['cmd'])) {
+	$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
 	if ($_POST['cmd']=='mediauit') {
 		ud('miniliving4l', 0, 'On');
 	} elseif ($_POST['cmd']=='UpdateKodi') {
@@ -59,10 +60,8 @@ if (isset($_POST['cmd'])) {
 			sw('nvidia', 'On',basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_POST['cmd']=='audio') {
-		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetAudioStream","params":{"playerid":1,"stream":'.$_POST['action'].'}}', false, $ctx);
 	} elseif ($_POST['cmd']=='subtitle') {
-		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
 		if ($_POST['action']=='disable') {
 			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":"off"}}', false, $ctx);
 		} elseif ($_POST['action']=='enable') {

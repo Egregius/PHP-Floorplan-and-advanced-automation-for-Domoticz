@@ -1,6 +1,6 @@
 #!/bin/bash
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
-sleep 9.878
+sleep 9.778
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 sleep 9.998
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &

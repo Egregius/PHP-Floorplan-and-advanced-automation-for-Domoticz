@@ -39,6 +39,7 @@ if (isset($d[$device])) {
 if ($device=='buiten_hum') { // 1
 	$status=explode(';', $status);
 	$status=$status[1]+3;
+	if ($status>100) $status=100;
 	if($status!=$d['buiten_temp']['m']) storemode('buiten_temp', $status);
 	exit;
 } elseif ($device=='kamer_hum') { // 2
@@ -59,6 +60,7 @@ if ($device=='buiten_hum') { // 1
 } elseif ($device=='badkamer_hum') { // 5
 	$status=explode(';', $status);
 	$status=$status[1]+7;
+	if ($status>100) $status=100;
 	if($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 	exit;
 } elseif ($device=='living_hum') { // 6
