@@ -1,15 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
-//lg(__FILE__.':'.$s);
 $user='cron120';
 $stamp=strftime("%F %T", TIME-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";

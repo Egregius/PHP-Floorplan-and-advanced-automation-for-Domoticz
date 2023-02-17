@@ -1,20 +1,7 @@
 <?php
-/**
- * Pass2PHP
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
-
-//if (endswith($device, '_Temperature')) exit;
-//elseif (endswith($device, '_Utility')) exit;
 
 $d=fetchdata();
 if (isset($d[$device])) {
@@ -38,9 +25,11 @@ if (isset($d[$device])) {
 } 
 if ($device=='buiten_hum') { // 1
 	$status=explode(';', $status);
-	$status=$status[1]+3;
-	if ($status>100) $status=100;
-	if($status!=$d['buiten_temp']['m']) storemode('buiten_temp', $status);
+	$temp=$status[0];
+	$hum=$status[1]+3;
+	if ($hum>100) $hum=100;
+	if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum);
+	if($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
 	exit;
 } elseif ($device=='kamer_hum') { // 2
 	$status=explode(';', $status);

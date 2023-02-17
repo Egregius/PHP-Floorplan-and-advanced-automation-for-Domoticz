@@ -1,6 +1,5 @@
 #!/bin/bash
 mkdir -p /var/log
-touch /var/log/fail2ban.log
 /usr/sbin/service domoticz stop
 /usr/sbin/service nginx stop
 rsync -aP /domoticz/ /temp/domoticz/
@@ -19,8 +18,6 @@ sleep 5
 /usr/sbin/service domoticz stop
 /usr/sbin/service nginx stop
 /usr/sbin/service mysql start
-/usr/sbin/service nginx start
-/usr/sbin/service domoticz start
 sleep 5
 /usr/sbin/service nginx start
 /usr/sbin/service domoticz start

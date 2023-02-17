@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 if ($d['achterdeur']['s']=='Open'&&$d['bose102']['s']=='On'&&$d['bose103']['s']=='On'&&$d['bose105']['s']=='On') {
 	foreach(array(102, 103, 105) as $i) {
 		$volume=json_decode(

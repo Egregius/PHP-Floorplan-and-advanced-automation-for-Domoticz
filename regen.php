@@ -1,25 +1,10 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.11-1
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
 if (isset($_POST['addregen'])) {
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
-	/*for ($x=60;$x>=1;$x--) {
-		$date=date("Y-m-d", (TIME-($x*86400)));
-		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
-		if(!$result=$db->query($query)){die('There was an error running the query ['.$query.'-'.$db->error.']');}
-	}*/
 	$date=date("Y-m-d", TIME);
 	$value=$_POST['addregen'];
 	$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
@@ -135,19 +120,7 @@ if (isset($_REQUEST['add'])) {
 	$eendag=TIME-86400*2;$eendagstr=strftime("%Y-%m-%d %H:%M:%S", $eendag);
 	$eenweek=TIME-86400*7;$eenweekstr=strftime("%Y-%m-%d %H:%M:%S", $eenweek);
 	$eenmaand=TIME-86400*31;$eenmaandstr=strftime("%Y-%m-%d", $eenmaand);
-	$buienradar='#FF1111';
-	$darksky='#FFFF44';
-	$buien='#44FF44';
-	echo '<h3>Voospellingen</h3>';
-	$legend='
-			<div style="width:379px;padding:15px 0px 10px 4px;">
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buienradar.'">Buienradar</font></a>
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$darksky.'">DarkSky</font></a>
-				&nbsp;<a href=\'javascript:navigator_Go("regen.php");\'><font color="'.$buien.'">Buien</font></a>
-			</div>';
-	echo $legend;
-	$colors=array($buienradar,$darksky,$buien);
-	$query="SELECT DATE_FORMAT(stamp, '%W %H:%i') as stamp,buienradar,darksky,buien from `regen` where stamp >= '$f_startdate 00:00:00' ORDER BY DATE_FORMAT(stamp, '%Y%m%d%H%i') ASC";
+	
 	$args=array(
 		'width'=>1000,
 		'height'=>880,
@@ -155,7 +128,6 @@ if (isset($_REQUEST['add'])) {
 		'responsive'=>false,
 		'background_color'=>'#000',
 		'chart_div'=>'graph',
-		'colors'=>$colors,
 		'margins'=>array(0,0,0,50),
 		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
 		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
@@ -187,14 +159,7 @@ if (isset($_REQUEST['add'])) {
 	elseif ($udevice=='iPhone') {$args['width']=360;$args['height']=240;}
 	elseif ($udevice=='Mac') {$args['width']=460;$args['height']=300;}
 	else {$args['width']=460;$args['height']=200;}
-	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-	if ($result->num_rows==0) {echo 'No data for dates '.$f_startdate.' to '.$f_enddate.'<hr>';goto end;}
-	while ($row=$result->fetch_assoc()) $graph[]=$row;
-	$result->free();
-	$chart=array_to_chart($graph, $args);
-	echo $chart['script'];
-	echo $chart['div'];
-	unset($chart);
+
 	$query="SELECT DATE_FORMAT(`date`, '%e/%c') as date, rain FROM `pluvio` WHERE `date` > '$eenmaandstr' ORDER BY DATE_FORMAT(`date`, '%Y%m%d') ASC;";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 	while ($row=$result->fetch_assoc()) $pluvio[]=$row;

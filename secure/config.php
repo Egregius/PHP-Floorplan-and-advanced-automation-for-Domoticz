@@ -1,17 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * Example config file
- * Can be placed in /var/www/config.php
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 date_default_timezone_set('Europe/Brussels');
@@ -21,7 +8,6 @@ if (!defined('TIME')) {
 $dbname='domotica';
 $dbuser='domotica';
 $dbpass='fount-bonn-Subside-7protegee-7Howl-jerk-nerd8-8courier-aftermost-eldest7-Devon-9Sect-catnap-Evans-8hypnotic';
-
 
 $log=false;
 $page=basename($_SERVER['PHP_SELF']);

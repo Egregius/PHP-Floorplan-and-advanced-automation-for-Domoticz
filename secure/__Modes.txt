@@ -47,4 +47,3 @@ zonvandaag   s = kWh                    m = percent
 Weg              s = modus weg          m = timestamp beweging
 max              s = temp                   m = regen
 icon               s = icon                    m = humidity
-douche          s = gas                     m = water

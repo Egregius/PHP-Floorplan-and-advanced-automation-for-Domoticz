@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 require '/var/www/html/secure/functions.php';
 $ctx=stream_context_create(array('http'=>array('timeout' =>5)));
 $smappee=@json_decode(@file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);

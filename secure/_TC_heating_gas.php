@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP Temperature Control
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 $kamers=array('living'/*,'kamer','alex','badkamer'*/);
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
@@ -17,9 +7,6 @@ foreach ($kamers as $kamer) {
 
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<1000) $aanna=1000;
 $uitna=(21-$d['buiten_temp']['s'])*60; if ($uitna<595) $uitna=595;
-
-//lg('bigdif='.$bigdif.'	difgas='.$difgas.'	aanna='.$aanna.'	uitna='.$uitna);
-
 
 if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);

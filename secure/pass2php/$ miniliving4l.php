@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 if ($d['tv']['s']=='Off'||$d['sony']['s']=='Off'||$d['nvidia']['s']=='Off') {
 	if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	if ($d['sony']['s']!='On') {
@@ -36,20 +26,5 @@ if ($d['tv']['s']=='Off'||$d['sony']['s']=='Off'||$d['nvidia']['s']=='Off') {
 			bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 		}
 	}
-} /*else {
-	if ($d['lgtv']['s']=='On') {
-		lgcommand('off');
-		sleep(2);
-	}
-	$items=array('lgtv','kristal');
-	foreach ($items as $item) {
-		if ($d[$item]['s']!='Off') {
-			sw($item, 'Off', basename(__FILE__).':'.__LINE__);
-		}
-	}
-	if ($d['nvidia']['s']!='Off') {
-		sleep(10);
-		sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}*/
+}
 store('Weg', 0, basename(__FILE__).':'.__LINE__);

@@ -1,16 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.11-1
- *
- * This file gives the status of the bose soundtouch with the $_REQUEST['ip'].
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
  if (isset($_REQUEST['ip'])) {
     $bose=$_REQUEST['ip'];
     $d=array();

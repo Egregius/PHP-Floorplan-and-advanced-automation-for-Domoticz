@@ -1,16 +1,4 @@
 <?php
-/**
- * Pass2PHP Temperature Control
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-//${'difliving'}=number_format($d['living_temp']['s']-$d['living_set']['s']+0.5,1);
-//if (${'difliving'}<$bigdif) $bigdif=${'difliving'};
 foreach (array('living','kamer','alex') as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
@@ -23,8 +11,6 @@ foreach (array('badkamer') as $kamer) {
 
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<595) $aanna=595;
 $uitna=(21-$d['buiten_temp']['s'])*60; if ($uitna<475) $uitna=475;
-
-//lg('bigdif='.$bigdif.'	difgas='.$difgas.'	uitna='.$uitna);
 
 if (($bigdif<=-0.8||$difgas<=-0.2)&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif (($bigdif<=-0.6||$difgas<=-0.1)&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);

@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 $n='waskamer';
 if ($status>$d[$n.'_temp']['s']+0.2) $status=$d[$n.'_temp']['s']+0.2;
 elseif ($status<$d[$n.'_temp']['s']-0.2) $status=$d[$n.'_temp']['s']-0.2;

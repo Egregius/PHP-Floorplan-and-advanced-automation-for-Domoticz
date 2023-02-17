@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 if ($d['Rliving']['s']<30) sl('Rliving', 30, basename(__FILE__).':'.__LINE__);
 if ($d['Rbureel']['s']<70) sl('Rbureel', 70, basename(__FILE__).':'.__LINE__);
 if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);

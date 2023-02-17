@@ -1,44 +1,7 @@
 <?php
-/**
- * Pass2PHP
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-//lg(__FILE__.':'.$s);
 $user='cron300';
 if(isset($db)) $db=dbconnect();
 
-// Begin regenpomp
-if (1==1) {
-	$stamp=strftime("%F %T", TIME-129600);
-	$stmt=$db->query("SELECT SUM(`buien`) AS buien FROM regen WHERE stamp>'$stamp';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $rainpast=$row['buien'];
-	if ($d['minmaxtemp']['m'] > -5) {
-		if ($rainpast>25000) $pomppauze=3600;
-		elseif ($rainpast>22000) $pomppauze=7200;
-		elseif ($rainpast>19000) $pomppauze=10800;
-		elseif ($rainpast>16000) $pomppauze=21600;
-		elseif ($rainpast>13000) $pomppauze=43200;
-		elseif ($rainpast>10000) $pomppauze=86400;
-		elseif ($rainpast>7000) $pomppauze=129600;
-		elseif ($rainpast>3000) $pomppauze=172800;
-		elseif ($rainpast>1000) $pomppauze=216000;
-		else $pomppauze=31536000;
-//		$pomppauze=$pomppauze/30;if ($pomppauze>43200) $pomppauze=43200;
-		//$msg=$stamp.PHP_EOL.'rainpast = '.$rainpast.PHP_EOL.'pomppauze = '.$pomppauze.' = '.date("H:i", $pomppauze-3600);
-		if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>=$pomppauze) {
-			sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__.' '.'Pomp pauze = '.$pomppauze.', maxtemp = '.$d['minmaxtemp']['m'].'°C, rainpast = '.$rainpast);
-			//$msg.=PHP_EOL.'Regenpomp aan';
-		}
-		//telegram($msg);
-	}
-}
-// EINDE regenpomp
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['zwembadfilter']['s']=='On') {
@@ -67,6 +30,7 @@ if ($d['zwembadwarmte']['s']=='On') {
 	}
 }*/
 //EINDE EERSTE BLOK INDIEN ZWEMBAD
+
 // BEGIN TWEEDE BLOK INDIEN GEEN ZWEMBAD
 if ($d['achterdeur']['s']=='Open') {
 	if ($d['zwembadfilter']['s']=='Off') sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
@@ -81,7 +45,6 @@ if ($d['kookplaat']['s']=='On') {
 	$i=explode(';', $d['kookplaatpower_kWh']['s']);
 	if ($i[0]<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 }
-//if ($d['Weg']['s']==0&&TIME<=strtotime('16:00')&&($d['zon']['s']-$d['el']['s'])>300) alert('wasmachien','Wasmachien checken'.PHP_EOL.($d['zon']['s']-$d['el']['s']).' W overschot',43200);
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);
@@ -91,12 +54,6 @@ if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirk
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
-
-/*$items=array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR');
-foreach ($items as $i) {
-	if (past($i)>10800&&$d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-}*/
-
 if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
 	if (!empty($nowplaying)) {
@@ -112,7 +69,6 @@ if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
 		}
 	}
 }
-
 $ctx=stream_context_create(array('http'=>array('timeout'=>10)));
 $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
 if (!empty($data)) {
@@ -297,9 +253,7 @@ if (TIME>strtotime('0:10')) {
 		unset($data);
 	}
 }
-
 if ($d['Xlight']['s']!='Off'&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-
 if ($d['zon']['s']>0) {
 	if (past('uv')>1100) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
@@ -312,25 +266,4 @@ if ($d['zon']['s']>0) {
 } else {
 	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
-}
-/*foreach (array('living','badkamer','kamer','alex','waskamer','buiten') as $i) {
-	if (past($i.'_hum')>300) alert($i.'_hum','Batterij '.$i.'_hum checken',43200);
-}*/
-
-foreach (array(101,102,103,104,105,106,107) as $i) {
-	if ($d['bose'.$i]['icon']!='Offline') {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$i:8090/now_playing"))),true);
-		if (!empty($status)) {
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']=='STANDBY') {
-					if ($d['bose'.$i]['s']!='Off') store('bose'.$i, 'Off', basename(__FILE__).':'.__LINE__);
-				} else {
-					if ($d['bose'.$i]['s']!='On') {
-						store('bose'.$i, 'On', basename(__FILE__).':'.__LINE__);
-						bosekey('SHUFFLE_ON', 0, $i);
-					}
-				}
-			}
-		}
-	}
 }

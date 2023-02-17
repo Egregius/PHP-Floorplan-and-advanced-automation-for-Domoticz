@@ -1,15 +1,4 @@
 <?php
-/**
- * Pass2PHP cron trigger script
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-
 require 'functions.php';
 $d=fetchdata();
 $s=(int)strftime("%S", TIME);

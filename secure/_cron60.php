@@ -1,15 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-//lg(__FILE__.':'.$s);
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
@@ -65,7 +54,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','sony','kristal','garage','tuin','voordeur','zolderg','dampkap','lamp kast','nvidia') as $i) {
+		foreach (array('bureel','sony','kristal','garage','tuin','voordeur','zolderg','lamp kast','nvidia') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -149,33 +138,6 @@ if ($d['auto']['s']=='On') {
 //			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
-		}
-	}
-	if (
-		(
-			($d['garage']['s']=='On'&&past('garage')>180)
-			||
-			($d['pirgarage']['s']=='On'&&past('pirgarage')>180)
-		)
-		&&TIME>strtotime('7:00')
-		&&TIME<strtotime('23:00')
-		&&$d['poort']['s']=='Closed'
-		&&$d['achterdeur']['s']=='Closed'
-	) {
-		if ($d['dampkap']['s']=='Off') {
-			double('dampkap', 'On');
-			storemode('dampkap', TIME+300);
-		}
-	} elseif (
-		($d['garage']['s']=='Off'&&past('garage')>270&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>270)
-		||$d['poort']['s']=='Open'
-		||$d['achterdeur']['s']=='Open'
-	) {
-		if ($d['dampkap']['s']=='On') {
-			if (TIME>$d['dampkap']['m']) {
-					lg('TIME='.TIME.' M='.$d['dampkap']['m']);
-					double('dampkap', 'Off', basename(__FILE__).':'.__LINE__);
-			}
 		}
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);

@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 $db = new SQLite3('/temp/domoticz/domoticz.db');
 define('TIME', $_SERVER['REQUEST_TIME']);
 $clean = strftime("%G-%m-%d %k:%M:%S", TIME-3600*24*7);

@@ -1,15 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-//lg(__FILE__.':'.$s);
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
 	$i=40;
@@ -41,14 +30,6 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-/*	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&past('snijplank')>5) {
-		foreach (array(20,15,10,7,0) as $i) {
-			if ($d['snijplank']['s']>$i) {
-				sl('snijplank', $i, basename(__FILE__).':'.__LINE__);
-				break;
-			}
-		}
-	}*/
 	if ($d['lgtv']=='On'&&TIME>strtotime('19:00')) $i=5;
 	else $i=35;
 	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
@@ -65,7 +46,6 @@ $i=50;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
-//	if (pingport('192.168.2.6', 3000)==1) {
 	if (ping('192.168.2.6')==true) {
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 		apcu_store('lgtv-offline', 0);
@@ -93,27 +73,19 @@ if ($d['tv']['s']=='On') {
 		apcu_store('lgtv-offline', 0);
 	}
 }
-if ($d['nvidia']['s']=='On') {
-//	if (pingport($shieldip, 9080)==1) {
-	if (ping($shieldip)==true) {
-		if ($d['nvidia']['m']=='Off') 	storemode('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-	} else {
-		if ($d['nvidia']['m']=='On') 	storemode('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-$user='cron10  ';
-//$el=$d['el']['s']-$d['zon']['s'];lg($el);
-
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-foreach(array(102=>30,103=>18,104=>38,106=>35,107=>35) as $ip=>$vol) {
+foreach(array(102=>30,103=>18,104=>38,106=>35,107=>30) as $ip=>$vol) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 			if ($ip==103) {
 				if ($d['bose101']['s']=='On') bosezone($ip, true);
-				else bosekey('PRESET_5', 0, $ip);
+				elseif ($d['bose103']['m']==0) {
+					bosekey('PRESET_5', 0, $ip);
+					storemode('bose103', 1);
+				}
 				bosevolume($vol, $ip);
 			} else {
 				bosezone($ip);
@@ -122,6 +94,8 @@ foreach(array(102=>30,103=>18,104=>38,106=>35,107=>35) as $ip=>$vol) {
 		}
 		if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+		} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
+			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
@@ -138,6 +112,8 @@ foreach(array(101,105) as $ip) {
 		}
 		if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+		} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
+			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);

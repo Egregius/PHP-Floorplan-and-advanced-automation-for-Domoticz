@@ -1,16 +1,4 @@
 <?php
-/**
- * Pass2PHP Temperature Control
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
-//if ($d['kamer_set']['m']==0) $d['kamer_set']['s']=15;
-//if ($d['alex_set']['m']==0) $d['alex_set']['s']=15;
 if ($d['daikin']['m']==1) {
 	$bigdif=0;
 	foreach (array('living','kamer','alex') as $k) {

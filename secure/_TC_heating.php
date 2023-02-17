@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP Temperature Control Airco heating
- * php version 8.0
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 $user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
@@ -32,7 +22,6 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setkamer=12;
-//			if (TIME<strtotime('5:00')||TIME>strtotime('21:00')) $Setkamer=15.5;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
 	if ($d['alex_set']['m']==0) {
@@ -53,7 +42,6 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 				)
 		) {
 			$Setalex=12;
-//			if (TIME<strtotime('5:00')||TIME>strtotime('18:00')) $Setalex=15.5;
 		}
 	} else $Setalex=$d['alex_set']['s'];
 } elseif ($d['heating']['s']>=1) {
@@ -73,7 +61,7 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$alex_set=$Setalex;
 	$d['alex_set']['s']=$Setalex;
 }
-$Setliving=15;
+$Setliving=16;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
 		if ($d['Weg']['s']<2) {
@@ -86,8 +74,6 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('19:00')) $Setliving=$base-1.5;
 				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('19:00')) $Setliving=$base-2;
 				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('19:00')) $Setliving=$base-2.5;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('19:00')) $Setliving=$base-3;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=$base-3.5;
 			} else {
 				if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=$base;
 				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('19:00')) $Setliving=$base-0.5;
@@ -95,8 +81,6 @@ if ($d['living_set']['m']==0) {
 				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('19:00')) $Setliving=$base-1.5;
 				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=$base-2;
 				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('19:00')) $Setliving=$base-2.5;
-				elseif (TIME>=strtotime('4:20')&&TIME<strtotime('19:00')) $Setliving=$base-3;
-				elseif (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=$base-3.5;
 			}
 			if ($d['Weg']['s']==0) {
 				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=$base;

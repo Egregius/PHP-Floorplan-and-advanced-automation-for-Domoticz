@@ -1,21 +1,10 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.11-1
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 require 'secure/functions.php';
 require 'scripts/chart.php';
 session_start();
 		error_reporting(E_ALL);
 		ini_set("display_errors", "on");
 	$f_startdate=date("Y-m-d", TIME-86400);
-	//if($user=='Guy'){echo '<pre>';print_r($_REQUEST);print_r($_SESSION);echo '</pre>';}
 
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<html xmlns="http://www.w3.org/1999/xhtml">

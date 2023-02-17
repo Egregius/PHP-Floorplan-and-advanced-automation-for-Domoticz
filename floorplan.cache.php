@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.4-2
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
@@ -240,11 +230,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				<td>Elec</td>
 				<td class="right">'.number_format($row['s'], 0).' W</td>
 				<td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
-		} elseif ($row['n']=='dampkap') {
-			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.$row['s'].'</td>
-				<td>'.strftime("%k:%M:%S", $row['m']).'</td>';
 		} elseif ($row['n']=='civil_twilight'||$row['n']=='Sun') {
 			echo '
 				<td>'.$row['n'].'</td>
@@ -294,11 +279,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 				<td>Dag</td>';
 			}
-		} elseif ($row['n']=='douche') {
-			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.$row['s']*10 .' L gas</td>
-				<td>'.$row['m'].' L water</td>';
 		} elseif ($row['n']=='minmaxtemp') {
 			echo '
 				<td>Temp < 6u</td>

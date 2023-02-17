@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP Temperature Control Passive cooling
- * php version 7.3
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link     https://egregius.be
- **/
 if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {

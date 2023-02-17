@@ -1,14 +1,4 @@
 <?php
-/**
- * Pass2PHP
- * php version 7.3.11-1
- *
- * @category Home_Automation
- * @package  Pass2PHP
- * @author   Guy Verschuere <guy@egregius.be>
- * @license  GNU GPLv3
- * @link	 https://egregius.be
- **/
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 ?>
@@ -30,7 +20,6 @@ require '/var/www/authentication.php';
 		</div>
 		<div class="fix box box1" style="top:120px;left:0px;width:100%">
 			<a href="javascript:navigator_Go('log.php#Domoticz');" class="btn b2">Domoticz</a>
-			<a href="javascript:navigator_Go('log.php#Fail2Ban');" class="btn b2">Fail2Ban</a>
 			<a href="javascript:navigator_Go('log.php#nginxaccess');" class="btn b2">nginx access</a>
 			<a href="javascript:navigator_Go('log.php#nginxerror');" class="btn b2">nginx error</a>
 		</div>
