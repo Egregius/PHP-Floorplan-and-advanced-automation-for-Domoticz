@@ -9,6 +9,7 @@
  * @license  GNU GPLv3
  * @link	 https://egregius.be
  **/
+
 $m='';$m2='';
 $l=0;$m.=' base';
 if ($d['badkamer_set']['m']==0) {$set=15.2;$m2.=__LINE__.' ';}

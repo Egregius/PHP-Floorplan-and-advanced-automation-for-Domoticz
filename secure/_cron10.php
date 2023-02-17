@@ -102,19 +102,18 @@ if ($d['nvidia']['s']=='On') {
 	}
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
 $user='cron10  ';
 //$el=$d['el']['s']-$d['zon']['s'];lg($el);
 
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-foreach(array(102=>22,103=>18,104=>38,106=>35,107=>35) as $ip=>$vol) {
-	$status=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
+foreach(array(102=>30,103=>18,104=>38,106=>35,107=>35) as $ip=>$vol) {
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 			if ($ip==103) {
 				if ($d['bose101']['s']=='On') bosezone($ip, true);
-				else bosekey('PRESET_6', 0, $ip);
+				else bosekey('PRESET_5', 0, $ip);
 				bosevolume($vol, $ip);
 			} else {
 				bosezone($ip);
@@ -131,11 +130,14 @@ foreach(array(102=>22,103=>18,104=>38,106=>35,107=>35) as $ip=>$vol) {
 	unset($status);
 }
 foreach(array(101,105) as $ip) {
-	$status=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
+	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 		if ($ip==101&&isset($status['@attributes']['source'],$status['shuffleSetting'])&&$status['@attributes']['source']=='SPOTIFY'&&$status['shuffleSetting']!='SHUFFLE_ON') {
 			bosekey('SHUFFLE_ON', 0, $ip);
+		}
+		if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
+			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
@@ -143,3 +145,5 @@ foreach(array(101,105) as $ip) {
 	}
 	unset($status);
 }
+
+if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');

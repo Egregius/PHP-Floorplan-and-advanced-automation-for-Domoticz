@@ -19,31 +19,20 @@ $maxtemp=1;
 $mintemp=100;
 $temps=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
-//lg('<<< Weather >>>');
+usleep(50000);
 $ds=curl('https://api.darksky.net/forecast/'.$dsapikey.'/'.$lat.','.$lon.'?units=si');
 if (isset($ds)) {
 	file_put_contents('/temp/ds.json', $ds);
 	$ds=json_decode($ds, true);
 	if (isset($ds['currently'])) {
-		if (isset($ds['currently']['temperature'])) {
-			$temps['ds']=($ds['currently']['temperature']+$ds['currently']['apparentTemperature'])/2;
-			/*if ($temps['ds']>$temps['buiten_temp']+0.5) {
-				$temps['ds']=$temps['buiten_temp']+0.5;
-			} elseif ($temps['ds']<$temps['buiten_temp']-0.5) {
-				$temps['ds']=$temps['buiten_temp']-0.5;
-			}*/
-		}
-		if (isset($ds['currently']['windSpeed'])) {
-			$dswind=$ds['currently']['windSpeed'];
-		}
+		if (isset($ds['currently']['temperature'])) $temps['ds']=$ds['currently']['temperature'];
+		if (isset($ds['currently']['windSpeed'])) $dswind=$ds['currently']['windSpeed'];
 		if (isset($ds['currently']['windGust'])) {
 			if ($ds['currently']['windGust']>$dswind) {
 				$dswind=$ds['currently']['windGust'];
 			}
 		}
-		if (isset($dswind)) {
-			$dswind=$dswind * 1.609344;
-		}
+		if (isset($dswind)) $dswind=$dswind * 1.609344;
 		if (isset($ds['minutely']['data'])) {
 			$dsbuien=0;
 			foreach ($ds['minutely']['data'] as $i) {
@@ -70,31 +59,40 @@ if (isset($ds)) {
 		}
 	}
 }
+usleep(50000);
 $ow=curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
 if (isset($ow)) {
 	file_put_contents('/temp/ow.json', $ow);
 	$ow=json_decode($ow, true);
 	if (isset($ow['main']['temp'])) {
 		$temps['ow']=($ow['main']['temp']+$ow['main']['feels_like'])/2;
-		/*if ($temps['ow']>$temps['buiten_temp']+0.5) {
-			$temps['ow']=$temps['buiten_temp']+0.5;
-		} elseif ($temps['ow']<$temps['buiten_temp']-0.5) {
-			$temps['ow']=$temps['buiten_temp']-0.5;
-		}*/
 		$owwind=$ow['wind']['speed'] * 3.6;
 		if (isset($ow['wind']['gust'])&&$ow['wind']['gust'] * 3.6>$owwind) $owwind=$ow['wind']['gust'] * 3.6;
 		if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon']);
 	}
 }
 
+usleep(50000);
 $ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
-if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
-	$temps['ob']=($ob['temperature']+$ob['feeltemperature'])/2;
-}
+if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) $temps['ob']=$ob['temperature'];
 
+usleep(50000);
+$om=json_decode(curl('https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true'), true);
+if (isset($om['current_weather']['temperature'])) $temps['om']=$om['current_weather']['temperature'];
+
+usleep(50000);
+$yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour'), true);
+if (isset($yr['temperature']['value'])) $temps['yr']=$yr['temperature']['value'];
+
+if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
+	usleep(50000);
+	$to=json_decode(curl('https://api.tomorrow.io/v4/weather/realtime?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio), true);
+	if (isset($to['data']['values']['temperature'])) $temps['to']=$to['data']['values']['temperature'];
+}
+usleep(50000);
 $buienradar=0;
 $rains=json_decode(curl('https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon), true);
-//lg(print_r($rains, true));
+
 if (isset($rains['forecasts'])) {
 	$x=1;
 	foreach ($rains['forecasts'] as $i) {
@@ -105,7 +103,7 @@ if (isset($rains['forecasts'])) {
 	$buienradar=round($buienradar/7, 0);
 	if ($buienradar>20) $maxrain=$buienradar;
 }
-if (count($temps)==4) {
+if (count($temps)>=3) {
 	$newbuitentemp=round(array_sum($temps)/count($temps), 1);
 
 	if (isset($ds['hourly']['data'])) {
@@ -114,21 +112,15 @@ if (count($temps)==4) {
 		if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 		if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 	}
-
-	echo 'new = '.$newbuitentemp;
-	$msg='Buiten temperaturen : prevbuitentemp='.$prevbuitentemp.' ';
-	foreach ($temps as $k=>$v) {
-		$msg.=$k.'='.$v.', ';
-	}
-	$msg.='newbuitentemp='.$newbuitentemp;
-
 	if ($d['buiten_temp']['s']!=$newbuitentemp) store('buiten_temp', $newbuitentemp);
 }
+
+
+lg(print_r($temps,true).' => '.$newbuitentemp);
+
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-	$avg=$row['AVG'];
-}
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row['AVG'];
 if ($prevbuitentemp>$avg+0.5) {
 	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5');
 } elseif ($prevbuitentemp>$avg+0.4) {
@@ -162,7 +154,7 @@ elseif (isset($dswind)) $wind=round($dswind,1);
 
 store('wind', $wind);
 
-//if($newbuitentemp!=$prevbuitentemp) lg($msg);
+
 if (isset($d['buien']['s'])&&isset($dsbuien)&&isset($buienradar)) $newbuien=($d['buien']['s']+$dsbuien+$buienradar)/3;
 elseif (isset($d['buien']['s'])&&isset($buienradar)) $newbuien=($d['buien']['s']+$buienradar)/2;
 elseif (isset($d['buien']['s'])&&isset($dsbuien)) $newbuien=($d['buien']['s']+$dsbuien)/2;
