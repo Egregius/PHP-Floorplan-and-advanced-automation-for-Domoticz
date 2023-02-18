@@ -75,7 +75,7 @@ if ($d['tv']['s']=='On') {
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-foreach(array(102=>30,103=>18,104=>38,106=>35,107=>30) as $ip=>$vol) {
+foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
@@ -84,7 +84,7 @@ foreach(array(102=>30,103=>18,104=>38,106=>35,107=>30) as $ip=>$vol) {
 				if ($d['bose101']['s']=='On') bosezone($ip, true);
 				elseif ($d['bose103']['m']==0) {
 					bosekey('PRESET_5', 0, $ip);
-					storemode('bose103', 1);
+					storemode('bose101', 0);
 				}
 				bosevolume($vol, $ip);
 			} else {
@@ -100,6 +100,7 @@ foreach(array(102=>30,103=>18,104=>38,106=>35,107=>30) as $ip=>$vol) {
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
 		if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+		if ($ip==103&&$d['bose101']['m']==0&&TIME<strtotime('8:30')) storemode('bose101', 1);
 	}
 	unset($status);
 }
