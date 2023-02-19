@@ -14,8 +14,7 @@ if ($cmd==1) {
 	sl($sl, 0);
 	sw($sw, 'Off');
 }*/
-
-
+for($x=45;$x<=75;$x++) echo $x .'='.roundDownToAny($x).'='.roundUpToAny($x).'<br>';
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');

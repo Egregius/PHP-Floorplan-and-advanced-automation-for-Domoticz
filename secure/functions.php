@@ -630,3 +630,9 @@ function fetchdata() {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 	return $d;
 }
+function roundUpToAny($n,$x=5) {
+	return round(($n+$x/2)/$x)*$x;
+}
+function roundDownToAny($n,$x=5) {
+	return floor($n/$x) * $x;
+}

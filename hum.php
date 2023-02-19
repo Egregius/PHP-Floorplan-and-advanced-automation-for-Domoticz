@@ -65,7 +65,7 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 
 
 echo '<div style="padding:16px 0px 20px 0px;">';
-if ($aantalsensors==4) echo '
+if ($aantalsensors==6) echo '
 	<a href="/hum.php?living_hum=on" class="btn Living">Living</a>
 	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
 	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
@@ -121,7 +121,7 @@ $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
 	$_SESSION['sensors_hum']=array('living_hum'=>1,'waskamer_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1,'buiten_hum'=>1);
-	$aantalsensors=4;
+	$aantalsensors=6;
 }
 //echo '<pre>';print_r($sensors);echo '</pre>';
 //echo '<pre>';print_r($_SESSION['sensors_hum']);echo '</pre>';
@@ -168,12 +168,22 @@ $result->free();
 foreach ($graph as $t) {
 	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 		if ($v==1) {
-			if ($t[$k]<$min) $min=$t[$k];
-			if ($t[$k]>$max) $max=$t[$k];
+			if ($aantalsensors==1) {
+				if ($t[$k]<$min) $min=$t[$k];
+				if ($t[$k]>$max) $max=$t[$k];
+			} elseif ($aantalsensors==6) {
+				if ($k!='badkamer_hum'&&$k!='buiten_hum'&&$k!='waskamer_hum') {
+					if ($t[$k]<$min) $min=$t[$k];
+					if ($t[$k]>$max) $max=$t[$k];
+				}
+			}
 		}
 	}
 }
-if ($min>50) $min=50;
+$min=roundDownToAny($min);
+$max=roundUpToAny($max);
+
+if ($min>60) $min=60;
 $args['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
