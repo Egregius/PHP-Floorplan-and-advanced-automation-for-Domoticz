@@ -80,7 +80,7 @@ $args=array(
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
-		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1}},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 );

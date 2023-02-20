@@ -230,7 +230,7 @@ foreach ($graph as $t) {
 $argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#444"},minorGridlines: {multiple: 1, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"# °C",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
