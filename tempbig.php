@@ -115,7 +115,7 @@ if ($sensor=='alles') {
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
-		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{min:'.$min.',max:'.$max.'}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
@@ -147,7 +147,7 @@ if ($sensor=='alles') {
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
-		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{min:'.$min.',max:'.$max.'}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
@@ -174,7 +174,7 @@ if ($sensor=='alles') {
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
-		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},Gridlines:{multiple:1},minorGridlines:{multiple:1},viewWindow:{min:'.$min.',max:'.$max.'}},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{min:'.$min.',max:'.$max.'}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
 	$chart=array_to_chart($graph, $args);
