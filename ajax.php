@@ -14,7 +14,7 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 }
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
-	else $t=$_SERVER['REQUEST_TIME']-2;
+	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME'];
 	$db=dbconnect();

@@ -182,16 +182,17 @@ foreach ($graph as $t) {
 }
 $min=roundDownToAny($min);
 $max=roundUpToAny($max);
-
 if ($min>60) $min=60;
+if ($max>100) $max=100;
+
 $args['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
+		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
 //	vAxis:{viewWindowMode:"explicit",viewWindow:{max:'.ceil($max).',min:'.floor($min).'},gridlines:{count:0}}
 $chart=array_to_chart($graph, $args);
 echo $chart['script'];
@@ -251,15 +252,16 @@ foreach ($graph as $t) {
 	}
 }
 if ($min>50) $min=50;
+if ($max>100) $max=100;
 
 $argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
+		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
 
 $chart=array_to_chart($graph, $argshour);
 echo $chart['script'];
@@ -318,15 +320,16 @@ foreach ($graph as $t) {
 	}
 }
 if ($min>50) $min=50;
+if ($max>100) $max=100;
 
 $argshour['raw_options']='
 		lineWidth:3,
 		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 1, color: "#999"},minorGridlines: {multiple: 0.5, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
+		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
 		hAxis:{textPosition:"none"},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[8,8]},1:{lineDashStyle:[8,8]},2:{lineDashStyle:[8,8]},3:{lineDashStyle:[8,8]},4:{lineDashStyle:[8,8]},},';
+		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
 echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 100 dagen';
 $argshour['chart_div']='chart_div';
 $chart=array_to_chart($graph, $argshour);
@@ -337,6 +340,6 @@ unset($chart,$graph);
 $togo=61-date("s");
 if ($togo<15) $togo=15;
 $togo=$togo*1000+62000;
-echo date("s")."<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
+//echo "<br><br><br>refreshing in ".$togo/1000 ." seconds";
 echo '<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();
