@@ -367,7 +367,7 @@ function endswith($string,$test) {
 	if ($testlen>$strlen) return false;
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
-function bosekey($key,$sleep=75000,$ip=101) {
+function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
 	lg('bosekey '.$key);
@@ -381,13 +381,17 @@ function bosekey($key,$sleep=75000,$ip=101) {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
 //			lg('Bosekey '.$key.' '.$ip.' '.$x.' data='.print_r($data, true));
 			if (isset($data)) {
-				if (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE'&&isset($data['artist'])&&($data['artist']!='Paul Kalkbrenner'&&$data['artist']!='Florian Appl'&&$data['track']!='Cloud Rider'&&$data['track']!='Sky and Sand'&&$data['track']!='Seaside')) {
+				if (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE'&&isset($data['artist'])&&($data['artist']!='Paul Kalkbrenner'&&$data['artist']!='Michel Cleis Feat. TotÓ La Mom'&&$data['artist']!='Florian Appl'&&$data['track']!='Cloud Rider'&&$data['track']!='Sky and Sand'&&$data['track']!='Seaside')) {
 					break;
-				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') bosekey('NEXT_TRACK', 750000, $ip);
+				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') {
+					bosekey('SHUFFLE_ON', 750000, $ip);
+					bosekey('NEXT_TRACK', 750000, $ip);
+				}
 			}
 			sleep(2);
 		}
 	}
+	if (strlen($msg)>0) lg($msg);
 /*	if ($key=='POWER') {
 		if ($ip==101) {
 			if ($d['bose101']['s']=='On') sw('Bose Living', 'Off', basename(__FILE__).':'.__LINE__);

@@ -177,11 +177,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
 				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
 					sw('bose101', 'Off');
-					bosekey("POWER");
+					bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
 					foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
-						if ($d[$i]['s']=='On') {
-							sw($i, 'Off');
-						}
+						if ($d[$i]['s']=='On') sw($i, 'Off');
 					}
 				} elseif ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
 					bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -281,15 +279,15 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		}
 		if ($bose=='On') $_REQUEST['boseip']=101;
 		if ($_REQUEST['action']=='prev') {
-			bosekey("PREV_TRACK", 0, $_REQUEST['boseip']);
+			bosekey("PREV_TRACK", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['action']=='next') {
-			bosekey("NEXT_TRACK", 0, $_REQUEST['boseip']);
+			bosekey("NEXT_TRACK", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_REQUEST['command']=='power') {
 			if ($_REQUEST['action']=='On') {
 				bosezone($_REQUEST['boseip'], true);
 			} elseif ($_REQUEST['action']=='Off') {
-				bosekey("POWER", 0, $_REQUEST['boseip']);
+				bosekey("POWER", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 				sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);
 				if ($_REQUEST['boseip']==101) {
 					if ($d['bose102']['s']=='On') {
