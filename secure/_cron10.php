@@ -9,7 +9,7 @@ if ($d['auto']['s']=='On') {
 	$i=120;
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
-	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>$i&&past('deurinkom')>$i&&past('deurvoordeur')>$i) {
+	if ($d['pirinkom']['s']=='Off'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>$i&&past('deurinkom')>$i&&past('deurbadkamer')>15&&past('deurvoordeur')>$i) {
 		foreach (array(24,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -33,7 +33,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['lgtv']=='On'&&TIME>strtotime('19:00')) $i=5;
 	else $i=35;
 	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
-		foreach (array(6,0) as $i) {
+		foreach (array(5,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 				break;
