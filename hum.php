@@ -253,7 +253,9 @@ foreach ($graph as $t) {
 		}
 	}
 }
-if ($min>50) $min=50;
+$min=roundDownToAny($min);
+$max=roundUpToAny($max);
+if ($min>60) $min=60;
 if ($max>100) $max=100;
 
 $argshour['raw_options']='
@@ -315,13 +317,17 @@ foreach ($graph as $t) {
 				if ($t['MIN']<$min) $min=$t['MIN'];
 				if ($t['MAX']>$max) $max=$t['MAX'];
 			} else {
-				if ($t[$k]<$min) $min=$t[$k];
-				if ($t[$k]>$max) $max=$t[$k];
+				if ($k!='badkamer_hum'&&$k!='buiten_hum'&&$k!='waskamer_hum') {
+					if ($t[$k]<$min) $min=$t[$k];
+					if ($t[$k]>$max) $max=$t[$k];
+				}
 			}
 		}
 	}
 }
-if ($min>50) $min=50;
+$min=roundDownToAny($min);
+$max=roundUpToAny($max);
+if ($min>60) $min=60;
 if ($max>100) $max=100;
 
 $argshour['raw_options']='
