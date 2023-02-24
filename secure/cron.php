@@ -1,6 +1,10 @@
 <?php
 require 'functions.php';
 $d=fetchdata();
+if (isset($_REQUEST['cron'])) {
+	include '_'.$_REQUEST['cron'].'.php';
+	exit;
+}
 $s=(int)strftime("%S", TIME);
 if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
@@ -17,5 +21,5 @@ if($s<9) {
 	if ($m%5==0) include '_cron300.php';
 	if ($m==0) include '_cron3600.php';
 }
-if (isset($_REQUEST['cron'])) include '_'.$_REQUEST['cron'].'.php';
+
 $db=null;
