@@ -3,6 +3,10 @@ $user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
+if($dow==0||$dow==6) $t=strtotime('7:30');
+elseif($dow==2||$dow==5) $t=strtotime('6:45');
+else $t=strtotime('7:00');
+
 if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 	if ($d['kamer_set']['m']==0) {
 		if (
@@ -67,20 +71,15 @@ if ($d['living_set']['m']==0) {
 		if ($d['Weg']['s']<2) {
 			$dow=date("w");
 			$base=19;
-			if($dow==0||$dow==6) {
-				if (TIME>=strtotime('7:30')&&TIME<strtotime('19:00')) $Setliving=$base;
-				elseif (TIME>=strtotime('7:00')&&TIME<strtotime('19:00')) $Setliving=$base-0.5;
-				elseif (TIME>=strtotime('6:40')&&TIME<strtotime('19:00')) $Setliving=$base-1;
-				elseif (TIME>=strtotime('6:20')&&TIME<strtotime('19:00')) $Setliving=$base-1.5;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('19:00')) $Setliving=$base-2;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('19:00')) $Setliving=$base-2.5;
-			} else {
-				if (TIME>=strtotime('6:30')&&TIME<strtotime('19:00')) $Setliving=$base;
-				elseif (TIME>=strtotime('6:00')&&TIME<strtotime('19:00')) $Setliving=$base-0.5;
-				elseif (TIME>=strtotime('5:40')&&TIME<strtotime('19:00')) $Setliving=$base-1;
-				elseif (TIME>=strtotime('5:20')&&TIME<strtotime('19:00')) $Setliving=$base-1.5;
-				elseif (TIME>=strtotime('5:00')&&TIME<strtotime('19:00')) $Setliving=$base-2;
-				elseif (TIME>=strtotime('4:40')&&TIME<strtotime('19:00')) $Setliving=$base-2.5;
+			$loop=true;
+			for ($x=0;$x<=3;$x+=0.1) {
+				if ($loop==true) {
+					$t2=$t-(1800*$x);
+					if (TIME>=$t2&&TIME<strtotime('19:00')) {
+						$Setliving=$base-$x;
+						$loop=false;
+					}
+				} else break;
 			}
 			if ($d['Weg']['s']==0) {
 				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=$base;

@@ -3,7 +3,8 @@ header('Access-Control-Allow-Origin: *');
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
-/*$d=fetchdata();
+$d=fetchdata();
+/*
 $sl=array('kamer','lichtbadkamer','kamer','waskamer','alex','hall','inkom','zithoek','eettafel','wasbak','snijplank','terras');
 $sw=array('wc','tuin','garage','garageled','zolderg','kristal','lamp kast','bureel');
 $cmd=0;
@@ -13,8 +14,31 @@ if ($cmd==1) {
 } else {
 	sl($sl, 0);
 	sw($sw, 'Off');
-}*/
-for($x=45;$x<=75;$x++) echo $x .'='.roundDownToAny($x).'='.roundUpToAny($x).'<br>';
+}
+*/
+
+echo '<pre>';
+if($dow==0||$dow==6) $t=strtotime('9:15');
+elseif($dow==2||$dow==5) $t=strtotime('6:45');
+else $t=strtotime('7:00');
+echo 'TIME=	'.TIME.'<br>';
+echo '$t  =	'.$t.'<br>';
+echo 't =	'.strftime("%F %T", $t).'<br>';
+echo 'set<br>';
+$loop=true;
+for ($x=0;$x<=3;$x+=0.1) {
+	if ($loop==true) {
+		$t2=$t-(1800*$x);
+		if (TIME>=$t2&&TIME<strtotime('19:00')) {
+			$set=19-$x;
+			$loop=false;
+		}
+	} else break;
+}
+	
+
+	
+
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
