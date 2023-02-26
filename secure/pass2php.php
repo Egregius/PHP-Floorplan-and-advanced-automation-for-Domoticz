@@ -29,7 +29,11 @@ if ($device=='buiten_hum') { // 1
 	$hum=$status[1]+3;
 	if ($hum>100) $hum=100;
 	if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum);
-	if($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
+	if($temp!=$d['minmaxtemp']['icon']) {
+		if ($temp>$d['buiten_temp']['s']+1) $temp=$d['buiten_temp']['s']+1;
+		elseif ($temp<$d['buiten_temp']['s']-1) $temp=$d['buiten_temp']['s']-1;
+		storeicon('minmaxtemp', $temp);
+	}
 	exit;
 } elseif ($device=='kamer_hum') { // 2
 	$status=explode(';', $status);

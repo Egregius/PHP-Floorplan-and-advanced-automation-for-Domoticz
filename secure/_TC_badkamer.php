@@ -24,11 +24,9 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 	$loop=true;
 	for ($x=0;$x<=8;$x+=0.1) {
 		if ($loop==true) {
-			$t2=$t-(500*$x);
-			$m=strftime("%F %T", $t2).'	';
+			$t2=$t-(1600*$x);
 			if (TIME>=$t2&&TIME<$t+900) {
-				$set=23-$x;
-				$m.=' '.$set.' ';
+				$set=round(23-$x, 1);
 				$loop=false;
 			}
 		} else break;
@@ -49,7 +47,6 @@ $loop=true;
 for ($x=0;$x<=40;$x+=1) {
 	if ($loop==true) {
 		$t2=$t-(50*$x);
-		$m=strftime("%F %T", $t2).'	';
 		if (TIME>=$t2&&TIME<$t+900) {
 			$hum=25+$x;
 			$loop=false;
@@ -73,7 +70,6 @@ else {
 	if ($difbadkamer>0.5&&$d['badkamer_set']['s']>19) {
 		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
-		if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {

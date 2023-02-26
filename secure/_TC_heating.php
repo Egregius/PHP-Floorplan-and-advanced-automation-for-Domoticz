@@ -3,6 +3,7 @@ $user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
+$dow=date("w");
 if($dow==0||$dow==6) $t=strtotime('7:30');
 elseif($dow==2||$dow==5) $t=strtotime('6:45');
 else $t=strtotime('7:00');
@@ -69,21 +70,20 @@ $Setliving=16;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
 		if ($d['Weg']['s']<2) {
-			$dow=date("w");
 			$base=19;
 			$loop=true;
 			for ($x=0;$x<=3;$x+=0.1) {
 				if ($loop==true) {
-					$t2=$t-(1800*$x);
+					$t2=$t-(5000*$x);
 					if (TIME>=$t2&&TIME<strtotime('19:00')) {
-						$Setliving=$base-$x;
+						$Setliving=round($base-$x, 1);
 						$loop=false;
 					}
 				} else break;
 			}
 			if ($d['Weg']['s']==0) {
-				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=$base;
-				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=$base-1;
+//				if (TIME>=strtotime('4:00')&&TIME<strtotime('19:00')) $Setliving=$base;
+//				if ($d['pirliving']['s']=='Off'&&TIME<apcu_fetch('living')-3600) $Setliving=$base-1;
 			}
 		}
 		if ($Setliving>18&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&TIME>=strtotime('11:00')) $Setliving=$base-1;
