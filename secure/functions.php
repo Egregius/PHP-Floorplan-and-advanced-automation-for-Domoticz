@@ -43,7 +43,7 @@ function finkom($force=false) {
 }
 function fhall() {
 	global $d,$device;
-	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45')||past('deuralex')<3600)) {
+	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45'))||past('deuralex')<3600) {
 		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$d['zon']['s']==0) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}

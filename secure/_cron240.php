@@ -57,8 +57,9 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		if ($d['wasdroger']['s']=='On') {
-			$i=explode(';',$d['wasdroger_kWh']['s']);
-			if ($i[0]<10) alert(
+			if (past('wasdroger_kWh')>600) {
+				$i=explode(';',$d['wasdroger_kWh']['s']);
+				if ($i[0]<10) alert(
 					'wasdrogervol',
 					'Wasdroger vol',
 					3600,
@@ -66,6 +67,7 @@ if ($d['auto']['s']=='On') {
 					2,
 					false
 				);
+			}
 		}
 	}
 }
