@@ -24,7 +24,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 	$loop=true;
 	for ($x=0;$x<=11;$x+=0.1) {
 		if ($loop==true) {
-			$t2=$t-(1300*$x);
+			$t2=$t-(3000*$x);
 			if (TIME>=$t2&&TIME<$t+900) {
 				$set=round(23-$x, 1);
 				$loop=false;
@@ -42,7 +42,7 @@ if (isset($set)) {
 	if ($set!=$d['badkamer_set']['s']) store('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
 	$d['badkamer_set']['s']=$set;
 }
-$hum=65;
+$hum=60;
 $loop=true;
 for ($x=0;$x<=40;$x+=1) {
 	if ($loop==true) {
@@ -77,7 +77,7 @@ if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {
 	if ($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Open') {$l=0;$m.=' + '.__LINE__.' deur badkamer, deur waskamer en raam waskamer open';}
 	if ($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Open') {$l=0;$m.=' + '.__LINE__.' deur badkamer, deur kamer Alex en raam Alex kamer open';}
 }
-//if ($d['badkamer_set']['m']==0&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' + '.__LINE__.' auto';}
+if ($d['badkamer_set']['m']==0&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' + '.__LINE__.' auto';}
 //else
 if ($d['badkamer_set']['m']==1&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' + '.__LINE__.' slow';}
 if ($d['Weg']['s']>=3) {$l=0;$m.=' + '.__LINE__.' Weg';}

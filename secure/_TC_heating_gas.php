@@ -12,10 +12,10 @@ if ($bigdif<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('br
 elseif ($bigdif<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<= 0  &&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($bigdif<= 0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*1.5) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>= 0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*0.75) sw('brander', 'Off', 'Uit na = '.$uitna*0.75.' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>= 0 &&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&past('brander')>$uitna*1.25) sw('brander', 'Off', 'Uit na = '.$uitna*1.25 .' '.basename(__FILE__).':'.__LINE__);
-elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&past('brander')>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*1.5 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0.1&&$d['brander']['s']=="On"&&(past('brander')>$uitna*0.75||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*0.75.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>= 0 &&$d['brander']['s']=="On"&&(past('brander')>$uitna||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&(past('brander')>$uitna*1.25||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*1.25 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&(past('brander')>$uitna*1.5||$d['living_temp']['icon']>=0.3)) sw('brander','Off', 'Uit na = '.$uitna*1.5 .' '.basename(__FILE__).':'.__LINE__);
 
 if ($d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
