@@ -37,7 +37,7 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d;
-	if (($d['inkom']['s']<28&&$d['zon']['s']==0)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
