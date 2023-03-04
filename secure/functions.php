@@ -4,10 +4,8 @@ $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
 function fliving() {
 	global $d;
-	if ($d['Weg']['s']==0&&$d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+		if ($d['zon']['s']==0&&$dag=false) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -18,7 +16,7 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if ($d['Weg']['s']==0&&($d['zon']['s']<=50||TIME<strtotime('7:00')||TIME>strtotime('22:00'))&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<=50&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d;
@@ -31,15 +29,15 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
-	if (TIME>=strtotime('6:30')&&TIME<strtotime('19:30')&&$d['Weg']['s']==0&&$d['wasbak']['s']<6&&$d['snijplank']['s']==0&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ((TIME<strtotime('6:30')||TIME>=strtotime('19:30'))&&$d['Weg']['s']==0&&$d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
 	global $d;
-	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m']))||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (($d['inkom']['s']<28&&$d['zon']['s']==0)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
@@ -48,7 +46,7 @@ function fhall() {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['Weg']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if (TIME>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen() {
 	global $d,$boseipbuiten;
