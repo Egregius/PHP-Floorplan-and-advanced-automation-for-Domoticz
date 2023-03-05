@@ -590,7 +590,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	}
 	
 	$fdir=0;
-	if ($device=='living'&&$d['lgtv']['s']=='Off') $fdir=3;
+	//if ($device=='living'&&$d['lgtv']['s']=='Off') $fdir=3;
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=$fdir";
 	file_get_contents($url);
 	sleep(1);

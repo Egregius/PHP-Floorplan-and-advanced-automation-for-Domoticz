@@ -69,7 +69,7 @@ if ($d['living_set']['m']==0) {
 			$loop=true;
 			for ($x=0;$x<=4;$x+=0.1) {
 				if ($loop==true) {
-					$t2=$t-(2800*$x);
+					$t2=$t-(2700*$x);
 					if (TIME>=$t2&&TIME<strtotime('19:00')) {
 						$Setliving=round($base-$x, 1);
 						$loop=false;
