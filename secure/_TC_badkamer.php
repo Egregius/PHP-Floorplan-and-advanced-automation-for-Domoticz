@@ -24,7 +24,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 	$loop=true;
 	for ($x=0;$x<=11;$x+=0.1) {
 		if ($loop==true) {
-			$t2=$t-(1300*$x);
+			$t2=$t-(1100*$x);
 			if (TIME>=$t2&&TIME<$t+900) {
 				$set=round(23-$x, 1);
 				$loop=false;

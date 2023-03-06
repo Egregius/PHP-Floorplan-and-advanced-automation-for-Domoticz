@@ -63,6 +63,9 @@ if ($device=='buiten_hum') { // 1
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+	if (TIME>=$zonop&&TIME<=$zononder) $dag=true; else $dag=false;
 	store($device, $status);
 	include '/var/www/html/secure/pass2php/'.$device.'.php';
 }

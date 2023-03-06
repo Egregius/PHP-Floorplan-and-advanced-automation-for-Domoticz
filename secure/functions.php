@@ -16,33 +16,33 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if ($d['zon']['s']<=50&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
-	global $d;
+	global $d,$dag;
 	if (past('$ 8badkamer-8')>10) {
-		if ($d['lichtbadkamer']['s']<16&&$d['zon']['s']==0) {
+		if ($d['lichtbadkamer']['s']<16&&$dag==false) {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
 function fkeuken() {
-	global $d;
-	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&(($d['zon']['s']==0&&TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	global $d,$dag;
+	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag==false||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($d['zon']['s']==0||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag==false||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
-	global $d;
-	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['zon']['s']==0)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	global $d,$dag;
+	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag==false)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$device;
 	if (TIME>=strtotime('7:30')&&TIME<=strtotime('21:00')&&(TIME<$d['Sun']['s']||TIME>$d['Sun']['m'])&&($d['Ralex']['s']==0||TIME<=strtotime('19:45'))||past('deuralex')<3600) {
-		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$d['zon']['s']==0) {
+		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag==false) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
@@ -390,15 +390,6 @@ function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 		}
 	}
 	if (strlen($msg)>0) lg($msg);
-/*	if ($key=='POWER') {
-		if ($ip==101) {
-			if ($d['bose101']['s']=='On') sw('Bose Living', 'Off', basename(__FILE__).':'.__LINE__);
-			else sl('Bose Living', 17, basename(__FILE__).':'.__LINE__);
-		} elseif ($ip==105) {
-			if ($d['bose105']['s']=='On') sw('Bose Keuken', 'Off', basename(__FILE__).':'.__LINE__);
-			else sl('Bose Keuken', 17, basename(__FILE__).':'.__LINE__);
-		}
-	}*/
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
@@ -582,16 +573,12 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
-	
 	if ($maxpow==false) {
 		$maxpow=$d['daikin_kWh']['icon'];
 	} else {
 		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
-	
-	$fdir=0;
-	//if ($device=='living'&&$d['lgtv']['s']=='Off') $fdir=3;
-	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=$fdir";
+	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	file_get_contents($url);
 	sleep(1);
 	$status=daikinstatus($device);
