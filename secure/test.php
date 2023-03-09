@@ -16,29 +16,19 @@ if ($cmd==1) {
 	sw($sw, 'Off');
 }
 */
-
+$TIME=strtotime('6:40');
 echo '<pre>';
-$dow=date("w");
-
-if($dow==0||$dow==6) $t=strtotime('7:30');
-elseif($dow==2||$dow==5) $t=strtotime('6:45');
-else $t=strtotime('7:00');
-	
-$base=19;
-			$loop=true;
-			for ($x=0;$x<=3;$x+=0.1) {
-				if ($loop==true) {
-					$t2=$t-(6000*$x);
-					if (TIME>=$t2&&TIME<strtotime('19:00')) {
-						$Setliving=$base-$x;
-						$loop=false;
-					}
-				} else break;
-				echo strftime("%F %T", $t2).'	'.(isset($Setliving)?$Setliving:'').'<br>';
-			}
-	
-
-
+$dag=0;
+if ($TIME>=$d['civil_twilight']['s']&&$TIME<=$d['civil_twilight']['m']) {
+	$dag=1;
+	if ($TIME>=$d['Sun']['s']&&$TIME<=$d['Sun']['m']) $dag=3;
+	else {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if ($TIME>=$zonop&&$TIME<=$zononder) $dag=2;
+	}
+}
+echo $dag;
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');

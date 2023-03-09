@@ -3,9 +3,20 @@ require 'functions.php';
 $d=fetchdata();
 $s=(int)strftime("%S", TIME);
 $dow=date("w");
-if($dow==0||$dow==6) $t=strtotime('7:00');
-elseif($dow==2||$dow==5) $t=strtotime('6:15');
-else $t=strtotime('6:30');
+if($dow==0||$dow==6) $t=strtotime('7:30');
+elseif($dow==2||$dow==5) $t=strtotime('6:45');
+else $t=strtotime('7:00');
+
+$dag=0;
+if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+	$dag=1;
+	if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) $dag=3;
+	else {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+	}
+}
 
 $zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 $zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;

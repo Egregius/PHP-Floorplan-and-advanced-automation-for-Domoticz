@@ -120,7 +120,7 @@ if ($d['auto']['s']=='On') {
 		if ($i[0]<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['luchtdroger']['s']=='On') {
+/*	if ($d['luchtdroger']['s']=='On') {
 		if ($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']<17&&(TIME<=strtotime('4:00')||TIME>=strtotime('8:00'))) {
 			$i=explode(';', $d['luchtdroger_kWh']['s']);
 			if ($i[0]<100&&past('luchtdroger_kWh')>895) {
@@ -130,12 +130,12 @@ if ($d['auto']['s']=='On') {
 		}
 	} else {
 		if ($d['Weg']['s']<=1&&TIME>=strtotime('5:00')&&TIME<=strtotime('7:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__);
-	}
+	}*/
 	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']&&TIME<=strtotime('16:00')) {
 		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||($d['zon']['s']>20&&TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
-//			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}

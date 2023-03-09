@@ -3,9 +3,9 @@ require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
 function fliving() {
-	global $d;
+	global $d,$dag;
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-		if ($d['zon']['s']==0&&$dag=false) {
+		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -21,7 +21,7 @@ function fgarage() {
 function fbadkamer() {
 	global $d,$dag;
 	if (past('$ 8badkamer-8')>10) {
-		if ($d['lichtbadkamer']['s']<16&&$dag==false) {
+		if ($d['lichtbadkamer']['s']<16&&$dag<3) {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
@@ -29,20 +29,20 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d,$dag;
-	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag==false||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag==false||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
 	global $d,$dag;
-	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag==false)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$dag;
 	if (TIME>=strtotime('7:30')&&($d['Ralex']['s']==0||TIME<=strtotime('19:45')||past('deuralex')<3600)) {
-		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag==false) {
+		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
