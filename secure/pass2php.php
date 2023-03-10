@@ -63,9 +63,18 @@ if ($device=='buiten_hum') { // 1
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if (TIME>=$zonop&&TIME<=$zononder) $dag=true; else $dag=false;
+	$dag=0;
+	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		}
+	}
 	store($device, $status);
 	include '/var/www/html/secure/pass2php/'.$device.'.php';
 }

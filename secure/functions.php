@@ -7,9 +7,10 @@ function fliving() {
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
 		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
-			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']=='Off'&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 		}
-		if (TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
+		if ($d['bose101']['s']=='Off'&&TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);
 	}
 

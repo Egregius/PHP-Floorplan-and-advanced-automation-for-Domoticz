@@ -133,8 +133,8 @@ if ($d['auto']['s']=='On') {
 	}*/
 	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
-	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']&&TIME<=strtotime('16:00')) {
-		if ($d['Rliving']['s']<30&&$d['Rbureel']['s']<30&&($d['zon']['s']>0||($d['zon']['s']>20&&TIME>$d['Sun']['s']&&TIME<$d['Sun']['m']))) {
+	if ($dag==4&&TIME<=strtotime('16:00')) {
+		if ($d['Rliving']['s']<50&&$d['Rbureel']['s']<50) {
 			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
@@ -179,27 +179,6 @@ if ($d['auto']['s']=='On') {
 	}
 	//End Bose
 
-	if ($d['kamer']['s']>0&&$d['zon']['s']>200&&$d['RkamerL']['s']<=40&&$d['RkamerR']['s']<=40) {
-		if (TIME>strtotime('6:00')&&TIME<strtotime('8:00')) sl('kamer', 0, basename(__FILE__).':'.__LINE__);
-		elseif (past('kamer')>900) if ($d['kamer']['m']!=1) storemode('kamer', 1, basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['waskamer']['s']>0&&$d['zon']['s']>200&&$d['Rwaskamer']['s']==0&&past('waskamer')>900	) {
-		if ($d['waskamer']['m']!=1) storemode('waskamer', 1, basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['alex']['s']>0&&$d['zon']['s']>200&&$d['Ralex']['s']==0&&past('alex')>900) {
-		if ($d['alex']['m']!=1) storemode('alex', 1, basename(__FILE__).':'.__LINE__);
-	}
-	/*if ($d['eettafel']['s']>0
-		&&$d['Rbureel']['s']==0
-		&&$d['Rliving']['s']==0
-		&&$d['zon']['s']>100
-		&&past('eettafel')>7200
-	) {
-		if ($d['eettafel']['m']!=1) storemode('eettafel', 1, basename(__FILE__).':'.__LINE__);
-	}*/
-	if ($d['zithoek']['s']>0&&$d['Rbureel']['s']==0&&$d['Rliving']['s']==0&&$d['zon']['s']>100&&past('zithoek')>7200) {
-		if ($d['zithoek']['m']!=1) storemode('zithoek', 1, basename(__FILE__).':'.__LINE__);
-	}
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
@@ -215,13 +194,13 @@ if ($d['auto']['s']=='On') {
 if (($d['Weg']['s']>0||$d['daikin']['s']=='Off')&&$d['Xlight']['s']!='Off') sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
-if (TIME<=strtotime('0:03')) {
+if (TIME<=strtotime('0:02')) {
 	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['regenpomp']['s']=='On'&&past('regenpomp')>40) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
 
-if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
-elseif ($d['bose101']['s']=='Off'&&$d['bose103']['s']=='On'&&past('bose103')<300) bosekey('SHUFFLE_ON', 0, 103);
+//if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
+//elseif ($d['bose101']['s']=='Off'&&$d['bose103']['s']=='On'&&past('bose103')<300) bosekey('SHUFFLE_ON', 0, 103);

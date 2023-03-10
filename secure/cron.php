@@ -10,8 +10,10 @@ else $t=strtotime('7:00');
 $dag=0;
 if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
 	$dag=1;
-	if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) $dag=3;
-	else {
+	if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+		if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+		else $dag=3;
+	} else {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 		if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
