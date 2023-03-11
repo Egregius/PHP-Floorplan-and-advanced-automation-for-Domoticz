@@ -1,5 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+echo '<pre>';
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
@@ -16,19 +17,7 @@ if ($cmd==1) {
 	sw($sw, 'Off');
 }
 */
-$TIME=strtotime('6:40');
-echo '<pre>';
-$dag=0;
-if ($TIME>=$d['civil_twilight']['s']&&$TIME<=$d['civil_twilight']['m']) {
-	$dag=1;
-	if ($TIME>=$d['Sun']['s']&&$TIME<=$d['Sun']['m']) $dag=3;
-	else {
-		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($TIME>=$zonop&&$TIME<=$zononder) $dag=2;
-	}
-}
-echo $dag;
+print_r($_SERVER);
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');

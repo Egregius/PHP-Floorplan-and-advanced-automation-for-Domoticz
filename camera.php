@@ -26,6 +26,13 @@ if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 } else $data['z']=1;
 echo serialize($data);
 
+if ($d['Weg']['s']==0&&$_SERVER['REMOTE_ADDR']=='192.168.2.11') {
+	rgb('Xlight', 50, 100);
+	sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
+	if ($d['bose101']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
+	if ($d['lgtv']['s']=='On') shell_exec('python3 /var/www/html/secure/lgtv.py -c send-message -a "Deurbel" 192.168.2.6 > /dev/null 2>/dev/null &');
+}
+
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();
