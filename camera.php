@@ -56,3 +56,15 @@ function lg($msg) {
 		fclose($fp);
 	}
 }
+function rgb($name,$hue,$level,$check=false) {
+	global $user,$d,$domoticzurl;
+	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
+	if ($d[$name]['i']>0) {
+		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
+		else {
+			if ($d[$name]['s']!=$$level) {
+				file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
+			}
+		}
+	} else store($name, $level);
+}
