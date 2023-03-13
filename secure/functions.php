@@ -108,7 +108,7 @@ function idx($name) {
 	if ($d[$name]['i']>0) return $d[$name]['i'];
 	else return 0;
 }
-function sl($name,$level,$msg='') {
+function sl($name,$level,$msg='',$force=false) {
 	global $user,$d,$domoticzurl;
 	if(!isset($d))$d=fetchdata();
 	 if (is_array($name)) {
@@ -120,7 +120,7 @@ function sl($name,$level,$msg='') {
 	} else {
 		lg(' (SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
-			if ($d[$name]['s']!=$level) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
+			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
 		} else store($name, $level, $msg);
 	}

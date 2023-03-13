@@ -3,12 +3,12 @@ if ($d['tv']['s']=='Off'||$d['sony']['s']=='Off'||$d['nvidia']['s']=='Off') {
 	if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	if ($d['sony']['s']!='On') {
 		sw('sony', 'On', basename(__FILE__).':'.__LINE__);
-		sleep(10);
+//		sleep(10);
 	}
 	if ($d['tv']['s']!='On') {
 		sw('tv', 'On', basename(__FILE__).':'.__LINE__);
 		sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-		sleep(50);
+//		sleep(50);
 	}
 	if ($d['nvidia']['s']!='On') {
 		sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);

@@ -126,7 +126,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			huisslapen();
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
-		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
 			foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
@@ -146,7 +146,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);
 			if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
 		} else {
-			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 			if($_REQUEST['device']=='luifel') {
 				store($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
@@ -164,12 +164,12 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				if ($d['nas']['s']=='Off') shell_exec('secure/wakenas.sh &');
 				if ($d['sony']['s']!='On') {
 					sw('sony', 'On', basename(__FILE__).':'.__LINE__);
-					sleep(10);
+//					sleep(10);
 				}
 				if ($d['tv']['s']!='On') {
 					sw('tv', 'On', basename(__FILE__).':'.__LINE__);
 					sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-					sleep(50);
+//					sleep(50);
 				}
 				if ($d['nvidia']['s']!='On') {
 					sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
