@@ -26,13 +26,6 @@ if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 } else $data['z']=1;
 echo serialize($data);
 
-if ($d['Weg']['s']==0&&$_SERVER['REMOTE_ADDR']=='192.168.2.11') {
-	rgb('Xlight', 50, 100);
-	sl('Xbel', 10, basename(__FILE__).':'.__LINE__);
-	if ($d['bose101']['s']=='On') shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
-	if ($d['lgtv']['s']=='On') shell_exec('python3 /var/www/html/secure/lgtv.py -c send-message -a "Deurbel" 192.168.2.6 > /dev/null 2>/dev/null &');
-}
-
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();
@@ -55,16 +48,4 @@ function lg($msg) {
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
-}
-function rgb($name,$hue,$level,$check=false) {
-	global $user,$d,$domoticzurl;
-	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
-	if ($d[$name]['i']>0) {
-		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
-		else {
-			if ($d[$name]['s']!=$$level) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
-			}
-		}
-	} else store($name, $level);
 }

@@ -42,7 +42,7 @@ if (isset($set)) {
 	if ($set!=$d['badkamer_set']['s']) store('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
 	$d['badkamer_set']['s']=$set;
 }
-$hum=60;
+$hum=65;
 $loop=true;
 for ($x=0;$x<=40;$x+=1) {
 	if ($loop==true) {
@@ -116,9 +116,9 @@ if ($d['wasdroger']['s']=='On') {
 		if ($d['waskamervuur2']['s']=='On'&&past('waskamervuur1')>595) sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['waskamervuur1']['s']=='On'&&past('waskamervuur1')>595) sw('waskamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['waskamer_temp']['m']<63&&past('wasdroger')>1795) sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['waskamer_temp']['m']<65&&past('wasdroger')>1795) sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['waskamer_temp']['m']>68&&$d['raamwaskamer']['s']=='Closed'&&$d['deurwaskamer']['s']=='Closed'&&past('wasdroger')>595) sw('wasdroger', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['waskamer_temp']['m']>70&&$d['raamwaskamer']['s']=='Closed'&&$d['deurwaskamer']['s']=='Closed'&&past('wasdroger')>595) sw('wasdroger', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['waskamervuur2']['s']=='On') sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['waskamervuur1']['s']=='On') sw('waskamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 }
