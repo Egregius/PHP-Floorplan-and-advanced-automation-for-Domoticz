@@ -141,13 +141,13 @@ if ($d['auto']['s']=='On') {
 		&&$d['bose105']['s']=='Off'
 		&&$d['bose106']['s']=='Off'
 		&&$d['bose107']['s']=='Off'
-		&&past('bose101')>180
-		&&past('bose102')>90
-		&&past('bose103')>90
-		&&past('bose104')>90
-		&&past('bose105')>90
-		&&past('bose106')>90
-		&&past('bose107')>90
+		&&past('bose101')>300
+		&&past('bose102')>300
+		&&past('bose103')>300
+		&&past('bose104')>300
+		&&past('bose105')>300
+		&&past('bose106')>300
+		&&past('bose107')>300
 		&&(($d['Weg']['s']>0||$d['sony']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);

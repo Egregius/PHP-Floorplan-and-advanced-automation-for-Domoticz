@@ -84,7 +84,7 @@ foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 			if ($ip==103) {
 				if ($d['bose101']['s']=='On') bosezone($ip, true);
-				elseif ($d['bose103']['m']==0) {
+				elseif ($d['bose103']['m']==0&&TIME>$t) {
 					bosekey('PRESET_5', 0, $ip);
 					storemode('bose101', 0);
 				}
