@@ -19,19 +19,16 @@ if ($d['daikin']['m']==1) {
 			if ($dif>2.2) $power=0;
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
-				if     ($dif<=-3.49)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-2.49)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-1.29)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-0.29)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-0.19)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=-0.09)	{$rate=6;$line=__LINE__;}
-				elseif ($dif<=0)	{$rate=6;$line=__LINE__;}
-				elseif ($dif>0)		{$rate=5;$line=__LINE__;}
-				elseif ($dif>0.2)		{$rate=4;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
+				if ($dif<-1) $rate=6;
+				elseif ($dif<-0.4) $rate=5;
+				elseif ($dif<0) $rate=4;
+				elseif ($dif>=1) {$rate=1;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
+				elseif ($dif>=0.5) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+				elseif ($dif>=0) $rate=3;
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-1;
 					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0)) {
-						if ($rate>4)$rate=$rate-1;
+						if ($rate>3)$rate=$rate-2;
 						if ($rate<0)$rate=0;
 					}
 				} elseif ($k=='kamer') {
@@ -49,18 +46,13 @@ if ($d['daikin']['m']==1) {
 						if ($rate<3) $rate=3;
 					}
 				}
-//				lg ($k.' => rate'.$rate.'='.$rates[$rate].' power='.$power);
 				$set=ceil($set * 2) / 2;
 				if ($set>25) $set=25;
 				elseif ($set<10) $set=10;
-//				$set=number_format($set,1);
 				$daikin=json_decode($d['daikin'.$k]['s']);
 				if (!isset($power)) $power=$daikin->power;
-//				lg(print_r($daikin, true));
-//				lg ($k.' => rate'.$rate.'='.$rates[$rate].' dif='.$dif.' power='.$power);
-//				lg ($k.'	'.$daikin->set.' '.$set.'	'.$daikin->power.' '.$power.'	'.$daikin->mode.' '. 4 .'	'.$daikin->fan.' '.$rates[$rate].'	'.$d['daikin_kWh']['icon'].' '.$maxpow);
 				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rates[$rate]||$d['daikin_kWh']['icon']!=$maxpow) {
-					lg('DAIKIN SET '.$k.' line='.$line.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
+//					lg('DAIKIN SET '.$k.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
 					$data=json_decode($d[$k.'_set']['icon'], true);
 					$data['power']=$power;
 					$data['mode']=4;

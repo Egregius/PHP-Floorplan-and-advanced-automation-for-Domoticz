@@ -23,21 +23,30 @@ if (isset($_REQUEST['add'])) {
 			<meta name="apple-mobile-web-app-capable" content="yes">
 			<meta name="apple-mobile-web-app-status-bar-style" content="black">
 			<title>Regenvoorspelling</title>
-			<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
+			<link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
 			<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 			<style>
 				.btn{margin-left:0!important;}
 			</style>
 		</head>';
 	if ($udevice=='iPad') echo '
-		<body style="width:800px">
-			<form action="/floorplan.php"><input type="submit" class="btn b5" value="Plan"/></form>
-			<form action="/temp.php"><input type="submit" class="btn b5" value="Temperaturen"/></form>
+		<body style="width:1010px">
+			<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+			<form action="/temp.php"><input type="submit" class="btn b4" value="Temperaturen"/></form>
 			<form action="/hum.php"><input type="submit" class="btn btn b4" value="Humidity"/></form>
 			<form action="/regen.php">
-				<input type="submit" class="btn b5" value="Regen"/>
+				<input type="submit" class="btn b4" value="Regen"/>
 				<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 			</form>';
+		elseif ($udevice=='iPhone') echo '
+		<body style="width:560px">
+			<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
+			<form action="/temp.php"><input type="submit" class="btn btna b4" value="Temperaturen"/></form>
+			<form action="/hum.php"><input type="submit" class="btn btn b4" value="Humidity"/></form>
+			<form action="/regen.php">
+				<input type="submit" class="btn b4" value="Regen"/>
+				<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
+			</form';
 	else echo '
 		<body style="width:100%">
 			<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>

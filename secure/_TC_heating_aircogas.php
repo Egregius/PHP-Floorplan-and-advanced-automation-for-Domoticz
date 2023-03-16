@@ -51,9 +51,9 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>0)		{$rate=5;$line=__LINE__;}
 				elseif ($dif>0.2)		{$rate=4;$line=__LINE__;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 				if ($k=='living') {
-					$set=$d[$k.'_set']['s']-0;
+					$set=$d[$k.'_set']['s']-1;
 					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0)) {
-						if ($rate>4)$rate=$rate-1;
+						if ($rate>3)$rate=3;
 						if ($rate<0)$rate=0;
 					}
 				} elseif ($k=='kamer') {

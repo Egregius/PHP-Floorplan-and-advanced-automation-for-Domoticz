@@ -32,7 +32,7 @@ if ($udevice=='iPad') echo '
 		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Humidity"/></form>
 		<form action="/regen.php"><input type="submit" class="btn b4" value="Regen"/></form>';
 elseif ($udevice=='iPhone') echo '
-	<body style="width:420px">
+	<body style="width:560px">
 		<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btn b4" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btna b4" value="Humidity"/></form>
@@ -101,11 +101,11 @@ $argshour=array(
 		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
 	);
 if ($udevice=='iPad') {
-	$args['width']=1000;$args['height']=1230;
-	$argshour['width']=1000;$argshour['height']=1230;
+	$args['width']=1000;$args['height']=1320;
+	$argshour['width']=1000;$argshour['height']=1320;
 } elseif ($udevice=='iPhone') {
-	$args['width']=462;$args['height']=710;
-	$argshour['width']=462;$argshour['height']=710;
+	$args['width']=560;$args['height']=855;
+	$argshour['width']=560;$argshour['height']=855;
 } elseif ($udevice=='iPhoneSE') {
 	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
