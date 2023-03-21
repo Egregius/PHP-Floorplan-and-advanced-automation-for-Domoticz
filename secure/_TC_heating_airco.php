@@ -28,7 +28,7 @@ if ($d['daikin']['m']==1) {
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-1;
 					if (($d['lgtv']['s']=='On'&&TIME>strtotime('19:00'))||($d['eettafel']['s']>0)) {
-						if ($rate>3)$rate=$rate-2;
+						if ($rate>2)$rate=$rate-3;
 						if ($rate<0)$rate=0;
 					}
 				} elseif ($k=='kamer') {
