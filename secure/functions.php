@@ -8,7 +8,7 @@ function fliving() {
 		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
 		if ($d['bose101']['s']=='Off'&&TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);
@@ -477,7 +477,7 @@ function bosepost($method,$xml,$ip=101,$log=false) {
 
 function sirene($msg) {
 	global $d,$device,$status;
-	if ($d['Weg']['s']==0) return false;
+	if ($d['Weg']['s']==0||past('Weg')<60) return false;
 	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
 		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurwaskamer', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamwaskamer', 'raamalex'))) {
 			if ($d['Weg']['s']>=2) {
