@@ -8,12 +8,12 @@ if ($d['auto']['s']=='On') {
 		if ($dag>0) {
 			if ($d['Ralex']['s']==0&&$d['Rwaskamer']['s']>0) sl('Rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Ralex']['s']>0&&/*TIME>=strtotime('7:30')&&*/($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
-		}
-		if ($dag>0&&$d['lgtv']['s']=='Off') {
-			foreach ($beneden as $i) {
-				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+			if ($d['lgtv']['s']=='Off') {
+				foreach ($beneden as $i) {
+					if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||TIME>=strtotime('8:30')||past('deuralex')<3600)) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||TIME>=strtotime('8:30')||past('deuralex')<3600)) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('17:00')) {

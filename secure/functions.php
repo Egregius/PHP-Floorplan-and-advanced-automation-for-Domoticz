@@ -515,7 +515,7 @@ function createheader($page='') {
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="initial-scale=1.37,user-scalable=no,minimal-ui">';
+		<meta name="viewport" content="initial-scale=1.6,user-scalable=yes,minimal-ui">';
 	} elseif ($udevice=='iPhone') {
 		echo '
 		<meta name="HandheldFriendly" content="true">
@@ -536,7 +536,7 @@ function createheader($page='') {
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=3">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=4">
 		<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js?v=5"></script>';
 	if ($page!='') {

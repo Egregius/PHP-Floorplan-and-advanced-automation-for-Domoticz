@@ -56,7 +56,10 @@ if ($d['daikin']['m']==1) {
 					$data['fan']=$rates[$rate];
 					$data['set']=$set;
 					$data=json_encode($data);
-					if ($d[$k.'_set']['icon']!=$data) storeicon($k.'_set', $data, basename(__FILE__).':'.__LINE__);
+					if ($d[$k.'_set']['icon']!=$data) {
+						storeicon($k.'_set', $data, basename(__FILE__).':'.__LINE__);
+						$d[$k.'_set']['icon']=$data;
+					}
 					daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rates[$rate], $spmode, $maxpow);
 				}
 			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);

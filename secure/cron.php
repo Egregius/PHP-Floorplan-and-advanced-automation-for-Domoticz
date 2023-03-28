@@ -19,10 +19,7 @@ if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
 		if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
 	}
 }
-
-$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-if (TIME>=$zonop&&TIME<=$zononder) $dag=true; else $dag=false;
+//lg($dag);
 
 if (isset($_REQUEST['cron'])) {
 	include '_'.$_REQUEST['cron'].'.php';
