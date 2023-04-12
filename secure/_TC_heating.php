@@ -67,9 +67,10 @@ if ($d['living_set']['m']==0) {
 		if ($d['Weg']['s']<2) {
 			$base=19;
 			$loop=true;
+			$factor=(20-$d['buiten_temp']['s'])*120;
 			for ($x=0;$x<=4;$x+=0.1) {
 				if ($loop==true) {
-					$t2=$t-(2700*$x);
+					$t2=$t-($factor*$x);
 					if (TIME>=$t2&&TIME<strtotime('19:00')) {
 						$Setliving=round($base-$x, 1);
 						$loop=false;

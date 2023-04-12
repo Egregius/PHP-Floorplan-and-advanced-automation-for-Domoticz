@@ -22,11 +22,11 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		if ($d['badkamer_set']['s']!=12) {$set=12;$m2.=__LINE__.' ';}
 	}
 	$loop=true;
-	for ($x=0;$x<=11;$x+=0.1) {
+	for ($x=0;$x<=9;$x+=0.1) {
 		if ($loop==true) {
 			$t2=$t-(1100*$x);
 			if (TIME>=$t2&&TIME<$t+900) {
-				$set=round(23-$x, 1);
+				$set=round(21-$x, 1);
 				$loop=false;
 			}
 		} else break;
@@ -44,7 +44,7 @@ if (isset($set)) {
 }
 $hum=65;
 $loop=true;
-for ($x=0;$x<=40;$x+=1) {
+for ($x=0;$x<=35;$x+=1) {
 	if ($loop==true) {
 		$t2=$t-(50*$x);
 		if (TIME>=$t2&&TIME<$t+900) {
