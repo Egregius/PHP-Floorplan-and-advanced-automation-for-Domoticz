@@ -30,9 +30,10 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d,$dag;
-	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
+		lg($dag);
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||($d['RkeukenL']['s']>70&&$d['RkeukenR']['s']>70))) {
+	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }

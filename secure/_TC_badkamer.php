@@ -22,9 +22,10 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		if ($d['badkamer_set']['s']!=12) {$set=12;$m2.=__LINE__.' ';}
 	}
 	$loop=true;
+	$factor=(20-$d['buiten_temp']['s'])*100;
 	for ($x=0;$x<=9;$x+=0.1) {
 		if ($loop==true) {
-			$t2=$t-(1100*$x);
+			$t2=$t-($factor*$x);
 			if (TIME>=$t2&&TIME<$t+900) {
 				$set=round(21-$x, 1);
 				$loop=false;
@@ -87,7 +88,7 @@ if ($l==0) {
 	if ($d['luchtdroger']['s']=='On') {
 		if ($d['luchtdroger1']['s']=='On') sw('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['luchtdroger2']['s']=='On') sw('luchtdroger2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['luchtdroger1']['s']=='Off'&&$d['luchtdroger2']['s']=='Off'&&past('luchtdroger')>595&&past('luchtdroger1')>115&&past('luchtdroger2')>115) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger1']['s']=='Off'&&$d['luchtdroger2']['s']=='Off'&&past('luchtdroger')>85&&past('luchtdroger1')>85&&past('luchtdroger2')>85) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } elseif ($l==1) {
 	if ($d['luchtdroger']['s']=='Off') sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
