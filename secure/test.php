@@ -17,7 +17,11 @@ if ($cmd==1) {
 	sw($sw, 'Off');
 }
 */
-print_r($_SERVER);
+$ctx=stream_context_create(array('http'=>array('timeout' =>1)));
+
+$status=file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx);
+var_dump($status);
+
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');

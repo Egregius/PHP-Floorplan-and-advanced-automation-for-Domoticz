@@ -78,7 +78,8 @@ if ($d['tv']['s']=='On') {
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
-	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
+	$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+	$status=json_decode(json_encode(simplexml_load_string($status)), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
@@ -107,7 +108,9 @@ foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 	unset($status);
 }
 foreach(array(101,105) as $ip) {
-	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx))), true);
+	$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+	if ($ip==101&&$status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') bosekey('PRESET_5', 0, $ip);
+	$status=json_decode(json_encode(simplexml_load_string($status)), true);
 	if (isset($status['@attributes']['source'])) {
 		if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 		if ($ip==101&&isset($status['@attributes']['source'],$status['shuffleSetting'])&&$status['@attributes']['source']=='SPOTIFY'&&$status['shuffleSetting']!='SHUFFLE_ON') {
