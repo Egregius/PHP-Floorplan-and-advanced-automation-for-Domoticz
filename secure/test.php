@@ -5,23 +5,39 @@ $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
+
 /*
-$sl=array('kamer','lichtbadkamer','kamer','waskamer','alex','hall','inkom','zithoek','eettafel','wasbak','snijplank','terras');
-$sw=array('wc','tuin','garage','garageled','zolderg','kristal','lamp kast','bureel');
-$cmd=0;
-if ($cmd==1) {
-	sl($sl, 20);
-	sw($sw, 'On');
-} else {
-	sl($sl, 0);
-	sw($sw, 'Off');
-}
+$response=file_get_contents(
+	'http://192.168.2.19:8123/api/states',
+	false,
+	stream_context_create(
+		array(
+			'http'=>array(
+				'header'=>array(
+					'Content-Type: application/json',
+					'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZDM1MDc5MzJmMDY0MWZmODRlMzhlNTExNmM1NDFlMSIsImlhdCI6MTY4MTk3NjMwNywiZXhwIjoxOTk3MzM2MzA3fQ.Dthf5CqY06vfsnCruEclAKfds6h11EjyPsXNwZgT_vU'
+				),
+				'method'=>'GET',
+				
+				
+			)
+		)
+	)
+);
 */
-$ctx=stream_context_create(array('http'=>array('timeout' =>1)));
+for ($y=1;$y<=10;$y++) {
+	for ($x=1;$x<=10;$x++) {
+		hass('switch','turn_on','switch.plug'.$x);
+	}
+	sleep(3);
+	for ($x=1;$x<=10;$x++) {
+		hass('switch','turn_off','switch.plug'.$x);
+	}
+	sleep(3);
+}
 
-$status=file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx);
-var_dump($status);
 
+$response=json_decode($response);
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');

@@ -166,9 +166,13 @@ function sw($name,$action='Toggle',$msg='') {
 		}
 	} else {
 		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if ($d[$name]['i']>0) {
+		if ($d[$name]['i']>10) {
 			lg($msg);
 			if ($d[$name]['s']!=$action) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+		} elseif ($d[$name]['i']>0) {
+			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
+			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
+			store($name, $action, $msg);
 		} else store($name, $action, $msg);
 	}
 }
@@ -600,6 +604,18 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		file_get_contents($url);
 		usleep(100000);
 	}
+}
+function hass($domain,$service,$entity) {
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
+	curl_setopt($ch,CURLOPT_POST,1);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZDM1MDc5MzJmMDY0MWZmODRlMzhlNTExNmM1NDFlMSIsImlhdCI6MTY4MTk3NjMwNywiZXhwIjoxOTk3MzM2MzA3fQ.Dthf5CqY06vfsnCruEclAKfds6h11EjyPsXNwZgT_vU'));
+	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$response=curl_exec($ch);
+	curl_close($ch);
 }
 function curl($url) {
 	$ch=curl_init();

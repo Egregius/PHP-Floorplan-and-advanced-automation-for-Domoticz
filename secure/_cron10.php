@@ -42,6 +42,17 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
+	if ($d['GroheRed']['s']=='Off'&&$d['Weg']['s']==0&&TIME>=strtotime('10:00')&&TIME<=strtotime('19:00')) {
+		if ($d['zon']['s']-$d['el']['s']>2000&&past('GroheRed')>175) {
+			sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
+			storemode('GroheRed', 'Zon', basename(__FILE__).':'.__LINE__);
+		}
+	} elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>175) {
+		if ($d['GroheRed']['m']=='Zon'&&$d['zon']['s']-$d['el']['s']<0) {
+			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+			storemode('GroheRed', '', basename(__FILE__).':'.__LINE__);
+		}
+	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 $i=50;
