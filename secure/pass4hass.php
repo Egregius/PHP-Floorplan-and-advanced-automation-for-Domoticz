@@ -51,12 +51,11 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 	} elseif ($device=='kodi') {
 		if ($action=='paused') fkeuken();
 		elseif ($action=='play') {
-			if ($d['wasbak']['s']>0&&TIME>strtotime('10:00')) {
+			if ($d['wasbak']['s']>0&&TIME>strtotime('20:00')) {
 				sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 				sleep(1);
 				sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	} else telegram(print_r($_POST, true));
-	telegram(print_r($_POST, true));
 }
