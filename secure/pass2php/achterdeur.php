@@ -1,7 +1,7 @@
 <?php
 if ($status=="Open") {
 	// BOSE BUITEN
-	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
+/*	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
 				simplexml_load_string(
@@ -40,7 +40,7 @@ if ($status=="Open") {
 				}
 			}
 		}
-	}
+	}*/
 	// END BOSE BUITEN
 	sirene('Achterdeur open');
  } else {
@@ -48,7 +48,7 @@ if ($status=="Open") {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 			telegram('Achterdeur open om '.strftime("%k:%M:%S", TIME), false, 3);
 	}
-	// BOSE BUITEN
+/*	// BOSE BUITEN
 	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
@@ -89,13 +89,14 @@ if ($status=="Open") {
 			}
 		}
 	}
-	// END BOSE BUITEN
+	// END BOSE BUITEN*/
 	sirene('Achterdeur dicht');
 }
 
 // Indien geen zwembad
-
+/*
 if ($status=="Open") {
 	if ($d['zwembadfilter']['s']=='Off') sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
 	if ($d['zwembadwarmte']['s']=='Off') sw('zwembadwarmte','On', basename(__FILE__).':'.__LINE__);
 }
+*/

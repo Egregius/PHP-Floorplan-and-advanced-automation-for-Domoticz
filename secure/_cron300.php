@@ -30,7 +30,7 @@ if ($d['zwembadwarmte']['s']=='On') {
 	}
 }*/
 //EINDE EERSTE BLOK INDIEN ZWEMBAD
-
+/*
 // BEGIN TWEEDE BLOK INDIEN GEEN ZWEMBAD
 if ($d['achterdeur']['s']=='Open') {
 	if ($d['zwembadfilter']['s']=='Off') sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
@@ -40,7 +40,7 @@ if ($d['achterdeur']['s']=='Open') {
 	if ($d['zwembadwarmte']['s']=='On') sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
 }
 //EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
-
+*/
 if ($d['kookplaat']['s']=='On') {
 	$i=explode(';', $d['kookplaatpower_kWh']['s']);
 	if ($i[0]<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
