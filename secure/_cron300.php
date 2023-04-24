@@ -4,40 +4,40 @@ if(isset($db)) $db=dbconnect();
 
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
-/*if ($d['zwembadfilter']['s']=='On') {
-	if (past('zwembadfilter')>10700
+/*if ($d['steenterras']['s']=='On') {
+	if (past('steenterras')>10700
 		&&TIME>strtotime("16:00")
-		&&$d['zwembadwarmte']['s']=='Off'
+		&&$d['houtterras']['s']=='Off'
 		&&$d['buiten_temp']['s']<27
 	) {
-		sw('zwembadfilter','Off', basename(__FILE__).':'.__LINE__);
+		sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	}
 }else{
 	if (
-			(past('zwembadfilter')>10700&&TIME>strtotime("12:59")&&TIME<strtotime("15:59"))
+			(past('steenterras')>10700&&TIME>strtotime("12:59")&&TIME<strtotime("15:59"))
 			||
-			(past('zwembadfilter')>10700&&$d['buiten_temp']['s']>27)
+			(past('steenterras')>10700&&$d['buiten_temp']['s']>27)
 	   ) {
-	   	sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
+	   	sw('steenterras','On', basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($d['zwembadwarmte']['s']=='On') {
-	if (past('zwembadwarmte')>86398) {
-		sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
+if ($d['houtterras']['s']=='On') {
+	if (past('houtterras')>86398) {
+		sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['zwembadfilter']['s']=='Off') {
-		sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']['s']=='Off') {
+		sw('steenterras','On', basename(__FILE__).':'.__LINE__);
 	}
 }*/
 //EINDE EERSTE BLOK INDIEN ZWEMBAD
 /*
 // BEGIN TWEEDE BLOK INDIEN GEEN ZWEMBAD
 if ($d['achterdeur']['s']=='Open') {
-	if ($d['zwembadfilter']['s']=='Off') sw('zwembadfilter','On', basename(__FILE__).':'.__LINE__);
-	if ($d['zwembadwarmte']['s']=='Off') sw('zwembadwarmte','On', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']['s']=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
+	if ($d['houtterras']['s']=='Off') sw('houtterras','On', basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['zwembadfilter']['s']=='On') sw('zwembadfilter','Off', basename(__FILE__).':'.__LINE__);
-	if ($d['zwembadwarmte']['s']=='On') sw('zwembadwarmte','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
 }
 //EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
 */
