@@ -50,6 +50,7 @@ for ($x=0;$x<=35;$x+=1) {
 		$t2=$t-(50*$x);
 		if (TIME>=$t2&&TIME<$t+900) {
 			$hum=25+$x;
+			lg ('TC_badkamer hum = '.$hum);
 			$loop=false;
 		}
 	} else break;

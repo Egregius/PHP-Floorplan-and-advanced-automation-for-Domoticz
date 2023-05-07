@@ -2,11 +2,11 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 require 'scripts/chart.php';
-if (isset($_POST['addregen'])) {
+if (isset($_REQUEST['addregen'])) {
 	$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	if ($db->connect_errno>0) die('Unable to connect to database [' . $db->connect_error . ']');
 	$date=date("Y-m-d", TIME);
-	$value=$_POST['addregen'];
+	$value=$_REQUEST['addregen'];
 	$query="INSERT INTO `pluvio` (`date`, `rain`) VALUES ('$date', '$value') ON DUPLICATE KEY Update rain=rain+$value;";
 	if(!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
 
@@ -19,7 +19,7 @@ if (isset($_REQUEST['add'])) {
 			<link rel="dns-prefetch" href="https://www.gstatic.com/" />
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 			<meta name="HandheldFriendly" content="true"/>
-			<meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, minimal-ui"/>
+			<meta name="viewport" content="width=device-width,height=device-height, user-scalable=yes, minimal-ui"/>
 			<meta name="apple-mobile-web-app-capable" content="yes">
 			<meta name="apple-mobile-web-app-status-bar-style" content="black">
 			<title>Regenvoorspelling</title>
@@ -39,7 +39,7 @@ if (isset($_REQUEST['add'])) {
 				<input type="submit" class="btn btna b1" name="add" value="Regen invullen"/>
 			</form>';
 		elseif ($udevice=='iPhone') echo '
-		<body style="width:560px">
+		<body style="width:100%">
 			<form action="floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
 			<form action="/temp.php"><input type="submit" class="btn btna b4" value="Temperaturen"/></form>
 			<form action="/hum.php"><input type="submit" class="btn btn b4" value="Humidity"/></form>
