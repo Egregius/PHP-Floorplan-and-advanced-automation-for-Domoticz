@@ -39,7 +39,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		$d['badkamer_set']['s']=5;
 	}
 }
-if (isset($set)) {
+if (isset($set)&&$d['heating']['s']>=0) {
 	if ($set!=$d['badkamer_set']['s']) store('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
 	$d['badkamer_set']['s']=$set;
 }
@@ -47,7 +47,7 @@ $hum=65;
 $loop=true;
 for ($x=0;$x<=35;$x+=1) {
 	if ($loop==true) {
-		$t2=$t-(50*$x);
+		$t2=$t-(120*$x);
 		if (TIME>=$t2&&TIME<$t+900) {
 			$hum=25+$x;
 			lg ('TC_badkamer hum = '.$hum);

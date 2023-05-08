@@ -3,7 +3,7 @@ if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LIN
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
-		if (isset($daikin->pow)&&$daikin->pow!=0&&$daikin->mode!=2) {
+		if ($daikin->power!=0&&$daikin->mode!=2) {
 			daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
 			storemode('daikin'.$k, 0);
 			storeicon($k.'_set', 'Off');
@@ -14,9 +14,7 @@ if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
-$zon=$d['zon']['s'];
-$heating=$d['heating']['s'];
+
 if ($d['auto']['s']=='On') {
 	if (TIME>=$t&&TIME<strtotime('10:00')) {
 		if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
@@ -34,14 +32,14 @@ if ($d['auto']['s']=='On') {
 	}
 
 	elseif (TIME>=strtotime('11:00')&&TIME<strtotime('15:00')) {
-		if($zon>2000) {
+		if($d['zon']['s']>2000) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
-		if($zon>2000) {
+		if($d['zon']['s']>2000) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Ralex']['s']<82) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<40) sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);

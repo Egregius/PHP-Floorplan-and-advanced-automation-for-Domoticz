@@ -293,10 +293,7 @@ if ($d['daikin']['m']==1) {
 }
 $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
-$benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) $dag=true; else $dag=false;
-$zon=$d['zon']['s'];
-$heating=$d['heating']['s'];
+
 if ($d['auto']['s']=='On') {
 	if (TIME>=$t&&TIME<strtotime('10:00')) {
 		if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
@@ -314,14 +311,14 @@ if ($d['auto']['s']=='On') {
 	}
 
 	elseif (TIME>=strtotime('11:00')&&TIME<strtotime('15:00')) {
-		if($zon>1500) {
+		if($d['zon']['s']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
 	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
-		if($zon>1500) {
+		if($d['zon']['s']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<50&&past('Rbureel')>7200) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);

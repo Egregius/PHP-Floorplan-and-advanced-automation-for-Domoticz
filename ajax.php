@@ -92,28 +92,47 @@ elseif (isset($_REQUEST['media'])) {
 elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
 	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
-		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-		if ($_REQUEST['device']=='living') {
-			if ($d['heating']['s']==-2) {//airco cooling
-				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-			} elseif ($d['heating']['s']==-1) {//passive cooling
-			} elseif ($d['heating']['s']==0) {// Neutral
-			} elseif ($d['heating']['s']==1) {//heating airco
-				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-			} elseif ($d['heating']['s']==2) {//heating airco gas
-				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-			} elseif ($d['heating']['s']==3) {//heating gas airco
-				if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-			} elseif ($d['heating']['s']==4) {//heating gas
-				if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
-				elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$_REQUEST['action']) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($_REQUEST['device']=='badkamer') {
+			$s=(int)strftime("%S", TIME);
+			$dow=date("w");
+			if($dow==0||$dow==6) $t=strtotime('7:30');
+			elseif($dow==2||$dow==5) $t=strtotime('6:45');
+			else $t=strtotime('7:00');
+			if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
+				store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			}
+		} else {
+			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			if ($_REQUEST['device']=='living') {
+				if ($d['heating']['s']==-2) {//airco cooling
+					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']['s']==-1) {//passive cooling
+				} elseif ($d['heating']['s']==0) {// Neutral
+				} elseif ($d['heating']['s']==1) {//heating airco
+					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']['s']==2) {//heating airco gas
+					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']['s']==3) {//heating gas airco
+					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+					if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']['s']==4) {//heating gas
+					if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+					elseif ($d['brander']['s']=='On'&&$d['living_temp']['s']>$_REQUEST['action']) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+			}
+			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 		}
-		storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='setpoint2') {
-		store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-		storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
+		$s=(int)strftime("%S", TIME);
+		$dow=date("w");
+		if($dow==0||$dow==6) $t=strtotime('7:30');
+		elseif($dow==2||$dow==5) $t=strtotime('6:45');
+		else $t=strtotime('7:00');
+		if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
+			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
+		}
 	} elseif ($_REQUEST['command']=='luchtdroger') {
 		storemode('luchtdroger', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='heating') {
