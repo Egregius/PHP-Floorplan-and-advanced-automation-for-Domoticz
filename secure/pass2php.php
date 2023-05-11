@@ -31,8 +31,10 @@ if ($device=='buiten_hum') { // 1
 	$temp=$status[0];
 	$hum=$status[1]+3;
 	if ($hum>100) $hum=100;
+	if ($status>$d['buiten_temp']['m']+1) $status=$d['buiten_temp']['m']+1;
+	elseif ($status<$d['buiten_temp']['m']-1) $status=$d['buiten_temp']['m']-1;
 	if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum);
-	if($temp!=$d['minmaxtemp']['icon']) {
+	if ($temp!=$d['minmaxtemp']['icon']) {
 		if ($temp>$d['buiten_temp']['s']+1) $temp=$d['buiten_temp']['s']+1;
 		elseif ($temp<$d['buiten_temp']['s']-1) $temp=$d['buiten_temp']['s']-1;
 		storeicon('minmaxtemp', $temp);
@@ -41,28 +43,38 @@ if ($device=='buiten_hum') { // 1
 } elseif ($device=='kamer_hum') { // 2
 	$status=explode(';', $status);
 	$status=$status[1]+3;
-	if($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
+	if ($status>$d['kamer_temp']['m']+1) $status=$d['kamer_temp']['m']+1;
+	elseif ($status<$d['kamer_temp']['m']-1) $status=$d['kamer_temp']['m']-1;
+	if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 	exit;
 } elseif ($device=='alex_hum') { // 3
 	$status=explode(';', $status);
 	$status=$status[1]+5;
-	if($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
+	if ($status>$d['alex_temp']['m']+1) $status=$d['alex_temp']['m']+1;
+	elseif ($status<$d['alex_temp']['m']-1) $status=$d['alex_temp']['m']-1;
+	if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
 	exit;
 } elseif ($device=='waskamer_hum') { // 4
 	$status=explode(';', $status);
 	$status=$status[1]+5;
-	if($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
+	if ($status>$d['waskamer_temp']['m']+1) $status=$d['waskamer_temp']['m']+1;
+	elseif ($status<$d['waskamer_temp']['m']-1) $status=$d['waskamer_temp']['m']-1;
+	if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
 	exit;
 } elseif ($device=='badkamer_hum') { // 5
 	$status=explode(';', $status);
 	$status=$status[1]+7;
+	if ($status>$d['badkamer_temp']['m']+1) $status=$d['badkamer_temp']['m']+1;
+	elseif ($status<$d['badkamer_temp']['m']-1) $status=$d['badkamer_temp']['m']-1;
 	if ($status>100) $status=100;
-	if($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
+	if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 	exit;
 } elseif ($device=='living_hum') { // 6
 	$status=explode(';', $status);
 	$status=$status[1]+5;
-	if($status!=$d['living_temp']['m']) storemode('living_temp', $status);
+	if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;
+	elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
+	if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
 	exit;
 }
 if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
