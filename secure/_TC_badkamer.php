@@ -47,7 +47,7 @@ $hum=65;
 $loop=true;
 for ($x=0;$x<=35;$x+=1) {
 	if ($loop==true) {
-		$t2=$t-(120*$x);
+		$t2=$t-(360*$x);
 		if (TIME>=$t2&&TIME<$t+900) {
 			$hum=25+$x;
 			lg ('TC_badkamer hum = '.$hum);
@@ -92,22 +92,22 @@ if ($l==0) {
 		if ($d['luchtdroger1']['s']=='Off'&&$d['luchtdroger2']['s']=='Off'&&past('luchtdroger')>85&&past('luchtdroger1')>85&&past('luchtdroger2')>85) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } elseif ($l==1) {
-	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	else {
-		if ($d['luchtdroger1']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger1']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['luchtdroger2']['s']=='On') sw('luchtdroger2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } elseif ($l==2) {
-	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	else {
 		if ($d['luchtdroger1']['s']=='On') sw('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['luchtdroger2']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger2']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } elseif ($l==3) {
-	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['luchtdroger']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	else {
-		if ($d['luchtdroger1']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['luchtdroger2']['s']=='Off'&&TIME>=strtotime('4:30')&&TIME<=strtotime('18:00')) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger1']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger2']['s']=='Off'&&TIME>=strtotime('3:30')&&TIME<=strtotime('18:00')) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
 } 
 

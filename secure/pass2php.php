@@ -5,7 +5,10 @@ $status=$_REQUEST['s'];
 
 $d=fetchdata();
 if (isset($d[$device])) {
-	if ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers'||$d[$device]['dt']=='luifel') {
+	if ($d[$device]['dt']=='luifel') {
+		if ($status=='Open') $status=100;
+		elseif ($status=='Closed') $status=0;
+	} elseif ($d[$device]['dt']=='dimmer'||$d[$device]['dt']=='rollers') {
 		if ($status=='Off'||$status=='Open') $status=0;
 		elseif ($status=='On'||$status=='Closed') $status=100;
 		else $status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
