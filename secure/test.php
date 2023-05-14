@@ -25,19 +25,10 @@ $response=file_get_contents(
 	)
 );
 */
-for ($y=1;$y<=10;$y++) {
-	for ($x=1;$x<=10;$x++) {
-		hass('switch','turn_on','switch.plug'.$x);
-	}
-	sleep(3);
-	for ($x=1;$x<=10;$x++) {
-		hass('switch','turn_off','switch.plug'.$x);
-	}
-	sleep(3);
+for ($x=0;$x<=10;$x=$x+0.1) {
+	echo $x.' '.floor($x*10)/10 .'<br>';
 }
 
-
-$response=json_decode($response);
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');
