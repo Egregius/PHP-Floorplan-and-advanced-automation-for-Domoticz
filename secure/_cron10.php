@@ -114,7 +114,7 @@ foreach(array(102=>35,103=>18,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
 		if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
-		if ($ip==103&&$d['bose101']['m']==0&&TIME<strtotime('8:30')) storemode('bose101', 1);
+		//if ($ip==103&&$d['bose101']['m']==0&&TIME<strtotime('8:30')) storemode('bose101', 1);
 	}
 	unset($status);
 }

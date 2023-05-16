@@ -38,7 +38,6 @@ if (isset($owf['list'])) {
 		}
 	}
 }
-usleep(150000);
 
 //lg(__LINE__.' https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
 $ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
@@ -48,7 +47,6 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$winds['ob_wind']=$ob['windspeed'] * 1.609344;
 	$winds['ob_gust']=$ob['windgusts'] * 1.609344;
 }
-usleep(150000);
 
 //lg(__LINE__.' https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true');
 $om=json_decode(curl('https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true'), true);
@@ -65,7 +63,6 @@ if (isset($om['hourly']['temperature_2m'])) {
 		if ($x>=12) break;
 	}
 }
-usleep(150000);
 
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour');
 $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour'), true);
@@ -76,7 +73,6 @@ if (isset($yr['temperature']['value'])) {
 	$rains['yr']=$yr['precipitation']['value'];
 	
 }
-usleep(150000);
 
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast');
 $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast'), true);
@@ -90,7 +86,6 @@ if (isset($yr['shortIntervals'])) {
 		} else break;
 	}
 }
-usleep(150000);
 
 if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
 	//lg(__LINE__.' https://api.tomorrow.io/v4/weather/realtime?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio);
@@ -100,8 +95,7 @@ if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
 		$winds['to']=$to['data']['values']['windSpeed'] * 1.609344;
 		$winds['to_gust']=$to['data']['values']['windGust'] * 1.609344;
 	}
-	usleep(150000);
-	
+		
 	//lg(__LINE__.' https://api.tomorrow.io/v4/weather/forecast?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio2);
 	$to=json_decode(curl('https://api.tomorrow.io/v4/weather/forecast?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio2), true);
 	if (isset($to['timelines']['hourly'])) {
@@ -115,7 +109,6 @@ if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
 		}
 	}
 }
-usleep(150000);
 
 $buienradar=0;
 //lg(__LINE__.' https://graphdata.buienradar.nl/2.0/forecast/geo/Rain3Hour?lat='.$lat.'&lon='.$lon);
@@ -146,7 +139,7 @@ if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 
-if (count($winds)>=5) {
+if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
 	if ($d['wind']['s']!=$wind) store('wind', $wind);
 }
