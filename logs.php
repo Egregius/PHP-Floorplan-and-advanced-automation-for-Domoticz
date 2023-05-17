@@ -19,9 +19,8 @@ require '/var/www/authentication.php';
 			</a>
 		</div>
 		<div class="fix box box1" style="top:120px;left:0px;width:100%">
-			<a href="javascript:navigator_Go('log.php#Domoticz');" class="btn b2">Domoticz</a>
-			<a href="javascript:navigator_Go('log.php#nginxaccess');" class="btn b2">nginx access</a>
-			<a href="javascript:navigator_Go('log.php#nginxerror');" class="btn b2">nginx error</a>
+			<a href="javascript:navigator_Go('log.php#Domoticz');" class="btn b1">Domoticz</a>
+			<a href="javascript:navigator_Go('log.php#nginxerror');" class="btn b1">nginx error</a>
 		</div>
 		<div class="clear">
 
