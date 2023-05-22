@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 require '/var/www/client-examples/vendor/autoload.php';
+require '/var/www/html/secure/functions.php';
 
 use PhpMqtt\Client\Examples\Shared\SimpleLogger;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -27,7 +28,7 @@ try {
             'message' => $message,
             'typeOfMessage' => $retained ? 'retained message' : 'message',
         ]);
-
+		lg($topic.'	'.$message);
         // After receiving the first message on the subscribed topic, we want the client to stop listening for messages.
        // $client->interrupt();
     }, MqttClient::QOS_AT_MOST_ONCE);
