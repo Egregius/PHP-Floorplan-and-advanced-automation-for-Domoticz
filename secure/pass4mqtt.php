@@ -21,7 +21,7 @@ try {
     $client->connect(null, true);
 
     // Subscribe to the topic 'foo/bar/baz' using QoS 0.
-    $client->subscribe('domoticz/out', function (string $topic, string $message, bool $retained) use ($logger, $client) {
+    $client->subscribe('domoticz/out/kamer_hum', function (string $topic, string $message, bool $retained) use ($logger, $client) {
         $logger->info('We received a {typeOfMessage} on topic [{topic}]: {message}', [
             'topic' => $topic,
             'message' => $message,
