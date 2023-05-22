@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-require '/var/www/vendor/autoload.php';
+require '/var/www/client-examples/vendor/autoload.php';
 
 use PhpMqtt\Client\Examples\Shared\SimpleLogger;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -21,7 +21,7 @@ try {
     $client->connect(null, true);
 
     // Subscribe to the topic 'foo/bar/baz' using QoS 0.
-    $client->subscribe('foo/bar/baz', function (string $topic, string $message, bool $retained) use ($logger, $client) {
+    $client->subscribe('domoticz', function (string $topic, string $message, bool $retained) use ($logger, $client) {
         $logger->info('We received a {typeOfMessage} on topic [{topic}]: {message}', [
             'topic' => $topic,
             'message' => $message,
