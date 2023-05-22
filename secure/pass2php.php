@@ -45,7 +45,7 @@ if ($device=='buiten_hum') { // 1
 	$status=$status[1]+3;
 	if ($status>$d['kamer_temp']['m']+1) $status=$d['kamer_temp']['m']+1;
 	elseif ($status<$d['kamer_temp']['m']-1) $status=$d['kamer_temp']['m']-1;
-	if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
+	/*if ($status!=$d['kamer_temp']['m']) */storemode('kamer_temp', $status);
 	exit;
 } elseif ($device=='alex_hum') { // 3
 	$status=explode(';', $status);
