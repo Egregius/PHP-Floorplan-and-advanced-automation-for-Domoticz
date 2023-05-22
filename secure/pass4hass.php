@@ -57,5 +57,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 				sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
+	} elseif (str_starts_with($device,'plug')) {
+		store($device, $action, 'From hass');
 	} else telegram(print_r($_POST, true));
 }
