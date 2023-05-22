@@ -172,7 +172,7 @@ function sw($name,$action='Toggle',$msg='') {
 		} elseif ($d[$name]['i']>0) {
 			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
 			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
-			store($name, $action, $msg);
+			//store($name, $action, $msg);
 		} else store($name, $action, $msg);
 	}
 }
