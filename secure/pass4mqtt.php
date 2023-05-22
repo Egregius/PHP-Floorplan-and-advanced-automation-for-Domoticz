@@ -29,7 +29,7 @@ try {
         ]);
 
         // After receiving the first message on the subscribed topic, we want the client to stop listening for messages.
-        $client->interrupt();
+       // $client->interrupt();
     }, MqttClient::QOS_AT_MOST_ONCE);
 
     // Since subscribing requires to wait for messages, we need to start the client loop which takes care of receiving,
