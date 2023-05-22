@@ -16,13 +16,13 @@ use Psr\Log\LogLevel;
 
 try {
     // Create a new instance of an MQTT client and configure it to use the shared broker host and port.
-    $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, $logger);
+    $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
 
     // Connect to the broker without specific connection settings but with a clean session.
     $client->connect(null, true);
 
     // Subscribe to the topic 'foo/bar/baz' using QoS 0.
-    $client->subscribe('domoticz/out/#', function (string $topic, string $message, bool $retained) use ($logger, $client) {
+    $client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
  /*       $logger->info('{topic}: {message}', [
             'topic' => $topic,
             'message' => $message,
