@@ -6,13 +6,13 @@ declare(strict_types=1);
 require '/var/www/client-examples/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 
-use PhpMqtt\Client\Examples\Shared\SimpleLogger;
+//use PhpMqtt\Client\Examples\Shared\SimpleLogger;
 use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
 use Psr\Log\LogLevel;
 
 // Create an instance of a PSR-3 compliant logger. For this example, we will also use the logger to log exceptions.
-$logger = new SimpleLogger(LogLevel::INFO);
+//$logger = new SimpleLogger(LogLevel::INFO);
 
 try {
     // Create a new instance of an MQTT client and configure it to use the shared broker host and port.
@@ -23,11 +23,11 @@ try {
 
     // Subscribe to the topic 'foo/bar/baz' using QoS 0.
     $client->subscribe('domoticz/out/#', function (string $topic, string $message, bool $retained) use ($logger, $client) {
-        $logger->info('{topic}: {message}', [
+ /*       $logger->info('{topic}: {message}', [
             'topic' => $topic,
             'message' => $message,
             'typeOfMessage' => $retained ? 'retained message' : 'message',
-        ]);
+        ]);*/
 		lg($topic.'	'.$message);
         // After receiving the first message on the subscribed topic, we want the client to stop listening for messages.
        // $client->interrupt();
@@ -42,5 +42,5 @@ try {
     $client->disconnect();
 } catch (MqttClientException $e) {
     // MqttClientException is the base exception of all exceptions in the library. Catching it will catch all MQTT related exceptions.
-    $logger->error('Subscribing to a topic using QoS 0 failed. An exception occurred.', ['exception' => $e]);
+//    $logger->error('Subscribing to a topic using QoS 0 failed. An exception occurred.', ['exception' => $e]);
 }
