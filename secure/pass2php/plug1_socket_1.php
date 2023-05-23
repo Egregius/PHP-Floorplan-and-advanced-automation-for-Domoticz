@@ -1,0 +1,2 @@
+<?php
+store('water', $status);

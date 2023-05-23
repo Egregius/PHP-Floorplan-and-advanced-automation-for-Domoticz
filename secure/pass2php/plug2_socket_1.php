@@ -1,0 +1,2 @@
+<?php
+store('luchtdroger', $status);

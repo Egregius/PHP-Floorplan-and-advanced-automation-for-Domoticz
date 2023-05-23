@@ -1,4 +1,5 @@
 <?php
+exit;
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
