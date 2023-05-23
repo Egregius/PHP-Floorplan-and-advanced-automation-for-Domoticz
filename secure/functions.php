@@ -170,8 +170,8 @@ function sw($name,$action='Toggle',$msg='') {
 			if ($d[$name]['s']!=$action) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 		} elseif ($d[$name]['i']>0) {
 			lg($msg);
-			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
-			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
+			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i'].'_socket_1');
+			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i'].'_socket_1');
 			//store($name, $action, $msg);
 		} else store($name, $action, $msg);
 	}
