@@ -606,7 +606,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	}
 }
 function hass($domain,$service,$entity) {
-	lg('HASS '.$domain.' '.$service.' '.$entity.'_socket_1');
+	lg('ddddHASS '.$domain.' '.$service.' ssss'.$entity.'_socket_1');
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
