@@ -55,7 +55,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						elseif ($message['nvalue']==1) $status='On';
 					}
 					store($device, $status);
-					lg('switch	'.$device.'	=> '.$status.'	'.print_r($message,true));
+//					lg('switch	'.$device.'	=> '.$status.'	'.print_r($message,true));
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
 					store($device, $status);
