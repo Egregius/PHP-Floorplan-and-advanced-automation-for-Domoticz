@@ -170,8 +170,8 @@ function sw($name,$action='Toggle',$msg='') {
 			if ($d[$name]['s']!=$action) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 		} elseif ($d[$name]['i']>0) {
 			lg($msg);
-			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i'].'_socket_1');
-			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i'].'_socket_1');
+			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
+			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
 			//store($name, $action, $msg);
 		} else store($name, $action, $msg);
 	}
@@ -606,12 +606,12 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	}
 }
 function hass($domain,$service,$entity) {
-	lg('ddddHASS '.$domain.' '.$service.' ssss'.$entity.'_socket_1');
+	lg('HASS '.$domain.' '.$service.' ssss'.$entity);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
 	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZDM1MDc5MzJmMDY0MWZmODRlMzhlNTExNmM1NDFlMSIsImlhdCI6MTY4MTk3NjMwNywiZXhwIjoxOTk3MzM2MzA3fQ.Dthf5CqY06vfsnCruEclAKfds6h11EjyPsXNwZgT_vU'));
-	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'_socket_1"}');
+	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
