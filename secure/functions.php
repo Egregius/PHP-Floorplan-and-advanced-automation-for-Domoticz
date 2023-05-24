@@ -4,6 +4,7 @@ $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
 function fliving() {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
 		if ($d['zon']['s']==0&&$GLOBALS['dag']<3) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
@@ -17,10 +18,12 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$GLOBALS['dag']<3) {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
@@ -30,6 +33,7 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
@@ -38,10 +42,12 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$dag;
+	if (!is_array($d)) $d=fetchdata();
 	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$GLOBALS['dag']<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$dag;
+	if (!is_array($d)) $d=fetchdata();
 	if (TIME>=strtotime('7:30')&&($d['Ralex']['s']==0||TIME<=strtotime('19:45')||past('deuralex')<3600)) {
 		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$GLOBALS['dag']<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
@@ -51,6 +57,7 @@ function fhall() {
 }
 function huisslapen() {
 	global $d,$boseipbuiten;
+	if (!is_array($d)) $d=fetchdata();
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','nvidia','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
@@ -75,6 +82,7 @@ function huisslapen() {
 }
 function huisthuis() {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
 	if ($d['bose103']['m']!=0) storemode('bose103', 0);
 	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
@@ -101,6 +109,7 @@ function waarschuwing($msg) {
 }
 function past($name) {
 	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if (!empty($d[$name]['t'])) return TIME-$d[$name]['t'];
 	else return 999999999;
 }
@@ -112,7 +121,7 @@ function idx($name) {
 }
 function sl($name,$level,$msg='',$force=false) {
 	global $user,$d,$domoticzurl;
-	if(!isset($d))$d=fetchdata();
+	if (!is_array($d)) $d=fetchdata();
 	 if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -129,6 +138,7 @@ function sl($name,$level,$msg='',$force=false) {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $user,$d,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
@@ -141,7 +151,7 @@ function rgb($name,$hue,$level,$check=false) {
 }
 function resetsecurity() {
 	global $d,$domoticzurl;
-	if (!isset($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 		usleep(100000);
@@ -156,7 +166,7 @@ function resetsecurity() {
 }
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl,$db;
-	if (!isset($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata();
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
@@ -178,7 +188,7 @@ function sw($name,$action='Toggle',$msg='') {
 }
 function fvolume($cmd) {
 	global $d;
-	if (!isset($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['sony']['s']=='On') {
 		if ($cmd<0) sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"'.$cmd.'","output":""}],"version":"1.1"}');
 		else sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+'.trim($cmd).'","output":""}],"version":"1.1"}');
@@ -233,28 +243,35 @@ function lgcommand($action,$msg='') {
 	if ($action=='on') exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
 	else shell_exec('/var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
 }
-function store($name,$status,$msg='',$idx=null,$force=true) {
+function store($name,$status,$msg='',$idx=null) {
 	global $d, $db, $user;
-	if (!isset($d)) $d=fetchdata();
+	//if (!isset($d)) $d=fetchdata();
 	$time=time();
-	if ($idx>0) $db->query("INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';");
-	else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-	if ($name!='crypto'/*&&!endswith($name, '_temp')*/&&strlen($msg>0)) lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	if ($idx>0) $sql="INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',i='$idx',t='$time';";
+	else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
+	$db->query($sql);
+	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
+	lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':'').' '.$sql);
 }
 function storemode($name,$mode,$msg='',$time=0) {
 	global $db, $user;
-	$time=time()+$time;
+	
 	if(!isset($db)) $db=dbconnect();
-	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
+	if ($time>0) {
+		$time=time()+$time;
+		$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
+	} else $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
 	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 }
-function storeicon($name,$icon,$msg='') {
+function storeicon($name,$icon,$msg='',$time=false) {
 	global $d, $db, $user;
 	if (!isset($d)) $d=fetchdata();
-	$time=TIME;
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
-		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
+		if ($time==true) {
+			$time=TIME;
+			$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
+		} else $db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon') ON DUPLICATE KEY UPDATE icon='$icon';");
 		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
 	}
 }
@@ -297,6 +314,7 @@ function sony($lib,$json) {
 }
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $user,$d,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
@@ -326,6 +344,7 @@ function rookmelder($msg) {
 	global $device;
 	resetsecurity();
 //	global $d,$device;
+//	if (!is_array($d)) $d=fetchdata();
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['Weg']['s']<=1) {
 
@@ -484,6 +503,7 @@ function bosepost($method,$xml,$ip=101,$log=false) {
 
 function sirene($msg) {
 	global $d,$device,$status;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['Weg']['s']==0||past('Weg')<60) return false;
 	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
 		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurwaskamer', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamwaskamer', 'raamalex'))) {
@@ -606,7 +626,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	}
 }
 function hass($domain,$service,$entity) {
-	lg('HASS '.$domain.' '.$service.' ssss'.$entity);
+	lg('HASS '.$domain.' '.$service.' '.$entity);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);

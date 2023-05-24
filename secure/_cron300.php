@@ -42,8 +42,7 @@ if ($d['achterdeur']['s']=='Open') {
 //EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
 */
 if ($d['kookplaat']['s']=='On') {
-	$i=explode(';', $d['kookplaatpower_kWh']['s']);
-	if ($i[0]<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['kookplaatpower_kWh']['s']<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {

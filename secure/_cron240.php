@@ -27,7 +27,6 @@ if ($d['auto']['s']=='On') {
 					3600,
 					false,
 					2,
-					false
 				);
 			}
 		} elseif ($d['heating']['s']<0) { //Cooling
@@ -52,21 +51,15 @@ if ($d['auto']['s']=='On') {
 					3600,
 					false,
 					2,
-					false
 				);
 			}
 		}
 		if ($d['wasdroger']['s']=='On') {
 			if (past('wasdroger_kWh')>600) {
-				$i=explode(';',$d['wasdroger_kWh']['s']);
-				if ($i[0]<10) alert(
-					'wasdrogervol',
-					'Wasdroger vol',
-					3600,
-					false,
-					2,
-					false
-				);
+				if ($d['wasdroger_kWh']['s']<10) {
+					alert('wasdrogervol','Wasdroger vol',60,false,2);
+					sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	}

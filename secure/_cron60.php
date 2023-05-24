@@ -116,8 +116,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
-		$i=explode(';', $d['Grohered_kWh']['s']);
-		if ($i[0]<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['Grohered_kWh']['s']<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
@@ -175,9 +174,8 @@ if ($d['auto']['s']=='On') {
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
 		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
-		$level=explode(';', $d['kookplaatpower_kWh']['s']);
-		if ($level[0]<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
+		if ($d['kookplaatpower_kWh']['s']<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 if ($d['Xlight']['s']!='Off'&&past('Xlight')>60) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);

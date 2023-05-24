@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 declare(strict_types=1);
-
+$user='MQTT';
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 
@@ -10,6 +10,7 @@ use PhpMqtt\Client\MqttClient;
 $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
 $client->connect(null, true);
 $client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
+	$user='MQTT';
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
@@ -54,20 +55,28 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
-					store($device, $status);
-//					lg('switch	'.$device.'	=> '.$status.'	'.print_r($message,true));
+//					lg(' (MQTT) Switch '.$device.' => '.$status);
+					store($device, $status, ' (MQTT) Switch ');
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
-					store($device, $status);
-//					lg('Temp	'.print_r($message,true));	
+//					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-						store($device, $status);
+						store($device, round($status,0),' (MQTT) kWh ');
 					}
+				} elseif ($message['dtype']=='Usage') {
+					$status=$message['svalue1'];
+//					lg(' (MQTT) Usage '.$device.' => '.$status);	
+					store($device, $status,' (MQTT) Usage ');
+				} elseif ($message['dtype']=='Color Switch') {
+					$status=$message['nvalue'];
+//					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
-					lg('else	'.print_r($message,true));	
+					lg(' (MQTT) else '.print_r($message,true));	
 				}
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif ($device=='buiten_hum') { // 1
@@ -133,11 +142,11 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
-				lg('HA switch	'.$device.'	=> '.$status);
+				lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status);
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-			} //else lg('no file found for '.$device);
-		}		
+			} else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
+		} else lg(print_r($topic, true).'	'.print_r($message,true));
 	} else lg(print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $client->loop(true);
