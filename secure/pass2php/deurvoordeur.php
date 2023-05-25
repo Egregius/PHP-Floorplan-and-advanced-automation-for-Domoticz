@@ -1,4 +1,5 @@
 <?php
+if (!is_array($d)) $d=fetchdata();
 if ($status=="Open"&&$d['auto']['s']=='On') {
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;

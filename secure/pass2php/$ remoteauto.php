@@ -1,4 +1,5 @@
 <?php
+if (!is_array($d)) $d=fetchdata();
 if ($status=='Off') {
 	if (past('$ remoteauto')<60) sw('poortrf', 'On');
 	sw('voordeur', 'On');
