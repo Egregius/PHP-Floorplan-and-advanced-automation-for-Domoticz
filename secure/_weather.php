@@ -129,10 +129,12 @@ if (isset($data['forecasts'])) {
 if (count($temps)>=4) $temp=round(array_sum($temps)/count($temps), 1);
 
 foreach ($temps as $i) {
-	if ($i>$maxtemp) $maxtemp=$i;
-	elseif ($i<$mintemp) $mintemp=$i;
+	if ($i>-30&&$i<50) {
+		if ($i>$maxtemp) $maxtemp=$i;
+		elseif ($i<$mintemp) $mintemp=$i;
+	}
 }
-$mintemp=floor($mintemp*10)/10;
+if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10;
 $maxtemp=ceil($maxtemp*10)/10;
 
 if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);

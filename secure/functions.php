@@ -34,6 +34,7 @@ function fbadkamer() {
 function fkeuken() {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
+	lg('fkeuken $GLOBALS[dag]='.$GLOBALS['dag']);
 	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
@@ -251,7 +252,7 @@ function store($name,$status,$msg='',$idx=null) {
 	else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
-	lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':'').' '.$sql);
+	lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 }
 function storemode($name,$mode,$msg='',$time=0) {
 	global $db, $user;

@@ -55,24 +55,30 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
-//					lg(' (MQTT) Switch '.$device.' => '.$status);
+					lg(' (MQTT) Switch '.$device.' => '.$status);
+					store($device, $status, ' (MQTT) Switch ');
+				} elseif ($message['dtype']=='Lighting 2') {
+					if ($message['nvalue']==0) $status='Off';
+					elseif ($message['nvalue']==1) $status='On';
+					lg(' (MQTT) Lighting 2 '.$device.' => '.$status);
 					store($device, $status, ' (MQTT) Switch ');
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
-//					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					lg(' (MQTT) Temp '.$device.' => '.$status);	
 					store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-						store($device, round($status,0),' (MQTT) kWh ');
+						lg(' (MQTT) kWh '.$device.' => '.$status);	
+						store($device, $status,' (MQTT) kWh ');
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
-//					lg(' (MQTT) Usage '.$device.' => '.$status);	
+					lg(' (MQTT) Usage '.$device.' => '.$status);	
 					store($device, $status,' (MQTT) Usage ');
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
-//					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					lg(' (MQTT) Temp '.$device.' => '.$status);	
 					store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
@@ -135,7 +141,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;
 				elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
-			} //else lg('no file found for '.$device);
+			} else lg('no file found for '.$device);
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {

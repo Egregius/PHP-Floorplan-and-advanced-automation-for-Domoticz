@@ -22,7 +22,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		if ($d['badkamer_set']['s']!=12) {$set=12;$m2.=__LINE__.' ';}
 	}
 	$loop=true;
-	$factor=(20-$d['buiten_temp']['s'])*100;
+	if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
 	for ($x=0;$x<=9;$x+=0.1) {
 		if ($loop==true) {
 			$t2=$t-($factor*$x);
@@ -50,7 +50,7 @@ for ($x=0;$x<=35;$x+=1) {
 		$t2=$t-(360*$x);
 		if (TIME>=$t2&&TIME<$t+900) {
 			$hum=25+$x;
-			lg ('TC_badkamer hum = '.$hum);
+//			lg ('TC_badkamer hum = '.$hum);
 			$loop=false;
 		}
 	} else break;
@@ -70,7 +70,7 @@ elseif ($difbadkamer<=-0.3) {$l=2;$m.=' + '.__LINE__.' difbadkamer<=-0.3';}
 elseif ($difbadkamer< 0) {$l=1;$m.=' + '.__LINE__.' difbadkamer<0';}
 else {
 	if ($difbadkamer>0.5&&$d['badkamer_set']['s']>19) {
-		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamer_set']['s']>15) store('badkamer_set', 15, basename(__FILE__).':'.__LINE__.' $difbadkamer='.$difbadkamer);
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	}
 }

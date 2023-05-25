@@ -91,5 +91,5 @@ if ($d['daikin']['m']==1) {
 		store($kamer.'Z', round(${'RSet'.$kamer}, 1), basename(__FILE__).':'.__LINE__);
 	}
 }*/
-$uitna=(21-$d['buiten_temp']['s'])*75; if ($uitna<295) $uitna=295;
+if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) {$uitna=(21-$d['buiten_temp']['s'])*75; if ($uitna<295) $uitna=295;} else $uitna=295;
 if ($d['brander']['s']=='On'&&past('brander')>$uitna) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
