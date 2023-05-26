@@ -12,26 +12,27 @@ $client->connect(null, true);
 $client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
 	$user='MQTT';
 	$topic=explode('/', $topic);
+	
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+			$d=fetchdata();
+			$dag=0;
+			if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+				$dag=1;
+				if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+					if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+					else $dag=3;
+				} else {
+					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+					if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+				}
+			}
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-				global $dbname,$dbuser,$dbpass;
-				$d=fetchdata();
-				$GLOBALS['dag']=0;
-				if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
-					$GLOBALS['dag']=1;
-					if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-						if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $GLOBALS['dag']=4;
-						else $GLOBALS['dag']=3;
-					} else {
-						$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-						$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-						if (TIME>=$zonop&&TIME<=$zononder) $GLOBALS['dag']=2;
-					}
-				}
 				if ($message['dtype']=='Light/Switch') {
 					if ($message['switchType']=='Dimmer') {
 						if ($message['nvalue']==0) $status=0;
@@ -145,6 +146,20 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+			$d=fetchdata();
+			$dag=0;
+			if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+				$dag=1;
+				if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+					if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+					else $dag=3;
+				} else {
+					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+					if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+				}
+			}
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);

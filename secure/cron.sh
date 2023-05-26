@@ -37,6 +37,7 @@ if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
 
+
 # Remove these lines as they only upload my files to gitbub.
 HOUR=$(date +"%H")
 if [ $(($HOUR%8)) -eq 0 ] ; then

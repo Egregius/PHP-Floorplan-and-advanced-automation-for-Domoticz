@@ -33,7 +33,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&past('deurbadka
 		} else break;
 	}
 	
-} elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<1) {
+} elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {
 		store('badkamer_set', 5, basename(__FILE__).':'.__LINE__);
 		$d['badkamer_set']['s']=5;

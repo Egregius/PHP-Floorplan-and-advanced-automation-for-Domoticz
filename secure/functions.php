@@ -1,15 +1,16 @@
 <?php
 require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+
 $db=dbconnect();
 function fliving() {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-		if ($d['zon']['s']==0&&$GLOBALS['dag']<3) {
+		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&TIME<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$GLOBALS['dag']);
+			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&TIME<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
 		if ($d['bose101']['s']=='Off'&&TIME>=strtotime('5:30')&&TIME<strtotime('17:30')) bosezone(101);
 		apcu_store('living', TIME);
@@ -23,9 +24,21 @@ function fgarage() {
 }
 function fbadkamer() {
 	global $d;
+	$dag=0;
+	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		}
+	}
 	if (!is_array($d)) $d=fetchdata();
 	if (past('$ 8badkamer-8')>10) {
-		if ($d['lichtbadkamer']['s']<16&&$GLOBALS['dag']<3) {
+		if ($d['lichtbadkamer']['s']<16&&$dag<3) {
 			if (TIME>strtotime('5:30')&&TIME<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
@@ -33,24 +46,60 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d;
+	$dag=0;
+	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		}
+	}
 	if (!is_array($d)) $d=fetchdata();
-	lg('fkeuken $GLOBALS[dag]='.$GLOBALS['dag']);
-	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
+	lg('fkeuken $dag='.$dag);
+	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($GLOBALS['dag']<3||$d['RkeukenL']['s']>70)) {
+	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
-	global $d,$dag;
+	global $d;
+	$dag=0;
+	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		}
+	}
 	if (!is_array($d)) $d=fetchdata();
-	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$GLOBALS['dag']<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
-	global $d,$dag;
+	global $d;
+	$dag=0;
+	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		}
+	}
 	if (!is_array($d)) $d=fetchdata();
 	if (TIME>=strtotime('7:30')&&($d['Ralex']['s']==0||TIME<=strtotime('19:45')||past('deuralex')<3600)) {
-		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$GLOBALS['dag']<3) {
+		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
