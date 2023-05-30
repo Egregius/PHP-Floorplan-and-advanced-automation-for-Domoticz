@@ -252,7 +252,6 @@ if (TIME>strtotime('0:10')) {
 		unset($data);
 	}
 }
-if ($d['Xlight']['s']!='Off'&&past('Xlight')>300) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['zon']['s']>0) {
 	if (past('uv')>1100) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);

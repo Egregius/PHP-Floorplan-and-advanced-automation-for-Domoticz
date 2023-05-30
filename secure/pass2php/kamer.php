@@ -1,6 +1,7 @@
 <?php
+$time=time();
 if ($status==0) {
-	if (TIME<strtotime('20:00')) {
+	if ($time<strtotime('20:00')) {
 		if ($d['bose103']['s']=='On') {
 			$status=json_decode(
 				json_encode(
@@ -23,6 +24,6 @@ if ($status==0) {
 		}
 	}
 }
-if ($d['kamer']['m']>0&&TIME<strtotime('8:00')) {
+if ($d['kamer']['m']>0&&$time<strtotime('8:00')) {
 	storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
 }

@@ -178,7 +178,8 @@ if ($d['auto']['s']=='On') {
 		if ($d['kookplaatpower_kWh']['s']<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($d['Xlight']['s']!='Off'&&past('Xlight')>60) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+//lg ('Xlight = '.$d['Xlight']['s']);
+if ($d['Xlight']['s']!=0&&past('Xlight')>60) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
 if (TIME<=strtotime('0:02')) {

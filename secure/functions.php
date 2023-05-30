@@ -160,7 +160,7 @@ function waarschuwing($msg) {
 function past($name) {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
-	if (!empty($d[$name]['t'])) return TIME-$d[$name]['t'];
+	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
 	else return 999999999;
 }
 function idx($name) {

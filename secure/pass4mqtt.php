@@ -11,22 +11,22 @@ $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, n
 $client->connect(null, true);
 $client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
 	$user='MQTT';
+	$time=time();
 	$topic=explode('/', $topic);
-	
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 			$dag=0;
-			if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+			if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 				$dag=1;
-				if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-					if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+				if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+					if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 					else $dag=3;
 				} else {
 					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-					if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+					if ($time>=$zonop&&$time<=$zononder) $dag=2;
 				}
 			}
 			$message=json_decode($message, true);
@@ -79,7 +79,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					store($device, $status,' (MQTT) Usage ');
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
-					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					lg(' (MQTT) Colorswitch '.$device.' => '.$status);	
 					store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
@@ -142,22 +142,22 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;
 				elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
-			} else lg('no file found for '.$device);
+			} //else lg('no file found for '.$device);
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 			$dag=0;
-			if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+			if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 				$dag=1;
-				if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-					if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+				if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+					if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 					else $dag=3;
 				} else {
 					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-					if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+					if ($time>=$zonop&&$time<=$zononder) $dag=2;
 				}
 			}
 			$device=$topic[2];
@@ -166,7 +166,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status);
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-			} else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
+			} //else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		} else lg(print_r($topic, true).'	'.print_r($message,true));
 	} else lg(print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);

@@ -1,15 +1,45 @@
 #!/bin/bash
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
 sleep 9.778
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
-sleep 9.998
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+sleep 9.993
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
-sleep 9.998
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+sleep 9.993
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
-sleep 9.998
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+sleep 9.993
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
-sleep 9.998
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+sleep 9.993
+
 wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+ps cax | grep pass4mqtt.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
 
 ps cax | grep domoticz
 if [ $? -ne 0 ] ; then
@@ -31,12 +61,6 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
 fi
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-
 
 # Remove these lines as they only upload my files to gitbub.
 HOUR=$(date +"%H")

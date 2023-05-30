@@ -3,7 +3,7 @@ if (!is_array($d)) $d=fetchdata();
 if ($status=="Open"&&$d['auto']['s']=='On') {
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$dag==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	elseif ($d['voordeur']['s']=='On'&&$d['zon']['s']>0) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	finkom();
 	if ($d['Weg']['s']==0) {
