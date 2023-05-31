@@ -1,10 +1,10 @@
 <?php
-exit;
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
 
 $d=fetchdata();
+echo __LINE__.'<br>';
 if (isset($d[$device])) {
 	if ($d[$device]['dt']=='luifel') {
 		if ($status=='Open') $status=100;
@@ -20,6 +20,7 @@ if (isset($d[$device])) {
 		if ($status=='Open') $status='Closed';
 		else $status='Open';
 	} elseif ($device=='winst') {
+		echo('winst='.$status+$d['winst']['s']);
 		store($device, $status+$d['winst']['s'], 'Pass2PHP');
 		exit;
 	} elseif ($device=='sirene') {

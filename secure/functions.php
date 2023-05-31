@@ -214,26 +214,36 @@ function resetsecurity() {
 		}
 	}
 }
-function sw($name,$action='Toggle',$msg='') {
+function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $user,$d,$domoticzurl,$db;
 	if (!is_array($d)) $d=fetchdata();
 	if (is_array($name)) {
+//		lg(basename(__FILE__).':'.__LINE__);
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
 			}
 		}
 	} else {
+		lg(basename(__FILE__).':'.__LINE__);
 		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>10) {
+//			lg(basename(__FILE__).':'.__LINE__);
 			lg($msg);
-			if ($d[$name]['s']!=$action) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+			if ($d[$name]['s']!=$action||$force==true) {
+//				lg(basename(__FILE__).':'.__LINE__);
+				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+			}
 		} elseif ($d[$name]['i']>0) {
+//			lg(basename(__FILE__).':'.__LINE__);
 			lg($msg);
 			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
 			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
 			//store($name, $action, $msg);
-		} else store($name, $action, $msg);
+		} else {
+//			lg(basename(__FILE__).':'.__LINE__);
+			store($name, $action, $msg);
+		}
 	}
 }
 function fvolume($cmd) {
