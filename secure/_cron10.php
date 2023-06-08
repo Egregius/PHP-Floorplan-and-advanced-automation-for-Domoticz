@@ -42,7 +42,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if ($d['GroheRed']['s']=='Off'&&$d['Weg']['s']==0&&TIME>=strtotime('10:00')&&TIME<=strtotime('19:00')) {
+/*	if ($d['GroheRed']['s']=='Off'&&$d['Weg']['s']==0&&TIME>=strtotime('10:00')&&TIME<=strtotime('19:00')) {
 		if ($d['zon']['s']-$d['el']['s']>2200&&past('GroheRed')>175) {
 			sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 			storemode('GroheRed', 'Zon', basename(__FILE__).':'.__LINE__);
@@ -52,7 +52,7 @@ if ($d['auto']['s']=='On') {
 			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 			storemode('GroheRed', '', basename(__FILE__).':'.__LINE__);
 		}
-	}
+	}*/
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 $i=50;
@@ -88,7 +88,7 @@ if ($d['tv']['s']=='On') {
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-foreach(array(102=>35,103=>18,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
+foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 	$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 	$status=json_decode(json_encode(simplexml_load_string($status)), true);
 	if (isset($status['@attributes']['source'])) {
@@ -96,7 +96,7 @@ foreach(array(102=>35,103=>18,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 			if ($ip==103) {
 				if ($d['bose101']['s']=='On') bosezone($ip, true);
-				elseif ($d['bose103']['m']==0&&TIME>strtotime('20:00')) {
+				elseif ($d['bose103']['m']==0&&$time>strtotime('20:00')) {
 					bosekey('PRESET_5', 0, $ip);
 					storemode('bose101', 0);
 				}
@@ -118,7 +118,7 @@ foreach(array(102=>35,103=>18,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 	}
 	unset($status);
 }
-foreach(array(101/*,105*/) as $ip) {
+foreach(array(101,105) as $ip) {
 	$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 	if ($ip==101&&$status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') bosekey('PRESET_5', 0, $ip);
 	$status=json_decode(json_encode(simplexml_load_string($status)), true);

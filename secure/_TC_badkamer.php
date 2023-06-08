@@ -60,7 +60,7 @@ $difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 if ($d['badkamer_temp']['s']<16) $hum-=10;
 
 if ($d['badkamer_temp']['m']>$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
-if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60) {
+if ($d['deurbadkamer']['s']=='Open'&&past('deurbadkamer')>60&&$d['heating']['s']>=0) {
 	if ($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>65) {$l=1;$m.=' + '.__LINE__.' kamer_hum>60';}
 	if ($d['deurwaskamer']['s']=='Open'&&$d['raamwaskamer']['s']=='Closed'&&$d['waskamer_temp']['m']>65) {$l=1;$m.=' + '.__LINE__.' waskamer_hum>60';}
 	if ($d['deuralex']['s']=='Open'&&$d['raamalex']['s']=='Closed'&&$d['alex_temp']['m']>65) {$l=1;$m.=' + '.__LINE__.' alex_hum>60';}
