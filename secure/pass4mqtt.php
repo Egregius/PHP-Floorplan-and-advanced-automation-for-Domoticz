@@ -87,7 +87,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				}
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif ($device=='buiten_hum') { // 1
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$temp=$message['svalue1'];
 				$hum=$status+3;
@@ -101,28 +100,24 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					storeicon('minmaxtemp', $temp);
 				}
 			} elseif ($device=='kamer_hum') { // 2
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$hum=$status+3;
 				if ($status>$d['kamer_temp']['m']+1) $status=$d['kamer_temp']['m']+1;
 				elseif ($status<$d['kamer_temp']['m']-1) $status=$d['kamer_temp']['m']-1;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 			} elseif ($device=='alex_hum') { // 3
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$hum=$status+5;
 				if ($status>$d['alex_temp']['m']+1) $status=$d['alex_temp']['m']+1;
 				elseif ($status<$d['alex_temp']['m']-1) $status=$d['alex_temp']['m']-1;
 				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
 			} elseif ($device=='waskamer_hum') { // 4
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$hum=$status+5;
 				if ($status>$d['waskamer_temp']['m']+1) $status=$d['waskamer_temp']['m']+1;
 				elseif ($status<$d['waskamer_temp']['m']-1) $status=$d['waskamer_temp']['m']-1;
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
 			} elseif ($device=='badkamer_hum') { // 5
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$hum=$status+5;
 				if ($status>$d['badkamer_temp']['m']+1) $status=$d['badkamer_temp']['m']+1;
@@ -130,7 +125,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status>100) $status=100;
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 			} elseif ($device=='living_hum') { // 6
-				$d=fetchdata();
 				$status=$message['svalue2'];
 				$hum=$status+5;
 				if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;

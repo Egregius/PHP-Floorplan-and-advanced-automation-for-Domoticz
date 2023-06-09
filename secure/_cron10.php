@@ -1,12 +1,12 @@
 <?php
+$d=fetchdata();
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
-	$i=40;
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garageled')>$i&&$d['garageled']['s']=='On') sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
-	elseif ($d['pirgarage']['s']=='On'&&$d['garageled']['s']=='Off'&&$d['garage']['s']=='Off'&&$d['zon']['s']==0) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-	$i=40;
-	if ($d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garage')>$i&&$d['garage']['s']=='On') sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
-	$i=120;
+	$i=39;
+	if ($d['garageled']['s']=='On'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garageled')>$i) sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
+	$i=39;
+	if ($d['garage']['s']=='On'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('poort')>$i&&past('deurgarage')>$i&&past('garage')>$i) sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
+	$i=119;
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
 	if ($d['pirinkom']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>$i&&past('deurinkom')>$i&&past('deurbadkamer')>15&&past('deurvoordeur')>$i) {
@@ -32,7 +32,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['lgtv']=='On'&&TIME>strtotime('19:00')) $i=5;
 	else $i=35;
-	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
+	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 		foreach (array(5,0) as $i) {
 			if ($d['wasbak']['s']>$i) {
 				sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
@@ -55,7 +55,7 @@ if ($d['auto']['s']=='On') {
 	}*/
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-$i=50;
+$i=59;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
@@ -87,6 +87,7 @@ if ($d['tv']['s']=='On') {
 	}
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 	$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
@@ -139,4 +140,4 @@ foreach(array(101,105) as $ip) {
 	unset($status);
 }
 
-if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
+//if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');

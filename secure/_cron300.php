@@ -1,4 +1,5 @@
 <?php
+$d=fetchdata();
 $user='cron300';
 if(isset($db)) $db=dbconnect();
 

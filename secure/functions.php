@@ -4,7 +4,8 @@ $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 
 $db=dbconnect();
 function fliving() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -30,11 +31,13 @@ function fliving() {
 
 }
 function fgarage() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -57,7 +60,8 @@ function fbadkamer() {
 	}
 }
 function fkeuken() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -79,7 +83,8 @@ function fkeuken() {
 	}
 }
 function finkom($force=false) {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -96,7 +101,8 @@ function finkom($force=false) {
 	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -118,8 +124,8 @@ function fhall() {
 	if ($time>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen() {
-	global $boseipbuiten;
-	$d=fetchdata();
+	global $d,$boseipbuiten;
+	if (!is_array($d)) $d=fetchdata();
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','nvidia','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
@@ -143,7 +149,8 @@ function huisslapen() {
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 }
 function huisthuis() {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
 	if ($d['bose103']['m']!=0) storemode('bose103', 0);
 	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
@@ -171,6 +178,7 @@ function waarschuwing($msg) {
 function past($name) {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
+//	lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
 	else return 999999999;
 }
@@ -181,8 +189,8 @@ function idx($name) {
 	else return 0;
 }
 function sl($name,$level,$msg='',$force=false) {
-	global $user,$domoticzurl;
-	$d=fetchdata();
+	global $d,$user,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -198,8 +206,8 @@ function sl($name,$level,$msg='',$force=false) {
 	}
 }
 function rgb($name,$hue,$level,$check=false) {
-	global $user,$domoticzurl;
-	$d=fetchdata();
+	global $d,$user,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
@@ -211,8 +219,8 @@ function rgb($name,$hue,$level,$check=false) {
 	} else store($name, $level);
 }
 function resetsecurity() {
-	global $domoticzurl;
-	$d=fetchdata();
+	global $d,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 		usleep(100000);
@@ -226,39 +234,34 @@ function resetsecurity() {
 	}
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
-	global $user,$domoticzurl,$db;
-	$d=fetchdata();
+	global $d,$user,$domoticzurl,$db;
+	if (!is_array($d)) $d=fetchdata();
 	if (is_array($name)) {
-//		lg(basename(__FILE__).':'.__LINE__);
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
 			}
 		}
 	} else {
-		lg(basename(__FILE__).':'.__LINE__);
 		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>10) {
-//			lg(basename(__FILE__).':'.__LINE__);
 			lg($msg);
 			if ($d[$name]['s']!=$action||$force==true) {
-//				lg(basename(__FILE__).':'.__LINE__);
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
 		} elseif ($d[$name]['i']>0) {
-//			lg(basename(__FILE__).':'.__LINE__);
 			lg($msg);
 			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
 			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
 			//store($name, $action, $msg);
 		} else {
-//			lg(basename(__FILE__).':'.__LINE__);
 			store($name, $action, $msg);
 		}
 	}
 }
 function fvolume($cmd) {
-	$d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d['sony']['s']=='On') {
 		if ($cmd<0) sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"'.$cmd.'","output":""}],"version":"1.1"}');
 		else sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+'.trim($cmd).'","output":""}],"version":"1.1"}');
@@ -332,8 +335,8 @@ function storemode($name,$mode,$msg='',$time=0) {
 	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 }
 function storeicon($name,$icon,$msg='',$time=false) {
-	global $db, $user;
-	$d=fetchdata();
+	global $d, $db, $user;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
 		if ($time==true) {
@@ -344,7 +347,7 @@ function storeicon($name,$icon,$msg='',$time=false) {
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
-	global $db;
+	global $db,$time;
 	if(!isset($db)) $db=dbconnect();
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
@@ -381,8 +384,8 @@ function sony($lib,$json) {
 	return $result;
 }
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
-	global $user,$domoticzurl;
-	$d=fetchdata();
+	global $d,$user,$domoticzurl;
+	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
@@ -720,6 +723,8 @@ function dbconnect() {
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
 function fetchdata() {
+	unset ($GLOBALS['d']);
+	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
 	global $db;
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");

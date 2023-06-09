@@ -1,4 +1,5 @@
 <?php
+if (!is_array($d)) $d=fetchdata();
 $user='weather';
 $prevwind=$d['wind']['s'];
 

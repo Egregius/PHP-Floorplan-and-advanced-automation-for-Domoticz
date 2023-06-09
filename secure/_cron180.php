@@ -1,4 +1,5 @@
 <?php
+$d=fetchdata();
 $user='cron180';
 if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 	foreach (array('living', 'kamer', 'alex') as $k) {

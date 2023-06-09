@@ -1,41 +1,61 @@
 #!/bin/bash
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+ps cax | grep cron.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
 sleep 9.778
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
+ps cax | grep cron.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/cron.php >/dev/null 2>&1 &
+fi
 sleep 9.993
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
+ps cax | grep cron.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/cron.php >/dev/null 2>&1 &
+fi
 sleep 9.993
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
+ps cax | grep cron.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/cron.php >/dev/null 2>&1 &
+fi
 sleep 9.993
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
+ps cax | grep cron.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/cron.php >/dev/null 2>&1 &
+fi
 sleep 9.993
 
-wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
+#wget -O /dev/null -o /dev/null "http://127.0.0.1/secure/cron.php" >/dev/null 2>&1 &
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &

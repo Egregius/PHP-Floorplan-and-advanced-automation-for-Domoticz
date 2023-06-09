@@ -1,4 +1,25 @@
 <?php
+$d=fetchdata();
+$s=(int)strftime("%S", TIME);
+$dow=date("w");
+if($dow==0||$dow==6) $t=strtotime('7:30');
+elseif($dow==2||$dow==5) $t=strtotime('6:45');
+else $t=strtotime('7:00');
+
+$dag=0;
+if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+	$dag=1;
+	if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
+		if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+		else $dag=3;
+	} else {
+		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+		if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+	}
+}
+
+
 $user='cron60  ';
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
@@ -123,8 +144,8 @@ if ($d['auto']['s']=='On') {
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($dag==4) {
 		if ($d['Rliving']['s']<50&&$d['Rbureel']['s']<50) {
-			if ($d['lamp kast']['s']!='Off'&&past('lamp kast')>60) sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['bureel']['s']!='Off'&&past('bureel')>60) sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}

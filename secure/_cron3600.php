@@ -1,6 +1,7 @@
 <?php
-$user='cron3600';
 if (!isset($db)) $db=dbconnect();
+$d=fetchdata();
+$user='cron3600';
 $date=strftime("%F", TIME);
 if (strftime("%k", TIME)==19) {
 	$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);

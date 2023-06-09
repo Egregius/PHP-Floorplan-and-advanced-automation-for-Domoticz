@@ -1,4 +1,5 @@
 <?php
+$d=fetchdata();
 $user='cron240';
 if ($d['auto']['s']=='On') {
 	if ($d['Weg']['s']==0){
