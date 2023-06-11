@@ -723,7 +723,7 @@ function dbconnect() {
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
 function fetchdata() {
-	unset ($GLOBALS['d']);
+	//unset ($GLOBALS['d']);
 	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
 	global $db;
 	if(!isset($db)) $db=dbconnect();
