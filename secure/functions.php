@@ -1,10 +1,10 @@
 <?php
 require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-
+$time=time();
 $db=dbconnect();
 function fliving() {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
@@ -19,13 +19,18 @@ function fliving() {
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
+	lg(basename(__FILE__).':'.__LINE__);
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
-		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) bosezone(101);
+		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
+			lg(basename(__FILE__).':'.__LINE__);
+			bosezone(101);
+		}
 		apcu_store('living', $time);
 	}
 
@@ -36,7 +41,7 @@ function fgarage() {
 	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
@@ -60,7 +65,7 @@ function fbadkamer() {
 	}
 }
 function fkeuken() {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
@@ -83,7 +88,7 @@ function fkeuken() {
 	}
 }
 function finkom($force=false) {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
@@ -101,7 +106,7 @@ function finkom($force=false) {
 	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
@@ -167,13 +172,12 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function waarschuwing($msg) {
-	telegram($msg, false, 2);
-	sl('Xring', 40, basename(__FILE__).':'.__LINE__);
+//	telegram($msg, false, 1);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	sleep(3);
-	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
-	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
-	die($msg);
+	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
+//	sleep(3);
+//	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
+//	die($msg);
 }
 function past($name) {
 	global $d;
@@ -386,7 +390,7 @@ function sony($lib,$json) {
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $d,$user,$domoticzurl;
 	if (!is_array($d)) $d=fetchdata();
-	if ($d[$name]['i']>0) {
+	if (isset($d[$name]['i'])&&$d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
 				return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
@@ -512,7 +516,8 @@ function bosepreset($pre,$ip=101) {
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip,$forced=false,$vol='') {
-	$d=fetchdata();
+	global $d,$time;
+	$time=time();
 	$preset='PRESET_5';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
@@ -665,6 +670,8 @@ function daikinstatus($device) {
 	}
 }
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=false) {
+	global $time;
+	$time=time();
 	$d=fetchdata();
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;

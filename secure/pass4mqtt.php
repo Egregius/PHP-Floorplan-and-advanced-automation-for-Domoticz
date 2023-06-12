@@ -57,7 +57,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						elseif ($message['nvalue']==1) $status='On';
 					}
 					lg(' (MQTT) Switch '.$device.' => '.$status);
-					store($device, $status, ' (MQTT) Switch ');
+					store($device, $status, ' (MQTT) Switch <> ');
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';
@@ -155,8 +155,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			} //else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
-		} else lg(print_r($topic, true).'	'.print_r($message,true));
-	} else lg(print_r($topic, true).'	'.print_r($message,true));
+		} //else lg(print_r($topic, true).'	'.print_r($message,true));
+	} //else lg(print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $client->loop(true);
 $client->disconnect();

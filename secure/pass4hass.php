@@ -2,15 +2,15 @@
 if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_SERVER['HTTP_CONTENT_TYPE']=='application/x-www-form-urlencoded') {
 	require '/var/www/html/secure/functions.php';
 	$d=fetchdata();
-	if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 		$dag=1;
-		if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-			if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 			else $dag=3;
 		} else {
 			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-			if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
 
@@ -28,8 +28,8 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 				$d['lamp kast']['s']='On';
 			} else sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-			if ($_SERVER['REQUEST_TIME']>apcu_fetch('ring_ding')+30) {
-				apcu_store('ring_ding', $_SERVER['REQUEST_TIME']);
+			if ($_SERVER['REQUEST_$time']>apcu_fetch('ring_ding')+30) {
+				apcu_store('ring_ding', $_SERVER['REQUEST_$time']);
 				telegram('DEURBEL', false, 1);
 				sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 				if ($d['deurvoordeur']['s']=='Closed') {
@@ -51,7 +51,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 	} elseif ($device=='kodi') {
 		if ($action=='paused') fkeuken();
 		elseif ($action=='play') {
-			if ($d['wasbak']['s']>0&&TIME>strtotime('20:00')) {
+			if ($d['wasbak']['s']>0&&$time>strtotime('20:00')) {
 				sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 				sleep(1);
 				sl('wasbak', 0, basename(__FILE__).':'.__LINE__);

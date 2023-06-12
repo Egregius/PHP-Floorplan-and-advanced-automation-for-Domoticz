@@ -1,26 +1,27 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+lg('Starting cron loop...');
 while (1){
 	$time=time();
 	if ($time%10==0) include '_cron10.php';
 	if ($time%20==0) {
-		$s=(int)strftime("%S", TIME);
+		$s=(int)strftime("%S", $time);
 		$dow=date("w");
 		if($dow==0||$dow==6) $t=strtotime('7:30');
 		elseif($dow==2||$dow==5) $t=strtotime('6:45');
 		else $t=strtotime('7:00');
 
 		$dag=0;
-		if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+		if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 			$dag=1;
-			if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-				if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+			if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+				if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 				else $dag=3;
 			} else {
 				$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 				$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-				if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+				if ($time>=$zonop&&$time<=$zononder) $dag=2;
 			}
 		}
 		if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';

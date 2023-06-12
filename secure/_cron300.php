@@ -7,7 +7,7 @@ if(isset($db)) $db=dbconnect();
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']['s']=='On') {
 	if (past('steenterras')>10700
-		&&TIME>strtotime("16:00")
+		&&$time>strtotime("16:00")
 		&&$d['houtterras']['s']=='Off'
 		&&$d['buiten_temp']['s']<27
 	) {
@@ -15,7 +15,7 @@ if(isset($db)) $db=dbconnect();
 	}
 }else{
 	if (
-			(past('steenterras')>10700&&TIME>strtotime("12:59")&&TIME<strtotime("15:59"))
+			(past('steenterras')>10700&&$time>strtotime("12:59")&&$time<strtotime("15:59"))
 			||
 			(past('steenterras')>10700&&$d['buiten_temp']['s']>27)
 	   ) {
@@ -54,7 +54,7 @@ if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirk
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
 }
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
-if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||TIME<=strtotime('6:00'))) {
+if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||$time<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
 	if (!empty($nowplaying)) {
 		if (isset($nowplaying['@attributes']['source'])) {
@@ -94,14 +94,14 @@ if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 		}
 	}
 	if ($data[0]=='ret=OK'&&isset($livingheat)&&isset($kamerheat)&&isset($kamerheat)&&isset($kamercool)&&isset($alexheat)&&isset($alexcool)) {
-		$date=strftime('%F', TIME);
+		$date=strftime('%F', $time);
 		if (!isset($db)) $db=dbconnect();
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
-		$date=strftime('%F', TIME-86400);
+		$date=strftime('%F', $time-86400);
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 	}
 }
-if (TIME>strtotime('0:10')) {
+if ($time>strtotime('0:10')) {
 	$chauth = curl_init('https://app1pub.smappee.net/dev/v1/oauth2/token?grant_type=password&client_id='.$smappeeclient_id.'&client_secret='.$smappeeclient_secret.'&username='.$smappeeusername.'&password='.$smappeepassword.'');
 	curl_setopt($chauth, CURLOPT_AUTOREFERER, true);
 	curl_setopt($chauth, CURLOPT_RETURNTRANSFER, 1);
@@ -120,7 +120,7 @@ if (TIME>strtotime('0:10')) {
 		$headers=array('Authorization: Bearer '.$access);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=5&from='.$timefrom.'000&to='.TIME.'000');
+		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=5&from='.$timefrom.'000&to='.$time.'000');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -150,7 +150,7 @@ if (TIME>strtotime('0:10')) {
 		$headers=array('Authorization: Bearer '.$access);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=4&from='.$timefrom.'000&to='.TIME.'000');
+		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=4&from='.$timefrom.'000&to='.$time.'000');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -180,7 +180,7 @@ if (TIME>strtotime('0:10')) {
 		$headers=array('Authorization: Bearer '.$access);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=3&from='.$timefrom.'000&to='.TIME.'000');
+		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=3&from='.$timefrom.'000&to='.$time.'000');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -208,16 +208,16 @@ if (TIME>strtotime('0:10')) {
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
-			if (strftime("%M", $_SERVER['REQUEST_TIME'])%15==0) {
+			if (strftime("%M", $time)%15==0) {
 				echo __LINE__.'<br>';
 				$prev=array();
-				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $_SERVER['REQUEST_TIME'])."%' ORDER BY stamp DESC LIMIT 0,1;");
+				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $time)."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
 				if(!isset($prev['import'])) {$prev['import']=0;$prev['export']=0;}
 				$kwhimport=($gridImport/1000)-$prev['import'];
 				$kwhexport=($gridExport/1000)-$prev['export'];
 				if ($kwhimport<0) $kwhimport=0;
-				$sql="INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $_SERVER['REQUEST_TIME'])."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
+				$sql="INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
 				echo __LINE__.' '.$sql.'<br>';
 				$db->query($sql);
 				if ($kwhimport>(4/4)) telegram ('Kwartierpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
@@ -231,13 +231,13 @@ if (TIME>strtotime('0:10')) {
 			}
 		}
 		curl_close($ch);
-		$timefrom=TIME-600;
+		$timefrom=$time-600;
 		$ch=curl_init('');
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		$headers=array('Authorization: Bearer '.$access);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=1&from='.$timefrom.'000&to='.TIME.'000');
+		curl_setopt($ch, CURLOPT_URL, 'https://app1pub.smappee.net/dev/v1/servicelocation/'.$smappeeserviceLocationId.'/consumption?aggregation=1&from='.$timefrom.'000&to='.$time.'000');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_VERBOSE, 0);

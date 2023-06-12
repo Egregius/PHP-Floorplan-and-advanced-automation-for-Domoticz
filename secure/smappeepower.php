@@ -10,11 +10,11 @@ if (isset($smappee['report'])&&!empty($smappee['report'])) {
 		$newzon=round($matches[1][1], 0);
 		if ($newzon<0) $newzon=0;
 		if ($newzon==0 ) $db->query("UPDATE devices SET s='$newzon' WHERE n='zon';") or trigger_error($db->error);
-		else $db->query("UPDATE devices SET s='$newzon',t='".TIME."' WHERE n='zon';") or trigger_error($db->error);
+		else $db->query("UPDATE devices SET s='$newzon',t='".$time."' WHERE n='zon';") or trigger_error($db->error);
 
 		if (!empty($matches[1][2])) {
 			$consumption=round($matches[1][2], 0);
-			$db->query("UPDATE devices SET s='$consumption',t='".TIME."' WHERE n='el';") or trigger_error($db->error);
+			$db->query("UPDATE devices SET s='$consumption',t='".$time."' WHERE n='el';") or trigger_error($db->error);
 			if ($consumption-$newzon>8500) alert('Power', 'Power usage: '.$consumption-$newzon.' W!', 600, false);
 		}
 		$db=null;

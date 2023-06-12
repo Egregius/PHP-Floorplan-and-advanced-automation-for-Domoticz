@@ -30,7 +30,7 @@ if ($d['auto']['s']=='On') {
 	} else {
 		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
-	if ($d['lgtv']=='On'&&TIME>strtotime('19:00')) $i=5;
+	if ($d['lgtv']=='On'&&$time>strtotime('19:00')) $i=5;
 	else $i=35;
 	if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 		foreach (array(5,0) as $i) {
@@ -42,7 +42,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-/*	if ($d['GroheRed']['s']=='Off'&&$d['Weg']['s']==0&&TIME>=strtotime('10:00')&&TIME<=strtotime('19:00')) {
+/*	if ($d['GroheRed']['s']=='Off'&&$d['Weg']['s']==0&&$time>=strtotime('10:00')&&$time<=strtotime('19:00')) {
 		if ($d['zon']['s']-$d['el']['s']>2200&&past('GroheRed')>175) {
 			sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 			storemode('GroheRed', 'Zon', basename(__FILE__).':'.__LINE__);
@@ -68,7 +68,7 @@ if ($d['tv']['s']=='On') {
 		}
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&($time<$zonop||$time>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	} else {
 		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
@@ -115,7 +115,7 @@ foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 	} else {
 		if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
 		if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
-		//if ($ip==103&&$d['bose101']['m']==0&&TIME<strtotime('8:30')) storemode('bose101', 1);
+		//if ($ip==103&&$d['bose101']['m']==0&&$time<strtotime('8:30')) storemode('bose101', 1);
 	}
 	unset($status);
 }

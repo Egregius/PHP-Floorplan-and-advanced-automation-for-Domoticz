@@ -71,8 +71,6 @@ if ($domoticz) {
 			}
 			if (isset($dom['LastUpdate'])) {
 				$time=strtotime($dom['LastUpdate']);
-			} else {
-				$time=TIME;
 			}
 			echo $idx.' '.$name.' = ';
 			$query="INSERT INTO devices (n,i,s,dt) VALUES ('$name','$idx','$status','$type') ON DUPLICATE KEY UPDATE i='$idx',s='$status',dt='$type';";

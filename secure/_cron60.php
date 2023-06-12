@@ -1,21 +1,21 @@
 <?php
 $d=fetchdata();
-$s=(int)strftime("%S", TIME);
+$s=(int)strftime("%S", $time);
 $dow=date("w");
 if($dow==0||$dow==6) $t=strtotime('7:30');
 elseif($dow==2||$dow==5) $t=strtotime('6:45');
 else $t=strtotime('7:00');
 
 $dag=0;
-if (TIME>=$d['civil_twilight']['s']&&TIME<=$d['civil_twilight']['m']) {
+if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 	$dag=1;
-	if (TIME>=$d['Sun']['s']&&TIME<=$d['Sun']['m']) {
-		if (TIME>=$d['Sun']['s']+900&&TIME<=$d['Sun']['m']-900) $dag=4;
+	if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+		if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 		else $dag=3;
 	} else {
 		$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 		$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-		if (TIME>=$zonop&&TIME<=$zononder) $dag=2;
+		if ($time>=$zonop&&$time<=$zononder) $dag=2;
 	}
 }
 
@@ -131,7 +131,7 @@ if ($d['auto']['s']=='On') {
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	if (TIME>=strtotime('10:00')&&TIME<strtotime('10:05')) {
+	if ($time>=strtotime('10:00')&&$time<strtotime('10:05')) {
 		foreach (array('RkamerL','RkamerR','Rwaskamer','Ralex') as $i) {
 			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 		}
@@ -140,8 +140,8 @@ if ($d['auto']['s']=='On') {
 		if ($d['Grohered_kWh']['s']<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if (($d['Weg']['s']>0||TIME<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&(TIME<strtotime('8:00')||TIME>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if (($d['Weg']['s']>0||$time<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($dag==4) {
 		if ($d['Rliving']['s']<50&&$d['Rbureel']['s']<50) {
 			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
@@ -203,7 +203,7 @@ if ($d['auto']['s']=='On') {
 if ($d['Xlight']['s']!=0&&past('Xlight')>60) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
-if (TIME<=strtotime('0:02')) {
+if ($time<=strtotime('0:02')) {
 	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }

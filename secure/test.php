@@ -25,9 +25,7 @@ $response=file_get_contents(
 	)
 );
 */
-for ($x=0;$x<=10;$x=$x+0.1) {
-	echo $x.' '.floor($x*10)/10 .'<br>';
-}
+fliving();
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');

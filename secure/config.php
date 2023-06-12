@@ -2,9 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", "on");
 date_default_timezone_set('Europe/Brussels');
-if (!defined('TIME')) {
-    define('TIME', $_SERVER['REQUEST_TIME']);
-}
+
 $dbname='domotica';
 $dbuser='domotica';
 $dbpass='fount-bonn-Subside-7protegee-7Howl-jerk-nerd8-8courier-aftermost-eldest7-Devon-9Sect-catnap-Evans-8hypnotic';

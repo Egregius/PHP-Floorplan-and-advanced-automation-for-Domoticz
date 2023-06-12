@@ -697,7 +697,7 @@ EOB;
    }
   }
 date_default_timezone_set('Europe/Brussels');
-$time=$_SERVER['REQUEST_TIME'];
+$time=$_SERVER['REQUEST_$time'];
   echo
 		'<div class="info" style="width:1300px"><table cellspacing=0><tbody>',
 		'<tr>',

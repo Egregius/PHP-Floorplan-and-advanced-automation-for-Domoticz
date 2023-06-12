@@ -29,7 +29,7 @@ if (isset($ow['main']['temp'])) {
 $owf=json_decode(curl('https://api.openweathermap.org/data/2.5/forecast?lat='.$lat.'&lon='.$lon.'&units=metric&appid='.$owappid),true);
 if (isset($owf['list'])) {
 	foreach ($owf['list'] as $i) {
-		if ($i['dt']<TIME+(12*3600)) {
+		if ($i['dt']<$time+(12*3600)) {
 			if ($i['main']['temp']<$mintemp) $mintemp=$i['main']['temp'];
 			elseif ($i['main']['temp']>$maxtemp) $maxtemp=$i['main']['temp'];
 			if ($i['main']['feels_like']<$mintemp) $mintemp=$i['main']['feels_like'];
@@ -79,7 +79,7 @@ if (isset($yr['temperature']['value'])) {
 $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast'), true);
 if (isset($yr['shortIntervals'])) {
 	foreach ($yr['shortIntervals'] as $i) {
-		if (strtotime($i['start'])<TIME+(12*3600)) {
+		if (strtotime($i['start'])<$time+(12*3600)) {
 			if ($i['temperature']['value']<$mintemp) $mintemp=$i['temperature']['value'];
 			elseif ($i['temperature']['value']>$maxtemp) $maxtemp=$i['temperature']['value'];
 			if ($i['feelsLike']['value']<$mintemp) $mintemp=$i['feelsLike']['value'];
@@ -88,7 +88,7 @@ if (isset($yr['shortIntervals'])) {
 	}
 }
 
-if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
+if ($time>=strtotime('8:00')&&$time<strtotime('20:00')) {
 	//lg(__LINE__.' https://api.tomorrow.io/v4/weather/realtime?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio);
 	$to=json_decode(curl('https://api.tomorrow.io/v4/weather/realtime?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio), true);
 	if (isset($to['data']['values']['temperature'])) {
@@ -101,7 +101,7 @@ if (TIME>=strtotime('8:00')&&TIME<strtotime('20:00')) {
 	$to=json_decode(curl('https://api.tomorrow.io/v4/weather/forecast?location='.$lat.','.$lon.'&fields=temperature&units=metric&apikey='.$tomorrowio2), true);
 	if (isset($to['timelines']['hourly'])) {
 		foreach ($to['timelines']['hourly'] as $i) {
-			if (strtotime($i['time'])<TIME+(12*3600)) {
+			if (strtotime($i['time'])<$time+(12*3600)) {
 				if ($i['values']['temperature']<$mintemp) $mintemp=$i['values']['temperature'];
 				elseif ($i['values']['temperature']>$maxtemp) $maxtemp=$i['values']['temperature'];
 				if ($i['values']['temperatureApparent']<$mintemp) $mintemp=$i['values']['temperatureApparent'];
@@ -182,7 +182,7 @@ if ($d['buiten_temp']['s']>$avg+0.5) {
 }
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&TIME>=strtotime("10:00")&&$rain<5) { // Aircocooling
+	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&$time>=strtotime("10:00")&&$rain<5) { // Aircocooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=24) $luifel=45;
 		elseif ($wind>=20) $luifel=45;
@@ -192,7 +192,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>21.5 &&TIME>=strtotime("11:00")&&$rain<5) { // Passive Cooling
+	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>21.5 &&$time>=strtotime("11:00")&&$rain<5) { // Passive Cooling
 		if ($wind>=30)  $luifel=0;
 		elseif ($wind>=10) $luifel=35;
 		else $luifel=45;
@@ -201,7 +201,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>23&&TIME>=strtotime("11:00")&&$rain<5) { // Neutral
+	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>23&&$time>=strtotime("11:00")&&$rain<5) { // Neutral
 		if ($wind>=30) 	$luifel=0;
 		elseif ($wind>=10) $luifel=30;
 		else $luifel=40;
@@ -217,7 +217,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	if (isset($rain)&&($rain>=15||$d['Weg']['s']==1||TIME>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed'&&$d['luifel']['s']>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+	if (isset($rain)&&($rain>=15||$d['Weg']['s']==1||$time>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed'&&$d['luifel']['s']>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);

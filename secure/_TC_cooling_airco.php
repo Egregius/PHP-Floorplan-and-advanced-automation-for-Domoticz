@@ -19,7 +19,7 @@ if ($d['daikin']['m']==1) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']>=80)
 			&&
-				(past('raamkamer')>300||TIME>strtotime('19:00'))
+				(past('raamkamer')>300||$time>strtotime('19:00'))
 			&&
 				(
 					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<300))
@@ -33,20 +33,20 @@ if ($d['daikin']['m']==1) {
 				)
 		) {
 			$base=22;
-			if (TIME<strtotime('6:30')) $Setkamer=$base;
-			elseif (TIME>strtotime('22:00')) $Setkamer=$base;
-			elseif (TIME>strtotime('21:00')) $Setkamer=$base+0.5;
-			elseif (TIME>strtotime('20:00')) $Setkamer=$base+1;
-			elseif (TIME>strtotime('19:00')) $Setkamer=$base+1.5;
-			elseif (TIME>strtotime('18:00')) $Setkamer=$base+2;
-			elseif (TIME>strtotime('17:00')) $Setkamer=$base+2.5;
-			elseif (TIME>strtotime('16:00')) $Setkamer=$base+3;
-			elseif (TIME>strtotime('15:00')) $Setkamer=$base+3.5;
-			elseif (TIME>strtotime('14:00')) $Setkamer=$base+4;
-			elseif (TIME>strtotime('13:00')) $Setkamer=$base+4.5;
-			elseif (TIME>strtotime('12:00')) $Setkamer=$base+5;
-			elseif (TIME>strtotime('11:00')) $Setkamer=$base+5.5;
-			elseif (TIME>strtotime('10:00')) $Setkamer=$base+6;
+			if ($time<strtotime('6:30')) $Setkamer=$base;
+			elseif ($time>strtotime('22:00')) $Setkamer=$base;
+			elseif ($time>strtotime('21:00')) $Setkamer=$base+0.5;
+			elseif ($time>strtotime('20:00')) $Setkamer=$base+1;
+			elseif ($time>strtotime('19:00')) $Setkamer=$base+1.5;
+			elseif ($time>strtotime('18:00')) $Setkamer=$base+2;
+			elseif ($time>strtotime('17:00')) $Setkamer=$base+2.5;
+			elseif ($time>strtotime('16:00')) $Setkamer=$base+3;
+			elseif ($time>strtotime('15:00')) $Setkamer=$base+3.5;
+			elseif ($time>strtotime('14:00')) $Setkamer=$base+4;
+			elseif ($time>strtotime('13:00')) $Setkamer=$base+4.5;
+			elseif ($time>strtotime('12:00')) $Setkamer=$base+5;
+			elseif ($time>strtotime('11:00')) $Setkamer=$base+5.5;
+			elseif ($time>strtotime('10:00')) $Setkamer=$base+6;
 		}
 		if ($d['Weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {
@@ -66,7 +66,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['kamer_set']['s']==4) $rate=6;
 			elseif($d['kamer_set']['s']==5) $rate=7;
 			$set=$d['kamer_set']['s']-1;
-			if (TIME<strtotime('8:30')||$d['Weg']['s']==1&&$set>10)$rate='B';
+			if ($time<strtotime('8:30')||$d['Weg']['s']==1&&$set>10)$rate='B';
 			$set=ceil($set * 2) / 2;
 			if ($set>30) $set=30;
 			elseif ($set<18) $set=18;
@@ -118,7 +118,7 @@ if ($d['daikin']['m']==1) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['Ralex']['s']>=80)
 			&&
-				(past('raamalex')>300|| TIME>strtotime('19:00'))
+				(past('raamalex')>300|| $time>strtotime('19:00'))
 			&&
 				(
 					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<300))
@@ -132,20 +132,20 @@ if ($d['daikin']['m']==1) {
 				)
 		) {
 			$base=22;
-			if (TIME<strtotime('7:00')) $Setalex=$base;
-			elseif (TIME>strtotime('19:30')) $Setalex=$base;
-			elseif (TIME>strtotime('18:30')) $Setalex=$base+0.5;
-			elseif (TIME>strtotime('17:30')) $Setalex=$base+1;
-			elseif (TIME>strtotime('16:30')) $Setalex=$base+1.5;
-			elseif (TIME>strtotime('15:30')) $Setalex=$base+2;
-			elseif (TIME>strtotime('14:30')) $Setalex=$base+2.5;
-			elseif (TIME>strtotime('13:30')) $Setalex=$base+3;
-			elseif (TIME>strtotime('12:30')) $Setalex=$base+3.5;
-			elseif (TIME>strtotime('11:30')) $Setalex=$base+4;
-			elseif (TIME>strtotime('10:30')) $Setalex=$base+4.5;
-			elseif (TIME>strtotime('9:30')) $Setalex=$base+5;
-			elseif (TIME>strtotime('8:30')) $Setalex=$base+5.5;
-			elseif (TIME>strtotime('7:30')) $Setalex=$base+6;
+			if ($time<strtotime('7:00')) $Setalex=$base;
+			elseif ($time>strtotime('19:30')) $Setalex=$base;
+			elseif ($time>strtotime('18:30')) $Setalex=$base+0.5;
+			elseif ($time>strtotime('17:30')) $Setalex=$base+1;
+			elseif ($time>strtotime('16:30')) $Setalex=$base+1.5;
+			elseif ($time>strtotime('15:30')) $Setalex=$base+2;
+			elseif ($time>strtotime('14:30')) $Setalex=$base+2.5;
+			elseif ($time>strtotime('13:30')) $Setalex=$base+3;
+			elseif ($time>strtotime('12:30')) $Setalex=$base+3.5;
+			elseif ($time>strtotime('11:30')) $Setalex=$base+4;
+			elseif ($time>strtotime('10:30')) $Setalex=$base+4.5;
+			elseif ($time>strtotime('9:30')) $Setalex=$base+5;
+			elseif ($time>strtotime('8:30')) $Setalex=$base+5.5;
+			elseif ($time>strtotime('7:30')) $Setalex=$base+6;
 		}
 		if ($d['Weg']['s']>=3) $Setalex=28;
 		if ($d['alex_set']['s']!=$Setalex) {
@@ -165,7 +165,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['alex_set']['s']==4) $rate=6;
 			elseif($d['alex_set']['s']==5) $rate=7;
 			$set=$d['alex_set']['s']-1;
-			if (TIME<strtotime('8:30')||TIME>strtotime('19:30')&&$set>10)$rate='B';
+			if ($time<strtotime('8:30')||$time>strtotime('19:30')&&$set>10)$rate='B';
 			$set=ceil($set * 2) / 2;
 			if ($set>30) $set=30;
 			elseif ($set<18) $set=18;
@@ -295,29 +295,29 @@ $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 
 if ($d['auto']['s']=='On') {
-	if (TIME>=$t&&TIME<strtotime('10:00')) {
+	if ($time>=$t&&$time<strtotime('10:00')) {
 		if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['RkamerR']['s']>0) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
 		if ($dag>0) {
 			if ($d['Ralex']['s']==0&&$d['Rwaskamer']['s']>0) sl('Rwaskamer', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['Ralex']['s']>0&&/*TIME>=strtotime('7:30')&&*/($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Ralex']['s']>0&&/*$time>=strtotime('7:30')&&*/($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($dag>0&&$d['lgtv']['s']=='Off') {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']>0) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
-			if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||TIME>=strtotime('8:30')||past('deuralex')<3600)) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['Rliving']['s']>0&&$d['lgtv']['s']=='Off'&&($d['Ralex']['s']<=1||$time>=strtotime('8:30')||past('deuralex')<3600)) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
-	elseif (TIME>=strtotime('11:00')&&TIME<strtotime('15:00')) {
+	elseif ($time>=strtotime('11:00')&&$time<strtotime('15:00')) {
 		if($d['zon']['s']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
-	elseif (TIME>=strtotime('15:00')&&TIME<strtotime('22:00')) {
+	elseif ($time>=strtotime('15:00')&&$time<strtotime('22:00')) {
 		if($d['zon']['s']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
@@ -325,7 +325,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	elseif (TIME>=strtotime('22:00')||TIME<strtotime('3:00')) {
+	elseif ($time>=strtotime('22:00')||$time<strtotime('3:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);

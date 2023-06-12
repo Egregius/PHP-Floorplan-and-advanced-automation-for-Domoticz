@@ -2,8 +2,8 @@
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $user='cron3600';
-$date=strftime("%F", TIME);
-if (strftime("%k", TIME)==19) {
+$date=strftime("%F", $time);
+if (strftime("%k", $time)==19) {
 	$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
 	$msg='';
 	foreach ($xml['Node'] as $node) {
@@ -27,10 +27,10 @@ if (strftime("%k", TIME)==19) {
 	unset($xml);
 	if (strlen($msg)>5) telegram($msg);
 }
-if (strftime("%k", TIME)==0&&$d['winst']['s']!=0) store ('winst', 0);
+if (strftime("%k", $time)==0&&$d['winst']['s']!=0) store ('winst', 0);
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
-	$time=TIME;
+	$time=$time;
 	$name='civil_twilight';
 	$status=strtotime($data['CivTwilightStart']);
 	$mode=strtotime($data['CivTwilightEnd']);
@@ -41,13 +41,13 @@ if (isset($data['CivTwilightStart'])) {
 	$icon=strtotime($data['SunAtSouth']);
 	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
 }
-if (TIME<strtotime('1:05')) {
+if ($time<strtotime('1:05')) {
 	for ($x=3;$x>=0;$x--) {
-		$date=date("Y-m-d", (TIME-($x*86400)));
+		$date=date("Y-m-d", ($time-($x*86400)));
 		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
 		if(!$result=$db->query($query)){lg($db->error);die('There was an error running the query ['.$query.'-'.$db->error.']');}
 	}
 }
 /* Clean old database records */
-$remove=strftime("%F %T", TIME-(86400*101));
+$remove=strftime("%F %T", $time-(86400*101));
 $stmt=$db->query("delete from temp where stamp < '$remove'");
