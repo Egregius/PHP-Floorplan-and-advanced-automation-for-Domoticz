@@ -25,7 +25,10 @@ $response=file_get_contents(
 	)
 );
 */
-fliving();
+echo __LINE__.$dag;
+dag();
+echo __LINE__.$dag;
+
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');

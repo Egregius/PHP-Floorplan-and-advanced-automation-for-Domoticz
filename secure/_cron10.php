@@ -1,5 +1,6 @@
 <?php
 $d=fetchdata();
+dag();
 $user='cron10  ';
 if ($d['auto']['s']=='On') {
 	$i=39;

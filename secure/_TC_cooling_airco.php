@@ -32,7 +32,7 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=22;
+			$base=21.5;
 			if ($time<strtotime('6:30')) $Setkamer=$base;
 			elseif ($time>strtotime('22:00')) $Setkamer=$base;
 			elseif ($time>strtotime('21:00')) $Setkamer=$base+0.5;
@@ -47,6 +47,9 @@ if ($d['daikin']['m']==1) {
 			elseif ($time>strtotime('12:00')) $Setkamer=$base+5;
 			elseif ($time>strtotime('11:00')) $Setkamer=$base+5.5;
 			elseif ($time>strtotime('10:00')) $Setkamer=$base+6;
+			elseif ($time>strtotime('9:00')) $Setkamer=$base+6.5;
+			elseif ($time>strtotime('8:00')) $Setkamer=$base+7;
+			elseif ($time>strtotime('7:00')) $Setkamer=$base+7.5;
 		}
 		if ($d['Weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {

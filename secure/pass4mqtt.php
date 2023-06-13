@@ -4,7 +4,7 @@ declare(strict_types=1);
 $user='MQTT';
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-
+lg('Starting MQTT loop...');
 use PhpMqtt\Client\MqttClient;
 
 $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
@@ -17,18 +17,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if ($topic[1]=='out') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			$dag=0;
-			if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
-				$dag=1;
-				if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-					if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
-					else $dag=3;
-				} else {
-					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-					if ($time>=$zonop&&$time<=$zononder) $dag=2;
-				}
-			}
+			dag();
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];

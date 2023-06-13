@@ -3,6 +3,7 @@ $user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
+$time=time();
 if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 	if ($d['kamer_set']['m']==0) {
 		if (
