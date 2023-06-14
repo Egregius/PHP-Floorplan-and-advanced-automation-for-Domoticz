@@ -2,18 +2,8 @@
 if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_SERVER['HTTP_CONTENT_TYPE']=='application/x-www-form-urlencoded') {
 	require '/var/www/html/secure/functions.php';
 	$d=fetchdata();
-	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
-		$dag=1;
-		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
-			else $dag=3;
-		} else {
-			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-			if ($time>=$zonop&&$time<=$zononder) $dag=2;
-		}
-	}
-
+	dag();
+	$time=time();
 	$device=$_POST['d'];
 	$action=$_POST['a'];
 	if ($device=='eufy') {
@@ -29,7 +19,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 			} else sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 			if ($_SERVER['REQUEST_$time']>apcu_fetch('ring_ding')+30) {
-				apcu_store('ring_ding', $_SERVER['REQUEST_$time']);
+				apcu_store('ring_ding', $time);
 				telegram('DEURBEL', false, 1);
 				sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 				if ($d['deurvoordeur']['s']=='Closed') {
