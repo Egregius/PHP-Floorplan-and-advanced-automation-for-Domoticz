@@ -1,9 +1,12 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-lg('Starting cron loop...');
-if (isset($argv[0])) include ('_cron'.$argv[1].'.php');
-else {
+
+if (isset($argv[0])) {
+	lg('Executing _cron'.$argv[1].'.php');
+	include ('_cron'.$argv[1].'.php');
+} else {
+	lg('Starting cron loop...');
 	while (1){
 		$time=time();
 		if ($time%10==0) include '_cron10.php';
