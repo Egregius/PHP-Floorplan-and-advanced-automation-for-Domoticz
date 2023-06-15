@@ -30,8 +30,8 @@ function fgarage() {
 }
 function fbadkamer() {
 	global $d,$dag,$time;
-	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
+	$dag=dag();
 	if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$dag<3) {
 			if ($time>strtotime('5:30')&&$time<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
