@@ -3,10 +3,10 @@ require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $time=time();
 $db=dbconnect();
-dag();
+$dag=dag();
 function fliving() {
 	global $d,$dag,$time;
-	dag();
+	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
 	lg(basename(__FILE__).':'.__LINE__);
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
@@ -30,7 +30,7 @@ function fgarage() {
 }
 function fbadkamer() {
 	global $d,$dag,$time;
-	dag();
+	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
 	if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$dag<3) {
@@ -41,7 +41,7 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d,$dag,$time;
-	dag();
+	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
 	lg('fkeuken $dag='.$dag);
 	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
@@ -52,13 +52,13 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$dag,$time;
-	dag();
+	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
 	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$dag,$time;
-	dag();
+	$dag=dag();
 	if (!is_array($d)) $d=fetchdata();
 	if ($time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<3600)) {
 		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
