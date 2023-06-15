@@ -687,8 +687,8 @@ function dag() {
 	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
-	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	$time=time();
+	lg(basename(__FILE__).':'.__LINE__.'='.$dag.' time='.$time.'	'.$d['civil_twilight']['s'].'	'.$d['civil_twilight']['m']);
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
 		lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 		$dag=1;
