@@ -1,7 +1,8 @@
 <?php
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
-dag();
+$dag=dag();
+$time=time();
 $user='cron3600';
 $date=strftime("%F", $time);
 if (strftime("%k", $time)==19) {
