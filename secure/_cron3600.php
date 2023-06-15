@@ -42,7 +42,7 @@ if (isset($data['CivTwilightStart'])) {
 	$mode=strtotime($data['Sunset']);
 	$icon=strtotime($data['SunAtSouth']);
 	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
-}
+} else lg('Error fetching CivTwilightStart from domoticz');
 if ($time<strtotime('1:05')) {
 	for ($x=3;$x>=0;$x--) {
 		$date=date("Y-m-d", ($time-($x*86400)));

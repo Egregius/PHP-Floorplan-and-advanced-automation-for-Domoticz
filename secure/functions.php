@@ -91,11 +91,13 @@ function huisslapen() {
 	}
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
+	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis() {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
+	if ($d['bose101']['m']!=1) storemode('bose101', 1);
 	if ($d['bose103']['m']!=0) storemode('bose103', 0);
 	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
@@ -684,25 +686,19 @@ function roundDownToAny($n,$x=5) {
 }
 function dag() {
 	global $d,$dag,$time;
-	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
-	lg(basename(__FILE__).':'.__LINE__.'='.$dag.' time='.$time.'	'.$d['civil_twilight']['s'].'	'.$d['civil_twilight']['m']);
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
-		lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 		$dag=1;
 		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-			lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 			else $dag=3;
 		} else {
-			lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
-	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	return $dag;
 }
