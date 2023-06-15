@@ -684,19 +684,25 @@ function roundDownToAny($n,$x=5) {
 }
 function dag() {
 	global $d,$dag,$time;
+	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
+	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
+		lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 		$dag=1;
 		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+			lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
 			else $dag=3;
 		} else {
+			lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
+	lg(basename(__FILE__).':'.__LINE__.'='.$dag);
 	return $dag;
 }
