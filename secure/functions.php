@@ -4,6 +4,11 @@ $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $time=time();
 $db=dbconnect();
 $dag=dag();
+
+$memcache = new Memcache;
+$memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
+	
+	
 function fliving() {
 	global $d,$dag,$time;
 	$dag=dag();
@@ -701,16 +706,13 @@ function dag() {
 }
 function mset($key, $data, $ttl=0) {
 	lg('mset '.$key.' '.$data);
-	global $m;
-	$m = new Memcache;
-	$m->connect('192.168.2.21', 11211) or die ("Could not connect");
-	$m->set($key, $data);
+	global $memcache;
+	
+	$memcache->set($key, $data);
 }
 function mget($key) {
-	global $m;
-	$m = new Memcache;
-	$m->connect('192.168.2.21', 11211) or die ("Could not connect");
-	$data=$m->get($key);
+	global $memcache;
+	$data=$memcache->get($key);
 	lg('mget '.$key.' '.$data);
 	return $data;
 }
