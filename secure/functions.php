@@ -7,17 +7,14 @@ $dag=dag();
 function fliving() {
 	global $d,$dag,$time;
 	$dag=dag();
-	if (!is_array($d)) $d=fetchdata();
-	lg(basename(__FILE__).':'.__LINE__);
+	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['zon']['s']==0&&$dag<3) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
 		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
-			lg(basename(__FILE__).':'.__LINE__);
 			bosezone(101);
 		}
 		apcu_store('living', $time);
@@ -25,7 +22,7 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if (!is_array($d)) $d=fetchdata();
+	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
@@ -33,7 +30,7 @@ function fbadkamer() {
 	if (!is_array($d)) $d=fetchdata();
 	$dag=dag();
 	if (past('$ 8badkamer-8')>10) {
-		if ($d['lichtbadkamer']['s']<16&&$dag<3) {
+		if ($d['lichtbadkamer']['s']<16&&$dag<3&&$d['zon']['s']<50) {
 			if ($time>strtotime('5:30')&&$time<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
@@ -42,25 +39,25 @@ function fbadkamer() {
 function fkeuken() {
 	global $d,$dag,$time;
 	$dag=dag();
-	if (!is_array($d)) $d=fetchdata();
+	if (!isset($d['zon']['s'])) $d=fetchdata();
 	lg('fkeuken $dag='.$dag);
-	if ($d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
+	if ($d['zon']['s']<50&&$d['wasbak']['s']<6&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
+	} elseif ($d['zon']['s']<50&&$d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
 	global $d,$dag,$time;
 	$dag=dag();
-	if (!is_array($d)) $d=fetchdata();
-	if (($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if (!isset($d['zon']['s'])) $d=fetchdata();
+	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$dag,$time;
 	$dag=dag();
-	if (!is_array($d)) $d=fetchdata();
-	if ($time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<3600)) {
+	if (!isset($d['zon']['s'])) $d=fetchdata();
+	if ($d['zon']['s']<50&&$time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<3600)) {
 		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
@@ -69,7 +66,7 @@ function fhall() {
 }
 function huisslapen() {
 	global $d,$boseipbuiten;
-	if (!is_array($d)) $d=fetchdata();
+	if (!isset($d['zon']['s'])) $d=fetchdata();
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','nvidia','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
@@ -701,4 +698,19 @@ function dag() {
 		}
 	}
 	return $dag;
+}
+function mset($key, $data, $ttl=0) {
+	lg('mset '.$key.' '.$data);
+	global $m;
+	$m = new Memcache;
+	$m->connect('192.168.2.21', 11211) or die ("Could not connect");
+	$m->set($key, $data);
+}
+function mget($key) {
+	global $m;
+	$m = new Memcache;
+	$m->connect('192.168.2.21', 11211) or die ("Could not connect");
+	$data=$m->get($key);
+	lg('mget '.$key.' '.$data);
+	return $data;
 }

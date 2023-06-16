@@ -60,9 +60,11 @@ $i=59;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
+	lg(basename(__FILE__).':'.__LINE__);
 	if (ping('192.168.2.6')==true) {
+		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-		apcu_store('lgtv-offline', 0);
+		mset('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
 			sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['sony']['s']!='On'&&past('sony')>30) sw('sony', 'On', basename(__FILE__).':'.__LINE__);
@@ -72,9 +74,12 @@ if ($d['tv']['s']=='On') {
 		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&($time<$zonop||$time>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	} else {
-		if ($d['lgtv']['s']=='On') apcu_inc('lgtv-offline');
+		lg(basename(__FILE__).':'.__LINE__);
+//		if ($d['lgtv']['s']=='On') {
+			mset('lgtv-offline',mget('lgtv-offline')+1);
+//		}
 	}
-	if (apcu_fetch('lgtv-offline')>=30) {
+	if (mget('lgtv-offline')>=30) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
 			sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['auto']['s']=='On'&&$d['lamp kast']['s']=='Off'&&$d['zon']['s']==0&&$d['Weg']['s']==0) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
@@ -84,7 +89,7 @@ if ($d['tv']['s']=='On') {
 			if ($d['sony']['s']!='Off'&&past('sony')>900) sw('sony', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['kristal']['s']!='Off'&&past('lgtv')>900&&past('kristal')>900) 	sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
-		apcu_store('lgtv-offline', 0);
+		mset('lgtv-offline', 0);
 	}
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);

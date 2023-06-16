@@ -125,18 +125,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if (isset($topic[3])&&$topic[3]=='state') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			$dag=0;
-			if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
-				$dag=1;
-				if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-					if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
-					else $dag=3;
-				} else {
-					$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-					$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-					if ($time>=$zonop&&$time<=$zononder) $dag=2;
-				}
-			}
+			$dag=dag();
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);

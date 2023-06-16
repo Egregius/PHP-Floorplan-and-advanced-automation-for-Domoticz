@@ -1,2 +1,2 @@
 <?php
-store('water', $status);
+if ($status!=$d['water']['s']) store('water', $status);

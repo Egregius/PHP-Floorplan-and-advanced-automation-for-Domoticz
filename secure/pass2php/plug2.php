@@ -1,2 +1,2 @@
 <?php
-store('luchtdroger', $status);
+if ($status!=$d['luchtdroger']['s']) store('luchtdroger', $status);

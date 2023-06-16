@@ -1,4 +1,5 @@
 <?php
+lg('EXECUTING CRON3600');
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $dag=dag();
@@ -30,6 +31,7 @@ if (strftime("%k", $time)==19) {
 	if (strlen($msg)>5) telegram($msg);
 }
 if (strftime("%k", $time)==0&&$d['winst']['s']!=0) store ('winst', 0);
+
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=devices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
 	$time=$time;
@@ -51,5 +53,6 @@ if ($time<strtotime('1:05')) {
 	}
 }
 /* Clean old database records */
+
 $remove=strftime("%F %T", $time-(86400*101));
 $stmt=$db->query("delete from temp where stamp < '$remove'");
