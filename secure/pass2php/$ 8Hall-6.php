@@ -1,4 +1,4 @@
 <?php
 if ($d['raamhall']['s']=='Closed') {
-	sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__);
+	sw('zoldertrap', 'On', basename(__FILE__).':'.__LINE__,true);
 }

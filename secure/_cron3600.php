@@ -1,5 +1,5 @@
 <?php
-lg('EXECUTING CRON3600');
+lg('CRON-3600');
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $dag=dag();

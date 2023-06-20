@@ -196,7 +196,7 @@ if ($time<=strtotime('0:02')) {
 }
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
+
 
 //if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
 //elseif ($d['bose101']['s']=='Off'&&$d['bose103']['s']=='On'&&past('bose103')<300) bosekey('SHUFFLE_ON', 0, 103);

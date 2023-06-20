@@ -17,7 +17,7 @@ if ($d['daikin']['m']==1) {
 	$Setkamer=33;
 	if ($d['kamer_set']['m']==0) {
 		if (
-				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']>=80)
+				($d['raamkamer']['s']=='Closed'||$d['RkamerR']['s']>=85)
 			&&
 				(past('raamkamer')>300||$time>strtotime('19:00'))
 			&&
@@ -25,31 +25,29 @@ if ($d['daikin']['m']==1) {
 					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<300))
 				||
 					(
-						($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<300)||$d['raamalex']['s']=='Closed'||$d['Ralex']['s']>=80)
+						($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<300)||$d['raamalex']['s']=='Closed'||$d['Ralex']['s']>=85)
 					&&
-						($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&past('deurwaskamer')<300)||$d['raamwaskamer']['s']=='Closed'||$d['Rwaskamer']['s']>=80)
+						($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&past('deurwaskamer')<300)||$d['raamwaskamer']['s']=='Closed'||$d['Rwaskamer']['s']>=85)
 					&& $d['raamhall']['s']=='Closed'
 					)
 				)
 		) {
 			$base=21.5;
 			if ($time<strtotime('6:30')) $Setkamer=$base;
-			elseif ($time>strtotime('22:00')) $Setkamer=$base;
-			elseif ($time>strtotime('21:00')) $Setkamer=$base+0.5;
-			elseif ($time>strtotime('20:00')) $Setkamer=$base+1;
-			elseif ($time>strtotime('19:00')) $Setkamer=$base+1.5;
-			elseif ($time>strtotime('18:00')) $Setkamer=$base+2;
-			elseif ($time>strtotime('17:00')) $Setkamer=$base+2.5;
-			elseif ($time>strtotime('16:00')) $Setkamer=$base+3;
-			elseif ($time>strtotime('15:00')) $Setkamer=$base+3.5;
-			elseif ($time>strtotime('14:00')) $Setkamer=$base+4;
-			elseif ($time>strtotime('13:00')) $Setkamer=$base+4.5;
-			elseif ($time>strtotime('12:00')) $Setkamer=$base+5;
-			elseif ($time>strtotime('11:00')) $Setkamer=$base+5.5;
-			elseif ($time>strtotime('10:00')) $Setkamer=$base+6;
-			elseif ($time>strtotime('9:00')) $Setkamer=$base+6.5;
-			elseif ($time>strtotime('8:00')) $Setkamer=$base+7;
-			elseif ($time>strtotime('7:00')) $Setkamer=$base+7.5;
+			elseif ($time>strtotime('21:00')) $Setkamer=$base;
+			elseif ($time>strtotime('20:00')) $Setkamer=$base+0.5;
+			elseif ($time>strtotime('19:00')) $Setkamer=$base+1;
+			elseif ($time>strtotime('18:00')) $Setkamer=$base+1.5;
+			elseif ($time>strtotime('17:00')) $Setkamer=$base+2;
+			elseif ($time>strtotime('16:00')) $Setkamer=$base+2.5;
+			elseif ($time>strtotime('15:00')) $Setkamer=$base+3;
+			elseif ($time>strtotime('14:00')) $Setkamer=$base+3.5;
+			elseif ($time>strtotime('13:00')) $Setkamer=$base+4;
+			elseif ($time>strtotime('12:00')) $Setkamer=$base+4.5;
+			elseif ($time>strtotime('11:00')) $Setkamer=$base+5;
+			elseif ($time>strtotime('10:00')) $Setkamer=$base+5.5;
+			elseif ($time>strtotime('9:00')) $Setkamer=$base+6;
+			elseif ($time>strtotime('8:00')) $Setkamer=$base+6.5;
 		}
 		if ($d['Weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {
@@ -60,6 +58,7 @@ if ($d['daikin']['m']==1) {
 	$dif=$d['kamer_temp']['s']-$d['kamer_set']['s'];
 	if ($dif>=0) $power=1;
 	elseif ($dif<-1.5) $power=0;
+
 	if ($d['kamer_set']['s']<32) {
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
@@ -74,28 +73,31 @@ if ($d['daikin']['m']==1) {
 			if ($set>30) $set=30;
 			elseif ($set<18) $set=18;
 			$daikin=json_decode($d['daikinkamer']['s']);
-			if (!isset($power)) $power=$daikin->power;
-			if ($daikin->adv == '') {
-				$powermode=0;
-			} else if (strstr($daikin->adv, '/')) {
-				$advs=explode("/", $daikin->adv);
-				if ($advs[0]==2) $powermode=2;
-				elseif ($advs[0]==12) $powermode=1;
-				else $powermode=0;
-			} else {
-				if ($daikin->adv==13)  $powermode=0; //Normal
-				elseif ($daikin->adv==12)  $powermode=1; // Eco
-				elseif ($daikin->adv==2)  $powermode=2; // Power
-				elseif ($daikin->adv=='')  $powermode=0;
-			}
-			if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
-				$data=json_decode($d['kamer_set']['icon'], true);
-				$data['power']=$power;
-				$data['mode']=3;
-				$data['fan']=$rate;
-				$data['set']=$set;
-				storeicon('kamer_set', json_encode($data));
-				daikinset('kamer', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
+			if (isset($daikin)) {
+				if (!isset($power)) $power=$daikin->power;
+				if ($daikin->adv == '') {
+					$powermode=0;
+				} else if (strstr($daikin->adv, '/')) {
+					$advs=explode("/", $daikin->adv);
+					if ($advs[0]==2) $powermode=2;
+					elseif ($advs[0]==12) $powermode=1;
+					else $powermode=0;
+				} else {
+					if ($daikin->adv==13)  $powermode=0; //Normal
+					elseif ($daikin->adv==12)  $powermode=1; // Eco
+					elseif ($daikin->adv==2)  $powermode=2; // Power
+					elseif ($daikin->adv=='')  $powermode=0;
+				}
+				if (($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=3||$daikin->fan!=$rate)&&$powermode<2) {
+					$data=json_decode($d['kamer_set']['icon'], true);
+					$data['power']=$power;
+					$data['mode']=3;
+					$data['fan']=$rate;
+					$data['set']=$set;
+					storeicon('kamer_set', json_encode($data));
+					daikinset('kamer', $power, 3, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
+				}
+				unset($daikin);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
 			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
@@ -136,19 +138,18 @@ if ($d['daikin']['m']==1) {
 		) {
 			$base=22;
 			if ($time<strtotime('7:00')) $Setalex=$base;
-			elseif ($time>strtotime('19:30')) $Setalex=$base;
-			elseif ($time>strtotime('18:30')) $Setalex=$base+0.5;
-			elseif ($time>strtotime('17:30')) $Setalex=$base+1;
-			elseif ($time>strtotime('16:30')) $Setalex=$base+1.5;
-			elseif ($time>strtotime('15:30')) $Setalex=$base+2;
-			elseif ($time>strtotime('14:30')) $Setalex=$base+2.5;
-			elseif ($time>strtotime('13:30')) $Setalex=$base+3;
-			elseif ($time>strtotime('12:30')) $Setalex=$base+3.5;
-			elseif ($time>strtotime('11:30')) $Setalex=$base+4;
-			elseif ($time>strtotime('10:30')) $Setalex=$base+4.5;
-			elseif ($time>strtotime('9:30')) $Setalex=$base+5;
-			elseif ($time>strtotime('8:30')) $Setalex=$base+5.5;
-			elseif ($time>strtotime('7:30')) $Setalex=$base+6;
+			elseif ($time>strtotime('18:30')) $Setalex=$base;
+			elseif ($time>strtotime('17:30')) $Setalex=$base+0.5;
+			elseif ($time>strtotime('16:30')) $Setalex=$base+1;
+			elseif ($time>strtotime('15:30')) $Setalex=$base+1.5;
+			elseif ($time>strtotime('14:30')) $Setalex=$base+2;
+			elseif ($time>strtotime('13:30')) $Setalex=$base+2.5;
+			elseif ($time>strtotime('12:30')) $Setalex=$base+3;
+			elseif ($time>strtotime('11:30')) $Setalex=$base+3.5;
+			elseif ($time>strtotime('10:30')) $Setalex=$base+4;
+			elseif ($time>strtotime('9:30')) $Setalex=$base+4.5;
+			elseif ($time>strtotime('8:30')) $Setalex=$base+5;
+			elseif ($time>strtotime('7:30')) $Setalex=$base+5.5;
 		}
 		if ($d['Weg']['s']>=3) $Setalex=28;
 		if ($d['alex_set']['s']!=$Setalex) {
@@ -237,7 +238,6 @@ if ($d['daikin']['m']==1) {
 	$dif=$d['living_temp']['s']-$d['living_set']['s'];
 	if ($dif>=0) $power=1;
 	elseif ($dif<-1.5) $power=0;
-//	lg('dif living='.$dif.', power='.$power);
 	if ($d['living_set']['s']<32) {
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
