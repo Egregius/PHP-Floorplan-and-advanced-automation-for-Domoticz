@@ -194,7 +194,6 @@ if ($time<=strtotime('0:02')) {
 	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
 
 

@@ -60,9 +60,7 @@ $i=59;
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['tv']['s']=='On') {
-	lg(basename(__FILE__).':'.__LINE__);
 	if (ping('192.168.2.6')==true) {
-		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 		mset('lgtv-offline', 0);
 		if ($d['nvidia']['s']!='On'&&past('nvidia')>30	&&$d['Weg']['s']==0) {
@@ -74,10 +72,9 @@ if ($d['tv']['s']=='On') {
 		if ($d['auto']['s']=='On'&&$d['kristal']['s']=='Off'&&$d['zon']['s']==0&&($time<$zonop||$time>$zononder)&&past('kristal')>3600) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
 	} else {
-		lg(basename(__FILE__).':'.__LINE__);
-//		if ($d['lgtv']['s']=='On') {
+		if ($d['lgtv']['s']=='On') {
 			mset('lgtv-offline',mget('lgtv-offline')+1);
-//		}
+		}
 	}
 	if (mget('lgtv-offline')>=30) {
 		if ($d['lgtv']['s']!='Off'&&past('lgtv')>900) {
@@ -94,3 +91,4 @@ if ($d['tv']['s']=='On') {
 }
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
+if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
