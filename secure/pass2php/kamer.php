@@ -24,6 +24,3 @@ if ($status==0) {
 		}
 	}
 }
-if ($d['kamer']['m']>0&&$time<strtotime('8:00')) {
-	storemode('kamer', 0, basename(__FILE__).':'.__LINE__);
-}

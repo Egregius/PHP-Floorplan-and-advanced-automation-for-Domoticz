@@ -45,10 +45,8 @@ function fkeuken() {
 	global $d,$dag,$time;
 	$dag=dag();
 	if (!isset($d['zon']['s'])) $d=fetchdata();
-	lg('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s']);
+	lg('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
 	if ($d['zon']['s']<50&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
-		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-	} elseif ($d['zon']['s']<50&&$d['wasbak']['s']<4&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
