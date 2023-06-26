@@ -18,7 +18,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 				$d['lamp kast']['s']='On';
 			} else sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-			if ($_SERVER['REQUEST_$time']>apcu_fetch('ring_ding')+30) {
+			if ($_SERVER['REQUEST_TIME']>apcu_fetch('ring_ding')+30) {
 				apcu_store('ring_ding', $time);
 				telegram('DEURBEL', false, 1);
 				sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
