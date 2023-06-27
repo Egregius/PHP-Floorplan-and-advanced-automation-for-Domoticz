@@ -21,7 +21,7 @@ if(!$mqtt->connect(true, NULL, $username, $password)) {
 
 $mqtt->debug = true;
 
-$topics['domoticz/out'] = array('qos' => 0, 'function' => 'procMsg');
+$topics['#'] = array('qos' => 0, 'function' => 'procMsg');
 $mqtt->subscribe($topics, 0);
 
 while($mqtt->proc()) {
