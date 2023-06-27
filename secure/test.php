@@ -31,7 +31,7 @@ echo __LINE__.':'.$a.'<br>';
 test();
 echo __LINE__.':'.$a.'<br>';
 echo __LINE__.':'.$a.'<br>';
-function test() {
+function test() use ($a) {
 	echo __LINE__.':'.$a.'<br>';
 }
 
