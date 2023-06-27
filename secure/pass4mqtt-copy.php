@@ -27,6 +27,9 @@ while($mqtt->proc()) {
 $mqtt->close();
 
 function domoticz($topic, $msg){
+	echo 'HA Received: ' . date('r') . "\n";
+	echo "Topic: {$topic}\n";
+	echo "\t$msg\n\n";
 	global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 	$d=fetchdata();
 	dag();
@@ -136,7 +139,20 @@ function domoticz($topic, $msg){
 }
 
 function homeassistant($topic, $msg){
-		echo 'HA Received: ' . date('r') . "\n";
-		echo "Topic: {$topic}\n\n";
-		echo "\t$msg\n\n";
+	echo 'HA Received: ' . date('r') . "\n";
+	echo "Topic: {$topic}\n";
+	echo "\t$msg\n\n";
+	$topic=explode('/', $topic);
+	if (isset($topic[3])&&$topic[3]=='state') {
+		global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+		$d=fetchdata();
+		$dag=dag();
+		$device=$topic[2];
+		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+			$status=ucfirst($message);
+			lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status);
+			include '/var/www/html/secure/pass2php/'.$device.'.php';
+			//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+		} //else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
+	} 
 }
