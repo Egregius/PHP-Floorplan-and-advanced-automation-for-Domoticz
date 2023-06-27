@@ -28,9 +28,12 @@ $response=file_get_contents(
 echo __LINE__.':'.$a.'<br>';
 $a='a';
 echo __LINE__.':'.$a.'<br>';
+test();
 echo __LINE__.':'.$a.'<br>';
 echo __LINE__.':'.$a.'<br>';
-
+function test() {
+	echo __LINE__.':'.$a.'<br>';
+}
 
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
