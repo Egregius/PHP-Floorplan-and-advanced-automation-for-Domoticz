@@ -2,6 +2,7 @@
 <?php
 declare(strict_types=1);
 $user='MQTT';
+// Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 lg('Starting MQTT loop...');
