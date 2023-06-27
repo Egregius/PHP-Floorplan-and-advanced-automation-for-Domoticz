@@ -26,7 +26,7 @@ while($mqtt->proc()) {
 }
 $mqtt->close();
 
-function domoticz($topic, $msg){
+function domoticz($topic, $message){
 	echo 'HA Received: ' . date('r') . "\n";
 	echo "Topic: {$topic}\n";
 	echo "\t$msg\n\n";
@@ -138,7 +138,7 @@ function domoticz($topic, $msg){
 
 }
 
-function homeassistant($topic, $msg){
+function homeassistant($topic, $message){
 	echo 'HA Received: ' . date('r') . "\n";
 	echo "Topic: {$topic}\n";
 	echo "\t$msg\n\n";
