@@ -29,7 +29,7 @@ $mqtt->close();
 function domoticz($topic, $message){
 	echo 'HA Received: ' . date('r') . "\n";
 	echo "Topic: {$topic}\n";
-	echo "\t$msg\n\n";
+	echo "\t$message\n\n";
 	global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 	$d=fetchdata();
 	dag();
@@ -60,34 +60,34 @@ function domoticz($topic, $message){
 				if ($message['nvalue']==0) $status='Off';
 				elseif ($message['nvalue']==1) $status='On';
 			}
-			lg(' (MQTT) Switch '.$device.' => '.$status);
+			lg(' (MQTT2) Switch '.$device.' => '.$status);
 			store($device, $status, ' (MQTT) Switch <> ');
 		} elseif ($message['dtype']=='Lighting 2') {
 			if ($message['nvalue']==0) $status='Off';
 			elseif ($message['nvalue']==1) $status='On';
-			lg(' (MQTT) Lighting 2 '.$device.' => '.$status);
+			lg(' (MQTT2) Lighting 2 '.$device.' => '.$status);
 			store($device, $status, ' (MQTT) Switch ');
 		} elseif ($message['dtype']=='Temp') {
 			$status=$message['svalue1'];
-			lg(' (MQTT) Temp '.$device.' => '.$status);	
+			lg(' (MQTT2) Temp '.$device.' => '.$status);	
 			store($device, $status,' (MQTT) Temp ');
 		} elseif ($message['dtype']=='General') {
 			if ($message['stype']=='kWh') {
 				$status=$message['svalue1'];
-				lg(' (MQTT) kWh '.$device.' => '.$status);	
+				lg(' (MQTT2) kWh '.$device.' => '.$status);	
 				store($device, $status,' (MQTT) kWh ');
 			}
 		} elseif ($message['dtype']=='Usage') {
 			$status=$message['svalue1'];
-			lg(' (MQTT) Usage '.$device.' => '.$status);	
+			lg(' (MQTT2) Usage '.$device.' => '.$status);	
 			store($device, $status,' (MQTT) Usage ');
 		} elseif ($message['dtype']=='Color Switch') {
 			$status=$message['nvalue'];
-			lg(' (MQTT) Colorswitch '.$device.' => '.$status);	
+			lg(' (MQTT2) Colorswitch '.$device.' => '.$status);	
 			store($device, $status,' (MQTT) Color ');
 		} else {
 //					store($device, $message['nvalue']);
-			lg(' (MQTT) else '.print_r($message,true));	
+			lg(' (MQTT2) else '.print_r($message,true));	
 		}
 		include '/var/www/html/secure/pass2php/'.$device.'.php';
 	} elseif ($device=='buiten_hum') { // 1
@@ -141,7 +141,7 @@ function domoticz($topic, $message){
 function homeassistant($topic, $message){
 	echo 'HA Received: ' . date('r') . "\n";
 	echo "Topic: {$topic}\n";
-	echo "\t$msg\n\n";
+	echo "\t$message\n\n";
 	$topic=explode('/', $topic);
 	if (isset($topic[3])&&$topic[3]=='state') {
 		global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
