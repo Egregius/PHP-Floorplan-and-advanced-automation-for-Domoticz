@@ -21,8 +21,8 @@ if(!$mqtt->connect(true, NULL, $username, $password)) {
 
 $mqtt->debug = false;
 
-$topics['domoticz/out/#'] = array('qos' => 0, 'function' => 'procMsg');
-$topics['#'] = array('qos' => 0, 'function' => 'procMsg');
+$topics['domoticz/out/#'] = array('qos' => 0, 'function' => 'domoticz');
+$topics['homeassistant/#'] = array('qos' => 0, 'function' => 'homeassistant');
 $mqtt->subscribe($topics, 0);
 
 while($mqtt->proc()) {
@@ -31,8 +31,14 @@ while($mqtt->proc()) {
 
 $mqtt->close();
 
-function procMsg($topic, $msg){
-		echo 'Msg Recieved: ' . date('r') . "\n";
+function domoticz($topic, $msg){
+		echo 'DMZ Received: ' . date('r') . "\n";
+		echo "Topic: {$topic}\n\n";
+		echo "\t$msg\n\n";
+}
+
+function homeassistant($topic, $msg){
+		echo 'HA Received: ' . date('r') . "\n";
 		echo "Topic: {$topic}\n\n";
 		echo "\t$msg\n\n";
 }
