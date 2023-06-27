@@ -25,9 +25,11 @@ $response=file_get_contents(
 	)
 );
 */
-echo __LINE__.$dag;
-dag();
-echo __LINE__.$dag;
+echo __LINE__.':'.$a.'<br>';
+$a='a';
+echo __LINE__.':'.$a.'<br>';
+echo __LINE__.':'.$a.'<br>';
+echo __LINE__.':'.$a.'<br>';
 
 
 /*NL('Rook gedetecteerd in badkamer!');
