@@ -59,7 +59,7 @@ if ($d['daikin']['m']==1) {
 	$dif=$d['kamer_temp']['s']-$d['kamer_set']['s'];
 	if ($dif>=0) $power=1;
 	elseif ($dif<-1.5) $power=0;
-	if (isset($power)) lg('kamer dif='.$dif.' power='.$power); else lg('kamer dif='.$dif);
+//	if (isset($power)) lg('kamer dif='.$dif.' power='.$power); else lg('kamer dif='.$dif);
 	if ($d['kamer_set']['s']<32) {
 		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
@@ -109,7 +109,7 @@ if ($d['daikin']['m']==1) {
 			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	} elseif(past('raamkamer')>300&&past('deurkamer')>300) {
-		lg(basename(__FILE__).':'.__LINE__);
+//		lg(basename(__FILE__).':'.__LINE__);
 		$daikin=json_decode($d['daikinkamer']['s']);
 		if ($daikin->power!=0||$daikin->mode!=3) {
 			lg(basename(__FILE__).':'.__LINE__);
@@ -248,7 +248,7 @@ if ($d['daikin']['m']==1) {
 	$dif=$d['living_temp']['s']-$d['living_set']['s'];
 	if ($dif>=0) $power=1;
 	elseif ($dif<-1.5) $power=0;
-	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
+//	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
 	if ($d['living_set']['s']<32) {
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
