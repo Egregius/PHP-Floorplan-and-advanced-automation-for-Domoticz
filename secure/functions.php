@@ -14,8 +14,8 @@ function fliving() {
 	$dag=dag();
 	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
-		if ($d['zon']['s']==0&&$dag<3) {
-			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 15, basename(__FILE__).':'.__LINE__);
+		if (($d['zon']['s']==0&&$dag<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
+			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
@@ -28,7 +28,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	if (!isset($d['zon']['s'])) $d=fetchdata();
-	if ($d['zon']['s']<150&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<500&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d,$dag,$time;
@@ -45,8 +45,9 @@ function fkeuken() {
 	global $d,$dag,$time;
 	$dag=dag();
 	if (!isset($d['zon']['s'])) $d=fetchdata();
-	lg('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
-	if ($d['zon']['s']<50&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>70)) {
+	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
+	if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>80)) {
+		echo __LINE__;
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
@@ -65,7 +66,7 @@ function fhall() {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($time>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open') sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$time>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>3600) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen() {
 	global $d,$boseipbuiten;

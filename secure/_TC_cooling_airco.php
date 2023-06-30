@@ -61,9 +61,7 @@ if ($d['daikin']['m']==1) {
 	elseif ($dif<-1.5) $power=0;
 //	if (isset($power)) lg('kamer dif='.$dif.' power='.$power); else lg('kamer dif='.$dif);
 	if ($d['kamer_set']['s']<32) {
-		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
-			lg(basename(__FILE__).':'.__LINE__);
 			$rate='A';
 			if ($d['kamer_set']['s']==1) $rate=3;
 			elseif($d['kamer_set']['s']==2) $rate=4;
@@ -79,7 +77,6 @@ if ($d['daikin']['m']==1) {
 			$daikin=json_decode($d['daikinkamer']['s']);
 //			lg(print_r($daikin, true));
 			if (isset($daikin)) {
-				lg(basename(__FILE__).':'.__LINE__);
 				if (!isset($power)) $power=$daikin->power;
 				if ($daikin->adv == '') {
 					$powermode=0;
@@ -109,10 +106,8 @@ if ($d['daikin']['m']==1) {
 			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	} elseif(past('raamkamer')>300&&past('deurkamer')>300) {
-//		lg(basename(__FILE__).':'.__LINE__);
 		$daikin=json_decode($d['daikinkamer']['s']);
 		if ($daikin->power!=0||$daikin->mode!=3) {
-			lg(basename(__FILE__).':'.__LINE__);
 			$data=json_decode($d['kamer_set']['icon'], true);
 			$data['power']=0;
 			$data['mode']=3;
@@ -326,14 +321,14 @@ if ($d['auto']['s']=='On') {
 	}
 
 	elseif ($time>=strtotime('11:00')&&$time<strtotime('15:00')) {
-		if($d['zon']['s']>1500) {
+		if($d['zon']['s']>2000) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
 	elseif ($time>=strtotime('15:00')&&$time<strtotime('22:00')) {
-		if($d['zon']['s']>1500) {
+		if($d['zon']['s']>2500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<82&&past('Rwaskamer')>3600) sl('Rwaskamer', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<82&&past('Ralex')>3600) sl('Ralex', 82, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<50&&past('Rbureel')>7200) sl('Rbureel', 50, basename(__FILE__).':'.__LINE__);

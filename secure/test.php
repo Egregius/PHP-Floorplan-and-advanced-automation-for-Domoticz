@@ -6,6 +6,10 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
+
+
+fkeuken();
+
 /*
 $response=file_get_contents(
 	'http://192.168.2.19:8123/api/states',
