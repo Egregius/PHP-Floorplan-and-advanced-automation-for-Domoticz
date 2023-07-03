@@ -6,6 +6,7 @@ $user='MQTT';
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 lg('Starting MQTT loop...');
+updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
 
 $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);

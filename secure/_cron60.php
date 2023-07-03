@@ -137,6 +137,8 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
+	
+	if ($time==strtotime('6:30')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
 	//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'

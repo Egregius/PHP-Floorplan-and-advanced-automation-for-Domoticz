@@ -6,65 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-$domoticz=json_decode(
-	file_get_contents(
-		$domoticzurl.'/json.htm?type=devices&used=true'
-	),
-	true
-);
-if ($domoticz) {
-	foreach ($domoticz['result'] as $dom) {
-		$update=false;
-		$name=$dom['Name'];
-		if (isset($dom['SwitchType'])) $switchtype=$dom['SwitchType'];
-		elseif (isset($dom['SubType'])) $switchtype=$dom['SubType'];
-		if($switchtype=='On/Off') $update=true;
-		elseif($switchtype=='Switch') $update=true;
-		elseif($switchtype=='Contact') $update=true;
-		elseif($switchtype=='Door Contact') $update=true;
-		elseif($switchtype=='Motion Sensor') $update=true;
-		elseif($switchtype=='Push On Button') $update=true;
-		elseif($switchtype=='X10 Siren') $update=true;
-		elseif($switchtype=='Smoke Detector') $update=true;
-		elseif($switchtype=='Selector') $update=true;
-		elseif($switchtype=='Blinds Inverted') $update=true;
-		if ($dom['Type']=='Temp') {
-			$status=$dom['Temp'];
-			 $update=false;
-		} elseif ($dom['Type']=='Temp + Humidity') {
-			$status=$dom['Temp'];
-			 $update=false;
-		} elseif ($dom['TypeImg']=='current') {
-			$status=str_replace(' Watt', '', $dom['Data']);
-			 $update=false;
-		} elseif ($name=='luifel') {
-			$status=str_replace('%', '', $dom['Level']);
-			 $update=true;
-		} elseif ($switchtype=='Dimmer') {
-			if ($dom['Data']=='Off') $status=0;
-			elseif ($dom['Data']=='On') $status=100;
-			else $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
-			 $update=true;
-		} elseif ($switchtype=='Blinds Percentage') {
-			if ($dom['Data']=='Open') $status=0;
-			elseif ($dom['Data']=='Closed') $status=100;
-			else $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
-			$update=true;
-		} elseif ($name=='achterdeur') {
-			if ($dom['Data']=='Open') $status='Closed';
-			else $status='Open';
-		} else $status=$dom['Data'];
-		if ($update==true) {
-			if ($status!=$d[$name]['s']) {
-				echo $name.'	= '.$status.'<br>';
-				$query="UPDATE devices SET s=:status WHERE n=:name;";
-				$stmt=$db->prepare($query);
-				$stmt->execute(array(':status'=>$status, ':name'=>$name));
-			}
-		}
-	}
-}
-
+updatefromdomoticz();
 
 
 
