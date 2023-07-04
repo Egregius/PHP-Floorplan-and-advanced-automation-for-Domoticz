@@ -12,4 +12,4 @@ foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zol
 	if ($d[$i.'_temp']['icon']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
 }
-updatefromdomoticz();
+//updatefromdomoticz();

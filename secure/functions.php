@@ -114,11 +114,11 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function waarschuwing($msg) {
-//	telegram($msg, false, 1);
+	telegram($msg, false, 1);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	sleep(10);
-	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
+//	sleep(10);
+//	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 //	die($msg);
 }
 function past($name) {
