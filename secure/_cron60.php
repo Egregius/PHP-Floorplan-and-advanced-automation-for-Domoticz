@@ -138,7 +138,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
-	if ($time==strtotime('6:40')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
+	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
 	//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'
@@ -188,8 +188,6 @@ if ($d['auto']['s']=='On') {
 		if ($d['kookplaatpower_kWh']['s']<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
-//lg ('Xlight = '.$d['Xlight']['s']);
-if ($d['Xlight']['s']!=0&&past('Xlight')>60) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 
 	/* -------------------------------------------- ALTIJD ----------------------------*/
 if ($time<=strtotime('0:02')) {

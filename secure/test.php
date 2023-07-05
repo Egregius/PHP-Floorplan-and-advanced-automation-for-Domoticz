@@ -6,8 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-updatefromdomoticz();
-
+rgb('Xlight', 115, 40);
 
 
 /*

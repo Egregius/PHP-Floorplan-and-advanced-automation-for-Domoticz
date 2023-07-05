@@ -22,7 +22,6 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 			sleep($k);
 		}
 	}
-	if ($d['Xlight']['s']!='Off') sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 } else {
