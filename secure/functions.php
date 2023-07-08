@@ -11,8 +11,8 @@ $memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
 	
 function fliving() {
 	global $d,$dag,$time;
+	$d=fetchdata();
 	$dag=dag();
-	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
 		if (($d['zon']['s']==0&&$dag<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
@@ -27,12 +27,12 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if (!isset($d['zon']['s'])) $d=fetchdata();
+	$d=fetchdata();
 	if ($d['zon']['s']<500&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d,$dag,$time;
-	if (!is_array($d)) $d=fetchdata();
+	$d=fetchdata();
 	$dag=dag();
 	if (past('$ 8badkamer-8')>10) {
 		if ($d['lichtbadkamer']['s']<16&&$dag<3&&$d['zon']['s']<50) {
@@ -43,8 +43,8 @@ function fbadkamer() {
 }
 function fkeuken() {
 	global $d,$dag,$time;
+	$d=fetchdata();
 	$dag=dag();
-	if (!isset($d['zon']['s'])) $d=fetchdata();
 	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
 	if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>80)) {
 		echo __LINE__;
@@ -53,14 +53,14 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$dag,$time;
+	$d=fetchdata();
 	$dag=dag();
-	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$dag,$time;
+	$d=fetchdata();
 	$dag=dag();
-	if (!isset($d['zon']['s'])) $d=fetchdata();
 	if ($d['zon']['s']<50&&$time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<3600)) {
 		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);

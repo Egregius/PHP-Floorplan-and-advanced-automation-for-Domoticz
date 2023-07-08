@@ -6,8 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-rgb('Xlight', 115, 40);
-
+fkeuken();
 
 /*
 $response=file_get_contents(
