@@ -28,7 +28,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	$d=fetchdata();
-	if ($d['zon']['s']<500&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<400&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d,$dag,$time;
@@ -124,7 +124,7 @@ function waarschuwing($msg) {
 function past($name) {
 	global $d;
 	$d=fetchdata();
-	//lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
+	if ($name=='$ remoteauto') lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
 	else return 999999999;
 }
@@ -644,7 +644,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 function updatefromdomoticz() {
 	global $db,$domoticzurl;
 	$d=fetchdata();
-	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=devices&used=true'),true);
+	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=command&param=getdevices&used=true'),true);
 	if ($domoticz) {
 		foreach ($domoticz['result'] as $dom) {
 			$update=false;

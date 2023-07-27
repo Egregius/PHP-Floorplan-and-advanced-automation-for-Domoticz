@@ -66,6 +66,16 @@ if (isset($om['hourly']['temperature_2m'])) {
 	}
 }
 
+//lg(__LINE__.' https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json');
+$vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json'), true);
+if (isset($vc['currentConditions']['temp'])) {
+	$temps['vc']=$vc['currentConditions']['temp'];
+	$temps['vc_feel']=$vc['currentConditions']['feelslike'];
+	$winds['vc_wind']=$vc['currentConditions']['windgust'];
+	$rains['vc']=$vc['currentConditions']['precip'];
+	
+}
+
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour');
 $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour'), true);
 if (isset($yr['temperature']['value'])) {
@@ -105,8 +115,8 @@ if (isset($data['forecasts'])) {
 	$rains['buienradar']=$buienradar;
 }
 
-if (count($temps)>=4) $temp=round(array_sum($temps)/count($temps), 1);
-
+if (count($temps)>=3) $temp=round(array_sum($temps)/count($temps), 1);
+//lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {
 		if ($i>$maxtemp) $maxtemp=$i;
@@ -119,7 +129,7 @@ $maxtemp=ceil($maxtemp*10)/10;
 if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
-
+//lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
 	if ($d['wind']['s']!=$wind) store('wind', $wind);

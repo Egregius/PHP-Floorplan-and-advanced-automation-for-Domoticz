@@ -76,6 +76,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 //					store($device, $message['nvalue']);
 					lg(' (MQTT) else '.print_r($message,true));	
 				}
+				if ($device=='$ remoteauto') lg(' (MQTT)		'.print_r($message,true));	
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif ($device=='buiten_hum') { // 1
 				$status=$message['svalue2'];

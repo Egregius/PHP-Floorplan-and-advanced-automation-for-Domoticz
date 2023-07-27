@@ -32,7 +32,7 @@ if (strftime("%k", $time)==19) {
 }
 if (strftime("%k", $time)==0&&$d['winst']['s']!=0) store ('winst', 0);
 
-$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=devices&rid=1'), true);
+$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
 	$time=$time;
 	$name='civil_twilight';

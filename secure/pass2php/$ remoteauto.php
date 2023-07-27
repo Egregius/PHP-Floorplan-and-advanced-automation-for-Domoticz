@@ -1,13 +1,15 @@
 <?php
-if (!is_array($d)) $d=fetchdata();
+$d=fetchdata();
 if ($status=='Off') {
-	if (past('$ remoteauto')<60) sw('poortrf', 'On');
-	sw('voordeur', 'On');
+	echo __LINE__.'<br>';
+	$past=past('$ remoteauto');
+	lg('REMOTE AUTO past='.$past);
+	if ($past<60) sw('poortrf', 'On');
+	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, true);
 	huisthuis();
 	if ($d['zon']['s']>0) {
-		$d['voordeur']['s']='On';
 		sleep(2);
-		sw('voordeur', 'Off');
+		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
 	}
 } else {
 	if ($d['achterdeur']['s']!='Closed') {

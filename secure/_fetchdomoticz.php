@@ -2,7 +2,7 @@
 $db=dbconnect();
 $domoticz=json_decode(
 	file_get_contents(
-		$domoticzurl.'/json.htm?type=devices&used=true'
+		$domoticzurl.'/json.htm?type=command&param=getdevices&used=true'
 	),
 	true
 );

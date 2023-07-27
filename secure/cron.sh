@@ -102,19 +102,19 @@ if [ $(($HOUR%8)) -eq 0 ] ; then
 fi
 # END Github
 
-DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
 if [ "$STATUS" == "OK" ] ; then
 	exit
 else
 	sleep 20
-	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
 	STATUS2=`echo $DOMOTICZ | jq -r '.status'`
 	if [ "$STATUS2" == "OK" ] ; then
 		exit
 	else
 		sleep 20
-		DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=devices&rid=1"`
+		DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
 		STATUS3=`echo $DOMOTICZ | jq -r '.status'`
 		if [ "$STATUS3" == "OK" ] ; then
 			exit

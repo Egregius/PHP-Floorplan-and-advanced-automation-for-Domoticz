@@ -6,7 +6,11 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-fkeuken();
+echo past('$ remoteauto');
+
+//$status='Off';
+//include 'pass2php/$ remoteauto.php';
+
 
 /*
 $response=file_get_contents(
