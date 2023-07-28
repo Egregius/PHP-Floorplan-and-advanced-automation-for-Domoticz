@@ -123,7 +123,7 @@ function waarschuwing($msg) {
 }
 function past($name) {
 	global $d;
-	$d=fetchdata();
+	//$d=fetchdata();
 	if ($name=='$ remoteauto') lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
 	else return 999999999;
