@@ -1,5 +1,5 @@
 <?php
 if ($status=='On') {
 	$item='RkamerL';
-	sl($item, 0, basename(__FILE__).':'.__LINE__);
+	sl($item, 0, basename(__FILE__).':'.__LINE__, true);
 }

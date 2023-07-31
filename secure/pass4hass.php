@@ -12,8 +12,8 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['deurvoordeur']['s']=='Closed') shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?beweging" > /dev/null 2>/dev/null &');
 		} elseif ($action=='doorbell') {
-			if ($d['bureel']['s']=='Off') sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['lamp kast']['s']=='Off') {
+			if ($d['bureel']['s']=='Off'&&$d['Weg']['s']==0) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['lamp kast']['s']=='Off'&&$d['Weg']['s']==0) {
 				sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 				$d['lamp kast']['s']='On';
 			} else sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
@@ -21,7 +21,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 			if ($_SERVER['REQUEST_TIME']>apcu_fetch('ring_ding')+30) {
 				apcu_store('ring_ding', $time);
 				telegram('DEURBEL', false, 1);
-				sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['Weg']['s']==0) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
 				if ($d['deurvoordeur']['s']=='Closed') {
 					shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?deurbel" > /dev/null 2>/dev/null &');
 					shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055" > /dev/null 2>/dev/null &');

@@ -193,7 +193,7 @@ if ($d['auto']['s']=='On') {
 		if ($wind>=30) 	$luifel=0;
 		elseif ($wind>=10) $luifel=30;
 		else $luifel=40;
-		$luifel=0; // In comment zetten om luifel te activeren.
+		//$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
