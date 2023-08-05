@@ -12,6 +12,10 @@ echo past('$ remoteauto');
 //include 'pass2php/$ remoteauto.php';
 
 
+
+exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
+echo $return_var;
+
 /*
 $response=file_get_contents(
 	'http://192.168.2.19:8123/api/states',

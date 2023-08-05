@@ -55,5 +55,12 @@ if ($d['Weg']['s']<3) {
 		}
 		unset($status);
 	}
+	$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+	if (isset($loadedprofile['result']['label'])&&$d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
+	
+	
+	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
+	if ($output[0]=='TV is on.'&&$d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+	elseif ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 }
 //if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');

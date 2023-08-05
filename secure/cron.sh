@@ -87,8 +87,8 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Remove these lines as they only upload my files to gitbub.
-HOUR=$(date +"%H")
-if [ $(($HOUR%8)) -eq 0 ] ; then
+MINUTE=$(date +"%M")
+if [ "$MINUTE" -eq 0 ] ; then
 	LAST=$(find /var/www/html -type f ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"
