@@ -14,7 +14,7 @@ if ($d['Weg']['s']<3) {
 					if ($d['bose101']['s']=='On') bosezone($ip, true);
 					elseif ($d['bose103']['m']==0&&$time>strtotime('20:00')) {
 						bosekey('PRESET_5', 0, $ip);
-						storemode('bose101', 0);
+//						storemode('bose101', 0);
 						bosevolume($vol, $ip);
 					}
 					

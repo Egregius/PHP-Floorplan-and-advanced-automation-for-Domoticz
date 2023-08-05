@@ -177,46 +177,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		storemode($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='fetch') {
 		include 'secure/_fetchdomoticz.php';
-	} elseif ($_REQUEST['device']=='media') {
-		if ($_REQUEST['command']=='media') {
-			if ($_REQUEST['action']=='On') {
-				if ($d['nas']['s']=='Off') shell_exec('secure/wakenas.sh &');
-				if ($d['sony']['s']!='On') {
-					sw('sony', 'On', basename(__FILE__).':'.__LINE__);
-//					sleep(10);
-				}
-				if ($d['tv']['s']!='On') {
-					sw('tv', 'On', basename(__FILE__).':'.__LINE__);
-					sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-//					sleep(50);
-				}
-				if ($d['nvidia']['s']!='On') {
-					sw('nvidia', 'On', basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['tv']['s']=='On'&&$d['nvidia']['s']=='On') lgcommand('on');
-				if ($d['bose101']['s']=='On'&&$d['bose101']['m']==1&&$d['eettafel']['s']==0&&$d['bose102']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off') {
-					sw('bose101', 'Off');
-					bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
-					foreach (array('bose102', 'bose103', 'bose104', 'bose105') as $i) {
-						if ($d[$i]['s']=='On') sw($i, 'Off');
-					}
-				} elseif ($d['bose101']['s']=='On'&&$d['bose101']['m']==1) {
-					bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				}
-			} elseif ($_REQUEST['action']=='Off') {
-				if ($d['lgtv']['s']!='Off') {
-					shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
-					sleep(2);
-				}
-				if ($d['sony']['s']!='Off') {
-					sw('sony', 'Off',basename(__FILE__).':'.__LINE__);
-				}
-				if ($d['nvidia']['s']!='Off') {
-					sleep(10);
-					sw('nvidia', 'Off', basename(__FILE__).':'.__LINE__);
-				}
-			}
-		}
 	} elseif ($_REQUEST['command']=='water') {
 		storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		double('water', 'On');

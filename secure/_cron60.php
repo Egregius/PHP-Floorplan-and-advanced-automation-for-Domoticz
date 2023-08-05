@@ -34,13 +34,6 @@ if ($d['auto']['s']=='On') {
 			if (past('pirliving')>$uit) {
 				foreach (array('kristal','lamp kast') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
-			$uit=14400;
-			if (past('pirliving')>$uit) {
-				if ($d['sony']['s']=='On'||$d['lgtv']['s']=='On') {
-					ud('miniliving4l', 1, 'On');
-					lg('miniliving4l pressed omdat er al 4 uur geen beweging is');
-				}
-			}
 		}
 		$avg=0;
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]['s'];
@@ -62,7 +55,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','sony','kristal','garage','tuin','voordeur','zolderg','lamp kast','nvidia') as $i) {
+		foreach (array('bureel','kristal','garage','tuin','voordeur','zolderg','lamp kast') as $i) {
 			if ($d[$i]['s']!='Off') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -127,7 +120,6 @@ if ($d['auto']['s']=='On') {
 		if ($d['Grohered_kWh']['s']<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if (($d['Weg']['s']>0||$time<=strtotime('18:00'))&&$d['lgtv']['s']=='Off'&&$d['tv']['s']=='On'&&past('tv')>3600&&past('lgtv')>3600) sw('tv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($dag==4) {
 		if ($d['Rbureel']['s']<40) {
@@ -138,7 +130,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
-	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
+//	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
 	//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'
@@ -157,7 +149,7 @@ if ($d['auto']['s']=='On') {
 		&&past('bose105')>300
 		&&past('bose106')>300
 		&&past('bose107')>300
-		&&(($d['Weg']['s']>0||$d['sony']['s']=='On'||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
+		&&(($d['Weg']['s']>0||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 		if (!empty($status)) {

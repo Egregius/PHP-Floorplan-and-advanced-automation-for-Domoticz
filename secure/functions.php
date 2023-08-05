@@ -72,7 +72,7 @@ function huisslapen() {
 	global $d,$boseipbuiten;
 	if (!isset($d['zon']['s'])) $d=fetchdata();
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','nvidia','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -98,8 +98,8 @@ function huisthuis() {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
-	if ($d['bose101']['m']!=1) storemode('bose101', 1);
-	if ($d['bose103']['m']!=0) storemode('bose103', 0);
+	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 }
@@ -207,49 +207,44 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 function fvolume($cmd) {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
-	if ($d['sony']['s']=='On') {
-		if ($cmd<0) sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"'.$cmd.'","output":""}],"version":"1.1"}');
-		else sony('audio','{"method":"setAudioVolume","id":1,"params":[{"volume":"+'.trim($cmd).'","output":""}],"version":"1.1"}');
-	} else {
-		if ($cmd=='down') {
-			if ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-				exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-				exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-			} elseif ($d['bose101']['s']=='On') {
-				$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-				if (!empty($nowplaying)) {
-					if (isset($nowplaying['@attributes']['source'])) {
-						if ($nowplaying['@attributes']['source']!='STANDBY') {
-							$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-							$cv=$volume['actualvolume'];
-							if ($cv==0) exit;
-							elseif ($cv>50) bosevolume($cv-6);
-							elseif ($cv>30) bosevolume($cv-5);
-							elseif ($cv>20) bosevolume($cv-4);
-							elseif ($cv>10) bosevolume($cv-3);
-							else bosevolume($cv-2);
-						}
+	if ($cmd=='down') {
+		if ($d['lgtv']['s']=='On') {
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
+			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
+		} elseif ($d['bose101']['s']=='On') {
+			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if ($nowplaying['@attributes']['source']!='STANDBY') {
+						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+						$cv=$volume['actualvolume'];
+						if ($cv==0) exit;
+						elseif ($cv>50) bosevolume($cv-6);
+						elseif ($cv>30) bosevolume($cv-5);
+						elseif ($cv>20) bosevolume($cv-4);
+						elseif ($cv>10) bosevolume($cv-3);
+						else bosevolume($cv-2);
 					}
 				}
 			}
-		} elseif ($cmd=='up') {
-			if ($d['tv']['s']=='On'&&$d['lgtv']['s']=='On') {
-				exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-				exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-			} elseif ($d['bose101']['s']=='On') {
-				$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-				if (!empty($nowplaying)) {
-					if (isset($nowplaying['@attributes']['source'])) {
-						if ($nowplaying['@attributes']['source']!='STANDBY') {
-							$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-							$cv=$volume['actualvolume'];
-							if ($cv>80) exit;
-							elseif ($cv>50) bosevolume($cv+6);
-							elseif ($cv>30) bosevolume($cv+5);
-							elseif ($cv>20) bosevolume($cv+4);
-							elseif ($cv>10) bosevolume($cv+3);
-							else bosevolume($cv+2);
-						}
+		}
+	} elseif ($cmd=='up') {
+		if ($d['lgtv']['s']=='On') {
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
+			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
+		} elseif ($d['bose101']['s']=='On') {
+			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
+			if (!empty($nowplaying)) {
+				if (isset($nowplaying['@attributes']['source'])) {
+					if ($nowplaying['@attributes']['source']!='STANDBY') {
+						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
+						$cv=$volume['actualvolume'];
+						if ($cv>80) exit;
+						elseif ($cv>50) bosevolume($cv+6);
+						elseif ($cv>30) bosevolume($cv+5);
+						elseif ($cv>20) bosevolume($cv+4);
+						elseif ($cv>10) bosevolume($cv+3);
+						else bosevolume($cv+2);
 					}
 				}
 			}
@@ -317,17 +312,6 @@ function kodi($json) {
 	curl_close($ch);
 	return $result;
 }
-function sony($lib,$json) {
-	global $kodiurl;
-	$ch=curl_init('http://192.168.2.5:10000/sony/'.$lib);
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-	$result=curl_exec($ch);
-	curl_close($ch);
-	return $result;
-}
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $d,$user,$domoticzurl;
 	if (!is_array($d)) $d=fetchdata();
@@ -346,7 +330,7 @@ function convertToHours($time) {
 	else return strftime('%k:%M:%S', $time-3600);
 }
 function ping($ip) {
-	$result=exec("/bin/ping -c1 -w2 $ip", $outcome, $reply);
+	$result=exec("/bin/ping -c1 -W1 -s1 $ip", $outcome, $reply);
 	if ($reply==0) return true;
 	else return false;
 }
