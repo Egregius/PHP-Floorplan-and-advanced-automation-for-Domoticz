@@ -1,6 +1,6 @@
 <?php
 $d=fetchdata();
-if ($d['Weg']['s']<3) {
+if ($d['Weg']['s']<2) {
 	dag();
 	$user='cron17  ';
 	$ctx=stream_context_create(array('http'=>array('timeout' =>1)));
@@ -62,5 +62,9 @@ if ($d['Weg']['s']<3) {
 	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
 	if ($output[0]=='TV is on.'&&$d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
 	elseif ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($output[0]=='TV is on.'&&$d['Weg']['s']>0) shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
+} else {
+	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
+	if ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__)
 }
 //if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
