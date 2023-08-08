@@ -128,6 +128,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
+	if ($d['lgtv']['s']=='Off'&&$d['Media']['s']=='On'&&past('lgtv')>1790&&past('Media')>1790) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
 //	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);

@@ -239,7 +239,16 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			shell_exec('secure/wakenas.sh');
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
-			else call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
+			else {
+				if ($_REQUEST['device']=='Media') {
+					if ($_REQUEST['action']=='Off') {
+						$d=fetchdata();
+						if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
+						if ($d['bureel']['s']=='On') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
+						shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
+					} else sw('Media', 'On', basename(__FILE__).':'.__LINE__);
+				} else 	call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 }

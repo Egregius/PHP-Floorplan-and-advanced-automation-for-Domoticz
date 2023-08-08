@@ -2,7 +2,7 @@
 $d=fetchdata();
 if ($d['Weg']['s']<2) {
 	dag();
-	$user='cron17  ';
+	$user='cron10B	';
 	$ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 	foreach(array(102=>35,103=>18,104=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
@@ -55,16 +55,28 @@ if ($d['Weg']['s']<2) {
 		}
 		unset($status);
 	}
-	$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-	if (isset($loadedprofile['result']['label'])&&$d['nas']['s']=='Off') shell_exec('/var/www/html/secure/wakenas.sh &');
-	
-	
+	if ($d['Weg']['s']<2) {
+		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+		if (isset($loadedprofile['result']['label'])&&$d['nas']['s']=='Off') {
+			lg('Waking NAS...');
+			shell_exec('/var/www/html/secure/wakenas.sh &');
+		}
+	}	
 	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
-	if ($output[0]=='TV is on.'&&$d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
-	elseif ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($output[0]=='TV is on.') {
+		if ($d['lgtv']['s']=='Off') sw('lgtv', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['Weg']['s']==0) {
+			$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+			if (isset($loadedprofile['result']['label'])&&$d['nas']['s']=='Off') {
+				lg('Waking NAS...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+			}
+		}	
+	} elseif ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($output[0]=='TV is on.'&&$d['Weg']['s']>0) shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
 } else {
 	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
-	if ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__)
+	if ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 }
+unset($output, $return_var);
 //if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
