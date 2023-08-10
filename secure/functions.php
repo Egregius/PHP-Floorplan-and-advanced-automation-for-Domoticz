@@ -399,7 +399,7 @@ function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
 	if ($sleep>0) usleep($sleep);
-	if (startsWith($key,'PRESET')&&$ip!=102) {
+/*	if (startsWith($key,'PRESET')&&$ip!=102) {
 		for ($x=1;$x<=10;$x++) {
 			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
 //			lg('Bosekey '.$key.' '.$ip.' '.$x.' data='.print_r($data, true));
@@ -413,7 +413,7 @@ function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 			}
 			sleep(2);
 		}
-	}
+	}*/
 	if (strlen($msg)>0) lg($msg);
 }
 function bosevolume($vol,$ip=101, $msg='') {

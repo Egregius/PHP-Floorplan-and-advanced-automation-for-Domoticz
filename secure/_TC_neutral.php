@@ -1,7 +1,7 @@
 <?php
 if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['daikin']['s']=='On') {
+if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin=json_decode($d['daikin'.$k]['s']);
 		if ($daikin->power!=0&&$daikin->mode!=3) {
