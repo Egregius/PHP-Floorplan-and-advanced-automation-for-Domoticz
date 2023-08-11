@@ -42,9 +42,26 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
-
+		
+/*		if ($d['bose101']['s']=='On') {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+			if (isset($nowplaying['@attributes']['sourceAccount'])&&$nowplaying['@attributes']['sourceAccount']=='egregiusspotify') {
+				$id=str_replace('spotify:track:', '', $nowplaying['trackID']);
+				file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+			}
+		}*/
 		
 	}
+	/* -------------------------------------------- SLAPEN ----------------------*/
+/*	if ($d['Weg']['s']==1){
+		if ($d['bose105']['s']=='On') {
+			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
+			if (isset($nowplaying['@attributes']['sourceAccount'])&&$nowplaying['@attributes']['sourceAccount']=='egregiusspotify') {
+				$id=str_replace('spotify:track:', '', $nowplaying['trackID']);
+				file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+			}
+		}
+	}*/
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
 		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
@@ -56,7 +73,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		foreach (array('bureel','kristal','garage','tuin','voordeur','zolderg','lamp kast') as $i) {
-			if ($d[$i]['s']!='Off') {
+			if ($d[$i]['s']=='On') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 					lg($i.' uitgeschakeld omdat we slapen of weg zijn');
@@ -124,8 +141,8 @@ if ($d['auto']['s']=='On') {
 	if ($dag==4) {
 		if ($d['Rbureel']['s']<40) {
 			if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['kristal']['s']!='Off') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['bureel']['s']=='On') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
 	if ($d['lgtv']['s']=='Off'&&$d['Media']['s']=='On'&&past('lgtv')>1790&&past('Media')>1790) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);

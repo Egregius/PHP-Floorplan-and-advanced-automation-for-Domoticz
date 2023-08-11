@@ -393,7 +393,7 @@ function endswith($string,$test) {
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
-	lg('bosekey '.$key);
+	lg('bosekey '.$key.' '.$msg);
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
@@ -414,7 +414,6 @@ function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 			sleep(2);
 		}
 	}*/
-	if (strlen($msg)>0) lg($msg);
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;

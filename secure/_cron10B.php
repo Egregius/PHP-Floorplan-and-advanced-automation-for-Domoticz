@@ -49,6 +49,34 @@ if ($d['Weg']['s']<2) {
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
+			if (isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
+				$played=file_get_contents('https://secure.egregius.be/spotify/played.php');
+				$played=json_decode($played, true);
+				$id=str_replace('spotify:track:', '', $status['trackID']);
+				if (is_array($played)) {
+					if (in_array($id, $played)) {
+						bosekey('NEXT_TRACK', 150000, $ip, ' => already played 1');
+						sleep(3);
+						$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+						$status=json_decode(json_encode(simplexml_load_string($status)), true);
+						if (isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
+							$id=str_replace('spotify:track:', '', $status['trackID']);
+							if (in_array($id, $played)) {
+								bosekey('NEXT_TRACK', 150000, $ip, ' => already played 2');
+								sleep(3);
+								$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+								$status=json_decode(json_encode(simplexml_load_string($status)), true);
+								if (isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
+									$id=str_replace('spotify:track:', '', $status['trackID']);
+									if (in_array($id, $played)) {
+										bosekey('NEXT_TRACK', 150000, $ip, ' => already played 3');
+									} else file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+								}
+							} else file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+						}
+					} else file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+				} else file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
+			}
 		} else {
 			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
 			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
