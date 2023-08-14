@@ -49,8 +49,8 @@ if ($d['Weg']['s']<2) {
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
-			if (isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
-				$played=file_get_contents('https://secure.egregius.be/spotify/played.php');
+			if ($ip==101&&isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
+				$played=file_get_contents('https://secure.egregius.be/spotify/played.php', false, $ctx);
 				$played=json_decode($played, true);
 				$id=str_replace('spotify:track:', '', $status['trackID']);
 				if (is_array($played)) {
@@ -101,10 +101,12 @@ if ($d['Weg']['s']<2) {
 			}
 		}	
 	} elseif ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($output[0]=='TV is on.'&&$d['Weg']['s']>0) shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
-} else {
-	exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
-	if ($output[0]!='TV is on.'&&$d['lgtv']['s']=='On') sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
+	
+} 
+exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
+if ($output[0]=='TV is on.'&&$d['Weg']['s']>0) {
+	shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
+	sw('lgtv', 'Off', basename(__FILE__).':'.__LINE__);
 }
 unset($output, $return_var);
 //if (past('wind')>86&&past('buiten_temp')>86&&past('buien')>86) require('_weather.php');
