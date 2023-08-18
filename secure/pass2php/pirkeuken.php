@@ -5,10 +5,10 @@ if ($d['auto']['s']=='On') {
 		sirene('Beweging keuken');
 	} else {
 		$time=time();
-		if ($d['snijplank']['s']=='On'&&$d['lgtv']['s']=='On'&&$time>=strtotime('19:00')) {
+		if ($d['snijplank']['s']=='On'&&$d['Media']['s']=='On'&&$time>=strtotime('19:00')) {
 			sw('snijplank', 'Off', basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['wasbak']['s']>0&&$d['lgtv']['s']=='On'&&$time>=strtotime('19:00')) {
+		if ($d['wasbak']['s']>0&&$d['Media']['s']=='On'&&$time>=strtotime('19:00')) {
 			sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}

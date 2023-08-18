@@ -1,4 +1,2 @@
 <?php
-if ($d['lgtv']['s']!='Off') {
-	shell_exec('python3 secure/lgtv.py -c off '.$lgtvip);
-}
+sw('Media', 'On', basename(__FILE__).':'.__LINE__);

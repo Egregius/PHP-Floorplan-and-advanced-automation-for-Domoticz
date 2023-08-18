@@ -13,29 +13,6 @@ echo past('$ remoteauto');
 
 
 
-exec('/var/www/html/secure/lgtv.py '.$lgtvip, $output, $return_var);
-echo $return_var;
-
-/*
-$response=file_get_contents(
-	'http://192.168.2.19:8123/api/states',
-	false,
-	stream_context_create(
-		array(
-			'http'=>array(
-				'header'=>array(
-					'Content-Type: application/json',
-					'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjZDM1MDc5MzJmMDY0MWZmODRlMzhlNTExNmM1NDFlMSIsImlhdCI6MTY4MTk3NjMwNywiZXhwIjoxOTk3MzM2MzA3fQ.Dthf5CqY06vfsnCruEclAKfds6h11EjyPsXNwZgT_vU'
-				),
-				'method'=>'GET',
-				
-				
-			)
-		)
-	)
-);
-*/
-
 /*NL('Rook gedetecteerd in badkamer!');
 NL('Rook gedetecteerd in kamer!');
 NL('Rook gedetecteerd in living!');
@@ -119,8 +96,6 @@ unset(
 	$_SESSION,
 	$zwaveidx,
 	$db,
-	$lgtvip,
-	$lgtvmac,
 	$nasip,
 	$shieldip,
 	$kodiurl,

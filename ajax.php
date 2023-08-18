@@ -45,30 +45,6 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='spotify') {
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
 	resetsecurity();
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='lgtv') {
-	if ($_REQUEST['command']=='input') {
-		if($_REQUEST['action']=='Netflix') {
-			shell_exec('/var/www/html/secure/lgtv.py -c app -a netflix '.$lgtvip);
-		} elseif ($_REQUEST['action']=='YouTube') {
-			shell_exec('/var/www/html/secure/lgtv.py -c app -a youtube.leanback.v4 '.$lgtvip);
-		} elseif ($_REQUEST['action']=='Shield') {
-			shell_exec('/var/www/html/secure/lgtv.py -c set-input -a HDMI_1 '.$lgtvip);
-		}
-	} elseif ($_REQUEST['command']=='play') {
-		shell_exec('/var/www/html/secure/lgtv.py -c play '.$lgtvip);
-	} elseif ($_REQUEST['command']=='pause') {
-		shell_exec('/var/www/html/secure/lgtv.py -c pause '.$lgtvip);
-	} elseif ($_REQUEST['command']=='volume') {
-		if ($_REQUEST['action']<0) fvolume($_REQUEST['action']);
-		else fvolume('+'.trim($_REQUEST['action']));
-	} elseif ($_REQUEST['command']=='sw') {
-		if ($_REQUEST['action']=='On') {
-			shell_exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip);
-		} elseif ($_REQUEST['action']=='Off') {
-			shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
-		}
-	}
-}
 elseif (isset($_REQUEST['bose'])) {
 	$bose=$_REQUEST['bose'];
 	$d=array();
@@ -244,16 +220,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			shell_exec('secure/wakenas.sh');
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
-			else {
-				if ($_REQUEST['device']=='Media') {
-					if ($_REQUEST['action']=='Off') {
-						$d=fetchdata();
-						if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
-						if ($d['bureel']['s']=='On') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
-						shell_exec('/var/www/html/secure/lgtv.py -c off '.$lgtvip);
-					} else sw('Media', 'On', basename(__FILE__).':'.__LINE__);
-				} else 	call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
-			}
+			else call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 		}
 	}
 }

@@ -3,13 +3,8 @@
 require '/var/www/html/secure/functions.php';
 
 if (isset($argv[1])) {
-	if ($argv[1]=='test') {
-		mset('lgtv-offline', 10);
-		echo mget('lgtv-offline');
-	} else {
-		lg('Executing _cron'.$argv[1].'.php');
-		include ('_cron'.$argv[1].'.php');
-	}
+	lg('Executing _cron'.$argv[1].'.php');
+	include ('_cron'.$argv[1].'.php');
 } else {
 	lg('Starting cron loop...');
 	while (1){

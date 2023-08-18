@@ -46,6 +46,14 @@ if ($d['achterdeur']['s']=='Open') {
 if ($d['kookplaat']['s']=='On') {
 	if ($d['kookplaatpower_kWh']['s']<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 }
+if ($d['Weg']['s']>0) {
+	if ($d['Media']['s']=='On'&&past('Weg')>1800) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['kookplaat']['s']=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
+}
+
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);

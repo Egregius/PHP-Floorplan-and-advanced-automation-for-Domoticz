@@ -3,8 +3,6 @@
 adblock.txt
 hosts.txt
 client_secret.json
-.pylgtv
-secure/.pylgtv
 homeegregius-6d02ff673a38.json
 service-account-credentials.json
 secure/gcal/google-api-php-client/*

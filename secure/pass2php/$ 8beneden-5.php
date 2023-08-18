@@ -3,7 +3,7 @@ if ($status=='On') {
 	if ($d['zon']['s']==0) {
 		sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['lgtv']['s']=='On') {
+		if ($d['Media']['s']=='On') {
 			if ($d['Rliving']['s']<40) {
 				sl('Rliving', 40, basename(__FILE__).':'.__LINE__);
 			} else {

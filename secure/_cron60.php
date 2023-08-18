@@ -145,7 +145,6 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-	if ($d['lgtv']['s']=='Off'&&$d['Media']['s']=='On'&&past('lgtv')>1790&&past('Media')>1790) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
 //	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
@@ -167,7 +166,7 @@ if ($d['auto']['s']=='On') {
 		&&past('bose105')>300
 		&&past('bose106')>300
 		&&past('bose107')>300
-		&&(($d['Weg']['s']>0||$d['lgtv']['s']=='On')&&$d['eettafel']['s']==0)
+		&&(($d['Weg']['s']>0||$d['Media']['s']=='On')&&$d['eettafel']['s']==0)
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 		if (!empty($status)) {

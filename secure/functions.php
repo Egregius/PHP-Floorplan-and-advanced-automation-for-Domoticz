@@ -13,7 +13,7 @@ function fliving() {
 	global $d,$dag,$time;
 	$d=fetchdata();
 	$dag=dag();
-	if ($d['lgtv']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
+	if ($d['Media']['s']=='Off'&&$d['bureel']['s']=='Off'&&$d['eettafel']['s']==0) {
 		if (($d['zon']['s']==0&&$dag<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
@@ -117,13 +117,12 @@ function waarschuwing($msg) {
 	telegram($msg, false, 1);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
-//	sleep(10);
-//	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
-//	die($msg);
+	sleep(10);
+	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 function past($name) {
 	global $d;
-	//$d=fetchdata();
+	if (!isset($d[$name]['t'])) $d=fetchdata();
 	if ($name=='$ remoteauto') lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
 	else return 999999999;
@@ -204,58 +203,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		}
 	}
 }
-function fvolume($cmd) {
-	global $d;
-	if (!is_array($d)) $d=fetchdata();
-	if ($cmd=='down') {
-		if ($d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-down 192.168.2.6');
-		} elseif ($d['bose101']['s']=='On') {
-			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-			if (!empty($nowplaying)) {
-				if (isset($nowplaying['@attributes']['source'])) {
-					if ($nowplaying['@attributes']['source']!='STANDBY') {
-						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-						$cv=$volume['actualvolume'];
-						if ($cv==0) exit;
-						elseif ($cv>50) bosevolume($cv-6);
-						elseif ($cv>30) bosevolume($cv-5);
-						elseif ($cv>20) bosevolume($cv-4);
-						elseif ($cv>10) bosevolume($cv-3);
-						else bosevolume($cv-2);
-					}
-				}
-			}
-		}
-	} elseif ($cmd=='up') {
-		if ($d['lgtv']['s']=='On') {
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-			exec('/var/www/html/secure/lgtv.py -c volume-up 192.168.2.6');
-		} elseif ($d['bose101']['s']=='On') {
-			$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-			if (!empty($nowplaying)) {
-				if (isset($nowplaying['@attributes']['source'])) {
-					if ($nowplaying['@attributes']['source']!='STANDBY') {
-						$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-						$cv=$volume['actualvolume'];
-						if ($cv>80) exit;
-						elseif ($cv>50) bosevolume($cv+6);
-						elseif ($cv>30) bosevolume($cv+5);
-						elseif ($cv>20) bosevolume($cv+4);
-						elseif ($cv>10) bosevolume($cv+3);
-						else bosevolume($cv+2);
-					}
-				}
-			}
-		}
-	}
-}
-function lgcommand($action,$msg='') {
-	global $lgtvip, $lgtvmac;
-	if ($action=='on') exec('/var/www/html/secure/lgtv.py -c on -a '.$lgtvmac.' '.$lgtvip, $output, $return_var);
-	else shell_exec('/var/www/html/secure/lgtv.py -c '.$action.' '.$lgtvip.' > /dev/null 2>&1 &');
-}
+
 function store($name,$status,$msg='',$idx=null) {
 	global $db, $user;
 	$time=time();
@@ -444,10 +392,10 @@ function bosezone($ip,$forced=false,$vol='') {
 	$time=time();
 	$preset='PRESET_5';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&($d['lgtv']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
+		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
 			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+			if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101);
 		}
@@ -463,7 +411,7 @@ function bosezone($ip,$forced=false,$vol='') {
 				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($preset, 750000, 101);
-				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+				if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $xml, 101);

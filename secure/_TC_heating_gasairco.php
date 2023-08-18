@@ -49,7 +49,7 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>0)		{$rate=1;$spmode=-1;}
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-2;
-					if (($d['lgtv']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) {
+					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) {
 						if ($rate>3)$rate=3;
 						if ($rate<0)$rate=0;
 					}
