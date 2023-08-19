@@ -7,6 +7,7 @@ require '/var/www/authentication.php';
 $d=fetchdata();
 
 echo past('$ remoteauto');
+telegram('test');
 
 //$status='Off';
 //include 'pass2php/$ remoteauto.php';
