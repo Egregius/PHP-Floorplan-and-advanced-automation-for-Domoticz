@@ -21,7 +21,7 @@ function fliving() {
 		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
 			bosezone(101);
 		}
-		apcu_store('living', $time);
+		mset('living', $time);
 	}
 }
 function fgarage() {

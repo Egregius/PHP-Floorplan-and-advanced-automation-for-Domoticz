@@ -25,11 +25,11 @@ if ($d['kamer']['m']==2) {
 		if (!empty($data)) {
 			if (isset($data['@attributes']['source'])) {
 				if ($data['@attributes']['source']=='STANDBY') {
-					bosekey("POWER", 0, 103);
+	//				bosekey("POWER", 0, 103);
 					sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 //					usleep(200000);
 //					bosekey('SHUFFLE_ON', 0, 103);
-					usleep(200000);
+	//				usleep(200000);
 					bosekey("PRESET_5", 0, 103);
 					bosevolume(17, 103);
 				} else {

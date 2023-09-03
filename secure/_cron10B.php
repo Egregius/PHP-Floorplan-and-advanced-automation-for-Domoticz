@@ -36,7 +36,10 @@ if ($d['Weg']['s']==0) {
 	}
 	foreach(array(101,105) as $ip) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') bosekey('PRESET_5', 0, $ip);
+		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
+			lg('INVALID SOURCE');
+			bosekey('PRESET_5', 0, $ip);
+		}
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
 			if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
@@ -48,7 +51,7 @@ if ($d['Weg']['s']==0) {
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
-			if (isset($status['@attributes']['sourceAccount'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
+			if (isset($status['@attributes']['sourceAccount'], $status['trackID'])&&$status['@attributes']['sourceAccount']=='egregiusspotify') {
 				$played=file_get_contents('https://secure.egregius.be/spotify/played.php', false, $ctx);
 				$played=json_decode($played, true);
 				$id=str_replace('spotify:track:', '', $status['trackID']);

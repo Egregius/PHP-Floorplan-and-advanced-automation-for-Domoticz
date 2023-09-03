@@ -1,5 +1,6 @@
 <?php
 if ($status=='On') {
-	$item='RkamerL';
-	sl($item, 100, basename(__FILE__).':'.__LINE__, true);
+	sl('waskamer', 0, basename(__FILE__).':'.__LINE__, true);
+	if ($d['Weg']['s']==1) finkom(true);
+	huisthuis();
 }
