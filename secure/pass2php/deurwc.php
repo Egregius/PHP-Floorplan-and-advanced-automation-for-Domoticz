@@ -6,5 +6,7 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
 	}
     finkom();
 }
-if ($status=='Open') sirene('Deur WC open');
-else sirene('Deur WC dicht');
+if ($d['Weg']['s']>0) {
+	if ($status=='Open') sirene('Deur WC open');
+	else sirene('Deur WC dicht');
+}

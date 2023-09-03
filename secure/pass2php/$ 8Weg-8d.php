@@ -1,7 +1,6 @@
 <?php
-if (past('$ 8Weg-8')<10) {
-	if ($status=='On') {
-		huisthuis();
-		resetsecurity();
-	}
+$last=mget('8weg');
+if ($last>time()-5) {
+	huisthuis();
+	resetsecurity();
 }

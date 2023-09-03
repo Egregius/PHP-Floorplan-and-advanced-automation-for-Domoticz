@@ -1,5 +1,5 @@
 <?php
 if ($status=='On'&&$d['auto']['s']=='On') {
 	fliving();
-	sirene('Beweging living');
 }
+if ($d['Weg']['s']>0) sirene('Beweging living');

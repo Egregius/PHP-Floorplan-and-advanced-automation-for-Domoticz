@@ -31,7 +31,7 @@ define('MAX_ITEM_DUMP',50);
 if (file_exists("servers.php")) {
 	include_once("servers.php");
 } else {
-	$MEMCACHE_SERVERS[] = '127.0.0.1:11211';
+	$MEMCACHE_SERVERS[] = '192.168.2.21:11211';
 }
 
 ////////// END OF DEFAULT CONFIG AREA /////////////////////////////////////////////////////////////
@@ -874,7 +874,7 @@ EOB;
 		$totals = $cacheItems['counts'];
 		$maxDump = MAX_ITEM_DUMP;
 		foreach($items as $server => $entries) {
-			if ($_REQUEST["server"] != array_search($server,$MEMCACHE_SERVERS)) {
+			if (isset($_REQUEST["server"])&&$_REQUEST["server"] != array_search($server,$MEMCACHE_SERVERS)) {
 				continue;
 			}
     	echo <<< EOB

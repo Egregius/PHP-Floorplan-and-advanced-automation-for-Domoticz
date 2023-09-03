@@ -1,12 +1,12 @@
 <?php
 $d=fetchdata();
 if ($status=='Off') {
-	echo __LINE__.'<br>';
-	$past=past('$ remoteauto');
+	$last=mget('remoteauto');
 	lg('REMOTE AUTO past='.$past);
-	if ($past<60) sw('poortrf', 'On');
+	if ($last>time()-60) sw('poortrf', 'On');
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, true);
 	huisthuis();
+	mset('remoteauto');
 	if ($d['zon']['s']>0) {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
@@ -45,9 +45,8 @@ if ($status=='Off') {
 		exit;
 	}
 	store('Weg', 2);
-	sw('voordeur', 'On');
-	$d['voordeur']['s']='On';
+	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, true);
 	sleep(2);
-	sw('voordeur', 'Off');
+	sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
 	huisslapen();
 }

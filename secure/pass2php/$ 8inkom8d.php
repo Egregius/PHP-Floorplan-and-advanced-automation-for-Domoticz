@@ -1,5 +1,6 @@
 <?php
-if ($d['Weg']['s']>=2&&past('$ 8inkom8')<10) {
+$last=mget('8inkom');
+if ($last>time()-5) {
 	huisthuis();
 	resetsecurity();
 }

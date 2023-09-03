@@ -4,5 +4,7 @@ if ($status=='Open'&&$d['auto']['s']=='On') {
     fkeuken();
     fliving();
 }
-if ($status=='Open') sirene('Deur garage open');
-else sirene('Deur garage dicht');
+if ($d['Weg']['s']>0) {
+	if ($status=='Open') sirene('Deur garage open');
+	else sirene('Deur garage dicht');
+}

@@ -7,5 +7,7 @@ if ($d['auto']['s']=='On') {
 		if ($time>strtotime('6:00')&&$time<strtotime('10:00')&&$d['Ralex']['s']==0&&$d['Rwaskamer']>0) sl('Rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 	}
 }
-if ($status=='Open') sirene('Deur waskamer open');
-else sirene('Deur waskamer dicht');
+if ($d['Weg']['s']>1) {
+	if ($status=='Open') sirene('Deur waskamer open');
+	else sirene('Deur waskamer dicht');
+}

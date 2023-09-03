@@ -42,7 +42,7 @@ if ($status=="Open") {
 		}
 	}*/
 	// END BOSE BUITEN
-	sirene('Achterdeur open');
+	if ($d['Weg']['s']>0) sirene('Achterdeur open');
  } else {
 	if ($d['Weg']['s']>0&&$d['auto']['s']==1&&past('Weg')>178) {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);

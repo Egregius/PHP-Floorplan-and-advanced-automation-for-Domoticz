@@ -446,24 +446,15 @@ function bosepost($method,$xml,$ip=101,$log=false) {
 }
 
 function sirene($msg) {
-	global $device,$status;
-	$d=fetchdata();
-	if ($d['Weg']['s']==0||past('Weg')<60) return false;
-	elseif (isset($status)&&($status=='On'||$status=='Open')&&$device!=$d['Weg']['icon']) {
-		if (in_array($device, array('pirhall', 'deuralex', 'deurkamer', 'deurwaskamer', 'deurkamer', 'deurbadkamer', 'raamhall', 'raamkamer', 'raamwaskamer', 'raamalex'))) {
-			if ($d['Weg']['s']>=2) {
-				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-				telegram($msg.' om '.strftime("%k:%M:%S", $time), false, 2);
-				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
-			}
-		} else {
-			if ($d['Weg']['s']>=1) {
-				sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-				telegram($msg.' om '.strftime("%k:%M:%S", $time), false, 2);
-				storeicon('Weg', $device, basename(__FILE__).':'.__LINE__);
-			}
-		}
+	lg(' >>> SIRENE '.$msg);
+	$last=mget('sirene');
+	$time=time();
+	lg(' >>> last='.$last.'	time='.$time);
+	if ($last>$time-120) {
+		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+		telegram($msg.' om '.strftime("%k:%M:%S", $time), false, 2);
 	}
+	mset('sirene', $time);
 }
 function createheader($page='') {
 	global $udevice,$ipaddress;

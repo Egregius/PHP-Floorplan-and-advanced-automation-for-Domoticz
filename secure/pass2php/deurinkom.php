@@ -3,5 +3,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
     finkom();
     fliving();
 }
-if ($status=='Open') sirene('Deur inkom open');
-else sirene('Deur inkom dicht');
+if ($d['Weg']['s']>0) {
+	if ($status=='Open') sirene('Deur inkom open');
+	else sirene('Deur inkom dicht');
+}

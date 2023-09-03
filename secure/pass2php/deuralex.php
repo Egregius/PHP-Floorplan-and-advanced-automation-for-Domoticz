@@ -9,5 +9,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
-if ($status=='Open') sirene('Deur Alex open');
-else sirene('Deur Alex dicht');
+if ($d['Weg']['s']>1) {
+	if ($status=='Open') sirene('Deur Alex open');
+	else sirene('Deur Alex dicht');
+}

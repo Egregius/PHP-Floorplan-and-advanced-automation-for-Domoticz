@@ -4,5 +4,7 @@ if ($d['auto']['s']=='On') {
 		fhall();
 	}
 }
-if ($status=='Open') sirene('Deur kamer open');
-else sirene('Deur kamer dicht');
+if ($d['Weg']['s']>1) {
+	if ($status=='Open') sirene('Deur kamer open');
+	else sirene('Deur kamer dicht');
+}

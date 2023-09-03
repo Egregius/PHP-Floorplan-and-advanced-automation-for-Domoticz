@@ -1,9 +1,7 @@
 <?php
 if ($d['auto']['s']=='On') {
-	if ($status=="On") {
-		fkeuken();
-		sirene('Beweging keuken');
-	} else {
+	if ($status=="On") fkeuken();
+	else {
 		$time=time();
 		if ($d['snijplank']['s']=='On'&&$d['Media']['s']=='On'&&$time>=strtotime('19:00')) {
 			sw('snijplank', 'Off', basename(__FILE__).':'.__LINE__);
@@ -13,3 +11,4 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
+if ($d['Weg']['s']>0) sirene('Beweging keuken');
