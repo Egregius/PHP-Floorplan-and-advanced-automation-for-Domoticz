@@ -11,4 +11,4 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 }
-if ($d['Weg']['s']>0) sirene('Beweging keuken');
+if ($status=='On'&&$d['Weg']['s']>0) sirene('Beweging keuken');

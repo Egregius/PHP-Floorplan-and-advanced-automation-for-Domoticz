@@ -450,7 +450,7 @@ function sirene($msg) {
 	$last=mget('sirene');
 	$time=time();
 	lg(' >>> last='.$last.'	time='.$time);
-	if ($last>$time-120) {
+	if ($last>$time-300) {
 		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 		telegram($msg.' om '.strftime("%k:%M:%S", $time), false, 2);
 	}
