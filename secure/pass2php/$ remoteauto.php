@@ -1,12 +1,13 @@
 <?php
-$d=fetchdata();
+//$d=fetchdata();
 if ($status=='Off') {
 	$last=mget('remoteauto');
-	lg('REMOTE AUTO past='.$past);
-	if ($last>time()-60) sw('poortrf', 'On');
+	lg('REMOTE AUTO past='.$last);
+	if ($last>$time-60) sw('poortrf', 'On');
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, true);
 	huisthuis();
-	mset('remoteauto');
+	mset('remoteauto', $time);
+	lg($d['zon']['s']);
 	if ($d['zon']['s']>0) {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);

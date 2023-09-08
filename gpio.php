@@ -11,10 +11,10 @@ if (isset($_REQUEST['gpio'])) {
 	} elseif ($gpio==19) {
 		if ($_REQUEST['action']=='on') store('poort', 'Closed', basename(__FILE__).':'.__LINE__);
 		else {
+			fgarage();
 			store('poort', 'Open', basename(__FILE__).':'.__LINE__);
 			if ($d['voordeur']['s']=='On'&&$d['zon']['s']>0) sw('voordeur', 'Off',basename(__FILE__).':'.__LINE__);
-			sirene('Poort open');
-			fgarage();
+			if ($d['Weg']['s']>0&&$d['poortrf']['s']=='Off') sirene('Poort open');
 			if ($d['Xlight']['s']>0) sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	} else die('Unknown');
