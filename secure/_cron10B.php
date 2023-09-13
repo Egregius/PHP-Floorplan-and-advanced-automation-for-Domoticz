@@ -3,7 +3,7 @@ $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0) {
-	foreach(array(102=>30,104=>35,106=>35,107=>30) as $ip=>$vol) {
+	foreach(array(102=>26,104=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
@@ -13,12 +13,14 @@ if ($d['Weg']['s']==0) {
 					if ($d['bose101']['s']=='On') bosezone($ip, true);
 					elseif ($d['bose103']['m']==0&&$time>strtotime('20:00')) {
 						bosekey('PRESET_5', 0, $ip);
+						usleep(500000);
 //						storemode('bose101', 0);
 						bosevolume($vol, $ip);
 					}
 					
 				} else {
 					bosezone($ip);
+					usleep(500000);
 					bosevolume($vol, $ip);
 				}
 			}

@@ -17,8 +17,6 @@ if ($d['auto']['s']=='On') {
 				break;
 			}
 		}
-	} else {
-		if ($d['pirinkom']['s']=='On'&&$d['zon']['s']==0) finkom();
 	}
 	$i=5;
 	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
@@ -28,8 +26,6 @@ if ($d['auto']['s']=='On') {
 				break;
 			}
 		}
-	} else {
-		if ($d['pirhall']['s']=='On'&&$d['zon']['s']==0) fhall();
 	}
 	if ($d['Media']=='On'&&$time>strtotime('19:00')) $i=5;
 	else $i=35;
