@@ -10,18 +10,15 @@ $memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
 	
 	
 function fliving() {
-	lg(__LINE__);
 	global $d,$dag,$time;
 	$d=fetchdata();
 	$dag=dag();
 	if ($d['Media']['s']=='Off'&&$d['bureel']['s']!='On'&&$d['eettafel']['s']==0) {
-		lg(__LINE__);
 		if (($d['zon']['s']==0&&$dag<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
 		}
 		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
-			lg(__LINE__);
 			bosezone(101);
 		}
 		mset('living', $time);
