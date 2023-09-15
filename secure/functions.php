@@ -464,36 +464,28 @@ function createheader($page='') {
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Floorplan</title>';
-	if ($ipaddress=='192.168.2.202')  { //Aarde
+	if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.768,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.203'||$udevice=='iPad')  { //iPad Nero
+	} elseif ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="initial-scale=1.6,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
+		echo '
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
 	} elseif ($udevice=='iPhone') {
 		echo '
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
 	} else {
 		echo '
+		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
+	}
+	echo '
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
-	}
-	echo '
+		<meta name="theme-color" content="#000">
 		<link rel="manifest" href="/manifest.json">
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
