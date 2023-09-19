@@ -51,7 +51,7 @@ if ($d['auto']['s']=='On') {
 		if($d['zon']['s']>2000) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Ralex']['s']<83) sl('Rwaskamer', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<83) sl('Ralex', 83, basename(__FILE__).':'.__LINE__);
-			if ($d['Rbureel']['s']<40) sl('Rbureel', 40, basename(__FILE__).':'.__LINE__);
+			if ($d['Rbureel']['s']<30) sl('Rbureel', 30, basename(__FILE__).':'.__LINE__);
 			if ($d['Weg']['s']>1) if ($d['Rliving']['s']<86) sl('Rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}

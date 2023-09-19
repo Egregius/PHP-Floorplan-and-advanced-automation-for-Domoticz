@@ -50,7 +50,7 @@ if ($d['heating']['s']>=0) {
 		if ($loop==true) {
 			$t2=$t-(360*$x);
 			if ($time>=$t2&&$time<$t+900) {
-				$hum=25+$x;
+				$hum=35+$x;
 	//			lg ('TC_badkamer hum = '.$hum);
 				$loop=false;
 			}
