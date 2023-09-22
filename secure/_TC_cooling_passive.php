@@ -59,7 +59,7 @@ if ($d['auto']['s']=='On') {
 	elseif ($time>=strtotime('22:00')||$time<strtotime('3:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($benedenall as $i) {
-				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<88) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			foreach ($boven as $i) {
 				if ($i=='Rwaskamer') {

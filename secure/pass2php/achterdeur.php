@@ -47,7 +47,7 @@ if ($status=="Open") {
 	if ($d['Weg']['s']>0&&$d['auto']['s']==1&&past('Weg')>178) {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 			$time=time();
-			telegram('Achterdeur open om '.strftime("%k:%M:%S", $time), false, 3);
+			telegram('Achterdeur dicht om '.strftime("%k:%M:%S", $time), false, 3);
 	}
 /*	// BOSE BUITEN
 	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
@@ -91,7 +91,6 @@ if ($status=="Open") {
 		}
 	}
 	// END BOSE BUITEN*/
-	sirene('Achterdeur dicht');
 }
 
 // Indien geen zwembad

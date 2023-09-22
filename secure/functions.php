@@ -466,7 +466,7 @@ function createheader($page='') {
 		<title>Floorplan</title>';
 	if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.768,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.868,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
 		<meta name="viewport" content="initial-scale=1.6,user-scalable=yes,minimal-ui">';

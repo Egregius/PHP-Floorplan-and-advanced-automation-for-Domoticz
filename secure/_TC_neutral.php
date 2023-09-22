@@ -36,7 +36,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	elseif ($time>=strtotime('17:00')&&$time<strtotime('22:00')) {
-		if ($dag<3) {
+		if ($dag<3&&$d['kamer_temp']['s']<=18&&$d['alex_temp']['s']<=18) {
 			foreach ($boven as $i) {
 				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
@@ -53,11 +53,7 @@ if ($d['auto']['s']=='On') {
 				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			foreach ($boven as $i) {
-				if ($i=='RkamerR') {
-					if ($d['Weg']['s']>=2&&$d[$i]['s']<82) sl($i, 82, basename(__FILE__).':'.__LINE__);
-				} else {
-					if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
-				}
+				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}

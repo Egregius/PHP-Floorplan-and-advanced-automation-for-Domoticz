@@ -352,7 +352,7 @@ if ($d['auto']['s']=='On') {
 	elseif ($time>=strtotime('22:00')||$time<strtotime('3:00')) {
 		if ($d['Weg']['s']>0) {
 			foreach ($beneden as $i) {
-				if ($d[$i]['s']<88) sl($i, 88, basename(__FILE__).':'.__LINE__);
+				if ($d[$i]['s']<88) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['Rliving']['s']<86) sl('Rliving', 86, basename(__FILE__).':'.__LINE__);
 			foreach ($boven as $i) {
