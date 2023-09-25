@@ -45,14 +45,8 @@ if (isset($data['CivTwilightStart'])) {
 	$icon=strtotime($data['SunAtSouth']);
 	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
 } else lg('Error fetching CivTwilightStart from domoticz');
-if ($time<strtotime('1:05')) {
-	for ($x=3;$x>=0;$x--) {
-		$date=date("Y-m-d", ($time-($x*86400)));
-		$query="INSERT IGNORE INTO `pluvio` (`date`, `rain`) VALUES ('$date', '0');";
-		if(!$result=$db->query($query)){lg($db->error);die('There was an error running the query ['.$query.'-'.$db->error.']');}
-	}
-}
+
 /* Clean old database records */
 
-$remove=strftime("%F %T", $time-(86400*101));
+$remove=strftime("%F %T", $time-(86400*100));
 $stmt=$db->query("delete from temp where stamp < '$remove'");

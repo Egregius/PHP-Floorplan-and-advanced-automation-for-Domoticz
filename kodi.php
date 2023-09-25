@@ -68,6 +68,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<meta name="HandheldFriendly" content="true" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="theme-color" content="#000">
 	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 	<title>Kodi</title>
 	<link rel="icon" type="image/png" href="images/kodi.png">

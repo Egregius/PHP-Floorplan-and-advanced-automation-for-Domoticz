@@ -30,6 +30,7 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+	<meta name="theme-color" content="#000">
 	<title>Kodi</title>
 	<link rel="icon" type="image/png" href="images/kodi.png">
 	<link rel="shortcut icon" href="images/kodi.png" />
