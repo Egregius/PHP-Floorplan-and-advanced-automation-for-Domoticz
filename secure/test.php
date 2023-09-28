@@ -6,8 +6,9 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-echo past('$ remoteauto');
-telegram('test');
+hass('media_player','turn_on','media_player.ht_a7000');
+
+
 
 //$status='Off';
 //include 'pass2php/$ remoteauto.php';
