@@ -48,9 +48,6 @@ if (isset($_POST['cmd'])) {
 		} else {
 			kodi('{"jsonrpc":"2.0","id":1,"method":"Player.SetSubtitle","params":{"playerid":1,"subtitle":'.$_POST['action'].'}}', false, $ctx);
 		}
-	} elseif ($_POST['cmd']=='Volume') {
-		lg('volume '.$_POST['action']);
-		fvolume($_POST['action']);
 	}
 	exit;
 } elseif (isset($_POST['kodicontrol'])) {
@@ -225,8 +222,6 @@ echo '
 					<form action="kodicontrol.php">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
 					</form>
-					<input type="submit" name="Volume" value="Down" class="btn big b2" onclick="exec(\'Volume\',\'down\');"/>
-					<input type="submit" name="Volume" value="Up" class="btn big b2" onclick="exec(\'Volume\',\'up\');"/>
 				</div>
 		</div>
 	</body>

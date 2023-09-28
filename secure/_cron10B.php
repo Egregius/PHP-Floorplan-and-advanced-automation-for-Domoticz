@@ -142,3 +142,23 @@ if ($d['Weg']['s']<=1) {
 		unset($status);
 	}
 }
+if ($d['Weg']['s']==0) {
+	if ($d['nas']['s']=='Off') {
+		if ($d['Media']['s']=='On') {
+			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+			if (isset($kodi['result'])) {
+				lg('Waking NAS for Kodi...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+				unset($kodi);
+			}
+		}
+		if (past('pirhall')<300) {
+			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+			if (isset($kodi['result'])) {
+				lg('Waking NAS for Kodi 2...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+				unset($kodi);
+			}
+		}
+	}	
+}
