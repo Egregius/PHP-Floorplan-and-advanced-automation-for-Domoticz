@@ -20,9 +20,8 @@ $times[]=TIME-$d['Weg']['t'];
 $data['t']=min($times);
 $zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 $zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-if ($d['Weg']['s']==0) {
-//	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=42');
-	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=20');
+if ($d['Weg']['s']==0&&$data['t']>90) {
+	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=10');
 	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=747&switchcmd=Set%20Level&level=20&passcode=');
 }
 if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
