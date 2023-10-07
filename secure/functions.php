@@ -389,8 +389,8 @@ function bosepreset($pre,$ip=101) {
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time;
 	$time=time();
-	$week=strftime("%v", $time);
-	if ($week%2==0) $preset='PRESET_1';
+	$week=strftime('%v', $time);
+	if ((int)$week % 2 == 0) $preset='PRESET_1';
 	else $preset='PRESET_2';
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
