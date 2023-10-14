@@ -34,6 +34,7 @@ echo '<html>
 <meta name="HandheldFriendly" content="true"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#000">
 <meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,initial-scale=1,minimal-ui" />
 <link rel="icon" type="image/png" href="/images/Camera.png"/>
 <link rel="shortcut icon" href="/images/Camera.png"/>

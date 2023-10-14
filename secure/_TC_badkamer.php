@@ -44,7 +44,8 @@ if (isset($set)&&$d['heating']['s']>=0) {
 	$d['badkamer_set']['s']=$set;
 }
 if ($d['heating']['s']>=0) {
-	$hum=65;
+	if ($time>=$t-7200&&$time<$t+900) $hum=60;
+	else $hum=80;
 	$loop=true;
 	for ($x=0;$x<=35;$x+=1) {
 		if ($loop==true) {

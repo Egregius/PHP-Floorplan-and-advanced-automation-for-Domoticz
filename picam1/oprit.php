@@ -15,7 +15,9 @@ echo '
 <meta name="msapplication-TileImage" content="../images/Camera.png"/>
 <meta name="msapplication-config" content="browserconfig.xml"/>
 <meta name="mobile-web-app-capable" content="yes"/><link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#ffffff"/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#000">
 <link rel="stylesheet" href="../style.css"/>
 <style type="text/css">body{margin:0 auto;}form,table{display:inline;margin:0px;padding:0px;}</style>
 <script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
