@@ -79,8 +79,8 @@ if ($d['living_set']['m']==0) {
 				} else break;
 			}
 			if ($d['Weg']['s']==0) {
-//				if ($time>=strtotime('4:00')&&$time<strtotime('19:00')) $Setliving=$base;
-//				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$base-1;
+				if ($time>=strtotime('4:00')&&$time<strtotime('19:00')) $Setliving=$base;
+				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$base-1;
 			}
 		}
 		if ($Setliving>18&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$base-1;
