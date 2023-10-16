@@ -123,6 +123,17 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
 			} //else lg('no file found for '.$device);
+		} elseif ($topic[1]=='in') {
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+			$d=fetchdata();
+			dag();
+			$message=json_decode($message, true);
+			if ($message['command']=='switchlight') {
+				if ($message['switchcmd']=='On') store(null,'On','domoticz in from Homebridge/Homekit',$message['idx']);
+				else if ($message['switchcmd']=='Off') store(null,'Off','domoticz in from Homebridge/Homekit',$message['idx']);
+				else if ($message['switchcmd']=='Set Level') store(null,$message['level'],'domoticz in from Homebridge/Homekit',$message['idx']);
+				else lg(print_r($message,true));
+			} else lg(print_r($message,true));
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
