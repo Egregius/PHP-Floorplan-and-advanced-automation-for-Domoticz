@@ -21,8 +21,10 @@ if ($status=='On') {
 		if (!empty($data)) {
 			if (isset($data['@attributes']['source'])) {
 				if ($data['@attributes']['source']=='STANDBY') {
+					if ((int)$week % 2 == 0) $preset='PRESET_1';
+					else $preset='PRESET_2';
 					sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
-					bosekey("PRESET_1", 0, 103);
+					bosekey($preset, 10000, 103);
 					bosevolume(17, 103);
 				} else {
 					bosevolume(17, 103);
