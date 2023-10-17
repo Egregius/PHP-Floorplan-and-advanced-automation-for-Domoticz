@@ -22,9 +22,9 @@ if ($d['daikin']['m']==1) {
 				if ($dif<-1) $rate=6;
 				elseif ($dif<-0.4) $rate=5;
 				elseif ($dif<0) $rate=4;
-				elseif ($dif>=1) {$rate=1;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
-				elseif ($dif>=0.5) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
-				elseif ($dif>=0) $rate=3;
+				elseif ($dif>=1) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
+				elseif ($dif>=0.5) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+				elseif ($dif>=0) $rate=4;
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-1;
 					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) $rate=0;

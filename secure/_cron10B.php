@@ -80,6 +80,12 @@ if ($d['Weg']['s']<=1) {
 		}
 		unset($status);
 	}
+} else {
+	$status=@file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx);
+	if (isset($status['@attributes']['source'])&&$status['@attributes']['source']!='STANDBY') {
+		bosekey('POWER', 0, 101);
+		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 }
 if ($d['Weg']['s']==0) {
 	if ($d['nas']['s']=='Off') {
