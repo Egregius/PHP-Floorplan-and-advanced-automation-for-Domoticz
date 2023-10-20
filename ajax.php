@@ -145,6 +145,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			if ($d['Rbureel']['s']<70) sl('Rbureel', 69, basename(__FILE__).':'.__LINE__);
 			if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);
 			if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
+		} elseif ($_REQUEST['device']=='RkamerL') {
+			sl('RkamerL', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			sl('RkamerR', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 		} else {
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 			if($_REQUEST['device']=='luifel') {
