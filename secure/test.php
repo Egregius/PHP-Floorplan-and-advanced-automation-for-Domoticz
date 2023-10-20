@@ -6,9 +6,10 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-hass('media_player','turn_on','media_player.ht_a7000');
-
-
+if ($d['luchtdroger']['s']=='Off') {
+	if ($d['luchtdroger1']['s']!='Off') store('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['luchtdroger2']['s']!='Off') store('luchtdroger2', 'Off', basename(__FILE__).':'.__LINE__);
+}
 
 //$status='Off';
 //include 'pass2php/$ remoteauto.php';

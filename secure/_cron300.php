@@ -277,3 +277,14 @@ if ($d['zon']['s']>0) {
 	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
 }
+if ($d['luchtdroger']['s']=='On') {
+	$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=getopenzwavenodes&idx=3'),true);
+if (isset($data['result'])) {
+	foreach ($data['result'] as $i) {
+		if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
+			telegram('Node '.$i['Name'].' dead, restarting...');
+			echo shell_exec('sudo /sbin/reboot');
+		}
+	}
+}
+}
