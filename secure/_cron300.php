@@ -85,7 +85,7 @@ $data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php
 if (!empty($data)) {
 	if ($data['zonpercent']!=$d['zonvandaag']['m']) storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
 }
-if ($d['daikin']['s']=='On'&&past('daikin')>118) {
+if ($d['daikin']['s']=='On'&&past('daikin')>178) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($k=='living') $ip=111;
 		elseif ($k=='kamer') $ip=112;

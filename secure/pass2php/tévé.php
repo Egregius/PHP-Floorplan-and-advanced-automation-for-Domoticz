@@ -1,4 +1,4 @@
 <?php
 if ($status=='On') {
-	include ('$ miniliving4l.php');
+	sw('Media', 'On', basename(__FILE__).':'.__LINE__);
 }
