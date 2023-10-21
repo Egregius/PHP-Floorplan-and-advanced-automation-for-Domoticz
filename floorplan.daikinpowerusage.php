@@ -11,7 +11,8 @@ echo '
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="theme-color" content="#000">';
 if ($udevice=='iPhone') {
 	echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';

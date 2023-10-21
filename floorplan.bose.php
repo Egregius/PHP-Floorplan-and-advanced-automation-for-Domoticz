@@ -18,15 +18,21 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-if ($udevice=='iPhone') {
+if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 	echo '
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui">';
-} elseif ($udevice=='iPhoneSE') {
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.868,user-scalable=yes,minimal-ui">';
+} elseif ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 	echo '
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.8,user-scalable=yes,minimal-ui">';
-} elseif ($udevice=='iPad') {
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.35,user-scalable=yes,minimal-ui">';
+} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
 	echo '
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui">';
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+} elseif ($udevice=='iPhone') {
+	echo '
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+} else {
+	echo '
+	<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
 }
 echo '
 	<meta name="msapplication-TileColor" content="#000000">
@@ -58,12 +64,12 @@ echo '
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time">
 		</a>
 	</div>
-	<div class="fix z1" style="top:5px;left:5px;">
+	<div class="fix z1" style="bottom:14px;left:14px;">
 		<a href=\'javascript:navigator_Go("floorplan.php");\'>
 			<img src="/images/close.png" width="72px" height="72px" alt="close">
 		</a>
 	</div>
-	<div class="fix blackmedia" >
+	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
 			<div style="height:180px;" id="art"></div>
 			<h4 id="artist"></h4>
@@ -72,7 +78,7 @@ echo '
 			<div id="bass"></div>
 			<br>
 			<br>
-			<div id="power"></div>'.$udevice.'
+			<div id="power"></div>
 	</div>
 </body>
 </html>';

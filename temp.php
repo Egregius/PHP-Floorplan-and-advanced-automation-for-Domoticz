@@ -30,9 +30,11 @@ if ($udevice=='iPad') echo '
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
 elseif ($udevice=='iPhone') echo '
 	<body style="width:560px">
+		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:560px;height:60px;background-color:#000;">
 		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
+		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>
+		</div>';
 
 else 	echo '
 	<body style="width:100%">
