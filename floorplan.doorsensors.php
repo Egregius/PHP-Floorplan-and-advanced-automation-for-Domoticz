@@ -30,21 +30,21 @@ echo '
 		.red{color:#FFF;}
 		.stamp{width:38px;text-align:center;font-size:120%;color:#888}
 		.fix{cursor:pointer;z-index:100;}
-		.dpoort{top:270px;left:404px;width:60px;height:114px;}
-		.dachterdeur{top:265px;left:80px;width:60px;height:45px;}
-		.draamliving{top:46px;left:80px;width:60px;height:163px;}
-		.draamkeuken{top:179px;left:417px;width:60px;height:42px;}
-		.draamwaskamer{top:448px;left:80px;width:60px;height:44px;}
-		.draamalex{top:568px;left:80px;width:60px;height:44px;}
-		.draamkamer{top:586px;left:425px;width:60px;height:43px;text-align:left;}
-		.draamhall{top:396px;left:216px;width:55px;height:40px;}
-		.ddeurvoordeur{top:59px;left:418px;width:60px;height:44px;}
-		.ddeurbadkamer{top:420px;left:341px;width:60px;height:46px;}
-		.ddeurkamer{top:469px;left:290px;width:46px;height:33px;}
-		.ddeurwaskamer{top:448px;left:167px;width:44px;height:44px;}
-		.ddeuralex{top:535px;left:213px;width:43px;height:33px;}
-		.ddeurgarage{top:221px;left:341px;width:43px;height:33px;}
-		.ddeurinkom{top:56px;left:338px;width:43px;height:44px;}
+		.dpoort{top:322px;left:348px;width:60px;height:114px;}
+		.dachterdeur{top:309px;left:80px;width:60px;height:51px;}
+		.draamliving{top:56px;left:80px;width:60px;height:188px;}
+		.draamkeuken{top:210px;left:417px;width:60px;height:48px;}
+		.draamwaskamer{top:521px;left:80px;width:60px;height:48px;}
+		.draamalex{top:661px;left:80px;width:60px;height:48px;}
+		.draamkamer{top:661px;left:425px;width:60px;height:48px;text-align:left;}
+		.draamhall{top:461px;left:216px;width:55px;height:40px;}
+		.ddeurvoordeur{top:71px;left:418px;width:60px;height:51px;}
+		.ddeurbadkamer{top:490px;left:341px;width:60px;height:48px;}
+		.ddeurkamer{top:544px;left:290px;width:46px;height:33px;}
+		.ddeurwaskamer{top:521px;left:167px;width:44px;height:51px;}
+		.ddeuralex{top:597px;left:213px;width:43px;height:33px;}
+		.ddeurgarage{top:264px;left:341px;width:43px;height:33px;}
+		.ddeurinkom{top:68px;left:338px;width:43px;height:50px;}
 		.ddeurwc{top:43px;left:418px;width:43px;height:33px;}
 	</style>
 </head>';
@@ -64,7 +64,7 @@ if (isset($_REQUEST['name'])&&isset($_REQUEST['action'])) {
 $d=fetchdata();
 echo '
 <body class="floorplan">
-	<div class="fix z1" style="top:5px;left:5px;">
+	<div class="fix z1" style="bottom:12px;left:12px;">
 		<a href=\'javascript:navigator_Go("floorplan.php");\'>
 			<img src="/images/close.png" width="72px" height="72px"/>
 		</a>
