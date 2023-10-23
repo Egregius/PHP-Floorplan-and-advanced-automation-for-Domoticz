@@ -222,7 +222,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		if ($_REQUEST['device']=='nas') {
 			shell_exec('secure/wakenas.sh');
 		} elseif ($_REQUEST['device']=='imac') {
-			if ($_REQUEST['action']=='On') system("sudo -u root /var/www/imacwake.sh");
+			if ($_REQUEST['action']=='On'&&$d['Weg']['s']==0) system("sudo -u root /var/www/imacwake.sh");
 			elseif ($_REQUEST['action']=='Off') system("sudo -u root /var/www/imacsleep.sh");
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
