@@ -221,6 +221,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} else {
 		if ($_REQUEST['device']=='nas') {
 			shell_exec('secure/wakenas.sh');
+		} elseif ($_REQUEST['device']=='imac') {
+			shell_exec('sudo -i -u root /var/www/wakemac.sh');
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 			else call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
