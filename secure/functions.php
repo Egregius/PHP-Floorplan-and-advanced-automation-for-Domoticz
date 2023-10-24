@@ -92,6 +92,7 @@ function huisslapen() {
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['imac']['s']=='On') system("sudo -u root /var/www/imacsleep.sh");
 }
 function huisthuis() {
 	global $d;
@@ -394,6 +395,7 @@ function bosezone($ip,$forced=false,$vol='') {
 	$week=strftime('%v', $time);
 	if ((int)$week % 2 == 0) $preset='PRESET_2';
 	else $preset='PRESET_1';
+	telegram('Bosezone__Week = '.$week.'__Preset = '.$preset);
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
 			bosekey("POWER", 1500000, 101);
