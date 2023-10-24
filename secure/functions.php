@@ -392,10 +392,9 @@ function bosepreset($pre,$ip=101) {
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time;
 	$time=time();
-	$week=strftime('%v', $time);
+	$week=strftime('%-V', $time);
 	if ((int)$week % 2 == 0) $preset='PRESET_2';
 	else $preset='PRESET_1';
-	telegram('Bosezone__Week = '.$week.'__Preset = '.$preset);
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
 			bosekey("POWER", 1500000, 101);
