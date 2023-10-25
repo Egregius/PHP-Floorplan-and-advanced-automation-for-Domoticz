@@ -7,7 +7,8 @@ $tail=new PHPTail(
 	)
 );
 if (isset($_GET['ajax'])) {
-	echo $tail->getNewLines($_GET['file'], $_GET['lastsize'], $_GET['grep'], $_GET['invert']);die();
+	$vandaag=strftime("%F", $_SERVER['REQUEST_TIME']);
+	echo str_replace($vandaag.' ','',$tail->getNewLines($_GET['file'], $_GET['lastsize'], $_GET['grep'], $_GET['invert']));die();
 }
 $tail->generateGUI();
 class PHPTail
