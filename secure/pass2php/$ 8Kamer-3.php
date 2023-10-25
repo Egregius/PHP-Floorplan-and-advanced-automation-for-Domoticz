@@ -21,7 +21,7 @@ if ($status=='On') {
 		if (!empty($data)) {
 			if (isset($data['@attributes']['source'])) {
 				if ($data['@attributes']['source']=='STANDBY') {
-					$week=strftime('%v', $time);
+					$week=strftime('%-V', $time);
 					if ((int)$week % 2 == 0) $preset='PRESET_2';
 					else $preset='PRESET_1';
 					sw('bose103', 'On', basename(__FILE__).':'.__LINE__);

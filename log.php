@@ -4,9 +4,6 @@ require '/var/www/authentication.php';
 $tail=new PHPTail(
 	array(
 	"Domoticz"=>"/temp/domoticz.log",
-	"php8.0-fpm"=>"/var/log/php8.0-fpm.log",
-	"nginxaccess"=>"/var/log/nginx/access.log",
-	"nginxerror"=>"/var/log/nginx/error.log"
 	)
 );
 if (isset($_GET['ajax'])) {
@@ -63,16 +60,17 @@ class PHPTail
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Logs</title>
-
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#000">
 <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />-->
 
 <style type="text/css">
-#grepKeyword, #settings {font-size: 80%;}
+body{background-color:#000;color:#DDD;font-size:0.7em;}
 .float{background: white;border-bottom: 1px solid black;padding: 10px 0 10px 0;margin: 0px;height: 30px;width: 100%;text-align: left;}
 .contents {margin-top: 30px;}
-.results {padding-bottom: 20px;font-family: monospace;font-size: small;white-space: pre;}
+.results {padding-bottom: 20px;font-family: monospace;white-space: pre;}
 </style>
 <script src="/scripts/jquery.2.0.0.min.js"></script>
 <script src="/scripts/jquery-ui.min.js"></script>
@@ -180,22 +178,13 @@ console.log(e);
 </script>
 </head>
 <body>
-	<div class="fix z1" style="position:sticky;top:5px;left:5px;">
-		<a href="javascript:navigator_Go('logs.php');">
-			<img src="/images/close.png" width="72px" height="72px"/>
+	<div class="fix z1" style="position:fixed;top:0px;left:0px;">
+		<a href="javascript:navigator_Go('floorplan.php');">
+			<img src="/images/close.png" width="48px" height="48px"/>
 		</a>
 	</div>
 	<div class="contents">
 		<div id="results" class="results"></div>
-		<div id="settings" title="PHPTail settings">
-			<p>Grep keyword (return results that contain this keyword)</p>
-			<input id="grep" type="text" value="" />
-			<p>Should the grep keyword be inverted? (Return results that do NOT contain the keyword)</p>
-			<div id="invert">
-				<input type="radio" value="1" id="invert1" name="invert" /><label for="invert1">Yes</label>
-				<input type="radio" value="0" id="invert2" name="invert" checked="checked" /><label for="invert2">No</label>
-			</div>
-		</div>
 	</div>
 <script src="/scripts/bootstrap.min.js"></script>
 </body>
