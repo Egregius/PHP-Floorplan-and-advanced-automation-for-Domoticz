@@ -390,11 +390,16 @@ function bosepreset($pre,$ip=101) {
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip,$forced=false,$vol='') {
-	global $d,$time;
+	global $d,$time,$weekend;
 	$time=time();
 	$week=strftime('%-V', $time);
-	if ((int)$week % 2 == 0) $preset='PRESET_2';
-	else $preset='PRESET_1';
+	if ($weekend==true) {
+		if ((int)$week % 2 == 0) $preset='PRESET_4';
+		else $preset='PRESET_3';
+	} else {
+		if ((int)$week % 2 == 0) $preset='PRESET_2';
+		else $preset='PRESET_1';
+	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
 			bosekey("POWER", 1500000, 101);
