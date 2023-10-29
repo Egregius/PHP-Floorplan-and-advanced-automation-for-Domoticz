@@ -402,11 +402,11 @@ function bosezone($ip,$forced=false,$vol='') {
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['Media']['s']=='Off'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
-			bosekey("POWER", 1500000, 101);
+//			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+			bosekey($preset, 750000, 101);
 			if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
-			bosekey($preset, 750000, 101);
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
@@ -417,7 +417,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==106) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>';
 			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-				bosekey("POWER", 1500000, 101);
+//				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($preset, 750000, 101);
 				if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);

@@ -27,12 +27,12 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureel') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('bureel') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 				foreach (array('eettafel','zithoek') as $i) if ($d[$i]['s']>0&&past($i)>$uit) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
-				foreach (array('kristal','lamp kast') as $i) if ($d[$i]['s']!='Off'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('kristal','lamp kast') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}
 		$avg=0;
