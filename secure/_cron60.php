@@ -115,16 +115,15 @@ if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- ALTIJD BIJ AUT0----------------------------*/
 	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
-	if (past('deurbadkamer')>1200&&past('lichtbadkamer')>600) {
+	if (past('deurbadkamer')>1800&&past('lichtbadkamer')>600) {
 		if ($d['lichtbadkamer']['s']>0) {
 			$new=round($d['lichtbadkamer']['s'] * 0.85, 0);
 			if ($new<10) $new=0;
 			sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	foreach (array('living_set','badkamer_set') as $i) {
-		if ($d[$i]['m']!=0&&past($i)>7200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-	}
+	if ($d['living_set']['m']!=0&&$d['eettafel']['m']==0&&past('living_set')>7200) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['badkamer_set']['m']!=0&&$d['lichtbadkamer']['m']==0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -137,7 +136,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['Grohered_kWh']['s']<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))	) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($dag==4) {
 		if ($d['Rbureel']['s']<40) {
 			if ($d['lamp kast']['s']!='Off'&&$d['eettafel']['s']==0) sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
@@ -188,6 +187,8 @@ if ($d['auto']['s']=='On') {
 
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['steenterras']['s']=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {

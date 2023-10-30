@@ -208,7 +208,7 @@ if ($time>strtotime('0:10')) {
 				$gridExport=$i['gridExport'];
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
-				$sql="INSERT INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
+				$sql="INSERT IGNORE INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
 				echo __LINE__.' '.$sql.'<br>';
 				$db->query($sql);
 			}
@@ -228,7 +228,7 @@ if ($time>strtotime('0:10')) {
 				$kwhimport=($gridImport/1000)-$prev['import'];
 				$kwhexport=($gridExport/1000)-$prev['export'];
 				if ($kwhimport<0) $kwhimport=0;
-				$sql="INSERT INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
+				$sql="INSERT IGNORE INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
 				echo __LINE__.' '.$sql.'<br>';
 				$db->query($sql);
 				if ($kwhimport>(4/4)) telegram ('Kwartierpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
@@ -283,6 +283,7 @@ if (isset($data['result'])) {
 	foreach ($data['result'] as $i) {
 		if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
 			telegram('Node '.$i['Name'].' dead, restarting...');
+			sleep(3);
 			echo shell_exec('sudo /sbin/reboot');
 		}
 	}
