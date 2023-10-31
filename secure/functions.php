@@ -224,13 +224,12 @@ function storemode($name,$mode,$msg='',$time=0) {
 	} else $db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
 	lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 }
-function storeicon($name,$icon,$msg='',$time=false) {
+function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user;
 	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
-		if ($time==true) {
-			$time=$time;
+		if ($updatetime==true) {
 			$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		} else $db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon') ON DUPLICATE KEY UPDATE icon='$icon';");
 		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
@@ -245,7 +244,6 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 		if (isset($row['t'])) $last=$row['t'];
 	}
 	if ($last < $time-$ttl) {
-		$time=$time;
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
 		telegram($msg, $silent, $to);
 		lg('alert='.$last);
