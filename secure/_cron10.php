@@ -41,9 +41,9 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-$i=59;
-if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('deurvoordeur')>$i&&past('voordeur')>$i) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>59) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-if ($d['water']['s']=='On'&&past('water')>$d['water']['m']) sw('water', 'Off');
+if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);

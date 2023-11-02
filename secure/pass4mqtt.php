@@ -81,7 +81,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} elseif ($device=='buiten_hum') { // 1
 				$status=$message['svalue2'];
 				$temp=$message['svalue1'];
-				$hum=$status+3;
+				$hum=$status-4;
 				if ($hum>100) $hum=100;
 				if ($status>$d['buiten_temp']['m']+1) $status=$d['buiten_temp']['m']+1;
 				elseif ($status<$d['buiten_temp']['m']-1) $status=$d['buiten_temp']['m']-1;
@@ -93,13 +93,13 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				}
 			} elseif ($device=='kamer_hum') { // 2
 				$status=$message['svalue2'];
-				$hum=$status+3;
+				$hum=$status+1;
 				if ($status>$d['kamer_temp']['m']+1) $status=$d['kamer_temp']['m']+1;
 				elseif ($status<$d['kamer_temp']['m']-1) $status=$d['kamer_temp']['m']-1;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
 			} elseif ($device=='alex_hum') { // 3
 				$status=$message['svalue2'];
-				$hum=$status+5;
+				$hum=$status+4;
 				if ($status>$d['alex_temp']['m']+1) $status=$d['alex_temp']['m']+1;
 				elseif ($status<$d['alex_temp']['m']-1) $status=$d['alex_temp']['m']-1;
 				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
@@ -111,14 +111,14 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
 			} elseif ($device=='badkamer_hum') { // 5
 				$status=$message['svalue2'];
-				$hum=$status+5;
+				$hum=$status+12;
 				if ($status>$d['badkamer_temp']['m']+1) $status=$d['badkamer_temp']['m']+1;
 				elseif ($status<$d['badkamer_temp']['m']-1) $status=$d['badkamer_temp']['m']-1;
 				if ($status>100) $status=100;
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
 			} elseif ($device=='living_hum') { // 6
 				$status=$message['svalue2'];
-				$hum=$status+5;
+				$hum=$status+3;
 				if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;
 				elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
