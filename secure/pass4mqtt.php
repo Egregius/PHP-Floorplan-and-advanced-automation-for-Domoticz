@@ -79,49 +79,29 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($device=='$ remoteauto') lg(' (MQTT)		'.print_r($message,true));	
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif ($device=='buiten_hum') { // 1
-				$status=$message['svalue2'];
 				$temp=$message['svalue1'];
-				$hum=$status-4;
+				$hum=$message['svalue2']-3;
 				if ($hum>100) $hum=100;
-				if ($status>$d['buiten_temp']['m']+1) $status=$d['buiten_temp']['m']+1;
-				elseif ($status<$d['buiten_temp']['m']-1) $status=$d['buiten_temp']['m']-1;
-				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum);
+				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum, '', 1);
 				if ($temp!=$d['minmaxtemp']['icon']) {
-					if ($temp>$d['buiten_temp']['s']+1) $temp=$d['buiten_temp']['s']+1;
-					elseif ($temp<$d['buiten_temp']['s']-1) $temp=$d['buiten_temp']['s']-1;
 					storeicon('minmaxtemp', $temp);
 				}
 			} elseif ($device=='kamer_hum') { // 2
-				$status=$message['svalue2'];
-				$hum=$status+1;
-				if ($status>$d['kamer_temp']['m']+1) $status=$d['kamer_temp']['m']+1;
-				elseif ($status<$d['kamer_temp']['m']-1) $status=$d['kamer_temp']['m']-1;
-				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status);
+				$status=$message['svalue2']-2;
+				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
 			} elseif ($device=='alex_hum') { // 3
-				$status=$message['svalue2'];
-				$hum=$status+4;
-				if ($status>$d['alex_temp']['m']+1) $status=$d['alex_temp']['m']+1;
-				elseif ($status<$d['alex_temp']['m']-1) $status=$d['alex_temp']['m']-1;
-				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status);
+				$status=$message['svalue2']-1;
+				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status, '', 1);
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue2'];
-				$hum=$status+5;
-				if ($status>$d['waskamer_temp']['m']+1) $status=$d['waskamer_temp']['m']+1;
-				elseif ($status<$d['waskamer_temp']['m']-1) $status=$d['waskamer_temp']['m']-1;
-				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status);
+				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
 			} elseif ($device=='badkamer_hum') { // 5
-				$status=$message['svalue2'];
-				$hum=$status+12;
-				if ($status>$d['badkamer_temp']['m']+1) $status=$d['badkamer_temp']['m']+1;
-				elseif ($status<$d['badkamer_temp']['m']-1) $status=$d['badkamer_temp']['m']-1;
+				$status=$message['svalue2']+4;
 				if ($status>100) $status=100;
-				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status);
+				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
 			} elseif ($device=='living_hum') { // 6
-				$status=$message['svalue2'];
-				$hum=$status+3;
-				if ($status>$d['living_temp']['m']+1) $status=$d['living_temp']['m']+1;
-				elseif ($status<$d['living_temp']['m']-1) $status=$d['living_temp']['m']-1;
-				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status);
+				$status=$message['svalue2']-1;
+				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
 			} //else lg('no file found for '.$device);
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
