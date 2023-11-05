@@ -90,13 +90,13 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$status=$message['svalue2']-2;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
 			} elseif ($device=='alex_hum') { // 3
-				$status=$message['svalue2']-1;
+				$status=$message['svalue2'];
 				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status, '', 1);
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue2'];
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
 			} elseif ($device=='badkamer_hum') { // 5
-				$status=$message['svalue2']+4;
+				$status=$message['svalue2']+3;
 				if ($status>100) $status=100;
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
 			} elseif ($device=='living_hum') { // 6
