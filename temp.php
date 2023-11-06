@@ -100,7 +100,7 @@ if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=1320;
 	$argshour['width']=1000;$argshour['height']=1320;
 } elseif ($udevice=='iPhone') {
-	$args['width']=560;$args['height']=710;
+	$args['width']=560;$args['height']=1010;
 	$argshour['width']=560;$argshour['height']=710;
 } elseif ($udevice=='iPhoneSE') {
 	$args['width']=420;$args['height']=710;

@@ -22,8 +22,10 @@ if ($d['daikin']['m']==1) {
 				if ($dif<-1) $rate=6;
 				elseif ($dif<-0.4) $rate=5;
 				elseif ($dif<0) $rate=4;
-				elseif ($dif>=1) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
-				elseif ($dif>=0.5) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+				elseif ($dif>=1.4) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
+				elseif ($dif>=0.9) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
+				elseif ($dif>=0.6) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1;}
+				elseif ($dif>=0.3) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 				elseif ($dif>=0) $rate=4;
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-2.5;
