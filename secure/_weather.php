@@ -47,7 +47,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=$ob['temperature'];
 	$temps['ob_feel']=$ob['feeltemperature'];
 	$winds['ob_wind']=$ob['windspeed'] * 1.609344;
-	$winds['ob_gust']=$ob['windgusts'] * 1.609344;
+	if (isset($ob['windgusts'])) $winds['ob_gust']=$ob['windgusts'] * 1.609344;
 }
 
 //lg(__LINE__.' https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true');

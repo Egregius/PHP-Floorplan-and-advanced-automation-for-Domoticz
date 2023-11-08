@@ -8,19 +8,16 @@ $tail=new PHPTail(
 );
 if (isset($_GET['ajax'])) {
 	$vandaag=strftime("%F",$_SERVER['REQUEST_TIME']);
-	echo str_replace($vandaag.' ','',$tail->getNewLines($_GET['file'], $_GET['lastsize'], $_GET['grep'], $_GET['invert']));die();
+	echo str_replace($vandaag.' ','',$tail->getNewLines($_GET['file'], $_GET['lastsize']));die();
 }
 $tail->generateGUI();
-class PHPTail
-{
+class PHPTail {
 	private $log="";
 	private $updateTime;
-	public function __construct($log)
-	{
+	public function __construct($log) {
 		$this->log=is_array($log)?$log:array($log);
 	}
-	public function getNewLines($file,$lastFetchedSize,$grepKeyword,$invert)
-	{
+	public function getNewLines($file,$lastFetchedSize) {
 		clearstatcache();
 		if (empty($file)) $file=key(array_slice($this->log, 0, 1, true));
 		$fsize=filesize($this->log[$file]);
@@ -36,8 +33,7 @@ class PHPTail
 		if (end($data) == "") array_pop($data);
 		return json_encode(array("size" => $fsize, "file" => $this->log[$file], "data" => $data));
 	}
-	public function generateGUI()
-	{
+	public function generateGUI() {
 		?>
 <!DOCTYPE html>
 <html lang="en">
