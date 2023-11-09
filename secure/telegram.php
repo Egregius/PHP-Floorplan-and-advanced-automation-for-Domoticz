@@ -25,7 +25,7 @@ if (isset($content)) {
 	$bot_url="https://api.telegram.org/bot".$telegrambot."/";
 	$url=$bot_url."sendMessage?chat_id=".$telegramchatid1.'&disable_web_page_preview&parse_mode=html';
 	$post_fields=array(
-		'text'=>'<pre>'.$content.'</pre>',
+		'text'=>$content,
 		'disable_notification'=>$silent
 	);
 	$ch=curl_init();
@@ -48,7 +48,7 @@ if (isset($content)) {
 	if ($to=='2') {
 		$url=$bot_url."sendMessage?chat_id=".$telegramchatid2.'&disable_web_page_preview&parse_mode=html';
 		$post_fields=array(
-			'text'=>'<pre>'.$content.'</pre>',
+			'text'=>$content,
 			'disable_notification'=>$silent
 		);
 		$ch=curl_init();
