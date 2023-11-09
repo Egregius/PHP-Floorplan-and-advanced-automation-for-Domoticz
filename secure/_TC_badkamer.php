@@ -1,6 +1,6 @@
 <?php
 $m='';$m2='';
-$l=0;$m.=' base';
+$l=0;
 if ($d['badkamer_set']['m']==0) {$set=12;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
@@ -56,12 +56,12 @@ if ($d['heating']['s']>=0) {
 			}
 		} else break;
 	}
-	if ($d['badkamer_temp']['s']<16.5) $hum-=5;
-	elseif ($d['badkamer_temp']['s']<16) $hum-=10;
-	elseif ($d['badkamer_temp']['s']<15.5) $hum-=15;
-	elseif ($d['badkamer_temp']['s']<15) $hum-=20;
+	if ($d['badkamer_temp']['s']<14) $hum-=30;
 	elseif ($d['badkamer_temp']['s']<14.5) $hum-=25;
-	elseif ($d['badkamer_temp']['s']<14) $hum-=30;
+	elseif ($d['badkamer_temp']['s']<15) $hum-=20;
+	elseif ($d['badkamer_temp']['s']<15.5) $hum-=15;
+	elseif ($d['badkamer_temp']['s']<16) $hum-=10;
+	elseif ($d['badkamer_temp']['s']<16.5) $hum-=5;
 	if ($d['badkamer_temp']['m']>$hum&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer<60))) {$l=1;$m.=' + '.__LINE__.' badkamer_hum>='.$hum;}
 	if ($d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer>60) {
 		if ($d['deurkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['kamer_temp']['m']>65) {$l=1;$m.=' + '.__LINE__.' kamer_hum>60';}
@@ -91,7 +91,7 @@ if ($d['luchtdroger']['m']!='Auto') {$l=$d['luchtdroger']['m'];$m.=' + '.__LINE_
 
 if ($l==0) {
 	if ($d['luchtdroger']['s']=='On') {
-		if ($d['luchtdroger1']['s']=='On'&&past('luchtdroger1')>175) sw('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['luchtdroger1']['s']=='On'&&past('luchtdroger1')>295) sw('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['luchtdroger2']['s']=='On'&&past('luchtdroger2')>95) sw('luchtdroger2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['luchtdroger1']['s']=='Off'&&$d['luchtdroger2']['s']=='Off'&&past('luchtdroger')>75&&past('luchtdroger1')>95&&past('luchtdroger2')>115) sw('luchtdroger', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}

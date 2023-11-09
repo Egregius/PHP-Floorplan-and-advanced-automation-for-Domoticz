@@ -30,7 +30,18 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	} else $data['z']=1;
 	echo serialize($data);
+} elseif (isset($_GET['token'])&&$_GET['token']==$cameratoken.'b') {
+	$user='camera';
+	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+	$result = $mysqli->query("select n,s from devices WHERE n ='Weg';") or trigger_error($mysqli->error." [$sql]");
+	while ($row = $result->fetch_array()) {
+		$d[$row['n']]['s'] = $row['s'];
+	}
+	$data=array();
+	$data['w']=$d['Weg']['s'];
+	echo serialize($data);
 } else echo '403 Access denied';
+
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl;
 	if (!isset($d)) $d=fetchdata();

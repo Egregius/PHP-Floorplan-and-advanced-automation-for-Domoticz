@@ -66,21 +66,21 @@ $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.strftime("%k:%M:%S", TIME).'</font></a></center></div>';
 echo $legend;
 $args=array(
-	'width'=>3170,
-	'height'=>1700,
+	'width'=>3340,
+	'height'=>1800,
 	'hide_legend'=>true,
 	'responsive'=>false,
 	'background_color'=>'#000',
 	'chart_div'=>'graph',
 	'margins'=>array(0,0,0,50),
-	'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-	'x_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
+	'y_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
+	'x_axis_text_style'=>array('fontSize'=>18,'color'=>'FFFFFF'),
 	'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF'),
 	'raw_options'=>'
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
-		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"}},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#F00"},minorGridlines: {multiple: 1, color: "#FFF"}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 );
