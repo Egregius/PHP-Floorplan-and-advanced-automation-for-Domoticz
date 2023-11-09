@@ -25,7 +25,7 @@ if ($d['auto']['s']=='On') {
 	elseif ($time>=strtotime('17:00')&&$time<strtotime('22:00')) {
 		if ($d['zon']['s']==0) {
 			foreach (array('Rwaskamer','Ralex','RkamerL','RkamerR') as $i) if ($d[$i]['s']<70&&past($i)>14400) sl($i, 100, basename(__FILE__).':'.__LINE__);
-			if ($d['Weg']['s']==1) {
+			if ($d['Weg']['s']>=1) {
 				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<70&&past($i)>14400) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			} else {
 				if ($time<$d['civil_twilight']['s']||$time>$d['civil_twilight']['m']) {
