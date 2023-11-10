@@ -27,7 +27,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 		if ($loop==true) {
 			$t2=$t-($factor*$x);
 			if ($time>=$t2&&$time<$t+900) {
-				$set=round(21-$x, 1);
+				$set=round(22-$x, 1);
 				$loop=false;
 			}
 		} else break;

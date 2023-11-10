@@ -17,7 +17,7 @@ if ($d['Weg']['s']==0) {
 						bosevolume($vol, $ip);
 					}
 					
-				} else {
+				} elseif ($ip!=102) {
 					bosezone($ip);
 					usleep(500000);
 					bosevolume($vol, $ip);
