@@ -105,7 +105,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} //else lg('no file found for '.$device);
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
-			
 			$message=json_decode($message, true);
 			if ($message['command']=='switchlight') {
 				$d=fetchdataidx();

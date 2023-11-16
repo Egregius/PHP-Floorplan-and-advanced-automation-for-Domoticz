@@ -667,7 +667,7 @@ function fetchdataidx() {
 	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
 	global $db;
 	if(!isset($db)) $db=dbconnect();
-	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
+	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
 	return $d;
 }
