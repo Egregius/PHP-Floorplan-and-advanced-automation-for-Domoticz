@@ -105,14 +105,21 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} //else lg('no file found for '.$device);
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
-			$d=fetchdata();
-			dag();
+			
 			$message=json_decode($message, true);
 			if ($message['command']=='switchlight') {
-				if ($message['switchcmd']=='On') store(null,'On','domoticz in from Homebridge/Homekit',$message['idx']);
-				else if ($message['switchcmd']=='Off') store(null,'Off','domoticz in from Homebridge/Homekit',$message['idx']);
-				else if ($message['switchcmd']=='Set Level') store(null,$message['level'],'domoticz in from Homebridge/Homekit',$message['idx']);
-				else lg(print_r($message,true));
+				$d=fetchdataidx();
+				if ($d[$message['idx']]['dt']=='dimmer') {
+					if ($message['switchcmd']=='On') store(null,100,'domoticz in from Homebridge/Homekit',$message['idx']);
+					else if ($message['switchcmd']=='Off') store(null,0,'domoticz in from Homebridge/Homekit',$message['idx']);
+					else if ($message['switchcmd']=='Set Level') store(null,$message['level'],'domoticz in from Homebridge/Homekit',$message['idx']);
+					else lg(print_r($message,true));
+				} else {
+					if ($message['switchcmd']=='On') store(null,'On','domoticz in from Homebridge/Homekit',$message['idx']);
+					else if ($message['switchcmd']=='Off') store(null,'Off','domoticz in from Homebridge/Homekit',$message['idx']);
+					else if ($message['switchcmd']=='Set Level') store(null,$message['level'],'domoticz in from Homebridge/Homekit',$message['idx']);
+					else lg(print_r($message,true));
+				}
 			} else lg(print_r($message,true));
 		}
 	} elseif ($topic[0]=='homeassistant') {

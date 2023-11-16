@@ -21,7 +21,7 @@ if (isset($ow['main']['temp'])) {
 	if ($ow['main']['temp_min']<$mintemp) $mintemp=$ow['main']['temp_min'];
 	if ($ow['main']['temp_max']>$maxtemp) $maxtemp=$ow['main']['temp_max'];
 	$winds['ow_speed']=$ow['wind']['speed'] * 3.6;
-	$winds['ow_gust']=$ow['wind']['gust'] * 3.6;
+	if (isset($ow['wind']['gust'])) $winds['ow_gust']=$ow['wind']['gust'] * 3.6;
 	if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon']);
 	if (isset($ow['rain']['1h'])) $rains['ow']=$ow['rain']['1h']*10;
 }

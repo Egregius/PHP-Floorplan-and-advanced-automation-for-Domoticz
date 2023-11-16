@@ -66,7 +66,7 @@ $Setliving=15;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
 		if ($d['Weg']['s']<2) {
-			$base=17;
+			$base=21;
 			$loop=true;
 			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
 			for ($x=0;$x<=4;$x+=0.1) {

@@ -208,7 +208,7 @@ function store($name='',$status,$msg='',$idx=null) {
 	global $db, $user;
 	$time=time();
 	if ($idx>0) {
-		if ($name=='') $sql="INSERT INTO devices (n,i,s,t) VALUES ('$name','$idx','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
+		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
@@ -660,6 +660,15 @@ function fetchdata() {
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+	return $d;
+}
+function fetchdataidx() {
+	//unset ($GLOBALS['d']);
+	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
+	global $db;
+	if(!isset($db)) $db=dbconnect();
+	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
 	return $d;
 }
 function roundUpToAny($n,$x=5) {
