@@ -16,6 +16,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<meta name="viewport" content="width=device-width,height=device-height, user-scalable=yes, minimal-ui"/>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="theme-color" content="#000">
 	<title>Temperaturen</title>
 	<link href="/styles/temp.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
@@ -66,8 +67,8 @@ $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.strftime("%k:%M:%S", TIME).'</font></a></center></div>';
 echo $legend;
 $args=array(
-	'width'=>3340,
-	'height'=>1800,
+	'width'=>3140,
+	'height'=>1700,
 	'hide_legend'=>true,
 	'responsive'=>false,
 	'background_color'=>'#000',

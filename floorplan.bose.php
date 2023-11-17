@@ -17,7 +17,8 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	<meta name="HandheldFriendly" content="true">
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="theme-color" content="#000">';
 if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 	echo '
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.868,user-scalable=yes,minimal-ui">';
@@ -37,7 +38,6 @@ if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 echo '
 	<meta name="msapplication-TileColor" content="#000000">
 	<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
-	<meta name="theme-color" content="#000000">
 	<link rel="icon" type="image/png" href="images/domoticzphp48.png">
 	<link rel="shortcut icon" href="images/domoticzphp48.png">
 	<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">

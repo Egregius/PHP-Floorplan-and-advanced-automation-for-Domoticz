@@ -19,8 +19,8 @@ if ($d['daikin']['m']==1) {
 			if ($dif>2.2) $power=0;
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
-				if ($dif<-1) $rate=6;
-				elseif ($dif<-0.4) $rate=5;
+				if ($dif<-2) $rate=6;
+				elseif ($dif<-1) $rate=5;
 				elseif ($dif<0) $rate=4;
 				elseif ($dif>=1.6) {$rate=2;$d[$k.'_set']['s']=$d[$k.'_set']['s']-2;}
 				elseif ($dif>=1.2) {$rate=3;$d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;}
@@ -29,9 +29,11 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>=0) $rate=4;
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-2.5;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2.5&&$d['eettafel']['s']==0) $set=$d[$k.'_temp']['s']-2.5;
 					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) $rate=0;
 				} elseif ($k=='kamer') {
 					$set=$d['kamer_set']['s']-3;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']) $set=$d[$k.'_temp']['s']-2;
 					if ($time<strtotime('8:30')||$time>strtotime('22:00')) {
 						$rate=0;
 					} else {
@@ -39,6 +41,7 @@ if ($d['daikin']['m']==1) {
 					}
 				} elseif ($k=='alex') {
 					$set=$d['alex_set']['s']-3;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']) $set=$d[$k.'_temp']['s']-2;
 					if ($time<strtotime('8:30')||$time>strtotime('19:30')) {
 						$rate=0;
 					} else {
