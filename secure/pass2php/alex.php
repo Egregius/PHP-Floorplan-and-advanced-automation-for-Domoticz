@@ -1,8 +1,7 @@
 <?php
 if ($status>0) {
 	$time=time();
-	$dag=dag();
-	if ($d['auto']['s']=='On'&&$d['raamalex']['s']=='Closed'&&$time>=strtotime('7:30')&&$time<strtotime('10:00')&&$dag>0) {
+	if ($d['auto']['s']=='On'&&$d['raamalex']['s']=='Closed'&&$time>=strtotime('7:30')&&$time<strtotime('10:00')&&$d['dag']>0) {
 		if ($d['Ralex']['s']>0) {
 			sl('Ralex', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['Rliving']['s']>0) sl('Rliving', 0, basename(__FILE__).':'.__LINE__);

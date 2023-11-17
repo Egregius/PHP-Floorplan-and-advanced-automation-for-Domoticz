@@ -19,7 +19,6 @@ if (isset($argv[1])) {
 			if($dow==0||$dow==6) $t=strtotime('7:30');
 			elseif($dow==2||$dow==5) $t=strtotime('6:45');
 			else $t=strtotime('7:00');
-			$dag=dag();
 			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
 			elseif ($d['heating']['s']==0) include '_TC_neutral.php';

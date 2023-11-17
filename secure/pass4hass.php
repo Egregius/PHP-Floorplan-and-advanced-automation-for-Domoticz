@@ -2,14 +2,13 @@
 if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_SERVER['HTTP_CONTENT_TYPE']=='application/x-www-form-urlencoded') {
 	require '/var/www/html/secure/functions.php';
 	$d=fetchdata();
-	dag();
 	$time=time();
 	$device=$_POST['d'];
 	$action=$_POST['a'];
 	if ($device=='eufy') {
 		if ($action=='motion') {
 			if ($d['bureel']['s']=='Off') sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
-			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['dag']<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['deurvoordeur']['s']=='Closed') shell_exec('/usr/bin/wget -O /dev/null -o /dev/null "http://192.168.2.11/telegram.php?beweging" > /dev/null 2>/dev/null &');
 		} elseif ($action=='doorbell') {
 			if ($d['bureel']['s']=='Off'&&$d['Weg']['s']==0) sw('bureel', 'On', basename(__FILE__).':'.__LINE__);
@@ -17,7 +16,7 @@ if (isset($_POST['d'],$_POST['a'])&&$_SERVER['REMOTE_ADDR']=='192.168.2.19'&&$_S
 				sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__);
 				$d['lamp kast']['s']='On';
 			} else sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($dag<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['dag']<2) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 			if ($_SERVER['REQUEST_TIME']>mget('ring_ding')+30) {
 				mset('ring_ding', $time);
 				telegram('DEURBEL', false, 1);

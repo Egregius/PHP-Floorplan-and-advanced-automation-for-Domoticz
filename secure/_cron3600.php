@@ -2,7 +2,6 @@
 //lg('CRON-3600');
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
-$dag=dag();
 $time=time();
 $user='cron3600';
 $date=strftime("%F", $time);

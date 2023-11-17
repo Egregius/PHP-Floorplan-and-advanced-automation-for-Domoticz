@@ -1,6 +1,5 @@
 <?php
 $d=fetchdata();
-dag();
 $s=(int)strftime("%S", $time);
 $dow=date("w");
 if($dow==0||$dow==6) $t=strtotime('7:30');
@@ -137,7 +136,7 @@ if ($d['auto']['s']=='On') {
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($dag==4) {
+	if ($d['dag']==4) {
 		if ($d['Rbureel']['s']<40) {
 			if ($d['lamp kast']['s']!='Off'&&$d['eettafel']['s']==0) sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['bureel']['s']=='On') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);

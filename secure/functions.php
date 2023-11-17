@@ -3,20 +3,18 @@ require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $time=time();
 $db=dbconnect();
-$dag=dag();
 
 $memcache = new Memcache;
 $memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
 	
 	
 function fliving() {
-	global $d,$dag,$time;
+	global $d,$time;
 	$d=fetchdata();
-	$dag=dag();
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0) {
-		if (($d['zon']['s']==0&&$dag<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
+		if (($d['zon']['s']==0&&$d['dag']<3)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$dag);
+			if ($d['lamp kast']['s']=='Off'&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
 		}
 		if ($d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
 			bosezone(101);
@@ -30,38 +28,34 @@ function fgarage() {
 	if ($d['zon']['s']<400&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
-	global $d,$dag,$time;
+	global $d,$time;
 	$d=fetchdata();
-	$dag=dag();
 	if (past('$ 8badkamer-8')>10) {
-		if ($d['lichtbadkamer']['s']<16&&$dag<3&&$d['zon']['s']<50) {
+		if ($d['lichtbadkamer']['s']<16&&$d['dag']<3&&$d['zon']['s']<50) {
 			if ($time>strtotime('5:30')&&$time<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
 function fkeuken() {
-	global $d,$dag,$time;
+	global $d,$time;
 	$d=fetchdata();
-	$dag=dag();
-	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$dag.' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
-	if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($dag<3||$d['RkeukenL']['s']>80)) {
+	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$d['dag'].' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
+	if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) {
 		echo __LINE__;
 		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
-	global $d,$dag,$time;
+	global $d,$time;
 	$d=fetchdata();
-	$dag=dag();
-	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<28&&$dag<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['dag']<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
-	global $d,$dag,$time;
+	global $d,$time;
 	$d=fetchdata();
-	$dag=dag();
 	if ($d['zon']['s']<50&&$time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<900)) {
-		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$dag<3) {
+		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 28, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
@@ -660,26 +654,6 @@ function fetchdata() {
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
-	return $d;
-}
-function fetchdataidx() {
-	//unset ($GLOBALS['d']);
-	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
-	global $db;
-	if(!isset($db)) $db=dbconnect();
-	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
-	return $d;
-}
-function roundUpToAny($n,$x=5) {
-	return round(($n+$x/2)/$x)*$x;
-}
-function roundDownToAny($n,$x=5) {
-	return floor($n/$x) * $x;
-}
-function dag() {
-	global $d,$dag,$time;
-	if (!is_array($d)) $d=fetchdata();
 	$dag=0;
 	$time=time();
 	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
@@ -693,7 +667,36 @@ function dag() {
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
-	return $dag;
+	$d['dag']=$dag;
+	return $d;
+}
+function fetchdataidx() {
+	//unset ($GLOBALS['d']);
+	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
+	global $db;
+	if(!isset($db)) $db=dbconnect();
+	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
+	$dag=0;
+	$time=time();
+	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
+		$dag=1;
+		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
+			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
+			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			if ($time>=$zonop&&$time<=$zononder) $dag=2;
+		}
+	}
+	$d['dag']=$dag;return $d;
+}
+function roundUpToAny($n,$x=5) {
+	return round(($n+$x/2)/$x)*$x;
+}
+function roundDownToAny($n,$x=5) {
+	return floor($n/$x) * $x;
 }
 function mset($key, $data, $ttl=0) {
 //	lg('mset '.$key.' '.$data);

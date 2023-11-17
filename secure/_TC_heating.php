@@ -72,14 +72,14 @@ if ($d['living_set']['m']==0) {
 			for ($x=0;$x<=4;$x+=0.1) {
 				if ($loop==true) {
 					$t2=$t-($factor*$x);
-					if ($time>=$t2&&$time<strtotime('19:00')) {
+					if ($time>=$t2&&$time<strtotime('20:00')) {
 						$Setliving=round($base-$x, 1);
 						$loop=false;
 					}
 				} else break;
 			}
 			if ($d['Weg']['s']==0) {
-				if ($time>=strtotime('4:00')&&$time<strtotime('19:00')) $Setliving=$base;
+				if ($time>=strtotime('4:00')&&$time<strtotime('20:00')) $Setliving=$base;
 				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$base-1;
 			}
 		}

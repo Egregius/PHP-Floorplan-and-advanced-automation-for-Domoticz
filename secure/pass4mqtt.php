@@ -19,7 +19,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if ($topic[1]=='out') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			dag();
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];
@@ -125,7 +124,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if (isset($topic[3])&&$topic[3]=='state') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			$dag=dag();
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
