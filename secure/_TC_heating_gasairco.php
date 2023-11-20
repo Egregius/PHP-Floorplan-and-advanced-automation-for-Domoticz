@@ -50,7 +50,7 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>=0) $rate=4;
 				if ($k=='living') {
 					$set=$d[$k.'_set']['s']-3.5;
-					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2.5&&$d['eettafel']['s']==0&&$d[$k.'_temp']['s']>18) $set=$d[$k.'_temp']['s']-2.5;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2.5&&$d[$k.'_temp']['s']>18) $set=$d[$k.'_temp']['s']-2.5;
 					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) $rate=0;
 				} elseif ($k=='kamer') {
 					$set=$d['kamer_set']['s']-3;

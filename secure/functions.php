@@ -7,7 +7,6 @@ $db=dbconnect();
 $memcache = new Memcache;
 $memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
 	
-	
 function fliving() {
 	global $d,$time;
 	$d=fetchdata();
@@ -386,9 +385,11 @@ function bosepreset($pre,$ip=101) {
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
 function bosezone($ip,$forced=false,$vol='') {
-	global $d,$time,$weekend;
+	global $d,$time,$dow,$weekend;
 	$time=time();
 	$week=strftime('%-V', $time);
+	$dow=date("w");
+	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
 		if ((int)$week % 2 == 0) $preset='PRESET_4';
 		else $preset='PRESET_3';
