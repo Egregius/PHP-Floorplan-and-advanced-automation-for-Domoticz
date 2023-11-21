@@ -43,3 +43,4 @@ if ($d['deurvoordeur']['s']=='Open'&&$status=='On') {
 	sleep(4);
 	sl('Xring', 0, basename(__FILE__).':'.__LINE__);
 }
+mset('8inkom', time());

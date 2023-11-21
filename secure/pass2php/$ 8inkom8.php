@@ -1,2 +1,2 @@
 <?php
-mset('8inkom', time());
+mset('8inkom8', time());

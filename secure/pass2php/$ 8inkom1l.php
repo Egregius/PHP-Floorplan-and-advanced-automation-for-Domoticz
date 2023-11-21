@@ -5,3 +5,4 @@ if ($d['inkom']['s']<100) {
 	if ($new>100) $new=100;
 	sl('inkom', $new);
 }
+mset('8inkom', time());

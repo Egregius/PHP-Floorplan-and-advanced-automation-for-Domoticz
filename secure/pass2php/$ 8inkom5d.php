@@ -1,4 +1,3 @@
 <?php
-if ($d['inkom']['s']>0) {
-	sl('inkom', 0);
-}
+sl('inkom', 0);
+mset('8inkom', time());
