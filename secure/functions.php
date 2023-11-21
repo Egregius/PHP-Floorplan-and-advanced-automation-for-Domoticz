@@ -386,6 +386,7 @@ function bosepreset($pre,$ip=101) {
 }
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
+	if (!is_array($d)) $d=fetchdata();
 	$time=time();
 	$week=strftime('%-V', $time);
 	$dow=date("w");
