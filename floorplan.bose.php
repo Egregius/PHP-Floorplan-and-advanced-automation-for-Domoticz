@@ -24,7 +24,7 @@ if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.868,user-scalable=yes,minimal-ui">';
 } elseif ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 	echo '
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.35,user-scalable=yes,minimal-ui">';
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=yes,minimal-ui">';
 } elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
 	echo '
 	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
@@ -42,15 +42,21 @@ echo '
 	<link rel="shortcut icon" href="images/domoticzphp48.png">
 	<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
 	<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
+	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=2">
 	<style type="text/css">
-		.btn{height:48px;margin:3px;}
+		.btn{height:5vh;margin:3px;}
+		.b1{max-width:98vw;}
 		.b2{margin:1px;}
 		.input{width:78px;}
-		.blackmedia{top:50px;left:0px;height:581px;width:490px;background-color:#000;text-align:center;}
+		.blackmedia{top:50px;left:0px;height:581px;width:100%;background-color:#000;text-align:center;}
+		#clock{top:0px;left:0px;width:100vw;text-align:center;}
+		#volume{width:99vw;}
+		#bass{width:99vw;}
+		.volume{width:9%;height:60px;padding:5px 0.5% 0px 0.5%!important;margin:0 0.3%;}
+
 	</style>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
-	<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
+	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
 	<script type="text/javascript">
 		function navigator_Go(url){window.location.assign(url)}
 		$(document).ready(function() {
@@ -61,13 +67,10 @@ echo '
 </head>
 <body>
 	<div class="fix" id="clock">
-		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time">
-		</a>
+		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time"></a>
 	</div>
 	<div class="fix z1" style="bottom:14px;left:14px;">
-		<a href=\'javascript:navigator_Go("floorplan.php");\'>
-			<img src="/images/close.png" width="72px" height="72px" alt="close">
-		</a>
+		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
