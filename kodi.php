@@ -27,7 +27,7 @@ if (isset($_POST['cmd'])) {
 	} elseif ($_POST['cmd']=='CleanKodi') {
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Videolibrary.Clean"}');
 	} elseif ($_POST['cmd']=='PauseKodi') {
-		file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx=2472&nvalue=0&svalue=On');
+		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.PlayPause","params":{"playerid":1}}');
 	} elseif ($_POST['cmd']=='StopKodi') {
 		kodi('{"jsonrpc":"2.0","id":1,"method":"Player.Stop","params":{"playerid":1}}');
 	} elseif ($_POST['cmd']=='bigbackward') {
