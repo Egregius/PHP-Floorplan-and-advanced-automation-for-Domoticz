@@ -79,8 +79,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif ($device=='buiten_hum') { // 1
 				$temp=$message['svalue1'];
-				$hum=$message['svalue2']-3;
-				if ($hum>100) $hum=100;
+				$hum=$message['svalue2'];
+//				if ($hum>100) $hum=100;
 				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum, '', 1);
 				if ($temp!=$d['minmaxtemp']['icon']) {
 					storeicon('minmaxtemp', $temp);
