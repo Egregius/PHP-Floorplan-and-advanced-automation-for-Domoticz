@@ -52,7 +52,7 @@ echo '
 		#clock{top:0px;left:0px;width:100vw;text-align:center;}
 		#volume{width:99vw;}
 		#bass{width:99vw;}
-		.volume{width:8.4%;height:60px;padding:0!important;margin:0 0.3%;}
+		.volume{width:8.4%;height:50px;padding:0!important;margin:0 0.3%;}
 
 	</style>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>

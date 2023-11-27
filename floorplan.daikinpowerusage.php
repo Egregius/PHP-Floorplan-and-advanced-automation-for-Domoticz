@@ -25,7 +25,6 @@ if (isset($_GET['setauto'])) {
 } elseif (isset($_GET['setpower'])) {
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 	storemode('daikin_kWh', $_GET['setpower']);
-//	storeicon('daikin_kWh', $_GET['setpower']);
 	if ($_GET['setpower']!='Auto') {
 		echo '111='.file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
 		echo '112='.file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
@@ -61,10 +60,10 @@ echo '
 			</a>';
 if ($d['daikin']['m']==0) echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4 btna">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4">Auto</a> '.$d['daikin_kWh']['icon'];
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4">Auto</a> '.$d['daikin_kWh']['m'];
 else echo '
 			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b4">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a> '.$d['daikin_kWh']['icon'];
+			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b4 btna">Auto</a> '.$d['daikin_kWh']['m'];
 echo '
 			<br>
 			<br>';

@@ -3,6 +3,7 @@
 if ($status=='Off') {
 	$last=mget('remoteauto');
 	lg('REMOTE AUTO past='.$last);
+	$time=time();
 	if ($last>$time-60) sw('poortrf', 'On');
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, true);
 	huisthuis();
