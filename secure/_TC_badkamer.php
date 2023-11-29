@@ -23,7 +23,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	}
 	$loop=true;
 	if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
-	for ($x=0;$x<=9;$x+=0.1) {
+	for ($x=0;$x<=10;$x+=0.1) {
 		if ($loop==true) {
 			$t2=$t-($factor*$x);
 			if ($time>=$t2&&$time<$t+900) {

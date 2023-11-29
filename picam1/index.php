@@ -25,8 +25,8 @@ if(isset($_REQUEST['Record'])){
 	shell_exec('curl -s "http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle" &');
 	exit;
 }
-if ($_SERVER['REMOTE_ADDR']=='192.168.2.200') $refresh=100;
 $refresh=1500;
+if ($_SERVER['REMOTE_ADDR']=='192.168.2.201') $refresh=100;
 
 echo '<html>
 <head><title>Oprit</title>
