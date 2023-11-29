@@ -472,10 +472,10 @@ function createheader($page='') {
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Floorplan</title>';
-	if ($ipaddress=='192.168.2.202'||$ipaddress=='192.168.4.3')  { //Aarde
+	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.75,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
+	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.15,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
