@@ -124,9 +124,9 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart);
 } elseif ($sensor=='binnen') {
-	$args['colors']=array($living,$badkamer,$kamer,$alex,$living,$badkamer,$kamer,$waskamer,$alex);
+	$args['colors']=array($living,$badkamer,$kamer,$waskamer,$alex,$living,$badkamer,$kamer,$waskamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT stamp,living,badkamer,kamer,alex from `temp` where stamp >= '$dag'";
+	$query="SELECT stamp,living,badkamer,kamer,waskamer,alex from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
