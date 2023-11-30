@@ -26,7 +26,7 @@ if(isset($_REQUEST['Record'])){
 	exit;
 }
 $refresh=1500;
-if ($_SERVER['REMOTE_ADDR']=='192.168.2.201') $refresh=100;
+//if ($_SERVER['REMOTE_ADDR']=='192.168.2.201') $refresh=500;
 
 echo '<html>
 <head><title>Oprit</title>
