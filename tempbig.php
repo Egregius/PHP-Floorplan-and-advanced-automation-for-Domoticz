@@ -86,7 +86,7 @@ $args=array(
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}'
 );
 if ($sensor=='alles') {
-	$args['colors']=array($buiten,$living,$badkamer,$kamer,$waskamer,$alex,$zolder,$living,$badkamer,$kamer,$waskamer,$alex);
+	$args['colors']=array($buiten,$living,$badkamer,$kamer,$alex,$waskamer,$zolder,$living,$badkamer,$kamer,$waskamer,$alex);
 	$line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 	$query="SELECT stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -126,7 +126,7 @@ if ($sensor=='alles') {
 } elseif ($sensor=='binnen') {
 	$args['colors']=array($living,$badkamer,$kamer,$waskamer,$alex,$living,$badkamer,$kamer,$waskamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT stamp,living,badkamer,kamer,waskamer,alex from `temp` where stamp >= '$dag'";
+	$query="SELECT stamp,living,badkamer,kamer,alex,waskamer from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
