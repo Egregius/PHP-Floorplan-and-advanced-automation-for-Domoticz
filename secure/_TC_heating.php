@@ -63,13 +63,14 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$d['alex_set']['s']=$Setalex;
 }
 $Setliving=15;
+if ($d['Weg']['s']<=2&&$d['heating']['s']>=3) $Setliving=17;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
 		if ($d['Weg']['s']<2) {
 			$base=20;
 			$loop=true;
 			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
-			for ($x=0;$x<=10;$x+=0.1) {
+			for ($x=0;$x<=3;$x+=0.1) {
 				if ($loop==true) {
 					$t2=$t-($factor*$x);
 					if ($time>=$t2&&$time<strtotime('20:00')) {
