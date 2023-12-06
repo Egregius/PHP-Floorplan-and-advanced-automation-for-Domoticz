@@ -48,14 +48,14 @@ function fkeuken() {
 function finkom($force=false) {
 	global $d,$time;
 	$d=fetchdata();
-	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<28&&$d['dag']<3)||$force==true) sl('inkom', 28, basename(__FILE__).':'.__LINE__);
+	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<3)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$time;
 	$d=fetchdata();
 	if ($d['zon']['s']<50&&$time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||past('deuralex')<900)) {
-		if ($d['hall']['s']<28&&$d['Weg']['s']==0&&$d['dag']<3) {
-			sl('hall', 28, basename(__FILE__).':'.__LINE__);
+		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
+			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
 	if ($d['Weg']['s']==0&&$time>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>3600) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
