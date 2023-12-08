@@ -1,2 +1,2 @@
 <?php
-sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__, true);
