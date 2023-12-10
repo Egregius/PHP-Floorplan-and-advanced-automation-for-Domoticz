@@ -51,9 +51,9 @@ function finkom($force=false) {
 	if ($d['zon']['s']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<3)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
-	global $d,$time;
+	global $d,$t,$time;
 	$d=fetchdata();
-	if ($d['zon']['s']<50&&$time>=strtotime('7:30')&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
+	if ($d['zon']['s']<50&&$time>=$t+1800&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -681,14 +681,14 @@ function fetchdataidx() {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
 	$dag=0;
 	$time=time();
-	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
+	if ($time>=$d[9992]['s']&&$time<=$d[9992]['m']) {
 		$dag=1;
-		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
+		if ($time>=$d[9991]['s']&&$time<=$d[9991]['m']) {
+			if ($time>=$d[9991]['s']+900&&$time<=$d[9991]['m']-900) $dag=4;
 			else $dag=3;
 		} else {
-			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
+			$zonop=($d[9992]['s']+$d[9991]['s'])/2;
+			$zononder=($d[9992]['m']+$d[9991]['m'])/2;
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
