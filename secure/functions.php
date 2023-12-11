@@ -52,7 +52,12 @@ function finkom($force=false) {
 }
 function fhall() {
 	global $d,$t,$time;
+	$time=time();
 	$d=fetchdata();
+	$dow=date("w");
+	if($dow==0||$dow==6) $t=strtotime('7:30');
+	elseif($dow==2||$dow==5) $t=strtotime('6:45');
+	else $t=strtotime('7:00');
 	if ($d['zon']['s']<50&&$time>=$t+1800&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
@@ -673,8 +678,6 @@ function fetchdata() {
 	return $d;
 }
 function fetchdataidx() {
-	//unset ($GLOBALS['d']);
-	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
 	global $db;
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
@@ -692,7 +695,8 @@ function fetchdataidx() {
 			if ($time>=$zonop&&$time<=$zononder) $dag=2;
 		}
 	}
-	$d['dag']=$dag;return $d;
+	$d['dag']=$dag;
+	return $d;
 }
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
