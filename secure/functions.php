@@ -56,7 +56,7 @@ function fhall() {
 	$d=fetchdata();
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
-	elseif($dow==2||$dow==5) $t=strtotime('6:45');
+//	elseif($dow==2||$dow==5) $t=strtotime('6:45');
 	else $t=strtotime('7:00');
 	if ($d['zon']['s']<50&&$time>=$t+1800&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
