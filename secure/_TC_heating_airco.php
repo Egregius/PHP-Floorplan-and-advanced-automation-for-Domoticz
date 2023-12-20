@@ -34,7 +34,8 @@ if ($d['daikin']['m']==1) {
 					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) $rate=0;
 				} elseif ($k=='kamer') {
 					$set=$d['kamer_set']['s']-3;
-					if ($maxpow==40&&$set>$d[$k.'_temp']['s']) $set=$d[$k.'_temp']['s']-2;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
+					elseif ($maxpow==40&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					if ($time<strtotime('8:30')||$time>strtotime('22:00')) {
 						$rate=0;
 					} else {
@@ -42,7 +43,8 @@ if ($d['daikin']['m']==1) {
 					}
 				} elseif ($k=='alex') {
 					$set=$d['alex_set']['s']-3;
-					if ($maxpow==40&&$set>$d[$k.'_temp']['s']) $set=$d[$k.'_temp']['s']-2;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
+					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					if ($time<strtotime('8:30')||$time>strtotime('19:30')) {
 						$rate=0;
 					} else {

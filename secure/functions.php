@@ -39,10 +39,12 @@ function fbadkamer() {
 function fkeuken() {
 	global $d,$time;
 	$d=fetchdata();
-	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$d['dag'].' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
-	if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) {
-		echo __LINE__;
-		sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+//	echo ('fkeuken zon='.$d['zon']['s'].' dag='.$d['dag'].' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
+	if (1==2) { //Snijplank ook aan leggen bij feestjes
+		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
+		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
+	} else {
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
