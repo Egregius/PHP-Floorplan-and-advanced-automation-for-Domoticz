@@ -14,6 +14,7 @@ if (strftime("%k", $time)==19) {
 				if ($cmd['Value']['@attributes']['label']=='Battery Level') {
 					$id=$node['@attributes']['id'];
 					$name=$node['@attributes']['name'];
+					echo $name.PHP_EOL;
 					$value=$cmd['Value']['@attributes']['value'];
 					if ($value>100) 	$value=100;
 					$stmt=$db->query("select value from battery WHERE name='$name' ORDER BY `date` DESC LIMIT 0,1;");

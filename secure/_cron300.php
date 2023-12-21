@@ -121,7 +121,7 @@ if ($time>strtotime('0:10')) {
 	curl_setopt($chauth, CURLOPT_SSL_VERIFYPEER, false);
 	$objauth=json_decode(curl_exec($chauth));
 	if (!empty($objauth)) {
-		echo __LINE__.'<br>';
+		echo __LINE__.PHP_EOL;
 		$access=$objauth->{'access_token'};
 		curl_close($chauth);
 		$timefrom=strtotime(date("Y-m-d", strtotime("-185 days")));
@@ -138,7 +138,7 @@ if ($time>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
-			echo __LINE__.'<br>';
+			echo __LINE__.PHP_EOL;
 			foreach ($data['consumptions'] as $i) {
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
@@ -149,7 +149,7 @@ if ($time>strtotime('0:10')) {
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
 				$sql="INSERT INTO smappee_kwartaal (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
-				echo __LINE__.' '.$sql.'<br>';
+				echo __LINE__.' '.$sql.PHP_EOL;
 				$db->query($sql);
 			}
 		}
@@ -168,7 +168,7 @@ if ($time>strtotime('0:10')) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data=json_decode(curl_exec($ch), true);
 		if (!empty($data['consumptions'])) {
-			echo __LINE__.'<br>';
+			echo __LINE__.PHP_EOL;
 			foreach ($data['consumptions'] as $i) {
 				$timestamp=$i['timestamp']/1000;
 				$consumption=$i['consumption'];
@@ -179,7 +179,7 @@ if ($time>strtotime('0:10')) {
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
 				$sql="INSERT INTO smappee_maand (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
-				echo __LINE__.' '.$sql.'<br>';
+				echo __LINE__.' '.$sql.PHP_EOL;
 				$db->query($sql);
 			}
 		}
@@ -208,18 +208,25 @@ if ($time>strtotime('0:10')) {
 				$selfConsumption=$i['selfConsumption'];
 				$selfSufficiency=$i['selfSufficiency'];
 				$sql="INSERT IGNORE INTO smappee_dag (timestamp, consumption,solar,alwaysOn,gridImport,gridExport,selfConsumption,selfSufficiency) VALUES ('$timestamp', '$consumption', '$solar', '$alwaysOn', '$gridImport', '$gridExport', '$selfConsumption', '$selfSufficiency') ON DUPLICATE KEY UPDATE consumption='$consumption', solar='$solar', alwaysOn='$alwaysOn', gridImport='$gridImport', gridExport='$gridExport', selfConsumption='$selfConsumption', selfSufficiency='$selfSufficiency';";
-				echo __LINE__.' '.$sql.'<br>';
+				echo __LINE__.' '.$sql.PHP_EOL;
 				$db->query($sql);
 			}
-			if (isset($data['consumptions'][2]['consumption'])) $vv=round($data['consumptions'][2]['consumption']/1000, 1); else $vv=0;
-			if ($d['el']['m']!=$vv) storemode('el', $vv, basename(__FILE__).':'.__LINE__);
+//			echo __LINE__.PHP_EOL;
+//			print_r($data);
+			if (isset($data['consumptions'][2]['consumption'])) $vv=round($data['consumptions'][2]['consumption']/1000, 1);
+			elseif (isset($data['consumptions'][1]['consumption'])) $vv=round($data['consumptions'][1]['consumption']/1000, 1);
+			else $vv=0.001;
+			if ($d['el']['m']!=$vv) {
+				echo __LINE__.PHP_EOL;
+				storemode('el', $vv, basename(__FILE__).':'.__LINE__);
+			}
 			if (isset($data['consumptions'][2]['solar'])) $zonvandaag=round($data['consumptions'][2]['solar']/1000, 1); else $zonvandaag=0;
 			if ($d['zonvandaag']['s']!=$zonvandaag) store('zonvandaag', $zonvandaag, basename(__FILE__).':'.__LINE__);
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
 			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 			if (strftime("%M", $time)%15==0) {
-				echo __LINE__.'<br>';
+				echo __LINE__.PHP_EOL;
 				$prev=array();
 				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $time)."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
@@ -228,14 +235,14 @@ if ($time>strtotime('0:10')) {
 				$kwhexport=($gridExport/1000)-$prev['export'];
 				if ($kwhimport<0) $kwhimport=0;
 				$sql="INSERT IGNORE INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
-				echo __LINE__.' '.$sql.'<br>';
+				echo __LINE__.' '.$sql.PHP_EOL;
 				$db->query($sql);
 				if ($kwhimport>(4/4)) telegram ('Kwartierpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
 
 				$stmt=$db->query("SELECT LEFT(stamp, 7) AS maand, MAX(kwhimport)*4 AS max FROM smappee_kwartier GROUP BY LEFT(stamp, 7) ORDER BY stamp DESC LIMIT 0,20;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 					$sql="INSERT INTO smappee_maandpiek (maand, kWh) VALUES ('".$row['maand']."', '".$row['max']."') ON DUPLICATE KEY UPDATE kWh='".$row['max']."';";
-					echo __LINE__.' '.$sql.'<br>';
+					echo __LINE__.' '.$sql.PHP_EOL;
 					$db->query($sql);
 				}
 			}
@@ -278,13 +285,13 @@ if ($d['zon']['s']>0) {
 }
 if ($d['luchtdroger']['s']=='On') {
 	$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=getopenzwavenodes&idx=3'),true);
-if (isset($data['result'])) {
-	foreach ($data['result'] as $i) {
-		if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
-			telegram('Node '.$i['Name'].' dead, restarting...');
-			sleep(3);
-//			echo shell_exec('sudo /sbin/reboot');
+	if (isset($data['result'])) {
+		foreach ($data['result'] as $i) {
+			if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
+				telegram('Node '.$i['Name'].' dead, restarting...');
+				sleep(3);
+	//			echo shell_exec('sudo /sbin/reboot');
+			}
 		}
 	}
-}
 }
