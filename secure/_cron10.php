@@ -37,7 +37,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 		$i=39;
-		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&$d['wasbak']['s']<=25&&past('snijplank')>$i) {
+		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']>0&&$d['snijplank']['s']<=25&&past('snijplank')>$i) {
 			foreach (array(8,7,6,5,4,3,2,1) as $i) {
 				if ($d['snijplank']['s']>$i) {
 					sl('snijplank', $i, basename(__FILE__).':'.__LINE__);
@@ -49,7 +49,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['Media']=='On'&&$time>strtotime('19:00')) $i=5;
 		else $i=35;
 		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
-			foreach (array(5,1) as $i) {
+			foreach (array(5,0) as $i) {
 				if ($d['wasbak']['s']>$i) {
 					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 	//				sleep(1);

@@ -283,7 +283,7 @@ if (isset($data['result'])) {
 		if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
 			telegram('Node '.$i['Name'].' dead, restarting...');
 			sleep(3);
-			echo shell_exec('sudo /sbin/reboot');
+//			echo shell_exec('sudo /sbin/reboot');
 		}
 	}
 }
