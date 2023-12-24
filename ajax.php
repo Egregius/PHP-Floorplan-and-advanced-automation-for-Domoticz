@@ -37,6 +37,10 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 		exec('curl -s http://192.168.2.20/secure/runsync.php &');
 	}
 }
+elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='MQTT') {
+	$db=dbconnect();
+	$db->query("UPDATE devices SET m=1 WHERE n ='Weg';");
+}
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='spotify') {
 	$d=fetchdata();
 	if ($d['bose101']['s']=='On'||$d['bose105']['s']=='On'||$d['Weg']['s']>0) echo 1;

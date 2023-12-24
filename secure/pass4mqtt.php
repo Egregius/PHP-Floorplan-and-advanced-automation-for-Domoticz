@@ -102,6 +102,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$status=$message['svalue2']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
 			} //else lg('no file found for '.$device);
+			if ($d['Weg']['m']==1) {
+				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
+				die();
+			}
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$message=json_decode($message, true);
