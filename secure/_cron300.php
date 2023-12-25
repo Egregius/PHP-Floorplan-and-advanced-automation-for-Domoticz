@@ -54,7 +54,7 @@ if ($d['Weg']['s']>0) {
 	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
 	
 }
-
+/*
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('Weg', 1, basename(__FILE__).':'.__LINE__);
@@ -62,7 +62,7 @@ if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirk
 } elseif (past('Weg')>36000&& $d['Weg']['s']==1&& past('pirliving')>36000&& past('pirkeuken')>36000&& past('pirinkom')>36000&& past('pirhall')>36000&& past('pirgarage')>36000) {
 	store('Weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('Weg ingeschakeld na 10 uur geen beweging', false, 2);
-}
+}*/
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||$time<=strtotime('6:00'))) {
 	$nowplaying=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.103:8090/now_playing'))),true);
