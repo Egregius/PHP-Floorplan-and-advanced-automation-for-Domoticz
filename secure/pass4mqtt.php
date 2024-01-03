@@ -82,25 +82,29 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$hum=$message['svalue2']+1;
 				if ($hum>100) $hum=100;
 				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum, '', 1);
-				if ($temp!=$d['minmaxtemp']['icon']) {
-					storeicon('minmaxtemp', $temp);
-				}
+				if ($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
+				store('buiten_hum', $temp);
 			} elseif ($device=='kamer_hum') { // 2
 				$status=$message['svalue2']-2;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
+				store('kamer_hum', $status);
 			} elseif ($device=='alex_hum') { // 3
 				$status=$message['svalue2'];
 				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status, '', 1);
+				store('alex_hum', $status);
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue2'];
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
+				store('waskamer_hum', $status);
 			} elseif ($device=='badkamer_hum') { // 5
 				$status=$message['svalue2']+1;
 				if ($status>100) $status=100;
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
+				store('badkamer_hum', $status);
 			} elseif ($device=='living_hum') { // 6
 				$status=$message['svalue2']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
+				store('kamer_hum', $status);
 			} //else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
 				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");

@@ -10,7 +10,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
 	if ($d['pirinkom']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>$i&&past('deurinkom')>$i&&past('deurbadkamer')>15&&past('deurvoordeur')>45) {
-		foreach (array(29,28,27,26,0) as $i) {
+		foreach (array(29,28,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -19,7 +19,7 @@ if ($d['auto']['s']=='On') {
 	}
 	$i=5;
 	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
-		foreach (array(29,28,27,0) as $i) {
+		foreach (array(29,28,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -60,7 +60,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>59) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-if ($d['GroheRed']['s']=='On'&&$d['el']['s']>7200) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['GroheRed']['s']=='On'&&($d['el']['s']>7500||past('GroheRed')>1800)) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);

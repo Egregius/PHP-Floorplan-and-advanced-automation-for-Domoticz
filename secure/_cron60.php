@@ -22,8 +22,8 @@ foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- THUIS ----------------------------*/
 	if ($d['Weg']['s']==0){
-		if ($d['zon']['s']==0&&$d['tuintafel']['s']=='Off'&&$d['Rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
-		elseif (($d['zon']['s']>0||$d['Rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
+//		if ($d['zon']['s']==0&&$d['tuintafel']['s']=='Off'&&$d['Rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
+//		elseif (($d['zon']['s']>0||$d['Rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
@@ -40,7 +40,6 @@ if ($d['auto']['s']=='On') {
 		$avg=$avg/5;
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
-			if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
 		}
 		
 /*		if ($d['bose101']['s']=='On') {
