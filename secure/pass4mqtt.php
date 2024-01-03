@@ -104,7 +104,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} elseif ($device=='living_hum') { // 6
 				$status=$message['svalue2']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
-				store('kamer_hum', $status);
+				store('living_hum', $status);
 			} //else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
 				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
