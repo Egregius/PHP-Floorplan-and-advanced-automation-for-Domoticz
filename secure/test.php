@@ -4,13 +4,40 @@ echo '<pre>';
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
-$d=fetchdata();
+//$d=fetchdata();
 
-if ($d['luchtdroger']['s']=='Off') {
-	if ($d['luchtdroger1']['s']!='Off') store('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['luchtdroger2']['s']!='Off') store('luchtdroger2', 'Off', basename(__FILE__).':'.__LINE__);
-}
 
+
+
+$year=date("Y");
+$title='test remastered 1996';
+$replace=array(
+	'albummix',
+	'clubedit',
+	'clubmix',
+	'edit',
+	'extended',
+	'feat',
+	'featuring',
+	'festivalmix',
+	'mixedit',
+	'originalmix',
+	'radioedit',
+	'radiomix',
+	'radioversion',
+	'remastered',
+	'remix',
+	'rework',
+	'singleversion',
+	'version',
+	'videoedit',
+	'7"',
+);
+for($x=1970;$x<=$year;$x++) $replace[]=$x;
+$title=str_replace($replace,'',$title);
+print_r($replace);
+
+echo $title;
 //$status='Off';
 //include 'pass2php/$ remoteauto.php';
 
