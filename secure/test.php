@@ -7,37 +7,17 @@ require '/var/www/authentication.php';
 //$d=fetchdata();
 
 
+$d1=0;
+$d2=0;
+$d3=0;
+
+for($x=1;$x<=52;$x++) {
+	if ($x%3==0) $d3++;
+	elseif ($x%2==0) $d2++;
+	else $d1++;
+}
 
 
-$year=date("Y");
-$title='test remastered 1996';
-$replace=array(
-	'albummix',
-	'clubedit',
-	'clubmix',
-	'edit',
-	'extended',
-	'feat',
-	'featuring',
-	'festivalmix',
-	'mixedit',
-	'originalmix',
-	'radioedit',
-	'radiomix',
-	'radioversion',
-	'remastered',
-	'remix',
-	'rework',
-	'singleversion',
-	'version',
-	'videoedit',
-	'7"',
-);
-for($x=1970;$x<=$year;$x++) $replace[]=$x;
-$title=str_replace($replace,'',$title);
-print_r($replace);
-
-echo $title;
 //$status='Off';
 //include 'pass2php/$ remoteauto.php';
 

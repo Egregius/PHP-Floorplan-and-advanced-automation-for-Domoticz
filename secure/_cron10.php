@@ -52,6 +52,10 @@ if ($d['auto']['s']=='On') {
 			foreach (array(5,0) as $i) {
 				if ($d['wasbak']['s']>$i) {
 					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
+					if ($i==0) {
+						sleep(2);
+						sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
+					}
 					break;
 				}
 			}
