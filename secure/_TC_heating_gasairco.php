@@ -37,8 +37,8 @@ if ($d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-			if ($dif>=-0.5) $power=0;
-			elseif ($dif<=-2 ) $power=1;
+			if ($dif>=0.2) $power=0;
+			elseif ($dif<=-0.8 ) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 				if ($dif<-1) $rate=6;
 				elseif ($dif<-0.4) $rate=5;
@@ -49,9 +49,9 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif>=0.4) {$rate=4;$d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;}
 				elseif ($dif>=0) $rate=4;
 				if ($k=='living') {
-					$set=$d[$k.'_set']['s']-2.5;
-					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2.5&&$d[$k.'_temp']['s']>18) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2.5;
-					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>18) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
+					$set=$d[$k.'_set']['s']-2;
+					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>18) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
+					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>18) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					if (($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0)) $rate=0;
 				} elseif ($k=='kamer') {
 					$set=$d['kamer_set']['s']-3;
