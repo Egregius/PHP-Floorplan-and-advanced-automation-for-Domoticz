@@ -27,11 +27,23 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	if ($dday==true) {
 		$loop=true;
 		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
-		for ($x=0;$x<=10;$x+=0.1) {
+		for ($x=0;$x<=9;$x+=0.1) {
 			if ($loop==true) {
 				$t2=$t-($factor*$x);
 				if ($time>=$t2&&$time<$t+2700) {
 					$set=round(22-$x, 1);
+					$loop=false;
+				}
+			} else break;
+		}
+	} else {
+		$loop=true;
+		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
+		for ($x=0;$x<=4;$x+=0.1) {
+			if ($loop==true) {
+				$t2=$t-($factor*$x);
+				if ($time>=$t2&&$time<$t+2700) {
+					$set=round(17-$x, 1);
 					$loop=false;
 				}
 			} else break;
@@ -120,7 +132,7 @@ if ($l==0) {
 //		if ($d['luchtdroger2']['s']=='Off'/*&&$time>=strtotime('3:00')&&$time<=strtotime('18:00')*/) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 //	}
 	if ($d['waskamervuur1']['s']=='Off') sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
-	if ($d['waskamervuur2']['s']=='Off') sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['waskamervuur2']['s']=='Off'&&$d['waskamervuur2']['m']!=1) sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 } elseif ($l==3) {
 //	if ($d['luchtdroger']['s']=='Off'/*&&$time>=strtotime('3:00')&&$time<=strtotime('18:00')*/) sw('luchtdroger', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 //	else {
@@ -128,7 +140,7 @@ if ($l==0) {
 //		if ($d['luchtdroger2']['s']=='Off'/*&&$time>=strtotime('3:00')&&$time<=strtotime('18:00')*/) sw('luchtdroger2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 //	}
 	if ($d['waskamervuur1']['s']=='Off') sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
-	if ($d['waskamervuur2']['s']=='Off') sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['waskamervuur2']['s']=='Off'&&$d['waskamervuur2']['m']!=1) sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 } 
 //if ($d['luchtdroger']['s']=='Off') {
 //	if ($d['luchtdroger1']['s']=='On') store('luchtdroger1', 'Off', basename(__FILE__).':'.__LINE__);
