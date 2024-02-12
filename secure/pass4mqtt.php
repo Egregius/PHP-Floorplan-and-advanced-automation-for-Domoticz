@@ -59,7 +59,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
-						lg(print_r($message,true));
 						$status=$message['svalue1'];
 						lg(' (MQTT) kWh '.$device.' => '.$status);	
 						store($device, $status,' (MQTT) kWh ');
