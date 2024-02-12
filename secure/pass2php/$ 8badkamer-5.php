@@ -1,2 +1,2 @@
 <?php
-bosezone(102, true);
+//bosezone(102, true);

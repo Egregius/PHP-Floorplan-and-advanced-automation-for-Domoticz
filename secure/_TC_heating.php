@@ -72,7 +72,8 @@ if ($d['living_set']['m']==0) {
 			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=(20-$d['buiten_temp']['s'])*100; else $factor=1000;
 			for ($x=0;$x<=5;$x+=0.1) {
 				if ($loop==true) {
-					$t2=$t-($factor*$x);
+					if ($d['heating']['s']>=2) $t2=$t-($factor*$x);
+					else $t2=$t;
 					if ($time>=$t2&&$time<strtotime('20:00')) {
 						$Setliving=round($base-$x, 1);
 						$loop=false;

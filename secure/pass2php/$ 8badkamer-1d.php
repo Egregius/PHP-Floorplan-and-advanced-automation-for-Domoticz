@@ -1,2 +1,2 @@
 <?php
-sw('luchtdroger', 'On');
+require('$ 8badkamer-1.php');
