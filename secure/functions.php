@@ -8,6 +8,7 @@ $memcache = new Memcache;
 $memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
 
 function t() {
+	global $dow;
 	$dow=date("w");
 	if($dow==1) $t=strtotime('7:10');
 	elseif($dow==2) $t=strtotime('6:45');
