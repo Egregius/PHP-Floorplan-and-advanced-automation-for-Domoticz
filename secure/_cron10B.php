@@ -3,7 +3,7 @@ $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0) {
-	foreach(array(102=>26,104=>35,106=>35,107=>30) as $ip=>$vol) {
+	foreach(array(104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
@@ -45,7 +45,7 @@ if ($d['Weg']['s']==0) {
 		}
 		unset($status);
 	}
-	foreach(array(101,105) as $ip) {
+	foreach(array(101,102) as $ip) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
 			lg('INVALID SOURCE');
