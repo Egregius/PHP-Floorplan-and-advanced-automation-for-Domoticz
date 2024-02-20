@@ -37,7 +37,9 @@ if ($status=='On') {
 			waarschuwing(' Let op . Bose buiten10');
 			exit;
 		}
+		sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__,true);
 		store('Weg', 2, basename(__FILE__).':'.__LINE__);
+		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=60');
 		sl('Xring', 90, basename(__FILE__).':'.__LINE__);
 		huisslapen();
 		sleep(4);

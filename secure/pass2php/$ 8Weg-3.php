@@ -1,2 +1,2 @@
 <?php
-sw('powermeter', 'Toggle', basename(__FILE__).':'.__LINE__);
+sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
