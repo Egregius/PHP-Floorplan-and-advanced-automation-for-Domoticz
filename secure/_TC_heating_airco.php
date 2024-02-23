@@ -13,10 +13,17 @@ if ($d['daikin']['m']==1) {
 	$maxpow=floor($maxpow/10)*10;
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 	elseif ($d['Weg']['s']>0) $maxpow=40;
+	if ($d['living_set']['m']==0) {
+		if ($dow==1&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $maxpow=40;
+		elseif ($dow==2&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $maxpow=40;
+		elseif ($dow==3&&$time>=strtotime('8:15')&&$time<strtotime('11:20')) $maxpow=40;
+		elseif ($dow==4&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $maxpow=40;
+		elseif ($dow==5&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $maxpow=40;
+	}
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-			if ($dif>2.2) $power=0;
+			if ($dif>3) $power=0;
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 				if ($dif<-2) $rate=6;
