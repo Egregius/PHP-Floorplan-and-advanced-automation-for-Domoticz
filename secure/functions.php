@@ -3,9 +3,8 @@ require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $time=time();
 $db=dbconnect();
-
-$memcache = new Memcache;
-$memcache->connect('192.168.2.21', 11211) or die ("Could not connect");
+$memcache=new Memcache;
+$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 
 function t() {
 	global $dow;
@@ -15,8 +14,8 @@ function t() {
 	elseif($dow==3) $t=strtotime('7:10');
 	elseif($dow==4) $t=strtotime('7:00');
 	elseif($dow==5) $t=strtotime('7:00');
-	elseif($dow==6) $t=strtotime('7:30');
-	elseif($dow==0) $t=strtotime('7:30');
+	elseif($dow==6) $t=strtotime('7:45');
+	elseif($dow==0) $t=strtotime('7:45');
 	return $t;
 }
 	
