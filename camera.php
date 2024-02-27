@@ -21,9 +21,15 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$data['t']=min($times);
 	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
 	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-	if ($d['Weg']['s']==0&&$data['t']>90) {
-		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=10');
-		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=747&switchcmd=Set%20Level&level=20&passcode=');
+	if ($d['Weg']['s']==0&&$data['t']>90&&!isset($_GET['eufy'])) {
+		$memcache=new Memcache;
+		$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
+		$prev=mget('bewegingvoordeur');
+		if ($prev<$_SERVER['REQUEST_TIME']-600) {
+			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=2');
+			file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=747&switchcmd=Set%20Level&level=20&passcode=');
+		}
+		mset('bewegingvoordeur', $_SERVER['REQUEST_TIME']);
 	}
 	if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
 		$data['z']=0;
@@ -64,4 +70,14 @@ function lg($msg) {
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
+}
+
+function mset($key, $data, $ttl=0) {
+	global $memcache;
+	$memcache->set($key, $data);
+}
+function mget($key) {
+	global $memcache;
+	$data=$memcache->get($key);
+	return $data;
 }
