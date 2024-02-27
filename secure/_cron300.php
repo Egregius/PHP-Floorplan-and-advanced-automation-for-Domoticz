@@ -46,13 +46,14 @@ if ($d['kookplaat']['s']=='On') {
 	if ($d['kookplaatpower_kWh']['s']<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['Weg']['s']>0) {
-	if ($d['Media']['s']=='On'&&past('Weg')>1800) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['Media']['s']=='On'&&past('Weg')>900) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
 	if (ping('192.168.2.7')==true) sw('Media', 'Off', basename(__FILE__).':'.__LINE__, true);
 	if ($d['kookplaat']['s']=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
-	
+} else {
+	if ($d['Media']['s']=='On'&&$d['shield']['s']=='Off'&&past('shield')>900) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /*
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);

@@ -123,6 +123,7 @@ if ($d['Weg']['s']<=1) {
 	}
 }
 if ($d['Weg']['s']==0) {
+	if ($d['Media']['s']=='On'&&$d['ht_a7000']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
 	if ($d['nas']['s']=='Off') {
 		if ($d['Media']['s']=='On') {
 			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
@@ -141,5 +142,4 @@ if ($d['Weg']['s']==0) {
 			}
 		}
 	}
-	if ($d['Media']['s']=='On'&&$d['ht_a7000']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
 }
