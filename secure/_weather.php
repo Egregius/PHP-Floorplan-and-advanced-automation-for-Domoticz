@@ -125,8 +125,8 @@ foreach ($temps as $i) {
 }
 if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10;
 $maxtemp=ceil($maxtemp*10)/10;
-if ($temp>$d['buiten_temp']['s']+0.1) $temp+=0.1;
-elseif ($temp<$d['buiten_temp']['s']-0.1) $temp-=0.1;
+if ($temp>$d['buiten_temp']['s']+0.1) $temp=$d['buiten_temp']['s']+0.1;
+elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
 if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
