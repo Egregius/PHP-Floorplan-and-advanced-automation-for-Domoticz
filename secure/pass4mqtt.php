@@ -138,9 +138,9 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status);
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-			} //else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
-		} //else lg(print_r($topic, true).'	'.print_r($message,true));
-	} //else lg(print_r($topic, true).'	'.print_r($message,true));
+			} else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
+		} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $client->loop(true);
 $client->disconnect();

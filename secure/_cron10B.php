@@ -141,5 +141,5 @@ if ($d['Weg']['s']==0) {
 			}
 		}
 	}
-	if ($d['Media']['s']=='On'&&$d['Sony']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
+	if ($d['Media']['s']=='On'&&$d['ht_a7000']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
 }
