@@ -10,10 +10,10 @@ function t() {
 	global $dow;
 	$dow=date("w");
 	if($dow==1) $t=strtotime('7:10');
-	elseif($dow==2) $t=strtotime('6:50');
+	elseif($dow==2) $t=strtotime('7:00');
 	elseif($dow==3) $t=strtotime('7:10');
 	elseif($dow==4) $t=strtotime('7:00');
-	elseif($dow==5) $t=strtotime('7:00');
+	elseif($dow==5) $t=strtotime('7:10');
 	elseif($dow==6) $t=strtotime('7:45');
 	elseif($dow==0) $t=strtotime('7:45');
 	return $t;
