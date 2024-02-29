@@ -53,8 +53,9 @@ if ($d['auto']['s']=='On') {
 				if ($d['wasbak']['s']>$i) {
 					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 					if ($i==0) {
+						sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 						sleep(2);
-						sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
+						sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 					}
 					break;
 				}
@@ -65,6 +66,7 @@ if ($d['auto']['s']=='On') {
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>59) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['GroheRed']['s']=='On'&&($d['el']['s']>7500||past('GroheRed')>1800)) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['powermeter']['s']=='On'&&($d['el']['s']>6500||past('powermeter')>9536)) sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);

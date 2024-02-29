@@ -20,6 +20,11 @@ if ($d['daikin']['m']==1) {
 		elseif ($dow==4&&$time>=strtotime('8:00')&&$time<strtotime('17:20')) $maxpow=40;
 		elseif ($dow==5&&$time>=strtotime('8:00')&&$time<strtotime('12:30')) $maxpow=40;
 	}*/
+	if ($d['el']['s']>5000&&$maxpow>40) $maxpow=40;
+	elseif ($d['el']['s']>4500&&$maxpow>50) $maxpow=50;
+	elseif ($d['el']['s']>4000&&$maxpow>60) $maxpow=60;
+	elseif ($d['el']['s']>3500&&$maxpow>70) $maxpow=70;
+	elseif ($d['el']['s']>3000&&$maxpow>80) $maxpow=80;
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];

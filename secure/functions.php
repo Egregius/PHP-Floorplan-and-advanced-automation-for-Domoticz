@@ -649,7 +649,7 @@ function hass($domain,$service,$entity) {
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
 	$response=curl_exec($ch);
-	if (strlen($respone)>0) lg($response);
+	if (strlen($response)>0) lg($response);
 	curl_close($ch);
 }
 function curl($url) {
