@@ -71,7 +71,10 @@ function fhall() {
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
 	else $t=strtotime('7:00');
-	if ($d['zon']['s']<50&&$time>=$t+1800&&($d['Ralex']['s']==0||$time<=strtotime('19:45')||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
+	if ($d['zon']['s']<50&&$time<=strtotime('19:45')&&
+			($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)
+		) 
+		{
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}

@@ -6,16 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-
-$d1=0;
-$d2=0;
-$d3=0;
-
-for($x=1;$x<=52;$x++) {
-	if ($x%3==0) $d3++;
-	elseif ($x%2==0) $d2++;
-	else $d1++;
-}
+fhall();
 
 
 //$status='Off';
