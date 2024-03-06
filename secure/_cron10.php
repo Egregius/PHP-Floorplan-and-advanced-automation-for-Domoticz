@@ -64,7 +64,7 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 }
-if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>59) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['GroheRed']['s']=='On'&&($d['el']['s']>7500||past('GroheRed')>1800)) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['powermeter']['s']=='On'&&($d['el']['s']>6500||past('powermeter')>9536)) sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');

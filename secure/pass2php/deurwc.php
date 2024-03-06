@@ -1,7 +1,9 @@
 <?php
-if (!is_array($d)) $d=fetchdata();
+//if (!is_array($d)) $d=fetchdata();
 if ($status=='Open'&&$d['auto']['s']=='On') {
-	if (past('wc')>10&&$d['wc']['s']!='On') {
+	$last=mget('wc');
+	$time=time();
+	if ($time>$last+5&&$d['wc']['s']!='On') {
 		sw('wc', 'On', basename(__FILE__).':'.__LINE__);
 	}
     finkom();

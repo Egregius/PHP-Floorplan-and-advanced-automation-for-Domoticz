@@ -7,7 +7,7 @@ $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 
 function t() {
-	global $dow;
+	global $dow,$t;
 	$dow=date("w");
 	if($dow==1) $t=strtotime('7:10');
 	elseif($dow==2) $t=strtotime('7:00');
@@ -41,9 +41,12 @@ function fgarage() {
 function fbadkamer() {
 	global $d,$time;
 	$d=fetchdata();
-	if (past('$ 8badkamer-8')>10) {
+	$last=mget('lichtbadkamer');
+	$time=time();
+	if ($time>$last) {
 		if ($d['lichtbadkamer']['s']<16&&$d['dag']<3&&$d['zon']['s']<50) {
-			if ($time>strtotime('5:30')&&$time<strtotime('21:30')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
+			$t=t();
+			if ($time>$t&&$time<strtotime('21:00')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 		}
 	}

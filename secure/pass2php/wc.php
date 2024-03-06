@@ -1,0 +1,2 @@
+<?php
+mset('wc', time());

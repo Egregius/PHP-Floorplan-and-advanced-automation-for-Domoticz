@@ -67,30 +67,30 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=3) $Setliving=17;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
 		if ($d['Weg']['s']<2) {
-			$base=21;
+			$target=21;
 			$loop=true;
-			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=($base-$d['buiten_temp']['s'])*100; else $factor=1000;
+			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=($target-$d['buiten_temp']['s'])*100; else $factor=1000;
 			for ($x=0;$x<=5;$x+=0.1) {
 				if ($loop==true) {
 					if ($d['heating']['s']>=2) $t2=$t-($factor*$x);
 					else $t2=$t;
 					if ($time>=$t2&&$time<strtotime('20:00')) {
-						$Setliving=round($base-$x, 1);
+						$Setliving=round($target-$x, 1);
 						$loop=false;
 					}
 				} else break;
 			}
 			if ($d['Weg']['s']==0) {
-				if ($time>=strtotime('4:00')&&$time<strtotime('20:00')) $Setliving=$base;
-/*				if ($dow==1&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$base-3;
-				elseif ($dow==2&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$base-3;
-				elseif ($dow==3&&$time>=strtotime('8:15')&&$time<strtotime('11:20')) $Setliving=$base-3;
-				elseif ($dow==4&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$base-3;
-				elseif ($dow==5&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $Setliving=$base-3;*/
-				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$base-3;
+				if ($time>=strtotime('4:00')&&$time<strtotime('20:00')) $Setliving=$target;
+/*				if ($dow==1&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
+				elseif ($dow==2&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
+				elseif ($dow==3&&$time>=strtotime('8:15')&&$time<strtotime('11:20')) $Setliving=$target-3;
+				elseif ($dow==4&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
+				elseif ($dow==5&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $Setliving=$target-3;*/
+				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$target-3;
 			}
 		}
-		if ($Setliving>18&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$base-1;
+		if ($Setliving>18&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$target-1;
 	}
 	if ($d['living_set']['s']!=$Setliving/*&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60*/) {
 		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);

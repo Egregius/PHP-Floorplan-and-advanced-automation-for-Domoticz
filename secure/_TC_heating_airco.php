@@ -6,11 +6,12 @@ if ($d['daikin']['m']==1) {
 		if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 	}
 	$rates=array('B', 'B', 3, 4, 5, 6, 7);
-	$maxpow=floor(60*$bigdif);
+	$maxpow=floor((30-$d['buiten_temp']['s']-$d['buiten_temp']['s'])*$bigdif);
+	$maxpow=floor($maxpow/10)*10;
+//	lg($bigdif.' '.$maxpow);
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 	else $spmode=-1;
-	$maxpow=floor($maxpow/10)*10;
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 	elseif ($d['Weg']['s']>0) $maxpow=40;
 /*	if ($d['living_set']['m']==0) {
