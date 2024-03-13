@@ -43,7 +43,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 		for ($x=0;$x<=4;$x+=0.1) {
 			if ($loop==true) {
 				$t2=$t-($factor*$x);
-				if ($time>=$t2&&$time<$t+2700) {
+				if ($time>=$t2&&$time<$t+1800) {
 					$set=round(17-$x, 1);
 					$loop=false;
 				}
