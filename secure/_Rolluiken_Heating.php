@@ -2,7 +2,7 @@
 $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['Weg']['s']==0&&$d['dag']>0))&&$time<strtotime('9:00')) {
+	if (($time>=$t||($d['Weg']['s']==0&&$d['dag']>0))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);

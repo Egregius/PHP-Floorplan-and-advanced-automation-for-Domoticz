@@ -8,7 +8,6 @@ if ($d['daikin']['m']==1) {
 	$rates=array('B', 'B', 3, 4, 5, 6, 7);
 	$maxpow=floor((30-$d['buiten_temp']['s']-$d['buiten_temp']['s'])*$bigdif);
 	$maxpow=floor($maxpow/10)*10;
-//	lg($bigdif.' '.$maxpow);
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 	else $spmode=-1;
