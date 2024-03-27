@@ -20,6 +20,7 @@ function t() {
 }
 	
 function fliving() {
+  return true;
 	global $d,$time;
 	$d=fetchdata();
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0) {
