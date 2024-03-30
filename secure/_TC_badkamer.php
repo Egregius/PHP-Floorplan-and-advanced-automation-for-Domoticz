@@ -106,7 +106,7 @@ if ($d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer>60) {
 }
 
 if ($d['badkamer_set']['m']==1&&$l>2&&$d['lichtbadkamer']['s']==0) {$l=2;$m.=' + '.__LINE__.' slow';}
-if ($time>$t+2700&&$l>1) {$l=1;$m.=' + '.__LINE__.' Weg';}
+if ($time>$t+2700&&$l>1&&past('badkamer_set')>3600) {$l=1;$m.=' + '.__LINE__.' Weg';}
 if ($d['luchtdroger']['m']!='Auto') {$l=$d['luchtdroger']['m'];$m.=' + '.__LINE__.' Fixed';}
 if ($d['Weg']['s']>=2) {$l=0;$m.=' + '.__LINE__.' Weg';}
 
