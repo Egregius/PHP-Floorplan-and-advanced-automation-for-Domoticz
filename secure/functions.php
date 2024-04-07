@@ -342,9 +342,9 @@ function telegram($msg,$silent=true,$to=1) {
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 	lg('Telegram sent: '.$msg);
 }
-function lg($msg) {
+function lg($msg,$force=false) {
 	global $log;
-	if ($log==true) {
+	if ($log==true||$force==true) {
 		$fp=fopen('/temp/domoticz.log', "a+");
 		$time=microtime(true);
 		$dFormat="Y-m-d H:i:s";

@@ -47,30 +47,30 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						elseif ($message['nvalue']==1) $status='On';
 					}
 					lg(' (MQTT) Switch '.$device.' => '.$status);
-					store($device, $status, ' (MQTT) Switch <> ');
+					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch <> ');
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';
 					lg(' (MQTT) Lighting 2 '.$device.' => '.$status);
-					store($device, $status, ' (MQTT) Switch ');
+					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch ');
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
 					lg(' (MQTT) Temp '.$device.' => '.$status);	
-					store($device, $status,' (MQTT) Temp ');
+					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
 						lg(' (MQTT) kWh '.$device.' => '.$status);	
-						store($device, $status,' (MQTT) kWh ');
+						if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) kWh ');
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
 					lg(' (MQTT) Usage '.$device.' => '.$status);	
-					store($device, $status,' (MQTT) Usage ');
+					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Usage ');
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
 					lg(' (MQTT) Colorswitch '.$device.' => '.$status);	
-					store($device, $status,' (MQTT) Color ');
+					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
 					lg(' (MQTT) else '.print_r($message,true));	
@@ -83,28 +83,28 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($hum>100) $hum=100;
 				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum, '', 1);
 				if ($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
-				store('buiten_hum', $temp);
+				if ($status!=$d['buiten_hum']['s']) store('buiten_hum', $hum);
 			} elseif ($device=='kamer_hum') { // 2
 				$status=$message['svalue2']-2;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
-				store('kamer_hum', $status);
+				if ($status!=$d['kamer_hum']['s']) store('kamer_hum', $status);
 			} elseif ($device=='alex_hum') { // 3
 				$status=$message['svalue2'];
 				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status, '', 1);
-				store('alex_hum', $status);
+				if ($status!=$d['alex_hum']['s']) store('alex_hum', $status);
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue2'];
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
-				store('waskamer_hum', $status);
+				if ($status!=$d['waskamer_hum']['s']) store('waskamer_hum', $status);
 			} elseif ($device=='badkamer_hum') { // 5
 				$status=$message['svalue2']+1;
 				if ($status>100) $status=100;
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
-				store('badkamer_hum', $status);
+				if ($status!=$d['badkamer_hum']['s']) store('badkamer_hum', $status);
 			} elseif ($device=='living_hum') { // 6
 				$status=$message['svalue2']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
-				store('living_hum', $status);
+				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
 			} //else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
 				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
