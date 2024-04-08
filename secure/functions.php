@@ -110,7 +110,7 @@ function huisslapen() {
 	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
-	if ($d['imac']['s']=='On') system("sudo -u root /var/www/imacsleep.sh");
+	system("sudo -u root /var/www/imacsleep_withlock.sh &");
 }
 function huisthuis() {
 	global $d;
