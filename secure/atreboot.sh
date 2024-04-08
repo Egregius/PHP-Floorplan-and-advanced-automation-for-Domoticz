@@ -1,7 +1,9 @@
 #!/bin/bash
 mkdir -p /var/log
+/usr/sbin/service mysql stop
 /usr/sbin/service domoticz stop
 /usr/sbin/service nginx stop
+rsync -aP /var/lib/mysql/ /temp/mysql/
 rsync -aP /domoticz/ /temp/domoticz/
 touch /temp/domoticz.log
 touch /temp/phperror.log
