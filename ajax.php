@@ -126,6 +126,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		if ($_REQUEST['action']==0) {
 			huisthuis();
 		} elseif ($_REQUEST['action']>=1) {
+			lg('huisslapen...');
 			huisslapen();
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
