@@ -6,7 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-fhall();
+fliving();
 
 
 //$status='Off';
