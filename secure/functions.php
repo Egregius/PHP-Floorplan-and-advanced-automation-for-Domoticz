@@ -138,10 +138,11 @@ function waarschuwing($msg) {
 	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 function past($name) {
-	global $d;
+	global $d,$time;
+	$time=time();
 	if (!isset($d[$name]['t'])) $d=fetchdata();
-	if ($name=='$ remoteauto') lg('past '.$name.'	time='.time().' t='.$d[$name]['t'].' past='.time()-$d[$name]['t']);
-	if (!empty($d[$name]['t'])) return time()-$d[$name]['t'];
+	if ($name=='$ remoteauto') lg('past '.$name.'	time='.$time.' t='.$d[$name]['t'].' past='.$time-$d[$name]['t']);
+	if (!empty($d[$name]['t'])) return $time-$d[$name]['t'];
 	else return 999999999;
 }
 function idx($name) {
