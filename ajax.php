@@ -35,6 +35,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 	if ($_REQUEST['command']=='runsync') {
 		lg('Running syncs');
 		exec('curl -s http://192.168.2.20/secure/runsync.php &');
+		store('runsync', 1, basename(__FILE__).':'.__LINE__);
 	}
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='MQTT') {
