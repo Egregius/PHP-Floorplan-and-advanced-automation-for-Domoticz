@@ -63,6 +63,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['Ralex']['s']==0&&$d['zon']['s']>100&&$d['alex']['s']==1) sl('alex', 0, basename(__FILE__).':'.__LINE__);
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['GroheRed']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>7500) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan 7500W verbruik');
