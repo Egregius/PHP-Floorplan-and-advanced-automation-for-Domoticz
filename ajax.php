@@ -126,9 +126,12 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
 			huisthuis();
-		} elseif ($_REQUEST['action']>=1) {
+		} elseif ($_REQUEST['action']==1) {
 			lg('huisslapen...');
 			huisslapen();
+		} elseif ($_REQUEST['action']>=2) {
+			lg('huisslapen...');
+			huisslapen(true);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
 		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
@@ -231,7 +234,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			elseif ($_REQUEST['action']=='Off') system("sudo -u root /var/www/imacsleep.sh");
 		} elseif ($_REQUEST['device']=='powermeter') {
 			if ($_REQUEST['action']=='On') {
-				store('powermeter', 'On', basename(__FILE__).':'.__LINE__);
+				mset('powermeter',time());
 				sleep(1);
 			}
 			call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);

@@ -41,7 +41,7 @@ if ($status=='On') {
 		store('Weg', 2, basename(__FILE__).':'.__LINE__);
 		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=60');
 		sl('Xring', 90, basename(__FILE__).':'.__LINE__);
-		huisslapen();
+		huisslapen(true);
 		sleep(4);
 		sl('Xring', 0, basename(__FILE__).':'.__LINE__);
 	} else {
