@@ -3,31 +3,29 @@ $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0) {
-	foreach(array(104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
+	$week=strftime('%-V', $time);
+	foreach(array(103=>17,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
 			if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
 			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 				if ($ip==103) {
-					if ($d['bose101']['s']=='On') bosezone($ip, true);
-					elseif ($d['bose103']['m']==0&&$time>strtotime('20:00')) {
-						$time=time();
-						$week=strftime('%-V', $time);
-						$dow=date("w");
-						if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-						if ($weekend==true) {
-							if ((int)$week % 2 == 0) $preset='PRESET_4';
-							else $preset='PRESET_3';
-						} else {
-							if ((int)$week % 2 == 0) $preset='PRESET_2';
-							else $preset='PRESET_1';
-						}
-						bosekey($preset, 0, $ip);
-						usleep(500000);
-						bosevolume($vol, $ip);
+					if ($d['bed']['s']=='On'&&past('bed')<43200) {
+						if ($time>strtotime('20:00')||$time<strtotime('4:00')||$d['Weg']['s']==1) {
+							if ($weekend==true) {
+								if ((int)$week % 2 == 0) $preset='PRESET_4';
+								else $preset='PRESET_3';
+							} else {
+								if ((int)$week % 2 == 0) $preset='PRESET_2';
+								else $preset='PRESET_1';
+							}
+							bosekey($preset, 0, $ip);
+							usleep(500000);
+							bosevolume($vol, $ip);
+						} elseif ($d['bose101']['s']=='On') bosezone($ip, true);
 					}
-					
+		
 				} elseif ($ip!=000102) {
 					bosezone($ip);
 					usleep(500000);
@@ -49,10 +47,6 @@ if ($d['Weg']['s']==0) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
 			lg('INVALID SOURCE');
-			$time=time();
-			$week=strftime('%-V', $time);
-			$dow=date("w");
-			if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 			if ($weekend==true) {
 				if ((int)$week % 2 == 0) $preset='PRESET_4';
 				else $preset='PRESET_3';
