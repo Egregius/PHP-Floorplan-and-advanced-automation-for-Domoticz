@@ -41,6 +41,24 @@ if (isset($owf['list'])) {
 	}
 }
 
+//lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
+$wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
+if (isset($wa['current']['temp_c'])) {
+	$temps['wa']=$wa['current']['temp_c'];
+	$temps['wa_feel']=$wa['current']['feelslike_c'];
+	$winds['wa_speed']=$wa['current']['wind_kph'];
+	$winds['wa_gust']=$wa['current']['gust_kph'];
+	$rains['wa']=$wa['current']['precip_mm'];
+}
+
+
+//lg(__LINE__.' https://api.agromonitoring.com/agro/1.0/weather?'.$lat.'&lon='.$lon.'&units=metric&appid='.$amappid);
+$am=json_decode(curl('https://api.agromonitoring.com/agro/1.0/weather?'.$lat.'&lon='.$lon.'&units=metric&appid='.$amappid),true);
+if (isset($am['main']['temp'])) {
+	$temps['am']=$am['main']['temp'];
+	$temps['am_feel']=$am['main']['feels_like'];
+}
+
 //lg(__LINE__.' https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
 $ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
@@ -49,6 +67,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$winds['ob_wind']=$ob['windspeed'] * 1.609344;
 	if (isset($ob['windgusts'])) $winds['ob_gust']=$ob['windgusts'] * 1.609344;
 }
+
 
 //lg(__LINE__.' https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true');
 $om=json_decode(curl('https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true'), true);
@@ -65,6 +84,9 @@ if (isset($om['hourly']['temperature_2m'])) {
 		if ($x>=12) break;
 	}
 }
+
+
+
 
 //lg(__LINE__.' https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json');
 $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json'), true);
@@ -130,7 +152,7 @@ elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
 if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
-//lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
+lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
 	if ($d['wind']['s']!=$wind) store('wind', $wind);
@@ -141,7 +163,7 @@ if (count($rains)>=2) {
 	if ($d['buien']['s']!=$rain) store('buien', $rain);
 }
 
-//lg('temps = '.print_r($temps,true).' => '.$temp);lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
+lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
 
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
