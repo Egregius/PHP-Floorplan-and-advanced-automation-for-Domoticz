@@ -1,5 +1,5 @@
 <?php
-if ($d['auto']['s']=='On') {
+if ($status=='On'&&$d['auto']['s']=='On'&&$d['Weg']['s']==0) {
 	if ($status=="On") fkeuken();
 	else {
 		$time=time();

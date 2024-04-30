@@ -19,3 +19,5 @@ if ($d['bose103']['s']=='On'&&($d['Weg']['s']==1||$time<=strtotime('3:00'))) {
 		}
 	}
 }
+
+if ($d['wasbak']['s']==0) sl('wasbak', 0, basename(__FILE__).':'.__LINE__, true);

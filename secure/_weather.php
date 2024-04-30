@@ -13,6 +13,31 @@ $temps['buiten_temp']=$d['buiten_temp']['s'];
 $temps['buiten_temp_hum']=$d['minmaxtemp']['icon'];
 $winds['prev_wind']=$d['wind']['s'];
 
+//lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
+$ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
+if (isset($ow['current'])) {
+	$temps['ow3']=$ow['current']['temp'];
+	$temps['ow_feel3']=$ow['current']['feels_like'];
+	$winds['ow_speed']=$ow['current']['wind_speed'] * 3.6;
+	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=$ow['current']['wind_gust'] * 3.6;
+	if ($d['icon']['s']!=$ow['current']['weather'][0]['icon']) store('icon', $ow['current']['weather'][0]['icon']);
+	if (isset($ow['rain']['1h'])) $rains['ow']=$ow['rain']['1h']*10;
+	foreach ($ow['hourly'] as $i) {
+		if ($i['dt']<$time+(12*3600)) {
+//			lg(__LINE__.' '.print_r($i,true));
+			if ($i['temp']<$mintemp) $mintemp=$i['temp'];
+			elseif ($i['temp']>$maxtemp) $maxtemp=$i['temp'];
+			if ($i['feels_like']<$mintemp) $mintemp=$i['feels_like'];
+			elseif ($i['feels_like']>$maxtemp) $maxtemp=$i['feels_like'];
+		} else break;
+	}
+}
+//lg(__LINE__.print_r($temps,true));
+//lg(__LINE__.print_r($winds,true));
+//lg(__LINE__.print_r($rains,true));
+//lg($mintemp.' '.$maxtemp);
+/*
+
 //lg(__LINE__.' https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
 $ow=json_decode(curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid),true);
 if (isset($ow['main']['temp'])) {
@@ -40,7 +65,7 @@ if (isset($owf['list'])) {
 		}
 	}
 }
-
+*/
 //lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
 if (isset($wa['current']['temp_c'])) {
@@ -49,14 +74,6 @@ if (isset($wa['current']['temp_c'])) {
 	$winds['wa_speed']=$wa['current']['wind_kph'];
 	$winds['wa_gust']=$wa['current']['gust_kph'];
 	$rains['wa']=$wa['current']['precip_mm'];
-}
-
-
-//lg(__LINE__.' https://api.agromonitoring.com/agro/1.0/weather?'.$lat.'&lon='.$lon.'&units=metric&appid='.$amappid);
-$am=json_decode(curl('https://api.agromonitoring.com/agro/1.0/weather?'.$lat.'&lon='.$lon.'&units=metric&appid='.$amappid),true);
-if (isset($am['main']['temp'])) {
-	$temps['am']=$am['main']['temp'];
-	$temps['am_feel']=$am['main']['feels_like'];
 }
 
 //lg(__LINE__.' https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
@@ -152,7 +169,7 @@ elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
 if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
-lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
+//lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
 	if ($d['wind']['s']!=$wind) store('wind', $wind);
@@ -163,7 +180,7 @@ if (count($rains)>=2) {
 	if ($d['buien']['s']!=$rain) store('buien', $rain);
 }
 
-lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
+//lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
 
 $db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");

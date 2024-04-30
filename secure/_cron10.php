@@ -73,10 +73,10 @@ elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>600&&past('watervandaag')>60
 if ($d['powermeter']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>5000) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
 	telegram ('Auto laden uit, te veel verbruik');
-} elseif ($d['powermeter']['s']=='On'&&past('powermeter')>9895) {
+} /*elseif ($d['powermeter']['s']=='On'&&past('powermeter')>9895) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 2u45 bezig');
 	telegram ('Auto laden uit, langer dan 2u45 bezig');
-}
+}*/
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
