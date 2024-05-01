@@ -18,7 +18,7 @@ if (isset($_REQUEST['fetch'])) {
     		}
     	} else {
     		if ($d['studiodisplay']['s']=='On') {
-    			sw('studiodisplay', 'Off', basename(__FILE__).':'.__LINE__);
+//    			sw('studiodisplay', 'Off', basename(__FILE__).':'.__LINE__);
     		}
     	}
     }
