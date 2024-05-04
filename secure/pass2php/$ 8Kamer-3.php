@@ -29,9 +29,9 @@ if ($status=='On') {
 						else $preset='PRESET_1';
 						sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
 						bosekey($preset, 10000, 103);
-						bosevolume(17, 103);
+						bosevolume(15, 103);
 					} else {
-						bosevolume(17, 103);
+						bosevolume(15, 103);
 					}
 				}
 			}
