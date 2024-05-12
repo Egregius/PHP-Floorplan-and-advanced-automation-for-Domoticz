@@ -2,7 +2,7 @@
 if (!is_array($d)) $d=fetchdata();
 $user='weather';
 $prevwind=$d['wind']['s'];
-
+//lg ('Weather');
 $wind=$prevwind;
 $maxtemp=-100;
 $mintemp=100;
@@ -36,36 +36,7 @@ if (isset($ow['current'])) {
 //lg(__LINE__.print_r($winds,true));
 //lg(__LINE__.print_r($rains,true));
 //lg($mintemp.' '.$maxtemp);
-/*
 
-//lg(__LINE__.' https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid);
-$ow=json_decode(curl('https://api.openweathermap.org/data/2.5/weather?id='.$owid.'&units=metric&APPID='.$owappid),true);
-if (isset($ow['main']['temp'])) {
-	$temps['ow']=$ow['main']['temp'];
-	$temps['ow_feel']=$ow['main']['feels_like'];
-	if ($ow['main']['temp_min']<$mintemp) $mintemp=$ow['main']['temp_min'];
-	if ($ow['main']['temp_max']>$maxtemp) $maxtemp=$ow['main']['temp_max'];
-	$winds['ow_speed']=$ow['wind']['speed'] * 3.6;
-	if (isset($ow['wind']['gust'])) $winds['ow_gust']=$ow['wind']['gust'] * 3.6;
-	if ($d['icon']['s']!=$ow['weather'][0]['icon']) store('icon', $ow['weather'][0]['icon']);
-	if (isset($ow['rain']['1h'])) $rains['ow']=$ow['rain']['1h']*10;
-}
-
-//lg(__LINE__.' https://api.openweathermap.org/data/2.5/forecast?lat='.$lat.'&lon='.$lon.'&units=metric&appid='.$owappid);
-$owf=json_decode(curl('https://api.openweathermap.org/data/2.5/forecast?lat='.$lat.'&lon='.$lon.'&units=metric&appid='.$owappid),true);
-if (isset($owf['list'])) {
-	foreach ($owf['list'] as $i) {
-		if ($i['dt']<$time+(12*3600)) {
-			if ($i['main']['temp']<$mintemp) $mintemp=$i['main']['temp'];
-			elseif ($i['main']['temp']>$maxtemp) $maxtemp=$i['main']['temp'];
-			if ($i['main']['feels_like']<$mintemp) $mintemp=$i['main']['feels_like'];
-			elseif ($i['main']['feels_like']>$maxtemp) $maxtemp=$i['main']['feels_like'];
-			if ($i['main']['temp_min']<$mintemp) $mintemp=$i['main']['temp_min'];
-			if ($i['main']['temp_max']>$maxtemp) $maxtemp=$i['main']['temp_max'];
-		}
-	}
-}
-*/
 //lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
 if (isset($wa['current']['temp_c'])) {
@@ -101,9 +72,6 @@ if (isset($om['hourly']['temperature_2m'])) {
 		if ($x>=12) break;
 	}
 }
-
-
-
 
 //lg(__LINE__.' https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json');
 $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json'), true);
@@ -154,7 +122,7 @@ if (isset($data['forecasts'])) {
 	$rains['buienradar']=$buienradar;
 }
 
-if (count($temps)>=3) $temp=round(array_sum($temps)/count($temps), 1);
+if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
 //lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {
