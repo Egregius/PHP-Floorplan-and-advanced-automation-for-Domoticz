@@ -95,7 +95,7 @@ if ($status=="Open") {
 
 // Indien geen zwembad
 
-if ($status=="Open") {
-	if ($d['steenterras']['s']=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
+//if ($status=="Open") {
+//	if ($d['steenterras']['s']=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
 //	if ($d['houtterras']['s']=='Off') sw('houtterras','On', basename(__FILE__).':'.__LINE__);
-}
+//}

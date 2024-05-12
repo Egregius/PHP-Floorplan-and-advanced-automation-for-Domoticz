@@ -33,13 +33,13 @@ if ($d['houtterras']['s']=='On') {
 //EINDE EERSTE BLOK INDIEN ZWEMBAD
 
 // BEGIN TWEEDE BLOK INDIEN GEEN ZWEMBAD
-if ($d['achterdeur']['s']=='Open') {
-	if ($d['steenterras']['s']=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
+//if ($d['achterdeur']['s']=='Open') {
+//	if ($d['steenterras']['s']=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
 //	if ($d['houtterras']['s']=='Off') sw('houtterras','On', basename(__FILE__).':'.__LINE__);
-} else {
-	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+//} else {
+//	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 //	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
-}
+//}
 //EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
 
 if ($d['kookplaat']['s']=='On') {
