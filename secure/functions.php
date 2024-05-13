@@ -116,7 +116,7 @@ function huisthuis() {
 	global $d;
 	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
-	if ($d['bed']['s']=='On') sw('bed', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['bed']['s']=='On'&&$time>=strtotime('6:00')&&$time<=strtotime('9:00')) sw('bed', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
