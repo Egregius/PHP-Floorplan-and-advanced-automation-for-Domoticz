@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
