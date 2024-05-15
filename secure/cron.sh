@@ -59,11 +59,12 @@ if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
 
-ps cax | grep domoticz
-if [ $? -ne 0 ] ; then
-	/usr/sbin/service domoticz.sh stop
-	/usr/sbin/service domoticz.sh start
-fi
+#ps cax | grep domoticz
+#if [ $? -ne 0 ] ; then
+#	/usr/sbin/service domoticz.sh stop
+#	/usr/sbin/service domoticz.sh start
+#fi
+
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
@@ -95,6 +96,7 @@ if [ "$MINUTE" -eq 0 ] ; then
 	fi
 fi
 # END Github
+exit
 
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`

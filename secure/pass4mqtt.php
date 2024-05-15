@@ -22,9 +22,11 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];
+//			lg(__LINE__.' '.$device);
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+//				lg(__LINE__.' '.$device);
 				if ($message['dtype']=='Light/Switch') {
-					lg(__LINE__);
+//					lg(__LINE__.' '.$device);
 					if ($message['switchType']=='Dimmer') {
 						if ($message['nvalue']==0) $status=0;
 						else $status=$message['svalue1'];
@@ -106,8 +108,9 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$status=$message['svalue2']-1;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
 				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
-			} //else lg('no file found for '.$device);
+			}// else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
+				lg('Stopping MQTT Loop...');
 				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
 				die();
 			}

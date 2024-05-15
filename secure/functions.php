@@ -211,7 +211,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		if ($d[$name]['i']>10) {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$force==true) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+				lg(file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action));
 			}
 		} elseif ($d[$name]['i']>0) {
 			lg($msg);
