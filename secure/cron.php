@@ -22,7 +22,7 @@ if (isset($argv[1])) {
 			elseif ($d['heating']['s']==0) include '_TC_neutral.php';
 			elseif ($d['heating']['s']>0) include '_TC_heating.php';
 		}
-		if ($crontime%87==0) include '_weather.php';
+		if ($crontime%89==0) include '_weather.php';
 		if ($crontime%120==0) include '_cron120.php';
 		if ($crontime%180==0) include '_cron180.php';
 		if ($crontime%240==0) include '_cron240.php';
