@@ -11,17 +11,6 @@ if (isset($_REQUEST['fetch'])) {
 } elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
 	echo $_REQUEST['store'], $_REQUEST['value'];
     store($_REQUEST['store'], $_REQUEST['value'], basename(__FILE__).':'.__LINE__);
-    if ($_REQUEST['store']=='imac') {
-    	if ($_REQUEST['value']=='On') {
-    		if ($d['studiodisplay']['s']!='On') {
-//    			sw('studiodisplay', 'On', basename(__FILE__).':'.__LINE__);
-    		}
-    	} else {
-    		if ($d['studiodisplay']['s']=='On') {
-//    			sw('studiodisplay', 'Off', basename(__FILE__).':'.__LINE__);
-    		}
-    	}
-    }
 } elseif (isset($_REQUEST['count'])) {
     $data=$d[$_REQUEST['count']]['s']+1;
     echo $data;

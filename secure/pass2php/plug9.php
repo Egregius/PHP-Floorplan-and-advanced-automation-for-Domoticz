@@ -1,2 +1,2 @@
 <?php
-if ($status!=$d['studiodisplay']['s']) store('studiodisplay', $status);
+if ($status!=$d['lamp kast']['s']) store('lamp kast', $status);

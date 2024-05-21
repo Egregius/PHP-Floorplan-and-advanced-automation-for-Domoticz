@@ -87,7 +87,6 @@ function fhall() {
 function huisslapen($weg=false) {
 	global $d,$boseipbuiten;
 	if (!isset($d['zon']['s'])) $d=fetchdata();
-//	if ($d['bed']['s']=='Off'&&$weg==false) sw('bed', 'On', basename(__FILE__).':'.__LINE__);
 	$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
 	if (!empty($data)) {
 		if (isset($data['@attributes']['source'])) {
@@ -100,7 +99,7 @@ function huisslapen($weg=false) {
 		}
 	}
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat',/*'steenterras',*/'houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('langekast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat',/*'steenterras',*/'houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -116,7 +115,7 @@ function huisthuis() {
 //	global $d;
 //	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
-//	if ($d['bed']['s']=='On'&&$time>=strtotime('6:00')&&$time<=strtotime('9:00')) sw('bed', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('19:00')) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 //	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
