@@ -112,8 +112,8 @@ function huisslapen($weg=false) {
 	if ($d['imac']['m']!='Unavailable') system("sudo -u root /var/www/imacsleep_withlock.sh &");
 }
 function huisthuis() {
-//	global $d;
-//	if (!is_array($d)) $d=fetchdata();
+	global $d;
+	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
 	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('19:00')) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
