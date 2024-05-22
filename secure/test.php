@@ -6,16 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
-$wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
-print_r($wa);
-if (isset($wa['current']['temp_c'])) {
-	$temps['wa']=$wa['current']['temp_c'];
-	$temps['wa_feel']=$wa['current']['feelslike_c'];
-	$winds['wa_speed']=$wa['current']['wind_kph'];
-	$winds['wa_gust']=$wa['current']['gust_kph'];
-	$rains['wa']=$wa['current']['precip_mm'];
-}
+sw('langekast', 'On');
 
 
 //$status='Off';
