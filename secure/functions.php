@@ -9,11 +9,11 @@ $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 function t() {
 	global $dow,$t;
 	$dow=date("w");
-	if($dow==1) $t=strtotime('7:10');
+	if($dow==1) $t=strtotime('7:00');
 	elseif($dow==2) $t=strtotime('7:00');
-	elseif($dow==3) $t=strtotime('7:10');
+	elseif($dow==3) $t=strtotime('7:00');
 	elseif($dow==4) $t=strtotime('7:00');
-	elseif($dow==5) $t=strtotime('7:10');
+	elseif($dow==5) $t=strtotime('7:00');
 	elseif($dow==6) $t=strtotime('7:45');
 	elseif($dow==0) $t=strtotime('7:45');
 	return $t;
@@ -112,7 +112,7 @@ function huisslapen($weg=false) {
 	if ($d['imac']['m']!='Unavailable') system("sudo -u root /var/www/imacsleep_withlock.sh &");
 }
 function huisthuis() {
-	global $d;
+	global $d,$time;
 	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
 	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('19:00')) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
