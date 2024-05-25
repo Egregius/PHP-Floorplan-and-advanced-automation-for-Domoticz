@@ -1,6 +1,6 @@
 <?php
 $item='RkamerR';
-if ($d['heating']['s']<0) {
+if ($d['raamkamer']['s']=='Open') {
 	if ($d[$item]['s']<70) {
 		sl($item, 70, basename(__FILE__).':'.__LINE__);
 	} elseif ($d[$item]['s']<76) {

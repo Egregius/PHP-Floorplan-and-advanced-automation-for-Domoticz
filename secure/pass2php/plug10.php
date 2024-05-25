@@ -1,2 +1,2 @@
 <?php
-if ($status!=$d['bed']['s']) store('bed', $status);
+if ($status!=$d['langekast']['s']) store('langekast', $status);
