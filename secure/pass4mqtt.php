@@ -112,7 +112,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			if ($d['Weg']['m']==1) {
 				lg('Stopping MQTT Loop...');
 				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
-				die();
+				die('Stop');
 			}
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
