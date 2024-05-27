@@ -100,7 +100,7 @@ function huisslapen($weg=false) {
 	}
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('langekast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat',/*'steenterras',*/'houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (array('living_set','alex_set','kamer_set','badkamer_set','eettafel','zithoek','luifel') as $i) {
+	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 //	foreach(array('waskamer', 'alex') as $i) {
@@ -113,8 +113,10 @@ function huisslapen($weg=false) {
 }
 function huisthuis() {
 	global $d,$time;
+	$time=time();
 	if (!is_array($d)) $d=fetchdata();
 	store('Weg', 0);
+	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 //	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
