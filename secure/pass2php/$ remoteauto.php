@@ -1,8 +1,6 @@
 <?php
 //$d=fetchdata();
 lg('REMOTE AUTO = '.$status);
-	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, false);
-
 if ($status=='Off') {
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, false);
 	if ($d['Weg']['s']==0) {

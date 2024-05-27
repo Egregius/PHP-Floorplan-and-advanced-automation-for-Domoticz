@@ -27,7 +27,7 @@ function fliving() {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
 		}
-		if ($d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
+		if ($d['langekast']['s']=='On'&&$d['imac']['s']!='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
 			bosezone(101);
 		}
 		mset('living', $time);
