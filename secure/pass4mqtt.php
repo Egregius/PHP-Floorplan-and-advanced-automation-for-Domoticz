@@ -110,9 +110,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
 			}// else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
-				lg('Stopping MQTT Loop...');
-				$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
-				die('Stop');
+				lg(' Stopping MQTT Loop...');
+				storemode('Weg', 0, '', 1);
+				$client->disconnect();
+				exec('kill -9 ' . getmypid());
 			}
 		} elseif ($topic[1]=='in') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;

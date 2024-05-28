@@ -80,3 +80,11 @@ if ($d['powermeter']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>5000) {
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+
+
+if ($d['Weg']['m']==2) {
+	lg('Stopping CRON Loop...');
+	$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
+	exit('Stop');
+	die('Stop');
+}
