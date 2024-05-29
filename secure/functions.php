@@ -22,7 +22,7 @@ function t() {
 function fliving() {
 	global $d,$time;
 	$d=fetchdata();
-	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0) {
+	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']['s']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
