@@ -78,8 +78,13 @@ if ($d['powermeter']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>5000) {
 	telegram ('Auto laden uit, langer dan 2u45 bezig');
 }*/
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
+
+
+/*
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+*/
+
 
 
 if ($d['Weg']['m']==2) {
