@@ -3,16 +3,15 @@
 lg('REMOTE AUTO = '.$status);
 if ($status=='Off') {
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, false);
-	if ($d['Weg']['s']==0) {
-		$last=mget('remoteauto');
-		$time=time();
-		lg('REMOTE AUTO past='.$last.'	time ='.$time);
-		mset('remoteauto', $time);
-		if ($last>$time-60) {
-			lg('SWITCH POORT ON');
-			sw('poortrf', 'On', basename(__FILE__).':'.__LINE__, true);
-		}
-	} else huisthuis();
+	$last=mget('remoteauto');
+	$time=time();
+	lg('REMOTE AUTO past='.$last.'	time ='.$time);
+	mset('remoteauto', $time);
+	if ($last>$time-60&&$d['Weg']['s']==0) {
+		lg('SWITCH POORT ON');
+		sw('poortrf', 'On', basename(__FILE__).':'.__LINE__, true);
+	}
+	if ($d['Weg']['s']>0) huisthuis();
 	if ($d['zon']['s']>0) {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);

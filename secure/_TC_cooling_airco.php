@@ -349,7 +349,7 @@ if ($d['auto']['s']=='On') {
 				if ($i=='Rwaskamer') {
 					if ($d['deurwaskamer']['s']=='Closed'&&$d[$i]['s']<50) sl($i, 83, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='RkamerL') {
-					if ($d[$i]['s']<50) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					if ($d['Weg']['s']>=2&&$d[$i]['s']<50) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='RkamerR') {
 					if ($d['Weg']['s']>=2&&$d[$i]['s']<50) sl($i, 83, basename(__FILE__).':'.__LINE__);
 				} else {

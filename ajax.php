@@ -233,9 +233,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} else {
 		if ($_REQUEST['device']=='nas') {
 			shell_exec('secure/wakenas.sh');
-		} elseif ($_REQUEST['device']=='imac') {
-			if ($_REQUEST['action']=='On'&&$d['Weg']['s']==0) system("sudo -u root /var/www/imacwake.sh");
-			elseif ($_REQUEST['action']=='Off') system("sudo -u root /var/www/imacsleep.sh");
 		} elseif ($_REQUEST['device']=='powermeter') {
 			if ($_REQUEST['action']=='On') {
 				mset('powermeter',time());

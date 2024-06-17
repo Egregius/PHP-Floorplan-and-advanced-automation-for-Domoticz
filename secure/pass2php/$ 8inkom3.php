@@ -1,3 +1,4 @@
 <?php
-sw('voordeur', 'On');
-mset('8inkom', time());
+mset('powermeter',time());
+sleep(1);
+sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);

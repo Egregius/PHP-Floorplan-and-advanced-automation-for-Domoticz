@@ -26,7 +26,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	}
 	if ($dday==true) {
 		$loop=true;
-		$target=20.5;
+		$target=20;
 		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=(20-$d['buiten_temp']['s'])*120; else $factor=1000;
 		for ($x=0;$x<=$target-14;$x+=0.1) {
 			if ($loop==true) {

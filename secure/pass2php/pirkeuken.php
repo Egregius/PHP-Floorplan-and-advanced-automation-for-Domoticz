@@ -10,5 +10,4 @@ if ($status=='On'&&$d['auto']['s']=='On'&&$d['Weg']['s']==0) {
 			sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
-}
-if ($status=='On'&&$d['Weg']['s']>0) sirene('Beweging keuken');
+} elseif ($status=='On'&&$d['Weg']['s']>0&&past('Weg')>60) sirene('Beweging keuken');
