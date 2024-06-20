@@ -16,6 +16,9 @@ if ($status=='Off') {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
 	}
+	mset('powermeter',time());
+	sleep(1);
+	sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
 		waarschuwing(' Let op . Achterdeur open');

@@ -67,8 +67,8 @@ $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.strftime("%k:%M:%S", TIME).'</font></a></center></div>';
 echo $legend;
 $args=array(
-	'width'=>2540,
-	'height'=>1350,
+	'width'=>3350,
+	'height'=>1750,
 	'hide_legend'=>true,
 	'responsive'=>false,
 	'background_color'=>'#000',
