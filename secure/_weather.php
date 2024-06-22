@@ -178,12 +178,12 @@ if ($d['buiten_temp']['s']>$avg+0.5) {
 }
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&$time>=strtotime("10:00")&&$rain<5) { // Aircocooling
+	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&$time>=strtotime("10:00")&&$rain<5) { // Airco Cooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=24) $luifel=45;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=45;
-		//$luifel=0; // In comment zetten om luifel te activeren.
+		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
