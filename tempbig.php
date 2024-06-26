@@ -5,7 +5,7 @@ require 'scripts/chart.php';
 $sensor=998;
 if (isset($_REQUEST['sensor'])) $sensor=$_REQUEST['sensor'];
 
-$dag=date("Y-m-d H:i:00", TIME-86400*2);
+$dag=date("Y-m-d H:i:00", TIME-86400*1);
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -50,16 +50,16 @@ $sensor=$sensornaam;
 $living='#FF1111';
 $badkamer='#6666FF';
 $kamer='#44FF44';
-$waskamer='00EEFF';
-$alex='#EEEE00';
+$alex='00EEFF';
+$waskamer='#EEEE00';
 $zolder='#EE33EE';
 $buiten='#FFFFFF';
 $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;"><center>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=147");\'><font color="'.$living.'">Living</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=246");\'><font color="'.$badkamer.'">Badkamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=278");\'><font color="'.$kamer.'">Kamer</font></a>
-	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=356");\'><font color="'.$waskamer.'">waskamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=244");\'><font color="'.$alex.'">Alex</font></a>
+	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=356");\'><font color="'.$waskamer.'">waskamer</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=293");\'><font color="'.$zolder.'">Zolder</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
@@ -126,7 +126,7 @@ if ($sensor=='alles') {
 } elseif ($sensor=='binnen') {
 	$args['colors']=array($living,$badkamer,$kamer,$waskamer,$alex,$living,$badkamer,$kamer,$waskamer,$alex);
 	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
-	$query="SELECT stamp,living,badkamer,kamer,alex,waskamer from `temp` where stamp >= '$dag'";
+	$query="SELECT stamp,living,badkamer,kamer,waskamer,alex from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
 	$result->free();
