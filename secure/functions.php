@@ -82,7 +82,7 @@ function fhall() {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['Weg']['s']==0&&$time>=strtotime('21:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>3600) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
 	global $d,$boseipbuiten;

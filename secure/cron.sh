@@ -92,7 +92,7 @@ if [ "$MINUTE" -eq 0 ] ; then
 		cd /var/www/html/
 		/usr/bin/nice -n20 git add .
 		/usr/bin/nice -n20 git commit -am "Update"
-		/usr/bin/nice -n20 git push origin master
+		/usr/bin/nice -n20 git push origin master --force
 	fi
 fi
 # END Github
