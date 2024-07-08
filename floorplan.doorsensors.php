@@ -31,7 +31,6 @@ echo '
 		.red{color:#FFF;}
 		.stamp{width:38px;text-align:center;font-size:120%;color:#888}
 		.fix{cursor:pointer;z-index:100;}
-		.dpoort{top:322px;left:348px;width:60px;height:114px;}
 		.dachterdeur{top:309px;left:80px;width:60px;height:51px;}
 		.draamliving{top:56px;left:80px;width:60px;height:188px;}
 		.draamkeuken{top:210px;left:417px;width:60px;height:48px;}
@@ -72,27 +71,7 @@ echo '
 	</div>
 	<div class="fix" id="clock" onclick="javascript:navigator_Go(\'floorplan.doorsensors.php\');">'.strftime("%k:%M:%S", TIME).'
 	</div>';
-if ($d['poort']['s']=='Open') {
-	echo '
-	<a href=\'javascript:navigator_Go("?name=poort&action=Closed");\'>
-		<div class="fix red dpoort">
-			<br>
-			<br>
-			<br>
-			Open
-		</div>
-	</a>';
-} else {
-	echo '
-	<a href=\'javascript:navigator_Go("?name=poort&action=Open");\'>
-		<div class="fix green dpoort">
-			<br>
-			<br>
-			<br>
-			Closed
-		</div>
-	</a>';
-}
+
 
 if ($d['achterdeur']['s']=='Open') {
 	echo '

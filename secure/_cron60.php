@@ -133,7 +133,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['Grohered_kWh']['s']<50&&past('GroheRed')>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif (past('GroheRed')>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['poort']['s']=='Closed'&&past('poort')>120&&past('poortrf')>120&&$d['poortrf']['s']=='On'&&($time<strtotime('8:00')||$time>strtotime('8:40'))) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poortrf']['s']=='On'&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dag']==4) {
 		if ($d['Rbureel']['s']<40) {
 			if ($d['lamp kast']['s']=='On'&&$d['eettafel']['s']==0) sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);

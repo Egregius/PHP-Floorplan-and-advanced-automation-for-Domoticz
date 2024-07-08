@@ -16,9 +16,6 @@ if ($status=='On') {
 		waarschuwing('Let op. Bose buiten', 55);
 		exit('');
 	}
-	if ($d['poort']['s']!='Closed') {
-		waarschuwing('Let op. Poort open', 55);
-	}
 	if ($d['Weg']['s']!=1) {
 		store('Weg', 1, basename(__FILE__).':'.__LINE__);
 	}

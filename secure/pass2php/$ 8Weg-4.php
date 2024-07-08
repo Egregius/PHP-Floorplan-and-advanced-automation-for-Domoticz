@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if ($d['poort']['s']=='Open') {
+	if ($d['poortrf']['s']=='On') {
 		if ($d['achterdeur']['s']!='Closed') {
 			waarschuwing(' Let op . Achterdeur open');
 			exit;
