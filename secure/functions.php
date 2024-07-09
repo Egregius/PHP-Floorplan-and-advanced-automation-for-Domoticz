@@ -188,7 +188,7 @@ function resetsecurity() {
 	if (!is_array($d)) $d=fetchdata();
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
-		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
+//		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	foreach (array('SDbadkamer','SDkamer','SDalex','SDwaskamer','SDzolder','SDliving') as $i) {
 		if ($d[$i]['s']!='Off') {
