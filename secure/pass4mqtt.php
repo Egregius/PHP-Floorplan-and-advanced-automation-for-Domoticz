@@ -24,7 +24,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$status=$message['svalue1'];
 //			lg(__LINE__.' '.$device);
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-				lg(__LINE__.' '.$device);
+//				lg(__LINE__.' '.$device);
 				if ($message['dtype']=='Light/Switch') {
 //					lg(__LINE__.' '.$device);
 					if ($message['switchType']=='Dimmer') {
