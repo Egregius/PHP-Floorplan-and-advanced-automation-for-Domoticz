@@ -215,7 +215,7 @@ if ($time>strtotime('0:10')) {
 			if ($d['zonvandaag']['s']!=$zonvandaag) store('zonvandaag', $zonvandaag, basename(__FILE__).':'.__LINE__);
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
-			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
+//			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
 			if (strftime("%M", $time)%15==0) {
 				echo __LINE__.PHP_EOL;
 				$prev=array();
