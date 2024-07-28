@@ -4,10 +4,6 @@ if ($d['deurvoordeur']['s']=='Open'&&$status=='On') {
 		waarschuwing(' Let op . Achterdeur open');
 		exit;
 	}
-	if ($d['poort']['s']!='Closed') {
-		waarschuwing(' Let op . Poort open');
-		exit;
-	}
 	if ($d['raamliving']['s']!='Closed') {
 		waarschuwing(' Let op . Raam Living open');
 		exit;

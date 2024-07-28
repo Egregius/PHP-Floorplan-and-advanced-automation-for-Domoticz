@@ -286,6 +286,8 @@ if ($d['luchtdroger']['s']=='On') {
 		}
 	}
 }
-foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
-	if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
-}
+if ($d['Weg']['s']==0) {
+	foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
+		if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
+	}
+}	
