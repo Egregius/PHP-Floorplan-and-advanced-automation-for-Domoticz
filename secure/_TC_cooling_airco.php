@@ -331,11 +331,11 @@ if ($d['auto']['s']=='On') {
 	}
 
 	elseif ($time>=strtotime('15:00')&&$time<strtotime('22:00')) {
-		if($d['zon']['s']>2500) {
+		if($d['zon']['s']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['Rwaskamer']['s']<50) sl('Rwaskamer', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['Ralex']['s']<50) sl('Ralex', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<30) sl('Rbureel', 30, basename(__FILE__).':'.__LINE__);
-			if ($d['Weg']['s']>1&&$d['Rliving']['s']<86&&$d['living_temp']['s']>21&&$d['luifel']['s']<30) sl('Rliving', 86, basename(__FILE__).':'.__LINE__);
+			if ($d['Weg']['s']>1&&$d['Rliving']['s']<86&&$d['living_temp']['s']>21&&$d['luifel']['s']<30&&past('Weg')>3600) sl('Rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
