@@ -1,2 +1,2 @@
 <?php
-sw('tuin');
+sw('tuintafel');
