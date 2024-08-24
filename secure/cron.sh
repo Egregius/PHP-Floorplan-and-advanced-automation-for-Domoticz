@@ -96,7 +96,7 @@ if [ "$MINUTE" -eq 0 ] ; then
 	fi
 fi
 # END Github
-exit
+#exit
 
 DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
 STATUS=`echo $DOMOTICZ | jq -r '.status'`
