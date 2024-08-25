@@ -1,3 +1,3 @@
 <?php
-sw('tuin');
+if (past('tuin')>2) sw('tuin');
 
