@@ -15,9 +15,11 @@ if ($status=='Off') {
 	if ($d['zon']['s']>0) {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
-		mset('powermeter',time());
-		sleep(1);
-		sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
+		if ($d['zon']['s']>2000) {
+			mset('powermeter',time());
+			sleep(1);
+			sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
+		}
 	}
 } else {
 	if ($d['achterdeur']['s']!='Closed') {
