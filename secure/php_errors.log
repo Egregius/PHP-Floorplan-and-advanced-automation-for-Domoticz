@@ -6,3 +6,6 @@
 [28-Aug-2024 08:36:27 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
 [28-Aug-2024 12:45:07 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
 [28-Aug-2024 18:58:30 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
+[28-Aug-2024 23:05:08 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
+[28-Aug-2024 23:35:51 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
+[29-Aug-2024 00:00:01 Europe/Brussels] PHP Deprecated:  Function strftime() is deprecated in /var/www/html/secure/cleandomoticzdb.php on line 4
