@@ -5,3 +5,4 @@
 [28-Aug-2024 07:15:04 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
 [28-Aug-2024 08:36:27 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
 [28-Aug-2024 12:45:07 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
+[28-Aug-2024 18:58:30 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
