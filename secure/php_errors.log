@@ -1,3 +1,4 @@
 [27-Aug-2024 21:32:01 Europe/Brussels] PHP Deprecated:  Optional parameter $name declared before required parameter $status is implicitly treated as a required parameter in /var/www/html/secure/functions.php on line 227
 [28-Aug-2024 00:00:01 Europe/Brussels] PHP Deprecated:  Function strftime() is deprecated in /var/www/html/secure/cleandomoticzdb.php on line 4
 [28-Aug-2024 01:40:08 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
+[28-Aug-2024 03:05:51 Europe/Brussels] PHP Deprecated:  str_pad(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/secure/functions.php on line 236
