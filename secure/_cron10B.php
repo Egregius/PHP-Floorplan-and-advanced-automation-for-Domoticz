@@ -2,7 +2,7 @@
 $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-if ($d['Weg']['s']==0) {
+if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past['langekast')>45) {
 	$week=strftime('%-V', $time);
 	foreach(array(103=>16,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
@@ -95,7 +95,7 @@ if ($d['Weg']['s']==0) {
 		}
 	}	
 }
-if ($d['Weg']['s']<=1) {
+/*if ($d['Weg']['s']<=1) {
 	foreach(array(103) as $ip) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
@@ -132,11 +132,11 @@ if ($d['Weg']['s']<=1) {
 		bosekey('POWER', 0, 101);
 		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}
+}*/
 if ($d['Weg']['s']==0) {
-	if ($d['Media']['s']=='On'&&$d['ht_a7000']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
+	if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['ht_a7000']['s']=='Off'&&past('Media')<300) hass('media_player','turn_on','media_player.ht_a7000');
 	if ($d['nas']['s']=='Off') {
-		if ($d['Media']['s']=='On') {
+		if ($d['lg_webos_tv_cd9e']['s']=='On') {
 			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
 			if (isset($kodi['result'])) {
 				lg('Waking NAS for Kodi...');
