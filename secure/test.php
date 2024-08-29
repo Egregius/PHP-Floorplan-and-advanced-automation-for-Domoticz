@@ -6,7 +6,12 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-huisthuis();
+
+
+
+echo strftime("%k:%M:%S", time()).'<br>';
+echo date("G:i:s", time()).'<br>';
+
 
 
 //$status='Off';

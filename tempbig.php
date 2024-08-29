@@ -64,7 +64,7 @@ $legend='<div style="position:absolute;top:14px;left;0px;width:100%;z-index:100;
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=329");\'><font color="'.$buiten.'">Buiten</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=998");\'><font color="'.$buiten.'">Binnen</font></a>
 	&nbsp;<a href=\'javascript:navigator_Go("tempbig.php?sensor=999");\'><font color="'.$buiten.'">Alles</font></a>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.strftime("%k:%M:%S", TIME).'</font></a></center></div>';
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'javascript:navigator_Go("tempbig.php");\'><font color="#FFFFFF">'.date("G:i:s", TIME).'</font></a></center></div>';
 echo $legend;
 $args=array(
 	'width'=>3350,

@@ -2,7 +2,7 @@
 $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past['langekast')>45) {
+if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 	$week=strftime('%-V', $time);
 	foreach(array(103=>16,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
