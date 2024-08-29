@@ -224,7 +224,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 	}
 }
 
-function store($name='',$status,$msg='',$idx=null) {
+function store($name='',$status='',$msg='',$idx=null) {
 	global $db, $user;
 	$time=time();
 	if ($idx>0) {
@@ -297,9 +297,9 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	lg(' (udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function convertToHours($time) {
-	if ($time<600) return substr(strftime('%M:%S', $time-3600), 1);
-	elseif ($time>=600&&$time<3600) return strftime('%M:%S', $time-3600);
-	else return strftime('%k:%M:%S', $time-3600);
+	if ($time<600) return substr(date('i:s', $time-3600), 1);
+	elseif ($time>=600&&$time<3600) return date('i:s', $time-3600);
+	else return date('G:i:s', $time-3600);
 }
 function ping($ip) {
 	$result=exec("/bin/ping -c1 -W1 -s1 $ip", $outcome, $reply);
@@ -415,7 +415,7 @@ function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
 	if (!is_array($d)) $d=fetchdata();
 	$time=time();
-	$week=strftime('%-V', $time);
+	$week=date('W');
 	$dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
@@ -487,7 +487,7 @@ function sirene($msg) {
 	lg(' >>> last='.$last.'	time='.$time);
 	if ($last>$time-300) {
 		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-		telegram($msg.' om '.strftime("%k:%M:%S", $time), false, 2);
+		telegram($msg.' om '.date("G:i:s", $time), false, 2);
 	}
 	mset('sirene', $time);
 }

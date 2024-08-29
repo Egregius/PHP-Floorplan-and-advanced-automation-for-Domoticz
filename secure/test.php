@@ -9,8 +9,6 @@ require '/var/www/authentication.php';
 
 
 
-echo strftime("%k:%M:%S", time()).'<br>';
-echo date("G:i:s", time()).'<br>';
 
 
 

@@ -1,6 +1,5 @@
 <?php
 $d=fetchdata();
-//$s=(int)strftime("%S", $time);
 $t=t();
 
 $user='cron60  ';

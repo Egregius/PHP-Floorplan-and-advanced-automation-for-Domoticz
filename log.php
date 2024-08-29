@@ -7,7 +7,7 @@ $tail=new PHPTail(
 	)
 );
 if (isset($_GET['ajax'])) {
-	$vandaag=strftime("%F",$_SERVER['REQUEST_TIME']);
+	$vandaag=date('Y-m-d');
 	echo str_replace($vandaag.' ','',$tail->getNewLines($_GET['file'], $_GET['lastsize']));die();
 }
 $tail->generateGUI();

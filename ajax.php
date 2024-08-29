@@ -83,7 +83,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
 		if ($_REQUEST['device']=='badkamer') {
-			$s=(int)strftime("%S", TIME);
+			$s=date('s');
 			$dow=date("w");
 			if($dow==0||$dow==6) $t=strtotime('7:30');
 			elseif($dow==2||$dow==5) $t=strtotime('6:45');
@@ -113,7 +113,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_REQUEST['command']=='setpoint2') {
-		$s=(int)strftime("%S", TIME);
+		$s=date('s');
 		$dow=date("w");
 		if($dow==0||$dow==6) $t=strtotime('7:30');
 		elseif($dow==2||$dow==5) $t=strtotime('6:45');

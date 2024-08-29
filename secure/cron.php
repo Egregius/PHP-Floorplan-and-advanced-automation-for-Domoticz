@@ -15,7 +15,7 @@ if (isset($argv[1])) {
 		if ($crontime%10==0) include '_cron10.php';
 		if ($crontime%15==0) {
 			$user=' TC '.$d['heating']['s'];
-			$s=(int)strftime("%S", $time);
+			$s=date('s');
 			$t=t();
 			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';

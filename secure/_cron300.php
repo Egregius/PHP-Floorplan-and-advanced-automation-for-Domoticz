@@ -95,10 +95,10 @@ if ($d['daikin']['s']=='On'&&past('daikin')>178) {
 		}
 	}
 	if ($data[0]=='ret=OK'&&isset($livingheat)&&isset($kamerheat)&&isset($kamerheat)&&isset($kamercool)&&isset($alexheat)&&isset($alexcool)) {
-		$date=strftime('%F', $time);
+		$date=date('Y-m-d', $time);
 		if (!isset($db)) $db=dbconnect();
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
-		$date=strftime('%F', $time-86400);
+		$date=date('Y-m-d', $time-86400);
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 	}
 }
@@ -216,16 +216,16 @@ if ($time>strtotime('0:10')) {
 			$gas=$d['gasvandaag']['s']/100;
 			$water=$d['watervandaag']['s']/1000;
 //			@file_get_contents($vurl."verbruik=$vv&gas=$gas&water=$water&zon=$zonvandaag");
-			if (strftime("%M", $time)%15==0) {
+			if (date('i')%15==0) {
 				echo __LINE__.PHP_EOL;
 				$prev=array();
-				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".strftime("%F", $time)."%' ORDER BY stamp DESC LIMIT 0,1;");
+				$stmt=$db->query("SELECT import, kwhimport, export, kwhexport FROM smappee_kwartier WHERE stamp LIKE '".date("Y-m-d")."%' ORDER BY stamp DESC LIMIT 0,1;");
 				while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row;
 				if(!isset($prev['import'])) {$prev['import']=0;$prev['export']=0;}
 				$kwhimport=($gridImport/1000)-$prev['import'];
 				$kwhexport=($gridExport/1000)-$prev['export'];
 				if ($kwhimport<0) $kwhimport=0;
-				$sql="INSERT IGNORE INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".strftime("%F %H:%M:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
+				$sql="INSERT IGNORE INTO smappee_kwartier (stamp, import, kwhimport, export, kwhexport) VALUES ('".date("Y-m-d H:i:00", $time)."', '".round($gridImport/1000, 3) ."', '".round($kwhimport,3)."', '".round($gridExport/1000, 3) ."', '".round($kwhexport,3)."');";
 				echo __LINE__.' '.$sql.PHP_EOL;
 				$db->query($sql);
 				if ($kwhimport>(4/4)) telegram ('Kwartierpiek = '.$kwhimport.' kWH'.PHP_EOL.'= '.$kwhimport*4 .' kWh / uur');
@@ -288,6 +288,6 @@ if ($d['luchtdroger']['s']=='On') {
 }
 if ($d['Weg']['s']==0) {
 	foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
-		if (past($i)>43150) alert($i,$i.' not updated since '.strftime("%k:%M:%S", $d[$i]['t']),7200);
+		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]['t']),7200);
 	}
 }	

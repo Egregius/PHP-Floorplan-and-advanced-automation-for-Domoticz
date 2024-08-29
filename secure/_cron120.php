@@ -2,7 +2,7 @@
 $d=fetchdata();
 $user='cron120';
 //lg($user);
-$stamp=strftime("%F %T", $time-900);
+$stamp=date('Y-m-d H:i:s', $time-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
 if(isset($db)) $db=dbconnect();
 $result=$db->query($sql);

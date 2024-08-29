@@ -69,7 +69,7 @@ echo '
 			<img src="/images/close.png" width="72px" height="72px"/>
 		</a>
 	</div>
-	<div class="fix" id="clock" onclick="javascript:navigator_Go(\'floorplan.doorsensors.php\');">'.strftime("%k:%M:%S", TIME).'
+	<div class="fix" id="clock" onclick="javascript:navigator_Go(\'floorplan.doorsensors.php\');">'.date('G:i:s').'
 	</div>';
 
 

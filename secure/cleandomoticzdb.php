@@ -1,7 +1,7 @@
 <?php
 $db = new SQLite3('/domoticz/domoticz.db');
 $time=time();
-$clean = strftime("%G-%m-%d %k:%M:%S", $time-3600*24*7);
+$clean = date("Y-m-d H:i:s", $time-3600*24*7);
 $tables = array( 'LightingLog',
 	'MultiMeter',
 	'MultiMeter_Calendar',

@@ -3,7 +3,7 @@ $d=fetchdata();
 $user='cron10B	';
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
-	$week=strftime('%-V', $time);
+	$week=date('W');
 	foreach(array(103=>16,104=>35,105=>35,106=>35,107=>30) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
@@ -31,7 +31,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 							if (!empty($data)) {
 								if (isset($data['@attributes']['source'])) {
 									if ($data['@attributes']['source']=='STANDBY') {
-										$week=strftime('%-V', $time);
+										$week=date('W', $time);
 										if ((int)$week % 2 == 0) $preset='PRESET_2';
 										else $preset='PRESET_1';
 										sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
@@ -100,7 +100,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
 			$time=time();
-			$week=strftime('%-V', $time);
+			$week=date('W', $time);
 			$dow=date("w");
 			if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 			if ($weekend==true) {

@@ -4,8 +4,8 @@ if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $time=time();
 $user='cron3600';
-$date=strftime("%F", $time);
-if (strftime("%k", $time)==19) {
+$date=date('Y-m-d');
+if (date('G')==19) {
 	$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
 	$msg='';
 	foreach ($xml['Node'] as $node) {
@@ -30,7 +30,7 @@ if (strftime("%k", $time)==19) {
 	unset($xml);
 	if (strlen($msg)>5) telegram($msg);
 }
-if (strftime("%k", $time)==0&&$d['winst']['s']!=0) store ('winst', 0);
+if (date('G')==0&&$d['winst']['s']!=0) store ('winst', 0);
 
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
@@ -48,5 +48,5 @@ if (isset($data['CivTwilightStart'])) {
 
 /* Clean old database records */
 
-$remove=strftime("%F %T", $time-(86400*100));
+$remove=date('Y-m-d H:i:s', $time-(86400*100));
 $stmt=$db->query("delete from temp where stamp < '$remove'");

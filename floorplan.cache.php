@@ -234,8 +234,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		} elseif ($row['n']=='civil_twilight'||$row['n']=='Sun') {
 			echo '
 				<td>'.$row['n'].'</td>
-				<td>'.strftime("%k:%M:%S", $row['s']).'</td>
-				<td>'.strftime("%k:%M:%S", $row['m']).'</td>';
+				<td>'.date('G:i:s', $row['s']).'</td>
+				<td>'.date('G:i:s', $row['m']).'</td>';
 		} elseif ($row['n']=='icon') {
 			echo '
 				<td>icon</td>
@@ -256,7 +256,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			echo '
 				<td nowrap>Laatste beweging:<br>
-				'.strftime("%d-%m %k:%M:%S", $row['m']).'</td>';
+				'.date("d-m G:i:s", $row['m']).'</td>';
 		} elseif ($row['n']=='wind') {
 			echo '
 				<td>'.$row['n'].'</td>
@@ -321,11 +321,11 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	}
 	if ($row['t']<TIME - (86400*7*4)) {
 		echo '
-			<td nowrap>'.strftime("%d-%m-%Y", $row['t']).'</td>
+			<td nowrap>'.date('d-m-Y', $row['t']).'</td>
 		</tr>';
 	} else {
 		echo '
-			<td nowrap>'.strftime("%d-%m %H:%M:%S", $row['t']).'</td>
+			<td nowrap>'.date("d-m G:i:s", $row['t']).'</td>
 		</tr>';
 	}
 }

@@ -170,7 +170,8 @@ function getStringFromPropertyAndValue($property, $value)
         <?php
         uasort(
             $status['scripts'], function ($a, $b) {
-                return $a['hits'] < $b ['hits'];
+                if( $a['hits'] < $b ['hits']) return 1;
+                else return 0;
             }
         );
 

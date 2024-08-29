@@ -133,9 +133,9 @@ if (isset($current['result']['item']['file'])) {
 							<td><h2>'.$passedtime.'</h2></td>
 							<td>Runtime</td><td><h2>'.$totaltime.'</h2></td>
 							<td>Remaining</td>
-							<td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
+							<td><h2>'.date('G:i:s', (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
 							<td>End at</td>
-							<td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
+							<td><h2>'.date('G:i:s', (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
 						</tr>
 					</table>
 				</div>';
@@ -149,9 +149,9 @@ if (isset($current['result']['item']['file'])) {
 						</tr>
 						<tr>
 							<td>Remaining</td>
-							<td><h2>'.strftime("%k:%M:%S", (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
+							<td><h2>'.date('G:i:s', (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
 							<td>End at</td>
-							<td><h2>'.strftime("%k:%M:%S", (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
+							<td><h2>'.date('G:i:s', (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
 						</tr>
 					</table>
 				</div>';
