@@ -31,7 +31,7 @@ if (isset($argv[1])) {
 		if ($crontime%3600==0) include '_cron3600.php';
 		$time_elapsed_secs=microtime(true)-$start;
 		if ($time_elapsed_secs<1) {
-			usleep(1000*(1000-($time_elapsed_secs*1000)));
+			usleep(round(1000*(1000-($time_elapsed_secs*1000))));
 		}
 	}
 }
