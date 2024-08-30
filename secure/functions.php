@@ -27,7 +27,7 @@ function fliving() {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
 		}
-		if ($d['langekast']['s']=='On'&&$d['imac']['s']!='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')) {
+		if ($d['langekast']['s']=='On'&&$d['imac']['s']!='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')&&past('langekast')>75) {
 			bosezone(101);
 		}
 		mset('living', $time);
@@ -426,7 +426,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		else $preset='PRESET_1';
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')) {
+		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 //			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101);
@@ -466,12 +466,14 @@ function bosezone($ip,$forced=false,$vol='') {
 	}
 }
 function bosepost($method,$xml,$ip=101,$log=false) {
-	for($x=1;$x<=100;$x++) {
+	for($x=1;$x<=10;$x++) {
 		$ch=curl_init("http://192.168.2.$ip:8090/$method");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1); 
+		curl_setopt($ch, CURLOPT_TIMEOUT, 1); 
 		$response=curl_exec($ch);
 		curl_close($ch);
 		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;

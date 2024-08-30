@@ -14,7 +14,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 					if ($d['bed']['s']=='On'&&past('bed')<43200) {
 						if ($time>strtotime('20:00')||$time<strtotime('4:00')||$d['Weg']['s']==1) {
 							if ($d['bose101']['s']=='On') {
-								$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
+								$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx))), true);
 								if (!empty($data)) {
 									if (isset($data['@attributes']['source'])) {
 										if ($data['@attributes']['source']!='STANDBY') {
@@ -27,7 +27,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 									}
 								}
 							}
-							$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing"))), true);
+							$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.103:8090/now_playing", false, $ctx))), true);
 							if (!empty($data)) {
 								if (isset($data['@attributes']['source'])) {
 									if ($data['@attributes']['source']=='STANDBY') {
@@ -94,6 +94,9 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 			shell_exec('/var/www/html/secure/wakenas.sh &');
 		}
 	}	
+}
+if($d['langekast']['s']!='On') {
+	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__);
 }
 /*if ($d['Weg']['s']<=1) {
 	foreach(array(103) as $ip) {
