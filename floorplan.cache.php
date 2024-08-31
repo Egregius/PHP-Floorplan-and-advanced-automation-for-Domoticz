@@ -301,7 +301,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '2 Gas heating';
 			}
 			echo '</td>
-				<td>Big diff '.number_format($row['m'], 1, ',', '').' °C</td>';
+				<td>Big diff '.number_format($row['m']??0, 1, ',', '').' °C</td>';
 		} elseif ($row['n']=='jaarteller') {
 			echo '
 				<td>Teller jaar</td>
@@ -310,14 +310,14 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		} else {
 			echo '
 				<td>'.$row['n'].'</td>
-				<td>'.substr($row['s'], 0, 20).'</td>
-				<td>'.substr($row['m'], 0, 20).'</td>';
+				<td>'.substr($row['s'] ?? '', 0, 20).'</td>
+				<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
 		}
 	} else {
 		echo '
 				<td>'.$row['n'].'</td>
-				<td>'.substr($row['s'], 0, 20).'</td>
-				<td>'.substr($row['m'], 0, 20).'</td>';
+				<td>'.substr($row['s'] ?? '', 0, 20).'</td>
+				<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
 	}
 	if ($row['t']<TIME - (86400*7*4)) {
 		echo '
