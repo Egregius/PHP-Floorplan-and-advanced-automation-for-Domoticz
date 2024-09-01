@@ -232,7 +232,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		}
 	} else {
 		if ($_REQUEST['device']=='nas') {
-			shell_exec('secure/wakenas.sh');
+			if ($_REQUEST['action']=='On') shell_exec('secure/wakenas.sh');
+			else shell_exec('/var/www/sleepnas.sh');
 		} elseif ($_REQUEST['device']=='powermeter') {
 			if ($_REQUEST['action']=='On') {
 				mset('powermeter',time());

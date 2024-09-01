@@ -25,7 +25,7 @@ function fliving() {
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']['s']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
+			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['zithoek']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
 		}
 		mset('living', $time);
 	}
@@ -235,8 +235,8 @@ function store($name='',$status='',$msg='',$idx=null) {
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
-	if ($name=='') lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($idx, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
-	else lg(' (STORE) '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	if ($name=='') lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	else lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 }
 function storemode($name,$mode,$msg='',$updatetime=false) {
 	global $db, $user, $time;
