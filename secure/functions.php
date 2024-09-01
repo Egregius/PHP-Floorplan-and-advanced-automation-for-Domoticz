@@ -70,7 +70,7 @@ function finkom($force=false) {
 function fhall() {
 	global $d,$t,$time;
 	$time=time();
-  $d=fetchdata();
+	$d=fetchdata();
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
 	else $t=strtotime('7:00');
@@ -87,13 +87,16 @@ function fhall() {
 function huisslapen($weg=false) {
 	global $d,$boseipbuiten;
 	if (!isset($d['zon']['s'])) $d=fetchdata();
-	$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'))), true);
-	if (!empty($data)) {
-		if (isset($data['@attributes']['source'])) {
-			if ($data['@attributes']['source']!='STANDBY') {
-				bosekey("POWER", 0, 101);
-				foreach (array(101,102,103,104,105,106,107) as $x) {
-					if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['langekast']['s']=='On') {
+		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
+		$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'),false,$ctx)), true);
+		if (!empty($data)) {
+			if (isset($data['@attributes']['source'])) {
+				if ($data['@attributes']['source']!='STANDBY') {
+					bosekey("POWER", 0, 101);
+					foreach (array(101,102,103,104,105,106,107) as $x) {
+						if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
+					}
 				}
 			}
 		}
