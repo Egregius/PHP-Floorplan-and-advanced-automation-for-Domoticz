@@ -18,7 +18,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 								if (!empty($data)) {
 									if (isset($data['@attributes']['source'])) {
 										if ($data['@attributes']['source']!='STANDBY') {
-											bosekey("POWER", 0, 101);
+											bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
 											sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 											sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
 											sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
@@ -31,11 +31,10 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 							if (!empty($data)) {
 								if (isset($data['@attributes']['source'])) {
 									if ($data['@attributes']['source']=='STANDBY') {
-										$week=date('W', $time);
 										if ((int)$week % 2 == 0) $preset='PRESET_2';
 										else $preset='PRESET_1';
 										sw('bose103', 'On', basename(__FILE__).':'.__LINE__);
-										bosekey($preset, 10000, 103);
+										bosekey($preset, 10000, 103, basename(__FILE__).':'.__LINE__);
 										bosevolume(16, 103);
 									}
 								}
@@ -71,7 +70,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 				if ((int)$week % 2 == 0) $preset='PRESET_2';
 				else $preset='PRESET_1';
 			}
-			bosekey($preset, 0, $ip);
+			bosekey($preset, 0, $ip, basename(__FILE__).':'.__LINE__);
 		}
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {

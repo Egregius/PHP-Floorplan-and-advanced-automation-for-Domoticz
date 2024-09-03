@@ -432,7 +432,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 //			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			bosekey($preset, 750000, 101);
+			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 		}
@@ -447,7 +447,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 //				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				bosekey($preset, 750000, 101);
+				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(21, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
