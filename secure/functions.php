@@ -29,7 +29,7 @@ function fliving() {
 		}
 		mset('living', $time);
 	}
-	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')&&past('langekast')>75) {
+	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')&&past('langekast')>60) {
 		bosezone(101);
 	}
 }
@@ -429,7 +429,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		else $preset='PRESET_1';
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>75) {
+		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 //			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
@@ -437,7 +437,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
-			if ($d['bose'.$ip]['s']!='On') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 			    if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">587A628BB5C0</member></zone>';
 			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
 			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
