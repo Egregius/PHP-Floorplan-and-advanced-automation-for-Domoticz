@@ -85,24 +85,9 @@ function fhall() {
 	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
-	global $d,$boseipbuiten;
-	if (!isset($d['zon']['s'])) $d=fetchdata();
-	if ($d['langekast']['s']=='On') {
-		$ctx=stream_context_create(array('http'=>array('timeout' =>2)));
-		$data=json_decode(json_encode(simplexml_load_string(file_get_contents('http://192.168.2.101:8090/now_playing'),false,$ctx)), true);
-		if (!empty($data)) {
-			if (isset($data['@attributes']['source'])) {
-				if ($data['@attributes']['source']!='STANDBY') {
-					bosekey("POWER", 0, 101);
-					foreach (array(101,102,103,104,105,106,107) as $x) {
-						if ($d['bose'.$x]['s']!='Off') sw('bose'.$x, 'Off', basename(__FILE__).':'.__LINE__);
-					}
-				}
-			}
-		}
-	}
+	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('langekast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat',/*'steenterras',*/'houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('langekast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','lamp kast','tuin','snijplank','zolderg','wc','GroheRed','kookplaat','steenterras','houtterras'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -112,7 +97,6 @@ function huisslapen($weg=false) {
 //	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
-//	if ($d['imac']['m']!='Unavailable') system("sudo -u root /var/www/imacsleep_withlock.sh &");
 }
 function huisthuis() {
 	global $d,$time;
