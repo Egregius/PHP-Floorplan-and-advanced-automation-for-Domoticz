@@ -103,194 +103,194 @@ if (!$result=$db->query($sql)) {
 }
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	echo '
-		<tr class="border_bottom">';
+				<tr class="border_bottom">';
 	if (isset($_REQUEST['nicestatus'])) {
 		if (endswith($row['n'], '_set')) {
 			echo '
-				<td>'.$row['n'].'</td>';
-			if ($row['s']=='D') echo '<td class="center">Drogen</td>';
-			else '
-				<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>';
+					<td>'.$row['n'].'</td>';
+			if ($row['s']=='D') echo '
+					<td class="center">Drogen</td>';
+			else echo '
+					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>';
 			if ($row['m']==0) {
 				echo '
-				<td>Auto</td>';
+					<td>Auto</td>';
 			} else {
 				echo '
-				<td>Manueel</td>';
+					<td>Manueel</td>';
 			}
 		} elseif (endswith($row['n'], 'Z')) {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
-				<td></td>';
+					<td>'.$row['n'].'</td>
+					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td></td>';
 		} elseif (endswith($row['n'], '_temp')) {
 			if ($row['n']=='buiten_temp') {
 				echo  '
-				<td>'.$row['n'].'</td>
-				<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
-				<td>'.number_format($row['m'], 0, ',', '').' % Buien</td>';
+					<td>'.$row['n'].'</td>
+					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td>'.number_format($row['m'], 0, ',', '').' % Buien</td>';
 			} else {
 				echo '
-				<td>'.$row['n'].'</td>
-				<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
-				<td>'.$row['m'].'</td>';
+					<td>'.$row['n'].'</td>
+					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td>'.$row['m'].'</td>';
 			}
 		} elseif (startswith($row['n'], 'R')) {
 			echo '
-				<td>'.$row['n'].'</td>';
+					<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {
 				echo '
-				<td>Open</td>';
+					<td>Open</td>';
 			} elseif ($row['s']==100) {
 				echo '
-				<td>Gesloten</td>';
+					<td>Gesloten</td>';
 			} else {
 				echo '
-				<td>'.$row['s'].' % Toe</td>';
+					<td>'.$row['s'].' % Toe</td>';
 			}
 			if ($row['m']==0) {
 				echo '
-				<td>Auto</td>';
+					<td>Auto</td>';
 			} elseif ($row['m']==1) {
 				echo '
-				<td>Manueel</td>';
+					<td>Manueel</td>';
 			} elseif ($row['m']==2) {
 				echo '
-				<td>Slapen</td>';
+					<td>Slapen</td>';
 			}
 		} elseif (startswith($row['n'], '8')) {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td></td>
-				<td></td>';
+					<td>'.$row['n'].'</td>
+					<td></td>
+					<td></td>';
 		} elseif (startswith($row['n'], 'mini')) {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td></td>
-				<td></td>';
+					<td>'.$row['n'].'</td>
+					<td></td>
+					<td></td>';
 		} elseif($row['n']=='luifel') {
 			echo '
-				<td>'.$row['n'].'</td>';
+					<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {
 				echo '
-				<td>Gesloten</td>';
+					<td>Gesloten</td>';
 			} elseif ($row['s']==100) {
 				echo '
-				<td>Open</td>';
+					<td>Open</td>';
 			} else {
 				echo '
-				<td>'.$row['s'].' % Open</td>';
+					<td>'.$row['s'].' % Open</td>';
 			}
 			if ($row['m']==0) {
 				echo '
-				<td>Auto</td>';
+					<td>Auto</td>';
 			} else {
 				echo '
-				<td>Manueel</td>';
+					<td>Manueel</td>';
 			}
 		} elseif (in_array($row['n'], array('eettafel','zithoek','kamer','waskamer','alex','lichtbadkamer'))) {
 			echo '
-				<td>'.$row['n'].'</td>';
+					<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {
 				echo '
-				<td>Off</td>';
+					<td>Off</td>';
 			} else {
 				echo '
-				<td>'.$row['s'].'</td>';
+					<td>'.$row['s'].'</td>';
 			}
 			if ($row['m']==0) {
 				echo '
-				<td></td>';
+					<td></td>';
 			} elseif ($row['m']==1) {
 				echo '
-				<td>Wake-up</td>';
+					<td>Wake-up</td>';
 			} elseif ($row['m']==2) {
 				echo '
-				<td>Sleep</td>';
+					<td>Sleep</td>';
 			}
 		} elseif ($row['n']=='zonvandaag') {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.number_format($row['s'], 1, ',', '').' kWh</td>
-				<td>'.number_format($row['m'], 1, ',', '').' % Ref</td>';
+					<td>'.$row['n'].'</td>
+					<td>'.number_format($row['s'], 1, ',', '').' kWh</td>
+					<td>'.number_format($row['m'], 1, ',', '').' % Ref</td>';
 		} elseif ($row['n']=='max') {
 			echo '
-				<td>Max voorspeld</td>
-				<td></td>
-				<td>'.number_format($row['m']*100, 0).' % Regen</td>';
+					<td>Max voorspeld</td>
+					<td></td>
+					<td>'.number_format($row['m']*100, 0).' % Regen</td>';
 		} elseif ($row['n']=='uv') {
 			echo '
-				<td>UV</td>
-				<td>Nu '.number_format($row['s'], 1, ',', '').'</td>
-				<td>Max '.number_format($row['m'], 1, ',', '').'</td>';
+					<td>UV</td>
+					<td>Nu '.number_format($row['s'], 1, ',', '').'</td>
+					<td>Max '.number_format($row['m'], 1, ',', '').'</td>';
 		} elseif ($row['n']=='zon') {
 			echo '
-				<td>Zon</td>
-				<td class="right">'.number_format($row['s'], 0, ',', '').' W</td>
-				<td></td>';
+					<td>Zon</td>
+					<td class="right">'.number_format($row['s'], 0, ',', '').' W</td>
+					<td></td>';
 		} elseif ($row['n']=='elec') {
 			echo '
-				<td>Elec</td>
-				<td class="right">'.number_format($row['s'], 0).' W</td>
-				<td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
+					<td>Elec</td>
+					<td class="right">'.number_format($row['s'], 0).' W</td>
+					<td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
 		} elseif ($row['n']=='civil_twilight'||$row['n']=='Sun') {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.date('G:i:s', $row['s']).'</td>
-				<td>'.date('G:i:s', $row['m']).'</td>';
+					<td>'.$row['n'].'</td>
+					<td>'.date('G:i:s', $row['s']).'</td>
+					<td>'.date('G:i:s', $row['m']).'</td>';
 		} elseif ($row['n']=='icon') {
 			echo '
-				<td>icon</td>
-				<td><img src="/images/'.$d['icon']['s'].'.png" alt="icon"></td>
-				<td>'.$row['m'].'% Humidity</td>';
+					<td>icon</td>
+					<td><img src="/images/'.$d['icon']['s'].'.png" alt="icon"></td>
+					<td>'.$row['m'].'% Humidity</td>';
 		} elseif ($row['n']=='Weg') {
 			echo '
-				<td>Weg</td>';
+					<td>Weg</td>';
 			if ($row['s']==0) {
 				echo '
-				<td>Thuis</td>';
+					<td>Thuis</td>';
 			} elseif ($row['s']==1) {
 				echo '
-				<td>Slapen</td>';
+					<td>Slapen</td>';
 			} elseif ($row['s']==2) {
 				echo '
-				<td>Weg</td>';
+					<td>Weg</td>';
 			}
 			echo '
-				<td nowrap>Laatste beweging:<br>
-				'.date("d-m G:i:s", $row['m']).'</td>';
+					<td nowrap>Laatste beweging:<br>'.date("d-m G:i:s", $row['m']).'</td>';
 		} elseif ($row['n']=='wind') {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.number_format($row['s'], 1, ',', '').' km/u</td>';
+					<td>'.$row['n'].'</td>
+					<td>'.number_format($row['s'], 1, ',', '').' km/u</td>';
 			echo '
-				<td></td>';
+					<td></td>';
 		} elseif ($row['n']=='auto') {
 			echo '
-				<td>'.$row['n'].'</td>';
+					<td>'.$row['n'].'</td>';
 			if ($row['s']=='Off') {
 				echo '
-				<td>Lichten manueel</td>';
+					<td>Lichten manueel</td>';
 			} elseif ($row['s']=='On') {
 				echo '
-				<td>Lichten automatisch</td>';
+					<td>Lichten automatisch</td>';
 			}
 			if ($row['m']==0) {
 				echo '
-				<td>Nacht</td>';
+					<td>Nacht</td>';
 			} elseif ($row['m']==1) {
 				echo '
-				<td>Dag</td>';
+					<td>Dag</td>';
 			}
 		} elseif ($row['n']=='minmaxtemp') {
 			echo '
-				<td>Temp < 6u</td>
-				<td>min '.number_format($row['s'], 1, ',', '') .' °C</td>
-				<td>max '.number_format($row['m'], 1, ',', '').' °C</td>';
+					<td>Temp < 6u</td>
+					<td>min '.number_format($row['s'], 1, ',', '') .' °C</td>
+					<td>max '.number_format($row['m'], 1, ',', '').' °C</td>';
 		} elseif ($row['n']=='heating') {
 			echo '
-				<td>Heating</td>
-				<td>';
+					<td>Heating</td>
+					<td>';
 			if ($row['s']==0) {
 				echo '0 Neutral';
 			} elseif ($row['s']==-2) {
@@ -303,32 +303,32 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '2 Gas heating';
 			}
 			echo '</td>
-				<td>Big diff '.number_format($row['m']??0, 1, ',', '').' °C</td>';
+					<td>Big diff '.number_format($row['m']??0, 1, ',', '').' °C</td>';
 		} elseif ($row['n']=='jaarteller') {
 			echo '
-				<td>Teller jaar</td>
-				<td>'.number_format($row['s'], 2, ',', '').' kWh/dag</td>
-				<td></td>';
+					<td>Teller jaar</td>
+					<td>'.number_format($row['s'], 2, ',', '').' kWh/dag</td>
+					<td></td>';
 		} else {
 			echo '
-				<td>'.$row['n'].'</td>
-				<td>'.substr($row['s'] ?? '', 0, 20).'</td>
-				<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
+					<td>'.$row['n'].'</td>
+					<td>'.substr($row['s'] ?? '', 0, 20).'</td>
+					<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
 		}
 	} else {
 		echo '
-				<td>'.$row['n'].'</td>
-				<td>'.substr($row['s'] ?? '', 0, 20).'</td>
-				<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
+					<td>'.$row['n'].'</td>
+					<td>'.substr($row['s'] ?? '', 0, 20).'</td>
+					<td>'.substr($row['m'] ?? '', 0, 20).'</td>';
 	}
 	if ($row['t']<TIME - (86400*7*4)) {
 		echo '
-			<td nowrap>'.date('d-m-Y', $row['t']).'</td>
-		</tr>';
+					<td nowrap>'.date('d-m-Y', $row['t']).'</td>
+				</tr>';
 	} else {
 		echo '
-			<td nowrap>'.date("d-m G:i:s", $row['t']).'</td>
-		</tr>';
+					<td nowrap>'.date("d-m G:i:s", $row['t']).'</td>
+				</tr>';
 	}
 }
 echo '
