@@ -560,6 +560,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+	lg($url);
 	file_get_contents($url);
 	sleep(1);
 	$status=daikinstatus($device);

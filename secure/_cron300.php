@@ -49,16 +49,14 @@ if ($d['dysonlader']['s']=='On') {
 	if ($d['dysonlader_kWh']['s']<10&&past('dysonlader')>1800) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['Weg']['s']>0) {
-	if ($d['Media']['s']=='On'&&past('Weg')>900) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
-	if (ping('192.168.2.7')==true) sw('Media', 'Off', basename(__FILE__).':'.__LINE__, true);
 	if ($d['kookplaat']['s']=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dysonlader']['s']=='On') sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-//	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
-} else {
-	if ($d['Media']['s']=='On'&&$d['shield']['s']=='Off'&&past('shield')>900) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
-}
+} 
+if ($d['Media']['s']=='On'&&$d['lg_webos_tv_cd9e']['s']=='Off'&&past('lg_webos_tv_cd9e')>1200) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
+
 /*
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {

@@ -107,7 +107,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	if (isset($_REQUEST['nicestatus'])) {
 		if (endswith($row['n'], '_set')) {
 			echo '
-				<td>'.$row['n'].'</td>
+				<td>'.$row['n'].'</td>';
+			if ($row['s']=='D') echo '<td class="center">Drogen</td>';
+			else '
 				<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>';
 			if ($row['m']==0) {
 				echo '

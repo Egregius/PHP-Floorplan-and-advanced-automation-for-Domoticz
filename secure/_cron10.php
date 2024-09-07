@@ -9,7 +9,7 @@ if ($d['auto']['s']=='On') {
 	$i=119;
 	if ($d['pirzolder']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolder')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
-	if ($d['pirinkom']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>12&&past('deurinkom')>12&&past('deurbadkamer')>25&&past('deurvoordeur')>45) {
+	if ($d['Weg']['s']==0&&$d['pirinkom']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>12&&past('deurinkom')>12&&past('deurbadkamer')>25&&past('deurvoordeur')>45) {
 		foreach (array(29,28,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
@@ -18,7 +18,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	$i=5;
-	if ($d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
+	if ($d['Weg']['s']==0&&$d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
 		foreach (array(29,28,0) as $i) {
 			if ($d['hall']['s']>$i) {
 				sl('hall', $i, basename(__FILE__).':'.__LINE__);
