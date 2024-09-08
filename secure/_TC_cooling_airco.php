@@ -63,6 +63,8 @@ if ($d['daikin']['m']==1) {
 			store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
 			$d['kamer_set']['s']=$Setkamer;
 		}
+	} elseif ($d['kamer_set']['m']==1&&$d['kamer_set']['s']=='D') {
+		$power=1;
 	}
 	
 	
@@ -179,6 +181,8 @@ if ($d['daikin']['m']==1) {
 			store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
 			$d['alex_set']['s']=$Setalex;
 		}
+	} elseif ($d['alex_set']['m']==1&&$d['alex_set']['s']=='D') {
+		$power=1;
 	}
 	
 	if ($d['alex_set']['s']<32||$d['alex_set']['s']=='D') {
@@ -270,6 +274,8 @@ if ($d['daikin']['m']==1) {
 			store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 			$d['living_set']['s']=$Setliving;
 		}
+	} elseif ($d['living_set']['m']==1&&$d['living_set']['s']=='D') {
+		$power=1;
 	}
 	
 //	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
