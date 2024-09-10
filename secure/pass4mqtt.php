@@ -145,7 +145,74 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} elseif ($topic[0]=='owntracks') {
+		global $owntracksdeviceid, $dbotuser, $dbotpass;
+		if ($topic[2]==$owntracksdeviceid) {
+			$message=json_decode($message);
+			lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+			$db=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
+			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$prevlat=0;
+			$prevlon=0;
+			$x=0;
+			if (isset($message->waypoints)) {
+				foreach ($message->waypoints as $i) {
+					if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
+						lg ('lat='.$i->lat.'	lon='.$i->lon);
+						lgowntracks ('lat='.$i->lat.'	lon='.$i->lon);
+						
+						$lat=round(floorToFraction($i->lat, 1100), 4);
+						$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
+						if ($prevlat!=$lat||$prevlon!=$lon) {
+							$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
+							$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
+							$aantal=$stmt->rowCount();
+							if ($aantal>0) {
+								$x++;
+								$stmt=$db->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
+								$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
+							}
+							$prevlat=$lat;
+							$prevlon=$lon;
+						}
+					}
+					if ($x>0) lgowntracks(count($message->waypoints).'	=> '.$x.' bollekes gekleurd');
+					else lgowntracks(count($message->waypoints));
+				}
+			}	elseif (isset($message->_type)&&$message->_type=='location') {
+				if (count($message->inregions)==0) {
+					lg ('lat='.$i->lat.'	lon='.$i->lon);
+					lgowntracks ('lat='.$i->lat.'	lon='.$i->lon);
+					$lat=round(floorToFraction($i->lat, 1100), 4);
+					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
+					$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
+					$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
+					$aantal=$stmt->rowCount();
+					if ($aantal>0) {
+						$stmt=$db->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
+						$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
+						lgowntracks(count($message->waypoints).'	=> 1 bolleke gekleurd');
+					}
+				}
+			}
+		}
 	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $client->loop(true);
 $client->disconnect();
+
+function floorToFraction($number, $denominator = 1) {
+	return floor($number*$denominator)/$denominator;
+}
+function lonToFraction($lat) {
+	return round((90-$lat)*50, 0);
+}
+function lgowntracks($msg) {
+	$fp=fopen('/var/log/owntracks-'.date("Y-m-d").'.log', "a+");
+	$time=microtime(true);
+	$dFormat="Y-m-d H:i:s";
+	$mSecs=$time-floor($time);
+	$mSecs=substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s	%s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
+}
