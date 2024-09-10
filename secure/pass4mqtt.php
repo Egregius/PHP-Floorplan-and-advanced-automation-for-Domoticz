@@ -177,14 +177,13 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						}
 					}
 					if ($x>0) lgowntracks(count($message->waypoints).'	=> '.$x.' bollekes gekleurd');
-					else lgowntracks(count($message->waypoints));
 				}
 			}	elseif (isset($message->_type)&&$message->_type=='location') {
-				if (count($message->inregions)==0) {
-					lg ('lat='.$i->lat.'	lon='.$i->lon);
-					lgowntracks ('lat='.$i->lat.'	lon='.$i->lon);
-					$lat=round(floorToFraction($i->lat, 1100), 4);
-					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
+//				if (count($message->inregions)==0) {
+					lg ('lat='.$message->lat.'	lon='.$message->lon);
+					lgowntracks ('lat='.$message->lat.'	lon='.$message->lon);
+					$lat=round(floorToFraction($message->lat, 1100), 4);
+					$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
 					$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
 					$aantal=$stmt->rowCount();
@@ -193,7 +192,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
 						lgowntracks(count($message->waypoints).'	=> 1 bolleke gekleurd');
 					}
-				}
+//				}
 			}
 		}
 	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
