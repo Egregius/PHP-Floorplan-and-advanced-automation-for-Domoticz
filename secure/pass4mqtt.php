@@ -193,6 +193,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						lgowntracks(count($message->waypoints).'	=> 1 bolleke gekleurd');
 					}
 //				}
+			}	elseif (isset($message->_type)&&$message->_type=='transition') {
+				if ($message->desc=='Thuis'&&$message->event=='enter') {
+					huisthuis();
+				}
 			}
 		}
 	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
