@@ -158,8 +158,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			foreach ($message->waypoints as $i) {
 				if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
 					lg ('lat='.$i->lat.'	lon='.$i->lon);
-					lgowntracks ('lat='.$i->lat.'	lon='.$i->lon);
-					
 					$lat=round(floorToFraction($i->lat, 1100), 4);
 					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					if ($prevlat!=$lat||$prevlon!=$lon) {
@@ -180,7 +178,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		} elseif (isset($message->_type)&&$message->_type=='location') {
 //				if (count($message->inregions)==0) {
 				lg ('lat='.$message->lat.'	lon='.$message->lon);
-				lgowntracks ('lat='.$message->lat.'	lon='.$message->lon);
 				$lat=round(floorToFraction($message->lat, 1100), 4);
 				$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 				$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
@@ -189,11 +186,12 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($aantal>0) {
 					$stmt=$db->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
 					$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
-					lgowntracks(count($message->waypoints).'	=> 1 bolleke gekleurd');
+					lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 				}
 //				}
 		}	elseif (isset($message->_type)&&$message->_type=='transition') {
 			if ($message->desc=='Thuis'&&$message->event=='enter') {
+				lg('Huis thuis door Owntracks');
 				huisthuis();
 			}
 		}
@@ -207,13 +205,4 @@ function floorToFraction($number, $denominator = 1) {
 }
 function lonToFraction($lat) {
 	return round((90-$lat)*50, 0);
-}
-function lgowntracks($msg) {
-	$fp=fopen('/var/log/owntracks-'.date("Y-m-d").'.log', "a+");
-	$time=microtime(true);
-	$dFormat="Y-m-d H:i:s";
-	$mSecs=$time-floor($time);
-	$mSecs=substr(number_format($mSecs, 3), 1);
-	fwrite($fp, sprintf("%s%s	%s\n", date($dFormat), $mSecs, $msg));
-	fclose($fp);
 }
