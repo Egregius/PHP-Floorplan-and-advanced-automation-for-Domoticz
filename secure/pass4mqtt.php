@@ -147,26 +147,26 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {
 		global $owntracksdeviceid, $dbotuser, $dbotpass;
-		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+//		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 		$message=json_decode($message);
-		$db=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$dbo=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
+		$dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$prevlat=0;
 		$prevlon=0;
 		$x=0;
 		if (isset($message->waypoints)) {
 			foreach ($message->waypoints as $i) {
 				if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
-					lg ('lat='.$i->lat.'	lon='.$i->lon);
+					lg ('<<< OwnTracks >>> '.$i->lat.','.$i->lon);
 					$lat=round(floorToFraction($i->lat, 1100), 4);
 					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					if ($prevlat!=$lat||$prevlon!=$lon) {
-						$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
+						$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
 						$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
 						$aantal=$stmt->rowCount();
 						if ($aantal>0) {
 							$x++;
-							$stmt=$db->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
+							$stmt=$dbo->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
 							$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
 						}
 						$prevlat=$lat;
@@ -177,23 +177,27 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			}
 		} elseif (isset($message->_type)&&$message->_type=='location') {
 //				if (count($message->inregions)==0) {
-				lg ('lat='.$message->lat.'	lon='.$message->lon);
+				lg ('<<< OwnTracks >>> '.$message->lat.','.$message->lon);
 				$lat=round(floorToFraction($message->lat, 1100), 4);
 				$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 				$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
 				$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
 				$aantal=$stmt->rowCount();
 				if ($aantal>0) {
-					$stmt=$db->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
+					$stmt=$dbo->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
 					$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
 					lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 				}
 //				}
-		}	elseif (isset($message->_type)&&$message->_type=='transition') {
-			if ($message->desc=='Thuis'&&$message->event=='enter') {
+		}	elseif ($d['Weg']['s']>1&&isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+			$d=fetchdata();
+			if ($d['Weg']['s']>1) {
 				lg('Huis thuis door Owntracks');
 				huisthuis();
 			}
+		} else {
+			lg('<<< OwnTracks >>> '.print_r(json_decode($message),true));
 		}
 	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
