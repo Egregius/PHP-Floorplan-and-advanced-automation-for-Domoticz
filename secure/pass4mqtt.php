@@ -180,7 +180,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				lg ('<<< OwnTracks >>> '.$message->lat.','.$message->lon);
 				$lat=round(floorToFraction($message->lat, 1100), 4);
 				$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
-				$stmt=$db->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
+				$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
 				$stmt->execute(array(':lat'=>$lat,':lon'=>$lon));
 				$aantal=$stmt->rowCount();
 				if ($aantal>0) {
@@ -189,10 +189,11 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 				}
 //				}
-		}	elseif ($d['Weg']['s']>1&&isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
+		}	elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 			if ($d['Weg']['s']>1) {
+				if ($d['voordeur']['s']=='Off') sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				lg('Huis thuis door Owntracks');
 				huisthuis();
 			}
