@@ -157,7 +157,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if (isset($message->waypoints)) {
 			foreach ($message->waypoints as $i) {
 				if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
-					lg ('<<< OwnTracks >>> '.$i->lat.','.$i->lon);
+					lg ('				<<< OwnTracks >>> '.$i->lat.','.$i->lon);
 					$lat=round(floorToFraction($i->lat, 1100), 4);
 					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					if ($prevlat!=$lat||$prevlon!=$lon) {
@@ -177,7 +177,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			}
 		} elseif (isset($message->_type)&&$message->_type=='location') {
 //				if (count($message->inregions)==0) {
-				lg ('<<< OwnTracks >>> '.$message->lat.','.$message->lon);
+				lg ('				<<< OwnTracks >>> '.$message->lat.','.$message->lon);
 				$lat=round(floorToFraction($message->lat, 1100), 4);
 				$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 				$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
@@ -198,7 +198,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				huisthuis();
 			}
 		} else {
-			lg('<<< OwnTracks >>> '.print_r(json_decode($message),true));
+			lg('				<<< OwnTracks >>> '.print_r(json_decode($message),true));
 		}
 	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);

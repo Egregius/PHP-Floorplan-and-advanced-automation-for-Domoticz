@@ -198,7 +198,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		if ($d[$name]['i']>10) {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$force==true) {
-				lg(file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action));
+				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
 		} elseif ($d[$name]['i']>0) {
 			lg($msg);
@@ -220,7 +220,12 @@ function store($name='',$status='',$msg='',$idx=null) {
 	$db->query($sql);
 	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
 	if ($name=='') lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
-	else lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	else {
+		if (endswith($name, '_temp')) return;
+		elseif(endswith($name, '_kWh')) return;
+		elseif(endswith($name, '_hum')) return;
+		else lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	}
 }
 function storemode($name,$mode,$msg='',$updatetime=false) {
 	global $db, $user, $time;
