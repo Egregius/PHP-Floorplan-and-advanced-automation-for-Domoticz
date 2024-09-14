@@ -95,7 +95,6 @@ function huisslapen($weg=false) {
 //		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 //	}
 //	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-//	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis() {
@@ -107,7 +106,6 @@ function huisthuis() {
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 //	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
-//	if ($d['luchtdroger']['m']!='Auto') storemode('luchtdroger', 'Auto', basename(__FILE__).':'.__LINE__);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);

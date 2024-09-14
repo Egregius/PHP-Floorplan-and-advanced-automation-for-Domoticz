@@ -46,8 +46,5 @@ if ($status=='On') {
 		sl('Xring', 0, basename(__FILE__).':'.__LINE__);
 	} else {
 		sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
-		if ($d['sirene']['s']!='Off') {
-			sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
-		}
 	}
 }

@@ -272,18 +272,6 @@ if ($d['zon']['s']>0) {
 	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['luchtdroger']['s']=='On') {
-	$data=json_decode(file_get_contents('http://192.168.2.2:8080/json.htm?type=command&param=getopenzwavenodes&idx=3'),true);
-	if (isset($data['result'])) {
-		foreach ($data['result'] as $i) {
-			if (!in_array($i['Name'], array('waskamervuur')) && $i['State']=='Dead') {
-				telegram('Node '.$i['Name'].' dead, restarting...');
-				sleep(3);
-				echo shell_exec('sudo /sbin/reboot');
-			}
-		}
-	}
-}
 if ($d['Weg']['s']==0) {
 	foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]['t']),7200);

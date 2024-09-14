@@ -7,4 +7,3 @@ if ($d['zon']['s']>0) {
 	else $level=27;
 }
 sl('inkom', $level, basename(__FILE__).':'.__LINE__);
-mset('8inkom', time());
