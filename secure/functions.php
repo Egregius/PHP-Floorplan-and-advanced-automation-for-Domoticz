@@ -150,7 +150,7 @@ function sl($name,$level,$msg='',$force=false) {
 			}
 		}
 	} else {
-		lg(' (SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')');
+		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')');
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
@@ -194,7 +194,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			}
 		}
 	} else {
-		$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>10) {
 			lg($msg);
 			if ($d[$name]['s']!=$action||$force==true) {
@@ -219,12 +219,12 @@ function store($name='',$status='',$msg='',$idx=null) {
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
-	if ($name=='') lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 	else {
 		if (endswith($name, '_temp')) return;
 		elseif(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
-		else lg(' (STORE) '.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 	}
 }
 function storemode($name,$mode,$msg='',$updatetime=false) {
@@ -233,10 +233,11 @@ function storemode($name,$mode,$msg='',$updatetime=false) {
 	if ($updatetime==true) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-		lg(' (STOREMODE+) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
+		lg('(STOREMODE+) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 	} else {
 		$db->query("INSERT INTO devices (n,m) VALUES ('$name','$mode') ON DUPLICATE KEY UPDATE m='$mode';");
-		lg(' (STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
+		if ($name=='el') return;
+		lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
 	}
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
@@ -248,7 +249,8 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 			$time=time();
 			$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		} else $db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon') ON DUPLICATE KEY UPDATE icon='$icon';");
-		if (!endswith($name, '_temp')) lg(' (STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
+		if (endswith($name, '_temp')) return;
+		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -286,7 +288,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 			}
 		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
-	lg(' (udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
+	lg('(udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function convertToHours($time) {
 	if ($time<600) return substr(date('i:s', $time-3600), 1);
@@ -565,7 +567,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
 	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-	lg($url);
+//	lg($url);
 	file_get_contents($url);
 	sleep(1);
 	$status=daikinstatus($device);

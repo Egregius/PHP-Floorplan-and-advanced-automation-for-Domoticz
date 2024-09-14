@@ -10,7 +10,7 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 			$msg.='	'.$diff;
 		}
 	}
-	lg(' (AJAX)	'.$_SERVER['REMOTE_ADDR'].'	'.$udevice.'	'.$user.$msg);
+	lg('(AJAX)	'.$user.$msg);
 }
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
@@ -38,13 +38,9 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
 		store('runsync', 1, basename(__FILE__).':'.__LINE__);
 	}
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='MQTT') {
+elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db=dbconnect();
-	$db->query("UPDATE devices SET m=1 WHERE n ='Weg';");
-}
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='CRON') {
-	$db=dbconnect();
-	$db->query("UPDATE devices SET m=2 WHERE n ='Weg';");
+	$db->query("UPDATE devices SET m=3 WHERE n ='Weg';");
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='spotify') {
 	$d=fetchdata();

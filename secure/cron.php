@@ -1,13 +1,13 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-
 if (isset($argv[1])) {
 	lg('Executing _cron'.$argv[1].'.php');
 	include ('_cron'.$argv[1].'.php');
 } else {
-	lg('Starting cron loop...');
+	lg('Starting CRON loop...');
 	while (1){
+		if (!isset($d)) $d=fetchdata();
 		$start = microtime(true);
 		$time=time();
 		$crontime=$time;

@@ -49,34 +49,34 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
-					lg(' (MQTT) Switch '.$device.' => '.$status);
+					lg('(MQTT) Switch '.$device.' => '.$status);
 					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch <> ');
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';
-					lg(' (MQTT) Lighting 2 '.$device.' => '.$status);
+					lg('(MQTT) Lighting 2 '.$device.' => '.$status);
 					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch ');
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
-					lg(' (MQTT) Temp '.$device.' => '.$status);	
+					lg('(MQTT) Temp '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-						lg(' (MQTT) kWh '.$device.' => '.$status);	
+						lg('(MQTT) kWh '.$device.' => '.$status);	
 						if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) kWh ');
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
-					lg(' (MQTT) Usage '.$device.' => '.$status);	
+					lg('(MQTT) Usage '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Usage ');
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
-					lg(' (MQTT) Colorswitch '.$device.' => '.$status);	
+					lg('(MQTT) Colorswitch '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
-					lg(' (MQTT) else '.print_r($message,true));	
+					lg('(MQTT) else '.print_r($message,true));	
 				}
 //				if ($device=='$ remoteauto') lg(' (MQTT)		'.print_r($message,true));	
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -110,8 +110,13 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
 			}// else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
-				lg(' Stopping MQTT Loop...');
+				lg('Stopping MQTT Loop...');
 				storemode('Weg', 0, '', 1);
+				$client->disconnect();
+				exec('kill -9 ' . getmypid());
+			} elseif ($d['Weg']['m']==3) {
+				lg('Stopping MQTT Loop...');
+				storemode('Weg', 2, '', 1);
 				$client->disconnect();
 				exec('kill -9 ' . getmypid());
 			}
