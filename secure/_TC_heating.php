@@ -81,13 +81,12 @@ if ($d['living_set']['m']==0) {
 				} else break;
 			}
 			if ($d['Weg']['s']==0) {
-//				if ($time>=strtotime('4:00')&&$time<strtotime('20:00')) $Setliving=$target;
 				if ($time>=$t&&$time<strtotime('20:00')) $Setliving=$target;
-/*				if ($dow==1&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
-				elseif ($dow==2&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
-				elseif ($dow==3&&$time>=strtotime('8:15')&&$time<strtotime('11:20')) $Setliving=$target-3;
-				elseif ($dow==4&&$time>=strtotime('8:15')&&$time<strtotime('15:50')) $Setliving=$target-3;
-				elseif ($dow==5&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $Setliving=$target-3;*/
+				if ($dow==1&&$time>=strtotime('8:15')&&$time<strtotime('17:00')) $Setliving=$target-3;
+				elseif ($dow==2&&$time>=strtotime('8:15')&&$time<strtotime('15:00')) $Setliving=$target-3;
+				elseif ($dow==3&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $Setliving=$target-3;
+				elseif ($dow==4&&$time>=strtotime('8:15')&&$time<strtotime('15:00')) $Setliving=$target-3;
+				elseif ($dow==5&&$time>=strtotime('8:15')&&$time<strtotime('12:00')) $Setliving=$target-3;
 				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$target-3;
 			}
 		}
