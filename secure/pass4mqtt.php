@@ -194,7 +194,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 				}
 //				}
-		}	elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
+		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 			if ($d['Weg']['s']>1) {
