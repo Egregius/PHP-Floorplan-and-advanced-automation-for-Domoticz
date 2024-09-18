@@ -8,8 +8,12 @@ require '/var/www/authentication.php';
 
 
 
-fliving();
+$sun=date_sun_info(time(), $lat, $lon);
+echo date('G:i:s',$sun['civil_twilight_begin']);
 
+foreach ($sun as $k=>$v) {
+	echo $k.'='.date('G:i:s',$v).'<br>';
+}
 
 
 //$status='Off';
