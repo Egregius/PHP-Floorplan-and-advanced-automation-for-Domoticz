@@ -21,12 +21,7 @@ foreach ($sun as $k=>$v) {
 
 
 
-/*NL('Rook gedetecteerd in badkamer!');
-NL('Rook gedetecteerd in kamer!');
-NL('Rook gedetecteerd in living!');
-NL('Rook gedetecteerd in waskamer!');
-NL('Rook gedetecteerd op zolder!');
-NL('Rook gedetecteerd bij Alex!');*/
+
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
