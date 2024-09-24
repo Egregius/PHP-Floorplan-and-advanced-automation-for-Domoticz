@@ -195,10 +195,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			if ($d['Weg']['s']>1) {
+//			if ($d['Weg']['s']>1) {
 				if ($d['voordeur']['s']=='Off') sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				huisthuis('door OwnTracks. '.basename(__FILE__).':'.__LINE__);
-			}
+//			}
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));
 		}
