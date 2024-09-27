@@ -102,8 +102,7 @@ require('_Rolluiken_Heating.php');
 $bigdif=100;
 $difgas=100;
 if ($d['heating']['s']==1) require ('_TC_heating_airco.php');
-elseif ($d['heating']['s']==2) require ('_TC_heating_aircogas.php');
-elseif ($d['heating']['s']==3) require ('_TC_heating_gasairco.php');
-elseif ($d['heating']['s']==4) require ('_TC_heating_gas.php');
+elseif ($d['heating']['s']==2) require ('_TC_heating_gasairco.php');
+elseif ($d['heating']['s']==3) require ('_TC_heating_gas.php');
 require('_TC_badkamer.php');
 

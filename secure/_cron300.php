@@ -46,7 +46,7 @@ if ($d['kookplaat']['s']=='On') {
 	if ($d['kookplaatpower_kWh']['s']<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['dysonlader']['s']=='On') {
-	if ($d['dysonlader_kWh']['s']<10&&past('dysonlader')>1800) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['dysonlader_kWh']['s']<10&&past('dysonlader')>2400) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['Weg']['s']>0) {
 	if ($d['kookplaat']['s']=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);

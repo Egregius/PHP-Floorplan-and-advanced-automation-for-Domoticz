@@ -15,7 +15,7 @@ $uitna=(21-$d['buiten_temp']['s'])*60; if ($uitna<595) $uitna=595;
 if (($bigdif<=-0.8||$difgas<=-0.2)&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6) sw('brander', 'On', 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif (($bigdif<=-0.6||$difgas<=-0.1)&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8) sw('brander', 'On', 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
 elseif (($bigdif<=-0.4||$difgas<=0)&&$d['brander']['s']=="Off"&&past('brander')>$aanna) sw('brander','On', 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
-elseif (($bigdif>=0&&$difgas>=0)&&$d['brander']['s']=="On") sw('brander','Off',basename(__FILE__).':'.__LINE__);
+elseif (($bigdif>=0&&$difgas>=0)&&$d['brander']['s']=="On"&&past('brander')>$uitna) sw('brander','Off',basename(__FILE__).':'.__LINE__);
 elseif (($bigdif>=-0.4&&$difgas>=0)&&$d['brander']['s']=="On"&&(past('brander')>$uitna||$d['living_temp']['icon']>=0.3)) sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
 elseif (($bigdif>=-0.6&&$difgas>=-0.1)&&$d['brander']['s']=="On"&&(past('brander')>$uitna*1.5||$d['living_temp']['icon']>=0.4)) sw('brander', 'Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
 elseif (($bigdif>=-0.8&&$difgas>=-0.2)&&$d['brander']['s']=="On"&&(past('brander')>$uitna*2||$d['living_temp']['icon']>=0.5)) sw('brander', 'Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
