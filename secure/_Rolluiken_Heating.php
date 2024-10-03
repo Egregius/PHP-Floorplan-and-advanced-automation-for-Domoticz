@@ -31,7 +31,7 @@ if ($d['auto']['s']=='On') {
 				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100&&past($i)>14400) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			} else {
 				if ($d['dag']==0) {
-					foreach (array('Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100&&past($i)>3600) sl($i, 100, basename(__FILE__).':'.__LINE__);
+					foreach (array('Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100&&past($i)>900) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		} elseif ($d['buiten_temp']['s']<3) {

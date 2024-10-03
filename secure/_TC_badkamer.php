@@ -6,7 +6,7 @@ if ($d['badkamer_set']['m']==0) {$set=14;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
 
-if (in_array($dow, array(0,2,4,6,7))) $dday=true; else $dday=false;
+if (in_array($dow, array(0,1,2,3,4,5,6,7))) $dday=true; else $dday=false;
 if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']['s']=='Open'||$d['raamwaskamer']['s']=='Open'||$d['raamalex']['s']=='Open')) {
 	$set=5;$m2.=__LINE__.' ';
 } elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']>0) {
@@ -26,8 +26,8 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	}
 	if ($dday==true) {
 		$loop=true;
-		$target=20;
-		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=(20-$d['buiten_temp']['s'])*120; else $factor=1000;
+		$target=21;
+		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=(20-$d['buiten_temp']['s'])*150; else $factor=1000;
 		for ($x=0;$x<=$target-14;$x+=0.1) {
 			if ($loop==true) {
 				$t2=$t-($factor*$x);

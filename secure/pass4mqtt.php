@@ -152,7 +152,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {
 		global $owntracksdeviceid, $dbotuser, $dbotpass;
-//		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 		$message=json_decode($message);
 		$dbo=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
 		$dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
