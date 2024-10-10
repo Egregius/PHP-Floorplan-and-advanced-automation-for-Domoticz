@@ -152,7 +152,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {
 		global $owntracksdeviceid, $dbotuser, $dbotpass;
-//		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 		$message=json_decode($message);
 		$dbo=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
 		$dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -162,7 +162,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if (isset($message->waypoints)) {
 			foreach ($message->waypoints as $i) {
 				if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
-					lg (PHP_EOL.'				<<< OwnTracks >>> '.$i->lat.','.$i->lon.PHP_EOL);
+					lg (PHP_EOL.'				<<< OwnTracks WP >>> '.$i->lat.','.$i->lon.PHP_EOL);
 					$lat=round(floorToFraction($i->lat, 1100), 4);
 					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					if ($prevlat!=$lat||$prevlon!=$lon) {
@@ -181,7 +181,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($x>0) lgowntracks(count($message->waypoints).'	=> '.$x.' bollekes gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='location') {
-			lg (PHP_EOL.'				<<< OwnTracks >>> '.$message->lat.','.$message->lon.PHP_EOL);
+			lg (PHP_EOL.'				<<< OwnTracks LO >>> '.$message->lat.','.$message->lon.PHP_EOL);
 			$lat=round(floorToFraction($message->lat, 1100), 4);
 			$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 			$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
@@ -197,7 +197,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$d=fetchdata();
 //			if ($d['Weg']['s']>1) {
 				if ($d['voordeur']['s']=='Off') sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-				huisthuis('door OwnTracks. '.basename(__FILE__).':'.__LINE__);
+				huisthuis('door OwnTracks.');
 //			}
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));

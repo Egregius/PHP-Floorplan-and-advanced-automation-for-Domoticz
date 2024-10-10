@@ -55,7 +55,8 @@ if ($d['daikin']['m']==1) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 			if ($dif>3) $power=0;
-			elseif ($dif<=0) $power=1;
+			elseif ($dif<=0&&$time>strtotime('8:30')) $power=1;
+			else $power=0;
 			if ($d['daikin']['s']=='On'&&past('daikin')>70) {
 				if ($dif<-2) $rate=6;
 				elseif ($dif<-1) $rate=5;
