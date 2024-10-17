@@ -198,7 +198,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 //			if ($d['Weg']['s']>1) {
-				if ($d['voordeur']['s']=='Off') sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']<4) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+				telegram('Huis thuis door OwnTracks',false);
 				huisthuis('door OwnTracks.');
 //			}
 		} else {
