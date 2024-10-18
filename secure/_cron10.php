@@ -70,13 +70,10 @@ if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&past('voordeur
 if ($d['GroheRed']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>7500) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan 7500W verbruik');
 elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>3600) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 60min aan');
 //elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>600&&past('watervandaag')>600) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 10min geen water genomen');
-if ($d['powermeter']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>5000) {
+if ($d['powermeter']['s']=='On'&&($d['el']['s']-$d['zon']['s'])>3000) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
 	telegram ('Auto laden uit, te veel verbruik');
-} /*elseif ($d['powermeter']['s']=='On'&&past('powermeter')>9895) {
-	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 2u45 bezig');
-	telegram ('Auto laden uit, langer dan 2u45 bezig');
-}*/
+} 
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 
 

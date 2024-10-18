@@ -29,7 +29,7 @@ function fliving() {
 		}
 		mset('living', $time);
 	}
-	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')&&past('langekast')>60) {
+	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')&&past('langekast')>60) {
 		bosezone(101);
 	}
 }
