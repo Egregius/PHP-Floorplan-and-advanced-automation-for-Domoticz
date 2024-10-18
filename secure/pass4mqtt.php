@@ -199,7 +199,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$d=fetchdata();
 //			if ($d['Weg']['s']>1) {
 				if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']<4) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-				telegram('Huis thuis door OwnTracks',false);
+				else telegram('Huis thuis door OwnTracks',false);
 				huisthuis('door OwnTracks.');
 //			}
 		} else {
