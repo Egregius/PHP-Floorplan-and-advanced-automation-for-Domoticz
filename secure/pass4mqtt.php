@@ -198,9 +198,13 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
 //			if ($d['Weg']['s']>1) {
-				if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']<4) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-				else telegram('Huis thuis door OwnTracks',false);
-				huisthuis('door OwnTracks.');
+				if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']<4) {
+					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+					if($d['Weg']['s']==2) huisthuis('door OwnTracks.');
+				} elseif($d['Weg']['s']==2) {
+					telegram('Huis thuis door OwnTracks',false);
+					huisthuis('door OwnTracks.');
+				}
 //			}
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));
