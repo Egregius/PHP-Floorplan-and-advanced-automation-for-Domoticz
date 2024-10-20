@@ -74,10 +74,7 @@ function fhall() {
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
 	else $t=strtotime('7:00');
-	if ($d['zon']['s']<50&&$time<=strtotime('19:45')&&
-			($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)
-		) 
-		{
+	if ($d['zon']['s']<50&&$time<=strtotime('19:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -103,7 +100,7 @@ function huisthuis($msg='') {
 	$d=fetchdata();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
-	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
+//	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
 //	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
