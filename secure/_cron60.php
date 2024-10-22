@@ -68,7 +68,7 @@ if ($d['auto']['s']=='On') {
 				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
 			}
 		}
-		foreach (array('bureel','kristal','garage','tuin','voordeur','zolderg','lamp kast') as $i) {
+		foreach (array('lamp kast','bureel','kristal','garage','tuin','voordeur','zolderg','langekast') as $i) {
 			if ($d[$i]['s']=='On') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -141,6 +141,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
+	if ($d['dag']==0&&$d['kristal']['s']=='Off'&&past('kristal')>10800) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
 //	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
