@@ -16,7 +16,8 @@ if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
 	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
-	$d['t']=$_SERVER['REQUEST_TIME'];
+//	$d['t']=$_SERVER['REQUEST_TIME'];
+	$d['t']=microtime(true);
 	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {

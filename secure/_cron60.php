@@ -141,7 +141,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-	if ($d['dag']==0&&$d['kristal']['s']=='Off'&&past('kristal')>10800) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>108) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
 //	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
