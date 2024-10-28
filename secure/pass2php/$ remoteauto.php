@@ -17,7 +17,7 @@ if ($status=='Off') {
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
 		if ($d['zon']['s']>2000) {
 			mset('powermeter',time());
-			sleep(1);
+			usleep(100000);
 			sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
 		}
 	}

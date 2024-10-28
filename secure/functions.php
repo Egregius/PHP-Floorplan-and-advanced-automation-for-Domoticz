@@ -84,7 +84,7 @@ function fhall() {
 function huisslapen($weg=false) {
 	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('lamp kast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','kristal','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','houtterras','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('lamp kast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','houtterras','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}

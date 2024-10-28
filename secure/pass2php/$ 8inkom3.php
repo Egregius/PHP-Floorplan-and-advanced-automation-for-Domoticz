@@ -1,4 +1,4 @@
 <?php
 mset('powermeter',time());
-sleep(1);
+usleep(1000000);
 sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);
