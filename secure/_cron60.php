@@ -46,7 +46,7 @@ if ($d['auto']['s']=='On') {
 				file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
 			}
 		}*/
-		
+		if ($d['dag']<=1&&$d['lg_webos_tv_cd9e']['s']=='On'&&$d['kristal']['s']=='Off'&&past('kristal')>108) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	/* -------------------------------------------- SLAPEN ----------------------*/
 /*	if ($d['Weg']['s']==1){
@@ -141,7 +141,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-	if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>108) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+	
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
 //	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
