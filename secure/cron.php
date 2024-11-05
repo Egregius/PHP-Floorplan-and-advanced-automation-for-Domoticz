@@ -2,7 +2,7 @@
 <?php
 require '/var/www/html/secure/functions.php';
 if (isset($argv[1])) {
-	lg('Executing _cron'.$argv[1].'.php');
+	echo 'Executing _cron'.$argv[1].'.php'.PHP_EOL.PHP_EOL;
 	include ('_cron'.$argv[1].'.php');
 } else {
 	lg('Starting CRON loop...');

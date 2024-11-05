@@ -4,37 +4,27 @@ if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $time=time();
 $user='cron3600';
-$date=date('Y-m-d');
-if (date('G')==19) {
-	$xml=json_decode(json_encode(	simplexml_load_string(file_get_contents('/temp/domoticz/Config/ozwcache_0xe9238f6e.xml'),"SimpleXMLElement",	LIBXML_NOCDATA)),true);
-	$msg='';
-	foreach ($xml['Node'] as $node) {
-		foreach ($node['CommandClasses']['CommandClass'] as $cmd) {
-			if (isset($cmd['Value']['@attributes']['label'])) {
-				if ($cmd['Value']['@attributes']['label']=='Battery Level') {
-					$id=$node['@attributes']['id'];
-					$name=$node['@attributes']['name'];
-					echo $name.PHP_EOL;
-					$value=$cmd['Value']['@attributes']['value'];
-					if ($value>100) 	$value=100;
-					$stmt=$db->query("select value from battery WHERE name='$name' ORDER BY `date` DESC LIMIT 0,1;");
-					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $prev=$row['value'];
-					if (isset( $prev)&&$value!=$prev) $msg.=$name.PHP_EOL.'  new = '.$value.', prev = '.$prev.PHP_EOL.PHP_EOL;
-					unset( $prev);
-					$query="INSERT INTO `battery` (`date`,`name`,`value`) VALUES ('$date','$name','$value') ON DUPLICATE KEY UPDATE `value`='$value';";
-					if (!$result=$db->query($query)) die('There was an error running the query ['.$query.'-'.$db->error.']');
-				}
-			}
-		}
-	}
-	unset($xml);
-	if (strlen($msg)>5) telegram($msg);
-}
-if (date('G')==0&&$d['winst']['s']!=0) store ('winst', 0);
 
+if (date('G')==0) {
+	if ($d['winst']['s']!=0) store ('winst', 0);
+	$since=date("Y-m-d", $time-86400*7);
+	foreach (array('01','02') as $x) {
+		$query="DELETE FROM `temp` WHERE `stamp` LIKE '%:$x:00' AND `stamp` < '$since'";
+		echo $query.PHP_EOL;
+		$db->query($query);
+	}
+}
+
+
+	$since=date("Y-m-d", $time-86400*7);
+	foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59) as $x) {
+		$query="DELETE FROM `temp` WHERE `stamp` LIKE '%:$x:00' AND `stamp` < '$since'";
+		echo $query.PHP_EOL;
+		$db->query($query);
+	}
+	
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'), true);
 if (isset($data['CivTwilightStart'])) {
-	$time=$time;
 	$name='civil_twilight';
 	$status=strtotime($data['CivTwilightStart']);
 	$mode=strtotime($data['CivTwilightEnd']);
