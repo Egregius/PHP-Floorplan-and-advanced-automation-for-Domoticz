@@ -3,6 +3,7 @@ mkdir -p /var/log
 /usr/sbin/service mysql stop
 /usr/sbin/service domoticz stop
 /usr/sbin/service nginx stop
+/var/www/read_p1.py
 #rsync -aP /var/lib/mysql/ /temp/mysql/
 #rsync -aP /domoticz/ /temp/domoticz/
 touch /temp/domoticz.log
@@ -19,3 +20,4 @@ sleep 1
 sleep 1
 /usr/sbin/service nginx start
 /usr/sbin/service domoticz start
+/var/www/read_p1.py
