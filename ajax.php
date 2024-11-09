@@ -236,11 +236,14 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				shell_exec('/var/www/sleepnas.sh');
 			}
 		} elseif ($_REQUEST['device']=='powermeter') {
-			if ($_REQUEST['action']=='On') {
+			if ($_REQUEST['command']=='On') {
 				mset('powermeter',time());
 				sleep(1);
+				sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
+				storemode('powermeter', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			} elseif ($_REQUEST['command']=='Off') {
+				sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
 			}
-			call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 			else call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
