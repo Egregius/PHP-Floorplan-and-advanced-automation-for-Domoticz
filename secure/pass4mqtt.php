@@ -88,7 +88,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
 				if ($status!=$d['buiten_hum']['s']) store('buiten_hum', $hum);
 			} elseif ($device=='kamer_hum') { // 2
-				$status=$message['svalue2']-2;
+				$status=$message['svalue2']-7;
 				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
 				if ($status!=$d['kamer_hum']['s']) store('kamer_hum', $status);
 			} elseif ($device=='alex_hum') { // 3

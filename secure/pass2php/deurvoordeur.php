@@ -42,6 +42,7 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 		}
 		sleep($k);
 	}
+	if ($d['Weg']['s']==0) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /*if ($status=='Open') sirene('Voordeur open');
 else sirene('Voordeur dicht');*/
