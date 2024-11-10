@@ -107,7 +107,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
 				if ($status!=$d['badkamer_hum']['s']) store('badkamer_hum', $status);
 			} elseif ($device=='living_hum') { // 6
-				$status=$message['svalue2']-1;
+				$status=$message['svalue2']-4;
 				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
 				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
 			}// else lg('no file found for '.$device);
