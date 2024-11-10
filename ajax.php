@@ -242,7 +242,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			} elseif ($_REQUEST['command']=='Off') {
-				sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
+				sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
+				storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
