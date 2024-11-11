@@ -2,8 +2,11 @@
 require '/var/www/html/secure/functions.php';
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
-
-$d=fetchdata();
+if ($device=='winst') {
+	echo $status;
+	store($device, $status, 'Pass2PHP');
+	exit;
+} else $d=fetchdata();
 echo __LINE__.'<br>';
 if (isset($d[$device])) {
 	if ($d[$device]['dt']=='luifel') {
@@ -20,10 +23,6 @@ if (isset($d[$device])) {
 	} elseif ($device=='achterdeur') {
 		if ($status=='Open') $status='Closed';
 		else $status='Open';
-	} elseif ($device=='winst') {
-		echo('winst='.$status+$d['winst']['s']);
-		store($device, $status+$d['winst']['s'], 'Pass2PHP');
-		exit;
 	} elseif ($device=='sirene') {
 		if ($status=='Group On') $status='On';
 		else $status='Off';

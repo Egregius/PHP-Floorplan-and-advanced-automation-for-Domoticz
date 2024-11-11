@@ -98,7 +98,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue1'];
 				if ($status!=$d['waskamer_temp']['s']) store('waskamer_temp', $status);
-				$status=$message['svalue2'];
+				$status=$message['svalue2']+4;
 				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
 				if ($status!=$d['waskamer_hum']['s']) store('waskamer_hum', $status);
 			} elseif ($device=='badkamer_hum') { // 5
