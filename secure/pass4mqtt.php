@@ -113,7 +113,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($hum!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $hum, '', 1);
 				if ($hum!=$d['waskamer_hum']['s']) store('waskamer_hum', $hum);
 			} elseif ($device=='badkamer_hum') { // 5
-				$hum=$message['svalue2']-5;
+				$hum=$message['svalue2']-7;
 				if ($hum>100) $hum=100;
 				elseif($hum>$d['badkamer_temp']['m']+1) $hum=$d['badkamer_temp']['m']+1;
 				elseif($hum<$d['badkamer_temp']['m']-1) $hum=$d['badkamer_temp']['m']-1;
