@@ -84,32 +84,48 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$temp=$message['svalue1'];
 				$hum=$message['svalue2']+1;
 				if ($hum>100) $hum=100;
+				elseif($hum>$d['buiten_temp']['m']+1) $hum=$d['buiten_temp']['m']+1;
+				elseif($hum<$d['buiten_temp']['m']-1) $hum=$d['buiten_temp']['m']-1;
 				if($hum!=$d['buiten_temp']['m']) storemode('buiten_temp', $hum, '', 1);
 				if ($temp!=$d['minmaxtemp']['icon']) storeicon('minmaxtemp', $temp);
 				if ($status!=$d['buiten_hum']['s']) store('buiten_hum', $hum);
 			} elseif ($device=='kamer_hum') { // 2
-				$status=$message['svalue2']-7;
-				if ($status!=$d['kamer_temp']['m']) storemode('kamer_temp', $status, '', 1);
-				if ($status!=$d['kamer_hum']['s']) store('kamer_hum', $status);
+				$hum=$message['svalue2']-7;
+				if ($hum>100) $hum=100;
+				elseif($hum>$d['kamer_temp']['m']+1) $hum=$d['kamer_temp']['m']+1;
+				elseif($hum<$d['kamer_temp']['m']-1) $hum=$d['kamer_temp']['m']-1;
+				if ($hum!=$d['kamer_temp']['m']) storemode('kamer_temp', $hum, '', 1);
+				if ($hum!=$d['kamer_hum']['s']) store('kamer_hum', $hum);
 			} elseif ($device=='alex_hum') { // 3
-				$status=$message['svalue2']+5;
-				if ($status!=$d['alex_temp']['m']) storemode('alex_temp', $status, '', 1);
-				if ($status!=$d['alex_hum']['s']) store('alex_hum', $status);
+				$hum=$message['svalue2']-9;
+				if ($hum>100) $hum=100;
+				elseif($hum>$d['alex_temp']['m']+1) $hum=$d['alex_temp']['m']+1;
+				elseif($hum<$d['alex_temp']['m']-1) $hum=$d['alex_temp']['m']-1;
+				if ($hum!=$d['alex_temp']['m']) storemode('alex_temp', $hum, '', 1);
+				if ($hum!=$d['alex_hum']['s']) store('alex_hum', $hum);
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue1'];
 				if ($status!=$d['waskamer_temp']['s']) store('waskamer_temp', $status);
-				$status=$message['svalue2']+4;
-				if ($status!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $status, '', 1);
-				if ($status!=$d['waskamer_hum']['s']) store('waskamer_hum', $status);
+				$hum=$message['svalue2']+4;
+				if ($hum>100) $hum=100;
+				elseif($hum>$d['waskamer_temp']['m']+1) $hum=$d['waskamer_temp']['m']+1;
+				elseif($hum<$d['waskamer_temp']['m']-1) $hum=$d['waskamer_temp']['m']-1;
+				if ($hum!=$d['waskamer_temp']['m']) storemode('waskamer_temp', $hum, '', 1);
+				if ($hum!=$d['waskamer_hum']['s']) store('waskamer_hum', $hum);
 			} elseif ($device=='badkamer_hum') { // 5
-				$status=$message['svalue2']-4;
-				if ($status>100) $status=100;
-				if ($status!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $status, '', 1);
-				if ($status!=$d['badkamer_hum']['s']) store('badkamer_hum', $status);
+				$hum=$message['svalue2']-5;
+				if ($hum>100) $hum=100;
+				elseif($hum>$d['badkamer_temp']['m']+1) $hum=$d['badkamer_temp']['m']+1;
+				elseif($hum<$d['badkamer_temp']['m']-1) $hum=$d['badkamer_temp']['m']-1;
+				if ($hum!=$d['badkamer_temp']['m']) storemode('badkamer_temp', $hum, '', 1);
+				if ($hum!=$d['badkamer_hum']['s']) store('badkamer_hum', $hum);
 			} elseif ($device=='living_hum') { // 6
-				$status=$message['svalue2']-6;
-				if ($status!=$d['living_temp']['m']) storemode('living_temp', $status, '', 1);
-				if ($status!=$d['living_hum']['s']) store('living_hum', $status);
+				$hum=$message['svalue2']-6;
+				if ($hum>100) $hum=100;
+				elseif($hum>$d['living_temp']['m']+1) $hum=$d['living_temp']['m']+1;
+				elseif($hum<$d['living_temp']['m']-1) $hum=$d['living_temp']['m']-1;
+				if ($hum!=$d['living_temp']['m']) storemode('living_temp', $hum, '', 1);
+				if ($hum!=$d['living_hum']['s']) store('living_hum', $hum);
 			}// else lg('no file found for '.$device);
 			if ($d['Weg']['m']==1) {
 				lg('Stopping MQTT Loop...');
