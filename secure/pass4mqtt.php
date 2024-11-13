@@ -106,7 +106,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			} elseif ($device=='waskamer_hum') { // 4
 				$status=$message['svalue1'];
 				if ($status!=$d['waskamer_temp']['s']) store('waskamer_temp', $status);
-				$hum=$message['svalue2']+4;
+				$hum=$message['svalue2']+3;
 				if ($hum>100) $hum=100;
 				elseif($hum>$d['waskamer_temp']['m']+1) $hum=$d['waskamer_temp']['m']+1;
 				elseif($hum<$d['waskamer_temp']['m']-1) $hum=$d['waskamer_temp']['m']-1;
