@@ -27,7 +27,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	if ($dday==true) {
 		$loop=true;
 		$target=20.0;
-		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=(20-$d['buiten_temp']['s'])*180; else $factor=1000;
+		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=($target-$d['buiten_temp']['s'])*175; else $factor=1000;
 		for ($x=0;$x<=$target-14;$x+=0.1) {
 			if ($loop==true) {
 				$t2=$t-($factor*$x);
@@ -40,8 +40,8 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	} else {
 		$loop=true;
 		$target=19.0;
-		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=(20-$d['buiten_temp']['s'])*110; else $factor=1000;
-		for ($x=0;$x<=4;$x+=0.1) {
+		if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<20) $factor=($target-$d['buiten_temp']['s'])*170; else $factor=1000;
+		for ($x=0;$x<=$target-14;$x+=0.1) {
 			if ($loop==true) {
 				$t2=$t-($factor*$x);
 				if ($time>=$t2&&$time<$t+1800) {
