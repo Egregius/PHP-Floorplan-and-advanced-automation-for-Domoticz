@@ -3,6 +3,7 @@ if ($status!=$d[$device]['s']) store($device,$status, basename(__FILE__).':'.__L
 //lg(print_r($topic,true));
 
 if ($status=='On') {
+	if ($d['Weg']['s']==0&&$d['Shield']['s']=='Off') sw('Shield', 'On', basename(__FILE__).':'.__LINE__);
 	$time=time();
 	if ($time>=strtotime('18:30')) {
 		if ($d['Rliving']['s']<30) sl('Rliving', 30, basename(__FILE__).':'.__LINE__);
@@ -14,4 +15,6 @@ if ($status=='On') {
 		bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
 		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 	}
+} elseif ($status=='Off') {
+	if ($d['Shield']['s']=='On') sw('Shield', 'Off', basename(__FILE__).':'.__LINE__);
 }

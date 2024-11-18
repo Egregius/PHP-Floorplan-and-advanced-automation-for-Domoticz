@@ -1,2 +1,2 @@
 <?php
-if ($status!=$d['shieldpower']['s']) store('shieldpower', $status);
+if ($status!=$d['Shield']['s']) store('Shield', $status);
