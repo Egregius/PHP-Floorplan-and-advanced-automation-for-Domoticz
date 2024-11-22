@@ -8,7 +8,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
-			if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
+			if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 				if ($ip==103) {
 					if ($d['bed']['s']=='On'&&past('bed')<43200) {
@@ -54,7 +54,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
+			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
 			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		unset($status);
@@ -75,7 +75,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
 			if ($d['bose'.$ip]['icon']!='Online') {
-				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__);
+				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 //				if ($ip==101) {
 //					if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('17:30')&&past('langekast')>60) {
 //						bosezone(101);
@@ -102,7 +102,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 	}	
 }
 if($d['langekast']['s']!='On') {
-	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__);
+	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
 }
 /*if ($d['Weg']['s']<=1) {
 	foreach(array(103) as $ip) {
