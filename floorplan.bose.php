@@ -9,6 +9,15 @@ if (isset($_REQUEST['ip'])) {
 } else {
 	$bose=101;//Living
 }
+$boses=array(
+	101=>'Bose Living',
+	102=>'Bose Keuken',
+	103=>'Bose boven',
+	104=>'Bose 104',
+	105=>'Bose 10-Wit',
+	106=>'Bose Buiten20',
+	107=>'Bose 107',
+);
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -67,10 +76,10 @@ echo '
 </head>
 <body>
 	<div class="fix" id="clock">
-		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time"></a>
+		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time"></a> 
 	</div>
 	<div class="fix z1" style="bottom:14px;left:14px;">
-		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
+		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a><span style="font-size:2em;padding:8px;">'.$boses[$bose].'</span>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
