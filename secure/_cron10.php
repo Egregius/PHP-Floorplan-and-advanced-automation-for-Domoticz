@@ -65,8 +65,6 @@ if ($d['auto']['s']=='On') {
 	if ($d['sirene']['s']=='On'&&past('sirene')>110) sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['Ralex']['s']==0&&$d['zon']['s']>100&&$d['alex']['s']==1) sl('alex', 0, basename(__FILE__).':'.__LINE__);
 	elseif ($d['Ralex']['s']==100&&$d['Weg']['s']==1&&$d['alex']['s']==1&&$d['deuralex']['s']=='Closed'&&past('alex')>590) sl('alex', 0, basename(__FILE__).':'.__LINE__);
-//	if ($d['Weg']['s']==0&&$d['lg_webos_tv_cd9e']['s']=='On'&&$d['Shield']['s']=='Off'/*&&past('lg_webos_tv_cd9e')>9*/) sw('Shield', 'On', basename(__FILE__).':'.__LINE__);
-//	elseif ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['Shield']['s']=='On'&&past('lg_webos_tv_cd9e')>28&&past('Shield')>28) sw('Shield', 'Off', basename(__FILE__).':'.__LINE__);
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']==0&&past('voordeur')>55&&past('Weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
