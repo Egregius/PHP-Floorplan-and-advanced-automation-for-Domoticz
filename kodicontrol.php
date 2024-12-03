@@ -39,6 +39,9 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 	<link rel="icon" sizes="192x192" href="images/kodi.png">
 	<meta name="mobile-web-app-capable" content="yes">
 	<link href="/styles/kodi.css" rel="stylesheet" type="text/css"/>
+	<style>
+		.big{min-height:11vh;}
+	</style>
 </head>
 <body>
 <div class="navbar">
