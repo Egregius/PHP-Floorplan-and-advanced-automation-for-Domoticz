@@ -97,7 +97,7 @@ function huisslapen($weg=false) {
 function huisthuis($msg='') {
 	global $d,$time;
 	$time=time();
-	$d=fetchdata();
+//	$d=fetchdata();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
 //	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
