@@ -1,5 +1,5 @@
 <?php
-if ($status=='On') {
+if ($status=='On'&&$d['Weg']['s']==0&&($time>strtotime('21:00')||$time<strtotime('4:00'))) {
 	if ($d['achterdeur']['s']!='Closed') {
 		waarschuwing('Let op. Achterdeur open', 55);
 		exit('');
