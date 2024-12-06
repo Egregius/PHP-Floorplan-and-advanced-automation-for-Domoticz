@@ -24,7 +24,7 @@ if ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkam
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['Weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=14) {$set=14;$m2.=__LINE__.' ';}
 	}
-	$factor=($d['badkamer_temp']['s']-$d['buiten_temp']['s'])*140;
+	$factor=($set-$d['buiten_temp']['s'])*($d['badkamer_temp']['s']-$d['buiten_temp']['s'])*5;
 	$m.=' target='.$target.' buiten='.$d['buiten_temp']['s'].' badk='.$d['badkamer_temp']['s'].' factor='.$factor;
 	$target=19;
 	if ($dday==true) {

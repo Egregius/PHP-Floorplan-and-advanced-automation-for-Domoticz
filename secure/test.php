@@ -8,31 +8,7 @@ require '/var/www/authentication.php';
 
 
 
-echo time().'<br>';
-echo microtime(true).'<br>';
-$message="
-	18 @ =E2=82=AC 5.00 =3D =E2=82=AC 90.00<br>
-	17 @ =E2=82=AC 10.00 =3D =E2=82=AC 170.00<br>
-	14 @ =E2=82=AC 20.00 =3D =E2=82=AC 280.00<br>
-	5 @ =E2=82=AC 50.00 =3D =E2=82=AC 250.00<br>
-	Total: 54 Notes =3D =E2=82=AC 790.00<br>";
-$reps=array(
-	' @ '=>' x ',
-	'=E2=82=AC'=>'	€',
-	' =3D '=>'	= ',
-	'.'=>',',
-	'0.00'=>'0',
-	'5.00'=>'5',
-);
-//$message=str_replace(' @ ',' x ',$message);
-//$message=str_replace('=E2=82=AC','€',$message);
-//$message=str_replace(' =3D ',' = ',$message);
-//$message=str_replace('.00',',00',$message);
-$message=strtr($message,$reps);
-echo $message;
-
-//$status='Off';
-//include 'pass2php/$ remoteauto.php';
+telegram('Test '.date('G:i:s'));
 
 
 
