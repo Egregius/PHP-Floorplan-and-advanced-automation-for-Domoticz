@@ -8,7 +8,7 @@ require '/var/www/authentication.php';
 
 
 
-telegram('Test '.date('G:i:s'));
+telegram('Test '.date('G:i:s'),false);
 
 
 
