@@ -8,8 +8,7 @@ require '/var/www/authentication.php';
 
 
 
-telegram('Test '.date('G:i:s'),false);
-
+$data=json_decode(curl('http://192.168.2.4/api/v1/data'), true);
 
 
 

@@ -5,5 +5,5 @@ do
 	sleep 3.95
 done
 pkill -f "p1.php"
-/var/www/p1.php
+#/var/www/p1.php
 
