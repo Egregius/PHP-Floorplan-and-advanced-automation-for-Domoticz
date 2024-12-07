@@ -229,7 +229,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));
 		}
-	}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $client->loop(true);
 $client->disconnect();
