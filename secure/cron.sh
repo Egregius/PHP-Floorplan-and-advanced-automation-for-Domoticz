@@ -12,6 +12,11 @@ ps cax | grep cron2.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron2.php >/dev/null 2>&1 &
 fi
+ps cax | grep energy.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/energy.php >/dev/null 2>&1 &
+fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
