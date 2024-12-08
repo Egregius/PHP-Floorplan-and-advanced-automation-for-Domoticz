@@ -49,10 +49,6 @@ while (1){
 		if(!$result=$db->query($query)){echo('There was an error running the query "'.$query.'" - '.$db->error);}
 		$db->close();
 		
-		$dbname='domotica';
-		$dbuser='domotica';
-		$dbpass='0untracked-mila5-1Lumbar-3confound-bereft8-opals-Allyn8-buyer-channel-Junction-1Haggler-marbles1-Nods-Honk-2Rico';
-	
 		$db=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 		$stmt=$db->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','el','zon');");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
