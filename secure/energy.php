@@ -88,7 +88,8 @@ while (1){
 				if (!empty($matches[1][2])) {
 					$consumption=round($matches[1][2], 0);
 					$net=$data->active_power_w;
-					$db->query("UPDATE devices SET dt='$net', s='$consumption',t='".$time."' WHERE n='el';") or trigger_error($db->error);
+					$avg=$data->active_power_average_w;
+					$db->query("UPDATE devices SET dt='$net', s='$consumption', icon='".$avg."', t='".$time."' WHERE n='el';") or trigger_error($db->error);
 					if ($net>8500) alert('Power', 'Power usage: '.$net.' W!', 600, false);
 				}
 				
