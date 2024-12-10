@@ -91,7 +91,7 @@ while (1){
 					$avg=$data->active_power_average_w;
 					$db->query("UPDATE devices SET dt='$net', s='$consumption', icon='".$avg."', t='".$time."' WHERE n='el';") or trigger_error($db->error);
 					if ($net>8500) alert('Power', 'Power usage: '.$net.' W!', 600, false);
-					if ($avg>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$avg.' W!', 300, false);
+					if ($avg>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$avg.' Wh!', 300, false);
 				}
 				
 			}
