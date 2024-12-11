@@ -29,7 +29,8 @@ if (isset($_REQUEST['t'])) {
 	}
 	$d['net']=mget('net');
 	$d['avg']=mget('avg');
-	$d['zon']=mget('zon');
+	$zon=mget('zon');
+	if($zon>0) $d['zon']=mget('zon');
 	echo json_encode($d);
 	exit;
 } elseif (isset($_REQUEST['q'])) {
@@ -244,7 +245,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				sleep(1);
 				sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			} elseif ($_REQUEST['command']=='Off') {
+			} elseif ($_REQUEST['command']=='Off'||$_REQUEST['action']==0) {
 				sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 			}
@@ -252,7 +253,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			if ($_REQUEST['command']=='On') {
 				sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('GroheRed', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			} elseif ($_REQUEST['command']=='Off') {
+			} elseif ($_REQUEST['command']=='Off'||$_REQUEST['action']==0) {
 				sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
 			}
