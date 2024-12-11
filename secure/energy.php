@@ -18,6 +18,10 @@ while (1){
 			if ($i->type=='gas_meter') $gas=$i->value;
 			elseif ($i->type=='water_meter') $water=$i->value;
 		}
+
+
+
+
 		date_default_timezone_set('Europe/Brussels');
 		$time=time();
 		$vandaag=date("Y-m-d",$time);
@@ -56,7 +60,7 @@ while (1){
 		$db->close();
 		
 		$db=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
-		$stmt=$db->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','el','zon');");
+		$stmt=$db->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			$d[$row['n']]['s'] = $row['s'];
 			$d[$row['n']]['m'] = $row['m'];
@@ -75,9 +79,9 @@ while (1){
 			echo 'Updating zonvandaag'.PHP_EOL;
 			$db->query("UPDATE devices SET s=$zon,t=$time WHERE n='zonvandaag';");
 		}
-		if ($verbruik!=$d['el']['m']) {
-			echo 'Updating el'.PHP_EOL;
-			$db->query("UPDATE devices SET m=$verbruik,t=$time WHERE n='el';");
+		if ($verbruik!=$d['elvandaag']['s']) {
+			echo 'Updating elvandaag'.PHP_EOL;
+			$db->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
 		}
 
 		// Smappee
@@ -89,6 +93,13 @@ while (1){
 				$newzon=round($matches[1][1], 0);
 				if ($newzon<0) $newzon=0;
 				mset('zon',$newzon);
+				$power=$data->active_power_w+$newzon;
+				$alwayson=mget('alwayson');
+				if ($power<$alwayson||empty($alwayson)) {
+					mset('alwayson',$power);
+					$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
+				}
+				
 			}
 		} else {
 			if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {

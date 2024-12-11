@@ -100,6 +100,7 @@ function huisthuis($msg='') {
 //	$d=fetchdata();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
+	if ($d['Weg']['s']==1) mset('alwayson',9999);
 //	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
@@ -693,7 +694,8 @@ function fetchdata() {
 		}
 	}
 	$d['dag']=$dag;
-	$d['el']['net']=mget('el_net');
+	$d['net']=mget('el_net');
+	$d['avg']=mget('el_avg');
 	return $d;
 }
 function fetchdataidx() {
