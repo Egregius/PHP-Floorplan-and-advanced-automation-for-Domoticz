@@ -88,30 +88,48 @@ while (1){
 				$db->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
 			}
 		}
-		// Smappee
-		$ctx=stream_context_create(array('http'=>array('timeout' =>5)));
-		$smappee=@json_decode(@file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
-		if (isset($smappee['report'])&&!empty($smappee['report'])) {
-			preg_match_all("/ activePower=(\\d*.\\d*)/",$smappee['report'],$matches);
-			if (!empty($matches[1][1])) {
-				$zon=mget('zon');
-				$newzon=round($matches[1][1], 0);
-				if ($newzon<0) $newzon=0;
-				if ($zon!=$newzon) mset('zon',$newzon);
-				$power=$data->active_power_w+$newzon;
-				$alwayson=mget('alwayson');
-				if ($power<$alwayson||empty($alwayson)) {
-					mset('alwayson',$power);
-					$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
-					lg('New alwayson '.$power.' W');
-				}
-				
-			}
-		} else {
-			if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {
-				exit;
+		
+		
+		// Homewizard kWh meter
+		$zon=curl('http://192.168.2.9/api/v1/data');
+		$zon=json_decode($zon);
+		if (isset($zon->active_power_w)) {
+			$prevzon=mget('zon');
+			$newzon=$zon->active_power_w;
+			if ($prevzon!=$newzon) mset('zon',$newzon);
+			$power=$data->active_power_w+$newzon;
+			$alwayson=mget('alwayson');
+			if ($power<$alwayson||empty($alwayson)) {
+				mset('alwayson',$power);
+				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
+				lg('New alwayson '.$power.' W');
 			}
 		}
+		
+		// Smappee
+//		$ctx=stream_context_create(array('http'=>array('timeout' =>5)));
+//		$smappee=@json_decode(@file_get_contents('http://192.168.2.15/gateway/apipublic/reportInstantaneousValues', false, $ctx), true);
+//		if (isset($smappee['report'])&&!empty($smappee['report'])) {
+//			preg_match_all("/ activePower=(\\d*.\\d*)/",$smappee['report'],$matches);
+//			if (!empty($matches[1][1])) {
+//				$zon=mget('zon');
+//				$newzon=round($matches[1][1], 0);
+//				if ($newzon<0) $newzon=0;
+//				if ($zon!=$newzon) mset('zon',$newzon);
+//				$power=$data->active_power_w+$newzon;
+//				$alwayson=mget('alwayson');
+//				if ($power<$alwayson||empty($alwayson)) {
+//					mset('alwayson',$power);
+//					$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
+//					lg('New alwayson '.$power.' W');
+//				}
+//				
+//			}
+//		} else {
+//			if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {
+//				exit;
+//			}
+//		}
 	}
 	if ($x==10) exit;
 	$x++;
