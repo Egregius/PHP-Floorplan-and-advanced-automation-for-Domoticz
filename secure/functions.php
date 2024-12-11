@@ -5,6 +5,7 @@ $time=time();
 $db=dbconnect();
 $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
+date_default_timezone_set('Europe/Brussels');
 
 function t() {
 	global $dow,$t;

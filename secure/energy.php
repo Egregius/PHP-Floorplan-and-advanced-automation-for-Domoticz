@@ -1,8 +1,12 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-$x=0;
+
+$x=1;
+$sleep='	start';
 while (1){
+	$start = microtime(true);
+	
 	// Homewizard Energy
 	$data=curl('http://192.168.2.4/api/v1/data');
 	$data=json_decode($data);
@@ -11,16 +15,18 @@ while (1){
 		mset('el_avg',$data->active_power_average_w);
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
-		
-		if (date('s')==0&&date('i')%10==0) {
-			lg('Updating energy data');
+//		lg($x.' '.date('s').' '.date('i').'	'.$sleep);
+		$sec=date('s');
+		$min=date('i');
+		if (($sec==0&&$min>0&&$min%10==0)||($sec==55&&$min==59)) {
+			lg('--- Updating energy data ---');
 			$elec=$data->total_power_import_kwh;
 			$injectie=$data->total_power_export_kwh;
 			foreach ($data->external as $i) {
 				if ($i->type=='gas_meter') $gas=$i->value;
 				elseif ($i->type=='water_meter') $water=$i->value;
 			}
-			date_default_timezone_set('Europe/Brussels');
+			
 			$time=time();
 			$vandaag=date("Y-m-d",$time);
 			$gisteren=date("Y-m-d",$time-86400);
@@ -97,7 +103,7 @@ while (1){
 				if ($power<$alwayson||empty($alwayson)) {
 					mset('alwayson',$power);
 					$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
-					lg('New alwayson');
+					lg('New alwayson '.$power.' W');
 				}
 				
 			}
@@ -107,7 +113,11 @@ while (1){
 			}
 		}
 	}
+	if ($x==10) exit;
 	$x++;
-	if ($x==8) exit;
-	sleep(1);
+	$time_elapsed_secs=microtime(true)-$start;
+	$sleep=1-$time_elapsed_secs;
+	if ($sleep<0) $sleep=0;
+	$sleep=round($sleep*1000000);
+	usleep($sleep);
 }
