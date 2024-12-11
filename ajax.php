@@ -25,7 +25,7 @@ if (isset($_REQUEST['t'])) {
 		$d[$row['n']]['t']=$row['t'];
 		if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
 		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-		if(!empty($row['icon']))$d[$row['n']]['ic']=$row['icon'];
+		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	echo json_encode($d);
 	exit;
