@@ -91,7 +91,7 @@ if ($d['living_set']['m']==0) {
 			}
 			if ($d['heating']['s']==3) $Setliving=$target;
 		}
-		if ($Setliving>18&&$d['zon']['s']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$target-1;
+		if ($Setliving>18&&$d['zon']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$target-1;
 	}
 	if ($d['living_set']['s']!=$Setliving/*&&past('raamliving')>60&&past('deurinkom')>60&&past('deurgarage')>60*/) {
 		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);

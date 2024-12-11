@@ -11,8 +11,8 @@ while (1){
 	$data=curl('http://192.168.2.4/api/v1/data');
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
-		mset('el_net',$data->active_power_w);
-		mset('el_avg',$data->active_power_average_w);
+		mset('net',$data->active_power_w);
+		mset('avg',$data->active_power_average_w);
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
 //		lg($x.' '.date('s').' '.date('i').'	'.$sleep);

@@ -27,8 +27,9 @@ if (isset($_REQUEST['t'])) {
 		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
-	$d['net']=mget('el_net');
-	$d['avg']=mget('el_avg');
+	$d['net']=mget('net');
+	$d['avg']=mget('avg');
+	$d['zon']=mget('zon');
 	echo json_encode($d);
 	exit;
 } elseif (isset($_REQUEST['q'])) {

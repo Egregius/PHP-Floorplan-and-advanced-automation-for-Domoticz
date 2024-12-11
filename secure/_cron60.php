@@ -19,8 +19,8 @@ foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- THUIS ----------------------------*/
 	if ($d['Weg']['s']==0){
-//		if ($d['zon']['s']==0&&$d['tuintafel']['s']=='Off'&&$d['Rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
-//		elseif (($d['zon']['s']>0||$d['Rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
+//		if ($d['zon']==0&&$d['tuintafel']['s']=='Off'&&$d['Rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
+//		elseif (($d['zon']>0||$d['Rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
