@@ -693,6 +693,7 @@ function fetchdata() {
 		}
 	}
 	$d['dag']=$dag;
+	$d['el']['net']=mget('el_net');
 	return $d;
 }
 function fetchdataidx() {
@@ -723,14 +724,11 @@ function roundDownToAny($n,$x=5) {
 	return floor($n/$x) * $x;
 }
 function mset($key, $data, $ttl=0) {
-//	lg('mset '.$key.' '.$data);
 	global $memcache;
-	
 	$memcache->set($key, $data);
 }
 function mget($key) {
 	global $memcache;
 	$data=$memcache->get($key);
-//	lg('mget '.$key.' '.$data);
 	return $data;
 }

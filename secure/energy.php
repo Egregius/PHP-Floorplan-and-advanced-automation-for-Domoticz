@@ -1,11 +1,17 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+$x=0;
 while (1){
 	// Homewizard Energy
 	$data=curl('http://192.168.2.4/api/v1/data');
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
+		mset('el_net',$data->active_power_w);
+		mset('el_avg',$data->active_power_average_w);
+		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
+		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
+		
 		$elec=$data->total_power_import_kwh;
 		$injectie=$data->total_power_export_kwh;
 		foreach ($data->external as $i) {
@@ -82,18 +88,7 @@ while (1){
 			if (!empty($matches[1][1])) {
 				$newzon=round($matches[1][1], 0);
 				if ($newzon<0) $newzon=0;
-				if ($newzon==0 ) $db->query("UPDATE devices SET s='$newzon' WHERE n='zon';") or trigger_error($db->error);
-				else $db->query("UPDATE devices SET s='$newzon',t='".$time."' WHERE n='zon';") or trigger_error($db->error);
-		
-				if (!empty($matches[1][2])) {
-					$consumption=round($matches[1][2], 0);
-					$net=$data->active_power_w;
-					$avg=$data->active_power_average_w;
-					$db->query("UPDATE devices SET dt='$net', s='$consumption', icon='".$avg."', t='".$time."' WHERE n='el';") or trigger_error($db->error);
-					if ($net>8500) alert('Power', 'Power usage: '.$net.' W!', 600, false);
-					if ($avg>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$avg.' Wh!', 300, false);
-				}
-				
+				mset('zon',$newzon);
 			}
 		} else {
 			if (shell_exec('curl -H "Content-Type: application/json" -X POST -d "" http://192.168.2.15/gateway/apipublic/logon')!='{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}') {
@@ -101,5 +96,7 @@ while (1){
 			}
 		}
 	}
+	$x++;
+	if ($x==8) exit;
 	sleep(1);
 }
