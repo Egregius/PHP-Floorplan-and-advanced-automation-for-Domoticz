@@ -82,7 +82,7 @@ while (1){
 			$injectie=round($injectie-$gisteren['injectie'],3);
 			$verbruik=round($zonvandaag-$injectie+$elec,3);
 			$query="INSERT INTO `Guydag` (`date`,`gas`,`elec`,`verbruik`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$verbruik','$zonvandaag','$water') ON DUPLICATE KEY UPDATE `gas`='$gas',`elec`='$elec',`verbruik`='$verbruik',`zon`='$zonvandaag',`water`='$water'";
-			if(!$result=$db->query($query)){echo('There was an error running the query "'.$query.'" - '.$db->error);}
+			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			
 			if (!isset($dbdomoticz)) {
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
