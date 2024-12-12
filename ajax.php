@@ -30,7 +30,7 @@ if (isset($_REQUEST['t'])) {
 	$d['net']=mget('net');
 	$d['avg']=mget('avg');
 	$zon=mget('zon');
-	if($zon>0) $d['zon']=mget('zon');
+	if($zon!=0) $d['zon']=-mget('zon');
 	echo json_encode($d);
 	exit;
 } elseif (isset($_REQUEST['q'])) {

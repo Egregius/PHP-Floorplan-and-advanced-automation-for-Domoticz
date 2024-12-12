@@ -203,6 +203,9 @@ if ($time<=strtotime('0:02')) {
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
 
+$prevdag=mget('dag');
+if ($d['dag']!=$prevdag) mset('dag',$d['dag']);
+
 
 
 //if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);

@@ -17,28 +17,40 @@ while (1){
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
 
 		// Homewizard kWh meter
-		$zon=curl('http://192.168.2.9/api/v1/data');
-		$zon=json_decode($zon);
-		if (isset($zon->active_power_w)) {
-			$prevzon=mget('zon');
-			$newzon=$zon->active_power_w;
-			if ($prevzon!=$newzon) mset('zon',$newzon);
-			$power=$data->active_power_w+$newzon;
-			$alwayson=mget('alwayson');
-			if ($power<$alwayson||empty($alwayson)) {
-				mset('alwayson',$power);
-				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
-				lg('New alwayson '.$power.' W');
-				$vandaag=date("Y-m-d",$time);
-				if (!isset($dbverbruik)) {
-					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
-					if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
-				}
-				$query="INSERT INTO `alwayson` (`date`,`w`) VALUES ('$vandaag','$alwayson') ON DUPLICATE KEY UPDATE `w`='$alwayson'";
-				if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
+		$dag=mget('dag');
+		if ($dag>2) {
+			$zon=curl('http://192.168.2.9/api/v1/data');
+			$zon=json_decode($zon);
+			if (isset($zon->active_power_w)) {
+				$prevzon=mget('zon');
+				$newzon=round($zon->active_power_w);
+				if ($prevzon!=$newzon) mset('zon',$newzon);
+				
 			}
+		} else {
+			$prevzon=mget('zon');
+			$newzon=0;
+			if ($prevzon!=$newzon) mset('zon',$newzon);
 		}
 		
+		// Combined
+		$power=$data->active_power_w-$newzon;
+		$alwayson=mget('alwayson');
+		if ($power<$alwayson||empty($alwayson)) {
+			mset('alwayson',$power);
+			$time=time();
+			$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
+			lg('New alwayson '.$power.' W');
+			$vandaag=date("Y-m-d",$time);
+			if (!isset($dbverbruik)) {
+				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
+				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+			}
+			$query="INSERT INTO `alwayson` (`date`,`w`) VALUES ('$vandaag','$alwayson') ON DUPLICATE KEY UPDATE `w`='$alwayson'";
+			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
+		}
+		
+		// Updating verbruik database
 		$sec=date('s');
 		$min=date('i');
 		if (($sec==0&&$min>0&&$min%10==0)||($sec==55&&$min==59)) {
