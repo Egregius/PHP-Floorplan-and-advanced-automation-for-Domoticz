@@ -246,20 +246,20 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				shell_exec('/var/www/sleepnas.sh');
 			}
 		} elseif ($_REQUEST['device']=='powermeter') {
-			if ($_REQUEST['command']=='On') {
+			if ($_REQUEST['action']>0) {
 				mset('powermeter',time());
 				sleep(1);
 				if (mget('avg')<$_REQUEST['action']) sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			} elseif ($_REQUEST['command']=='Off'||$_REQUEST['action']==0) {
+			} else {
 				sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='GroheRed') {
-			if ($_REQUEST['command']=='On') {
+			if ($_REQUEST['action']>0) {
 				if (mget('avg')<$_REQUEST['action']) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('GroheRed', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			} elseif ($_REQUEST['command']=='Off'||$_REQUEST['action']==0) {
+			} else {
 				sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
 			}
