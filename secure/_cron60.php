@@ -203,8 +203,37 @@ if ($time<=strtotime('0:02')) {
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
 
-$prevdag=mget('dag');
-if ($d['dag']!=$prevdag) mset('dag',$d['dag']);
+$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
+if (isset($data->CivTwilightStart)) {
+	$CivTwilightStart=strtotime($data->CivTwilightStart);
+	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
+	$Sunrise=strtotime($data->Sunrise);
+	$Sunset=strtotime($data->Sunset);
+	if ($time>=$CivTwilightStart&&$time<=$CivTwilightEnd) {
+		$dag=1;
+		if ($time>=$Sunrise&&$time<=$Sunset) {
+			if ($time>=$Sunrise+900&&$time<=$Sunset-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($CivTwilightStart+$Sunrise)/2;
+			$zononder=($CivTwilightEnd+$Sunset)/2;
+			if ($time>=$zonop&&$time<=$zononder) $dag=2;
+		}
+	}
+	$prevdag=mget('dag');
+	if ($dag!=$prevdag) mset('dag',$dag);
+	mset('CivTwilightStart', date('G:i', $CivTwilightStart));
+	mset('CivTwilightEnd', date('G:i', $CivTwilightEnd));
+	mset('Sunrise', date('G:i', $Sunrise));
+	mset('Sunset', date('G:i', $Sunset));
+} else lg('Error fetching CivTwilightStart from domoticz');
+
+
+
+
+
+
+
 
 
 

@@ -101,7 +101,6 @@ function huisthuis($msg='') {
 //	$d=fetchdata();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
-	if ($d['Weg']['s']==1) mset('alwayson',9999);
 //	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
 //	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 //	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
@@ -681,20 +680,7 @@ function fetchdata() {
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
-	$dag=0;
-	$time=time();
-	if ($time>=$d['civil_twilight']['s']&&$time<=$d['civil_twilight']['m']) {
-		$dag=1;
-		if ($time>=$d['Sun']['s']&&$time<=$d['Sun']['m']) {
-			if ($time>=$d['Sun']['s']+900&&$time<=$d['Sun']['m']-900) $dag=4;
-			else $dag=3;
-		} else {
-			$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-			$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
-			if ($time>=$zonop&&$time<=$zononder) $dag=2;
-		}
-	}
-	$d['dag']=$dag;
+	$d['dag']=mget('dag');
 	$d['net']=mget('net');
 	$d['avg']=mget('avg');
 	$d['zon']=mget('zon');
@@ -705,20 +691,7 @@ function fetchdataidx() {
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
-	$dag=0;
-	$time=time();
-	if ($time>=$d[9992]['s']&&$time<=$d[9992]['m']) {
-		$dag=1;
-		if ($time>=$d[9991]['s']&&$time<=$d[9991]['m']) {
-			if ($time>=$d[9991]['s']+900&&$time<=$d[9991]['m']-900) $dag=4;
-			else $dag=3;
-		} else {
-			$zonop=($d[9992]['s']+$d[9991]['s'])/2;
-			$zononder=($d[9992]['m']+$d[9991]['m'])/2;
-			if ($time>=$zonop&&$time<=$zononder) $dag=2;
-		}
-	}
-	$d['dag']=$dag;
+	$d['dag']=mget('dag');
 	return $d;
 }
 function roundUpToAny($n,$x=5) {

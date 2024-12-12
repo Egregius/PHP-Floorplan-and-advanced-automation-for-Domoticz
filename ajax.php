@@ -31,6 +31,12 @@ if (isset($_REQUEST['t'])) {
 	$d['avg']=mget('avg');
 	$zon=mget('zon');
 	if($zon!=0) $d['zon']=-mget('zon');
+	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
+		$d['CivTwilightStart']=mget('CivTwilightStart');
+		$d['Sunrise']=mget('Sunrise');
+		$d['Sunset']=mget('Sunset');
+		$d['CivTwilightEnd']=mget('CivTwilightEnd');
+	}
 	echo json_encode($d);
 	exit;
 } elseif (isset($_REQUEST['q'])) {

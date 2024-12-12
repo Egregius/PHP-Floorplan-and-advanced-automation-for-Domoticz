@@ -6,7 +6,7 @@ $time=time();
 $user='cron3600';
 
 if (date('G')==0) {
-	if ($d['winst']['s']!=0) store ('winst', 0);
+	mset('alwayson',9999);
 }
 
 
@@ -17,18 +17,27 @@ foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,2
 	$db->query($query);
 }
 	
-$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'), true);
-if (isset($data['CivTwilightStart'])) {
-	$name='civil_twilight';
-	$status=strtotime($data['CivTwilightStart']);
-	$mode=strtotime($data['CivTwilightEnd']);
-	$db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$status','$mode','$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', t='$time';");
-	$name='Sun';
-	$status=strtotime($data['Sunrise']);
-	$mode=strtotime($data['Sunset']);
-	$icon=strtotime($data['SunAtSouth']);
-	$db->query("INSERT INTO devices (n,s,m,icon,t) VALUES ('$name', '$status', '$mode', '$icon', '$time') ON DUPLICATE KEY UPDATE s='$status', m='$mode', icon='$icon', t='$time';");
+$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
+if (isset($data->CivTwilightStart)) {
+	$CivTwilightStart=strtotime($data->CivTwilightStart);
+	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
+	$Sunrise=strtotime($data->Sunrise);
+	$Sunset=strtotime($data->Sunset);
+	if ($time>=$CivTwilightStart&&$time<=$CivTwilightEnd) {
+		$dag=1;
+		if ($time>=$Sunrise&&$time<=$Sunset) {
+			if ($time>=$Sunrise+900&&$time<=$Sunset-900) $dag=4;
+			else $dag=3;
+		} else {
+			$zonop=($CivTwilightStart+$Sunrise)/2;
+			$zononder=($CivTwilightEnd+$Sunset)/2;
+			if ($time>=$zonop&&$time<=$zononder) $dag=2;
+		}
+	}
+	mset('dag',$dag);
+	mset('CivTwilightStart', date('G:i', $CivTwilightStart));
 } else lg('Error fetching CivTwilightStart from domoticz');
+
 
 /* Clean old database records */
 
