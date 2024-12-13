@@ -209,6 +209,7 @@ if (isset($data->CivTwilightStart)) {
 	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
 	$Sunrise=strtotime($data->Sunrise);
 	$Sunset=strtotime($data->Sunset);
+	$dag=0;
 	if ($time>=$CivTwilightStart&&$time<=$CivTwilightEnd) {
 		$dag=1;
 		if ($time>=$Sunrise&&$time<=$Sunset) {
