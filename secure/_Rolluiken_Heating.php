@@ -2,7 +2,7 @@
 $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['Weg']['s']==0&&$d['dag']>0))&&$time<strtotime('8:30')) {
+	if (($time>=$t||($d['Weg']['s']==0&&$d['dag']>1))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['RkamerL']['s']>0) sl('RkamerL', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['RkamerR']['s']>0) sl('RkamerR', 0, basename(__FILE__).':'.__LINE__);
@@ -31,7 +31,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	elseif ($time>=strtotime('18:00')&&$time<strtotime('22:00')) {
-		if ($d['dag']==0) {
+		if ($d['dag']<=1) {
 			foreach (array('Rwaskamer','Ralex','RkamerL','RkamerR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			if ($d['Weg']['s']>=1) {
 				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
