@@ -66,27 +66,27 @@ $Setliving=15;
 if ($d['Weg']['s']<=2&&$d['heating']['s']>=3) $Setliving=17;
 if ($d['living_set']['m']==0) {
 	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
-		if ($d['Weg']['s']<2) {
-			$target=19;
-			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=($target-$d['buiten_temp']['s'])*100; else $factor=1000;
+		if ($d['Weg']['s']<=1) {
+			$Setliving=18;
+			if ($d['buiten_temp']['s']>-30&&$d['buiten_temp']['s']<50) $factor=($Setliving-$d['buiten_temp']['s'])*100; else $factor=1000;
 			for ($x=0;$x<=5;$x+=0.1) {
 				if ($d['heating']['s']>=2) $t2=$t-($factor*$x);
 				else $t2=$t;
 				if ($time>=$t2&&$time<strtotime('19:45')) {
-					$Setliving=round($target-$x, 1);
+					$Setliving=round($Setliving-$x, 1);
 					break;
 				}
 			}
 			if ($d['Weg']['s']==0) {
-				if ($time>=$t&&$time<strtotime('19:40')) $Setliving=$target;
-				if ($dow==1&&$time>=strtotime('8:05')&&$time<strtotime('15:00')) $Setliving=$target-2;
-				elseif ($dow==2&&$time>=strtotime('8:05')&&$time<strtotime('15:00')) $Setliving=$target-2;
-				elseif ($dow==3&&$time>=strtotime('8:05')&&$time<strtotime('12:00')) $Setliving=$target-2;
-				elseif ($dow==4&&$time>=strtotime('8:05')&&$time<strtotime('15:00')) $Setliving=$target-2;
-				elseif ($dow==5&&$time>=strtotime('8:05')&&$time<strtotime('12:00')) $Setliving=$target-2;
-				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving=$target-2;
+				if ($dow==1&&$time>=strtotime('15:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==2&&$time>=strtotime('15:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==3&&$time>=strtotime('12:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==4&&$time>=strtotime('15:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==5&&$time>=strtotime('12:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==6&&$time>=strtotime('8:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				elseif ($dow==0&&$time>=strtotime('8:00')&&$time<strtotime('19:00')) $Setliving+=1;
+				if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving-=1;
 			}
-			if ($d['heating']['s']==3) $Setliving=$target;
 		}
 		if ($Setliving>18&&$d['zon']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$target-1;
 	}
