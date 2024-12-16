@@ -217,8 +217,7 @@ function store($name='',$status='',$msg='',$idx=null) {
 		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
-	return;
-	/*if ($name!='crypto'&&!endswith($name, '_temp')&&strlen($msg>0)) */
+//	return;
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 	else {
 		if (endswith($name, '_temp')) return;

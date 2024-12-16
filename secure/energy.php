@@ -6,9 +6,22 @@ $x=1;
 $sleep='	start';
 while (1){
 	$start = microtime(true);
-	
-	// Homewizard Energy
+	$dag=mget('dag');
 	$data=curl('http://192.168.2.4/api/v1/data');
+	if ($dag>2) {
+		$zon=curl('http://192.168.2.9/api/v1/data');
+		$zon=json_decode($zon);
+		if (isset($zon->active_power_w)) {
+			$prevzon=mget('zon');
+			$newzon=round($zon->active_power_w);
+			if ($prevzon!=$newzon) mset('zon',$newzon);
+			
+		}
+	} else {
+		$prevzon=mget('zon');
+		$newzon=0;
+		if ($prevzon!=$newzon) mset('zon',$newzon);
+	}
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
 		mset('net',$data->active_power_w);
@@ -16,24 +29,6 @@ while (1){
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
 
-		// Homewizard kWh meter
-		$dag=mget('dag');
-		if ($dag>2) {
-			$zon=curl('http://192.168.2.9/api/v1/data');
-			$zon=json_decode($zon);
-			if (isset($zon->active_power_w)) {
-				$prevzon=mget('zon');
-				$newzon=round($zon->active_power_w);
-				if ($prevzon!=$newzon) mset('zon',$newzon);
-				
-			}
-		} else {
-			$prevzon=mget('zon');
-			$newzon=0;
-			if ($prevzon!=$newzon) mset('zon',$newzon);
-		}
-		
-		// Combined
 		$power=$data->active_power_w-$newzon;
 		$alwayson=mget('alwayson');
 		if ($power<$alwayson||empty($alwayson)) {
