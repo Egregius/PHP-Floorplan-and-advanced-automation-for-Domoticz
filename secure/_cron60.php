@@ -2,7 +2,7 @@
 $d=fetchdata();
 $t=t();
 
-$user='cron60  ';
+$user=basename(__FILE__);
 //lg($user);
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];

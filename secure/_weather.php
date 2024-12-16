@@ -1,6 +1,6 @@
 <?php
 if (!is_array($d)) $d=fetchdata();
-$user='weather';
+$user=basename(__FILE__);
 $prevwind=$d['wind']['s'];
 //lg ('Weather');
 $wind=$prevwind;

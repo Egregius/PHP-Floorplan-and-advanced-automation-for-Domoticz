@@ -1,4 +1,5 @@
 <?php
+$user=basename(__FILE__);
 $db=dbconnect();
 $domoticz=json_decode(
 	file_get_contents(

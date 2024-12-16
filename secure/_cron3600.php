@@ -3,7 +3,7 @@
 if (!isset($db)) $db=dbconnect();
 $d=fetchdata();
 $time=time();
-$user='cron3600';
+$user=basename(__FILE__);
 
 if (date('G')==0) {
 	mset('alwayson',9999);

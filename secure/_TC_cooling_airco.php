@@ -1,4 +1,5 @@
 <?php
+$user=basename(__FILE__);
 if ($d['daikin']['m']==1) {
 	if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 	$bigdif=-100;

@@ -1,6 +1,6 @@
 <?php
 $d=fetchdata();
-$user='cron180';
+$user=basename(__FILE__);
 if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$data=daikinstatus($k);

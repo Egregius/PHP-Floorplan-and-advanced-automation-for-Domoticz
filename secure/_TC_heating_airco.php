@@ -1,4 +1,5 @@
 <?php
+$user=basename(__FILE__);
 if ($d['daikin']['m']==1) {
 	$bigdif=0;
 	foreach (array('living','kamer','alex') as $k) {

@@ -1,4 +1,5 @@
 <?php
+$user=basename(__FILE__);
 $boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
 $beneden=array('Rbureel','RkeukenL','RkeukenR');
 if ($d['auto']['s']=='On') {

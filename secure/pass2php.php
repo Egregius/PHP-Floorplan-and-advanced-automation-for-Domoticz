@@ -1,5 +1,6 @@
 <?php
 require '/var/www/html/secure/functions.php';
+$user=basename(__FILE__);
 $device=$_REQUEST['d'];
 $status=$_REQUEST['s'];
 if ($device=='winst') {

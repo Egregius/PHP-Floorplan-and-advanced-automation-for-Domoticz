@@ -1,6 +1,6 @@
 <?php
 $d=fetchdata();
-$user='cron120';
+$user=basename(__FILE__);
 //lg($user);
 $stamp=date('Y-m-d H:i:s', $time-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";

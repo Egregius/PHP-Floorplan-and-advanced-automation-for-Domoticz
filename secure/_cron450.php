@@ -1,6 +1,6 @@
 <?php
 $d=fetchdata();
-$user='cron360';
+$user=basename(__FILE__);
 if(isset($db)) $db=dbconnect();
 
 
