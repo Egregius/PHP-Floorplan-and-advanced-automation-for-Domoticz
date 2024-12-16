@@ -26,7 +26,7 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		unset($status);
 	}
 	foreach(array(101,102) as $ip) {
-		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+		$status=file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
 			lg('INVALID SOURCE');
 			if ($weekend==true) {
