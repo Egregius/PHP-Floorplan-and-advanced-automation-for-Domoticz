@@ -3,7 +3,7 @@ require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$user='camera';
 	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-	$result = $mysqli->query("select n,i,s,t,m from devices WHERE n in ('Weg', 'auto', 'poortrf', 'deurvoordeur','civil_twilight', 'Sun', 'zon', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
+	$result = $mysqli->query("select n,i,s,t,m from devices WHERE n in ('Weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
 		$d[$row['n']]['i'] = $row['i'];
 		$d[$row['n']]['s'] = $row['s'];
@@ -20,8 +20,6 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$times[]=TIME-$d['Weg']['t'];
 
 	$data['t']=min($times);
-	$zonop=($d['civil_twilight']['s']+$d['Sun']['s'])/2;
-	$zononder=($d['civil_twilight']['m']+$d['Sun']['m'])/2;
 	if ($d['Weg']['s']==0&&$data['t']>90&&!isset($_GET['eufy'])) {
 		$memcache=new Memcache;
 		$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
@@ -32,7 +30,7 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 		}
 		mset('bewegingvoordeur', $_SERVER['REQUEST_TIME']);
 	}
-	if ($d['zon']['s']==0&&(TIME<$zonop||TIME>$zononder)) {
+	if (mget('dag')<2) {
 		$data['z']=0;
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	} else $data['z']=1;

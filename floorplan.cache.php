@@ -213,7 +213,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			echo '
 					<td>'.$row['n'].'</td>
 					<td>'.number_format($row['s'], 1, ',', '').' kWh</td>
-					<td>'.number_format($row['m'], 1, ',', '').' % Ref</td>';
+					<td>'.($row['m']>0?number_format($row['m'], 1, ',', ''):0).' % Ref</td>';
 		} elseif ($row['n']=='max') {
 			echo '
 					<td>Max voorspeld</td>
@@ -234,11 +234,6 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					<td>Elec</td>
 					<td class="right">'.number_format($row['s'], 0).' W</td>
 					<td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
-		} elseif ($row['n']=='civil_twilight'||$row['n']=='Sun') {
-			echo '
-					<td>'.$row['n'].'</td>
-					<td>'.date('G:i:s', $row['s']).'</td>
-					<td>'.date('G:i:s', $row['m']).'</td>';
 		} elseif ($row['n']=='icon') {
 			echo '
 					<td>icon</td>

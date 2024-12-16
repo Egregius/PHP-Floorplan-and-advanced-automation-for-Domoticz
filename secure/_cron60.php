@@ -38,26 +38,8 @@ if ($d['auto']['s']=='On') {
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
-		
-/*		if ($d['bose101']['s']=='On') {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.101:8090/now_playing"))), true);
-			if (isset($nowplaying['@attributes']['sourceAccount'])&&$nowplaying['@attributes']['sourceAccount']=='egregiusspotify') {
-				$id=str_replace('spotify:track:', '', $nowplaying['trackID']);
-				file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
-			}
-		}*/
 		if ($d['dag']<=1&&$d['lg_webos_tv_cd9e']['s']=='On'&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	/* -------------------------------------------- SLAPEN ----------------------*/
-/*	if ($d['Weg']['s']==1){
-		if ($d['bose105']['s']=='On') {
-			$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.105:8090/now_playing"))), true);
-			if (isset($nowplaying['@attributes']['sourceAccount'])&&$nowplaying['@attributes']['sourceAccount']=='egregiusspotify') {
-				$id=str_replace('spotify:track:', '', $nowplaying['trackID']);
-				file_get_contents('https://secure.egregius.be/spotify/store_played.php?id='.$id);
-			}
-		}
-	}*/
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {
 		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
@@ -197,11 +179,7 @@ if ($d['auto']['s']=='On') {
 	}
 }
 
-	/* -------------------------------------------- ALTIJD ----------------------------*/
-if ($time<=strtotime('0:02')) {
-	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
-	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
-}
+/* -------------------------------------------- ALTIJD ----------------------------*/
 
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
 if (isset($data->CivTwilightStart)) {
