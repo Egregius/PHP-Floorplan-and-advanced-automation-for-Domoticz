@@ -115,6 +115,33 @@ while (1){
 			if ($zonvandaag!=$d['zonvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
 			if ($verbruik!=$d['elvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
 		}
+		if ($uur==0&&$min==1&&$sec==0) {
+			if (!isset($dbverbruik)) {
+				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
+				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+			}
+			$since=date("Y-m-d",$time-(86400*30));
+			$query="SELECT AVG(gas) AS gas, AVG(elec) AS elec, AVG(water)*1000 AS water FROM `Guydag` WHERE date>'$since'";
+			echo $query.PHP_EOL;
+			if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" '.$dbverbruik->error);
+			while($row=$result->fetch_assoc())$avg=$row;$result->free();
+			if (isset($avg)) {
+				if (!isset($dbdomoticz)) {
+					$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
+				}
+				$dbdomoticz->query("UPDATE devices SET m=".round($avg['water'],3)." WHERE n='watervandaag';");
+				$dbdomoticz->query("UPDATE devices SET m=".round($avg['gas'],3)." WHERE n='gasvandaag';");
+				$dbdomoticz->query("UPDATE devices SET m=".round($avg['elec'],3)." WHERE n='elvandaag';");
+			}
+			if (!isset($dbzonphp)) {
+				$dbzonphp=new mysqli('192.168.2.20','home','H0m€','egregius_zonphp');
+				if($dbzonphp->connect_errno>0){die('Unable to connect to database ['.$dbzonphp->connect_error.']');}
+			}
+			$query="SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer='2009-".date('m')."-01 00:00:00'";
+			if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
+			while($row=$result->fetch_assoc())$zonref=$row['Dag_Refer'];$result->free();
+			if (isset($zonref))	$dbdomoticz->query("UPDATE devices SET m=".$zonref." WHERE n='zonvandaag';");
+		}
 	}
 	if ($x==10) exit;
 	$x++;
