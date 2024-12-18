@@ -68,11 +68,6 @@ if (past('Weg')>18000&& $d['Weg']['s']==0&& past('pirliving')>18000&& past('pirk
 }*/
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 
-$ctx=stream_context_create(array('http'=>array('timeout'=>10)));
-$data=json_decode(file_get_contents('https://verbruik.egregius.be/tellerjaar.php',false,$ctx),true);
-if (!empty($data)) {
-	if ($data['zonpercent']!=$d['zonvandaag']['m']) storemode('zonvandaag', $data['zonpercent'], basename(__FILE__).':'.__LINE__);
-}
 if ($d['daikin']['s']=='On'&&past('daikin')>178) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($k=='living') $ip=111;

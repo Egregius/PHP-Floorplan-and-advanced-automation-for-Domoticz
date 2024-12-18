@@ -30,7 +30,7 @@ if (isset($_REQUEST['t'])) {
 	$d['net']=mget('net');
 	$d['avg']=mget('avg');
 	$zon=mget('zon');
-	if($zon!=0) $d['zon']=-mget('zon');
+	if($zon!=0) $d['zon']=-$zon;
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$d['CivTwilightStart']=mget('CivTwilightStart');
 		$d['Sunrise']=mget('Sunrise');
