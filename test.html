@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cirkel met percentage kleur</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="circleCanvas" width="200" height="200"></canvas>
+
+  <script>
+function drawCircle(value, maxValue) {
+  const canvas = document.getElementById('circleCanvas');
+  const ctx = canvas.getContext('2d');
+  const radius = canvas.width / 2;
+  const startAngle = -Math.PI / 2; // Start aan de bovenkant (12 uur)
+
+  // Bereken het percentage op basis van de waarde en de maxwaarde
+  const percentage = value / maxValue; 
+  const endAngle = startAngle + (percentage * 2 * Math.PI); // Hoek voor het percentage
+
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Cirkel tekenen (grijze achtergrond)
+  ctx.beginPath();
+  ctx.arc(radius, radius, radius - 10, 0, 2 * Math.PI);
+  ctx.lineWidth = 10; // Dikte van de rand
+  ctx.strokeStyle = '#ddd'; // Grijze kleur voor de rand
+  ctx.stroke();
+
+  // Kleur het percentage van de cirkel
+  ctx.beginPath();
+  ctx.arc(radius, radius, radius - 10, startAngle, endAngle);
+  ctx.lineWidth = 10;
+  ctx.strokeStyle = '#4caf50'; // Groene kleur voor het percentage
+  ctx.stroke();
+}
+
+// Voorbeeld: teken de cirkel voor een waarde van 75 uit een maximum van 100
+drawCircle(75, 100);  // Hier kun je de waarde en maxwaarde aanpassen
+
+
+</script>
+</body>
+</html>
