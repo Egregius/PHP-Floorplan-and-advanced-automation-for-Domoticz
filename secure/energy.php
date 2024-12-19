@@ -57,7 +57,7 @@ while (1){
 			$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i')."','".$data->active_power_average_w."')";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 		}
-		if ($uur>=6&&(($uur<23&&$min%10==0&&$sec==0)||($uur==23&&$min==59&&$sec==55))) {
+		if ($uur>=5&&(($uur<23&&$min%10==0&&$sec==0)||($uur==23&&$min==59&&$sec==55))) {
 			lg('--- Updating energy data ---');
 			$elec=$data->total_power_import_kwh;
 			$injectie=$data->total_power_export_kwh;
