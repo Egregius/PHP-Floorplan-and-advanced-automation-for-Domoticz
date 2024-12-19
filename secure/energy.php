@@ -28,7 +28,7 @@ while (1){
 		mset('avg',$data->active_power_average_w);
 		$prevtotal=mget('energytotal');
 		var_dump($prevtotal);
-		$total=(int)(($data->total_power_import_kwh*10)+($data->total_power_export_kwh*10)+($data->total_gas_m3*1000));
+		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		var_dump($total);
 		mset('energytotal',$total);
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
@@ -115,7 +115,12 @@ while (1){
 				$d[$row['n']]['m'] = $row['m'];
 			}
 			$water=$water*1000;
-			$verbruik=round($verbruik, 1);
+			if($verbruik>=10) $verbruik=round($verbruik, 1);
+			elseif($verbruik>=2) $verbruik=round($verbruik, 2);
+			else $verbruik=round($verbruik, 3);
+			if($zonvandaag>=10) $zonvandaag=round($zonvandaag, 1);
+			elseif($zonvandaag>=2) $zonvandaag=round($zonvandaag, 2);
+			else $zonvandaag=round($zonvandaag, 3);
 			if ($water!=$d['watervandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$water,t=$time WHERE n='watervandaag';");
 			if ($gas!=$d['gasvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$gas,t=$time WHERE n='gasvandaag';");
 			if ($zonvandaag!=$d['zonvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
