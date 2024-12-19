@@ -37,7 +37,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	$d=fetchdata();
-	if ($d['zon']<400&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']<300&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d,$time;
