@@ -36,6 +36,7 @@ if (isset($_REQUEST['t'])) {
 		$d['Sunrise']=mget('Sunrise');
 		$d['Sunset']=mget('Sunset');
 		$d['CivTwilightEnd']=mget('CivTwilightEnd');
+		$d['zonavg']=$d['zonvandaag']['icon'];
 	}
 	echo json_encode($d);
 	exit;
