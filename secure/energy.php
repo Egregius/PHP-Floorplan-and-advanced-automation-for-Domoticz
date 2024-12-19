@@ -27,9 +27,9 @@ while (1){
 		mset('net',$data->active_power_w);
 		mset('avg',$data->active_power_average_w);
 		$prevtotal=mget('energytotal');
-//		var_dump($prevtotal);
-		$total=(int)round($data->total_power_import_kwh+$data->total_power_export_kwh+$data->total_gas_m3,2)*100;
-//		var_dump($total);
+		var_dump($prevtotal);
+		$total=(int)(($data->total_power_import_kwh*10)+($data->total_power_export_kwh*10)+($data->total_gas_m3*1000));
+		var_dump($total);
 		mset('energytotal',$total);
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
