@@ -73,8 +73,9 @@ while (1){
 					$prevwater=mget('water_meter');
 					$water=$i->value;
 					if ($prevwater!=$water&&mget('Weg')>2) {
+						mset('water_meter',$water);
 						alert('water_meter', 'Water verbruik gededecteerd!', 300, true);
-						lg('Waterteller='.$water);
+						lg('Waterteller:	prev='.$prevwater.', nu='.$water);
 					}
 				}
 			}
