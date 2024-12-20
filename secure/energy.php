@@ -69,7 +69,14 @@ while (1){
 			$injectie=$data->total_power_export_kwh;
 			foreach ($data->external as $i) {
 				if ($i->type=='gas_meter') $gas=$i->value;
-				elseif ($i->type=='water_meter') $water=$i->value;
+				elseif ($i->type=='water_meter'){
+					$prevwater=mget('water_meter');
+					$water=$i->value;
+					if ($prevwater!=$water&&mget('Weg')>2) {
+						alert('water_meter', 'Water verbruik gededecteerd!', 300, true);
+						lg('Waterteller='.$water);
+					}
+				}
 			}
 			
 			$time=time();
