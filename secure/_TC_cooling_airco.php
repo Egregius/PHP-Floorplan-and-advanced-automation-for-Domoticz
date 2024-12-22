@@ -293,7 +293,8 @@ if ($d['daikin']['m']==1) {
 			elseif($d['living_set']['s']==4) $rate=6;
 			elseif($d['living_set']['s']==5) $rate=7;
 			if ($d['eettafel']['s']>0) $rate='B';
-			if($d['living_set']['s']=='D') {
+			elseif ($d['eettafel']['s']>0) $rate='B';
+		if($d['living_set']['s']=='D') {
 				$mode=2;
 				$set='M';
 				$spmode=-1;

@@ -8,7 +8,8 @@ require '/var/www/authentication.php';
 
 //mset('alwayson',9999);
 
-echo mget('dag');
+echo mset('alwayson',999);
+echo mget('alwayson');
 
 
 
