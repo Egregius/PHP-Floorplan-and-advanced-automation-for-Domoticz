@@ -8,9 +8,7 @@ require '/var/www/authentication.php';
 
 //mset('alwayson',9999);
 
-echo mset('alwayson',999);
-echo mget('alwayson');
-
+echo hass('media_player','lg_webos_tv_cd9e');
 
 
 /*-------------------------------------------------*/

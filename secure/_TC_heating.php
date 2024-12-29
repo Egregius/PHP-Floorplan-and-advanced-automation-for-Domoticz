@@ -45,6 +45,10 @@ if ($d['Weg']['s']<=2&&$d['heating']['s']>=1) {
 			$Setalex=12;
 		}
 	} else $Setalex=$d['alex_set']['s'];
+} elseif ($d['Weg']['s']>=3) {
+	$Setkamer=5;
+	$Setwaskamer=5;
+	$Setalex=5;
 } elseif ($d['heating']['s']>=1) {
 	$Setkamer=10;
 	$Setwaskamer=10;
@@ -89,10 +93,12 @@ if ($d['living_set']['m']==0) {
 				}
 			}
 			if($target2>$Setliving) $Setliving=$target2;
-		} elseif ($d['Weg']['s']==2&&$d['heating']['s']>=3) {
-			$Setliving=16;
 		}
-		if ($Setliving>18&&$d['zon']>3000&&$d['buiten_temp']['s']>15&&$time>=strtotime('11:00')) $Setliving=$target-1;
+	}
+	if ($d['Weg']['s']==2&&$d['heating']['s']>=1) {
+		$Setliving=15;
+	} elseif ($d['Weg']['s']==3&&$d['heating']['s']>=1) {
+		$Setliving=10;
 	}
 	if ($d['living_set']['s']!=$Setliving) {
 		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
