@@ -38,7 +38,10 @@ if ($d['auto']['s']=='On') {
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
-		if ($d['dag']<=1&&$d['lg_webos_tv_cd9e']['s']=='On'&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['lg_webos_tv_cd9e']['s']=='On') {
+			if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+			if (past('lg_webos_tv_cd9e')<120) hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
+		}
 	}
 	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
 	if ($d['Weg']['s']>=1) {

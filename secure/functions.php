@@ -658,6 +658,21 @@ function hass($domain,$service,$entity) {
 	if (strlen($response)>0) lg($response);
 	curl_close($ch);
 }
+function hassinput($domain,$service,$entity,$input) {
+	lg('HASS '.$domain.' '.$service.' '.$entity);
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
+	curl_setopt($ch,CURLOPT_POST,1);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlYzFjYTVlOWY0MWE0ZWEwOTY0NjFmM2QzN2QxMjg0MiIsImlhdCI6MTcxMzU0OTY4MCwiZXhwIjoyMDI4OTA5NjgwfQ.TpYxRLRMEezo1Jx4buGYAE6UN0ku6tEuhExc3KetjPw'));
+	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'","source":"'.$input.'"}');
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$response=curl_exec($ch);
+	if (strlen($response)>0) lg($response);
+	curl_close($ch);
+}
+
 function curl($url) {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);

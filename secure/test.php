@@ -8,7 +8,9 @@ require '/var/www/authentication.php';
 
 //mset('alwayson',9999);
 
-echo hass('media_player','lg_webos_tv_cd9e');
+hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
+
+
 
 
 /*-------------------------------------------------*/

@@ -73,6 +73,7 @@ if ($d['Weg']['s']==0) {
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
 			}
+			if (past('lg_webos_tv_cd9e')<35) hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
 		}
 		if (past('pirhall')<300) {
 			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
@@ -82,5 +83,6 @@ if ($d['Weg']['s']==0) {
 				unset($kodi);
 			}
 		}
+		
 	}
 }
