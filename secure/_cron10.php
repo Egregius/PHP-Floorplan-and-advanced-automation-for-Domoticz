@@ -46,7 +46,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['Media']=='On'&&$time>strtotime('19:00')) $i=5;
+		if ($d['lg_webos_tv_cd9e']=='On'&&$time>strtotime('19:00')) $i=5;
 		else $i=35;
 		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 			foreach (array(5,0) as $i) {

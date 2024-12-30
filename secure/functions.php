@@ -60,13 +60,13 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<2||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
 	global $d,$time;
 	$d=fetchdata();
-	if ($d['zon']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<3)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+	if ($d['zon']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<2)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$t,$time;

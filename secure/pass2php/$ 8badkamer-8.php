@@ -1,6 +1,7 @@
 <?php
 if ($d['lichtbadkamer']['s']>0) sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
-mset('lichtbadkamer', time());
+$time=time();
+mset('lichtbadkamer', $time);
 
 $t=t();
 if ($d['Weg']['s']==1&&$time>$t&&$time<$t+2700) huisthuis();
