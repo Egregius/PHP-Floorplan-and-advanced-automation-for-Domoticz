@@ -497,7 +497,7 @@ function createheader($page='') {
 		<title>Floorplan</title>';
 	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.86,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.68,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
 		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.15,user-scalable=yes,minimal-ui">';
@@ -517,16 +517,12 @@ function createheader($page='') {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="theme-color" content="#000">
+		<link rel="manifest" href="/manifest.json">
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<script type="text/javascript" src="/scripts/m4q.min.js"></script>';
-	if ($page=='energy') echo '
-		<link rel="stylesheet" type="text/css" href="/styles/energy.css">
-		<script type="text/javascript" src="/scripts/energy.js"></script>';
-	else echo '
-		<link rel="manifest" href="/manifest.json">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
+		<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
 	if ($page!='') {
 		echo '
