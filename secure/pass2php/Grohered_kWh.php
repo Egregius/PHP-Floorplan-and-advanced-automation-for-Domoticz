@@ -1,6 +1,6 @@
 <?php
 //lg('grohered='.$status);
-lg('Grohered_kWh: status='.$status.', Xlightmode='.$d['Xlight']['m']);
+//lg('Grohered_kWh: status='.$status.', Xlightmode='.$d['Xlight']['m']);
 if ($status>100&&($d['Xlight']['m']=='groen'||$d['Xlight']['m']=='uit')) {
 	rgb('Xlight', 0, 70);
 	storemode('Xlight', 'rood');
