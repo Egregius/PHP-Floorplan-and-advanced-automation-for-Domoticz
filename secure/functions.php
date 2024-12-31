@@ -517,12 +517,16 @@ function createheader($page='') {
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="theme-color" content="#000">
-		<link rel="manifest" href="/manifest.json">
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
+		<script type="text/javascript" src="/scripts/m4q.min.js"></script>';
+	if ($page=='energy') echo '
+		<link rel="stylesheet" type="text/css" href="/styles/energy.css">
+		<script type="text/javascript" src="/scripts/energy.js"></script>';
+	else echo '
+		<link rel="manifest" href="/manifest.json">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
-		<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
 	if ($page!='') {
 		echo '
