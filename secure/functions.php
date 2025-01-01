@@ -497,19 +497,19 @@ function createheader($page='') {
 		<title>Floorplan</title>';
 	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.68,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.15,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
 	} elseif ($udevice=='iPhone') {
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
 	} else {
 		echo '
-		<meta name="viewport" content="width=device-width,height=device-height,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
 	}
 	echo '
 		<meta name="HandheldFriendly" content="true">
@@ -531,7 +531,7 @@ function createheader($page='') {
 		</script>';
 	}
 	echo '
-	</head>';
+	</head>'.$udevice.' '.$ipaddress;
 }
 function daikinstatus($device) {
 	if ($device=='living') $ip=111;
