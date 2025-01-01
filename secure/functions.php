@@ -531,7 +531,7 @@ function createheader($page='') {
 		</script>';
 	}
 	echo '
-	</head>'.$udevice.' '.$ipaddress;
+	</head>';
 }
 function daikinstatus($device) {
 	if ($device=='living') $ip=111;
