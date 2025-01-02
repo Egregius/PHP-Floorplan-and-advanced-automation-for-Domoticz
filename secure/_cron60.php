@@ -108,11 +108,11 @@ if ($d['auto']['s']=='On') {
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($time>=strtotime('10:00')&&$time<strtotime('10:05')) {
-		foreach (array('RkamerL','RkamerR','Rwaskamer','Ralex') as $i) {
-			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-		}
-	}
+//	if ($time>=strtotime('10:00')&&$time<strtotime('10:05')) {
+//		foreach (array('RkamerL','RkamerR','Rwaskamer','Ralex') as $i) {
+//			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+//		}
+//	}
 	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
 		$past=past('GroheRed');
 		if ($d['Grohered_kWh']['s']<50&&$past>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
