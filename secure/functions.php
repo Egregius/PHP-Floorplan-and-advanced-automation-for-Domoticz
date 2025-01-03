@@ -37,14 +37,14 @@ function fliving() {
 function fgarage() {
 	global $d;
 	$d=fetchdata();
-	if ($d['zon']<300&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['dag']<3&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer() {
 	global $d,$time;
 	$d=fetchdata();
 	$last=mget('lichtbadkamer');
 	$time=time();
-	if ($time>$last+15&&$d['lichtbadkamer']['s']<16&&$d['dag']<3) {
+	if ($time>$last+9&&$d['lichtbadkamer']['s']<16&&$d['dag']<3&&past('$ 8badkamer-8')>9) {
 		$t=t();
 		if ($time>$t&&$time<strtotime('21:00')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 		elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);

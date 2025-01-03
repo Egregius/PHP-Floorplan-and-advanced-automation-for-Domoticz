@@ -219,12 +219,17 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				elseif($d['Weg']['s']==2) {
 					telegram('Huis thuis door OwnTracks',false);
 					huisthuis('door OwnTracks.');
+					$time=time();
+					mset('remoteauto', $time);
 				}
 			} elseif($d['Weg']['s']==2) {
 				telegram('Huis thuis door OwnTracks',false);
 				huisthuis('door OwnTracks.');
+				$time=time();
+				mset('remoteauto', $time);
 			} elseif($d['Weg']['s']==0) {
 				huisthuis('door OwnTracks.');
+				
 			}
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));
