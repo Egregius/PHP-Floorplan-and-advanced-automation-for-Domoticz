@@ -44,19 +44,16 @@ function fbadkamer() {
 	$d=fetchdata();
 	$last=mget('lichtbadkamer');
 	$time=time();
-	if ($time>$last+10) {
-		if ($d['lichtbadkamer']['s']<16&&$d['dag']<3&&$d['zon']<50) {
-			$t=t();
-			if ($time>$t&&$time<strtotime('21:00')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
-			elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
-		}
+	if ($time>$last+15&&$d['lichtbadkamer']['s']<16&&$d['dag']<3) {
+		$t=t();
+		if ($time>$t&&$time<strtotime('21:00')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
+		elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fkeuken() {
-	global $d,$time;
+	global $d;
 	$d=fetchdata();
-//	echo ('fkeuken zon='.$d['zon'].' dag='.$d['dag'].' wasbak='.$d['wasbak']['s'].' snijplank='.$d['snijplank']['s'].' RkeukenL='.$d['RkeukenL']['s']);
-	if (1==2) { //Snijplank ook aan leggen bij feestjes
+	if (1==2) {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
@@ -89,23 +86,12 @@ function huisslapen($weg=false) {
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-//	foreach(array('waskamer', 'alex') as $i) {
-//		if ($d[$i]['s']>0&&$d[$i]['m']!=1) storemode($i, 1, basename(__FILE__).':'.__LINE__);
-//	}
-//	if ($d['auto']['s']=='Off') sw('auto', 'On', basename(__FILE__).':'.__LINE__);
-//	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis($msg='') {
-	global $d,$time;
-	$time=time();
-//	$d=fetchdata();
+//	global $d,$time;
+//	$time=time();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
-//	if ($d['langekast']['s']=='Off'&&$time>=strtotime('6:00')&&$time<=strtotime('21:00')&&past('langekast')>300) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
-//	if ($d['bose101']['m']!=1) storemode('bose101', 1, basename(__FILE__).':'.__LINE__);
-//	if ($d['bose103']['m']!=0) storemode('bose103', 0, basename(__FILE__).':'.__LINE__);
-//	if ($d['auto']['s']!='On') store('auto', 'On', basename(__FILE__).':'.__LINE__);
-	
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
@@ -325,7 +311,6 @@ function rookmelder($msg) {
 //				if ($d[$i]['s']!='On') sw($i, 'On', basename(__FILE__).':'.__LINE__);
 //			}
 //		}
-//		boseplayinfo($msg, 45);
 //	}
 }
 function koekje($user,$expirytime) {
@@ -365,21 +350,6 @@ function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip);
 	if ($sleep>0) usleep($sleep);
-/*	if (startsWith($key,'PRESET')&&$ip!=102) {
-		for ($x=1;$x<=10;$x++) {
-			$data=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$ip:8090/now_playing"))), true);
-//			lg('Bosekey '.$key.' '.$ip.' '.$x.' data='.print_r($data, true));
-			if (isset($data)) {
-				if (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE'&&isset($data['artist'])&&!str_contains($data['artist'], 'Kalkbrenner')&&!str_contains($data['track'], 'Kalkbrenner')) {
-					break;
-				} elseif (isset($data['playStatus'])&&$data['playStatus']=='PLAY_STATE') {
-					bosekey('SHUFFLE_ON', $x*75000, $ip);
-					bosekey('NEXT_TRACK', $x*75000, $ip);
-				}
-			}
-			sleep(2);
-		}
-	}*/
 }
 function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
@@ -421,7 +391,6 @@ function bosezone($ip,$forced=false,$vol='') {
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
-//			bosekey("POWER", 1500000, 101);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -436,7 +405,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==106) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>';
 			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
-//				bosekey("POWER", 1500000, 101);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['Media']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -450,7 +418,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone', $xml, 101);
 				store('bose'.$ip, 'On');
-//				lg($xml);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
@@ -689,8 +656,6 @@ function dbconnect() {
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
 function fetchdata() {
-	//unset ($GLOBALS['d']);
-	//lg('fetch '.debug_backtrace()[0]['file'].':'.debug_backtrace()[0]['line']);
 	global $db;
 	if(!isset($db)) $db=dbconnect();
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");

@@ -7,7 +7,8 @@ if ($d['badkamer_set']['m']==0) {$set=14;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
 
-if (in_array($dow, array(0,2,4,6,7))) $dday=true; else $dday=false;
+//if (in_array($dow, array(0,2,4,6,7))) $dday=true; else $dday=false;
+$dday=true;
 if ($d['Weg']['s']>=2) $set=5;
 elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']['s']=='Open'||$d['raamwaskamer']['s']=='Open'||$d['raamalex']['s']=='Open')) {
 	$set=5;$m2.=__LINE__.' ';
