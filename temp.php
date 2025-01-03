@@ -12,8 +12,24 @@ echo '
 	<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
 	<link rel="dns-prefetch" href="https://www.gstatic.com/" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="HandheldFriendly" content="true"/>
-	<meta name="viewport" content="width=device-width,height=device-height, user-scalable=no, minimal-ui"/>
+	<meta name="HandheldFriendly" content="true"/>';
+	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
+		echo '
+		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} elseif ($udevice=='iPhone') {
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} else {
+		echo '
+		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
+	}
+	echo '
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
@@ -29,8 +45,8 @@ if ($udevice=='iPad') echo '
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
 elseif ($udevice=='iPhone') echo '
-	<body style="width:560px">
-		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:560px;height:60px;background-color:#000;">
+	<body style="width:450px">
+		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:100%;height:70px;background-color:#000;">
 		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>
@@ -68,7 +84,7 @@ elseif ($aantalsensors==0) {
 	$aantalsensors=4;
 }
 
-echo '<div style="padding:16px 0px 20px 0px;"><form method="GET">';
+echo '<div style="padding:20px 0px 20px 0px;"><form method="GET">';
 foreach ($sensors as $k=>$v) {
 	if(isset($_SESSION['sensors'][$k])&&$_SESSION['sensors'][$k]==1) echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'" checked><label for="'.$k.'">'.$v['Naam'].'</label>';
 	else echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" class="'.$k.'"><label for="'.$k.'">'.$v['Naam'].'</label>';
@@ -100,8 +116,8 @@ if ($udevice=='iPad') {
 	$args['width']=1000;$args['height']=1320;
 	$argshour['width']=1000;$argshour['height']=1320;
 } elseif ($udevice=='iPhone') {
-	$args['width']=550;$args['height']=1010;
-	$argshour['width']=560;$argshour['height']=1010;
+	$args['width']=480;$args['height']=950;
+	$argshour['width']=480;$argshour['height']=950;
 } elseif ($udevice=='iPhoneSE') {
 	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
