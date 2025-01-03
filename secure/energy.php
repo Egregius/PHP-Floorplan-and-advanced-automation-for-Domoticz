@@ -54,14 +54,14 @@ while (1){
 		$sec=date('s');
 		$min=date('i');
 		$uur=date('G');
-		if ($sec==52&&($min==14||$min==29||$min==44||$min==59)) { // Einde kwartier
+		if ($data->active_power_average_w>2500&&$sec==52&&($min==14||$min==29||$min==44||$min==59)) { // Einde kwartier
 			if (!isset($dbverbruik)) {
 				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
 			}
 			$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i')."','".$data->active_power_average_w."')";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
-			if($data->active_power_average_w>2500) telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
+			telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
 		}
 		if ($total!=$prevtotal) {
 			$elec=$data->total_power_import_kwh;
