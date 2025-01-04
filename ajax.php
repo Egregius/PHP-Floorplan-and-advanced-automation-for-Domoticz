@@ -16,13 +16,13 @@ if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
 	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
-//	$d['t']=$_SERVER['REQUEST_TIME'];
-	$d['t']=microtime(true);
+	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
+//	$d['t']=microtime(true);
 	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE ajax=1 AND t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
-		$d[$row['n']]['t']=$row['t'];
+		if(!empty($row['t']))$d[$row['n']]['t']=$row['t'];
 		if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
 		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];

@@ -62,11 +62,27 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="HandheldFriendly" content="true" />
+		<meta name="HandheldFriendly" content="true"/>';
+	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
+		echo '
+		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} elseif ($udevice=='iPhone') {
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} else {
+		echo '
+		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
+	}
+	echo '
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 	<title>Kodi</title>
 	<link rel="icon" type="image/png" href="images/kodi.png">
 	<link rel="shortcut icon" href="images/kodi.png" />
@@ -85,7 +101,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 			})
 		}
 	</script>
-	<link href="/styles/kodi.css?v=2" rel="stylesheet" type="text/css"/>
+	<link href="/styles/kodi.css?v=6" rel="stylesheet" type="text/css"/>
 	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
 	</head>
 	<body>
@@ -101,7 +117,7 @@ $current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2
 if (isset($current['result']['item']['file'])) {
 	if (!empty($current['result']['item']['file'])) {
 		echo '
-			<div class="box title">';
+			<div class="title">';
 		$item=$current['result']['item'];
 		//print_r($item);
 		if ($item['episode']>0) {
@@ -157,7 +173,8 @@ if (isset($current['result']['item']['file'])) {
 				</div>';
 			}
 			echo '
-				<div class="box controls">';
+				<br>
+				<div class="controls">';
 			echo $prop['speed']==1
 			 ?'
 					<input type="submit" name="PauseKodi" value="Playing" class="btn b2" onclick="exec(\'PauseKodi\',\'Playing\');"/>'
@@ -176,7 +193,7 @@ if (isset($current['result']['item']['file'])) {
 			echo '
 				</div>';
 			echo '
-				<div class="box audios">';
+				<br><div class="audios">';
 			$stream=0;
 			foreach ($prop['audiostreams'] as $audio) {
 				echo $audio['index']===$prop['currentaudiostream']['index']
@@ -188,7 +205,8 @@ if (isset($current['result']['item']['file'])) {
 			}
 			echo '
 				</div>
-				<div class="box subs">';
+				<br>
+				<div class="subs">';
 			foreach ($prop['subtitles'] as $subtitle) {
 				echo $subtitle['index']===$prop['currentsubtitle']['index']
 				?'
@@ -211,14 +229,15 @@ if (isset($current['result']['item']['file'])) {
 		}
 		echo '
 		 </div>';
-	}
+	} else echo '<br><br><br><br><br>';
 } else {
-echo '
-		</div>';
+	echo 'aaa
+		<br><br></div><br><br>bbb';
 }
 
 echo '
-				<div class="box">
+				<br>
+				<div>
 					<form action="kodicontrol.php">
 					<input type="submit" name="kodicontrol" value="kodicontrol" class="btn big b1"/><br>
 					</form>

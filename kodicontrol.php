@@ -12,10 +12,8 @@ elseif (isset($_POST['context'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 elseif (isset($_POST['OSD'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ShowOSD"}');
 elseif (isset($_POST['INFO'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Info"}');
 elseif (isset($_POST['Later'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayminus"}}');
-elseif (isset($_POST['SUBSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelay"}}');
 elseif (isset($_POST['Earlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitledelayplus"}}');
 elseif (isset($_POST['AudioLater'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayminus"}}');
-elseif (isset($_POST['AUDIOSYNC'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelay"}}');
 elseif (isset($_POST['AudioEarlier'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"audiodelayplus"}}');
 elseif (isset($_POST['Subup'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftup"}}');
 elseif (isset($_POST['Subdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.ExecuteAction","params":{"action":"subtitleshiftdown"}}');
@@ -26,10 +24,27 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="HandheldFriendly" content="true" />
+			<meta name="HandheldFriendly" content="true"/>
+<?php
+	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
+		echo '
+		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} elseif ($udevice=='iPhone') {
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} else {
+		echo '
+		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
+	}
+?>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="viewport" content="width=device-width,height=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 	<meta name="theme-color" content="#000">
 	<title>Kodi</title>
 	<link rel="icon" type="image/png" href="images/kodi.png">
@@ -45,13 +60,11 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 </head>
 <body>
 <div class="navbar">
-	<form action="/floorplan.php"><input type="submit" class="btn b4" value="Plan"/></form>
-	<form action="/kodi.php"><input type="submit" class="btn btna b4" value="Kodi"/></form>
-	<form action="https://films.egregius.be/films.php"><input type="submit" class="btn b4" value="Films"/></form>
-	<form action="https://films.egregius.be/series.php"><input type="submit" class="btn b4" value="Series"/></form>
-	</div>
-	<div class="box"><form method="POST">
-	<br>
+	<form action="/floorplan.php"><input type="submit" class="btn b2" value="Plan"/></form>
+	<form action="/kodi.php"><input type="submit" class="btn btna b2" value="Kodi"/></form>
+</div>
+<div><form method="POST">
+	<br><br>
 	<input type="submit" name="back" value="Back" class="btn big b3"/>
 	<input type="submit" name="up" value="UP" class="btn big b3"/>
 	<input type="submit" name="context" value="Context" class="btn big b3"/>
@@ -66,11 +79,11 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 	<input type="submit" name="OSD" value="OSD" class="btn big b2"/>
 	<br><br>
 	<input type="submit" name="Earlier" value="Earlier" class="btn big b3"/>
-	<input type="submit" name="SUBSYNC" value="SubSync" class="btn big b3"/>
+	<input type="submit" name="SUBSYNC" value="Subs" class="btn big b3"/>
 	<input type="submit" name="Later" value="Later" class="btn big b3"/>
 	<br>
 	<input type="submit" name="AudioEarlier" value="Earlier" class="btn big b3"/>
-	<input type="submit" name="AudioSYNC" value="SoundSync" class="btn big b3"/>
+	<input type="submit" name="AudioSYNC" value="Sound" class="btn big b3"/>
 	<input type="submit" name="AudioLater" value="Later" class="btn big b3"/>
 	<br>
 	<input type="submit" name="Subup" value="Subup" class="btn big b2"/>
