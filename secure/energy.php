@@ -59,7 +59,7 @@ while (1){
 				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
 			}
-			$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i')."','".$data->active_power_average_w."')";
+			$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$data->active_power_average_w."')";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
 		}
