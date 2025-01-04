@@ -6,11 +6,10 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-//mset('alwayson',9999);
-
-hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
-
-
+$time=time();
+mset('lichtbadkamertijd', $time);
+lg('>>>	mset lichtbadkamertijd '.$time);
+lg('<<<	mget lichtbadkamertijd '.mget('lichtbadkamertijd'));
 
 
 /*-------------------------------------------------*/
