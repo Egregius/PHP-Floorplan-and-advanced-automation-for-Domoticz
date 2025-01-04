@@ -17,15 +17,13 @@ foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,7200,false,2);
 }
 if ($d['auto']['s']=='On') {
-	/* -------------------------------------------- THUIS ----------------------------*/
-	if ($d['Weg']['s']==0){
+	if ($d['Weg']['s']==0){/* ----------------------------------------- THUIS ----------------------------------------------------*/
 //		if ($d['zon']==0&&$d['tuintafel']['s']=='Off'&&$d['Rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
 //		elseif (($d['zon']>0||$d['Rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
 				foreach (array('bureel') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
-				foreach (array('eettafel','zithoek') as $i) if ($d[$i]['s']>0&&past($i)>$uit) storemode($i, 1, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
@@ -40,11 +38,28 @@ if ($d['auto']['s']=='On') {
 		}
 		if ($d['lg_webos_tv_cd9e']['s']=='On') {
 			if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
-			if (past('lg_webos_tv_cd9e')<120) hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
 		}
-	}
-	/* -------------------------------------------- SLAPEN OF WEG ---------------*/
-	if ($d['Weg']['s']>=1) {
+	}elseif ($d['Weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
+		$uit=600;
+		foreach (array('pirhall') as $i) {
+			if ($d[$i]['s']!='Off') {
+				if (past($i)>$uit) {
+					ud($i, 0, 'Off');
+					lg($i.' uitgeschakeld omdat we weg zijn');
+				}
+			}
+		}
+		foreach (array('kamer','waskamer','alex','lichtbadkamer') as $i) {
+			if ($d[$i]['s']>0) {
+				if (past($i)>$uit) {
+					if ($d[$i]['s']>0) {
+						sl($i, 0, basename(__FILE__).':'.__LINE__);
+						lg($i.' uitgeschakeld omdat we weg zijn');
+					}
+				}
+			}
+		}
+	}elseif ($d['Weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		$uit=600;
 		foreach (array('pirgarage','pirkeuken','pirliving','pirinkom') as $i) {
@@ -70,30 +85,8 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	/* -------------------------------------------- WEG ----------------------------*/
-	if ($d['Weg']['s']>=2) {
-		$uit=600;
-		foreach (array('pirhall') as $i) {
-			if ($d[$i]['s']!='Off') {
-				if (past($i)>$uit) {
-					ud($i, 0, 'Off');
-					lg($i.' uitgeschakeld omdat we weg zijn');
-				}
-			}
-		}
-		foreach (array('kamer','waskamer','alex','lichtbadkamer') as $i) {
-			if ($d[$i]['s']>0) {
-				if (past($i)>$uit) {
-					if ($d[$i]['s']>0) {
-						sl($i, 0, basename(__FILE__).':'.__LINE__);
-						lg($i.' uitgeschakeld omdat we weg zijn');
-					}
-				}
-			}
-		}
-	}
 
-	/* -------------------------------------------- ALTIJD BIJ AUT0----------------------------*/
+	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
 	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 	if (past('deurbadkamer')>1800&&past('lichtbadkamer')>600) {
@@ -108,11 +101,6 @@ if ($d['auto']['s']=='On') {
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-//	if ($time>=strtotime('10:00')&&$time<strtotime('10:05')) {
-//		foreach (array('RkamerL','RkamerR','Rwaskamer','Ralex') as $i) {
-//			if ($d[$i]['m']!=0) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-//		}
-//	}
 	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
 		$past=past('GroheRed');
 		if ($d['Grohered_kWh']['s']<50&&$past>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
@@ -129,7 +117,6 @@ if ($d['auto']['s']=='On') {
 	
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
-//	if ($time==strtotime('5:00')) sw('water', 'On', basename(__FILE__).':'.__LINE__);
 	//Bose
 	if ($d['pirliving']['s']=='Off'
 		&&$d['pirgarage']['s']=='Off'
@@ -171,18 +158,18 @@ if ($d['auto']['s']=='On') {
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
-//		if ($d['steenterras']['s']=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['steenterras']['s']=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) {
-		sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
-	}
+	
 	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
 		if ($d['kookplaatpower_kWh']['s']<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 
-/* -------------------------------------------- ALTIJD ----------------------------*/
+/* -------------------------------------------- ALTIJD ---------------------------------------------------*/
+
+if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 
 $data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
 if (isset($data->CivTwilightStart)) {
@@ -209,15 +196,3 @@ if (isset($data->CivTwilightStart)) {
 	mset('Sunrise', date('G:i', $Sunrise));
 	mset('Sunset', date('G:i', $Sunset));
 } else lg('Error fetching CivTwilightStart from domoticz');
-
-
-
-
-
-
-
-
-
-
-//if ($d['bose101']['s']=='On'&&past('bose101')<300) bosekey('SHUFFLE_ON', 0, 101);
-//elseif ($d['bose101']['s']=='Off'&&$d['bose103']['s']=='On'&&past('bose103')<300) bosekey('SHUFFLE_ON', 0, 103);

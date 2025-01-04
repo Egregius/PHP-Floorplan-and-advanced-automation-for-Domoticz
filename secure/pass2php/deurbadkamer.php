@@ -1,7 +1,7 @@
 <?php
 if ($status!=$d['deurbadkamer']['s']) {
 	if ($status=='Open'&&$d['auto']['s']=='On') {
-		if ($d['lichtbadkamer']['s']<16&&$d['dag']<3) {
+		if ($d['lichtbadkamer']['s']<16/*&&$d['dag']<3*/) {
 			$time=time();
 			$last=mget('lichtbadkamer');
 			$past=$time-$last;

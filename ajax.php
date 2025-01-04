@@ -19,10 +19,10 @@ if (isset($_REQUEST['t'])) {
 	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
 //	$d['t']=microtime(true);
 	$db=dbconnect();
-	$stmt=$db->query("SELECT n,s,t,m,dt,icon FROM devices WHERE ajax=1 AND t >= $t;");
+	$stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
-		if(!empty($row['t']))$d[$row['n']]['t']=$row['t'];
+		if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
 		if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
 		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
