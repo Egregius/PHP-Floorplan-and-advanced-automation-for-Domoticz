@@ -1,7 +1,11 @@
 <?php
-if ($status!=$d['deurbadkamer']['s']) {
-	if ($status=='Open'&&$d['auto']['s']=='On') {
+	lg(__LINE__);
+//if ($status!=$d['deurbadkamer']['s']) {
+	lg(__LINE__);
+//	if ($status=='Open'&&$d['auto']['s']=='On') {
+			lg(__LINE__);
 		if ($d['lichtbadkamer']['s']<16/*&&$d['dag']<3*/) {
+				lg(__LINE__);
 			$time=time();
 			$last=mget('lichtbadkamer');
 			$past=$time-$last;
@@ -13,9 +17,9 @@ if ($status!=$d['deurbadkamer']['s']) {
 			}
 		}
 		fhall();
-	}
+//	}
 	if ($d['Weg']['s']>1) {
 		if ($status=='Open') sirene('Deur badkamer open');
 		else sirene('Deur badkamer dicht');
 	}
-}
+//}

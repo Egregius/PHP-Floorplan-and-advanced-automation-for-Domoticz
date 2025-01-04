@@ -5,7 +5,7 @@ $user='MQTT';
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-lg('Starting MQTT loop...');
+lg(basename(__FILE__).':'.__LINE__.' Starting MQTT loop...');
 updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
 
@@ -18,6 +18,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
+			global $d;
 			$d=fetchdata();
 			$message=json_decode($message, true);
 			$device=$message['name'];
@@ -49,37 +50,50 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
-					lg('(MQTT) Switch '.$device.' => '.$status);
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) Switch '.$device.' => '.$status);
 					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch <> ');
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';
-					lg('(MQTT) Lighting 2 '.$device.' => '.$status);
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) Lighting 2 '.$device.' => '.$status);
 					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch ');
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
-					lg('(MQTT) Temp '.$device.' => '.$status);	
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) Temp '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Temp ');
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-						lg('(MQTT) kWh '.$device.' => '.$status);	
+						lg(basename(__FILE__).':'.__LINE__.'(MQTT) kWh '.$device.' => '.$status);	
 						if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) kWh ');
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
-					lg('(MQTT) Usage '.$device.' => '.$status);	
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) Usage '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Usage ');
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
-					lg('(MQTT) Colorswitch '.$device.' => '.$status);	
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) Colorswitch '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
-					lg('(MQTT) else '.print_r($message,true));	
+					lg(basename(__FILE__).':'.__LINE__.'(MQTT) else '.print_r($message,true));	
 				}
 //				if ($device=='$ remoteauto') lg(' (MQTT)		'.print_r($message,true));	
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
+
+
+
+
+
+
+
+
+				lg(basename(__FILE__).':'.__LINE__);
+				lg(basename(__FILE__).':'.__LINE__.':/var/www/html/secure/pass2php/'.$device.'.php');
+				lg(basename(__FILE__).':'.__LINE__);
+				lg(basename(__FILE__).':'.__LINE__.':'.require('/var/www/html/secure/pass2php/'.$device.'.php'));
+				lg(basename(__FILE__).':'.__LINE__);
+
 			} elseif ($device=='buiten_hum') { // 1
 				$temp=$message['svalue1'];
 				$hum=$message['svalue2']+1;
