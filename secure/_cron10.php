@@ -1,6 +1,6 @@
 <?php
-$d=fetchdata($time);
-$time=time();
+$d=fetchdata($fetch);
+$fetch=time();
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	$i=39;

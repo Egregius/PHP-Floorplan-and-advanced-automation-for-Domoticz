@@ -1,5 +1,5 @@
 <?php
-$d=fetchdata();
+//$d=fetchdata($fetch);
 $user=basename(__FILE__);
 if(isset($db)) $db=dbconnect();
 

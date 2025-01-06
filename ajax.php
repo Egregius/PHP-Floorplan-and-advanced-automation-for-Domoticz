@@ -43,7 +43,8 @@ if (isset($_REQUEST['t'])) {
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db=dbconnect();
-	$db->query("UPDATE devices SET m=3 WHERE n ='Weg';");
+	$time=time();
+	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='Weg';");
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])) {

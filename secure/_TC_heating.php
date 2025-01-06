@@ -1,4 +1,5 @@
 <?php
+$d=fetchdata($fetch);
 $user=basename(__FILE__);
 $Setkamer=4;
 $Setwaskamer=4;

@@ -1,5 +1,5 @@
 <?php
-$d=fetchdata();
+//$d=fetchdata($fetch);
 $user=basename(__FILE__);
 //lg($user);
 $stamp=date('Y-m-d H:i:s', $time-900);

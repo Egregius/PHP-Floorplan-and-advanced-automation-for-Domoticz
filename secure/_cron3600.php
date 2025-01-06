@@ -1,7 +1,7 @@
 <?php
 //lg('CRON-3600');
 if (!isset($db)) $db=dbconnect();
-$d=fetchdata();
+//$d=fetchdata($fetch);
 $time=time();
 $user=basename(__FILE__);
 

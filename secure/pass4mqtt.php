@@ -6,7 +6,7 @@ ini_set( 'display_errors', true );
 
 $user='MQTT';
 $time=time();
-global $time;
+
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
@@ -163,8 +163,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
-			$d=fetchdata();
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$time;
+			$d=fetchdata($time);
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
@@ -216,8 +216,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
-			$d=fetchdata();
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$time;
+			$d=fetchdata($time);
 			if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
 				sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				if($d['Weg']['s']==0) huisthuis('door OwnTracks.');
