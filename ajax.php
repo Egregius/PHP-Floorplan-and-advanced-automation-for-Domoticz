@@ -17,7 +17,6 @@ if (isset($_REQUEST['t'])) {
 	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
-//	$d['t']=microtime(true);
 	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -40,16 +39,8 @@ if (isset($_REQUEST['t'])) {
 	}
 	echo json_encode($d);
 	exit;
-} elseif (isset($_REQUEST['q'])) {
-	if ($_REQUEST['q']=='aftellen') echo $_SERVER['REQUEST_TIME'];
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync') {
-	if ($_REQUEST['command']=='runsync') {
-		$url='http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'];
-		lg('Running syncs '.$url);
-		exec('curl -s '.$url.' &');
-	}
-}
+elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db=dbconnect();
 	$db->query("UPDATE devices SET m=3 WHERE n ='Weg';");
@@ -59,9 +50,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='spotify') {
 	if ($d['bose101']['s']=='On'||$d['bose105']['s']=='On'||$d['Weg']['s']>0) echo 1;
 	else echo 0;
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') {
-	resetsecurity();
-}
+elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])) {
 	$bose=$_REQUEST['bose'];
 	$d=array();

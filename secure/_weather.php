@@ -146,9 +146,11 @@ if (count($winds)>=4) {
 if (count($rains)>=2) {
 	$rain=floor(array_sum($rains)/count($rains));
 	if ($d['buien']['s']!=$rain) store('buien', $rain);
-	if ($rain>0) $past=(86400/$rain)*2;
-	else $past=86400;
-	if ($past<1800) $past=1800;
+	if ($rain>0) {
+		$past=(86400/$rain)*2;
+		mset('buien',$time);
+	} else $past=86400;
+	if ($past<1200) $past=1200;
 	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
 

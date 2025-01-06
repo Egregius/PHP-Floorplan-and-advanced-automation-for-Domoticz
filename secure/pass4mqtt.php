@@ -218,7 +218,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
 			$d=fetchdata();
-			if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']<2) {
+			if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
 				sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				if($d['Weg']['s']==0) huisthuis('door OwnTracks.');
 				elseif($d['Weg']['s']==2) {

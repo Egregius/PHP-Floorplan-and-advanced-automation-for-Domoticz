@@ -1,8 +1,6 @@
 <?php
 $time=time();
 mset('lichtbadkamertijd', $time);
-lg('>>>	mset lichtbadkamertijd '.$time);
-lg('<<<	mget lichtbadkamertijd '.mget('lichtbadkamertijd'));
 if ($d['lichtbadkamer']['s']>0) sw('lichtbadkamer', 'Off', basename(__FILE__).':'.__LINE__);
 
 $t=t();

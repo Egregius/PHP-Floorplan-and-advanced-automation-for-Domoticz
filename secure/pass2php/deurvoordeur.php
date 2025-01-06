@@ -1,7 +1,7 @@
 <?php
 if (!is_array($d)) $d=fetchdata();
 if ($status=="Open"&&$d['auto']['s']=='On') {
-	if ($d['voordeur']['s']=='Off'&&$d['zon']['s']==0&&$d['dag']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['voordeur']['s']=='Off'&&$d['dag']==0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	elseif ($d['voordeur']['s']=='On'&&$d['zon']['s']>0) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	finkom();
 	if ($d['Weg']['s']==0) {
