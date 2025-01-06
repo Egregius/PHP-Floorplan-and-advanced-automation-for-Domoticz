@@ -644,12 +644,16 @@ function dbconnect() {
 	global $dbname,$dbuser,$dbpass;
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
-function fetchdata() {
-	global $db;
+function fetchdata($t=0) {
+	global $db,$d;
 	if(!isset($db)) $db=dbconnect();
-	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
+	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
+	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
-	$d['dag']=mget('dag');
+	lg('							'.$_SERVER['SCRIPT_NAME'].'	> '.$stmt->rowCount().' rows fetched');
+	if ($t==0) {
+		$d['dag']=mget('dag');
+	}
 	$d['net']=mget('net');
 	$d['avg']=mget('avg');
 	$d['zon']=mget('zon');

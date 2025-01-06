@@ -45,11 +45,6 @@ elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['dev
 	$db=dbconnect();
 	$db->query("UPDATE devices SET m=3 WHERE n ='Weg';");
 }
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='spotify') {
-	$d=fetchdata();
-	if ($d['bose101']['s']=='On'||$d['bose105']['s']=='On'||$d['Weg']['s']>0) echo 1;
-	else echo 0;
-}
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])) {
 	$bose=$_REQUEST['bose'];
@@ -69,7 +64,6 @@ elseif (isset($_REQUEST['bose'])) {
 	exit;
 }
 elseif (isset($_REQUEST['media'])) {
-	$d=fetchdata();
 	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
 	$data=array();
 	$data['pfsense']=json_decode(@file_get_contents('https://pfsense.egregius.be:44300/egregius.php', false, $ctx), true);
@@ -77,7 +71,6 @@ elseif (isset($_REQUEST['media'])) {
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
-	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
 		if ($_REQUEST['device']=='badkamer') {
 			$s=date('s');
@@ -92,6 +85,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		} else {
 			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
+				$d=fetchdata();
 				if ($d['heating']['s']==-2) {//airco cooling
 					if ($d['daikin']['s']=='Off'&&$_REQUEST['action']!='D'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 				} elseif ($d['heating']['s']==-1) {//passive cooling
@@ -137,18 +131,22 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
+			$d=fetchdata();
 			foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='RkeukenL') {
+			$d=fetchdata();
 			foreach(array('RkeukenL', 'RkeukenR') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Boven') {
+			$d=fetchdata();
 			foreach(array('RkamerL', 'RkamerR', 'Rwaskamer', 'Ralex') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='tv') {
+			$d=fetchdata();
 			if ($d['Rliving']['s']<30) sl('Rliving', 30, basename(__FILE__).':'.__LINE__);
 			if ($d['Rbureel']['s']<70) sl('Rbureel', 69, basename(__FILE__).':'.__LINE__);
 			if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);
@@ -180,6 +178,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		$data['powermode']=$_REQUEST['action'];
 		storeicon($_REQUEST['device'], json_encode($data));
 		if ($_REQUEST['action']=='Normal') {
+			$d=fetchdata();
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1');
 			if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 				$low=40;
@@ -191,6 +190,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			sleep(1);
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
 		} elseif ($_REQUEST['action']=='Eco') {
+			$d=fetchdata();
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
 			if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 				$low=40;
@@ -285,6 +285,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				bosekey("POWER", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 				sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);
 				if ($_REQUEST['boseip']==101) {
+					$d=fetchdata();
 					if ($d['bose102']['s']=='On') {
 						sw('bose102', 'Off',basename(__FILE__).':'.__LINE__);
 					}

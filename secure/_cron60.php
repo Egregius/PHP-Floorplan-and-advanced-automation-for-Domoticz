@@ -1,5 +1,5 @@
 <?php
-$d=fetchdata();
+$d=fetchdata($time);
 $t=t();
 
 $user=basename(__FILE__);

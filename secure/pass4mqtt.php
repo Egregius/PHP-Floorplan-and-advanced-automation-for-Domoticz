@@ -5,24 +5,24 @@ ini_set( 'error_reporting', E_ALL );
 ini_set( 'display_errors', true );
 
 $user='MQTT';
+$time=time();
+global $time;
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 lg(' Starting MQTT loop...');
 updatefromdomoticz();
+$d=fetchdata(0);
 use PhpMqtt\Client\MqttClient;
 
 $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
 $client->connect(null, true);
 $client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
-	$user='MQTT';
-	$time=time();
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl;
-			global $d;
-			$d=fetchdata();
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time;
+			$d=fetchdata($time);
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];

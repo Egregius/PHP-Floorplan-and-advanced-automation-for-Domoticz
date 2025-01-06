@@ -7,7 +7,7 @@ if (isset($argv[1])) {
 } else {
 	lg('Starting CRON loop...');
 	while (1){
-		if (!isset($d)) $d=fetchdata();
+		if (!isset($d)) $d=fetchdata(0);
 		$start = microtime(true);
 		$time=time();
 		$crontime=$time;

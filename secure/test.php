@@ -6,8 +6,13 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-echo mget('buien');
+$time=$_SERVER['REQUEST_TIME']-1;
+for($x=1;$x<=100;$x++) {
+	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=".$time.";");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+}
 
+print_r($_SERVER);
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
 //NL('Druk 6 voor Geert, 7 voor Peter, 8 voor Sandro, 9 voor Gie.');
