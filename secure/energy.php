@@ -4,9 +4,11 @@ require '/var/www/html/secure/functions.php';
 
 $x=1;
 $sleep='	start';
+$prevtotal=0;
 while (1){
 	$start = microtime(true);
 	$dag=mget('dag');
+	$en=mget('en');
 	$data=curl('http://192.168.2.4/api/v1/data');
 	if ($dag>2) {
 		$zon=curl('http://192.168.2.9/api/v1/data');
@@ -14,23 +16,21 @@ while (1){
 		if (isset($zon->active_power_w)) {
 			$prevzon=mget('zon');
 			$newzon=round($zon->active_power_w);
-			if ($prevzon!=$newzon) mset('zon',$newzon);
-			
 		}
 	} else {
 		$prevzon=mget('zon');
 		$newzon=0;
-		if ($prevzon!=$newzon) mset('zon',$newzon);
 	}
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
-		mset('net',$data->active_power_w);
-		mset('avg',$data->active_power_average_w);
-		$prevtotal=mget('energytotal');
-		var_dump($prevtotal);
+		mset('en',array(
+			'net'=>$data->active_power_w,
+			'avg'=>$data->active_power_average_w,
+			'zon'=>$newzon,
+		));
+//		mset('net',$data->active_power_w);
+//		mset('avg',$data->active_power_average_w);
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
-		var_dump($total);
-		mset('energytotal',$total);
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
 
@@ -64,6 +64,7 @@ while (1){
 			telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
 		}
 		if ($total!=$prevtotal) {
+			lg('__Updating energy data');
 			$elec=$data->total_power_import_kwh;
 			$injectie=$data->total_power_export_kwh;
 			foreach ($data->external as $i) {
@@ -132,6 +133,7 @@ while (1){
 			if ($gas!=$d['gasvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$gas,t=$time WHERE n='gasvandaag';");
 			if ($zonvandaag!=$d['zonvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
 			if ($verbruik!=$d['elvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
+			$prevtotal=$total;
 		}
 	}
 	if ($uur==0&&$min==1&&$sec==0) {
@@ -169,7 +171,7 @@ while (1){
 		if (isset($zonref,$zonavg))	$dbdomoticz->query("UPDATE devices SET m=".$zonref.", icon=".$zonavg." WHERE n='zonvandaag';");
 	}
 
-	if ($x==10) exit;
+	if ($x==86399) exit;
 	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=1-$time_elapsed_secs;

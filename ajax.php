@@ -26,10 +26,10 @@ if (isset($_REQUEST['t'])) {
 		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
-	$d['net']=mget('net');
-	$d['avg']=mget('avg');
-	$zon=mget('zon');
-	if($zon!=0) $d['zon']=-$zon;
+	$en=mget('en');
+	$d['net']=$en['net'];
+	$d['avg']=$en['avg'];
+	$d['zon']=-$en['zon'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$d['CivTwilightStart']=mget('CivTwilightStart');
 		$d['Sunrise']=mget('Sunrise');

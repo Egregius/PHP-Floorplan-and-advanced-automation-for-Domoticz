@@ -12,7 +12,10 @@ ps cax | grep cron2.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron2.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
+ps cax | grep energy.php
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/energy.php >/dev/null 2>&1 &
+fi
 sleep 10
 
 ps cax | grep pass4mqtt.php
@@ -23,7 +26,6 @@ ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
 sleep 10
 
 ps cax | grep pass4mqtt.php
@@ -34,7 +36,6 @@ ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
 sleep 10
 
 ps cax | grep pass4mqtt.php
@@ -45,7 +46,6 @@ ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
 sleep 10
 
 ps cax | grep pass4mqtt.php
@@ -56,14 +56,12 @@ ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-/var/www/html/secure/energy.php >/dev/null 2>&1 &
 
 #ps cax | grep domoticz
 #if [ $? -ne 0 ] ; then

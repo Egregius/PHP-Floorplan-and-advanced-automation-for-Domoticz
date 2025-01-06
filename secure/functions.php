@@ -192,8 +192,7 @@ function store($name='',$status='',$msg='',$idx=null) {
 		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
-	mset($name,$status);
-//	return;
+//	mset($name,$status);
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
 	else {
 		if (endswith($name, '_temp')) return;
@@ -214,10 +213,8 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 	if (!is_array($d)) $d=fetchdata();
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
-		if ($updatetime==true) {
-			$time=time();
-			$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		} else $db->query("INSERT INTO devices (n,icon) VALUES ('$name','$icon') ON DUPLICATE KEY UPDATE icon='$icon';");
+		$time=time();
+		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
 		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
 	}
@@ -645,12 +642,11 @@ function fetchdata($t=0) {
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 	lg('							'.$_SERVER['SCRIPT_NAME'].'	> '.$stmt->rowCount().' rows fetched');
-	if ($t==0) {
-		$d['dag']=mget('dag');
-	}
-	$d['net']=mget('net');
-	$d['avg']=mget('avg');
-	$d['zon']=mget('zon');
+	$d['dag']=mget('dag');
+	$en=mget('en');
+	$d['net']=$en['net'];
+	$d['avg']=$en['avg'];
+	$d['zon']=$en['zon'];
 	return $d;
 }
 function fetchdataidx() {
