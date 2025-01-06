@@ -28,8 +28,6 @@ while (1){
 			'avg'=>$data->active_power_average_w,
 			'zon'=>$newzon,
 		));
-//		mset('net',$data->active_power_w);
-//		mset('avg',$data->active_power_average_w);
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 		if ($data->active_power_average_w>2500) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
@@ -50,7 +48,6 @@ while (1){
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 		}
 		
-		// Updating verbruik database
 		$sec=date('s');
 		$min=date('i');
 		$uur=date('G');
@@ -63,8 +60,9 @@ while (1){
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
 		}
+
+		// Updating verbruik database
 		if ($total!=$prevtotal) {
-			lg('__Updating energy data');
 			$elec=$data->total_power_import_kwh;
 			$injectie=$data->total_power_export_kwh;
 			foreach ($data->external as $i) {
