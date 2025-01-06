@@ -6,11 +6,7 @@ require 'functions.php';
 require '/var/www/authentication.php';
 //$d=fetchdata();
 
-$time=time();
-mset('lichtbadkamertijd', $time);
-lg('>>>	mset lichtbadkamertijd '.$time);
-lg('<<<	mget lichtbadkamertijd '.mget('lichtbadkamertijd'));
-
+echo mget('buien');
 
 /*-------------------------------------------------*/
 //require_once 'gcal/google-api-php-client/vendor/autoload.php';
