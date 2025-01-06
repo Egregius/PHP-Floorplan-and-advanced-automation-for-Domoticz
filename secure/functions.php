@@ -641,7 +641,6 @@ function fetchdata($t=0) {
 	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
-	lg('							'.$_SERVER['SCRIPT_NAME'].'	> '.$stmt->rowCount().' rows fetched');
 	$d['dag']=mget('dag');
 	$en=mget('en');
 	$d['net']=$en['net'];

@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+$fetch=0;
 require '/var/www/html/secure/functions.php';
 if (isset($argv[1])) {
 	echo 'Executing _cron'.$argv[1].'.php'.PHP_EOL.PHP_EOL;

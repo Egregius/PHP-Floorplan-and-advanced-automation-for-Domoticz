@@ -31,10 +31,11 @@ if (isset($_REQUEST['t'])) {
 	$d['avg']=$en['avg'];
 	$d['zon']=-$en['zon'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
-		$d['CivTwilightStart']=mget('CivTwilightStart');
-		$d['Sunrise']=mget('Sunrise');
-		$d['Sunset']=mget('Sunset');
-		$d['CivTwilightEnd']=mget('CivTwilightEnd');
+		$sunrise=mget('sunrise');
+		$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
+		$d['Sunrise']=$sunrise['Sunrise'];
+		$d['Sunset']=$sunrise['Sunset'];
+		$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
 		$d['zonavg']=$d['zonvandaag']['icon'];
 	}
 	echo json_encode($d);

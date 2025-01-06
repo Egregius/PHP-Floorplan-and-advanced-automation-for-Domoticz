@@ -191,8 +191,4 @@ if (isset($data->CivTwilightStart)) {
 	}
 	$prevdag=mget('dag');
 	if ($dag!=$prevdag) mset('dag',$dag);
-	mset('CivTwilightStart', date('G:i', $CivTwilightStart));
-	mset('CivTwilightEnd', date('G:i', $CivTwilightEnd));
-	mset('Sunrise', date('G:i', $Sunrise));
-	mset('Sunset', date('G:i', $Sunset));
 } else lg('Error fetching CivTwilightStart from domoticz');
