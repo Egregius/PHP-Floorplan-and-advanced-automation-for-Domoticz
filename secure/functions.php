@@ -22,7 +22,6 @@ function t() {
 	
 function fliving() {
 	global $d,$time;
-//	$d=fetchdata();
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
@@ -36,32 +35,29 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-//	$d=fetchdata();
-	if ($d['dag']<3&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if (($d['dag']<4||$d['zon']==0)&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
 	global $d;
-//	$d=fetchdata();
 	if (1==2) {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<2||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<4||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {
 	global $d,$time;
 	$d=fetchdata();
-	if ($d['zon']<50&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<2)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+	if ($d['dag']<40&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<4)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$t,$time;
 	$time=time();
-//	$d=fetchdata();
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
 	else $t=strtotime('7:00');
-	if ($d['zon']<50&&$time<=strtotime('19:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
+	if ($d['dag']<4&&$time<=strtotime('19:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -77,8 +73,6 @@ function huisslapen($weg=false) {
 	}
 }
 function huisthuis($msg='') {
-//	global $d,$time;
-//	$time=time();
 	store('Weg', 0);
 	lg('Huis thuis '.$msg);
 }
