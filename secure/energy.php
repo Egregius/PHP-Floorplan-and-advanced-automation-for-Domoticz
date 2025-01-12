@@ -2,9 +2,8 @@
 <?php
 require '/var/www/html/secure/functions.php';
 
-$x=1;
-$sleep='	start';
 $prevtotal=0;
+$prevavg=0;
 while (1){
 	$start = microtime(true);
 	$dag=mget('dag');
@@ -30,7 +29,6 @@ while (1){
 		));
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
-		if ($data->active_power_average_w>2300) alert('Kwartierpiek', 'Kwartierpiek: '.$data->active_power_average_w.' Wh!', 300, false);
 
 		$power=$data->active_power_w-$newzon;
 		$alwayson=mget('alwayson');
@@ -51,15 +49,20 @@ while (1){
 		$sec=date('s');
 		$min=date('i');
 		$uur=date('G');
-		if ($data->active_power_average_w>2500&&$sec==51&&($min==14||$min==29||$min==44||$min==59)) { // Einde kwartier
-			if (!isset($dbverbruik)) {
-				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
-				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+		$newavg=$data->active_power_average_w;
+		if ($newavg>2300) {
+			alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!', 300, false);
+			if ($newavg<$prevavg) { // Nieuw kwartier
+				if (!isset($dbverbruik)) {
+					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
+					if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+				}
+				$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$newavg."')";
+				if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
+				telegram('Kwartierpiek: '.$newavg.' Wh');
 			}
-			$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$data->active_power_average_w."')";
-			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
-			telegram('Kwartierpiek: '.$data->active_power_average_w.' Wh');
 		}
+		$prevavg=$newavg;
 
 		// Updating verbruik database
 		if ($total!=$prevtotal) {
@@ -169,8 +172,6 @@ while (1){
 		if (isset($zonref,$zonavg))	$dbdomoticz->query("UPDATE devices SET m=".$zonref.", icon=".$zonavg." WHERE n='zonvandaag';");
 	}
 
-	if ($x==86399) exit;
-	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=1-$time_elapsed_secs;
 	if ($sleep<0) $sleep=0;
