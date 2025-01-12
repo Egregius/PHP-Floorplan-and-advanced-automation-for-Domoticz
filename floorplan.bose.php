@@ -83,11 +83,10 @@ echo '
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
-			<div style="height:180px;" id="art"></div>
+			<div id="art"></div>
 			<h4 id="artist"></h4>
 			<span id="track"></span><br>
 			<div id="volume"></div>
-			<div id="bass"></div>
 			<br>
 			<br>
 			<div id="power"></div>

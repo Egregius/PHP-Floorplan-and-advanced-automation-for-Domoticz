@@ -60,7 +60,6 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}elseif ($d['Weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
-		if ($d['GroheRed']['s']=='On') sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		$uit=600;
 		foreach (array('pirgarage','pirkeuken','pirliving','pirinkom') as $i) {
 			if ($d[$i]['s']!='Off') {

@@ -50,6 +50,7 @@ function finkom($force=false) {
 	global $d,$time;
 	$d=fetchdata();
 	if ($d['dag']<40&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<4)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 }
 function fhall() {
 	global $d,$t,$time;
