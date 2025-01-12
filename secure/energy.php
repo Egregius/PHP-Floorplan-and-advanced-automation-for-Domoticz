@@ -50,27 +50,27 @@ while (1){
 		$min=date('i');
 		$uur=date('G');
 		$newavg=$data->active_power_average_w;
-		if ($newavg>23) {
+		if ($prevavg>2300) {
 			alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!', 300, false);
 			echo $x.'	'.date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
-			if ($newavg<$prevavg&&$prevavg>25) { // Nieuw kwartier
-				echo __LINE__.PHP_EOL;
+			if ($newavg<$prevavg&&$prevavg>2500) { // Nieuw kwartier
+				echo '	'.__LINE__.PHP_EOL;
 				if (!isset($dbverbruik)) {
-					echo __LINE__.PHP_EOL;
+					echo '	'.__LINE__.PHP_EOL;
 					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 					if($dbverbruik->connect_errno>0){
-						echo __LINE__.PHP_EOL;
+						echo '	'.__LINE__.PHP_EOL;
 						die('Unable to connect to database ['.$dbverbruik->connect_error.']');
 					}
 				}
-				echo __LINE__.PHP_EOL;
-				$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$newavg."')";
+				echo '	'.__LINE__.PHP_EOL;
+				$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$prevavg."')";
 				if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);
-				echo __LINE__.PHP_EOL;
+				echo '	'.__LINE__.PHP_EOL;
 				telegram('Kwartierpiek = '.$prevavg.' Wh');
 			}
 		}
-		if ($newavg<$prevavg) telegram (date('Y-m-d H:i:s').PHP_EOL.'prev='.$prevavg.PHP_EOL.'new='.$newavg);
+//		if ($newavg<$prevavg) telegram (date('Y-m-d H:i:s').PHP_EOL.'prev='.$prevavg.PHP_EOL.'new='.$newavg);
 		$prevavg=$newavg;
 		// Updating verbruik database
 		if ($total!=$prevtotal) {
