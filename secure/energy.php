@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-
+$x=1;
 $prevtotal=0;
 $prevavg=0;
 while (1){
@@ -50,20 +50,28 @@ while (1){
 		$min=date('i');
 		$uur=date('G');
 		$newavg=$data->active_power_average_w;
-		if ($newavg>2300) {
+		if ($newavg>23) {
 			alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!', 300, false);
-			if ($newavg<$prevavg) { // Nieuw kwartier
+			echo $x.'	'.date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
+			if ($newavg<$prevavg&&$prevavg>25) { // Nieuw kwartier
+				echo __LINE__.PHP_EOL;
 				if (!isset($dbverbruik)) {
+					echo __LINE__.PHP_EOL;
 					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
-					if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+					if($dbverbruik->connect_errno>0){
+						echo __LINE__.PHP_EOL;
+						die('Unable to connect to database ['.$dbverbruik->connect_error.']');
+					}
 				}
+				echo __LINE__.PHP_EOL;
 				$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$newavg."')";
-				if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
-				telegram('Kwartierpiek: '.$newavg.' Wh');
+				if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);
+				echo __LINE__.PHP_EOL;
+				telegram('Kwartierpiek = '.$prevavg.' Wh');
 			}
 		}
+		if ($newavg<$prevavg) telegram (date('Y-m-d H:i:s').PHP_EOL.'prev='.$prevavg.PHP_EOL.'new='.$newavg);
 		$prevavg=$newavg;
-
 		// Updating verbruik database
 		if ($total!=$prevtotal) {
 			$elec=$data->total_power_import_kwh;
@@ -171,7 +179,7 @@ while (1){
 		
 		if (isset($zonref,$zonavg))	$dbdomoticz->query("UPDATE devices SET m=".$zonref.", icon=".$zonavg." WHERE n='zonvandaag';");
 	}
-
+	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=1-$time_elapsed_secs;
 	if ($sleep<0) $sleep=0;
