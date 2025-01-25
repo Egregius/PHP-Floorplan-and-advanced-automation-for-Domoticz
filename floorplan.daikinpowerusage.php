@@ -13,13 +13,22 @@ echo '
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="theme-color" content="#000">';
-if ($udevice=='iPhone') {
-	echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-} elseif ($udevice=='iPad') {
-	echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-}
+	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
+		echo '
+		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
+	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} elseif ($udevice=='iPhone') {
+		echo '
+		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
+	} else {
+		echo '
+		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
+	}
 if (isset($_GET['setauto'])) {
 	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
 } elseif (isset($_GET['setpower'])) {
@@ -68,8 +77,6 @@ else echo '
 echo '
 			<br>
 			<br>';
-
-
 foreach (array(40,50,60,70,80,90,100, 'Auto') as $i) {
 	if ($d['daikin_kWh']['m']==$i) echo '
 			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn btna b9">'.$i.'</a>';

@@ -3,7 +3,7 @@ if ($status!=$d[$device]['s']) store($device,$status, basename(__FILE__).':'.__L
 //lg(print_r($topic,true));
 
 if ($status=='On') {
-	hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
+	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
 	if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 	$time=time();
 	if ($time>=strtotime('18:30')) {
