@@ -49,8 +49,10 @@ function fkeuken() {
 function finkom($force=false) {
 	global $d,$time;
 	$d=fetchdata();
-	if ($d['dag']<40&&($d['Weg']['s']==0&&$d['inkom']['s']<30&&$d['dag']<4)||$force==true) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-	if ($d['Weg']['s']==0&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
+	if (($d['dag']<3&&$d['Weg']['s']==0)||$force==true) {
+		if ($d['inkom']['s']<30&&$d['dag']<4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+		if ($d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
+	}
 }
 function fhall() {
 	global $d,$t,$time;
@@ -58,7 +60,7 @@ function fhall() {
 	$dow=date("w");
 	if($dow==0||$dow==6) $t=strtotime('7:30');
 	else $t=strtotime('7:00');
-	if ($d['dag']<4&&$time<=strtotime('19:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
+	if ($d['dag']<3&&$time<=strtotime('20:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
