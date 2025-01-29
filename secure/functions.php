@@ -43,7 +43,7 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<4||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 }
 function finkom($force=false) {

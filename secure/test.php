@@ -4,17 +4,8 @@ echo '<pre>';
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
-//$d=fetchdata();
-
-$data=array(
-	'avg'=>123,
-	'zon'=>123,
-	'net'=>123
-);
-$data=json_encode($data);
-for($x=1;$x<=100;$x++) {
-	json_decode($data);
-}
+$d=fetchdata();
+echo $d['dag'];
 
 
 echo '</pre>';
