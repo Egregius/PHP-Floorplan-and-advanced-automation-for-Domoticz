@@ -7,6 +7,8 @@ require '/var/www/authentication.php';
 $d=fetchdata();
 echo $d['dag'];
 
+$data=json_decode(hassget());
+
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
