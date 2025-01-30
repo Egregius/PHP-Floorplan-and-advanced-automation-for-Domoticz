@@ -63,6 +63,8 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 }
 if($d['langekast']['s']!='On') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
+} else {
+	if (past('langekast')<15) sw('lamp kast', 'Off');
 }
 
 if ($d['Weg']['s']==0) {

@@ -6,7 +6,7 @@ if ($d['daikin']['m']==1) {
 		${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
 	}
-	$maxpow=floor((40-$d['buiten_temp']['s']-$d['buiten_temp']['s'])*$bigdif);
+	$maxpow=floor((50-$d['buiten_temp']['s']-$d['buiten_temp']['s'])*$bigdif);
 	$maxpow=floor($maxpow/10)*10;
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
@@ -30,24 +30,25 @@ if ($d['daikin']['m']==1) {
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$rate='A';
-				    if ($dif>=1.6) $d[$k.'_set']['s']=$d[$k.'_set']['s']-2;
-				elseif ($dif>=1.2) $d[$k.'_set']['s']=$d[$k.'_set']['s']-1.5;
-				elseif ($dif>=0.8) $d[$k.'_set']['s']=$d[$k.'_set']['s']-1;
-				elseif ($dif>=0.4) $d[$k.'_set']['s']=$d[$k.'_set']['s']-0.5;
-				elseif ($dif<=-0.4) $d[$k.'_set']['s']=$d[$k.'_set']['s']+1;
-				elseif ($dif<=0) $d[$k.'_set']['s']=$d[$k.'_set']['s']+0.5;
+				    if ($dif>=1.2) $set=$d[$k.'_set']['s']-2;
+				elseif ($dif>=0.9) $set=$d[$k.'_set']['s']-1.5;
+				elseif ($dif>=0.6) $set=$d[$k.'_set']['s']-1;
+				elseif ($dif>=0.3) $set=$d[$k.'_set']['s']-0.5;
+				elseif ($dif<=-0.9) $set=$d[$k.'_set']['s']+2;
+				elseif ($dif<=-0.6) $set=$d[$k.'_set']['s']+1.5;
+				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+1;
+				elseif ($dif<0) $set=$d[$k.'_set']['s']+0.5;
 				if ($k=='living') {
-					$set=$d[$k.'_set']['s'];
 					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					//if ((($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0&&$time>strtotime('11:45')&&$time>strtotime('13:00'))||($d['eettafel']['s']>0&&$time>strtotime('17:30')&&$time>strtotime('19:00')))) $rate='B';
 				} elseif ($k=='kamer') {
-					$set=$d['kamer_set']['s']-1;
+					$set-=1;
 					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 					elseif ($maxpow==40&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					if ($time<strtotime('10:00')||$time>strtotime('22:00')) $rate='B';
 				} elseif ($k=='alex') {
-					$set=$d['alex_set']['s']-1;
+					$set-=1;
 					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>14) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					if ($time<strtotime('10:00')||$time>strtotime('19:30')) $rate='B';
