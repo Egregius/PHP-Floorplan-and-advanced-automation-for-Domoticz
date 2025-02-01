@@ -12,7 +12,6 @@ echo $d['dag'];
 //	if ($i->entity_id==
 //	print_r($i);
 //}
-sw('lamp kast', 'Off');
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

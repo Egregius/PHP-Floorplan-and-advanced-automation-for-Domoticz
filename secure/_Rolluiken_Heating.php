@@ -32,17 +32,17 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	elseif ($time>=strtotime('18:00')&&$time<strtotime('22:00')) {
-		if ($d['dag']<4) {
-			foreach (array('Rwaskamer','Ralex','RkamerL','RkamerR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
-			if ($d['Weg']['s']>=1) {
-				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
-			}
-		} elseif ($d['dag']==0) {
+		if ($d['dag']==0) {
 			foreach (array('Rwaskamer','Ralex','RkamerL','RkamerR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			if ($d['Weg']['s']>=1) {
 				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			} else {
 				foreach (array('Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+			}
+		} elseif ($d['dag']<4) {
+			foreach (array('Rwaskamer','Ralex','RkamerL','RkamerR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+			if ($d['Weg']['s']>=1) {
+				foreach (array('Rliving','Rbureel','RkeukenL','RkeukenR') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($d['buiten_temp']['s']<3) {
 			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]['s']=='Open'&&$d[$i.'_temp']['s']<13&&$d['R'.$i]['s']<71) sl('R'.$i, 100, basename(__FILE__).':'.__LINE__);
