@@ -10,8 +10,8 @@ $query="SELECT MAX(wH) AS wH FROM `kwartierpiek` where date like '".date('Y-m').
 if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" '.$dbverbruik->error);
 while($row=$result->fetch_assoc())$kwartierpiek=$row['wH'];$result->free();
 if (!isset($kwartierpiek)) $kwartierpiek=2500;
-echo $kwartierpiek.PHP_EOL;
-
+echo 'Kwartierpiek = '.$kwartierpiek.PHP_EOL;
+$x=1;
 while (1){
 	$start = microtime(true);
 	$dag=mget('dag');
@@ -59,24 +59,24 @@ while (1){
 		$uur=date('G');
 		$newavg=$data->active_power_average_w;
 		if ($prevavg>2300) {
-			if ($newavg>$kwartierpiek*0.9) alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH', 300, false);
-			echo date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
+			if ($newavg>$kwartierpiek-200) alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH', 30, false);
+			echo $x.'	'.date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
 			if ($newavg<$prevavg&&$prevavg>2500) { // Nieuw kwartier
-				echo '	'.__LINE__.PHP_EOL;
+				echo $x.'	'.__LINE__.PHP_EOL;
 				if (!isset($dbverbruik)) {
-					echo '	'.__LINE__.PHP_EOL;
+					echo $x.'	'.__LINE__.PHP_EOL;
 					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 					if($dbverbruik->connect_errno>0){
-						echo '	'.__LINE__.PHP_EOL;
+						echo $x.'	'.__LINE__.PHP_EOL;
 						die('Unable to connect to database ['.$dbverbruik->connect_error.']');
 					}
 				}
-				echo '	'.__LINE__.PHP_EOL;
+				echo $x.'	'.__LINE__.PHP_EOL;
 				$query="INSERT INTO `kwartierpiek` (`date`,`wh`) VALUES ('".date('Y-m-d H:i:s')."','".$prevavg."')";
 				if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);
-				echo '	'.__LINE__.PHP_EOL;
-				if ($prevavg>$kwartierpiek*0.9) {
-					telegram('Kwartierpiek = '.$prevavg.' Wh'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH');
+				echo $x.'	'.__LINE__.PHP_EOL;
+				if ($prevavg>$kwartierpiek-200) {
+					alert('KartierpiekB', 'Kwartierpiek = '.$prevavg.' Wh'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH', 30, false);
 					$kwartierpiek=$prevavg;
 				}
 			}
@@ -190,6 +190,7 @@ while (1){
 		
 		if (isset($zonref,$zonavg))	$dbdomoticz->query("UPDATE devices SET m=".$zonref.", icon=".$zonavg." WHERE n='zonvandaag';");
 	}
+	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=1-$time_elapsed_secs;
 	if ($sleep<0) $sleep=0;
