@@ -127,3 +127,4 @@ if ($d['daikin']['m']==1) {
 		unset($power);
 	}
 }
+if ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=600) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

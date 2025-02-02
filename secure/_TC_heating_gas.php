@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-$kamers=array('living',/*'kamer','alex',*/'badkamer');
+$kamers=array('living',/*'kamer','alex','badkamer'*/);
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
 	if (${'dif'.$kamer}<$bigdif) $bigdif=${'dif'.$kamer};
@@ -32,3 +32,5 @@ if ($d['daikin']['m']==1) {
 		}
 	}
 }
+if ($d['brander']['s']=='On'&&$d['badkamer_temp']['s']>14&&past('brander')>=595) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
