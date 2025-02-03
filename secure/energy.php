@@ -193,7 +193,8 @@ while (1){
 	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=1-$time_elapsed_secs;
-	if ($sleep<0) $sleep=0;
-	$sleep=round($sleep*1000000);
-	usleep($sleep);
+	if ($sleep>0) {
+		$sleep=round($sleep*1000000);
+		usleep($sleep);
+	}
 }
