@@ -59,7 +59,7 @@ while (1){
 		$uur=date('G');
 		$newavg=$data->active_power_average_w;
 		if ($prevavg>2300) {
-			if ($newavg>$kwartierpiek-200) alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH', 30, false);
+			if ($newavg>$kwartierpiek-200) alert('Kwartierpiek', 'Kwartierpiek momenteel al '.$newavg.' Wh!'.PHP_EOL.PHP_EOL.'Piek deze maand = '.$kwartierpiek.' wH', 120, false);
 			echo $x.'	'.date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
 			if ($newavg<$prevavg&&$prevavg>2500) { // Nieuw kwartier
 				echo $x.'	'.__LINE__.PHP_EOL;

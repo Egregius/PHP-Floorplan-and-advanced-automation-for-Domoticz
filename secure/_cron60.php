@@ -102,8 +102,13 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
 		$past=past('GroheRed');
-		if ($d['Grohered_kWh']['s']<50&&$past>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-		elseif ($past>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['Grohered_kWh']['s']<50&&$past>180) {
+			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+		} elseif ($past>1800) {
+			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+		}
 	}
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dag']>3) {

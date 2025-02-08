@@ -29,7 +29,7 @@ if ($d['daikin']['m']==1) {
 			if ($dif>3) $power=0;
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
-				lg('Daikin '.$k.' dif='.$dif);
+//				lg('Daikin '.$k.' dif='.$dif);
 				$rate='A';
 				      if ($dif>=1.2) $set=$d[$k.'_set']['s']-2;
 				elseif ($dif>=0.9) $set=$d[$k.'_set']['s']-1.5;
@@ -40,6 +40,7 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif<=-0.9) $set=$d[$k.'_set']['s']+2;
 				elseif ($dif<=-0.6) $set=$d[$k.'_set']['s']+1.5;
 				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+1;
+				else $set=$d[$k.'_set']['s'];
 				if ($k=='living') {
 //					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 //					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;

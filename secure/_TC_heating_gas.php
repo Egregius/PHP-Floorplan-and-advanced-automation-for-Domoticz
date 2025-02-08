@@ -32,5 +32,4 @@ if ($d['daikin']['m']==1) {
 		}
 	}
 }
-if ($d['brander']['s']=='On'&&$d['badkamer_temp']['s']>14&&past('brander')>=595) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);

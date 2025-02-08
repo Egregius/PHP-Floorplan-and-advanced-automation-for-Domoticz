@@ -69,14 +69,19 @@ if ($d['auto']['s']=='On') {
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']==0&&past('voordeur')>55&&past('Weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-if ($d['GroheRed']['s']=='On'&&$d['avg']>$d['GroheRed']['m']) {
-	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan '.$d['GroheRed']['m'].'W verbruik');
-	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-} elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>3600) {
-	sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 60min aan');
-	storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+if ($d['GroheRed']['m']==0) {
+	if ($d['net']<-1200&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over');
+} else {
+	if ($d['GroheRed']['s']=='On'&&$d['avg']>$d['GroheRed']['m']) {
+		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan '.$d['GroheRed']['m'].'W verbruik');
+		storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+	} elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>3600) {
+		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 60min aan');
+		storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
+		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 }
-//elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>600&&past('watervandaag')>600) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 10min geen water genomen');
 if ($d['powermeter']['s']=='On'&&$d['avg']>$d['powermeter']['m']) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
 	storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
