@@ -372,7 +372,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			elseif ($time<strtotime('7:00')) bosevolume(13, 101, basename(__FILE__).':'.__LINE__);
-			else bosevolume(17, 101, basename(__FILE__).':'.__LINE__);
+			else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
