@@ -13,7 +13,7 @@ if ($status!=$d['deuralex']['s']) {
 					if ($d['RkeukenR']['s']>0) sl('RkeukenR', 0, basename(__FILE__).':'.__LINE__);
 					bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 				}
-			} elseif ($time>strtotime('7:00')&&$time<strtotime('9:00') bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
+			} elseif ($time>strtotime('7:00')&&$time<strtotime('9:00')) bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 		}
 	}
 	if ($d['Weg']['s']>1) {
