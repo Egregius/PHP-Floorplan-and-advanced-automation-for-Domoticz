@@ -13,15 +13,14 @@ if ($d['daikin']['m']==1) {
 	else $spmode=-1;
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 	elseif ($d['Weg']['s']>0) $maxpow=40;
-//	if ($d['living_set']['m']==0) {
-		if ($dow==1&&$time>=strtotime('8:00')&&$time<strtotime('16:50')) $maxpow=40;
-		elseif ($dow==2&&$time>=strtotime('8:00')&&$time<strtotime('17:20')) $maxpow=40;
+	if ($d['living_set']['m']==0) {
+		if ($dow==1&&$time>=strtotime('8:00')&&$time<strtotime('15:00')) $maxpow=40;
+		elseif ($dow==2&&$time>=strtotime('8:00')&&$time<strtotime('15:00')) $maxpow=40;
 		elseif ($dow==3&&$time>=strtotime('8:00')&&$time<strtotime('12:00')) $maxpow=40;
-		elseif ($dow==4&&$time>=strtotime('8:00')&&$time<strtotime('17:20')) $maxpow=40;
-		elseif ($dow==5&&$time>=strtotime('8:00')&&$time<strtotime('12:30')) $maxpow=40;
-//	}
-	$net=mget('net');
-	if ($net>2500&&$maxpow>40) $maxpow=40;
+		elseif ($dow==4&&$time>=strtotime('8:00')&&$time<strtotime('15:00')) $maxpow=40;
+		elseif ($dow==5&&$time>=strtotime('8:00')&&$time<strtotime('12:00')) $maxpow=40;
+	}
+	if ($d['net']>2500&&$maxpow>40) $maxpow=40;
 	$pastdaikin=past('daikin');
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
