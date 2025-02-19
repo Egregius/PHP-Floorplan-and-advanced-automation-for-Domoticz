@@ -167,7 +167,7 @@ if ($d['auto']['s']=='On') {
 	}
 	
 	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
-		if ($d['kookplaatpower_kWh']['s']<200&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['kookplaatpower_kWh']['s']<100&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 

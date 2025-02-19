@@ -69,9 +69,8 @@ if ($d['auto']['s']=='On') {
 }
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']==0&&past('voordeur')>55&&past('Weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-if ($d['GroheRed']['m']==0) {
-	if ($d['net']<-1200&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over');
-} else {
+if ($d['GroheRed']['m']==0&&$d['net']<-1200&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over');
+else {
 	if ($d['GroheRed']['s']=='On'&&$d['avg']>$d['GroheRed']['m']) {
 		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan '.$d['GroheRed']['m'].'W verbruik');
 		storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
