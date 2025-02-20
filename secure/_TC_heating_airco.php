@@ -1,16 +1,21 @@
 <?php
 $user=basename(__FILE__);
 if ($d['daikin']['m']==1) {
-	$bigdif=0;
+	$totalmin=0;
 	foreach (array('living','kamer','alex') as $k) {
 		${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-		if (${'dif'.$k}<0&&$d[$k.'_set']['s']>10) $bigdif-=${'dif'.$k};
+		if (${'dif'.$k}<0) $totalmin-=${'dif'.$k};
 	}
-	$maxpow=floor((100-($d['buiten_temp']['s']*3))*$bigdif);
-	$maxpow=floor($maxpow/10)*10;
-	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
-	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
+	if ($totalmin>=-1.2) $maxpow=100;
+	elseif ($totalmin>=-1.0) $maxpow=90;
+	elseif ($totalmin>=-0.8) $maxpow=80;
+	elseif ($totalmin>=-0.6) $maxpow=70;
+	elseif ($totalmin>=-0.4) $maxpow=60;
+	elseif ($totalmin>=-0.2) $maxpow=50;
+	else $maxpow=40;
+	if ($maxpow>=80) $spmode=0;
 	else $spmode=-1;
+
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
 	elseif ($d['Weg']['s']>0) $maxpow=40;
 	if ($d['living_set']['m']==0) {
@@ -41,8 +46,8 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+1;
 				else $set=$d[$k.'_set']['s'];
 				if ($k=='living') {
-					if ($set>$d[$k.'_set']['s']) lg('DAIKIN living hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is. $dif='.$dif.', maxpow='.$maxpow);
-					elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN living lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is. $dif='.$dif.', maxpow='.$maxpow);
+					if ($set>$d[$k.'_set']['s']) lg('DAIKIN living hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is. $dif='.$dif.', $$totalmin='.$totalmin.', maxpow='.$maxpow);
+					elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN living lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is. $dif='.$dif.', $$totalmin='.$totalmin.', maxpow='.$maxpow);
 //					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 //					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					//if ((($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0&&$time>strtotime('11:45')&&$time>strtotime('13:00'))||($d['eettafel']['s']>0&&$time>strtotime('17:30')&&$time>strtotime('19:00')))) $rate='B';
