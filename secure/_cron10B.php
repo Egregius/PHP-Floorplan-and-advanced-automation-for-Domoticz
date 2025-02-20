@@ -82,6 +82,8 @@ if ($d['Weg']['s']==0) {
 				unset($kodi);
 			}
 			if (past('lg_webos_tv_cd9e')<35) hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
+			if ($d['heating']['s']>0&&$d['Rliving']['s']<100) sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
+			elseif ($d['Rliving']['s']<25) sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
 		}
 		if (past('pirhall')<300) {
 			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);

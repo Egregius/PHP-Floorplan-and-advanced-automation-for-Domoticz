@@ -360,10 +360,12 @@ function bosezone($ip,$forced=false,$vol='') {
 	$dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
-		if ((int)$week % 2 == 0) $preset='PRESET_4';
-		else $preset='PRESET_3';
+		if ((int)$week % 3 == 0) $preset='PRESET_6';
+		elseif ((int)$week % 2 == 0) $preset='PRESET_5';
+		else $preset='PRESET_4';
 	} else {
-		if ((int)$week % 2 == 0) $preset='PRESET_2';
+		if ((int)$week % 3 == 0) $preset='PRESET_3';
+		elseif ((int)$week % 2 == 0) $preset='PRESET_2';
 		else $preset='PRESET_1';
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
