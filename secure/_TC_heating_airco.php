@@ -49,8 +49,8 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+1;
 				else $set=$d[$k.'_set']['s'];
 				if ($k=='living') {
-					if ($set>$d[$k.'_set']['s']) lg('DAIKIN living hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is. $dif='.$dif.', $totalmin='.$totalmin.', maxpow='.$maxpow);
-					elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN living lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is. $dif='.$dif.', $totalmin='.$totalmin.', maxpow='.$maxpow);
+//					if ($set>$d[$k.'_set']['s']) lg('DAIKIN living hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is, dif='.$dif);
+//					elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN living lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is, $dif='.$dif);
 //					if ($maxpow==40&&$set>$d[$k.'_temp']['s']-2&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-2;
 //					elseif ($maxpow==50&&$set>$d[$k.'_temp']['s']-1.5&&$d[$k.'_temp']['s']>19.5) $set=(ceil($d[$k.'_temp']['s']*2)/2)-1.5;
 					//if ((($d['Media']['s']=='On'&&$time>strtotime('19:00'))||($d['eettafel']['s']>0&&$time>strtotime('11:45')&&$time>strtotime('13:00'))||($d['eettafel']['s']>0&&$time>strtotime('17:30')&&$time>strtotime('19:00')))) $rate='B';
@@ -71,7 +71,9 @@ if ($d['daikin']['m']==1) {
 				$daikin=json_decode($d['daikin'.$k]['s']);
 				if (!isset($power)) $power=$daikin->power;
 					if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate||$d['daikin_kWh']['icon']!=$maxpow) {
-						lg('DAIKIN SET '.$k.' dif='.$dif.' rate='.$rate.' spmode='.$spmode.' maxpow='.$maxpow.' bigdif='.$bigdif);
+						if ($set>$d[$k.'_set']['s']) lg('DAIKIN '.$k.' hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is, dif='.$dif);
+						elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN '.$k.' lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is, $dif='.$dif);
+						lg('DAIKIN SET '.$k.' set '.$daikin->set.'>'.$set.' | power '.$daikin->power.'>'.$power.' | mode '.$daikin->mode.'>4 | fan '.$daikin->fan.'>'.$rate.' | maxpow '.$d['daikin_kWh']['icon'].'>'.$maxpow.' | dif '.$dif.' | spmode '.$spmode);
 						$data=json_decode($d[$k.'_set']['icon'], true);
 						$data['power']=$power;
 						$data['mode']=4;
