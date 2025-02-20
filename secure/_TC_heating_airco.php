@@ -73,7 +73,10 @@ if ($d['daikin']['m']==1) {
 					if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate||$d['daikin_kWh']['icon']!=$maxpow) {
 						if ($set>$d[$k.'_set']['s']) lg('DAIKIN '.$k.' hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is, dif='.$dif);
 						elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN '.$k.' lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is, $dif='.$dif);
-						lg('DAIKIN SET '.$k.' set '.$daikin->set.'>'.$set.' | power '.$daikin->power.'>'.$power.' | mode '.$daikin->mode.'>4 | fan '.$daikin->fan.'>'.$rate.' | maxpow '.$d['daikin_kWh']['icon'].'>'.$maxpow.' | dif '.$dif.' | spmode '.$spmode);
+						if ($spmode==1) $spmodetxt='POWER';
+						elseif ($spmode==0) $spmodetxt='normal';
+						elseif ($spmode==1) $spmodetxt='ECO';
+						lg('DAIKIN SET '.$k.' set '.$daikin->set.'>'.$set.' | power '.$daikin->power.'>'.$power.' | mode '.$daikin->mode.'>4 | fan '.$daikin->fan.'>'.$rate.' | maxpow '.$d['daikin_kWh']['icon'].'>'.$maxpow.' | dif '.$dif.' | spmode '.$spmodetxt);
 						$data=json_decode($d[$k.'_set']['icon'], true);
 						$data['power']=$power;
 						$data['mode']=4;

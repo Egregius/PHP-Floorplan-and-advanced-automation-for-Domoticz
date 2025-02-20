@@ -509,6 +509,11 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
+	$ip=array(
+		'living'=>111,
+		'kamer'=>112,
+		'alex'=>113
+	);
 	if ($maxpow==false) {
 		$maxpow=$d['daikin_kWh']['icon'];
 	} else {
@@ -522,17 +527,19 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	if ($power==0&&$d['daikin'.$device]['m']!=0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
 	elseif ($d['daikin'.$device]['m']!=$mode) storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
 
-	if ($spmode==-1) lg(__LINE__.': '.file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2')); // Eco
-	elseif ($spmode==0) lg(__LINE__.': '.file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1')); // Normal
-	elseif ($spmode==1) lg(__LINE__.': '.file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=1')); // Power
+	if ($spmode==-1) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=1&spmode_kind=2'); // Eco
+	elseif ($spmode==0) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=0&spmode_kind=1'); // Normal
+	elseif ($spmode==1) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=1&spmode_kind=1'); // Power
 	sleep(2);
 
-//	foreach(array(111, 112, 113) as $ip) {
-		if ($maxpow==100) $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
-		else $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$maxpow.'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
-//		lg(__LINE__.': '.file_get_contents($url));
-		file_get_contents($url);
-//	}
+	foreach($ip as $k=>$ip) {
+		if ($d['daikin'.$k]['m']!=0) {
+			if ($maxpow==100) $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
+			else $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$maxpow.'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
+			lg(__LINE__.': '.file_get_contents($url));
+			file_get_contents($url);
+		}
+	}
 }
 function updatefromdomoticz() {
 	global $db,$domoticzurl;
