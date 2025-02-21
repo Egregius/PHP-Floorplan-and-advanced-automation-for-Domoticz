@@ -356,16 +356,16 @@ function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
 	if (!is_array($d)) $d=fetchdata();
 	$time=time();
-	$week=date('W');
+	$jaardag=date('z')+1;
 	$dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
-		if ((int)$week % 3 == 0) $preset='PRESET_6';
-		elseif ((int)$week % 2 == 0) $preset='PRESET_5';
+		if ((int)$jaardag % 3 == 0) $preset='PRESET_6';
+		elseif ((int)$jaardag % 2 == 0) $preset='PRESET_5';
 		else $preset='PRESET_4';
 	} else {
-		if ((int)$week % 3 == 0) $preset='PRESET_3';
-		elseif ((int)$week % 2 == 0) $preset='PRESET_2';
+		if ((int)$jaardag % 3 == 0) $preset='PRESET_3';
+		elseif ((int)$jaardag % 2 == 0) $preset='PRESET_2';
 		else $preset='PRESET_1';
 	}
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
