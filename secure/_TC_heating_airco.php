@@ -39,15 +39,15 @@ if ($d['daikin']['m']==1) {
 //				lg('Daikin '.$k.' dif='.$dif);
 				$rate='A';
 				      if ($dif>=1.2) $set=$d[$k.'_set']['s']-1;
-				elseif ($dif>=0.9) $set=$d[$k.'_set']['s']-0.5;
-				elseif ($dif>=0.6) $set=$d[$k.'_set']['s']-0;
-				elseif ($dif>=0.3) $set=$d[$k.'_set']['s']+0.5;
-				elseif ($dif<=-1.5) $set=$d[$k.'_set']['s']+3.5;
-				elseif ($dif<=-1.2) $set=$d[$k.'_set']['s']+3;
-				elseif ($dif<=-0.9) $set=$d[$k.'_set']['s']+2.5;
-				elseif ($dif<=-0.6) $set=$d[$k.'_set']['s']+2;
-				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+1.5;
-				else $set=$d[$k.'_set']['s']+1;
+				elseif ($dif>=0.9) $set=$d[$k.'_set']['s']+1;
+				elseif ($dif>=0.6) $set=$d[$k.'_set']['s']+1.5;
+				elseif ($dif>=0.3) $set=$d[$k.'_set']['s']+1.5;
+				elseif ($dif<=-1.5) $set=$d[$k.'_set']['s']+4.5;
+				elseif ($dif<=-1.2) $set=$d[$k.'_set']['s']+4;
+				elseif ($dif<=-0.9) $set=$d[$k.'_set']['s']+3.5;
+				elseif ($dif<=-0.6) $set=$d[$k.'_set']['s']+3;
+				elseif ($dif<=-0.3) $set=$d[$k.'_set']['s']+2.5;
+				else $set=$d[$k.'_set']['s']+2;
 				if ($k=='living') {
 //					if ($set>$d[$k.'_set']['s']) lg('DAIKIN living hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is, dif='.$dif);
 //					elseif ($set<$d[$k.'_set']['s']) lg('DAIKIN living lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is, $dif='.$dif);

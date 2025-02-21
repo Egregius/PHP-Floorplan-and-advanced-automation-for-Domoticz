@@ -357,6 +357,7 @@ function bosezone($ip,$forced=false,$vol='') {
 	if (!is_array($d)) $d=fetchdata();
 	$time=time();
 	$jaardag=date('z')+1;
+	lg($jaardag);
 	$dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
@@ -515,12 +516,18 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		'alex'=>113
 	);
 	if ($maxpow==false) {
+
 		$maxpow=$d['daikin_kWh']['icon'];
+
 	} else {
+
 		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
-	$url="http://192.168.2.$ip/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+
+	$url="http://192.168.2.".$ip[$device]."/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+
 	file_get_contents($url);
+
 	sleep(2);
 	$status=daikinstatus($device);
 	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status, basename(__FILE__).':'.__LINE__.':'.$msg);
