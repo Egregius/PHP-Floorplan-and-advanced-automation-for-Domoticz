@@ -373,6 +373,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
+			lg('Bose zone time='.$time.'|'.strtotime('7:00'));
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
