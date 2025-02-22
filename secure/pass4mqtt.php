@@ -78,6 +78,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					$status=$message['nvalue'];
 					lg('(MQTT) Colorswitch '.$device.' => '.$status);	
 					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
+				} elseif ($message['dtype']=='Setpoint') {
+					$status=$message['svalue1'];
+					lg('(MQTT) Setpoint '.$device.' => '.$status);	
+					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
 				} else {
 //					store($device, $message['nvalue']);
 					lg('(MQTT) else '.print_r($message,true));	

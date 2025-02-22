@@ -181,7 +181,15 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		}
 	}
 }
-
+function setpoint($name, $value,$msg='') {
+	global $d,$user,$domoticzurl,$db;
+	if (!is_array($d)) $d=fetchdata();
+	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
+	lg($msg);
+	if ($d[$name]['i']>0) {
+		file_get_contents($domoticzurl.'/json.htm?type=command&param=setsetpoint&idx='.$d[$name]['i'].'&setpoint='.$value);
+	}
+}
 function store($name='',$status='',$msg='',$idx=null) {
 	global $db, $user;
 	$time=time();
@@ -356,6 +364,7 @@ function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
 	if (!is_array($d)) $d=fetchdata();
 	$time=time();
+	$t=t();
 	$jaardag=date('z')+1;
 	lg($jaardag);
 	$dow=date("w");
@@ -373,9 +382,9 @@ function bosezone($ip,$forced=false,$vol='') {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
-			lg('Bose zone time='.$time.'|'.strtotime('7:00'));
+			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-			elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
+			elseif ($time<$t+1800) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
@@ -545,7 +554,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 			if ($maxpow==100) $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
 			else $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$maxpow.'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
 			lg(__LINE__.': '.file_get_contents($url));
-			file_get_contents($url);
+//			file_get_contents($url);
 		}
 	}
 }

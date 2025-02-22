@@ -59,11 +59,11 @@ if ($d['kamer_set']['m']==1) $Setkamer=$d['kamer_set']['s'];
 if ($d['alex_set']['m']==1) $Setalex=$d['alex_set']['s'];
 
 if ($d['kamer_set']['s']!=$Setkamer) {
-	store('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
+	setpoint('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
 	$d['kamer_set']['s']=$Setkamer;
 }
 if ($d['alex_set']['s']!=$Setalex) {
-	store('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
+	setpoint('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
 	$alex_set=$Setalex;
 	$d['alex_set']['s']=$Setalex;
 }
@@ -101,7 +101,7 @@ if ($d['living_set']['m']==0) {
 		$Setliving=10;
 	}
 	if ($d['living_set']['s']!=$Setliving) {
-		store('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
+		setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 		$living_set=$Setliving;
 		$d['living_set']['s']=$Setliving;
 	}

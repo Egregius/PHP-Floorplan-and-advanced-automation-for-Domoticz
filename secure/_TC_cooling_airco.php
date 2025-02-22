@@ -132,6 +132,8 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
+			$data['spmode']=$daikin->spmode;
+			$data['maxpow']=$daikin->maxpow;
 			storeicon('kamer_set', json_encode($data));
 			daikinset('kamer', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 		}
@@ -248,6 +250,8 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
+			$data['spmode']=$daikin->spmode;
+			$data['maxpow']=$daikin->maxpow;
 			storeicon('alex_set', json_encode($data));
 			daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 		}
@@ -344,6 +348,8 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
+			$data['spmode']=$daikin->spmode;
+			$data['maxpow']=$daikin->maxpow;
 			storeicon('living_set', json_encode($data));
 			daikinset('living', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', $spmode, $maxpow);
 		}

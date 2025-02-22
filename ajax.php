@@ -83,11 +83,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			else $t=strtotime('7:00');
 			if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
 				if ($d['waskamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__);
-				store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
 				$d=fetchdata();
 				if ($d['heating']['s']==-2) {//airco cooling
@@ -122,7 +122,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 					sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 				}
 			}
-			store($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 2, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_REQUEST['command']=='heating') {

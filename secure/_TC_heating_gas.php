@@ -28,6 +28,8 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=4;
 			$data['fan']='A';
 			$data['set']=10;
+			$data['spmode']=$daikin->spmode;
+			$data['maxpow']=$daikin->maxpow;
 			storeicon($k.'_set', json_encode($data));
 		}
 	}
