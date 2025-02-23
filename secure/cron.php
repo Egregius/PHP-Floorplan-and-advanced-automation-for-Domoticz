@@ -4,8 +4,8 @@ require '/var/www/html/secure/functions.php';
 $fetch=0;
 if (!isset($d)) $d=fetchdata(0);
 $user='CRONstart';
-sw('waskamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
-sw('waskamervuur2', 'Off', basename(__FILE__).':'.__LINE__,true);
+sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
+sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__,true);
 if (isset($argv[1])) {
 	echo 'Executing _cron'.$argv[1].'.php'.PHP_EOL.PHP_EOL;
 	include ('_cron'.$argv[1].'.php');

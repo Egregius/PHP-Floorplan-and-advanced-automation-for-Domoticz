@@ -24,7 +24,9 @@ if ($d['daikin']['m']==1) {
 		elseif ($dow==5&&$time>=strtotime('8:00')&&$time<strtotime('12:00')) $maxpow=40;
 	}*/
 
-	if ($d['net']>2500&&$maxpow>40) $maxpow=40;
+	if ($d['net']>3500&&$maxpow>40) $maxpow=40;
+	elseif ($d['net']>3000&&$maxpow>60) $maxpow=60;
+	elseif ($d['net']>2500&&$maxpow>80) $maxpow=80;
 	$pastdaikin=past('daikin');
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {

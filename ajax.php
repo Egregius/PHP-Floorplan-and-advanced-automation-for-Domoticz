@@ -82,7 +82,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			elseif($dow==2||$dow==5) $t=strtotime('6:45');
 			else $t=strtotime('7:00');
 			if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
-				if ($d['waskamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 				setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			}
@@ -115,11 +115,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		elseif($dow==2||$dow==5) $t=strtotime('6:45');
 		else $t=strtotime('7:00');
 		if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
-			if ($d['waskamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) {
-				sw('waskamervuur1', 'On', basename(__FILE__).':'.__LINE__);
-				if ($d['waskamervuur2']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']-0.3) {
+			if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) {
+				sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['badkamervuur2']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']-0.3) {
 					sleep(2);
-					sw('waskamervuur2', 'On', basename(__FILE__).':'.__LINE__);
+					sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 				}
 			}
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
