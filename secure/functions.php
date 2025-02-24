@@ -329,7 +329,7 @@ function endswith($string,$test) {
 	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
-	lg('bosekey '.$key.' '.$msg);
+	lg('bosekey '.$ip.' '.$key.' '.$msg);
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";

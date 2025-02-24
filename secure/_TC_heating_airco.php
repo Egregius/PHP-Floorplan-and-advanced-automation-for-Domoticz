@@ -50,7 +50,7 @@ if ($d['daikin']['m']==1) {
 				if ($k=='living') {
 					$cor=3;
 					$set+=$cor;
-					if ($time>strtotime('20:00')) $rate='B';
+					if ($time>strtotime('20:00')) $rate=3;
 				} elseif ($k=='kamer') {
 					$cor=1;
 					$set+=$cor;
