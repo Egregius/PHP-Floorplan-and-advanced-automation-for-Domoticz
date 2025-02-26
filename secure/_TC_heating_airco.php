@@ -6,12 +6,12 @@ if ($d['daikin']['m']==1) {
 		${'dif'.$k}=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 		if (${'dif'.$k}<0) $totalmin-=${'dif'.$k};
 	}
-	if ($totalmin>=1.8) $maxpow=100;
-	elseif ($totalmin>=1.5) $maxpow=90;
-	elseif ($totalmin>=1.2) $maxpow=80;
-	elseif ($totalmin>=0.9) $maxpow=70;
-	elseif ($totalmin>=0.6) $maxpow=60;
-	elseif ($totalmin>=0.3) $maxpow=50;
+	if ($totalmin>=2.5) $maxpow=100;
+	elseif ($totalmin>=2.0) $maxpow=90;
+	elseif ($totalmin>=1.6) $maxpow=80;
+	elseif ($totalmin>=1.2) $maxpow=70;
+	elseif ($totalmin>=0.8) $maxpow=60;
+	elseif ($totalmin>=0.4) $maxpow=50;
 	else $maxpow=40;
 
 	if ($d['daikin_kWh']['m']!='Auto') $maxpow=$d['daikin_kWh']['m'];
@@ -42,11 +42,11 @@ if ($d['daikin']['m']==1) {
 
 				  elseif ($dif <= -1.5) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
 				  elseif ($dif <= -1.2) {$set=$d[$k.'_set']['s']+2;$spmode=1;$line=__LINE__;}
-				  elseif ($dif <= -0.9) {$set=$d[$k.'_set']['s']+1.5;$spmode=1;$line=__LINE__;}
+				  elseif ($dif <= -0.9) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
 				  elseif ($dif <= -0.6) {$set=$d[$k.'_set']['s']+1;$spmode=0;$line=__LINE__;}
 				  elseif ($dif <= -0.3) {$set=$d[$k.'_set']['s']+0.5;$spmode=0;$line=__LINE__;}
 				  else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
-
+					if ($d['Weg']['s']>0) $spmode=-1;
 				if ($k=='living') {
 					$cor=3;
 					$set+=$cor;

@@ -1,6 +1,5 @@
 <?php
-$d=fetchdata($fetch);
-$fetch=time();
+$d=fetchdata($time-20);
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	$i=39;
@@ -88,14 +87,6 @@ if ($d['powermeter']['s']=='On'&&$d['avg']>$d['powermeter']['m']) {
 	telegram ('Auto laden uit, te veel verbruik');
 } 
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
-
-
-/*
-if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1798) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
-*/
-
-
 
 if ($d['Weg']['m']==2) {
 	lg('Stopping CRON Loop...');

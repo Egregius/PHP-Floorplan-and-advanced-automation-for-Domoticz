@@ -62,7 +62,7 @@ echo '
 		#volume{width:99vw;}
 		#bass{width:99vw;}
 		.volume{width:8.4%;height:50px;padding:0!important;margin:0 0.3%;}
-
+		#playlist{font-size:33px;left:4px;font-weight:500;}
 	</style>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
 	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
@@ -77,6 +77,9 @@ echo '
 <body>
 	<div class="fix" id="clock">
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time"></a> 
+	</div>
+	<div class="fix" id="playlist">
+		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="playlist">'.boseplaylist().'</a> 
 	</div>
 	<div class="fix z1" style="bottom:14px;left:14px;">
 		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a><span style="font-size:2em;padding:8px;">'.$boses[$bose].'</span>
