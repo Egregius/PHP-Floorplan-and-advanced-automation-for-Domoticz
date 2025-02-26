@@ -65,7 +65,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 		<meta name="HandheldFriendly" content="true"/>';
 	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
 		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=0.8,user-scalable=yes,minimal-ui">';
+		<meta name="viewport" content="width=300,height=500,initial-scale=0.84,user-scalable=yes,minimal-ui">';
 	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
 		echo '
 		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
