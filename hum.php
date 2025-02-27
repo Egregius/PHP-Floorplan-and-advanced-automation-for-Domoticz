@@ -12,35 +12,19 @@ echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
-	<link rel="dns-prefetch" href="https://www.gstatic.com/" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>';
-	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
-		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} elseif ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} else {
-		echo '
-		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
-	}
-	echo '
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="theme-color" content="#000">
-	<title>Humidity</title>
-	<link rel="icon" href="images/temperatures.png"/>
-	<link rel="shortcut icon" href="images/temperatures.png"/>
-	<link rel="apple-touch-icon" href="images/temperatures.png"/>
-	<link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
+		<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
+		<link rel="dns-prefetch" href="https://www.gstatic.com/" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="viewport" content="width=device-width,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="theme-color" content="#000">
+		<title>Humidity</title>
+		<link rel="icon" href="images/temperatures.png"/>
+		<link rel="shortcut icon" href="images/temperatures.png"/>
+		<link rel="apple-touch-icon" href="images/temperatures.png"/>
+		<link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
 	</head>';
 if ($udevice=='iPad') echo '
 	<body style="width:1010px">

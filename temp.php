@@ -12,24 +12,8 @@ echo '
 	<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
 	<link rel="dns-prefetch" href="https://www.gstatic.com/" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="HandheldFriendly" content="true"/>';
-	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
-		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} elseif ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} else {
-		echo '
-		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
-	}
-	echo '
+	<meta name="HandheldFriendly" content="true"/>
+	<meta name="viewport" content="width=300,height=500,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
@@ -44,7 +28,7 @@ if ($udevice=='iPad') echo '
 		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
-elseif ($udevice=='iPhone') echo '
+elseif ($udevice=='iPhoneGuy'||$udevice=='iPhoneKirby') echo '
 	<body style="width:450px">
 		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:100%;height:70px;background-color:#000;">
 		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
@@ -112,16 +96,16 @@ $argshour=array(
 		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
 		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
 	);
-if ($udevice=='iPad') {
+if ($udevice=='iPadGuy') {
 	$args['width']=1000;$args['height']=1320;
 	$argshour['width']=1000;$argshour['height']=1320;
-} elseif ($udevice=='iPhone') {
+} elseif ($udevice=='iPhoneGuy') {
 	$args['width']=480;$args['height']=950;
 	$argshour['width']=480;$argshour['height']=950;
-} elseif ($udevice=='iPhoneSE') {
+} elseif ($udevice=='iPhoneKirby') {
 	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
-} elseif ($udevice=='iMac') {
+} elseif ($udevice=='Mac') {
 	$args['width']=490;$args['height']=780;
 	$argshour['width']=490;$argshour['height']=780;
 } else {
@@ -260,6 +244,6 @@ unset($chart,$graph);
 $togo=61-date("s");
 if ($togo<15) $togo=15;
 $togo=$togo*1000+62000;
-echo "<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds";
+echo "<br>$udevice<br><br>refreshing in ".$togo/1000 ." seconds<br><br><br><br><br>";
 echo '<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
 $db->close();

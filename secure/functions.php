@@ -458,30 +458,14 @@ function sirene($msg) {
 	mset('sirene', $time);
 }
 function createheader($page='') {
-	global $udevice,$ipaddress;
+	global $scale;
 	echo '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<title>Floorplan</title>';
-	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
-		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=0.84,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} elseif ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} else {
-		echo '
-		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
-	}
-	echo '
+		<title>Floorplan</title>
+		<meta name="viewport" content="width=device-width,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">

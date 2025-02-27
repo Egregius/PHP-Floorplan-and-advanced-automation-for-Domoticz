@@ -4,6 +4,19 @@ $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 $db=dbconnect();
+if (isset($_GET['setauto'])) {
+	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
+} elseif (isset($_GET['setpower'])) {
+	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	storemode('daikin_kWh', $_GET['setpower']);
+	storeicon('daikin_kWh', $_GET['setpower']);
+	if ($_GET['setpower']!='Auto') {
+		file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
+		file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
+		file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
+	}
+}
+$d=fetchdata();
 echo '
 <html>
 	<head>
@@ -13,37 +26,8 @@ echo '
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="theme-color" content="#000">';
-	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
-		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=1.68,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=yes,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} elseif ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=yes,minimal-ui">';
-	} else {
-		echo '
-		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
-	}
-if (isset($_GET['setauto'])) {
-	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
-} elseif (isset($_GET['setpower'])) {
-	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-	storemode('daikin_kWh', $_GET['setpower']);
-	storeicon('daikin_kWh', $_GET['setpower']);
-	if ($_GET['setpower']!='Auto') {
-		echo '111='.file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
-		echo '112='.file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
-		echo '113='.file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
-	}
-}
-$d=fetchdata();
-echo '
+		<meta name="theme-color" content="#000">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>

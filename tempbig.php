@@ -13,7 +13,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<link rel="dns-prefetch" href="https://www.gstatic.com/" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="HandheldFriendly" content="true"/>
-	<meta name="viewport" content="width=device-width,height=device-height, user-scalable=yes, minimal-ui"/>
+	<meta name="viewport" content="width=300,height=500,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
