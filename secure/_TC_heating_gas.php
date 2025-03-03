@@ -34,4 +34,6 @@ if ($d['daikin']['m']==1) {
 		}
 	}
 }
-if ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&$d['raamkamer']['s']=='Closed'&&$d['raamwaskamer']['s']=='Closed'&&$d['raamalex']['s']=='Closed')) {
+	if ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<14&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+}

@@ -121,44 +121,6 @@ if ($d['auto']['s']=='On') {
 	
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
 	
-	//Bose
-	if ($d['pirliving']['s']=='Off'
-		&&$d['pirgarage']['s']=='Off'
-		&&$d['bose101']['m']==1
-		&&$d['bose101']['s']=='On'
-		&&$d['bose102']['s']=='Off'
-		&&$d['bose103']['s']=='Off'
-		&&$d['bose104']['s']=='Off'
-		&&$d['bose105']['s']=='Off'
-		&&$d['bose106']['s']=='Off'
-		&&$d['bose107']['s']=='Off'
-		&&past('bose101')>300
-		&&past('bose102')>300
-		&&past('bose103')>300
-		&&past('bose104')>300
-		&&past('bose105')>300
-		&&past('bose106')>300
-		&&past('bose107')>300
-		&&(($d['Weg']['s']>0||$d['lg_webos_tv_cd9e']['s']=='On')&&$d['eettafel']['s']==0)
-	) {
-		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
-		if (!empty($status)) {
-			if (isset($status['@attributes']['source'])) {
-				if ($status['@attributes']['source']!='STANDBY') {
-					bosekey("POWER", 0, 101);
-					if ($d['bose101']['s']!='Off') sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose102']['s']!='Off') sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose103']['s']!='Off') sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose105']['s']!='Off') sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose106']['s']!='Off') sw('bose106', 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['bose107']['s']!='Off') sw('bose107', 'Off', basename(__FILE__).':'.__LINE__);
-				}
-			}
-		}
-	}
-	//End Bose
-
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);

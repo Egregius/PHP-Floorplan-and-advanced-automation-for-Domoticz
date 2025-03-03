@@ -38,23 +38,24 @@ while (1){
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 
-		$power=$data->active_power_w-$newzon;
-		$alwayson=mget('alwayson');
-		if ($power>=50&&($power<$alwayson||empty($alwayson))) {
-			if (!isset($db)) $db=dbconnect();
-			mset('alwayson',$power);
-			$time=time();
-			$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
-			lg('New alwayson '.$power.' W');
-			$vandaag=date("Y-m-d",$time);
-			if (!isset($dbverbruik)) {
-				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
-				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+		if ($newzon==0) {
+			$power=$data->active_power_w;
+			$alwayson=mget('alwayson');
+			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
+				if (!isset($db)) $db=dbconnect();
+				mset('alwayson',$power);
+				$time=time();
+				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
+				lg('New alwayson '.$power.' W');
+				$vandaag=date("Y-m-d",$time);
+				if (!isset($dbverbruik)) {
+					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
+					if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
+				}
+				$query="INSERT INTO `alwayson` (`date`,`w`) VALUES ('$vandaag','$alwayson') ON DUPLICATE KEY UPDATE `w`='$alwayson'";
+				if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			}
-			$query="INSERT INTO `alwayson` (`date`,`w`) VALUES ('$vandaag','$alwayson') ON DUPLICATE KEY UPDATE `w`='$alwayson'";
-			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 		}
-		
 		$sec=date('s');
 		$min=date('i');
 		$uur=date('G');
