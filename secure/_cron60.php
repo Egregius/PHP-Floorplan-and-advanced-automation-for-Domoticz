@@ -99,13 +99,8 @@ if ($d['auto']['s']=='On') {
 	}
 	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
 		$past=past('GroheRed');
-		if ($d['Grohered_kWh']['s']<50&&$past>180) {
-			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-		} elseif ($past>1800) {
-			sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-			storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-		}
+		if ($d['Grohered_kWh']['s']<50&&$past>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+		elseif ($past>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dag']>3) {
@@ -115,9 +110,9 @@ if ($d['auto']['s']=='On') {
 			if ($d['kristal']['s']=='On') sw('kristal', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
-	
+
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
-	
+
 	if ($d['Rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);

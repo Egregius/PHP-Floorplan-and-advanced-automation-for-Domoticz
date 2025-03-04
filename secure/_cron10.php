@@ -70,24 +70,18 @@ if ($d['auto']['s']=='On') {
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']==0&&past('voordeur')>55&&past('Weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 $pastgrohe=past('GroheRed');
-lg ($d['GroheRed']['s']);
-if ($d['GroheRed']['m']==0&&$d['net']<-1500&&$d['GroheRed']['s']=='Off'/*&&$pastgrohe>59*/) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
-else {
-	if ($d['GroheRed']['s']=='On'&&$d['avg']>$d['GroheRed']['m']) {
-		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan '.$d['GroheRed']['m'].'W verbruik');
-		storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	} elseif ($d['GroheRed']['s']=='On'&&past('GroheRed')>3600) {
-		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Langer dan 60min aan');
-		storemode('GroheRed', 0, basename(__FILE__).':'.__LINE__);
-		sw('Xlight', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}
-if ($d['powermeter']['s']=='On'&&$d['avg']>$d['powermeter']['m']) {
-	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
+if ($d['Weg']['s']<2&&$d['net']<-1200&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
+elseif ($d['GroheRed']['s']=='On'&&$pastgrohe>3600&&past('$ 8keuken8d')>1800&&$d['net']>0) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+
+if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']||$d['Weg']['s']>=2)) {
+	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Auto laden uit, te veel verbruik');
 	storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
-	telegram ('Auto laden uit, te veel verbruik');
-} 
+} elseif ($d['Weg']['s']==0&&$d['powermeter']['s']=='Off'&&$d['avg']<100&&$d['net']<-2500&&$d['GroheRed']['s']=='On') {
+	$time=time();
+	mset('powermeter',$time);
+	storemode('powermeter', 500, basename(__FILE__).':'.__LINE__);
+	sw('powermeter', 'On', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
+}
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 
 if ($d['Weg']['m']==2) {

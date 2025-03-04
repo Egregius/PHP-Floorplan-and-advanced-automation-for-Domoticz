@@ -100,17 +100,17 @@ $argshour=array(
 		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
 		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
 	);
-if ($udevice=='iPad') {
+if ($udevice=='iPadGuy') {
 	$args['width']=1000;$args['height']=1320;
 	$argshour['width']=1000;$argshour['height']=1320;
-} elseif ($udevice=='iPhone') {
+} elseif ($udevice=='iPhoneGuy') {
 	$args['width']=480;$args['height']=950;
 	$argshour['width']=480;$argshour['height']=950;
-} elseif ($udevice=='iPhoneSE') {
+} elseif ($udevice=='iPhoneKirby') {
 	$args['width']=420;$args['height']=710;
 	$argshour['width']=420;$argshour['height']=610;
 } elseif ($udevice=='Mac') {
-	$args['width']=490;$args['height']=788;
+	$args['width']=490;$args['height']=780;
 	$argshour['width']=490;$argshour['height']=780;
 } else {
 	$args['width']=480;$args['height']=902;

@@ -56,7 +56,7 @@ if ($d['daikin']['m']==1) {
 				  else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 					if ($d['Weg']['s']>0) $spmode=-1;
 				if ($k=='living') {
-					$cor=3;
+					$cor=2.5;
 					$set+=$cor;
 					if ($time>strtotime('20:00')) $rate=3;
 				} elseif ($k=='kamer') {
