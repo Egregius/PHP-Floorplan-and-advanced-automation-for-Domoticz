@@ -16,8 +16,8 @@ if (isset($argv[1])) {
 		$start = microtime(true);
 		$time=time();
 		$crontime=$time;
-		if ($crontime%60==0) include '_cron60.php';
 		if ($crontime%10==0) include '_cron10.php';
+		if ($crontime%60==0) include '_cron60.php';
 		if ($crontime%15==0) {
 			$user=' TC '.$d['heating']['s'];
 			$s=date('s');

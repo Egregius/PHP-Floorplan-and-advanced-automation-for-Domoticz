@@ -1,7 +1,4 @@
 <?php
-$d=fetchdata($time-120);
-$t=t();
-
 $user=basename(__FILE__);
 //lg($user);
 $stamp=sprintf("%s", date("Y-m-d H:i"));

@@ -1,5 +1,6 @@
 <?php
-$d=fetchdata($time-20);
+$t=t();
+$d=fetchdata($time-60);
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	$i=39;
@@ -69,7 +70,8 @@ if ($d['auto']['s']=='On') {
 if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']==0&&past('voordeur')>55&&past('Weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 $pastgrohe=past('GroheRed');
-if ($d['GroheRed']['m']==0&&$d['net']<-1500&&$d['GroheRed']['s']=='Off'/*&&$pastgrohe>59*/) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over');
+lg ($d['GroheRed']['s']);
+if ($d['GroheRed']['m']==0&&$d['net']<-1500&&$d['GroheRed']['s']=='Off'/*&&$pastgrohe>59*/) sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
 else {
 	if ($d['GroheRed']['s']=='On'&&$d['avg']>$d['GroheRed']['m']) {
 		sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__.' Meer dan '.$d['GroheRed']['m'].'W verbruik');
