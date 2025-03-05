@@ -7,11 +7,9 @@ require '/var/www/authentication.php';
 $d=fetchdata();
 echo $d['dag'];
 
-//$data=json_decode(hassget());
-//foreach ($data as $i) {
-//	if ($i->entity_id==
-//	print_r($i);
-//}
+file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:0,%22b%22:0,%22cw%22:0,%22ww%22:0}&brightness=1');
+sleep(5);
+file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx=744&color={%22m%22:3,%22t%22:0,%22r%22:255,%22g%22:0,%22b%22:0,%22cw%22:0,%22ww%22:0}&brightness=0');
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

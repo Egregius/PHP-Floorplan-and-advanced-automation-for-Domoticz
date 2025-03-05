@@ -1,6 +1,8 @@
 <?php
 require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
+	$memcache=new Memcache;
+	$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 	$user='camera';
 	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	$result = $mysqli->query("select n,i,s,t,m from devices WHERE n in ('Weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");

@@ -18,9 +18,6 @@ if (isset($d[$device])) {
 		if ($status=='Off'||$status=='Open') $status=0;
 		elseif ($status=='On'||$status=='Closed') $status=100;
 		else $status=filter_var($status, FILTER_SANITIZE_NUMBER_INT);
-		if ($device=='Xlight') {
-			if (!is_int($status)) $status=101;
-		}
 	} elseif ($device=='achterdeur') {
 		if ($status=='Open') $status='Closed';
 		else $status='Open';

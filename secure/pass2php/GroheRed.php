@@ -1,6 +1,5 @@
 <?php
 if ($status=='Off') {
-	rgb('Xlight', 0, 0);
-	storemode('Xlight', 'uit');
+	file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=744&switchcmd=Off&level=0&passcode=');
 }
 

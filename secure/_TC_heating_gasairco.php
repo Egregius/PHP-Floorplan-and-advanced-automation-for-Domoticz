@@ -6,7 +6,9 @@ foreach (array('living','badkamer') as $kamer) {
 }
 
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<1000) $aanna=1000;
-$uitna=(21-$d['buiten_temp']['s'])*60; if ($uitna<595) $uitna=595;
+$uitna=(21-$d['buiten_temp']['s'])*60; 
+if ($uitna<595) $uitna=595;
+elseif ($uitna>1195) $uitna=1195;
 
 if (	$difgas<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6&&$d['net']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8&&$d['net']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
