@@ -10,6 +10,10 @@ $time=time();
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
+
+//Setting some temp variables
+$xlight=false;
+
 lg(' Starting MQTT loop...');
 updatefromdomoticz();
 $d=fetchdata(0);
@@ -21,7 +25,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time;
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$xlight;
 			$d=fetchdata($time);
 			$message=json_decode($message, true);
 			$device=$message['name'];
