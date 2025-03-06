@@ -45,8 +45,8 @@ if ($d['daikin']['m']==1) {
 			elseif ($dif<=0&&($d['buiten_temp']['s']>4||$d['net']<-500)) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$rate='A';
-				      if ($dif >=  1.2) {$set=$d[$k.'_set']['s']-2;$spmode=-1;$line=__LINE__;}
-				  elseif ($dif >=  0.9) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
+				      if ($dif >=  1.2) {$set=$d[$k.'_set']['s']-3;$spmode=-1;$line=__LINE__;}
+				  elseif ($dif >=  0.9) {$set=$d[$k.'_set']['s']-2;$spmode=-1;$line=__LINE__;}
 				  elseif ($dif >=  0.6) {$set=$d[$k.'_set']['s']-1;$spmode=-1;$line=__LINE__;}
 				  elseif ($dif >=  0.3) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
 
