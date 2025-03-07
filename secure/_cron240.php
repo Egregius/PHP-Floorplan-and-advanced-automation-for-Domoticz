@@ -1,5 +1,4 @@
 <?php
-//$d=fetchdata($fetch);
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	if ($d['Weg']['s']==0){

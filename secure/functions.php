@@ -22,6 +22,7 @@ function t() {
 	
 function fliving() {
 	global $d,$time;
+	$time=time();
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
@@ -48,7 +49,8 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$time;
-	$d=fetchdata();
+	//$d=fetchdata();
+	$time=time();
 	if (($d['dag']<3&&$d['Weg']['s']==0)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']<4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		if ($d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
@@ -99,20 +101,20 @@ function waarschuwing($msg) {
 function past($name) {
 	global $d,$time;
 	$time=time();
-	if (!isset($d[$name]['t'])) $d=fetchdata();
+	if (!isset($d[$name]['t'])) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($name=='$ remoteauto') lg('past '.$name.'	time='.$time.' t='.$d[$name]['t'].' past='.$time-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return $time-$d[$name]['t'];
 	else return 999999999;
 }
 function idx($name) {
 	global $d;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($d[$name]['i']>0) return $d[$name]['i'];
 	else return 0;
 }
 function sl($name,$level,$msg='',$force=false) {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -129,7 +131,7 @@ function sl($name,$level,$msg='',$force=false) {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
@@ -142,7 +144,7 @@ function rgb($name,$hue,$level,$check=false) {
 }
 function resetsecurity() {
 	global $d,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 //		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
@@ -156,7 +158,7 @@ function resetsecurity() {
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $d,$user,$domoticzurl,$db;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
@@ -183,7 +185,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg);
 	if ($d[$name]['i']>0) {
@@ -215,7 +217,7 @@ function storemode($name,$mode,$msg='',$updatetime=true) {
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__.'-'.__FUNCTION__);
 	if ($d[$name]['icon']!=$icon) {
 		if(!isset($db)) $db=dbconnect();
 		$time=time();
@@ -251,7 +253,7 @@ function kodi($json) {
 }
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (isset($d[$name]['i'])&&$d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
@@ -281,7 +283,7 @@ function rookmelder($msg) {
 	global $device;
 	resetsecurity();
 //	global $d,$device;
-//	if (!is_array($d)) $d=fetchdata();
+//	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['Weg']['s']<=1) {
 
@@ -378,7 +380,7 @@ function boseplaylist() {
 }
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
-	if (!is_array($d)) $d=fetchdata();
+	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$t=t();
 	$playlist=boseplaylist();
@@ -511,7 +513,7 @@ function daikinstatus($device) {
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=false) {
 	global $time;
 	$time=time();
-	$d=fetchdata();
+	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
@@ -555,7 +557,7 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 }
 function updatefromdomoticz() {
 	global $db,$domoticzurl;
-	$d=fetchdata();
+	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=command&param=getdevices&used=true'),true);
 	if ($domoticz) {
 		foreach ($domoticz['result'] as $dom) {
@@ -665,7 +667,9 @@ function dbconnect() {
 	global $dbname,$dbuser,$dbpass;
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 }
-function fetchdata($t=0) {
+function fetchdata($t=0,$lg='') {
+	if ($t==0) lg('fetchdata ALL '.$lg);
+	else lg('fetchdata '.time()-$t.' '.$lg);
 	global $db,$d;
 	if(!isset($db)) $db=dbconnect();
 	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");

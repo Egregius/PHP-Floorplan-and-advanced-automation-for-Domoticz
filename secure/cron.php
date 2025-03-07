@@ -2,7 +2,7 @@
 <?php
 require '/var/www/html/secure/functions.php';
 $fetch=0;
-if (!isset($d)) $d=fetchdata(0);
+if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $user='CRONstart';
 sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
 sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__,true);
@@ -12,7 +12,7 @@ if (isset($argv[1])) {
 } else {
 	lg('Starting CRON loop...');
 	while (1){
-		if (!isset($d)) $d=fetchdata(0);
+		if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 		$start = microtime(true);
 		$time=time();
 		$crontime=$time;

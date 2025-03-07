@@ -1,6 +1,6 @@
 <?php
 $t=t();
-$d=fetchdata($time-60);
+$d=fetchdata($time-10,basename(__FILE__).':'.__LINE__);
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	$i=39;
@@ -77,7 +77,6 @@ if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']||$d['Weg']['s'
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Auto laden uit, te veel verbruik');
 	storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 } elseif ($d['Weg']['s']==0&&$d['powermeter']['s']=='Off'&&$d['avg']<100&&$d['net']<-2500&&$d['GroheRed']['s']=='On') {
-	$time=time();
 	mset('powermeter',$time);
 	storemode('powermeter', 500, basename(__FILE__).':'.__LINE__);
 	sw('powermeter', 'On', basename(__FILE__).':'.__LINE__.' Te veel verbruik');

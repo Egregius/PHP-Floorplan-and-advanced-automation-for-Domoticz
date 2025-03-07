@@ -2,7 +2,7 @@
 <?php
 require '/var/www/html/secure/functions.php';
 lg('Starting cron10B loop...');
-if (!isset($d)) $d=fetchdata(0);
+if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 while (1){
 	$start = microtime(true);
 	include '_cron10B.php';
