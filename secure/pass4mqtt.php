@@ -12,7 +12,7 @@ require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 
 //Setting some temp variables
-$xlight=false;
+$lastfetch=0;
 
 lg(' Starting MQTT loop...');
 updatefromdomoticz();
@@ -25,8 +25,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$xlight;
-			$d=fetchdata($time-5,basename(__FILE__).':'.__LINE__);
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch;
+			$time=time();
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$lastfetch=$time;
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];
@@ -171,8 +173,9 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$time;
-			$d=fetchdata($time-5,basename(__FILE__).':'.__LINE__);
+			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$lastfetch=$time;
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
@@ -224,25 +227,24 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$time;
-			$d=fetchdata($time-5,basename(__FILE__).':'.__LINE__);
+			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
+			$time=time();
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$lastfetch=$time;
 			if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
 				sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 				if($d['Weg']['s']==0) huisthuis('door OwnTracks.');
 				elseif($d['Weg']['s']==2) {
 					telegram('Huis thuis door OwnTracks',false);
 					huisthuis('door OwnTracks.');
-					$time=time();
 					mset('remoteauto', $time);
 				}
 			} elseif($d['Weg']['s']==2) {
 				telegram('Huis thuis door OwnTracks',false);
 				huisthuis('door OwnTracks.');
-				$time=time();
 				mset('remoteauto', $time);
 			} elseif($d['Weg']['s']==0) {
 				huisthuis('door OwnTracks.');
-				
 			}
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));

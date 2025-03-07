@@ -2,7 +2,7 @@
 require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $time=time();
-$db=dbconnect();
+if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
@@ -49,8 +49,6 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$time;
-	//$d=fetchdata();
-	$time=time();
 	if (($d['dag']<3&&$d['Weg']['s']==0)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']<4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		if ($d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
@@ -210,7 +208,7 @@ function store($name='',$status='',$msg='',$idx=null) {
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
 	global $db, $user, $time;
-	if(!isset($db)) $db=dbconnect();
+	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg('(STOREMODE+) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
@@ -219,7 +217,7 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
 	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__.'-'.__FUNCTION__);
 	if ($d[$name]['icon']!=$icon) {
-		if(!isset($db)) $db=dbconnect();
+		if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
@@ -228,7 +226,7 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	global $db,$time;
-	if(!isset($db)) $db=dbconnect();
+	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -663,18 +661,21 @@ function curl($url) {
 	curl_close($ch);
 	return $data;
 }
-function dbconnect() {
+function dbconnect($lg='') {
 	global $dbname,$dbuser,$dbpass;
-	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
+	lg('dbconnect '.$lg);
+	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass,array(PDO::ATTR_PERSISTENT=>true));
 }
 function fetchdata($t=0,$lg='') {
-	if ($t==0) lg('fetchdata ALL '.$lg);
-	else lg('fetchdata '.time()-$t.' '.$lg);
 	global $db,$d;
-	if(!isset($db)) $db=dbconnect();
+	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+
+	if ($t==0) lg('fetchdata ALL '.$lg.' - '.$stmt->rowCount().' rows');
+	else lg('fetchdata '.time()-$t.' '.$lg.' - '.$stmt->rowCount().' rows');
+
 	$d['dag']=mget('dag');
 	$en=mget('en');
 	$d['net']=$en['net'];
@@ -684,7 +685,7 @@ function fetchdata($t=0,$lg='') {
 }
 function fetchdataidx() {
 	global $db;
-	if(!isset($db)) $db=dbconnect();
+	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
 	$d['dag']=mget('dag');

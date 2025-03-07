@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-if(isset($db)) $db=dbconnect();
+if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 
 if ($d['wasbak']['s']==0) sl('wasbak', 0, basename(__FILE__).':'.__LINE__, true);
 

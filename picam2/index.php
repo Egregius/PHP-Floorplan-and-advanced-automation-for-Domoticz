@@ -2,7 +2,7 @@
 require('../secure/functions.php');
 $_SESSION['referer']='picam2/index.php';
 require('/var/www/authentication.php');
-$d=fetchdata();
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 require(dirname(__FILE__) . '/config.php');
 echo '<html><head><title>'.TITLE_STRING.'</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
