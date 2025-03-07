@@ -36,7 +36,7 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if (($d['dag']<4||$d['zon']==0)&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']<100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
 	global $d;
@@ -509,9 +509,9 @@ function daikinstatus($device) {
 	}
 }
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=false) {
-	global $time;
-	$time=time();
-	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	global $time,$lastfetch;
+	$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	$lastfetch=$time;
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
 	elseif ($device=='alex') $ip=113;
@@ -663,7 +663,7 @@ function curl($url) {
 }
 function dbconnect($lg='') {
 	global $dbname,$dbuser,$dbpass;
-	lg('dbconnect '.$lg);
+//	lg('dbconnect '.$lg);
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass,array(PDO::ATTR_PERSISTENT=>true));
 }
 function fetchdata($t=0,$lg='') {
