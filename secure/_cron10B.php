@@ -1,6 +1,7 @@
 <?php
 $time=time();
-$d=fetchdata($time-60,basename(__FILE__).':'.__LINE__);
+$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+$lastfetch=$time;
 $user=basename(__FILE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {

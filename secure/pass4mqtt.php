@@ -25,7 +25,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch;
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch,$xlight;
 			$time=time();
 			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 			$lastfetch=$time;

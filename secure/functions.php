@@ -673,8 +673,8 @@ function fetchdata($t=0,$lg='') {
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 
-	if ($t==0) lg('fetchdata ALL '.$lg.' - '.$stmt->rowCount().' rows');
-	else lg('fetchdata '.time()-$t.' '.$lg.' - '.$stmt->rowCount().' rows');
+	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 
 	$d['dag']=mget('dag');
 	$en=mget('en');

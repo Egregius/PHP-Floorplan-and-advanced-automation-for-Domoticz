@@ -1,5 +1,6 @@
 <?php
-$d=fetchdata($time-30,basename(__FILE__).':'.__LINE__);
+$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+$lastfetch=$time;
 $user=basename(__FILE__);
 $Setkamer=4;
 $Setwaskamer=4;

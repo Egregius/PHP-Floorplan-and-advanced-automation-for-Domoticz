@@ -97,11 +97,11 @@ if ($d['auto']['s']=='On') {
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
+/*	if ($d['GroheRed']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
 		$past=past('GroheRed');
 		if ($d['Grohered_kWh']['s']<50&&$past>180) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif ($past>1800) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	}*/
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dag']>3) {
 		if ($d['Rbureel']['s']<40) {

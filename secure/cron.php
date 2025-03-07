@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-$fetch=0;
+$lastfetch=0;
 if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $user='CRONstart';
 sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
