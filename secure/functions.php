@@ -96,10 +96,10 @@ function waarschuwing($msg) {
 	sleep(10);
 	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 }
-function past($name) {
+function past($name,$lg='') {
 	global $d,$time;
 	$time=time();
-	if (!isset($d[$name]['t'])) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	if (!isset($d[$name]['t'])) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__.' '.$lg);
 	if ($name=='$ remoteauto') lg('past '.$name.'	time='.$time.' t='.$d[$name]['t'].' past='.$time-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return $time-$d[$name]['t'];
 	else return 999999999;

@@ -34,7 +34,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$status=$message['svalue1'];
 //			lg(__LINE__.' '.$device);
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-//				lg(__LINE__.' '.$device);
+				lg(__LINE__.' '.$device);
 				if ($message['dtype']=='Light/Switch') {
 //					lg(__LINE__.' '.$device);
 					if ($message['switchType']=='Dimmer') {
@@ -60,7 +60,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						elseif ($message['nvalue']==1) $status='On';
 					}
 					lg('(MQTT) Switch '.$device.' => '.$status);
-					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch <> ');
+					if ($status!=$d[$device]['s']||substr($device,0,1)=='$') store($device, $status, ' (MQTT) Switch <> ');
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';

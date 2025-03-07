@@ -72,7 +72,7 @@ if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['Weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 $pastgrohe=past('GroheRed');
 if ($d['Weg']['s']<2&&$d['net']<-1200&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
-elseif ($d['GroheRed']['s']=='On'&&$pastgrohe>3600&&past('$ 8keuken8d')>1800&&$d['net']>0) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($d['GroheRed']['s']=='On'&&$pastgrohe>3600&&past('$ 8keuken8')>1800&&$d['net']>0) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']||$d['Weg']['s']>=2)) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Auto laden uit, te veel verbruik');
