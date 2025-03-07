@@ -3,7 +3,7 @@ $elec=0.3634;
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-$db=dbconnect();
+if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 if (isset($_GET['setauto'])) {
 	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
 } elseif (isset($_GET['setpower'])) {

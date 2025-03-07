@@ -1,6 +1,6 @@
 <?php
 //lg('CRON-3600');
-if (!isset($db)) $db=dbconnect();
+if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 $user=basename(__FILE__);
 
 if (date('G')==0) {

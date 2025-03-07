@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-$db=dbconnect();
+if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 $domoticz=json_decode(
 	file_get_contents(
 		$domoticzurl.'/json.htm?type=command&param=getdevices&used=true'

@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-if(isset($db)) $db=dbconnect();
+if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
@@ -87,7 +87,7 @@ if ($d['daikin']['s']=='On'&&past('daikin')>178) {
 	}
 	if ($data[0]=='ret=OK'&&isset($livingheat)&&isset($kamerheat)&&isset($kamerheat)&&isset($kamercool)&&isset($alexheat)&&isset($alexcool)) {
 		$date=date('Y-m-d', $time);
-		if (!isset($db)) $db=dbconnect();
+		if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
 		$date=date('Y-m-d', $time-86400);
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");

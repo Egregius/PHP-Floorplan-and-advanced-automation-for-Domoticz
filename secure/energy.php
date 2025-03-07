@@ -42,7 +42,7 @@ while (1){
 			$power=$data->active_power_w;
 			$alwayson=mget('alwayson');
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
-				if (!isset($db)) $db=dbconnect();
+				if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 				mset('alwayson',$power);
 				$time=time();
 				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
