@@ -37,11 +37,11 @@ if ($d['daikin']['m']==1) {
 				  elseif ($dif <= -1.2) {$set=$d[$k.'_set']['s']+2;$spmode=1;$line=__LINE__;}
 				  elseif ($dif <= -0.9) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
 				  elseif ($dif <= -0.6) {$set=$d[$k.'_set']['s']+1;$spmode=0;$line=__LINE__;}
-				  elseif ($dif <= -0.3) {$set=$d[$k.'_set']['s']+0.5;$spmode=0;$line=__LINE__;}
+				  elseif ($dif <= -0.3) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
 				  else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 					if ($d['Weg']['s']>0) $spmode=-1;
 				if ($k=='living') {
-					$cor=3;
+					$cor=2.5;
 					$set+=$cor;
 					if ($time>strtotime('20:00')) $rate=3;
 				} elseif ($k=='kamer') {
