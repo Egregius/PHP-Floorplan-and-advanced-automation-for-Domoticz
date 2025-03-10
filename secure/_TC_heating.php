@@ -100,9 +100,9 @@ if ($d['living_set']['m']==0) {
 			$factor=(($Setliving-$d['buiten_temp']['s'])/2)*(($d['living_temp']['s']-$d['buiten_temp']['s'])/2)*120;
 			for ($x=0;$x<=5;$x+=0.1) {
 				$t2=(int)($t-($factor*$x)-300);
-				if ($time>=$t2&&$time<=strtotime('7:45')) {
+				if ($time>=$t2&&$time<=strtotime('12:00')) {
 					$target2=round($target-$x, 1);
-					lg(number_format($x,1,'.','').' factor='.$factor.',t2='.date('H:i:s', $t2).' > '.number_format($target2,1,'.',''));
+//					lg(number_format($x,1,'.','').' factor='.$factor.',t2='.date('H:i:s', $t2).' > '.number_format($target2,1,'.',''));
 					break;
 				}
 			}
