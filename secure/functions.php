@@ -675,7 +675,7 @@ function fetchdata($t=0,$lg='') {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
-	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+//	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 
 	$d['dag']=mget('dag');
 	$en=mget('en');
