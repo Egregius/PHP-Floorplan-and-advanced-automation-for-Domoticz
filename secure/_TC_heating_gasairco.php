@@ -10,9 +10,9 @@ $uitna=(21-$d['buiten_temp']['s'])*60;
 if ($uitna<595) $uitna=595;
 elseif ($uitna>1195) $uitna=1195;
 
-if (	$difgas<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6&&$d['net']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8&&$d['net']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&past('brander')>$aanna    &&$d['net']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+if (	$difgas<=-0.2&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.6&&$d['net']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=-0.1&&$d['brander']['s']=="Off"&&past('brander')>$aanna*0.8&&$d['net']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&past('brander')>$aanna    &&$d['net']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas>=0   &&$d['brander']['s']=="On" &&past('brander')>$uitna)     sw('brander','Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas>=-0.1&&$d['brander']['s']=="On" &&past('brander')>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas>=0.2 &&$d['brander']['s']=="On" &&past('brander')>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
@@ -41,8 +41,8 @@ if ($d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
-			if ($dif>3&&($d['buiten_temp']['s']<2||$d['net']>0)) $power=0;
-			elseif ($dif<=0&&($d['buiten_temp']['s']>4||$d['net']<-500)) $power=1;
+			if ($dif>3&&($d['buiten_temp']['s']<0||$d['net']>0)) $power=0;
+			elseif ($dif<=0&&($d['buiten_temp']['s']>2||$d['net']<-500)) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$rate='A';
 				      if ($dif >=  1.2) {$set=$d[$k.'_set']['s']-3;$spmode=-1;$line=__LINE__;}
