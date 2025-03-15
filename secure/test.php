@@ -6,8 +6,8 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata();
 
-fgarage();
- 
+
+hass('input_button','press','input_button.wakeipad');
  
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
