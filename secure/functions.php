@@ -50,7 +50,7 @@ function fkeuken() {
 	} else {
 		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
-	hass('input_button','press','input_button.wakeipad');
+//	hass('input_button','press','input_button.wakeipad');
 }
 function finkom($force=false) {
 	global $d,$time;
