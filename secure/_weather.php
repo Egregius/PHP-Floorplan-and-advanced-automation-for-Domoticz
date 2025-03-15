@@ -190,7 +190,7 @@ if ($d['auto']['s']=='On') {
 		else $luifel=45;
 		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>21.5 &&$time>=strtotime("11:00")&&$rain<5) { // Passive Cooling
@@ -199,7 +199,7 @@ if ($d['auto']['s']=='On') {
 		else $luifel=45;
 		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>23&&$time>=strtotime("11:00")&&$rain<5) { // Neutral
@@ -208,7 +208,7 @@ if ($d['auto']['s']=='On') {
 		else $luifel=40;
 		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']['s']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} else {

@@ -21,16 +21,18 @@ function t() {
 }
 	
 function fliving() {
-	global $d,$time;
+	global $d,$time,$t;
 	$time=time();
 	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
-			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['zithoek']['s']==0&&$d['snijplank']['s']==0&&$time<strtotime('21:30')&&past('langekast')>10) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
-			if ($d['zithoek']['s']==0&&$time<strtotime('9:30')) sl('zithoek', 8, basename(__FILE__).':'.__LINE__);
-			if ($d['wasbak']['s']==0&&$time<strtotime('21:30')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			$am=strtotime('10:00');
+			$t=t();
+			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['zithoek']['s']==0&&$d['snijplank']['s']==0&&$time>$t&&$time<$am&&past('langekast')>10) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
+			if ($d['zithoek']['s']==0&&$time<$am) sl('zithoek', 8, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 		}
-		mset('living', $time);
 	}
+	mset('living', $time);
 //	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')&&past('langekast')>60) {
 //		bosezone(101);
 //	}
@@ -38,7 +40,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	lg('fgarage zon='.$d['zon']);
-	if ($d['zon']>-100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']<100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
 	global $d;
@@ -682,7 +684,7 @@ function fetchdata($t=0,$lg='') {
 	$en=mget('en');
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
-	$d['zon']=$en['zon'];
+	$d['zon']=-$en['zon'];
 	return $d;
 }
 function fetchdataidx() {

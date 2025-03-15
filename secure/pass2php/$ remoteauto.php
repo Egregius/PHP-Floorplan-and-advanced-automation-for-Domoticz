@@ -12,10 +12,10 @@ if ($status=='Off') {
 		sw('poortrf', 'On', basename(__FILE__).':'.__LINE__, true);
 	}
 	if ($d['Weg']['s']>0) huisthuis();
-	if ($d['zon']['s']>0) {
+	if ($d['zon']>0) {
 		sleep(2);
 		sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__, true);
-		if ($d['zon']['s']>2000) {
+		if ($d['zon']>2000) {
 			mset('powermeter',time());
 			usleep(100000);
 			sw('powermeter', 'On', basename(__FILE__).':'.__LINE__,true);

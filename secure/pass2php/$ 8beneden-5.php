@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if ($d['zon']['s']==0) {
+	if ($d['zon']==0) {
 		sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['Media']['s']=='On') {

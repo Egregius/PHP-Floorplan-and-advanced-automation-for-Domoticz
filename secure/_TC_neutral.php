@@ -19,7 +19,6 @@ $benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
 if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 
-$zon=$d['zon']['s'];
 $heating=$d['heating']['s'];
 if ($d['auto']['s']=='On') {
 	if (($time>=$t||($d['Weg']['s']==0&&$d['dag']>0))&&$time<strtotime('8:30')) {

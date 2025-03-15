@@ -1,5 +1,5 @@
 <?php
-if ($d['zon']['s']>0) {
+if ($d['zon']>0) {
 	if ($d['inkom']['s']>=32) $level=$d['inkom']['s']+5;
 	else $level=32;
 } else {
