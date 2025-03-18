@@ -183,6 +183,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
+	if(!isset($d)) $d=fetchdata();
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg,3);
 	if ($d[$name]['i']>0) {
