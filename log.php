@@ -114,14 +114,13 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 	$levels=array(
 		0=>'Default / Undefined',
 		1=>'Loop starts',
-		2=>'',
-		3=>'',
+		3=>'Setpoints',
 		4=>'Switch commands',
-		5=>'Setpoints',
-		6=>'',
-		7=>'Store/Storemode',
+		6=>'OwnTracks',
 		8=>'Update kWh devices',
-		9=>'Update temperatures'
+		9=>'Update temperatures',
+		10=>'Store/Storemode',
+		99=>'SQL Fetchdata'
 	);
 	foreach ($levels as $k=>$v) {
 		if ($k==$loglevel) echo '

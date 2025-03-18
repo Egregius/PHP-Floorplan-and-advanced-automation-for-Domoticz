@@ -12,8 +12,8 @@ require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 
 //Setting some temp variables
-$lastfetch=0;
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$lastfetch=time();
 
 lg(' Starting MQTT loop...',1);
 updatefromdomoticz();
@@ -38,16 +38,24 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($message['dtype']=='Light/Switch') {
 //					lg(__LINE__.' '.$device);
 					if ($message['switchType']=='Dimmer') {
+						$type='DIMMER';
+						$name=$device;
 						if ($message['nvalue']==0) $status=0;
 						else $status=$message['svalue1'];
 					} elseif ($message['switchType']=='Blinds Percentage') {
+						$type='ROLLERS	';
+						$name=substr($device, 1);
 						if ($message['nvalue']==0) $status=0;
 						elseif ($message['nvalue']==1) $status=100;
 						else $status=$message['svalue1'];
 					} elseif ($message['switchType']=='Contact') {
+						$type='CONTACT	';
+						$name=$device;
 						if ($message['nvalue']==0) $status='Closed';
 						elseif ($message['nvalue']==1) $status='Open';
 					} elseif ($message['switchType']=='Door Contact') {
+						$type='CONTACT	';
+						$name=$device;
 						if ($device=='achterdeur') {
 							if ($message['nvalue']==0) $status='Open';
 							elseif ($message['nvalue']==1) $status='Closed';
@@ -55,12 +63,24 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 							if ($message['nvalue']==0) $status='Closed';
 							elseif ($message['nvalue']==1) $status='Open';
 						}
+					} elseif ($message['switchType']=='On/Off') {
+						$type='SWITCH	';
+						$name=$device;
+						if ($message['nvalue']==0) $status='Off';
+						elseif ($message['nvalue']==1) $status='On';
+					} elseif ($message['switchType']=='Motion Sensor') {
+						$type='PIR	';
+						$name=substr($device, 3);
+						if ($message['nvalue']==0) $status='Off';
+						elseif ($message['nvalue']==1) $status='On';
 					} else {
+						$type=$message['switchType'];
+						$name=$device;
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
 					if ($status!=$d[$device]['s']||substr($device,0,1)=='$') {
-						lg('(MQTT) Switch '.$device.' => '.$status, 4);
+						lg('(MQTT) '.$type.$name.' => '.$status, 4);
 						store($device, $status, ' (MQTT) Switch <> ');
 					}
 				} elseif ($message['dtype']=='Lighting 2') {
@@ -73,14 +93,14 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
 					if ($status!=$d[$device]['s']) {
-						lg('(MQTT) Temp '.$device.' => '.$status,9);	
+						lg('(MQTT) Temp	'.$device.' => '.$status,9);	
 						store($device, $status,' (MQTT) Temp ');
 					}
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
 						if ($status!=$d[$device]['s']) {
-							lg('(MQTT) kWh '.$device.' => '.$status,8);	
+							lg('(MQTT) kWh	'.$device.' => '.round($status,1),8);	
 							store($device, $status,' (MQTT) kWh ');
 						}
 					}
@@ -193,7 +213,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
-				if ($status!=$d[$device]['s']) {
+				if (isset($d[$device]['s'])&&$status!=$d[$device]['s']) {
 					lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status,4);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
@@ -202,7 +222,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {
 		global $owntracksdeviceid, $dbotuser, $dbotpass;
-		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+//		lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true),6);
 		$message=json_decode($message);
 		$dbo=new PDO("mysql:host=192.168.2.20;dbname=location;", $dbotuser, $dbotpass);
 		$dbo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -231,7 +251,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($x>0) lgowntracks(count($message->waypoints).'	=> '.$x.' bollekes gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='location') {
-			lg (PHP_EOL.'				<<< OwnTracks LO >>> '.$message->lat.','.$message->lon.PHP_EOL);
+			lg (PHP_EOL.'				<<< OwnTracks LO >>> '.$message->lat.','.$message->lon.PHP_EOL,6);
 			$lat=round(floorToFraction($message->lat, 1100), 4);
 			$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 			$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
@@ -263,7 +283,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				huisthuis('door OwnTracks.');
 			}
 		} else {
-			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true));
+			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true),6);
 		}
 	} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);

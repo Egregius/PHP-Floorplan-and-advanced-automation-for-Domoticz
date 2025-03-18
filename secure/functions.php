@@ -39,7 +39,6 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	lg('fgarage zon='.$d['zon']);
 	if ($d['zon']<100&&$d['garage']['s']=='Off'&&$d['garageled']['s']=='Off') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
@@ -125,7 +124,7 @@ function sl($name,$level,$msg='',$force=false) {
 			}
 		}
 	} else {
-		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')');
+		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
@@ -135,7 +134,7 @@ function sl($name,$level,$msg='',$force=false) {
 function rgb($name,$hue,$level,$check=false) {
 	global $d,$user,$domoticzurl;
 	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
-	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level);
+	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 		else {
@@ -172,12 +171,12 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>10) {
-			lg($msg);
+			lg($msg,4);
 			if ($d[$name]['s']!=$action||$force==true) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
 		} elseif ($d[$name]['i']>0) {
-			lg($msg);
+			lg($msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
 			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
 			//store($name, $action, $msg);
@@ -190,7 +189,7 @@ function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
 	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
-	lg($msg);
+	lg($msg,3);
 	if ($d[$name]['i']>0) {
 		file_get_contents($domoticzurl.'/json.htm?type=command&param=setsetpoint&idx='.$d[$name]['i'].'&setpoint='.$value);
 	}
@@ -203,12 +202,12 @@ function store($name='',$status='',$msg='',$idx=null) {
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 //	mset($name,$status);
-	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),7);
+	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
 		if (endswith($name, '_temp')) return;
 		elseif(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
-		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),7);
+		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
@@ -216,7 +215,7 @@ function storemode($name,$mode,$msg='',$updatetime=true) {
 	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),7);
+	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
@@ -226,7 +225,7 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
-		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),7);
+		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -322,12 +321,15 @@ Levels:
 3:	
 4:	Switch commands
 5:	Setpoints
-6:	
-7:	Store/Storemode
+6:	OwnTracks
+7:	
 8:	Update kWh devices
 9:	Update temperatures
+10: Store/Storemode
+99:	SQL Fetchdata
 */
 	global $db,$d;
+	$loglevel=0;
 	if (isset($d['auto']['m'])) $loglevel=$d['auto']['m'];
 	else {
 		if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
@@ -578,8 +580,8 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 	}
 }
 function updatefromdomoticz() {
-	global $db,$domoticzurl;
-	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	global $d,$db,$domoticzurl;
+//	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=command&param=getdevices&used=true'),true);
 	if ($domoticz) {
 		foreach ($domoticz['result'] as $dom) {
@@ -624,7 +626,7 @@ function updatefromdomoticz() {
 				else $status='Open';
 			} else $status=$dom['Data'];
 			if ($update==true) {
-				if ($status!=$d[$name]['s']) {
+				if (isset($d[$name]['s'])&&$status!=$d[$name]['s']) {
 					lg('(UPDDOMOTICZ)	'. $name.'	= '.$status,9);
 					$query="UPDATE devices SET s=:status WHERE n=:name;";
 					$stmt=$db->prepare($query);
@@ -636,7 +638,7 @@ function updatefromdomoticz() {
 
 }
 function hass($domain,$service,$entity) {
-	lg('HASS '.$domain.' '.$service.' '.$entity);
+	lg('HASS '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
@@ -650,7 +652,7 @@ function hass($domain,$service,$entity) {
 	curl_close($ch);
 }
 function hassinput($domain,$service,$entity,$input) {
-	lg('HASSinput '.$domain.' '.$service.' '.$entity);
+	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
@@ -687,7 +689,6 @@ function curl($url) {
 }
 function dbconnect($lg='') {
 	global $dbname,$dbuser,$dbpass;
-//	lg('dbconnect '.$lg);
 	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass,array(PDO::ATTR_PERSISTENT=>true));
 }
 function fetchdata($t=0,$lg='') {
@@ -698,7 +699,7 @@ function fetchdata($t=0,$lg='') {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
 
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
-//	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 
 	$d['dag']=mget('dag');
 	$en=mget('en');

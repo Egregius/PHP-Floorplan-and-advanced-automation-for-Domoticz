@@ -1,11 +1,11 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-$lastfetch=0;
 if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$lastfetch=time();
 $user='CRONstart';
-sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
 sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__,true);
+sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
 if (isset($argv[1])) {
 	echo 'Executing _cron'.$argv[1].'.php'.PHP_EOL.PHP_EOL;
 	include ('_cron'.$argv[1].'.php');
