@@ -214,9 +214,9 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$status=ucfirst($message);
 				if (isset($d[$device]['s'])&&$status!=$d[$device]['s']) {
 					lg(' (MQTT HASS) Switch	'.$device.'	= '.$status,4);
-				}
+				}// else lg(__LINE__);
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$device','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {

@@ -306,7 +306,7 @@ function lg($msg,$level=0) {
 Levels:
 0:	Default / Undefined
 1:	Loop starts
-2:	
+2:	Heating
 3:	
 4:	Switch commands
 5:	Setpoints
@@ -331,7 +331,7 @@ Levels:
 		$dFormat="Y-m-d H:i:s";
 		$mSecs=$time-floor($time);
 		$mSecs=substr(number_format($mSecs, 3), 1);
-		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg.' ['.$level.']'));
 		fclose($fp);
 	}
 }
