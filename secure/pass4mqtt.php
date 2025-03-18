@@ -100,26 +100,26 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
 						if ($status!=$d[$device]['s']) {
-							lg('(MQTT) kWh	'.$device.' => '.round($status,1),8);	
+							lg('(MQTT) kWh	'.$device.' = '.round($status,1),8);	
 							store($device, $status,' (MQTT) kWh ');
 						}
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
 					if ($status!=$d[$device]['s']) {
-						lg('(MQTT) Usage '.$device.' => '.$status,8);	
+						lg('(MQTT) Usage '.$device.' = '.$status,8);	
 						store($device, $status,' (MQTT) Usage ');
 					}
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
 					if ($status!=$d[$device]['s']) {
-						lg('(MQTT) Colorswitch '.$device.' => '.$status,4);	
+						lg('(MQTT) Colorswitch '.$device.' = '.$status,4);	
 						store($device, $status,' (MQTT) Color ');
 					}
 				} elseif ($message['dtype']=='Setpoint') {
 					$status=(float)$message['svalue1'];
 					if ($status!=$d[$device]['s']) {
-						lg('(MQTT) Setpoint '.$device.' => '.$status,5);	
+						lg('(MQTT) Setpoint '.$device.' = '.$status,5);	
 						store($device, $status,' (MQTT) Setpoint ');
 					}
 				} else {
@@ -214,7 +214,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
 				if (isset($d[$device]['s'])&&$status!=$d[$device]['s']) {
-					lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status,4);
+					lg(' (MQTT HASS) Switch	'.$device.'	= '.$status,4);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");

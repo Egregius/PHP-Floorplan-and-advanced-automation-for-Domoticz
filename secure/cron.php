@@ -12,9 +12,10 @@ if (isset($argv[1])) {
 } else {
 	lg('Starting CRON loop...',9);
 	while (1){
-		if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-		$start = microtime(true);
+		$start=microtime(true);
 		$time=time();
+		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+		$lastfetch=$time;
 		$crontime=$time;
 		if ($crontime%10==0) include '_cron10.php';
 		if ($crontime%60==0) include '_cron60.php';

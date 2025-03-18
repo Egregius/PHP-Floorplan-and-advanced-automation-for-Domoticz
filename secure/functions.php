@@ -103,20 +103,17 @@ function waarschuwing($msg) {
 function past($name,$lg='') {
 	global $d,$time;
 	$time=time();
-	if (!isset($d[$name]['t'])) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__.' '.$lg);
 	if ($name=='$ remoteauto') lg('past '.$name.'	time='.$time.' t='.$d[$name]['t'].' past='.$time-$d[$name]['t']);
 	if (!empty($d[$name]['t'])) return $time-$d[$name]['t'];
 	else return 999999999;
 }
 function idx($name) {
 	global $d;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($d[$name]['i']>0) return $d[$name]['i'];
 	else return 0;
 }
 function sl($name,$level,$msg='',$force=false) {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -133,7 +130,6 @@ function sl($name,$level,$msg='',$force=false) {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
@@ -146,7 +142,6 @@ function rgb($name,$hue,$level,$check=false) {
 }
 function resetsecurity() {
 	global $d,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 //		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
@@ -160,7 +155,6 @@ function resetsecurity() {
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $d,$user,$domoticzurl,$db;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
@@ -187,7 +181,6 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg,3);
 	if ($d[$name]['i']>0) {
@@ -212,16 +205,13 @@ function store($name='',$status='',$msg='',$idx=null) {
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
 	global $db, $user, $time;
-	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__.'-'.__FUNCTION__);
 	if ($d[$name]['icon']!=$icon) {
-		if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
@@ -230,7 +220,6 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	global $db,$time;
-	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -255,7 +244,6 @@ function kodi($json) {
 }
 function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 	global $d,$user,$domoticzurl;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if (isset($d[$name]['i'])&&$d[$name]['i']>0) {
 		if ($check==true) {
 			if ($d[$name]['s']!=$svalue) {
@@ -282,10 +270,9 @@ function double($name, $action, $msg='') {
 }
 
 function rookmelder($msg) {
-	global $device;
+	global $d,$device;
 	resetsecurity();
 //	global $d,$device;
-//	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['Weg']['s']<=1) {
 
@@ -404,7 +391,6 @@ function boseplaylist() {
 }
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
-	if (!is_array($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$t=t();
 	$playlist=boseplaylist();
@@ -535,8 +521,7 @@ function daikinstatus($device) {
 	}
 }
 function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1, $maxpow=false) {
-	global $time,$lastfetch;
-	$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	global $d,$time,$lastfetch;
 	$lastfetch=$time;
 	if ($device=='living') $ip=111;
 	elseif ($device=='kamer') $ip=112;
@@ -547,29 +532,21 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		'alex'=>113
 	);
 	if ($maxpow==false) {
-
 		$maxpow=$d['daikin_kWh']['icon'];
-
 	} else {
-
 		if ($maxpow!=$d['daikin_kWh']['icon']) storeicon('daikin_kWh', $maxpow);
 	}
-
 	$url="http://192.168.2.".$ip[$device]."/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-
 	file_get_contents($url);
-
 	sleep(2);
 	$status=daikinstatus($device);
 	if ($d['daikin'.$device]['s']!=$status) store('daikin'.$device, $status, basename(__FILE__).':'.__LINE__.':'.$msg);
 	if ($power==0&&$d['daikin'.$device]['m']!=0) storemode('daikin'.$device, 0, basename(__FILE__).':'.__LINE__.':'.$msg);
 	elseif ($d['daikin'.$device]['m']!=$mode) storemode('daikin'.$device, $mode, basename(__FILE__).':'.__LINE__.':'.$msg);
-
 	if ($spmode==-1) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=1&spmode_kind=2'); // Eco
 	elseif ($spmode==0) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=0&spmode_kind=1'); // Normal
 	elseif ($spmode==1) file_get_contents('http://192.168.2.'.$ip[$device].'/aircon/set_special_mode?set_spmode=1&spmode_kind=1'); // Power
 	sleep(2);
-
 	foreach($ip as $k=>$ip) {
 		if ($d['daikin'.$k]['m']!=0) {
 			if ($maxpow==100) $url='http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0';
@@ -581,7 +558,6 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 }
 function updatefromdomoticz() {
 	global $d,$db,$domoticzurl;
-//	$d=fetchdata(0,basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=command&param=getdevices&used=true'),true);
 	if ($domoticz) {
 		foreach ($domoticz['result'] as $dom) {

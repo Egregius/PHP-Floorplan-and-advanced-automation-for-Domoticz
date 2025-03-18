@@ -2,10 +2,13 @@
 <?php
 require '/var/www/html/secure/functions.php';
 lg('Starting cron10B loop...');
-$lastfetch=0;
-if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$lastfetch=time();
 while (1){
-	$start = microtime(true);
+	$start=microtime(true);
+	$time=time();
+	$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+	$lastfetch=$time;
 	include '_cron10B.php';
 	$time_elapsed_secs=microtime(true)-$start;
 	$sleep=10-$time_elapsed_secs;
