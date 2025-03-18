@@ -1,5 +1,4 @@
 <?php
-//if (!is_array($d)) $d=fetchdata();
 if ($status!=$d['deurwc']['s']) {
 	if ($status=='Open'&&$d['auto']['s']=='On') {
 		$last=mget('wc');

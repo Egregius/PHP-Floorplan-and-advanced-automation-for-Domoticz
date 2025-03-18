@@ -1,5 +1,4 @@
 <?php
-//$d=fetchdata();
 lg('REMOTE AUTO = '.$status);
 if ($status=='Off') {
 	sw('voordeur', 'On', basename(__FILE__).':'.__LINE__, false);

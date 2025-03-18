@@ -16,7 +16,7 @@ if (isset($_GET['setauto'])) {
 		file_get_contents('http://192.168.2.113/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
 	}
 }
-$d=fetchdata();
+$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 echo '
 <html>
 	<head>

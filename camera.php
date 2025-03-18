@@ -51,7 +51,7 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 
 function sw($name,$action='Toggle',$msg='') {
 	global $user,$d,$domoticzurl;
-	if (!isset($d)) $d=fetchdata();
+	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	$msg=' (SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 	if ($d[$name]['i']>0) {
 		lg($msg);

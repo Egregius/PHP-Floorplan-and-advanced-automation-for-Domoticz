@@ -4,7 +4,7 @@ echo '<pre>';
 $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
-$d=fetchdata();
+$d=fetchdata(0,'test.php');
 
 
 hass('input_button','press','input_button.wakeipad');

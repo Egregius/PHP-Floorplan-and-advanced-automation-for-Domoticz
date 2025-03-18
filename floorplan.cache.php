@@ -96,7 +96,7 @@ echo '
 				</tr>
 			</thead>
 			<tbody>';
-$d=fetchdata();
+$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 $sql="SELECT *  FROM `devices` ORDER BY t DESC";
 if (!$result=$db->query($sql)) {
 	die('There was an error running the query ['.$sql.' - '.$db->error.']');

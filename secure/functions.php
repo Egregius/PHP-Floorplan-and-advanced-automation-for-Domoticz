@@ -114,6 +114,7 @@ function idx($name) {
 }
 function sl($name,$level,$msg='',$force=false) {
 	global $d,$user,$domoticzurl;
+	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -155,6 +156,7 @@ function resetsecurity() {
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $d,$user,$domoticzurl,$db;
+	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {

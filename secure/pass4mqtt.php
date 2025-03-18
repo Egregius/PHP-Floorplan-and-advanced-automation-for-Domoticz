@@ -32,11 +32,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$message=json_decode($message, true);
 			$device=$message['name'];
 			$status=$message['svalue1'];
-//			lg(__LINE__.' '.$device);
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
-//				lg(__LINE__.' '.$device);
+//				if (isset($message['switchType'])) lg(__LINE__.' device='.$device. '	type='.$message['switchType']);
+//				else lg(__LINE__.' device='.$device. '	message='.print_r($message, true));
 				if ($message['dtype']=='Light/Switch') {
-//					lg(__LINE__.' '.$device);
 					if ($message['switchType']=='Dimmer') {
 						$type='DIMMER';
 						$name=$device;
@@ -100,7 +99,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
 						if ($status!=$d[$device]['s']) {
-							lg('(MQTT) kWh	'.$device.' = '.round($status,1),8);	
+							lg('(MQTT) kWh	'.$device.' = '.$status,8);	
 							store($device, $status,' (MQTT) kWh ');
 						}
 					}
@@ -215,8 +214,8 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				$status=ucfirst($message);
 				if (isset($d[$device]['s'])&&$status!=$d[$device]['s']) {
 					lg(' (MQTT HASS) Switch	'.$device.'	= '.$status,4);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
@@ -232,7 +231,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		if (isset($message->waypoints)) {
 			foreach ($message->waypoints as $i) {
 				if ($i->_type=='waypoint'/*&&$i->desc!='Thuis'*/) {
-					lg (PHP_EOL.'				<<< OwnTracks WP >>> '.$i->lat.','.$i->lon.PHP_EOL);
+					lg (PHP_EOL.'				<<< OwnTracks waypoints >>> '.$i->lat.','.$i->lon.PHP_EOL,6);
 					$lat=round(floorToFraction($i->lat, 1100), 4);
 					$lon=round(floorToFraction($i->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 					if ($prevlat!=$lat||$prevlon!=$lon) {
@@ -251,7 +250,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				if ($x>0) lgowntracks(count($message->waypoints).'	=> '.$x.' bollekes gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='location') {
-			lg (PHP_EOL.'				<<< OwnTracks LO >>> '.$message->lat.','.$message->lon.PHP_EOL,6);
+			lg (PHP_EOL.'				<<< OwnTracks location >>> '.$message->lat.','.$message->lon.PHP_EOL,6);
 			$lat=round(floorToFraction($message->lat, 1100), 4);
 			$lon=round(floorToFraction($message->lon, round(lonToFraction($lat)/(50/18), 0)), 4);
 			$stmt=$dbo->prepare("INSERT IGNORE INTO history (lat,lon) VALUES (:lat,:lon)");
@@ -260,7 +259,6 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			if ($aantal>0) {
 				$stmt=$dbo->prepare("INSERT INTO histperdag (dag,aantal) VALUES (:dag,:aantal) ON DUPLICATE KEY UPDATE aantal=aantal+1");
 				$stmt->execute(array(':dag'=>date('Y-m-d'),':aantal'=>1));
-				lg(count($message->waypoints).'	=> 1 bolleke gekleurd');
 			}
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;

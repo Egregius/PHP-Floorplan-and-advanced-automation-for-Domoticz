@@ -7,7 +7,7 @@ if ($device=='winst') {
 	echo $status;
 	store($device, $status, 'Pass2PHP');
 	exit;
-} else $d=fetchdata();
+} else $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 echo __LINE__.'<br>';
 if (isset($d[$device])) {
 	if ($d[$device]['dt']=='luifel') {
