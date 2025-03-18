@@ -4,9 +4,10 @@ if ($status!=$d[$device]['s']) store($device,$status, basename(__FILE__).':'.__L
 
 if ($status=='On') {
 	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lg_webos_tv_cd9e','SHIELD');
-	if ($d['dag']<=1&&$d['kristal']['s']=='Off') sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+	
 	$time=time();
 	if ($time>=strtotime('18:00')) {
+		if ($d['kristal']['s']=='Off') sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['heating']['s']>0&&$d['Rliving']['s']<100) sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 		elseif ($d['Rliving']['s']<25) sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
 		if ($d['Rbureel']['s']<70) sl('Rbureel', 69, basename(__FILE__).':'.__LINE__);

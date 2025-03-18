@@ -13,10 +13,10 @@ require '/var/www/html/secure/functions.php';
 
 //Setting some temp variables
 $lastfetch=0;
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 
 lg(' Starting MQTT loop...');
 updatefromdomoticz();
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 use PhpMqtt\Client\MqttClient;
 
 $client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
@@ -73,7 +73,7 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-						lg('(MQTT) kWh '.$device.' => '.$status);	
+//						lg('(MQTT) kWh '.$device.' => '.$status);	
 						if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) kWh ');
 					}
 				} elseif ($message['dtype']=='Usage') {

@@ -34,7 +34,7 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
 		if ($d['lg_webos_tv_cd9e']['s']=='On') {
-			if ($d['dag']<=1&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['dag']<=3&&$d['kristal']['s']=='Off'&&past('kristal')>7200) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}elseif ($d['Weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;

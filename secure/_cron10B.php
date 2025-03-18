@@ -28,36 +28,38 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		unset($status);
 	}
 	foreach(array(101,102) as $ip) {
-		$status=file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-		if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
-			lg('INVALID SOURCE');
-			if ($weekend==true) {
-				if ((int)$week % 2 == 0) $preset='PRESET_4';
-				else $preset='PRESET_3';
-			} else {
-				if ((int)$week % 2 == 0) $preset='PRESET_2';
-				else $preset='PRESET_1';
-			}
-			bosekey($preset, 0, $ip, basename(__FILE__).':'.__LINE__);
-		}
-		$status=json_decode(json_encode(simplexml_load_string($status)), true);
-		if (isset($status['@attributes']['source'])) {
-			if ($d['bose'.$ip]['icon']!='Online') {
-				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
-				if ($d['lg_webos_tv_cd9e']['s']!='On'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')) {
-					bosezone(101);
+		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+		if (isset($status)) {
+			if ($status=='<?xml version="1.0" encoding="UTF-8" ?><nowPlaying deviceID="587A6260C5B2" source="INVALID_SOURCE"><ContentItem source="INVALID_SOURCE" isPresetable="true" /></nowPlaying>') {
+				lg('INVALID SOURCE');
+				if ($weekend==true) {
+					if ((int)$week % 2 == 0) $preset='PRESET_4';
+					else $preset='PRESET_3';
+				} else {
+					if ((int)$week % 2 == 0) $preset='PRESET_2';
+					else $preset='PRESET_1';
 				}
+				bosekey($preset, 0, $ip, basename(__FILE__).':'.__LINE__);
 			}
-			if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
-				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
+			$status=json_decode(json_encode(simplexml_load_string($status)), true);
+			if (isset($status['@attributes']['source'])) {
+				if ($d['bose'.$ip]['icon']!='Online') {
+					storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+					if ($d['lg_webos_tv_cd9e']['s']!='On'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')) {
+						bosezone(101);
+					}
+				}
+				if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
+					if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+				} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
+					if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+				}
+			} else {
+				if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
-		} else {
-			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
-			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+			unset($status);
 		}
-		unset($status);
 	}
 	if ($d['Media']['s']=='On'&&$d['nas']['s']=='Off') {
 		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);

@@ -10,7 +10,7 @@ if (isset($argv[1])) {
 	echo 'Executing _cron'.$argv[1].'.php'.PHP_EOL.PHP_EOL;
 	include ('_cron'.$argv[1].'.php');
 } else {
-	lg('Starting CRON loop...');
+	lg('Starting CRON loop...',9);
 	while (1){
 		if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 		$start = microtime(true);

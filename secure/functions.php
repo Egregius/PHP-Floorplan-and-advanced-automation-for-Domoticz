@@ -313,9 +313,22 @@ function telegram($msg,$silent=true,$to=1) {
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 	lg('Telegram sent: '.$msg);
 }
-function lg($msg,$force=false) {
-	global $log;
-	if ($log==true||$force==true) {
+function lg($msg,$level=0) {
+/*
+Levels:
+0:	Default / Undefined
+1:	Loop starts
+2:	Switch commands
+3:	
+4:	
+5:	
+6:	
+7:	
+8:	Update kWh devices
+9:	Update temperatures
+*/
+	global $d;
+	if ($level<=$d['auto']['m']) {
 		$fp=fopen('/temp/domoticz.log', "a+");
 		$time=microtime(true);
 		$dFormat="Y-m-d H:i:s";
@@ -606,7 +619,7 @@ function updatefromdomoticz() {
 			} else $status=$dom['Data'];
 			if ($update==true) {
 				if ($status!=$d[$name]['s']) {
-					echo $name.'	= '.$status.'<br>';
+					lg('(UPDDOMOTICZ)	'. $name.'	= '.$status,9);
 					$query="UPDATE devices SET s=:status WHERE n=:name;";
 					$stmt=$db->prepare($query);
 					$stmt->execute(array(':status'=>$status, ':name'=>$name));
