@@ -393,6 +393,7 @@ function boseplaylist() {
 }
 function bosezone($ip,$forced=false,$vol='') {
 	global $d,$time,$dow,$weekend;
+	if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 	$time=time();
 	$t=t();
 	$playlist=boseplaylist();
