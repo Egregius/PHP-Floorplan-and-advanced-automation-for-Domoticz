@@ -15,7 +15,7 @@ require '/var/www/html/secure/functions.php';
 $lastfetch=0;
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 
-lg(' Starting MQTT loop...');
+lg(' Starting MQTT loop...',1);
 updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
 
@@ -59,38 +59,52 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 						if ($message['nvalue']==0) $status='Off';
 						elseif ($message['nvalue']==1) $status='On';
 					}
-					lg('(MQTT) Switch '.$device.' => '.$status);
-					if ($status!=$d[$device]['s']||substr($device,0,1)=='$') store($device, $status, ' (MQTT) Switch <> ');
+					if ($status!=$d[$device]['s']||substr($device,0,1)=='$') {
+						lg('(MQTT) Switch '.$device.' => '.$status, 4);
+						store($device, $status, ' (MQTT) Switch <> ');
+					}
 				} elseif ($message['dtype']=='Lighting 2') {
 					if ($message['nvalue']==0) $status='Off';
 					elseif ($message['nvalue']==1) $status='On';
-					lg('(MQTT) Lighting 2 '.$device.' => '.$status);
-					if ($status!=$d[$device]['s']) store($device, $status, ' (MQTT) Switch ');
+					if ($status!=$d[$device]['s']) {
+						lg('(MQTT) Lighting 2 '.$device.' => '.$status,4);
+						store($device, $status, ' (MQTT) Switch ');
+					}
 				} elseif ($message['dtype']=='Temp') {
 					$status=$message['svalue1'];
-					lg('(MQTT) Temp '.$device.' => '.$status);	
-					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Temp ');
+					if ($status!=$d[$device]['s']) {
+						lg('(MQTT) Temp '.$device.' => '.$status,9);	
+						store($device, $status,' (MQTT) Temp ');
+					}
 				} elseif ($message['dtype']=='General') {
 					if ($message['stype']=='kWh') {
 						$status=$message['svalue1'];
-//						lg('(MQTT) kWh '.$device.' => '.$status);	
-						if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) kWh ');
+						if ($status!=$d[$device]['s']) {
+							lg('(MQTT) kWh '.$device.' => '.$status,8);	
+							store($device, $status,' (MQTT) kWh ');
+						}
 					}
 				} elseif ($message['dtype']=='Usage') {
 					$status=$message['svalue1'];
-					lg('(MQTT) Usage '.$device.' => '.$status);	
-					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Usage ');
+					if ($status!=$d[$device]['s']) {
+						lg('(MQTT) Usage '.$device.' => '.$status,8);	
+						store($device, $status,' (MQTT) Usage ');
+					}
 				} elseif ($message['dtype']=='Color Switch') {
 					$status=$message['nvalue'];
-					lg('(MQTT) Colorswitch '.$device.' => '.$status);	
-					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Color ');
+					if ($status!=$d[$device]['s']) {
+						lg('(MQTT) Colorswitch '.$device.' => '.$status,4);	
+						store($device, $status,' (MQTT) Color ');
+					}
 				} elseif ($message['dtype']=='Setpoint') {
 					$status=(float)$message['svalue1'];
-					lg('(MQTT) Setpoint '.$device.' => '.$status);	
-					if ($status!=$d[$device]['s']) store($device, $status,' (MQTT) Setpoint ');
+					if ($status!=$d[$device]['s']) {
+						lg('(MQTT) Setpoint '.$device.' => '.$status,5);	
+						store($device, $status,' (MQTT) Setpoint ');
+					}
 				} else {
 //					store($device, $message['nvalue']);
-					lg('(MQTT) else '.print_r($message,true));	
+					lg('(MQTT) else '.print_r($message,true),1);	
 				}
 //				if ($device=='$ remoteauto') lg(' (MQTT)		'.print_r($message,true));	
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -179,8 +193,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
-				lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status);
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				if ($status!=$d[$device]['s']) {
+					lg(' (MQTT HASS) Switch	'.$device.'	=> '.$status,4);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				}
 				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));

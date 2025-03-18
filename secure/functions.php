@@ -203,12 +203,12 @@ function store($name='',$status='',$msg='',$idx=null) {
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 //	mset($name,$status);
-	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),7);
 	else {
 		if (endswith($name, '_temp')) return;
 		elseif(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
-		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''));
+		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),7);
 	}
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
@@ -216,7 +216,7 @@ function storemode($name,$mode,$msg='',$updatetime=true) {
 	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg('(STOREMODE+) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''));
+	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),7);
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
@@ -226,7 +226,7 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
-		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''));
+		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),7);
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -318,17 +318,23 @@ function lg($msg,$level=0) {
 Levels:
 0:	Default / Undefined
 1:	Loop starts
-2:	Switch commands
+2:	
 3:	
-4:	
-5:	
+4:	Switch commands
+5:	Setpoints
 6:	
-7:	
+7:	Store/Storemode
 8:	Update kWh devices
 9:	Update temperatures
 */
-	global $d;
-	if ($level<=$d['auto']['m']) {
+	global $db,$d;
+	if (isset($d['auto']['m'])) $loglevel=$d['auto']['m'];
+	else {
+		if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+		$stmt=$db->query("select m from devices WHERE n='auto';");
+		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row['m'];
+	}
+	if ($level<=$loglevel) {
 		$fp=fopen('/temp/domoticz.log', "a+");
 		$time=microtime(true);
 		$dFormat="Y-m-d H:i:s";

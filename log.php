@@ -49,6 +49,11 @@ body{background-color:#000;color:#DDD;font-size:0.7em;}
 .float{background:white;border-bottom:1px solid black;padding:10px 0 10px 0;margin:0px;height:30px;width:100%;text-align:left;}
 .contents{margin-top:30px;}
 .results{padding-bottom:20px;font-family:monospace;white-space:pre;}
+
+form{display:inline;margin:0px;padding:0px;}
+input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;border:0px solid transparent;}
+.btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
+.b1{width:100%;margin:0;padding:0;height:48px;font-size:1.4em;}
 </style>
 <script src="/scripts/jquery.2.0.0.min.js"></script>
 <script src="/scripts/jquery-ui.min.js"></script>
@@ -86,9 +91,11 @@ body{background-color:#000;color:#DDD;font-size:0.7em;}
 			if (scroll) scrollToBottom()
 		})
 	}
+	function setLoglevel(level){
+		$.getJSON('/ajax.php?device=auto&command=mode&action='+level.value)
+	}
 	/* ]]> */
 	function navigator_Go(url){window.location.assign(url)}
-
 </script>
 </head>
 <body>
@@ -96,6 +103,36 @@ body{background-color:#000;color:#DDD;font-size:0.7em;}
 		<a href="javascript:navigator_Go('floorplan.php');">
 			<img src="/images/close.png" width="48px" height="48px"/>
 		</a>
+	</div>
+	<div class="fix z1" style="position:fixed;top:0px;left:50px;width:300px;">
+		<form>
+			<select name="loglevel" class="button btn b1" onchange="setLoglevel(this)">
+<?php
+	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	$stmt=$db->query("select m from devices WHERE n='auto';");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row['m'];
+	$levels=array(
+		0=>'Default / Undefined',
+		1=>'Loop starts',
+		2=>'',
+		3=>'',
+		4=>'Switch commands',
+		5=>'Setpoints',
+		6=>'',
+		7=>'Store/Storemode',
+		8=>'Update kWh devices',
+		9=>'Update temperatures'
+	);
+	foreach ($levels as $k=>$v) {
+		if ($k==$loglevel) echo '
+				<option value="'.$k.'" selected>'.$k.' '.$v.'</option>';
+		else echo '
+				<option value="'.$k.'">'.$k.' '.$v.'</option>';
+				
+	}
+?>
+			</select>
+		</form>
 	</div>
 	<div class="contents">
 		<div id="results" class="results"></div>
