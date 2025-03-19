@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html lang="nl">
-	<head>
-		<meta charset="utf-8">
-		<title>MQTT</title>.
-		<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-	</head>
-	<body>
-	
-		<script>
-		let client = mqtt.connect('wss://home.egregius.be:8081');
-		let topic = "domoticz"
-		let metric = '{"name": "sensor1", "temp": 10}'
-		
-		client.subscribe(topic);
-		client.publish(topic, metric);
-		
-		client.on('message', function (topic, message) { // message is Buffer
-		console.log(message.toString());
-		});
-		
-		client.end();
-		</script>
-	</body
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mosquitto WebSocket Client</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; height: 800px; overflow-y: scroll; }
+    </style>
+</head>
+<body>
+    <h2>MQTT WebSocket Client</h2>
+    <p>Status: <span id="status">Niet verbonden</span></p>
+    <div id="messages"></div>
+    
+    <script>
+        const brokerUrl = "wss://home.egregius.be:8081"; // Vervang door je eigen broker indien nodig
+        const client = mqtt.connect(brokerUrl);
+        
+        client.on("connect", function () {
+            document.getElementById("status").innerText = "Verbonden";
+            client.subscribe("#", function (err) {
+                if (!err) {
+                    console.log("Geabonneerd op alle topics");
+                }
+            });
+            
+            // Verstuur bericht bij verbinding
+            client.publish("domoticz/in", JSON.stringify({ command: "getdeviceinfo", idx: 0 }));
+
+        });
+        
+        client.on("message", function (topic, message) {
+            const msgDiv = document.getElementById("messages");
+            const msg = document.createElement("p");
+            msg.textContent = `${topic} | ${message.toString()}`;
+            msgDiv.appendChild(msg);
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+        });
+        
+        client.on("error", function (error) {
+            document.getElementById("status").innerText = "Fout: " + error.message;
+        });
+    </script>
+</body>
 </html>
