@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; }
-        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; height: 800px; overflow-y: scroll; }
+        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; height: 90vh; overflow-y: scroll; }
     </style>
 </head>
 <body>
@@ -28,14 +28,14 @@
             });
             
             // Verstuur bericht bij verbinding
-            client.publish("domoticz/in", JSON.stringify({ command: "getdeviceinfo", idx: 0 }));
+            //client.publish("domoticz/in", JSON.stringify({ command: "getdeviceinfo", idx: 0 }));
 
         });
         
         client.on("message", function (topic, message) {
             const msgDiv = document.getElementById("messages");
             const msg = document.createElement("p");
-            msg.textContent = `${topic} | ${message.toString()}`;
+            msg.textContent = new Date().toLocaleTimeString()+` ${topic} = ${message.toString()}`;
             msgDiv.appendChild(msg);
             msgDiv.scrollTop = msgDiv.scrollHeight;
         });
