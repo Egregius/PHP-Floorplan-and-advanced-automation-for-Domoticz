@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8">
+		<title>MQTT</title>.
+		<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+	</head>
+	<body>
+	
+		<script>
+		let client = mqtt.connect('wss://home.egregius.be:8081');
+		let topic = "domoticz"
+		let metric = '{"name": "sensor1", "temp": 10}'
+		
+		client.subscribe(topic);
+		client.publish(topic, metric);
+		
+		client.on('message', function (topic, message) { // message is Buffer
+		console.log(message.toString());
+		});
+		
+		client.end();
+		</script>
+	</body
+</html>
