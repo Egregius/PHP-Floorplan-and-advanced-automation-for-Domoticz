@@ -1,6 +1,6 @@
 <?php
 require 'secure/functions.php';
-require '/var/www/authentication.php';
+//require '/var/www/authentication.php';
 session_write_close();
 if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
