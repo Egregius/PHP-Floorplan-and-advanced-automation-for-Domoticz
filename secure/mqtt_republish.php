@@ -24,15 +24,60 @@ try {
     $mqtt->subscribe('domoticz/out/#', function ($t, $m) use ($mqtt, $d) {
 		echo "📩 Ontvangen: [$t] $m\n";
         $t=str_replace('domoticz/out/','',$t);
-        $m=json_decode($m);
-        $name=$m->name;
+        $m=json_decode($m,true);
+        $name=$m['name'];
         if (array_key_exists($name, $d)) {
-			$status=$d[$name];
-			$status=json_encode($status);
+			if ($m['dtype']=='Light/Switch') {
+				if ($m['switchType']=='Dimmer') {
+					if ($m['nvalue']==0) $d[$name]['s']=0;
+					else $d[$name]['s']=$m['svalue1'];
+				} elseif ($m['switchType']=='Blinds Percentage') {
+					if ($m['nvalue']==0) $d[$name]['s']=0;
+					elseif ($m['nvalue']==1) $d[$name]['s']=100;
+					else $d[$name]['s']=$m['svalue1'];
+				} elseif ($m['switchType']=='Contact') {
+					if ($m['nvalue']==0) $d[$name]['s']='Closed';
+					elseif ($m['nvalue']==1) $d[$name]['s']='Open';
+				} elseif ($m['switchType']=='Door Contact') {
+					if ($name=='achterdeur') {
+						if ($m['nvalue']==0) $d[$name]['s']='Open';
+						elseif ($m['nvalue']==1) $d[$name]['s']='Closed';
+					} else {
+						if ($m['nvalue']==0) $d[$name]['s']='Closed';
+						elseif ($m['nvalue']==1) $d[$name]['s']='Open';
+					}
+				} elseif ($m['switchType']=='On/Off') {
+					if ($m['nvalue']==0) $d[$name]['s']='Off';
+					elseif ($m['nvalue']==1) $d[$name]['s']='On';
+				} elseif ($m['switchType']=='Motion Sensor') {
+					if ($m['nvalue']==0) $d[$name]['s']='Off';
+					elseif ($m['nvalue']==1) $d[$name]['s']='On';
+				} else {
+					if ($m['nvalue']==0) $d[$name]['s']='Off';
+					elseif ($m['nvalue']==1) $d[$name]['s']='On';
+				}
+			} elseif ($m['dtype']=='Lighting 2') {
+				if ($m['nvalue']==0) $d[$name]['s']='Off';
+				elseif ($m['nvalue']==1) $d[$name]['s']='On';
+			} elseif ($m['dtype']=='Temp') {
+				$d[$name]['s']=$m['svalue1'];
+			} elseif ($m['dtype']=='General') {
+				if ($m['stype']=='kWh') {
+					$d[$name]['s']=$m['svalue1'];
+				}
+			} elseif ($m['dtype']=='Usage') {
+				$d[$name]['s']=$m['svalue1'];
+			} elseif ($m['dtype']=='Color Switch') {
+				$d[$name]['s']=$m['nvalue'];
+			}
+			if (isset($d[$name]['t'])) $d[$name]['t']=time();
+			$status=json_encode($d[$name]);
 			$topic='i/'.$name;
 			echo "🚀 Herpublicatie: $topic $status\n";
 			$mqtt->publish($topic, $status, 0, true);
 			unset($name,$dtype,$topic,$status);
+		} elseif ($m['dtype']=='Setpoint') {
+			$status=(float)$m['svalue1'];
 		}
     }, 0);
     while ($mqtt->loop(true)) {}
