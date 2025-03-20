@@ -1,9 +1,9 @@
+#!/usr/bin/php
 <?php
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
-$subscribeTopic="domoticz/out/#";
 
 if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
@@ -69,6 +69,8 @@ try {
 				$d[$name]['s']=$m['svalue1'];
 			} elseif ($m['dtype']=='Color Switch') {
 				$d[$name]['s']=$m['nvalue'];
+			} elseif ($m['dtype']=='Setpoint') {
+				$status=(float)$m['svalue1'];
 			}
 			if (isset($d[$name]['t'])) $d[$name]['t']=time();
 			$status=json_encode($d[$name]);
@@ -76,8 +78,8 @@ try {
 			echo "🚀 Herpublicatie: $topic $status\n";
 			$mqtt->publish($topic, $status, 0, true);
 			unset($name,$dtype,$topic,$status);
-		} elseif ($m['dtype']=='Setpoint') {
-			$status=(float)$m['svalue1'];
+		} elseif ($m['stype']=='Viking 02035, 02038, TSS320') {
+			
 		}
     }, 0);
     while ($mqtt->loop(true)) {}

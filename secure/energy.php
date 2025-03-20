@@ -1,6 +1,15 @@
 #!/usr/bin/php
 <?php
+require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+$mqtt=new MqttClient('127.0.0.1',1883,'php_mqtt_ws_'.rand());
+$connectionSettings=(new ConnectionSettings())
+	->setKeepAliveInterval(60)
+	->setUseTls(false);
+$mqtt->connect($connectionSettings, true);
+
 $prevtotal=0;
 $prevavg=0;
 $dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
@@ -22,7 +31,7 @@ while (1){
 		$zon=json_decode($zon);
 		if (isset($zon->active_power_w)) {
 			$prevzon=mget('zon');
-			$newzon=round($zon->active_power_w);
+			$newzon=-round($zon->active_power_w);
 		}
 	} else {
 		$prevzon=mget('zon');
@@ -30,11 +39,13 @@ while (1){
 	}
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
-		mset('en',array(
+		$en=array(
 			'net'=>$data->active_power_w,
 			'avg'=>$data->active_power_average_w,
-			'zon'=>$newzon,
-		));
+			'zon'=>$newzon
+		);
+		mset('en',$en);
+		$mqtt->publish('i/en', json_encode($en), 0, true);
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 

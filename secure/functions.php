@@ -685,7 +685,7 @@ function fetchdata($t=0,$lg='') {
 	$en=mget('en');
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
-	$d['zon']=-$en['zon'];
+	$d['zon']=$en['zon'];
 	return $d;
 }
 function fetchdataidx() {
