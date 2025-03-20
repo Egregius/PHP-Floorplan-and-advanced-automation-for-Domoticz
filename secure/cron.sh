@@ -4,7 +4,10 @@ ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+fi
 ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
@@ -17,55 +20,76 @@ ps cax | grep energy.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/energy.php >/dev/null 2>&1 &
 fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+fi
 ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+fi
 ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+fi
 ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 fi
-
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+fi
 ps cax | grep cron.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/cron.php >/dev/null 2>&1 &
 fi
+
 sleep 10
 
 ps cax | grep pass4mqtt.php
 if [ $? -ne 0 ] ; then
 	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+fi
+ps cax | grep mqttrepublishdo
+if [ $? -ne 0 ] ; then
+	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
 fi
 
 
@@ -80,10 +104,10 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
 	/usr/sbin/service nginx start
 fi
-PHP=$(ps -C php-fpm8.0 | wc -l)
+PHP=$(ps -C php-fpm8.2 | wc -l)
 if [ $PHP -le 1 ] || [ $PHP -ge 50 ] ; then
-	/usr/sbin/service php8.0-fpm stop
-	/usr/sbin/service php8.0-fpm start
+	/usr/sbin/service php8.2-fpm stop
+	/usr/sbin/service php8.2-fpm start
 fi
 ps cax | grep mariadbd
 if [ $? -ne 0 ] ; then
