@@ -4,38 +4,37 @@ require '/var/www/vendor/autoload.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
-$server   = "127.0.0.1"; // MQTT WebSocket broker (localhost)
-$port     = 8081; // WebSocket poort (zoals geconfigureerd in Mosquitto)
-$clientId = "php_mqtt_ws_" . rand(); // Unieke client ID
+$server   = "127.0.0.1";  // WebSocket MQTT broker
+$port     = 1883;         // WebSocket poort
+$clientId = "php_mqtt_ws_" . rand(); 
 
-// Topics
-$subscribeTopic = "#"; // Het topic waarop we luisteren
-$publishTopic   = "test"; // Het topic waarop we publiceren
+$subscribeTopic = "domoticz/out/#";   // Gebruik wildcard voor alle berichten
+$publishTopic   = "test";
 
 try {
-    // Maak verbinding via WebSockets
-    $mqtt = new MqttClient($server, $port, $clientId, MqttClient::MQTT_3_1); 
+    // Maak verbinding met de MQTT broker via WebSocket
+    $mqtt = new MqttClient($server, $port, $clientId);
+    
+    // Zet de verbindingseinstellungen, zoals Keep-Alive en gebruik geen TLS (aangezien het een WebSocket verbinding is)
+    $connectionSettings = (new ConnectionSettings())
+        ->setKeepAliveInterval(60)
+        ->setUseTls(false); // Zorg ervoor dat er geen TLS gebruikt wordt (WebSocket verbindingen gebruiken vaak geen TLS)
 
-    // Instellingen (geen authenticatie nodig)
-    $connectionSettings = (new ConnectionSettings())->setKeepAliveInterval(60);
-
-    // Verbinden met de broker
+    // Maak de verbinding
     $mqtt->connect($connectionSettings, true);
-    echo "✅ Verbonden met MQTT WebSocket broker op $server:$port\n";
+    echo "✅ Verbonden met WebSocket broker op $server:$port\n";
 
-    // Callback voor binnenkomende berichten
+    // Subscribe op het topic (gebruik # om alles te ontvangen onder domoticz/out)
     $mqtt->subscribe($subscribeTopic, function ($topic, $message) use ($mqtt, $publishTopic) {
         echo "📩 Ontvangen: [$topic] $message\n";
-
-        // Herpubliceren met retain flag
-        $mqtt->publish($publishTopic, $message, 0, true);
-        echo "🚀 Herpublicatie: [$publishTopic] $message\n";
+        $mqtt->publish($publishTopic.'/'.str_replace('domoticz/out/','',$topic), $message, 0, true);  // Publiceer het bericht met Retain
+        echo "🚀 Herpublicatie: [$publishTopic]/[$topic] $message\n";
     }, 0);
 
-    // Blijf luisteren naar berichten
+    // Loop om berichten te verwerken
     while ($mqtt->loop(true)) {}
 
-    // Verbinding sluiten (wordt normaal niet bereikt)
+    // Verbreek de verbinding
     $mqtt->disconnect();
 } catch (Exception $e) {
     echo "❌ Fout: " . $e->getMessage() . "\n";
