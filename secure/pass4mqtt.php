@@ -25,11 +25,10 @@ $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);
 $mqtt->connect($connectionSettings, true);
-$mqtt->subscribe('#', function (string $topic, string $message, bool $retained) use ($mqtt) {
+$mqtt->subscribe('#', function (string $topic, string $message, bool $retained) use ($mqtt,$dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch) {
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
-			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch,$xlight;
 			$time=time();
 			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 			$lastfetch=$time;
@@ -287,7 +286,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained) 
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true),6);
 		}
-	} elseif ($topic[0]!='i') lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} elseif ($topic[0]!='i'&&$topic[0]!='p') lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
 $mqtt->loop(true);
 $mqtt->disconnect();
