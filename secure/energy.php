@@ -52,6 +52,7 @@ while (1){
 		if ($newzon==0) {
 			$power=$data->active_power_w;
 			$alwayson=mget('alwayson');
+			$d['elvandaag']['icon']=$alwayson;
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
 				if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 				mset('alwayson',$power);
@@ -143,18 +144,16 @@ while (1){
 			$elec=$elec-$gisteren['elec'];
 			$water=round($water-$gisteren['water'],3);
 			$injectie=round($injectie-$gisteren['injectie'],3);
-			$verbruik=round($zonvandaag-$injectie+$elec,3);
+			$verbruik=round(/*$zonvandaag-$injectie+*/$elec,3);
 			$query="INSERT INTO `Guydag` (`date`,`gas`,`elec`,`verbruik`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$verbruik','$zonvandaag','$water') ON DUPLICATE KEY UPDATE `gas`='$gas',`elec`='$elec',`verbruik`='$verbruik',`zon`='$zonvandaag',`water`='$water'";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			
 			if (!isset($dbdomoticz)) {
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
-			$stmt=$dbdomoticz->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
-			while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-				$d[$row['n']]['s'] = $row['s'];
-				$d[$row['n']]['m'] = $row['m'];
-			}
+			$stmt=$dbdomoticz->query("select n,s,m,icon from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
+			while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']]=$row;
+
 			$water=$water*1000;
 			if($verbruik>=10) $verbruik=round($verbruik, 1);
 			elseif($verbruik>=2) $verbruik=round($verbruik, 2);
