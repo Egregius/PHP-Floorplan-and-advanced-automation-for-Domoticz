@@ -404,7 +404,7 @@ function bosezone($ip,$forced=false,$vol='') {
 	elseif ($playlist=='MIX-1') $preset='PRESET_4';
 	elseif ($playlist=='MIX-2') $preset='PRESET_5';
 	elseif ($playlist=='MIX-3') $preset='PRESET_6';
-	
+	lg($playlist.' '.$preset);
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);

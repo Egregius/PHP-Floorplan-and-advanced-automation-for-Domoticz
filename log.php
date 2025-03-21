@@ -100,7 +100,7 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 </head>
 <body>
 	<div class="fix z1" style="position:fixed;top:0px;left:0px;">
-		<a href="javascript:navigator_Go('floorplan.php');">
+		<a href="javascript:navigator_Go('/index.html');">
 			<img src="/images/close.png" width="48px" height="48px"/>
 		</a>
 	</div>

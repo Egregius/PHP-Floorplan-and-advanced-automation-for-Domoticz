@@ -78,7 +78,7 @@ if (isset($_REQUEST['nicestatus'])) {
 }
 echo '
 		<div class="fix" style="top:0px;right:0px;">
-			<a href=\'javascript:navigator_Go("floorplan.php");\'>
+			<a href=\'javascript:navigator_Go("/index.html");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
 		</div>

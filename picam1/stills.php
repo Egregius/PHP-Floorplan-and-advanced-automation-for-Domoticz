@@ -27,7 +27,7 @@ echo '<html>
 </head>
 <body>
 	<div class="navbar" role="navigation">
-		<form method="POST" action="../floorplan.php">
+		<form method="POST" action="/index.html">
 			<input type="submit" value="Plan" class="btn b7" />
 		</form>
 	</div>

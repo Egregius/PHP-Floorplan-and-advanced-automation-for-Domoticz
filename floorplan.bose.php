@@ -2,7 +2,7 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 if (!isset($_SESSION['referer'])) {
-	$_SESSION['referer']='floorplan.php';
+	$_SESSION['referer']='floorplan.bose.php';
 }
 if (isset($_REQUEST['ip'])) {
 	$bose=str_replace('bose', '', $_REQUEST['ip']);
@@ -70,7 +70,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.$boses[$bose].'</a> 
 	</div>
 	<div class="fix z1" style="bottom:14px;left:14px;">
-		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
+		<a href=\'javascript:navigator_Go("/index.html");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">

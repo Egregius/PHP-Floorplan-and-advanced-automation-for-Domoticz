@@ -10,6 +10,7 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 			$msg.='	'.$diff;
 		}
 	}
+	if (!isset($user)) $user=$_SERVER['REMOTE_ADDR'];
 	lg('(AJAX)	'.$user.$msg);
 }
 if (isset($_REQUEST['t'])) {

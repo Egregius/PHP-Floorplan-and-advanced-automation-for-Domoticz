@@ -2,6 +2,9 @@
 <?php
 require '/var/www/html/secure/functions.php';
 require '/var/www/vendor/autoload.php';
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+
 $mqtt=new MqttClient('127.0.0.1',1883,'cron2'.rand());
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)

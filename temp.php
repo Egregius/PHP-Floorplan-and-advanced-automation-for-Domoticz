@@ -25,20 +25,20 @@ echo '
 	</head>';
 if ($udevice=='iPad') echo '
 	<body style="width:1010px">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
+		<form action="/index.html"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
 elseif ($udevice=='iPhoneGuy'||$udevice=='iPhoneKirby') echo '
 	<body style="width:450px">
 		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:100%;height:70px;background-color:#000;">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
+		<form action="/index.html"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>
 		</div>';
 
 else 	echo '
 	<body style="width:100%">
-		<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
+		<form action="/index.html"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
 $db=new mysqli('localhost', $dbuser, $dbpass, $dbname);

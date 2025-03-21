@@ -7,7 +7,11 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
-			if ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+			if ($d['bose'.$ip]['icon']!='Online') {
+				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+				$d['bose'.$ip]['icon']='Online';
+				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+			}
 			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 				bosezone($ip,true,$vol);
 //				usleep(500000);
@@ -19,7 +23,11 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
+			if ($d['bose'.$ip]['icon']!='Offline') {
+				storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
+				$d['bose'.$ip]['icon']='Offline';
+				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+			}
 			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		unset($status);
@@ -74,7 +82,11 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 	}	
 }
 if($d['langekast']['s']!='On') {
-	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
+	if ($d['bose101']['icon']!='Offline') {
+		storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
+		$d['bose'.$ip]['icon']='Offline';
+		$mqtt->publish('i/bose101', json_encode($d['bose101']), 0, true);
+	}
 } else {
 	if (past('langekast')<15) sw('lamp kast', 'Off');
 }

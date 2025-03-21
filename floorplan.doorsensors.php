@@ -55,7 +55,7 @@ $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 echo '
 <body class="floorplan">
 	<div class="fix z1" style="bottom:12px;left:12px;">
-		<a href=\'javascript:navigator_Go("floorplan.php");\'>
+		<a href=\'javascript:navigator_Go("/index.html");\'>
 			<img src="/images/close.png" width="72px" height="72px"/>
 		</a>
 	</div>

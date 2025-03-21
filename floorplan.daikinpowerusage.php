@@ -50,7 +50,7 @@ echo '
 	</head>
 	<body>
 		<div class="fix" style="top:0px;left:0px;width:100%">
-			<a href=\'javascript:navigator_Go("floorplan.php");\'>
+			<a href=\'javascript:navigator_Go("/index.html");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>';
 if ($d['daikin']['m']==0) echo '
