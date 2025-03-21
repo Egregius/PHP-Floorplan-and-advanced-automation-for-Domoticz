@@ -15,7 +15,7 @@ while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 }
 try {
-    $mqtt=new MqttClient('127.0.0.1',1883,'php_mqtt_ws_'.rand());
+    $mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
     $connectionSettings=(new ConnectionSettings())
         ->setKeepAliveInterval(60)
         ->setUseTls(false);

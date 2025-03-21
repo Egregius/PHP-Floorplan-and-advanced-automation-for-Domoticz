@@ -1,6 +1,14 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+require '/var/www/vendor/autoload.php';
+$mqtt=new MqttClient('127.0.0.1',1883,'cron2'.rand());
+$connectionSettings=(new ConnectionSettings())
+	->setKeepAliveInterval(60)
+	->setUseTls(false);
+$mqtt->connect($connectionSettings, true);
+
+
 lg('Starting cron10B loop...');
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $lastfetch=time();
