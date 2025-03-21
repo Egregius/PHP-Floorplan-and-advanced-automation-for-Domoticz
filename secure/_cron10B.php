@@ -42,9 +42,12 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 			if (isset($status['@attributes']['source'])) {
 				if ($d['bose'.$ip]['icon']!='Online') {
 					storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+					$d['bose'.$ip]['icon']='Online';
+					$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
 					if ($d['lg_webos_tv_cd9e']['s']!='On'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')) {
 						bosezone(101);
 					}
+					
 				}
 				if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
 					if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
@@ -52,7 +55,11 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 					if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 				}
 			} else {
-				if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
+				if ($d['bose'.$ip]['icon']!='Offline') {
+					storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__);
+					$d['bose'.$ip]['icon']='Offline';
+					$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+				}
 				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 			unset($status);

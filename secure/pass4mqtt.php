@@ -18,10 +18,14 @@ $lastfetch=time();
 lg(' Starting MQTT loop...',1);
 updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
 
-$client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
-$client->connect(null, true);
-$client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
+$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
+$connectionSettings=(new ConnectionSettings())
+	->setKeepAliveInterval(60)
+	->setUseTls(false);
+$mqtt->connect($connectionSettings, true);
+$mqtt->subscribe('#', function (string $topic, string $message, bool $retained) use ($mqtt) {
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
@@ -283,10 +287,10 @@ $client->subscribe('#', function (string $topic, string $message, bool $retained
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true),6);
 		}
-	} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} elseif ($topic[0]!='i') lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
-$client->loop(true);
-$client->disconnect();
+$mqtt->loop(true);
+$mqtt->disconnect();
 
 function floorToFraction($number, $denominator = 1) {
 	return floor($number*$denominator)/$denominator;

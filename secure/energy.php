@@ -29,12 +29,12 @@ while (1){
 	if ($dag>2) {
 		$zon=curl('http://192.168.2.9/api/v1/data');
 		$zon=json_decode($zon);
-		if (isset($zon->active_power_w)) {
-			$prevzon=mget('zon');
+		if (isset($zon->active_power_w)&&$zon->active_power_w<0) {
+//			$prevzon=mget('zon');
 			$newzon=-round($zon->active_power_w);
 		}
 	} else {
-		$prevzon=mget('zon');
+//		$prevzon=mget('zon');
 		$newzon=0;
 	}
 	$data=json_decode($data);

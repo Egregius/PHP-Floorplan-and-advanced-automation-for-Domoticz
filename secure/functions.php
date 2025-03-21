@@ -122,7 +122,7 @@ function sl($name,$level,$msg='',$force=false) {
 			}
 		}
 	} else {
-		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('(SETLEVEL)	'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
@@ -131,7 +131,7 @@ function sl($name,$level,$msg='',$force=false) {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $d,$user,$domoticzurl;
-	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
+	lg(' (RGB)		'.$user.' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 		else {
@@ -165,7 +165,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			}
 		}
 	} else {
-		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+		$msg='(SWITCH)'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['i']>10) {
 			lg($msg,4);
 			if ($d[$name]['s']!=$action||$force==true) {
@@ -184,7 +184,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
 	if(!isset($d)) $d=fetchdata();
-	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
+	$msg='(SETPOINT)'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg,3);
 	if ($d[$name]['i']>0) {
 		file_get_contents($domoticzurl.'/json.htm?type=command&param=setsetpoint&idx='.$d[$name]['i'].'&setpoint='.$value);
@@ -218,7 +218,7 @@ function storeicon($name,$icon,$msg='',$updatetime=false) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
-		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('(STOREICON)	'.$user.'	=> '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -254,7 +254,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 			}
 		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
-	lg('(udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
+	lg('(udevice) | '.$user.'=> '.str_pad($name??'', 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function convertToHours($time) {
 	if ($time<600) return substr(date('i:s', $time-3600), 1);
