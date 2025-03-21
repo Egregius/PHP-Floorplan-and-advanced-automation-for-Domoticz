@@ -49,6 +49,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		#playlist{font-size:33px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
 	</style>
+	<script src="/scripts/mqtt.min.js"></script>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
 	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
 	<script type="text/javascript">
@@ -56,6 +57,17 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		$(document).ready(function() {
 			ajaxbose('.$bose.')
 			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
+		});
+		let socket = null;
+		if (socket && socket.readyState === WebSocket.OPEN) {
+			console.log("WebSocket is al actief")
+		}
+		console.log("Start websocket")
+		socket = mqtt.connect("wss://home.egregius.be:8081", {
+			protocolVersion: 4,
+			reconnectPeriod: 5000, // Probeer elke 5 sec opnieuw
+			connectTimeout: 30 * 1000, // 30 sec timeout
+			clientId: "webClient_" + Math.random().toString(16).substr(2, 8),
 		});
 	</script>
 </head>
