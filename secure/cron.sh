@@ -5,21 +5,6 @@ ENERGY=true
 CRON=true
 CRON2=true
 
-if [ $PASS4MQTT = false ] ;then
-	pkill -f pass4mqtt.php
-fi
-if [ $MQTTREPUBLISHDOMOTICZ = false ] ;then
-	pkill -f mqttrepublishdomoticz.php
-fi
-if [ $ENERGY = false ] ;then
-	pkill -f energy.php
-fi
-if [ $CRON = false ] ;then
-	pkill -f cron.php
-fi
-if [ $CRON2 = false ] ;then
-	pkill -f cron2.php
-fi
 i=1
 while [ $i -lt 6 ]; do
 	echo $i

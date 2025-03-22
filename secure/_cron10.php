@@ -1,4 +1,5 @@
 <?php
+$mqtt->publish('p', 'c', 0, false);
 $t=t();
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {

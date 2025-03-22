@@ -56,7 +56,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		function navigator_Go(url){window.location.assign(url)}
 		$(document).ready(function() {
 			ajaxbose('.$bose.')
-			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
+			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},100)
 		});
 	</script>
 </head>
@@ -69,9 +69,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	</div>
 	<div class="fix" id="bose">
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.$boses[$bose].'</a> 
-	</div>
-	<div class="fix z1" style="bottom:14px;left:14px;">
-		<a href=\'javascript:navigator_Go("/index.html");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
