@@ -72,7 +72,10 @@ function fhall() {
 	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:00')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
-	global $d;
+	global $d,$mqtt;
+	if ($weg==true) $d['Weg']['s']=2;
+	else $d['Weg']['s']=1;
+	$mqtt->publish('i/Weg', json_encode($d['Weg']), 0, true);
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lamp kast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
@@ -80,7 +83,10 @@ function huisslapen($weg=false) {
 	}
 }
 function huisthuis($msg='') {
+	global $d,$mqtt;
 	store('Weg', 0);
+	$d['Weg']['s']=0;
+	$mqtt->publish('i/Weg', json_encode($d['Weg']), 0, true);
 	lg('Huis thuis '.$msg);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {

@@ -139,7 +139,7 @@ elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
 if ($d['buiten_temp']['s']!=$temp) {
 	store('buiten_temp', $temp);
 	unset($d['buiten_temp']['t']);
-	$d['buiten_temp']['s']=$temp;
+	$d['buiten_temp']['s']=round($temp,1);
 	lg('buiten_temp='.$temp);
 	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, true);
 }

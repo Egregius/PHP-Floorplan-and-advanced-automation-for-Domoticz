@@ -1,7 +1,15 @@
 <?php
-require 'secure/functions.php';
+require '/var/www/vendor/autoload.php';
+require '/var/www/html/secure/functions.php';
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
+$connectionSettings=(new ConnectionSettings())
+	->setKeepAliveInterval(60)
+	->setUseTls(false);
+$mqtt->connect($connectionSettings, true);
 //require '/var/www/authentication.php';
-session_write_close();
+//session_write_close();
 if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
 	foreach($_REQUEST as $k=>$v) {
@@ -127,6 +135,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='Weg') {
+		
+		$lastfetch=0;
+		$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+		
 		store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
 			huisthuis();
@@ -313,3 +325,4 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	}
 }
+$mqtt->disconnect();

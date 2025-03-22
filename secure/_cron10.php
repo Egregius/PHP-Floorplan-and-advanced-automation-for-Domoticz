@@ -76,7 +76,7 @@ $pastgrohe=past('GroheRed');
 if ($d['Weg']['s']<2&&$d['net']<-1000&&$d['GroheRed']['s']=='Off') sw('GroheRed', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
 elseif ($d['GroheRed']['s']=='On'&&$pastgrohe>3600&&past('$ 8keuken8')>1800&&$d['net']>0) sw('GroheRed', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']||$d['Weg']['s']>=2)) {
+if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']+1000||$d['Weg']['s']>=2)) {
 	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Auto laden uit, te veel verbruik');
 	storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 } elseif ($d['Weg']['s']==0&&$d['powermeter']['s']=='Off'&&$d['avg']<100&&$d['net']<-2500&&$d['GroheRed']['s']=='On') {
