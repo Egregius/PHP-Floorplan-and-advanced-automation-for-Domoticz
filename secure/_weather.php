@@ -137,6 +137,7 @@ if ($d['buiten_temp']['s']!=$temp) {
 	store('buiten_temp', $temp);
 	unset($d['buiten_temp']['t']);
 	$d['buiten_temp']['s']=$temp;
+	lg('buiten_temp='.$temp);
 	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, true);
 }
 if ($d['minmaxtemp']['m']!=$maxtemp) {

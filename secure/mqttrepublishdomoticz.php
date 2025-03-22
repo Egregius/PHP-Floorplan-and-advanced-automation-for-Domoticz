@@ -5,15 +5,7 @@ require '/var/www/html/secure/functions.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
-if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
-$stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 OR n like '%_hum';");
-while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-	$d[$row['n']]['s']=$row['s'];
-	if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
-	if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-	if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-	if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
-}
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 try {
     $mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
     $connectionSettings=(new ConnectionSettings())
@@ -27,6 +19,9 @@ try {
         $name=$m['name'];
 		$topic='i/'.$name;
 		if (array_key_exists($name, $d)&&$m['stype']!='Viking 02035, 02038, TSS320') {
+			$time=time();
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$lastfetch=$time;
 			if ($m['dtype']=='Light/Switch') {
 				if ($m['switchType']=='Dimmer') {
 					if ($m['nvalue']==0) $d[$name]['s']=0;
