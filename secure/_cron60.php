@@ -149,5 +149,8 @@ if (isset($data->CivTwilightStart)) {
 		}
 	}
 	$prevdag=mget('dag');
-	if ($dag!=$prevdag) mset('dag',$dag);
+	if ($dag!=$prevdag) {
+		mset('dag',$dag);
+		$mqtt->publish('i/dag', $dag, 0, true);
+	}
 } else lg('Error fetching CivTwilightStart from domoticz');

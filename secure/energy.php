@@ -152,7 +152,11 @@ while (1){
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
 			$stmt=$dbdomoticz->query("select n,s,m,icon from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
-			while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']]=$row;
+			while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+				if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
+				if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
+				if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+			}
 
 			$water=$water*1000;
 			if($verbruik>=10) $verbruik=round($verbruik, 1);

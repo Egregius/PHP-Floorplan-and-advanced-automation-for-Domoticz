@@ -10,9 +10,9 @@ $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 OR n li
 while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 	$d[$row['n']]['s']=$row['s'];
 	if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
-	if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
-	if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-	if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+	if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
+	if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+	if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 }
 try {
     $mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
@@ -23,7 +23,6 @@ try {
     echo "✅ ".date("H:i:s")."  Verbonden met MQTT\n";
     $mqtt->subscribe('domoticz/out/#', function ($t, $m) use ($mqtt, $d) {
         $t=str_replace('domoticz/out/','',$t);
-		
         $m=json_decode($m,true);
         $name=$m['name'];
 		$topic='i/'.$name;

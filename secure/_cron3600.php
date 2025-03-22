@@ -31,10 +31,12 @@ if (isset($data->CivTwilightStart)) {
 	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
 	$Sunrise=strtotime($data->Sunrise);
 	$Sunset=strtotime($data->Sunset);
-	mset('sunrise', array(
+	$sunrise=array(
 		'CivTwilightStart'=>date('G:i', $CivTwilightStart),
 		'CivTwilightEnd'=>date('G:i', $CivTwilightEnd),
 		'Sunrise'=>date('G:i', $Sunrise),
 		'Sunset'=>date('G:i', $Sunset),
-	));
+	);
+	mset('sunrise', $sunrise);
+	$mqtt->publish('i/sunrise', json_encode($sunrise), 0, true);
 } else lg('Error fetching CivTwilightStart from domoticz');

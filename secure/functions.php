@@ -676,7 +676,14 @@ function fetchdata($t=0,$lg='') {
 	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+		if(!is_null($row['i']))$d[$row['n']]['i']=$row['i'];
+		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
+		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
+		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
+		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+	}
 
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
