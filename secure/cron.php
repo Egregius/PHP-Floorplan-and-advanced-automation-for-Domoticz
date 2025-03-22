@@ -1,6 +1,15 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+require '/var/www/vendor/autoload.php';
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+
+$mqtt=new MqttClient('127.0.0.1',1883,'cron'.rand());
+$connectionSettings=(new ConnectionSettings())
+	->setKeepAliveInterval(60)
+	->setUseTls(false);
+$mqtt->connect($connectionSettings, true);
 if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $lastfetch=time();
 $user='CRONstart';

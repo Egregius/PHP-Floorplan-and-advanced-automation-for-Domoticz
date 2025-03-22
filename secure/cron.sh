@@ -1,97 +1,61 @@
 #!/bin/sh
+PASS4MQTT=true
+MQTTREPUBLISHDOMOTICZ=false
+ENERGY=true
+CRON=true
+CRON2=true
 
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+if [ $PASS4MQTT = false ] ;then
+	pkill -f pass4mqtt.php
 fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+if [ $MQTTREPUBLISHDOMOTICZ = false ] ;then
+	pkill -f mqttrepublishdomoticz.php
 fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
+if [ $ENERGY = false ] ;then
+	pkill -f energy.php
 fi
-ps cax | grep cron2.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron2.php >/dev/null 2>&1 &
+if [ $CRON = false ] ;then
+	pkill -f cron.php
 fi
-ps cax | grep energy.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/energy.php >/dev/null 2>&1 &
+if [ $CRON2 = false ] ;then
+	pkill -f cron2.php
 fi
-
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep mqttrepublishdo
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
-fi
-
+i=1
+while [ $i -lt 6 ]; do
+	echo $i
+	if [ $PASS4MQTT = true ] ;then
+		ps cax | grep pass4mqtt.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $MQTTREPUBLISHDOMOTICZ = true ] ;then
+		ps cax | grep mqttrepublishdo
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $ENERGY = true ] ;then
+		ps cax | grep energy.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/energy.php >/dev/null 2>&1 &
+		fi
+	fi	
+	if [ $CRON = true ] ;then
+		ps cax | grep cron.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/cron.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $CRON2 = true ] ;then
+		ps cax | grep cron2.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/cron2.php >/dev/null 2>&1 &
+		fi
+	fi
+	sleep 10
+	i=`expr $i + 1`
+done
 
 #ps cax | grep domoticz
 #if [ $? -ne 0 ] ; then

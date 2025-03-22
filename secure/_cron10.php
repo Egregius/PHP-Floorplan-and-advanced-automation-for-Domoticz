@@ -84,6 +84,7 @@ if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 
 if ($d['Weg']['m']==2) {
 	lg('Stopping CRON Loop...');
+	$mqtt->disconnect();
 	$db->query("UPDATE devices SET m=0 WHERE n ='Weg';");
 	exit('Stop');
 	die('Stop');

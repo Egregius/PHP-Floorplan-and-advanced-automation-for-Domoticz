@@ -186,7 +186,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained) 
 			} elseif ($d['Weg']['m']==3) {
 				lg('Stopping MQTT Loop...');
 				storemode('Weg', 2, '', 1);
-				$client->disconnect();
+				$mqtt->disconnect();
 				exec('kill -9 ' . getmypid());
 			}
 		} elseif ($topic[1]=='in') {

@@ -58,17 +58,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 			ajaxbose('.$bose.')
 			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
 		});
-		let socket = null;
-		if (socket && socket.readyState === WebSocket.OPEN) {
-			console.log("WebSocket is al actief")
-		}
-		console.log("Start websocket")
-		socket = mqtt.connect("wss://home.egregius.be:8081", {
-			protocolVersion: 4,
-			reconnectPeriod: 5000, // Probeer elke 5 sec opnieuw
-			connectTimeout: 30 * 1000, // 30 sec timeout
-			clientId: "webClient_" + Math.random().toString(16).substr(2, 8),
-		});
 	</script>
 </head>
 <body>
