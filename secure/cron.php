@@ -11,7 +11,7 @@ $connectionSettings=(new ConnectionSettings())
 	->setUseTls(false);
 $mqtt->connect($connectionSettings, true);
 if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-$lastfetch=time();
+$lastfetch=0;
 $user='CRONstart';
 sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__,true);
 sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__,true);
@@ -23,8 +23,7 @@ if (isset($argv[1])) {
 	while (1){
 		$start=microtime(true);
 		$time=time();
-		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
-		$lastfetch=$time;
+		
 		$crontime=$time;
 		if ($crontime%10==0) include '_cron10.php';
 		if ($crontime%60==0) include '_cron60.php';
@@ -32,6 +31,8 @@ if (isset($argv[1])) {
 			$user=' TC '.$d['heating']['s'];
 			$s=date('s');
 			$t=t();
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$lastfetch=$time;
 			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
 			elseif ($d['heating']['s']==0) include '_TC_neutral.php';

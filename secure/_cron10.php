@@ -1,6 +1,9 @@
 <?php
 $mqtt->publish('p', 'c', 0, false);
 $t=t();
+$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+$lastfetch=$time;
+		
 $user=basename(__FILE__);
 if ($d['auto']['s']=='On') {
 	$i=39;

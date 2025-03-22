@@ -12,6 +12,9 @@ $temps['buiten_temp']=$d['buiten_temp']['s'];
 $temps['buiten_temp_hum']=$d['minmaxtemp']['icon'];
 $winds['prev_wind']=$d['wind']['s'];
 
+$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+$lastfetch=$time;
+		
 //lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
 if (isset($ow['current'])) {

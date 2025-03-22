@@ -25,7 +25,8 @@ $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);
 $mqtt->connect($connectionSettings, true);
-$mqtt->subscribe('#', function (string $topic, string $message, bool $retained) use ($mqtt,$dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch) {
+$mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
+	global $mqtt,$dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch;
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {

@@ -684,7 +684,6 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
-
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 

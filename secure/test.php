@@ -6,8 +6,10 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
 
-hass('switch','turn_on','switch.plug7');
-//sw('bosekeuken', 'Off');
+file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=70');
+file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
+sleep(2);
+file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=0&passcode=');//sw('bosekeuken', 'Off');
 //hass('input_button','press','input_button.wakeipad');
  
 echo '</pre>';
