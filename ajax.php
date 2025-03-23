@@ -3,7 +3,7 @@ require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
-$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
+$mqtt=new MqttClient('127.0.0.1',1883,'ajax');
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);
@@ -135,7 +135,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='Weg') {
 		
 		$lastfetch=0;
-		$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 		
 		store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
@@ -313,11 +313,6 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 						sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
 					}
 				}
-			}  elseif ($_REQUEST['action']=='hartje') {
-				bosekey('THUMBS_UP');
-			}  elseif ($_REQUEST['action']=='skippen') {
-				$status='On';
-				require('secure/pass2php/Bose verwijderen.php');
 			}
 	} elseif ($_REQUEST['command']=='mode') {
 		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);

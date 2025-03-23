@@ -6,7 +6,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 $lastfetch=0;
 $d=fetchdata(0,'mqttrepublish:'.__LINE__.'	');
-$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
+$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz');
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);
@@ -72,7 +72,7 @@ $mqtt->subscribe('#',function($t,$m){
 			if (isset($d[$name]['t'])) $d[$name]['t']=time();
 			$status=json_encode($d[$name]);
 			echo "🚀 ".date("H:i:s")."  $topic $status\n";
-			$mqtt->publish($topic, $status, 0, true);
+			$mqtt->publish($topic, $status, 0, false);
 			unset($name,$dtype,$topic,$status);
 		} elseif ($m['stype']=='Viking 02035, 02038, TSS320') {
 			$time=time();
@@ -88,14 +88,14 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['buiten_temp']['m']=$hum;
 					$topic='i/buiten_temp';
 					$status=json_encode($d['buiten_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 				if ($temp!=$d['minmaxtemp']['icon']) {
 					$d['minmaxtemp']['icon']=$temp;
 					$topic='i/minmaxtemp';
 					$status=json_encode($d['minmaxtemp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} elseif ($m['name']=='kamer_hum') { // 2
@@ -107,7 +107,7 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['kamer_temp']['m']=$hum;
 					$topic='i/kamer_temp';
 					$status=json_encode($d['kamer_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} elseif ($m['name']=='alex_hum') { // 3
@@ -119,7 +119,7 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['alex_temp']['m']=$hum;
 					$topic='i/alex_temp';
 					$status=json_encode($d['alex_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} elseif ($m['name']=='waskamer_hum') { // 4
@@ -132,7 +132,7 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['waskamer_temp']['s']=$status;
 					$topic='i/waskamer_temp';
 					$status=json_encode($d['waskamer_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} elseif ($m['name']=='badkamer_hum') { // 5
@@ -144,7 +144,7 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['badkamer_temp']['m']=$hum;
 					$topic='i/badkamer_temp';
 					$status=json_encode($d['badkamer_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} elseif ($m['name']=='living_hum') { // 6
@@ -156,7 +156,7 @@ $mqtt->subscribe('#',function($t,$m){
 					$d['living_temp']['m']=$hum;
 					$topic='i/living_temp';
 					$status=json_encode($d['living_temp']);
-					$mqtt->publish($topic, $status, 0, true);
+					$mqtt->publish($topic, $status, 0, false);
 					echo "🚀 ".date("H:i:s")."  $topic $status\n";
 				}
 			} else echo "Name not found\n";
@@ -173,7 +173,7 @@ $mqtt->subscribe('#',function($t,$m){
 						$d['$device']['s']=$status;
 						$topic='i/'.$device;
 						$status=json_encode($d['$device']);
-						$mqtt->publish($topic, $status, 0, true);
+						$mqtt->publish($topic, $status, 0, false);
 					}// else lg(__LINE__);
 					//$db->query("INSERT INTO devices (n,s,t) VALUES ('$device','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 				}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));

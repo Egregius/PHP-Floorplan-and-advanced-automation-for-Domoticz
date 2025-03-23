@@ -5,7 +5,7 @@ require '/var/www/vendor/autoload.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
-$mqtt=new MqttClient('127.0.0.1',1883,'cron2'.rand());
+$mqtt=new MqttClient('127.0.0.1',1883,'cron2');
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);

@@ -141,14 +141,14 @@ if ($d['buiten_temp']['s']!=$temp) {
 	unset($d['buiten_temp']['t']);
 	$d['buiten_temp']['s']=round($temp,1);
 	lg('buiten_temp='.$temp);
-	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, true);
+	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, false);
 }
 if ($d['minmaxtemp']['m']!=$maxtemp||$d['minmaxtemp']['s']!=$mintemp) {
 	if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 	if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 	$d['minmaxtemp']['s']=$mintemp;
 	$d['minmaxtemp']['m']=$maxtemp;
-	$mqtt->publish('i/minmaxtemp', json_encode($d['minmaxtemp']), 0, true);
+	$mqtt->publish('i/minmaxtemp', json_encode($d['minmaxtemp']), 0, false);
 }
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 if (count($winds)>=4) {
@@ -156,7 +156,7 @@ if (count($winds)>=4) {
 	if ($d['wind']['s']!=$wind) {
 		store('wind', $wind);
 		$d['wind']['s']=$wind;
-		$mqtt->publish('i/wind', json_encode($d['wind']), 0, true);
+		$mqtt->publish('i/wind', json_encode($d['wind']), 0, false);
 	}
 }
 
@@ -165,7 +165,7 @@ if (count($rains)>=2) {
 	if ($d['buien']['s']!=$rain) {
 		store('buien', $rain);
 		$d['buien']['s']=$rain;
-		$mqtt->publish('i/buien', json_encode($d['buien']), 0, true);
+		$mqtt->publish('i/buien', json_encode($d['buien']), 0, false);
 	}
 	if ($rain>0) {
 		$past=(86400/$rain)*2;

@@ -45,7 +45,7 @@ while (1){
 			'zon'=>$newzon
 		);
 		mset('en',$en);
-		$mqtt->publish('i/en', json_encode($en), 0, true);
+		$mqtt->publish('i/en', json_encode($en), 0, false);
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 
@@ -168,22 +168,22 @@ while (1){
 			if ($water!=$d['watervandaag']['s']) {
 				$dbdomoticz->query("UPDATE devices SET s=$water,t=$time WHERE n='watervandaag';");
 				$d['watervandaag']['s']=$water;
-				$mqtt->publish('i/watervandaag', json_encode($d['watervandaag']), 0, true);
+				$mqtt->publish('i/watervandaag', json_encode($d['watervandaag']), 0, false);
 			}
 			if ($gas!=$d['gasvandaag']['s']) {
 				$dbdomoticz->query("UPDATE devices SET s=$gas,t=$time WHERE n='gasvandaag';");
 				$d['gasvandaag']['s']=$gas;
-				$mqtt->publish('i/gasvandaag', json_encode($d['gasvandaag']), 0, true);
+				$mqtt->publish('i/gasvandaag', json_encode($d['gasvandaag']), 0, false);
 			}
 			if ($zonvandaag!=$d['zonvandaag']['s']) {
 				$dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
 				$d['zonvandaag']['s']=$zonvandaag;
-				$mqtt->publish('i/zonvandaag', json_encode($d['zonvandaag']), 0, true);
+				$mqtt->publish('i/zonvandaag', json_encode($d['zonvandaag']), 0, false);
 			}
 			if ($verbruik!=$d['elvandaag']['s']) {
 				$dbdomoticz->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
 				$d['elvandaag']['s']=$verbruik;
-				$mqtt->publish('i/elvandaag', json_encode($d['elvandaag']), 0, true);
+				$mqtt->publish('i/elvandaag', json_encode($d['elvandaag']), 0, false);
 			}
 			$prevtotal=$total;
 		}
@@ -204,7 +204,7 @@ while (1){
 			}
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['water'],3)." WHERE n='watervandaag';");
 			$d['watervandaag']['m']=round($avg['water'],3);
-			$mqtt->publish($topic, json_encode($d['watervandaag']), 0, true);
+			$mqtt->publish($topic, json_encode($d['watervandaag']), 0, false);
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['gas'],3)." WHERE n='gasvandaag';");
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['elec'],3)." WHERE n='elvandaag';");
 		}

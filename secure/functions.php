@@ -73,9 +73,6 @@ function fhall() {
 }
 function huisslapen($weg=false) {
 	global $d,$mqtt;
-	if ($weg==true) $d['Weg']['s']=2;
-	else $d['Weg']['s']=1;
-	$mqtt->publish('i/Weg', json_encode($d['Weg']), 0, true);
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lamp kast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
@@ -83,10 +80,7 @@ function huisslapen($weg=false) {
 	}
 }
 function huisthuis($msg='') {
-	global $d,$mqtt;
 	store('Weg', 0);
-	$d['Weg']['s']=0;
-	$mqtt->publish('i/Weg', json_encode($d['Weg']), 0, true);
 	lg('Huis thuis '.$msg);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
@@ -172,16 +166,18 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		}
 	} else {
 		$msg='(SWITCH)'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if ($d[$name]['i']>10) {
-			lg($msg,4);
-			if ($d[$name]['s']!=$action||$force==true) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+		if (isset($d[$name]['i'])) {
+			if ($d[$name]['i']>10) {
+				lg($msg,4);
+				if ($d[$name]['s']!=$action||$force==true) {
+					file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+				}
+			} elseif ($d[$name]['i']>0) {
+				lg($msg,4);
+				if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
+				elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
+				//store($name, $action, $msg);
 			}
-		} elseif ($d[$name]['i']>0) {
-			lg($msg,4);
-			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
-			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
-			//store($name, $action, $msg);
 		} else {
 			store($name, $action, $msg);
 		}
@@ -197,12 +193,14 @@ function setpoint($name, $value,$msg='') {
 	}
 }
 function store($name='',$status='',$msg='',$idx=null) {
-	global $db, $user;
+	global $db,$d,$user,$mqtt;
 	$time=time();
 	if ($idx>0) {
 		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
+	$d[$name]['s']=$status;
+	$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 //	mset($name,$status);
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
@@ -213,16 +211,20 @@ function store($name='',$status='',$msg='',$idx=null) {
 	}
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
-	global $db, $user, $time;
+	global $db,$d,$user,$time,$mqtt;
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
+	$d[$name]['m']=$mode;
+	$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
-	global $d, $db, $user, $time;
+	global $d,$db,$user,$time,$mqtt;
 	if ($d[$name]['icon']!=$icon) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
+		$d[$name]['icon']=$icon;
+		$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 		if (endswith($name, '_temp')) return;
 		lg('(STOREICON)	'.$user.'	=> '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
@@ -415,7 +417,7 @@ function bosezone($ip,$forced=false,$vol='') {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			$d['bose'.$ip]['s']='On';
-			$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+			$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, false);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -433,7 +435,7 @@ function bosezone($ip,$forced=false,$vol='') {
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				$d['bose101']['s']='On';
-				$mqtt->publish('i/bose101', json_encode($d['bose'.$ip]), 0, true);
+				$mqtt->publish('i/bose101', json_encode($d['bose'.$ip]), 0, false);
 				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
@@ -448,7 +450,7 @@ function bosezone($ip,$forced=false,$vol='') {
 				bosepost('setZone', $xml, 101);
 				store('bose'.$ip, 'On');
 				$d['bose'.$ip]['s']='On';
-				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, false);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);

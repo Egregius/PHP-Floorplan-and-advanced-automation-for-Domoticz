@@ -20,7 +20,7 @@ updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
-$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
+$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz');
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
 	->setUseTls(false);
