@@ -399,7 +399,7 @@ function boseplaylist() {
 	return $preset;
 }
 function bosezone($ip,$forced=false,$vol='') {
-	global $d,$time,$dow,$weekend;
+	global $d,$time,$dow,$weekend,$mqtt;
 	if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 	$time=time();
 	$t=t();
@@ -414,6 +414,8 @@ function bosezone($ip,$forced=false,$vol='') {
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+			$d['bose'.$ip]['s']='On';
+			$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -430,6 +432,8 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+				$d['bose101']['s']='On';
+				$mqtt->publish('i/bose101', json_encode($d['bose'.$ip]), 0, true);
 				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
@@ -443,6 +447,8 @@ function bosezone($ip,$forced=false,$vol='') {
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone', $xml, 101);
 				store('bose'.$ip, 'On');
+				$d['bose'.$ip]['s']='On';
+				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);

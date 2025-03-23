@@ -51,7 +51,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	</style>
 	<script src="/scripts/mqtt.min.js"></script>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
-	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
+	<script type="text/javascript" src="/scripts/floorplanmqtt.js?v=2"></script>
 	<script type="text/javascript">
 		function navigator_Go(url){window.location.assign(url)}
 		$(document).ready(function() {
