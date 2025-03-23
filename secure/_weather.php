@@ -143,14 +143,11 @@ if ($d['buiten_temp']['s']!=$temp) {
 	lg('buiten_temp='.$temp);
 	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, true);
 }
-if ($d['minmaxtemp']['m']!=$maxtemp) {
-	storemode('minmaxtemp', $maxtemp);
-	$d['minmaxtemp']['m']=$maxtemp;
-	$mqtt->publish('i/minmaxtemp', json_encode($d['minmaxtemp']), 0, true);
-}
-if ($d['minmaxtemp']['s']!=$mintemp) {
-	store('minmaxtemp', $mintemp);
+if ($d['minmaxtemp']['m']!=$maxtemp||$d['minmaxtemp']['s']!=$mintemp) {
+	if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
+	if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 	$d['minmaxtemp']['s']=$mintemp;
+	$d['minmaxtemp']['m']=$maxtemp;
 	$mqtt->publish('i/minmaxtemp', json_encode($d['minmaxtemp']), 0, true);
 }
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');

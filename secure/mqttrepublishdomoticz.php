@@ -5,7 +5,7 @@ require '/var/www/html/secure/functions.php';
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 $lastfetch=0;
-$d=fetchdata(0,'mqttrepublish:'.__LINE__);
+$d=fetchdata(0,'mqttrepublish:'.__LINE__.'	');
 $mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz'.rand());
 $connectionSettings=(new ConnectionSettings())
 	->setKeepAliveInterval(60)
@@ -20,7 +20,7 @@ $mqtt->subscribe('#',function($t,$m){
 		$m=json_decode($m,true);
 		$name=$m['name'];
 		$topic='i/'.$name;
-		if (array_key_exists($name, $d)&&$m['stype']!='Viking 02035, 02038, TSS320') {
+		if (array_key_exists($name, $d)&&$m['stype']!='Viking 02035, 02038, TSS320'&&substr($name,0,1)!='$') {
 			$time=time();
 			$d=fetchdata($lastfetch,'mqttrepublish:'.__LINE__);
 			$lastfetch=$time;
