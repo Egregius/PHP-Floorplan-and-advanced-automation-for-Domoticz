@@ -1,4 +1,5 @@
 <?php
+$mqtt->publish('p', 'c', 0, false);
 $user=basename(__FILE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
@@ -18,11 +19,20 @@ if ($d['Weg']['s']==0&&$d['langekast']['s']=='On'&&past('langekast')>75) {
 //				bosevolume($vol, $ip);
 			}
 			if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
-				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['bose'.$ip]['s']=='Off') {
+					sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+					$d['bose'.$ip]['s']='On';
+					$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+				}
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
-				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+				if ($d['bose'.$ip]['s']=='On') {
+					sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+					$d['bose'.$ip]['s']='Off';
+					$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, true);
+				}
 			}
 		} else {
+//			lg('bose'.$ip.' '.__LINE__.' '.$d['bose'.$ip]['icon']);
 			if ($d['bose'.$ip]['icon']!='Offline') {
 				storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
 				$d['bose'.$ip]['icon']='Offline';
