@@ -338,7 +338,7 @@ Levels:
 		$dFormat="Y-m-d H:i:s";
 		$mSecs=$time-floor($time);
 		$mSecs=substr(number_format($mSecs, 3), 1);
-		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg.' ['.$level.']'));
+		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
 }

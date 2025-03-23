@@ -10,12 +10,12 @@ $time=time();
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
+lg(' Starting MQTT loop...',1);
 
 //Setting some temp variables
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-$lastfetch=time();
+$d=fetchdata(0,'pass4mqtt:'.__LINE__);
+$lastfetch=$time;
 
-lg(' Starting MQTT loop...',1);
 updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
@@ -31,7 +31,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
 			$time=time();
-			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
 			$lastfetch=$time;
 			$message=json_decode($message, true);
 			$device=$message['name'];
@@ -211,7 +211,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
 			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
-			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
 			$lastfetch=$time;
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
@@ -267,7 +267,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
 			$time=time();
-			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
 			$lastfetch=$time;
 			if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
 				sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
