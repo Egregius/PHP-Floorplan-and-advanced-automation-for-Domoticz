@@ -60,7 +60,7 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 </head>
 <body>
 <div class="navbar">
-	<form action="/index.html"><input type="submit" class="btn b2" value="Plan"/></form>
+	<form action="/floorplan.php"><input type="submit" class="btn b2" value="Plan"/></form>
 	<form action="/kodi.php"><input type="submit" class="btn btna b2" value="Kodi"/></form>
 </div>
 <div><form method="POST">

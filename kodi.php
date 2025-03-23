@@ -106,7 +106,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	</head>
 	<body>
 		<div class="navbar">
-			<form action="/index.html">
+			<form action="/floorplan.php">
 				<input type="submit" class="btn b2" value="Plan"/>
 			</form>
 			<form action="/kodi.php">

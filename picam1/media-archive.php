@@ -264,7 +264,7 @@ function restart_page($selected)
 	<div><div class="menu">
 	<div style="margin: auto; overflow: visible;">
 	<div class="marginright">
-	<form method="POST" action="/index.html"><input type="submit" value="Plan" class="btn" style="min-width:5em"/></form>
+	<form method="POST" action="/floorplan.php"><input type="submit" value="Plan" class="btn" style="min-width:5em"/></form>
 	<form method="POST" action="index.php"><input type="submit" value="Live" class="btn" style="min-width:5em"/></form>
 	<form method="POST" action="media-archive.php?type=videos&year='.date("Y").'&label= &m0='.date("n",time()-86400).'&d0='.date("j",time()-86400).'&m1='.date("n").'&d1='.date("j").'">
 		<input type="submit" value="Archief" class="btn" style="min-width:5em"/>

@@ -10,28 +10,24 @@ $time=time();
 // Using https://github.com/php-mqtt/client
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-lg(' Starting MQTT loop...',1);
 
 //Setting some temp variables
-$d=fetchdata(0,'pass4mqtt:'.__LINE__);
-$lastfetch=$time;
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$lastfetch=time();
 
+lg(' Starting MQTT loop...',1);
 updatefromdomoticz();
 use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
 
-$mqtt=new MqttClient('127.0.0.1',1883,'mqttrepublishdomoticz');
-$connectionSettings=(new ConnectionSettings())
-	->setKeepAliveInterval(60)
-	->setUseTls(false);
-$mqtt->connect($connectionSettings, true);
-$mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
-	global $mqtt,$dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch;
+$client = new MqttClient('127.0.0.1', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
+$client->connect(null, true);
+$client->subscribe('#', function (string $topic, string $message, bool $retained) use ($client) {
 	$topic=explode('/', $topic);
 	if ($topic[0]=='domoticz') {
 		if ($topic[1]=='out') {
+			global $dbname,$dbuser,$dbpass,$user,$domoticzurl,$d,$time,$lastfetch,$xlight;
 			$time=time();
-			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 			$lastfetch=$time;
 			$message=json_decode($message, true);
 			$device=$message['name'];
@@ -187,7 +183,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 			} elseif ($d['Weg']['m']==3) {
 				lg('Stopping MQTT Loop...');
 				storemode('Weg', 2, '', 1);
-				$mqtt->disconnect();
+				$client->disconnect();
 				exec('kill -9 ' . getmypid());
 			}
 		} elseif ($topic[1]=='in') {
@@ -211,16 +207,16 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 	} elseif ($topic[0]=='homeassistant') {
 		if (isset($topic[3])&&$topic[3]=='state') {
 			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
-			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 			$lastfetch=$time;
 			$device=$topic[2];
 			if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
 				$status=ucfirst($message);
 				if (isset($d[$device]['s'])&&$status!=$d[$device]['s']) {
 					lg(' (MQTT HASS) Switch	'.$device.'	= '.$status,4);
-				}// else lg(__LINE__);
+				}
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$device','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+				//$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 			}// else lg('no file found for '.$device.' '.print_r($topic, true).'	'.print_r($message,true));
 		}// else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 	} elseif ($topic[0]=='owntracks') {
@@ -267,7 +263,7 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 		} elseif (isset($message->_type)&&$message->_type=='transition'&&$message->desc=='Thuis'&&$message->event=='enter') {
 			global $dbname,$dbuser,$dbpass,$d,$user,$domoticzurl,$time,$lastfetch;
 			$time=time();
-			$d=fetchdata($lastfetch,'pass4mqtt:'.__LINE__);
+			$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 			$lastfetch=$time;
 			if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
 				sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
@@ -287,10 +283,10 @@ $mqtt->subscribe('#', function (string $topic, string $message, bool $retained){
 		} else {
 			lg(PHP_EOL.'				<<< OwnTracks >>> '.print_r(json_decode($message),true),6);
 		}
-	} elseif ($topic[0]!='i'&&$topic[0]!='p') lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
+	} else lg(__LINE__.':'.print_r($topic, true).'	'.print_r($message,true));
 }, MqttClient::QOS_AT_MOST_ONCE);
-$mqtt->loop(true);
-$mqtt->disconnect();
+$client->loop(true);
+$client->disconnect();
 
 function floorToFraction($number, $denominator = 1) {
 	return floor($number*$denominator)/$denominator;

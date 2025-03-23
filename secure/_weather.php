@@ -12,9 +12,6 @@ $temps['buiten_temp']=$d['buiten_temp']['s'];
 $temps['buiten_temp_hum']=$d['minmaxtemp']['icon'];
 $winds['prev_wind']=$d['wind']['s'];
 
-$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__.'	');
-$lastfetch=$time;
-		
 //lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
 if (isset($ow['current'])) {
@@ -136,37 +133,18 @@ if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10
 $maxtemp=ceil($maxtemp*10)/10;
 if ($temp>$d['buiten_temp']['s']+0.1) $temp=$d['buiten_temp']['s']+0.1;
 elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
-if ($d['buiten_temp']['s']!=$temp) {
-	store('buiten_temp', $temp);
-	unset($d['buiten_temp']['t']);
-	$d['buiten_temp']['s']=round($temp,1);
-	lg('buiten_temp='.$temp);
-	$mqtt->publish('i/buiten_temp', json_encode($d['buiten_temp']), 0, false);
-}
-if ($d['minmaxtemp']['m']!=$maxtemp||$d['minmaxtemp']['s']!=$mintemp) {
-	if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
-	if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
-	$d['minmaxtemp']['s']=$mintemp;
-	$d['minmaxtemp']['m']=$maxtemp;
-	$mqtt->publish('i/minmaxtemp', json_encode($d['minmaxtemp']), 0, false);
-}
+if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
+if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
+if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
-	if ($d['wind']['s']!=$wind) {
-		store('wind', $wind);
-		$d['wind']['s']=$wind;
-		$mqtt->publish('i/wind', json_encode($d['wind']), 0, false);
-	}
+	if ($d['wind']['s']!=$wind) store('wind', $wind);
 }
 
 if (count($rains)>=2) {
 	$rain=floor(array_sum($rains)/count($rains));
-	if ($d['buien']['s']!=$rain) {
-		store('buien', $rain);
-		$d['buien']['s']=$rain;
-		$mqtt->publish('i/buien', json_encode($d['buien']), 0, false);
-	}
+	if ($d['buien']['s']!=$rain) store('buien', $rain);
 	if ($rain>0) {
 		$past=(86400/$rain)*2;
 		mset('buien',$time);
@@ -176,6 +154,34 @@ if (count($rains)>=2) {
 }
 
 //lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
+
+$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row['AVG'];
+if ($d['buiten_temp']['s']>$avg+0.5) {
+	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5');
+} elseif ($d['buiten_temp']['s']>$avg+0.4) {
+	if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4');
+} elseif ($d['buiten_temp']['s']>$avg+0.3) {
+	if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3');
+} elseif ($d['buiten_temp']['s']>$avg+0.2) {
+	if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red');
+} elseif ($d['buiten_temp']['s']>$avg+0.1) {
+	if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up');
+} elseif ($d['buiten_temp']['s']<$avg-0.5) {
+	if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5');
+} elseif ($d['buiten_temp']['s']<$avg-0.4) {
+	if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4');
+} elseif ($d['buiten_temp']['s']<$avg-0.3) {
+	if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3');
+} elseif ($d['buiten_temp']['s']<$avg-0.2) {
+	if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue');
+} elseif ($d['buiten_temp']['s']<$avg-0.1) {
+	if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down');
+} else {
+	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '');
+}
+
 if ($d['auto']['s']=='On') {
 	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&$time>=strtotime("10:00")&&$rain<5) { // Airco Cooling
 		if ($wind>=30) 	 $luifel=0;

@@ -2,7 +2,7 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 if (!isset($_SESSION['referer'])) {
-	$_SESSION['referer']='floorplan.bose.php';
+	$_SESSION['referer']='floorplan.php';
 }
 if (isset($_REQUEST['ip'])) {
 	$bose=str_replace('bose', '', $_REQUEST['ip']);
@@ -49,14 +49,13 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		#playlist{font-size:33px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
 	</style>
-	<script src="/scripts/mqtt.min.js"></script>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
-	<script type="text/javascript" src="/scripts/floorplanmqtt.js?v=2"></script>
+	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
 	<script type="text/javascript">
 		function navigator_Go(url){window.location.assign(url)}
 		$(document).ready(function() {
 			ajaxbose('.$bose.')
-			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},100)
+			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
 		});
 	</script>
 </head>
@@ -69,6 +68,9 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	</div>
 	<div class="fix" id="bose">
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.$boses[$bose].'</a> 
+	</div>
+	<div class="fix z1" style="bottom:14px;left:14px;">
+		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">

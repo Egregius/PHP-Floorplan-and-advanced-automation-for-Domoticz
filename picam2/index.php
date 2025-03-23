@@ -23,13 +23,13 @@ if (isset($_POST['Record'])) {
 } elseif (isset($_POST['Off'])) {
 	shell_exec('curl -s "http://127.0.0.1/secure/pass2php/Ralex.php?status=0" >/dev/null 2>/dev/null &');
 	echo '<script type="text/javascript">
-	window.location.replace("/index.html");
+	window.location.replace("/floorplan.php");
 	</script>';
 } elseif (isset($_POST['On'])) {
 	sw('picam2plug', 'On');
 }
 echo '<div class="navbar" role="navigation">
-		<form method="POST" action="/index.html">
+		<form method="POST" action="../floorplan.php">
 	  <input type="submit" value="Plan" class="btn b5"/>
 	</form>
 	<form method="POST">

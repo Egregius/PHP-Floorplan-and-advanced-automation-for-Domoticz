@@ -1,15 +1,6 @@
 #!/usr/bin/php
 <?php
-require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
-$mqtt=new MqttClient('127.0.0.1',1883,'php_mqtt_ws_'.rand());
-$connectionSettings=(new ConnectionSettings())
-	->setKeepAliveInterval(60)
-	->setUseTls(false);
-$mqtt->connect($connectionSettings, true);
-
 $prevtotal=0;
 $prevavg=0;
 $dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
@@ -29,30 +20,27 @@ while (1){
 	if ($dag>2) {
 		$zon=curl('http://192.168.2.9/api/v1/data');
 		$zon=json_decode($zon);
-		if (isset($zon->active_power_w)&&$zon->active_power_w<0) {
-//			$prevzon=mget('zon');
-			$newzon=-round($zon->active_power_w);
+		if (isset($zon->active_power_w)) {
+			$prevzon=mget('zon');
+			$newzon=round($zon->active_power_w);
 		}
 	} else {
-//		$prevzon=mget('zon');
+		$prevzon=mget('zon');
 		$newzon=0;
 	}
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
-		$en=array(
+		mset('en',array(
 			'net'=>$data->active_power_w,
 			'avg'=>$data->active_power_average_w,
-			'zon'=>$newzon
-		);
-		mset('en',$en);
-		$mqtt->publish('i/en', json_encode($en), 0, false);
+			'zon'=>$newzon,
+		));
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 
 		if ($newzon==0) {
 			$power=$data->active_power_w;
 			$alwayson=mget('alwayson');
-			$d['elvandaag']['icon']=$alwayson;
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
 				if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 				mset('alwayson',$power);
@@ -144,20 +132,18 @@ while (1){
 			$elec=$elec-$gisteren['elec'];
 			$water=round($water-$gisteren['water'],3);
 			$injectie=round($injectie-$gisteren['injectie'],3);
-			$verbruik=round(/*$zonvandaag-$injectie+*/$elec,3);
+			$verbruik=round($zonvandaag-$injectie+$elec,3);
 			$query="INSERT INTO `Guydag` (`date`,`gas`,`elec`,`verbruik`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$verbruik','$zonvandaag','$water') ON DUPLICATE KEY UPDATE `gas`='$gas',`elec`='$elec',`verbruik`='$verbruik',`zon`='$zonvandaag',`water`='$water'";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			
 			if (!isset($dbdomoticz)) {
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
-			$stmt=$dbdomoticz->query("select n,s,m,icon from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
+			$stmt=$dbdomoticz->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
 			while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-				if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
-				if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-				if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+				$d[$row['n']]['s'] = $row['s'];
+				$d[$row['n']]['m'] = $row['m'];
 			}
-
 			$water=$water*1000;
 			if($verbruik>=10) $verbruik=round($verbruik, 1);
 			elseif($verbruik>=2) $verbruik=round($verbruik, 2);
@@ -165,26 +151,10 @@ while (1){
 			if($zonvandaag>=10) $zonvandaag=round($zonvandaag, 1);
 			elseif($zonvandaag>=2) $zonvandaag=round($zonvandaag, 2);
 			else $zonvandaag=round($zonvandaag, 3);
-			if ($water!=$d['watervandaag']['s']) {
-				$dbdomoticz->query("UPDATE devices SET s=$water,t=$time WHERE n='watervandaag';");
-				$d['watervandaag']['s']=$water;
-				$mqtt->publish('i/watervandaag', json_encode($d['watervandaag']), 0, false);
-			}
-			if ($gas!=$d['gasvandaag']['s']) {
-				$dbdomoticz->query("UPDATE devices SET s=$gas,t=$time WHERE n='gasvandaag';");
-				$d['gasvandaag']['s']=$gas;
-				$mqtt->publish('i/gasvandaag', json_encode($d['gasvandaag']), 0, false);
-			}
-			if ($zonvandaag!=$d['zonvandaag']['s']) {
-				$dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
-				$d['zonvandaag']['s']=$zonvandaag;
-				$mqtt->publish('i/zonvandaag', json_encode($d['zonvandaag']), 0, false);
-			}
-			if ($verbruik!=$d['elvandaag']['s']) {
-				$dbdomoticz->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
-				$d['elvandaag']['s']=$verbruik;
-				$mqtt->publish('i/elvandaag', json_encode($d['elvandaag']), 0, false);
-			}
+			if ($water!=$d['watervandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$water,t=$time WHERE n='watervandaag';");
+			if ($gas!=$d['gasvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$gas,t=$time WHERE n='gasvandaag';");
+			if ($zonvandaag!=$d['zonvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$zonvandaag,t=$time WHERE n='zonvandaag';");
+			if ($verbruik!=$d['elvandaag']['s']) $dbdomoticz->query("UPDATE devices SET s=$verbruik,t=$time WHERE n='elvandaag';");
 			$prevtotal=$total;
 		}
 	}
@@ -203,8 +173,6 @@ while (1){
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['water'],3)." WHERE n='watervandaag';");
-			$d['watervandaag']['m']=round($avg['water'],3);
-			$mqtt->publish($topic, json_encode($d['watervandaag']), 0, false);
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['gas'],3)." WHERE n='gasvandaag';");
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['elec'],3)." WHERE n='elvandaag';");
 		}

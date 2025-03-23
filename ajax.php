@@ -1,15 +1,7 @@
 <?php
-require '/var/www/vendor/autoload.php';
-require '/var/www/html/secure/functions.php';
-use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
-$mqtt=new MqttClient('127.0.0.1',1883,'ajax');
-$connectionSettings=(new ConnectionSettings())
-	->setKeepAliveInterval(60)
-	->setUseTls(false);
-$mqtt->connect($connectionSettings, true);
-//require '/var/www/authentication.php';
-//session_write_close();
+require 'secure/functions.php';
+require '/var/www/authentication.php';
+session_write_close();
 if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
 	foreach($_REQUEST as $k=>$v) {
@@ -18,12 +10,11 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 			$msg.='	'.$diff;
 		}
 	}
-	if (!isset($user)) $user=$_SERVER['REMOTE_ADDR'];
 	lg('(AJAX)	'.$user.$msg);
 }
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
-	else $t=$_REQUEST['t']-1;
+	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
 	if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
@@ -38,7 +29,7 @@ if (isset($_REQUEST['t'])) {
 	$en=mget('en');
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
-	$d['zon']=$en['zon'];
+	$d['zon']=-$en['zon'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$sunrise=mget('sunrise');
 		$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
@@ -91,9 +82,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			if($dow==0||$dow==6) $t=strtotime('7:30');
 			elseif($dow==2||$dow==5) $t=strtotime('6:45');
 			else $t=strtotime('7:00');
-			if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
-			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
+			if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
+				if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+				setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
+			}
 		} else {
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
@@ -133,10 +126,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='Weg') {
-		
-		$lastfetch=0;
-		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
-		
 		store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
 			huisthuis();
@@ -313,9 +302,13 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 						sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
 					}
 				}
+			}  elseif ($_REQUEST['action']=='hartje') {
+				bosekey('THUMBS_UP');
+			}  elseif ($_REQUEST['action']=='skippen') {
+				$status='On';
+				require('secure/pass2php/Bose verwijderen.php');
 			}
 	} elseif ($_REQUEST['command']=='mode') {
 		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	}
 }
-$mqtt->disconnect();

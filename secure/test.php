@@ -2,24 +2,15 @@
 header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
-require '/var/www/vendor/autoload.php';
-require '/var/www/html/secure/functions.php';
-use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
-
-$mqtt=new MqttClient('127.0.0.1',1883,'test');
-$connectionSettings=(new ConnectionSettings())
-	->setKeepAliveInterval(60)
-	->setUseTls(false);
-$mqtt->connect($connectionSettings, true);
+require 'functions.php';
+require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
 
-store('Weg', 0, basename(__FILE__).':'.__LINE__);
-//hass('input_button','press','input_button.wakeipad');
+
+hass('input_button','press','input_button.wakeipad');
  
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
-$mqtt->disconnect();
 unset(
 	$_COOKIE,
 	$_ENV,

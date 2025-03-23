@@ -45,7 +45,7 @@ echo '<html>
 <body>';
 
 echo '<div class="navbar" role="navigation">
-	<form method="POST" action="/index.html">
+	<form method="POST" action="../floorplan.php">
 	  <input type="submit" value="Plan" class="btn b7" />
 	</form>
 	<form method="POST">

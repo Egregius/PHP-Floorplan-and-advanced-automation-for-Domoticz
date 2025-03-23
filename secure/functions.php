@@ -69,10 +69,10 @@ function fhall() {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:00')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
-	global $d,$mqtt;
+	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lamp kast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
@@ -122,7 +122,7 @@ function sl($name,$level,$msg='',$force=false) {
 			}
 		}
 	} else {
-		lg('(SETLEVEL)	'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($d[$name]['i']>0) {
 			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
 			if (str_starts_with($name, 'R')) store($name, $level, $msg);
@@ -131,7 +131,7 @@ function sl($name,$level,$msg='',$force=false) {
 }
 function rgb($name,$hue,$level,$check=false) {
 	global $d,$user,$domoticzurl;
-	lg(' (RGB)		'.$user.' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
+	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
 	if ($d[$name]['i']>0) {
 		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
 		else {
@@ -165,19 +165,17 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			}
 		}
 	} else {
-		$msg='(SWITCH)'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if (isset($d[$name]['i'])) {
-			if ($d[$name]['i']>10) {
-				lg($msg,4);
-				if ($d[$name]['s']!=$action||$force==true) {
-					file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
-				}
-			} elseif ($d[$name]['i']>0) {
-				lg($msg,4);
-				if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
-				elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
-				//store($name, $action, $msg);
+		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+		if ($d[$name]['i']>10) {
+			lg($msg,4);
+			if ($d[$name]['s']!=$action||$force==true) {
+				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
+		} elseif ($d[$name]['i']>0) {
+			lg($msg,4);
+			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
+			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
+			//store($name, $action, $msg);
 		} else {
 			store($name, $action, $msg);
 		}
@@ -185,22 +183,19 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
-	if(!isset($d)) $d=fetchdata();
-	$msg='(SETPOINT)'.str_pad($user??'', 13, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
+	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg,3);
 	if ($d[$name]['i']>0) {
 		file_get_contents($domoticzurl.'/json.htm?type=command&param=setsetpoint&idx='.$d[$name]['i'].'&setpoint='.$value);
 	}
 }
 function store($name='',$status='',$msg='',$idx=null) {
-	global $db,$d,$user,$mqtt;
+	global $db, $user;
 	$time=time();
 	if ($idx>0) {
 		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
-	$d[$name]['s']=$status;
-	$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 //	mset($name,$status);
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
@@ -211,22 +206,18 @@ function store($name='',$status='',$msg='',$idx=null) {
 	}
 }
 function storemode($name,$mode,$msg='',$updatetime=true) {
-	global $db,$d,$user,$time,$mqtt;
+	global $db, $user, $time;
 	$time=time();
 	$db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	$d[$name]['m']=$mode;
-	$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
-	global $d,$db,$user,$time,$mqtt;
+	global $d, $db, $user, $time;
 	if ($d[$name]['icon']!=$icon) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
-		$d[$name]['icon']=$icon;
-		$mqtt->publish('i/'.$name, json_encode($d[$name]), 0, false);
 		if (endswith($name, '_temp')) return;
-		lg('(STOREICON)	'.$user.'	=> '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
@@ -262,7 +253,7 @@ function ud($name,$nvalue,$svalue,$check=false,$smg='') {
 			}
 		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
 	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
-	lg('(udevice) | '.$user.'=> '.str_pad($name??'', 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
+	lg('(udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
 }
 function convertToHours($time) {
 	if ($time<600) return substr(date('i:s', $time-3600), 1);
@@ -315,7 +306,7 @@ function lg($msg,$level=0) {
 Levels:
 0:	Default / Undefined
 1:	Loop starts
-2:	Heating
+2:	
 3:	
 4:	Switch commands
 5:	Setpoints
@@ -401,8 +392,7 @@ function boseplaylist() {
 	return $preset;
 }
 function bosezone($ip,$forced=false,$vol='') {
-	global $d,$time,$dow,$weekend,$mqtt;
-	if (!isset($d)) $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+	global $d,$time,$dow,$weekend;
 	$time=time();
 	$t=t();
 	$playlist=boseplaylist();
@@ -412,12 +402,10 @@ function bosezone($ip,$forced=false,$vol='') {
 	elseif ($playlist=='MIX-1') $preset='PRESET_4';
 	elseif ($playlist=='MIX-2') $preset='PRESET_5';
 	elseif ($playlist=='MIX-3') $preset='PRESET_6';
-	lg($playlist.' '.$preset);
+	
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
 		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			$d['bose'.$ip]['s']='On';
-			$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, false);
 			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
@@ -434,8 +422,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				$d['bose101']['s']='On';
-				$mqtt->publish('i/bose101', json_encode($d['bose'.$ip]), 0, false);
 				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
@@ -449,8 +435,6 @@ function bosezone($ip,$forced=false,$vol='') {
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone', $xml, 101);
 				store('bose'.$ip, 'On');
-				$d['bose'.$ip]['s']='On';
-				$mqtt->publish('i/bose'.$ip, json_encode($d['bose'.$ip]), 0, false);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
@@ -690,14 +674,8 @@ function fetchdata($t=0,$lg='') {
 	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
 	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		if(!is_null($row['i']))$d[$row['n']]['i']=$row['i'];
-		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
-		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
-		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
-	}
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['n']] = $row;
+
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 
@@ -705,7 +683,7 @@ function fetchdata($t=0,$lg='') {
 	$en=mget('en');
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
-	$d['zon']=$en['zon'];
+	$d['zon']=-$en['zon'];
 	return $d;
 }
 function fetchdataidx() {

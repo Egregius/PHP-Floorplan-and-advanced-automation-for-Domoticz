@@ -1,2 +1,2 @@
 <?php
-if ($status!=$d['water']['s']) store('water', $status, $status,basename(__FILE__).':'.__LINE__);
+if ($status!=$d['water']['s']) store('water', $status);
