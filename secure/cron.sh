@@ -1,73 +1,64 @@
 #!/bin/sh
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron2.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron2.php >/dev/null 2>&1 &
-fi
-ps cax | grep energy.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/energy.php >/dev/null 2>&1 &
-fi
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-ps cax | grep cron.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/cron.php >/dev/null 2>&1 &
-fi
-sleep 10
-
-ps cax | grep pass4mqtt.php
-if [ $? -ne 0 ] ; then
-	/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-fi
-
-#ps cax | grep domoticz
-#if [ $? -ne 0 ] ; then
-#	/usr/sbin/service domoticz.sh stop
-#	/usr/sbin/service domoticz.sh start
-#fi
+PASS4MQTT=true
+MQTTREPUBLISHDOMOTICZ=false
+ENERGY=true
+CRON=true
+CRON2=true
+MQTTTEST=true
+i=1
+while [ $i -lt 6 ]; do
+	echo $i
+	if [ $PASS4MQTT = true ] ;then
+		ps cax | grep pass4mqtt.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $MQTTREPUBLISHDOMOTICZ = true ] ;then
+		ps cax | grep mqttrepublishdo
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $ENERGY = true ] ;then
+		ps cax | grep energy.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/energy.php >/dev/null 2>&1 &
+		fi
+	fi	
+	if [ $CRON = true ] ;then
+		ps cax | grep cron.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/cron.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $CRON2 = true ] ;then
+		ps cax | grep cron2.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/cron2.php >/dev/null 2>&1 &
+		fi
+	fi
+	if [ $MQTTTEST = true ] ;then
+		ps cax | grep mqttfalse.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqttfalse.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt1.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt1.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt10.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt10.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt100.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt100.php >/dev/null 2>&1 &
+		fi
+	fi
+	sleep 10
+	i=`expr $i + 1`
+done
 
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
