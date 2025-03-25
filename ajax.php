@@ -22,9 +22,9 @@ if (isset($_REQUEST['t'])) {
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
 		if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
-		if(!empty($row['m']))$d[$row['n']]['m']=$row['m'];
-		if(!empty($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-		if(!empty($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
+		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	$en=mget('en');
 	$d['net']=$en['net'];

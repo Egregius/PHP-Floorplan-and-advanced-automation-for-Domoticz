@@ -1,10 +1,12 @@
 #!/bin/sh
+DOMOTICZ=false
 PASS4MQTT=true
 MQTTREPUBLISHDOMOTICZ=false
 ENERGY=true
 CRON=true
 CRON2=true
 MQTTTEST=true
+
 i=1
 while [ $i -lt 6 ]; do
 	echo $i
@@ -104,6 +106,31 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql start
 fi
 
+if [ $DOMOTICZ = true ] ;then
+	DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
+	STATUS=`echo $DOMOTICZSTATUS | jq -r '.status'`
+	if [ $STATUS = "OK" ] ; then
+		exit
+	else
+		sleep 20
+		DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
+		STATUS2=`echo $DOMOTICZSTATUS | jq -r '.status'`
+		if [ $STATUS2 = "OK" ] ; then
+			exit
+		else
+			sleep 20
+			DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
+			STATUS3=`echo $DOMOTICZSTATUS | jq -r '.status'`
+			if [ $STATUS3 = "OK" ] ; then
+				exit
+			else
+				/usr/sbin/service domoticz stop
+				/usr/sbin/service domoticz start
+			fi
+		fi
+	fi
+fi
+
 # Remove these lines as they only upload my files to gitbub.
 MINUTE=$(date +"%M")
 if [ "$MINUTE" -eq 0 ] ; then
@@ -120,26 +147,3 @@ if [ "$MINUTE" -eq 0 ] ; then
 fi
 # END Github
 #exit
-
-DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-STATUS=`echo $DOMOTICZ | jq -r '.status'`
-if [ $STATUS = "OK" ] ; then
-	exit
-else
-	sleep 20
-	DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-	STATUS2=`echo $DOMOTICZ | jq -r '.status'`
-	if [ $STATUS2 = "OK" ] ; then
-		exit
-	else
-		sleep 20
-		DOMOTICZ=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-		STATUS3=`echo $DOMOTICZ | jq -r '.status'`
-		if [ $STATUS3 = "OK" ] ; then
-			exit
-		else
-			/usr/sbin/service domoticz stop
-			/usr/sbin/service domoticz start
-		fi
-	fi
-fi

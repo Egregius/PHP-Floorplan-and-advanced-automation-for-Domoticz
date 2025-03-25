@@ -130,7 +130,7 @@ if ($d['auto']['s']=='On') {
 
 if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
 
-$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
+@$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
 if (isset($data->CivTwilightStart)) {
 	$CivTwilightStart=strtotime($data->CivTwilightStart);
 	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
@@ -150,4 +150,4 @@ if (isset($data->CivTwilightStart)) {
 	}
 	$prevdag=mget('dag');
 	if ($dag!=$prevdag) mset('dag',$dag);
-} else lg('Error fetching CivTwilightStart from domoticz');
+}// else lg('Error fetching CivTwilightStart from domoticz');

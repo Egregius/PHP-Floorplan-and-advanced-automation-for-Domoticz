@@ -25,7 +25,7 @@ $stmt=$db->query("delete from temp where stamp < '$remove'");
 
 
 
-$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
+@$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
 if (isset($data->CivTwilightStart)) {
 	$CivTwilightStart=strtotime($data->CivTwilightStart);
 	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
@@ -37,4 +37,4 @@ if (isset($data->CivTwilightStart)) {
 		'Sunrise'=>date('G:i', $Sunrise),
 		'Sunset'=>date('G:i', $Sunset),
 	));
-} else lg('Error fetching CivTwilightStart from domoticz');
+}// else lg('Error fetching CivTwilightStart from domoticz');
