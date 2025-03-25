@@ -39,6 +39,18 @@ while [ $i -lt 6 ]; do
 		fi
 	fi
 	if [ $MQTTTEST = true ] ;then
+		ps cax | grep mqttsleep5.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqttsleep5.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqttsleep2.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqttsleep2.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqttsleep.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqttsleep.php >/dev/null 2>&1 &
+		fi
 		ps cax | grep mqttfalse.php
 		if [ $? -ne 0 ] ; then
 			/var/www/mqttfalse.php >/dev/null 2>&1 &

@@ -48,7 +48,7 @@ while (1){
 				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
 				lg('New alwayson '.$power.' W');
 				$vandaag=date("Y-m-d",$time);
-				if (!isset($dbverbruik)) {
+				if (!isset($dbverbruik)||!mysqli_ping($dbverbruik)) {
 					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 					if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
 				}
@@ -65,7 +65,7 @@ while (1){
 			echo $x.'	'.date('Y-m-d H:i:s').' prev='.$prevavg.' new='.$newavg.PHP_EOL;
 			if ($newavg<$prevavg&&$prevavg>2500) { // Nieuw kwartier
 				echo $x.'	'.__LINE__.PHP_EOL;
-				if (!isset($dbverbruik)) {
+				if (!isset($dbverbruik)||!mysqli_ping($dbverbruik)) {
 					echo $x.'	'.__LINE__.PHP_EOL;
 					$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 					if($dbverbruik->connect_errno>0){
@@ -105,7 +105,7 @@ while (1){
 			$time=time();
 			$vandaag=date("Y-m-d",$time);
 			$gisteren=date("Y-m-d",$time-86400);
-			if (!isset($dbzonphp)) {
+			if (!isset($dbzonphp)||!mysqli_ping($dbzonphp)) {
 				$dbzonphp=new mysqli('192.168.2.20','home','H0m€','egregius_zonphp');
 				if($dbzonphp->connect_errno>0){die('Unable to connect to database ['.$dbzonphp->connect_error.']');}
 			}		
@@ -117,7 +117,7 @@ while (1){
 			$query="SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`;";
 			if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
 			while($row=$result->fetch_assoc())$zontotaal=$row['Geg_Maand'];$result->free();
-			if (!isset($dbverbruik)) {
+			if (!isset($dbverbruik)||!mysqli_ping($dbverbruik)) {
 				$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 				if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
 			}		
@@ -136,7 +136,7 @@ while (1){
 			$query="INSERT INTO `Guydag` (`date`,`gas`,`elec`,`verbruik`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$verbruik','$zonvandaag','$water') ON DUPLICATE KEY UPDATE `gas`='$gas',`elec`='$elec',`verbruik`='$verbruik',`zon`='$zonvandaag',`water`='$water'";
 			if(!$result=$dbverbruik->query($query)){echo('There was an error running the query "'.$query.'" - '.$dbverbruik->error);}
 			
-			if (!isset($dbdomoticz)) {
+			if (!isset($dbdomoticz)||!isPDOConnectionAlive($dbdomoticz)) {
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
 			$stmt=$dbdomoticz->query("select n,s,m from devices WHERE n IN ('watervandaag','gasvandaag','zonvandaag','elvandaag');");
@@ -159,7 +159,7 @@ while (1){
 		}
 	}
 	if ($uur==0&&$min==1&&$sec==0) {
-		if (!isset($dbverbruik)) {
+		if (!isset($dbverbruik)||!mysqli_ping($dbverbruik)) {
 			$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 			if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
 		}
@@ -169,14 +169,14 @@ while (1){
 		if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" '.$dbverbruik->error);
 		while($row=$result->fetch_assoc())$avg=$row;$result->free();
 		if (isset($avg)) {
-			if (!isset($dbdomoticz)) {
+			if (!isset($dbdomoticz)||!isPDOConnectionAlive($dbdomoticz)) {
 				$dbdomoticz=new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass);
 			}
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['water'],3)." WHERE n='watervandaag';");
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['gas'],3)." WHERE n='gasvandaag';");
 			$dbdomoticz->query("UPDATE devices SET m=".round($avg['elec'],3)." WHERE n='elvandaag';");
 		}
-		if (!isset($dbzonphp)) {
+		if (!isset($dbzonphp)||!mysqli_ping($dbzonphp)) {
 			$dbzonphp=new mysqli('192.168.2.20','home','H0m€','egregius_zonphp');
 			if($dbzonphp->connect_errno>0){die('Unable to connect to database ['.$dbzonphp->connect_error.']');}
 		}
@@ -199,4 +199,12 @@ while (1){
 		$sleep=round($sleep*1000000);
 		usleep($sleep);
 	}
+}
+function isPDOConnectionAlive($pdo) {
+    try {
+        $pdo->query("SELECT 1");
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
 }
