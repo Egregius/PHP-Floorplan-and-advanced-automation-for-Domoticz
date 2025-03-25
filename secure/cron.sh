@@ -55,6 +55,22 @@ while [ $i -lt 6 ]; do
 		if [ $? -ne 0 ] ; then
 			/var/www/mqtt100.php >/dev/null 2>&1 &
 		fi
+		ps cax | grep mqtt1000.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt1000.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt10m.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt10m.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt100m.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt100m.php >/dev/null 2>&1 &
+		fi
+		ps cax | grep mqtt1000m.php
+		if [ $? -ne 0 ] ; then
+			/var/www/mqtt1000m.php >/dev/null 2>&1 &
+		fi
 	fi
 	sleep 10
 	i=`expr $i + 1`
