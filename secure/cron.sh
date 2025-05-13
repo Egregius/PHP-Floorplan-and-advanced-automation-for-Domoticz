@@ -1,11 +1,10 @@
 #!/bin/sh
-DOMOTICZ=false
+DOMOTICZ=true
 PASS4MQTT=true
 MQTTREPUBLISHDOMOTICZ=false
 ENERGY=true
 CRON=true
 CRON2=true
-MQTTTEST=true
 
 i=1
 while [ $i -lt 6 ]; do
@@ -38,52 +37,6 @@ while [ $i -lt 6 ]; do
 		ps cax | grep cron2.php
 		if [ $? -ne 0 ] ; then
 			/var/www/html/secure/cron2.php >/dev/null 2>&1 &
-		fi
-	fi
-	if [ $MQTTTEST = true ] ;then
-		ps cax | grep mqttsleep5.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqttsleep5.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqttsleep2.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqttsleep2.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqttsleep.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqttsleep.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqttfalse.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqttfalse.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt1.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt1.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt10.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt10.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt100.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt100.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt1000.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt1000.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt10m.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt10m.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt100m.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt100m.php >/dev/null 2>&1 &
-		fi
-		ps cax | grep mqtt1000m.php
-		if [ $? -ne 0 ] ; then
-			/var/www/mqtt1000m.php >/dev/null 2>&1 &
 		fi
 	fi
 	sleep 10

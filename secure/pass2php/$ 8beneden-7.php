@@ -1,6 +1,3 @@
 <?php
-if ($d['eettafel']['s']==0) {
-	sl('eettafel', 8, basename(__FILE__).':'.__LINE__);
-} else {
-	sl('eettafel', floor($d['eettafel']['s']*0.94));
-}
+sw('boseliving', 'On', basename(__FILE__).':'.__LINE__, true);
+storemode('bose101', 1, basename(__FILE__).':'.__LINE__, true);

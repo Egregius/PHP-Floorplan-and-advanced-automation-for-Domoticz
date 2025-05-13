@@ -44,7 +44,7 @@ if ($status=='On') {
 		sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__,true);
 		storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 		store('Weg', 2, basename(__FILE__).':'.__LINE__);
-//		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=70');
+		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=70');
 		file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
 		huisslapen(true);
 		sleep(2);

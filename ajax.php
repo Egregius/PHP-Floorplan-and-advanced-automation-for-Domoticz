@@ -38,6 +38,7 @@ if (isset($_REQUEST['t'])) {
 		$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
 		$d['zonavg']=$d['zonvandaag']['icon'];
 		$d['dag']=mget('dag');
+		$d['playlist']=boseplaylist();
 	}
 	echo json_encode($d);
 	exit;
@@ -179,7 +180,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		include 'secure/_fetchdomoticz.php';
 	} elseif ($_REQUEST['command']=='water') {
 		storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-		double('water', 'On');
+		sw('water', 'On');
 	} elseif ($_REQUEST['command']=='powermode') {
 		if ($_REQUEST['device']=='living_set') {$ip=111;$daikin='living';}
 		elseif ($_REQUEST['device']=='kamer_set') {$ip=112;$daikin='kamer';}
@@ -283,32 +284,27 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			bosekey("NEXT_TRACK", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($_REQUEST['command']=='power') {
-			if ($_REQUEST['action']=='On') {
-				bosezone($_REQUEST['boseip'], true);
-			} elseif ($_REQUEST['action']=='Off') {
-				bosekey("POWER", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
-				sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);
-				if ($_REQUEST['boseip']==101) {
-					$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-					if ($d['bose102']['s']=='On') {
-						sw('bose102', 'Off',basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['bose103']['s']=='On') {
-						sw('bose103', 'Off',basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['bose104']['s']=='On') {
-						sw('bose104', 'Off',basename(__FILE__).':'.__LINE__);
-					}
-					if ($d['bose105']['s']=='On') {
-						sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
-					}
+		$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+		if ($_REQUEST['action']=='On') {
+			bosezone($_REQUEST['boseip'], true);
+		} elseif ($_REQUEST['action']=='Off') {
+			bosekey("POWER", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
+			sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);
+			if ($_REQUEST['boseip']==101) {
+				if ($d['bose102']['s']=='On') {
+					sw('bose102', 'Off',basename(__FILE__).':'.__LINE__);
 				}
-			}  elseif ($_REQUEST['action']=='hartje') {
-				bosekey('THUMBS_UP');
-			}  elseif ($_REQUEST['action']=='skippen') {
-				$status='On';
-				require('secure/pass2php/Bose verwijderen.php');
+				if ($d['bose103']['s']=='On') {
+					sw('bose103', 'Off',basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['bose104']['s']=='On') {
+					sw('bose104', 'Off',basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['bose105']['s']=='On') {
+					sw('bose105', 'Off',basename(__FILE__).':'.__LINE__);
+				}
 			}
+		}
 	} elseif ($_REQUEST['command']=='mode') {
 		storemode('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	}

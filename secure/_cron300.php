@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+//if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
@@ -53,7 +53,6 @@ if ($d['Weg']['s']>0) {
 	if ($d['steenterras']['s']=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['houtterras']['s']=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
 } 
-if ($d['Media']['s']=='On'&&$d['lg_webos_tv_cd9e']['s']!='On'&&past('Media')>3600&&past('pirliving')>3600&&past('lg_webos_tv_cd9e')>3600) sw('Media', 'Off', basename(__FILE__).':'.__LINE__);
 
 /*
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);

@@ -1,12 +1,8 @@
 <?php
-if ($d['zon']==0) {
-	sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
+if ($d['eettafel']['s']==0) {
+	sl('eettafel', 30, basename(__FILE__).':'.__LINE__);
 } else {
-	if ($d['Rliving']['s']>32) {
-		sl('Rliving', 32, basename(__FILE__).':'.__LINE__);
-	} else {
-		if ($d['Rliving']['s']>0) {
-			sl('Rliving', 0, basename(__FILE__).':'.__LINE__);
-		}
-	}
+	$new=ceil($d['eettafel']['s']*1.08);
+	if ($new>100) $new=100;
+	sl('eettafel', $new);
 }

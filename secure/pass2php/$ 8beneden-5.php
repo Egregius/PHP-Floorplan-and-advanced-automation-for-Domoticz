@@ -1,34 +1,6 @@
 <?php
-if ($status=='On') {
-	if ($d['zon']==0) {
-		sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
-	} else {
-		if ($d['Media']['s']=='On') {
-			if ($d['Rliving']['s']<40) {
-				sl('Rliving', 40, basename(__FILE__).':'.__LINE__);
-			} else {
-				if ($d['heating']['s']<0) {
-					$level=88;
-				} else {
-					$level=100;
-				}
-				if ($d['Rliving']['s']<$level) {
-					sl('Rliving', $level, basename(__FILE__).':'.__LINE__);
-				}
-			}
-		} else {
-			if ($Rliving<25) {
-				sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
-			} else {
-				if ($d['heating']['s']<0) {
-					$level=88;
-				} else {
-					$level=100;
-				}
-				if ($d['Rliving']['s']<$level) {
-					sl('Rliving', $level, basename(__FILE__).':'.__LINE__);
-				}
-			}
-		}
-	}
+if ($d['eettafel']['s']==0) {
+	sl('eettafel', 8, basename(__FILE__).':'.__LINE__);
+} else {
+	sl('eettafel', floor($d['eettafel']['s']*0.94));
 }

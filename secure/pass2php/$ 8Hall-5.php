@@ -6,4 +6,4 @@ if ($d['auto']['s']=='On') {
 }
 huisthuis();
 $t=t();
-if ($d['Weg']['s']==1&&$time>=$t-3600&&$time<$t+3600) sw('langekast', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['Weg']['s']==1&&$time>=$t-3600&&$time<$t+3600) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);

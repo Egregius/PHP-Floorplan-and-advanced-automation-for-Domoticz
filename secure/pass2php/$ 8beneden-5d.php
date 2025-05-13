@@ -1,2 +1,2 @@
 <?php
-sl('Rliving', 100, basename(__FILE__).':'.__LINE__, true);
+sl('eettafel', 0, '8beneden-7d', true);

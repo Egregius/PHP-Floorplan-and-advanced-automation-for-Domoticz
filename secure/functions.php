@@ -1,7 +1,6 @@
 <?php
 require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-$time=time();
 if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
 $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
@@ -10,32 +9,19 @@ date_default_timezone_set('Europe/Brussels');
 function t() {
 	global $dow,$t;
 	$dow=date("w");
-	if($dow==1) $t=strtotime('7:00');
-	elseif($dow==2) $t=strtotime('7:00');
-	elseif($dow==3) $t=strtotime('7:00');
-	elseif($dow==4) $t=strtotime('7:00');
-	elseif($dow==5) $t=strtotime('7:00');
-	elseif($dow==6) $t=strtotime('7:45');
-	elseif($dow==0) $t=strtotime('7:45');
-	return $t;
+	if ($dow==0||$dow==6) return strtotime('7:45');
+	else return strtotime('7:00');
 }
 	
 function fliving() {
 	global $d,$time,$t;
-	$time=time();
-	if ($d['Media']['s']=='Off'&&$d['lamp kast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+	if ($d['media']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
 			$am=strtotime('10:00');
-			$t=t();
-			if ($d['lamp kast']['s']=='Off'&&$d['wasbak']['s']==0&&$d['zithoek']['s']==0&&$d['snijplank']['s']==0&&$time>$t&&$time<$am&&past('langekast')>10) sw('lamp kast', 'On', basename(__FILE__).':'.__LINE__.' dag='.$d['dag']);
-			if ($d['zithoek']['s']==0&&$time<$am) sl('zithoek', 8, basename(__FILE__).':'.__LINE__);
+			if ($d['eettafel']['s']==0&&$time<$am) sl('eettafel', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 		}
 	}
-	mset('living', $time);
-//	if ($d['lg_webos_tv_cd9e']['s']!='On'&&$d['langekast']['s']=='On'&&$d['bose101']['s']=='Off'&&$time>=strtotime('5:30')&&$time<strtotime('19:30')&&past('langekast')>60) {
-//		bosezone(101);
-//	}
 }
 function fgarage() {
 	global $d;
@@ -60,10 +46,10 @@ function finkom($force=false) {
 }
 function fhall() {
 	global $d,$t,$time;
-	$time=time();
-	$dow=date("w");
-	if($dow==0||$dow==6) $t=strtotime('7:30');
-	else $t=strtotime('7:00');
+//	$time=time();
+//	$dow=date("w");
+//	if($dow==0||$dow==6) $t=strtotime('7:30');
+//	else $t=strtotime('7:00');
 	if ($d['dag']<3&&$time<=strtotime('20:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
 		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
@@ -74,7 +60,7 @@ function fhall() {
 function huisslapen($weg=false) {
 	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('lamp kast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','langekast'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
@@ -166,16 +152,16 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		}
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if ($d[$name]['i']>10) {
+		if ($d[$name]['dt']=='hsw') {
+			lg('[hsw] '.$msg,4);
+			if ($action=='On') hass('switch','turn_on','switch.'.$name);
+			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
+			store($name, $action, $msg);
+		} elseif (isset($d[$name]['i'])) {
 			lg($msg,4);
 			if ($d[$name]['s']!=$action||$force==true) {
 				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
 			}
-		} elseif ($d[$name]['i']>0) {
-			lg($msg,4);
-			if ($action=='On') hass('switch','turn_on','switch.plug'.$d[$name]['i']);
-			elseif ($action=='Off') hass('switch','turn_off','switch.plug'.$d[$name]['i']);
-			//store($name, $action, $msg);
 		} else {
 			store($name, $action, $msg);
 		}
@@ -183,6 +169,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$domoticzurl,$db;
+	if (!isset($d[$name]['i'])) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	lg($msg,3);
 	if ($d[$name]['i']>0) {
@@ -213,7 +200,7 @@ function storemode($name,$mode,$msg='',$updatetime=true) {
 }
 function storeicon($name,$icon,$msg='',$updatetime=false) {
 	global $d, $db, $user, $time;
-	if ($d[$name]['icon']!=$icon) {
+	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
 		$time=time();
 		$db->query("INSERT INTO devices (n,t,icon) VALUES ('$name','$time','$icon') ON DUPLICATE KEY UPDATE t='$time',icon='$icon';");
 		if (endswith($name, '_temp')) return;
@@ -285,7 +272,7 @@ function rookmelder($msg) {
 //			foreach (array('hall','inkom','kamer','waskamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
 //				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 //			}
-//			foreach (array('snijplank','garage','lamp kast','bureel', 'tuin') as $i) {
+//			foreach (array('snijplank','garage','lampkast','bureel', 'tuin') as $i) {
 //				if ($d[$i]['s']!='On') sw($i, 'On', basename(__FILE__).':'.__LINE__);
 //			}
 //		}
@@ -376,17 +363,17 @@ function bosepreset($pre,$ip=101) {
 	bosekey("PRESET_$pre", 0, $ip, true);
 }
 function boseplaylist() {
-	$time=time();
-	$jaardag=date('z')+1;
+	global $time;
+	$dag=floor($time/86400);
 	$dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if ($weekend==true) {
-		if ((int)$jaardag % 3 == 0) $preset='MIX-3';
-		elseif ((int)$jaardag % 2 == 0) $preset='MIX-2';
+		if ($dag % 3 == 0) $preset='MIX-3';
+		elseif ($dag % 2 == 0) $preset='MIX-2';
 		else $preset='MIX-1';
 	} else {
-		if ((int)$jaardag % 3 == 0) $preset='EDM-3';
-		elseif ((int)$jaardag % 2 == 0) $preset='EDM-2';
+		if ($dag % 3 == 0) $preset='EDM-3';
+		elseif ($dag % 2 == 0) $preset='EDM-2';
 		else $preset='EDM-1';
 	}
 	return $preset;
@@ -396,44 +383,47 @@ function bosezone($ip,$forced=false,$vol='') {
 	$time=time();
 	$t=t();
 	$playlist=boseplaylist();
-	    if ($playlist=='EDM-1') $preset='PRESET_1';
-	elseif ($playlist=='EDM-2') $preset='PRESET_2';
-	elseif ($playlist=='EDM-3') $preset='PRESET_3';
-	elseif ($playlist=='MIX-1') $preset='PRESET_4';
-	elseif ($playlist=='MIX-2') $preset='PRESET_5';
-	elseif ($playlist=='MIX-3') $preset='PRESET_6';
-	
+	$map = [
+		'EDM-1' => 'PRESET_1',
+		'EDM-2' => 'PRESET_2',
+		'EDM-3' => 'PRESET_3',
+		'MIX-1' => 'PRESET_4',
+		'MIX-2' => 'PRESET_5',
+		'MIX-3' => 'PRESET_6',
+	];
 	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&($d['lg_webos_tv_cd9e']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['langekast']['s']=='On'&&past('langekast')>60) {
+		if ($d['Weg']['s']==0&&($d['lgtv']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
+			bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
-			if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 			elseif ($time<$t+1800) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-			    if ($ip==102) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>';
-			elseif ($ip==103) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>';
-			elseif ($ip==104) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>';
-			elseif ($ip==105) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>';
-			elseif ($ip==106) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>';
-			elseif ($ip==107) $xml='<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>';
+			$map = [
+				102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
+				103 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
+				104 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>',
+				105 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
+				106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
+				107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
+			];
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				bosekey($preset, 750000, 101, basename(__FILE__).':'.__LINE__);
-				if ($d['lg_webos_tv_cd9e']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+				bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
+				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
-				bosepost('setZone', $xml, 101);
+				bosepost('setZone', $map[$ip], 101);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 			} elseif ($d['bose'.$ip]['s']=='Off') {
-				bosepost('setZone', $xml, 101);
+				bosepost('setZone',  $map[$ip], 101);
 				store('bose'.$ip, 'On');
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
@@ -467,7 +457,7 @@ function sirene($msg) {
 	lg(' >>> last='.$last.'	time='.$time);
 	if ($last>$time-300) {
 		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-		telegram($msg.' om '.date("G:i:s", $time), false, 2);
+		telegram($msg.' om '.date("G:i:s", $time), false, 3);
 	}
 	mset('sirene', $time);
 }
@@ -688,9 +678,15 @@ function fetchdata($t=0,$lg='') {
 
 	$d['dag']=mget('dag');
 	$en=mget('en');
-	$d['net']=$en['net'];
-	$d['avg']=$en['avg'];
-	$d['zon']=-$en['zon'];
+	if (isset($en['net'])) {
+		$d['net']=$en['net'];
+		$d['avg']=$en['avg'];
+		$d['zon']=-$en['zon'];
+	} else {
+		$d['net']=0;
+		$d['avg']=0;
+		$d['zon']=0;
+	}
 	return $d;
 }
 function fetchdataidx() {
@@ -715,4 +711,12 @@ function mget($key) {
 	global $memcache;
 	$data=$memcache->get($key);
 	return $data;
+}
+function isPDOConnectionAlive($pdo) {
+    try {
+        $pdo->query("SELECT 1");
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
 }

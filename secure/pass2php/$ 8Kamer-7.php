@@ -1,2 +1,2 @@
 <?php
-require('$ 8badkamer-7.php');
+require('$ 8badkamer-6.php');

@@ -1,2 +1,2 @@
 <?php
-sl('eettafel', 0, '8beneden-7d', true);
+sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__, true);

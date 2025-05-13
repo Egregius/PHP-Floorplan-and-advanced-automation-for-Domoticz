@@ -1,6 +1,4 @@
 <?php
-$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
-$lastfetch=$time;
 $user=basename(__FILE__);
 $Setkamer=4;
 $Setwaskamer=4;
@@ -92,8 +90,6 @@ if ($d['living_set']['m']==0) {
 
 			elseif ($dow==0&&$time>=strtotime('8:00')&&$time<strtotime('19:00')) $Setliving=20;
 			elseif ($dow==0&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			if ($d['pirliving']['s']=='Off'&&$time<mget('living')-3600) $Setliving-=1;
 		} elseif ($d['Weg']['s']==1) {
 			$target2=$Setliving;
 			$target=18;
