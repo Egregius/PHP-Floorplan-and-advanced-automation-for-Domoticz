@@ -108,12 +108,12 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($device=='achterdeur') {
 					if ($status=='Off') $status='Open';
 					elseif ($status=='On') $status='Closed';
-				} elseif ($d[$device]['dt']=='c') {
+				} elseif (isset($d[$device]['dt'])&&$d[$device]['dt']=='c') {
 					if ($status=='On') $status='Open';
 					elseif ($status=='Off') $status='Closed';
 				} else {
-					if ($status=='On') $status='On';
-					elseif ($status=='Off') $status='Off';
+					if ($status=='on') $status='On';
+					elseif ($status=='off') $status='Off';
 				}
 //				if ($d[$device]['s']!=$status) {
 					lg('mqtt	'.__LINE__.'	|binary	|state	|'.$device.'	|'.$status.'|');
