@@ -213,12 +213,13 @@ if ($d['auto']['s']=='On') {
 		}
 	} else {
 		$luifel=0;
+//		lg('luifel='.$luifel.'|$d[luifel][s]='.$d['luifel']['s']);
 		if ($d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
 			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
-	if (isset($rain)&&($rain>=15||$d['Weg']['s']==1||$time>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed'&&$d['luifel']['s']>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+	if (isset($rain)&&($rain>=15||$d['weg']['s']==1||$time>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed'&&$d['luifel']['s']>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 
 	if ($d['luifel']['m']==1) {
 		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);

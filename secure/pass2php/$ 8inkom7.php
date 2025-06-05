@@ -1,2 +1,0 @@
-<?php
-sw('voordeur', 'Off');

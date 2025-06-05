@@ -13,7 +13,7 @@ if ($status!=$d['deurbadkamer']['s']) {
 		}
 		fhall();
 	}
-	if ($d['Weg']['s']>1) {
+	if ($d['weg']['s']>1) {
 		if ($status=='Open') sirene('Deur badkamer open');
 		else sirene('Deur badkamer dicht');
 	}

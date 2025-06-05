@@ -42,7 +42,7 @@ while (1){
 			$power=$data->active_power_w;
 			$alwayson=mget('alwayson');
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
-				if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+				$db=dbconnect();
 				mset('alwayson',$power);
 				$time=time();
 				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
@@ -94,7 +94,7 @@ while (1){
 				elseif ($i->type=='water_meter'){
 					$prevwater=mget('water_meter');
 					$water=$i->value;
-					if ($prevwater!=$water&&mget('Weg')>2) {
+					if ($prevwater!=$water&&mget('weg')>2) {
 						mset('water_meter',$water);
 						alert('water_meter', 'Water verbruik gededecteerd!', 300, true);
 						lg('Waterteller:	prev='.$prevwater.', nu='.$water);

@@ -13,9 +13,9 @@ if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	}
 }
 
-$boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
-$beneden=array('Rbureel','RkeukenL','RkeukenR');
-$benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
+$boven=array('rwaskamer','ralex','rkamerl','rkamerr');
+$beneden=array('rbureel','rkeukenl','rkeukenr');
+$benedenall=array('rliving','rbureel','rkeukenl','rkeukenr');
 if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
 if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 

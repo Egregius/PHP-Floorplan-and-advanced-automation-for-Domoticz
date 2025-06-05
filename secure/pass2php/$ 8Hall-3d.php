@@ -1,2 +1,0 @@
-<?php
-store('auto', 'On');

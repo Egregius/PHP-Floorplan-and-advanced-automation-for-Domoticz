@@ -12,9 +12,9 @@ if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	}
 }
 
-$boven=array('Rwaskamer','Ralex','RkamerL','RkamerR');
-$beneden=array('Rbureel','RkeukenL','RkeukenR');
-$benedenall=array('Rliving','Rbureel','RkeukenL','RkeukenR');
+$boven=array('rwaskamer','ralex','rkamerl','rkamerr');
+$beneden=array('rbureel','rkeukenl','rkeukenr');
+$benedenall=array('rliving','rbureel','rkeukenl','rkeukenr');
 
 require('_Rolluiken_Cooling.php');
 require('_TC_badkamer.php');

@@ -19,7 +19,7 @@ if ($status=='Playing') {
 		&&past('bose105')>30
 		&&past('bose106')>30
 		&&past('bose107')>30
-		&&($d['Weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
+		&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
 	) {
 		$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 		if (!empty($status)) {

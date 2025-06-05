@@ -108,7 +108,7 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 		<form>
 			<select name="loglevel" class="button btn b1" onchange="setLoglevel(this)">
 <?php
-	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+	$db=dbconnect();
 	$stmt=$db->query("select m from devices WHERE n='auto';");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row['m'];
 	$levels=array(

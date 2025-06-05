@@ -1,5 +1,5 @@
 #!/bin/sh
-DOMOTICZ=true
+DOMOTICZ=false
 PASS4MQTT=true
 MQTTREPUBLISHDOMOTICZ=false
 ENERGY=true

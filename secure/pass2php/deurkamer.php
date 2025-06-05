@@ -5,7 +5,7 @@ if ($status!=$d['deurkamer']['s']) {
 			fhall();
 		}
 	}
-	if ($d['Weg']['s']>1) {
+	if ($d['weg']['s']>1) {
 		if ($status=='Open') sirene('Deur kamer open');
 		else sirene('Deur kamer dicht');
 	}

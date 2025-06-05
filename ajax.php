@@ -17,7 +17,7 @@ if (isset($_REQUEST['t'])) {
 	else $t=$_SERVER['REQUEST_TIME']-1;
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
-	if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+	$db=dbconnect();
 	$stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
@@ -32,29 +32,31 @@ if (isset($_REQUEST['t'])) {
 	$d['zon']=-$en['zon'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$sunrise=mget('sunrise');
-		$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
-		$d['Sunrise']=$sunrise['Sunrise'];
-		$d['Sunset']=$sunrise['Sunset'];
-		$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
-		$d['zonavg']=$d['zonvandaag']['icon'];
-		$d['dag']=mget('dag');
-		$d['playlist']=boseplaylist();
+		if ($sunrise) {
+			$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
+			$d['Sunrise']=$sunrise['Sunrise'];
+			$d['Sunset']=$sunrise['Sunset'];
+			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
+			$d['zonavg']=$d['zonvandaag']['icon'];
+			$d['dag']=mget('dag');
+			$d['playlist']=boseplaylist();
+		}
 	}
 	echo json_encode($d);
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
-	if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+	$db=dbconnect();
 	$time=time();
-	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='Weg';");
+	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='weg';");
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])) {
 	$bose=$_REQUEST['bose'];
 	$d=array();
 	$d['time']=$_SERVER['REQUEST_TIME'];
-	if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+	$db=dbconnect();
 	$stmt=$db->query("SELECT m FROM devices WHERE n like 'bose101';");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d['bose101mode']=$row['m'];
@@ -127,8 +129,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		}
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-	} elseif ($_REQUEST['command']=='Weg') {
-		store('Weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+	} elseif ($_REQUEST['command']=='weg') {
+		store('weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
 			huisthuis();
 		} elseif ($_REQUEST['action']==1) {
@@ -139,32 +141,37 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			huisslapen(true);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
-		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+		/*if ($_REQUEST['device']=='eettafel'||$_REQUEST['device']=='bureel'||$_REQUEST['device']=='zithoek') {
+			sl($_REQUEST['device'].'1', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			sl($_REQUEST['device'].'2', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			sl($_REQUEST['device'].'3', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			sl($_REQUEST['device'].'4', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+		} else */sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
 			$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-			foreach(array('Rliving', 'Rbureel', 'RkeukenL', 'RkeukenR') as $i) {
+			foreach(array('rliving', 'rbureel', 'rkeukenl', 'rkeukenr') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($_REQUEST['device']=='RkeukenL') {
+		} elseif ($_REQUEST['device']=='rkeukenl') {
 			$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-			foreach(array('RkeukenL', 'RkeukenR') as $i) {
+			foreach(array('rkeukenl', 'rkeukenr') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Boven') {
 			$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-			foreach(array('RkamerL', 'RkamerR', 'Rwaskamer', 'Ralex') as $i) {
+			foreach(array('rkamerl', 'rkamerr', 'rwaskamer', 'ralex') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='tv') {
 			$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-			if ($d['Rliving']['s']<30) sl('Rliving', 30, basename(__FILE__).':'.__LINE__);
-			if ($d['Rbureel']['s']<70) sl('Rbureel', 69, basename(__FILE__).':'.__LINE__);
-			if ($d['RkeukenL']['s']<55) sl('RkeukenL', 55, basename(__FILE__).':'.__LINE__);
-			if ($d['RkeukenR']['s']<55) sl('RkeukenR', 55, basename(__FILE__).':'.__LINE__);
-		} elseif ($_REQUEST['device']=='RkamerL') {
-			sl('RkamerL', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-			sl('RkamerR', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			if ($d['rliving']['s']<30) sl('rliving', 30, basename(__FILE__).':'.__LINE__);
+			if ($d['rbureel']['s']<70) sl('rbureel', 69, basename(__FILE__).':'.__LINE__);
+			if ($d['rkeukenl']['s']<55) sl('rkeukenl', 55, basename(__FILE__).':'.__LINE__);
+			if ($d['rkeukenr']['s']<55) sl('rkeukenr', 55, basename(__FILE__).':'.__LINE__);
+		} elseif ($_REQUEST['device']=='rkamerl') {
+			sl('rkamerl', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+			sl('rkamerr', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 		} else {
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 			if($_REQUEST['device']=='luifel') {
@@ -256,8 +263,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($_REQUEST['device']=='GroheRed') {
-			sw('GroheRed', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		} elseif ($_REQUEST['device']=='grohered') {
+			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} else {
 			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
 			else call_user_func($_REQUEST['command'],str_replace('_', ' ', $_REQUEST['device']),$_REQUEST['action'],basename(__FILE__).':'.__LINE__);
@@ -272,7 +279,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset($_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skip') {
-		if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
+		$db=dbconnect();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			$bose=$row['s'];

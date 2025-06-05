@@ -4,7 +4,7 @@ if ($status!=$d['deurinkom']['s']) {
 		finkom();
 		fliving();
 	}
-	if ($d['Weg']['s']>0) {
+	if ($d['weg']['s']>0) {
 		if ($status=='Open') sirene('Deur inkom open');
 		else sirene('Deur inkom dicht');
 	}

@@ -1,7 +1,7 @@
 <?php
 require '/var/www/config.php';
 $dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+$db=dbconnect();
 $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
@@ -12,13 +12,12 @@ function t() {
 	if ($dow==0||$dow==6) return strtotime('7:45');
 	else return strtotime('7:00');
 }
-	
 function fliving() {
 	global $d,$time,$t;
-	if ($d['media']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		if (($d['zon']==0&&$d['dag']<4)||($d['RkeukenL']['s']>80&&$d['RkeukenR']['s']>80&&$d['Rbureel']['s']>80&&$d['Rliving']['s']>80)) {
+	if ($d['media']['s']=='Off'&&$d['bureel1']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+		if (($d['zon']==0&&$d['dag']<4)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
-			if ($d['eettafel']['s']==0&&$time<$am) sl('eettafel', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['eettafel']['s']==0&&$time<$am&&$d['bureel1']['s']=='Off') hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3000');
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -33,41 +32,38 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['RkeukenL']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']<3||$d['rkeukenl']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 	}
 //	hass('input_button','press','input_button.wakeipad');
 }
 function finkom($force=false) {
 	global $d,$time;
-	if (($d['dag']<3&&$d['Weg']['s']==0)||$force==true) {
+	if (($d['dag']<3&&$d['weg']['s']==0)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']<4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		if ($d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
 	global $d,$t,$time;
-//	$time=time();
-//	$dow=date("w");
-//	if($dow==0||$dow==6) $t=strtotime('7:30');
-//	else $t=strtotime('7:00');
-	if ($d['dag']<3&&$time<=strtotime('20:45')&&($time>=$t+1800||$d['Ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
-		if ($d['hall']['s']<30&&$d['Weg']['s']==0&&$d['dag']<3) {
+	if ($d['dag']<3&&$time<=strtotime('20:45')&&($time>=$t+1800||$d['ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
+		if ($d['hall']['s']<30&&$d['weg']['s']==0&&$d['dag']<3) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['Weg']['s']==0&&$d['RkamerL']['s']>70&&$d['RkamerR']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
 	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','GroheRed','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock'), 'Off', basename(__FILE__).':'.__LINE__);
+	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock','zetel'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 }
 function huisthuis($msg='') {
-	store('Weg', 0);
-	lg('Huis thuis '.$msg);
+	store('weg', 0);
+	if (strlen($msg)>0) lg($msg);
+	else lg('Huis thuis');
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
@@ -81,10 +77,11 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 }
 function waarschuwing($msg) {
 	telegram($msg, false, 1);
-	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	sleep(10);
-	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
+	hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>60]);
+//	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+//	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
+//	sleep(10);
+//	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 function past($name,$lg='') {
 	global $d,$time;
@@ -99,82 +96,81 @@ function idx($name) {
 	else return 0;
 }
 function sl($name,$level,$msg='',$force=false) {
-	global $d,$user,$domoticzurl;
+	global $d,$user;
 	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
-				sl($i, $level, $msg);
+				sl($i, $level, $msg, $force);
 			}
 		}
 	} else {
 		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
-		if ($d[$name]['i']>0) {
-			if ($d[$name]['s']!=$level||$force==true) file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd=Set%20Level&level='.$level);
-			if (str_starts_with($name, 'R')) store($name, $level, $msg);
-		} else store($name, $level, $msg);
-	}
-}
-function rgb($name,$hue,$level,$check=false) {
-	global $d,$user,$domoticzurl;
-	lg(' (RGB)		'.$user.' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level,4);
-	if ($d[$name]['i']>0) {
-		if ($check==false) file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
-		else {
-			if ($d[$name]['s']!=$$level) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=setcolbrightnessvalue&idx='.$d[$name]['i'].'&hue='.$hue.'&brightness='.$level.'&iswhite=false');
+		if ($d[$name]['s']!=$level||$force==true) {
+			if ($d[$name]['dt']=='hd') {
+				lg('[hsw] '.$name.'>'.$level.' '.$msg,4);
+				if ($d['dag']==4) $temp=3400;
+				elseif ($d['dag']==3) $temp=3200;
+				elseif ($d['dag']==2) $temp=3000;
+				elseif ($d['dag']==1) $temp=2850;
+				elseif ($d['dag']==0) $temp=2700;
+				
+				if ($level>0) hass('light','turn_on','light.'.$name,'"brightness_pct":'.$level.',"color_temp_kelvin":'.$temp);
+				elseif ($level==0) hass('light','turn_off','light.'.$name);
+	//			store($name, $level, $msg);
+			} elseif ($d[$name]['dt']=='d') {
+				if ($level>0) hass('light','turn_on','light.'.$name,'"brightness":'.$level*2.55);
+				elseif ($level==0) hass('light','turn_off','light.'.$name);
+	//			store($name, $level, $msg);
+			} elseif ($d[$name]['dt']=='r') {
+				lg(basename(__FILE__).':'.__LINE__);
+				hass('cover','set_cover_position','cover.'.$name,'"position":'.$level);
+				store($name, $level, $msg);
 			}
 		}
-	} else store($name, $level);
+	}
 }
 function resetsecurity() {
-	global $d,$domoticzurl;
+	global $d;
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 //		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	foreach (array('SDbadkamer','SDkamer','SDalex','SDwaskamer','SDzolder','SDliving') as $i) {
-		if ($d[$i]['s']!='Off') {
-			file_get_contents($domoticzurl.'/json.htm?type=command&param=resetsecuritystatus&idx='.$d[$i]['i'].'&switchcmd=Normal');
-			store($i, 'Off', basename(__FILE__).':'.__LINE__);
-		}
-	}
+//	foreach (array('SDbadkamer','SDkamer','SDalex','SDwaskamer','SDzolder','SDliving') as $i) {
+//		if ($d[$i]['s']!='Off') {
+//			store($i, 'Off', basename(__FILE__).':'.__LINE__);
+//		}
+//	}
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
-	global $d,$user,$domoticzurl,$db;
+	global $d,$user,$db;
 	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
-				sw($i, $action, $msg);
+				sw($i, $action, $msg, $force);
 				usleep(300000);
 			}
 		}
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-		if ($d[$name]['dt']=='hsw') {
-			lg('[hsw] '.$msg,4);
-			if ($action=='On') hass('switch','turn_on','switch.'.$name);
-			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
-			store($name, $action, $msg);
-		} elseif (isset($d[$name]['i'])) {
-			lg($msg,4);
-			if ($d[$name]['s']!=$action||$force==true) {
-				file_get_contents($domoticzurl.'/json.htm?type=command&param=switchlight&idx='.$d[$name]['i'].'&switchcmd='.$action);
+		if ($d[$name]['s']!=$action||$force==true) {
+			if ($d[$name]['dt']=='hsw') {
+				lg('[hsw] '.$msg,4);
+				if ($action=='On') hass('switch','turn_on','switch.'.$name);
+				elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
+//				store($name, $action, $msg);
+			} else {
+				store($name, $action, $msg);
 			}
-		} else {
-			store($name, $action, $msg);
 		}
 	}
 }
 function setpoint($name, $value,$msg='') {
-	global $d,$user,$domoticzurl,$db;
+	global $d,$user,$db;
 	if (!isset($d[$name]['i'])) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
-	lg($msg,3);
-	if ($d[$name]['i']>0) {
-		file_get_contents($domoticzurl.'/json.htm?type=command&param=setsetpoint&idx='.$d[$name]['i'].'&setpoint='.$value);
-	}
+	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='',$idx=null) {
 	global $db, $user;
@@ -183,7 +179,6 @@ function store($name='',$status='',$msg='',$idx=null) {
 		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
-//	mset($name,$status);
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
 		if (endswith($name, '_temp')) return;
@@ -231,17 +226,6 @@ function kodi($json) {
 	curl_close($ch);
 	return $result;
 }
-function ud($name,$nvalue,$svalue,$check=false,$smg='') {
-	global $d,$user,$domoticzurl;
-	if (isset($d[$name]['i'])&&$d[$name]['i']>0) {
-		if ($check==true) {
-			if ($d[$name]['s']!=$svalue) {
-				return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
-			}
-		} else return file_get_contents($domoticzurl.'/json.htm?type=command&param=udevice&idx='.$d[$name]['i'].'&nvalue='.$nvalue.'&svalue='.$svalue);
-	} else store($name, $svalue, basename(__FILE__).':'.__LINE__);
-	lg('(udevice) | '.$user.'=> '.str_pad($name, 13, ' ', STR_PAD_LEFT).' =>'.$nvalue.','.$svalue.(isset($msg)?' ('.$msg:')'));
-}
 function convertToHours($time) {
 	if ($time<600) return substr(date('i:s', $time-3600), 1);
 	elseif ($time>=600&&$time<3600) return date('i:s', $time-3600);
@@ -263,9 +247,9 @@ function rookmelder($msg) {
 	resetsecurity();
 //	global $d,$device;
 	alert($device,	$msg,	300, false, 2, true);
-//	if ($d['Weg']['s']<=1) {
+//	if ($d['weg']['s']<=1) {
 
-//		foreach (array(/*'Ralex',*/'RkamerL','RkeukenL','RkamerR','Rwaskamer','Rliving','RkeukenR','Rbureel') as $i) {
+//		foreach (array(/*'ralex',*/'rkamerl','rkeukenl','rkamerr','rwaskamer','rliving','rkeukenr','rbureel') as $i) {
 //			if ($d[$i]['s']>0) sl($i, 1, basename(__FILE__).':'.__LINE__);
 //		}
 //		if ($d['zon']<200) {
@@ -304,23 +288,26 @@ Levels:
 10: Store/Storemode
 99:	SQL Fetchdata
 */
-	global $db,$d;
-	$loglevel=0;
-	if (isset($d['auto']['m'])) $loglevel=$d['auto']['m'];
-	else {
-		if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
-		$stmt=$db->query("select m from devices WHERE n='auto';");
-		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row['m'];
-	}
-	if ($level<=$loglevel) {
-		$fp=fopen('/temp/domoticz.log', "a+");
-		$time=microtime(true);
-		$dFormat="Y-m-d H:i:s";
-		$mSecs=$time-floor($time);
-		$mSecs=substr(number_format($mSecs, 3), 1);
+	static $inLg = false;
+	if ($inLg) return; // voorkomt recursie
+
+	$inLg = true;
+	global $d;
+	if (isset($d['auto']['m'])) {
+		$loglevel = $d['auto']['m'];
+	} else $loglevel = 0;
+
+	if ($level <= $loglevel) {
+		$fp = fopen('/temp/domoticz.log', "a+");
+		$time = microtime(true);
+		$dFormat = "Y-m-d H:i:s";
+		$mSecs = $time - floor($time);
+		$mSecs = substr(number_format($mSecs, 3), 1);
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
+
+	$inLg = false;
 }
 function startsWith($haystack,$needle) {
 	return $needle===""||strrpos($haystack, $needle, -strlen($haystack))!==false;
@@ -391,8 +378,8 @@ function bosezone($ip,$forced=false,$vol='') {
 		'MIX-2' => 'PRESET_5',
 		'MIX-3' => 'PRESET_6',
 	];
-	if (($d['Weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['Weg']['s']==0&&($d['lgtv']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
+	if (($d['weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
+		if ($d['weg']['s']==0&&($d['lgtv']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
@@ -548,95 +535,41 @@ function daikinset($device, $power, $mode, $stemp,$msg='', $fan='A', $spmode=-1,
 		}
 	}
 }
-function updatefromdomoticz() {
-	global $d,$db,$domoticzurl;
-	$domoticz=json_decode(file_get_contents($domoticzurl.'/json.htm?type=command&param=getdevices&used=true'),true);
-	if ($domoticz) {
-		foreach ($domoticz['result'] as $dom) {
-			$update=false;
-			$name=$dom['Name'];
-			if (isset($dom['SwitchType'])) $switchtype=$dom['SwitchType'];
-			elseif (isset($dom['SubType'])) $switchtype=$dom['SubType'];
-			if($switchtype=='On/Off') $update=true;
-			elseif($switchtype=='Switch') $update=true;
-			elseif($switchtype=='Contact') $update=true;
-			elseif($switchtype=='Door Contact') $update=true;
-			elseif($switchtype=='Motion Sensor') $update=true;
-			elseif($switchtype=='Push On Button') $update=true;
-			elseif($switchtype=='X10 Siren') $update=true;
-			elseif($switchtype=='Smoke Detector') $update=true;
-			elseif($switchtype=='Selector') $update=true;
-			elseif($switchtype=='Blinds Inverted') $update=true;
-			if ($dom['Type']=='Temp') {
-				$status=$dom['Temp'];
-				 $update=false;
-			} elseif ($dom['Type']=='Temp + Humidity') {
-				$status=$dom['Temp'];
-				 $update=false;
-			} elseif ($dom['TypeImg']=='current') {
-				$status=str_replace(' Watt', '', $dom['Data']);
-				 $update=false;
-			} elseif ($name=='luifel') {
-				$status=str_replace('%', '', $dom['Level']);
-				 $update=true;
-			} elseif ($switchtype=='Dimmer') {
-				if ($dom['Data']=='Off') $status=0;
-				elseif ($dom['Data']=='On') $status=100;
-				else $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
-				 $update=true;
-			} elseif ($switchtype=='Blinds Percentage') {
-				if ($dom['Data']=='Open') $status=0;
-				elseif ($dom['Data']=='Closed') $status=100;
-				else $status=filter_var($dom['Data'], FILTER_SANITIZE_NUMBER_INT);
-				$update=true;
-			} elseif ($name=='achterdeur') {
-				if ($dom['Data']=='Open') $status='Closed';
-				else $status='Open';
-			} else $status=$dom['Data'];
-			if ($update==true) {
-				if (isset($d[$name]['s'])&&$status!=$d[$name]['s']) {
-					lg('(UPDDOMOTICZ)	'. $name.'	= '.$status,9);
-					$query="UPDATE devices SET s=:status WHERE n=:name;";
-					$stmt=$db->prepare($query);
-					$stmt->execute(array(':status'=>$status, ':name'=>$name));
-				}
-			}
-		}
-	}
-
-}
-function hass($domain,$service,$entity) {
-	lg('HASS '.$domain.' '.$service.' '.$entity,4);
+function hass($domain,$service,$entity,$data = []) {
+//	lg('HASS '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlYzFjYTVlOWY0MWE0ZWEwOTY0NjFmM2QzN2QxMjg0MiIsImlhdCI6MTcxMzU0OTY4MCwiZXhwIjoyMDI4OTA5NjgwfQ.TpYxRLRMEezo1Jx4buGYAE6UN0ku6tEuhExc3KetjPw'));
-	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY'));
+	if ($data==null) $data['entity_id']=$entity;
+	$data=json_encode($data);
+//	lg($data);
+	curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+//	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+//	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
 	$response=curl_exec($ch);
-	if (strlen($response)>0) lg($response);
 	curl_close($ch);
+//	if (strlen($response)>0) lg($data);
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/services/'.$domain.'/'.$service);
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlYzFjYTVlOWY0MWE0ZWEwOTY0NjFmM2QzN2QxMjg0MiIsImlhdCI6MTcxMzU0OTY4MCwiZXhwIjoyMDI4OTA5NjgwfQ.TpYxRLRMEezo1Jx4buGYAE6UN0ku6tEuhExc3KetjPw'));
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY'));
 	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'","source":"'.$input.'"}');
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
 	$response=curl_exec($ch);
-	if (strlen($response)>0) lg($response);
+	if (strlen($response)>5) lg('hassinput: '.$response);
 	curl_close($ch);
 }
 function hassget() {
 	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.19:8123/api/states');
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlYzFjYTVlOWY0MWE0ZWEwOTY0NjFmM2QzN2QxMjg0MiIsImlhdCI6MTcxMzU0OTY4MCwiZXhwIjoyMDI4OTA5NjgwfQ.TpYxRLRMEezo1Jx4buGYAE6UN0ku6tEuhExc3KetjPw'));
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states');
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY'));
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
@@ -644,6 +577,18 @@ function hassget() {
 	curl_close($ch);
 	return $response;
 }
+function hassservices() {
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services');
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY'));
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$response=curl_exec($ch);
+	curl_close($ch);
+	return $response;
+}
+
 function curl($url) {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
@@ -655,17 +600,38 @@ function curl($url) {
 	curl_close($ch);
 	return $data;
 }
-function dbconnect($lg='') {
-	global $dbname,$dbuser,$dbpass;
-	return new PDO("mysql:host=127.0.0.1;dbname=$dbname;",$dbuser,$dbpass,array(PDO::ATTR_PERSISTENT=>true));
+function dbconnect() {
+	global $db, $dbname, $dbuser, $dbpass;
+	static $db = null;
+
+	try {
+		if ($db === null) {
+			$db = new PDO("mysql:host=127.0.0.1;dbname=$dbname;", $dbuser, $dbpass, [
+				PDO::ATTR_PERSISTENT => true,
+				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+			]);
+		} else {
+			$db->query('SELECT 1');
+		}
+	} catch (PDOException $e) {
+		if ($e->getCode() == 2006) { // MySQL server has gone away
+			lg('dbconnect	'.__LINE__.'	|Verbinding verbroken, opnieuw verbinden');
+			$db = null;
+			return dbconnect(); // opnieuw proberen
+		} else {
+			lg('dbconnect	'.__LINE__.'	|PDO fout: '.$e->getMessage());
+			throw $e;
+		}
+	}
+	return $db;
 }
 function fetchdata($t=0,$lg='') {
-	global $db,$d;
-	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
-	if ($t==0) $stmt=$db->query("select n,i,s,t,m,dt,icon from devices;");
-	else $stmt=$db->query("select n,i,s,t,m,dt,icon from devices WHERE t>=$t;");
+	global $d;
+	$db=dbconnect();
+	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon from devices;");
+	else $stmt=$db->query("select n,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		if(!is_null($row['i']))$d[$row['n']]['i']=$row['i'];
+//		if(!is_null($row['i']))$d[$row['n']]['i']=$row['i'];
 		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
 		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
 		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
@@ -687,14 +653,6 @@ function fetchdata($t=0,$lg='') {
 		$d['avg']=0;
 		$d['zon']=0;
 	}
-	return $d;
-}
-function fetchdataidx() {
-	global $db;
-	if(!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__.'-'.__FUNCTION__);
-	$stmt=$db->query("select n,i,s,t,m,dt,icon from devices where i is not null;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $d[$row['i']] = $row;
-	$d['dag']=mget('dag');
 	return $d;
 }
 function roundUpToAny($n,$x=5) {

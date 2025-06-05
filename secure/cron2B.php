@@ -1,14 +1,20 @@
 <?php
 $user=basename(__FILE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-if ($d['Weg']['s']==0&&$d['boseliving']['s']=='On') {
+if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
 	foreach(array(101=>12,102=>35,103=>35,104=>35,105=>35,106=>35,107=>35) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
-			if ($d['bose'.$ip]['icon']!='Online'&&$d['boseliving']['s']!='On') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			elseif ($d['bose'.$ip]['icon']!='Online') storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+//			lg(basename(__FILE__).':'.__LINE__);
+			if ($d['bose'.$ip]['icon']!='Online'&&$d['boseliving']['s']!='On') {
+//				lg(basename(__FILE__).':'.__LINE__);
+				sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+			} elseif ($d['bose'.$ip]['icon']!='Online') {
+//				lg(basename(__FILE__).':'.__LINE__);
+				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+			}
 
 			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
 				bosezone($ip);
@@ -71,11 +77,11 @@ if ($d['Weg']['s']==0&&$d['boseliving']['s']=='On') {
 		}
 	}	
 }
-if($d['boseliving']['s']!='On') {
+if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
 }
 
-if ($d['Weg']['s']==0) {
+if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
 		if ($d['lgtv']['s']=='On') {
 			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
@@ -84,7 +90,7 @@ if ($d['Weg']['s']==0) {
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
 			}
-			if (past('lgtv')<35) hassinput('media_player','select_source','media_player.lgtv','SHIELD');
+//			if (past('lgtv')<35) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //			if ($d['heating']['s']>0&&$d['Rliving']['s']<100) sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 //			elseif ($d['Rliving']['s']<25) sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
 		}
@@ -117,7 +123,7 @@ if ($d['pirliving']['s']=='Off'
 	&&past('bose105')>30
 	&&past('bose106')>30
 	&&past('bose107')>30
-	&&($d['Weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
+	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
 ) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 	if (!empty($status)) {

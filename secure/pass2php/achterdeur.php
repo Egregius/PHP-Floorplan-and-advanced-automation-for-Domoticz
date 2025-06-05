@@ -1,7 +1,7 @@
 <?php
 if ($status=="Open") {
 	// BOSE BUITEN
-/*	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
+/*	if ($d['weg']['s']==0&&$d['bose106']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
 				simplexml_load_string(
@@ -21,7 +21,7 @@ if ($status=="Open") {
 			}
 		}
 	}
-	if ($d['Weg']['s']==0&&$d['bose107']['icon']=='Online') {
+	if ($d['weg']['s']==0&&$d['bose107']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
 				simplexml_load_string(
@@ -42,14 +42,14 @@ if ($status=="Open") {
 		}
 	}*/
 	// END BOSE BUITEN
-	if ($d['Weg']['s']>0) sirene('Achterdeur open');
+	if ($d['weg']['s']>0) sirene('Achterdeur open');
  } else {
-	if ($d['Weg']['s']>0&&$d['auto']['s']==1&&past('Weg')>178) {
+	if ($d['weg']['s']>0&&$d['auto']['s']==1&&past('weg')>178) {
 			sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 			telegram('Achterdeur dicht om '.date('G:i:s'), false, 3);
 	}
 /*	// BOSE BUITEN
-	if ($d['Weg']['s']==0&&$d['bose106']['icon']=='Online') {
+	if ($d['weg']['s']==0&&$d['bose106']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
 				simplexml_load_string(
@@ -69,7 +69,7 @@ if ($status=="Open") {
 			}
 		}
 	}
-	if ($d['Weg']['s']==0&&$d['bose107']['icon']=='Online') {
+	if ($d['weg']['s']==0&&$d['bose107']['icon']=='Online') {
 		$status=json_decode(
 			json_encode(
 				simplexml_load_string(

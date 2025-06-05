@@ -6,9 +6,18 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
 
+//echo hassget();
+//echo hassservices();
+//hass('light','turn_off','light.bureel1');
+//hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3200');
+//hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+//hass('input_button','press','input_button.wakeipad');
 
-hass('input_button','press','input_button.wakeipad');
- 
+echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);
+
+//file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
+
+
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
@@ -52,7 +61,7 @@ unset(
 	$lon,
 	$vurl,
 	$weekend
-	);
+);
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
 

@@ -2,7 +2,7 @@
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-if (!isset($db)) $db=dbconnect(basename(__FILE__).':'.__LINE__);
+$db=dbconnect();
 echo '
 <html>
 	<head>

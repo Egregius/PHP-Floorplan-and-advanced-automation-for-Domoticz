@@ -71,6 +71,22 @@ echo '<div class="navbar" role="navigation">
 	<div class="camera2">
 		<img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
 	</div>
+	
+	<OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
+     codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
+     width="640" height="480" id="vlc" events="True">
+   <param name="Src" value="rtsp://cameraipaddress" />
+   <param name="ShowDisplay" value="True" />
+   <param name="AutoLoop" value="False" />
+   <param name="AutoPlay" value="True" />
+   <embed id="vlcEmb"  type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2" autoplay="yes" loop="no" width="640" height="480"
+     target="http://192.168.2.26:1984/stream.html?src=T8210P7422421180&mode=webrtc" ></embed>
+</OBJECT>
+
+<video width="540" height="310" controls>
+  <source src="http://192.168.2.26:1984/stream.html?src=T8210P7422421180&mode=webrtc" type="video/mp4">
+</video>
+
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
