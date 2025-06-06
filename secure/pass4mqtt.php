@@ -3,210 +3,224 @@
 declare(strict_types=1);
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', true);
-$user='MQTT';
-$time=time();
-$startloop=$time;
 // Using https://github.com/php-mqtt/client
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
 
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 
-$d=fetchdata(0,'mqtt:'.__LINE__);
-$d['lastfetch']=$time;
+$user = 'MQTT';
+$startloop = microtime(true);
+$d = fetchdata(0, 'mqtt:' . __LINE__);
+$d['lastfetch'] = microtime(true);
 
-lg(' Starting MQTT loop...',1);
-
-use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
+lg('Starting MQTT loop...', 1);
 
 $connectionSettings = (new ConnectionSettings)
     ->setUsername('mqtt')
     ->setPassword('mqtt');
 
-$mqtt=new MqttClient('192.168.2.26',1883,'pass4mqtt',MqttClient::MQTT_3_1,null,null);
+$mqtt = new MqttClient('192.168.2.26', 1883, 'pass4mqtt', MqttClient::MQTT_3_1, null, null);
 $mqtt->connect($connectionSettings, true);
 
-$mqtt->subscribe('homeassistant/switch/+/state', function (string $topic, string $status) use (&$d) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
+// Central array to track processed messages per run
+$alreadyProcessed = [];
 
-		$d['time']=time();
-		$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-		$d['lastfetch']=$d['time']-30;
-		$status=ucfirst($status);
-		if ($d[$device]['s']!=$status) {
-			lg('mqtt	'.__LINE__.'	|switch	|state	|'.$device.'|'.$status);
-			include "/var/www/html/secure/pass2php/$device.php";
-			store($device, $status);
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
+// Subscribe switch states
+$mqtt->subscribe('homeassistant/switch/+/state', function (string $topic, string $status) use (&$d, &$alreadyProcessed) {
+    try {
+        $path = explode('/', $topic);
+        $device = $path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+        if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+            $d['time'] = microtime(true);
+            $d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+            $d['lastfetch'] = $d['time'] - 30;
+
+            $status = ucfirst($status);
+
+            if (($d[$device]['s'] ?? null) !== $status) {
+                lg('mqtt ' . __LINE__ . ' |switch |state |' . $device . '|' . $status);
+                include '/var/www/html/secure/pass2php/' . $device . '.php';
+                store($device, $status);
+            }
+        }
+        stoploop($d);
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/light/+/brightness', function (string $topic, string $status) use (&$d) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
+// Subscribe light brightness
+$mqtt->subscribe('homeassistant/light/+/brightness', function (string $topic, string $status) use (&$d, &$alreadyProcessed) {
+    try {
+        $path = explode('/', $topic);
+        $device = $path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+        if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+            $d['time'] = microtime(true);
+            $d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+            $d['lastfetch'] = $d['time'] - 30;
 
-		$d['time']=time();
-		$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-		$d['lastfetch']=$d['time']-30;
-		$status = ($status === 'null') ? 0 : round($status/2.55);
-		if ($d[$device]['s']!=$status) {
-			lg('mqtt	'.__LINE__.'	|bright	|state	|'.$device.'	|'.$status.'|');
-			include "/var/www/html/secure/pass2php/$device.php";
-			store($device, $status);
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
+            if ($status === 'null') {
+                $status = 0;
+            } else {
+                $status = round((float)$status / 2.55);
+            }
+
+            if (($d[$device]['s'] ?? null) !== $status) {
+                lg('mqtt ' . __LINE__ . ' |bright |state |' . $device . '|' . $status);
+                include '/var/www/html/secure/pass2php/' . $device . '.php';
+                store($device, $status);
+            }
+        }
+        stoploop($d);
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/sensor/+/state', function (string $topic, string $status) use (&$d, &$startloop) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
+// Subscribe sensor states
+$mqtt->subscribe('homeassistant/sensor/+/state', function (string $topic, string $status) use (&$d, &$alreadyProcessed, $startloop) {
+    try {
+        $path = explode('/', $topic);
+        $device = $path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+        if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+            $now = microtime(true);
+            if (($now - $startloop) > 5) {
+                lg('mqtt ' . __LINE__ . ' |sensor |state |' . $device . '|' . $status . '|');
 
-		$d['time']=time();
-		if (($d['time']-$startloop)>5) {
-			lg('mqtt	'.__LINE__.'	|sensor	|state	|'.$device.'	|'.$status.'|');
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time']-30;
+                $d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+                $d['lastfetch'] = $d['time'] - 30;
 
-			if ($device=='powermeter_kwh') {
-				include '/var/www/html/secure/pass2php/powermeter_kwh.php';
-			} elseif ($device=='powermeter_power') {
-				if ($d['powermeter_kwh']['s']!=$status) store('powermeter_kwh',$status);
-			} elseif ($device=='kookplaatpower_power') {
-				if ($d['kookplaatpower_kwh']['s']!=$status) store('kookplaatpower_kwh',$status);
-			} elseif (substr($device, -4)=='_hum') {
-				$tdevice=str_replace('_hum','_temp',$device);
-				$hum=(float)$status;
-				if ($hum>100) $hum=100;
-				elseif($hum>$d[$tdevice]['m']+1) $hum=$d[$tdevice]['m']+1;
-				elseif($hum<$d[$tdevice]['m']-1) $hum=$d[$tdevice]['m']-1;
-				if($hum!=$d[$tdevice]['m']) storemode($tdevice, $hum, '', 1);
-			} elseif (substr($device, -5)=='_temp') {
-				$status=(float)$status;
-				if ($status>$d[$device]['s']+0.1) $status=$d[$device]['s']+0.1;
-				elseif ($status<$d[$device]['s']-0.1) $status=$d[$device]['s']-0.1;
-				if ($d[$device]['s']!=$status) store($device, $status);
-			}
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
+                if ($device === 'powermeter_kwh') {
+                    include '/var/www/html/secure/pass2php/powermeter_kwh.php';
+                } elseif ($device === 'powermeter_power') {
+                    if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh', $status);
+                } elseif ($device === 'kookplaatpower_power') {
+                    if (($d['kookplaatpower_kwh']['s'] ?? null) !== $status) store('kookplaatpower_kwh', $status);
+                } elseif (substr($device, -4) === '_hum') {
+                    $tdevice = str_replace('_hum', '_temp', $device);
+                    $hum = (float)$status;
+                    if ($hum > 100) $hum = 100;
+                    elseif ($hum > ($d[$tdevice]['m'] ?? 0) + 1) $hum = ($d[$tdevice]['m'] ?? 0) + 1;
+                    elseif ($hum < ($d[$tdevice]['m'] ?? 0) - 1) $hum = ($d[$tdevice]['m'] ?? 0) - 1;
+                    if ($hum !== ($d[$tdevice]['m'] ?? null)) storemode($tdevice, $hum, '', 1);
+                } elseif (substr($device, -5) === '_temp') {
+                    $st = (float)$status;
+                    if ($st > (($d[$device]['s'] ?? 0) + 0.1)) $st = ($d[$device]['s'] ?? 0) + 0.1;
+                    elseif ($st < (($d[$device]['s'] ?? 0) - 0.1)) $st = ($d[$device]['s'] ?? 0) - 0.1;
+                    if (($d[$device]['s'] ?? null) !== $st) store($device, $st);
+                }
+            }
+        }
+        stoploop($d);
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use (&$d, &$startloop) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
+// Subscribe binary_sensor states
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use (&$d, &$alreadyProcessed, $startloop) {
+    try {
+        $path = explode('/', $topic);
+        $device = $path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+        if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+            $now = microtime(true);
+            if (($now - $startloop) > 5) {
+                $d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+                $d['lastfetch'] = $d['time'] - 30;
 
-		$d['time']=time();
-		if (($d['time']-$startloop)>5) {
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time']-30;
-			$status=ucfirst($status);
+                $status = ucfirst($status);
+                if ($device === 'achterdeur') {
+                    if ($status === 'Off') $status = 'Open';
+                    elseif ($status === 'On') $status = 'Closed';
+                } elseif (isset($d[$device]['dt']) && $d[$device]['dt'] === 'c') {
+                    if ($status === 'On') $status = 'Open';
+                    elseif ($status === 'Off') $status = 'Closed';
+                } else {
+                    if ($status === 'on') $status = 'On';
+                    elseif ($status === 'off') $status = 'Off';
+                }
 
-			if ($device=='achterdeur') {
-				$status=($status=='Off')?'Open':'Closed';
-			} elseif (isset($d[$device]['dt']) && $d[$device]['dt']=='c') {
-				$status=($status=='On')?'Open':'Closed';
-			} else {
-				$status=($status=='on')?'On':(($status=='off')?'Off':$status);
-			}
-			lg('mqtt	'.__LINE__.'	|binary	|state	|'.$device.'	|'.$status.'|');
-			include "/var/www/html/secure/pass2php/$device.php";
-			store($device, $status);
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
+                lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
+                include '/var/www/html/secure/pass2php/' . $device . '.php';
+                store($device, $status);
+            }
+        }
+        stoploop($d);
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/event/+/event_type', function (string $topic, string $status) use (&$d, &$startloop) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
+// Subscribe event types
+$mqtt->subscribe('homeassistant/event/+/event_type', function (string $topic, string $status) use (&$d, &$alreadyProcessed, $startloop) {
+    try {
+        $path = explode('/', $topic);
+        $device = $path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+        if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+            $now = microtime(true);
+            if (($now - $startloop) > 5) {
+                lg('mqtt ' . __LINE__ . ' |event |e_type |' . $device . '|' . $status . '|');
 
-		$d['time']=time();
-		if (($d['time']-$startloop)>5) {
-			lg('mqtt	'.__LINE__.'	|event	|e_type	|'.$device.'	|'.$status.'|');
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time']-30;
+                $d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+                $d['lastfetch'] = $d['time'] - 30;
 
-			if (substr($device,0,1)=='8') {
-				if ($status=='"KeyPressed"') {
-					$status='On';
-					include "/var/www/html/secure/pass2php/$device.php";
-				} elseif ($status=='"KeyPressed2x"') {
-					$status='On';
-					include "/var/www/html/secure/pass2php/{$device}d.php";
-				}
-			} else {
-				if ($status=='"on"') {
-					$status='On';
-					include "/var/www/html/secure/pass2php/$device.php";
-				} elseif ($status=='"off"') {
-					$status='Off';
-					include "/var/www/html/secure/pass2php/$device.php";
-				}
-			}
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
+                if (substr($device, 0, 1) === '8') {
+                    if ($status === '"KeyPressed"') {
+                        $status = 'On';
+                        include '/var/www/html/secure/pass2php/' . $device . '.php';
+                        store($device, $status);
+                    }
+                }
+            }
+        }
+        stoploop($d);
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/cover/+/current_position', function (string $topic, string $status) use (&$d) {
-	try {
-		$path=explode('/', $topic);
-		$device=$path[2];
-		if (!file_exists("/var/www/html/secure/pass2php/$device.php")) return;
-		if (alreadyProcessed($device, $topic, $status, $d)) return;
 
-		$d['time']=time();
-		$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-		$d['lastfetch']=$d['time']-30;
-		if ($d[$device]['s']!=$status) {
-			lg('mqtt	'.__LINE__.'	|cover	|state	|'.$device.'	|'.$status.'|');
-			include "/var/www/html/secure/pass2php/$device.php";
-			store($device, $status);
-		}
-		stoploop($d);
-	} catch(Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
-}, MqttClient::QOS_AT_LEAST_ONCE);
+// Main loop with incremental sleep
+$sleepMicroseconds = 10000; // start 10ms
+$maxSleep = 1000000; // max 1s
+$quietCounter = 0;
 
 while (true) {
-    $mqtt->loopOnce(microtime(true),true,10);
-}
-$mqtt->disconnect();
+    $result = $mqtt->loop(true);
+    if ($result === 0) {
+        $quietCounter++;
+        $sleepMicroseconds = min($sleepMicroseconds + 10000, $maxSleep); // +10ms per quiet iteration max 1s
+        usleep($sleepMicroseconds);
+    } else {
+        // reset sleep if message received
+        $quietCounter = 0;
+        $sleepMicroseconds = 10000;
+    }
 
-function alreadyProcessed(string $device, string $topic, string $status, array &$d): bool {
-	$hash = md5($topic . '|' . $status);
-	if (isset($d['lasthash'][$device]) && $d['lasthash'][$device] === $hash) return true;
-	$d['lasthash'][$device] = $hash;
-	return false;
+    if (!empty($d['stoploop']) && $d['stoploop'] === true) {
+        lg('Stoploop flag detected, exiting.');
+        break;
+    }
+}
+
+$mqtt->disconnect();
+lg('MQTT loop stopped.', 1);
+
+function isProcessed(string $topic, string $status, array &$alreadyProcessed): bool {
+    $key = $topic . '|' . $status;
+    if (isset($alreadyProcessed[$key])) {
+    	lg('mqtt	| alreadyProcessed '.$topic.'|'.$status);
+        return true;
+    }
+    $alreadyProcessed[$key] = true;
+    return false;
 }
 
 function stoploop($d) {
@@ -223,7 +237,6 @@ function stoploop($d) {
 		exec('kill -9 ' . getmypid());
 	}
 }
-
 /*
 $mqtt->subscribe('homeassistant/media_player/+/state', function (string $topic, string $status) use ($mqtt, &$d, &$startloop) {
 	try{

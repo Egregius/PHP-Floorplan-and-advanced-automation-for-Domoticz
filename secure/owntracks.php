@@ -25,8 +25,8 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
 			//				telegram('Huis thuis door '.$user);
 							huisthuis('Huis thuis door '.$user);
 						}
-					} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.'Nog niet lang genoeg weg');
-				} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET, true).PHP_EOL.'Event is niet "enter"');
+					}
+				}
 			} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET, true).PHP_EOL.'Event niet gevonden');
 		} else telegram('domoticz/owntracks.php:'.__LINE__.PHP_EOL.'Onbekende gebruiker: '.$_GET['user']);
 	} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.'User niet gevonden');
