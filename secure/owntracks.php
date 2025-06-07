@@ -7,14 +7,13 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
 				if ($_GET['event']=='enter') {
 					$user=$_GET['user'];
 					$db=dbconnect();
-					$stmt=$db->query("SELECT n,s,t FROM devices WHERE n IN ('weg','voordeur');");
+					$stmt=$db->query("SELECT n,s,t FROM devices WHERE n IN ('weg','voordeur','dag');");
 					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 						$d[$row['n']]['s']=$row['s'];
 						$d[$row['n']]['t']=$row['t'];
 					}
 					if (past('weg')>300) {
-						$d['dag']=mget('dag');
-						if ($d['voordeur']['s']=='Off'&&$d['dag']<2) {
+						if ($d['voordeur']['s']=='Off'&&$d['dag']['s']<2) {
 							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 						}
 						if($d['weg']['s']==2) {

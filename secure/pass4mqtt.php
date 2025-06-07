@@ -87,7 +87,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh',$status);
 			} elseif ($device === 'kookplaatpower_power') {
 				if (($d['kookplaatpower_kwh']['s'] ?? null) !== $status) store('kookplaatpower_kwh',$status);
-			} elseif (substr($device,-4) === '_hum') {
+			}  elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(float)$status;
 				if ($hum > 100) $hum=100;
@@ -99,7 +99,14 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if ($st > (($d[$device]['s'] ?? 0) + 0.1)) $st=($d[$device]['s'] ?? 0) + 0.1;
 				elseif ($st < (($d[$device]['s'] ?? 0) - 0.1)) $st=($d[$device]['s'] ?? 0) - 0.1;
 				if (($d[$device]['s'] ?? null) !== $st) store($device,$st);
-			} else include '/var/www/html/secure/pass2php/'.$device.'.php';
+			} else {
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				store($device,$status);
+			}
+		} elseif ($device === 'sun_solar_elevation') {
+			store('dag',$status);
+		} elseif ($device === 'sun_solar_azimuth') {
+			storemode('dag',$status);
 		}
 		stoploop($d);
 	} catch (Throwable $e) {
