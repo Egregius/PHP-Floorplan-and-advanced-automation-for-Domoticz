@@ -1,6 +1,6 @@
 <?php
 $t=t();
-$user=basename(__FILE__);
+$user='cron10';
 if ($d['auto']['s']=='On') {
 	$i=39;
 	if ($d['garageled']['s']=='On'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('deurgarage')>$i&&past('garageled')>$i) sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);

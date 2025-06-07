@@ -1,5 +1,5 @@
 <?php
-$user=basename(__FILE__);
+$user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;

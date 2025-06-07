@@ -539,13 +539,13 @@ function hasstoken() {
 	global $user;
 	switch ($user) {
 		case 'cron10': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2YmQ0NDZjNTgyZTY0NDU5YTkxNmE4ZThmZDVhNWFjNCIsImlhdCI6MTc0OTMxODM1NywiZXhwIjoyMDY0Njc4MzU3fQ.S6oPTz8PrEChIU2Ogx4qFgcCBLzKy8tLeFKA_NfDbH8';
+		case 'cron60': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiZTc4NDhiOGNhMmY0OTIyODQxOGJkMDAyYmJkMDM0YyIsImlhdCI6MTc0OTMxOTM3NSwiZXhwIjoyMDY0Njc5Mzc1fQ.gn-THiHH1yf_CugxLoqNvbeftRxW_CsLJ2lPWt5c2Ro';
 		case 'Guy': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY';
 		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2YmQ0NDZjNTgyZTY0NDU5YTkxNmE4ZThmZDVhNWFjNCIsImlhdCI6MTc0OTMxODM1NywiZXhwIjoyMDY0Njc4MzU3fQ.S6oPTz8PrEChIU2Ogx4qFgcCBLzKy8tLeFKA_NfDbH8';
 	}
 }
 function hass($domain,$service,$entity) {
 	lg('HASS '.$domain.' '.$service.' '.$entity,4);
-	lg(hasstoken());
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
@@ -560,7 +560,6 @@ function hass($domain,$service,$entity) {
 }
 function hassopts($domain,$service,$entity,$data) {
 //	lg('HASS '.$domain.' '.$service.' '.$entity,4);
-	lg(hasstoken());
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);

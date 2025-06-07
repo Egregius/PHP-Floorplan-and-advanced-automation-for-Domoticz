@@ -1,5 +1,5 @@
 <?php
-$user=basename(__FILE__);
+$user='cron240';
 if ($d['auto']['s']=='On') {
 	if ($d['weg']['s']==0){
 		if ($d['living_temp']['s']>22&&$d['living_temp']['s']>$d['living_set']['s']+1&&$d['brander']['s']=='On') alert('livingtemp', 'Te warm in living, '.$d['living_temp']['s'].' °C. Controleer verwarming', 3600, false);

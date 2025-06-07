@@ -1,5 +1,5 @@
 <?php
-$user=basename(__FILE__);
+$user='cron300';
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']['s']=='On') {

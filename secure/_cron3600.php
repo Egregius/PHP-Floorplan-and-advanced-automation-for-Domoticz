@@ -1,6 +1,6 @@
 <?php
 //lg('CRON-3600');
-$user=basename(__FILE__);
+$user='cron3600';
 
 if (date('G')==0) {
 	mset('alwayson',9999);
