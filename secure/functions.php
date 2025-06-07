@@ -645,7 +645,6 @@ function fetchdata($t=0,$lg='') {
 	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,s,t,m,dt,icon from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-//		if(!is_null($row['i']))$d[$row['n']]['i']=$row['i'];
 		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
 		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
 		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
@@ -656,7 +655,7 @@ function fetchdata($t=0,$lg='') {
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 
-	$d['dag']=mget('dag');
+//	$d['dag']=mget('dag');
 	$en=mget('en');
 	if (isset($en['net'])) {
 		$d['net']=$en['net'];

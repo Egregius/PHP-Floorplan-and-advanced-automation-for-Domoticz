@@ -99,7 +99,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if ($st > (($d[$device]['s'] ?? 0) + 0.1)) $st=($d[$device]['s'] ?? 0) + 0.1;
 				elseif ($st < (($d[$device]['s'] ?? 0) - 0.1)) $st=($d[$device]['s'] ?? 0) - 0.1;
 				if (($d[$device]['s'] ?? null) !== $st) store($device,$st);
-			}
+			} else include '/var/www/html/secure/pass2php/'.$device.'.php';
 		}
 		stoploop($d);
 	} catch (Throwable $e) {

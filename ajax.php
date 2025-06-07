@@ -38,7 +38,6 @@ if (isset($_REQUEST['t'])) {
 			$d['Sunset']=$sunrise['Sunset'];
 			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
 			$d['zonavg']=$d['zonvandaag']['icon'];
-			$d['dag']=mget('dag');
 			$d['playlist']=boseplaylist();
 		}
 	}
