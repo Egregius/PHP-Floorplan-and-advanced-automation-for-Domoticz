@@ -107,6 +107,18 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			store('dag',$status);
 		} elseif ($device === 'sun_solar_azimuth') {
 			storemode('dag',$status);
+		} elseif ($device === 'weg') {
+			telegram('Weg ingesteld op '.$status.' door Home Assistant');
+			if ($status==0) {
+				store('weg',0);
+				huisthuis();
+			} elseif ($status==2) {
+				store('weg',2);
+				huisslapen(true);
+			} elseif ($status==3) {
+				store('weg',3);
+				huisslapen(true);
+			}
 		}
 		stoploop($d);
 	} catch (Throwable $e) {
