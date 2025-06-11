@@ -27,7 +27,24 @@ if(isset($_REQUEST['Record'])){
 }
 $refresh=1500;
 //if ($_SERVER['REMOTE_ADDR']=='192.168.2.201') $refresh=500;
+$token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY";
+$ha_url = "http://192.168.2.26:8123/api/services/button/press";
 
+// Pas dit aan naar jouw button-entity_id
+$data = [
+    "entity_id" => "button.start_p2p_stream"
+];
+
+$options = [
+    "http" => [
+        "method"  => "POST",
+        "header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+        "content" => json_encode($data),
+        "timeout" => 5
+    ]
+];
+$context = stream_context_create($options);
+$response = @file_get_contents($ha_url, false, $context);
 echo '<html>
 <head><title>Oprit</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
@@ -66,37 +83,30 @@ echo '<div class="navbar" role="navigation">
 	</form>
 	</div>
 	<div class="camera1">
-		<img class="camerai" id="mjpeg_dest" src="jpg.php"/>
+		<img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/>
 	</div>
 	<div class="camera2">
-		<img class="camerai" id="mjpeg_destoprit" src="jpg.oprit.php"/>
+		<img class="camerai" id="mjpeg_camera2" src="jpg.php"/>
+	</div>
+	<div class="camera3">
+		<img class="camerai" id="mjpeg_camera3" src="jpg.oprit.php"/>
 	</div>
 	
-	<OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
-     codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
-     width="640" height="480" id="vlc" events="True">
-   <param name="Src" value="rtsp://cameraipaddress" />
-   <param name="ShowDisplay" value="True" />
-   <param name="AutoLoop" value="False" />
-   <param name="AutoPlay" value="True" />
-   <embed id="vlcEmb"  type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2" autoplay="yes" loop="no" width="640" height="480"
-     target="http://192.168.2.26:1984/stream.html?src=T8210P7422421180&mode=webrtc" ></embed>
-</OBJECT>
-
-<video width="540" height="310" controls>
-  <source src="http://192.168.2.26:1984/stream.html?src=T8210P7422421180&mode=webrtc" type="video/mp4">
-</video>
-
+	
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		mypicam=setInterval(getpic, '.$refresh.');
-		mypicam2=setInterval(getpic2, '.$refresh.');
-		function getpic(){
-			try{document.getElementById(\'mjpeg_destoprit\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
+		mycam1=setInterval(getpic1, '.$refresh.');
+		mycam2=setInterval(getpic2, '.$refresh.');
+		mycam3=setInterval(getpic3, '.$refresh.');
+		function getpic1(){
+			try{document.getElementById(\'mjpeg_camera1\').src = "jpg.eufy.php?random="+new Date().getTime();}catch{}
 		}
 		function getpic2(){
-			try{document.getElementById(\'mjpeg_dest\').src = "jpg.php?random="+new Date().getTime();}catch{}
+			try{document.getElementById(\'mjpeg_camera2\').src = "jpg.php?random="+new Date().getTime();}catch{}
+		}
+		function getpic3(){
+			try{document.getElementById(\'mjpeg_camera3\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
 		}
 		function licht(){
 			$.get("/ajax.php?device=voordeur&command=sw&action=Toggle")
