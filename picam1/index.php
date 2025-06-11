@@ -82,10 +82,13 @@ echo '<div class="navbar" role="navigation">
 		<input type="submit" value="Archief" name="Archief" class="btn b8"/>
 	</form>
 	</div>
-	<div class="camera1">
-		<img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/>
-	</div>
-	<div class="camera2">
+<!--	<div class="camera1">
+		<!-- <img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/> 
+		<!-- <iframe src="https://ha.egregius.be/dashboard-deurbel/0" width="800" height="500" frameborder="0" allowfullscreen></iframe> 
+		
+		
+	</div>-->
+	 <div class="camera2">
 		<img class="camerai" id="mjpeg_camera2" src="jpg.php"/>
 	</div>
 	<div class="camera3">
@@ -96,12 +99,12 @@ echo '<div class="navbar" role="navigation">
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-		mycam1=setInterval(getpic1, '.$refresh.');
+//		mycam1=setInterval(getpic1, '.$refresh.');
 		mycam2=setInterval(getpic2, '.$refresh.');
 		mycam3=setInterval(getpic3, '.$refresh.');
-		function getpic1(){
-			try{document.getElementById(\'mjpeg_camera1\').src = "jpg.eufy.php?random="+new Date().getTime();}catch{}
-		}
+//		function getpic1(){
+//			try{document.getElementById(\'mjpeg_camera1\').src = "jpg.eufy.php?random="+new Date().getTime();}catch{}
+//		}
 		function getpic2(){
 			try{document.getElementById(\'mjpeg_camera2\').src = "jpg.php?random="+new Date().getTime();}catch{}
 		}
