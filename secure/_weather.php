@@ -183,30 +183,33 @@ if ($d['buiten_temp']['s']>$avg+0.5) {
 }
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2&&$d['living_temp']['s']>20&&$time>=strtotime("10:00")&&$rain<5) { // Airco Cooling
-		if ($wind>=30) 	 $luifel=0;
-		elseif ($wind>=24) $luifel=45;
+	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>180&&$rain<5) { // Airco Cooling
+		if ($wind>=40) 	 $luifel=0;
+		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
-		else $luifel=45;
+		else $luifel=55;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>21.5 &&$time>=strtotime("11:00")&&$rain<5) { // Passive Cooling
-		if ($wind>=30)  $luifel=0;
-		elseif ($wind>=10) $luifel=35;
-		else $luifel=45;
-		$luifel=0; // In comment zetten om luifel te activeren.
+	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>=20 &&$d['dag']['m']>117&&$rain<5) { // Passive Cooling
+		if ($wind>=40) 	 $luifel=0;
+		elseif ($wind>=30) $luifel=35;
+		elseif ($wind>=20) $luifel=45;
+		else $luifel=55;
+//		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
+			lg(basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']['s'].' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
 			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>23&&$time>=strtotime("11:00")&&$rain<5) { // Neutral
-		if ($wind>=30) 	$luifel=0;
-		elseif ($wind>=10) $luifel=30;
-		else $luifel=40;
-		$luifel=0; // In comment zetten om luifel te activeren.
+	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>=21&&$d['dag']['m']>117&&$rain<5) { // Neutral
+		if ($wind>=40) 	 $luifel=0;
+		elseif ($wind>=30) $luifel=35;
+		elseif ($wind>=20) $luifel=45;
+		else $luifel=55;
+//		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);

@@ -72,6 +72,31 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+// Subscribe covers
+$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
+	try {
+		$d['time']=microtime(true);
+		if (($d['time'] - $startloop) <= 3) return;
+		if (isProcessed($topic,$status,$alreadyProcessed)) return;
+		$path=explode('/',$topic);
+		$device=$path[2];
+		if (($d[$device]['s'] ?? null) === $status) return;
+		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+			if (isset($status)) {
+				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+				$d['lastfetch']=$d['time'] - 30;
+				if ($status === 'null') $status=0;
+				lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				store($device,$status);
+			}
+		}
+		stoploop($d);
+	} catch (Throwable $e) {
+		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+	}
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 // Subscribe sensor states
 $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
 	try {

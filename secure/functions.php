@@ -125,7 +125,11 @@ function sl($name,$level,$msg='',$force=false) {
 			} elseif ($d[$name]['dt']=='r') {
 				lg(basename(__FILE__).':'.__LINE__);
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-				store($name, $level, $msg);
+//				store($name, $level, $msg);
+			} elseif ($d[$name]['dt']=='luifel') {
+				lg(basename(__FILE__).':'.__LINE__);
+				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
+//				store($name, $level, $msg);
 			}
 		}
 	}
