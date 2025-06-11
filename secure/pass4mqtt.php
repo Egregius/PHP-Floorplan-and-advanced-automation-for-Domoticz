@@ -87,6 +87,8 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh',$status);
 			} elseif ($device === 'kookplaatpower_power') {
 				if (($d['kookplaatpower_kwh']['s'] ?? null) !== $status) store('kookplaatpower_kwh',$status);
+			} elseif ($device === 'grohered_power') {
+				if (($d['grohered_kwh']['s'] ?? null) !== $status) store('grohered_kwh',$status);
 			}  elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(float)$status;

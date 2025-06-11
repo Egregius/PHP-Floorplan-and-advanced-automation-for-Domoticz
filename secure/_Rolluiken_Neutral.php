@@ -20,12 +20,12 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 	elseif ($time>=strtotime('17:00')&&$time<strtotime('22:00')) {
-		if ($d['dag']['s']<3&&(($d['kamer_temp']['s']<=18&&$d['alex_temp']['s']<=18)||$d['rkamerr']['s']==100)) {
+		if ($d['dag']['s']<0&&(($d['kamer_temp']['s']<=18&&$d['alex_temp']['s']<=18)||$d['rkamerr']['s']==100)) {
 			foreach ($boven as $i) {
 				if ($d[$i]['s']<50) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		}
-		if ($d['dag']['s']<1) {
+		if ($d['dag']['s']<0) {
 			foreach ($beneden as $i) {
 				if ($d[$i]['s']<50) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}

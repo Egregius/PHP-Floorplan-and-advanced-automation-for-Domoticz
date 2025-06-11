@@ -34,7 +34,7 @@ if ($d['auto']['s']=='On') {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
 		if ($d['lgtv']['s']=='On') {
-			if ($d['dag']['s']<3&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['Buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['dag']['s']<0&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['Buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		}
 	}elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
@@ -105,7 +105,7 @@ if ($d['auto']['s']=='On') {
 		elseif ($past>1800) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
 	}*/
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['dag']['s']>3) {
+	if ($d['dag']['s']>0) {
 		if ($d['rbureel']['s']<40) {
 			if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['lampbureel']['s']=='On') sw('lampbureel', 'Off', basename(__FILE__).':'.__LINE__);
