@@ -12,6 +12,7 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 	}
 	lg('(AJAX)	'.$user.$msg);
 }
+if (isset($_REQUEST['device'])) lg(print_r($_REQUEST,true));
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
 	else $t=$_SERVER['REQUEST_TIME']-1;
@@ -45,6 +46,10 @@ if (isset($_REQUEST['t'])) {
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
+elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['command']=='eufy') {
+	lg('Starting Eufy stream');
+	shell_exec('/var/www/html/secure/eufystartstream.php > /dev/null 2>/dev/null &');
+}
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db=dbconnect();
 	$time=time();

@@ -37,7 +37,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 30;
+			$d['lastfetch']=$d['time'] - 300;
 			if (isset($status)) {
 				$status=ucfirst($status);
 				lg('mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
@@ -63,7 +63,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 30;
+				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				else $status=round((float)$status / 2.55);
 				lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
@@ -87,10 +87,10 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 			$d['time']=microtime(true);
 //			if (($d['time'] - $startloop) <= 3) return;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d[$device]['s'] ?? null) === $status) {lg(__LINE__);return;}
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 30;
+				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 //				include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -115,7 +115,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if (($d[$device]['s'] ?? null) === $status) return;
 			lg('mqtt '.__LINE__.' |sensor |state |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 30;
+			$d['lastfetch']=$d['time'] - 300;
 			if ($device === 'powermeter_kwh') {
 				include '/var/www/html/secure/pass2php/powermeter_kwh.php';
 			} elseif ($device === 'powermeter_power') {
@@ -223,7 +223,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			}*/
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 30;
+			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';
