@@ -7,7 +7,6 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	$result = $mysqli->query("select n,s,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
-		$d[$row['n']]['i'] = $row['i'];
 		$d[$row['n']]['s'] = $row['s'];
 		$d[$row['n']]['t'] = $row['t'];
 		$d[$row['n']]['m'] = $row['m'];

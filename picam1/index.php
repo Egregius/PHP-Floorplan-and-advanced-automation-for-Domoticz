@@ -82,8 +82,8 @@ echo '<div class="navbar" role="navigation">
 		<input type="submit" value="Archief" name="Archief" class="btn b8"/>
 	</form>
 	</div>
-<!--	<div class="camera1">
-		<!-- <img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/> 
+	<div class="camera1">
+		<!-- <img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/> -->
 		<iframe src="https://ha.egregius.be/dashboard-deurbel/0" width="800" height="500" frameborder="0" allowfullscreen></iframe> 
 		
 		
