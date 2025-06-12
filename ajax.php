@@ -12,7 +12,7 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 	}
 	lg('(AJAX)	'.$user.$msg);
 }
-if (isset($_REQUEST['device'])) lg(print_r($_REQUEST,true));
+//if (isset($_REQUEST['device'])) lg(print_r($_REQUEST,true));
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
 	else $t=$_SERVER['REQUEST_TIME']-1;
@@ -49,6 +49,13 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['c
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['command']=='eufy') {
 	lg('Starting Eufy stream');
 	shell_exec('/var/www/html/secure/eufystartstream.php > /dev/null 2>/dev/null &');
+	$d=array();
+	$db=dbconnect();
+	$stmt=$db->query("SELECT n,s FROM devices WHERE n IN ('voordeur','dag');");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+		$d[$row['n']]['s']=$row['s'];
+	}
+	if ($d['dag']['s']<-5) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 }
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db=dbconnect();
