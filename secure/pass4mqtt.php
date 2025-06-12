@@ -20,17 +20,22 @@ $connectionSettings=(new ConnectionSettings)
 $mqtt=new MqttClient('192.168.2.26',1883,'pass4mqtt',MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
+$validDevices = [];
+foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
+	$basename = basename($file, '.php');
+	$validDevices[$basename] = true;
+}
 
 // Subscribe switch states
-$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
+$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 3) return;
-		if (isProcessed($topic,$status,$alreadyProcessed)) return;
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (($d[$device]['s'] ?? null) === $status) return;
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+			if (($d['time'] - $startloop) <= 3) return;
+			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 30;
 			if (isset($status)) {
@@ -47,15 +52,15 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe light brightness
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
+$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 3) return;
-		if (isProcessed($topic,$status,$alreadyProcessed)) return;
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (($d[$device]['s'] ?? null) === $status) return;
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+			if (($d['time'] - $startloop) <= 3) return;
+			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 30;
@@ -73,21 +78,22 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe covers
-$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
+$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 3) return;
-		if (isProcessed($topic,$status,$alreadyProcessed)) return;
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (($d[$device]['s'] ?? null) === $status) return;
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+		if ($device=='rwaskamer') lg($topic.' ==> '.$status);
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+//			if (($d['time'] - $startloop) <= 3) return;
+//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 30;
 				if ($status === 'null') $status=0;
 				lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
+//				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status);
 			}
 		}
@@ -98,15 +104,15 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe sensor states
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use (&$d,&$startloop,&$alreadyProcessed) {
-	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 3) return;
-		if (isProcessed($topic,$status,$alreadyProcessed)) return;
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
+	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (($d[$device]['s'] ?? null) === $status) return;
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {		
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+			if (($d['time'] - $startloop) <= 3) return;
+			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
 			lg('mqtt '.__LINE__.' |sensor |state |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 30;
@@ -158,22 +164,23 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 // Subscribe binary_sensor states
 $lastKeypress = [];
 
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use (&$d, &$alreadyProcessed, &$lastKeypress, $startloop) {
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastKeypress) {
 	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 5) return;
 		$path = explode('/', $topic);
 		$device = $path[2];
-		$status = ucfirst(strtolower(trim($status, '"')));
-		$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
-		if ($isStateless) {
-			if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
-			$lastKeypress[$topic] = $d['time'];
-		}/* else {
-			if (isProcessed($topic, $status, $alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
-		}*/
-		if (file_exists('/var/www/html/secure/pass2php/' . $device . '.php')) {
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+			if (($d['time'] - $startloop) <= 5) return;
+			
+			$status = ucfirst(strtolower(trim($status, '"')));
+			$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
+			if ($isStateless) {
+				if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
+				$lastKeypress[$topic] = $d['time'];
+			}/* else {
+				if (isProcessed($topic, $status, $alreadyProcessed)) return;
+				if (($d[$device]['s'] ?? null) === $status) return;
+			}*/
 			$d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
 			$d['lastfetch'] = $d['time'] - 30;
 			if ($device === 'achterdeur') {
@@ -198,22 +205,22 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe event types
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use (&$d, &$alreadyProcessed, &$lastKeypress, $startloop) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastKeypress) {
 	try {
-		$d['time']=microtime(true);
-		if (($d['time'] - $startloop) <= 3) return;
 		$path=explode('/',$topic);
 		$device=$path[2];
-		$status = ucfirst(strtolower(trim($status, '"')));
-		$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
-		if ($isStateless) {
-			if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
-			$lastKeypress[$topic] = $d['time'];
-		}/* else {
-			if (isProcessed($topic, $status, $alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
-		}*/
-		if (file_exists('/var/www/html/secure/pass2php/'.$device.'.php')) {
+		if (isset($validDevices[$device])) {
+			$d['time']=microtime(true);
+			if (($d['time'] - $startloop) <= 3) return;
+			$status = ucfirst(strtolower(trim($status, '"')));
+			$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
+			if ($isStateless) {
+				if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
+				$lastKeypress[$topic] = $d['time'];
+			}/* else {
+				if (isProcessed($topic, $status, $alreadyProcessed)) return;
+				if (($d[$device]['s'] ?? null) === $status) return;
+			}*/
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 30;
