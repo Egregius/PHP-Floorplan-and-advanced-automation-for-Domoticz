@@ -84,10 +84,10 @@ echo '<div class="navbar" role="navigation">
 	</div>
 <!--	<div class="camera1">
 		<!-- <img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/> 
-		<!-- <iframe src="https://ha.egregius.be/dashboard-deurbel/0" width="800" height="500" frameborder="0" allowfullscreen></iframe> 
+		<iframe src="https://ha.egregius.be/dashboard-deurbel/0" width="800" height="500" frameborder="0" allowfullscreen></iframe> 
 		
 		
-	</div>-->
+	</div>
 	 <div class="camera2">
 		<img class="camerai" id="mjpeg_camera2" src="jpg.php"/>
 	</div>
