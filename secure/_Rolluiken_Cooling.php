@@ -3,7 +3,7 @@ $user=basename(__FILE__);
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rbureel','rkeukenl','rkeukenr');
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>0))&&$time<strtotime('8:30')) {
+	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>-3))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);
@@ -11,7 +11,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['ralex']['s']>0&&$time>=$t+1800&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
-		if ($d['dag']['s']>0) {
+		if ($d['dag']['s']>-3) {
 			if ($d['lgtv']['s']!='On') {
 				foreach ($beneden as $i) {
 					if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -21,15 +21,15 @@ if ($d['auto']['s']=='On') {
 	}
 
 	elseif ($d['dag']['m']>118&&$time<strtotime('15:00')) {
-		if($d['zon']>2000) {
+		if($d['zon']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['rwaskamer']['s']<83) sl('rwaskamer', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['ralex']['s']<83) sl('ralex', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['weg']['s']>1&&$d['rliving']['s']<86&&$d['living_temp']['s']>21) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
-	elseif ($d['dag']['m']>270&&$time<strtotime('22:00')) {
-		if($d['zon']>2000) {
+	elseif ($d['dag']['m']>220&&$time<strtotime('22:00')) {
+		if($d['zon']>1500) {
 			if ($d['raamwaskamer']['s']=='Closed'&&$d['ralex']['s']<50) sl('rwaskamer', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']['s']=='Closed'&&$d['ralex']['s']<83) sl('ralex', 83, basename(__FILE__).':'.__LINE__);
 			if ($d['rbureel']['s']<30&&$d['living_temp']['s']>=20.5) sl('rbureel', 30, basename(__FILE__).':'.__LINE__);
