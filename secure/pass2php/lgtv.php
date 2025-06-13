@@ -1,8 +1,8 @@
 <?php
 if ($status=='On') {
-//	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //	$d['time']=time();
-//	if ($d['time']>=strtotime('18:00')) {
+//	if ($d['time']>=strtotime('19:00')) {
 //		if ($d['kristal']['s']=='Off'&&$d['Buiten_temp']['s']<10&) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 //		if ($d['heating']['s']>0&&$d['Buiten_temp']['s']<10&&$d['rliving']['s']<100) sl('rliving', 100, basename(__FILE__).':'.__LINE__);
 //		elseif ($d['rliving']['s']<25) sl('rliving', 25, basename(__FILE__).':'.__LINE__);

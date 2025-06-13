@@ -4,7 +4,7 @@ PASS4MQTT=true
 MQTTREPUBLISHDOMOTICZ=false
 ENERGY=true
 CRON=true
-CRON2=true
+CRON2=false
 
 i=1
 while [ $i -lt 6 ]; do

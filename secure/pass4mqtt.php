@@ -245,6 +245,25 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+// Subscribe sensor states
+$mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
+	try {	
+		$path=explode('/',$topic);
+		$device=$path[2];
+		if (isset($validDevices[$device])) {
+			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
+			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+			$d['lastfetch']=$d['time'] - 300;
+			$status = ucfirst(strtolower(trim($status, '"')));
+			store($device,$status);
+		}
+		stoploop($d);
+	} catch (Throwable $e) {
+		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+	}
+},MqttClient::QOS_AT_LEAST_ONCE);
+
+
 // Main loop with incremental sleep
 $sleepMicroseconds=10000;
 $maxSleep=500000;
