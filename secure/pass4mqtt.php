@@ -38,7 +38,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
-			if (!is_null($status)) {
+			if (!is_null($status)&&($status=='on'||$status=='off')) {
 				$status=ucfirst($status);
 				lg('mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
