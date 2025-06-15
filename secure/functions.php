@@ -548,13 +548,13 @@ function hasstoken() {
 		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2YmQ0NDZjNTgyZTY0NDU5YTkxNmE4ZThmZDVhNWFjNCIsImlhdCI6MTc0OTMxODM1NywiZXhwIjoyMDY0Njc4MzU3fQ.S6oPTz8PrEChIU2Ogx4qFgcCBLzKy8tLeFKA_NfDbH8';
 	}
 }
-function hass($domain,$service,$entity) {
+function hass($domain,$service,$entity='') {
 	lg('HASS '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
 	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
-	curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
+	if ($entity!='') curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);

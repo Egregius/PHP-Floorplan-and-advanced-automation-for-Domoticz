@@ -12,6 +12,7 @@ $d=fetchdata(0,'test.php');
 //hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3200');
 //hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //hass('input_button','press','input_button.wakeipad');
+hass('backup','create_automatic');
 
 //echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);
 
