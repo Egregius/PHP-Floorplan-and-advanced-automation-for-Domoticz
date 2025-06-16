@@ -3,7 +3,7 @@ $user=basename(__FILE__);
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rbureel','rkeukenl','rkeukenr');
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>-3))&&$time<strtotime('8:30')) {
+	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>-4))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);

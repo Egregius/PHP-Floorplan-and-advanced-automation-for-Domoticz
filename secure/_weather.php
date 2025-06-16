@@ -183,14 +183,14 @@ if ($d['buiten_temp']['s']>$avg+0.5) {
 }
 
 if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>180&&$rain<5) { // Airco Cooling
+	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>117&&$rain<5) { // Airco Cooling
 		if ($wind>=40) 	 $luifel=0;
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']['s']<$luifel&&$d['zon']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>=20 &&$d['dag']['m']>117&&$rain<5) { // Passive Cooling

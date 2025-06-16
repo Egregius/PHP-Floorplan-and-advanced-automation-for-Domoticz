@@ -123,11 +123,11 @@ function sl($name,$level,$msg='',$force=false) {
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
 	//			store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='r') {
-				lg(basename(__FILE__).':'.__LINE__);
+//				lg(basename(__FILE__).':'.__LINE__);
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
 //				store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='luifel') {
-				lg(basename(__FILE__).':'.__LINE__);
+//				lg(basename(__FILE__).':'.__LINE__);
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
 //				store($name, $level, $msg);
 			}
