@@ -1,5 +1,4 @@
 <?php
-$user='heating';
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;

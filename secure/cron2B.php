@@ -16,13 +16,13 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 			}
 
-			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-				bosezone($ip);
-				if ($ip>101) {
-					usleep(500000);
-					bosevolume($vol, $ip);
-				}
-			}
+//			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
+//				bosezone($ip);
+//				if ($ip>101) {
+//					usleep(500000);
+//					bosevolume($vol, $ip);
+//				}
+//			}
 			if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
 				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {

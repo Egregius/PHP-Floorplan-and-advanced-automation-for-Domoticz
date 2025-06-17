@@ -25,7 +25,7 @@ while (1){
 		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
 		$lastfetch=$time-20;
 		include '_cron10.php';
-		$user=' TC '.$d['heating']['s'];
+		$user='heating';
 //			$s=date('s');
 		$t=t();
 		if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';

@@ -1,5 +1,4 @@
 <?php
-$user=basename(__FILE__);
 if ($d['brander']['s']=='On') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 	foreach (array('living', 'kamer', 'alex') as $k) {

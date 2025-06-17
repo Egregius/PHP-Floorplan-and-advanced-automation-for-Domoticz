@@ -1,5 +1,4 @@
 <?php
-$user=basename(__FILE__);
 if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {

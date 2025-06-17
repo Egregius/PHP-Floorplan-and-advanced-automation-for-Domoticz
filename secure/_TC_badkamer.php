@@ -1,5 +1,4 @@
 <?php
-$user=basename(__FILE__);
 $m='';$m2='';
 $l=0;
 

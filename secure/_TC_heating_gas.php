@@ -1,5 +1,4 @@
 <?php
-$user=basename(__FILE__);
 $kamers=array('living',/*'kamer','alex','badkamer'*/);
 foreach ($kamers as $kamer) {
 	${'dif'.$kamer}=number_format($d[$kamer.'_temp']['s']-$d[$kamer.'_set']['s'],1);
