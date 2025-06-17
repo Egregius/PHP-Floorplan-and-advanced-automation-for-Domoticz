@@ -95,7 +95,7 @@ function idx($name) {
 	if ($d[$name]['i']>0) return $d[$name]['i'];
 	else return 0;
 }
-function sl($name,$level,$msg='',$force=false) {
+function sl($name,$level,$msg='',$force=false,$temp=0) {
 	global $d,$user;
 	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
@@ -106,15 +106,16 @@ function sl($name,$level,$msg='',$force=false) {
 		}
 	} else {
 		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
-		if ($d[$name]['s']!=$level||$force==true) {
-			if ($d[$name]['dt']=='hd') {
+		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
+			if ($temp>0||$d[$name]['dt']=='hd') {
 				lg('[hsw] '.$name.'>'.$level.' '.$msg,4);
-				if ($d['dag']['s']>12) $temp=3400;
-				elseif ($d['dag']['s']>9) $temp=3200;
-				elseif ($d['dag']['s']>6) $temp=3000;
-				elseif ($d['dag']['s']>3) $temp=2850;
-				else $temp=2700;
-				
+				if ($temp==0) {
+					if ($d['dag']['s']>12) $temp=3400;
+					elseif ($d['dag']['s']>9) $temp=3200;
+					elseif ($d['dag']['s']>6) $temp=3000;
+					elseif ($d['dag']['s']>3) $temp=2850;
+					else $temp=2700;
+				}				
 				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
 	//			store($name, $level, $msg);
@@ -180,7 +181,7 @@ function store($name='',$status='',$msg='',$idx=null) {
 	global $db, $user;
 	$time=time();
 	if ($idx>0) {
-		$sql="UPDATE devices SET s='$status',t='$time' WHERE i=$idx";
+		$sql="UPDATE devices SET s='$status',t='$time' WHERE n='$name'";
 	} else $sql="INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';";
 	$db->query($sql);
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);

@@ -12,14 +12,40 @@ $d=fetchdata(0,'test.php');
 //hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3200');
 //hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //hass('input_button','press','input_button.wakeipad');
-hass('backup','create_automatic');
+//hass('backup','create_automatic');
 
 //echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);
 
 //file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
-
-shell_exec('/var/www/html/secure/eufystartstream.php > /dev/null 2>/dev/null &');
-
+$lights=array(
+	1=>'eettafel',
+	2=>'bureel',
+	3=>'zithoek'
+);
+for($x=1;$x<=10000;$x++) {
+	if ($x%4==0) $lamp=4;
+	elseif($x%3==0) $lamp=3;
+	elseif($x%2==0) $lamp=2;
+	else $lamp=1;
+	if ($x%12==0) $device='eettafel';
+	elseif ($x%11==0) $device='eettafel';
+	elseif ($x%10==0) $device='eettafel';
+	elseif ($x%9==0) $device='eettafel';
+	elseif ($x%8==0) $device='zithoek';
+	elseif ($x%7==0) $device='zithoek';
+	elseif ($x%6==0) $device='zithoek';
+	elseif ($x%5==0) $device='zithoek';
+	elseif ($x%4==0) $device='bureel';
+	elseif ($x%3==0) $device='bureel';
+	elseif ($x%2==0) $device='bureel';
+	elseif ($x%1==0) $device='bureel';
+	$device=$device.$lamp;
+	$level=rand(0,100);
+	$temp=rand(2202,6535);
+	sl($device, $level , basename(__FILE__).':'.__LINE__, true, $temp);	
+	echo $device.' '.$level.' '.$temp.'<br>';
+	usleep(7692);
+}
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
