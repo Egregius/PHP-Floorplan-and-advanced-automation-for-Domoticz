@@ -3,7 +3,7 @@ $user=basename(__FILE__);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
-	foreach(array(101=>12,102=>35,103=>35,104=>35,105=>35,106=>35,107=>35) as $ip=>$vol) {
+	foreach(array(101=>8,102=>32,103=>32,104=>32,105=>32,106=>32,107=>32) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
@@ -16,13 +16,13 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 			}
 
-//			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-//				bosezone($ip);
-//				if ($ip>101) {
-//					usleep(500000);
-//					bosevolume($vol, $ip);
-//				}
-//			}
+			if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
+				bosezone($ip);
+				if ($ip>101) {
+					usleep(500000);
+					bosevolume($vol, $ip);
+				}
+			}
 			if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
 				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 			} elseif (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='STANDBY') {
