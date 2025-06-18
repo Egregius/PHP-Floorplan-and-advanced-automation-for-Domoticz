@@ -15,9 +15,12 @@ function t() {
 function fliving() {
 	global $d,$time,$t;
 	if ($d['media']['s']=='Off'&&$d['bureel1']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		if (($d['zon']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
+		if (($d['zon']==0&&$d['dag']['s']<-2)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
-			if ($d['eettafel']['s']==0&&$time<$am&&$d['bureel1']['s']=='Off') hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3000');
+			if ($d['eettafel']['s']==0&&$time<$am) {
+				if ($d['bureel1']['s']<20) sl('bureel1', 20, basename(__FILE__).':'.__LINE__);
+				if ($d['bureel2']['s']<20) sl('bureel2', 20, basename(__FILE__).':'.__LINE__);
+			}
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -108,13 +111,13 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
-				lg('[hsw] '.$name.'>'.$level.' '.$msg,4);
+//				lg('[hsw] '.$name.'>'.$level.' '.$msg,4);
 				if ($temp==0) {
 					if ($d['dag']['s']>12) $temp=3400;
-					elseif ($d['dag']['s']>9) $temp=3200;
+					elseif ($d['dag']['s']>8) $temp=3200;
 					elseif ($d['dag']['s']>6) $temp=3000;
-					elseif ($d['dag']['s']>3) $temp=2850;
-					else $temp=2700;
+					elseif ($d['dag']['s']>2) $temp=2850;
+					else $temp=2750;
 				}				
 				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
@@ -572,21 +575,15 @@ function hass($domain,$service,$entity='') {
 	curl_close($ch);
 }
 function hassopts($domain,$service,$entity,$data) {
-//	lg('HASS '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
 	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
 	$data['entity_id']=$entity;
-	$data=json_encode($data);
-//	lg($data);
-	curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
-//	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-//	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode($data));
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$response=curl_exec($ch);
+	curl_exec($ch);
 	curl_close($ch);
-//	if (strlen($response)>0) lg($data);
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
@@ -598,8 +595,7 @@ function hassinput($domain,$service,$entity,$input) {
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
 	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$response=curl_exec($ch);
-//	if (strlen($response)>5) lg('hassinput: '.$response);
+	curl_exec($ch);
 	curl_close($ch);
 }
 function hassget() {

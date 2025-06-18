@@ -1,7 +1,7 @@
 <?php
-$user=basename(__FILE__);
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
-$beneden=array('rbureel','rkeukenl','rkeukenr');
+$beneden=array('rkeukenl','rkeukenr','rbureel');
+$benedenall=array('rkeukenl','rkeukenr','rbureel','rliving');
 if ($d['auto']['s']=='On') {
 	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>-4))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
@@ -11,7 +11,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['ralex']['s']>0&&$time>=$t+1800&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
-		if ($d['dag']['s']>-3) {
+		if ($d['dag']['s']>-4) {
 			if ($d['lgtv']['s']!='On') {
 				foreach ($beneden as $i) {
 					if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -37,7 +37,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	elseif ($time>=strtotime('22:00')||$time<strtotime('3:00')) {
+	elseif ($d['dag']['s']<-5||$time<strtotime('3:00')) {
 		if ($d['weg']['s']>0) {
 			foreach ($benedenall as $i) {
 				if ($d[$i]['s']<88) sl($i, 100, basename(__FILE__).':'.__LINE__);
