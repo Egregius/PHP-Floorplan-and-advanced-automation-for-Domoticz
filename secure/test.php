@@ -17,9 +17,8 @@ $d=fetchdata(0,'test.php');
 //echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);
 
 //file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
-sl('bureel1', 20);
-sl('bureel2', 20);
-				
+hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+
 /*				
 $lights=array(
 	1=>'eettafel',

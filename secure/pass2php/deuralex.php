@@ -11,9 +11,9 @@ if ($status!=$d['deuralex']['s']) {
 					if ($d['rbureel']['s']>0) sl('rbureel', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['rkeukenl']['s']>0) sl('rkeukenl', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['rkeukenr']['s']>0) sl('rkeukenr', 0, basename(__FILE__).':'.__LINE__);
-					bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
+					bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
 				}
-			} elseif ($d['time']>strtotime('7:00')&&$d['time']<strtotime('9:00')) bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 	if ($d['weg']['s']>1) {
