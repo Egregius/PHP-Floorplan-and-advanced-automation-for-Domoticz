@@ -119,7 +119,8 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 					elseif ($d['dag']['s']>2) $temp=2850;
 					else $temp=2750;
 				}				
-				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
+				if ($level>0&&$temp==0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level/*,"color_temp_kelvin"=>$temp*/));
+				elseif ($level>0&&$temp>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
 	//			store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='d') {
