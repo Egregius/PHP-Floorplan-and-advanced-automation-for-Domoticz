@@ -1,5 +1,5 @@
 <?php
-$today=date("Y-m-d");
+/*$today=date("Y-m-d");
 
 $dbf=new PDO("mysql:host=192.168.2.20;dbname=fuel;charset=utf8", 'fuel', 'pmHIaRmBaCaP61qR');
 $dbf->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -16,3 +16,4 @@ if ($vandaag>0) {
 	$opts=array(':idcar'=>2,':stamp'=>$today,':kWh'=>$vandaag);
 	$stmtf->execute($opts);
 }
+*/

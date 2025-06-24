@@ -41,8 +41,6 @@ if ($status=='On') {
 			waarschuwing(' Let op! Bose buiten10');
 			exit;
 		}
-		sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__,true);
-		storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>8,'ringtone_vol'=>50]);
 		huisslapen(true);

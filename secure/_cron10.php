@@ -74,14 +74,6 @@ elseif ($d['grohered']['s']=='On'&&$pastgrohe>3600&&past('$ 8keuken8')>1800&&$d[
 
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['powermeter']['s']=='On'&&($d['avg']>$d['powermeter']['m']||$d['weg']['s']>=2)) {
-	sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__.' Auto laden uit, te veel verbruik');
-	storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
-} elseif ($d['weg']['s']==0&&$d['powermeter']['s']=='Off'&&$d['avg']<100&&$d['net']<-2500&&$d['grohered']['s']=='On') {
-	mset('powermeter',$time);
-	storemode('powermeter', 500, basename(__FILE__).':'.__LINE__);
-	sw('powermeter', 'On', basename(__FILE__).':'.__LINE__.' Te veel verbruik');
-}
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 
 if ($d['weg']['m']==2) {
