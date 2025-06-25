@@ -46,7 +46,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		#volume{width:99vw;}
 		#bass{width:99vw;}
 		.volume{width:8.4%;height:50px;padding:0!important;margin:0 0.3%;}
-		#playlist{font-size:33px;left:4px;font-weight:500;}
+		#playlist{font-size:33px;top:4px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
 	</style>
 	<script type="text/javascript" src="/scripts/jQuery.js"></script>
