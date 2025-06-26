@@ -11,12 +11,12 @@ if (isset($_REQUEST['ip'])) {
 }
 $boses=array(
 	101=>'Living',
-	102=>'Keuken',
-	103=>'boven',
-	104=>'104',
+	102=>'102',
+	103=>'Boven',
+	104=>'Garage',
 	105=>'10-Wit',
 	106=>'Buiten20',
-	107=>'107',
+	107=>'Keuken',
 );
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
