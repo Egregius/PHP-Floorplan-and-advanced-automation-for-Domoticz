@@ -59,9 +59,10 @@ function huisslapen($weg=false) {
 	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras','ledluifel'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock','zetel'), 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
+	foreach (array('living_set','alex_set','kamer_set','badkamer_set','luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
+	hass('script', 'turn_on', 'script.alles_uitschakelen_via_label_uit_bij_weg');
 }
 function huisthuis($msg='') {
 	store('weg', 0);
@@ -81,7 +82,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 function waarschuwing($msg) {
 	telegram($msg, false, 1);
 	hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>60]);
-//	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 //	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
 //	sleep(10);
 //	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
@@ -561,18 +562,30 @@ function hasstoken() {
 		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 	}
 }
-function hass($domain,$service,$entity='') {
+function hass($domain, $service, $entity = '', $target = []) {
 	lg('HASS '.$domain.' '.$service.' '.$entity,4);
-	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
-	curl_setopt($ch,CURLOPT_POST,1);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
-	if ($entity!='') curl_setopt($ch,CURLOPT_POSTFIELDS,'{"entity_id":"'.$entity.'"}');
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
-	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$response=curl_exec($ch);
-//	if (strlen($response)>0) lg($response);
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/' . $domain . '/' . $service);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, [
+		'Content-Type: application/json',
+		'Authorization: Bearer ' . hasstoken()
+	]);
+
+	$data = [];
+	if ($entity != '') $data['entity_id'] = $entity;
+	if (!empty($target)) $data['target'] = $target;
+
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+
+	$response = curl_exec($ch);
+	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	if ($httpcode != 200) {
+		lg("HASS API ERROR $httpcode: $response", 1);
+	}
 	curl_close($ch);
 }
 function hassopts($domain,$service,$entity,$data) {
@@ -609,6 +622,26 @@ function hassget() {
 	$response=curl_exec($ch);
 	curl_close($ch);
 	return $response;
+}
+function hass_entities_by_label($label_slug) {
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/labels');
+	curl_setopt($ch, CURLOPT_HTTPHEADER, [
+		'Content-Type: application/json',
+		'Authorization: Bearer ' . hasstoken()
+	]);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$response = curl_exec($ch);
+	curl_close($ch);
+	lg('LABELS API RAW RESPONSE: '.$response, 4); // ← toevoegen
+	$labels = json_decode($response, true);
+
+	foreach ($labels as $label) {
+		if ($label['slug'] === $label_slug) {
+			return $label['associated_entities'] ?? [];
+		}
+	}
+	return [];
 }
 function hassservices() {
 	$ch=curl_init();
