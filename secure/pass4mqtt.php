@@ -67,9 +67,11 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				else $status=round((float)$status / 2.55);
-				lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if ($d[$device]['s']!=$status) store($device,$status,'',1);
+				if ($d[$device]['s']!=$status) {
+					lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+					store($device,$status,'',1);
+				}
 			}
 		}
 		stoploop($d);
@@ -93,9 +95,11 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
-				lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
+				if ($d[$device]['s']!=$status) {
 //				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if ($d[$device]['s']!=$status) store($device,$status,'',1);
+					lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
+					store($device,$status,'',1);
+				}
 			}
 		}
 		stoploop($d);
@@ -162,9 +166,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe binary_sensor states
-$lastKeypress = [];
-
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastKeypress) {
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed) {
 	try {
 		$path = explode('/', $topic);
 		$device = $path[2];
@@ -173,14 +175,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if (($d['time'] - $startloop) <= 5) return;
 			
 			$status = ucfirst(strtolower(trim($status, '"')));
-			$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
-			if ($isStateless) {
-				if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
-				$lastKeypress[$topic] = $d['time'];
-			}/* else {
-				if (isProcessed($topic, $status, $alreadyProcessed)) return;
-				if (($d[$device]['s'] ?? null) === $status) return;
-			}*/
 			$d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
 			$d['lastfetch'] = $d['time'] - 30;
 			if ($device === 'achterdeur') {
@@ -192,10 +186,10 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);
 			}
-			if (isset($status)) {
+			if (isset($status)&&$d[$device]['s']!=$status) {
 				lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
-				if ($d[$device]['s']!=$status) store($device, $status,'',1);
+				store($device, $status,'',1);
 			}
 		}
 		stoploop($d);
@@ -205,7 +199,8 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe event types
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastKeypress) {
+$lastEvent=0;
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -213,14 +208,9 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			$d['time']=microtime(true);
 			if (($d['time'] - $startloop) <= 3) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
-			$isStateless = in_array($status, ['Keypressed', 'Keypressed2x', 'On', 'Off']);
-			if ($isStateless) {
-				if (isset($lastKeypress[$topic]) && ($d['time'] - $lastKeypress[$topic]) < 1) return;
-				$lastKeypress[$topic] = $d['time'];
-			}/* else {
-				if (isProcessed($topic, $status, $alreadyProcessed)) return;
-				if (($d[$device]['s'] ?? null) === $status) return;
-			}*/
+			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 2) return;
+			else lg($device.' '.$lastEvent.' >>> OK, meer dan 2 seconden geleden');
+			$lastEvent = $d['time'];
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
@@ -251,12 +241,14 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 			$d['time']=microtime(true);
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			$status = ucfirst(strtolower(trim($status, '"')));
-			if ($d[$device]['s']!=$status) store($device,$status,'',1);
+			if ($d[$device]['s']!=$status) {
+				lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
+				store($device,$status,'',1);
+			}
 		}
 		stoploop($d);
 	} catch (Throwable $e) {
