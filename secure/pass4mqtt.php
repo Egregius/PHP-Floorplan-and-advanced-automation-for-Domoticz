@@ -31,8 +31,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 
 // Subscribe switch states
 $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
-	try {
-		
+	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {

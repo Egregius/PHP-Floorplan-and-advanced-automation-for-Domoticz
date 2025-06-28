@@ -23,6 +23,7 @@ while (1){
 	$time=time();
 	if ($time%10==0) {
 		$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
+		$d['time']=$time;
 		$lastfetch=$time-20;
 		include '_cron10.php';
 		$user='heating';
