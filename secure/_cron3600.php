@@ -21,19 +21,19 @@ foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,2
 $remove=date('Y-m-d H:i:s', $time-(86400*100));
 $stmt=$db->query("delete from temp where stamp < '$remove'");
 
-
-
-
-@$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
-if (isset($data->CivTwilightStart)) {
-	$CivTwilightStart=strtotime($data->CivTwilightStart);
-	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
-	$Sunrise=strtotime($data->Sunrise);
-	$Sunset=strtotime($data->Sunset);
+$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
+$response = @file_get_contents($url);
+$data = json_decode($response, true);
+if (isset($data['results'])) {
+	$results = $data['results'];
+	$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
+	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
+	$Sunrise = isoToLocalTimestamp($results['sunrise']);
+	$Sunset = isoToLocalTimestamp($results['sunset']);
 	mset('sunrise', array(
-		'CivTwilightStart'=>date('G:i', $CivTwilightStart),
-		'CivTwilightEnd'=>date('G:i', $CivTwilightEnd),
-		'Sunrise'=>date('G:i', $Sunrise),
-		'Sunset'=>date('G:i', $Sunset),
+		'CivTwilightStart' => date('G:i', $CivTwilightStart),
+		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
+		'Sunrise' => date('G:i', $Sunrise),
+		'Sunset' => date('G:i', $Sunset),
 	));
-}// else lg('Error fetching CivTwilightStart from domoticz');
+}

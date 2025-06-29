@@ -149,25 +149,3 @@ if ($d['auto']['s']=='On') {
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/
 
 if ($d['luifel']['s']==0&&$d['ledluifel']['s']>0) sl('ledluifel', 0, basename(__FILE__).':'.__LINE__);
-
-@$data=json_decode(file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1'));
-if (isset($data->CivTwilightStart)) {
-	$CivTwilightStart=strtotime($data->CivTwilightStart);
-	$CivTwilightEnd=strtotime($data->CivTwilightEnd);
-	$Sunrise=strtotime($data->Sunrise);
-	$Sunset=strtotime($data->Sunset);
-	$dag=0;
-	if ($time>=$CivTwilightStart&&$time<=$CivTwilightEnd) {
-		$dag=1;
-		if ($time>=$Sunrise&&$time<=$Sunset) {
-			if ($time>=$Sunrise+900&&$time<=$Sunset-900) $dag=4;
-			else $dag=3;
-		} else {
-			$zonop=($CivTwilightStart+$Sunrise)/2;
-			$zononder=($CivTwilightEnd+$Sunset)/2;
-			if ($time>=$zonop&&$time<=$zononder) $dag=2;
-		}
-	}
-	$prevdag=mget('dag');
-	if ($dag!=$prevdag) mset('dag',$dag);
-}// else lg('Error fetching CivTwilightStart from domoticz');
