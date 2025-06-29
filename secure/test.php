@@ -15,7 +15,10 @@ $d=fetchdata(0,'test.php');
 //hass('backup','create_automatic');
 //hass('script', 'turn_on', 'script.alles_uitschakelen_via_label_uit_bij_weg');
 
-	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
+//	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
+
+sync_devices_if_changed($db, $d);
+//print_r($d);
 
 
 //echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);

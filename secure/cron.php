@@ -1,6 +1,9 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+$db=dbconnect();
+load_devices_from_disk_if_empty($db);
+
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
 $lastfetch=$time-20;

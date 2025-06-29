@@ -10,8 +10,11 @@ use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 lg('Starting MQTT loop...',-1);
-
 $user='MQTT';
+
+$db=dbconnect();
+load_devices_from_disk_if_empty($db);
+
 $d=fetchdata(0,'mqtt:'.__LINE__);
 $startloop=microtime(true);
 $d['lastfetch']=$startloop;
