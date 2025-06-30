@@ -676,6 +676,7 @@ function dbconnect() {
 		} else {
 			lg('dbconnect	'.__LINE__.'	|PDO fout: '.$e->getMessage());
 			throw $e;
+			exit;
 		}
 	}
 	return $db;

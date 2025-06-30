@@ -10,7 +10,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['pirzolderg']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolderg')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
 	if ($d['weg']['s']==0&&$d['pirinkom']['s']=='Off'&&$d['deurvoordeur']['s']=='Closed'&&$d['inkom']['s']>0&&past('inkom')>$i&&past('pirinkom')>$i&&past('deurwc')>12&&past('deurinkom')>12&&past('deurbadkamer')>25&&past('deurvoordeur')>45) {
-		foreach (array(29,28,0) as $i) {
+		foreach (array(29,27,0) as $i) {
 			if ($d['inkom']['s']>$i) {
 				sl('inkom', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -19,7 +19,7 @@ if ($d['auto']['s']=='On') {
 	}
 	$i=5;
 	if ($d['weg']['s']==0&&$d['pirhall']['s']=='Off'&&$d['hall']['s']>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
-		foreach (array(29,28,0) as $i) {
+		foreach (array(29,27,0) as $i) {
 			if ($d['hall']['s']>$i) {
 					sl('hall', $i, basename(__FILE__).':'.__LINE__);
 				break;
@@ -46,8 +46,8 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['lgtv']['s']=='On'&&$time>strtotime('19:00')) $i=5;
-		else $i=35;
+		if ($d['lgtv']['s']=='On') $i=5;
+		else $i=25;
 		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 			foreach (array(5,0) as $i) {
 				if ($d['wasbak']['s']>$i) {
