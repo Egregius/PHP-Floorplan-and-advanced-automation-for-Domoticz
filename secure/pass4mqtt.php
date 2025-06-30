@@ -214,7 +214,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			if (($d['time'] - $startloop) <= 3) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-			else lg($device.' '.$lastEvent.' >>> OK, meer dan 2 seconden geleden');
+//			else lg($device.' '.$lastEvent.' >>> OK, meer dan 2 seconden geleden');
 			$lastEvent = $d['time'];
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
