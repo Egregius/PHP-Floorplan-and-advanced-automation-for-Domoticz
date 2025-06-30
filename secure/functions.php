@@ -732,3 +732,9 @@ function isPDOConnectionAlive($pdo) {
         return false;
     }
 }
+function isoToLocalTimestamp(string $isoTime): int {
+    // ISO tijd is in UTC, zet om naar timestamp
+    $utc = new DateTime($isoTime, new DateTimeZone("UTC"));
+    $utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    return $utc->getTimestamp();
+}
