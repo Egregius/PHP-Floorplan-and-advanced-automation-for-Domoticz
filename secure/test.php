@@ -17,7 +17,8 @@ $d=fetchdata(0,'test.php');
 
 //	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
 
-
+sync_devices_if_changed($db, $d);
+exit;
 $sunrise=mget('sunrise');
 
 

@@ -19,7 +19,8 @@ if (isset($_REQUEST['t'])) {
 	$d=array();
 	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
 	$db=dbconnect();
-	$stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
+	if ($_REQUEST['t']==0) $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
+	else $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
 		if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
@@ -38,7 +39,7 @@ if (isset($_REQUEST['t'])) {
 			$d['Sunrise']=$sunrise['Sunrise'];
 			$d['Sunset']=$sunrise['Sunset'];
 			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
-			$d['zonavg']=$d['zonvandaag']['icon'];
+//			$d['zonavg']=$d['zonvandaag']['icon'];
 			$d['playlist']=boseplaylist();
 		}
 	}
