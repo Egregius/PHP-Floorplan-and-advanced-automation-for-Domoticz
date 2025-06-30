@@ -8,8 +8,8 @@ if (isset($_GET['setauto'])) {
 	storemode('daikin', $_GET['setauto'], basename(__FILE__).':'.__LINE__);
 } elseif (isset($_GET['setpower'])) {
 	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-	storemode('daikin_kwh', $_GET['setpower']);
-	storeicon('daikin_kwh', $_GET['setpower']);
+	storemode('daikin_kwh', $_GET['setpower'],'',1);
+	storeicon('daikin_kwh', $_GET['setpower'],'',1);
 	if ($_GET['setpower']!='Auto') {
 		file_get_contents('http://192.168.2.111/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';
 		file_get_contents('http://192.168.2.112/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow='.$_GET['setpower'].'&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0').'&nbsp;';

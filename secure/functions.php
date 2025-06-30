@@ -209,7 +209,8 @@ function storemode($name,$mode,$msg='',$update=null) {
 function storeicon($name,$icon,$msg='',$update=null) {
 	global $d, $db, $user, $time;
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
-		$time=$d['time'];
+		if (isset($d['time'])) $time=$d['time'];
+		else $time=time();
 		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
 		if (endswith($name, '_temp')) return;
@@ -729,41 +730,5 @@ function isPDOConnectionAlive($pdo) {
         return true;
     } catch (PDOException $e) {
         return false;
-    }
-}
-function sync_devices_if_changed(PDO $pdo, array $memoryDevices): void {
-    $stmt = $pdo->query('SELECT * FROM devices_disk');
-    $diskDevices = [];
-    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $diskDevices[$row['n']] = $row;
-    }
-    $changed = [];
-    foreach ($memoryDevices as $name => $memRow) {
-        if (!is_string($name) || !is_array($memRow)) continue;
-		$rowWithName = ['n' => $name] + $memRow;
-
-        if (!isset($diskDevices[$name]) || array_diff_assoc($rowWithName, $diskDevices[$name])) {
-            $changed[] = $rowWithName;
-        }
-    }
-    if (empty($changed)) return;
-    $pdo->beginTransaction();
-    foreach ($changed as $row) {
-        $cols = array_keys($row); // ['n', 's', 't', ...]
-        $colList = '`' . implode('`, `', $cols) . '`';
-        $placeholders = ':' . implode(', :', $cols);
-        $sql = "REPLACE INTO devices_disk ($colList) VALUES ($placeholders)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($row);
-    }
-    $pdo->commit();
-}
-function load_devices_from_disk_if_empty(PDO $pdo): void {
-    $count = $pdo->query('SELECT COUNT(*) FROM devices')->fetchColumn();
-    if ((int)$count === 0) {
-        lg("MQTT | devices was leeg, importeren vanaf devices_disk.");
-        $pdo->exec('INSERT INTO devices SELECT * FROM devices_disk');
-    } else {
-        lg("MQTT | devices bevat al data, niets geïmporteerd van devices_disk.");
     }
 }
