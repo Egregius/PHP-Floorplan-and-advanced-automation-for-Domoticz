@@ -39,7 +39,7 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=20;
+			$base=21;
 			if ($time<strtotime('7:00')) $Setkamer=$base;
 			elseif ($time>strtotime('21:30')) $Setkamer=$base;
 			elseif ($time>strtotime('20:30')) $Setkamer=$base+0.5;
@@ -80,7 +80,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['kamer_set']['s']==2) $rate=4;
 			elseif($d['kamer_set']['s']==3) $rate=5;
 			elseif($d['kamer_set']['s']==4) $rate=6;
-			elseif($d['kamer_set']['s']==5) $rate=7;
+			elseif($d['kamer_set']['s']==5) {$rate=7;$d['kamer_set']['s']=18;}
 			if($d['kamer_set']['s']=='D') {
 				$mode=2;
 				$set='M';
@@ -202,7 +202,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['alex_set']['s']==2) $rate=4;
 			elseif($d['alex_set']['s']==3) $rate=5;
 			elseif($d['alex_set']['s']==4) $rate=6;
-			elseif($d['alex_set']['s']==5) $rate=7;
+			elseif($d['alex_set']['s']==5) {$rate=7;$d['alex_set']['s']=18;}
 			if($d['alex_set']['s']=='D') {
 				$mode=2;
 				$set='M';
@@ -301,9 +301,10 @@ if ($d['daikin']['m']==1) {
 			elseif($d['living_set']['s']==2) $rate=4;
 			elseif($d['living_set']['s']==3) $rate=5;
 			elseif($d['living_set']['s']==4) $rate=6;
-			elseif($d['living_set']['s']==5) $rate=7;
+			elseif($d['living_set']['s']==5) {$spmode=1;}
 			if ($d['eettafel']['s']>0) $rate='B';
 			elseif ($d['eettafel']['s']>0) $rate='B';
+			elseif ($d['lgtv']['s']=='On') $rate='B';
 			if($d['living_set']['s']=='D') {
 				$mode=2;
 				$set='M';
