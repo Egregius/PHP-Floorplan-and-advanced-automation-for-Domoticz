@@ -287,6 +287,13 @@ if ($d['daikin']['m']==1) {
 			setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 			$d['living_set']['s']=$Setliving;
 		}
+		if ($d['weg']['s']>1&&$d['living_temp']['m']>50&&$d['net']<-1000&&$d['living_set']['s']!='D') {
+			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+		} elseif ($d['weg']['s']<=1&&$d['living_temp']['m']>65&&$d['net']<-1000&&$d['living_set']['s']!='D') {
+			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+		} elseif (($d['living_temp']['m']<40&&$d['net']>0)&&$d['living_set']['s']=='D') {
+			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+		}
 	} elseif ($d['living_set']['m']==1||$d['living_set']['s']=='D') {
 //		lg(basename(__FILE__).':'.__LINE__);
 		$power=1;
@@ -363,5 +370,6 @@ if ($d['daikin']['m']==1) {
 		}
 	}
 }
+
 require('_Rolluiken_Cooling.php');
 require('_TC_badkamer.php');
