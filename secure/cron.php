@@ -6,7 +6,6 @@ $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
 $lastfetch=$time-20;
 $user='CRONstart';
-
 $items=array('badkamervuur2','badkamervuur1','water');
 foreach ($items as $i) {
 	sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
@@ -28,7 +27,6 @@ while (1){
 		$lastfetch=$time-20;
 		include '_cron10.php';
 		$user='heating';
-//			$s=date('s');
 		$t=t();
 		if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 		elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
@@ -41,7 +39,6 @@ while (1){
 			if ($time%240==0) include '_cron240.php';
 			if ($time%300==0) include '_cron300.php';
 			if ($time%3600==0) include '_cron3600.php';
-			if ($time%1800==0) sync_devices_if_changed($db, $d);
 		}
 		if ($time%450==0) include '_cron450.php';
 		if ($time%100==0) include '_weather.php';

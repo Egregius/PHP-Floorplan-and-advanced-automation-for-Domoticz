@@ -21,7 +21,7 @@ if ($d['daikin']['m']==1) {
 	// KAMER
 	unset($power);
 	$Setkamer=33;
-	if ($d['kamer_set']['m']==0) {
+	if ($d['kamer_set']['m']==0&&$d['kamer_set']['s']!='D') {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['rkamerr']['s']>=85)
 			&&
@@ -144,7 +144,7 @@ if ($d['daikin']['m']==1) {
 	// ALEX
 
 	$Setalex=33;
-	if ($d['alex_set']['m']==0) {
+	if ($d['alex_set']['m']==0&&$d['alex_set']['s']!='D') {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['ralex']['s']>=80)
 			&&
@@ -261,7 +261,7 @@ if ($d['daikin']['m']==1) {
 	// LIVING
 	$Setliving=33;
 //	lg(basename(__FILE__).':'.__LINE__);
-	if ($d['living_set']['m']==0) {
+	if ($d['living_set']['m']==0&&$d['living_set']['s']!='D') {
 //		lg(basename(__FILE__).':'.__LINE__);
 		if (
 			($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
@@ -281,20 +281,21 @@ if ($d['daikin']['m']==1) {
 			}
 		} else $power=0;
 //		$Setliving=22;
-		if ($d['living_set']['s']!=$Setliving&&($d['raamliving']['s']=='Closed'||past('raamliving')>60)&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
+		if ($d['living_set']['s']!='D'&&$d['living_set']['s']!=$Setliving&&($d['raamliving']['s']=='Closed'||past('raamliving')>60)&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
 			setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 			$d['living_set']['s']=$Setliving;
 		}
-		if ($d['weg']['s']>1&&$d['living_temp']['m']>50&&$d['net']<-1000&&$d['living_set']['s']!='D') {
+		if ($d['weg']['s']>1&&$d['living_temp']['m']>50&&$d['net']<-1000) {
 			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
-		} elseif ($d['weg']['s']<=1&&$d['living_temp']['m']>65&&$d['net']<-1000&&$d['living_set']['s']!='D') {
+		} elseif ($d['weg']['s']<=1&&$d['living_temp']['m']>60&&$d['net']<-1000) {
 			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
-		} elseif (($d['living_temp']['m']<40&&$d['net']>0)&&$d['living_set']['s']=='D') {
-			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
 		}
 	} elseif ($d['living_set']['m']==1||$d['living_set']['s']=='D') {
 //		lg(basename(__FILE__).':'.__LINE__);
 		$power=1;
+		if (($d['living_temp']['m']<50&&$d['net']>0)&&$d['living_set']['s']=='D') {
+			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+		}
 	}
 	
 //	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
