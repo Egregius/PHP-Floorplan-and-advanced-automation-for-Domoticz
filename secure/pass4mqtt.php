@@ -133,7 +133,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
 				if ($hum > 100) $hum=100;
-				elseif ($hum>(int)$d[$tdevice]['m']+1) $hum=(int)$d[$tdevice]['m']+1;
+				if ($hum>(int)$d[$tdevice]['m']+1) $hum=(int)$d[$tdevice]['m']+1;
 				elseif ($hum<(int)$d[$tdevice]['m']-1) $hum=(int)$d[$tdevice]['m']-1;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
 			} elseif (substr($device,-5) === '_temp') {

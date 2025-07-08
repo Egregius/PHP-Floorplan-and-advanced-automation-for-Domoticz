@@ -21,7 +21,6 @@ if ($d['daikin']['m']==1) {
 	// KAMER
 	unset($power);
 	$Setkamer=33;
-	$dif=$d['kamer_temp']['s']-$d['kamer_set']['s'];
 	if ($d['kamer_set']['m']==0) {
 		if (
 				($d['raamkamer']['s']=='Closed'||$d['rkamerr']['s']>=85)
@@ -56,8 +55,8 @@ if ($d['daikin']['m']==1) {
 			if ($d['kamer_set']['s']=='D') {
 				$power=1;
 			} else {
-				if ($dif>=0) $power=1;
-				elseif ($dif<-1.5) $power=0;
+				if ($difkamer>=0) $power=1;
+				elseif ($difkamer<-1.5) $power=0;
 			}
 		} else $power=0;
 //		$Setkamer=21.5;
@@ -72,7 +71,7 @@ if ($d['daikin']['m']==1) {
 	}
 	
 	
-//	if (isset($power)) lg('kamer dif='.$dif.' power='.$power); else lg('kamer dif='.$dif);
+//	if (isset($power)) lg('kamer dif='.$difkamer.' power='.$power); else lg('kamer dif='.$difkamer);
 	if ($d['kamer_set']['s']<32||$d['kamer_set']['s']=='D') {
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
 			$rate='A';
@@ -145,7 +144,6 @@ if ($d['daikin']['m']==1) {
 	// ALEX
 
 	$Setalex=33;
-	$dif=$d['alex_temp']['s']-$d['alex_set']['s'];
 	if ($d['alex_set']['m']==0) {
 		if (
 				($d['raamalex']['s']=='Closed'||$d['ralex']['s']>=80)
@@ -180,8 +178,8 @@ if ($d['daikin']['m']==1) {
 			if ($d['alex_set']['s']=='D') {
 				$power=1;
 			} else {
-				if ($dif>=0) $power=1;
-				elseif ($dif<-1.5) $power=0;
+				if ($difalex>=0) $power=1;
+				elseif ($difalex<-1.5) $power=0;
 			}
 		} else $power=0;
 		if ($d['weg']['s']>=3) $Setalex=28;
