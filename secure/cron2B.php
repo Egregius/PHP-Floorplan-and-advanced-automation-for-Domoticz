@@ -144,5 +144,6 @@ if ($d['pirliving']['s']=='Off'
 	}
 }
 if ($d['kodi']['s']=='Idle'||$d['kodi']['s']=='Paused') {
-	kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
+	$past=past('kodi');
+	if ($past>=20&&$past<=30)	kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
 }
