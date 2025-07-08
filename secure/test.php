@@ -16,38 +16,11 @@ $d=fetchdata(0,'test.php');
 //hass('script', 'turn_on', 'script.alles_uitschakelen_via_label_uit_bij_weg');
 
 //	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
-
-sync_devices_if_changed($db, $d);
-exit;
-$sunrise=mget('sunrise');
-
-
-$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
-$response = @file_get_contents($url);
-$data = json_decode($response, true);
-if (isset($data['results'])) {
-	$results = $data['results'];
-	$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
-	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
-	$Sunrise = isoToLocalTimestamp($results['sunrise']);
-	$Sunset = isoToLocalTimestamp($results['sunset']);
-	mset('sunrise', array(
-		'CivTwilightStart' => date('G:i', $CivTwilightStart),
-		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
-		'Sunrise' => date('G:i', $Sunrise),
-		'Sunset' => date('G:i', $Sunset),
-	));
-}
-
-
-
-function isoToLocalTimestamp(string $isoTime): int {
-	// ISO tijd is in UTC, zet om naar timestamp
-	$utc = new DateTime($isoTime, new DateTimeZone("UTC"));
-	$utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
-	return $utc->getTimestamp();
-}
-	
+echo kodi('{
+    "jsonrpc": "2.0",
+    "method": "GUI.ActivateScreensaver",
+    "id": 1
+}');
 
 //print_r($d);
 
