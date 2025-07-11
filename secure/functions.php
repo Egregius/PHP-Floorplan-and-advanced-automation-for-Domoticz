@@ -645,8 +645,8 @@ function hassservices() {
 	return $response;
 }
 function hassrepublishEntityState($entityId) {
-    $ha_url = 'http://homeassistant.local:8123';
-    $token = 'Bearer YOUR_LONG_LIVED_ACCESS_TOKEN';
+    $ha_url = 'http://192.168.2.26:8123';
+    $token = 'Bearer '.hasstoken();
     $base_topic = 'homeassistant';
 
     // 1. Status ophalen
@@ -655,7 +655,7 @@ function hassrepublishEntityState($entityId) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $token"]);
     $result = curl_exec($ch);
     curl_close($ch);
-
+	echo $result;
     $data = json_decode($result, true);
     if (!isset($data['state'])) {
         echo "Ongeldige entity of fout in API\n";

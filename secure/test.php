@@ -17,8 +17,8 @@ $d=fetchdata(0,'test.php');
 
 //	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
 //echo kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
-
-hassrepublishEntityState('bureel1');
+sw('lampkast', 'On','',true);
+//hassrepublishEntityState('switch.lampkast');
 
 //print_r($d);
 

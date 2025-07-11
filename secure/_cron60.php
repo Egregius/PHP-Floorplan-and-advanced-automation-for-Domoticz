@@ -108,7 +108,6 @@ if ($d['auto']['s']=='On') {
 	if ($d['dag']['s']>0) {
 		if ($d['rbureel']['s']<40) {
 			if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['lampbureel']['s']=='On') sw('lampbureel', 'Off', basename(__FILE__).':'.__LINE__);
 			if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20) sw('zithoek', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
