@@ -1,9 +1,18 @@
 <?php
 $user=basename(__FILE__);
+$boses=array(
+	101=>'Living',
+	102=>'102',
+	103=>'Boven',
+	104=>'Garage',
+	105=>'10-Wit',
+	106=>'Buiten20',
+	107=>'Keuken',
+);
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
-	foreach(array(101=>8,102=>32,103=>32,104=>32,105=>32,106=>32,107=>32) as $ip=>$vol) {
+	foreach(array(101=>12,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {

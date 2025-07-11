@@ -26,4 +26,3 @@ if (
 	&&past('daikinliving')>180
 	&&past('daikinkamer')>180
 	&&past('daikinalex')>180) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
-

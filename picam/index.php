@@ -13,15 +13,12 @@ require '../secure/functions.php';
 $_SESSION['referer']='picam1/index.php';
 require '/var/www/authentication.php';
 if(isset($_REQUEST['Record'])){
-	file_get_contents("http://192.168.2.11/fifo_command.php?cmd=record%20on%205%2055");
 	file_get_contents("http://192.168.2.12/fifo_command.php?cmd=record%20on%205%2055");
 	exit;
 }elseif(isset($_REQUEST['Foto'])){
-	shell_exec('curl -s "http://192.168.2.11/telegram.php?snapshot=true" &');
 	shell_exec('curl -s "http://192.168.2.12/telegram.php?snapshot=true" &');
 	exit;
 }elseif(isset($_REQUEST['Motion'])){
-	shell_exec('curl -s "http://192.168.2.11/fifo_command.php?cmd=motion_enable%20toggle" &');
 	shell_exec('curl -s "http://192.168.2.12/fifo_command.php?cmd=motion_enable%20toggle" &');
 	exit;
 }
@@ -82,34 +79,17 @@ echo '<div class="navbar" role="navigation">
 		<input type="submit" value="Archief" name="Archief" class="btn b8"/>
 	</form>
 	</div>
-	<div class="camera1">
-		<!-- <img class="camerai" id="mjpeg_camera1" src="jpg.eufy.php"/> -->
-		<iframe src="https://ha.egregius.be/dashboard-deurbel/0" width="800" height="500" frameborder="0" allowfullscreen></iframe> 
-		
-		
-	</div>
 	 <div class="camera2">
 		<img class="camerai" id="mjpeg_camera2" src="jpg.php"/>
-	</div>
-	<div class="camera3">
-		<img class="camerai" id="mjpeg_camera3" src="jpg.oprit.php"/>
 	</div>
 	
 	
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}
-//		mycam1=setInterval(getpic1, '.$refresh.');
 		mycam2=setInterval(getpic2, '.$refresh.');
-		mycam3=setInterval(getpic3, '.$refresh.');
-//		function getpic1(){
-//			try{document.getElementById(\'mjpeg_camera1\').src = "jpg.eufy.php?random="+new Date().getTime();}catch{}
-//		}
 		function getpic2(){
 			try{document.getElementById(\'mjpeg_camera2\').src = "jpg.php?random="+new Date().getTime();}catch{}
-		}
-		function getpic3(){
-			try{document.getElementById(\'mjpeg_camera3\').src = "jpg.oprit.php?random="+new Date().getTime();}catch{}
 		}
 		function licht(){
 			$.get("/ajax.php?device=voordeur&command=sw&action=Toggle")

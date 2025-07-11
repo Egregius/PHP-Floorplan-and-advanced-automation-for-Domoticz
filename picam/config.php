@@ -1,5 +1,5 @@
 <?php
-define("TITLE_STRING", "PiCam2 Alex");
+define("TITLE_STRING", "PiCam Oprit");
 define("IPCAM", "192.168.2.12");
 define("VIDEO_DIR", "videos");
 define("STILL_DIR", "stills");

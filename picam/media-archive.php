@@ -514,7 +514,7 @@ function restart_page($selected)
 	$free_percent = sprintf('%.1f',($disk_free / $disk_total) * 100);
 	$total = eng_filesize($disk_total);
 	$free = eng_filesize($disk_free);
-	echo "<span style=\"float: top; margin-left:10px;\">Disk free:&thinsp;${free}B&thinsp;($free_percent %)</span>";
+	echo "<span style=\"float: top; margin-left:10px;\">Disk free:&thinsp;{$free}B&thinsp;($free_percent %)</span>";
 	echo "</span>";
 		}
 	else {
