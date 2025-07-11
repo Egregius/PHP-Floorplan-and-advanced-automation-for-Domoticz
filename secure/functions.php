@@ -644,6 +644,53 @@ function hassservices() {
 	curl_close($ch);
 	return $response;
 }
+function hassrepublishEntityState($entityId) {
+    $ha_url = 'http://homeassistant.local:8123';
+    $token = 'Bearer YOUR_LONG_LIVED_ACCESS_TOKEN';
+    $base_topic = 'homeassistant';
+
+    // 1. Status ophalen
+    $ch = curl_init("$ha_url/api/states/$entityId");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $token"]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($result, true);
+    if (!isset($data['state'])) {
+        echo "Ongeldige entity of fout in API\n";
+        return;
+    }
+
+    $state = $data['state'];
+    $parts = explode('.', $entityId); // bv: switch.airco_living
+    if (count($parts) != 2) {
+        echo "Ongeldige entity_id structuur\n";
+        return;
+    }
+
+    list($domain, $object_id) = $parts;
+    $topic = "$base_topic/$domain/$object_id/state";
+
+    // 2. Publish via HA API (mqtt.publish)
+    $payload = [
+        'topic' => $topic,
+        'payload' => $state,
+        'retain' => true
+    ];
+
+    $ch = curl_init("$ha_url/api/services/mqtt/publish");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: $token",
+        "Content-Type: application/json"
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
+}
 
 function curl($url) {
 	$ch=curl_init();
