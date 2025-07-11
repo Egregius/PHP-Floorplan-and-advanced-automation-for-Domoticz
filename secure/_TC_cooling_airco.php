@@ -58,6 +58,10 @@ if ($d['daikin']['m']==1) {
 				if ($difkamer>=0) $power=1;
 				elseif ($difkamer<-1.5) $power=0;
 			}
+			if ($d['kamer_temp']['s']>=20&&$d['kamer_temp']['m']>=60&&$d['net']<-1000) {
+				$power=1;
+				store('kamer_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+			}
 		} else $power=0;
 //		$Setkamer=21.5;
 		if ($d['weg']['s']>=3) $Setkamer=28;
@@ -65,6 +69,11 @@ if ($d['daikin']['m']==1) {
 			setpoint('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
 			$d['kamer_set']['s']=$Setkamer;
 		}
+	} elseif ($d['kamer_set']['m']==0&&$d['kamer_set']['s']=='D') {
+		if (($d['kamer_temp']['s']<17||$d['kamer_temp']['m']<50||$d['net']>0)&&$d['kamer_set']['s']=='D') {
+			$power=0;
+			store('kamer_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+		} else $power=1;
 	} elseif ($d['kamer_set']['m']==1||$d['kamer_set']['s']=='D') {
 		$spmode=-1;
 		$power=1;
@@ -181,6 +190,10 @@ if ($d['daikin']['m']==1) {
 				if ($difalex>=0) $power=1;
 				elseif ($difalex<-1.5) $power=0;
 			}
+			if ($d['alex_temp']['s']>=20&&$d['alex_temp']['m']>=60&&$d['net']<-1000) {
+				$power=1;
+				store('alex_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+			}
 		} else $power=0;
 		if ($d['weg']['s']>=3) $Setalex=28;
 		
@@ -188,7 +201,12 @@ if ($d['daikin']['m']==1) {
 			setpoint('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
 			$d['alex_set']['s']=$Setalex;
 		}
-	} elseif ($d['alex_set']['m']==1&&$d['alex_set']['s']=='D') {
+	} elseif ($d['alex_set']['m']==0&&$d['alex_set']['s']=='D') {
+		if (($d['alex_temp']['s']<17||$d['alex_temp']['m']<50||$d['net']>0)&&$d['alex_set']['s']=='D') {
+			$power=0;
+			store('alex_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+		} else $power=1;
+	} elseif ($d['alex_set']['m']==1||$d['alex_set']['s']=='D') {
 		$power=1;
 		$spmode=-1;
 	}
@@ -279,29 +297,33 @@ if ($d['daikin']['m']==1) {
 				if ($difliving>=0) $power=1;
 				elseif ($difliving<-1.5) $power=0;
 			}
+			if ($d['living_temp']['m']>=20&&$d['living_temp']['m']>=60&&$d['net']<-1000) {
+				$power=1;
+				store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+			}
 		} else $power=0;
 //		$Setliving=22;
 		if ($d['living_set']['s']!='D'&&$d['living_set']['s']!=$Setliving&&($d['raamliving']['s']=='Closed'||past('raamliving')>60)&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
 			setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 			$d['living_set']['s']=$Setliving;
 		}
-		if ($d['weg']['s']>1&&$d['living_temp']['m']>50&&$d['net']<-1000) {
-			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
-		} elseif ($d['weg']['s']<=1&&$d['living_temp']['m']>60&&$d['net']<-1000) {
-			store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
-		}
+		
+	} elseif ($d['living_set']['m']==0&&$d['living_set']['s']=='D') {
+//		lg(basename(__FILE__).':'.__LINE__);
+		if (($d['living_temp']['s']<19||$d['living_temp']['m']<50||$d['net']>0)&&$d['living_set']['s']=='D') {
+			$power=0;
+			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+		} else $power=1;
 	} elseif ($d['living_set']['m']==1||$d['living_set']['s']=='D') {
 //		lg(basename(__FILE__).':'.__LINE__);
 		$power=1;
-		if (($d['living_temp']['m']<50&&$d['net']>0)&&$d['living_set']['s']=='D') {
-			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
-		}
 	}
 	
 //	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
 	if ($d['living_set']['s']<32||$d['living_set']['s']=='D') {
 //		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
+//			lg(basename(__FILE__).':'.__LINE__);
 			$rate='A';
 			if ($d['living_set']['s']==1) $rate=3;
 			elseif($d['living_set']['s']==2) $rate=4;
@@ -312,10 +334,12 @@ if ($d['daikin']['m']==1) {
 			elseif ($d['eettafel']['s']>0) $rate='B';
 			elseif ($d['lgtv']['s']=='On') $rate='B';
 			if($d['living_set']['s']=='D') {
+//				lg(basename(__FILE__).':'.__LINE__);
 				$mode=2;
 				$set='M';
 				$spmode=-1;
 			} else {
+//				lg(basename(__FILE__).':'.__LINE__);
 				$mode=3;
 				$set=$d['living_set']['s']-0;
 				$set=$set-($difliving*2);

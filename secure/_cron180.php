@@ -12,4 +12,17 @@ if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 		}
 	}
 }
-if ($d['daikinliving']['m']==0&&$d['daikinkamer']['m']==0&&$d['daikinalex']['m']==0&&$d['daikin']['s']=='On'&&$d['daikin']['m']==1&&$d['daikin_kwh']['s']<20&&past('daikin')>1800&&past('daikinliving')>180&&past('daikinkamer')>180&&past('daikinalex')>180) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
+if (
+	  $d['daikinliving']['m']==0
+	&&$d['daikinkamer']['m']==0
+	&&$d['daikinalex']['m']==0
+	&&$d['living_set']['s']!='D'
+	&&$d['kamer_set']['s']!='D'
+	&&$d['alex_set']['s']!='D'
+	&&$d['daikin']['s']=='On'
+	&&$d['daikin']['m']==1
+	&&$d['daikin_kwh']['s']<20
+	&&past('daikin')>1800
+	&&past('daikinliving')>180
+	&&past('daikinkamer')>180
+	&&past('daikinalex')>180) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);

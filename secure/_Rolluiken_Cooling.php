@@ -10,7 +10,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['ralex']['s']==0&&$d['rwaskamer']['s']>0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['ralex']['s']>0&&$time>=$t+1800&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
+//		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['dag']['s']>-4) {
 			if ($d['lgtv']['s']!='On') {
 				foreach ($beneden as $i) {
