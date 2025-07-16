@@ -8,6 +8,7 @@ $week=date("Y-m-d", TIME-86400*6);
 //$week='2022-12-05 16:24:00';
 $maand=date("Y-m-d", TIME-86400*100);
 //$maand='2022-12-05 16:24:00';
+
 echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -53,7 +54,6 @@ $sensors=array(
 	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
 	'waskamer_hum'=>array('Naam'=>'Wask','Color'=>'#EEEE00'),
 	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
-	'buiten_hum'=>array('Naam'=>'Buiten','Color'=>'#FFFFFF'),
 );
 foreach ($sensors as $k=>$v) {
 	if(isset($_GET[$k]))$_SESSION['sensors_hum'][$k]=true;else $_SESSION['sensors_hum'][$k]=false;
@@ -70,8 +70,7 @@ if ($aantalsensors==6) echo '
 	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
 	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
 	<a href="/hum.php?waskamer_hum=on" class="btn Kamer">Wask</a>
-	<a href="/hum.php?badkamer_hum=on" class="btn Kamer">Badk</a>
-	<a href="/hum.php?buiten_hum=on" class="btn Buiten">Buiten</a>';
+	<a href="/hum.php?badkamer_hum=on" class="btn Kamer">Badk</a>';
 else foreach ($sensors as $k=>$v) {
 //	print_r($v);
 //	$v=ucfirst(str_replace('_hum', '', $k));
@@ -120,7 +119,7 @@ $args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('living_hum'=>1,'waskamer_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1,'buiten_hum'=>1);
+	$_SESSION['sensors_hum']=array('living_hum'=>1,'waskamer_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
 	$aantalsensors=6;
 }
 //echo '<pre>';print_r($sensors);echo '</pre>';

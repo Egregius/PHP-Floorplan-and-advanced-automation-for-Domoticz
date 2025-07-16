@@ -150,7 +150,7 @@ if (count($rains)>=2) {
 		mset('buien',$time);
 	} else $past=86400;
 	if ($past<1200) $past=1200;
-	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+//EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
 
 //lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);

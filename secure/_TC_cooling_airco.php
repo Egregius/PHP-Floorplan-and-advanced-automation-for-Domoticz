@@ -58,7 +58,7 @@ if ($d['daikin']['m']==1) {
 				if ($difkamer>=0) $power=1;
 				elseif ($difkamer<-1.5) $power=0;
 			}
-			if ($d['kamer_temp']['s']>=20&&$d['kamer_temp']['m']>=60&&$d['net']<-1000) {
+			if ($d['kamer_temp']['s']>=20&&$d['kamer_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
 				store('kamer_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
 			}
@@ -190,7 +190,7 @@ if ($d['daikin']['m']==1) {
 				if ($difalex>=0) $power=1;
 				elseif ($difalex<-1.5) $power=0;
 			}
-			if ($d['alex_temp']['s']>=20&&$d['alex_temp']['m']>=60&&$d['net']<-1000) {
+			if ($d['alex_temp']['s']>=20&&$d['alex_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
 				store('alex_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
 			}
@@ -297,7 +297,7 @@ if ($d['daikin']['m']==1) {
 				if ($difliving>=0) $power=1;
 				elseif ($difliving<-1.5) $power=0;
 			}
-			if ($d['living_temp']['m']>=20&&$d['living_temp']['m']>=60&&$d['net']<-1000) {
+			if ($d['living_temp']['m']>=20&&$d['living_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
 				store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
 			}
