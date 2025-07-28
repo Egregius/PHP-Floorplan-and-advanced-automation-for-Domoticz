@@ -286,8 +286,8 @@ if ($d['daikin']['m']==1) {
 			&&($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
 			&&($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
 			&&($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
-			&& $d['weg']['s']<=2
 		) {
+//			lg(basename(__FILE__).':'.__LINE__);
 			if ($d['weg']['s']>=3) $Setliving=28;
 			elseif ($d['weg']['s']>0) $Setliving=25;
 			else $Setliving=24;

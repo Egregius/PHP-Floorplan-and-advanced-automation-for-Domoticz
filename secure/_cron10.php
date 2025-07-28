@@ -51,7 +51,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 			foreach (array(5,0) as $i) {
 				if ($d['wasbak']['s']>$i) {
-//EGREGIUS					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
+					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 /*					if ($i==0) {
 						sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 						sleep(2);

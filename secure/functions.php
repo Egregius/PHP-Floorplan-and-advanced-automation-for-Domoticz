@@ -57,7 +57,7 @@ function fhall() {
 }
 function huisslapen($weg=false) {
 	global $d;
-	sl(array('hall','inkom','eettafel','zithoek','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
+	sl(array('hall','inkom','eettafel','zithoek','bureel','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','bureel','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock','zetel'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
@@ -81,11 +81,8 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 function waarschuwing($msg) {
 	telegram($msg, false, 1);
 	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 60]);
-	
-//	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-//	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
-//	sleep(10);
-//	sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
+	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
+	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
 }
 function past($name,$lg='') {
 	global $d,$time;

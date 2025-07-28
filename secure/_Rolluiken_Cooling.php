@@ -13,7 +13,7 @@ if ($d['auto']['s']=='On') {
 //		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['dag']['s']>-4) {
 			if ($d['lgtv']['s']!='On') {
-				foreach ($beneden as $i) {
+				foreach ($benedenall as $i) {
 					if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
 			}
