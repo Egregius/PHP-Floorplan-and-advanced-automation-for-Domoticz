@@ -412,19 +412,19 @@ function bosezone($ip,$forced=false,$vol='') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif ($time<strtotime('7:00')) bosevolume(12, 101, basename(__FILE__).':'.__LINE__);
-				else bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
+				elseif ($time<strtotime('7:00')) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
+				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $map[$ip], 101);
 				if ($vol=='') {
-					if ($time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
+					if ($time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone',  $map[$ip], 101);
 				store('bose'.$ip, 'On');
 				if ($vol=='') {
-					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(30, $ip, basename(__FILE__).':'.__LINE__);
+					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
 				} else bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 			}

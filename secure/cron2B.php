@@ -12,7 +12,7 @@ $boses=array(
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
-	foreach(array(101=>12,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
+	foreach(array(101=>14,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
@@ -99,7 +99,7 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
 			}
-			if (past('lgtv')<35) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+//			if (past('lgtv')<35) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //			if ($d['heating']['s']>0&&$d['Rliving']['s']<100) sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 //			elseif ($d['Rliving']['s']<25) sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
 		}
@@ -152,7 +152,7 @@ if ($d['pirliving']['s']=='Off'
 		}
 	}
 }
-if ($d['kodi']['s']=='Idle'||$d['kodi']['s']=='Paused') {
+/*if ($d['kodi']['s']=='Idle'||$d['kodi']['s']=='Paused') {
 	$past=past('kodi');
 	if ($past>=20&&$past<=30)	kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
-}
+}*/
