@@ -78,11 +78,16 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 			unset($status);
 		}
 	}*/
-	if ($d['media']['s']=='On'&&$d['nas']['s']=='Off') {
-		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-		if (isset($loadedprofile['result']['label'])) {
-			lg('Waking NAS...');
-			shell_exec('/var/www/html/secure/wakenas.sh &');
+	if ($d['media']['s']=='On') {
+		if ($d['nas']['s']=='Off') {
+			$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+			if (isset($loadedprofile['result']['label'])) {
+				lg('Waking NAS...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+			}
+		}
+		if ($d['lgtv']['s']=='Off'&&past('lgtv')>60) {
+			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}	
 }
@@ -99,7 +104,7 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
 			}
-//			if (past('lgtv')<35) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+			if (past('lgtv')>=20&&past('lgtv')<=30) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //			if ($d['heating']['s']>0&&$d['Rliving']['s']<100) sl('Rliving', 100, basename(__FILE__).':'.__LINE__);
 //			elseif ($d['Rliving']['s']<25) sl('Rliving', 25, basename(__FILE__).':'.__LINE__);
 		}
@@ -113,6 +118,11 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 		}
 		
 	}
+	if ($d['media']['s']=='On') {
+		if ($d['lgtv']['s']=='Off'&&past('lgtv')>60) {
+			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
+		}
+	}	
 }
 
 if ($d['pirliving']['s']=='Off'
