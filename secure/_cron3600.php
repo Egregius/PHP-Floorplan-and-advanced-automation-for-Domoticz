@@ -60,7 +60,7 @@ foreach ($d as $device => $i) {
 			continue;
 		}
 		list($domain, $object_id) = explode('.', $entity_id);
-		$state = $data['state'];
+		$state = ucfirst($data['state']);
 		if ($state!=$i['s']) $to_publish[] = [
 			'topic' => "$base_topic/$domain/$object_id/state",
 			'payload' => $state

@@ -1,7 +1,7 @@
 <?php
 $user=basename(__FILE__);
 if ($d['daikin']['m']==1) {
-	if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['brander']['s']!='Off') sw('brander', 'Off', $user.':'.__LINE__);
 	$bigdif=-100;
 	foreach (array('living','kamer','alex') as $kamer) {
 		if ($d[$kamer.'_set']['s']!='D') {
@@ -60,19 +60,21 @@ if ($d['daikin']['m']==1) {
 			}
 			if ($d['kamer_temp']['s']>=20&&$d['kamer_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
-				store('kamer_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+				store('kamer_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 			}
-		} else $power=0;
+		} else {
+			$power=0;
+		}
 //		$Setkamer=21.5;
 		if ($d['weg']['s']>=3) $Setkamer=28;
 		if ($d['kamer_set']['s']!=$Setkamer) {
-			setpoint('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
+			setpoint('kamer_set', $Setkamer, $user.':'.__LINE__);
 			$d['kamer_set']['s']=$Setkamer;
 		}
 	} elseif ($d['kamer_set']['m']==0&&$d['kamer_set']['s']=='D') {
-		if (($d['kamer_temp']['s']<17||$d['kamer_temp']['m']<50||$d['net']>0)&&$d['kamer_set']['s']=='D') {
+		if (($d['kamer_temp']['s']<17||$d['kamer_temp']['m']<50||$d['net']>0||($d['raamkamer']['s']=='Open'&&past('raamkamer')>60))&&$d['kamer_set']['s']=='D') {
 			$power=0;
-			store('kamer_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+			store('kamer_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 		} else $power=1;
 	} elseif ($d['kamer_set']['m']==1||$d['kamer_set']['s']=='D') {
 		$spmode=-1;
@@ -124,7 +126,7 @@ if ($d['daikin']['m']==1) {
 					$data['fan']=$rate;
 					$data['set']=$set;
 					storeicon('kamer_set', json_encode($data));
-					daikinset('kamer', $power, $mode, $set, basename(__FILE__).':'.__LINE__, $rate, $powermode, $maxpow);
+					daikinset('kamer', $power, $mode, $set, $user.':'.__LINE__, $rate, $powermode, $maxpow);
 				}
 				unset($daikin);
 			}
@@ -132,7 +134,7 @@ if ($d['daikin']['m']==1) {
 //			lg(__LINE__);
 			if (past('daikin')>900) {
 //				lg(__LINE__);
-				sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				sw('daikin', 'On', $user.':'.__LINE__);
 			}
 		}// else lg(__LINE__);
 	} elseif(past('raamkamer')>300&&past('deurkamer')>300) {
@@ -143,10 +145,10 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
-			$data['spmode']=$daikin->spmode;
-			$data['maxpow']=$daikin->maxpow;
+			if (isset($daikin->spmode)) $data['spmode']=$daikin->spmode; else $data['spmode']=$spmode;
+			if (isset($daikin->maxpow)) $data['maxpow']=$daikin->maxpow; else $data['maxpow']=$maxpow;
 			storeicon('kamer_set', json_encode($data));
-			daikinset('kamer', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
+			daikinset('kamer', 0, 3, 10, $user.':'.__LINE__, 'A', -1, $maxpow);
 		}
 	}
 	unset($power);
@@ -192,19 +194,19 @@ if ($d['daikin']['m']==1) {
 			}
 			if ($d['alex_temp']['s']>=20&&$d['alex_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
-				store('alex_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+				store('alex_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 			}
 		} else $power=0;
 		if ($d['weg']['s']>=3) $Setalex=28;
 		
 		if ($d['alex_set']['s']!=$Setalex) {
-			setpoint('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
+			setpoint('alex_set', $Setalex, $user.':'.__LINE__);
 			$d['alex_set']['s']=$Setalex;
 		}
 	} elseif ($d['alex_set']['m']==0&&$d['alex_set']['s']=='D') {
-		if (($d['alex_temp']['s']<17||$d['alex_temp']['m']<50||$d['net']>0)&&$d['alex_set']['s']=='D') {
+		if (($d['alex_temp']['s']<17||$d['alex_temp']['m']<50||$d['net']>0||($d['raamalex']['s']=='Open'&&past('raamalex')>60))&&$d['alex_set']['s']=='D') {
 			$power=0;
-			store('alex_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+			store('alex_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 		} else $power=1;
 	} elseif ($d['alex_set']['m']==1||$d['alex_set']['s']=='D') {
 		$power=1;
@@ -254,12 +256,12 @@ if ($d['daikin']['m']==1) {
 					$data['fan']=$rate;
 					$data['set']=$set;
 					storeicon('alex_set', json_encode($data));
-					daikinset('alex', $power, $mode, $set, basename(__FILE__).':'.__LINE__, $rate, $maxpow);
+					daikinset('alex', $power, $mode, $set, $user.':'.__LINE__, $rate, $maxpow);
 				}
 				unset($daikin);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
-			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+			if (past('daikin')>900) sw('daikin', 'On', $user.':'.__LINE__);
 		}
 	} elseif(past('raamalex')>300&&past('deuralex')>300) {
 		$daikin=json_decode($d['daikinalex']['s']);
@@ -269,25 +271,25 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
-			$data['spmode']=$daikin->spmode;
-			$data['maxpow']=$daikin->maxpow;
+			if (isset($daikin->spmode)) $data['spmode']=$daikin->spmode; else $data['spmode']=$spmode;
+			if (isset($daikin->maxpow)) $data['maxpow']=$daikin->maxpow; else $data['maxpow']=$maxpow;
 			storeicon('alex_set', json_encode($data));
-			daikinset('alex', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
+			daikinset('alex', 0, 3, 10, $user.':'.__LINE__, 'A', -1, $maxpow);
 		}
 	}
 	unset($power);
 	// LIVING
 	$Setliving=33;
-//	lg(basename(__FILE__).':'.__LINE__);
+//	lg($user.':'.__LINE__);
 	if ($d['living_set']['m']==0&&$d['living_set']['s']!='D') {
-//		lg(basename(__FILE__).':'.__LINE__);
+//		lg($user.':'.__LINE__);
 		if (
 			($d['raamliving']['s']=='Closed'||($d['raamliving']['s']=='Open'&&past('raamliving')<300))
 			&&($d['raamkeuken']['s']=='Closed'||($d['raamkeuken']['s']=='Open'&&past('raamkeuken')<300))
 			&&($d['deurinkom']['s']=='Closed'||($d['deurvoordeur']['s']=='Closed'&&$d['deurinkom']['s']=='Open'))
 			&&($d['deurgarage']['s']=='Closed'||($d['deurgarage']['s']=='Open'&&past('deurgarage')<300))
 		) {
-//			lg(basename(__FILE__).':'.__LINE__);
+//			lg($user.':'.__LINE__);
 			if ($d['weg']['s']>=3) $Setliving=28;
 			elseif ($d['weg']['s']>0) $Setliving=25;
 			else $Setliving=24;
@@ -299,31 +301,31 @@ if ($d['daikin']['m']==1) {
 			}
 			if ($d['living_temp']['m']>=20&&$d['living_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
-				store('living_set', 'D', basename(__FILE__).':'.__LINE__, ' Drogen activeren');
+				store('living_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 			}
 		} else $power=0;
 //		$Setliving=22;
 		if ($d['living_set']['s']!='D'&&$d['living_set']['s']!=$Setliving&&($d['raamliving']['s']=='Closed'||past('raamliving')>60)&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {
-			setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
+			setpoint('living_set', $Setliving, $user.':'.__LINE__);
 			$d['living_set']['s']=$Setliving;
 		}
 		
 	} elseif ($d['living_set']['m']==0&&$d['living_set']['s']=='D') {
-//		lg(basename(__FILE__).':'.__LINE__);
+//		lg($user.':'.__LINE__);
 		if (($d['living_temp']['s']<19||$d['living_temp']['m']<50||$d['net']>0)&&$d['living_set']['s']=='D') {
 			$power=0;
-			store('living_set', 33, basename(__FILE__).':'.__LINE__, ' Drogen uitschakelen');
+			store('living_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 		} else $power=1;
 	} elseif ($d['living_set']['m']==1||$d['living_set']['s']=='D') {
-//		lg(basename(__FILE__).':'.__LINE__);
+//		lg($user.':'.__LINE__);
 		$power=1;
 	}
 	
 //	if (isset($power)) lg('living dif='.$dif.' power='.$power); else lg('living dif='.$dif);
 	if ($d['living_set']['s']<32||$d['living_set']['s']=='D') {
-//		lg(basename(__FILE__).':'.__LINE__);
+//		lg($user.':'.__LINE__);
 		if ($d['daikin']['s']=='On'&&past('daikin')>120) {
-//			lg(basename(__FILE__).':'.__LINE__);
+//			lg($user.':'.__LINE__);
 			$rate='A';
 			if ($d['living_set']['s']==1) $rate=3;
 			elseif($d['living_set']['s']==2) $rate=4;
@@ -334,12 +336,12 @@ if ($d['daikin']['m']==1) {
 			elseif ($d['eettafel']['s']>0) $rate='B';
 			elseif ($d['lgtv']['s']=='On') $rate='B';
 			if($d['living_set']['s']=='D') {
-//				lg(basename(__FILE__).':'.__LINE__);
+//				lg($user.':'.__LINE__);
 				$mode=2;
 				$set='M';
 				$spmode=-1;
 			} else {
-//				lg(basename(__FILE__).':'.__LINE__);
+//				lg($user.':'.__LINE__);
 				$mode=3;
 				$set=$d['living_set']['s']-0;
 				$set=$set-($difliving*2);
@@ -371,12 +373,12 @@ if ($d['daikin']['m']==1) {
 					$data['fan']=$rate;
 					$data['set']=$set;
 					storeicon('living_set', json_encode($data));
-					daikinset('living', $power, $mode, $set, basename(__FILE__).':'.__LINE__, $rate, $spmode, $maxpow);
+					daikinset('living', $power, $mode, $set, $user.':'.__LINE__, $rate, $spmode, $maxpow);
 				}
 				unset($daikin);
 			}
 		} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off') {
-			if (past('daikin')>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+			if (past('daikin')>900) sw('daikin', 'On', $user.':'.__LINE__);
 		}
 	} elseif (past('raamliving')>300&&past('raamkeuken')>300&&past('deurgarage')>300) {
 		$daikin=json_decode($d['daikinliving']['s']);
@@ -386,10 +388,10 @@ if ($d['daikin']['m']==1) {
 			$data['mode']=3;
 			$data['fan']='A';
 			$data['set']=33;
-			$data['spmode']=$daikin->spmode;
-			$data['maxpow']=$daikin->maxpow;
+			if (isset($daikin->spmode)) $data['spmode']=$daikin->spmode; else $data['spmode']=$spmode;
+			if (isset($daikin->maxpow)) $data['maxpow']=$daikin->maxpow; else $data['maxpow']=$maxpow;
 			storeicon('living_set', json_encode($data));
-			daikinset('living', 0, 3, 10, basename(__FILE__).':'.__LINE__, 'A', $spmode, $maxpow);
+			daikinset('living', 0, 3, 10, $user.':'.__LINE__, 'A', $spmode, $maxpow);
 		}
 	}
 }
