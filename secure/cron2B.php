@@ -119,7 +119,7 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 		
 	}
 	if ($d['media']['s']=='On') {
-		if ($d['lgtv']['s']=='Off'&&past('lgtv')>60) {
+		if ($d['lgtv']['s']=='Off'&&past('media')>60&&past('lgtv')>60) {
 			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}	
