@@ -86,7 +86,7 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 			}
 		}
-		if ($d['lgtv']['s']=='Off'&&past('lgtv')>60) {
+		if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
 			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}	
@@ -119,7 +119,7 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 		
 	}
 	if ($d['media']['s']=='On') {
-		if ($d['lgtv']['s']=='Off'&&past('media')>60&&past('lgtv')>60) {
+		if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
 			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}	

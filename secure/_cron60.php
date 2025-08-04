@@ -33,9 +33,9 @@ if ($d['auto']['s']=='On') {
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
 			if ($d[$i]['s']>$avg+5&&$d[$i]['s']>25) alert($i,'T '.$i.'='.$d[$i]['s'].'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
-		if ($d['lgtv']['s']=='On') {
-			if ($d['dag']['s']<0&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['Buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
-		}
+/*		if ($d['lgtv']['s']=='On') {
+			if ($d['dag']['s']<0&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
+		}*/
 	}elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
 		foreach (array('pirhall') as $i) {
