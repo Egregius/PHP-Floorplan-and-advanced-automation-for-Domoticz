@@ -17,7 +17,7 @@ while (1){
 	$dag=mget('dag');
 	$en=mget('en');
 	$data=curl('http://192.168.2.4/api/v1/data');
-	if ($dag>1) {
+	if ($dag>0) {
 		echo __LINE__;
 		$zon=curl('http://192.168.2.9/api/v1/data');
 		$zon=json_decode($zon);

@@ -89,7 +89,6 @@ if ($d['daikin']['s']=='On'&&past('daikin')>178) {
 		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
 	}
 }
-
 if ($d['zon']>0) {
 	if (past('uv')>1100) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
@@ -107,4 +106,5 @@ if ($d['weg']['s']==0&&1==2) {
 	foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]['t']),7200);
 	}
-}	
+}
+mset('dag',$d['dag']['s']);
