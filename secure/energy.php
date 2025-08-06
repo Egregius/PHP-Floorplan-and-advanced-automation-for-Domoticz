@@ -17,7 +17,8 @@ while (1){
 	$dag=mget('dag');
 	$en=mget('en');
 	$data=curl('http://192.168.2.4/api/v1/data');
-	if ($dag>2) {
+	if ($dag>1) {
+		echo __LINE__;
 		$zon=curl('http://192.168.2.9/api/v1/data');
 		$zon=json_decode($zon);
 		if (isset($zon->active_power_w)) {
@@ -25,6 +26,7 @@ while (1){
 			$newzon=round($zon->active_power_w);
 		}
 	} else {
+		echo __LINE__;
 		$prevzon=mget('zon');
 		$newzon=0;
 	}
