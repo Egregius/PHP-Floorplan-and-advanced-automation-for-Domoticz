@@ -81,7 +81,7 @@ foreach ($d as $device => $i) {
 		}
 		list($domain, $object_id) = explode('.', $entity_id);
 		$brightness = $attributes['brightness'] ?? 0;
-		if ($brightness === null) $brightness = 0;
+		$brightness=round((float)$brightness / 2.55);
 		if ($brightness!=$i['s']) $to_publish[] = [
 			'topic' => "$base_topic/$domain/$object_id/brightness",
 			'payload' => $brightness
