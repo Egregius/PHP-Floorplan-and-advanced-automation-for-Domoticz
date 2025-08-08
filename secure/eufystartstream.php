@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY";
-$ha_url = "http://192.168.2.26:8123/api/services/button/press";
+$ha_url = "http://192.168.2.26:8123/api/services/eufy_security/start_p2p_livestream";
 $data = [
-    "entity_id" => "button.start_p2p_stream"
+    "entity_id" => "camera.eufy"
 ];
 
 $options = [
