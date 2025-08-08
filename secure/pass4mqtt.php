@@ -146,9 +146,8 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if ($d[$device]['s']!=$status) store($device,$status,'',1);
 			}
 		} elseif ($device === 'sun_solar_elevation') {
-			$len=strlen($status);
-			if ($len==5) $status=round((float)$status,0);
-			elseif ($len==4) $status=round((float)$status,1);
+			if ($status>=10) $status=round((float)$status,0);
+			else $status=round((float)$status,1);
 			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
 		} elseif ($device === 'sun_solar_azimuth') {
 			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
