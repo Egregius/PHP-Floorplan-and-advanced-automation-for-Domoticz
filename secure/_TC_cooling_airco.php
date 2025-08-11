@@ -302,7 +302,7 @@ if ($d['daikin']['m']==1) {
 			if ($d['living_temp']['m']>=20&&$d['living_temp']['m']>=55&&$d['net']<-1000) {
 				$power=1;
 				store('living_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
-			}
+		}
 		} else $power=0;
 //		$Setliving=22;
 		if ($d['living_set']['s']!='D'&&$d['living_set']['s']!=$Setliving&&($d['raamliving']['s']=='Closed'||past('raamliving')>60)&&($d['deurinkom']['s']=='Closed'||past('deurinkom')>60)&&($d['deurgarage']['s']=='Closed'||past('deurgarage')>60)) {

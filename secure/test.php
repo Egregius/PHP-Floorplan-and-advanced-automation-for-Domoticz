@@ -13,11 +13,12 @@ $d=fetchdata(0,'test.php');
 //hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //hass('input_button','press','input_button.wakeipad');
 //hass('backup','create_automatic');
-//hass('script', 'turn_on', 'script.alles_uitschakelen_via_label_uit_bij_weg');
+
+hass('script', 'turn_on', 'script.alles_uitschakelen');
 
 //	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
 //echo kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
-sw('shieldpower', 'On','',true);
+//sw('shieldpower', 'On','',true);
 //hassrepublishEntityState('switch.lampkast');
 
 //print_r($d);

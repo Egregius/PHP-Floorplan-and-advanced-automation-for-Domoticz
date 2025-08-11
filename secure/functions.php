@@ -62,6 +62,7 @@ function huisslapen($weg=false) {
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
+	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 function huisthuis($msg='') {
 	store('weg', 0);

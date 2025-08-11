@@ -70,7 +70,7 @@ if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['weg']['s']<2&&$d['net']<-1200&&$d['grohered']['s']=='Off') sw('grohered', 'On', basename(__FILE__).':'.__LINE__.' '.$d['net'].'W Zonne-energie over', true);
-elseif ($d['grohered']['s']=='On'&&past('$ 8keuken8')>1800&&$d['net']>100) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
+elseif ($d['grohered']['s']=='On'&&past('8keuken_8')>1800&&$d['net']>100) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
