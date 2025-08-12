@@ -80,6 +80,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function waarschuwing($msg) {
+	hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', true);
 	telegram($msg, false, 1);
 	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 60]);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
@@ -688,6 +689,47 @@ function hassrepublishEntityState($entityId) {
     curl_close($ch);
 
     echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
+}
+function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critical = false) {
+    $token = hasstoken();
+    $ha_url = 'http://192.168.2.26:8123/api/services/notify/' . $target;
+    $data = [
+        "message" => $message,
+        "title"   => $title,
+        "data"    => [
+            "ttl"        => 0,
+            "priority"   => "high",
+            "persistent" => true
+        ]
+    ];
+    if ($critical) {
+        $data["data"]["push"] = [
+            "sound" => [
+                "name"     => "default",
+                "critical" => 1,
+                "volume"   => 1.0
+            ]
+        ];
+    }
+    for ($x = 1; $x <= 10; $x++) {
+        $options = [
+            "http" => [
+                "method"  => "POST",
+                "header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+                "content" => json_encode($data),
+                "timeout" => $x * 3
+            ]
+        ];
+        $context = stream_context_create($options);
+        $response = @file_get_contents($ha_url, false, $context);
+        if ($response === FALSE) {
+            lg('Fout bij versturen notificatie: ' . $title . ' ' . $message . ' naar ' . $target);
+            sleep($x * 3);
+        } else {
+            return true;
+        }
+    }
+    return false;
 }
 
 function curl($url) {

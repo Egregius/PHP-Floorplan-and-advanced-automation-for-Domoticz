@@ -6,6 +6,12 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
 
+
+
+
+hassnotify('Titel', 'Bericht');
+
+
 //echo hassget();
 //echo hassservices();
 //hass('light','turn_off','light.bureel1');
@@ -14,7 +20,7 @@ $d=fetchdata(0,'test.php');
 //hass('input_button','press','input_button.wakeipad');
 //hass('backup','create_automatic');
 
-hass('script', 'turn_on', 'script.alles_uitschakelen');
+//hass('script', 'turn_on', 'script.alles_uitschakelen');
 
 //	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
 //echo kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
