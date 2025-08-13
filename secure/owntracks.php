@@ -17,7 +17,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
 							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 						}
 						if($d['weg']['s']==2) {
-							telegram('Huis thuis door '.$user);
+							hassnotify('Huis thuis', 'door '.$user);
 							mset('remoteauto', time());
 							huisthuis('Huis thuis door '.$user);
 						} elseif($d['weg']['s']==0) {

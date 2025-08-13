@@ -39,4 +39,5 @@ if ($d['deurvoordeur']['s']=='Open'&&$status=='On') {
 	store('weg', 2, basename(__FILE__).':'.__LINE__);
 	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
 	huisslapen(true);
+	sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__,true);
 }
