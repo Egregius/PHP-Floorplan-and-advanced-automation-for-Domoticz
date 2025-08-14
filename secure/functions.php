@@ -81,7 +81,7 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 }
 function waarschuwing($msg) {
 	hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', true);
-	telegram($msg, false, 1);
+	telegram($msg, false, 2);
 	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 60]);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 	store('sirene', 'On', basename(__FILE__).':'.__LINE__);

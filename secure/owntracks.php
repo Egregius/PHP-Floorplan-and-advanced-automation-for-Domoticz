@@ -17,7 +17,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
 							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 						}
 						if($d['weg']['s']==2) {
-							hassnotify('Huis thuis', 'door '.$user);
+							hassnotify('Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', true);
 							mset('remoteauto', time());
 							huisthuis('Huis thuis door '.$user);
 						} elseif($d['weg']['s']==0) {
