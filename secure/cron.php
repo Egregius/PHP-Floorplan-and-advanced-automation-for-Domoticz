@@ -28,10 +28,12 @@ while (1){
 		include '_cron10.php';
 		$user='heating';
 		$t=t();
-		if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
-		elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
-		elseif ($d['heating']['s']==0) include '_TC_neutral.php';
-		elseif ($d['heating']['s']>0) include '_TC_heating.php';
+		if ($time%20==0) {
+			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
+			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
+			elseif ($d['heating']['s']==0) include '_TC_neutral.php';
+			elseif ($d['heating']['s']>0) include '_TC_heating.php';
+		}
 		if ($time%60==0) {
 			include '_cron60.php';
 			if ($time%120==0) include '_cron120.php';

@@ -169,7 +169,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 					if ($d[$name]['s']=='On') $action='Off';
 					else $action='On';
 				}
-				lg('[hsw] '.$msg,4);
+				lg('[sw] '.$msg,4);
 				if ($action=='On') hass('switch','turn_on','switch.'.$name);
 				elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 //				store($name, $action, $msg);
