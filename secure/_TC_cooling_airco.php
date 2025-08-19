@@ -183,9 +183,6 @@ if ($d['daikin']['m']==1) {
 			elseif ($time>strtotime('12:15')) $Setalex=$base+3;
 			elseif ($time>strtotime('11:15')) $Setalex=$base+3.5;
 			elseif ($time>strtotime('10:15')) $Setalex=$base+4;
-			elseif ($time>strtotime('9:15')) $Setalex=$base+4.5;
-			elseif ($time>strtotime('8:15')) $Setalex=$base+5;
-			elseif ($time>strtotime('7:15')) $Setalex=$base+5.5;
 			if ($d['alex_set']['s']=='D') {
 				$power=1;
 			} else {
