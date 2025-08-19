@@ -352,6 +352,15 @@ if ($d['daikin']['m']==1) {
 			$daikin=json_decode($d['daikinliving']['s']);
 			if(isset($daikin)) {
 				if (!isset($power)) $power=$daikin->power;
+				if (!isset($daikin->adv)) {
+					lg('set daikin to defaults');
+					$daikin = new stdClass();
+					$daikin->adv='';
+					$daikin->set='';
+					$daikin->power='';
+					$daikin->mode='';
+					$daikin->fan='';
+				}
 				if ($daikin->adv == '') {
 					$powermode=0;
 				} else if (strstr($daikin->adv, '/')) {

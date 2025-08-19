@@ -8,8 +8,8 @@ $d=fetchdata(0,'test.php');
 
 
 
-
-hassnotify('Titel', 'Bericht');
+echo daikinstatus('living');
+//hassnotify('Titel', 'Bericht');
 
 
 //echo hassget();

@@ -50,6 +50,7 @@ if ($d['auto']['s']=='On') {
 		else $i=25;
 		if ($d['pirkeuken']['s']=='Off'&&$d['snijplank']['s']==0&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 			foreach (array(5,0) as $i) {
+				lg($d['wasbak']['s'].' '.$i);
 				if ($d['wasbak']['s']>$i) {
 					sl('wasbak', $i, basename(__FILE__).':'.__LINE__);
 /*					if ($i==0) {
