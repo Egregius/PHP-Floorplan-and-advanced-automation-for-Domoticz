@@ -4,6 +4,7 @@ require '/var/www/html/secure/functions.php';
 lg('Starting cron2 loop...');
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
+define('LOOP_START', $time);
 $lastfetch=$time-20;
 while (1){
 	$start=microtime(true);
@@ -20,3 +21,11 @@ while (1){
 	}
 }
 
+function stoploop() {
+    $script = __FILE__;
+    if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
+        lg('functions.php gewijzigd → restarting cron2 loop...');
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
+}

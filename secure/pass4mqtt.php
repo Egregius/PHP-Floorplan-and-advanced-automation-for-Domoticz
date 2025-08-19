@@ -14,6 +14,7 @@ $user='MQTT';
 
 $d=fetchdata(0,'mqtt:'.__LINE__);
 $startloop=microtime(true);
+define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $lastEvent=$startloop;
@@ -50,10 +51,10 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				}
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
+	stoploop($d);
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe light brightness
@@ -289,16 +290,32 @@ function isProcessed(string $topic,string $status,array &$alreadyProcessed): boo
 }
 
 function stoploop($d) {
-	global $mqtt;
-	if ($d['weg']['m']==1) {
-		lg('Stopping MQTT Loop...');
-		storemode('weg',0,'',1);
-		$mqtt->disconnect();
-		exit;
-	} elseif ($d['weg']['m']==3) {
-		lg('Stopping MQTT Loop...');
-		storemode('weg',2,'',1);
-		$mqtt->disconnect();
-		exit;
-	}
+    global $mqtt;
+    $script = __FILE__;
+    if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
+        lg('functions.php gewijzigd → restarting pass4mqtt loop...');
+        $mqtt->disconnect();
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
+	if (filemtime(__DIR__ . '/pass4mqtt.php') > LOOP_START) {
+        lg('pass4mqtt.php gewijzigd → restarting pass4mqtt loop...');
+        $mqtt->disconnect();
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
+    // Bestaande checks
+    if ($d['weg']['m'] == 1) {
+        lg('Stopping MQTT Loop (weg=1)...');
+        storemode('weg', 0, '', 1);
+        $mqtt->disconnect();
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    } elseif ($d['weg']['m'] == 3) {
+        lg('Stopping MQTT Loop (weg=3)...');
+        storemode('weg', 2, '', 1);
+        $mqtt->disconnect();
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
 }

@@ -1,9 +1,12 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
+lg('Starting CRON loop...',9);
 
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
+define('LOOP_START', $time);
+
 $lastfetch=$time-20;
 $user='CRONstart';
 $items=array('badkamervuur2','badkamervuur1','water');
@@ -17,7 +20,6 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-lg('Starting CRON loop...',9);
 while (1){
 	$start=microtime(true);
 	$time=time();
@@ -44,8 +46,31 @@ while (1){
 		}
 		if ($time%450==0) include '_cron450.php';
 		if ($time%100==0) include '_weather.php';
+		
 	}
-	
+	stoploop($d);
 	$time_elapsed_secs=microtime(true)-$start;
 	if ($time_elapsed_secs<1) usleep(round(1000*(1000-($time_elapsed_secs*1000))));
+	
+}
+
+function stoploop($d) {
+    global $db;
+    $script = __FILE__;
+    if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
+        lg('functions.php gewijzigd → restarting cron loop...');
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
+    if (filemtime(__DIR__ . '/cron.php') > LOOP_START) {
+        lg('cron.php gewijzigd → restarting cron loop...');
+        exec("$script > /dev/null 2>&1 &");
+        exit;
+    }
+	if ($d['weg']['m']==2) {
+		lg('Stopping CRON Loop...');
+		$db->query("UPDATE devices SET m=0 WHERE n ='weg';");
+		exit('Stop');
+		die('Stop');
+	}
 }

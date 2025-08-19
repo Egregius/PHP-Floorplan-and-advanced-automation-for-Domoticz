@@ -77,9 +77,3 @@ if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', bas
 
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
 
-if ($d['weg']['m']==2) {
-	lg('Stopping CRON Loop...');
-	$db->query("UPDATE devices SET m=0 WHERE n ='weg';");
-	exit('Stop');
-	die('Stop');
-}

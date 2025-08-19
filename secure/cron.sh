@@ -1,7 +1,5 @@
 #!/bin/sh
-DOMOTICZ=false
 PASS4MQTT=true
-MQTTREPUBLISHDOMOTICZ=false
 ENERGY=true
 CRON=true
 CRON2=true
@@ -13,12 +11,6 @@ while [ $i -lt 6 ]; do
 		ps cax | grep pass4mqtt.php
 		if [ $? -ne 0 ] ; then
 			/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-		fi
-	fi
-	if [ $MQTTREPUBLISHDOMOTICZ = true ] ;then
-		ps cax | grep mqttrepublishdo
-		if [ $? -ne 0 ] ; then
-			/var/www/html/secure/mqttrepublishdomoticz.php >/dev/null 2>&1 &
 		fi
 	fi
 	if [ $ENERGY = true ] ;then
@@ -57,31 +49,6 @@ ps cax | grep mariadbd
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
-fi
-
-if [ $DOMOTICZ = true ] ;then
-	DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-	STATUS=`echo $DOMOTICZSTATUS | jq -r '.status'`
-	if [ $STATUS = "OK" ] ; then
-		exit
-	else
-		sleep 20
-		DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-		STATUS2=`echo $DOMOTICZSTATUS | jq -r '.status'`
-		if [ $STATUS2 = "OK" ] ; then
-			exit
-		else
-			sleep 20
-			DOMOTICZSTATUS=`curl -s --connect-timeout 2 --max-time 5 "http://127.0.0.1:8080/json.htm?type=command&param=getdevices&rid=1"`
-			STATUS3=`echo $DOMOTICZSTATUS | jq -r '.status'`
-			if [ $STATUS3 = "OK" ] ; then
-				exit
-			else
-				/usr/sbin/service domoticz stop
-				/usr/sbin/service domoticz start
-			fi
-		fi
-	fi
 fi
 
 # Remove these lines as they only upload my files to gitbub.
