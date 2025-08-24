@@ -1,3 +1,3 @@
 <?php
 include '../functions.php';
-boseplayinfo("deurbel", 50, basename(__FILE__).':'.__LINE__, 101);
+boseplayinfo("doorbell", 60, basename(__FILE__).':'.__LINE__, 101);

@@ -79,12 +79,29 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		bosevolume($volume['actualvolume'], 101, basename(__FILE__).':'.__LINE__);
 	}
 }
+function alert($name,$msg,$ttl,$silent=true,$to=1) {
+	global $db,$time;
+	$last=0;
+	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+		if (isset($row['t'])) $last=$row['t'];
+	}
+	if ($last < $time-$ttl) {
+		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
+		if ($to==1) hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', false);
+		else {
+			hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
+			telegram($msg, $silent, 2);
+		}
+		lg('alert='.$last);
+	}
+}
 function waarschuwing($msg) {
 	hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', true);
 	telegram($msg, false, 2);
-	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 60]);
 	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
+	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 65]);
 }
 function past($name,$lg='') {
 	global $d,$time;
@@ -216,20 +233,7 @@ function storeicon($name,$icon,$msg='',$update=null) {
 		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
-function alert($name,$msg,$ttl,$silent=true,$to=1) {
-	global $db,$time;
-	$last=0;
-	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		if (isset($row['t'])) $last=$row['t'];
-	}
-	if ($last < $time-$ttl) {
-		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
-		if ($to==1) hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', false);
-		else telegram($msg, $silent, $to);
-		lg('alert='.$last);
-	}
-}
+
 function kodi($json) {
 	global $kodiurl;
 	$ch=curl_init($kodiurl.'/jsonrpc');
