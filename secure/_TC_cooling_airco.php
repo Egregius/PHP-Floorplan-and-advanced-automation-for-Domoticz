@@ -38,7 +38,7 @@ if ($d['daikin']['m']==1) {
 					)
 				)
 		) {
-			$base=21;
+			$base=21.5;
 			if ($time<strtotime('7:00')) $Setkamer=$base;
 			elseif ($time>strtotime('21:30')) $Setkamer=$base;
 			elseif ($time>strtotime('20:30')) $Setkamer=$base+0.5;

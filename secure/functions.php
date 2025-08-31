@@ -525,7 +525,7 @@ function daikinstatus($device) {
         return FALSE;
     }
 	if (stripos($data, "SERIAL IF FAILURE") !== false) {
-        alert("daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",3600);
+        alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",3600);
 //        sw('daikin', 'Off', $user.':'.__LINE__);
 //        sleep(5);
 //        sw('daikin', 'On',  $user.':'.__LINE__);

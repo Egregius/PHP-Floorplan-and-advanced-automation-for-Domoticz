@@ -188,7 +188,7 @@ if ($d['auto']['s']=='On') {
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
-//		$luifel=0; // In comment zetten om luifel te activeren.
+		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
@@ -198,7 +198,7 @@ if ($d['auto']['s']=='On') {
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
-//		$luifel=0; // In comment zetten om luifel te activeren.
+		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			lg(basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']['s'].' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
 			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
@@ -209,7 +209,7 @@ if ($d['auto']['s']=='On') {
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
-//		$luifel=0; // In comment zetten om luifel te activeren.
+		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']['m']==0) {
 			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
