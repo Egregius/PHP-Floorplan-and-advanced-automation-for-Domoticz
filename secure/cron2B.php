@@ -12,7 +12,7 @@ $boses=array(
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
 if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
-	foreach(array(101=>14,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
+	/*foreach(array(101=>14,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		$status=json_decode(json_encode(simplexml_load_string($status)), true);
 		if (isset($status['@attributes']['source'])) {
@@ -42,7 +42,7 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		unset($status);
-	}
+	}*/
 /*	foreach(array(101) as $ip) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
 		if (isset($status)) {
@@ -91,9 +91,9 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 		}
 	}	
 }
-if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
+/*if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
-}
+}*/
 
 if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
@@ -125,7 +125,7 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 		if (past('media')>45&&past('media')<60) sw('shieldpower', 'On','',true);
 	}	
 }
-
+/*
 if ($d['pirliving']['s']=='Off'
 	&&$d['pirgarage']['s']=='Off'
 	&&$d['bose101']['m']==1
@@ -162,7 +162,7 @@ if ($d['pirliving']['s']=='Off'
 			}
 		}
 	}
-}
+}*/
 /*if ($d['kodi']['s']=='Idle'||$d['kodi']['s']=='Paused') {
 	$past=past('kodi');
 	if ($past>=20&&$past<=30)	kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
