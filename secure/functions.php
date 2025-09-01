@@ -22,6 +22,7 @@ function fliving() {
 				if ($d['bureel2']['s']<20) sl('bureel2', 20, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['zithoek']['s']==0) sl('zithoek', 10, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
@@ -30,12 +31,15 @@ function fgarage() {
 	if ($d['zon']<100&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
-	global $d;
+	global $d,$time;
 	if (1==2) {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-3||$d['rkeukenl']['s']>80)) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-3||$d['rkeukenl']['s']>80)) {
+			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			else sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
+		}
 	}
 //	hass('input_button','press','input_button.wakeipad');
 }

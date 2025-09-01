@@ -20,7 +20,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureel') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('bureel','zithoek','eettafel') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
@@ -108,7 +108,8 @@ if ($d['auto']['s']=='On') {
 	if ($d['dag']['s']>0) {
 		if ($d['rbureel']['s']<40) {
 			if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20) sw('zithoek', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sw('zithoek', 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['bureel']['s']>0&&$d['bureel']['s']<20&&$d['eettafel']['s']==0) sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}
 

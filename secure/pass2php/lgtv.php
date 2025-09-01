@@ -15,4 +15,10 @@ if ($status=='On') {
 		bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
 		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 	}
+} elseif ($status=='Off') {
+	if ($d['bureel1']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+		if (($d['zon']==0&&$d['dag']['s']<-3)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
+			if ($d['zithoek']['s']==0) sl('zithoek', 10, basename(__FILE__).':'.__LINE__);
+		}
+	}
 }
