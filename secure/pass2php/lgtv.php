@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+//	if ($d['auto']['s']=='On') hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 //	$d['time']=time();
 //	if ($d['time']>=strtotime('19:00')) {
 //		if ($d['kristal']['s']=='Off'&&$d['Buiten_temp']['s']<10&) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);

@@ -130,8 +130,23 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} elseif ($device === 'powermeter_power') {
 				if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh',$status);
 			} elseif ($device === 'kookplaatpower_power') {
-				if (($d['kookplaatpower_kwh']['s'] ?? null) !== $status) store('kookplaatpower_kwh',$status);
-			}  elseif (substr($device,-4) === '_hum') {
+				$current = (float)($d['kookplaatpower_kwh']['s'] ?? 0);
+				$statusF = (float)$status;
+				$delta = abs($statusF - $current);
+				if ($delta >= 100 || ($statusF < 20 && $current >= 20)) {
+					store('kookplaatpower_kwh', $statusF, '', 1);
+					$d['kookplaatpower_kwh']['s'] = $statusF;
+				} else lg('Skipped kookplaatpower_power '.$statusF);
+			}  elseif ($device === 'wasmachine_power') {
+				$current = (float)($d[$device]['s'] ?? 0);
+				$statusF = (float)$status;
+				$delta = abs($statusF - $current);
+				if ($delta >= 100 || ($statusF < 6 && $current >= 6)) {
+					store($device, $statusF, '', 1);
+					$d[$device]['s'] = $statusF;
+				} else lg('Skipped wasmachine power '.$statusF);
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+			} elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
 				if ($hum > 100) $hum=100;
