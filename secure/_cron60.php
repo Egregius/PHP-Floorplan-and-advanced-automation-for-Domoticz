@@ -147,4 +147,8 @@ if ($d['auto']['s']=='On') {
 	if ($d['weg']['s']>=1&&$d['media']['s']=='On'&&past('weg')>900) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/
-
+if ($d['wasmachine']['s']=='On') {
+	if ($d['wasmachine_power']['s']>0&&$d['wasmachine_power']['s']<5&&past('wasmachine_power')>120) {
+		hassnotify('Wasmachine', 'klaar');
+	}
+}

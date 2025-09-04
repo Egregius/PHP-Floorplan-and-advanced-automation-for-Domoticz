@@ -16,11 +16,11 @@ if ($status=='On') {
 		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 } elseif ($status=='Off') {
-	lg(__LINE__);
-	if ($d['bureel1']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		lg(__LINE__);
-		if ($d['zon']==0&&$d['dag']['s']<-3) {
-			lg(__LINE__);
+	lg(basename(__FILE__).':'.__LINE__);
+	if ($d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+		lg(basename(__FILE__).':'.__LINE__);
+		if ($d['zon']==0&&$d['dag']['s']<0) {
+			lg(basename(__FILE__).':'.__LINE__);
 			if ($d['zithoek']['s']==0) sl('zithoek', 10, basename(__FILE__).':'.__LINE__);
 		}
 	}
