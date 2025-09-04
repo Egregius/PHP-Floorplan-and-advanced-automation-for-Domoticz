@@ -6,9 +6,9 @@ require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
 
-
+fliving();
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
-shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
+//shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
 
 //sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 //waarschuwing('test');

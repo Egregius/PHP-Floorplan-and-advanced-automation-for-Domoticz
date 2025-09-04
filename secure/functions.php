@@ -14,8 +14,8 @@ function t() {
 }
 function fliving() {
 	global $d,$time,$t;
-	if ($d['media']['s']=='Off'&&$d['bureel1']['s']=='Off'&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		if (($d['zon']==0&&$d['dag']['s']<-3)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
+	if ($d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+		if (($d['zon']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
 			if ($d['eettafel']['s']==0&&$time<$am) {
 				if ($d['bureel1']['s']<20) sl('bureel1', 20, basename(__FILE__).':'.__LINE__);
