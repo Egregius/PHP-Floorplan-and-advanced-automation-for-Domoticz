@@ -141,7 +141,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$current = (float)($d[$device]['s'] ?? 0);
 				$statusF = (float)$status;
 				$delta = abs($statusF - $current);
-				if ($delta >= 100 || ($statusF < 6 && $current >= 6) || past('wasmachine')<300) {
+				if ($delta >= 100 || ($statusF < 6 && $current >= 6) || past('wasmachine_power')>300) {
 					store($device, $statusF, '', 1);
 					$d[$device]['s'] = $statusF;
 				} else lg('Skipped wasmachine power '.$statusF);
