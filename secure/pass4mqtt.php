@@ -143,8 +143,6 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				) {
 					store('kookplaatpower_kwh', $statusF, '', 1);
 					$d['kookplaatpower_kwh']['s'] = $statusF;
-				} else {
-					lg('Skipped kookplaatpower_power '.$statusF);
 				}
 			} elseif ($device === 'wasmachine_power') {
 				$current = (float)($d[$device]['s'] ?? 0);
@@ -160,10 +158,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				) {
 					store($device, $statusF, '', 1);
 					$d[$device]['s'] = $statusF;
-				} else {
-					lg('Skipped wasmachine power '.$statusF);
-				}
-			
+				}			
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
