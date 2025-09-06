@@ -129,32 +129,30 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				include '/var/www/html/secure/pass2php/powermeter_kwh.php';
 			} elseif ($device === 'powermeter_power') {
 				if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh',$status);
-			} elseif ($device === 'kookplaatpower_power') {
-				$current = (float)($d['kookplaatpower_kwh']['s'] ?? 0); // ← check: klopt dit wel? Anders $d[$device]['s']
+			} elseif ($device === 'kookplaat_power') {
+				$current = (float)($d[$device]['s'] ?? 0);
 				$statusF = (float)$status;
-				$delta   = abs($statusF - $current);
+				$delta = abs($statusF - $current);
 				$percent = ($current > 0) ? ($delta / $current) * 100 : 100;
-			
 				if (
-					$percent >= 30 ||
-					$delta >= 300 || 
-					($statusF < 20 && $current >= 20) ||
-					past('kookplaatpower_kwh') > 300
+					$percent >= 75 ||
+					$delta >= 300 ||
+					($statusF < 6 && $current >= 6) ||
+					past($device) > 300
 				) {
-					store('kookplaatpower_kwh', $statusF, '', 1);
-					$d['kookplaatpower_kwh']['s'] = $statusF;
-				}
+					store($device, $statusF, '', 1);
+					$d[$device]['s'] = $statusF;
+				}			
 			} elseif ($device === 'wasmachine_power') {
 				$current = (float)($d[$device]['s'] ?? 0);
 				$statusF = (float)$status;
 				$delta = abs($statusF - $current);
 				$percent = ($current > 0) ? ($delta / $current) * 100 : 100;
-			
 				if (
 					$percent >= 75 ||
 					$delta >= 300 ||
 					($statusF < 6 && $current >= 6) ||
-					past('wasmachine_power') > 300
+					past($device) > 300
 				) {
 					store($device, $statusF, '', 1);
 					$d[$device]['s'] = $statusF;

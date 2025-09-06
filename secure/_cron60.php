@@ -20,7 +20,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureel','zithoek','eettafel') as $i) if ($d[$i]['s']=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (array('bureel','zithoek','eettafel') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
@@ -105,11 +105,14 @@ if ($d['auto']['s']=='On') {
 		elseif ($past>1800) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
 	}*/
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['dag']['s']>0) {
-		if ($d['rbureel']['s']<40) {
-			if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sw('zithoek', 'Off', basename(__FILE__).':'.__LINE__);
-			if ($d['bureel']['s']>0&&$d['bureel']['s']<20&&$d['eettafel']['s']==0) sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
+
+	if ($d['pirliving']['s']=='Off') {
+		if ($d['dag']['s']>0) {
+			if ($d['rbureel']['s']<40&&$d['rliving']['s']<40) {
+				if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
+				if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['bureel']['s']>0&&$d['bureel']['s']<=20&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 
@@ -122,8 +125,8 @@ if ($d['auto']['s']=='On') {
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
 	
-	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>300) {
-//		if ($d['kookplaatpower_kWh']['s']<100&&past('kookplaatpower_kWh')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
+		if ($d['kookplaat_power']['s']<50&&past('kookplaat_power')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 /*	if ($d['weg']['s']>=1) {
 		if ($d['media']['s']=='On') {

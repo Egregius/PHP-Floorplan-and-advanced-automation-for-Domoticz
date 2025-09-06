@@ -328,7 +328,7 @@ if ($d['daikin']['m']==1) {
 			elseif($d['living_set']['s']==2) $rate=4;
 			elseif($d['living_set']['s']==3) $rate=5;
 			elseif($d['living_set']['s']==4) $rate=6;
-			elseif($d['living_set']['s']==5) {$spmode=1;}
+			elseif($d['living_set']['s']==5) {$rate=7;$spmode=1;}
 			if ($d['eettafel']['s']>0) $rate='B';
 			elseif ($d['eettafel']['s']>0) $rate='B';
 			elseif ($d['lgtv']['s']=='On') $rate='B';
