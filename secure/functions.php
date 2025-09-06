@@ -208,11 +208,13 @@ function setpoint($name, $value,$msg='') {
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
-function store($name='',$status='',$msg='',$update=null) {
-	global $db, $user;
+function store($name='',$status='',$msg='',$update=null,$force=true) {
+	global $d,$db, $user;
 	$time=time();
-	if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
-	else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+	if ($force==true||$status!=$d[$name]['s']) {
+		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+	}
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
 		if (endswith($name, '_temp')) return;

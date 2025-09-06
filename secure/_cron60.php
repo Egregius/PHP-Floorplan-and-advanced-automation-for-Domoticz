@@ -126,7 +126,7 @@ if ($d['auto']['s']=='On') {
 	}
 	
 	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
-		if ($d['kookplaat_power']['s']<50&&past('kookplaat_power')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['kookplaat_power']['s']<125&&past('kookplaat_power')>300) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 /*	if ($d['weg']['s']>=1) {
 		if ($d['media']['s']=='On') {

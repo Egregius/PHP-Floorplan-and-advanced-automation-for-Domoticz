@@ -140,7 +140,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 					($statusF < 6 && $current >= 6) ||
 					past($device) > 300
 				) {
-					store($device, $statusF, '', 1);
+					store($device, $statusF, '', 1,false);
 					$d[$device]['s'] = $statusF;
 				}			
 			} elseif ($device === 'wasmachine_power') {
@@ -154,7 +154,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 					($statusF < 6 && $current >= 6) ||
 					past($device) > 300
 				) {
-					store($device, $statusF, '', 1);
+					store($device, $statusF, '', 1,false);
 					$d[$device]['s'] = $statusF;
 				}			
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
