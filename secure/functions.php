@@ -427,7 +427,7 @@ function bosezone($ip,$forced=false,$vol='') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif ($time<strtotime('7:00')) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
+				elseif ($d['ralex']['s']==100) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $map[$ip], 101);
