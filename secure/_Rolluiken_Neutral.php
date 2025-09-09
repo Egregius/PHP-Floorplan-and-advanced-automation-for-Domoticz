@@ -9,7 +9,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['ralex']['s']==0&&$d['rwaskamer']['s']>0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
-			if (alexslaapt()==false) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['ralex']['s']>0&&alexslaapt()==false) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['dag']['s']>=$zonelevatie) {
 			if ($d['lgtv']['s']!='On') {
