@@ -5,75 +5,13 @@ $start=microtime(true);
 require 'functions.php';
 require '/var/www/authentication.php';
 $d=fetchdata(0,'test.php');
+$startloop=microtime(true);
+$d['time']=$startloop;
 
-$ha_url = 'http://192.168.2.26:8123';
-$ha_token = 'Bearer '.hasstoken();
-$base_topic = 'homeassistant';
-foreach ($d as $device => $i) {
-	if (!isset($i['dt'])) continue;
-	$entity_id = null;
-	$to_publish = [];
-	if ($i['dt'] === 'hsw') {
-		$entity_id = "switch.$device";
-		$url = "$ha_url/api/states/$entity_id";
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $ha_token"]);
-		$result = curl_exec($ch);
-		curl_close($ch);
-		$data = json_decode($result, true);
-		if (!isset($data['state'])) {
-			lg("Fout: kon status van $entity_id niet ophalen");
-			continue;
-		}
-		list($domain, $object_id) = explode('.', $entity_id);
-		$state = ucfirst($data['state']);
-		if ($state!=$i['s']) $to_publish[] = [
-			'topic' => "$base_topic/$domain/$object_id/state",
-			'payload' => $state
-		];
-	} elseif ($i['dt'] === 'hd') {
-		$entity_id = "light.$device";
-		$url = "$ha_url/api/states/$entity_id";
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $ha_token"]);
-		$result = curl_exec($ch);
-		curl_close($ch);
-		$data = json_decode($result, true);
-		$attributes = $data['attributes'] ?? [];
-		if (!array_key_exists('brightness', $attributes)) {
-			lg("Geen brightness attribuut voor $entity_id");
-			continue;
-		}
-		list($domain, $object_id) = explode('.', $entity_id);
-		$brightness = $attributes['brightness'] ?? 0;
-		$brightness=round((float)$brightness / 2.55);
-		if ($brightness!=$i['s']) $to_publish[] = [
-			'topic' => "$base_topic/$domain/$object_id/brightness",
-			'payload' => $brightness
-		];
-	} else continue;
-	usleep(50000);
-	foreach ($to_publish as $pub) {
-		$payload = [
-			'topic' => $pub['topic'],
-			'payload' => $pub['payload'],
-			'retain' => true
-		];
-		$ch = curl_init("$ha_url/api/services/mqtt/publish");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			"Authorization: $ha_token",
-			"Content-Type: application/json"
-		]);
-		$response = curl_exec($ch);
-		curl_close($ch);
-		lg("Herpublicatie: $entity_id → {$pub['payload']} → {$pub['topic']}");
-		usleep(50000);
-	}
-}
+$status='On';
+check_en_slapen('slaapkamer', $status, $d);
+
+
 
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
 //shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
@@ -173,6 +111,7 @@ unset(
 	$db,
 	$nasip,
 	$kodiurl,
+	$kodiurl2,
 	$dsapikey,
 	$owappid,
 	$openuv,
@@ -180,7 +119,11 @@ unset(
 	$lat,
 	$lon,
 	$vurl,
-	$weekend
+	$weekend,
+	$memcache,
+	$homes,
+	$cameratoken,
+	
 );
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 

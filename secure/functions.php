@@ -12,6 +12,79 @@ function t() {
 	if ($dow==0||$dow==6) return strtotime('7:45');
 	else return strtotime('7:00');
 }
+function alexslaapt(){
+	global $d,$time,$t;
+	if ($d['ralex']['s'] < 100) return false;
+	if ($d['deuralex']['s'] == 'Open') return false;
+	if ($d['alex']['s'] > 0) return false;
+	if ($d['heating']['s'] > 0) {
+		if ($time >= $t + 1800 && $time < strtotime('20:00')) {
+			if (past('deuralex') < 3600) return false;
+		}
+	}
+	if (past('deuralex') < 300) return false;
+	if (past('alex') < 300) return false;
+	return true;
+}
+function check_en_slapen($locatie, $status, &$d) {
+	$x = 0;
+	if ($locatie === 'voordeur') {
+		if ($d['deurvoordeur']['s'] !== 'Open' || $status !== 'On') return;
+	} elseif ($locatie === 'poort') {
+		if ($status !== 'On') return;
+		if ($d['poortrf']['s'] !== 'On') {
+			sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
+			return;
+		}
+	} elseif ($locatie === 'slaapkamer') {
+		if ($status !== 'On') return;
+		if ($d['weg']['s'] != 0) return;
+		if (!($d['time'] > strtotime('21:00') || $d['time'] < strtotime('4:00'))) return;
+	}
+	$ramen_deuren = [
+		'achterdeur'	=> 'Achterdeur open',
+		'raamliving'	=> 'Raam Living open',
+		'raamkeuken'	=> 'Raam keuken open',
+	];
+	if ($locatie !== 'voordeur') {
+		$ramen_deuren['deurvoordeur'] = 'Voordeur open';
+	}
+	foreach ($ramen_deuren as $k => $msg) {
+		if ($d[$k]['s'] != 'Closed') {
+			waarschuwing($msg, 55);
+			$x++;
+		}
+	}
+	$boses = [
+		102 => '102',
+		103 => 'Boven',
+		104 => 'Garage',
+		105 => '10-Wit',
+		106 => 'Buiten20',
+	];
+	foreach ($boses as $k => $v) {
+		if ($d['bose'.$k]['icon'] == 'Online') {
+			waarschuwing('Bose '.$v, 55);
+			$x++;
+		}
+	}
+	if ($x > 0) return;
+	if ($locatie === 'voordeur' || $locatie === 'poort') {
+		hassopts('xiaomi_aqara', 'play_ringtone', '', [
+			'gw_mac'		=> '34ce008d3f60',
+			'ringtone_id'	=> 8,
+			'ringtone_vol'	=> 50
+		]);
+		huisslapen(true);
+		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
+	} elseif ($locatie === 'slaapkamer') {
+		if ($d['kamer']['s'] > 5) {
+			sl('kamer', 5, basename(__FILE__).':'.__LINE__);
+		}
+		huisslapen();
+	}
+}
+
 function fliving() {
 	global $d,$time,$t;
 	if ($d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
@@ -22,7 +95,12 @@ function fliving() {
 				if ($d['bureel2']['s']<20) sl('bureel2', 20, basename(__FILE__).':'.__LINE__);
 			}
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']==0) sl('zithoek', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['zithoek']['s']==0) {
+				sl('zithoek1', 10, basename(__FILE__).':'.__LINE__);
+				sl('zithoek2', 10, basename(__FILE__).':'.__LINE__);
+				sl('zithoek3', 12, basename(__FILE__).':'.__LINE__);
+				sl('zithoek4', 12, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 }
@@ -47,17 +125,17 @@ function finkom($force=false) {
 	global $d,$time;
 	if (($d['dag']['s']<-4&&$d['weg']['s']==0)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']['s']<-2) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-		if ($d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('20:30')) sl('hall', 30, basename(__FILE__).':'.__LINE__);
+		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&alexslaapt()==false) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
 	global $d,$t,$time;
-	if ($d['dag']['s']<-4&&$time<=strtotime('20:45')&&($time>=$t+1800||$d['ralex']['s']==0||$d['deuralex']['s']=='Open'||past('deuralex')<900)) {
-		if ($d['hall']['s']<30&&$d['weg']['s']==0&&$d['dag']['s']<-3) {
+	if ($d['dag']['s']<-4&&alexslaapt()==true) {
+		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('22:30')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
 	global $d;
@@ -505,119 +583,119 @@ function createheader($page='') {
 	</head>';
 }
 function daikin_ips() {
-    return [
-        'living' => 111,
-        'kamer'  => 112,
-        'alex'   => 113,
-    ];
+	return [
+		'living' => 111,
+		'kamer'  => 112,
+		'alex'	=> 113,
+	];
 }
 
 function http_get($url, $retries = 2, $timeout = 2) {
-    $ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
-    for ($i=0; $i <= $retries; $i++) {
-        $data = @file_get_contents($url, false, $ctx);
-        if ($data !== FALSE) return $data;
-        usleep(200000); // 0.2s wachten
-    }
-    return FALSE;
+	$ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
+	for ($i=0; $i <= $retries; $i++) {
+		$data = @file_get_contents($url, false, $ctx);
+		if ($data !== FALSE) return $data;
+		usleep(200000); // 0.2s wachten
+	}
+	return FALSE;
 }
 function daikinstatus($device) {
-    $ips = daikin_ips();
-    if (!isset($ips[$device])) return FALSE;
+	$ips = daikin_ips();
+	if (!isset($ips[$device])) return FALSE;
 
-    $url = "http://192.168.2.{$ips[$device]}/aircon/get_control_info";
-    $data = http_get($url);
+	$url = "http://192.168.2.{$ips[$device]}/aircon/get_control_info";
+	$data = http_get($url);
 
-    if ($data === FALSE) {
-        lg("daikinstatus: geen antwoord van $device ($url)");
-        return FALSE;
-    }
+	if ($data === FALSE) {
+		lg("daikinstatus: geen antwoord van $device ($url)");
+		return FALSE;
+	}
 	if (stripos($data, "SERIAL IF FAILURE") !== false) {
-        alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",3600);
-//        sw('daikin', 'Off', $user.':'.__LINE__);
-//        sleep(5);
-//        sw('daikin', 'On',  $user.':'.__LINE__);
-        return FALSE;
-    }
-    $array = explode(",", $data);
+		alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",3600);
+//		sw('daikin', 'Off', $user.':'.__LINE__);
+//		sleep(5);
+//		sw('daikin', 'On',  $user.':'.__LINE__);
+		return FALSE;
+	}
+	$array = explode(",", $data);
 
-    // Standaardwaarden zodat alles altijd bestaat
-    $ci = [
-        'power' => null,
-        'mode'  => null,
-        'adv'   => 'default', 
-        'set'   => null,
-        'fan'   => null
-    ];
+	// Standaardwaarden zodat alles altijd bestaat
+	$ci = [
+		'power' => null,
+		'mode'  => null,
+		'adv'	=> 'default', 
+		'set'	=> null,
+		'fan'	=> null
+	];
 
-    foreach ($array as $value){
-        $pair = explode("=", $value, 2);
-        if (count($pair) !== 2) continue;
-        list($key, $val) = $pair;
+	foreach ($array as $value){
+		$pair = explode("=", $value, 2);
+		if (count($pair) !== 2) continue;
+		list($key, $val) = $pair;
 
-        if     ($key=='pow')   $ci['power'] = $val;
-        elseif ($key=='mode')  $ci['mode']  = $val;
-        elseif ($key=='adv')   $ci['adv']   = $val;
-        elseif ($key=='stemp') $ci['set']   = $val;
-        elseif ($key=='f_rate')$ci['fan']   = $val;
-    }
+		if	 ($key=='pow')	$ci['power'] = $val;
+		elseif ($key=='mode')  $ci['mode']  = $val;
+		elseif ($key=='adv')	$ci['adv']	= $val;
+		elseif ($key=='stemp') $ci['set']	= $val;
+		elseif ($key=='f_rate')$ci['fan']	= $val;
+	}
 
-    return json_encode($ci);
+	return json_encode($ci);
 }
 
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-    global $d, $time, $lastfetch;
-    $lastfetch = $time;
+	global $d, $time, $lastfetch;
+	$lastfetch = $time;
 
-    $ips = daikin_ips();
-    if (!isset($ips[$device])) return FALSE;
+	$ips = daikin_ips();
+	if (!isset($ips[$device])) return FALSE;
 
-    if ($maxpow === false) {
-        $maxpow = $d['daikin_kwh']['icon'];
-    } else {
-        if ($maxpow != $d['daikin_kwh']['icon']) {
-            storeicon('daikin_kwh', $maxpow);
-        }
-    }
+	if ($maxpow === false) {
+		$maxpow = $d['daikin_kwh']['icon'];
+	} else {
+		if ($maxpow != $d['daikin_kwh']['icon']) {
+			storeicon('daikin_kwh', $maxpow);
+		}
+	}
 
-    $base = "http://192.168.2.{$ips[$device]}";
+	$base = "http://192.168.2.{$ips[$device]}";
 
-    $url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-    lg("daikinset($device): $url");
-    http_get($url);
-    sleep(2); 
-    $status = daikinstatus($device);
-    if ($status) {
-        if ($d['daikin'.$device]['s'] != $status) {
-            store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");
-        }
-        if ($power==0 && $d['daikin'.$device]['m']!=0) {
-            storemode('daikin'.$device, 0, basename(__FILE__).":".__LINE__.":$msg");
-        } elseif ($d['daikin'.$device]['m']!=$mode) {
-            storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
-        }
+	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+	lg("daikinset($device): $url");
+	http_get($url);
+	sleep(2); 
+	$status = daikinstatus($device);
+	if ($status) {
+		if ($d['daikin'.$device]['s'] != $status) {
+			store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");
+		}
+		if ($power==0 && $d['daikin'.$device]['m']!=0) {
+			storemode('daikin'.$device, 0, basename(__FILE__).":".__LINE__.":$msg");
+		} elseif ($d['daikin'.$device]['m']!=$mode) {
+			storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
+		}
 
-        if ($spmode==-1) {
-            http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2"); // Eco
-        } elseif ($spmode==0) {
-            http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1"); // Normal
-        } elseif ($spmode==1) {
-            http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1"); // Power
-        }
+		if ($spmode==-1) {
+			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2"); // Eco
+		} elseif ($spmode==0) {
+			http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1"); // Normal
+		} elseif ($spmode==1) {
+			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1"); // Power
+		}
 
-        sleep(2);
+		sleep(2);
 
-        foreach($ips as $k=>$ip) {
-            if ($d['daikin'.$k]['m']!=0) {
-                if ($maxpow==100) {
-                    $url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
-                } else {
-                    $url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
-                }
-                http_get($url);
-            }
-        }
-    }
+		foreach($ips as $k=>$ip) {
+			if ($d['daikin'.$k]['m']!=0) {
+				if ($maxpow==100) {
+					$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+				} else {
+					$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+				}
+				http_get($url);
+			}
+		}
+	}
 }
 function hasstoken() {
 	global $user;
@@ -715,92 +793,92 @@ function hassservices() {
 	return $response;
 }
 function hassrepublishEntityState($entityId) {
-    $ha_url = 'http://192.168.2.26:8123';
-    $token = 'Bearer '.hasstoken();
-    $base_topic = 'homeassistant';
+	$ha_url = 'http://192.168.2.26:8123';
+	$token = 'Bearer '.hasstoken();
+	$base_topic = 'homeassistant';
 
-    // 1. Status ophalen
-    $ch = curl_init("$ha_url/api/states/$entityId");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $token"]);
-    $result = curl_exec($ch);
-    curl_close($ch);
+	// 1. Status ophalen
+	$ch = curl_init("$ha_url/api/states/$entityId");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $token"]);
+	$result = curl_exec($ch);
+	curl_close($ch);
 	echo $result;
-    $data = json_decode($result, true);
-    if (!isset($data['state'])) {
-        echo "Ongeldige entity of fout in API\n";
-        return;
-    }
+	$data = json_decode($result, true);
+	if (!isset($data['state'])) {
+		echo "Ongeldige entity of fout in API\n";
+		return;
+	}
 
-    $state = $data['state'];
-    $parts = explode('.', $entityId); // bv: switch.airco_living
-    if (count($parts) != 2) {
-        echo "Ongeldige entity_id structuur\n";
-        return;
-    }
+	$state = $data['state'];
+	$parts = explode('.', $entityId); // bv: switch.airco_living
+	if (count($parts) != 2) {
+		echo "Ongeldige entity_id structuur\n";
+		return;
+	}
 
-    list($domain, $object_id) = $parts;
-    $topic = "$base_topic/$domain/$object_id/state";
+	list($domain, $object_id) = $parts;
+	$topic = "$base_topic/$domain/$object_id/state";
 
-    // 2. Publish via HA API (mqtt.publish)
-    $payload = [
-        'topic' => $topic,
-        'payload' => $state,
-        'retain' => true
-    ];
+	// 2. Publish via HA API (mqtt.publish)
+	$payload = [
+		'topic' => $topic,
+		'payload' => $state,
+		'retain' => true
+	];
 
-    $ch = curl_init("$ha_url/api/services/mqtt/publish");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: $token",
-        "Content-Type: application/json"
-    ]);
-    $result = curl_exec($ch);
-    curl_close($ch);
+	$ch = curl_init("$ha_url/api/services/mqtt/publish");
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+	curl_setopt($ch, CURLOPT_HTTPHEADER, [
+		"Authorization: $token",
+		"Content-Type: application/json"
+	]);
+	$result = curl_exec($ch);
+	curl_close($ch);
 
-    echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
+	echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
 }
 function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critical = false) {
-    $token = hasstoken();
-    $ha_url = 'http://192.168.2.26:8123/api/services/notify/' . $target;
-    $data = [
-        "message" => $message,
-        "title"   => $title,
-        "data"    => [
-            "ttl"        => 0,
-            "priority"   => "high",
-            "persistent" => true
-        ]
-    ];
-    if ($critical) {
-        $data["data"]["push"] = [
-            "sound" => [
-                "name"     => "default",
-                "critical" => 1,
-                "volume"   => 1.0
-            ]
-        ];
-    }
-    for ($x = 1; $x <= 10; $x++) {
-        $options = [
-            "http" => [
-                "method"  => "POST",
-                "header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
-                "content" => json_encode($data),
-                "timeout" => $x * 3
-            ]
-        ];
-        $context = stream_context_create($options);
-        $response = @file_get_contents($ha_url, false, $context);
-        if ($response === FALSE) {
-            lg('Fout bij versturen notificatie: ' . $title . ' ' . $message . ' naar ' . $target);
-            sleep($x * 3);
-        } else {
-            return true;
-        }
-    }
-    return false;
+	$token = hasstoken();
+	$ha_url = 'http://192.168.2.26:8123/api/services/notify/' . $target;
+	$data = [
+		"message" => $message,
+		"title"	=> $title,
+		"data"	=> [
+			"ttl"		=> 0,
+			"priority"	=> "high",
+			"persistent" => true
+		]
+	];
+	if ($critical) {
+		$data["data"]["push"] = [
+			"sound" => [
+				"name"	 => "default",
+				"critical" => 1,
+				"volume"	=> 1.0
+			]
+		];
+	}
+	for ($x = 1; $x <= 10; $x++) {
+		$options = [
+			"http" => [
+				"method"  => "POST",
+				"header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+				"content" => json_encode($data),
+				"timeout" => $x * 3
+			]
+		];
+		$context = stream_context_create($options);
+		$response = @file_get_contents($ha_url, false, $context);
+		if ($response === FALSE) {
+			lg('Fout bij versturen notificatie: ' . $title . ' ' . $message . ' naar ' . $target);
+			sleep($x * 3);
+		} else {
+			return true;
+		}
+	}
+	return false;
 }
 
 function curl($url) {
@@ -883,16 +961,16 @@ function mget($key) {
 	return $data;
 }
 function isPDOConnectionAlive($pdo) {
-    try {
-        $pdo->query("SELECT 1");
-        return true;
-    } catch (PDOException $e) {
-        return false;
-    }
+	try {
+		$pdo->query("SELECT 1");
+		return true;
+	} catch (PDOException $e) {
+		return false;
+	}
 }
 function isoToLocalTimestamp(string $isoTime): int {
-    // ISO tijd is in UTC, zet om naar timestamp
-    $utc = new DateTime($isoTime, new DateTimeZone("UTC"));
-    $utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
-    return $utc->getTimestamp();
+	// ISO tijd is in UTC, zet om naar timestamp
+	$utc = new DateTime($isoTime, new DateTimeZone("UTC"));
+	$utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
+	return $utc->getTimestamp();
 }
