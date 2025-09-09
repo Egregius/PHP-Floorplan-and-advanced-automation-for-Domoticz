@@ -240,6 +240,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 		}
 	}
 }
+
 function resetsecurity() {
 	global $d;
 	if ($d['sirene']['s']!='Off') {

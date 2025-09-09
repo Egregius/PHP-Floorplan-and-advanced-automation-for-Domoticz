@@ -181,7 +181,6 @@ if ($d['buiten_temp']['s']>$avg+0.5) {
 } else {
 	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '');
 }
-
 if ($d['auto']['s']=='On') {
 	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>117&&$rain<5) { // Airco Cooling
 		if ($wind>=40) 	 $luifel=0;
@@ -210,8 +209,9 @@ if ($d['auto']['s']=='On') {
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
 		$luifel=0; // In comment zetten om luifel te activeren.
+//		lg ('luifel $d='.$d['luifel']['s'].' $luifel='.$luifel);
 		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__, true);
 			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} else {
