@@ -1,18 +1,18 @@
 <?php
 require '/var/www/config.php';
-$dow=date("w");if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+$dow=date("w");
+if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
 $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
 
-function t() {
-	global $dow,$t;
-	$dow=date("w");
-	if ($dow==0||$dow==6) return strtotime('7:45');
-	else return strtotime('7:00');
+function updateWekker(&$t, &$weekend) {
+    $dow = date("w");
+    $weekend = ($dow == 0 || $dow == 6);
+    $t = $weekend ? strtotime('7:45') : strtotime('7:00');
 }
-function alexslaapt(){
+function alexslaapt() {
 	global $d,$time,$t;
 	if ($d['ralex']['s'] < 100) return false;
 	if ($d['deuralex']['s'] == 'Open') return false;
@@ -505,7 +505,7 @@ function bosezone($ip,$forced=false,$vol='') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif ($d['ralex']['s']==100) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
+				elseif (alexslaapt()==true) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $map[$ip], 101);

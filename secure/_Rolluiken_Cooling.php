@@ -1,16 +1,16 @@
 <?php
+$zonelevatie=-5.5;
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rkeukenl','rkeukenr','rbureel');
 $benedenall=array('rkeukenl','rkeukenr','rbureel','rliving');
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>-5.5))&&$time<strtotime('8:30')) {
+	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>=$zonelevatie))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['ralex']['s']==0&&$d['rwaskamer']['s']>0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['ralex']['s']>0&&$time>=$t+1800&&($d['deuralex']['s']=='Open'||$d['alex']['s']>0)) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
+			if (alexslaapt()==false) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 		}
-//		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['dag']['s']>-4) {
 			if ($d['lgtv']['s']!='On') {
 				foreach ($benedenall as $i) {
@@ -37,7 +37,7 @@ if ($d['auto']['s']=='On') {
 		}
 	}
 
-	elseif ($d['dag']['s']<-5||$time<strtotime('3:00')) {
+	elseif ($d['dag']['s']<$zonelevatie||$time<strtotime('3:00')) {
 		if ($d['weg']['s']>0) {
 			foreach ($benedenall as $i) {
 				if ($d[$i]['s']<88) sl($i, 100, basename(__FILE__).':'.__LINE__);

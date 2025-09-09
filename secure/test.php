@@ -8,8 +8,7 @@ $d=fetchdata(0,'test.php');
 $startloop=microtime(true);
 $d['time']=$startloop;
 
-$status='On';
-check_en_slapen('slaapkamer', $status, $d);
+if (alexslaapt()==true) echo 'slaap';else echo 'wakker';
 
 
 
