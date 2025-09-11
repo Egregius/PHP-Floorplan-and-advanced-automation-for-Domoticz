@@ -80,6 +80,8 @@ function check_en_slapen($locatie, $status, &$d) {
 	} elseif ($locatie === 'slaapkamer') {
 		if ($d['kamer']['s'] > 5) {
 			sl('kamer', 5, basename(__FILE__).':'.__LINE__);
+		} elseif (($d['dag']['s']<-4||$d['rkamerr']['s']>90)&&past('kamer')>7200) {
+			sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		}
 		huisslapen();
 	}
@@ -130,12 +132,12 @@ function finkom($force=false) {
 }
 function fhall() {
 	global $d,$t,$time;
-	if ($d['dag']['s']<-4&&alexslaapt()==true) {
+	if ($d['dag']['s']<-4&&alexslaapt()==false) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&$d['deurkamer']['s']=='Open'&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisslapen($weg=false) {
 	global $d;

@@ -11,7 +11,8 @@ require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 lg('Starting MQTT loop...',-1);
 $user='MQTT';
-
+$t = null;
+$weekend = null;
 $d=fetchdata(0,'mqtt:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
@@ -234,7 +235,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe event types
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -248,6 +249,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
+			updateWekker($t, $weekend);
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';

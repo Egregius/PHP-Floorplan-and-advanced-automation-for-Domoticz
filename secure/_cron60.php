@@ -111,7 +111,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['rbureel']['s']<40&&$d['rliving']['s']<40) {
 				if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 				if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['bureel']['s']>0&&$d['bureel']['s']<=20&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+				if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}
