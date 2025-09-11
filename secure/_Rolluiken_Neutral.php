@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-$zonelevatie=-3.8;
+$zonelevatie=-5;
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rliving','rbureel','rkeukenl','rkeukenr');
 if ($d['auto']['s']=='On') {

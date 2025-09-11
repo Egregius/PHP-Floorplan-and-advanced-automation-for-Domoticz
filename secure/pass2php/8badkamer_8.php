@@ -3,8 +3,6 @@ if ($status=='On') {
 	lg(__LINE__);
 	mset('lichtbadkamertijd', $d['time']);
 	if ($d['lichtbadkamer']['s']>0) sl('lichtbadkamer', 0, basename(__FILE__).':'.__LINE__);
-	
-	$t=t();
 	if ($d['weg']['s']==1&&$d['time']>$t-1800&&$d['time']<$t+2700) huisthuis();
 	if ($d['badkamer_set']['m']!=0) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);

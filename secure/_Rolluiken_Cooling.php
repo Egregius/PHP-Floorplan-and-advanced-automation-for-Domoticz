@@ -1,5 +1,5 @@
 <?php
-$zonelevatie=-5.5;
+$zonelevatie=-6;
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rkeukenl','rkeukenr','rbureel');
 $benedenall=array('rkeukenl','rkeukenr','rbureel','rliving');

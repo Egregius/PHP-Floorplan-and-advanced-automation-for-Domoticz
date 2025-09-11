@@ -6,7 +6,6 @@ if ($status!=$d['deurbadkamer']['s']) {
 			$last=mget('lichtbadkamertijd');
 			$past=$time-$last;
 			if ($past>9) {
-				$t=t();
 				if ($time>$t&&$time<strtotime('21:00')) sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
 				elseif ($d['lichtbadkamer']['s']<8) sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
 			}
