@@ -153,5 +153,6 @@ if ($d['auto']['s']=='On') {
 if ($d['wasmachine']['s']=='On') {
 	if ($d['wasmachine_power']['s']<3.4&&past('wasmachine')>4200&&past('wasmachine_power')>120) {
 		hassnotify('Wasmachine', 'klaar');
+		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
