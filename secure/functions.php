@@ -108,7 +108,7 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if ($d['zon']<100&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['zon']<260&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
 	global $d,$time;
@@ -340,9 +340,12 @@ function convertToHours($time) {
 	else return date('G:i:s', $time-3600);
 }
 function ping($ip) {
-	$result=exec("/bin/ping -c1 -W1 -s1 $ip", $outcome, $reply);
-	if ($reply==0) return true;
-	else return false;
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        return false;
+    }
+    $result = null;
+    exec("ping -c 1 -w 1 " . escapeshellarg($ip), $output, $result);
+    return $result === 0;
 }
 function double($name, $action, $msg='') {
 	sw($name, $action, $msg);

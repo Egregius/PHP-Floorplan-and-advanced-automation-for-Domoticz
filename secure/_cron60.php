@@ -58,12 +58,6 @@ if ($d['auto']['s']=='On') {
 		}
 	}elseif ($d['weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		$uit=600;
-		foreach (array('pirgarage','pirkeuken','pirliving','pirinkom') as $i) {
-			if ($d[$i]['s']!='Off') {
-				ud($i, 0, 'Off');
-				lg($i.' uitgeschakeld omdat we slapen of weg zijn');
-			}
-		}
 		foreach (array('lampkast','bureel','kristal','garage','tuin','voordeur','zolderg','boseliving','mac','ipaddock','zetel') as $i) {
 			if ($d[$i]['s']=='On') {
 				if (past($i)>$uit) {
@@ -104,7 +98,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['grohered_kwh']['s']<50&&$past>180) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif ($past>1800) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
 	}*/
-	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('pirgarage2')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 
 	if ($d['pirliving']['s']=='Off') {
 		if ($d['dag']['s']>1) {
