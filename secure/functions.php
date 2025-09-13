@@ -496,13 +496,21 @@ function bosezone($ip,$forced=false,$vol='') {
 		}
 		if ($ip>101) {
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-			$map = [
+			$mapip = [
 				102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
 				103 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
 				104 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>',
 				105 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
 				106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
 				107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
+			];
+			$mapip = [
+				102 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
+				103 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
+				104 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>',
+				105 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
+				106 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
+				107 => '<zone master="C8DF8450CE28" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
 			];
 			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
@@ -511,13 +519,13 @@ function bosezone($ip,$forced=false,$vol='') {
 				elseif (alexslaapt()==true) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
-				bosepost('setZone', $map[$ip], 101);
+				bosepost('setZone', $mapip[$ip], 101);
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 			} elseif ($d['bose'.$ip]['s']=='Off') {
-				bosepost('setZone',  $map[$ip], 101);
+				bosepost('setZone',  $mapip[$ip], 101);
 				store('bose'.$ip, 'On');
 				if ($vol=='') {
 					if ($time>strtotime('6:00')&&$time<strtotime('21:00')) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);

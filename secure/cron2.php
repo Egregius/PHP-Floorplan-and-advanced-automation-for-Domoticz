@@ -19,6 +19,7 @@ while (1){
 		$sleep=round($sleep*1000000);
 		usleep($sleep);
 	}
+	if ($time%300==0) stoploop();
 }
 
 function stoploop() {

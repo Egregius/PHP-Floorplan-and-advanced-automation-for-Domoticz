@@ -1,8 +1,6 @@
 <?php
 $user=basename(__FILE__);
-$zonelevatie=-4;
-$boven=array('rwaskamer','ralex','rkamerl','rkamerr');
-$beneden=array('rbureel','rkeukenl','rkeukenr');
+$zonelevatie=-5.5;
 if ($d['auto']['s']=='On') {
 	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>$zonelevatie))&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
@@ -14,7 +12,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['dag']['s']>$zonelevatie) {
 			if ($d['lgtv']['s']!='On') {
-				foreach ($beneden as $i) {
+				foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) {
 					if ($d[$i]['s']>0&&past($i)>7200) sl($i, 0, basename(__FILE__).':'.__LINE__);
 				}
 			}

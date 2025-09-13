@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-$zonelevatie=-6;
+$zonelevatie=-6.2;
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rbureel','rkeukenl','rkeukenr');
 $benedenall=array('rliving','rbureel','rkeukenl','rkeukenr');
