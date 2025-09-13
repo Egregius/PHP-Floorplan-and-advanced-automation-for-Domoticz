@@ -8,9 +8,7 @@ $d=fetchdata(0,'test.php');
 $startloop=microtime(true);
 $d['time']=$startloop;
 
-if (alexslaapt()==true) echo 'slaap';else echo 'wakker';
-
-
+republishmqtt();
 
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
 //shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');

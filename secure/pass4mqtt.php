@@ -43,7 +43,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
-			if (!is_null($status)/*&&($status=='on'||$status=='off')*/) {
+			if (!is_null($status)&&strlen($status)>0/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
 				if ($d[$device]['s']!=$status) {
 					lg('mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
@@ -101,7 +101,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]['s']!=$status&&strlen($status)>0) {
 //				include '/var/www/html/secure/pass2php/'.$device.'.php';
 					lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,$status,'',1);
@@ -264,7 +264,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status,'',1);
 			}
-		}
+		}// else lg($device);
 		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
