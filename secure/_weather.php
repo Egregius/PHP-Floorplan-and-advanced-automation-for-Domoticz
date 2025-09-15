@@ -8,7 +8,9 @@ $mintemp=100;
 $temps=array();
 $winds=array();
 $rains=array();
+$hums=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
+$hums['buiten_temp']=$d['buiten_temp']['m'];
 $temps['buiten_temp_hum']=$d['minmaxtemp']['icon'];
 $winds['prev_wind']=$d['wind']['s'];
 
@@ -16,6 +18,7 @@ $winds['prev_wind']=$d['wind']['s'];
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
 if (isset($ow['current'])) {
 	$temps['ow3']=$ow['current']['temp'];
+	$hums['ow3']=$ow['current']['humidity'];
 	$temps['ow_feel3']=$ow['current']['feels_like'];
 	$winds['ow_speed']=$ow['current']['wind_speed'] * 3.6;
 	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=$ow['current']['wind_gust'] * 3.6;
@@ -40,6 +43,7 @@ if (isset($ow['current'])) {
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
 if (isset($wa['current']['temp_c'])) {
 	$temps['wa']=$wa['current']['temp_c'];
+	$hums['wa']=$ow['current']['humidity'];
 	$temps['wa_feel']=$wa['current']['feelslike_c'];
 	$winds['wa_speed']=$wa['current']['wind_kph'];
 	$winds['wa_gust']=$wa['current']['gust_kph'];
@@ -77,6 +81,7 @@ $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServic
 if (isset($vc['currentConditions']['temp'])) {
 	$temps['vc']=$vc['currentConditions']['temp'];
 	$temps['vc_feel']=$vc['currentConditions']['feelslike'];
+	$hums['vc']=$vc['currentConditions']['humidity'];
 	$winds['vc_wind']=$vc['currentConditions']['windgust'];
 	$rains['vc']=$vc['currentConditions']['precip'];
 	
@@ -122,6 +127,7 @@ if (isset($data['forecasts'])) {
 }
 
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
+if (count($hums)>=1) $hum=round(array_sum($hums)/count($hums), 1);
 //lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {
@@ -137,6 +143,10 @@ if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
+if ($hum>$d['buiten_temp']['m']+0.1) $hum=$d['buiten_temp']['m']+0.1;
+elseif ($hum<$d['buiten_temp']['m']-0.1) $hum=$d['buiten_temp']['m']-0.1;
+if ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
+
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
 	if ($d['wind']['s']!=$wind) store('wind', $wind);

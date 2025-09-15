@@ -8,7 +8,7 @@ $week=date("Y-m-d", TIME-86400*6);
 //$week='2022-12-05 16:24:00';
 $maand=date("Y-m-d", TIME-86400*100);
 //$maand='2022-12-05 16:24:00';
-
+//unset($_SESSION['sensors_hum']);
 echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -52,7 +52,6 @@ $sensors=array(
 	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
 	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
 	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
-	'waskamer_hum'=>array('Naam'=>'Wask','Color'=>'#EEEE00'),
 	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
 );
 foreach ($sensors as $k=>$v) {
@@ -66,16 +65,15 @@ foreach ($_SESSION['sensors_hum'] as $k=>$v) {
 
 echo '<div style="padding:16px 0px 20px 0px;">';
 if ($aantalsensors==6) echo '
-	<a href="/hum.php?living_hum=on" class="btn Living">Living</a>
-	<a href="/hum.php?kamer_hum=on" class="btn Kamer">Kamer</a>
-	<a href="/hum.php?alex_hum=on" class="btn Alex">Alex</a>
-	<a href="/hum.php?waskamer_hum=on" class="btn Kamer">Wask</a>
-	<a href="/hum.php?badkamer_hum=on" class="btn Kamer">Badk</a>';
+	<a href="/hum.php?living_hum=on" class="btn b4 Living">Living</a>
+	<a href="/hum.php?kamer_hum=on" class="btn b4 Kamer">Kamer</a>
+	<a href="/hum.php?alex_hum=on" class="btn b4 Alex">Alex</a>
+	<a href="/hum.php?badkamer_hum=on" class="btn b4 Kamer">Badk</a>';
 else foreach ($sensors as $k=>$v) {
 //	print_r($v);
 //	$v=ucfirst(str_replace('_hum', '', $k));
-	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn '.$k.'">'.$v['Naam'].'</a>';
-	else echo '<a href="/hum.php?'.$k.'=on" class="btn '.$k.'">'.$v['Naam'].'</a>';
+	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn b4 '.$k.'">'.$v['Naam'].'</a>';
+	else echo '<a href="/hum.php?'.$k.'=on" class="btn b4 '.$k.'">'.$v['Naam'].'</a>';
 }
 $args=array(
 		'width'=>1000,
@@ -119,7 +117,7 @@ $args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
 if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
 elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('living_hum'=>1,'waskamer_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
+	$_SESSION['sensors_hum']=array('living_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
 	$aantalsensors=6;
 }
 //echo '<pre>';print_r($sensors);echo '</pre>';

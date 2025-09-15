@@ -611,7 +611,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	}
 	return FALSE;
 }
-function daikinstatus($device) {
+function daikinstatus($device,$log='') {
 	$ips = daikin_ips();
 	if (!isset($ips[$device])) return FALSE;
 
@@ -619,7 +619,8 @@ function daikinstatus($device) {
 	$data = http_get($url);
 
 	if ($data === FALSE) {
-		lg("daikinstatus: geen antwoord van $device ($url)");
+		if (strlen($log)>0) lg("daikinstatus: geen antwoord van $device ($url)	| ".$log);
+		else lg("daikinstatus: geen antwoord van $device ($url)");
 		return FALSE;
 	}
 	if (stripos($data, "SERIAL IF FAILURE") !== false) {
@@ -676,7 +677,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	lg("daikinset($device): $url");
 	http_get($url);
 	sleep(2); 
-	$status = daikinstatus($device);
+	$status = daikinstatus($device, basename(__FILE__).":".__LINE__.":$msg");
 	if ($status) {
 		if ($d['daikin'.$device]['s'] != $status) {
 			store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");

@@ -22,7 +22,7 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-$last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = 0;
+$last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
 
 while (true) {
 	$start = microtime(true);
