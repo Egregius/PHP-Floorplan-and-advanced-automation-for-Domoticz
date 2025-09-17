@@ -10,7 +10,7 @@ $boses=array(
 	107=>'Keuken',
 );
 $ctx=stream_context_create(array('http'=>array('timeout' =>1)));
-if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
+//if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Playing')) {
 	$week=date('W');
 	foreach(array(101=>14,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
 		$status=@file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
@@ -90,7 +90,7 @@ if ($d['weg']['s']==0&&($d['boseliving']['s']=='On'||$d['boseliving']['s']=='Pla
 			if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 	}	
-}
+//}
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
 }
