@@ -55,7 +55,6 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
-	stoploop($d);
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe light brightness
@@ -81,7 +80,6 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				}
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
@@ -108,7 +106,6 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				}
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
@@ -180,6 +177,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if ($status>=10) $status=round($status,0);
 			else $status=round($status,1);
 			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
+			stoploop($d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
 		} elseif ($device === 'weg') {
@@ -195,7 +193,6 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				huisslapen(true);
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
@@ -228,7 +225,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				store($device, $status,'',1);
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
@@ -241,6 +237,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
+			$time=$d['time'];
 			if (($d['time'] - $startloop) <= 3) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
@@ -265,7 +262,6 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				store($device,$status,'',1);
 			}
 		}// else lg($device);
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
@@ -287,7 +283,6 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 				store($device,$status,'',1);
 			}
 		}
-		stoploop($d);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

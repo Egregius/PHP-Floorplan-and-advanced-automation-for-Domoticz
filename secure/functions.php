@@ -73,7 +73,7 @@ function check_en_slapen($locatie, $status, &$d) {
 		hassopts('xiaomi_aqara', 'play_ringtone', '', [
 			'gw_mac'		=> '34ce008d3f60',
 			'ringtone_id'	=> 8,
-			'ringtone_vol'	=> 50
+			'ringtone_vol'	=> 60
 		]);
 		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
@@ -89,7 +89,7 @@ function check_en_slapen($locatie, $status, &$d) {
 
 function fliving() {
 	global $d,$time,$t;
-	if ($d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
 			if ($d['eettafel']['s']==0&&$time<$am) {
@@ -108,7 +108,7 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if ($d['zon']<260&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['zon']<260&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 }
 function fkeuken() {
 	global $d,$time;
@@ -116,7 +116,7 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-3||$d['rkeukenl']['s']>80)) {
+		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-3||$d['rkeukenl']['s']>80)) {
 			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			else sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
 		}
@@ -125,14 +125,14 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$time;
-	if (($d['dag']['s']<-4&&$d['weg']['s']==0)||$force==true) {
+	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-4)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']['s']<-2) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&alexslaapt()==false) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
 	global $d,$t,$time;
-	if ($d['dag']['s']<-4&&alexslaapt()==false) {
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-4&&alexslaapt()==false) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -517,14 +517,17 @@ function bosezone($ip,$forced=false,$vol='') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif (alexslaapt()==true) bosevolume(14, 101, basename(__FILE__).':'.__LINE__);
+				elseif (alexslaapt()==true) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $mapip[$ip], 101);
 				if ($vol=='') {
-					if ($time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
+					if (alexslaapt()==false&&$time>strtotime('6:00')&&$time<strtotime('20:00')) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
-				} else bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
+				} else {
+					if (alexslaapt()==true) $vol-=10;
+					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
+				}
 			} elseif ($d['bose'.$ip]['s']=='Off') {
 				bosepost('setZone',  $mapip[$ip], 101);
 				store('bose'.$ip, 'On');
