@@ -14,7 +14,7 @@ while (1){
 	$lastfetch=$time-20;
 	include 'cron2B.php';
 	$time_elapsed_secs=microtime(true)-$start;
-	$sleep=20-$time_elapsed_secs;
+	$sleep=8-$time_elapsed_secs;
 	if ($sleep>0) {
 		$sleep=round($sleep*1000000);
 		usleep($sleep);

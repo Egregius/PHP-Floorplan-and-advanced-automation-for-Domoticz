@@ -162,14 +162,14 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=$status;
-				if ($hum > 100) $hum=100;
-				if ($hum>$d[$tdevice]['m']+1) $hum=$d[$tdevice]['m']+1;
-				elseif ($hum<$d[$tdevice]['m']-1) $hum=$d[$tdevice]['m']-1;
+//				if ($hum > 100) $hum=100;
+//				if ($hum>$d[$tdevice]['m']+1) $hum=$d[$tdevice]['m']+1;
+//				elseif ($hum<$d[$tdevice]['m']-1) $hum=$d[$tdevice]['m']-1;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
 			} elseif (substr($device,-5) === '_temp') {
 				$st=(float)$status;
-				if ($st>$d[$device]['s']+0.1) $st=$d[$device]['s']+0.1;
-				elseif ($st<$d[$device]['s']-0.1) $st=$d[$device]['s']-0.1;
+//				if ($st>$d[$device]['s']+0.1) $st=$d[$device]['s']+0.1;
+//				elseif ($st<$d[$device]['s']-0.1) $st=$d[$device]['s']-0.1;
 				if ($d[$device]['s']!=$st) store($device,$st,'',1);
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
