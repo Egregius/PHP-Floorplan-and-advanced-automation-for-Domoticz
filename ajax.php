@@ -275,6 +275,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				sw('powermeter', 'Off', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', 0, basename(__FILE__).':'.__LINE__);
 			}
+		} elseif ($_REQUEST['device']=='sirene') {
+			sw('sirene', 'Off', basename(__FILE__).':'.__LINE__);
+			store('sirene','Off');
 		} elseif ($_REQUEST['device']=='grohered') {
 			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} else {

@@ -11,7 +11,6 @@ $rains=array();
 $hums=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
 $hums['buiten_temp']=$d['buiten_temp']['m'];
-$temps['buiten_temp_hum']=$d['minmaxtemp']['icon'];
 $winds['prev_wind']=$d['wind']['s'];
 
 //lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
@@ -143,8 +142,8 @@ if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
 if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
 if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
-if ($hum>$d['buiten_temp']['m']+0.1) $hum=$d['buiten_temp']['m']+0.1;
-elseif ($hum<$d['buiten_temp']['m']-0.1) $hum=$d['buiten_temp']['m']-0.1;
+if ($hum>(float)$d['buiten_temp']['m']+0.1) $hum=(float)$d['buiten_temp']['m']+0.1;
+elseif ($hum<(float)$d['buiten_temp']['m']-0.1) $hum=(float)$d['buiten_temp']['m']-0.1;
 if ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
 
 if (count($winds)>=4) {

@@ -1,63 +1,42 @@
 <?php
-$user='cron2B';
-$boses=array(
-	101=>'Living',
-	102=>'102',
-	103=>'Boven',
-	104=>'Garage',
-	105=>'10-Wit',
-	106=>'Buiten20',
-	107=>'Keuken',
-);
-
-foreach(array(101=>14,102=>22,103=>32,104=>32,105=>32,106=>22,107=>32) as $ip=>$vol) {
-	$ch = curl_init("http://192.168.2.$ip:8090/now_playing");
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-	curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1500);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$status = curl_exec($ch);
-	curl_close($ch);
-	$status=json_decode(json_encode(simplexml_load_string($status)), true);
-	if (is_array($status)) {
-		if (isset($status['@attributes']['source'])) {
-			if ($d['bose'.$ip]['icon']!='Online'&&$d['boseliving']['s']!='On') {
-				sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			} elseif ($d['bose'.$ip]['icon']!='Online') {
-				storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
-			}
-			if ($status['@attributes']['source']=='STANDBY'&&$d['bose101']['m']==1) {
-				bosezone($ip);
-				if ($ip>101) {
-					usleep(500000);
-					bosevolume($vol, $ip);
-				}
-			} elseif ($status['@attributes']['source']=='STANDBY') {
-				if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
-			} elseif ($status['@attributes']['source']=='INVALID_SOURCE') {
-				$invalidcounter++;
-				if ($invalidcounter>10) {
-					lg('invalidcounter='.$invalidcounter);
-					bosekey("POWER", 0, 101);
-					if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
-					if ($d['boseliving']['s']!='Off') {
-						sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
-						sleep(5);
-						sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-						$invalidcounter=0;
-					}
-					
-				}
-			}
-			if (isset($status['playStatus'])&&$status['playStatus']=='PLAY_STATE') {
-				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-				if ($invalidcounter>0) $invalidcounter=0;
-			}
-		} else {
-			if ($d['bose'.$ip]['icon']!='Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-			if ($d['bose'.$ip]['s']=='On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
-		}
-		unset($status);
-	}
+foreach ($devices as $ip => $vol) {
+    $status = curl_exec($ch[$ip]);
+    $status = json_decode(json_encode(simplexml_load_string($status)), true);
+    if (is_array($status)) {
+        if (isset($status['@attributes']['source'])) {
+            if ($d['bose'.$ip]['icon'] != 'Online' && $d['boseliving']['s'] != 'On') {
+                sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+            } elseif ($d['bose'.$ip]['icon'] != 'Online') {
+                storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+            }
+            if ($status['@attributes']['source'] == 'STANDBY' && $d['bose101']['m'] == 1) {
+                bosezone($ip,false,$vol);
+            } elseif ($status['@attributes']['source'] == 'STANDBY') {
+                if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+            } elseif ($status['@attributes']['source'] == 'INVALID_SOURCE') {
+                $invalidcounter++;
+                if ($invalidcounter > 10) {
+                    lg('invalidcounter = '.$invalidcounter);
+                    bosekey("POWER", 0, 101);
+                    if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+                    if ($d['boseliving']['s'] != 'Off') {
+                        sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
+                        sleep(5);
+                        sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+                        $invalidcounter = 0;
+                    }
+                }
+            }
+            if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+                if ($d['bose'.$ip]['s'] == 'Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+                if ($invalidcounter > 0) $invalidcounter = 0;
+            }
+        } else {
+            if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
+            if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+        }
+        unset($status);
+    }
 }
 if ($d['media']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
@@ -74,7 +53,6 @@ if ($d['media']['s']=='On') {
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
 }
-
 if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
 		if ($d['lgtv']['s']=='On') {
@@ -110,6 +88,7 @@ if ($d['bose101']['m']==1
 	&&$d['bose105']['s']=='Off'
 	&&$d['bose106']['s']=='Off'
 	&&$d['bose107']['s']=='Off'
+	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
 	&&past('bose101')>90
 	&&past('bose102')>90
 	&&past('bose103')>90
@@ -117,7 +96,6 @@ if ($d['bose101']['m']==1
 	&&past('bose105')>90
 	&&past('bose106')>90
 	&&past('bose107')>90
-	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
 ) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 	if (!empty($status)) {
@@ -136,7 +114,3 @@ if ($d['bose101']['m']==1
 		}
 	}
 }
-/*if ($d['kodi']['s']=='Idle'||$d['kodi']['s']=='Paused') {
-	$past=past('kodi');
-	if ($past>=20&&$past<=30)	kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
-}*/
