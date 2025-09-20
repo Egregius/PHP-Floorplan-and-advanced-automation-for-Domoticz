@@ -4,22 +4,28 @@ require '/var/www/html/secure/functions.php';
 lg('Starting cron2 loop...');
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
+$lastcheck=$time;
 define('LOOP_START', $time);
-$lastfetch=$time-20;
+$invalidcounter=0;
+$ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
 while (1){
 	$start=microtime(true);
-	$time=time();
-	$d['time']=$time;
-	$d=fetchdata($lastfetch,basename(__FILE__).':'.__LINE__);
-	$lastfetch=$time-20;
+	$d=fetchdata($time-20,basename(__FILE__).':'.__LINE__);
 	include 'cron2B.php';
 	$time_elapsed_secs=microtime(true)-$start;
-	$sleep=8-$time_elapsed_secs;
+	$sleep=10-$time_elapsed_secs;
 	if ($sleep>0) {
 		$sleep=round($sleep*1000000);
+		lg('cron2 sleeping '.round($sleep/1000000,3));
 		usleep($sleep);
 	}
-	if ($time%300==0) stoploop();
+	$time=time();
+	$d['time']=$time;
+	if ($lastcheck<$time-300) {
+		$lastcheck=$time;
+		stoploop();
+	}
+	
 }
 
 function stoploop() {

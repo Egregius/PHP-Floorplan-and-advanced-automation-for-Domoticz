@@ -1,4 +1,5 @@
 <?php
+$user='TC_badkamer';
 $m='';$m2='';
 $l=0;
 

@@ -1,5 +1,5 @@
 <?php
-$user=basename(__FILE__);
+$user='Rolluiken_Heating';
 $zonelevatie=-5.5;
 if ($d['auto']['s']=='On') {
 	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>$zonelevatie))&&$time<strtotime('8:30')) {

@@ -220,7 +220,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-				lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
+//				lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status,'',1);
 			}
