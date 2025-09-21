@@ -147,7 +147,8 @@ function huisslapen($weg=false) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
-	if ($weg==true) store('weg', 2, basename(__FILE__).':'.__LINE__);
+	if ($weg==3) store('weg', 3, basename(__FILE__).':'.__LINE__);
+	elseif ($weg==true) store('weg', 2, basename(__FILE__).':'.__LINE__);
 	else store('weg', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis($msg='') {

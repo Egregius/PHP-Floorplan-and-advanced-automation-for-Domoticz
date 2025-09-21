@@ -150,7 +150,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			huisslapen();
 		} elseif ($_REQUEST['action']>=2) {
 			lg('huisslapen...');
-			huisslapen(true);
+			huisslapen(3);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
 		/*if ($_REQUEST['device']=='eettafel'||$_REQUEST['device']=='bureel'||$_REQUEST['device']=='zithoek') {

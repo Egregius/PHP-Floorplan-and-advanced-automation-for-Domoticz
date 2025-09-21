@@ -190,7 +190,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				huisslapen(true);
 			} elseif ($status==3) {
 				store('weg',3,'',1);
-				huisslapen(true);
+				huisslapen(3);
 			}
 		}
 	} catch (Throwable $e) {
