@@ -36,7 +36,10 @@ foreach ($devices as $ip => $vol) {
             if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
         }
         unset($status);
-    }
+    } else {
+		if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
+		if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+	}
 }
 if ($d['media']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
