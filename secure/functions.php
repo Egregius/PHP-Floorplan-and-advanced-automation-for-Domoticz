@@ -116,7 +116,7 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-3||$d['rkeukenl']['s']>80)) {
+		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<-1.4||$d['rkeukenl']['s']>80)) {
 			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			else sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
 		}
@@ -125,14 +125,14 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d,$time;
-	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-4)||$force==true) {
-		if ($d['inkom']['s']<30&&$d['dag']['s']<-2) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
+		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&alexslaapt()==false) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
 	global $d,$t,$time;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-4&&alexslaapt()==false) {
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&alexslaapt()==false) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
