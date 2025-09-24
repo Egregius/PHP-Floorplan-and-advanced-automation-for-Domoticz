@@ -34,9 +34,7 @@ while (1) {
     $time_elapsed_secs = microtime(true) - $start;
     $sleep = 10 - $time_elapsed_secs;
     if ($sleep > 0) {
-    	lg(__LINE__.'='.$sleep);
         $sleep = round($sleep * 1000000);
-    	lg(__LINE__.'='.$sleep);
         usleep($sleep);
     }
     $time = time();
