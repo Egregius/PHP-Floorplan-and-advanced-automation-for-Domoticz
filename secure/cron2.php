@@ -27,15 +27,6 @@ $boses=array(
 	106=>'Buiten20',
 	107=>'Keuken',
 );
-$ch = [];
-foreach ($devices as $ip => $vol) {
-    $url = "http://192.168.2.$ip:8090/now_playing";
-    $ch[$ip] = curl_init($url);
-    curl_setopt($ch[$ip], CURLOPT_CONNECTTIMEOUT, 1);
-    curl_setopt($ch[$ip], CURLOPT_TIMEOUT_MS, 1500);
-    curl_setopt($ch[$ip], CURLOPT_RETURNTRANSFER, true);
-}
-
 while (1) {
     $start = microtime(true);
     $d = fetchdata($time - 20, basename(__FILE__) . ':' . __LINE__);
@@ -43,7 +34,9 @@ while (1) {
     $time_elapsed_secs = microtime(true) - $start;
     $sleep = 10 - $time_elapsed_secs;
     if ($sleep > 0) {
+    	lg(__LINE__.'='.$sleep);
         $sleep = round($sleep * 1000000);
+    	lg(__LINE__.'='.$sleep);
         usleep($sleep);
     }
     $time = time();
@@ -58,19 +51,11 @@ function stoploop() {
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('functions.php gewijzigd → restarting cron2 loop...');
-        global $ch;
-        foreach ($ch as $c) {
-			curl_close($c);
-		}
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
         lg('cron2.php gewijzigd → restarting cron2 loop...');
-        global $ch;
-        foreach ($ch as $c) {
-			curl_close($c);
-		}
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
