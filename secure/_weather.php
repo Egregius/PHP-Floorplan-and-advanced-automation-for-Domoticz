@@ -1,5 +1,5 @@
 <?php
-$user=basename(__FILE__);
+$user='weather';
 $prevwind=$d['wind']['s'];
 //lg ('Weather');
 $wind=$prevwind;
@@ -138,13 +138,14 @@ if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10
 $maxtemp=ceil($maxtemp*10)/10;
 if ($temp>$d['buiten_temp']['s']+0.1) $temp=$d['buiten_temp']['s']+0.1;
 elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
-if ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
-if ($d['minmaxtemp']['m']!=$maxtemp) storemode('minmaxtemp', $maxtemp);
-if ($d['minmaxtemp']['s']!=$mintemp) store('minmaxtemp', $mintemp);
+
+
+if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('minmaxtemp', $mintemp, $maxtemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
-if ($hum>(float)$d['buiten_temp']['m']+0.1) $hum=(float)$d['buiten_temp']['m']+0.1;
-elseif ($hum<(float)$d['buiten_temp']['m']-0.1) $hum=(float)$d['buiten_temp']['m']-0.1;
-if ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
+if ($hum>(float)$d['buiten_temp']['m']+0.5) $hum=(float)$d['buiten_temp']['m']+0.5;
+elseif ($hum<(float)$d['buiten_temp']['m']-0.5) $hum=(float)$d['buiten_temp']['m']-0.5;
+if ($d['buiten_temp']['s']!=$temp||$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
+
 
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);

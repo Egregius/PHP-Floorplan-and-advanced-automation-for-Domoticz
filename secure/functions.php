@@ -294,8 +294,14 @@ function store($name='',$status='',$msg='',$force=false) {
 	global $d,$db,$user,$time;
 //	$time=time();
 	if ($force===true||$status!=$d[$name]['s']) {
-		if (isset($d[$name])) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
-		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+//		lg(basename(__FILE__).':'.__LINE__);
+		if (isset($d[$name])) {
+//			lg(basename(__FILE__).':'.__LINE__);
+			$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+		} else {
+//			lg(basename(__FILE__).':'.__LINE__);
+			$db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
+		}
 	}
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
@@ -314,7 +320,7 @@ function storemode($name,$mode,$msg='') {
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$db,$user,$time;
-	if (isset($d[$name])) $db->query("UPDATE devices SET s='$s, m='$m',t='$time' WHERE n='$name'");
+	if (isset($d[$name])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
 	lg('(STORESM) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S => '.$s.' M => '.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
@@ -1043,7 +1049,7 @@ function republishmqtt() {
 				'payload' => $brightness
 			];
 		} else continue;
-		usleep(5000);
+		usleep(500);
 		foreach ($to_publish as $pub) {
 			$payload = [
 				'topic' => $pub['topic'],
