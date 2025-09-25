@@ -21,18 +21,16 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-$lastfetch = $last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
+$last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
 
 while (true) {
-	$time = time();
-	if ((($time % 10 === 0) && $last10 !== $time) || $last10 <= $time - 10) {
+	$time = microtime(true);
+	if ((((int)$time % 10 === 0) && $last10 !== (int)$time) || $last10 <= $time - 10) {
 		$last10 = $time;
-		$d = fetchdata($lastfetch, basename(__FILE__).':'.__LINE__);
+		$d = fetchdata($time - 60, basename(__FILE__).':'.__LINE__);
 		$d['time'] = $time;
-		$lastfetch = $time - 20;
 		include '_cron10.php';
-		updateWekker($t, $weekend);
-		if ($time % 20 === 0) {
+		if ((int)$time % 20 === 0) {
 			$user='heating';
 			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
@@ -40,22 +38,27 @@ while (true) {
 			elseif ($d['heating']['s']>0) include '_TC_heating.php';
 		}
 	}
-	if (checkInterval($last60, 60, $time)) include '_cron60.php';
+	if (checkInterval($last60, 60, $time)) {
+		include '_cron60.php';
+		stoploop($d);
+	}
 	if (checkInterval($last120, 120, $time)) include '_cron120.php';
 	if (checkInterval($last180, 180, $time)) include '_cron180.php';
 	if (checkInterval($last240, 240, $time)) include '_cron240.php';
 	if (checkInterval($last300, 300, $time)) include '_cron300.php';
 	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
-	if (checkInterval($last450, 450, $time)) include '_cron450.php';
+	if (checkInterval($last450, 450, $time)) {
+		include '_cron450.php';
+		updateWekker($t, $weekend);
+	}
 	if (checkInterval($last100, 100, $time)) include '_weather.php';
-	stoploop($d);
-	$nextSecond = ceil(microtime(true));
-	$sleep = $nextSecond - microtime(true);
-	if ($sleep > 0) usleep((int)($sleep * 1000000));
+	$elapsed = microtime(true) - $time;
+	$sleep   = 1 - $elapsed;
+	if ($sleep > 0) usleep((int)($sleep * 1e6));
 }
 
 function checkInterval(&$last, $interval, $time) {
-    if (($time % $interval === 0 && $last !== $time) || $last <= $time - $interval) {
+    if (((int)$time % $interval === 0 && $last !== (int)$time) || $last <= $time - $interval) {
         $last = $time;
         return true;
     }

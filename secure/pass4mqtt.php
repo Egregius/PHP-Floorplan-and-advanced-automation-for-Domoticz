@@ -48,7 +48,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				if ($d[$device]['s']!=$status) {
 					lg('mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'');
+					store($device,$status);
 				}
 			}
 		}
@@ -76,7 +76,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				if ($d[$device]['s']!=$status) {
 					lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'');
+					store($device,$status);
 				}
 			}
 		}
@@ -102,7 +102,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				if ($d[$device]['s']!=$status&&strlen($status)>0) {
 //				include '/var/www/html/secure/pass2php/'.$device.'.php';
 					lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
-					store($device,$status,'');
+					store($device,$status);
 				}
 			}
 		}
