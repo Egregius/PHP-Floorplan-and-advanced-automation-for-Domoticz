@@ -31,7 +31,7 @@ while (true) {
 		$d = fetchdata($timeint - 60, basename(__FILE__).':'.__LINE__);
 		$d['time'] = $time;
 		include '_cron10.php';
-		if ($time % 20 === 0) {
+		if ($timeint % 20 === 0) {
 			$user='heating';
 			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
 			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
