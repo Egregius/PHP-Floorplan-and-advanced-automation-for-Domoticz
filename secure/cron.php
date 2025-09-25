@@ -9,7 +9,6 @@ $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
 define('LOOP_START', $time);
 
-$lastfetch=$time-20;
 $user='CRONstart';
 $items=array('badkamervuur2','badkamervuur1','water');
 foreach ($items as $i) {
@@ -22,10 +21,9 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-$last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
+$lastfetch = $last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
 
 while (true) {
-	$start = microtime(true);
 	$time = time();
 	if ((($time % 10 === 0) && $last10 !== $time) || $last10 <= $time - 10) {
 		$last10 = $time;
