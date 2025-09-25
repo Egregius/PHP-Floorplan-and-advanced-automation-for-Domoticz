@@ -14,7 +14,7 @@ foreach (array('living','badkamer','kamer','alex','zolder') as $i) {
 	if ($d[$i.'_temp']['s']>($avg+5)&&$d[$i.'_temp']['s']>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']['s'].'° in '.$i,7200,false,2);
 }
 if ($d['auto']['s']=='On') {
-	if ($d['weg']['s']==0){/* ----------------------------------------- THUIS ----------------------------------------------------*/
+	if ($d['weg']['s']==0) {/* ----------------------------------------- THUIS ----------------------------------------------------*/
 //		if ($d['zon']==0&&$d['tuintafel']['s']=='Off'&&$d['rliving']['s']<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
 //		elseif (($d['zon']>0||$d['rliving']['s']>50)&&$d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['pirliving']['s']=='Off') {
@@ -36,7 +36,7 @@ if ($d['auto']['s']=='On') {
 /*		if ($d['lgtv']['s']=='On') {
 			if ($d['dag']['s']<0&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		}*/
-	}elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
+	} elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
 		foreach (array('pirhall') as $i) {
 			if ($d[$i]['s']!='Off') {
@@ -56,7 +56,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-	}elseif ($d['weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
+	} elseif ($d['weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		$uit=600;
 		foreach (array('lampkast','bureel','kristal','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
 			if ($d[$i]['s']=='On') {
@@ -78,9 +78,6 @@ if ($d['auto']['s']=='On') {
 
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
 	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['ipaddock']['s']=='On') lg('ipaddock aan');
-	if ($d['ipaddock_vermogen']['s']<2) lg('ipaddock vermogen lager dan 2');
-	if (past('ipaddock')>600) lg('ipaddock langer dan 10 min aan');
 	if ($d['ipaddock']['s']=='On'&&$d['ipaddock_vermogen']['s']<2&&past('ipaddock')>600) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['living_set']['m']!=0&&$d['eettafel']['s']==0&&past('living_set')>28800) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['badkamer_set']['m']!=0&&$d['lichtbadkamer']['s']==0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);

@@ -1,4 +1,5 @@
 <?php
+//lg($d['daikin']['s']);
 if ($d['daikin']['m']==1) {
 	$totalmin=0;
 	foreach (array('living','kamer','alex') as $k) {
