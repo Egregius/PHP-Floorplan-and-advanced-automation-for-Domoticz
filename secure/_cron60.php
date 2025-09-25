@@ -78,7 +78,7 @@ if ($d['auto']['s']=='On') {
 
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
 	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['ipaddock']['s']=='On'&&$d['ipaddock_vermogen']['s']<1&&past('ipaddock')>=18000&&past('$ 8beneden-2')>=18000) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['ipaddock']['s']=='On'&&$d['ipaddock_vermogen']['s']<2&&past('ipaddock')>=18000&&past('$ 8beneden-2')>=18000) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['living_set']['m']!=0&&$d['eettafel']['s']==0&&past('living_set')>28800) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['badkamer_set']['m']!=0&&$d['lichtbadkamer']['s']==0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	foreach (array('kamer_set','alex_set') as $i) {

@@ -279,7 +279,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 				elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 //				store($name, $action, $msg);
 			} else {
-				store($name, $action, $msg);
+				store($name, $action, $msg, $force);
 			}
 //		}
 	}
@@ -290,10 +290,10 @@ function setpoint($name, $value,$msg='') {
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
-function store($name='',$status='',$msg='',$update=null,$force=true) {
+function store($name='',$status='',$msg='',$force=false) {
 	global $d,$db,$user,$time;
 //	$time=time();
-	if ($force==true||$status!=$d[$name]['s']) {
+	if ($force===true||$status!=$d[$name]['s']) {
 		if (isset($d[$name])) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
@@ -1043,7 +1043,7 @@ function republishmqtt() {
 				'payload' => $brightness
 			];
 		} else continue;
-		usleep(50000);
+		usleep(5000);
 		foreach ($to_publish as $pub) {
 			$payload = [
 				'topic' => $pub['topic'],
@@ -1060,7 +1060,7 @@ function republishmqtt() {
 			$response = curl_exec($ch);
 			curl_close($ch);
 			lg("Herpublicatie: $entity_id → {$pub['payload']} → {$pub['topic']}");
-			usleep(50000);
+			usleep(5000);
 		}
 	}
 }
