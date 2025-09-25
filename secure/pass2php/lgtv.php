@@ -11,17 +11,10 @@ if ($status=='On') {
 //		if ($d['rkeukenr']['s']<55&&$d['Buiten_temp']['s']<10) sl('rkeukenr', 55, basename(__FILE__).':'.__LINE__);
 //		hass('switch','turn_off','switch.plug7_socket_1');
 //	}
-	if ($d['bose101']['m']==1&&$d['bose101']['s']=='On'&&$d['bose102']['s']=='Off'&&$d['bose103']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off'&&$d['bose106']['s']=='Off'&&$d['bose107']['s']=='Off'&&$d['eettafel']['s']==0) {
+	if ($d['bose101']['m']==1&&$d['boseliving']['s']=='On'&&$d['bose101']['s']=='On'&&$d['bose102']['s']=='Off'&&$d['bose103']['s']=='Off'&&$d['bose104']['s']=='Off'&&$d['bose105']['s']=='Off'&&$d['bose106']['s']=='Off'&&$d['bose107']['s']=='Off'&&$d['eettafel']['s']==0) {
 		bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
-		sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-} elseif ($status=='Off') {
-	lg(basename(__FILE__).':'.__LINE__);
-	if ($d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		lg(basename(__FILE__).':'.__LINE__);
-		if ($d['zon']==0&&$d['dag']['s']<0) {
-			lg(basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']==0) sl('zithoek', 10, basename(__FILE__).':'.__LINE__);
-		}
+		storesm('bose101', 'Off', 'Offline', basename(__FILE__).':'.__LINE__);
+		sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
+
 	}
 }

@@ -8,7 +8,7 @@ foreach ($devices as $ip => $vol) {
 //			lg($boses[$ip].' = '.print_r($status,true));
 			if (isset($status['@attributes']['source'])) {
 				if ($d['bose'.$ip]['icon'] != 'Online' && $d['boseliving']['s'] != 'On') {
-					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+					store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				} elseif ($d['bose'.$ip]['icon'] != 'Online') {
 					storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 				}
@@ -23,29 +23,29 @@ foreach ($devices as $ip => $vol) {
 						bosekey("POWER", 0, 101);
 						if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 						if ($d['boseliving']['s'] != 'Off') {
-							sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
+							store('boseliving', 'Off', basename(__FILE__).':'.__LINE__,1);
 							sleep(5);
-							sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+							store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 							$invalidcounter = 0;
 						}
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
-					if ($d['bose'.$ip]['s'] == 'Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+					if ($d['bose'.$ip]['s'] == 'Off') store('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__,1);
 					if ($invalidcounter > 0) $invalidcounter = 0;
 				}
 			} else {
 				if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-				if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+				if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 			}
 			unset($status);
 		} else {
 			if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-			if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+			if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 		}
 	} else {
 		if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-		if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 	}
 }
 if ($d['media']['s']=='On') {
@@ -62,7 +62,7 @@ if ($d['media']['s']=='On') {
 }	
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
-	if ($d['bose101']['s'] == 'On') sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['bose101']['s'] == 'On') store('bose101', 'Off', basename(__FILE__).':'.__LINE__,1);
 }
 if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
@@ -113,13 +113,13 @@ if ($d['bose101']['m']==1
 		if (isset($status['@attributes']['source'])) {
 			if ($status['@attributes']['source']!='STANDBY') {
 				bosekey("POWER", 0, 101);
-				if ($d['bose101']['s']!='Off') sw('bose101', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose102']['s']!='Off') sw('bose102', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose103']['s']!='Off') sw('bose103', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose104']['s']!='Off') sw('bose104', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose105']['s']!='Off') sw('bose105', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose106']['s']!='Off') sw('bose106', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['bose107']['s']!='Off') sw('bose107', 'Off', basename(__FILE__).':'.__LINE__);
+				if ($d['bose101']['s']!='Off') store('bose101', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose102']['s']!='Off') store('bose102', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose103']['s']!='Off') store('bose103', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose104']['s']!='Off') store('bose104', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose105']['s']!='Off') store('bose105', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose106']['s']!='Off') store('bose106', 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose107']['s']!='Off') store('bose107', 'Off', basename(__FILE__).':'.__LINE__,1);
 				if ($d['boseliving']['s']!='Off') sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}

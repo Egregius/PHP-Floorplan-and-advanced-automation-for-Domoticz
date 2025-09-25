@@ -1,6 +1,5 @@
 <?php
 if ($status=='On') {
-	lg(__LINE__);
 	mset('lichtbadkamertijd', $d['time']);
 	if ($d['lichtbadkamer']['s']>0) sl('lichtbadkamer', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['weg']['s']==1&&$d['time']>$t-1800&&$d['time']<$t+2700) huisthuis();
@@ -11,5 +10,5 @@ if ($status=='On') {
 		sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 		sw('mac', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if (past('$ 8badkamer-8.php')>900) exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
+	if (past('8badkamer-8.php')>900) exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
 }

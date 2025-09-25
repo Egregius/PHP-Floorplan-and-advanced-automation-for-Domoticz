@@ -78,27 +78,13 @@ if ($d['auto']['s']=='On') {
 
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
 	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-
-	if ($d['ipaddock']['s']=='On'&&past('ipaddock')>=1800&&past('$ 8beneden-2')>=1800) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__);
-
-//	if (past('deurbadkamer')>1800&&past('lichtbadkamer')>600) {
-//		if ($d['lichtbadkamer']['s']>0) {
-//			$new=round($d['lichtbadkamer']['s'] * 0.85, 0);
-//			if ($new<10) $new=0;
-//			sl('lichtbadkamer', $new, basename(__FILE__).':'.__LINE__);
-//		}
-//	}
+	if ($d['ipaddock']['s']=='On'&&$d['ipaddock_vermogen']['s']<1&&past('ipaddock')>=18000&&past('$ 8beneden-2')>=18000) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['living_set']['m']!=0&&$d['eettafel']['s']==0&&past('living_set')>28800) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['badkamer_set']['m']!=0&&$d['lichtbadkamer']['s']==0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-/*	if ($d['grohered']['s']=='On'&&$d['pirkeuken']['s']=='Off'&&past('pirkeuken')>900) {
-		$past=past('grohered');
-		if ($d['grohered_kwh']['s']<50&&$past>180) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
-		elseif ($past>1800) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
-	}*/
-	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('pirgarage2')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 
 	if ($d['pirliving']['s']=='Off') {
 		if ($d['dag']['s']>1) {
@@ -122,25 +108,6 @@ if ($d['auto']['s']=='On') {
 	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
 		if ($d['kookplaat_power']['s']<125&&past('kookplaat_power')>240) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-/*	if ($d['weg']['s']>=1) {
-		if ($d['media']['s']=='On') {
-	//		lg(basename(__FILE__).':'.__LINE__.' media = On');
-			if ($d['lgtv']['s']!='On') {
-	//			lg(basename(__FILE__).':'.__LINE__.' lgtv anders dan On');
-				if (past('media')>1800) {
-					lg(basename(__FILE__).':'.__LINE__.' past media>1800');
-					if (past('lgtv')>1800) {
-						lg(basename(__FILE__).':'.__LINE__.' past lgtv>1800');
-						if (past('nvidia')>1800) {
-							lg(basename(__FILE__).':'.__LINE__.' past nvidia>1800');
-							telegram('TV wordt uitgeschakeld!');
-							sw('media', 'Off', basename(__FILE__).':'.__LINE__);
-						}
-					}
-				}
-			}
-		} //else lg(basename(__FILE__).':'.__LINE__.' media = '.$d['media']['s']);
-	}*/
 	if ($d['weg']['s']>=1&&$d['media']['s']=='On'&&past('weg')>900) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/

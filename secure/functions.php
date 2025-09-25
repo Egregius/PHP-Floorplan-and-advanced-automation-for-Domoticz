@@ -291,10 +291,10 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
-	global $d,$db, $user;
-	$time=time();
+	global $d,$db,$user,$time;
+//	$time=time();
 	if ($force==true||$status!=$d[$name]['s']) {
-		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+		if (isset($d[$name])) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
@@ -305,19 +305,25 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
-function storemode($name,$mode,$msg='',$update=null) {
-	global $db, $user, $time;
-	$time=time();
-	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
+function storemode($name,$mode,$msg='') {
+	global $d,$db,$user,$time;
+//	$time=time();
+	if (isset($d[$name])) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
-function storeicon($name,$icon,$msg='',$update=null) {
+function storesm($name,$s,$m,$msg='') {
+	global $d,$db,$user,$time;
+	if (isset($d[$name])) $db->query("UPDATE devices SET s='$s, m='$m',t='$time' WHERE n='$name'");
+	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
+	lg('(STORESM) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S => '.$s.' M => '.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+}
+function storeicon($name,$icon,$msg='') {
 	global $d, $db, $user, $time;
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
-		if (isset($d['time'])) $time=$d['time'];
-		else $time=time();
-		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
+//		if (isset($d['time'])) $time=$d['time'];
+//		else $time=time();
+		if (isset($d[$name])) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
 		if (endswith($name, '_temp')) return;
 		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
