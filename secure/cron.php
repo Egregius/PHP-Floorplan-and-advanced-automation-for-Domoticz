@@ -21,42 +21,38 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-$last10 = $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last100 = $time-60;
+$last10= $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last90 = $time-60;
 
 while (true) {
-	$time = microtime(true);
-	$timeint= (int)$time;
-	if ((($timeint % 10 === 0) && $last10 !== $timeint) || $last10 <= $time - 10) {
-		$last10 = $timeint;
-		$d = fetchdata($timeint - 60, basename(__FILE__).':'.__LINE__);
-		$d['time'] = $time;
-		include '_cron10.php';
-		if ($timeint % 20 === 0) {
-			$user='heating';
-			if ($d['heating']['s']==-2) include '_TC_cooling_airco.php';
-			elseif ($d['heating']['s']==-1) include '_TC_cooling_passive.php';
-			elseif ($d['heating']['s']==0) include '_TC_neutral.php';
-			elseif ($d['heating']['s']>0) include '_TC_heating.php';
-		}
-	}
-	if (checkInterval($last60, 60, $timeint)) {
-		include '_cron60.php';
-		stoploop($d);
-	}
-	if (checkInterval($last120, 120, $timeint)) include '_cron120.php';
-	if (checkInterval($last180, 180, $timeint)) include '_cron180.php';
-	if (checkInterval($last240, 240, $timeint)) include '_cron240.php';
-	if (checkInterval($last300, 300, $timeint)) include '_cron300.php';
-	if (checkInterval($last3600, 3600, $timeint)) include '_cron3600.php';
-	if (checkInterval($last450, 450, $timeint)) {
-		include '_cron450.php';
-		updateWekker($t, $weekend);
-	}
-	if (checkInterval($last100, 100, $timeint)) include '_weather.php';
-	$elapsed = microtime(true) - $time;
-	$sleep   = 1 - $elapsed;
-	if ($sleep > 0) usleep((int)($sleep * 1e6));
+    $time = microtime(true);
+    $timeint = (int)$time;
+    if ($timeint % 10 === 0 && $timeint !== $last10) {
+        $last10 = $timeint;
+        $d = fetchdata($timeint - 60, basename(__FILE__).':'.__LINE__);
+        $d['time'] = $time;
+        include '_cron10.php';
+
+        $user = 'heating';
+        if ($d['heating']['s'] == -2) include '_TC_cooling_airco.php';
+        elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
+        elseif ($d['heating']['s'] == 0)  include '_TC_neutral.php';
+        elseif ($d['heating']['s'] > 0)   include '_TC_heating.php';
+    }
+    if (checkInterval($last60,   60, $timeint)) { include '_cron60.php'; stoploop($d); }
+    if (checkInterval($last120, 120, $timeint)) include '_cron120.php';
+    if (checkInterval($last180, 180, $timeint)) include '_cron180.php';
+    if (checkInterval($last240, 240, $timeint)) include '_cron240.php';
+    if (checkInterval($last300, 300, $timeint)) include '_cron300.php';
+    if (checkInterval($last3600,3600, $timeint)) include '_cron3600.php';
+    if (checkInterval($last450, 450, $timeint)) { include '_cron450.php'; updateWekker($t, $weekend); }
+    if (checkInterval($last90,  90, $timeint)) include '_weather.php';
+
+    $next = floor($time / 10) * 10 + 10;
+    $sleep = $next - microtime(true);
+    $sleep = (int)round($sleep * 1e6)-1400;
+    if ($sleep > 0) usleep($sleep);
 }
+
 
 function checkInterval(&$last, $interval, $time) {
     if (($time % $interval === 0 && $last !== $time) || $last <= $time - $interval) {

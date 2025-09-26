@@ -13,7 +13,8 @@ foreach ($devices as $ip => $vol) {
 					storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY' && $d['bose101']['m'] == 1) {
-					bosezone($ip,false,$vol);
+				} elseif ($ip>101&&$status['@attributes']['source'] == 'STANDBY' && $d['bose101']['m'] == 0) {
+					bosezone($ip,true,$vol);
 				} elseif ($status['@attributes']['source'] == 'STANDBY') {
 					if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 				} elseif ($status['@attributes']['source'] == 'INVALID_SOURCE') {

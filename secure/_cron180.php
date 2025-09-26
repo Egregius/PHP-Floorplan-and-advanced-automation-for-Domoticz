@@ -1,5 +1,6 @@
 <?php
 $user='cron180';
+lg($user);
 //if ($d['daikin']['s']=='On'&&past('daikin')>118) {
 //	foreach (array('living', 'kamer', 'alex') as $k) {
 //		$data=daikinstatus($k);

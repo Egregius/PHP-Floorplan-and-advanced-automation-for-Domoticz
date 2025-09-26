@@ -2,7 +2,7 @@
 $user='Rolluiken_Heating';
 $zonelevatie=-5.5;
 if ($d['auto']['s']=='On') {
-	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>$zonelevatie))&&$time<strtotime('8:30')) {
+	if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>$zonelevatie))&&$time>strtotime('5:00')&&$time<strtotime('8:30')) {
 		if ($time>=$t) {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);

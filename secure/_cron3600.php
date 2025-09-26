@@ -1,6 +1,6 @@
 <?php
-//lg('CRON-3600');
 $user='cron3600';
+lg($user);
 
 if (date('G')==0) {
 	mset('alwayson',9999);
