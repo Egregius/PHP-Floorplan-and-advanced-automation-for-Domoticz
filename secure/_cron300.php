@@ -1,6 +1,6 @@
 <?php
 $user='cron300';
-lg($user);
+//lg($user);
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']['s']=='On') {
