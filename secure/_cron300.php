@@ -95,17 +95,19 @@ if ($d['zon']>0) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
 		echo 'UV=';print_r($uv);
 		if (isset($uv['result'])) {
-			if (round($uv['result']['uv'], 1)!=$d['uv']['s']) store('uv', round($uv['result']['uv'], 1), basename(__FILE__).':'.__LINE__);
-			if (round($uv['result']['uv_max'], 1)!=$d['uv']['m']) storemode('uv', round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
+			if (round($uv['result']['uv'], 1)!=$d['uv']['s']||round($uv['result']['uv_max'], 1)!=$d['uv']['m']) storesm('uv', round($uv['result']['uv'], 1), round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
 		}
 	}
 } else {
-	if ($d['uv']['s']>0) store('uv', 0, basename(__FILE__).':'.__LINE__);
-	if ($d['uv']['m']>0) storemode('uv', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['uv']['s']>0||$d['uv']['m']>0) storesm('uv', 0, 0, basename(__FILE__).':'.__LINE__);
 }
-if ($d['weg']['s']==0&&1==2) {
+if ($d['weg']['s']==0) {
 	foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','badkamer_temp','zolder_temp','buiten_hum','living_hum','kamer_hum','waskamer_hum','alex_hum','badkamer_hum') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]['t']),7200);
 	}
 }
 mset('dag',$d['dag']['s']);
+
+if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1700&&mget('buien')>$time-14400) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+
+republishmqtt();

@@ -36,6 +36,67 @@ if ($d['auto']['s']=='On') {
 /*		if ($d['lgtv']['s']=='On') {
 			if ($d['dag']['s']<0&&$d['kristal']['s']=='Off'&&past('kristal')>7200&&$d['buiten_temp']['s']<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		}*/
+		if ($d['living_set']['s']!='D'&&$d['living_temp']['s']>22&&$d['living_temp']['s']>$d['living_set']['s']+1&&$d['brander']['s']=='On') alert('livingtemp', 'Te warm in living, '.$d['living_temp']['s'].' °C. Controleer verwarming', 3600, false);
+		if ($time>=strtotime('16:00')) {
+			if ($d['raamalex']['s']=='Open'&&$d['alex_temp']['s']<12) alert('raamalex', 'Raam Alex dicht doen, '.$d['alex_temp']['s'].' °C.', 1799,	false);
+			if ($d['raamkamer']['s']=='Open'&&$d['alex_temp']['s']<10) alert('raamkamer', 'Raam kamer dicht doen, '.$d['kamer_temp']['s'].' °C.', 1799,	false);
+		}
+		if ($d['heating']['s']>0) { //Heating
+			if ($d['buiten_temp']['s']<$d['kamer_temp']['s']
+				&&$d['buiten_temp']['s']<$d['waskamer_temp']['s']
+				&&$d['buiten_temp']['s']<$d['alex_temp']['s']
+				&&($d['raamkamer']['s']=='Open'
+				||$d['raamwaskamer']['s']=='Open'
+				||$d['raamalex']['s']=='Open')
+				&&($d['kamer_temp']['s']<10
+				||$d['waskamer_temp']['s']<10
+				||$d['alex_temp']['s']<10)
+			) {
+				alert(
+					'ramenboven',
+					'Ramen boven dicht doen, te koud buiten.
+					Buiten = '.round($d['buiten_temp']['s'], 1).',
+					kamer = '.$d['kamer_temp']['s'].',
+					waskamer = '.$d['waskamer_temp']['s'].',
+					Alex = '.$d['alex_temp']['s'],
+					3600,
+					false,
+					2,
+				);
+			}
+		} elseif ($d['heating']['s']<0) { //Cooling
+			if (($d['buiten_temp']['s']>$d['kamer_temp']['s']
+				&&$d['buiten_temp']['s']>$d['waskamer_temp']['s']
+				&&$d['buiten_temp']['s']>$d['alex_temp']['s'])
+				&&$d['buiten_temp']['s']>=18
+				&&($d['kamer_temp']['s']>=18
+				||$d['waskamer_temp']['s']>=18
+				||$d['alex_temp']['s']>=18)
+				&&($d['raamkamer']['s']=='Open'
+				||($d['raamwaskamer']['s']=='Open'&&($d['deurkamer']['s']=='Open'||$d['deuralex']['s']=='Open'))
+				||$d['raamalex']['s']=='Open')
+			) {
+				alert(
+					'ramenboven',
+					'Ramen boven dicht doen, te warm buiten.
+					Buiten = '.round($d['buiten_temp']['s'], 1).',
+					kamer = '.$d['kamer_temp']['s'].',
+					waskamer = '.$d['waskamer_temp']['s'].',
+					Alex = '.$d['alex_temp']['s'],
+					3600,
+					false,
+					2,
+				);
+			}
+		}
+		if ($d['wasdroger']['s']=='On') {
+			if (past('wasdroger_kWh')>600) {
+				if ($d['wasdroger_kWh']['s']<10) {
+					alert('wasdrogervol','Wasdroger vol',60,false,2);
+					sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
+				}
+			}
+		}
 	} elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
 		foreach (array('pirhall') as $i) {
@@ -116,4 +177,27 @@ if ($d['wasmachine']['s']=='On') {
 		hassnotify('Wasmachine', 'klaar');
 		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
 	}
+}
+if (
+	  $d['daikinliving']['m']==0
+	&&$d['daikinkamer']['m']==0
+	&&$d['daikinalex']['m']==0
+	&&$d['living_set']['s']!='D'
+	&&$d['kamer_set']['s']!='D'
+	&&$d['alex_set']['s']!='D'
+	&&$d['daikin']['s']=='On'
+	&&$d['daikin']['m']==1
+	&&$d['daikin_kwh']['s']<20
+	&&past('daikin')>3600
+	&&past('daikinliving')>1800
+	&&past('daikinkamer')>1800
+	&&past('daikinalex')>1800) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
+$stamp=date('Y-m-d H:i:s', $time-900);
+$sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
+$result=$db->query($sql);
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
+foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
+	$diff=$d[$i.'_temp']['s']-$avg[$i];
+	if ($d[$i.'_temp']['icon']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
+//	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
 }

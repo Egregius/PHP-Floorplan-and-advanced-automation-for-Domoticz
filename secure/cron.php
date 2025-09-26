@@ -21,7 +21,7 @@ if ($d['weg']['s']>0) {
 	}
 }
 
-$last10= $last60 = $last120 = $last180 = $last240 = $last300 = $last3600 = $last450 = $last90 = $time-60;
+$last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
 
 while (true) {
     $time = microtime(true);
@@ -39,12 +39,8 @@ while (true) {
         elseif ($d['heating']['s'] > 0)   include '_TC_heating.php';
     }
     if (checkInterval($last60,   60, $timeint)) { include '_cron60.php'; stoploop($d); }
-    if (checkInterval($last120, 120, $timeint)) include '_cron120.php';
-    if (checkInterval($last180, 180, $timeint)) include '_cron180.php';
-    if (checkInterval($last240, 240, $timeint)) include '_cron240.php';
     if (checkInterval($last300, 300, $timeint)) include '_cron300.php';
-    if (checkInterval($last3600,3600, $timeint)) include '_cron3600.php';
-    if (checkInterval($last450, 450, $timeint)) { include '_cron450.php'; updateWekker($t, $weekend); }
+    if (checkInterval($last3600,3600, $timeint)) {include '_cron3600.php';updateWekker($t, $weekend);}
     if (checkInterval($last90,  90, $timeint)) include '_weather.php';
 
     $next = floor($time / 10) * 10 + 10;

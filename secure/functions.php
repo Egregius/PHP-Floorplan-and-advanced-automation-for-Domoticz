@@ -175,7 +175,7 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	}
 	if ($last < $time-$ttl) {
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
-		if ($to==1) hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', false);
+		if ($to==1) hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
 		else {
 			hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
 			telegram($msg, $silent, 2);
