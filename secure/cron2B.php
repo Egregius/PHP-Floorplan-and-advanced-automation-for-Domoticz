@@ -40,58 +40,19 @@ foreach ($devices as $ip => $vol) {
 				if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
 				if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 			}
-			unset($status);
 		} else {
 			if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
 			if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 		}
+		unset($status);
 	} else {
 		if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
 		if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
 	}
 }
-if ($d['media']['s']=='On') {
-	if ($d['nas']['s']=='Off') {
-		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-		if (isset($loadedprofile['result']['label'])) {
-			lg('Waking NAS...');
-			shell_exec('/var/www/html/secure/wakenas.sh &');
-		}
-	}
-	if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
-		if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}	
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
 	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
 	if ($d['bose101']['s'] == 'On') store('bose101', 'Off', basename(__FILE__).':'.__LINE__,1);
-}
-if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
-	if ($d['nas']['s']=='Off') {
-		if ($d['lgtv']['s']=='On') {
-			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
-			if (isset($kodi['result'])) {
-				lg('Waking NAS for Kodi...');
-				shell_exec('/var/www/html/secure/wakenas.sh &');
-				unset($kodi);
-			}
-			if (past('lgtv')>=20&&past('lgtv')<=30) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
-		}
-		if (past('pirhall')<300) {
-			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
-			if (isset($kodi['result'])) {
-				lg('Waking NAS for Kodi 2...');
-				shell_exec('/var/www/html/secure/wakenas.sh &');
-				unset($kodi);
-			}
-		}
-	}
-	if ($d['media']['s']=='On') {
-		if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
-			if (ping('192.168.2.6')===false&&ping('192.168.2.28')===false) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
-		}
-		if (past('media')>45&&past('media')<60) sw('shieldpower', 'On','',true);
-	}	
 }
 if ($d['bose101']['m']==1
 	&&$d['bose101']['s']=='On'
@@ -126,4 +87,43 @@ if ($d['bose101']['m']==1
 			}
 		}
 	}
+}
+if ($d['media']['s']=='On') {
+	if ($d['nas']['s']=='Off') {
+		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
+		if (isset($loadedprofile['result']['label'])) {
+			lg('Waking NAS...');
+			shell_exec('/var/www/html/secure/wakenas.sh &');
+		}
+	}
+	if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
+		if (ping('192.168.2.6')!=1) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
+	}
+}	
+if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
+	if ($d['nas']['s']=='Off') {
+		if ($d['lgtv']['s']=='On') {
+			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+			if (isset($kodi['result'])) {
+				lg('Waking NAS for Kodi...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+				unset($kodi);
+			}
+			if (past('lgtv')>=20&&past('lgtv')<=30) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
+		}
+		if (past('pirhall')<300) {
+			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+			if (isset($kodi['result'])) {
+				lg('Waking NAS for Kodi 2...');
+				shell_exec('/var/www/html/secure/wakenas.sh &');
+				unset($kodi);
+			}
+		}
+	}
+	if ($d['media']['s']=='On') {
+		if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
+			if (ping('192.168.2.6')===false&&ping('192.168.2.28')===false) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
+		}
+		if (past('media')>45&&past('media')<60) sw('shieldpower', 'On','',true);
+	}	
 }
