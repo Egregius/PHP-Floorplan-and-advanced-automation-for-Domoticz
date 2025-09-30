@@ -7,13 +7,13 @@ foreach ($devices as $ip => $vol) {
 		if (is_array($status)) {
 //			lg($boses[$ip].' = '.print_r($status,true));
 			if (isset($status['@attributes']['source'])) {
-				if ($d['bose'.$ip]['icon'] != 'Online' && $d['boseliving']['s'] != 'On') {
+				if ($d['bose'.$ip]['m'] != 'Online' && $d['boseliving']['s'] != 'On') {
 					store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
-				} elseif ($d['bose'.$ip]['icon'] != 'Online') {
-					storeicon('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+				} elseif ($d['bose'.$ip]['m'] != 'Online') {
+					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY' && $d['bose101']['m'] == 1) {
-					bosezone($ip,false,$vol);
+					bosezone($ip,true,$vol);
 				} elseif ($ip>101&&$status['@attributes']['source'] == 'STANDBY' && $d['bose101']['m'] == 0) {
 					bosezone($ip,true,$vol);
 				} elseif ($status['@attributes']['source'] == 'STANDBY') {
@@ -37,22 +37,18 @@ foreach ($devices as $ip => $vol) {
 					if ($invalidcounter > 0) $invalidcounter = 0;
 				}
 			} else {
-				if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-				if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
+				if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline', basename(__FILE__).':'.__LINE__, true);
 			}
 		} else {
-			if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-			if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
+			if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline', basename(__FILE__).':'.__LINE__, true);
 		}
 		unset($status);
 	} else {
-		if ($d['bose'.$ip]['icon'] != 'Offline') storeicon('bose'.$ip, 'Offline', basename(__FILE__).':'.__LINE__, true);
-		if ($d['bose'.$ip]['s'] == 'On') store('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,1);
+		if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline', basename(__FILE__).':'.__LINE__, true);
 	}
 }
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
-	if ($d['bose101']['icon']!='Offline') storeicon('bose101', 'Offline', basename(__FILE__).':'.__LINE__, true);
-	if ($d['bose101']['s'] == 'On') store('bose101', 'Off', basename(__FILE__).':'.__LINE__,1);
+	if ($d['bose101']['s'] == 'On' || $d['bose101']['m'] != 'Offline') storesm('bose101', 'Off', 'Offline', basename(__FILE__).':'.__LINE__, true);
 }
 if ($d['bose101']['m']==1
 	&&$d['bose101']['s']=='On'
