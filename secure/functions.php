@@ -80,7 +80,7 @@ function check_en_slapen($locatie, $status, &$d) {
 	} elseif ($locatie === 'slaapkamer') {
 		if ($d['kamer']['s'] > 5) {
 			sl('kamer', 5, basename(__FILE__).':'.__LINE__);
-		} elseif (($d['dag']['s']<-4||$d['rkamerr']['s']>90)&&past('kamer')>7200) {
+		} elseif (($d['dag']['s']<-4||$d['rkamerr']['s']>90)&&past('kamer')>7200&&$d['time'] > strtotime('21:00')&&$d['time'] < strtotime('23:00')) {
 			sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		}
 		huisslapen();
