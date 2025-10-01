@@ -64,20 +64,18 @@ elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['dev
 	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='weg';");
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
-elseif (isset($_REQUEST['bose'])) {
+elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107) {
 	$bose=$_REQUEST['bose'];
 	$d=array();
 	$d['time']=$_SERVER['REQUEST_TIME'];
-	$db=dbconnect();
-	$stmt=$db->query("SELECT icon FROM devices WHERE n like 'bose101';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		$d['bose101mode']=$row['icon'];
-	}
 	$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
-	if (isset($nowplaying['isFavorite'])) $nowplaying['isFavorite']=1; else $nowplaying['isFavorite']=0;
-	$d['nowplaying']=$nowplaying;
-	$d['volume']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
-//	$d['bass']=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/bass"))), true);
+	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
+	$d['source']=$nowplaying['@attributes']['source'];
+	$d['artist']=$nowplaying['artist'];
+	$d['track']=$nowplaying['track'];
+	$d['art']=$nowplaying['art'];
+	$d['playlist']=$nowplaying['ContentItem']['itemName'];
+	$d['volume']=$volume['actualvolume'];
 	echo json_encode($d);
 	exit;
 }

@@ -482,7 +482,7 @@ function boseplaylist() {
 	}
 	return $preset;
 }
-function bosezone($ip,$forced=false,$vol='') {
+function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
 	$playlist=boseplaylist();
 	$map = [
@@ -493,13 +493,13 @@ function bosezone($ip,$forced=false,$vol='') {
 		'MIX-2' => 'PRESET_5',
 		'MIX-3' => 'PRESET_6',
 	];
-	if (($d['weg']['s']<=1&&$d['bose101']['m']==1)||$forced===true) {
-		if ($d['weg']['s']==0&&($d['lgtv']['s']!='On'||$forced===true)&&$d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
+	if ($d['weg']['s']<=1) {
+		if ($d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 			bosekey($map[$playlist], 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-			elseif ($time<$t+1800) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
+			elseif (alexslaapt()==true) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {

@@ -3,9 +3,9 @@ $user='cron10';
 //lg($user);
 if ($d['auto']['s']=='On') {
 	$i=39;
-	if ($d['garageled']['s']=='On'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garageled')>$i) sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['garageled']['s']=='On'&&$d['pirgarage']['s']=='Off'&&$d['pirgarage2']['s']=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garageled')>$i) sw('garageled', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=119;
-	if ($d['garage']['s']=='On'&&$d['pirgarage']['s']=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garage')>$i) sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['garage']['s']=='On'&&$d['pirgarage']['s']=='Off'&&$d['pirgarage2']['s']=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garage')>$i) sw('garage', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=119;
 	if ($d['pirzolderg']['s']=='Off'&&$d['zolderg']['s']=='On'&&past('pirzolderg')>$i&&past('zolderg')>$i) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 	$i=5;
