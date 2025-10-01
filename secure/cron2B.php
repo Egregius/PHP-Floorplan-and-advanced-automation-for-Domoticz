@@ -5,7 +5,7 @@ foreach ($devices as $ip => $vol) {
     if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
-//			if ($ip==107) lg($boses[$ip].' = '.print_r($status,true));
+			if ($ip==101) lg($boses[$ip].' = '.print_r($status,true));
 			if (isset($status['@attributes']['source'])) {
 				if ($d['bose'.$ip]['m'] != 'Online' && $d['boseliving']['s'] != 'On') {
 					store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
