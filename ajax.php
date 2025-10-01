@@ -71,7 +71,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	$nowplaying=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
 	$volume=json_decode(json_encode(simplexml_load_string(file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['source']=$nowplaying['@attributes']['source'];
-	if (isset($nowplaying['artist'])) {
+	if (isset($nowplaying['ContentItem']['itemName'])) {
 		$d['artist']=$nowplaying['artist'];
 		$d['track']=$nowplaying['track'];
 		$d['art']=$nowplaying['art'];
