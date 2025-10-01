@@ -311,7 +311,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='power') {
 		$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']=='On') {
-			bosezone($_REQUEST['boseip'], true);
+			bosezone($_REQUEST['boseip']);
 		} elseif ($_REQUEST['action']=='Off') {
 			bosekey("POWER", 0, $_REQUEST['boseip'],basename(__FILE__).':'.__LINE__);
 			sw('bose'.$_REQUEST['boseip'], 'Off',basename(__FILE__).':'.__LINE__);

@@ -527,7 +527,7 @@ function bosezone($ip,$vol='') {
 					if (alexslaapt()==true) $vol-=10;
 					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 				}
-			} elseif ($d['bose'.$ip]['s']=='Off') {
+			} else /*if ($d['bose'.$ip]['s']=='Off') */{
 				bosepost('setZone',  $mapip[$ip], 101);
 				store('bose'.$ip, 'On');
 				if ($vol=='') {
