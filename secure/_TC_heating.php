@@ -75,7 +75,7 @@ if ($d['living_set']['m']==0) {
 			elseif ($dow==2&&$time>=strtotime('16:00')&&$time<strtotime('19:00')) $Setliving=20;
 			elseif ($dow==2&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
 
-			elseif ($dow==3&&$time>=strtotime('12:00')&&$time<strtotime('19:00')) $Setliving=20;
+			elseif ($dow==3&&$time>=strtotime('12:10')&&$time<strtotime('19:00')) $Setliving=20;
 			elseif ($dow==3&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
 
 			elseif ($dow==4&&$time>=strtotime('16:00')&&$time<strtotime('19:00')) $Setliving=20;
