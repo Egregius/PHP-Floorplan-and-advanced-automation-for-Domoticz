@@ -65,13 +65,13 @@ if ($d['bose101']['s']=='On'
 	&&$d['bose106']['s']=='Off'
 	&&$d['bose107']['s']=='Off'
 	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
-	&&past('bose101')>90
-	&&past('bose102')>90
-	&&past('bose103')>90
-	&&past('bose104')>90
-	&&past('bose105')>90
-	&&past('bose106')>90
-	&&past('bose107')>90
+	&&past('bose101')>180
+//	&&past('bose102')>30
+//	&&past('bose103')>30
+//	&&past('bose104')>30
+//	&&past('bose105')>30
+//	&&past('bose106')>30
+//	&&past('bose107')>30
 ) {
 	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
 	if (!empty($status)) {
