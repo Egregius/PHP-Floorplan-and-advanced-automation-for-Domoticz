@@ -17,13 +17,14 @@ foreach ($devices as $ip => $vol) {
 			}
 			if (isset($status['@attributes']['source'])) {
 				if ($d['bose'.$ip]['m'] != 'Online' && $d['boseliving']['s'] != 'On') {
-					store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {
 					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY') {
-					lg(basename(__FILE__).':'.__LINE__);
-					bosezone($ip,$vol);
+//					lg(basename(__FILE__).':'.__LINE__);
+					if ($ip==101) bosepreset(boseplaylist());
+					else bosezone($ip,$vol);
 				} elseif ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {

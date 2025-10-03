@@ -295,7 +295,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='bass') {
 		bosebass($_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='preset') {
-		bosepreset($_REQUEST['action'], $_REQUEST['boseip']);
+		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skip') {
 		$db=dbconnect();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
