@@ -47,15 +47,15 @@ if ($d['daikin']['m']==1) {
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($k=='living') {
-					$cor=-1;
+					$cor=-2;
 					$set+=$cor;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';
 				} elseif ($k=='kamer') {
-					$cor=-1;
+					$cor=-2;
 					$set+=$cor;
 					if ($time<strtotime('10:00')||$d['weg']['s']==1) $rate='B';
 				} elseif ($k=='alex') {
-					$cor=-1;
+					$cor=-2;
 					$set+=$cor;
 					if (alexslaapt()===true||$time>strtotime('20:10')) $rate='B';
 				}

@@ -195,7 +195,7 @@ if (
 	&&past('daikinliving')>1800
 	&&past('daikinkamer')>1800
 	&&past('daikinalex')>1800) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
-$stamp=date('Y-m-d H:i:s', $time-900);
+$stamp=date('Y-m-d H:i:s', $timeint-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
 $result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
