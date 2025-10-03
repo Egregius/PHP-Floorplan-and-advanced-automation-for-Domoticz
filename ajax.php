@@ -40,7 +40,15 @@ if (isset($_REQUEST['t'])) {
 			$d['Sunset']=$sunrise['Sunset'];
 			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
 //			$d['zonavg']=$d['zonvandaag']['icon'];
-			$d['playlist']=boseplaylist();
+			$map = [
+					'PRESET_1' => 'EDM-1',
+					'PRESET_2' => 'EDM-2',
+					'PRESET_3' => 'EDM-3',
+					'PRESET_4' => 'MIX-1',
+					'PRESET_5' => 'MIX-2',
+					'PRESET_6' => 'MIX-3',
+				];
+			$d['playlist']=$map[boseplaylist()];
 		}
 	}
 	echo json_encode($d);
