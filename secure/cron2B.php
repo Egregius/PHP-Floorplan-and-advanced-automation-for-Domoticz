@@ -8,7 +8,7 @@ foreach ($devices as $ip => $vol) {
 			if ($ip==101) {
 //				lg($boses[$ip].' = '.print_r($status,true));
 				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
-//					lg(basename(__FILE__).':'.__LINE__);
+					lg(basename(__FILE__).':'.__LINE__);
 					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
 						lg(basename(__FILE__).':'.__LINE__);
 						bosepreset(boseplaylist(), 101);
