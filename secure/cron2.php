@@ -29,7 +29,7 @@ $boses=array(
 );
 while (1) {
     $start = microtime(true);
-    $d = fetchdata($time - 20, basename(__FILE__) . ':' . __LINE__);
+    $d = fetchdata($time - 60, basename(__FILE__) . ':' . __LINE__);
     include 'cron2B.php';
     $time_elapsed_secs = microtime(true) - $start;
     $sleep = 10 - $time_elapsed_secs;
