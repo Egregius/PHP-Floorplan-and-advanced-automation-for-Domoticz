@@ -63,7 +63,7 @@ function check_en_slapen($locatie, $status, &$d) {
 		106 => 'Buiten20',
 	];
 	foreach ($boses as $k => $v) {
-		if ($d['bose'.$k]['icon'] == 'Online') {
+		if ($d['bose'.$k]['m'] == 'Online') {
 			waarschuwing('Bose '.$v, 55);
 			$x++;
 		}
