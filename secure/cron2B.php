@@ -16,7 +16,7 @@ foreach ($devices as $ip => $vol) {
 				}
 			}
 			if (isset($status['@attributes']['source'])) {
-				if (/*$d['bose'.$ip]['m'] != 'Online' && */$d['boseliving']['s'] != 'On') {
+				if (/*$d['bose'.$ip]['m'] != 'Online' && */$d['boseliving']['s'] != 'On'&&$d['lgtv']['s']=='Off') {
 //					lg(basename(__FILE__).':'.__LINE__);
 					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {

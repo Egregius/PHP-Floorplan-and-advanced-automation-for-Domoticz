@@ -3,7 +3,7 @@ if ($status!=$d['deuralex']['s']) {
 	if ($d['auto']['s']=='On') {
 		if ($status=='Open') {
 			fhall();
-			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('10:00')&&$d['dag']['s']>0) {
+			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('10:00')/*&&$d['dag']['s']>0*/) {
 				if ($d['ralex']['s']>0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 				if ($d['rwaskamer']['s']>0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 				if ($d['weg']['s']==0) {
