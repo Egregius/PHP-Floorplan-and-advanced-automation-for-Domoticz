@@ -7,7 +7,7 @@ $memcache=new Memcache;
 $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
 
-function updateWekker(&$t, &$weekend) {
+function updateWekker(&$t, &$weekend, &$dow) {
     $dow = date("w");
     $weekend = ($dow == 0 || $dow == 6);
     $t = $weekend ? strtotime('7:45') : strtotime('7:00');
