@@ -1,5 +1,5 @@
 <?php
-/*if ($d['auto']['s']=='On') {
+if ($d['auto']['s']=='On') {
 	if ($status=='Playing') {
 		if ($d['wasbak']['s']>0) sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['zithoek']['s']>0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
@@ -12,4 +12,4 @@
 			}
 		}
 	}
-}*/
+}
