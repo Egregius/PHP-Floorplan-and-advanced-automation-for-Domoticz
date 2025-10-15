@@ -12,4 +12,5 @@ if ($status>0) {
 	if ($d['alexslaapt']['s']==1) store('alexslaapt', 0);
 } else {
 	if ($d['alexslaapt']['s']==0&&$d['deuralex']['s']=='Closed'&&($d['time']>=strtotime('19:30')||$d['time']<strtotime('6:00'))) store('alexslaapt', 1);
+	elseif ($d['alexslaapt']['s']==1) store('alexslaapt', 0);
 }

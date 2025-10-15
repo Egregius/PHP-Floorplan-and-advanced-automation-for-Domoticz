@@ -28,19 +28,7 @@ echo '
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		<script type="text/javascript" charset="utf-8">
-			var asInitVals = new Array();
-			$(document).ready(function() {
-				$(\'#table\').dataTable(
-				{
-					"bStateSave": true,
-					"bPaginate": false,
-					"ordering": false,
-					"fnInitComplete":function(){
-						$("#table_filter input").focus();}
-				});
-			});
-		</script>
+		
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 			html{width:320px!important;}
@@ -276,7 +264,8 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			} elseif ($row['m']==1) {
 				echo '
 					<td>Dag</td>';
-			}
+			} else echo '
+					<td></td>';
 		} elseif ($row['n']=='minmaxtemp') {
 			echo '
 					<td>Temp < 6u</td>
@@ -332,5 +321,18 @@ echo '
 	<br>
 	<br>';
 ?>
+	<script type="text/javascript" charset="utf-8">
+		var asInitVals = new Array();
+		$(document).ready(function() {
+			$('#table').dataTable(
+			{
+				"bStateSave": true,
+				"bPaginate": false,
+				"ordering": false,
+				"fnInitComplete":function(){
+					$("#table_filter input").focus();}
+			});
+		});
+	</script>
 	</body>
 </html>
