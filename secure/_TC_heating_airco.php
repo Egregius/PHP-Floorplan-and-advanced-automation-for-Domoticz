@@ -57,7 +57,7 @@ if ($d['daikin']['m']==1) {
 				} elseif ($k=='alex') {
 					$cor=-2;
 					$set+=$cor;
-					if (alexslaapt()===true||$time>strtotime('20:10')) $rate='B';
+					if ($d['alexslaapt']['s']==1) $rate='B';
 				}
 				$set=ceil($set * 2) / 2;
 				if ($set>30) $set=30;

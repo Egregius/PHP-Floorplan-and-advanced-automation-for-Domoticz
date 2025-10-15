@@ -13,20 +13,6 @@ function updateWekker(&$t, &$weekend, &$dow, &$d) {
     else $weekend = ($dow == 0 || $dow == 6);
     $t = $weekend ? strtotime('7:45') : strtotime('7:00');
 }
-function alexslaapt() {
-	global $d,$time,$t;
-	if ($d['ralex']['s'] < 100) return false;
-	if ($d['deuralex']['s'] == 'Open') return false;
-	if ($d['alex']['s'] > 0) return false;
-	if ($d['heating']['s'] > 0) {
-		if ($time >= $t + 1800 && $time < strtotime('20:00')) {
-			if (past('deuralex') < 3600) return false;
-		}
-	}
-	if (past('deuralex') < 300) return false;
-	if (past('alex') < 300) return false;
-	return true;
-}
 function check_en_slapen($locatie, $status, &$d) {
 	$x = 0;
 	if ($locatie === 'voordeur') {
@@ -128,12 +114,12 @@ function finkom($force=false) {
 	global $d,$time;
 	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&alexslaapt()==false) sl('hall', 30, basename(__FILE__).':'.__LINE__);
+		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&$d['alexslaapt']['s']==0) sl('hall', 30, basename(__FILE__).':'.__LINE__);
 	}
 }
 function fhall() {
 	global $d,$t,$time;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&alexslaapt()==false) {
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&$d['alexslaapt']['s']==0) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -498,7 +484,7 @@ function bosezone($ip,$vol='') {
 			bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
 			lg('Bose zone time='.$time.'|'.$t+1800);
 			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-			elseif (alexslaapt()==true) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
+			elseif ($d['alexslaapt']['s']==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 			else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
@@ -517,25 +503,25 @@ function bosezone($ip,$vol='') {
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif (alexslaapt()==true) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
+				elseif ($d['alexslaapt']['s']==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 				usleep(100000);
 				bosepost('setZone', $mapip[$ip], 101);
 				if ($vol=='') {
-					if (alexslaapt()==true) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+					if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else {
-					if (alexslaapt()==true) $vol-=10;
+					if ($d['alexslaapt']['s']==1) $vol-=10;
 					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 				}
 			} else /*if ($d['bose'.$ip]['s']=='Off') */{
 				bosepost('setZone',  $mapip[$ip], 101);
 				store('bose'.$ip, 'On');
 				if ($vol=='') {
-					if (alexslaapt()==true) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+					if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else {
-					if (alexslaapt()==true) $vol-=10;
+					if ($d['alexslaapt']['s']==1) $vol-=10;
 					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 				}
 			}
