@@ -109,7 +109,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 // Subscribe sensor states
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -172,6 +172,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			stoploop($d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
+			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'weg') {
 			if ($status==0) {
 				store('weg',0,'',1);
@@ -212,7 +213,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
 //				lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
-				updateWekker($t, $weekend, $dow);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status,'',1);
 			}
@@ -238,7 +238,6 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
-			updateWekker($t, $weekend, $dow);
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';

@@ -21,7 +21,7 @@ $last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
 while (true) {
 	$time = microtime(true);
 	$timeint = (int)$time;
-	if ($t<$timeint-82800) updateWekker($t, $weekend, $dow);
+	if ($t<$timeint-82800) updateWekker($t, $weekend, $dow, $d);
 	if ($timeint % 10 === 0 && $timeint !== $last10) {
 		$last10 = $timeint;
 		$d = fetchdata($timeint - 60, basename(__FILE__).':'.__LINE__);
@@ -35,7 +35,7 @@ while (true) {
 		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
 	}
 	if (checkInterval($last60, 60, $timeint)) include '_cron60.php' ;
-	if (checkInterval($last300, 300, $timeint)) {include '_cron300.php';stoploop($d);updateWekker($t, $weekend, $dow);}
+	if (checkInterval($last300, 300, $timeint)) {include '_cron300.php';stoploop($d);updateWekker($t, $weekend, $dow, $d);}
 	if (checkInterval($last3600, 3600, $timeint)) include '_cron3600.php';
 	if (checkInterval($last90, 90, $timeint)) include '_weather.php';
 	

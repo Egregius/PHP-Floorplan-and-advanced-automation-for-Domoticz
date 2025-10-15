@@ -6,8 +6,11 @@ if ($d['auto']['s']=='On') {
 		if ($time>=$t) {
 			if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['rwaskamer']['s']>0&&alexslaapt()==false) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
-			if ($d['ralex']['s']>0&&alexslaapt()==false) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['rwaskamer']['s']>0&&$d['alexslaapt']['s']==0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
+			if ($d['ralex']['s']>0&&$d['alexslaapt']['s']==0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
+			if ($time>=$t+1800&&$weekend==false) {
+				if ($d['ralex']['s']>0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
+			}
 		}
 		if ($d['lgtv']['s']!='On'&&$d['rliving']['s']>0&&($d['ralex']['s']<=1||$time>=strtotime('8:30'))) sl('rliving', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['dag']['s']>$zonelevatie) {

@@ -1,7 +1,7 @@
 <?php
 if ($status!=$d['deuralex']['s']) {
-	if ($d['auto']['s']=='On') {
-		if ($status=='Open') {
+	if ($status=='Open') {
+		if ($d['auto']['s']=='On') {
 			fhall();
 			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('10:00')/*&&$d['dag']['s']>0*/) {
 				if ($d['ralex']['s']>0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
@@ -15,6 +15,9 @@ if ($status!=$d['deuralex']['s']) {
 				}
 			}
 		}
+		if ($d['alexslaapt']['s']==0&&$d['alex']['s']==0&&($d['time']>=strtotime('19:30')||$d['time']<strtotime('6:00'))) store('alexslaapt', 1);
+	} else {
+		if ($d['alexslaapt']['s']==1) store('alexslaapt', 0);
 	}
 	if ($d['weg']['s']>1) {
 		if ($status=='Open') sirene('Deur Alex open');
