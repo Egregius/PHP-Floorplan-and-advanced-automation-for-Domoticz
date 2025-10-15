@@ -7,9 +7,9 @@ if ($status=="Open"&&$d['auto']['s']=='On') {
 		if ($d['bureel']['s']!='Off') sw('bureel', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['lamp kast']['s']!='Off') sw('lamp kast', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-} else {
+} /*else {
 	if ($d['weg']['s']==0&&$d['voordeur']['s']=='On') sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-}
+}*/
 /*if ($status=='Open') sirene('Voordeur open');
 else sirene('Voordeur dicht');*/
 

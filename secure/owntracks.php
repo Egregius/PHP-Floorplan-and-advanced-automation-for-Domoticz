@@ -29,6 +29,9 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
 							huisthuis('Huis thuis door '.$user);
 						}
 					}
+					if ($d['voordeur']['s']=='Off'&&$d['dag']['s']<0) {
+							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+					}
 				}
 			} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET, true).PHP_EOL.'Event niet gevonden');
 		} else telegram('domoticz/owntracks.php:'.__LINE__.PHP_EOL.'Onbekende gebruiker: '.$_GET['user']);
