@@ -65,49 +65,65 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$d['alex_set']['s']=$Setalex;
 }
 if ($d['living_set']['m']==0) {
-	$Setliving=14;
-	if ($d['buiten_temp']['s']<20&&$d['minmaxtemp']['m']<22&&$d['heating']['s']>=1/*&&$d['raamliving']['s']=='Closed'&&$d['deurinkom']['s']=='Closed'&&$d['deurgarage']['s']=='Closed'*/) {
-		if ($d['weg']['s']==0) {
-			$Setliving=18;
-			    if ($dow==1&&$time>=strtotime('13:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==1&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==2&&$time>=strtotime('16:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==2&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==3&&$time>=strtotime('12:10')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==3&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==4&&$time>=strtotime('16:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==4&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==5&&$time>=strtotime('15:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==5&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==6&&$time>=strtotime('8:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==6&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-
-			elseif ($dow==0&&$time>=strtotime('8:00')&&$time<strtotime('19:00')) $Setliving=20;
-			elseif ($dow==0&&$time>=strtotime('19:00')||$time<strtotime('4:00')) $Setliving=16;
-		} elseif ($d['weg']['s']==1) {
-			$target2=$Setliving;
-			$target=18;
-			$factor=(($Setliving-$d['buiten_temp']['s'])/2)*(($d['living_temp']['s']-$d['buiten_temp']['s'])/2)*120;
-			for ($x=0;$x<=5;$x+=0.1) {
-				$t2=(int)($t-($factor*$x)-300);
-				if ($time>=$t2&&$time<=strtotime('12:00')) {
-					$target2=round($target-$x, 1);
-//					lg(number_format($x,1,'.','').' factor='.$factor.',t2='.date('H:i:s', $t2).' > '.number_format($target2,1,'.',''));
-					break;
-				}
-			}
-			if($target2>$Setliving) $Setliving=$target2;
+	$Setliving = 14;
+	$buiten    = $d['buiten_temp']['s'];
+	$living    = $d['living_temp']['s'];
+	$mode      = $d['heating']['s'];
+	$status    = $d['weg']['s'];
+	if ($buiten < 20 && $d['minmaxtemp']['m'] < 22 && $mode >= 1) {
+		// --- 1) Basis setpoints per status
+		switch ($status) {
+			case 0: $baseSet = 18; break; // thuis en wakker
+			case 1: $baseSet = 16; break; // slapen
+			case 2: $baseSet = 16; break; // weg
+			case 3: $baseSet = 14; break; // op reis
+			default: $baseSet = 14; break;
 		}
-	}
-	if ($d['weg']['s']==2&&$d['heating']['s']>=1) {
-		$Setliving=15;
-	} elseif ($d['weg']['s']==3&&$d['heating']['s']>=1) {
-		$Setliving=10;
+		// --- 2) Comforturen per dag
+		switch ($dow) {
+			case 1: $comfortStart = strtotime('12:50'); $comfortEnd = strtotime('19:00'); break;
+			case 2: $comfortStart = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
+			case 3: $comfortStart = strtotime('12:10'); $comfortEnd = strtotime('19:00'); break;
+			case 4: $comfortStart = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
+			case 5: $comfortStart = strtotime('15:00'); $comfortEnd = strtotime('19:30'); break;
+			case 6: $comfortStart = strtotime('8:00');  $comfortEnd = strtotime('19:30'); break;
+			case 0: $comfortStart = strtotime('8:00');  $comfortEnd = strtotime('19:00'); break;
+		}
+		$nacht = ($time >= strtotime('00:00') && $time < strtotime('04:00'));
+		$comfort = ($time >= $comfortStart && $time < $comfortEnd);
+		// --- 3) Nachtstand
+		if ($nacht) $Setliving = min($baseSet, 16);
+		else $Setliving = $baseSet;
+		// --- 4) Comforturen voor wakker thuis
+		if ($status == 0 && $comfort) $Setliving = 20;
+		// --- 5) Voorspellende opwarming naar volgende doel
+		$nextTarget = null;
+		if ($status == 1) { // slapen
+			$nextTarget = 18; // morgendoel
+		} elseif ($status == 0 && !$comfort) { // thuis wakker, comfortperiode komt eraan
+			$nextTarget = 20; // comfortdoel
+		}
+		if ($nextTarget !== null && $time < $comfortStart) {
+			// Lead per verwarmingsmodus
+			$lead_modes = [
+				1 => 100, // Airco
+				2 => 100, // Gas-Airco
+				3 => 100 // Gas
+			];
+			$lead_base = $lead_modes[$mode] ?? 50;
+			// Dynamische lead afhankelijk van temp verschil en buiten
+			$tempDiff = max(0, $nextTarget - $living);
+			$lead = $lead_base + ($tempDiff * 3) - ($buiten * 0.5);
+			$lead = max(10, min(60, $lead)); // minuten limiet
+			$t_start = $comfortStart - ($lead * 60);
+			if ($time >= $t_start) {
+				$progress = ($time - $t_start) / ($comfortStart - $t_start);
+				$curve = ($buiten < 5) ? 0.7 : 0.85; // snellere opwarming bij kouder weer
+				$preheat = $living + ($nextTarget - $living) * pow($progress, $curve);
+				if ($preheat > $Setliving) $Setliving = round($preheat, 1);
+			}
+		}
+		$Setliving = round($Setliving, 1);
 	}
 	if ($d['living_set']['s']!=$Setliving) {
 		setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);

@@ -27,34 +27,24 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$factor=((21-$d['buiten_temp']['s'])/2)*(($d['badkamer_temp']['s']-$d['buiten_temp']['s'])/2)*40;
-	$m.=' buiten='.$d['buiten_temp']['s'].' badk='.$d['badkamer_temp']['s'].' factor='.$factor;
-//	lg($m);
-	$target=18;
-	if ($dday==true) {
-		$loop=true;
-		for ($x=0;$x<=$target-13;$x+=0.1) {
-			if ($loop==true) {
-				$t2=$t-($factor*$x);
-				if ($time>=$t2&&$time<$t+2100) {
-					$set=round($target-$x, 1);
-					$loop=false;
-				}
-			} else break;
-		}
-	} else {
-		$loop=true;
-		$target-=1;
-		for ($x=0;$x<=$target-13;$x+=0.1) {
-			if ($loop==true) {
-				$t2=$t-($factor*$x);
-				if ($time>=$t2&&$time<$t+1200) {
-					$set=round($target-$x, 1);
-					$loop=false;
-				}
-			} else break;
-		}
+	$set = 13;
+	$target = 18;
+	$buiten = $d['buiten_temp']['s'];
+	$badkamer = $d['badkamer_temp']['s'];
+	$lead = (25 - ($buiten * 1.2)) + (($target - $badkamer) * 2);
+	$lead = round(max(10, min(30, $lead)));
+	$t_start = $t - ($lead * 60);
+	$t_end   = $t + 2100;
+	if ($time < $t_start) {
+		$set = 13;
+	} elseif ($time >= $t_start && $time < $t) {
+		$progress = ($time - $t_start) / ($t - $t_start);
+		$curve = ($buiten < 5) ? 0.7 : 0.85;
+		$set = 13 + ($target - 13) * pow($progress, $curve);
+	} elseif ($time >= $t && $time <= $t_end) {
+		$set = $target;
 	}
+	$set = round($set, 1);
 	
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {

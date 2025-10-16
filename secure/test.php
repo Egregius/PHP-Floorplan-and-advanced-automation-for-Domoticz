@@ -12,8 +12,23 @@ $d['time']=$startloop;
 
 //echo ping('192.168.2.254');
 
+$nextTarget = 18;     // doeltemperatuur
+$opwarmtijd = 40;     // gewenste tijd om op te warmen in minuten
 
-republishmqtt();
+echo "Binnen°C\tBuiten°C\tLead_base (min)\n";
+
+for ($living = 14; $living <= 20; $living++) {       // binnentemp van 14 tot 20°C
+    for ($buiten = 0; $buiten <= 15; $buiten += 1) { // buitentemp van 0 tot 15°C
+        $tempDiff = max(0, $nextTarget - $living);
+        $factor = ($tempDiff * 3) - ($buiten * 0.5);
+        $lead_base = $opwarmtijd - $factor;
+        $lead_base = max(10, min(60, round($lead_base))); // limiet tussen 10 en 60 minuten
+        echo "$living\t\t$buiten\t\t$lead_base\n";
+    }
+}
+
+
+//republishmqtt();
 
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
 //shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
