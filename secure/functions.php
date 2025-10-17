@@ -286,8 +286,8 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	}
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
-		if (endswith($name, '_temp')) return;
-		elseif(endswith($name, '_kWh')) return;
+		/*if (endswith($name, '_temp')) return;
+		else*/if(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
 		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}

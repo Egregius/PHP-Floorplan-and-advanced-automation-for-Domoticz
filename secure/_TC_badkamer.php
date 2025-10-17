@@ -28,23 +28,68 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
 	$set = 13;
-	$target = 18;
+	$target = 20.5;
 	$buiten = $d['buiten_temp']['s'];
 	$badkamer = $d['badkamer_temp']['s'];
-	$lead = (25 - ($buiten * 1.2)) + (($target - $badkamer) * 2);
-	$lead = round(max(10, min(30, $lead)));
-	$t_start = $t - ($lead * 60);
-	$t_end   = $t + 2100;
+	
+	// --- adaptive lead_base uit DB (JSON)
+	$leadDataBath = json_decode($d['$leadDataBath']['s'] ?? '{}', true) ?: [];
+	$lead_base = !empty($leadDataBath[1]) ? round(array_sum($leadDataBath[1])/count($leadDataBath[1])) : 120; // start 90 min
+	
+	// --- dynamische leadberekening
+	$leadMinutes = $lead_base 
+				 - ($buiten * 0.5)         // koude buitenlucht → vroeger starten
+				 + (($target - $badkamer) * 2); // hoe kouder binnen, hoe vroeger starten
+	$leadMinutes = round(max(30, min(150, $leadMinutes)));
+	
+	$t_start = $t - ($leadMinutes * 60);
+	$t_end   = $t + 1800; // 30 min na doelmoment
+	
+	// --- bepalen setpoint
 	if ($time < $t_start) {
-		$set = 13;
+		$set = 13; // nog niet starten
 	} elseif ($time >= $t_start && $time < $t) {
-		$progress = ($time - $t_start) / ($t - $t_start);
-		$curve = ($buiten < 5) ? 0.7 : 0.85;
-		$set = 13 + ($target - 13) * pow($progress, $curve);
+		$set = $target; // vol verwarmen
 	} elseif ($time >= $t && $time <= $t_end) {
-		$set = $target;
+		$set = $target; // nog even aanhouden
+	} else {
+		$set = 13; // daarna terug omlaag
 	}
-	$set = round($set, 1);
+	$set = round($set * 2) / 2; // afronden per halve graad
+	
+	// --- adaptieve bijsturing rond het doelmoment
+	if (abs($time - $t) <= 30) { // controle ±30 sec rond doelmoment
+		$diff = $target - $badkamer; // positief = te koud, negatief = te warm
+	
+		// aanpassing van lead_base
+		// --- continu, precieze aanpassing ipv grove stapjes
+		// diff = target - actual (positief = te koud)
+		$sensitivity = 20.0;   // minuten per °C (0.1°C -> 2 min). Pas aan indien nodig.
+		$alpha       = 0.25;   // EMA factor: 0 = nooit leren, 1 = direct overschrijven
+		
+		// bereken continue aanpassing (kan positief of negatief zijn)
+		$adj_minutes = $diff * $sensitivity; // vb. diff=0.1 -> adj=2.0 minuten
+		
+		// candidate lead (voor de dag)
+		$candidateLead = $lead_base + $adj_minutes;
+		
+		// EMA smoothing: voorkom dat één dag alles kapot maakt
+		$newLead = round(($lead_base * (1 - $alpha)) + ($candidateLead * $alpha), 1);
+		
+		// optionele ruime clamp (veiligheidsnet, niet te grof)
+		$minLead = 10;   // min 10 minuten (voorkom nul/min)
+		$maxLead = 240;  // max 4 uur (voorkom absurd lange starts)
+		$newLead = max($minLead, min($maxLead, $newLead));
+	
+		if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
+		$leadDataBath[1][] = round($newLead,1);
+		$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
+		store('$leadDataBath', json_encode($leadDataBath));
+	
+		lg("_TC_bath: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+	}
+	$set = round($set,1);
+
 	
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {
