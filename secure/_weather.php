@@ -126,7 +126,7 @@ if (isset($data['forecasts'])) {
 }
 
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
-if (count($hums)>=1) $hum=round(array_sum($hums)/count($hums), 1);
+if (count($hums)>=1) $hum=round(array_sum($hums)/count($hums), 0);
 //lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {

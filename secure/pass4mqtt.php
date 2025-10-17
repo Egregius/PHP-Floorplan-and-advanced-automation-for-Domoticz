@@ -155,7 +155,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 			} elseif (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
-				$hum=$status;
+				$hum=(int)$status;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
 			} elseif (substr($device,-5) === '_temp') {
 				$st=(float)$status;

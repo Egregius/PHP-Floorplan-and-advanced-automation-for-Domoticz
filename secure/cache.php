@@ -4,12 +4,14 @@ if (isset($_REQUEST['zon'])) {
 	$en=mget('en');
 	echo -$en['zon'];
 } else {
-	$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (isset($_REQUEST['fetch'])) {
+		$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 		echo $d[$_REQUEST['fetch']]['s'];
 	} elseif (isset($_REQUEST['s'])) {
+		$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 		echo $d[$_REQUEST['s']]['s'];
 	} if (isset($_REQUEST['m'])) {
+		$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['m']=='auto'&&$d['auto']['m']==0) echo 0;
 		else echo $d[$_REQUEST['m']]['m'];
 	} elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
@@ -19,6 +21,7 @@ if (isset($_REQUEST['zon'])) {
 //			hass('backup','create_automatic');
 //		}
 	} elseif (isset($_REQUEST['count'])) {
+		$d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 		$data=$d[$_REQUEST['count']]['s']+1;
 		echo $data;
 		store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);

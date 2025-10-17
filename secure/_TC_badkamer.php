@@ -58,7 +58,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$set = round($set * 2) / 2; // afronden per halve graad
 	
 	// --- adaptieve bijsturing rond het doelmoment
-	if (abs($time - $t) <= 30) { // controle ±30 sec rond doelmoment
+	if (abs($time - $t) <= 10) { // controle  rond doelmoment
 		$diff = $target - $badkamer; // positief = te koud, negatief = te warm
 	
 		// aanpassing van lead_base
@@ -86,7 +86,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
 		store('$leadDataBath', json_encode($leadDataBath));
 	
-		lg("_TC_bath: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+		lg("_TC_badkamer: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
 	}
 	$set = round($set,1);
 
