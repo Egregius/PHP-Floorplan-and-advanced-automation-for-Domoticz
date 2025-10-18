@@ -79,17 +79,9 @@ function fliving() {
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['zon']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
-			if ($d['eettafel']['s']==0&&$time<$am) {
-				if ($d['bureel1']['s']<20) sl('bureel1', 20, basename(__FILE__).':'.__LINE__);
-				if ($d['bureel2']['s']<20) sl('bureel2', 20, basename(__FILE__).':'.__LINE__);
-			}
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']==0) {
-				sl('zithoek1', 10, basename(__FILE__).':'.__LINE__);
-				sl('zithoek2', 10, basename(__FILE__).':'.__LINE__);
-				sl('zithoek3', 12, basename(__FILE__).':'.__LINE__);
-				sl('zithoek4', 12, basename(__FILE__).':'.__LINE__);
-			}
+			if ($d['zithoek']['s']==0) sl('zithoek', 12, basename(__FILE__).':'.__LINE__);
+			if ($d['eettafel']['s']==0) sl('eettafel', 12, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }

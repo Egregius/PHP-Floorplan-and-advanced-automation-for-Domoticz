@@ -24,7 +24,7 @@ if ($d['daikin']['m']==1) {
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 	else $spmode=-1;
-	
+	if ($preheating==true) {$maxpow=40;$spmode=-1;}
 	
 	$pastdaikin=past('daikin');
 	foreach (array('living', 'kamer', 'alex') as $k) {

@@ -8,7 +8,7 @@ if ($status=='On') {
 	if ($d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['weg']['s']==1&&$d['time']>=$t-3600&&$d['time']<$t+3600) {
 		sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-		sw('mac', 'On', basename(__FILE__).':'.__LINE__);
+//		sw('mac', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	if (past('8badkamer-8.php')>900) exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
 }

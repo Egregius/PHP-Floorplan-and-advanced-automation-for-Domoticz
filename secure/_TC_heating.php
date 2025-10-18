@@ -1,4 +1,5 @@
 <?php
+$preheating=false;
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
@@ -136,47 +137,31 @@ if ($d['living_set']['m']==0) {
 	
 			// Verwarmen vóór comfortStart
 			if ($time >= $t_start && $time < $comfortStart && ($status == 0 || $status == 1)) {
+				$preheating=true;
 				$Setliving = max($Setliving, $target);
+				if ($living>=$target&&past('leadDataLiving')>14400) {
+					$newLead=round(past('living_set')/60,0);
+					if (!isset($leadData[$mode])) $leadData[$mode] = [];
+					$leadData[$mode][] = $newLead;
+					$leadData[$mode] = array_slice($leadData[$mode], -14);
+					store('leadDataLiving', json_encode($leadData));
+					lg("_TC_living: Mode $mode, target={$target}, actual={$living}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+				}
 			}
 	
 			// Handhaven tijdens comfortperiode
 			if ($time >= $comfortStart && $time < $t_end && $status == 0) {
 				$Setliving = max($Setliving, $target);
-			}
-	
-			// --- Adaptieve bijsturing
-			if (abs($time - $comfortStart) <= 10) {
-				$diff = $target - $living; // positief = te koud
-	
-				// --- continu, precieze aanpassing ipv grove stapjes
-				// diff = target - actual (positief = te koud)
-				$sensitivity = 20.0;   // minuten per °C (0.1°C -> 2 min). Pas aan indien nodig.
-				$alpha       = 0.25;   // EMA factor: 0 = nooit leren, 1 = direct overschrijven
-				
-				// bereken continue aanpassing (kan positief of negatief zijn)
-				$adj_minutes = $diff * $sensitivity; // vb. diff=0.1 -> adj=2.0 minuten
-				
-				// candidate lead (voor de dag)
-				$candidateLead = $lead_base + $adj_minutes;
-				
-				// EMA smoothing: voorkom dat één dag alles kapot maakt
-				$newLead = round(($lead_base * (1 - $alpha)) + ($candidateLead * $alpha), 1);
-				
-				// optionele ruime clamp (veiligheidsnet, niet te grof)
-				$minLead = 10;   // min 10 minuten (voorkom nul/min)
-				$maxLead = 240;  // max 4 uur (voorkom absurd lange starts)
-				$newLead = max($minLead, min($maxLead, $newLead));
-	
-				if (!isset($leadData[$mode])) $leadData[$mode] = [];
-				$leadData[$mode][] = round($newLead,1);
-				$leadData[$mode] = array_slice($leadData[$mode], -14);
-				store('leadDataLiving', json_encode($leadData));
-	
-				lg("_TC_living: Mode $mode, target={$target}, actual={$living}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+				if ($living>=$target&&past('leadDataLiving')>43200) {
+					$newLead=round(past('living_set')/60,0);
+					if (!isset($leadData[$mode])) $leadData[$mode] = [];
+					$leadData[$mode][] = $newLead;
+					$leadData[$mode] = array_slice($leadData[$mode], -14);
+					store('leadDataLiving', json_encode($leadData));
+					lg("_TC_living: Mode $mode, target={$target}, actual={$living}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+				}
 			}
 		}
-	
-		$Setliving = round($Setliving * 2) / 2; // afronden per halve graad
 	}
 
 	

@@ -36,6 +36,7 @@ if ($d['daikin']['m']==1) {
 	if ($d['net']>3500&&$maxpow>40) $maxpow=40;
 	elseif ($d['net']>3000&&$maxpow>60) $maxpow=60;
 	elseif ($d['net']>2500&&$maxpow>80) $maxpow=80;
+	if ($preheating==true) {$maxpow=40;$spmode=-1;}
 	$pastdaikin=past('daikin');
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']['s']>10) {
@@ -60,6 +61,7 @@ if ($d['daikin']['m']==1) {
 					$cor=2.5;
 					$set+=$cor;
 					if ($time>strtotime('20:00')) $rate=3;
+					if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				} elseif ($k=='kamer') {
 					$cor=1;
 					$set+=$cor;
