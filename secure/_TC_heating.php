@@ -141,6 +141,9 @@ if ($d['living_set']['m']==0) {
 				$Setliving = max($Setliving, $target);
 				if ($living>=$target&&past('leadDataLiving')>14400) {
 					$newLead=round(past('living_set')/60,0);
+					$minLead = $lead_base - 30;
+					$maxLead = $lead_base + 30;
+					$newLead = max($minLead, min($maxLead, $newLead));
 					if (!isset($leadData[$mode])) $leadData[$mode] = [];
 					$leadData[$mode][] = $newLead;
 					$leadData[$mode] = array_slice($leadData[$mode], -14);
@@ -154,6 +157,9 @@ if ($d['living_set']['m']==0) {
 				$Setliving = max($Setliving, $target);
 				if ($living>=$target&&past('leadDataLiving')>43200) {
 					$newLead=round(past('living_set')/60,0);
+					$minLead = $lead_base - 30;
+					$maxLead = $lead_base + 30;
+					$newLead = max($minLead, min($maxLead, $newLead));
 					if (!isset($leadData[$mode])) $leadData[$mode] = [];
 					$leadData[$mode][] = $newLead;
 					$leadData[$mode] = array_slice($leadData[$mode], -14);

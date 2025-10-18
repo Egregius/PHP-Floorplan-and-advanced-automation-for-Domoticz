@@ -52,6 +52,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target; // vol verwarmen
 		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
 			$newLead=round(past('badkamer_set')/60,0);
+			$minLead = $lead_base - 30;
+			$maxLead = $lead_base + 30;
+			$newLead = max($minLead, min($maxLead, $newLead));
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;
 			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
@@ -62,6 +65,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target; // nog even aanhouden
 		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
 			$newLead=round(past('badkamer_set')/60,0);
+			$minLead = $lead_base - 30;
+			$maxLead = $lead_base + 30;
+			$newLead = max($minLead, min($maxLead, $newLead));
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;
 			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
