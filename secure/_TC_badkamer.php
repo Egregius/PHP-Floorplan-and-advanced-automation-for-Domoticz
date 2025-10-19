@@ -33,14 +33,13 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$badkamer = $d['badkamer_temp']['s'];
 	
 	// --- adaptive lead_base uit DB (JSON)
-	$leadDataBath = json_decode($d['$leadDataBath']['s'] ?? '{}', true) ?: [];
-	$lead_base = !empty($leadDataBath[1]) ? round(array_sum($leadDataBath[1])/count($leadDataBath[1])) : 120; // start 90 min
+	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
+	$lead_base = !empty($leadDataBath[1]) ? round(array_sum($leadDataBath[1])/count($leadDataBath[1])) : 90; // start 90 min
 	
 	// --- dynamische leadberekening
 	$leadMinutes = $lead_base 
 				 - ($buiten * 0.5)         // koude buitenlucht → vroeger starten
 				 + (($target - $badkamer) * 2); // hoe kouder binnen, hoe vroeger starten
-	$leadMinutes = round(max(30, min(150, $leadMinutes)));
 	
 	$t_start = $t - ($leadMinutes * 60);
 	$t_end   = $t + 1800; // 30 min na doelmoment
@@ -58,7 +57,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;
 			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
-			store('$leadDataBath', json_encode($leadDataBath));
+			store('leadDataBath', json_encode($leadDataBath),basename(__FILE__).':'.__LINE__,1);
 			lg("_TC_badkamer: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
 		}
 	} elseif ($time >= $t && $time <= $t_end) {
@@ -71,7 +70,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;
 			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
-			store('$leadDataBath', json_encode($leadDataBath));
+			store('leadDataBath', json_encode($leadDataBath),basename(__FILE__).':'.__LINE__,1);
 			lg("_TC_badkamer: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
 		}
 	} else {

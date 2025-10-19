@@ -130,7 +130,6 @@ if ($d['living_set']['m']==0) {
 			$leadMinutes = $lead_base
 						 - ($buiten * 0.4)
 						 + (($target - $living) * 2);
-			$leadMinutes = round(max(30, min(120, $leadMinutes)));
 	
 			$t_start = $comfortStart - ($leadMinutes * 60);
 			$t_end   = $comfortStart + 1800;
