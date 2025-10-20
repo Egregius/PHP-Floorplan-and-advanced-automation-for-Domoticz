@@ -51,8 +51,8 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target; // vol verwarmen
 		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
 			$newLead=round(past('badkamer_set')/60,0);
-			$minLead = $lead_base - 30;
-			$maxLead = $lead_base + 30;
+			$minLead = $lead_base - 10;
+			$maxLead = $lead_base + 10;
 			$newLead = max($minLead, min($maxLead, $newLead));
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;
@@ -64,8 +64,8 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target; // nog even aanhouden
 		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
 			$newLead=round(past('badkamer_set')/60,0);
-			$minLead = $lead_base - 30;
-			$maxLead = $lead_base + 30;
+			$minLead = $lead_base - 10;
+			$maxLead = $lead_base + 10;
 			$newLead = max($minLead, min($maxLead, $newLead));
 			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
 			$leadDataBath[1][] = $newLead;

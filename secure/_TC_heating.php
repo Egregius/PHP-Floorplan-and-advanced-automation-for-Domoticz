@@ -89,7 +89,6 @@ if ($d['living_set']['m']==0) {
 	}
 	
 	if ($buiten < 20 && $d['minmaxtemp']['m'] < 22 && $mode >= 1) {
-	
 		// --- Basis-setpoints afhankelijk van status
 		switch ($status) {
 			case 0: $baseSet = 18; break; // thuis en wakker
@@ -98,7 +97,7 @@ if ($d['living_set']['m']==0) {
 			case 3: $baseSet = 14; break; // op reis
 			default: $baseSet = 14; break;
 		}
-	
+//		lg(basename(__FILE__).':'.__LINE__.' > '.$baseSet);
 		// --- Tijdschema
 		$comfortMorning = $t;
 		switch ($dow) {
@@ -125,23 +124,28 @@ if ($d['living_set']['m']==0) {
 			$comfortStart = $p['start'];
 			$target       = $p['target'];
 			$lead_base    = $lead_modes[$mode] ?? 45; // fallback
-	
+//			lg(date("Y-m-d H:i", $comfortStart));
 			// dynamisch aanpassen op basis van huidige toestand
 			$leadMinutes = $lead_base
 						 - ($buiten * 0.4)
 						 + (($target - $living) * 2);
 	
 			$t_start = $comfortStart - ($leadMinutes * 60);
-			$t_end   = $comfortStart + 1800;
-	
+			$t_end   = $comfortEnd;
+//			lg('$time='.$time.' $t_start='.$t_start);
 			// Verwarmen vóór comfortStart
+//			if ($time >= $t_start) lg(basename(__FILE__).':'.__LINE__);
+//			if ($time < $comfortStart) lg(basename(__FILE__).':'.__LINE__);
+//			if ($time < $comfortStart) lg(basename(__FILE__).':'.__LINE__);
+//			if ($time >= $comfortStart) lg(basename(__FILE__).':'.__LINE__);
 			if ($time >= $t_start && $time < $comfortStart && ($status == 0 || $status == 1)) {
+//				lg(basename(__FILE__).':'.__LINE__.' > '.$target);
 				$preheating=true;
 				$Setliving = max($Setliving, $target);
 				if ($living>=$target&&past('leadDataLiving')>14400) {
 					$newLead=round(past('living_set')/60,0);
-					$minLead = $lead_base - 30;
-					$maxLead = $lead_base + 30;
+					$minLead = $lead_base - 10;
+					$maxLead = $lead_base + 10;
 					$newLead = max($minLead, min($maxLead, $newLead));
 					if (!isset($leadData[$mode])) $leadData[$mode] = [];
 					$leadData[$mode][] = $newLead;
@@ -154,10 +158,11 @@ if ($d['living_set']['m']==0) {
 			// Handhaven tijdens comfortperiode
 			if ($time >= $comfortStart && $time < $t_end && $status == 0) {
 				$Setliving = max($Setliving, $target);
+//				lg(basename(__FILE__).':'.__LINE__.' > '.$Setliving);
 				if ($living>=$target&&past('leadDataLiving')>43200) {
 					$newLead=round(past('living_set')/60,0);
-					$minLead = $lead_base - 30;
-					$maxLead = $lead_base + 30;
+					$minLead = $lead_base - 10;
+					$maxLead = $lead_base + 10;
 					$newLead = max($minLead, min($maxLead, $newLead));
 					if (!isset($leadData[$mode])) $leadData[$mode] = [];
 					$leadData[$mode][] = $newLead;

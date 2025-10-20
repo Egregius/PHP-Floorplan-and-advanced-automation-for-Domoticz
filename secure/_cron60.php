@@ -138,7 +138,7 @@ if ($d['auto']['s']=='On') {
 	}
 
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
-	if ($d['voordeur']['s']=='On'&&$d['deurvoordeur']['s']=='Closed'&&past('voordeur')>170) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+	
 
 	$uit=10;
 	if ($d['ipaddock']['s']=='On'&&$d['ipaddock_vermogen']['s']<$uit&&past('ipaddock')>600) sw('ipaddock', 'Off', basename(__FILE__).':'.__LINE__.' '.$d['ipaddock_vermogen']['s'].'W');
@@ -153,9 +153,16 @@ if ($d['auto']['s']=='On') {
 	if ($d['pirliving']['s']=='Off') {
 		if ($d['dag']['s']>1) {
 			if ($d['rbureel']['s']<40&&$d['rliving']['s']<40) {
-				if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
-				if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
-				if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+				if ($time>strtotime('5:00')&&$time<strtotime('10:00')) {
+					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=12) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
+					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']<=12) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']<=12) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['eettafel']['s']>0&&$d['eettafel']['s']<=12) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+				} else {
+					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
+					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	}
@@ -169,9 +176,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
 	
-	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
-		if ($d['kookplaat_power']['s']<125&&past('kookplaat_power')>240) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	
 	if ($d['weg']['s']>=1&&$d['media']['s']=='On'&&past('weg')>900) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/

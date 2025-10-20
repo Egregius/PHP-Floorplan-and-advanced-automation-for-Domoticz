@@ -113,12 +113,13 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 				<input type="submit" class="btn btna b2" value="Kodi"/>
 			</form>
 		</div>';
-$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
+$current=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetItem","params":{"properties":["title","album","artist","season","episode","duration","showtitle","tvshowid","thumbnail","file","imdbnumber","streamdetails"],"playerid":1},"id":"VideoGetItem"}', false, $ctx), true);
 if (isset($current['result']['item']['file'])) {
 	if (!empty($current['result']['item']['file'])) {
 		echo '
 			<div class="title">';
 		$item=$current['result']['item'];
+		echo '<pre>';print_r($current);echo '</pre>';
 		//print_r($item);
 		if ($item['episode']>0) {
 			echo '
@@ -130,7 +131,7 @@ if (isset($current['result']['item']['file'])) {
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
 		}
 		$properties=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
-		//echo '<pre>';print_r($properties);echo '</pre>';
+		echo '<pre>';print_r($properties);echo '</pre>';
 		if (!empty($properties['result'])) {
 			$prop=$properties['result'];
 			$point=$prop['time'];
