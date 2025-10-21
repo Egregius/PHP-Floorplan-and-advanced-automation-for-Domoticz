@@ -119,7 +119,7 @@ if (isset($current['result']['item']['file'])) {
 		echo '
 			<div class="title">';
 		$item=$current['result']['item'];
-		echo '<pre>';print_r($current);echo '</pre>';
+	//	echo '<pre>';print_r($current);echo '</pre>';
 		//print_r($item);
 		if ($item['episode']>0) {
 			echo '
@@ -131,7 +131,7 @@ if (isset($current['result']['item']['file'])) {
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
 		}
 		$properties=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
-		echo '<pre>';print_r($properties);echo '</pre>';
+	//	echo '<pre>';print_r($properties);echo '</pre>';
 		if (!empty($properties['result'])) {
 			$prop=$properties['result'];
 			$point=$prop['time'];
@@ -169,6 +169,29 @@ if (isset($current['result']['item']['file'])) {
 							<td><h2>'.date('G:i:s', (strtotime($totaltime)-strtotime($passedtime)-3600)).'</h2></td>
 							<td>End at</td>
 							<td><h2>'.date('G:i:s', (TIME+strtotime($totaltime)-strtotime($passedtime))).'</h2></td>
+						</tr>
+						<tr>
+							<td colspan="4">';
+//				echo '<pre>';print_r($item);echo '</pre>';
+				if (isset($item['streamdetails']['video'][0])) {
+					echo $item['streamdetails']['video'][0]['codec'].' @ '.$item['streamdetails']['video'][0]['width'].' x '.$item['streamdetails']['video'][0]['height'];
+				}
+				
+				echo '
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4">';
+				if (isset($item['streamdetails']['audio'][0])) {
+					echo $item['streamdetails']['audio'][0]['channels'].' channels ';
+					$codecs = [
+						'eac3'=>'Dolby Digital Plus',
+					];
+					if (isset($codecs[$item['streamdetails']['audio'][0]['codec']])) echo $codecs[$item['streamdetails']['audio'][0]['codec']];
+					else echo $item['streamdetails']['audio'][0]['codec'];
+				}
+				echo '
+							</td>
 						</tr>
 					</table>
 				</div>';

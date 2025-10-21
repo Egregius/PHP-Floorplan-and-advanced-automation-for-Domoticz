@@ -59,122 +59,62 @@ if ($d['alex_set']['s']!=$Setalex) {
 }
 if ($d['living_set']['m']==0) {
 	$Setliving = 14;
-	$buiten    = $d['buiten_temp']['s'];
 	$living    = $d['living_temp']['s'];
-	$mode      = $d['heating']['s']; // bv. 1 = normal, 2 = eco, ...
-	$status    = $d['weg']['s'];
-	$leadData  = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
-	
-	// Gemiddelde lead per mode
-	$lead_modes = [];
-	$known = [];
-	
-	// Eerst de bekende modi verzamelen
-	foreach ([1,2,3] as $m) {
-		if (!empty($leadData[$m])) {
-			$avg = round(array_sum($leadData[$m]) / count($leadData[$m]));
-			$lead_modes[$m] = $avg;
-			$known[] = $avg;
-		}
+	$mode      = $d['heating']['s'];
+	$weg       = $d['weg']['s'];
+	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
+	$avgMinPerDeg   = !empty($leadDataLiving[1])
+		? round(array_sum($leadDataLiving[1]) / count($leadDataLiving[1]), 1)
+		: 60;
+	$baseSet = [
+		0 => 18,
+		1 => 16,
+		2 => 16,
+		3 => 14
+	];
+	switch ($dow) {
+		case 1: $comfortAfternoon = strtotime('12:50'); $comfortEnd = strtotime('19:00'); break;
+		case 2: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
+		case 3: $comfortAfternoon = strtotime('12:10'); $comfortEnd = strtotime('19:00'); break;
+		case 4: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
+		case 5: $comfortAfternoon = strtotime('15:00'); $comfortEnd = strtotime('19:30'); break;
+		case 6: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:30'); break;
+		case 0: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:00'); break;
+	}
+	$target = 20.0;
+	$tempDelta   = max(0, $target - $living);
+	$leadMinutes = round($avgMinPerDeg * $tempDelta);
+	$t_start = $comfortAfternoon - ($leadMinutes * 60);
+	if ($d['daikin']['s']=='Off'||($d['daikin']['s']=='On'&&$past('daikin')<70)) $t_start -= 300;
+	$t_end   = $comfortEnd;
+	$nacht = ($time >= strtotime('19:30') || $time < strtotime('04:00'));
+	if ($nacht) $Setliving = min($baseSet[$weg], 16);
+	else $Setliving = $baseSet[$weg];
+	if ($time >= $t_start && $time < $comfortAfternoon && ($weg == 0 || $weg == 1)) {
+		$preheating = true;
+		$Setliving = max($Setliving, $target);
 	}
 	
-	// Bereken gemiddelde van bekende modi (of default 45 als geen enkele bekend is)
-	$avgKnown = !empty($known) ? round(array_sum($known) / count($known)) : 45;
-	
-	// Vul ontbrekende modi aan met gemiddelde
-	foreach ([1,2,3] as $m) {
-		if (!isset($lead_modes[$m])) {
-			$lead_modes[$m] = $avgKnown;
-		}
-	}
-	
-	if ($buiten < 20 && $d['minmaxtemp']['m'] < 22 && $mode >= 1) {
-		// --- Basis-setpoints afhankelijk van status
-		switch ($status) {
-			case 0: $baseSet = 18; break; // thuis en wakker
-			case 1: $baseSet = 16; break; // slapen
-			case 2: $baseSet = 16; break; // weg
-			case 3: $baseSet = 14; break; // op reis
-			default: $baseSet = 14; break;
-		}
-//		lg(basename(__FILE__).':'.__LINE__.' > '.$baseSet);
-		// --- Tijdschema
-		$comfortMorning = $t;
-		switch ($dow) {
-			case 1: $comfortAfternoon = strtotime('12:50'); $comfortEnd = strtotime('19:00'); break;
-			case 2: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
-			case 3: $comfortAfternoon = strtotime('12:10'); $comfortEnd = strtotime('19:00'); break;
-			case 4: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
-			case 5: $comfortAfternoon = strtotime('15:00'); $comfortEnd = strtotime('19:30'); break;
-			case 6: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:30'); break;
-			case 0: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:00'); break;
-		}
-	
-		$nacht = ($time >= strtotime('19:30') || $time < strtotime('04:00'));
-		if ($nacht) $Setliving = min($baseSet, 16);
-		else $Setliving = $baseSet;
-	
-		// --- Comfortperioden (ochtend & middag)
-		$periods = [
-			['start'=>$comfortMorning, 'target'=>18],
-			['start'=>$comfortAfternoon, 'target'=>20]
-		];
-	
-		foreach ($periods as $p) {
-			$comfortStart = $p['start'];
-			$target       = $p['target'];
-			$lead_base    = $lead_modes[$mode] ?? 45; // fallback
-//			lg(date("Y-m-d H:i", $comfortStart));
-			// dynamisch aanpassen op basis van huidige toestand
-			$leadMinutes = $lead_base
-						 - ($buiten * 0.4)
-						 + (($target - $living) * 2);
-	
-			$t_start = $comfortStart - ($leadMinutes * 60);
-			$t_end   = $comfortEnd;
-//			lg('$time='.$time.' $t_start='.$t_start);
-			// Verwarmen vóór comfortStart
-//			if ($time >= $t_start) lg(basename(__FILE__).':'.__LINE__);
-//			if ($time < $comfortStart) lg(basename(__FILE__).':'.__LINE__);
-//			if ($time < $comfortStart) lg(basename(__FILE__).':'.__LINE__);
-//			if ($time >= $comfortStart) lg(basename(__FILE__).':'.__LINE__);
-			if ($time >= $t_start && $time < $comfortStart && ($status == 0 || $status == 1)) {
-//				lg(basename(__FILE__).':'.__LINE__.' > '.$target);
-				$preheating=true;
-				$Setliving = max($Setliving, $target);
-				if ($living>=$target&&past('leadDataLiving')>14400) {
-					$newLead=round(past('living_set')/60,0);
-					$minLead = $lead_base - 10;
-					$maxLead = $lead_base + 10;
-					$newLead = max($minLead, min($maxLead, $newLead));
-					if (!isset($leadData[$mode])) $leadData[$mode] = [];
-					$leadData[$mode][] = $newLead;
-					$leadData[$mode] = array_slice($leadData[$mode], -14);
-					store('leadDataLiving', json_encode($leadData));
-					lg("_TC_living: Mode $mode, target={$target}, actual={$living}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
-				}
-			}
-	
-			// Handhaven tijdens comfortperiode
-			if ($time >= $comfortStart && $time < $t_end && $status == 0) {
-				$Setliving = max($Setliving, $target);
-//				lg(basename(__FILE__).':'.__LINE__.' > '.$Setliving);
-				if ($living>=$target&&past('leadDataLiving')>43200) {
-					$newLead=round(past('living_set')/60,0);
-					$minLead = $lead_base - 10;
-					$maxLead = $lead_base + 10;
-					$newLead = max($minLead, min($maxLead, $newLead));
-					if (!isset($leadData[$mode])) $leadData[$mode] = [];
-					$leadData[$mode][] = $newLead;
-					$leadData[$mode] = array_slice($leadData[$mode], -14);
-					store('leadDataLiving', json_encode($leadData));
-					lg("_TC_living: Mode $mode, target={$target}, actual={$living}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
-				}
+	if ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
+		$Setliving = max($Setliving, $target);
+		if ($living >= $target && past('leadDataLiving') > 43200 && past('8living_8') > 14400) {
+			$startTemp = $d['living_start_temp']['s'];
+			if ($startTemp && $living > $startTemp) {
+				$tempRise    = $living - $startTemp;
+				$minutesUsed = round(past('living_start_temp') / 60, 1);
+				$minPerDeg   = round($minutesUsed / $tempRise, 1);
+				$minPerDeg   = max(10, min(60, $minPerDeg));
+				if (!isset($leadDataLiving[1])) $leadDataLiving[1] = [];
+				$leadDataLiving[1][] = $minPerDeg;
+				$leadDataLiving[1] = array_slice($leadDataLiving[1], -14);
+				store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__, 1);
+				lg("_TC_living: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
 			}
 		}
 	}
-
-	
+	if (abs($time - $t_start) < 10) {
+		store('living_start_temp', $living,basename(__FILE__) . ':' . __LINE__, 1);
+	}
 	// --- 6) Weg en op reis fallback
 //	if ($d['weg']['s']==2 && $d['heating']['s']>=1) {
 //		$Setliving=16;

@@ -27,54 +27,42 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$set = 13;
-	$target = 20.5;
-	$buiten = $d['buiten_temp']['s'];
+	$set     = 13;
+	$target  = 20.5;
 	$badkamer = $d['badkamer_temp']['s'];
-	
-	// --- adaptive lead_base uit DB (JSON)
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
-	$lead_base = !empty($leadDataBath[1]) ? round(array_sum($leadDataBath[1])/count($leadDataBath[1])) : 90; // start 90 min
-	
-	// --- dynamische leadberekening
-	$leadMinutes = $lead_base 
-				 - ($buiten * 0.5)         // koude buitenlucht → vroeger starten
-				 + (($target - $badkamer) * 2); // hoe kouder binnen, hoe vroeger starten
-	
+	$avgMinPerDeg = !empty($leadDataBath)
+		? round(array_sum($leadDataBath) / count($leadDataBath), 1)
+		: 60;
+	$tempDelta = max(0, $target - $badkamer);
+	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $t - ($leadMinutes * 60);
-	$t_end   = $t + 1800; // 30 min na doelmoment
-	
-	// --- bepalen setpoint
+	$t_end   = $t + 1800;
 	if ($time < $t_start) {
-		$set = 13; // nog niet starten
+		$set = 13;
 	} elseif ($time >= $t_start && $time < $t) {
-		$set = $target; // vol verwarmen
-		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
-			$newLead=round(past('badkamer_set')/60,0);
-			$minLead = $lead_base - 10;
-			$maxLead = $lead_base + 10;
-			$newLead = max($minLead, min($maxLead, $newLead));
-			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
-			$leadDataBath[1][] = $newLead;
-			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
-			store('leadDataBath', json_encode($leadDataBath),basename(__FILE__).':'.__LINE__,1);
-			lg("_TC_badkamer: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
-		}
+		$set = $target;
 	} elseif ($time >= $t && $time <= $t_end) {
-		$set = $target; // nog even aanhouden
-		if ($badkamer>=$target&&past('leadDataBath')>43200&&past('8badkamer_8')>14400) {
-			$newLead=round(past('badkamer_set')/60,0);
-			$minLead = $lead_base - 10;
-			$maxLead = $lead_base + 10;
-			$newLead = max($minLead, min($maxLead, $newLead));
-			if (!isset($leadDataBath[1])) $leadDataBath[1] = [];
-			$leadDataBath[1][] = $newLead;
-			$leadDataBath[1] = array_slice($leadDataBath[1], -14); // max 14 dagen bewaren
-			store('leadDataBath', json_encode($leadDataBath),basename(__FILE__).':'.__LINE__,1);
-			lg("_TC_badkamer: target={$target}, actual={$badkamer}, diff=" . round($diff,1) . "° → new lead_base={$newLead} min");
+		$set = $target;
+		if ($badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 14400) {
+			$startTemp = $d['badkamer_start_temp']['s'];
+			if ($startTemp && $badkamer > $startTemp) {
+				$tempRise = $badkamer - $startTemp;
+				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
+				$minPerDeg = round($minutesUsed / $tempRise, 1);
+				$minPerDeg = max(10, min(60, $minPerDeg));
+				if (!isset($leadDataBath)) $leadDataBath = [];
+				$leadDataBath[] = $minPerDeg;
+				$leadDataBath = array_slice($leadDataBath, -14);
+				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__, 1);
+				lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
+			}
 		}
 	} else {
-		$set = 13; // daarna terug omlaag
+		$set = 13;
+	}
+	if (abs($time - $t_start) < 10) {
+		store('badkamer_start_temp', $badkamer,basename(__FILE__) . ':' . __LINE__, 1);
 	}
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {
