@@ -746,7 +746,11 @@ function hassopts($domain, $service, $entity = '', $data = []) {
 	}
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-	curl_exec($ch);
+	$response = curl_exec($ch);
+	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	if ($httpcode != 200) {
+		lg("HASS API ERROR $httpcode: $response", 1);
+	}
 	curl_close($ch);
 }
 

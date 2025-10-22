@@ -1,6 +1,8 @@
 <?php
+$action = isset($_GET['action']) ? $_GET['action'] : 'unknown';
+exec("mosquitto_pub -h 192.168.2.26 -u mqtt -P mqtt -t 'homeassistant/media_player/kodi_last_action/state' -m '$action'");
+lg("kodi ping: $action");
 echo 'ok';
-lg('kodi ping');
 function lg($msg,$level=0) {
 /*
 Levels:
@@ -38,3 +40,4 @@ Levels:
 
 	$inLg = false;
 }
+?>
