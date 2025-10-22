@@ -27,6 +27,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
+	$t = strtotime('9:00');
 	$set       = 13;
 	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']['s'];
@@ -70,16 +71,12 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$minPerDeg   = max(10, min(60, $minPerDeg));
 			$leadDataBath[] = $minPerDeg;
 			$leadDataBath = array_slice($leadDataBath, -14);
-			store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__, 1);
+			store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
 			lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
 		}
 	}
 	
 	// --- starttemp enkel opslaan bij exact startmoment ---
-	if (abs($time - $t_start) <= 10) {
-		store('badkamer_start_temp', $badkamer, basename(__FILE__) . ':' . __LINE__, 1);
-	}
-
 	if (abs($time - $t_start) < 10) {
 		store('badkamer_start_temp', $badkamer,basename(__FILE__) . ':' . __LINE__, 1);
 	}

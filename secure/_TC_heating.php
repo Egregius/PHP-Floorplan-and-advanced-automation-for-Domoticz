@@ -129,7 +129,7 @@ if ($d['living_set']['m']==0) {
 				if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
 				$leadDataLiving[$mode][] = $minPerDeg;
 				$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
-				store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__, 1);
+				store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
 				lg("_TC_living: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
 			}
 		}
