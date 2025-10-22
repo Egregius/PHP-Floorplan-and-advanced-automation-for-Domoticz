@@ -27,9 +27,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$t = strtotime('11:00');
+//	$t = strtotime('12:20');
 	$set       = 13;
-	$target    = 20.5;
+	$target    = 20.4;
 	$badkamer  = $d['badkamer_temp']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
@@ -50,9 +50,10 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target;
 	}
 	elseif ($time >= $t_start && $time < $t) {
+		lg(__LINE__);
 		// startmoment bereikt → begin opwarmen
 		$set = $target;
-		storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
+		if ($prevSet != 1) storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t && $time <= $t_end) {
 		lg(__LINE__);
@@ -66,20 +67,22 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	}
 	
 	// --- update leercurve ---
-	if ($time >= $t && $time <= $t_end && $badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 1800) {
+	if ($time >= $t && $time <= $t_end && $badkamer >= $target && past('leadDataBath') > 432 && past('8badkamer_8') > 1800) {
 		lg(__LINE__);
 		$startTemp = $d['badkamer_start_temp']['s'];
-		if ($startTemp && $badkamer > $startTemp) {
+		if ($startTemp && $badkamer >= $startTemp) {
 			lg(__LINE__);
 			$tempRise    = $badkamer - $startTemp;
-			$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
-			$minPerDeg   = round($minutesUsed / $tempRise, 1);
-			$minPerDeg   = max(10, min(60, $minPerDeg));
-			$leadDataBath[] = $minPerDeg;
-			$leadDataBath = array_slice($leadDataBath, -14);
-			store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
-			storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
-			lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
+			if ($tempRise>0) {
+				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
+				$minPerDeg   = round($minutesUsed / $tempRise, 1);
+				$minPerDeg   = max(10, min(60, $minPerDeg));
+				$leadDataBath[] = $minPerDeg;
+				$leadDataBath = array_slice($leadDataBath, -14);
+				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
+				lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
+			}
+			if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
 	
