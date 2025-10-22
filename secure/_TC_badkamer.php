@@ -27,40 +27,59 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$set     = 13;
-	$target  = 20.5;
-	$badkamer = $d['badkamer_temp']['s'];
+	$set       = 13;
+	$target    = 20.5;
+	$badkamer  = $d['badkamer_temp']['s'];
+	$prevSet   = $d['badkamer_set']['s'] ?? 13;
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
+	
 	$avgMinPerDeg = !empty($leadDataBath)
 		? round(array_sum($leadDataBath) / count($leadDataBath), 1)
 		: 60;
-	$tempDelta = max(0, $target - $badkamer);
+	
+	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
-	$t_start = $t - ($leadMinutes * 60);
-	$t_end   = $t + 1800;
-	if ($time < $t_start) {
-		$set = 13;
-	} elseif ($time >= $t_start && $time < $t) {
+	$t_start     = $t - ($leadMinutes * 60);
+	$t_end       = $t + 1800;
+	
+	// --- logica met hysterese / geheugen ---
+	if ($prevSet >= $target - 0.2) {
+		// al bezig met opwarmen → behoud target tot einde
 		$set = $target;
-	} elseif ($time >= $t && $time <= $t_end) {
+	}
+	elseif ($time >= $t_start && $time < $t) {
+		// startmoment bereikt → begin opwarmen
 		$set = $target;
-		if ($badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 14400) {
-			$startTemp = $d['badkamer_start_temp']['s'];
-			if ($startTemp && $badkamer > $startTemp) {
-				$tempRise = $badkamer - $startTemp;
-				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
-				$minPerDeg = round($minutesUsed / $tempRise, 1);
-				$minPerDeg = max(10, min(60, $minPerDeg));
-				if (!isset($leadDataBath)) $leadDataBath = [];
-				$leadDataBath[] = $minPerDeg;
-				$leadDataBath = array_slice($leadDataBath, -14);
-				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__, 1);
-				lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
-			}
-		}
-	} else {
+	}
+	elseif ($time >= $t && $time <= $t_end) {
+		// comfortfase → target behouden
+		$set = $target;
+	}
+	else {
+		// buiten comfortperiode en niet in opwarming → lage stand
 		$set = 13;
 	}
+	
+	// --- update leercurve ---
+	if ($time >= $t && $time <= $t_end && $badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 14400) {
+		$startTemp = $d['badkamer_start_temp']['s'];
+		if ($startTemp && $badkamer > $startTemp) {
+			$tempRise    = $badkamer - $startTemp;
+			$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
+			$minPerDeg   = round($minutesUsed / $tempRise, 1);
+			$minPerDeg   = max(10, min(60, $minPerDeg));
+			$leadDataBath[] = $minPerDeg;
+			$leadDataBath = array_slice($leadDataBath, -14);
+			store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__, 1);
+			lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
+		}
+	}
+	
+	// --- starttemp enkel opslaan bij exact startmoment ---
+	if (abs($time - $t_start) <= 10) {
+		store('badkamer_start_temp', $badkamer, basename(__FILE__) . ':' . __LINE__, 1);
+	}
+
 	if (abs($time - $t_start) < 10) {
 		store('badkamer_start_temp', $badkamer,basename(__FILE__) . ':' . __LINE__, 1);
 	}
