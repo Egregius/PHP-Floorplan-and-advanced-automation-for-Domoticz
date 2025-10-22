@@ -62,7 +62,7 @@ if ($d['living_set']['m']==0) {
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
-	$prevSet   = $d['living_set']['s'] ?? 14;   // ← toegevoegd geheugen
+	$prevSet   = $d['living_start_temp']['m'] ?? 0;   // ← toegevoegd geheugen
 	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
 	
 	$avgMinPerDeg = !empty($leadDataLiving[$mode])
@@ -99,7 +99,7 @@ if ($d['living_set']['m']==0) {
 	else $Setliving = $baseSet[$weg];
 	
 	// --- hysterese / geheugen toegevoegd ---
-	if ($prevSet >= $target - 0.2) {
+	if ($prevSet == 1) {
 		// al in comfortfase of opwarming: houd target vast
 		$Setliving = $target;
 	}
@@ -107,6 +107,7 @@ if ($d['living_set']['m']==0) {
 		// startmoment bereikt: begin preheat
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
+		storemode('living_start_temp', 1);
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
 		// comfortfase actief
@@ -130,6 +131,7 @@ if ($d['living_set']['m']==0) {
 				$leadDataLiving[$mode][] = $minPerDeg;
 				$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
 				store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
+				storemode('living_start_temp', 0);
 				lg("_TC_living: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
 			}
 		}

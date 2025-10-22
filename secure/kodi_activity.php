@@ -1,4 +1,5 @@
 <?php
+echo 'ok';
 lg('kodi ping');
 function lg($msg,$level=0) {
 /*

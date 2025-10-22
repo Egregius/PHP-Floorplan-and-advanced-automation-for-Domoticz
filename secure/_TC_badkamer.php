@@ -27,11 +27,11 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$t = strtotime('9:00');
+//	$t = strtotime('9:19');
 	$set       = 13;
 	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']['s'];
-	$prevSet   = $d['badkamer_set']['s'] ?? 13;
+	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
 	
 	$avgMinPerDeg = !empty($leadDataBath)
@@ -44,27 +44,33 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$t_end       = $t + 1800;
 	
 	// --- logica met hysterese / geheugen ---
-	if ($prevSet >= $target - 0.2) {
+	if ($prevSet == 1) {
+		lg(__LINE__);
 		// al bezig met opwarmen → behoud target tot einde
 		$set = $target;
 	}
 	elseif ($time >= $t_start && $time < $t) {
 		// startmoment bereikt → begin opwarmen
 		$set = $target;
+		storemode('badkamer_start_temp', 1);
 	}
 	elseif ($time >= $t && $time <= $t_end) {
+		lg(__LINE__);
 		// comfortfase → target behouden
 		$set = $target;
-	}
+	} 
 	else {
+//		lg(__LINE__);
 		// buiten comfortperiode en niet in opwarming → lage stand
 		$set = 13;
 	}
 	
 	// --- update leercurve ---
-	if ($time >= $t && $time <= $t_end && $badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 14400) {
+	if ($time >= $t && $time <= $t_end && $badkamer >= $target && past('leadDataBath') > 43200 && past('8badkamer_8') > 1800) {
+		lg(__LINE__);
 		$startTemp = $d['badkamer_start_temp']['s'];
 		if ($startTemp && $badkamer > $startTemp) {
+			lg(__LINE__);
 			$tempRise    = $badkamer - $startTemp;
 			$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
 			$minPerDeg   = round($minutesUsed / $tempRise, 1);
@@ -72,6 +78,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$leadDataBath[] = $minPerDeg;
 			$leadDataBath = array_slice($leadDataBath, -14);
 			store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
+			storemode('badkamer_start_temp', 0);
 			lg("_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)");
 		}
 	}
