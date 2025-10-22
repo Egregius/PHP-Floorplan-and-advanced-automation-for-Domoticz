@@ -1,9 +1,10 @@
 <?php
-$action = isset($_GET['action']) ? $_GET['action'] : 'unknown';
-exec("mosquitto_pub -h 192.168.2.26 -u mqtt -P mqtt -t 'homeassistant/media_player/kodi_last_action/state' -m '$action'");
+//$action = ucfirst(strtolower($_GET['action']));
+$uniq = substr(microtime(), 2,6);
+exec("mosquitto_pub -h 192.168.2.26 -u mqtt -P mqtt -t 'kodi_last_action' -m '{$_GET['action']}-$uniq'");
 echo 'ok';
 exit;
-lg("kodi ping: $action");
+lg("kodi ping: {$_GET['action']}-$uniq");
 function lg($msg,$level=0) {
 /*
 Levels:
