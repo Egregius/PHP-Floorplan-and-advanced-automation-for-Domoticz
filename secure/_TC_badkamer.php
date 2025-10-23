@@ -48,6 +48,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 //		lg(__LINE__);
 		// al bezig met opwarmen → behoud target tot einde
 		$set = $target;
+		if ($time > $t_end) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $t) {
 //		lg(__LINE__);
@@ -67,6 +68,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 //		lg(__LINE__);
 		// buiten comfortperiode en niet in opwarming → lage stand
 		$set = 13;
+		if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	
 	// --- update leercurve ---
@@ -84,7 +86,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$tempRise    = $badkamer - $startTemp;
 			if ($tempRise>0) {
 				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
-				$minPerDeg   = round($minutesUsed / $tempRise, 1);
+				$minPerDeg   = ceil($minutesUsed / $tempRise);
 				$minPerDeg   = max(10, min(60, $minPerDeg));
 				$leadDataBath[] = $minPerDeg;
 				$leadDataBath = array_slice($leadDataBath, -14);

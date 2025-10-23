@@ -136,14 +136,14 @@ foreach ($temps as $i) {
 }
 if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10;
 $maxtemp=ceil($maxtemp*10)/10;
-if ($temp>$d['buiten_temp']['s']+0.1) $temp=$d['buiten_temp']['s']+0.1;
-elseif ($temp<$d['buiten_temp']['s']-0.1) $temp=$d['buiten_temp']['s']-0.1;
+$ref = (float)$d['buiten_temp']['s'];
+$temp = max($ref - 0.1, min($temp, $ref + 0.1));
 
 
 if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('minmaxtemp', $mintemp, $maxtemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
-if ($hum>(float)$d['buiten_temp']['m']+0.5) $hum=(float)$d['buiten_temp']['m']+0.5;
-elseif ($hum<(float)$d['buiten_temp']['m']-0.5) $hum=(float)$d['buiten_temp']['m']-0.5;
+$ref = (int)$d['buiten_temp']['m'];
+$hum = max($ref - 1, min($hum, $ref + 1));
 if ($d['buiten_temp']['s']!=$temp||$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
 
 

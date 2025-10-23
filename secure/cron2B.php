@@ -92,18 +92,11 @@ if ($d['bose101']['s']=='On'
 		}
 	}
 }
-if ($d['media']['s']=='On') {
-	if ($d['nas']['s']=='Off') {
-		$loadedprofile=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"Profiles.GetCurrentProfile","id":1}', false, $ctx), true);
-		if (isset($loadedprofile['result']['label'])) {
-			lg('Waking NAS...');
-			shell_exec('/var/www/html/secure/wakenas.sh &');
-		}
-	}
+/*if ($d['media']['s']=='On') {
 	if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
 		if (ping('192.168.2.6')===false&&ping('192.168.2.7')===false&&ping('192.168.2.6')===false&&ping('192.168.2.28')===false) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}	
+}	*/
 if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
 		if ($d['lgtv']['s']=='On') {
@@ -124,10 +117,10 @@ if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 			}
 		}
 	}
-	if ($d['media']['s']=='On') {
+	/*if ($d['media']['s']=='On') {
 		if ($d['lgtv']['s']=='Off'&&past('media')>1800&&past('lgtv')>900) {
 			if (ping('192.168.2.6')===false&&ping('192.168.2.7')===false&&ping('192.168.2.28')===false) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['shieldpower']['s']=='Off'&&past('lgtv')>30) sw('shieldpower', 'On','',true);
-	}	
+	}	*/
 }

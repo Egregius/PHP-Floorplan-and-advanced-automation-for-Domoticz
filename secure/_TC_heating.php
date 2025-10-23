@@ -86,7 +86,7 @@ if ($d['living_set']['m']==0) {
 		case 0: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:00'); break;
 	}
 	
-	$target = 19;
+	$target = 20.5;
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $comfortAfternoon - ($leadMinutes * 60);
@@ -101,6 +101,7 @@ if ($d['living_set']['m']==0) {
 	if ($prevSet == 1) {
 		// al in comfortfase of opwarming: houd target vast
 		$Setliving = $target;
+		if ($time > $t_end) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		// startmoment bereikt: begin preheat
@@ -118,6 +119,7 @@ if ($d['living_set']['m']==0) {
 	else {
 		// alles buiten comfort: basisregeling
 		$Setliving = $Setliving;
+		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	
 	// --- leercurve ---
@@ -126,7 +128,7 @@ if ($d['living_set']['m']==0) {
 		if ($startTemp && $living > $startTemp) {
 			$tempRise    = $living - $startTemp;
 			$minutesUsed = round(past('living_start_temp') / 60, 1);
-			$minPerDeg   = round($minutesUsed / $tempRise, 1);
+			$minPerDeg   = ceil($minutesUsed / $tempRise);
 			$minPerDeg   = max(10, min(60, $minPerDeg));
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
 			$leadDataLiving[$mode][] = $minPerDeg;
