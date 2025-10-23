@@ -3,7 +3,7 @@ if (isset($_REQUEST['alert'],$_REQUEST['text'],$_REQUEST['time'])) {
 	include 'functions.php';
 	if (isset($_REQUEST['silent'])) $silent=$_REQUEST['silent'];
 	else $silent=true;
-	alert($_REQUEST['alert'], str_replace('__', PHP_EOL, $_REQUEST['text']), $_REQUEST['time'], $silent);
+	alert($_REQUEST['alert'], str_replace(array('__','|'), PHP_EOL, $_REQUEST['text']), $_REQUEST['time'], $silent);
 	exit;
 } else {
 	require '/var/www/config.php';
@@ -14,7 +14,7 @@ if (isset($_REQUEST['silent'])) {
 	$silent=$_REQUEST['silent'];
 }
 if (isset($_REQUEST['text'])) {
-	$content=str_replace('__', PHP_EOL, $_REQUEST['text']);
+	$content=str_replace(array('__','|'), PHP_EOL, $_REQUEST['text']);
 }
 if (isset($_REQUEST['to'])) {
 	$to=$_REQUEST['to'];

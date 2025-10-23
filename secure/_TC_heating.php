@@ -75,19 +75,18 @@ if ($d['living_set']['m']==0) {
 		2 => 16,
 		3 => 14
 	];
-	
 	// --- comforttijden per dag ---
 	switch ($dow) {
 		case 1: $comfortAfternoon = strtotime('12:50'); $comfortEnd = strtotime('19:00'); break;
 		case 2: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
 		case 3: $comfortAfternoon = strtotime('12:10'); $comfortEnd = strtotime('19:00'); break;
-		case 4: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
+		case 4: $comfortAfternoon = strtotime('10:00'); $comfortEnd = strtotime('19:00'); break;
 		case 5: $comfortAfternoon = strtotime('15:00'); $comfortEnd = strtotime('19:30'); break;
 		case 6: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:30'); break;
 		case 0: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:00'); break;
 	}
 	
-	$target = 20.0;
+	$target = 19;
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $comfortAfternoon - ($leadMinutes * 60);
@@ -108,6 +107,9 @@ if ($d['living_set']['m']==0) {
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
+		$msg="_TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
+		lg($msg);
+		telegram($msg);
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
 		// comfortfase actief
@@ -119,23 +121,21 @@ if ($d['living_set']['m']==0) {
 	}
 	
 	// --- leercurve ---
-	if ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
-		if ($living >= $target && past('leadDataLiving') > 43200 && past('8living_8') > 14400) {
-			$startTemp = $d['living_start_temp']['s'];
-			if ($startTemp && $living > $startTemp) {
-				$tempRise    = $living - $startTemp;
-				$minutesUsed = round(past('living_start_temp') / 60, 1);
-				$minPerDeg   = round($minutesUsed / $tempRise, 1);
-				$minPerDeg   = max(10, min(60, $minPerDeg));
-				if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
-				$leadDataLiving[$mode][] = $minPerDeg;
-				$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
-				store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
-				storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
-				$msg="_TC_living: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
-				lg($msg);
-				telegram($msg);
-			}
+	if ($prevSet == 1/*$time >= $comfortAfternoon && $time < $t_end && $weg == 0*/ && $living >= $target && past('leadDataLiving') > 43200) {
+		$startTemp = $d['living_start_temp']['s'];
+		if ($startTemp && $living > $startTemp) {
+			$tempRise    = $living - $startTemp;
+			$minutesUsed = round(past('living_start_temp') / 60, 1);
+			$minPerDeg   = round($minutesUsed / $tempRise, 1);
+			$minPerDeg   = max(10, min(60, $minPerDeg));
+			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
+			$leadDataLiving[$mode][] = $minPerDeg;
+			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
+			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
+			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			$msg="_TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
+			lg($msg);
+			telegram($msg);
 		}
 	}
 	

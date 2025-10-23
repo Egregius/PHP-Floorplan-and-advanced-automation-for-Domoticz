@@ -27,9 +27,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
-	$t = strtotime('9:20');
+//	$t = strtotime('9:20');
 	$set       = 13;
-	$target    = 19;
+	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
@@ -53,10 +53,10 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 //		lg(__LINE__);
 		// startmoment bereikt → begin opwarmen
 		$set = $target;
-		if ($prevSet != 1) {
-			lg("_TC_bath: leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}");
-			storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
-		}
+		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
+		lg($msg);
+		telegram($msg);
+		storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t && $time <= $t_end) {
 //		lg(__LINE__);
@@ -89,7 +89,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 				$leadDataBath[] = $minPerDeg;
 				$leadDataBath = array_slice($leadDataBath, -14);
 				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
-				$msg="_TC_bath: ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
+				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
 				telegram($msg);
 			}
