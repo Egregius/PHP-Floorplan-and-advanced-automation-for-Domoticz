@@ -248,7 +248,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 //		if ($d[$name]['s']!=$action||$force==true) {
-			if ($d[$name]['dt']=='hsw') {
+			if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
 				if ($action=='Toggle') {
 					if ($d[$name]['s']=='On') $action='Off';
 					else $action='On';
