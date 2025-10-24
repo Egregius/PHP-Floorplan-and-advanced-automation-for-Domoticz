@@ -71,9 +71,9 @@ if ($d['auto']['s']=='On') {
 	if ($d['ralex']['s']==0&&$d['zon']>100&&$d['alex']['s']==1) sl('alex', 0, basename(__FILE__).':'.__LINE__);
 	elseif ($d['ralex']['s']==100&&$d['weg']['s']==1&&$d['alex']['s']==1&&$d['deuralex']['s']=='Closed'&&past('alex')>590) sl('alex', 0, basename(__FILE__).':'.__LINE__);
 	
-	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
+/*	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {
 		if ($d['kookplaat_power']['s']<125&&past('kookplaat_power')>200&&past('kookplaat')>200) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
-	}
+	}*/
 }
     if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']==0&&past('voordeur')>55&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);

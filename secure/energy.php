@@ -185,11 +185,11 @@ while (1){
 		$maand=date('m');
 		$query="SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer='2009-".$maand."-01 00:00:00'";
 		if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
-		while($row=$result->fetch_assoc())$zonref=$row['Dag_Refer'];$result->free();
+		while($row=$result->fetch_assoc())$zonref=round($row['Dag_Refer'],1);$result->free();
 		
 		$query="SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag like '%-".$maand."-%' and Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag like '%-".$maand."-%')";
 		if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
-		while($row=$result->fetch_assoc())$zonavg=$row['AVG'];$result->free();
+		while($row=$result->fetch_assoc())$zonavg=round($row['AVG'],0);$result->free();
 		
 		
 		if (isset($zonref,$zonavg))	$dbdomoticz->query("UPDATE devices SET m=".$zonref.", icon=".$zonavg." WHERE n='zonvandaag';");

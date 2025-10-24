@@ -180,12 +180,12 @@ if ($d['auto']['s']=='On') {
 	if ($d['weg']['s']>=1&&$d['media']['s']=='On'&&past('weg')>900) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/
-if ($d['wasmachine']['s']=='On') {
+/*if ($d['wasmachine']['s']=='On') {
 	if ($d['wasmachine_power']['s']<3.4&&past('wasmachine')>4200&&past('wasmachine_power')>120) {
 		hassnotify('Wasmachine', 'klaar');
 		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-}
+}*/
 if (
 	  $d['daikinliving']['m']==0
 	&&$d['daikinkamer']['m']==0

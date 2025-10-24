@@ -120,40 +120,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
-			if ($device === 'powermeter_kwh') {
-				include '/var/www/html/secure/pass2php/powermeter_kwh.php';
-			} elseif ($device === 'powermeter_power') {
-				if (($d['powermeter_kwh']['s'] ?? null) !== $status) store('powermeter_kwh',$status);
-			} elseif ($device === 'kookplaat_power') {
-				$current = (float)($d[$device]['s'] ?? 0);
-				$statusF = (float)$status;
-				$delta = abs($statusF - $current);
-				$percent = ($current > 0) ? ($delta / $current) * 100 : 100;
-				if (
-					$percent >= 75 ||
-					$delta >= 300 ||
-					($statusF < 6 && $current >= 6) ||
-					past($device) > 300
-				) {
-					store($device, $statusF, '', 1,false);
-					$d[$device]['s'] = $statusF;
-				}			
-			} elseif ($device === 'wasmachine_power') {
-				$current = (float)($d[$device]['s'] ?? 0);
-				$statusF = (float)$status;
-				$delta = abs($statusF - $current);
-				$percent = ($current > 0) ? ($delta / $current) * 100 : 100;
-				if (
-					$percent >= 75 ||
-					$delta >= 300 ||
-					($statusF < 6 && $current >= 6) ||
-					past($device) > 300
-				) {
-					store($device, $statusF, '', 1,false);
-					$d[$device]['s'] = $statusF;
-				}			
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
-			} elseif (substr($device,-4) === '_hum') {
+			if (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
@@ -170,9 +137,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			else $status=round($status,1);
 			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
 			stoploop($d);
-		} elseif ($device === 'sun_solar_azimuth') {
-			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
 			updateWekker($t, $weekend, $dow, $d);
+		} elseif ($device === 'sun_solar_azimuth') {
+			$status=(int)$status;
+			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
 		} elseif ($device === 'weg') {
 			if ($status==0) {
 				store('weg',0,'',1);
