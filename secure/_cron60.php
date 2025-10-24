@@ -194,12 +194,10 @@ if (
 	&&$d['kamer_set']['s']!='D'
 	&&$d['alex_set']['s']!='D'
 	&&$d['daikin']['s']=='On'
-	&&$d['daikin']['m']==1
 	&&$d['daikin_kwh']['s']<20
+	&&past('daikin_kwh')>900
 	&&past('daikin')>3600
-	&&past('daikinliving')>1800
-	&&past('daikinkamer')>1800
-	&&past('daikinalex')>1800) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
+) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 $stamp=date('Y-m-d H:i:s', $timeint-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
 $result=$db->query($sql);

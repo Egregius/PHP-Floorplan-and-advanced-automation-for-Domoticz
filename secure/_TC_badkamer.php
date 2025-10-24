@@ -87,9 +87,10 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			if ($tempRise>0) {
 				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
 				$minPerDeg   = ceil($minutesUsed / $tempRise);
-				$minPerDeg   = max(10, min(60, $minPerDeg));
+				$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 				$leadDataBath[] = $minPerDeg;
 				$leadDataBath = array_slice($leadDataBath, -14);
+				$avgMinPerDeg = round(array_sum($leadDataBath) / count($leadDataBath), 1);
 				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);

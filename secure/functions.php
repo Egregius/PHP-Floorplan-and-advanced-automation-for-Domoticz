@@ -837,45 +837,59 @@ function hassrepublishEntityState($entityId) {
 	echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
 }
 function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critical = false) {
-	$token = hasstoken();
-	$ha_url = 'http://192.168.2.26:8123/api/services/notify/' . $target;
-	$data = [
-		"message" => $message,
-		"title"	=> $title,
-		"data"	=> [
-			"ttl"		=> 0,
-			"priority"	=> "high",
-			"persistent" => true
-		]
-	];
-	if ($critical) {
-		$data["data"]["push"] = [
-			"sound" => [
-				"name"	 => "default",
-				"critical" => 1,
-				"volume"	=> 1.0
-			]
-		];
-	}
-	for ($x = 1; $x <= 10; $x++) {
-		$options = [
-			"http" => [
-				"method"  => "POST",
-				"header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
-				"content" => json_encode($data),
-				"timeout" => $x * 3
-			]
-		];
-		$context = stream_context_create($options);
-		$response = @file_get_contents($ha_url, false, $context);
-		if ($response === FALSE) {
-			lg('Fout bij versturen notificatie: ' . $title . ' ' . $message . ' naar ' . $target);
-			sleep($x * 3);
-		} else {
-			return true;
-		}
-	}
-	return false;
+    $token = hasstoken();
+    if ($critical) {
+        $ha_url_push = 'http://192.168.2.26:8123/api/services/notify/' . $target;
+        $push_data = [
+            "message" => $message,
+            "title"   => $title,
+            "data"    => [
+                "ttl"      => 0,
+                "priority" => "high",
+                "persistent" => true,
+                "push" => [
+                    "sound" => [
+                        "name"     => "default",
+                        "critical" => 1,
+                        "volume"   => 1.0
+                    ]
+                ]
+            ]
+        ];
+        for ($x = 1; $x <= 10; $x++) {
+            $options = [
+                "http" => [
+                    "method"  => "POST",
+                    "header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+                    "content" => json_encode($push_data),
+                    "timeout" => 3
+                ]
+            ];
+            $context = stream_context_create($options);
+            $response = @file_get_contents($ha_url_push, false, $context);
+            if ($response !== FALSE) break;
+            sleep($x);
+        }
+        $ha_url_dashboard = 'http://192.168.2.26:8123/api/services/persistent_notification/create';
+        $dashboard_data = [
+            "title" => $title,
+            "message" => $message,
+            "notification_id" => uniqid("notif_")
+        ];
+        $options = [
+            "http" => [
+                "method"  => "POST",
+                "header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+                "content" => json_encode($dashboard_data),
+                "timeout" => 10
+            ]
+        ];
+        $context = stream_context_create($options);
+        @file_get_contents($ha_url_dashboard, false, $context);
+    } else {
+        telegram($title . ": " . $message);
+    }
+    return true;
 }
 
 function curl($url) {

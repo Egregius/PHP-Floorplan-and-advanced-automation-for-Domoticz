@@ -84,4 +84,3 @@ elseif ($d['grohered']['s']=='On'&&past('8keuken_8')>1800&&$d['net']>100) sw('gr
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['water']['s']=='On'&&past('water')>=$d['water']['m']) sw('water', 'Off');
-

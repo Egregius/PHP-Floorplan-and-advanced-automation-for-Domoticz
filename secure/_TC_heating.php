@@ -90,6 +90,7 @@ if ($d['living_set']['m']==0) {
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $comfortAfternoon - ($leadMinutes * 60);
+	if ($time>$t_start-3600) alert('living_start_temp','Verwarming living zal starten rond '.date("G:i", $t_start),64800);
 	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
 	$t_end = $comfortEnd;
 	
@@ -129,10 +130,11 @@ if ($d['living_set']['m']==0) {
 			$tempRise    = $living - $startTemp;
 			$minutesUsed = round(past('living_start_temp') / 60, 1);
 			$minPerDeg   = ceil($minutesUsed / $tempRise);
-			$minPerDeg   = max(10, min(60, $minPerDeg));
+			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
 			$leadDataLiving[$mode][] = $minPerDeg;
 			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
+			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$msg="_TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
