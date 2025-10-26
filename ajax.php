@@ -154,6 +154,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		}
 	} elseif ($_REQUEST['command']=='heating') {
 		store('heating', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+	} elseif ($_REQUEST['command']=='verlof') {
+		store('verlof', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='weg') {
 		store('weg', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		if ($_REQUEST['action']==0) {
@@ -166,12 +168,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			huisslapen(3);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
-		/*if ($_REQUEST['device']=='eettafel'||$_REQUEST['device']=='bureel'||$_REQUEST['device']=='zithoek') {
-			sl($_REQUEST['device'].'1', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-			sl($_REQUEST['device'].'2', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-			sl($_REQUEST['device'].'3', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-			sl($_REQUEST['device'].'4', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-		} else */sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
+		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
 			$d=fetchdata(0,basename(__FILE__).':'.__LINE__);

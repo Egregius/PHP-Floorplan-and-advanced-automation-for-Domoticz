@@ -75,15 +75,22 @@ if ($d['living_set']['m']==0) {
 		2 => 16,
 		3 => 14
 	];
-	// --- comforttijden per dag ---
-	switch ($dow) {
-		case 1: $comfortAfternoon = strtotime('12:50'); $comfortEnd = strtotime('19:00'); break;
-		case 2: $comfortAfternoon = strtotime('16:00'); $comfortEnd = strtotime('19:00'); break;
-		case 3: $comfortAfternoon = strtotime('12:10'); $comfortEnd = strtotime('19:00'); break;
-		case 4: $comfortAfternoon = strtotime('10:00'); $comfortEnd = strtotime('19:00'); break;
-		case 5: $comfortAfternoon = strtotime('15:00'); $comfortEnd = strtotime('19:30'); break;
-		case 6: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:30'); break;
-		case 0: $comfortAfternoon = strtotime('08:00'); $comfortEnd = strtotime('19:00'); break;
+	$comfortStart = [
+		1 => '12:50',
+		2 => '16:00',
+		3 => '12:10',
+		4 => '16:00',
+		5 => '15:00',
+		6 => '08:00',
+		0 => '08:00'
+	];
+	
+	if ($weekend==true) {
+		$comfortAfternoon = strtotime($comfortStart[0]);
+		$comfortEnd = strtotime('19:30');
+	} else {
+		$comfortAfternoon = strtotime($comfortStart[$dow]);
+		$comfortEnd = strtotime('19:00');
 	}
 	
 	$target = 20.5;

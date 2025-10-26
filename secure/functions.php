@@ -8,11 +8,11 @@ $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
-    if ($d['dag']['m'] > 180 ) $dow = date("w", $d['time']+43200);
-    else $dow = date("w");
+	$now = $d['time'] ?? time();
+    $dow = ($d['dag']['m'] > 180) ? date("w", $now + 43200) : date("w");
     if ($d['verlof']['s']==2) $weekend=true;
     else $weekend = ($dow == 0 || $dow == 6);
-    $t = $weekend ? strtotime('7:45') : strtotime('7:00');
+    $t = ($weekend||$d['verlof']['s']==2) ? strtotime('7:45') : strtotime('7:00');
 }
 function check_en_slapen($locatie, $status, &$d) {
 	$x = 0;
@@ -569,7 +569,7 @@ function createheader($page='') {
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<script type="text/javascript" src="/scripts/m4q.min.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>';
 	if ($page!='') {
 		echo '
 		<script type=\'text/javascript\'>

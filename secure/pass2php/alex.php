@@ -12,6 +12,7 @@ if ($status>0) {
 	if ($d['alexslaapt']['s']==1) {
 		store('alexslaapt', 0);
 		if ($d['bose101']['s']=='On') bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
+		if ($d['bose105']['s']=='On') bosevolume(32, 105, basename(__FILE__).':'.__LINE__);
 	}
 } else {
 	if ($d['alexslaapt']['s']==0&&$d['deuralex']['s']=='Closed'&&($d['time']>=strtotime('19:30')||$d['time']<strtotime('6:00'))) store('alexslaapt', 1);

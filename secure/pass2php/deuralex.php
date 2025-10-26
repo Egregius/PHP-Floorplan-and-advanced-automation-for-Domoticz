@@ -12,6 +12,7 @@ if ($status!=$d['deuralex']['s']) {
 					if ($d['rkeukenl']['s']>0) sl('rkeukenl', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['rkeukenr']['s']>0) sl('rkeukenr', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bose101']['s']=='On') bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
+					if ($d['bose105']['s']=='On') bosevolume(32, 105, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
