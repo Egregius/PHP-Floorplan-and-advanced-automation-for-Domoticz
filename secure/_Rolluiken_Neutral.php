@@ -11,7 +11,7 @@ if ($d['auto']['s']=='On') {
 			if ($d['rkamerr']['s']>0) sl('rkamerr', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['ralex']['s']==0&&$d['rwaskamer']['s']>0) sl('rwaskamer', 0, basename(__FILE__).':'.__LINE__);
 			if ($d['ralex']['s']>0&&$d['alexslaapt']['s']==0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
-			if ($time>=$t+1800&&$weekend==false) {
+			if ($time>=$t+1800&&$weekend==false&&$d['verlof']['s']==0) {
 				if ($d['ralex']['s']>0) sl('ralex', 0, basename(__FILE__).':'.__LINE__);
 			}
 		}
