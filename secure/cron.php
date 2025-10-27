@@ -20,6 +20,7 @@ if ($d['weg']['s']>0) {
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
 while (true) {
 	$time = microtime(true);
+	$d['time'] = $time;
 	$timeint = (int)$time;
 	if ($t<$timeint-82800) updateWekker($t, $weekend, $dow, $d);
 	if ($timeint % 10 === 0 && $timeint !== $last10) {
