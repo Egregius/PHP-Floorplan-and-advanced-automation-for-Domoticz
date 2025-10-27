@@ -13,12 +13,12 @@ while [ $i -lt 6 ]; do
 			/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
 		fi
 	fi
-#	if [ $ENERGY = true ] ;then
-#		ps cax | grep energyV2.php
-#		if [ $? -ne 0 ] ; then
-#			/var/www/html/secure/energyV2.php >/dev/null 2>&1 &
-#		fi
-#	fi	
+	if [ $ENERGY = true ] ;then
+		ps cax | grep energy.php
+		if [ $? -ne 0 ] ; then
+			/var/www/html/secure/energy.php >/dev/null 2>&1 &
+		fi
+	fi	
 	if [ $CRON = true ] ;then
 		ps cax | grep cron.php
 		if [ $? -ne 0 ] ; then

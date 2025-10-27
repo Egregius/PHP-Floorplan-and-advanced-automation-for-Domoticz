@@ -25,7 +25,7 @@ if (isset($_REQUEST['t'])) {
 		$d[$row['n']]['s']=$row['s'];
 		if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
 		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];else $row['dt']=null;
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	$en=mget('en');
