@@ -8,7 +8,7 @@ $memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
-	$now = $d['time'] ?? time();
+	$now = (int)$d['time'] ?? time();
     $dow = ($d['dag']['m'] > 180) ? date("w", $now + 43200) : date("w");
     if ($d['verlof']['s']==2) $weekend=true;
     else $weekend = ($dow == 0 || $dow == 6);
