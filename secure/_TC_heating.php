@@ -89,7 +89,8 @@ if ($d['living_set']['m']==0) {
 		$comfortAfternoon = strtotime($comfortStart[0]);
 		$comfortEnd = strtotime('19:30');
 	} else {
-		$comfortAfternoon = strtotime($comfortStart[$dow]);
+	 	if ($d['verlof']['s']>0) $comfortAfternoon = strtotime($comfortStart[0]);
+		else $comfortAfternoon = strtotime($comfortStart[$dow]);
 		$comfortEnd = strtotime('19:00');
 	}
 	
