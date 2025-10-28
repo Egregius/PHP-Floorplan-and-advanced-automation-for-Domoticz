@@ -1,6 +1,6 @@
 #!/bin/sh
 PASS4MQTT=true
-ENERGY=true
+ENERGY=false
 HOMEWIZARD=true
 CRON=true
 CRON2=true
@@ -20,12 +20,12 @@ while [ $i -lt 6 ]; do
 			/var/www/html/secure/energy.php >/dev/null 2>&1 &
 		fi
 	fi	
-	if [ $HOMEWIZARD = true ] ;then
-		ps cax | grep python3
-		if [ $? -ne 0 ] ; then
+	if [ $HOMEWIZARD = true ] ; then
+		pgrep -f homewizard_mqtt.py >/dev/null
+		if [ $? -ne 0 ]; then
 			/var/www/html/secure/homewizard_mqtt.py >/dev/null 2>&1 &
 		fi
-	fi	
+	fi
 	if [ $CRON = true ] ;then
 		ps cax | grep cron.php
 		if [ $? -ne 0 ] ; then

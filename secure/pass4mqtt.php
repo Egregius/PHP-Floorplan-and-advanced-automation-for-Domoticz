@@ -247,13 +247,39 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('energy',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
-	try {	
-		lg($topic.' '.$status);
-	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
-	}
-},MqttClient::QOS_AT_LEAST_ONCE);
+$mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($startloop, $validDevices, &$d, &$alreadyProcessed) {
+    try {
+        $status = json_decode($statusJson);
+        if (!$status || !isset($status->data)) {
+            throw new Exception("Geen data in MQTT bericht");
+        }
+
+        static $P1 = null;
+        static $kwh = null;
+        static $batterij = null;
+
+        if ($topic === 'energy/p1meter') {
+            $P1 = $status->data;
+        } elseif ($topic === 'energy/kwh') {
+            $kwh = $status->data;
+        } elseif ($topic === 'energy/batterij') {
+            $batterij = $status->data;
+        }
+
+        // Alleen mset uitvoeren als we beide apparaten al binnen hebben
+        if ($P1 && $kwh) {
+            mset('en', [
+                'net' => round($P1->power_w,0) ?? null,
+                'avg' => round($P1->average_power_15m_w) ?? null,
+                'zon' => round($kwh->power_w) ?? null,
+                'bat' => round($batterij->power_w) ?? null,
+            ]);
+        }
+
+    } catch (Throwable $e) {
+        lg("Fout in MQTT: " . __LINE__ . " $topic " . $e->getMessage());
+    }
+}, MqttClient::QOS_AT_LEAST_ONCE);
 // Main loop with incremental sleep
 $sleepMicroseconds=10000;
 $maxSleep=500000;

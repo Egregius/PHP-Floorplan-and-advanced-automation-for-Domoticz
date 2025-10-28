@@ -19,6 +19,7 @@ TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
 DEVICES = [
     {"name": "p1meter", "host": "p1dongle"},
     {"name": "kwh", "host": "energymeter"},
+    {"name": "batterij", "host": "battery"},
 ]
 
 HEARTBEAT_INTERVAL = 25

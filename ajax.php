@@ -32,6 +32,7 @@ if (isset($_REQUEST['t'])) {
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
 	$d['zon']=-$en['zon'];
+	$d['bat']=$en['bat'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$sunrise=mget('sunrise');
 		if ($sunrise) {
