@@ -144,7 +144,7 @@ if ($d['living_set']['m']==0) {
 			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
-			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+//			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$msg="_TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 			lg($msg);
 			telegram($msg);

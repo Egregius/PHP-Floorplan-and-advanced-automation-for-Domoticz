@@ -96,7 +96,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 				lg($msg);
 				telegram($msg);
 			}
-			if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+	//		if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
 	
@@ -118,7 +118,7 @@ if (isset($set)&&$d['heating']['s']>=0) {
 if ($d['weg']['s']<2) {
 	$difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 	$past=past('badkamervuur1');
-	if ($difbadkamer<=-0.2) {
+	if ($difbadkamer<=-0.1) {
 		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed'&&$past>=240) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
