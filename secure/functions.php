@@ -527,21 +527,25 @@ function bosezone($ip,$vol='') {
 		}
 	}
 }
-function bosepost($method,$xml,$ip=101,$log=false) {
-	for($x=1;$x<=10;$x++) {
-		$ch=curl_init("http://192.168.2.$ip:8090/$method");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1); 
-		curl_setopt($ch, CURLOPT_TIMEOUT, 1); 
-		$response=curl_exec($ch);
-		curl_close($ch);
-		if ($response=='<?xml version="1.0" encoding="UTF-8" ?><status>/'.$method.'</status>') break;
-		usleep(100000);
-	}
-	return $response;
+function bosepost($method, $xml, $ip=101, $log=false) {
+    $host = "192.168.2.$ip";
+    $port = 8090;
+    $path = "/$method";
+
+    $headers = "POST $path HTTP/1.1\r\n";
+    $headers .= "Host: $host\r\n";
+    $headers .= "Content-Type: application/xml\r\n";
+    $headers .= "Content-Length: ".strlen($xml)."\r\n";
+    $headers .= "Connection: Close\r\n\r\n";
+
+    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
+    if ($fp) {
+        fwrite($fp, $headers.$xml);
+        fclose($fp); // direct sluiten, niet wachten op response
+        if ($log) lg("💡 Bose $method verstuurd naar $host");
+    } else {
+        if ($log) lg("❌ Bose socket fout: $errstr ($errno)");
+    }
 }
 
 function sirene($msg) {
@@ -715,50 +719,48 @@ function hasstoken() {
 	}
 }
 function hass($domain, $service, $entity = '', $target = []) {
-	lg('HASS '.$domain.' '.$service.' '.$entity,4);
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/' . $domain . '/' . $service);
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		'Content-Type: application/json',
-		'Authorization: Bearer ' . hasstoken()
-	]);
-
-	$data = [];
-	if ($entity != '') $data['entity_id'] = $entity;
-	if (!empty($target)) $data['target'] = $target;
-
-	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-
-	$response = curl_exec($ch);
-	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	if ($httpcode != 200) {
-		lg("HASS API ERROR $httpcode: $response", 1);
-	}
-	curl_close($ch);
+    lg('HASS '.$domain.' '.$service.' '.$entity,4);
+    $host = '192.168.2.26';
+    $port = 8123;
+    $path = "/api/services/$domain/$service";
+    $data = [];
+    if ($entity != '') $data['entity_id'] = $entity;
+    if (!empty($target)) $data['target'] = $target;
+    $payload = json_encode($data);
+    $headers = "POST $path HTTP/1.1\r\n";
+    $headers .= "Host: $host\r\n";
+    $headers .= "Content-Type: application/json\r\n";
+    $headers .= "Authorization: Bearer ".hasstoken()."\r\n";
+    $headers .= "Content-Length: ".strlen($payload)."\r\n";
+    $headers .= "Connection: Close\r\n\r\n";
+    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
+    if ($fp) {
+        fwrite($fp, $headers.$payload);
+        fclose($fp);
+    } else {
+        lg("❌ HASS socket fout: $errstr ($errno)");
+    }
 }
+
 function hassopts($domain, $service, $entity = '', $data = []) {
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		'Content-Type: application/json',
-		'Authorization: Bearer ' . hasstoken()
-	]);
-	if (!empty($entity)) {
-		$data['entity_id'] = $entity;
-	}
-	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-	$response = curl_exec($ch);
-	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	if ($httpcode != 200) {
-		lg("HASS API ERROR $httpcode: $response", 1);
-	}
-	curl_close($ch);
+    $host = '192.168.2.26';
+    $port = 8123;
+    $path = "/api/services/$domain/$service";
+    if (!empty($entity)) $data['entity_id'] = $entity;
+    $payload = json_encode($data);
+    $headers = "POST $path HTTP/1.1\r\n";
+    $headers .= "Host: $host\r\n";
+    $headers .= "Content-Type: application/json\r\n";
+    $headers .= "Authorization: Bearer ".hasstoken()."\r\n";
+    $headers .= "Content-Length: ".strlen($payload)."\r\n";
+    $headers .= "Connection: Close\r\n\r\n";
+    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
+    if ($fp) {
+        fwrite($fp, $headers.$payload);
+        fclose($fp);
+    } else {
+        lg("❌ HASS socket fout: $errstr ($errno)");
+    }
 }
 
 function hassinput($domain,$service,$entity,$input) {
@@ -1067,35 +1069,25 @@ function republishmqtt() {
 	}
 }
 
-function setBatterijLedBrightness(int $brightness) {
-    $brightness = max(0, min(100, $brightness)); // Limiteer 0-100
-    $url = "https://battery/api/system";
-
-    $payload = json_encode([
-        'status_led_brightness_pct' => $brightness
-    ]);
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0",
-        "X-Api-Version: 2",
-        "Content-Type: application/json"
-    ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
-    $response = curl_exec($ch);
-    $error = curl_error($ch);
-    curl_close($ch);
-
-    if ($error) {
-        lg("❌ Fout bij LED brightness: $error");
-        return false;
-    }
-
-    lg("💡 Batterij LED brightness ingesteld op $brightness%");
-    return json_decode($response, true);
+function setBatterijLedBrightness(int $brightness) { 
+	$brightness = max(0, min(100, $brightness));
+	$url = "https://battery/api/system";
+	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+	curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0", "X-Api-Version: 2", "Content-Type: application/json" ]);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	$response = curl_exec($ch);
+	$error = curl_error($ch);
+	curl_close($ch);
+	if ($error) {
+		lg("❌ Fout bij LED brightness: $error");
+		return false;
+	} else {
+		lg("💡 Batterij LED brightness ingesteld op $brightness%");
+		return json_decode($response, true);
+	}
 }
