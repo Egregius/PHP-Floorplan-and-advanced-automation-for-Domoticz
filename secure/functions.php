@@ -92,7 +92,7 @@ function fgarage() {
 		if ($d['zon']<260) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['garageled']['m']!=1) {
 			storemode('garageled',1);
-			setBatterijLedBrightness(50);
+			setBatterijLedBrightness(30);
 		}
 	}
 }
@@ -1070,10 +1070,8 @@ function republishmqtt() {
 }
 
 function setBatterijLedBrightness(int $brightness) { 
-	$brightness = max(0, min(100, $brightness));
-	$url = "https://battery/api/system";
 	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
-	$ch = curl_init($url);
+	$ch = curl_init("https://battery/api/system");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 	curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0", "X-Api-Version: 2", "Content-Type: application/json" ]);
