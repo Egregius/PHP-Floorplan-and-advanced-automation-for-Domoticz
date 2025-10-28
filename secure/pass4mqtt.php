@@ -250,7 +250,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 $mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($startloop, $validDevices, &$d, &$alreadyProcessed) {
     try {
         $status = json_decode($statusJson);
-        if (!$status || !isset($status->data)) {
+        if (!$status) {
             throw new Exception("Geen data in MQTT bericht");
         }
 
@@ -259,19 +259,19 @@ $mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($
         static $batterij = null;
 
         if ($topic === 'energy/p1meter') {
-            $P1 = $status->data;
+            $P1 = $status;
         } elseif ($topic === 'energy/kwh') {
-            $kwh = $status->data;
+            $kwh = $status;
         } elseif ($topic === 'energy/batterij') {
-            $batterij = $status->data;
+            $batterij = $status;
         }
 
         if ($P1 && $kwh && $batterij) {
             mset('en', [
-                'net' => round($P1->power_w,0),
-                'avg' => round($P1->average_power_15m_w),
-                'zon' => round($kwh->power_w),
-                'bat' => round($batterij->power_w),
+                'net' => $P1->w,
+                'avg' => $P1->avg,
+                'zon' => $kwh->w,
+                'bat' => $batterij->w,
             ]);
         }
     } catch (Throwable $e) {

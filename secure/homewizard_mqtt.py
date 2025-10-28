@@ -127,11 +127,22 @@ async def handle_device(device, token, mqtt_pub, ssl_context):
                         asyncio.create_task(send_heartbeat(ws, name))
 
                     elif msg_type == "measurement":
-                        mqtt_pub.publish(name, {
-                            "device": name,
-                            "timestamp": datetime.now().isoformat(),
-                            "data": data.get("data", data)
-                        })
+#                        mqtt_pub.publish(name, data.get("data", data))
+                        if "p1meter" in name:
+                            payload = {
+                                "w": data["data"].get("power_w"),
+                                "avg": data["data"].get("average_power_15m_w")
+                            }
+                        elif "batterij" in name:
+                        	payload = {
+                                "w": int(round(data["data"].get("power_w")))
+                            }
+                        else:
+                            payload = {
+                                "w": data["data"].get("power_w")
+                            }
+                        
+                        mqtt_pub.publish(name, payload)
 
                     elif msg_type == "error":
                         log(f"❌ {name}: Fout ontvangen - {data}")
