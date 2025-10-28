@@ -247,7 +247,13 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-
+$mqtt->subscribe('energy',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
+	try {	
+		lg($topic.' '.$status);
+	} catch (Throwable $e) {
+		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+	}
+},MqttClient::QOS_AT_LEAST_ONCE);
 // Main loop with incremental sleep
 $sleepMicroseconds=10000;
 $maxSleep=500000;
