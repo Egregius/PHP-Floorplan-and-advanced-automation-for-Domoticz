@@ -88,7 +88,13 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['zon']<260&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') {
+		if ($d['zon']<260) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['garageled']['m']!=1) {
+			storemode('garageled',1);
+			setBatterijLedBrightness(50);
+		}
+	}
 }
 function fkeuken() {
 	global $d,$time;
@@ -949,11 +955,13 @@ function fetchdata($t=0,$lg='') {
 	if (isset($en['net'])) {
 		$d['net']=$en['net'];
 		$d['avg']=$en['avg'];
+		$d['bat']=$en['bat'];
 		$d['zon']=-$en['zon'];
 	} else {
 		$d['net']=0;
 		$d['avg']=0;
 		$d['zon']=0;
+		$d['bat']=0;
 	}
 	return $d;
 }
@@ -1057,4 +1065,37 @@ function republishmqtt() {
 			usleep(50000);
 		}
 	}
+}
+
+function setBatterijLedBrightness(int $brightness) {
+    $brightness = max(0, min(100, $brightness)); // Limiteer 0-100
+    $url = "https://battery/api/system";
+
+    $payload = json_encode([
+        'status_led_brightness_pct' => $brightness
+    ]);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0",
+        "X-Api-Version: 2",
+        "Content-Type: application/json"
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    if ($error) {
+        lg("❌ Fout bij LED brightness: $error");
+        return false;
+    }
+
+    lg("💡 Batterij LED brightness ingesteld op $brightness%");
+    return json_decode($response, true);
 }

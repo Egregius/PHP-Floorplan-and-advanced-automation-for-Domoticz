@@ -32,11 +32,6 @@ while (1){
 	}
 	$data=json_decode($data);
 	if (isset($data->total_power_import_kwh)) {
-		mset('en',array(
-			'net'=>$data->active_power_w,
-			'avg'=>$data->active_power_average_w,
-			'zon'=>$newzon,
-		));
 		$total=(int)(($data->total_power_import_kwh*100)+($data->total_power_export_kwh*100)+($data->total_gas_m3*1000));
 		if ($data->active_power_w>8500) alert('Power', 'Power usage: '.$data->active_power_w.' W!', 600, false);
 
@@ -160,7 +155,7 @@ while (1){
 			$prevtotal=$total;
 		}
 	}
-	if ($uur==0&&$min==1&&$sec==0) {
+	if ($uur==0&&$min<10) {
 		if (!isset($dbverbruik)||!mysqli_ping($dbverbruik)) {
 			$dbverbruik=new mysqli('192.168.2.20','home','H0m€','verbruik');
 			if($dbverbruik->connect_errno>0){die('Unable to connect to database ['.$dbverbruik->connect_error.']');}
@@ -196,7 +191,7 @@ while (1){
 	}
 	$x++;
 	$time_elapsed_secs=microtime(true)-$start;
-	$sleep=1-$time_elapsed_secs;
+	$sleep=300-$time_elapsed_secs;
 	if ($sleep>0) {
 		$sleep=round($sleep*1000000);
 		usleep($sleep);

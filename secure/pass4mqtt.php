@@ -266,16 +266,14 @@ $mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($
             $batterij = $status->data;
         }
 
-        // Alleen mset uitvoeren als we beide apparaten al binnen hebben
-        if ($P1 && $kwh) {
+        if ($P1 && $kwh && $batterij) {
             mset('en', [
-                'net' => round($P1->power_w,0) ?? null,
-                'avg' => round($P1->average_power_15m_w) ?? null,
-                'zon' => round($kwh->power_w) ?? null,
-                'bat' => round($batterij->power_w) ?? null,
+                'net' => round($P1->power_w,0),
+                'avg' => round($P1->average_power_15m_w),
+                'zon' => round($kwh->power_w),
+                'bat' => round($batterij->power_w),
             ]);
         }
-
     } catch (Throwable $e) {
         lg("Fout in MQTT: " . __LINE__ . " $topic " . $e->getMessage());
     }

@@ -11,10 +11,7 @@ $d['time']=$startloop;
 
 
 //echo ping('192.168.2.254');
-hassnotify('Alert!', 'test false', 'mobile_app_iphone_guy', false);
-sleep(2);
-hassnotify('Alert!', 'test true', 'mobile_app_iphone_guy', true);
-
+setBatterijLedBrightness(50);
 
 //republishmqtt();
 

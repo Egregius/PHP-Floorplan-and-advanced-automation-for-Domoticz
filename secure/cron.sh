@@ -1,6 +1,6 @@
 #!/bin/sh
 PASS4MQTT=true
-ENERGY=false
+ENERGY=true
 HOMEWIZARD=true
 CRON=true
 CRON2=true
