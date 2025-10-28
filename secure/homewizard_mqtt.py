@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
-import asyncio, json, ssl, traceback
+# homewizard_energy_mqtt.py
+# Installeer: pip install paho-mqtt websockets requests
+
+import asyncio
+import json
+import ssl
+import time
 from datetime import datetime
-import websockets, paho.mqtt.client as mqtt
+from pathlib import Path
+import requests
+import paho.mqtt.client as mqtt
+import websockets
 
 # ---------------------------
 # CONFIG
@@ -10,118 +19,245 @@ MQTT_HOST = "192.168.2.26"
 MQTT_PORT = 1883
 MQTT_USER = "mqtt"
 MQTT_PASS = "mqtt"
-MQTT_TOPIC_BASE = "energy"
+MQTT_TOPIC = "energy"
+
+TOKEN_FILE = Path("tokens.json")
 
 DEVICES = [
-    {"name": "p1meter", "url": "wss://p1dongle/api/ws", "token": "005BF7516EE3E996142F7E742823275E"},
-    {"name": "kwh", "url": "wss://energymeter/api/ws", "token": "0017DB17E4AC2ADC97E5279AE4142F8D"},
+    {"name": "p1meter", "host": "p1dongle"},
+    {"name": "kwh", "host": "energymeter"},
 ]
 
-VERIFY_SSL = False
 HEARTBEAT_INTERVAL = 25
-RECONNECT_BASE = 1.0
-RECONNECT_MAX = 60.0
-MQTT_RETAIN = True
+TOKEN_TIMEOUT = 60
+RECONNECT_DELAY = 5
 
 # ---------------------------
-def now(): return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-def log(*args): print(f"[{now()}]", *args)
+# LOGGING
+# ---------------------------
+def log(*args):
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
 
+# ---------------------------
+# TOKEN MANAGEMENT
+# ---------------------------
+def load_tokens():
+    if TOKEN_FILE.exists():
+        try:
+            return json.loads(TOKEN_FILE.read_text())
+        except:
+            return {}
+    return {}
+
+def save_tokens(tokens):
+    TOKEN_FILE.write_text(json.dumps(tokens, indent=2))
+
+def request_token(host, timeout=TOKEN_TIMEOUT):
+    """Vraag een token aan via de HomeWizard API"""
+    url = f"https://{host}/api/user"
+    
+    log(f"🔑 Token aanvragen bij {host}")
+    log(f"   DRUK NU OP DE KNOP VAN HET APPARAAT (binnen {timeout} sec)")
+    
+    payload = {"name": "local/homewizard_mqtt", "type": "script"}
+    start = time.time()
+    
+    while time.time() - start < timeout:
+        try:
+            resp = requests.post(url, json=payload, timeout=3, verify=False)
+            
+            if resp.status_code == 200:
+                data = resp.json()
+                token = data.get("token")
+                if token:
+                    log(f"✅ Token ontvangen van {host}")
+                    return token
+            
+            # Als status 403: knop nog niet ingedrukt
+            time.sleep(1)
+            
+        except requests.exceptions.RequestException as e:
+            log(f"   Wachten op autorisatie... ({int(time.time() - start)}s)")
+            time.sleep(1)
+    
+    raise TimeoutError(f"❌ Timeout: knop niet ingedrukt binnen {timeout} seconden")
+
+# ---------------------------
+# MQTT CLIENT
 # ---------------------------
 class MqttPublisher:
-    def __init__(self, host, port, user=None, password=None):
+    def __init__(self):
         self.client = mqtt.Client()
-        if user and password:
-            self.client.username_pw_set(user, password)
-        self.client.on_connect = lambda *a: log("MQTT connected")
-        self.client.on_disconnect = lambda *a: log("MQTT disconnected")
-        self.client.connect(host, port, 60)
-        self.client.loop_start()
-    def publish(self, topic, payload):
+        self.client.username_pw_set(MQTT_USER, MQTT_PASS)
+        self.client.on_connect = self._on_connect
+        self.connected = False
+        
+    def _on_connect(self, client, userdata, flags, rc):
+        if rc == 0:
+            self.connected = True
+            log(f"✅ MQTT verbonden met {MQTT_HOST}:{MQTT_PORT}")
+        else:
+            log(f"❌ MQTT verbinding mislukt (code {rc})")
+    
+    def connect(self):
         try:
-            if not isinstance(payload, (str, bytes)): payload = json.dumps(payload)
-            full_topic = f"{MQTT_TOPIC_BASE}/{topic}".strip("/")
-            self.client.publish(full_topic, payload, retain=MQTT_RETAIN)
-            log("MQTT publish", full_topic, payload)
+            self.client.connect(MQTT_HOST, MQTT_PORT, 60)
+            self.client.loop_start()
         except Exception as e:
-            log("MQTT publish error:", e)
+            log(f"❌ MQTT fout: {e}")
+    
+    def publish(self, device_name, data):
+        if not self.connected:
+            log(f"⚠️  MQTT niet verbonden, skip publish voor {device_name}")
+            return
+            
+        topic = f"{MQTT_TOPIC}/{device_name}"
+        payload = json.dumps(data)
+        self.client.publish(topic, payload, retain=True)
+        log(f"📤 {topic}: {payload[:100]}...")
 
 # ---------------------------
-async def heartbeat(name, ws):
+# WEBSOCKET HANDLER
+# ---------------------------
+async def handle_device(device, token, mqtt_pub, ssl_context):
+    name = device["name"]
+    host = device["host"]
+    
+    # Gebruik wss:// met disabled SSL verificatie
+    url = f"wss://{host}/api/ws"
+    
+    log(f"🔌 {name}: Verbinden met {url}")
+    
     while True:
-        await asyncio.sleep(HEARTBEAT_INTERVAL)
         try:
+            async with websockets.connect(url, ssl=ssl_context, ping_interval=None) as ws:
+                log(f"✅ {name}: WebSocket verbonden")
+                
+                # Start heartbeat taak
+                heartbeat_task = asyncio.create_task(send_heartbeat(ws, name))
+                
+                try:
+                    async for message in ws:
+                        data = json.loads(message)
+                        msg_type = data.get("type")
+                        
+                        if msg_type == "authorization_requested":
+                            log(f"🔐 {name}: Autorisatie gevraagd, token versturen...")
+                            await ws.send(json.dumps({
+                                "type": "authorize",
+                                "token": token
+                            }))
+                        
+                        elif msg_type == "authorized":
+                            log(f"✅ {name}: Geautoriseerd")
+                        
+                        elif msg_type == "unauthorized":
+                            log(f"❌ {name}: Autorisatie geweigerd - token mogelijk verlopen!")
+                            log(f"   Verwijder tokens.json en start opnieuw om nieuwe tokens aan te vragen")
+                        
+                        elif msg_type == "error":
+                            log(f"❌ {name}: Fout ontvangen - {data}")
+                        
+                        elif msg_type == "update":
+                            # Publiceer data naar MQTT
+                            mqtt_pub.publish(name, {
+                                "device": name,
+                                "timestamp": datetime.now().isoformat(),
+                                "data": data.get("data", data)
+                            })
+                        
+                        elif msg_type == "pong":
+                            # Heartbeat response
+                            pass
+                        
+                        else:
+                            log(f"📨 {name}: Onbekend bericht type '{msg_type}': {data}")
+                
+                except websockets.exceptions.ConnectionClosed:
+                    log(f"⚠️  {name}: Verbinding gesloten")
+                finally:
+                    heartbeat_task.cancel()
+        
+        except Exception as e:
+            log(f"❌ {name}: Fout - {e}")
+        
+        log(f"🔄 {name}: Opnieuw verbinden over {RECONNECT_DELAY} seconden...")
+        await asyncio.sleep(RECONNECT_DELAY)
+
+async def send_heartbeat(ws, name):
+    """Stuur periodiek een ping naar de websocket"""
+    try:
+        while True:
+            await asyncio.sleep(HEARTBEAT_INTERVAL)
             await ws.send(json.dumps({"type": "ping"}))
-            log(f"{name}: ping")
-        except Exception as e:
-            log(f"{name}: heartbeat failed: {e}")
-            break
+            log(f"💓 {name}: Heartbeat verzonden")
+    except asyncio.CancelledError:
+        pass
+    except Exception as e:
+        log(f"❌ {name}: Heartbeat fout - {e}")
 
 # ---------------------------
-async def run_device(dev, mqtt, ssl_ctx):
-    name, url, token = dev["name"], dev["url"], dev["token"]
-    backoff = RECONNECT_BASE
-
-    while True:
-        try:
-            log(f"{name}: connecting to {url}")
-            async with websockets.connect(url, ssl=ssl_ctx, ping_interval=None) as ws:
-                log(f"{name}: connected")
-
-                async for msg in ws:
-                    try:
-                        data = json.loads(msg)
-                    except Exception:
-                        log(f"{name}: invalid JSON: {msg[:80]!r}")
-                        continue
-
-                    t = data.get("type")
-                    log(f"{name}: recv {t}")
-
-                    if t == "authorization_requested":
-                        auth_msg = {"type": "authorize", "token": token}
-                        await ws.send(json.dumps(auth_msg))
-                        log(f"{name}: sent token")
-                        continue
-
-                    if t in ("authorization_succeeded", "authenticated"):
-                        log(f"{name}: authorized OK")
-                        asyncio.create_task(heartbeat(name, ws))
-                        continue
-
-                    if t == "authorization_failed":
-                        log(f"{name}: authorization FAILED -> check token!")
-                        continue
-
-                    # Normal data message
-                    payload = {"device": name, "timestamp": now(), "raw": data}
-                    for k in ("active_power_w","total_power_import_kwh","total_power_export_kwh"):
-                        if k in data: payload[k] = data[k]
-
-                    mqtt.publish(name, payload)
-                    mqtt.publish("", payload)
-
-        except Exception as e:
-            log(f"{name}: exception {e}")
-            log(traceback.format_exc())
-
-        log(f"{name}: reconnecting in {backoff:.1f}s")
-        await asyncio.sleep(backoff)
-        backoff = min(backoff * 2, RECONNECT_MAX)
-
+# MAIN
 # ---------------------------
 async def main():
-    ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    ssl_ctx.check_hostname = False
-    ssl_ctx.verify_mode = ssl.CERT_NONE
-    ssl_ctx.set_ciphers("DEFAULT")
-
-    mqtt = MqttPublisher(MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASS)
-    tasks = [asyncio.create_task(run_device(d, mqtt, ssl_ctx)) for d in DEVICES]
+    log("🚀 HomeWizard Energy MQTT Bridge gestart")
+    
+    # SSL context voor self-signed certificaten
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    
+    # Suppress SSL warnings
+    try:
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    except:
+        pass
+    
+    # MQTT setup
+    mqtt_pub = MqttPublisher()
+    mqtt_pub.connect()
+    
+    # Wacht even tot MQTT verbonden is
+    await asyncio.sleep(2)
+    
+    # Tokens laden of aanvragen
+    tokens = load_tokens()
+    
+    for dev in DEVICES:
+        name = dev["name"]
+        if name not in tokens:
+            try:
+                log(f"\n{'='*60}")
+                tokens[name] = request_token(dev["host"])
+                save_tokens(tokens)
+                log(f"{'='*60}\n")
+            except Exception as e:
+                log(f"❌ Token ophalen mislukt voor {name}: {e}")
+                continue
+    
+    # Start websocket tasks voor elk device
+    tasks = []
+    for dev in DEVICES:
+        name = dev["name"]
+        if name in tokens:
+            task = asyncio.create_task(handle_device(dev, tokens[name], mqtt_pub, ssl_context))
+            tasks.append(task)
+        else:
+            log(f"⚠️  {name}: Geen token, overslaan")
+    
+    if not tasks:
+        log("❌ Geen devices om te verbinden")
+        return
+    
+    # Draai alle tasks tegelijk
     await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        log("Exiting.")
+        log("\n👋 Gestopt door gebruiker")
+    except Exception as e:
+        log(f"❌ Fatale fout: {e}")
+        raise
