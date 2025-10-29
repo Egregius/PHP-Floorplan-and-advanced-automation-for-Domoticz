@@ -11,10 +11,55 @@ $d['time']=$startloop;
 
 
 //echo ping('192.168.2.254');
-setBatterijLedBrightness(50);
-
+setCache('battery', ['power_w' => 123, 'soc' => 87]);
+$data = getCache('battery');
 //republishmqtt();
 
+
+$loops = 1;
+
+
+// === TESTDATA ===
+$keys = [];
+for ($i = 0; $i < $loops; $i++) {
+    $keys[] = "key_$i";
+}
+$values = array_map(fn() => random_int(10000000, 99999999), $keys);
+
+// === TMPFS TEST ===
+$start = microtime(true);
+foreach ($keys as $i => $key) setCache($key, $values[$i]);
+$writeTmpfs = microtime(true) - $start;
+
+$start = microtime(true);
+foreach ($keys as $key) getCache($key);
+$readTmpfs = microtime(true) - $start;
+
+// === MEMCACHED TEST ===
+$start = microtime(true);
+foreach ($keys as $i => $key) mset($key, $values[$i]);
+$writeMem = microtime(true) - $start;
+
+$start = microtime(true);
+foreach ($keys as $key) mget($key);
+$readMem = microtime(true) - $start;
+
+
+
+// === RESULTATEN ===
+echo "=== BENCHMARK RESULTATEN ($loops iteraties) ===\n";
+echo "TMPFS JSON:\n";
+printf("  Schrijven: %.4f s\n", $writeTmpfs);
+printf("  Lezen:     %.4f s\n", $readTmpfs);
+
+echo "MEMCACHED:\n";
+printf("  Schrijven: %.4f s\n", $writeMem);
+printf("  Lezen:     %.4f s\n", $readMem);
+
+
+echo "\nVerhouding (lager is sneller):\n";
+printf("  TMPFS vs MEMCACHED write: %.2fx\n", $writeTmpfs / $writeMem);
+printf("  TMPFS vs MEMCACHED read:  %.2fx\n", $readTmpfs / $readMem);
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
 //shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
 

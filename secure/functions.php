@@ -1,5 +1,9 @@
 <?php
 require '/var/www/config.php';
+define('CACHE_DIR', '/dev/shm/mqttdata');
+if (!is_dir(CACHE_DIR)) {
+	mkdir(CACHE_DIR, 0777, true);
+}
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
@@ -953,7 +957,7 @@ function fetchdata($t=0,$lg='') {
 
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
-	$en=mget('en');
+	$en=json_decode(getCache('en'),true);
 	if (isset($en['net'])) {
 		$d['net']=$en['net'];
 		$d['avg']=$en['avg'];
@@ -1088,4 +1092,18 @@ function setBatterijLedBrightness(int $brightness) {
 		lg("💡 Batterij LED brightness ingesteld op $brightness%");
 		return json_decode($response, true);
 	}
+}
+
+function setCache(string $key, $value): bool {
+    $file = CACHE_DIR . '/' . $key . '.json';
+    $tmp  = $file . '.tmp';
+    file_put_contents($tmp, $value, LOCK_EX);
+    return rename($tmp, $file);
+}
+
+function getCache(string $key, $default = false) {
+    $file = CACHE_DIR . '/' . $key . '.json';
+    if (!file_exists($file)) return $default;
+    $data = @file_get_contents($file);
+    return $data === false ? $default : $data;
 }

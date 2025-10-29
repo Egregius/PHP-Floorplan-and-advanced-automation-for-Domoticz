@@ -267,12 +267,12 @@ $mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($
         }
 
         if ($P1 && $kwh && $batterij) {
-            mset('en', [
+            setCache('en', json_encode([
                 'net' => $P1->w,
                 'avg' => $P1->avg,
                 'zon' => $kwh->w,
                 'bat' => $batterij->w,
-            ]);
+            ]));
         }
     } catch (Throwable $e) {
         lg("Fout in MQTT: " . __LINE__ . " $topic " . $e->getMessage());

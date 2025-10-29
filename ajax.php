@@ -28,7 +28,7 @@ if (isset($_REQUEST['t'])) {
 		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];else $row['dt']=null;
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
-	$en=mget('en');
+	$en=json_decode(getCache('en'),true);
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
 	$d['bat']=$en['bat'];
