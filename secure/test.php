@@ -8,58 +8,52 @@ $d=fetchdata(0,'test.php');
 $startloop=microtime(true);
 $d['time']=$startloop;
 
+$iterations = 10000;     // aantal reads/writes
+$values = [
+    'a' => 'waarde1',
+    'b' => 'waarde2',
+    'c' => 'waarde3',
+    'd' => 'waarde4',
+    'e' => 'waarde5',
+];
 
-
-//echo ping('192.168.2.254');
-setCache('battery', ['power_w' => 123, 'soc' => 87]);
-$data = getCache('battery');
-//republishmqtt();
-
-
-$loops = 1;
-
-
-// === TESTDATA ===
-$keys = [];
-for ($i = 0; $i < $loops; $i++) {
-    $keys[] = "key_$i";
+// -------------------------------
+// Test 1: 5 losse bestanden
+// -------------------------------
+$start = microtime(true);
+for ($i = 0; $i < $iterations; $i++) {
+    foreach ($values as $k => $v) {
+        setCache($k, $v);
+    }
+    foreach ($values as $k => $v) {
+        getCache($k);
+    }
 }
-$values = array_map(fn() => random_int(10000000, 99999999), $keys);
+$sep_time = microtime(true) - $start;
 
-// === TMPFS TEST ===
+// -------------------------------
+// Test 2: 1 JSON-bestand
+// -------------------------------
 $start = microtime(true);
-foreach ($keys as $i => $key) setCache($key, $values[$i]);
-$writeTmpfs = microtime(true) - $start;
+for ($i = 0; $i < $iterations; $i++) {
+    $json = json_encode($values);
+    setCache('json_test', $json);
+    $data = json_decode(getCache('json_test'), true);
+}
+$json_time = microtime(true) - $start;
 
-$start = microtime(true);
-foreach ($keys as $key) getCache($key);
-$readTmpfs = microtime(true) - $start;
+// -------------------------------
+// Resultaten
+// -------------------------------
+echo "Resultaten na {$iterations} iteraties:\n";
+echo "--------------------------------------\n";
+echo "Losse waardes: " . number_format($sep_time, 4) . " s\n";
+echo "JSON bestand : " . number_format($json_time, 4) . " s\n";
 
-// === MEMCACHED TEST ===
-$start = microtime(true);
-foreach ($keys as $i => $key) mset($key, $values[$i]);
-$writeMem = microtime(true) - $start;
-
-$start = microtime(true);
-foreach ($keys as $key) mget($key);
-$readMem = microtime(true) - $start;
-
-
-
-// === RESULTATEN ===
-echo "=== BENCHMARK RESULTATEN ($loops iteraties) ===\n";
-echo "TMPFS JSON:\n";
-printf("  Schrijven: %.4f s\n", $writeTmpfs);
-printf("  Lezen:     %.4f s\n", $readTmpfs);
-
-echo "MEMCACHED:\n";
-printf("  Schrijven: %.4f s\n", $writeMem);
-printf("  Lezen:     %.4f s\n", $readMem);
+$ratio = $sep_time / $json_time;
+echo "Verhouding (losse/json): " . number_format($ratio, 2) . "x\n";
 
 
-echo "\nVerhouding (lager is sneller):\n";
-printf("  TMPFS vs MEMCACHED write: %.2fx\n", $writeTmpfs / $writeMem);
-printf("  TMPFS vs MEMCACHED read:  %.2fx\n", $readTmpfs / $readMem);
 //hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
 //shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
 

@@ -1,2 +1,2 @@
 <?php
-mset('wc', time());
+setCache('wc', time());

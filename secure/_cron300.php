@@ -98,7 +98,7 @@ if ($d['zon']>0) {
 
 setCache('dag',$d['dag']['s']);
 
-if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1700&&mget('buien')>$time-14400) {
+if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1700&&getCache('buien')>$time-14400) {
 	sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 	sleep(2);
 }

@@ -37,7 +37,7 @@ while (1){
 
 		if ($newzon==0) {
 			$power=$data->active_power_w;
-			$alwayson=getCache('alwayson');
+			$alwayson=(int)getCache('alwayson');
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
 				$db=dbconnect();
 				setCache('alwayson',$power);

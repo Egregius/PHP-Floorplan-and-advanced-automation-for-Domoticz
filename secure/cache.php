@@ -1,7 +1,7 @@
 <?php
 require 'functions.php';
 if (isset($_REQUEST['zon'])) {
-	$en=mget('en');
+	$en=getCache('en');
 	echo -$en['zon'];
 } else {
 	if (isset($_REQUEST['fetch'])) {

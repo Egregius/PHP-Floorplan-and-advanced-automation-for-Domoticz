@@ -254,6 +254,7 @@ $mqtt->subscribe('energy/+/+', function (string $topic, string $value) {
             'avg' => 0,
             'zon' => 0,
             'bat' => 0,
+            'charge' => 0,
         ];
         $parts = explode('/', $topic);
         [$root, $device, $key] = $parts;
@@ -269,6 +270,7 @@ $mqtt->subscribe('energy/+/+', function (string $topic, string $value) {
 
             case 'batterij':
                 if ($key === 'w')  $data['bat'] = $value;
+                if ($key === 'charge')  $data['charge'] = $value;
                 break;
         }
         setCache('en', json_encode($data));

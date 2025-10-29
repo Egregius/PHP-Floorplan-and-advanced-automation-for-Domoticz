@@ -18,11 +18,31 @@ if ($d['weg']['s']>0) {
 	foreach ($items as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
+
+if (getCache('sunrise')==false) {
+	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
+	$response = @file_get_contents($url);
+	$data = json_decode($response, true);
+	if (isset($data['results'])) {
+		$results = $data['results'];
+		$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
+		$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
+		$Sunrise = isoToLocalTimestamp($results['sunrise']);
+		$Sunset = isoToLocalTimestamp($results['sunset']);
+		setCache('sunrise', json_encode(array(
+			'CivTwilightStart' => date('G:i', $CivTwilightStart),
+			'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
+			'Sunrise' => date('G:i', $Sunrise),
+			'Sunset' => date('G:i', $Sunset),
+		)));
+	}
+}
+
+
 while (true) {
 	$time = microtime(true);
 	$d['time'] = $time;
 	$timeint = (int)$time;
-	if ($t<$timeint-82800) updateWekker($t, $weekend, $dow, $d);
 	if ($timeint % 10 === 0 && $timeint !== $last10) {
 		$last10 = $timeint;
 		$d = fetchdata($timeint - 60, basename(__FILE__).':'.__LINE__);

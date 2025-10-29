@@ -124,17 +124,26 @@ async def handle_device(device, token, mqtt_pub, ssl_context):
                             if last_values.get(f"{name}/w") != w:
                                 last_values[f"{name}/w"] = w
                                 mqtt_pub.publish(f"{name}/w", int(round(w)))
-#                                log(f"📤 {name}/w {w}")
                             if last_values.get(f"{name}/avg") != avg:
                                 last_values[f"{name}/avg"] = avg
                                 mqtt_pub.publish(f"{name}/avg", int(round(avg)))
-#                                log(f"📤 {name}/avg {avg}")
+                        elif "batterij" in name:
+                            w = d.get("power_w")
+                            charge = d.get("state_of_charge_pct")
+                            log(f"{name} {d}")
+                            if last_values.get(f"{name}/w") != w:
+                                last_values[f"{name}/w"] = w
+                                mqtt_pub.publish(f"{name}/w", int(round(w)))
+                            if last_values.get(f"{name}/charge") != charge:
+                                last_values[f"{name}/charge"] = charge
+                                mqtt_pub.publish(f"{name}/charge", int(round(charge)))
                         else:
                             w = int(round(d.get("power_w")))
                             if last_values.get(f"{name}/w") != w:
                                 last_values[f"{name}/w"] = w
                                 mqtt_pub.publish(f"{name}/w", w)
 #                                log(f"📤 {name}/w {w}")
+
 
                     elif msg_type == "error":
                         log(f"❌ {name}: Fout ontvangen - {data}")

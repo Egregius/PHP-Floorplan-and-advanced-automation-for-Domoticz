@@ -157,7 +157,7 @@ if (count($rains)>=2) {
 	if ($d['buien']['s']!=$rain) store('buien', $rain);
 	if ($rain>0) {
 		$past=(86400/$rain)*2;
-		mset('buien',$time);
+		setCache('buien',$time);
 	} else $past=86400;
 	if ($past<1200) $past=1200;
 //EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);

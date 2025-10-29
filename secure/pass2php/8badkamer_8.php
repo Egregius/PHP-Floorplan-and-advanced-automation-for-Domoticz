@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	mset('lichtbadkamertijd', $d['time']);
+	setCache('lichtbadkamertijd', $d['time']);
 	if ($d['lichtbadkamer']['s']>0) sl('lichtbadkamer', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['weg']['s']==1&&$d['time']>$t-1800&&$d['time']<$t+2700) {
 		huisthuis();

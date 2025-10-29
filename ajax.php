@@ -32,9 +32,10 @@ if (isset($_REQUEST['t'])) {
 	$d['net']=$en['net'];
 	$d['avg']=$en['avg'];
 	$d['bat']=$en['bat'];
+	$d['charge']=$en['charge'];
 	$d['zon']=-$en['zon'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
-		$sunrise=mget('sunrise');
+		$sunrise=json_decode(getCache('sunrise'),true);
 		if ($sunrise) {
 			$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
 			$d['Sunrise']=$sunrise['Sunrise'];
@@ -276,7 +277,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			}
 		} elseif ($_REQUEST['device']=='powermeter') {
 			if ($_REQUEST['action']>0) {
-				mset('powermeter',time());
+				setCache('powermeter',time());
 				sleep(1);
 				if (mget('avg')<$_REQUEST['action']) sw('powermeter', 'On', basename(__FILE__).':'.__LINE__);
 				storemode('powermeter', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
