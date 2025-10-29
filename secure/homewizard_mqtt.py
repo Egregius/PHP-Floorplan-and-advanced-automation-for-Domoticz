@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-
 import asyncio
 import json
 import ssl
+import time
 from datetime import datetime
 from pathlib import Path
 import requests
@@ -17,12 +17,11 @@ MQTT_TOPIC = "energy"
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
 
 DEVICES = [
-    {"name": "p1meter", "host": "p1dongle"},
-    {"name": "kwh", "host": "energymeter"},
-    {"name": "batterij", "host": "battery"},
+    {"name": "p", "host": "p1dongle"},
+    {"name": "z", "host": "energymeter"},
+    {"name": "b", "host": "battery"},
 ]
 
-HEARTBEAT_INTERVAL = 25
 RECONNECT_DELAY = 5
 last_values = {}
 
@@ -30,134 +29,95 @@ def log(*args):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
 
 def load_tokens():
-    if TOKEN_FILE.exists():
-        try:
-            return json.loads(TOKEN_FILE.read_text())
-        except:
-            return {}
-    return {}
+    return json.loads(TOKEN_FILE.read_text()) if TOKEN_FILE.exists() else {}
 
 def save_tokens(tokens):
     TOKEN_FILE.write_text(json.dumps(tokens, indent=2))
 
 def request_token(host, timeout=60):
     url = f"https://{host}/api/user"
-    log(f"🔑 Token aanvragen bij {host}")
-
     payload = {"name": "local/homewizard_mqtt", "type": "script"}
-    start = datetime.now().timestamp()
-
-    while datetime.now().timestamp() - start < timeout:
+    start = time.time()
+    log(f"🔑 Token aanvragen bij {host} - DRUK OP KNOP")
+    while time.time() - start < timeout:
         try:
             resp = requests.post(url, json=payload, timeout=3, verify=False)
-            if resp.status_code == 200:
-                data = resp.json()
-                token = data.get("token")
-                if token:
-                    log(f"✅ Token ontvangen van {host}")
-                    return token
-        except Exception:
-            log(f"   Wachten op autorisatie...")
-        asyncio.sleep(1)
-    raise TimeoutError(f"❌ Timeout: knop niet ingedrukt binnen {timeout} seconden")
+            if resp.status_code == 200 and (token := resp.json().get("token")):
+                log(f"✅ Token ontvangen van {host}")
+                return token
+        except:
+            pass
+        time.sleep(1)
+    raise TimeoutError(f"❌ Timeout na {timeout}s")
 
 class MqttPublisher:
     def __init__(self):
         self.client = mqtt.Client()
         self.client.username_pw_set(MQTT_USER, MQTT_PASS)
-        self.client.on_connect = self._on_connect
+        self.client.on_connect = lambda c, u, f, rc: log(f"✅ MQTT verbonden") if rc == 0 else log(f"❌ MQTT fout {rc}")
         self.connected = False
+        self.client.on_connect = self._on_connect
 
     def _on_connect(self, client, userdata, flags, rc):
         self.connected = rc == 0
-        if self.connected:
-            log(f"✅ MQTT verbonden met {MQTT_HOST}:{MQTT_PORT}")
-        else:
-            log(f"❌ MQTT verbinding mislukt (code {rc})")
 
     def connect(self):
-        try:
-            self.client.connect(MQTT_HOST, MQTT_PORT, 60)
-            self.client.loop_start()
-        except Exception as e:
-            log(f"❌ MQTT fout: {e}")
+        self.client.connect(MQTT_HOST, MQTT_PORT, 60)
+        self.client.loop_start()
 
-    def publish(self, device_name, data):
-        if not self.connected:
-            log(f"⚠️  MQTT niet verbonden, skip publish voor {device_name}")
-            return
-        topic = f"{MQTT_TOPIC}/{device_name}"
-        payload = json.dumps(data)
-        self.client.publish(topic, payload, retain=True)
+    def publish(self, topic, value):
+        if self.connected:
+            self.client.publish(f"{MQTT_TOPIC}/{topic}", json.dumps(value), retain=True)
+
+def publish_if_changed(mqtt_pub, key, value, transform=None):
+    if value is None:
+        return
+    if transform:
+        value = transform(value)
+    if last_values.get(key) != value:
+        last_values[key] = value
+        mqtt_pub.publish(key, value)
+
+def process_measurement(name, data, mqtt_pub):
+    if "p" in name:
+        publish_if_changed(mqtt_pub, f"n", data.get("power_w"), lambda x: int(round(x)))
+        publish_if_changed(mqtt_pub, f"a", data.get("average_power_15m_w"), lambda x: int(round(x)))
+    elif "b" in name:
+        publish_if_changed(mqtt_pub, f"b", data.get("power_w"), lambda x: int(round(x)))
+        publish_if_changed(mqtt_pub, f"c", data.get("state_of_charge_pct"), lambda x: int(round(x)))
+    else:
+        publish_if_changed(mqtt_pub, f"z", data.get("power_w"), lambda x: -int(round(x)))
 
 async def handle_device(device, token, mqtt_pub, ssl_context):
-    name = device["name"]
-    host = device["host"]
+    name, host = device["name"], device["host"]
     url = f"wss://{host}/api/ws"
     log(f"🔌 {name}: Verbinden met {url}")
     while True:
         try:
-            async with websockets.connect(url, ssl=ssl_context) as ws:
-                log(f"✅ {name}: WebSocket verbonden")
-                authorized = False
+            async with websockets.connect(url, ssl=ssl_context, ping_interval=20) as ws:
+                log(f"✅ {name}: Verbonden")
                 async for message in ws:
-                    data = json.loads(message)
-                    msg_type = data.get("type")
-                    if msg_type == "authorization_requested" and not authorized:
-                        await ws.send(json.dumps({
-                            "type": "authorization",
-                            "data": token
-                        }))
-                        authorized = True
-                        log(f"🔐 {name}: Token verzonden")
-
-                        await ws.send(json.dumps({
-                            "type": "subscribe",
-                            "data": "measurement"
-                        }))
-                        log(f"📝 {name}: Subscribe gestuurd")
-                    elif msg_type == "measurement":
-                        d = data.get("data", {})
-                        if "p1meter" in name:
-                            w = d.get("power_w")
-                            avg = d.get("average_power_15m_w")
-                            if last_values.get(f"{name}/w") != w:
-                                last_values[f"{name}/w"] = w
-                                mqtt_pub.publish(f"{name}/w", int(round(w)))
-                            if last_values.get(f"{name}/avg") != avg:
-                                last_values[f"{name}/avg"] = avg
-                                mqtt_pub.publish(f"{name}/avg", int(round(avg)))
-                        elif "batterij" in name:
-                            w = d.get("power_w")
-                            charge = d.get("state_of_charge_pct")
-                            log(f"{name} {d}")
-                            if last_values.get(f"{name}/w") != w:
-                                last_values[f"{name}/w"] = w
-                                mqtt_pub.publish(f"{name}/w", int(round(w)))
-                            if last_values.get(f"{name}/charge") != charge:
-                                last_values[f"{name}/charge"] = charge
-                                mqtt_pub.publish(f"{name}/charge", int(round(charge)))
-                        else:
-                            w = int(round(d.get("power_w")))
-                            if last_values.get(f"{name}/w") != w:
-                                last_values[f"{name}/w"] = w
-                                mqtt_pub.publish(f"{name}/w", w)
-#                                log(f"📤 {name}/w {w}")
-
-
-                    elif msg_type == "error":
-                        log(f"❌ {name}: Fout ontvangen - {data}")
-
-                log(f"⚠️  {name}: Verbinding gesloten")
-
+                    try:
+                        data = json.loads(message)
+                        msg_type = data.get("type")
+                        if msg_type == "authorization_requested":
+                            await ws.send(json.dumps({"type": "authorization", "data": token}))
+                            await ws.send(json.dumps({"type": "subscribe", "data": "measurement"}))
+                            log(f"🔐 {name}: Geautoriseerd")
+                        elif msg_type == "measurement":
+                            process_measurement(name, data.get("data", {}), mqtt_pub)
+                        elif msg_type == "error":
+                            log(f"❌ {name}: {data.get('message', data)}")
+                    except json.JSONDecodeError:
+                        log(f"⚠️  {name}: Ongeldig JSON")
+                    except Exception as e:
+                        log(f"⚠️  {name}: {e}")
         except Exception as e:
-            log(f"❌ {name}: Fout - {e}")
-
-        log(f"🔄 {name}: Opnieuw verbinden over {RECONNECT_DELAY} seconden...")
+            log(f"❌ {name}: {e}")
         await asyncio.sleep(RECONNECT_DELAY)
 
 async def main():
-    log("🚀 HomeWizard Energy MQTT Bridge gestart")
+    log("🚀 HomeWizard Energy MQTT Bridge")
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
@@ -166,41 +126,31 @@ async def main():
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     except:
         pass
-
     mqtt_pub = MqttPublisher()
     mqtt_pub.connect()
     await asyncio.sleep(2)
-
     tokens = load_tokens()
     for dev in DEVICES:
-        name = dev["name"]
-        if name not in tokens:
+        if dev["name"] not in tokens:
             try:
-                tokens[name] = request_token(dev["host"])
+                tokens[dev["name"]] = request_token(dev["host"])
                 save_tokens(tokens)
             except Exception as e:
-                log(f"❌ Token ophalen mislukt voor {name}: {e}")
-                continue
-
-    tasks = []
-    for dev in DEVICES:
-        name = dev["name"]
-        if name in tokens:
-            task = asyncio.create_task(handle_device(dev, tokens[name], mqtt_pub, ssl_context))
-            tasks.append(task)
-        else:
-            log(f"⚠️  {name}: Geen token, overslaan")
-
-    if not tasks:
-        log("❌ Geen devices om te verbinden")
-        return
-    await asyncio.gather(*tasks)
+                log(f"❌ {dev['name']}: {e}")
+    tasks = [
+        asyncio.create_task(handle_device(dev, tokens[dev["name"]], mqtt_pub, ssl_context))
+        for dev in DEVICES if dev["name"] in tokens
+    ]
+    if tasks:
+        await asyncio.gather(*tasks)
+    else:
+        log("❌ Geen devices beschikbaar")
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        log("\n👋 Gestopt door gebruiker")
+        log("👋 Gestopt")
     except Exception as e:
         log(f"❌ Fatale fout: {e}")
         raise

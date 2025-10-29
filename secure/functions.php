@@ -956,19 +956,11 @@ function fetchdata($t=0,$lg='') {
 	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
 	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 	$en=json_decode(getCache('en'),true);
-	if (isset($en['net'])) {
-		$d['net']=$en['net'];
-		$d['avg']=$en['avg'];
-		$d['bat']=$en['bat'];
-		$d['charge']=$en['charge'];
-		$d['zon']=-$en['zon'];
-	} else {
-		$d['net']=0;
-		$d['avg']=0;
-		$d['zon']=0;
-		$d['bat']=0;
-		$d['charge']=0;
-	}
+	$d['n']=$en['n'];
+	$d['a']=$en['a'];
+	$d['b']=$en['b'];
+	$d['c']=$en['c'];
+	$d['z']=$en['z'];
 	return $d;
 }
 function roundUpToAny($n,$x=5) {

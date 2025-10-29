@@ -29,11 +29,11 @@ if (isset($_REQUEST['t'])) {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	$en=json_decode(getCache('en'),true);
-	$d['net']=$en['net'];
-	$d['avg']=$en['avg'];
-	$d['bat']=$en['bat'];
-	$d['charge']=$en['charge'];
-	$d['zon']=-$en['zon'];
+	$d['n']=$en['n'];
+	$d['a']=$en['a'];
+	$d['b']=$en['b'];
+	$d['c']=$en['c'];
+	$d['z']=$en['z'];
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
 		$sunrise=json_decode(getCache('sunrise'),true);
 		if ($sunrise) {

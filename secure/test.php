@@ -8,115 +8,17 @@ $d=fetchdata(0,'test.php');
 $startloop=microtime(true);
 $d['time']=$startloop;
 
-$iterations = 10000;     // aantal reads/writes
-$values = [
-    'a' => 'waarde1',
-    'b' => 'waarde2',
-    'c' => 'waarde3',
-    'd' => 'waarde4',
-    'e' => 'waarde5',
-];
-
-// -------------------------------
-// Test 1: 5 losse bestanden
-// -------------------------------
-$start = microtime(true);
-for ($i = 0; $i < $iterations; $i++) {
-    foreach ($values as $k => $v) {
-        setCache($k, $v);
-    }
-    foreach ($values as $k => $v) {
-        getCache($k);
-    }
-}
-$sep_time = microtime(true) - $start;
-
-// -------------------------------
-// Test 2: 1 JSON-bestand
-// -------------------------------
-$start = microtime(true);
-for ($i = 0; $i < $iterations; $i++) {
-    $json = json_encode($values);
-    setCache('json_test', $json);
-    $data = json_decode(getCache('json_test'), true);
-}
-$json_time = microtime(true) - $start;
-
-// -------------------------------
-// Resultaten
-// -------------------------------
-echo "Resultaten na {$iterations} iteraties:\n";
-echo "--------------------------------------\n";
-echo "Losse waardes: " . number_format($sep_time, 4) . " s\n";
-echo "JSON bestand : " . number_format($json_time, 4) . " s\n";
-
-$ratio = $sep_time / $json_time;
-echo "Verhouding (losse/json): " . number_format($ratio, 2) . "x\n";
 
 
-//hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 0,'ringtone_vol' => 10]);
-//shell_exec('curl -s "http://127.0.0.1/secure/pass2php/belknopbose101.php" > /dev/null 2>/dev/null &');
-
-//sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-//waarschuwing('test');
-//echo daikinstatus('living');
-//hassnotify('Titel', 'Bericht');
 
 
-//echo hassget();
-//echo hassservices();
-//hass('light','turn_off','light.bureel1');
-//hass('light','turn_on','light.bureel1','"brightness_pct":20,"color_temp_kelvin":3200');
-//hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
-//hass('input_button','press','input_button.wakeipad');
-//hass('backup','create_automatic');
-
-//hass('script', 'turn_on', 'script.alles_uitschakelen');
-
-//	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 8,'ringtone_vol' => 50]);
-//echo kodi('{"jsonrpc": "2.0","method": "GUI.ActivateScreensaver","id": 1}');
-//sw('shieldpower', 'On','',true);
-//hassrepublishEntityState('switch.lampkast');
-
-//print_r($d);
 
 
-//echo hass('xiaomi_aqara','play_ringtone',null,['gw_mac'=>'34ce008d3f60','ringtone_id'=>2,'ringtone_vol'=>20]);
 
-//file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=745&switchcmd=Set%20Level&level=90&passcode=');
-//hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 
-/*				
-$lights=array(
-	1=>'eettafel',
-	2=>'bureel',
-	3=>'zithoek'
-);
-for($x=1;$x<=10000;$x++) {
-	if ($x%4==0) $lamp=4;
-	elseif($x%3==0) $lamp=3;
-	elseif($x%2==0) $lamp=2;
-	else $lamp=1;
-	if ($x%12==0) $device='eettafel';
-	elseif ($x%11==0) $device='eettafel';
-	elseif ($x%10==0) $device='eettafel';
-	elseif ($x%9==0) $device='eettafel';
-	elseif ($x%8==0) $device='zithoek';
-	elseif ($x%7==0) $device='zithoek';
-	elseif ($x%6==0) $device='zithoek';
-	elseif ($x%5==0) $device='zithoek';
-	elseif ($x%4==0) $device='bureel';
-	elseif ($x%3==0) $device='bureel';
-	elseif ($x%2==0) $device='bureel';
-	elseif ($x%1==0) $device='bureel';
-	$device=$device.$lamp;
-	$level=rand(0,100);
-	$temp=rand(2202,6535);
-	sl($device, $level , basename(__FILE__).':'.__LINE__, true, $temp);	
-	echo $device.' '.$level.' '.$temp.'<br>';
-	usleep(7692);
-}
-*/
+
+
+
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(

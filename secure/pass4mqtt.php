@@ -247,32 +247,11 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('energy/+/+', function (string $topic, string $value) {
+$mqtt->subscribe('energy/+', function (string $topic, string $value) {
     try {
-        static $data = [
-            'net' => 0,
-            'avg' => 0,
-            'zon' => 0,
-            'bat' => 0,
-            'charge' => 0,
-        ];
-        $parts = explode('/', $topic);
-        [$root, $device, $key] = $parts;
-        switch ($device) {
-            case 'p1meter':
-                if ($key === 'w')  $data['net'] = $value;
-                if ($key === 'avg') $data['avg'] = $value;
-                break;
-
-            case 'kwh':
-                if ($key === 'w')  $data['zon'] = $value;
-                break;
-
-            case 'batterij':
-                if ($key === 'w')  $data['bat'] = $value;
-                if ($key === 'charge')  $data['charge'] = $value;
-                break;
-        }
+        static $data = ['n' => 0, 'a' => 0, 'z' => 0, 'b' => 0, 'c' => 0];
+        $key = $topic[-1];
+        $data[$key] = $value;
         setCache('en', json_encode($data));
     } catch (Throwable $e) {
         lg("❌ Fout in MQTT: {$e->getMessage()} ($topic)");
