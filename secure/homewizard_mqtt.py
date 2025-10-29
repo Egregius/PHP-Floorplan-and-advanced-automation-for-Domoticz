@@ -13,7 +13,6 @@ MQTT_HOST = "192.168.2.26"
 MQTT_PORT = 1883
 MQTT_USER = "mqtt"
 MQTT_PASS = "mqtt"
-MQTT_TOPIC = "energy"
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
 
 DEVICES = [
@@ -67,7 +66,7 @@ class MqttPublisher:
 
     def publish(self, topic, value):
         if self.connected:
-            self.client.publish(f"{MQTT_TOPIC}/{topic}", json.dumps(value), retain=True)
+            self.client.publish(f"en/{topic}", json.dumps(value), retain=True)
 
 def publish_if_changed(mqtt_pub, key, value, transform=None):
     if value is None:

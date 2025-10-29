@@ -80,7 +80,7 @@ function check_en_slapen($locatie, $status, &$d) {
 function fliving() {
 	global $d,$time,$t;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		if (($d['zon']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
+		if (($d['z']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['zithoek']['s']==0) sl('zithoek', 12, basename(__FILE__).':'.__LINE__);
@@ -91,7 +91,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') {
-		if ($d['zon']<260) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['z']<260) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['garageled']['m']!=1) {
 			storemode('garageled',1);
 			setBatterijLedBrightness(30);
@@ -203,7 +203,6 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
-//				lg('[hsw] '.$name.'>'.$level.' '.$msg,4);
 				if ($temp==0) {
 					if ($d['dag']['s']>12) $temp=3400;
 					elseif ($d['dag']['s']>8) $temp=3200;
@@ -214,19 +213,13 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 				if ($level>0&&$temp==0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level/*,"color_temp_kelvin"=>$temp*/));
 				elseif ($level>0&&$temp>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
-	//			store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='d') {
 				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
-	//			store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='r') {
-//				lg(basename(__FILE__).':'.__LINE__);
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-//				store($name, $level, $msg);
 			} elseif ($d[$name]['dt']=='luifel') {
-//				lg(basename(__FILE__).':'.__LINE__);
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-//				store($name, $level, $msg);
 			}
 		}
 	}
@@ -236,13 +229,7 @@ function resetsecurity() {
 	global $d;
 	if ($d['sirene']['s']!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
-//		store('sirene', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-//	foreach (array('SDbadkamer','SDkamer','SDalex','SDwaskamer','SDzolder','SDliving') as $i) {
-//		if ($d[$i]['s']!='Off') {
-//			store($i, 'Off', basename(__FILE__).':'.__LINE__);
-//		}
-//	}
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $d,$user,$db;
@@ -256,25 +243,21 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		}
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
-//		if ($d[$name]['s']!=$action||$force==true) {
-			if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
-				if ($action=='Toggle') {
-					if ($d[$name]['s']=='On') $action='Off';
-					else $action='On';
-				}
-				lg('[sw] '.$msg,4);
-				if ($action=='On') hass('switch','turn_on','switch.'.$name);
-				elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
-//				store($name, $action, $msg);
-			} else {
-				store($name, $action, $msg);
+		if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
+			if ($action=='Toggle') {
+				if ($d[$name]['s']=='On') $action='Off';
+				else $action='On';
 			}
-//		}
+			lg('[sw] '.$msg,4);
+			if ($action=='On') hass('switch','turn_on','switch.'.$name);
+			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
+		} else {
+			store($name, $action, $msg);
+		}
 	}
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$db;
-//	if (!isset($d[$name]['i'])) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
@@ -287,8 +270,7 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	}
 	if ($name=='') lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
-		/*if (endswith($name, '_temp')) return;
-		else*/if(endswith($name, '_kWh')) return;
+		if(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
 		else lg('(STORE) '.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
@@ -351,14 +333,13 @@ function double($name, $action, $msg='') {
 function rookmelder($msg) {
 	global $d,$device;
 	resetsecurity();
-//	global $d,$device;
 	alert($device,	$msg,	300, false, 2, true);
 //	if ($d['weg']['s']<=1) {
 
 //		foreach (array(/*'ralex',*/'rkamerl','rkeukenl','rkamerr','rwaskamer','rliving','rkeukenr','rbureel') as $i) {
 //			if ($d[$i]['s']>0) sl($i, 1, basename(__FILE__).':'.__LINE__);
 //		}
-//		if ($d['zon']<200) {
+//		if ($d['z']<200) {
 //			foreach (array('hall','inkom','kamer','waskamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
 //				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 //			}
@@ -394,10 +375,6 @@ Levels:
 10: Store/Storemode
 99:	SQL Fetchdata
 */
-	static $inLg = false;
-	if ($inLg) return; // voorkomt recursie
-
-	$inLg = true;
 	global $d;
 	if (isset($d['auto']['m'])) {
 		$loglevel = $d['auto']['m'];
@@ -412,8 +389,6 @@ Levels:
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
-
-	$inLg = false;
 }
 function startsWith($haystack,$needle) {
 	return $needle===""||strrpos($haystack, $needle, -strlen($haystack))!==false;
@@ -533,17 +508,15 @@ function bosepost($method, $xml, $ip=101, $log=false) {
     $host = "192.168.2.$ip";
     $port = 8090;
     $path = "/$method";
-
     $headers = "POST $path HTTP/1.1\r\n";
     $headers .= "Host: $host\r\n";
     $headers .= "Content-Type: application/xml\r\n";
     $headers .= "Content-Length: ".strlen($xml)."\r\n";
     $headers .= "Connection: Close\r\n\r\n";
-
-    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
+    $fp = @fsockopen($host, $port, $errno, $errstr, 0.25);
     if ($fp) {
         fwrite($fp, $headers.$xml);
-        fclose($fp); // direct sluiten, niet wachten op response
+        fclose($fp);
         if ($log) lg("💡 Bose $method verstuurd naar $host");
     } else {
         if ($log) lg("❌ Bose socket fout: $errstr ($errno)");
@@ -604,17 +577,15 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	for ($i=0; $i <= $retries; $i++) {
 		$data = @file_get_contents($url, false, $ctx);
 		if ($data !== FALSE) return $data;
-		usleep(200000); // 0.2s wachten
+		usleep(200000);
 	}
 	return FALSE;
 }
 function daikinstatus($device,$log='') {
 	$ips = daikin_ips();
 	if (!isset($ips[$device])) return FALSE;
-
 	$url = "http://192.168.2.{$ips[$device]}/aircon/get_control_info";
 	$data = http_get($url);
-
 	if ($data === FALSE) {
 		if (strlen($log)>0) lg("daikinstatus: geen antwoord van $device ($url)	| ".$log);
 		else lg("daikinstatus: geen antwoord van $device ($url)");
@@ -628,8 +599,6 @@ function daikinstatus($device,$log='') {
 		return FALSE;
 	}
 	$array = explode(",", $data);
-
-	// Standaardwaarden zodat alles altijd bestaat
 	$ci = [
 		'power' => null,
 		'mode'  => null,
@@ -637,22 +606,18 @@ function daikinstatus($device,$log='') {
 		'set'	=> null,
 		'fan'	=> null
 	];
-
 	foreach ($array as $value){
 		$pair = explode("=", $value, 2);
 		if (count($pair) !== 2) continue;
 		list($key, $val) = $pair;
-
 		if	 ($key=='pow')	$ci['power'] = $val;
 		elseif ($key=='mode')  $ci['mode']  = $val;
 		elseif ($key=='adv')	$ci['adv']	= $val;
 		elseif ($key=='stemp') $ci['set']	= $val;
 		elseif ($key=='f_rate')$ci['fan']	= $val;
 	}
-
 	return json_encode($ci);
 }
-
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
 	global $d, $time, $lastfetch;
 	$lastfetch = $time;
@@ -667,9 +632,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 			storeicon('daikin_kwh', $maxpow);
 		}
 	}
-
 	$base = "http://192.168.2.{$ips[$device]}";
-
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	lg("daikinset($device): $url");
 	http_get($url);
@@ -684,17 +647,14 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 		} elseif ($d['daikin'.$device]['m']!=$mode) {
 			storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
 		}
-
 		if ($spmode==-1) {
-			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2"); // Eco
+			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2");
 		} elseif ($spmode==0) {
-			http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1"); // Normal
+			http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1");
 		} elseif ($spmode==1) {
-			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1"); // Power
+			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1");
 		}
-
 		sleep(2);
-
 		foreach($ips as $k=>$ip) {
 			if ($d['daikin'.$k]['m']!=0) {
 				if ($maxpow==100) {
@@ -804,8 +764,6 @@ function hassrepublishEntityState($entityId) {
 	$ha_url = 'http://192.168.2.26:8123';
 	$token = 'Bearer '.hasstoken();
 	$base_topic = 'homeassistant';
-
-	// 1. Status ophalen
 	$ch = curl_init("$ha_url/api/states/$entityId");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $token"]);
@@ -817,24 +775,19 @@ function hassrepublishEntityState($entityId) {
 		echo "Ongeldige entity of fout in API\n";
 		return;
 	}
-
 	$state = $data['state'];
-	$parts = explode('.', $entityId); // bv: switch.airco_living
+	$parts = explode('.', $entityId);
 	if (count($parts) != 2) {
 		echo "Ongeldige entity_id structuur\n";
 		return;
 	}
-
 	list($domain, $object_id) = $parts;
 	$topic = "$base_topic/$domain/$object_id/state";
-
-	// 2. Publish via HA API (mqtt.publish)
 	$payload = [
 		'topic' => $topic,
 		'payload' => $state,
 		'retain' => true
 	];
-
 	$ch = curl_init("$ha_url/api/services/mqtt/publish");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
@@ -844,7 +797,6 @@ function hassrepublishEntityState($entityId) {
 	]);
 	$result = curl_exec($ch);
 	curl_close($ch);
-
 	echo "Status van $entityId opnieuw gepubliceerd als '$state' op $topic\n";
 }
 function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critical = false) {
@@ -917,7 +869,6 @@ function curl($url) {
 function dbconnect() {
 	global $db, $dbname, $dbuser, $dbpass;
 	static $db = null;
-
 	try {
 		if ($db === null) {
 			$db = new PDO("mysql:host=127.0.0.1;dbname=$dbname;", $dbuser, $dbpass, [
@@ -928,10 +879,10 @@ function dbconnect() {
 			$db->query('SELECT 1');
 		}
 	} catch (PDOException $e) {
-		if ($e->getCode() == 2006) { // MySQL server has gone away
+		if ($e->getCode() == 2006) {
 			lg('dbconnect	'.__LINE__.'	|Verbinding verbroken, opnieuw verbinden');
 			$db = null;
-			return dbconnect(); // opnieuw proberen
+			return dbconnect();
 		} else {
 			lg('dbconnect	'.__LINE__.'	|PDO fout: '.$e->getMessage());
 			throw $e;
@@ -978,7 +929,6 @@ function isPDOConnectionAlive($pdo) {
 	}
 }
 function isoToLocalTimestamp(string $isoTime): int {
-	// ISO tijd is in UTC, zet om naar timestamp
 	$utc = new DateTime($isoTime, new DateTimeZone("UTC"));
 	$utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
 	return $utc->getTimestamp();
@@ -1071,7 +1021,6 @@ function setBatterijLedBrightness(int $brightness) {
 		lg("❌ Fout bij LED brightness: $error");
 		return false;
 	} else {
-		lg("💡 Batterij LED brightness ingesteld op $brightness%");
 		return json_decode($response, true);
 	}
 }

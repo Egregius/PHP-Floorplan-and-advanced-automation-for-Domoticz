@@ -3,7 +3,6 @@
 declare(strict_types=1);
 ini_set('error_reporting',E_ALL);
 ini_set('display_errors',true);
-
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
@@ -31,7 +30,6 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 
-// Subscribe switch states
 $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {	
 		$path=explode('/',$topic);
@@ -57,7 +55,6 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe light brightness
 $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {
 		$path=explode('/',$topic);
@@ -85,7 +82,6 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe covers
 $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {
 		$path=explode('/',$topic);
@@ -97,7 +93,6 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				if ($d[$device]['s']!=$status&&strlen($status)>0) {
-//				include '/var/www/html/secure/pass2php/'.$device.'.php';
 					lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,$status,'',1);
 				}
@@ -108,7 +103,6 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe sensor states
 $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow) {
 	try {	
 		$path=explode('/',$topic);
@@ -158,7 +152,6 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe binary_sensor states
 $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow) {
 	try {
 		$path = explode('/', $topic);
@@ -180,7 +173,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-//				lg('mqtt ' . __LINE__ . ' |binary |state |' . $device . '|' . $status . '|');
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status,'',1);
 			}
@@ -190,7 +182,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 	}
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe event types
 $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow) {
 	try {
 		$path=explode('/',$topic);
@@ -201,7 +192,6 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			if (($d['time'] - $startloop) <= 3) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-//			else lg($device.' '.$lastEvent.' >>> OK, meer dan 2 seconden geleden');
 			$lastEvent = $d['time'];
 			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
@@ -226,7 +216,6 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-// Subscribe sensor states
 $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed) {
 	try {	
 		$path=explode('/',$topic);
@@ -247,17 +236,11 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('energy/+', function (string $topic, string $value) {
-    try {
-        static $data = ['n' => 0, 'a' => 0, 'z' => 0, 'b' => 0, 'c' => 0];
-        $key = $topic[-1];
-        $data[$key] = $value;
-        setCache('en', json_encode($data));
-    } catch (Throwable $e) {
-        lg("❌ Fout in MQTT: {$e->getMessage()} ($topic)");
-    }
+$mqtt->subscribe('en/+', function (string $topic, string $value) {
+	static $data = ['n' => 0, 'a' => 0, 'z' => 0, 'b' => 0, 'c' => 0];
+	$data[$topic[-1]] = $value;
+	setCache('en', json_encode($data));
 }, MqttClient::QOS_AT_LEAST_ONCE);
-// Main loop with incremental sleep
 $sleepMicroseconds=10000;
 $maxSleep=500000;
 $quietCounter=0;
@@ -297,7 +280,6 @@ function stoploop($d) {
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
-    // Bestaande checks
     if ($d['weg']['m'] == 1) {
         lg('Stopping MQTT Loop (weg=1)...');
         storemode('weg', 0, '', 1);
