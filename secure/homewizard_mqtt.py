@@ -24,6 +24,7 @@ DEVICES = [
 
 HEARTBEAT_INTERVAL = 25
 RECONNECT_DELAY = 5
+last_values = {}
 
 def log(*args):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
@@ -55,7 +56,6 @@ def request_token(host, timeout=60):
                 if token:
                     log(f"✅ Token ontvangen van {host}")
                     return token
-            # Wachten en opnieuw proberen
         except Exception:
             log(f"   Wachten op autorisatie...")
         asyncio.sleep(1)
@@ -89,27 +89,21 @@ class MqttPublisher:
         topic = f"{MQTT_TOPIC}/{device_name}"
         payload = json.dumps(data)
         self.client.publish(topic, payload, retain=True)
-        log(f"📤 {topic}: {payload}")
 
 async def handle_device(device, token, mqtt_pub, ssl_context):
     name = device["name"]
     host = device["host"]
     url = f"wss://{host}/api/ws"
     log(f"🔌 {name}: Verbinden met {url}")
-
     while True:
         try:
-            async with websockets.connect(url, ssl=ssl_context, ping_interval=None) as ws:
+            async with websockets.connect(url, ssl=ssl_context) as ws:
                 log(f"✅ {name}: WebSocket verbonden")
                 authorized = False
-
                 async for message in ws:
                     data = json.loads(message)
-                    log(f"ℹ️  {name}: {data}")
                     msg_type = data.get("type")
-
                     if msg_type == "authorization_requested" and not authorized:
-                        # De juiste payload voor HomeWizard Energy!
                         await ws.send(json.dumps({
                             "type": "authorization",
                             "data": token
@@ -117,53 +111,41 @@ async def handle_device(device, token, mqtt_pub, ssl_context):
                         authorized = True
                         log(f"🔐 {name}: Token verzonden")
 
-                        # Direct na autorisatie: subscribe op measurements
                         await ws.send(json.dumps({
                             "type": "subscribe",
                             "data": "measurement"
                         }))
                         log(f"📝 {name}: Subscribe gestuurd")
-
-                        asyncio.create_task(send_heartbeat(ws, name))
-
                     elif msg_type == "measurement":
-#                        mqtt_pub.publish(name, data.get("data", data))
+                        d = data.get("data", {})
                         if "p1meter" in name:
-                            payload = {
-                                "w": data["data"].get("power_w"),
-                                "avg": data["data"].get("average_power_15m_w")
-                            }
-                        elif "batterij" in name:
-                        	payload = {
-                                "w": int(round(data["data"].get("power_w")))
-                            }
+                            w = d.get("power_w")
+                            avg = d.get("average_power_15m_w")
+                            if last_values.get(f"{name}/w") != w:
+                                last_values[f"{name}/w"] = w
+                                mqtt_pub.publish(f"{name}/w", int(round(w)))
+#                                log(f"📤 {name}/w {w}")
+                            if last_values.get(f"{name}/avg") != avg:
+                                last_values[f"{name}/avg"] = avg
+                                mqtt_pub.publish(f"{name}/avg", int(round(avg)))
+#                                log(f"📤 {name}/avg {avg}")
                         else:
-                            payload = {
-                                "w": data["data"].get("power_w")
-                            }
-                        
-                        mqtt_pub.publish(name, payload)
+                            w = int(round(d.get("power_w")))
+                            if last_values.get(f"{name}/w") != w:
+                                last_values[f"{name}/w"] = w
+                                mqtt_pub.publish(f"{name}/w", w)
+#                                log(f"📤 {name}/w {w}")
 
                     elif msg_type == "error":
                         log(f"❌ {name}: Fout ontvangen - {data}")
 
                 log(f"⚠️  {name}: Verbinding gesloten")
+
         except Exception as e:
             log(f"❌ {name}: Fout - {e}")
 
         log(f"🔄 {name}: Opnieuw verbinden over {RECONNECT_DELAY} seconden...")
         await asyncio.sleep(RECONNECT_DELAY)
-
-async def send_heartbeat(ws, name):
-    try:
-        while True:
-            await asyncio.sleep(HEARTBEAT_INTERVAL)
-            await ws.send(json.dumps({"type": "ping"}))
-            log(f"💓 {name}: Heartbeat verzonden")
-    except asyncio.CancelledError:
-        pass
-    except Exception as e:
-        log(f"❌ {name}: Heartbeat fout - {e}")
 
 async def main():
     log("🚀 HomeWizard Energy MQTT Bridge gestart")

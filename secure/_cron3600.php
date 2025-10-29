@@ -3,7 +3,7 @@ $user='cron3600';
 //lg($user);
 
 if (date('G')==0) {
-	mset('alwayson',9999);
+	setCache('alwayson',9999);
 	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
@@ -35,7 +35,7 @@ if (isset($data['results'])) {
 	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 	$Sunrise = isoToLocalTimestamp($results['sunrise']);
 	$Sunset = isoToLocalTimestamp($results['sunset']);
-	mset('sunrise', array(
+	setCache('sunrise', array(
 		'CivTwilightStart' => date('G:i', $CivTwilightStart),
 		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
 		'Sunrise' => date('G:i', $Sunrise),

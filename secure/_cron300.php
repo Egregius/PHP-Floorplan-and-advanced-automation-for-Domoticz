@@ -40,12 +40,6 @@ if ($d['houtterras']['s']=='On') {
 //}
 //EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
 
-if ($d['kookplaat']['s']=='On') {
-//	if ($d['kookplaatpower_kWh']['s']<40&&past('kookplaatpower_kWh')>600) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
-}
-if ($d['dysonlader']['s']=='On') {
-	if ($d['dysonlader_usage']['s']<10&&past('dysonlader')>2400) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
-}
 if ($d['weg']['s']>0) {
 	if ($d['kookplaat']['s']=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dysonlader']['s']=='On') sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
@@ -102,7 +96,7 @@ if ($d['zon']>0) {
 	if ($d['uv']['s']>0||$d['uv']['m']>0) storesm('uv', 0, 0, basename(__FILE__).':'.__LINE__);
 }
 
-mset('dag',$d['dag']['s']);
+setCache('dag',$d['dag']['s']);
 
 if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1700&&mget('buien')>$time-14400) {
 	sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);

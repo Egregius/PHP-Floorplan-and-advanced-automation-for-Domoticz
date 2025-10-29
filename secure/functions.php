@@ -7,8 +7,6 @@ if (!is_dir(CACHE_DIR)) {
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 $db=dbconnect();
-$memcache=new Memcache;
-$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
@@ -554,14 +552,14 @@ function bosepost($method, $xml, $ip=101, $log=false) {
 
 function sirene($msg) {
 	lg(' >>> SIRENE '.$msg);
-	$last=mget('sirene');
+	$last=getCache('sirene');
 	$time=time();
 	lg(' >>> last='.$last.'	time='.$time);
 	if ($last>$time-300) {
 		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
 		telegram($msg.' om '.date("G:i:s", $time), false, 3);
 	}
-	mset('sirene', $time);
+	setCache('sirene', $time);
 }
 function createheader($page='') {
 	global $scale;
@@ -977,15 +975,6 @@ function roundUpToAny($n,$x=5) {
 function roundDownToAny($n,$x=5) {
 	return floor($n/$x) * $x;
 }
-function mset($key, $data, $ttl=0) {
-	global $memcache;
-	$memcache->set($key, $data);
-}
-function mget($key) {
-	global $memcache;
-	$data=$memcache->get($key);
-	return $data;
-}
 function isPDOConnectionAlive($pdo) {
 	try {
 		$pdo->query("SELECT 1");
@@ -1000,7 +989,6 @@ function isoToLocalTimestamp(string $isoTime): int {
 	$utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
 	return $utc->getTimestamp();
 }
-
 function republishmqtt() {
 	global $d;
 	$ha_url = 'http://192.168.2.26:8123';

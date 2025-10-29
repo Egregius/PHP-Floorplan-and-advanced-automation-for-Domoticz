@@ -247,35 +247,33 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('energy/+', function (string $topic, string $statusJson) use ($startloop, $validDevices, &$d, &$alreadyProcessed) {
+$mqtt->subscribe('energy/+/+', function (string $topic, string $value) {
     try {
-        $status = json_decode($statusJson);
-        if (!$status) {
-            throw new Exception("Geen data in MQTT bericht");
-        }
+        static $data = [
+            'net' => 0,
+            'avg' => 0,
+            'zon' => 0,
+            'bat' => 0,
+        ];
+        $parts = explode('/', $topic);
+        [$root, $device, $key] = $parts;
+        switch ($device) {
+            case 'p1meter':
+                if ($key === 'w')  $data['net'] = $value;
+                if ($key === 'avg') $data['avg'] = $value;
+                break;
 
-        static $P1 = null;
-        static $kwh = null;
-        static $batterij = null;
+            case 'kwh':
+                if ($key === 'w')  $data['zon'] = $value;
+                break;
 
-        if ($topic === 'energy/p1meter') {
-            $P1 = $status;
-        } elseif ($topic === 'energy/kwh') {
-            $kwh = $status;
-        } elseif ($topic === 'energy/batterij') {
-            $batterij = $status;
+            case 'batterij':
+                if ($key === 'w')  $data['bat'] = $value;
+                break;
         }
-
-        if ($P1 && $kwh && $batterij) {
-            setCache('en', json_encode([
-                'net' => $P1->w,
-                'avg' => $P1->avg,
-                'zon' => $kwh->w,
-                'bat' => $batterij->w,
-            ]));
-        }
+        setCache('en', json_encode($data));
     } catch (Throwable $e) {
-        lg("Fout in MQTT: " . __LINE__ . " $topic " . $e->getMessage());
+        lg("❌ Fout in MQTT: {$e->getMessage()} ($topic)");
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 // Main loop with incremental sleep

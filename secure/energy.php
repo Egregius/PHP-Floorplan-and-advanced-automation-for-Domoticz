@@ -14,20 +14,20 @@ echo 'Kwartierpiek = '.$kwartierpiek.PHP_EOL;
 $x=1;
 while (1){
 	$start = microtime(true);
-	$dag=mget('dag');
-	$en=mget('en');
+	$dag=getCache('dag');
+	$en=getCache('en');
 	$data=curl('http://192.168.2.4/api/v1/data');
 	if ($dag>0) {
 		echo __LINE__;
 		$zon=curl('http://192.168.2.9/api/v1/data');
 		$zon=json_decode($zon);
 		if (isset($zon->active_power_w)) {
-			$prevzon=mget('zon');
+			$prevzon=getCache('zon');
 			$newzon=round($zon->active_power_w);
 		}
 	} else {
 		echo __LINE__;
-		$prevzon=mget('zon');
+		$prevzon=getCache('zon');
 		$newzon=0;
 	}
 	$data=json_decode($data);
@@ -37,10 +37,10 @@ while (1){
 
 		if ($newzon==0) {
 			$power=$data->active_power_w;
-			$alwayson=mget('alwayson');
+			$alwayson=getCache('alwayson');
 			if ($power>=50&&($power<$alwayson||empty($alwayson))) {
 				$db=dbconnect();
-				mset('alwayson',$power);
+				setCache('alwayson',$power);
 				$time=time();
 				$db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag';");
 				lg('New alwayson '.$power.' W');
@@ -89,10 +89,10 @@ while (1){
 			foreach ($data->external as $i) {
 				if ($i->type=='gas_meter') $gas=$i->value;
 				elseif ($i->type=='water_meter'){
-					$prevwater=mget('water_meter');
+					$prevwater=getCache('water_meter');
 					$water=$i->value;
-					if ($prevwater!=$water&&mget('weg')>2) {
-						mset('water_meter',$water);
+					if ($prevwater!=$water&&getCache('weg')>2) {
+						setCache('water_meter',$water);
 						alert('water_meter', 'Water verbruik gededecteerd!', 300, true);
 						lg('Waterteller:	prev='.$prevwater.', nu='.$water);
 					}
