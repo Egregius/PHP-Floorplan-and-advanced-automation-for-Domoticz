@@ -35,12 +35,12 @@ if (isset($data['results'])) {
 	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 	$Sunrise = isoToLocalTimestamp($results['sunrise']);
 	$Sunset = isoToLocalTimestamp($results['sunset']);
-	setCache('sunrise', array(
+	setCache('sunrise', json_encode(array(
 		'CivTwilightStart' => date('G:i', $CivTwilightStart),
 		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
 		'Sunrise' => date('G:i', $Sunrise),
 		'Sunset' => date('G:i', $Sunset),
-	));
+	)));
 }
 
 
