@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='LIGHT';
+$user='EVENT';
 lg('Starting '.$user.' loop ',-1);
 $counter=0;
 $t = null;
@@ -30,29 +30,35 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$counter) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$counter) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
+			$time=$d['time'];
 			if (($d['time'] - $startloop) <= 3) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
-			if (isset($status)) {
-				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 300;
-				if ($status === 'null') $status=0;
-				elseif ($status > 0 ) $status=round((float)$status / 2.55);
-				else $status=0;
-				if ($d[$device]['s']!=$status) {
-					lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+			$status = ucfirst(strtolower(trim($status, '"')));
+			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
+			$lastEvent = $d['time'];
+			lg('mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
+			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+			$d['lastfetch']=$d['time'] - 300;
+			if (substr($device,0,1) === '8') {
+				if ($status === 'Keypressed') {
+					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status,'',1);
+				} elseif ($status === 'Keypressed2x') {
+					$status='On';
+					include '/var/www/html/secure/pass2php/'.$device.'d.php';
+					store($device,$status,'',1);
 				}
+			} else {
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				store($device,$status,'',1);
 			}
-		}
+		}// else lg($device);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

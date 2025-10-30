@@ -1,43 +1,33 @@
-#!/bin/sh
-PASS4MQTT=true
-ENERGY=true
-HOMEWIZARD=true
-CRON=true
-CRON2=true
+#!/bin/bash
+cd /var/www/html/secure
+
+SCRIPTS=(
+  mqtt_binary_sensor.php
+  mqtt_cover.php
+  mqtt_energy.php
+  mqtt_event.php
+  mqtt_light.php
+  mqtt_media_player.php
+  mqtt_sensor.php
+  mqtt_switch.php
+  homewizard_mqtt.py
+  cron.php
+  cron2.php
+  energy.php
+)
 
 i=1
 while [ $i -lt 6 ]; do
 	echo $i
-	if [ $PASS4MQTT = true ] ;then
-		ps cax | grep pass4mqtt.php
-		if [ $? -ne 0 ] ; then
-			/var/www/html/secure/pass4mqtt.php >/dev/null 2>&1 &
-		fi
+	for s in "${SCRIPTS[@]}"; do
+		if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
+		echo "$(date '+%F %T') starting $s"
+		case "$s" in
+			*.php) /var/www/html/secure/$s >/dev/null 2>&1 & ;;
+			*.py)  /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
+		esac
 	fi
-	if [ $ENERGY = true ] ;then
-		ps cax | grep energy.php
-		if [ $? -ne 0 ] ; then
-			/var/www/html/secure/energy.php >/dev/null 2>&1 &
-		fi
-	fi	
-	if [ $HOMEWIZARD = true ] ; then
-		pgrep -f homewizard_mqtt.py >/dev/null
-		if [ $? -ne 0 ]; then
-			/var/www/html/secure/homewizard_mqtt.py >/dev/null 2>&1 &
-		fi
-	fi
-	if [ $CRON = true ] ;then
-		ps cax | grep cron.php
-		if [ $? -ne 0 ] ; then
-			/var/www/html/secure/cron.php >/dev/null 2>&1 &
-		fi
-	fi
-	if [ $CRON2 = true ] ;then
-		ps cax | grep cron2.php
-		if [ $? -ne 0 ] ; then
-			/var/www/html/secure/cron2.php >/dev/null 2>&1 &
-		fi
-	fi
+	done
 	sleep 10
 	i=`expr $i + 1`
 done

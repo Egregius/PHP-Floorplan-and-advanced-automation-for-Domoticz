@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='LIGHT';
+$user='COVER';
 lg('Starting '.$user.' loop ',-1);
 $counter=0;
 $t = null;
@@ -31,24 +31,18 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$counter) {
+$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$counter) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
-			if (($d['time'] - $startloop) <= 3) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
-				elseif ($status > 0 ) $status=round((float)$status / 2.55);
-				else $status=0;
-				if ($d[$device]['s']!=$status) {
-					lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				if ($d[$device]['s']!=$status&&strlen($status)>0) {
+					lg('mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,$status,'',1);
 				}
 			}
@@ -64,7 +58,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=500000;
+$maxSleep=1000000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
@@ -74,7 +68,6 @@ while (true) {
 		$sleepMicroseconds=10000;
 	}
 }
-
 $mqtt->disconnect();
 lg('MQTT loop stopped '.__FILE__,1);
 

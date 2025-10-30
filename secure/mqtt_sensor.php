@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='LIGHT';
+$user='SENSOR';
 lg('Starting '.$user.' loop ',-1);
 $counter=0;
 $t = null;
@@ -30,9 +30,8 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$counter) {
-	try {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$counter) {
+	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
@@ -40,17 +39,39 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (($d['time'] - $startloop) <= 3) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-			if (isset($status)) {
-				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 300;
-				if ($status === 'null') $status=0;
-				elseif ($status > 0 ) $status=round((float)$status / 2.55);
-				else $status=0;
-				if ($d[$device]['s']!=$status) {
-					lg('mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
-				}
+			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+			$d['lastfetch']=$d['time'] - 300;
+			if (substr($device,-4) === '_hum') {
+				$tdevice=str_replace('_hum','_temp',$device);
+				$hum=(int)$status;
+				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
+			} elseif (substr($device,-5) === '_temp') {
+				$st=(float)$status;
+				if ($d[$device]['s']!=$st) store($device,$st,'',1);
+			} else {
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				if ($d[$device]['s']!=$status) store($device,$status,'',1);
+			}
+		} elseif ($device === 'sun_solar_elevation') {
+			$status=(float)$status;
+			if ($status>=10) $status=round($status,0);
+			else $status=round($status,1);
+			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
+			stoploop($d);
+			updateWekker($t, $weekend, $dow, $d);
+		} elseif ($device === 'sun_solar_azimuth') {
+			$status=(int)$status;
+			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
+		} elseif ($device === 'weg') {
+			if ($status==0) {
+				store('weg',0,'',1);
+				huisthuis();
+			} elseif ($status==2) {
+				store('weg',2,'',1);
+				huisslapen(true);
+			} elseif ($status==3) {
+				store('weg',3,'',1);
+				huisslapen(3);
 			}
 		}
 	} catch (Throwable $e) {
@@ -64,7 +85,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=500000;
+$maxSleep=1000000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
