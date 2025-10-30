@@ -30,16 +30,11 @@ $mqtt->subscribe('en/+', function (string $topic, string $value) use (&$counter)
 	}
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=10000;
-$maxSleep=500000;
+$sleepMicroseconds=20000;
+$maxSleep=1000000;
 while (true) {
-	$result=$mqtt->loop(true);
-	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 10000,$maxSleep);
-		usleep($sleepMicroseconds);
-	} else {
-		$sleepMicroseconds=10000;
-	}
+	$mqtt->loop(true);
+	usleep(100000);
 }
 
 $mqtt->disconnect();
