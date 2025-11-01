@@ -989,6 +989,7 @@ function republishmqtt() {
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
 			$brightness=round((float)$brightness / 2.55);
+			if ($device=='bureel') lg('bureel: '.$brightness.'|'.$i['s']);
 			if ($brightness!=$i['s']) $to_publish[] = [
 				'topic' => "$base_topic/$domain/$object_id/brightness",
 				'payload' => $brightness

@@ -119,7 +119,7 @@ if ($d['auto']['s']=='On') {
 		}
 	} elseif ($d['weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		$uit=600;
-		foreach (array('lampkast','bureel','kristal','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
+		foreach (array('lampkast','kristal','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
 			if ($d[$i]['s']=='On') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -127,7 +127,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','wasbak','snijplank','hall','inkom','terras') as $i) {
+		foreach (array('eettafel','zithoek','bureel','wasbak','snijplank','hall','inkom','terras') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);

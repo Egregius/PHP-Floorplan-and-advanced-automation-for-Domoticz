@@ -61,7 +61,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
-			if ($d['dag']['m']!=$status) storemode('dag',$status,'',1);
+			if ($d['dag']['m']!=$status) {
+				storemode('dag',$status,'',1);
+				setCache('dag',$status);
+			}
 		} elseif ($device === 'weg') {
 			if ($status==0) {
 				store('weg',0,'',1);
