@@ -181,10 +181,21 @@ function waarschuwing($msg) {
 function past($name,$lg='') {
 	global $d,$time;
 	$time=time();
-	if ($name=='$ remoteauto') lg('past '.$name.'	time='.$time.' t='.$d[$name]['t'].' past='.$time-$d[$name]['t']);
-	if (!empty($d[$name]['t'])) return $time-$d[$name]['t'];
-	else return 999999999;
+	return $time-$d[$name]['t'];
 }
+
+function recentste(array $names) {
+    global $d;
+    $now = time();
+    $minDiff = PHP_INT_MAX;
+    foreach ($names as $name) {
+		$diff = $now - $d[$name]['t'];
+		if ($diff < $minDiff) $minDiff = $diff;
+    }
+    return $minDiff;
+}
+
+
 function idx($name) {
 	global $d;
 	if ($d[$name]['i']>0) return $d[$name]['i'];

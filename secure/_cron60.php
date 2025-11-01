@@ -107,7 +107,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('kamer','waskamer','alex','lichtbadkamer') as $i) {
+		foreach (array('kamer',/*'waskamer',*/'alex','lichtbadkamer') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]['s']>0) {

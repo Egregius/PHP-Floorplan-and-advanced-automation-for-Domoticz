@@ -57,7 +57,7 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$alex_set=$Setalex;
 	$d['alex_set']['s']=$Setalex;
 }
-if ($d['living_set']['m']==0) {
+if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 	$Setliving = 14;
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
