@@ -273,7 +273,8 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
-	global $d,$db, $user;
+	global $d,$user;
+	$db=dbconnect();
 	$time=time();
 	if ($force==true||$status!=$d[$name]['s']) {
 		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
@@ -287,20 +288,23 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	}
 }
 function storemode($name,$mode,$msg='',$update=null) {
-	global $db, $user, $time;
+	global $user, $time;
+	$db=dbconnect();
 	$time=time();
 	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
 	lg('(STOREMODE) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesm($name,$s,$m,$msg='') {
-	global $d,$db,$user,$time;
+	global $d,$user,$time;
+	$db=dbconnect();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
 	lg('(STORESM) '.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S => '.$s.' M => '.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$update=null) {
-	global $d, $db, $user, $time;
+	global $d, $user, $time;
+	$db=dbconnect();
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
 		if (isset($d['time'])) $time=$d['time'];
 		else $time=time();
@@ -882,26 +886,29 @@ function dbconnect() {
 	static $db = null;
 	try {
 		if ($db === null) {
-			$db = new PDO("mysql:host=127.0.0.1;dbname=$dbname;", $dbuser, $dbpass, [
-				PDO::ATTR_PERSISTENT => true,
+			$db = new PDO("mysql:host=127.0.0.1;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+				PDO::ATTR_TIMEOUT => 5,
 			]);
-		} else {
+		}
+		else {
 			$db->query('SELECT 1');
 		}
-	} catch (PDOException $e) {
-		if ($e->getCode() == 2006) {
-			lg('dbconnect	'.__LINE__.'	|Verbinding verbroken, opnieuw verbinden');
+	}
+	catch (PDOException $e) {
+		if ($e->getCode() == 2006 || strpos($e->getMessage(), 'server has gone away') !== false) {
+			lg('dbconnect '.__LINE__.' | Verbinding verbroken, opnieuw verbinden');
 			$db = null;
 			return dbconnect();
-		} else {
-			lg('dbconnect	'.__LINE__.'	|PDO fout: '.$e->getMessage());
-			throw $e;
-			exit;
 		}
+		lg('dbconnect '.__LINE__.' | PDO fout: '.$e->getMessage());
+		throw $e;
 	}
+
 	return $db;
 }
+
 function fetchdata($t=0,$lg='') {
 	global $d;
 	$db=dbconnect();
