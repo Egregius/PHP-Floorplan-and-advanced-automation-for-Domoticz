@@ -14,5 +14,5 @@ if ($status=='On') {
 		sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 //		sw('mac', 'On', basename(__FILE__).':'.__LINE__);
 	}
-	if (past('8badkamer-8.php')>900) exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
+	if (past('lichtbadkamer')>90) exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
 }

@@ -34,9 +34,9 @@ foreach ($devices as $ip => $vol) {
 						bosekey("POWER", 0, 101);
 						if ($d['bose'.$ip]['s'] == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__);
 						if ($d['boseliving']['s'] != 'Off') {
-							store('boseliving', 'Off', basename(__FILE__).':'.__LINE__,1);
+							sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__,1);
 							sleep(5);
-							store('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+							sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 							$invalidcounter = 0;
 						}
 					}

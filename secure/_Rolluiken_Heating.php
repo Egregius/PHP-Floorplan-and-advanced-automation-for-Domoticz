@@ -2,8 +2,7 @@
 $user='Rolluiken_Heating';
 $zonelevatie=-5.5;
 if ($d['auto']['s']=='On') {
-	$recentste = recentste(['rliving','rbureel','rkeukenl','rkeukenr','rwaskamer','ralex','rkamerl','rkamerr']);
-	if ($recentste>=10) {
+
 		if (($time>=$t||($d['weg']['s']==0&&$d['dag']['s']>$zonelevatie))&&$time>strtotime('5:00')&&$time<strtotime('8:30')) {
 			if ($time>=$t) {
 				if ($d['rkamerl']['s']>0) sl('rkamerl', 0, basename(__FILE__).':'.__LINE__);
@@ -65,5 +64,5 @@ if ($d['auto']['s']=='On') {
 				foreach (array('rwaskamer','ralex','rkamerl','rkamerr') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 			}
 		}
-	}
+
 }
