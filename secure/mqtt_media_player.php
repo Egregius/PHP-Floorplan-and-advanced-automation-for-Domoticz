@@ -25,27 +25,19 @@ $connectionSettings=(new ConnectionSettings)
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.26',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
-$alreadyProcessed=[];
-$validDevices = [];
-foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
-	$basename = basename($file, '.php');
-	$validDevices[$basename] = true;
-}
 
-$mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck) {
+$mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,&$d, &$lastcheck) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 300;
-			$status = ucfirst(strtolower(trim($status, '"')));
-			if ($d[$device]['s']!=$status) {
-				lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				store($device,$status,'',1);
-			}
+		$d['time']=microtime(true);
+		$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+		$d['lastfetch']=$d['time'] - 300;
+		$status = ucfirst(strtolower(trim($status, '"')));
+		if ($d[$device]['s']!=$status) {
+			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
+			include '/var/www/html/secure/pass2php/'.$device.'.php';
+			store($device,$status,'',1);
 		}
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
@@ -69,13 +61,7 @@ while (true) {
 }
 
 $mqtt->disconnect();
-lg('MQTT loop stopped '.__FILE__,1);
-
-function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
-	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;
-	$alreadyProcessed[$topic]=$status;
-	return false;
-}
+lg('🛑 MQTT loop stopped '.__FILE__,1);
 
 function stoploop() {
     global $mqtt;

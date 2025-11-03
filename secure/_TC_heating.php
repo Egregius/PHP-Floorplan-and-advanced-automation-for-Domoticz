@@ -172,6 +172,7 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 require('_Rolluiken_Heating.php');
 $bigdif=100;
 $difgas=100;
+$user = 'heating';
 if ($d['heating']['s']==1) require ('_TC_heating_airco.php');
 elseif ($d['heating']['s']==2) require ('_TC_heating_gasairco.php');
 elseif ($d['heating']['s']==3) require ('_TC_heating_gas.php');
