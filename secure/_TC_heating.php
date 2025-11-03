@@ -84,7 +84,6 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 		6 => '08:00',
 		0 => '08:00'
 	];
-	
 	if ($weekend==true) {
 		$comfortAfternoon = strtotime($comfortStart[0]);
 		$comfortEnd = strtotime('19:30');

@@ -5,8 +5,9 @@ lg('Starting CRON loop...',9);
 $t = null;
 $weekend = null;
 $dow = null;
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
 $items=array('badkamervuur2','badkamervuur1','water');
@@ -18,7 +19,7 @@ if ($d['weg']['s']>0) {
 	foreach ($items as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
-
+updateWekker($t, $weekend, $dow, $d);
 if (getCache('sunrise')==false) {
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
 	$response = @file_get_contents($url);
