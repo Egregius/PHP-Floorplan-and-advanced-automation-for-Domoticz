@@ -280,11 +280,11 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
-	if ($name=='') lg('(STORE)	'.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if ($name=='') lg(str_pad('(STORE)', 12, '-', STR_PAD_LEFT).str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
 		if(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
-		else lg('(STORE)	'.str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
+		else lg(str_pad('(STORE)', 12, '-', STR_PAD_LEFT).str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function storemode($name,$mode,$msg='',$update=null) {
