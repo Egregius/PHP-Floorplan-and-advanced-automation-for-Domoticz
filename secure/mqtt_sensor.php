@@ -9,8 +9,9 @@ use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='SENSOR';
-lg('🟢	Starting '.$user.' loop ',-1);
-$counter=0;
+lg('🟢 Starting '.$user.' loop ',-1);
+$time=time();
+$lastcheck=$time;
 $t = null;
 $weekend = null;
 $d=fetchdata(0,'mqtt:'.__LINE__);
@@ -30,12 +31,13 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$counter) {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
+			$time=microtime(true);
+			$d['time']=$time;
 			if (($d['time'] - $startloop) <= 3) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
@@ -48,6 +50,11 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} elseif (substr($device,-5) === '_temp') {
 				$st=(float)$status;
 				if ($d[$device]['s']!=$st) store($device,$st,'',1);
+			} elseif ($device=='daikin_kwh') {
+				$status=(int)$status;
+				if ($status>30) $status=1;
+				else $status=0;
+				if ($d[$device]['s']!=$status) store($device,$status,'',1);
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				if ($d[$device]['s']!=$status) store($device,$status,'',1);
@@ -80,11 +87,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
-	$counter++;
-	if ($counter>1000) {
-		stoploop();
-		$counter=0;
-	}
+	if ($lastcheck < $d['time'] - 30) {
+        $lastcheck = $d['time'];
+        stoploop();
+    }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
@@ -112,13 +118,13 @@ function stoploop() {
     global $mqtt;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑	functions.php gewijzigd → restarting '.basename($script).' loop...');
+        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
-        lg('🛑	'.basename($script) . ' gewijzigd → restarting ...');
+        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
         exec("$script > /dev/null 2>&1 &");
         exit;

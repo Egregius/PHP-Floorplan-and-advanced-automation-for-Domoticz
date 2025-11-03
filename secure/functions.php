@@ -311,7 +311,7 @@ function storeicon($name,$icon,$msg='',$update=null) {
 		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
 		if (endswith($name, '_temp')) return;
-		lg('📧	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('📧 '.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 
@@ -649,7 +649,8 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	}
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-	lg("daikinset($device): $url");
+	if ($d['heating']['s']>=0) lg("🔥 daikinset($device): $url");
+	else  lg("❄️ daikinset($device): $url");
 	http_get($url);
 	sleep(2); 
 	$status = daikinstatus($device, basename(__FILE__).":".__LINE__.":$msg");
@@ -922,8 +923,8 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 
-	if ($t==0) lg('fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
-	else lg('fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
+	if ($t==0) lg('💾 fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	else lg('💾 fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 	$en=json_decode(getCache('en'),true);
 	$d['n']=$en['n'];
 	$d['a']=$en['a'];

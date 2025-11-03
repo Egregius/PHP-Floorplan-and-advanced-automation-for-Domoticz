@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-lg('Starting cron2 loop...');
+lg('🟢 Starting cron2 loop...');
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
 $lastcheck=$time;
@@ -48,12 +48,12 @@ while (1) {
 function stoploop() {
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('functions.php gewijzigd → restarting cron2 loop...');
+        lg('🛑 functions.php gewijzigd → restarting cron2 loop...');
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
-        lg('cron2.php gewijzigd → restarting cron2 loop...');
+        lg('🛑 cron2.php gewijzigd → restarting cron2 loop...');
         exec("$script > /dev/null 2>&1 &");
         exit;
     }

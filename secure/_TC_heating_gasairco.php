@@ -83,7 +83,7 @@ if ($d['daikin']['m']==1) {
 					if ($spmode==1) $spmodetxt='POWER';
 					elseif ($spmode==0) $spmodetxt='';
 					elseif ($spmode==-1) $spmodetxt='eco';
-					lg('DAIKIN SET '.$k.' set '.$daikin->set.'>'.$set.' | power '.$daikin->power.'>'.$power.' | mode '.$daikin->mode.'>4 | fan '.$daikin->fan.'>'.$rate.' | maxpow '.$d['daikin_kWh']['icon'].'>'.$maxpow.' | dif '.$dif.' | '.$spmodetxt);
+					lg('🔥	DAIKIN SET '.$k.' set '.$daikin->set.'>'.$set.' | power '.$daikin->power.'>'.$power.' | mode '.$daikin->mode.'>4 | fan '.$daikin->fan.'>'.$rate.' | maxpow '.$d['daikin_kWh']['icon'].'>'.$maxpow.' | dif '.$dif.' | '.$spmodetxt);
 					$data=json_decode($d[$k.'_set']['icon'], true);
 					$data['power']=$power;
 					$data['mode']=4;

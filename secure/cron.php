@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-lg('Starting CRON loop...',9);
+lg('🟢 Starting CRON loop...',9);
 $t = null;
 $weekend = null;
 $dow = null;
@@ -79,17 +79,17 @@ function stoploop($d) {
 	global $db;
 	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-		lg('functions.php gewijzigd → restarting cron loop...');
+		lg('🛑 functions.php gewijzigd → restarting cron loop...');
 		exec("$script > /dev/null 2>&1 &");
 		exit;
 	}
 	if (filemtime(__DIR__ . '/cron.php') > LOOP_START) {
-		lg('cron.php gewijzigd → restarting cron loop...');
+		lg('🛑 cron.php gewijzigd → restarting cron loop...');
 		exec("$script > /dev/null 2>&1 &");
 		exit;
 	}
 	if ($d['weg']['m']==2) {
-		lg('Stopping CRON Loop...');
+		lg('🛑 Stopping CRON Loop...');
 		$db->query("UPDATE devices SET m=0 WHERE n ='weg';");
 		exit;
 	}

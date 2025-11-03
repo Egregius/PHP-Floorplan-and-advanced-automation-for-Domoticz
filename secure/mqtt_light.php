@@ -9,8 +9,9 @@ use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='LIGHT';
-lg('🟢	Starting '.$user.' loop ',-1);
-$counter=0;
+lg('🟢 Starting '.$user.' loop ',-1);
+$time=time();
+$lastcheck=$time;
 $t = null;
 $weekend = null;
 $d=fetchdata(0,'mqtt:'.__LINE__);
@@ -31,7 +32,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$counter) {
+$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -56,11 +57,10 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
-	$counter++;
-	if ($counter>1000) {
-		stoploop();
-		$counter=0;
-	}
+	if ($lastcheck < $d['time'] - 30) {
+        $lastcheck = $d['time'];
+        stoploop();
+    }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
@@ -88,13 +88,13 @@ function stoploop() {
     global $mqtt;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑	functions.php gewijzigd → restarting '.basename($script).' loop...');
+        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
-        lg('🛑	'.basename($script) . ' gewijzigd → restarting ...');
+        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
         exec("$script > /dev/null 2>&1 &");
         exit;
