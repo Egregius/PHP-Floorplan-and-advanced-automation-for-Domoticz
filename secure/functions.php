@@ -280,11 +280,11 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
 	}
-	if ($name=='') lg(str_pad('(STORE)', 12, '-', STR_PAD_LEFT).str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if ($name=='') lg(str_pad('💾 STORE', 12, ' ', STR_PAD_RIGHT).str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' => '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	else {
 		if(endswith($name, '_kWh')) return;
 		elseif(endswith($name, '_hum')) return;
-		else lg(str_pad('(STORE)', 12, '-', STR_PAD_LEFT).str_pad($user??'', 9, ' ', STR_PAD_LEFT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
+		else lg(str_pad('💾 STORE', 12, ' ', STR_PAD_RIGHT).str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' => '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' => '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 function storemode($name,$mode,$msg='',$update=null) {
@@ -293,14 +293,14 @@ function storemode($name,$mode,$msg='',$update=null) {
 	$time=time();
 	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg('(STOREMODE)	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	lg(str_pad('💾 STOREMODE', 12, ' ', STR_PAD_RIGHT).str_pad($user, 9, ' ', STR_PAD_RIGHT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$time;
 	$db=dbconnect();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
-	lg('(STORESM)	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S => '.$s.' M => '.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	lg(str_pad('💾 STORESM', 12, ' ', STR_PAD_RIGHT).str_pad($user, 9, ' ', STR_PAD_RIGHT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S => '.$s.' M => '.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$update=null) {
 	global $d, $user, $time;
@@ -311,7 +311,7 @@ function storeicon($name,$icon,$msg='',$update=null) {
 		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
 		if (endswith($name, '_temp')) return;
-		lg('(STOREICON)	'.$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg(str_pad('💾 STOREICON', 12, ' ', STR_PAD_RIGHT).$user.'	=> '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 
@@ -697,7 +697,7 @@ function hasstoken() {
 	}
 }
 function hass($domain, $service, $entity = '', $target = []) {
-    lg('HASS '.$domain.' '.$service.' '.$entity,4);
+    lg('💡 HASS '.$domain.' '.$service.' '.$entity,4);
     $host = '192.168.2.26';
     $port = 8123;
     $path = "/api/services/$domain/$service";
@@ -899,11 +899,11 @@ function dbconnect() {
 	}
 	catch (PDOException $e) {
 		if ($e->getCode() == 2006 || strpos($e->getMessage(), 'server has gone away') !== false) {
-			lg('dbconnect '.__LINE__.' | Verbinding verbroken, opnieuw verbinden');
+			lg(str_pad('('.__FUNCTION__.')', 12, ' ', STR_PAD_RIGHT).':'.__LINE__.' | Verbinding verbroken, opnieuw verbinden');
 			$db = null;
 			return dbconnect();
 		}
-		lg('dbconnect '.__LINE__.' | PDO fout: '.$e->getMessage());
+		lg(str_pad('('.__FUNCTION__.')', 12, ' ', STR_PAD_RIGHT).':'.__LINE__.' | PDO fout: '.$e->getMessage());
 		throw $e;
 	}
 
@@ -923,8 +923,8 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 
-	if ($t==0) lg('💾 fetchdata ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
-	else lg('💾 fetchdata '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
+	if ($t==0) lg('⬆️  FETCHDATA ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	else lg('⬆️  FETCHDATA '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 	$en=json_decode(getCache('en'),true);
 	$d['n']=$en['n'];
 	$d['a']=$en['a'];
@@ -971,7 +971,7 @@ function republishmqtt() {
 			curl_close($ch);
 			$data = json_decode($result, true);
 			if (!isset($data['state'])) {
-				lg("Fout: kon status van $entity_id niet ophalen");
+				lg(str_pad('('.__FUNCTION__.')', 12, ' ', STR_PAD_LEFT)."Fout: kon status van $entity_id niet ophalen");
 				continue;
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
@@ -997,11 +997,13 @@ function republishmqtt() {
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
 			$brightness=round((float)$brightness / 2.55);
-			if ($device=='bureel') lg('bureel: '.$brightness.'|'.$i['s']);
-			if ($brightness!=$i['s']) $to_publish[] = [
-				'topic' => "$base_topic/$domain/$object_id/brightness",
-				'payload' => $brightness
-			];
+			if ($brightness!=$i['s']) {
+				if ($device=='bureel') lg('bureel: '.$brightness.'|'.$i['s']);
+					$to_publish[] = [
+					'topic' => "$base_topic/$domain/$object_id/brightness",
+					'payload' => $brightness
+				];
+			}
 		} else continue;
 		usleep(50000);
 		foreach ($to_publish as $pub) {
