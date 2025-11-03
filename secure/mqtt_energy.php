@@ -9,7 +9,7 @@ use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='ENERGY';
-lg('🟢	Starting '.$user.' loop ',-1);
+lg('🟢 Starting '.$user.' loop ',-1);
 $counter=0;
 
 define('LOOP_START', microtime(true));

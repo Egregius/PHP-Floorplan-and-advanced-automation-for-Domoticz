@@ -10,13 +10,11 @@ $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
-$items=array('badkamervuur2','badkamervuur1','water');
-foreach ($items as $i) {
+foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
 	sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 if ($d['weg']['s']>0) {
-	$items=array('boseliving','bosekeuken','ipaddock','mac','media','zetel');
-	foreach ($items as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
+	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
 }
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
 updateWekker($t, $weekend, $dow, $d);
@@ -50,7 +48,7 @@ while (true) {
 		$d['time'] = $time;
 		include '_cron10.php';
 
-		$user = 'heating';
+		$user = 'HEATING';
 		if ($d['heating']['s'] == -2) include '_TC_cooling_airco.php';
 		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
 		elseif ($d['heating']['s'] == 0) include '_TC_neutral.php';
