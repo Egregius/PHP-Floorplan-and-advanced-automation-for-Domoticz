@@ -211,7 +211,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 			}
 		}
 	} else {
-		lg('(SETLEVEL)	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡            '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
 				if ($temp==0) {
@@ -259,7 +259,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-			lg('💡	'.$msg,4);
+			lg('💡          '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
