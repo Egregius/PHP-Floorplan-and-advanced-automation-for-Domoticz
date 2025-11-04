@@ -34,29 +34,26 @@ if ($d['daikin']['m']==1) {
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$rate='A';
-					if ($dif >=  1.2) {$set=$d[$k.'_set']['s']-3;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.9) {$set=$d[$k.'_set']['s']-2;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.6) {$set=$d[$k.'_set']['s']-1;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.3) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
+					if ($dif >=  2.0) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.5) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.0) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  0.5) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
 				
-				elseif ($dif <= -1.5) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -1.2) {$set=$d[$k.'_set']['s']+2;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -0.9) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -0.6) {$set=$d[$k.'_set']['s']+1;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -0.3) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
+				elseif ($dif <= -2.5) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
+				elseif ($dif <= -2.0) {$set=$d[$k.'_set']['s']+2.0;$spmode=1;$line=__LINE__;}
+				elseif ($dif <= -1.5) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
+				elseif ($dif <= -1.0) {$set=$d[$k.'_set']['s']+1.0;$spmode=0;$line=__LINE__;}
+				elseif ($dif <= -0.5) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($k=='living') {
-					$cor=-2;
-					$set+=$cor;
+					$set+=-3;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';
 				} elseif ($k=='kamer') {
-					$cor=-2;
-					$set+=$cor;
+					$set+=-2;
 					if ($time<strtotime('10:00')||$d['weg']['s']==1) $rate='B';
 				} elseif ($k=='alex') {
-					$cor=-2;
-					$set+=$cor;
+					$set+=-2;
 					if ($d['alexslaapt']['s']==1) $rate='B';
 				}
 				$set=ceil($set * 2) / 2;
@@ -64,8 +61,9 @@ if ($d['daikin']['m']==1) {
 				elseif ($set<10) $set=10;
 				$daikin=json_decode($d['daikin'.$k]['s']);
 				if (!isset($power)) $power=$daikin->power;
+//				if ($k=='living') lg('Daikin living => dif='.$dif.' setpoint='.$d[$k.'_set']['s'].' set='.$set.' spmode='.$spmode.' | '.$line);
 				if ($daikin->set!=$set||$daikin->power!=$power||$daikin->mode!=4||$daikin->fan!=$rate||$d['daikin_kwh']['icon']!=$maxpow) {
-//					lg('Living => dif='.$dif.' setpoint='.$d[$k.'_set']['s'].' set='.$set.' spmode='.$spmode.' | '.$line);
+					if ($k=='living') lg('Daikin living => dif='.$dif.' setpoint='.$d[$k.'_set']['s'].' set='.$set.' spmode='.$spmode.' | '.$line);
 //					if ($set>$d[$k.'_set']['s']+$cor) lg('DAIKIN '.$k.' hoger met '.$set-$d[$k.'_set']['s'].' omdat het te koud is, dif='.$dif);
 //					elseif ($set<$d[$k.'_set']['s']+$cor) lg('DAIKIN '.$k.' lager met '.$d[$k.'_set']['s']-$set.' omdat het te warm is, $dif='.$dif);
 					if ($spmode==1) $spmodetxt='POWER';
