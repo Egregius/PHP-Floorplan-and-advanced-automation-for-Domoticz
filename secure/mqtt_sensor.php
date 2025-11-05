@@ -19,6 +19,7 @@ $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
+$d['rand']=rand(60,120);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
@@ -53,7 +54,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} elseif ($device=='daikin_kwh') {
 				$val = (int)$status; // echte waarde
 				$old = (int)($d[$device]['s'] ?? 0);
-				$oldt = (float)($d[$device]['t'] ?? 0);
+				$oldt = (int)($d[$device]['t'] ?? 0);
 				if ($oldt === 0) {
 					store($device, $val, '', 1);
 					return;
@@ -93,7 +94,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - 30) {
+	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
         stoploop();
     }

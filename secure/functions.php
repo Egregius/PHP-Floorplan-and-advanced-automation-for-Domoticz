@@ -211,7 +211,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 			}
 		}
 	} else {
-		lg('💡 '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡 SW     '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
 				if ($temp==0) {

@@ -19,6 +19,7 @@ $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
+$d['rand']=rand(60,120);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
@@ -63,7 +64,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - 30) {
+	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
         stoploop();
     }
