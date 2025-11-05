@@ -6,15 +6,14 @@ import time
 from datetime import datetime
 from pathlib import Path
 import requests
-import paho.mqtt.client as mqtt
 import websockets
 
-MQTT_HOST = "192.168.2.26"
-MQTT_PORT = 1883
-MQTT_USER = "mqtt"
-MQTT_PASS = "mqtt"
+# Tokens JSON
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
+# Cache bestand (tmpfs)
+CACHE_FILE = Path("/dev/shm/cache/en.txt")
 
+# Devices configuratie
 DEVICES = [
     {"name": "p", "host": "p1dongle"},
     {"name": "z", "host": "energymeter"},
@@ -22,7 +21,7 @@ DEVICES = [
 ]
 
 RECONNECT_DELAY = 5
-last_values = {}
+state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
 
 def log(*args):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
@@ -49,45 +48,34 @@ def request_token(host, timeout=60):
         time.sleep(1)
     raise TimeoutError(f"❌ Timeout na {timeout}s")
 
-class MqttPublisher:
-    def __init__(self):
-        self.client = mqtt.Client()
-        self.client.username_pw_set(MQTT_USER, MQTT_PASS)
-        self.client.on_connect = lambda c, u, f, rc: log(f"✅ MQTT verbonden") if rc == 0 else log(f"❌ MQTT fout {rc}")
-        self.connected = False
-        self.client.on_connect = self._on_connect
+# Schrijf huidige state naar tmpfs
+def flush_state():
+    try:
+        CACHE_FILE.write_text(json.dumps(state))
+    except Exception as e:
+        log("Fout bij schrijven cache:", e)
 
-    def _on_connect(self, client, userdata, flags, rc):
-        self.connected = rc == 0
-
-    def connect(self):
-        self.client.connect(MQTT_HOST, MQTT_PORT, 60)
-        self.client.loop_start()
-
-    def publish(self, topic, value):
-        if self.connected:
-            self.client.publish(f"en/{topic}", json.dumps(value), retain=True)
-
-def publish_if_changed(mqtt_pub, key, value, transform=None):
+# Update value en schrijf alleen bij verandering
+def update_state(key, value):
     if value is None:
         return
-    if transform:
-        value = transform(value)
-    if last_values.get(key) != value:
-        last_values[key] = value
-        mqtt_pub.publish(key, value)
+    if state.get(key) != value:
+        state[key] = value
+        flush_state()
 
-def process_measurement(name, data, mqtt_pub):
+# Process measurement data
+def process_measurement(name, data):
     if "p" in name:
-        publish_if_changed(mqtt_pub, f"n", data.get("power_w"), lambda x: int(round(x)))
-        publish_if_changed(mqtt_pub, f"a", data.get("average_power_15m_w"), lambda x: int(round(x)))
+        update_state("n", int(round(data.get("power_w", 0))))
+        update_state("a", int(round(data.get("average_power_15m_w", 0))))
     elif "b" in name:
-        publish_if_changed(mqtt_pub, f"b", data.get("power_w"), lambda x: int(round(x)))
-        publish_if_changed(mqtt_pub, f"c", data.get("state_of_charge_pct"), lambda x: int(round(x)))
+        update_state("b", int(round(data.get("power_w", 0))))
+        update_state("c", int(round(data.get("state_of_charge_pct", 0))))
     else:
-        publish_if_changed(mqtt_pub, f"z", data.get("power_w"), lambda x: -int(round(x)))
+        update_state("z", -int(round(data.get("power_w", 0))))
 
-async def handle_device(device, token, mqtt_pub, ssl_context):
+# Handlers per device
+async def handle_device(device, token, ssl_context):
     name, host = device["name"], device["host"]
     url = f"wss://{host}/api/ws"
     log(f"🔌 {name}: Verbinden met {url}")
@@ -104,7 +92,7 @@ async def handle_device(device, token, mqtt_pub, ssl_context):
                             await ws.send(json.dumps({"type": "subscribe", "data": "measurement"}))
                             log(f"🔐 {name}: Geautoriseerd")
                         elif msg_type == "measurement":
-                            process_measurement(name, data.get("data", {}), mqtt_pub)
+                            process_measurement(name, data.get("data", {}))
                         elif msg_type == "error":
                             log(f"❌ {name}: {data.get('message', data)}")
                     except json.JSONDecodeError:
@@ -115,8 +103,9 @@ async def handle_device(device, token, mqtt_pub, ssl_context):
             log(f"❌ {name}: {e}")
         await asyncio.sleep(RECONNECT_DELAY)
 
+# Main routine
 async def main():
-    log("🚀 HomeWizard Energy MQTT Bridge")
+    log("🚀 HomeWizard Energy TMPFS Bridge")
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
@@ -125,9 +114,7 @@ async def main():
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     except:
         pass
-    mqtt_pub = MqttPublisher()
-    mqtt_pub.connect()
-    await asyncio.sleep(2)
+
     tokens = load_tokens()
     for dev in DEVICES:
         if dev["name"] not in tokens:
@@ -136,8 +123,9 @@ async def main():
                 save_tokens(tokens)
             except Exception as e:
                 log(f"❌ {dev['name']}: {e}")
+
     tasks = [
-        asyncio.create_task(handle_device(dev, tokens[dev["name"]], mqtt_pub, ssl_context))
+        asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
         for dev in DEVICES if dev["name"] in tokens
     ]
     if tasks:

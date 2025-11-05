@@ -2,7 +2,7 @@
 require 'functions.php';
 if (isset($_REQUEST['zon'])) {
 	$en=json_decode(getCache('en'),true);
-	echo -$en['z'];
+	echo $en['z'];
 } else {
 	if (isset($_REQUEST['fetch'])) {
 		$d=fetchdata(0, basename(__FILE__).':'.__LINE__);

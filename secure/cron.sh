@@ -4,15 +4,14 @@ cd /var/www/html/secure
 SCRIPTS=(
   mqtt_binary_sensor.php
   mqtt_cover.php
-  mqtt_energy.php
   mqtt_event.php
   mqtt_light.php
   mqtt_media_player.php
   mqtt_sensor.php
   mqtt_switch.php
-  homewizard_mqtt.py
   cron.php
   cron2.php
+  homewizard_tmpfs.py
   energy.php
 )
 
