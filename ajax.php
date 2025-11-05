@@ -5,12 +5,12 @@ session_write_close();
 if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
 	foreach($_REQUEST as $k=>$v) {
-		$msg.='	'.$k.'='.$v;
+		$msg.='	'.$k.'	'.$v;
 		if (isset($diff)) {
 			$msg.='	'.$diff;
 		}
 	}
-	lg('(AJAX)	'.$user.$msg);
+	lg('👉🏻 '.$user.$msg);
 }
 //if (isset($_REQUEST['device'])) lg(print_r($_REQUEST,true));
 if (isset($_REQUEST['t'])) {
