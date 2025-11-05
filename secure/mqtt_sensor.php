@@ -51,10 +51,16 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$st=(float)$status;
 				if ($d[$device]['s']!=$st) store($device,$st,'',1);
 			} elseif ($device=='daikin_kwh') {
-				$status=(int)$status;
-				if ($status>30) $status=1;
-				else $status=0;
-				if ($d[$device]['s']!=$status) store($device,$status,'',1);
+				$val = (int)$status; // echte waarde
+				$old = (int)($d[$device]['s'] ?? 0);
+				$oldt = (float)($d[$device]['t'] ?? 0);
+				if ($oldt === 0) {
+					store($device, $val, '', 1);
+					return;
+				}
+				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
+				$time_passed = ($time - $oldt) > 90;
+				if ($rel_increase >= 0.20 || $time_passed) store($device, $val, '', 1);
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				if ($d[$device]['s']!=$status) store($device,$status,'',1);

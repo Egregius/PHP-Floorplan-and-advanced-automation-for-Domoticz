@@ -2,7 +2,6 @@
 $user='TC_badkamer';
 $m='';$m2='';
 $l=0;
-
 if ($d['badkamer_set']['m']==0) {$set=13;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
@@ -49,6 +48,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		// al bezig met opwarmen → behoud target tot einde
 		$set = $target;
 		if ($time > $t_end) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+		$preheatbath=true;
 	}
 	elseif ($time >= $t_start && $time < $t) {
 //		lg(__LINE__);
@@ -58,17 +58,20 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		lg($msg);
 		telegram($msg);
 		storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
+		$preheatbath=true;
 	}
 	elseif ($time >= $t && $time <= $t_end) {
 //		lg(__LINE__);
 		// comfortfase → target behouden
 		$set = $target;
+		$preheatbath=false;
 	} 
 	else {
 //		lg(__LINE__);
 		// buiten comfortperiode en niet in opwarming → lage stand
 		$set = 13;
 		if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+		$preheatbath=false;
 	}
 	
 	// --- update leercurve ---
@@ -90,7 +93,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 				$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 				$leadDataBath[] = $minPerDeg;
 				$leadDataBath = array_slice($leadDataBath, -14);
-				$avgMinPerDeg = round(array_sum($leadDataBath) / count($leadDataBath), 1);
+				$avgMinPerDeg = ceil(array_sum($leadDataBath) / count($leadDataBath));
 				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
@@ -118,11 +121,11 @@ if (isset($set)&&$d['heating']['s']>=0) {
 if ($d['weg']['s']<2) {
 	$difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
 	$past=past('badkamervuur1');
-	if ($difbadkamer<=-0.3) {
+	if ($difbadkamer<=-0.3||($preheatbath==true&&$difbadkamer<=-0.1)) {
 		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed'&&$past>=235) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}
-	elseif ($difbadkamer<=0) {
+	elseif ($difbadkamer<=0||($preheatbath==true&&$difbadkamer<=+0.1)) {
 		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed'&&$past>=175) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
 		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
 	}

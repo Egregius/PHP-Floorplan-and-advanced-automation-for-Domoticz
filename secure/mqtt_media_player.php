@@ -35,7 +35,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$d['lastfetch']=$d['time'] - 300;
 		$status = ucfirst(strtolower(trim($status, '"')));
 		if ($d[$device]['s']!=$status) {
-			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
+//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 			include '/var/www/html/secure/pass2php/'.$device.'.php';
 			store($device,$status,'',1);
 		}

@@ -211,7 +211,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 			}
 		}
 	} else {
-		lg('💡            '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡 '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
 				if ($temp==0) {
@@ -259,7 +259,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-			lg('💡          '.$msg,4);
+			lg('💡 '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
@@ -432,7 +432,7 @@ function bosevolume($vol,$ip=101, $msg='') {
 		elseif ($vol>=20) bosebass(-8, $ip);
 		else bosebass(-9, $ip);
 	}
-	lg('bosevolume '.$ip.' -> '.$vol.' '.$msg);
+	lg('🔊 bosevolume '.$ip.' -> '.$vol.' '.$msg);
 }
 function bosebass($bass,$ip=101) {
 	$bass=1*$bass;
@@ -479,7 +479,6 @@ function bosezone($ip,$vol='') {
 			else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 		}
 		if ($ip>101) {
-			lg(basename(__FILE__).':'.__LINE__);
 			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 			$mapip = [
 				102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
@@ -697,7 +696,7 @@ function hasstoken() {
 	}
 }
 function hass($domain, $service, $entity = '', $target = []) {
-    lg('💡 HASS '.$domain.' '.$service.' '.$entity,4);
+//    lg('💡 HASS '.$domain.' '.$service.' '.$entity,4);
     $host = '192.168.2.26';
     $port = 8123;
     $path = "/api/services/$domain/$service";
