@@ -116,7 +116,7 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
-		$msg="_TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
+		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
 		telegram($msg);
 	}
@@ -144,7 +144,7 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
 //			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
-			$msg="_TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
+			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 			lg($msg);
 			telegram($msg);
 		}

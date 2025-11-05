@@ -371,7 +371,7 @@ function telegram($msg,$silent=true,$to=1) {
 	if ($silent==true) $silent='true';
 	else $silent='false';
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-	lg('✉️ Telegram sent: '.$msg);
+	lg('✉️  Telegram sent: '.$msg);
 }
 function lg($msg,$level=0) {
 /*
