@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_media_player:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -32,7 +32,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$path=explode('/',$topic);
 		$device=$path[2];
 		$d['time']=microtime(true);
-		$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+		$d=fetchdata($d['lastfetch'],'mqtt_media_player:'.__LINE__);
 		$d['lastfetch']=$d['time'] - 300;
 		$status = ucfirst(strtolower(trim($status, '"')));
 		if ($d[$device]['s']!=$status) {
@@ -50,7 +50,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=500000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {

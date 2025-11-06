@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_binary:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -41,7 +41,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if (($d['time'] - $startloop) <= 5) return;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
-			$d = fetchdata($d['lastfetch'], 'mqtt:' . __LINE__);
+			$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);
 			$d['lastfetch'] = $d['time'] - 30;
 			if ($device === 'achterdeur') {
 				if ($status=='Off') $status='Open';
@@ -67,7 +67,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=200000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {

@@ -1,5 +1,6 @@
 <?php
 $user='cron300';
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 //lg($user);
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD

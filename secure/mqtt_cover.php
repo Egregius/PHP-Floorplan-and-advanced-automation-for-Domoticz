@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_cover:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -40,7 +40,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
 			if (isset($status)) {
-				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+				$d=fetchdata($d['lastfetch'],'mqtt_cover:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				if ($d[$device]['s']!=$status&&strlen($status)>0) {
@@ -59,7 +59,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=1000000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {

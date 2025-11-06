@@ -873,7 +873,7 @@ function dbconnect() {
     }
 }
 function fetchdata($t=0,$lg='') {
-	global $d;
+	global $d,$time;
 	$db=dbconnect();
 	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon from devices;");
 	else $stmt=$db->query("select n,s,t,m,dt,icon from devices WHERE t>=$t;");
@@ -885,15 +885,18 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 
-	if ($t==0) lg('⬆️  FETCHDATA ALL	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
-	else lg('⬆️  FETCHDATA '.time()-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
-	$en=json_decode(getCache('en'),true);
-	$d['n']=$en['n'];
-	$d['a']=$en['a'];
-	$d['b']=$en['b'];
-	$d['c']=$en['c'];
-	$d['z']=$en['z'];
+	if ($t==0) lg('⬆️  FETCHDATA ALL '.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	else lg('⬆️  FETCHDATA '.(int)$time-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
+	$en=json_decode(getCache('en'));
+	if ($en) {
+		$d['n']=$en->n;
+		$d['a']=$en->a;
+		$d['b']=$en->b;
+		$d['c']=$en->c;
+		$d['z']=$en->z;
+	}
 	return $d;
+	
 }
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;

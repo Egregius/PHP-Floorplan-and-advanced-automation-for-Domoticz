@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_sensor:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -42,7 +42,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if (($d['time'] - $startloop) <= 3) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,-4) === '_hum') {
 				$tdevice=str_replace('_hum','_temp',$device);
@@ -101,7 +101,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=1000000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {

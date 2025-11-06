@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_light:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -43,7 +43,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
-				$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+				$d=fetchdata($d['lastfetch'],'mqtt_light:'.__LINE__);
 				$d['lastfetch']=$d['time'] - 300;
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
@@ -65,7 +65,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=500000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {

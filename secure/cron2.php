@@ -39,9 +39,10 @@ while (1) {
     }
     $time = time();
     $d['time'] = $time;
-    if ($lastcheck < $time - 30) {
+    if ($lastcheck < $time - 300) {
         $lastcheck = $time;
         stoploop();
+        $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
     }
 }
 

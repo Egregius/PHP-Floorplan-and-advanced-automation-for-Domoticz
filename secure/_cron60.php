@@ -153,7 +153,7 @@ if ($d['auto']['s']=='On') {
 					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=12) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']<=12) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']<=12) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
-					if ($d['eettafel']['s']>0&&$d['eettafel']['s']<=12) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['eettafel']['s']>0&&$d['eettafel']['s']<=12) sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
 				} else {
 					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);

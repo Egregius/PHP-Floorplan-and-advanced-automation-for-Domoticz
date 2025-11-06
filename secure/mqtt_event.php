@@ -14,7 +14,7 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
-$d=fetchdata(0,'mqtt:'.__LINE__);
+$d=fetchdata(0,'mqtt_event:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
@@ -44,7 +44,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
 //			lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
-			$d=fetchdata($d['lastfetch'],'mqtt:'.__LINE__);
+			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
@@ -71,7 +71,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=500000;
+$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
