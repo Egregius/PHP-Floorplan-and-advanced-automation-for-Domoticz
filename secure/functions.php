@@ -397,7 +397,7 @@ Levels:
 	if ($level <= $loglevel) {
 		$fp = fopen('/temp/domoticz.log', "a+");
 		$time = microtime(true);
-		$dFormat = "Y-m-d H:i:s";
+		$dFormat = "d-m H:i:s";
 		$mSecs = $time - floor($time);
 		$mSecs = substr(number_format($mSecs, 3), 1);
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
@@ -530,7 +530,7 @@ function bosepost($method, $xml, $ip=101, $log=false) {
     if ($fp) {
         fwrite($fp, $headers.$xml);
         fclose($fp);
-        if ($log) lg("💡 Bose $method verstuurd naar $host");
+//        if ($log) lg("💡 Bose $method verstuurd naar $host");
     } else {
         if ($log) lg("❌ Bose socket fout: $errstr ($errno)");
     }
