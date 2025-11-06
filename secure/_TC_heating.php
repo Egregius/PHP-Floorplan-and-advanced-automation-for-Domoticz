@@ -97,7 +97,6 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $comfortAfternoon - ($leadMinutes * 60);
-	if ($time>$t_start-3600) alert('living_start_temp','Verwarming living zal starten rond '.date("G:i", $t_start),64800);
 	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
 	$t_end = $comfortEnd;
 	
