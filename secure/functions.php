@@ -885,7 +885,7 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 
-	if ($t==0) lg('⬆️  FETCHDATA ALL '.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows');
+	if ($t==0) lg('⬆️  FETCHDATA ALL '.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 	else lg('⬆️  FETCHDATA '.(int)$time-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
 	$en=json_decode(getCache('en'));
 	if ($en) {

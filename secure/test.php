@@ -9,16 +9,7 @@ $startloop=microtime(true);
 $d['time']=$startloop;
 
 
-
-
-
-
-$pdo = new PDO("mysql:host=127.0.0.1;dbname=$dbname", $dbuser, $dbpass, [
-    PDO::ATTR_PERSISTENT => true
-]);
-var_dump($pdo->getAttribute(PDO::ATTR_PERSISTENT)); 
-
-
+hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
 
 
 
