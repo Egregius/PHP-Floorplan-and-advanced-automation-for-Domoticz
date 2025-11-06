@@ -93,7 +93,7 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 		$comfortEnd = strtotime('19:00');
 	}
 	
-	$target = 20.5;
+	$target = 21;
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start = $comfortAfternoon - ($leadMinutes * 60);

@@ -34,16 +34,16 @@ if ($d['daikin']['m']==1) {
 			elseif ($dif<=0) $power=1;
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$rate='A';
-					if ($dif >=  2.0) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  1.5) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  1.0) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.5) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
+					if ($dif >=  2.2) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.7) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.2) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  0.7) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
 				
-				elseif ($dif <= -2.5) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -2.0) {$set=$d[$k.'_set']['s']+2.0;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -1.5) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -1.0) {$set=$d[$k.'_set']['s']+1.0;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -0.5) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
+				elseif ($dif <= -2.7) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
+				elseif ($dif <= -2.2) {$set=$d[$k.'_set']['s']+2.0;$spmode=1;$line=__LINE__;}
+				elseif ($dif <= -1.7) {$set=$d[$k.'_set']['s']+1.5;$spmode=0;$line=__LINE__;}
+				elseif ($dif <= -1.2) {$set=$d[$k.'_set']['s']+1.0;$spmode=0;$line=__LINE__;}
+				elseif ($dif <= -0.7) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($k=='living') {

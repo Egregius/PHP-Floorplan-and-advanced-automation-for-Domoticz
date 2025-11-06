@@ -39,9 +39,9 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		if (isset($validDevices[$device])) {
 			$time=microtime(true);
 			$d['time']=$time;
-			if (($d['time'] - $startloop) <= 3) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d['time'] - $startloop) <= 3) return;
+//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+//			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,-4) === '_hum') {
@@ -60,11 +60,13 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 					return;
 				}
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
-				$time_passed = ($time - $oldt) > 120;
-				if ($rel_increase >= 0.30 || $rel_increase <= -0.30 || $time_passed) store($device, $val, '', 1);
+				$time_passed = ($time - $oldt) >= 30;
+				if ($rel_increase >= 0.50 || $rel_increase <= -0.50 || $time_passed) store($device, $val, '', 1);
 			} else {
-				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if ($d[$device]['s']!=$status) store($device,$status,'',1);
+				if ($d[$device]['s']!=$status) {
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+					store($device,$status,'',1);
+				}
 			}
 		} elseif ($device === 'sun_solar_elevation') {
 			$status=(float)$status;
