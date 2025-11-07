@@ -71,6 +71,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_elevation') {
 			$status=(float)$status;
 			if ($status>=10) $status=round($status,0);
+			elseif ($status<=-10) $status=round($status,0);
 			else $status=round($status,1);
 			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
 			stoploop($d);

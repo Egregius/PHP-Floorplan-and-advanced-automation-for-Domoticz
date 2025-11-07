@@ -1,36 +1,42 @@
 <?php
-if ($_SERVER['REMOTE_ADDR']=='192.168.2.20') {
-	require '/var/www/html/secure/functions.php';
+require '/var/www/html/secure/functions.php';
+if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2.201') {
 	if (isset($_GET['user'])) {
 		if ($_GET['user']=='Guy'||$_GET['user']=='Kirby') {
 			if (isset($_GET['event'])) {
 				if ($_GET['event']=='enter') {
 					$user=$_GET['user'];
 					$db=dbconnect();
-					$stmt=$db->query("SELECT n,s,t FROM devices WHERE n IN ('weg','voordeur','dag');");
+					$stmt=$db->query("SELECT n,s,t,dt FROM devices WHERE n IN ('weg','voordeur','dag');");
 					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 						$d[$row['n']]['s']=$row['s'];
 						$d[$row['n']]['t']=$row['t'];
+						if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 					}
-					if (past('weg')>300) {
+					telegram(print_r($d,true).PHP_EOL.past('weg'));
+					if (past('weg')>1) {
+						telegram('Domoticz owntracks.php:'.__LINE__);
 						if($d['weg']['s']==2) {
+							telegram('Domoticz owntracks.php='.__LINE__);
 							hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
 							setCache('remoteauto', time());
 							if ($d['voordeur']['s']=='Off') {
 								sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+								telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
 							}
 							huisthuis('Huis thuis door '.$user);
-							if ($d['voordeur']['s']=='Off'&&$d['dag']['s']>0) {
+							if ($d['dag']['s']>0) {
+								telegram('Domoticz owntracks.php:'.__LINE__);
 								sleep(2);
 								sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 							}
 						} elseif($d['weg']['s']==0) {
+							telegram('Domoticz owntracks.php='.__LINE__);
 			//				telegram('Huis thuis door '.$user);
+							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+							telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
 							huisthuis('🏠 Huis thuis door '.$user);
 						}
-					}
-					if ($d['voordeur']['s']=='Off'&&$d['dag']['s']<0) {
-							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					}
 				}
 			} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET, true).PHP_EOL.'Event niet gevonden');
