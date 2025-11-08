@@ -29,7 +29,6 @@ if (isset($_REQUEST['t'])) {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	$en=json_decode(getCache('en'));
-	
 	if ($en) {
 		$d['n']=$en->n;
 		$d['a']=$en->a;
@@ -44,7 +43,6 @@ if (isset($_REQUEST['t'])) {
 			$d['Sunrise']=$sunrise['Sunrise'];
 			$d['Sunset']=$sunrise['Sunset'];
 			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
-//			$d['zonavg']=$d['zonvandaag']['icon'];
 			$map = [
 					'PRESET_1' => 'EDM-1',
 					'PRESET_2' => 'EDM-2',
@@ -55,12 +53,18 @@ if (isset($_REQUEST['t'])) {
 				];
 			$d['playlist']=$map[boseplaylist()];
 		}
+	}
+	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0||($_REQUEST['t']>0 && getCache('energy_lastupdate')>$_REQUEST['t']-1)) {
 		$vandaag=json_decode(getCache('energy_vandaag'));
 		if ($vandaag) {
 			$d['gas']=$vandaag->gas;
+			$d['gasavg']=$vandaag->gasavg;
 			$d['elec']=$vandaag->elec;
+			$d['elecavg']=$vandaag->elecavg;
 			$d['verbruik']=$vandaag->verbruik;
 			$d['zon']=$vandaag->zon;
+			$d['zonavg']=$vandaag->zonavg;
+			$d['zonref']=$vandaag->zonref;
 			$d['alwayson']=$vandaag->alwayson;
 		}
 	}

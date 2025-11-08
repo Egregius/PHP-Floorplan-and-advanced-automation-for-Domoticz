@@ -45,7 +45,7 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
 fi
-/var/www/html/secure/energy.php
+
 # Remove these lines as they only upload my files to gitbub.
 MINUTE=$(date +"%M")
 if [ "$MINUTE" -eq 0 ] ; then

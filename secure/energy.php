@@ -1,5 +1,7 @@
 #!/usr/bin/php
 <?php
+$force = in_array('--force', $argv);
+
 require '/var/www/html/secure/functions.php';
 date_default_timezone_set('Europe/Brussels');
 
@@ -19,25 +21,27 @@ if ($r = $dbverbruik->query($q)) {
 $en = json_decode(getCache('en'));
 $teller = json_decode(getCache('teller'));
 if (!isset($teller->import)) exit; // niets binnen → stoppen
-
-$newzon=$en->z;
+$newData = [
+    'energy_import' => $teller->import,
+    'energy_export' => $teller->export,
+    'gas' => $teller->gas,
+    'water' => $teller->water
+];
+$zon=$en->z;
 $gas=$teller->gas;
 $elec=$teller->import;
 $injectie=$teller->export;
 $water=$teller->water;
-
+$alwayson = (int)getCache('alwayson');
 /** Variabelen uit meter */
-$total = (int)(($teller->import*100)+($teller->export*100)+($teller->gas*1000));
 $newavg = $en->a;
 
 /** Vorige waarden */
-$prevavg   = getCache('energy_prevavg', 0);
-$prevtotal = getCache('energy_prevtotal', 0);
+$prevavg   = getCache('energy_prevavg');
 
 /** Always-on detectie */
-if ($newzon == 0) {
+if ($zon == 0) {
     $power = $en->n;
-    $alwayson = (int)getCache('alwayson');
     if ($power>=50 && ($power<$alwayson || empty($alwayson))) {
         setCache('alwayson',$power);
         $time=time();
@@ -60,8 +64,7 @@ if ($prevavg > 2500) {
 }
 
 /** Verbruik updates als total gewijzigd */
-if ($total != $prevtotal) {
-	
+if (updateVerbruikCache($newData, $force)) {	
 	$prevwater=getCache('water_meter');
 	if ($prevwater!=$water && getCache('weg')>2) {
 		setCache('water_meter',$water);
@@ -101,16 +104,63 @@ if ($total != $prevtotal) {
         
     $since=date("Y-m-d",$time-(86400*30));
 	$query="SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date>'$since'";
-	echo $query.PHP_EOL;
+
 	if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" '.$dbverbruik->error);
 	while($row=$result->fetch_assoc())$avg=$row;$result->free();
-		
+	$maand=date('m');
+	$query="SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer='2009-".$maand."-01 00:00:00'";
+	if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
+	while($row=$result->fetch_assoc())$zonref=round($row['Dag_Refer'],1);$result->free();
 	
-    $data=json_encode(['gas'=>$gas,'gasavg'=>round($avg['gas'],3),'elec'=>$elec,'elecavg'=>round($avg['elec'],3),'verbruik'=>$verbruik,'zon'=>$zonvandaag,'alwayson'=>$alwayson]);
+	$query="SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag like '%-".$maand."-%' and Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag like '%-".$maand."-%')";
+	if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
+	while($row=$result->fetch_assoc())$zonavg=round($row['AVG'],0);$result->free();
+	
+	
+		
+    $data=json_encode(['gas'=>$gas,'gasavg'=>round($avg['gas'],3),'elec'=>$elec,'elecavg'=>round($avg['elec'],3),'verbruik'=>$verbruik,'zon'=>$zonvandaag,'zonref'=>$zonref,'zonavg'=>$zonavg,'alwayson'=>$alwayson]);
     lg('Updating teller database:'.$data);
     setCache('energy_vandaag',$data);
+    setCache('energy_lastupdate', time());
 }
 
 /** Opslaan nieuwe referenties */
 setCache('energy_prevavg', $newavg);
-setCache('energy_prevtotal', $total);
+
+
+function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.1,'energy_export'=>0.1,'gas'=>0.1,'water'=>0.01]) {
+    $cacheFile = '/dev/shm/cache/verbruik.json';
+    $cache = [];
+
+    if (file_exists($cacheFile)) {
+        $cache = json_decode(file_get_contents($cacheFile), true) ?: [];
+    }
+
+    if (!isset($cache['previous'])) {
+        // Eerste keer
+        $cache['previous'] = $newData;
+        $cache['current'] = $newData;
+        file_put_contents($cacheFile, json_encode($cache));
+        return true; // update moet gebeuren
+    }
+
+    if ($force) {
+        $cache['current'] = $newData;
+        file_put_contents($cacheFile, json_encode($cache));
+        return true;
+    }
+
+    $updateNeeded = false;
+    foreach ($newData as $key => $value) {
+        $prevValue = $cache['previous'][$key] ?? 0;
+        if (abs($value - $prevValue) >= ($thresholds[$key] ?? 0)) {
+            $updateNeeded = true;
+            break;
+        }
+    }
+
+    $cache['current'] = $newData;
+    file_put_contents($cacheFile, json_encode($cache));
+    return $updateNeeded;
+}
+
