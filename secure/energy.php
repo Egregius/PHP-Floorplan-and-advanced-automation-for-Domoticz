@@ -116,10 +116,9 @@ if (updateVerbruikCache($newData, $force)) {
 	if(!$result=$dbzonphp->query($query))echo('There was an error running the query "'.$query.'" '.$dbzonphp->error);
 	while($row=$result->fetch_assoc())$zonavg=round($row['AVG'],0);$result->free();
 	
-	
-		
     $data=json_encode(['gas'=>$gas,'gasavg'=>round($avg['gas'],3),'elec'=>$elec,'elecavg'=>round($avg['elec'],3),'verbruik'=>$verbruik,'zon'=>$zonvandaag,'zonref'=>$zonref,'zonavg'=>$zonavg,'alwayson'=>$alwayson]);
-    lg('Updating teller database:'.$data);
+    lg($data);
+    echo $data;
     setCache('energy_vandaag',$data);
     setCache('energy_lastupdate', time());
 }
@@ -131,25 +130,21 @@ setCache('energy_prevavg', $newavg);
 function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.1,'energy_export'=>0.1,'gas'=>0.1,'water'=>0.01]) {
     $cacheFile = '/dev/shm/cache/verbruik.json';
     $cache = [];
-
     if (file_exists($cacheFile)) {
         $cache = json_decode(file_get_contents($cacheFile), true) ?: [];
     }
-
     if (!isset($cache['previous'])) {
         // Eerste keer
         $cache['previous'] = $newData;
         $cache['current'] = $newData;
         file_put_contents($cacheFile, json_encode($cache));
-        return true; // update moet gebeuren
+        return true;
     }
-
     if ($force) {
         $cache['current'] = $newData;
         file_put_contents($cacheFile, json_encode($cache));
         return true;
     }
-
     $updateNeeded = false;
     foreach ($newData as $key => $value) {
         $prevValue = $cache['previous'][$key] ?? 0;
@@ -158,9 +153,11 @@ function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_im
             break;
         }
     }
-
-    $cache['current'] = $newData;
-    file_put_contents($cacheFile, json_encode($cache));
+    if ($updateNeeded || $force) {
+		$cache['previous'] = $newData; // only update previous when we actually process
+		$cache['current'] = $newData;
+		file_put_contents($cacheFile, json_encode($cache));
+	}
     return $updateNeeded;
 }
 

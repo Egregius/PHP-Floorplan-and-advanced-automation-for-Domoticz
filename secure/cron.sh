@@ -30,6 +30,8 @@ while [ $i -lt 6 ]; do
 	i=`expr $i + 1`
 done
 
+
+
 ps cax | grep nginx
 if [ $? -ne 0 ] ; then
 	/usr/sbin/service nginx stop
@@ -45,10 +47,16 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
 fi
+HOUR=$(date +%H)
+MIN=$(date +%M)
+if [ "$HOUR" == "23" ] && [ "$MIN" == "59" ]; then
+    /usr/bin/php /var/www/html/secure/energy.php --force
+else
+    /usr/bin/php /var/www/html/secure/energy.php
+fi
 
 # Remove these lines as they only upload my files to gitbub.
-MINUTE=$(date +"%M")
-if [ "$MINUTE" -eq 0 ] ; then
+if [ "$MIN" -eq 0 ] ; then
 	LAST=$(find /var/www/html -type f ! -name '_*' ! -path "*/stills/*" ! -path "*/sounds/*" ! -path "*/.git/*" ! -path "*/.github/*" ! -path "*/pass2php/*" ! -path "*/phpMyAdmin/*" ! -path "*/google-api-php-client/*" ! -path "*/archive/*" -printf '%T@\n' | sort -n | tail -1 | cut -f1- -d" ")
 	PREV=$(cat "/temp/timestampappcache.txt")
 	echo $LAST>"/temp/timestampappcache.txt"
