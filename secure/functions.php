@@ -656,11 +656,11 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 		if ($d['daikin'.$device]['s'] != $status) {
 			store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");
 		}
-		if ($power==0 && $d['daikin'.$device]['m']!=0) {
-			storemode('daikin'.$device, 0, basename(__FILE__).":".__LINE__.":$msg");
-		} elseif ($d['daikin'.$device]['m']!=$mode) {
-			storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
-		}
+//		if ($power==0 && $d['daikin'.$device]['m']!=0) {
+//			storemode('daikin'.$device, 0, basename(__FILE__).":".__LINE__.":$msg");
+//		} elseif ($d['daikin'.$device]['m']!=$mode) {
+//			storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
+//		}
 		if ($spmode==-1) {
 			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2");
 		} elseif ($spmode==0) {

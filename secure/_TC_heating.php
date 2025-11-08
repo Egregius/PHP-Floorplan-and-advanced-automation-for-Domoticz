@@ -57,8 +57,8 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$alex_set=$Setalex;
 	$d['alex_set']['s']=$Setalex;
 }
+$Setliving = 14;
 if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
-	$Setliving = 14;
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
@@ -153,20 +153,11 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 	if (abs($time - $t_start) < 10) {
 		store('living_start_temp', $living, basename(__FILE__) . ':' . __LINE__, 1);
 	}
-
-	// --- 6) Weg en op reis fallback
-//	if ($d['weg']['s']==2 && $d['heating']['s']>=1) {
-//		$Setliving=16;
-//	} elseif ($d['weg']['s']==3 && $d['heating']['s']>=1) {
-//		$Setliving=14;
-//	}
-
-
-	if ($d['living_set']['s']!=$Setliving) {
-		setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
-		$living_set=$Setliving;
-		$d['living_set']['s']=$Setliving;
-	}
+}
+if ($d['living_set']['s']!=$Setliving) {
+	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
+	$living_set=$Setliving;
+	$d['living_set']['s']=$Setliving;
 }
 require('_Rolluiken_Heating.php');
 $bigdif=100;
