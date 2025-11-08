@@ -40,9 +40,7 @@ if ($newzon == 0) {
     $alwayson = (int)getCache('alwayson');
     if ($power>=50 && ($power<$alwayson || empty($alwayson))) {
         setCache('alwayson',$power);
-        $db = dbconnect();
         $time=time();
-        $db->query("UPDATE devices SET icon=$power,t=$time WHERE n='elvandaag'");
         lg('New alwayson '.$power.' W');
         $vandaag=date("Y-m-d",$time);
         $dbverbruik->query("INSERT INTO `alwayson` (`date`,`w`) VALUES ('$vandaag','$alwayson') ON DUPLICATE KEY UPDATE `w`='$alwayson'");
@@ -63,7 +61,7 @@ if ($prevavg > 2500) {
 
 /** Verbruik updates als total gewijzigd */
 if ($total != $prevtotal) {
-	lg('Updating teller database');
+	
 	$prevwater=getCache('water_meter');
 	if ($prevwater!=$water && getCache('weg')>2) {
 		setCache('water_meter',$water);
@@ -85,7 +83,6 @@ if ($total != $prevtotal) {
     $q="SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
     if ($r=$dbzonphp->query($q)) { if ($row=$r->fetch_assoc()) $zontotaal=$row['Geg_Maand']; $r->free(); }
 
-    /** Opslaan absolute waarden */
     $dbverbruik->query("INSERT INTO `Guy` (`date`,`gas`,`elec`,`injectie`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$injectie','$zontotaal','$water')
         ON DUPLICATE KEY UPDATE gas='$gas',elec='$elec',injectie='$injectie',zon='$zontotaal',water='$water'");
 
@@ -94,13 +91,24 @@ if ($total != $prevtotal) {
     if ($r=$dbverbruik->query($q)) { $gisteren=$r->fetch_assoc(); $r->free(); }
 
     $gas = round($gas-$gisteren['gas'],3);
-    $elec = $elec - $gisteren['elec'];
+    $elec = round($elec - $gisteren['elec'],3);
     $water = round($water-$gisteren['water'],3);
     $injectie = round($injectie-$gisteren['injectie'],3);
     $verbruik = round($zonvandaag-$injectie+$elec,3);
 
     $dbverbruik->query("INSERT INTO `Guydag` (`date`,`gas`,`elec`,`verbruik`,`zon`,`water`) VALUES ('$vandaag','$gas','$elec','$verbruik','$zonvandaag','$water')
         ON DUPLICATE KEY UPDATE gas='$gas',elec='$elec',verbruik='$verbruik',zon='$zonvandaag',water='$water'");
+        
+    $since=date("Y-m-d",$time-(86400*30));
+	$query="SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date>'$since'";
+	echo $query.PHP_EOL;
+	if(!$result=$dbverbruik->query($query))echo('There was an error running the query "'.$query.'" '.$dbverbruik->error);
+	while($row=$result->fetch_assoc())$avg=$row;$result->free();
+		
+	
+    $data=json_encode(['gas'=>$gas,'gasavg'=>round($avg['gas'],3),'elec'=>$elec,'elecavg'=>round($avg['elec'],3),'verbruik'=>$verbruik,'zon'=>$zonvandaag,'alwayson'=>$alwayson]);
+    lg('Updating teller database:'.$data);
+    setCache('energy_vandaag',$data);
 }
 
 /** Opslaan nieuwe referenties */

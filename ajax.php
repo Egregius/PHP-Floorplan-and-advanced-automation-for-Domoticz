@@ -29,6 +29,7 @@ if (isset($_REQUEST['t'])) {
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
 	}
 	$en=json_decode(getCache('en'));
+	
 	if ($en) {
 		$d['n']=$en->n;
 		$d['a']=$en->a;
@@ -53,6 +54,14 @@ if (isset($_REQUEST['t'])) {
 					'PRESET_6' => 'MIX-3',
 				];
 			$d['playlist']=$map[boseplaylist()];
+		}
+		$vandaag=json_decode(getCache('energy_vandaag'));
+		if ($vandaag) {
+			$d['gas']=$vandaag->gas;
+			$d['elec']=$vandaag->elec;
+			$d['verbruik']=$vandaag->verbruik;
+			$d['zon']=$vandaag->zon;
+			$d['alwayson']=$vandaag->alwayson;
 		}
 	}
 	echo json_encode($d);
