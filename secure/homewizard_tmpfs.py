@@ -10,8 +10,10 @@ import websockets
 
 # Tokens JSON
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
-# Cache bestand (tmpfs)
+
+# Cache bestanden (tmpfs)
 CACHE_FILE = Path("/dev/shm/cache/en.txt")
+TELLER_FILE = Path("/dev/shm/cache/teller.txt")
 
 # Devices configuratie
 DEVICES = [
@@ -22,6 +24,7 @@ DEVICES = [
 
 RECONNECT_DELAY = 5
 state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
+teller_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
 
 def log(*args):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
@@ -48,14 +51,18 @@ def request_token(host, timeout=60):
         time.sleep(1)
     raise TimeoutError(f"❌ Timeout na {timeout}s")
 
-# Schrijf huidige state naar tmpfs
 def flush_state():
     try:
         CACHE_FILE.write_text(json.dumps(state))
     except Exception as e:
         log("Fout bij schrijven cache:", e)
 
-# Update value en schrijf alleen bij verandering
+def flush_teller_state():
+    try:
+        TELLER_FILE.write_text(json.dumps(teller_state))
+    except Exception as e:
+        log("Fout bij schrijven teller cache:", e)
+
 def update_state(key, value):
     if value is None:
         return
@@ -63,18 +70,49 @@ def update_state(key, value):
         state[key] = value
         flush_state()
 
-# Process measurement data
+def update_teller(import_kwh, export_kwh, gas, water):
+    changed = False
+    if import_kwh is not None and teller_state["import"] != import_kwh:
+        teller_state["import"] = import_kwh
+        changed = True
+    if export_kwh is not None and teller_state["export"] != export_kwh:
+        teller_state["export"] = export_kwh
+        changed = True
+    if gas is not None and teller_state["gas"] != gas:
+        teller_state["gas"] = gas
+        changed = True
+    if water is not None and teller_state["water"] != water:
+        teller_state["water"] = water
+        changed = True
+    if changed:
+        flush_teller_state()
+
 def process_measurement(name, data):
-    if "p" in name:
+    if name == "p":
         update_state("n", int(round(data.get("power_w", 0))))
         update_state("a", int(round(data.get("average_power_15m_w", 0))))
-    elif "b" in name:
+
+        # teller metingen
+        import_kwh = data.get("energy_import_kwh")
+        export_kwh = data.get("energy_export_kwh")
+
+        gas = None
+        water = None
+
+        for ext in data.get("external", []):
+            if ext.get("type") == "gas_meter":
+                gas = ext.get("value")
+            elif ext.get("type") == "water_meter":
+                water = ext.get("value")
+
+        update_teller(import_kwh, export_kwh, gas, water)
+
+    elif name == "b":
         update_state("b", int(round(data.get("power_w", 0))))
         update_state("c", int(round(data.get("state_of_charge_pct", 0))))
     else:
         update_state("z", -int(round(data.get("power_w", 0))))
 
-# Handlers per device
 async def handle_device(device, token, ssl_context):
     name, host = device["name"], device["host"]
     url = f"wss://{host}/api/ws"
@@ -95,15 +133,12 @@ async def handle_device(device, token, ssl_context):
                             process_measurement(name, data.get("data", {}))
                         elif msg_type == "error":
                             log(f"❌ {name}: {data.get('message', data)}")
-                    except json.JSONDecodeError:
-                        log(f"⚠️  {name}: Ongeldig JSON")
                     except Exception as e:
                         log(f"⚠️  {name}: {e}")
         except Exception as e:
             log(f"❌ {name}: {e}")
         await asyncio.sleep(RECONNECT_DELAY)
 
-# Main routine
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
     ssl_context = ssl.create_default_context()
@@ -124,10 +159,9 @@ async def main():
             except Exception as e:
                 log(f"❌ {dev['name']}: {e}")
 
-    tasks = [
-        asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
-        for dev in DEVICES if dev["name"] in tokens
-    ]
+    tasks = [asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
+             for dev in DEVICES if dev["name"] in tokens]
+
     if tasks:
         await asyncio.gather(*tasks)
     else:

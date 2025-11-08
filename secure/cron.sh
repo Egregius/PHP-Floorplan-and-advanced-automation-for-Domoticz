@@ -12,7 +12,7 @@ SCRIPTS=(
   cron.php
   cron2.php
   homewizard_tmpfs.py
-  energy.php
+#  energy.php
 )
 
 i=1
