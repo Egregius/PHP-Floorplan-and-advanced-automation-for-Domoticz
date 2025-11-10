@@ -1,2 +1,0 @@
-<?php
-store('kristal', $status);

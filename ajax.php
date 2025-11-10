@@ -54,7 +54,16 @@ if (isset($_REQUEST['t'])) {
 			$d['playlist']=$map[boseplaylist()];
 		}
 	}
-	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0||($_REQUEST['t']>0 && getCache('energy_lastupdate')>$_REQUEST['t']-1)) {
+	if (
+		$_REQUEST['t']=='undefined'
+		||$_REQUEST['t']==0
+		||
+			(
+				$_REQUEST['t']>0 
+				&& getCache('energy_lastupdate')>
+				$_REQUEST['t']-1
+			)
+		) {
 		$vandaag=json_decode(getCache('energy_vandaag'));
 		if ($vandaag) {
 			$d['gas']=$vandaag->gas;

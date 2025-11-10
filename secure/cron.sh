@@ -50,7 +50,7 @@ fi
 HOUR=$(date +%H)
 MIN=$(date +%M)
 
-if [ "$HOUR" = "23" ] && [ "$MIN" = "59" ]; then
+if { [ "$HOUR" = "7" ] || [ "$HOUR" = "23" ]; } && [ "$MIN" = "59" ]; then
     /usr/bin/php /var/www/html/secure/energy.php --force
 else
     /usr/bin/php /var/www/html/secure/energy.php
