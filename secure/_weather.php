@@ -33,10 +33,6 @@ if (isset($ow['current'])) {
 		} else break;
 	}
 }
-//lg(__LINE__.print_r($temps,true));
-//lg(__LINE__.print_r($winds,true));
-//lg(__LINE__.print_r($rains,true));
-//lg($mintemp.' '.$maxtemp);
 
 //lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
@@ -93,7 +89,6 @@ if (isset($yr['temperature']['value'])) {
 	$temps['yr_feel']=$yr['temperature']['feelsLike'];
 	$winds['yr_wind']=$yr['wind']['speed'] * 1.609344;
 	$rains['yr']=$yr['precipitation']['value']*100;
-	
 }
 
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast');
@@ -124,6 +119,12 @@ if (isset($data['forecasts'])) {
 	if ($buienradar>20) $maxrain=$buienradar;
 	$rains['buienradar']=$buienradar;
 }
+
+//lg(__LINE__.print_r($temps,true));
+//lg(__LINE__.print_r($winds,true));
+//lg(__LINE__.print_r($rains,true));
+//lg(__LINE__.print_r($hums,true));
+//lg($mintemp.' '.$maxtemp);
 
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
 if (count($hums)>=1) $hum=round(array_sum($hums)/count($hums), 0);

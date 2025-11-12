@@ -141,7 +141,8 @@ function huisslapen($weg=false) {
 	else store('weg', 1, basename(__FILE__).':'.__LINE__);
 }
 function huisthuis($msg='') {
-	store('weg', 0);
+	global $d;
+	if ($d['weg']['s']!=0) store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
 }

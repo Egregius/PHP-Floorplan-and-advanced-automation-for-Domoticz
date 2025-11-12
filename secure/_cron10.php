@@ -81,8 +81,12 @@ if ($d['auto']['s']=='On') {
 		if ($d['kookplaat_power']['s']<125&&past('kookplaat_power')>200&&past('kookplaat')>200) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}*/
 }
-    if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']==0&&past('voordeur')>55&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On'&&$d['weg']['s']>0&&past('voordeur')>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+    if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On') {
+    	$past=past('voordeur');
+    	if ($d['weg']['s']==0&&$d['dag']>0&&$past>5&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+    	elseif ($d['weg']['s']==0&&$past>55&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+		elseif ($d['weg']['s']>0&&$past>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+	}
 
 if ($d['weg']['s']<2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']['s']=='Off') sw('grohered', 'On', basename(__FILE__).':'.__LINE__.' net='.$d['net'].'W', true);
 elseif ($d['grohered']['s']=='On'&&past('8keuken_8')>1800&&$d['n']>100) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__.' net='.$d['net'].'W',true);

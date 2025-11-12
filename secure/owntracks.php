@@ -13,11 +13,11 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 						$d[$row['n']]['t']=$row['t'];
 						if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 					}
-					telegram(print_r($d,true).PHP_EOL.past('weg'));
-					if (past('weg')>1) {
-						telegram('Domoticz owntracks.php:'.__LINE__);
+//					telegram(print_r($d,true).PHP_EOL.past('weg'));
+					if (past('weg')>120) {
+//						telegram('Domoticz owntracks.php:'.__LINE__);
 						if($d['weg']['s']==2) {
-							telegram('Domoticz owntracks.php='.__LINE__);
+//							telegram('Domoticz owntracks.php='.__LINE__);
 							hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
 							setCache('remoteauto', time());
 							if ($d['voordeur']['s']=='Off') {
@@ -31,10 +31,10 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 								sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 							}
 						} elseif($d['weg']['s']==0) {
-							telegram('Domoticz owntracks.php='.__LINE__);
+//							telegram('Domoticz owntracks.php='.__LINE__);
 			//				telegram('Huis thuis door '.$user);
 							sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-							telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
+//							telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
 							huisthuis('🏠 Huis thuis door '.$user);
 						}
 					}
