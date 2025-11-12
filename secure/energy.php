@@ -14,10 +14,15 @@ if ($r = $dbverbruik->query($q)) {
     if ($row = $r->fetch_assoc()) $kwartierpiek = $row['wH'] ?? 2500;
     $r->free();
 }
-
-$en = json_decode(getCache('en'));
-$teller = json_decode(getCache('teller'));
-if (!isset($teller->import)) exit;
+for ($x=1;$x<=5;$x++) {
+	$en = json_decode(getCache('en'));
+	if ($en) break;
+}
+for ($x=1;$x<=5;$x++) {
+	$teller = json_decode(getCache('teller'));
+	if ($teller) break;
+}
+if (!isset($teller->import,$en->z)) exit;
 $newData = [
     'energy_import' => $teller->import,
     'energy_export' => $teller->export,
