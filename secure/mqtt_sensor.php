@@ -61,7 +61,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				}
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 				$time_passed = ($time - $oldt) >= 30;
-				if ($rel_increase >= 0.50 || $rel_increase <= -0.50 || $time_passed) store($device, $val, '', 1);
+				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
