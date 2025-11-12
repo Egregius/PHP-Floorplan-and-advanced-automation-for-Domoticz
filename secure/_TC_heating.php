@@ -58,11 +58,12 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$d['alex_set']['s']=$Setalex;
 }
 $Setliving = 14;
-if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
+if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
-	$prevSet   = $d['living_start_temp']['m'] ?? 0;   // ← toegevoegd geheugen
+	if ($d['living_set']['m']==2) $weg=0;
+	$prevSet   = $d['living_start_temp']['m'] ?? 0;
 	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
 	
 	$avgMinPerDeg = !empty($leadDataLiving[$mode])
@@ -108,7 +109,10 @@ if ($d['living_set']['m']==0&&$d['weg']['s']<=1) {
 	if ($prevSet == 1) {
 		// al in comfortfase of opwarming: houd target vast
 		$Setliving = $target;
-		if ($time > $t_end) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+		if ($time > $t_end) {
+			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
+		}
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		// startmoment bereikt: begin preheat

@@ -120,24 +120,22 @@ if (isset($set)&&$d['heating']['s']>=0) {
 
 if ($d['weg']['s']<2) {
 	$difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-//	$past=past('badkamervuur1');
-	$past=600;
 	if ($difbadkamer<=-0.3||($preheatbath==true&&$difbadkamer<=-0.1)) {
-		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed'&&$past>=235) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 	}
 	elseif ($difbadkamer<=0||($preheatbath==true&&$difbadkamer<=+0.1)) {
-		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed'&&$past>=175) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 	else {
-		if ($d['badkamervuur2']['s']=='On'&&$past>=240) sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
-		if ($d['badkamervuur2']['s']=='Off'&&$d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
+		if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamervuur2']['s']=='Off'&&$d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }
 else {
-	if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
-	if ($d['badkamervuur2']['s']=='Off'&&$d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__.' -> '.$m);
+	if ($d['badkamervuur2']['s']=='On') sw('badkamervuur2', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['badkamervuur2']['s']=='Off'&&$d['badkamervuur1']['s']=='On') sw('badkamervuur1', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
 

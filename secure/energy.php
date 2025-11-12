@@ -137,7 +137,6 @@ function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_im
         $prevValue = $cache['previous'][$key] ?? 0;
         $dif=round(abs($value - $prevValue),3);
         if ($dif >= ($thresholds[$key] ?? 0)) {
-        	lg('update needed');
             $updateNeeded = true;
             break;
         }
