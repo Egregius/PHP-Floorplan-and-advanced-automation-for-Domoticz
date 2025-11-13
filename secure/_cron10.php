@@ -83,9 +83,10 @@ if ($d['auto']['s']=='On') {
 }
     if ($d['deurvoordeur']['s']=='Closed'&&$d['voordeur']['s']=='On') {
     	$past=past('voordeur');
-    	if ($d['weg']['s']==0&&$d['dag']>0&&$past>5&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-    	elseif ($d['weg']['s']==0&&$past>55&&past('weg')>300) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-		elseif ($d['weg']['s']>0&&$past>55) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+    	$pastweg=past('weg');
+    	if ($d['weg']['s']==0&&$d['dag']>0&&$past>5&&$pastweg>30) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+    	elseif ($d['weg']['s']==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+		elseif ($d['weg']['s']>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 
 if ($d['weg']['s']<2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']['s']=='Off') sw('grohered', 'On', basename(__FILE__).':'.__LINE__.' net='.$d['net'].'W', true);

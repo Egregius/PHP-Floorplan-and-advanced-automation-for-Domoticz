@@ -605,12 +605,13 @@ function daikinstatus($device,$log='') {
 	$url = "http://192.168.2.{$ips[$device]}/aircon/get_control_info";
 	$data = http_get($url);
 	if ($data === FALSE) {
-		if (strlen($log)>0) lg("daikinstatus: geen antwoord van $device ($url)	| ".$log);
-		else lg("daikinstatus: geen antwoord van $device ($url)");
+		if (strlen($log)>0) $msg="daikinstatus: geen antwoord van $device ($url)	| ".$log;
+		else $msg="daikinstatus: geen antwoord van $device ($url)";
+		alert('daikinstatus', $msg, 1800);
 		return FALSE;
 	}
 	if (stripos($data, "SERIAL IF FAILURE") !== false) {
-		alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",3600);
+		alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",1800);
 //		sw('daikin', 'Off', $user.':'.__LINE__);
 //		sleep(5);
 //		sw('daikin', 'On',  $user.':'.__LINE__);
