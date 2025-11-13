@@ -1,7 +1,7 @@
 <?php
 $user='TC_badkamer';
 $m='';$m2='';
-$l=0;
+$preheatbath=false;
 if ($d['badkamer_set']['m']==0) {$set=13;$m2.=__LINE__.' ';}
 else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
@@ -44,14 +44,14 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	
 	// --- logica met hysterese / geheugen ---
 	if ($prevSet == 1) {
-//		lg(__LINE__);
+//		lg(basename(__FILE__) . ':' . __LINE__);
 		// al bezig met opwarmen → behoud target tot einde
 		$set = $target;
 		if ($time > $t_end) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 		$preheatbath=true;
 	}
 	elseif ($time >= $t_start && $time < $t) {
-//		lg(__LINE__);
+//		lg(basename(__FILE__) . ':' . __LINE__);
 		// startmoment bereikt → begin opwarmen
 		$set = $target;
 		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
@@ -61,13 +61,13 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$preheatbath=true;
 	}
 	elseif ($time >= $t && $time <= $t_end) {
-//		lg(__LINE__);
+//		lg(basename(__FILE__) . ':' . __LINE__);
 		// comfortfase → target behouden
 		$set = $target;
 		$preheatbath=false;
 	} 
 	else {
-//		lg(__LINE__);
+//		lg(basename(__FILE__) . ':' . __LINE__);
 		// buiten comfortperiode en niet in opwarming → lage stand
 		$set = 13;
 		if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);

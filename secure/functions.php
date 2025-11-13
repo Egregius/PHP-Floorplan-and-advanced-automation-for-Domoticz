@@ -126,6 +126,10 @@ function fhall() {
 		}
 	} else finkom();
 	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']['s']==1) lg(basename(__FILE__) . ':' . __LINE__);
+	if ($d['living_set']['m']==0) lg(basename(__FILE__) . ':' . __LINE__);
+	if ($d['time']>$t-3600) lg(basename(__FILE__) . ':' . __LINE__);
+	if ($d['time']<$t) lg(basename(__FILE__) . ':' . __LINE__);
 	if ($d['weg']['s']==1&&$d['living_set']['m']==0&&$d['time']>$t-3600&&$d['time']<$t) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 }
 function huisslapen($weg=false) {
@@ -135,14 +139,13 @@ function huisslapen($weg=false) {
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D') storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	hass('script', 'turn_on', 'script.alles_uitschakelen');
 	if ($weg===3) store('weg', 3, basename(__FILE__).':'.__LINE__);
 	elseif ($weg===true) store('weg', 2, basename(__FILE__).':'.__LINE__);
 	else store('weg', 1, basename(__FILE__).':'.__LINE__);
+	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 function huisthuis($msg='') {
-	global $d;
-	if ($d['weg']['s']!=0) store('weg', 0);
+	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
 }

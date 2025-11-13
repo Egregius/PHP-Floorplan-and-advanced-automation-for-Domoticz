@@ -127,7 +127,7 @@ if (isset($data['forecasts'])) {
 //lg($mintemp.' '.$maxtemp);
 
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
-if (count($hums)>=1) $hum=round(array_sum($hums)/count($hums), 0);
+if (count($hums)>=2) $hum=round(array_sum($hums)/count($hums), 0);
 //lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {
@@ -143,9 +143,16 @@ $temp = max($ref - 0.1, min($temp, $ref + 0.1));
 
 if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('minmaxtemp', $mintemp, $maxtemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
+
+//lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']['m']);
 $ref = (int)$d['buiten_temp']['m'];
+//lg(basename(__FILE__) . ':' . __LINE__.' = '.$ref);
 $hum = max($ref - 1, min($hum, $ref + 1));
+//lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
+
 if ($d['buiten_temp']['s']!=$temp||$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
+
+//storemode('buiten_temp',85);
 
 
 if (count($winds)>=4) {
@@ -164,9 +171,8 @@ if (count($rains)>=2) {
 //EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
 
-//lg('temps = '.print_r($temps,true).' => '.$temp);//lg('winds = '.print_r($winds,true).' => '.$wind);lg('rains = '.print_r($rains,true).' => '.$rain);
-
-$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+//$db=new PDO("mysql:host=localhost;dbname=$dbname;",$dbuser,$dbpass);
+$db=dbconnect();
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row['AVG'];
 if ($d['buiten_temp']['s']>$avg+0.5) {
