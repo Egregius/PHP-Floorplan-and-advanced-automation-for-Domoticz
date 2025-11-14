@@ -129,8 +129,8 @@ function fhall() {
 	if ($d['weg']['s']==1) lg(basename(__FILE__) . ':' . __LINE__);
 	if ($d['living_set']['m']==0) lg(basename(__FILE__) . ':' . __LINE__);
 	if ($d['time']>$t-36000) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($d['time']<$t) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($d['weg']['s']==1&&$d['living_set']['m']==0&&$d['time']>$t-36000&&$d['time']<$t) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+	if ($d['time']<$t+1800) lg(basename(__FILE__) . ':' . __LINE__);
+	if ($d['weg']['s']==1&&$d['living_set']['m']==0&&$d['time']>$t-36000&&$d['time']<$t+1800) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 }
 function huisslapen($weg=false) {
 	global $d;
