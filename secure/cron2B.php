@@ -22,6 +22,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {
 //					lg(basename(__FILE__).':'.__LINE__);
 					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+					if ($ip>101&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY') {
 //					lg(basename(__FILE__).':'.__LINE__);
@@ -67,7 +68,7 @@ if ($d['bose101']['s']=='On'
 	&&$d['bose106']['s']=='Off'
 	&&$d['bose107']['s']=='Off'
 	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
-	&&past('bose101')>180
+	&&past('bose101')>300
 //	&&past('bose102')>30
 //	&&past('bose103')>30
 //	&&past('bose104')>30

@@ -473,6 +473,7 @@ function boseplaylist() {
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
 	if ($d['weg']['s']<=1) {
+		if ($d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
 			lg(basename(__FILE__).':'.__LINE__);
 			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
@@ -492,7 +493,7 @@ function bosezone($ip,$vol='') {
 				106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
 				107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
 			];
-			if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
+			if ($d['bose101']['s']=='On'&&$d['bose'.$ip]['s']=='Off') {
 				lg(basename(__FILE__).':'.__LINE__);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
@@ -515,6 +516,7 @@ function bosezone($ip,$vol='') {
 					if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 				} else {
+					
 					if ($d['alexslaapt']['s']==1) $vol-=10;
 					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 				}

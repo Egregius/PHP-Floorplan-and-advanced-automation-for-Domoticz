@@ -14,12 +14,14 @@ $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
+$dow = null;
 $d=fetchdata(0,'mqtt_cover:'.__LINE__);
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
-$d['rand']=rand(60,120);
+$d['rand']=rand(300,600);
+updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
@@ -55,6 +57,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
         stoploop();
+        updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
