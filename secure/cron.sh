@@ -11,6 +11,7 @@ SCRIPTS=(
   mqtt_switch.php
   cron.php
   cron2.php
+  energy.php
   homewizard_tmpfs.py
 )
 
@@ -47,14 +48,9 @@ if [ $? -ne 0 ] ; then
 	/usr/sbin/service mysql stop
 	/usr/sbin/service mysql start
 fi
-HOUR=$(date +%H)
 MIN=$(date +%M)
 
-if [ "$HOUR" = "23" ] && [ "$MIN" = "59" ]; then
-    /usr/bin/php /var/www/html/secure/energy.php --force
-else
-    /usr/bin/php /var/www/html/secure/energy.php
-fi
+
 
 # Remove these lines as they only upload my files to gitbub.
 if [ "$MIN" -eq 0 ] ; then
