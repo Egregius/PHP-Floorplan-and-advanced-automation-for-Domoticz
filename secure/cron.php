@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 require '/var/www/html/secure/functions.php';
-lg('🟢 Starting CRON loop...',9);
+lg('🟢 Starting CRON loop...');
 $t = null;
 $weekend = null;
 $dow = null;
