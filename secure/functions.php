@@ -126,12 +126,6 @@ function fhall() {
 		}
 	} else finkom();
 	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
-	if ($d['weg']['s']==1) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($d['living_set']['m']==0) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($d['time']>$t-3600) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($d['time']<$t) lg(basename(__FILE__) . ':' . __LINE__);
-	lg(basename(__FILE__) . ':' . __LINE__.' '.date("Y-m-d G:i",$t));
-	if ($d['weg']['s']==1&&$d['living_set']['m']==0&&$d['time']>$t-3600&&$d['time']<$t) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 }
 function huisslapen($weg=false) {
 	global $d;
