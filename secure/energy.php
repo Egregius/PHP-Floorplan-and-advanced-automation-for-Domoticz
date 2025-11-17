@@ -5,7 +5,7 @@ date_default_timezone_set('Europe/Brussels');
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
 // Loop configuration
-$loopInterval = 60; // seconds between checks
+$loopInterval = 30; // seconds between checks
 $lastDayUpdate = null;
 
 // Database connection helper class
