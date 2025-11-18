@@ -53,6 +53,38 @@ if (isset($_REQUEST['t'])) {
 				];
 			$d['playlist']=$map[boseplaylist()];
 		}
+		$d['thermo_hist'] = [
+			"buiten_temp" => [
+				"min" => 0,
+				"avg" => 15,
+				"max" => 20,
+			],
+			"living_temp" => [
+				"min" => 15,
+				"avg" => 20,
+				"max" => 24,
+			],
+			"badkamer_temp" => [
+				"min" => 12,
+				"avg" => 20,
+				"max" => 22,
+			],
+			"kamer_temp" => [
+				"min" => 10,
+				"avg" => 14,
+				"max" => 18,
+			],
+			"alex_temp" => [
+				"min" => 10,
+				"avg" => 14,
+				"max" => 18,
+			],
+			"waskamer_temp" => [
+				"min" => 10,
+				"avg" => 14,
+				"max" => 18,
+			]
+		];
 	}
 	if (
 		$_REQUEST['t']=='undefined'
