@@ -1,6 +1,6 @@
 <?php
 $user='cron3600';
-//lg($user);
+lg($user);
 
 if (date('G')==0) {
 	setCache('alwayson',9999);
@@ -44,3 +44,33 @@ if (isset($data['results'])) {
 }
 
 
+
+
+$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*14);
+$cols = [
+    'living' => 'living_temp',
+    'kamer' => 'kamer_temp',
+    'badkamer' => 'badkamer_temp',
+    'alex' => 'alex_temp',
+    'buiten' => 'buiten_temp',
+    'waskamer' => 'waskamer_temp'
+];
+$query = "SELECT ";
+$selects = [];
+foreach($cols as $col => $jsonKey) {
+    $selects[] = "MIN($col) AS {$col}_min, AVG($col) AS {$col}_avg, MAX($col) AS {$col}_max";
+}
+$query .= implode(", ", $selects);
+$query .= " FROM temp WHERE stamp > :stamp";
+$stmt = $db->prepare($query);
+$stmt->execute([':stamp' => $stamp]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$thermo_hist = [];
+foreach($cols as $col => $jsonKey) {
+    $thermo_hist[$jsonKey] = [
+        'min' => isset($row["{$col}_min"]) ? round((float)$row["{$col}_min"],1) : null,
+        'avg' => isset($row["{$col}_avg"]) ? round((float)$row["{$col}_avg"],1) : null,
+        'max' => isset($row["{$col}_max"]) ? round((float)$row["{$col}_max"],1) : null,
+    ];
+}
+echo setCache('thermo_hist',json_encode($thermo_hist));

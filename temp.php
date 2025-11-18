@@ -209,6 +209,8 @@ foreach ($_SESSION['sensors'] as $k=>$v) {
 }
 
 $query.=" from `temp` where stamp > '$maand' GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
+print_r($_SESSION['sensors']);
+
 if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 while ($row=$result->fetch_assoc()) $graph[]=$row;
 $result->free();

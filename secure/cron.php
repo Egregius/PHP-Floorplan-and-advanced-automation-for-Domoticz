@@ -16,7 +16,7 @@ foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
 if ($d['weg']['s']>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
 }
-$last10= $last60 = $last300 = $last3600 = $last90 = $time-60;
+$last10= $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 if (getCache('sunrise')==false) {
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
