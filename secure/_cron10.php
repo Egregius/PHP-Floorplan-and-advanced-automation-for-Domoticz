@@ -89,8 +89,8 @@ if ($d['auto']['s']=='On') {
 		elseif ($d['weg']['s']>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 
-if ($d['weg']['s']<2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']['s']=='Off') sw('grohered', 'On', basename(__FILE__).':'.__LINE__.' net='.$d['net'].'W', true);
-elseif ($d['grohered']['s']=='On'&&past('8keuken_8')>1800&&$d['n']>100) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__.' net='.$d['net'].'W',true);
+if ($d['weg']['s']<2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']['s']=='Off') sw('grohered', 'On', basename(__FILE__).':'.__LINE__.' n='.$d['n'].'W', true);
+elseif ($d['grohered']['s']=='On'&&past('8keuken_8')>1800&&$d['n']>100) sw('grohered', 'Off', basename(__FILE__).':'.__LINE__.' n='.$d['n'].'W',true);
 
 if ($d['regenpomp']['s']=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off', basename(__FILE__).':'.__LINE__);
 

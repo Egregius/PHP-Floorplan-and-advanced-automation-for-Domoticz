@@ -58,7 +58,7 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$d['alex_set']['s']=$Setalex;
 }
 $Setliving = 14;
-if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
+if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d['weg']['s']<=1)) {
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
@@ -71,7 +71,7 @@ if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
 		: 60;
 	
 	$baseSet = [
-		0 => 18.5,
+		0 => 19,
 		1 => 16,
 		2 => 16,
 		3 => 14
@@ -101,39 +101,32 @@ if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
 	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
 	$t_end = $comfortEnd;
 	
-	// --- basis nachtregeling ---
 	if ($time >= strtotime('19:30') || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
 	else $Setliving = $baseSet[$weg];
-	
-	// --- hysterese / geheugen toegevoegd ---
 	if ($prevSet == 1) {
-		// al in comfortfase of opwarming: houd target vast
 		$Setliving = $target;
 		if ($time > $t_end) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
-			if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 		}
+		if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
-		// startmoment bereikt: begin preheat
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
 		telegram($msg);
+		
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
-		// comfortfase actief
 		$Setliving = max($Setliving, $target);
 	}
 	else {
-		// alles buiten comfort: basisregeling
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	
-	// --- leercurve ---
 	if ($prevSet == 1/*$time >= $comfortAfternoon && $time < $t_end && $weg == 0*/ && $living >= $target && past('leadDataLiving') > 43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		if ($startTemp && $living > $startTemp) {
@@ -142,7 +135,7 @@ if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
 			$minPerDeg   = ceil($minutesUsed / $tempRise);
 			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
-			$leadDataLiving[$mode][] = $minPerDeg;
+			$leadDataLiving[$mode][] = round($minPerDeg,1);
 			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
@@ -158,6 +151,7 @@ if (($d['living_set']['m']==0||$d['living_set']['m']==2)&&$d['weg']['s']<=1) {
 		store('living_start_temp', $living, basename(__FILE__) . ':' . __LINE__, 1);
 	}
 }
+if ($d['living_set']['m']==1) $Setliving=$d['living_set']['s'];
 if ($d['living_set']['s']!=$Setliving) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
@@ -172,4 +166,4 @@ elseif ($d['heating']['s']==2) require ('_TC_heating_gasairco.php');
 elseif ($d['heating']['s']==3) require ('_TC_heating_gas.php');
 require('_TC_badkamer.php');
 
-if ($d['brander']['s']=='On'&&past('brander')>1195) sw('brander', 'Off');
+if ($d['heating']['s']<=1&&$d['brander']['s']=='On'&&past('brander')>1195) sw('brander', 'Off');
