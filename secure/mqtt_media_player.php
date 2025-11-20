@@ -52,6 +52,24 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,&$d, &$lastcheck) {
+	try {	
+		$path=explode('/',$topic);
+		$device=$path[2];
+		if ($device=='nvidia') {
+			$d['time']=microtime(true);
+			$d=fetchdata($d['lastfetch'],'mqtt_media_player:'.__LINE__);
+			$d['lastfetch']=$d['time'] - 300;
+			$status = ucfirst(strtolower(trim($status, '"')));
+			if ($d[$device]['m']!=$status) {
+				storemode($device,$status,'',1);
+			}
+		}
+	} catch (Throwable $e) {
+		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+	}
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 $sleepMicroseconds=10000;
 $maxSleep=100000;
 while (true) {
