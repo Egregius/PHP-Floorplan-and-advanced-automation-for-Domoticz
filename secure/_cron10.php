@@ -52,8 +52,11 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	} else {
-		if ($d['lgtv']['s']=='On') $i=5;
-		else $i=25;
+		$i=25;
+		if ($d['lgtv']['s']=='On'&&$d['nvidia']['s']=='Playing') {
+			if ($d['nvidia']['m']!='Com.spocky.projengmenu') $i=5;
+		}
+
 		if ($d['wasbak']['s']>25) {
 			if ($d['pirkeuken']['s']=='On') $i=300;
 			elseif ($d['pirkeuken']['s']=='Off') $i=150;

@@ -41,9 +41,9 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		if (isset($validDevices[$device])) {
 			$time=microtime(true);
 			$d['time']=$time;
-//			if (($d['time'] - $startloop) <= 3) return;
-//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
+			if (($d['time'] - $startloop) <= 2) return;
+			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,-4) === '_hum') {

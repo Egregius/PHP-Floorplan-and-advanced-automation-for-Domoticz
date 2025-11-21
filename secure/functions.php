@@ -106,7 +106,7 @@ function fkeuken() {
 	} else {
 		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<0||$d['rkeukenl']['s']>80)) {
 			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			else sl('wasbak', 5, basename(__FILE__).':'.__LINE__);
+			else sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
 		}
 	}
 //	hass('input_button','press','input_button.wakeipad');
