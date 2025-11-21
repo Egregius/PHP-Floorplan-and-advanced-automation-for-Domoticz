@@ -1,13 +1,12 @@
 <?php
 require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
-	$memcache=new Memcache;
-	$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
 	$user='camera';
 	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
-	$result = $mysqli->query("select n,s,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
+	$result = $mysqli->query("select n,s,dt,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
 		$d[$row['n']]['s'] = $row['s'];
+		$d[$row['n']]['dt'] = $row['dt'];
 		$d[$row['n']]['t'] = $row['t'];
 		$d[$row['n']]['m'] = $row['m'];
 	}
@@ -19,19 +18,8 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$times[]=TIME-$d['deurvoordeur']['t'];
 	$times[]=TIME-$d['poortrf']['t'];
 	$times[]=TIME-$d['weg']['t'];
-
 	$data['t']=min($times);
-	if ($d['weg']['s']==0&&$data['t']>90&&!isset($_GET['eufy'])) {
-		$memcache=new Memcache;
-		$memcache->connect('192.168.2.21',11211) or die ("Could not connect");
-		$prev=mget('bewegingvoordeur');
-		if ($prev<$_SERVER['REQUEST_TIME']-600) {
-			file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=749&switchcmd=Set%20Level&level=2');
-			file_get_contents('http://127.0.0.1:8080/json.htm?type=command&param=switchlight&idx=747&switchcmd=Set%20Level&level=20&passcode=');
-		}
-		mset('bewegingvoordeur', $_SERVER['REQUEST_TIME']);
-	}
-	if (mget('dag')<2) {
+	if (getCache('dag')<0) {
 		$data['z']=0;
 		sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	} else $data['z']=1;
@@ -98,12 +86,11 @@ function lg($msg) {
 	}
 }
 
-function mset($key, $data, $ttl=0) {
-	global $memcache;
-	$memcache->set($key, $data);
+function setCache(string $key, $value): bool {
+    return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
-function mget($key) {
-	global $memcache;
-	$data=$memcache->get($key);
-	return $data;
+
+function getCache(string $key, $default = false) {
+    $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
+    return $data === false ? $default : $data;
 }
