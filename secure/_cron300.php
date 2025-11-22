@@ -48,7 +48,7 @@ if ($d['weg']['s']>0) {
 	if ($d['tuintafel']['s']=='On') sw('tuintafel','Off', basename(__FILE__).':'.__LINE__);
 } 
 
-/*
+
 if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 if (past('weg')>18000&& $d['weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('weg', 1, basename(__FILE__).':'.__LINE__);
@@ -56,35 +56,9 @@ if (past('weg')>18000&& $d['weg']['s']==0&& past('pirliving')>18000&& past('pirk
 } elseif (past('weg')>36000&& $d['weg']['s']==1&& past('pirliving')>36000&& past('pirkeuken')>36000&& past('pirinkom')>36000&& past('pirhall')>36000&& past('pirgarage')>36000) {
 	store('weg', 2, basename(__FILE__).':'.__LINE__);
 	telegram('weg ingeschakeld na 10 uur geen beweging', false, 2);
-}*/
+}
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['daikin']['s']=='On'&&past('daikin')>178) {
-	foreach (array('living', 'kamer', 'alex') as $k) {
-		if ($k=='living') $ip=111;
-		elseif ($k=='kamer') $ip=112;
-		elseif ($k=='alex') $ip=113;
-		sleep(2);
-		$data=file_get_contents('http://192.168.2.'.$ip.'/aircon/get_day_power_ex');
-		$data=explode(',', $data);
-		if ($data[0]=='ret=OK') {
-			$curr_day_heat=explode('=', $data[1]);
-			${$k.'heat'}=array_sum(explode('/', $curr_day_heat[1]));
-			$prev_1day_heat=explode('=', $data[2]);
-			${$k.'prevheat'}=array_sum(explode('/', $prev_1day_heat[1]));
-			$curr_day_cool=explode('=', $data[3]);
-			${$k.'cool'}=array_sum(explode('/', $curr_day_cool[1]));
-			$prev_1day_cool=explode('=', $data[4]);
-			${$k.'prevcool'}=array_sum(explode('/', $prev_1day_cool[1]));
-		}
-	}
-	if ($data[0]=='ret=OK'&&isset($livingheat)&&isset($kamerheat)&&isset($kamerheat)&&isset($kamercool)&&isset($alexheat)&&isset($alexcool)) {
-		$date=date('Y-m-d', $time);
-		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingheat','$livingcool','$kamerheat','$kamercool','$alexheat','$alexcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingheat',livingcool='$livingcool',kamerheat='$kamerheat',kamercool='$kamercool',alexheat='$alexheat',alexcool='$alexcool';");
-		$date=date('Y-m-d', $time-86400);
-		$db->query("INSERT INTO daikin (date,livingheat,livingcool,kamerheat,kamercool,alexheat,alexcool) VALUES ('$date','$livingprevheat','$livingprevcool','$kamerprevheat','$kamerprevcool','$alexprevheat','$alexprevcool') ON DUPLICATE KEY UPDATE date='$date',livingheat='$livingprevheat',livingcool='$livingprevcool',kamerheat='$kamerprevheat',kamercool='$kamerprevcool',alexheat='$alexprevheat',alexcool='$alexprevcool';");
-	}
-}
 if ($d['z']>0) {
 	if (past('uv')>1100) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
