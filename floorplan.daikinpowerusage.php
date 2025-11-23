@@ -54,16 +54,6 @@ echo '
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a><br>
 			<br>
-			<br>';
-if ($d['daikin']['m']==0) echo '
-			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b2 btna">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b2">Auto</a><br>
-			<br>
-			<div style="font-size:2em">Current: '.$d['daikin_kwh']['icon'].'</div>';
-else echo '
-			<a href="/floorplan.daikinpowerusage.php?setauto=0" class="btn b2">Manueel</a>
-			<a href="/floorplan.daikinpowerusage.php?setauto=1" class="btn b2 btna">Auto</a><br>
-			<br>
 			<div style="font-size:2em">Current: '.$d['daikin_kwh']['icon'].'</div>';
 echo '
 			<br>
