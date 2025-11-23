@@ -50,10 +50,10 @@ if ($d['daikin']['m']==1) {
 					$set+=-3;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';
 				} elseif ($k=='kamer') {
-					$set+=-2;
+					$set+=-1.5;
 					if ($time<strtotime('10:00')||$d['weg']['s']==1) $rate='B';
 				} elseif ($k=='alex') {
-					$set+=-2;
+					$set+=-1.5;
 					if ($d['alexslaapt']['s']==1) $rate='B';
 				}
 				$set=ceil($set * 2) / 2;
