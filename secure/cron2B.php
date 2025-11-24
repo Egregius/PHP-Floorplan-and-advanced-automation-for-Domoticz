@@ -41,7 +41,7 @@ foreach ($devices as $ip => $vol) {
 				if ($status['@attributes']['source'] == 'STANDBY') {
 //					lg(basename(__FILE__).':'.__LINE__);
 					if ($ip==101) bosepreset(boseplaylist());
-					elseif ($d['time']<strtotime('21:00')) bosezone($ip,$vol);
+					elseif ($d['time']<strtotime('20:00')) bosezone($ip,$vol);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]['s'] == 'Off') store('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__,1);
