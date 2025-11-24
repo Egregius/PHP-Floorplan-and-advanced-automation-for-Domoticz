@@ -39,20 +39,20 @@ echo '
 			td{font-size:0.8em;text-align:center;}
 			th{text-align:center;}
 			.fix{width:320px;padding:0}
-			.btn{width:300px;}
+			.btn{width:90%;padding:20px 8px 8px 8px;margin:8px;}
 			.btna{color:#000!important}
-			.btnd{width:236px;}
-			.b4{max-width:155px!important;}
-			.b3{max-width:200px!important;}
 			tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
 			.border_right {border-right:1pt dotted #777;}
 		</style>
 	</head>
 	<body>
-		<div class="fix center" style="top:0px;left:0px;width:100%">
+		<div class="fix" style="bottom:10px;left:10px;width:100%">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
-			</a><br>
+			</a>
+		</div>
+		<div class="fix center" style="top:0px;left:0px;width:100%">
+			<br>
 			<br>
 			<div style="font-size:2em">Current: '.$d['daikin_kwh']['icon'].'</div>';
 echo '
@@ -60,9 +60,9 @@ echo '
 			<br>';
 foreach (array(40,50,60,70,80,90,100, 'Auto') as $i) {
 	if ($d['daikin_kwh']['m']==$i) echo '
-			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn btna b2">'.$i.'</a>';
+			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn btna">'.$i.'</a>';
 	else echo '
-			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn b2">'.$i.'</a>';
+			<a href="/floorplan.daikinpowerusage.php?setpower='.$i.'" class="btn">'.$i.'</a>';
 }
 ?>
 		</div>

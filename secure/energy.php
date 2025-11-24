@@ -128,7 +128,7 @@ class Database {
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
 
-lg("🟢 energy/php started");
+lg("🟢 energy.php started");
 
 // Main loop
 while (true) {

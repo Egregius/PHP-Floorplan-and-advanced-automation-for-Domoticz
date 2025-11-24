@@ -79,7 +79,7 @@ function check_en_slapen($locatie, $status, &$d) {
 
 function fliving() {
 	global $d,$time,$t;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureel1']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
+	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureellinks']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['z']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
 			if ($d['wasbak']['s']==0&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
@@ -129,7 +129,7 @@ function fhall() {
 }
 function huisslapen($weg=false) {
 	global $d;
-	sl(array('hall','inkom','eettafel','zithoek','bureel','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
+	sl(array('hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
 	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken','boseliving','mac','ipaddock','zetel'), 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
@@ -966,8 +966,9 @@ function republishmqtt() {
 			$brightness = $attributes['brightness'] ?? 0;
 			$brightness=round((float)$brightness / 2.55);
 			if ($brightness!=$i['s']) {
-				if ($device=='bureel') lg('bureel: '.$brightness.'|'.$i['s']);
-					$to_publish[] = [
+				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i['s']);
+				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i['s']);
+				$to_publish[] = [
 					'topic' => "$base_topic/$domain/$object_id/brightness",
 					'payload' => $brightness
 				];

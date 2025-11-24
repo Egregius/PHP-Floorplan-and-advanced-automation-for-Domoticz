@@ -20,7 +20,7 @@ if ($d['auto']['s']=='On') {
 		if ($d['pirliving']['s']=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureel','zithoek','eettafel') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				foreach (array('bureellinks','bureelrechts','zithoek','eettafel') as $i) if ($d[$i]['s']>0&&past($i)>$uit) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
@@ -127,7 +127,7 @@ if ($d['auto']['s']=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','bureel','wasbak','snijplank','hall','inkom','terras') as $i) {
+		foreach (array('eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','hall','inkom','terras') as $i) {
 			if ($d[$i]['s']>0) {
 				if (past($i)>$uit) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);
@@ -152,12 +152,14 @@ if ($d['auto']['s']=='On') {
 				if ($time>strtotime('5:00')&&$time<strtotime('10:00')) {
 					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=12) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']<=12) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
-					if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']<=12) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureellinks']['s']>0&&$d['bureellinks']['s']<=24&&$d['eettafel']['s']<=12) sl('bureellinks', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureelrechts']['s']>0&&$d['bureelrechts']['s']<=24&&$d['eettafel']['s']<=12) sl('bureelrechts', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['eettafel']['s']>0&&$d['eettafel']['s']<=12) sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
 				} else {
 					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
-					if ($d['bureel']['s']>0&&$d['bureel']['s']<=24&&$d['eettafel']['s']==0) sl('bureel', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureellinks']['s']>0&&$d['bureellinks']['s']<=24&&$d['eettafel']['s']==0) sl('bureellinks', 0, basename(__FILE__).':'.__LINE__);
+					if ($d['bureelrechts']['s']>0&&$d['bureelrechts']['s']<=24&&$d['eettafel']['s']==0) sl('bureelrechts', 0, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
