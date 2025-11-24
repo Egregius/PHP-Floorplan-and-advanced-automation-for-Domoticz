@@ -14,21 +14,7 @@ foreach ($devices as $ip => $vol) {
 						bosepreset(boseplaylist(), 101);
 					}
 				}
-			}
-			if (isset($status['@attributes']['source'])) {
-				if (/*$d['bose'.$ip]['m'] != 'Online' && */$d['boseliving']['s'] != 'On'&&($d['lgtv']['s']=='Off'||($d['lgtv']['s']=='On'&&$time<strtotime('8:00')))) {
-//					lg(basename(__FILE__).':'.__LINE__);
-					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
-				} elseif ($d['bose'.$ip]['m'] != 'Online') {
-//					lg(basename(__FILE__).':'.__LINE__);
-					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
-					if ($ip>101&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
-				}
-				if ($status['@attributes']['source'] == 'STANDBY') {
-//					lg(basename(__FILE__).':'.__LINE__);
-					if ($ip==101) bosepreset(boseplaylist());
-					else bosezone($ip,$vol);
-				} elseif ($status['@attributes']['source'] == 'INVALID_SOURCE') {
+				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {
 						lg('invalidcounter = '.$invalidcounter);
@@ -41,6 +27,21 @@ foreach ($devices as $ip => $vol) {
 							$invalidcounter = 0;
 						}
 					}
+				}
+			}
+			if (isset($status['@attributes']['source'])) {
+				if (/*$d['bose'.$ip]['m'] != 'Online' && */$d['boseliving']['s'] != 'On'&&($d['lgtv']['s']=='Off'||($d['lgtv']['s']=='On'&&$time<strtotime('8:00')))) {
+//					lg(basename(__FILE__).':'.__LINE__);
+					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+				} elseif ($d['bose'.$ip]['m'] != 'Online') {
+//					lg(basename(__FILE__).':'.__LINE__);
+					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+					if ($ip>101&&$d['boseliving']['s']=='Off'&&$d['time']<strtotime('21:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+				}
+				if ($status['@attributes']['source'] == 'STANDBY') {
+//					lg(basename(__FILE__).':'.__LINE__);
+					if ($ip==101) bosepreset(boseplaylist());
+					elseif ($d['time']<strtotime('21:00')) bosezone($ip,$vol);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]['s'] == 'Off') store('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__,1);
