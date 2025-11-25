@@ -2,17 +2,7 @@
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 session_write_close();
-if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
-	$msg='';
-	foreach($_REQUEST as $k=>$v) {
-		$msg.='	'.$k.'	'.$v;
-		if (isset($diff)) {
-			$msg.='	'.$diff;
-		}
-	}
-	lg('👉🏻 '.$user.$msg);
-}
-//if (isset($_REQUEST['device'])) lg(print_r($_REQUEST,true));
+
 if (isset($_REQUEST['t'])) {
 	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
 	else $t=$_SERVER['REQUEST_TIME']-1;
@@ -348,4 +338,14 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='mode') {
 		storeicon('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	}
+}
+if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
+	$msg='';
+	foreach($_REQUEST as $k=>$v) {
+		$msg.='	'.$k.'	'.$v;
+		if (isset($diff)) {
+			$msg.='	'.$diff;
+		}
+	}
+	lg('👉🏻 '.$user.$msg);
 }
