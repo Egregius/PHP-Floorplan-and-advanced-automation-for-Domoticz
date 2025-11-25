@@ -25,11 +25,8 @@ if (isset($ow['current'])) {
 	if (isset($ow['rain']['1h'])) $rains['ow']=$ow['rain']['1h']*10;
 	foreach ($ow['hourly'] as $i) {
 		if ($i['dt']<$time+(12*3600)) {
-//			lg(__LINE__.' '.print_r($i,true));
 			if ($i['temp']<$mintemp) $mintemp=$i['temp'];
 			elseif ($i['temp']>$maxtemp) $maxtemp=$i['temp'];
-			if ($i['feels_like']<$mintemp) $mintemp=$i['feels_like'];
-			elseif ($i['feels_like']>$maxtemp) $maxtemp=$i['feels_like'];
 		} else break;
 	}
 }
@@ -39,7 +36,6 @@ $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$l
 if (isset($wa['current']['temp_c'])) {
 	$temps['wa']=$wa['current']['temp_c'];
 	$hums['wa']=$ow['current']['humidity'];
-	$temps['wa_feel']=$wa['current']['feelslike_c'];
 	$winds['wa_speed']=$wa['current']['wind_kph'];
 	$winds['wa_gust']=$wa['current']['gust_kph'];
 	$rains['wa']=$wa['current']['precip_mm'];
@@ -75,7 +71,6 @@ if (isset($om['hourly']['temperature_2m'])) {
 $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json'), true);
 if (isset($vc['currentConditions']['temp'])) {
 	$temps['vc']=$vc['currentConditions']['temp'];
-	$temps['vc_feel']=$vc['currentConditions']['feelslike'];
 	$hums['vc']=$vc['currentConditions']['humidity'];
 	$winds['vc_wind']=$vc['currentConditions']['windgust'];
 	$rains['vc']=$vc['currentConditions']['precip'];
@@ -86,7 +81,6 @@ if (isset($vc['currentConditions']['temp'])) {
 $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour'), true);
 if (isset($yr['temperature']['value'])) {
 	$temps['yr']=$yr['temperature']['value'];
-	$temps['yr_feel']=$yr['temperature']['feelsLike'];
 	$winds['yr_wind']=$yr['wind']['speed'] * 1.609344;
 	$rains['yr']=$yr['precipitation']['value']*100;
 }
@@ -98,8 +92,6 @@ if (isset($yr['shortIntervals'])) {
 		if (strtotime($i['start'])<$time+(12*3600)) {
 			if ($i['temperature']['value']<$mintemp) $mintemp=$i['temperature']['value'];
 			elseif ($i['temperature']['value']>$maxtemp) $maxtemp=$i['temperature']['value'];
-			if ($i['feelsLike']['value']<$mintemp) $mintemp=$i['feelsLike']['value'];
-			elseif ($i['feelsLike']['value']>$maxtemp) $maxtemp=$i['feelsLike']['value'];
 		} else break;
 	}
 }
