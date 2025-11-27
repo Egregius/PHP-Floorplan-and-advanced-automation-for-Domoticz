@@ -29,6 +29,7 @@ $boses=array(
 );
 while (1) {
     $start = microtime(true);
+    $d['time'] = (int)$start;
     $d = fetchdata($time - 60, basename(__FILE__) . ':' . __LINE__);
     include 'cron2B.php';
     $time_elapsed_secs = microtime(true) - $start;
@@ -37,10 +38,9 @@ while (1) {
         $sleep = round($sleep * 1000000);
         usleep($sleep);
     }
-    $time = time();
-    $d['time'] = $time;
-    if ($lastcheck < $time - 300) {
-        $lastcheck = $time;
+    
+    if ($lastcheck < $d['time'] - 300) {
+        $lastcheck = $d['time'];
         stoploop();
         $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
     }
