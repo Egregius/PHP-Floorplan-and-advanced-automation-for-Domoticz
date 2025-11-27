@@ -140,7 +140,10 @@ if ($d['auto']['s']=='On') {
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
 	
 	if ($d['living_set']['m']!=0&&$d['eettafel']['s']==0&&past('living_set')>28800) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
-	if ($d['badkamer_set']['m']!=0&&$d['lichtbadkamer']['s']==0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
+	if($d['lichtbadkamer']['s']==0) {
+		if ($d['badkamer_set']['m']!=0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']['s']=='On'&&($d['time']<strtotime('6:00')||$d['time']>strtotime('8:00'))) sw('badkamerpower','Off', basename(__FILE__).':'.__LINE__);
+	}
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}

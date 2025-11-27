@@ -32,11 +32,11 @@ foreach ($devices as $ip => $vol) {
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]['m'] != 'Online' && */$d['boseliving']['s'] != 'On'&&($d['lgtv']['s']=='Off'||($d['lgtv']['s']=='On'&&$d['time']<strtotime('8:00')))) {
 //					lg(basename(__FILE__).':'.__LINE__);
-					sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+	//				sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {
 //					lg(basename(__FILE__).':'.__LINE__);
 					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
-					if ($ip>101&&$d['boseliving']['s']=='Off'&&$d['time']<strtotime('21:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
+					if ($ip>101&&$d['boseliving']['s']=='Off'&&$d['time']<strtotime('18:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY') {
 //					lg(basename(__FILE__).':'.__LINE__);
