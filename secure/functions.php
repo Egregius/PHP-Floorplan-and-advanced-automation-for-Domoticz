@@ -728,22 +728,93 @@ function hassopts($domain, $service, $entity = '', $data = []) {
     $host = '192.168.2.26';
     $port = 8123;
     $path = "/api/services/$domain/$service";
+
     if (!empty($entity)) $data['entity_id'] = $entity;
     $payload = json_encode($data);
-    $headers = "POST $path HTTP/1.1\r\n";
-    $headers .= "Host: $host\r\n";
-    $headers .= "Content-Type: application/json\r\n";
-    $headers .= "Authorization: Bearer ".hasstoken()."\r\n";
-    $headers .= "Content-Length: ".strlen($payload)."\r\n";
-    $headers .= "Connection: Close\r\n\r\n";
-    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
-    if ($fp) {
-        fwrite($fp, $headers.$payload);
-        fclose($fp);
-    } else {
+
+    $request  = "POST $path HTTP/1.1\r\n";
+    $request .= "Host: $host\r\n";
+    $request .= "Content-Type: application/json\r\n";
+    $request .= "Authorization: Bearer " . hasstoken() . "\r\n";
+    $request .= "Content-Length: " . strlen($payload) . "\r\n";
+    $request .= "Connection: close\r\n\r\n";
+    $request .= $payload;
+
+    // connect and read response
+    $timeout = 2.0; // seconden - pas aan als nodig
+    $fp = @stream_socket_client("tcp://{$host}:{$port}", $errno, $errstr, $timeout);
+    if (!$fp) {
         lg("❌ HASS socket fout: $errstr ($errno)");
+        return [
+            'ok' => false,
+            'error' => "socket_error",
+            'errno' => $errno,
+            'errstr' => $errstr
+        ];
     }
+
+    stream_set_timeout($fp, (int)$timeout);
+    fwrite($fp, $request);
+
+    // lees volledige response
+    $raw = '';
+    while (!feof($fp)) {
+        $raw .= fgets($fp, 1024);
+    }
+    $meta = stream_get_meta_data($fp);
+    fclose($fp);
+
+    // split headers en body
+    $parts = preg_split("/\r\n\r\n/", $raw, 2);
+    $header_text = $parts[0] ?? '';
+    $body = $parts[1] ?? '';
+
+    // status code uit eerste headerregel
+    $status = 0;
+    $lines = preg_split("/\r\n/", $header_text);
+    if (!empty($lines[0]) && preg_match('#HTTP/\d\.\d\s+(\d{3})#', $lines[0], $m)) {
+        $status = (int)$m[1];
+    }
+
+    // headers parsen
+    $headers = [];
+    for ($i = 1; $i < count($lines); $i++) {
+        $line = $lines[$i];
+        if (strpos($line, ':') !== false) {
+            list($k, $v) = explode(':', $line, 2);
+            $headers[trim($k)] = trim($v);
+        }
+    }
+
+    $json = null;
+    $jsonError = null;
+    if ($body !== '') {
+        $json = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $jsonError = json_last_error_msg();
+        }
+    }
+
+    $result = [
+        'ok' => ($status >= 200 && $status < 300),
+        'status' => $status,
+        'headers' => $headers,
+        'body' => $body,
+        'json' => $json,
+        'json_error' => $jsonError,
+        'meta' => $meta,
+        'raw' => $raw
+    ];
+
+    if (!$result['ok']) {
+        lg("❌ HASS response niet-OK: HTTP {$status}, json_error: {$jsonError}");
+    } else {
+        lg("✅ HASS response OK: HTTP {$status}");
+    }
+
+    return $result;
 }
+
 
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);

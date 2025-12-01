@@ -46,6 +46,7 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif <= -0.8) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
+				if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				if ($k=='living') {
 					$set+=-3;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';

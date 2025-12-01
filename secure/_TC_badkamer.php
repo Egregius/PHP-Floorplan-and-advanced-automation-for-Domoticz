@@ -56,7 +56,6 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$set = $target;
 		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
-		telegram($msg);
 		storemode('badkamer_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 		$preheatbath=true;
 	}
@@ -97,7 +96,6 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
-				telegram($msg);
 			}
 	//		if ($prevSet != 0) storemode('badkamer_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 		}
@@ -114,8 +112,15 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	}
 }
 if (isset($set)&&$d['heating']['s']>=0) {
-	if ($set!=$d['badkamer_set']['s']) setpoint('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
+	if ($set!=$d['badkamer_set']['s']) {
+		setpoint('badkamer_set', $set, basename(__FILE__).':'.__LINE__.' '.$m2);
+		if ($d['heating']['s']>=2) {
+			if ($set>15) hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
+			else hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
+		}
+	}
 	$d['badkamer_set']['s']=$set;
+	
 }
 
 if ($d['weg']['s']<2) {

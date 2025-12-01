@@ -116,7 +116,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
-		telegram($msg);
 		
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
@@ -142,7 +141,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 //			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 			lg($msg);
-			telegram($msg);
 		}
 	}
 	
