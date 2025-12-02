@@ -7,7 +7,7 @@ foreach (array('living','badkamer') as $kamer) {
 $aanna=(1/(21-$d['buiten_temp']['s']))*6000; if ($aanna<1000) $aanna=1000;
 $uitna=(21-$d['buiten_temp']['s'])*60; 
 if ($uitna<595) $uitna=595;
-elseif ($uitna>1195) $uitna=1195;
+elseif ($uitna>1795) $uitna=1795;
 $pastbrander=past('brander');
 //lg('difgas='.$difgas.' pastbrander='.$pastbrander);
 if (	$difgas<=-1.5&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.5&&$d['n']>-500&&$d['buiten_temp']['s']<=5) sw('brander','On' , 'Aan na = '.$aanna*0.5.' '.basename(__FILE__).':'.__LINE__);
@@ -63,7 +63,7 @@ if ($d['daikin']['m']==1) {
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				if ($k=='living') {
-					$set+=-3;
+					$set+=-2.5;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';
 				} elseif ($k=='kamer') {
 					$set+=-1.5;

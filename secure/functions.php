@@ -809,7 +809,7 @@ function hassopts($domain, $service, $entity = '', $data = []) {
     if (!$result['ok']) {
         lg("❌ HASS response niet-OK: HTTP {$status}, json_error: {$jsonError}");
     } else {
-        lg("✅ HASS response OK: HTTP {$status}",10);
+        lg("✅ HASS response OK: HTTP {$status}",99);
     }
 
     return $result;
