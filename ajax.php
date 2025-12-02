@@ -4,73 +4,92 @@ require '/var/www/authentication.php';
 session_write_close();
 
 if (isset($_REQUEST['t'])) {
-	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) $t=0;
-	else $t=$_REQUEST['t']-1;
-	$d=array();
-	$d['t']=$_SERVER['REQUEST_TIME_FLOAT'];
-	$db=dbconnect();
-	if ($_REQUEST['t']==0) $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
-	else $stmt=$db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		$d[$row['n']]['s']=$row['s'];
-		if($row['ajax']==2)$d[$row['n']]['t']=$row['t'];
-		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];else $row['dt']=null;
-		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
-	}
-	$en=json_decode(getCache('en'));
-	if ($en) {
-		$d['n']=$en->n;
-		$d['a']=$en->a;
-		$d['b']=$en->b;
-		$d['c']=$en->c;
-		$d['z']=$en->z;
-	}
-	if ($_REQUEST['t']=='undefined'||$_REQUEST['t']==0) {
-		$sunrise=json_decode(getCache('sunrise'),true);
-		if ($sunrise) {
-			$d['CivTwilightStart']=$sunrise['CivTwilightStart'];
-			$d['Sunrise']=$sunrise['Sunrise'];
-			$d['Sunset']=$sunrise['Sunset'];
-			$d['CivTwilightEnd']=$sunrise['CivTwilightEnd'];
-			$map = [
-					'PRESET_1' => 'EDM-1',
-					'PRESET_2' => 'EDM-2',
-					'PRESET_3' => 'EDM-3',
-					'PRESET_4' => 'MIX-1',
-					'PRESET_5' => 'MIX-2',
-					'PRESET_6' => 'MIX-3',
-				];
-			$d['playlist']=$map[boseplaylist()];
-		}
-		$d['thermo_hist']=json_decode(getCache('thermo_hist'),true);
-	}
-	if (
-		$_REQUEST['t']=='undefined'
-		||$_REQUEST['t']==0
-		||
-			(
-				$_REQUEST['t']>0 
-				&& getCache('energy_lastupdate')>
-				$_REQUEST['t']-1
-			)
-		) {
-		$vandaag=json_decode(getCache('energy_vandaag'));
-		if ($vandaag) {
-			$d['gas']=$vandaag->gas;
-			$d['gasavg']=$vandaag->gasavg;
-			$d['elec']=$vandaag->elec;
-			$d['elecavg']=$vandaag->elecavg;
-			$d['verbruik']=$vandaag->verbruik;
-			$d['zon']=$vandaag->zon;
-			$d['zonavg']=$vandaag->zonavg;
-			$d['zonref']=$vandaag->zonref;
-			$d['alwayson']=$vandaag->alwayson;
-		}
-	}
-	echo json_encode($d);
-	exit;
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $lastRequestKey = "last_request_$ip";
+
+    // vorige requesttijd ophalen uit cache (bijv. bestand of APCu)
+    $lastRequest = getCache($lastRequestKey); // pas getCache aan voor jouw cache-oplossing
+
+    // check of t op 0 gezet moet worden
+    $currentTime = microtime(true);
+    if ($_REQUEST['t'] == 'undefined' || $_REQUEST['t'] == 0 || !$lastRequest || ($currentTime - $lastRequest) > 2) {
+        $t = 0;
+    } else {
+        $t = $_REQUEST['t'] - 1;
+    }
+
+    // tijd van dit request opslaan voor IP
+    setCache($lastRequestKey, $currentTime);
+
+    $d = array();
+    $d['t'] = $_SERVER['REQUEST_TIME_FLOAT'];
+    $db = dbconnect();
+
+    if ($t == 0) {
+        $stmt = $db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
+    } else {
+        $stmt = $db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
+    }
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $d[$row['n']]['s'] = $row['s'];
+        if ($row['ajax'] == 2) $d[$row['n']]['t'] = $row['t'];
+        if (!is_null($row['m'])) $d[$row['n']]['m'] = $row['m'];
+        if (!is_null($row['dt'])) $d[$row['n']]['dt'] = $row['dt']; else $row['dt'] = null;
+        if (!is_null($row['icon'])) $d[$row['n']]['icon'] = $row['icon'];
+    }
+
+    $en = json_decode(getCache('en'));
+    if ($en) {
+        $d['n'] = $en->n;
+        $d['a'] = $en->a;
+        $d['b'] = $en->b;
+        $d['c'] = $en->c;
+        $d['z'] = $en->z;
+    }
+
+    if ($t == 0) {
+        $sunrise = json_decode(getCache('sunrise'), true);
+        if ($sunrise) {
+            $d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
+            $d['Sunrise'] = $sunrise['Sunrise'];
+            $d['Sunset'] = $sunrise['Sunset'];
+            $d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
+            $map = [
+                'PRESET_1' => 'EDM-1',
+                'PRESET_2' => 'EDM-2',
+                'PRESET_3' => 'EDM-3',
+                'PRESET_4' => 'MIX-1',
+                'PRESET_5' => 'MIX-2',
+                'PRESET_6' => 'MIX-3',
+            ];
+            $d['playlist'] = $map[boseplaylist()];
+        }
+        $d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
+    }
+
+    if (
+        $t == 0
+        || ($t > 0 && getCache('energy_lastupdate') > $t - 1)
+    ) {
+        $vandaag = json_decode(getCache('energy_vandaag'));
+        if ($vandaag) {
+            $d['gas'] = $vandaag->gas;
+            $d['gasavg'] = $vandaag->gasavg;
+            $d['elec'] = $vandaag->elec;
+            $d['elecavg'] = $vandaag->elecavg;
+            $d['verbruik'] = $vandaag->verbruik;
+            $d['zon'] = $vandaag->zon;
+            $d['zonavg'] = $vandaag->zonavg;
+            $d['zonref'] = $vandaag->zonref;
+            $d['alwayson'] = $vandaag->alwayson;
+        }
+    }
+
+    echo json_encode($d);
+    exit;
 }
+
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['command']=='eufy') {
 	lg('Starting Eufy stream');
