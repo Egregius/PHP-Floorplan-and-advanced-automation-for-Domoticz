@@ -10,12 +10,15 @@ if ($uitna<595) $uitna=595;
 elseif ($uitna>1195) $uitna=1195;
 $pastbrander=past('brander');
 //lg('difgas='.$difgas.' pastbrander='.$pastbrander);
-if (	$difgas<=-0.2&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.6&&$d['n']>-500&&$d['buiten_temp']['s']<=5) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-0.1&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.8&&$d['n']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=3) sw('brander','On' , 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
+if (	$difgas<=-1.0&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.5&&$d['n']>-500&&$d['buiten_temp']['s']<=7) sw('brander','On' , 'Aan na = '.$aanna*0.5.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=-0.8&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.6&&$d['n']>-500&&$d['buiten_temp']['s']<=6) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=-0.6&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.7&&$d['n']>-500&&$d['buiten_temp']['s']<=5) sw('brander','On' , 'Aan na = '.$aanna*0.7.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=-0.4&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.8&&$d['n']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=-0.2&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.9&&$d['n']>-500&&$d['buiten_temp']['s']<=3) sw('brander','On' , 'Aan na = '.$aanna*0.9.' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas>=0   &&$d['brander']['s']=="On" &&$pastbrander>$uitna)     sw('brander','Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
 elseif ($difgas>=-0.1&&$d['brander']['s']=="On" &&$pastbrander>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas>=0.2 &&$d['brander']['s']=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
+elseif ($difgas>=-0.2 &&$d['brander']['s']=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
 
 if ($d['daikin']['m']==1) {
 	$totalmin=0;

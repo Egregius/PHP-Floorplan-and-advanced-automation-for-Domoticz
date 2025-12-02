@@ -657,11 +657,11 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 //	else  lg("❄️ daikinset($device): $url");
 	http_get($url);
 //	usleep(500000); 
-	$status = daikinstatus($device, basename(__FILE__).":".__LINE__.":$msg");
-	if ($status) {
-		if ($d['daikin'.$device]['s'] != $status) {
-			store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");
-		}
+//	$status = daikinstatus($device, basename(__FILE__).":".__LINE__.":$msg");
+//	if ($status) {
+//		if ($d['daikin'.$device]['s'] != $status) {
+//			store('daikin'.$device, $status, basename(__FILE__).":".__LINE__.":$msg");
+//		}
 //		if ($power==0 && $d['daikin'.$device]['m']!=0) {
 //			storemode('daikin'.$device, 0, basename(__FILE__).":".__LINE__.":$msg");
 //		} elseif ($d['daikin'.$device]['m']!=$mode) {
@@ -685,7 +685,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 				http_get($url);
 			}
 		}
-	}
+//	}
 }
 function hasstoken() {
 	global $user;

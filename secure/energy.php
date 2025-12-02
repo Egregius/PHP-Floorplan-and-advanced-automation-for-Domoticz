@@ -1,6 +1,5 @@
 #!/usr/bin/php
 <?php
-require '/var/www/html/secure/functions.php';
 date_default_timezone_set('Europe/Brussels');
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
@@ -441,4 +440,21 @@ function stoploop() {
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
+}
+function lg($msg) {
+	$fp = fopen('/temp/domoticz.log', "a+");
+	$time = microtime(true);
+	$dFormat = "d-m H:i:s";
+	$mSecs = $time - floor($time);
+	$mSecs = substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
+}
+function setCache(string $key, $value): bool {
+    return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
+}
+
+function getCache(string $key, $default = false) {
+    $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
+    return $data === false ? $default : $data;
 }
