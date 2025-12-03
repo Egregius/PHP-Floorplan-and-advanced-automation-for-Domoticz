@@ -5,16 +5,16 @@ $extra=false;
 if (isset($_REQUEST['all'])) {
 	$t=0;
 	$extra=true;
-//	$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' d?all + extra';
+	$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' d?all + extra';
 } else {
 	$lastRequest = getCache($_SERVER['HTTP_X_FORWARDED_FOR']) ?? 1;
 	if (($time - $lastRequest) > 300) {
 		$extra=true;
 		$t = $lastRequest;
-//		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
 	} else {
 		$t = $lastRequest;
-//		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
 	}
 }
 setCache($_SERVER['HTTP_X_FORWARDED_FOR'], $time);
@@ -92,7 +92,7 @@ if (
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-//lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
+lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
 
 
 function dbconnect() {

@@ -34,7 +34,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, $mqtt) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -57,6 +57,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$val = (int)$status; // echte waarde
 				$old = (int)($d[$device]['s'] ?? 0);
 				$oldt = (int)($d[$device]['t'] ?? 0);
+				$d[$device]['s']=$status;
+				$data['t']=(int)$d['time'];
+				$data[$device]=$d[$device];
+				$mqtt->publish('i/',json_encode($data),MqttClient::QOS_AT_LEAST_ONCE);
 				if ($oldt === 0) {
 					store($device, $val, '', 1);
 					return;
@@ -64,10 +68,16 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 				$time_passed = ($time - $oldt) >= 30;
 				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
+				
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status,'',1);
+					
+					$d[$device]['s']=$status;
+					$data['t']=(int)$d['time'];
+					$data[$device]=$d[$device];
+					$mqtt->publish('i/',json_encode($data),MqttClient::QOS_AT_LEAST_ONCE);
 				}
 			}
 		} elseif ($device === 'sun_solar_elevation') {
