@@ -6,7 +6,11 @@ createheader('floorplan');
 ?>
 	<body class="floorplan">
 		<div class="fix" id="clock">
-			<a href='javascript:location.reload(true);' id="time">
+			<a href="#" id="time" onclick="
+				sessionStorage.removeItem('floorplanData');
+				location.reload();
+				return false;
+			">
 				Loading...
 			</a>
 		</div>

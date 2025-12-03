@@ -1,18 +1,21 @@
 <?php
 require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
+$extra=false;
 if (isset($_REQUEST['all'])) {
 	$t=0;
-	lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' d?all');
+	$extra=true;
+	$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' d?all + extra';
 } else {
 	$lastRequest = getCache($_SERVER['HTTP_X_FORWARDED_FOR']) ?? 1;
 	
-	if (($time - $lastRequest) > 3600) {
-		$t = 0;
-		lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest to long ago');
+	if (($time - $lastRequest) > 900) {
+		$extra=true;
+		$t = $lastRequest;
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest to long ago + extra';
 	} else {
 		$t = $lastRequest;
-		lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' '.$time - $lastRequest);
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' '.$time - $lastRequest;
 	}
 }
 setCache($_SERVER['HTTP_X_FORWARDED_FOR'], $time);
@@ -51,7 +54,7 @@ if ($en) {
 	$d['c'] = $en->c;
 	$d['z'] = $en->z;
 }
-if ($t == 0) {
+if ($extra==true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
 		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
@@ -71,7 +74,7 @@ if ($t == 0) {
 	$d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
 }
 if (
-	$t == 0
+	$extra==true
 	|| ($t > 0 && getCache('energy_lastupdate') > $t - 1)
 ) {
 	$vandaag = json_decode(getCache('energy_vandaag'));
@@ -88,7 +91,9 @@ if (
 	}
 }
 
-echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+echo $data;
+lg($msg.' '.strlen($data));
 
 
 function dbconnect() {

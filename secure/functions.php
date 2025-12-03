@@ -572,7 +572,7 @@ function createheader($page='') {
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<script type="text/javascript" src="/scripts/m4q.min.js"></script>
-		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>';
+		<script type="text/javascript" src="/scripts/floorplanjs.js?v=3"></script>';
 	if ($page!='') {
 		echo '
 		<script type=\'text/javascript\'>
