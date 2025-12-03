@@ -6,25 +6,17 @@ session_write_close();
 if (isset($_REQUEST['t'])) {
     $ip = $_SERVER['REMOTE_ADDR'];
     $lastRequestKey = "last_request_$ip";
-
-    // vorige requesttijd ophalen uit cache (bijv. bestand of APCu)
-    $lastRequest = getCache($lastRequestKey); // pas getCache aan voor jouw cache-oplossing
-
-    // check of t op 0 gezet moet worden
-    $currentTime = microtime(true);
+    $lastRequest = getCache($lastRequestKey);
+    $currentTime = $_SERVER['REQUEST_TIME_FLOAT'];
     if ($_REQUEST['t'] == 'undefined' || $_REQUEST['t'] == 0 || !$lastRequest || ($currentTime - $lastRequest) > 2) {
         $t = 0;
     } else {
         $t = $_REQUEST['t'] - 1;
     }
-
-    // tijd van dit request opslaan voor IP
     setCache($lastRequestKey, $currentTime);
-
     $d = array();
-    $d['t'] = $_SERVER['REQUEST_TIME_FLOAT'];
+    $d['t'] = $currentTime;
     $db = dbconnect();
-
     if ($t == 0) {
         $stmt = $db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
     } else {
@@ -35,10 +27,20 @@ if (isset($_REQUEST['t'])) {
         $d[$row['n']]['s'] = $row['s'];
         if ($row['ajax'] == 2) $d[$row['n']]['t'] = $row['t'];
         if (!is_null($row['m'])) $d[$row['n']]['m'] = $row['m'];
-        if (!is_null($row['dt'])) $d[$row['n']]['dt'] = $row['dt']; else $row['dt'] = null;
-        if (!is_null($row['icon'])) $d[$row['n']]['icon'] = $row['icon'];
+        if (!is_null($row['dt'])) {
+        	$d[$row['n']]['dt'] = $row['dt'];
+        	if ($row['dt']=='daikin') {
+        		$d[$row['n']]['s'] = null;
+        	}
+        } else $row['dt'] = null;
+        if (!is_null($row['icon'])) {
+			if ($row['dt']=='th'&&$row['n']!='badkamer_set') {
+				$d[$row['n']]['icon']=json_decode($row['icon'],true);
+				if (json_last_error() !== JSON_ERROR_NONE) echo "INVALID JSON FOR ICON: ".$row['n']." >> ".$row['icon'];
+			}
+			else $d[$row['n']]['icon']=$row['icon'];
+		}
     }
-
     $en = json_decode(getCache('en'));
     if ($en) {
         $d['n'] = $en->n;
@@ -47,7 +49,6 @@ if (isset($_REQUEST['t'])) {
         $d['c'] = $en->c;
         $d['z'] = $en->z;
     }
-
     if ($t == 0) {
         $sunrise = json_decode(getCache('sunrise'), true);
         if ($sunrise) {
@@ -67,7 +68,6 @@ if (isset($_REQUEST['t'])) {
         }
         $d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
     }
-
     if (
         $t == 0
         || ($t > 0 && getCache('energy_lastupdate') > $t - 1)
@@ -86,7 +86,7 @@ if (isset($_REQUEST['t'])) {
         }
     }
 
-    echo json_encode($d);
+    echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
