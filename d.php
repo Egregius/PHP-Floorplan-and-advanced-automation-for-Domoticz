@@ -3,13 +3,16 @@ require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
 if (isset($_REQUEST['all'])) {
 	$t=0;
+	lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' d?all');
 } else {
 	$lastRequest = getCache($_SERVER['HTTP_X_FORWARDED_FOR']) ?? 1;
 	
-	if (($time - $lastRequest) > 2) {
+	if (($time - $lastRequest) > 3600) {
 		$t = 0;
+		lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest to long ago');
 	} else {
-		$t = $lastRequest - 1;
+		$t = $lastRequest;
+		lg ($_SERVER['HTTP_X_FORWARDED_FOR'].' '.$time - $lastRequest);
 	}
 }
 setCache($_SERVER['HTTP_X_FORWARDED_FOR'], $time);
@@ -150,4 +153,14 @@ function setCache(string $key, $value): bool {
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
+}
+
+function lg($msg) {
+	$fp = fopen('/temp/domoticz.log', "a+");
+	$time = microtime(true);
+	$dFormat = "d-m H:i:s";
+	$mSecs = $time - floor($time);
+	$mSecs = substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
 }
