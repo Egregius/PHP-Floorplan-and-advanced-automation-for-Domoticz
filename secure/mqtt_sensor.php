@@ -106,7 +106,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=10000;
+$sleepMicroseconds=1000;
 $maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
