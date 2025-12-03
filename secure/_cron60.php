@@ -196,7 +196,7 @@ if (
 	&&$d['alex_set']['s']!='D'
 	&&$d['daikin']['s']=='On'
 	&&$d['daikin_kwh']['s']<20
-	&&past('daikin_kwh')>900
+	&&past('daikin_kwh')>1800
 	&&past('daikin')>3600
 ) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 $stamp=date('Y-m-d H:i:s', $timeint-900);
