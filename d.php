@@ -8,14 +8,13 @@ if (isset($_REQUEST['all'])) {
 	$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' d?all + extra';
 } else {
 	$lastRequest = getCache($_SERVER['HTTP_X_FORWARDED_FOR']) ?? 1;
-	
-	if (($time - $lastRequest) > 900) {
+	if (($time - $lastRequest) > 300) {
 		$extra=true;
 		$t = $lastRequest;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest to long ago + extra';
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
 	} else {
 		$t = $lastRequest;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' '.$time - $lastRequest;
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
 	}
 }
 setCache($_SERVER['HTTP_X_FORWARDED_FOR'], $time);
@@ -75,7 +74,7 @@ if ($extra==true) {
 }
 if (
 	$extra==true
-	|| ($t > 0 && getCache('energy_lastupdate') > $t - 1)
+//	|| ($t > 0 && getCache('energy_lastupdate') > $t - 1)
 ) {
 	$vandaag = json_decode(getCache('energy_vandaag'));
 	if ($vandaag) {
@@ -93,7 +92,7 @@ if (
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-lg($msg.' '.strlen($data));
+lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
 
 
 function dbconnect() {
