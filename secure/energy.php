@@ -367,11 +367,13 @@ function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_im
             break;
         }
     }
+    
     if ($updateNeeded || $force) {
         $cache['previous'] = $newData;
         $cache['current'] = $newData;
         file_put_contents($cacheFile, json_encode($cache));
     }
+    
     return $updateNeeded;
 }
 function stoploop() {
@@ -399,6 +401,7 @@ function lg($msg) {
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
+
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;

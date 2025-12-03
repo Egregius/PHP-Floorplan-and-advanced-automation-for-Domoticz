@@ -35,7 +35,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 
-$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, $mqtt) {
+$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -52,10 +52,6 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status,'',1);
-					$d[$device]['s']=$status;
-					$data['t']=(int)$d['time'];
-					$data[$device]=$d[$device];
-					$mqtt->publish('i/',json_encode($data),MqttClient::QOS_AT_LEAST_ONCE);
 				}
 			}
 		}
