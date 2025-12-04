@@ -68,7 +68,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	
 	$avgMinPerDeg = !empty($leadDataLiving[$mode])
 		? round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1)
-		: 60;
+		: 20;
 	
 	$baseSet = [
 		0 => 19,
@@ -116,7 +116,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
-		
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
 		$Setliving = max($Setliving, $target);
@@ -132,7 +131,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$tempRise    = $living - $startTemp;
 			$minutesUsed = round(past('living_start_temp') / 60, 1);
 			$minPerDeg   = ceil($minutesUsed / $tempRise);
-			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
+			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
 			$leadDataLiving[$mode][] = round($minPerDeg,1);
 			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);

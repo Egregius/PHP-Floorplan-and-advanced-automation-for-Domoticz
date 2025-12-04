@@ -26,11 +26,12 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$set       = 13;
 	$target    = 21;
 	$badkamer  = $d['badkamer_temp']['s'];
+	$mode      = $d['heating']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
 	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
-	$avgMinPerDeg = !empty($leadDataBath)
-		? round(array_sum($leadDataBath) / count($leadDataBath), 1)
-		: 60;
+	$avgMinPerDeg = !empty($leadDataLiving[$mode])
+		? round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1)
+		: 20;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start     = $t - ($leadMinutes * 60);
@@ -62,10 +63,10 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			if ($tempRise>0) {
 				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
 				$minPerDeg   = ceil($minutesUsed / $tempRise);
-				$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
-				$leadDataBath[] = $minPerDeg;
-				$leadDataBath = array_slice($leadDataBath, -14);
-				$avgMinPerDeg = ceil(array_sum($leadDataBath) / count($leadDataBath));
+				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+				$leadDataBath[$mode][] = $minPerDeg;
+				$leadDataBath[$mode] = array_slice($leadDataBath[$mode], -14);
+				$avgMinPerDeg[$mode] = ceil(array_sum($leadDataBath[$mode]) / count($leadDataBath[$mode]));
 				store('leadDataBath', json_encode($leadDataBath), basename(__FILE__) . ':' . __LINE__);
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
