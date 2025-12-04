@@ -194,14 +194,14 @@ function processEnergyData($dbverbruik, $dbzonphp, $force) {
 	}
 	if ($prevavg > 2500) {
 		if ($newavg > $kwartierpiek - 200) {
-			alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 120, false);
+			//alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 120, false);
 		}
 		if ($newavg < $prevavg) {
 			try {
 				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
 				$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
 				if ($prevavg > $kwartierpiek - 200) {
-					alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 30, false);
+					//alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 30, false);
 					$kwartierpiek = $prevavg;
 				}
 			} catch (Exception $e) {
