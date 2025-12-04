@@ -45,6 +45,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		else $d[$row['n']]['icon']=$row['icon'];
 	}
 }
+
 $en = json_decode(getCache('en'));
 if ($en) {
 	$d['n'] = $en->n;
@@ -53,6 +54,7 @@ if ($en) {
 	$d['c'] = $en->c;
 	$d['z'] = $en->z;
 }
+
 if ($extra==true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
