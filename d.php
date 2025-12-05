@@ -22,8 +22,8 @@ if (isset($_GET['o'])) {
 		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
-	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
-	$d['pfsense']=json_decode(@file_get_contents('https://pfsense.egregius.be:44300/egregius.php', false, $ctx), true);
+	$ctx = stream_context_create(['http'=>['timeout'=>1],'ssl'=>['verify_peer'=>false,'verify_peer_name'=>false,'allow_self_signed'=> true]]);
+	$d['pf']=json_decode(@file_get_contents('https://192.168.2.254:44300/egregius.php', false, $ctx), true);
 } elseif (isset($_GET['h'])) {
 	$type='h';
 	if (isset($_GET['all'])) {
@@ -65,8 +65,8 @@ if (isset($_GET['o'])) {
 		$d['c'] = $en->c;
 		$d['z'] = $en->z;
 	}
-	$verbruik=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].'v');
-	if ($verbruik===false) {
+	$verbruiklast=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].'v');
+	if ($verbruiklast===false||$verbruik===true) {
 		$vandaag = json_decode(getCache('energy_vandaag'));
 		if ($vandaag) {
 			$d['gas'] = $vandaag->gas;
@@ -79,11 +79,11 @@ if (isset($_GET['o'])) {
 			$d['zonref'] = $vandaag->zonref;
 			$d['alwayson'] = $vandaag->alwayson;
 			$msg2.=' + verbruik';
-			apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].'v', $time, 300);
+			apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].'v', $time, 600);
 		}
 	}
 }
-apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 7200);
+apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 14400);
 $db = dbconnect();
 //try {
     $stmt = $db->query($sql);
@@ -92,8 +92,8 @@ $db = dbconnect();
 //    error_log("SQL QUERY: " . $sql);
 //    throw $e;
 //}
-$extra=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e');
-if ($extra===false) {
+$extralast=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e');
+if ($extralast===false||$extra===true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
 		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
@@ -109,7 +109,7 @@ if ($extra===false) {
 			'PRESET_6' => 'MIX-3',
 		];
 		$d['playlist'] = $map[boseplaylist()];
-		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 7200);
+		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 14400);
 	}
 	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
 	$msg2.=' + extra';
