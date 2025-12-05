@@ -1098,3 +1098,22 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
+static $localCache = [];
+function setCacheFast(string $key, $value) {
+    global $localCache;
+    $localCache[$key] = $value;
+}
+function getCacheFast(string $key, $default = false) {
+    global $localCache;
+    if (isset($localCache[$key])) {
+        return $localCache[$key];
+    }
+
+    $file = '/dev/shm/cache/' . $key . '.txt';
+    $data = @file_get_contents($file);
+    if ($data === false) return $default;
+
+    // populate memory for later
+    $localCache[$key] = $data;
+    return $data;
+}

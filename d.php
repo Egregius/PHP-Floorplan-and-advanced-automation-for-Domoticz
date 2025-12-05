@@ -2,30 +2,70 @@
 require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
 $extra=false;
-if (isset($_REQUEST['all'])) {
-	$t=0;
-	$extra=true;
-	$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' d?all + extra';
-} else {
-	$lastRequest = getCache($_SERVER['HTTP_X_FORWARDED_FOR']) ?? 1;
-	if (($time - $lastRequest) > 300) {
+if (isset($_GET['o'])) {
+	$type='o';
+	if (isset($_GET['all'])) {
+		$t=0;
 		$extra=true;
-		$t = $lastRequest;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE o=1";
 	} else {
-		$t = $lastRequest;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if (($time - $lastRequest) > 300) {
+			$extra=true;
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+		} else {
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+		}
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE o=1 AND t >= $t";
+	}
+} elseif (isset($_GET['h'])) {
+	$type='h';
+	if (isset($_GET['all'])) {
+		$t=0;
+		$extra=true;
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE h=1";
+	} else {
+		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if (($time - $lastRequest) > 300) {
+			$extra=true;
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+		} else {
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+		}
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE h=1 AND t >= $t";
+	}
+} else {
+	$type='f';
+	if (isset($_GET['all'])) {
+		$t=0;
+		$extra=true;
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE f=1";
+	} else {
+		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if (($time - $lastRequest) > 300) {
+			$extra=true;
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+		} else {
+			$t = $lastRequest;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+		}
+		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE f=1 AND t >= $t";
 	}
 }
-setCache($_SERVER['HTTP_X_FORWARDED_FOR'], $time);
+
+
+
+apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 300);
 $d = array();
 $d['t'] = $time;
 $db = dbconnect();
-if ($t == 0) {
-	$stmt = $db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1;");
-} else {
-	$stmt = $db->query("SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE ajax>=1 AND t >= $t;");
-}
+$stmt = $db->query($sql);
+
 
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 	$d[$row['n']]['s'] = $row['s'];
