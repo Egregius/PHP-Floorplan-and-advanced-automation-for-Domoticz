@@ -5,6 +5,7 @@ $extra=false;
 $verbruik=false;
 $d = array();
 $d['t'] = $time;
+$msg2='';
 if (isset($_GET['o'])) {
 	$type='o';
 	if (isset($_GET['all'])) {
@@ -17,7 +18,7 @@ if (isset($_GET['o'])) {
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	cache expired';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	expired';
 		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
@@ -35,7 +36,7 @@ if (isset($_GET['o'])) {
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	cache expired';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	expired';
 		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
@@ -52,7 +53,7 @@ if (isset($_GET['o'])) {
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	cache expired';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	expired';
 		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1 AND `t`>=$t";
 	}
@@ -64,17 +65,35 @@ if (isset($_GET['o'])) {
 		$d['c'] = $en->c;
 		$d['z'] = $en->z;
 	}
+	$verbruik=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].'v');
+	if ($verbruik===false) {
+		$vandaag = json_decode(getCache('energy_vandaag'));
+		if ($vandaag) {
+			$d['gas'] = $vandaag->gas;
+			$d['gasavg'] = $vandaag->gasavg;
+			$d['elec'] = $vandaag->elec;
+			$d['elecavg'] = $vandaag->elecavg;
+			$d['verbruik'] = $vandaag->verbruik;
+			$d['zon'] = $vandaag->zon;
+			$d['zonavg'] = $vandaag->zonavg;
+			$d['zonref'] = $vandaag->zonref;
+			$d['alwayson'] = $vandaag->alwayson;
+			$msg2.=' + verbruik';
+			apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].'v', $time, 300);
+		}
+	}
 }
-apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 900);
+apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 7200);
 $db = dbconnect();
-try {
+//try {
     $stmt = $db->query($sql);
-} catch (PDOException $e) {
-    error_log("SQL ERROR: " . $e->getMessage());
-    error_log("SQL QUERY: " . $sql);
-    throw $e;
-}
-if ($extra==true) {
+//} catch (PDOException $e) {
+//    error_log("SQL ERROR: " . $e->getMessage());
+//    error_log("SQL QUERY: " . $sql);
+//    throw $e;
+//}
+$extra=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e');
+if ($extra===false) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
 		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
@@ -90,23 +109,12 @@ if ($extra==true) {
 			'PRESET_6' => 'MIX-3',
 		];
 		$d['playlist'] = $map[boseplaylist()];
+		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 7200);
 	}
 	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
+	$msg2.=' + extra';
 }
-if ($verbruik==true ) {
-	$vandaag = json_decode(getCache('energy_vandaag'));
-	if ($vandaag) {
-		$d['gas'] = $vandaag->gas;
-		$d['gasavg'] = $vandaag->gasavg;
-		$d['elec'] = $vandaag->elec;
-		$d['elecavg'] = $vandaag->elecavg;
-		$d['verbruik'] = $vandaag->verbruik;
-		$d['zon'] = $vandaag->zon;
-		$d['zonavg'] = $vandaag->zonavg;
-		$d['zonref'] = $vandaag->zonref;
-		$d['alwayson'] = $vandaag->alwayson;
-	}
-}
+
 while ($row = $stmt->fetch()) {
 	$d[$row['n']]['s'] = $row['s'];
 	if ($row['rt'] == 1) $d[$row['n']]['t'] = $row['t'];
@@ -128,8 +136,8 @@ while ($row = $stmt->fetch()) {
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
-else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes');
+if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
+else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;

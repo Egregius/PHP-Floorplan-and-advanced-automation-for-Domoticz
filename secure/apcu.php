@@ -1,6 +1,5 @@
 <?php
 $start=microtime(true);
-define('time',$_SERVER['REQUEST_TIME']);
 if(isset($_POST['Update'])){
 	if(isset($_POST['name'])){
 		apcu_store($_POST['name'],$_POST['Update']);
@@ -37,8 +36,8 @@ function ConfirmDelete(){return confirm('Are you sure?');}
 <?php
 $apcu=apcu_cache_info();
 $running=time()-$apcu['start_time'];
-$days=date("z",$running)-1;
-$time=date("G:i:s",$running-3600);
+$days = floor($running / 86400);
+$time = gmdate("H:i:s", $running);
 ?>
 <style>
 table{width:100%;}
@@ -48,8 +47,8 @@ td{padding:2px 10px;}
 </style>
 <div style="width:400px;">
 <table>
-	<tr><th align="right">Start time</td><td align="right"><?php echo date("Y-m-d G:i:s",$apcu['start_time']).' - '.$apcu['start_time'];?></td></tr>
-	<tr><th align="right">Run time</th><td align="right"><?php echo $days.' '.$time; ?></td></tr>
+	<tr><th align="right">Start time</td><td align="right"><?php echo date("Y-m-d G:i:s",$apcu['start_time']);?></td></tr>
+	<tr><th align="right">Run time</th><td align="right"><?php echo $days.' '.$time.' - '.$running; ?></td></tr>
 	<tr><th align="right">entries</th><td align="right"><?php echo $apcu['num_entries'];?></td></tr>
 	<tr><th align="right">misses</th><td align="right"><?php echo $apcu['num_misses'];?></td><td align="right"><?php echo round($apcu['num_misses']/$running,2);?>/sec</td></tr>
 	<tr><th align="right">updates</th><td align="right"><?php echo $apcu['num_inserts'];?></td><td align="right"><?php echo round($apcu['num_inserts']/$running,2);?>/sec</td></tr>
