@@ -306,7 +306,7 @@ function sortheader($key,$name,$extra='') {
 function menu_entry($ob,$title) {
 	global $MYREQUEST,$MY_SELF;
 	if($title=='User Cache Entries') {
-		return "<li><a class=\"child_active\" href=\"/apcu.php?OB=2&SCOPE=A&SORT1=A&SORT2=D&COUNT=0&SEARCH=\">$title</a></li>";
+		return "<li><a class=\"child_active\" href=\"apcu.php?OB=2&SCOPE=A&SORT1=A&SORT2=D&COUNT=0&SEARCH=\">$title</a></li>";
 	} else {
 		if ($MYREQUEST['OB']!=$ob) {
 			return "<li><a href=\"$MY_SELF&OB=$ob\">$title</a></li>";
@@ -736,10 +736,10 @@ $time=$_SERVER['REQUEST_TIME'];
 		}
 	}
 function convertToHours($time){
-	if($time<600)return substr(strftime('%M:%S',$time),1);
-	elseif($time>=600&&$time<3600)return strftime('%M:%S',$time);
-	elseif($time>=3600&&$time<86400)return strftime('%k:%M:%S',$time-3600);
-	else return strftime('%e:%H:%M:%S',$time-3600-86400);
+	if($time<600)return date("i:s",$time);
+	elseif($time>=600&&$time<3600)return date("i:s",$time);
+	elseif($time>=3600&&$time<86400)return date("G:i:s",$time-3600);
+	else return date("j:H:i:s",$time-3600-86400);
 }
 
 	if ($list) {
@@ -761,7 +761,7 @@ function convertToHours($time){
           "<td class=td-0><a href=\"$MY_SELF&OB=",$MYREQUEST['OB'],"&SH=",$sh,"#key-". $sh ."\">",$field_value,'</a></td>',
           '<td class="td-n center">',$entry['num_hits'],'</td>',
           '<td class="td-n right">',$entry['mem_size'],'</td>',
-          '<td class="td-n left">',date(DATE_FORMAT,$entry['access_time']),' - ',convertToHours($time-$entry['access_time']),'</td>',
+          '<td class="td-n left">',$entry['access_time'],date(DATE_FORMAT,$entry['access_time']),' - ',convertToHours($time-$entry['access_time']),'</td>',
           '<td class="td-n left">',date(DATE_FORMAT,$entry['mtime']),' - ',convertToHours($time-$entry['mtime']),'</td>';
 
         if ($entry['deletion_time']) {

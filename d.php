@@ -2,74 +2,90 @@
 require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
 $extra=false;
+$verbruik=false;
+$d = array();
+$d['t'] = $time;
 if (isset($_GET['o'])) {
 	$type='o';
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE o=1";
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	all';
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1";
 	} else {
 		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if (($time - $lastRequest) > 300) {
 			$extra=true;
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	lastrequest > 5 min = + extra';
 		} else {
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $lastRequest.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE o=1 AND t >= $t";
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
+	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
+	$d['pfsense']=json_decode(@file_get_contents('https://pfsense.egregius.be:44300/egregius.php', false, $ctx), true);
 } elseif (isset($_GET['h'])) {
 	$type='h';
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE h=1";
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	all';
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1";
 	} else {
 		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if (($time - $lastRequest) > 300) {
 			$extra=true;
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	lastrequest > 5 min = + extra';
 		} else {
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $lastRequest.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE h=1 AND t >= $t";
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
 } else {
 	$type='f';
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE f=1";
+		$verbruik=true;
+		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	all';
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1";
 	} else {
 		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if (($time - $lastRequest) > 300) {
 			$extra=true;
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].' lastrequest > 5 min = + extra';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	lastrequest > 5 min = + extra';
 		} else {
 			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	'.$time - $lastRequest.' sec';
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $lastRequest.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,ajax FROM devices WHERE f=1 AND t >= $t";
+		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1 AND `t`>=$t";
+	}
+	$en = json_decode(getCache('en'));
+	if ($en) {
+		$d['n'] = $en->n;
+		$d['a'] = $en->a;
+		$d['b'] = $en->b;
+		$d['c'] = $en->c;
+		$d['z'] = $en->z;
 	}
 }
-
-
-
 apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 300);
-$d = array();
-$d['t'] = $time;
 $db = dbconnect();
-$stmt = $db->query($sql);
-
-
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+try {
+    $stmt = $db->query($sql);
+} catch (PDOException $e) {
+    error_log("SQL ERROR: " . $e->getMessage());
+    error_log("SQL QUERY: " . $sql);
+    throw $e;
+}
+while ($row = $stmt->fetch()) {
 	$d[$row['n']]['s'] = $row['s'];
-	if ($row['ajax'] == 2) $d[$row['n']]['t'] = $row['t'];
+	if ($row['rt'] == 1) $d[$row['n']]['t'] = $row['t'];
 	if (!is_null($row['m'])) $d[$row['n']]['m'] = $row['m'];
 	if (!is_null($row['dt'])) {
 		$d[$row['n']]['dt'] = $row['dt'];
@@ -85,16 +101,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		else $d[$row['n']]['icon']=$row['icon'];
 	}
 }
-
-$en = json_decode(getCache('en'));
-if ($en) {
-	$d['n'] = $en->n;
-	$d['a'] = $en->a;
-	$d['b'] = $en->b;
-	$d['c'] = $en->c;
-	$d['z'] = $en->z;
-}
-
 if ($extra==true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
@@ -114,10 +120,7 @@ if ($extra==true) {
 	}
 	$d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
 }
-if (
-	$extra==true
-//	|| ($t > 0 && getCache('energy_lastupdate') > $t - 1)
-) {
+if ($verbruik==true ) {
 	$vandaag = json_decode(getCache('energy_vandaag'));
 	if ($vandaag) {
 		$d['gas'] = $vandaag->gas;
@@ -131,12 +134,10 @@ if (
 		$d['alwayson'] = $vandaag->alwayson;
 	}
 }
-
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
-
-
+if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');
+else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes');
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;
@@ -192,15 +193,10 @@ function boseplaylist() {
 	];
 	return $map[$preset];
 }
-function setCache(string $key, $value): bool {
-    return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
-}
-
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
-
 function lg($msg) {
 	$fp = fopen('/temp/domoticz.log', "a+");
 	$time = microtime(true);
