@@ -75,7 +75,7 @@ try {
     throw $e;
 }
 if ($extra==true) {
-	$sunrise = json_decode(apcu_fetch('sunrise'), true);
+	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
 		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
 		$d['Sunrise'] = $sunrise['Sunrise'];
