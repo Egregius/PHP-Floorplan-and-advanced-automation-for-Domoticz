@@ -74,6 +74,39 @@ try {
     error_log("SQL QUERY: " . $sql);
     throw $e;
 }
+if ($extra==true) {
+	$sunrise = json_decode(apcu_fetch('sunrise'), true);
+	if ($sunrise) {
+		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
+		$d['Sunrise'] = $sunrise['Sunrise'];
+		$d['Sunset'] = $sunrise['Sunset'];
+		$d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
+		$map = [
+			'PRESET_1' => 'EDM-1',
+			'PRESET_2' => 'EDM-2',
+			'PRESET_3' => 'EDM-3',
+			'PRESET_4' => 'MIX-1',
+			'PRESET_5' => 'MIX-2',
+			'PRESET_6' => 'MIX-3',
+		];
+		$d['playlist'] = $map[boseplaylist()];
+	}
+	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
+}
+if ($verbruik==true ) {
+	$vandaag = json_decode(getCache('energy_vandaag'));
+	if ($vandaag) {
+		$d['gas'] = $vandaag->gas;
+		$d['gasavg'] = $vandaag->gasavg;
+		$d['elec'] = $vandaag->elec;
+		$d['elecavg'] = $vandaag->elecavg;
+		$d['verbruik'] = $vandaag->verbruik;
+		$d['zon'] = $vandaag->zon;
+		$d['zonavg'] = $vandaag->zonavg;
+		$d['zonref'] = $vandaag->zonref;
+		$d['alwayson'] = $vandaag->alwayson;
+	}
+}
 while ($row = $stmt->fetch()) {
 	$d[$row['n']]['s'] = $row['s'];
 	if ($row['rt'] == 1) $d[$row['n']]['t'] = $row['t'];
@@ -92,39 +125,7 @@ while ($row = $stmt->fetch()) {
 		else $d[$row['n']]['icon']=$row['icon'];
 	}
 }
-if ($extra==true) {
-	$sunrise = json_decode(getCache('sunrise'), true);
-	if ($sunrise) {
-		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
-		$d['Sunrise'] = $sunrise['Sunrise'];
-		$d['Sunset'] = $sunrise['Sunset'];
-		$d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
-		$map = [
-			'PRESET_1' => 'EDM-1',
-			'PRESET_2' => 'EDM-2',
-			'PRESET_3' => 'EDM-3',
-			'PRESET_4' => 'MIX-1',
-			'PRESET_5' => 'MIX-2',
-			'PRESET_6' => 'MIX-3',
-		];
-		$d['playlist'] = $map[boseplaylist()];
-	}
-	$d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
-}
-if ($verbruik==true ) {
-	$vandaag = json_decode(getCache('energy_vandaag'));
-	if ($vandaag) {
-		$d['gas'] = $vandaag->gas;
-		$d['gasavg'] = $vandaag->gasavg;
-		$d['elec'] = $vandaag->elec;
-		$d['elecavg'] = $vandaag->elecavg;
-		$d['verbruik'] = $vandaag->verbruik;
-		$d['zon'] = $vandaag->zon;
-		$d['zonavg'] = $vandaag->zonavg;
-		$d['zonref'] = $vandaag->zonref;
-		$d['alwayson'] = $vandaag->alwayson;
-	}
-}
+
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
 if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes');

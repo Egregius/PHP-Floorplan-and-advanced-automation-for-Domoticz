@@ -3,9 +3,9 @@ $user='cron3600';
 //lg($user);
 
 if (date('G')==0) {
-	setCache('alwayson',9999);
-	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
-	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
+	apcu_store('alwayson',9999);
+//	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
+//	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
 
 if ($d['weg']['s']==0) {
@@ -35,7 +35,7 @@ if (isset($data['results'])) {
 	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 	$Sunrise = isoToLocalTimestamp($results['sunrise']);
 	$Sunset = isoToLocalTimestamp($results['sunset']);
-	setCache('sunrise', json_encode(array(
+	apcu_store('sunrise', json_encode(array(
 		'CivTwilightStart' => date('G:i', $CivTwilightStart),
 		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
 		'Sunrise' => date('G:i', $Sunrise),
@@ -73,4 +73,4 @@ foreach($cols as $col => $jsonKey) {
         'max' => isset($row["{$col}_max"]) ? round((float)$row["{$col}_max"],1) : null,
     ];
 }
-echo setCache('thermo_hist',json_encode($thermo_hist));
+echo apcu_store('thermo_hist',json_encode($thermo_hist));

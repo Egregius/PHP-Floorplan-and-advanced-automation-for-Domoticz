@@ -18,7 +18,7 @@ if ($d['weg']['s']>0) {
 }
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
-if (getCache('sunrise')==false) {
+if (apcu_fetch('sunrise')==false) {
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
 	$response = @file_get_contents($url);
 	$data = json_decode($response, true);
@@ -28,7 +28,7 @@ if (getCache('sunrise')==false) {
 		$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 		$Sunrise = isoToLocalTimestamp($results['sunrise']);
 		$Sunset = isoToLocalTimestamp($results['sunset']);
-		setCache('sunrise', json_encode(array(
+		apcu_store('sunrise', json_encode(array(
 			'CivTwilightStart' => date('G:i', $CivTwilightStart),
 			'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
 			'Sunrise' => date('G:i', $Sunrise),
