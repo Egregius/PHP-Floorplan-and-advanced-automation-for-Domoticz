@@ -13,15 +13,12 @@ if (isset($_GET['o'])) {
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1";
 	} else {
-		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
-		if (($time - $lastRequest) > 300) {
+		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if ($t === false) {
+			$t = 0;
 			$extra=true;
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	lastrequest > 5 min = + extra';
-		} else {
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $lastRequest.' sec';
-		}
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	cache expired';
+		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
 	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
@@ -34,15 +31,12 @@ if (isset($_GET['o'])) {
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1";
 	} else {
-		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
-		if (($time - $lastRequest) > 300) {
+		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if ($t === false) {
+			$t = 0;
 			$extra=true;
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	lastrequest > 5 min = + extra';
-		} else {
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $lastRequest.' sec';
-		}
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	cache expired';
+		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
 } else {
@@ -54,15 +48,12 @@ if (isset($_GET['o'])) {
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1";
 	} else {
-		$lastRequest = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
-		if (($time - $lastRequest) > 300) {
+		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		if ($t === false) {
+			$t = 0;
 			$extra=true;
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	lastrequest > 5 min = + extra';
-		} else {
-			$t = $lastRequest;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $lastRequest.' sec';
-		}
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	cache expired';
+		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1 AND `t`>=$t";
 	}
 	$en = json_decode(getCache('en'));
@@ -74,7 +65,7 @@ if (isset($_GET['o'])) {
 		$d['z'] = $en->z;
 	}
 }
-apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 300);
+apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 900);
 $db = dbconnect();
 try {
     $stmt = $db->query($sql);

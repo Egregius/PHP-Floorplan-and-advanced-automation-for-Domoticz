@@ -7,7 +7,9 @@ createheader('floorplan');
 	<body class="floorplan">
 		<div class="fix" id="clock">
 			<a href="#" id="time" onclick="
-				sessionStorage.removeItem(view);
+				sessionStorage.removeItem('floorplan');
+				sessionStorage.removeItem('floorplanheating');
+				sessionStorage.removeItem('floorplanothers');
 				location.reload();
 				return false;
 			">
