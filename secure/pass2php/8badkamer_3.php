@@ -8,6 +8,6 @@ if ($status=='On') {
 //		sl('lichtbadkamer', 50, basename(__FILE__).':'.__LINE__);
 		usleep(500000);
 	}
-	sl('lichtbadkamer', 50, basename(__FILE__).':'.__LINE__);
+	sl('lichtbadkamer', 35, basename(__FILE__).':'.__LINE__);
 	store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
 }

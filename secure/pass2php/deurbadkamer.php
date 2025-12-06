@@ -5,8 +5,8 @@ if ($status!=$d['deurbadkamer']['s']) {
 			if (past('lichtbadkamer')>9) {
 				if ($d['time']>$t&&$d['time']<strtotime('21:00')) {
 					sl('lichtbadkamer', 16, basename(__FILE__).':'.__LINE__);
-				} elseif ($d['lichtbadkamer']['s']<8) {
-					sl('lichtbadkamer', 8, basename(__FILE__).':'.__LINE__);
+				} elseif ($d['lichtbadkamer']['s']<9) {
+					sl('lichtbadkamer', 9, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
