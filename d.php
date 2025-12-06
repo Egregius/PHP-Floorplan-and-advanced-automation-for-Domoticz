@@ -64,7 +64,7 @@ if (isset($_GET['o'])) {
 		$d['b'] = $en->b;
 		$d['c'] = $en->c;
 		$d['z'] = $en->z;
-	}
+	} else lg("Can't fetch en");
 	$verbruiklast=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].'v');
 	if ($verbruiklast===false||$verbruik===true) {
 		$vandaag = json_decode(getCache('energy_vandaag'));
@@ -136,8 +136,8 @@ while ($row = $stmt->fetch()) {
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
-else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
+//if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
+//else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;

@@ -586,9 +586,9 @@ function createheader($page='') {
 }
 function daikin_ips() {
 	return [
-		'living' => 111,
-		'kamer'  => 112,
-		'alex'	=> 113,
+		'living' => 161,
+		'kamer'  => 162,
+		'alex'	=> 163,
 	];
 }
 
