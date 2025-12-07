@@ -19,7 +19,10 @@ if (isset($_GET['o'])) {
 			$t = 0;
 			$extra=true;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	expired';
-		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
+		} else {
+			if ($t<$time-5) $t-=3600;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
+		}
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
 	$ctx = stream_context_create(['http'=>['timeout'=>1],'ssl'=>['verify_peer'=>false,'verify_peer_name'=>false,'allow_self_signed'=> true]]);
@@ -37,7 +40,10 @@ if (isset($_GET['o'])) {
 			$t = 0;
 			$extra=true;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	expired';
-		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
+		} else {
+			if ($t<$time-5) $t-=3600;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
+		}
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
 } else {
@@ -54,7 +60,10 @@ if (isset($_GET['o'])) {
 			$t = 0;
 			$extra=true;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	expired';
-		} else $msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
+		} else {
+			if ($t<$time-5) $t-=3600;
+			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
+		}
 		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1 AND `t`>=$t";
 	}
 	$en = json_decode(getCache('en'));
@@ -100,16 +109,8 @@ if ($extralast===false||$extra===true) {
 		$d['Sunrise'] = $sunrise['Sunrise'];
 		$d['Sunset'] = $sunrise['Sunset'];
 		$d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
-		$map = [
-			'PRESET_1' => 'EDM-1',
-			'PRESET_2' => 'EDM-2',
-			'PRESET_3' => 'EDM-3',
-			'PRESET_4' => 'MIX-1',
-			'PRESET_5' => 'MIX-2',
-			'PRESET_6' => 'MIX-3',
-		];
-		$d['playlist'] = $map[boseplaylist()];
-		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 14400);
+		$d['playlist'] = boseplaylist();
+		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 3600);
 	}
 	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
 	$msg2.=' + extra';
@@ -136,8 +137,8 @@ while ($row = $stmt->fetch()) {
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-//if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
-//else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
+if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
+else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;
@@ -183,7 +184,7 @@ function boseplaylist() {
 		elseif ($dag % 2 == 0) $preset='EDM-2';
 		else $preset='EDM-1';
 	}
-	$map = [
+/*	$map = [
 		'EDM-1' => 'PRESET_1',
 		'EDM-2' => 'PRESET_2',
 		'EDM-3' => 'PRESET_3',
@@ -191,7 +192,8 @@ function boseplaylist() {
 		'MIX-2' => 'PRESET_5',
 		'MIX-3' => 'PRESET_6',
 	];
-	return $map[$preset];
+	return $map[$preset];*/
+	return $preset;
 }
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');

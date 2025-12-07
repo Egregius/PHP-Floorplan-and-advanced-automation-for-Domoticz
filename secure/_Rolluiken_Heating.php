@@ -31,6 +31,8 @@ if ($d['auto']['s']=='On') {
 				foreach (array('rwaskamer','ralex','rkamerl','rkamerr') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				if ($d['dag']['s']<0&&$d['buiten_temp']['s']<8) {
 					foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+				} elseif ($d['dag']['s']<-6&&$d['buiten_temp']['s']<10) {
+					foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}

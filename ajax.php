@@ -39,6 +39,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['playlist']='';
 	}
 	$d['volume']=$volume['actualvolume'];
+	$d['playlisttoday']=boseplaylisttoday();
 	echo json_encode($d);
 	exit;
 }
@@ -279,4 +280,29 @@ if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!
 		}
 	}
 	lg('👉🏻 '.$user.$msg);
+}
+function boseplaylisttoday() {
+	global $time;
+	$dag=floor($time/86400);
+	$dow=date("w");
+	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+	if ($weekend==true) {
+		if ($dag % 3 == 0) $preset='MIX-3';
+		elseif ($dag % 2 == 0) $preset='MIX-2';
+		else $preset='MIX-1';
+	} else {
+		if ($dag % 3 == 0) $preset='EDM-3';
+		elseif ($dag % 2 == 0) $preset='EDM-2';
+		else $preset='EDM-1';
+	}
+/*	$map = [
+		'EDM-1' => 'PRESET_1',
+		'EDM-2' => 'PRESET_2',
+		'EDM-3' => 'PRESET_3',
+		'MIX-1' => 'PRESET_4',
+		'MIX-2' => 'PRESET_5',
+		'MIX-3' => 'PRESET_6',
+	];
+	return $map[$preset];*/
+	return $preset;
 }

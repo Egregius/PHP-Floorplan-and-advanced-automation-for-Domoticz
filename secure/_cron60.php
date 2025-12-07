@@ -153,13 +153,13 @@ if ($d['auto']['s']=='On') {
 		if ($d['dag']['s']>1) {
 			if ($d['rbureel']['s']<40&&$d['rliving']['s']<40) {
 				if ($time>strtotime('5:00')&&$time<strtotime('10:00')) {
-					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=14) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
+//					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=14) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']<=14) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bureellinks']['s']>0&&$d['bureellinks']['s']<=24&&$d['eettafel']['s']<=14) sl('bureellinks', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bureelrechts']['s']>0&&$d['bureelrechts']['s']<=24&&$d['eettafel']['s']<=14) sl('bureelrechts', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['eettafel']['s']>0&&$d['eettafel']['s']<=14) sl('eettafel', 0, basename(__FILE__).':'.__LINE__);
 				} else {
-					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
+//					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']==0) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
 					if ($d['zithoek']['s']>0&&$d['zithoek']['s']<20&&$d['eettafel']['s']==0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bureellinks']['s']>0&&$d['bureellinks']['s']<=24&&$d['eettafel']['s']==0) sl('bureellinks', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['bureelrechts']['s']>0&&$d['bureelrechts']['s']<=24&&$d['eettafel']['s']==0) sl('bureelrechts', 0, basename(__FILE__).':'.__LINE__);
