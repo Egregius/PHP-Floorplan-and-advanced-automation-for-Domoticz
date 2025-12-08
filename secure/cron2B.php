@@ -36,6 +36,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {
 //					lg(basename(__FILE__).':'.__LINE__);
 					storemode('bose'.$ip, 'Online', basename(__FILE__).':'.__LINE__, true);
+					$d['bose'.$ip]['m']='Online';
 //					if ($ip>101&&$d['boseliving']['s']=='Off'&&$d['time']<strtotime('18:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,1);
 				}
 				if ($status['@attributes']['source'] == 'STANDBY') {
