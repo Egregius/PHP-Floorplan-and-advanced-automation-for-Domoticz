@@ -232,6 +232,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
 				elseif ($level==0) hass('light','turn_off','light.'.$name);
 			} elseif ($d[$name]['dt']=='r') {
+				if($name=='rbureel') $level=100-$level;
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
 			} elseif ($d[$name]['dt']=='luifel') {
 				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
