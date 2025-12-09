@@ -52,21 +52,52 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				if ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				} elseif ($d[$device]['dt']=='c') {
+					if ($status->contact==1) $status='Closed';
+					else $status='Open';
+					if ($d[$device]['s']!=$status) {
+						store($device,$status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
+				} elseif ($d[$device]['dt']=='pir') {
+					if ($status->occupancy==1) $status='On';
+					else $status='Off';
+					if ($d[$device]['s']!=$status) {
+						store($device,$status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
+				} elseif ($d[$device]['dt']=='hd') {
+					if ($status->state=='OFF') $status=0;
+					else $status=$status=round((float)$status->brightness / 2.55);
+					if ($d[$device]['s']!=$status) {
+						store($device,$status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
+				} elseif ($d[$device]['dt']=='hsw') {
+					if ($status->state=='OFF') {
+						$status='Off';
+						$power=0;
+					} else {
+						$power=round($status->power);
+						$status='On';
+					}
+					if (isset($d[$device]['p'])) {
+						if ($d[$device]['s']!=$status&&$d[$device]['p']!=$power) {
+							storesp($device,$status,$power);
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+						} elseif ($d[$device]['p']!=$power) {
+							storep($device,$power);
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+						}
+					} elseif ($d[$device]['s']!=$status) {
+						store($device,$power);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
 				} else {
 					lg('🔥 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
-			} elseif (substr($device,0,1) === '8') {
-				if ($status === 'Keypressed') {
-					$status='On';
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
-				} elseif ($status === 'Keypressed2x') {
-					$status='On';
-					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					store($device,$status,'',1);
-				}
 			} else lg('🔥 Z2M '.$device.' '.print_r($status,true));
-		} else lg('🔥 Z2M '.$device.' '.$status);
+		} // else lg('🔥 Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

@@ -57,6 +57,10 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
 					store($device,$status,'',1);
+				} elseif ($status === 'Keyhelddown') {
+					$status='On';
+					include '/var/www/html/secure/pass2php/'.$device.'l.php';
+					store($device,$status,'',1);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';

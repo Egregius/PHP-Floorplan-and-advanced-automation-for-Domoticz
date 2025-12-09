@@ -307,6 +307,20 @@ function storesm($name,$s,$m,$msg='') {
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
 	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
+function storesp($name,$s,$p,$msg='') {
+	global $d,$user,$time;
+	$db=dbconnect();
+	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
+	else $db->query("INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time') ON DUPLICATE KEY UPDATE s='$s',p='$p',t='$time';");
+	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+}
+function storep($name,$p,$msg='') {
+	global $d,$user,$time;
+	$db=dbconnect();
+	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
+	else $db->query("INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time') ON DUPLICATE KEY UPDATE p='$p',t='$time';");
+	lg('💾 STOREP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+}
 function storeicon($name,$icon,$msg='',$update=null) {
 	global $d, $user, $time;
 	$db=dbconnect();
@@ -955,14 +969,15 @@ function dbconnect() {
 function fetchdata($t=0,$lg='') {
 	global $d,$time;
 	$db=dbconnect();
-	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon from devices;");
-	else $stmt=$db->query("select n,s,t,m,dt,icon from devices WHERE t>=$t;");
+	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon,p from devices;");
+	else $stmt=$db->query("select n,s,t,m,dt,icon,p from devices WHERE t>=$t;");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
 		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
 		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
 		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
 		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
+		if(!is_null($row['p']))$d[$row['n']]['p']=$row['p'];
 	}
 
 	if ($t==0) lg('⬆️  FETCHDATA ALL '.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);

@@ -12,7 +12,7 @@ if (isset($_GET['o'])) {
 		$t=0;
 		$extra=true;
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	all';
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1";
 	} else {
 		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if ($t === false) {
@@ -23,7 +23,7 @@ if (isset($_GET['o'])) {
 			if ($t<$time-5) $t-=3600;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `o`=1 AND `t`>=$t";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
 	$ctx = stream_context_create(['http'=>['timeout'=>1],'ssl'=>['verify_peer'=>false,'verify_peer_name'=>false,'allow_self_signed'=> true]]);
 	$d['pf']=json_decode(@file_get_contents('https://192.168.2.254:44300/egregius.php', false, $ctx), true);
@@ -33,7 +33,7 @@ if (isset($_GET['o'])) {
 		$t=0;
 		$extra=true;
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	all';
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1";
 	} else {
 		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if ($t === false) {
@@ -44,7 +44,7 @@ if (isset($_GET['o'])) {
 			if ($t<$time-5) $t-=3600;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `h`=1 AND `t`>=$t";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
 } else {
 	$type='f';
@@ -53,7 +53,7 @@ if (isset($_GET['o'])) {
 		$extra=true;
 		$verbruik=true;
 		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	all';
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1";
 	} else {
 		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
 		if ($t === false) {
@@ -64,7 +64,7 @@ if (isset($_GET['o'])) {
 			if ($t<$time-5) $t-=3600;
 			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
 		}
-		$sql="SELECT n,s,t,m,dt,icon,rt FROM devices WHERE `f`=1 AND `t`>=$t";
+		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1 AND `t`>=$t";
 	}
 	$en = json_decode(getCache('en'));
 	if ($en) {
@@ -133,6 +133,7 @@ while ($row = $stmt->fetch()) {
 		}
 		else $d[$row['n']]['icon']=$row['icon'];
 	}
+	if (!is_null($row['p'])) $d[$row['n']]['p'] = $row['p'];
 }
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
