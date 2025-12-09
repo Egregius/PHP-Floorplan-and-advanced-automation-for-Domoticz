@@ -35,7 +35,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[1];
@@ -43,13 +43,18 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			$d['time']=microtime(true);
 			$time=$d['time'];
 			if (($d['time'] - $startloop) <= 3) return;
-			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-			$lastEvent = $d['time'];
+//			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
+//			$lastEvent = $d['time'];
 			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
-				lg('🔥 Z2M '.$d[$device]['dt'].'	'.$device.'	'.print_r($status,true));
+				if ($d[$device]['dt']=='remote') {
+					$status=$status->action;
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				} else {
+					lg('🔥 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+				}
 			} elseif (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';
