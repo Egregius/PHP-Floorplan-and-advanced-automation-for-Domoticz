@@ -72,6 +72,7 @@ if ($d['bose101']['s']=='On'
 	&&$d['bose107']['s']=='Off'
 	&&($d['weg']['s']>0||($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0))
 	&&past('bose101')>300
+	&&past('boseliving')>1800
 //	&&past('bose102')>30
 //	&&past('bose103')>30
 //	&&past('bose104')>30

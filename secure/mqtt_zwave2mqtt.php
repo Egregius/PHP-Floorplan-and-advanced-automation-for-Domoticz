@@ -20,8 +20,8 @@ $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
-//$d['rand']=rand(300,600);
-$d['rand']=5;
+$d['rand']=rand(300,600);
+//$d['rand']=5;
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
@@ -50,7 +50,6 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			$d['lastfetch']=$d['time'] - 300;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
-				$GLOBALS['current_device_file'] = $device;
 				if ($d[$device]['dt']=='8knop') {
 					if(isset($path[4])&&$path[4]=='scene') {
 						$knop=(int)$path[5];

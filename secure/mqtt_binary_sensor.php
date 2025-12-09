@@ -39,24 +39,26 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 		$path = explode('/', $topic);
 		$device = $path[2];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			if (($d['time'] - $startloop) <= 5) return;
-			if ($status=='unavailable') return;
-			$status = ucfirst(strtolower(trim($status, '"')));
-			$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);
-			$d['lastfetch'] = $d['time'] - 30;
-			if ($device === 'achterdeur') {
-				if ($status=='Off') $status='Open';
-				elseif ($status=='On') $status='Closed';
-				else unset($status);
-			} elseif (isset($d[$device]['dt']) && $d[$device]['dt'] === 'c') {
-				if ($status=='On') $status='Open';
-				elseif ($status=='Off') $status='Closed';
-				else unset($status);
-			}
-			if (isset($status)&&$d[$device]['s']!=$status) {
-				include '/var/www/html/secure/pass2php/' . $device . '.php';
-				store($device, $status,'',1);
+			if(isset($d[$device]['dt'])&&$d[$device]['dt']!='pir') {
+				$d['time']=microtime(true);
+				if (($d['time'] - $startloop) <= 5) return;
+				if ($status=='unavailable') return;
+				$status = ucfirst(strtolower(trim($status, '"')));
+				$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);
+				$d['lastfetch'] = $d['time'] - 30;
+				if ($device === 'achterdeur') {
+					if ($status=='Off') $status='Open';
+					elseif ($status=='On') $status='Closed';
+					else unset($status);
+				} elseif ($d[$device]['dt'] === 'c') {
+					if ($status=='On') $status='Open';
+					elseif ($status=='Off') $status='Closed';
+					else unset($status);
+				}
+				if (isset($status)&&$d[$device]['s']!=$status) {
+					include '/var/www/html/secure/pass2php/' . $device . '.php';
+					store($device, $status,'',1);
+				}
 			}
 		}
 	} catch (Throwable $e) {

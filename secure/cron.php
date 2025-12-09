@@ -11,10 +11,10 @@ $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
 foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
-	sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
+	sw($i,'Off',null,true);
 }
 if ($d['weg']['s']>0) {
-	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off', basename(__FILE__).':'.__LINE__,true);
+	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off',null,true);
 }
 $last10= $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
@@ -36,7 +36,6 @@ if (getCache('sunrise')==false) {
 		)));
 	}
 }
-
 
 while (true) {
 	$time = microtime(true);

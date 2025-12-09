@@ -207,7 +207,16 @@ function idx($name) {
 }
 function sl($name,$level,$msg='',$force=false,$temp=0) {
 	global $d,$user;
-	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
@@ -215,7 +224,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 			}
 		}
 	} else {
-		lg('💡 SL     '.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡 SL	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
 				if ($temp==0) {
@@ -249,6 +258,15 @@ function resetsecurity() {
 }
 function sw($name,$action='Toggle',$msg='',$force=false) {
 	global $d,$user,$db;
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
 	if (!isset($d)) $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -279,7 +297,16 @@ function setpoint($name, $value,$msg='') {
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
 	global $d,$user;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	$time=time();
 	if ($force==true||$status!=$d[$name]['s']) {
 		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
@@ -294,43 +321,88 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 }
 function storemode($name,$mode,$msg='',$update=null) {
 	global $user, $time;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	$time=time();
 	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
-	lg('💾 STOREMODE '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$time;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
 	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$time;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time') ON DUPLICATE KEY UPDATE s='$s',p='$p',t='$time';");
 	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storep($name,$p,$msg='') {
 	global $d,$user,$time;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time') ON DUPLICATE KEY UPDATE p='$p',t='$time';");
-	lg('💾 STOREP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$update=null) {
 	global $d, $user, $time;
-	$db=dbconnect();
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $caller = $backtrace[0];
+    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+    
+    if (!empty($msg)) {
+        $msg = $callerLocation . ' - ' . $msg;
+    } else {
+        $msg = $callerLocation;
+    }
+    $db=dbconnect();
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
 		if (isset($d['time'])) $time=$d['time'];
 		else $time=time();
 		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
 		if (endswith($name, '_temp')) return;
-		lg('💾 STOREICON '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 }
 
@@ -1087,7 +1159,6 @@ function republishmqtt() {
 		}
 	}
 }
-
 function setBatterijLedBrightness(int $brightness) { 
 	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
 	$ch = curl_init("https://battery/api/system");
@@ -1107,11 +1178,9 @@ function setBatterijLedBrightness(int $brightness) {
 		return json_decode($response, true);
 	}
 }
-
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
-
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;

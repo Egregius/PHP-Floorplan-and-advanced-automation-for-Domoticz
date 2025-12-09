@@ -10,15 +10,15 @@ if ($uitna<595) $uitna=595;
 elseif ($uitna>1795) $uitna=1795;
 $pastbrander=past('brander');
 //lg('difgas='.$difgas.' pastbrander='.$pastbrander);
-if (	$difgas<=-1.5&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.5&&$d['n']>-500&&$d['buiten_temp']['s']<=5) sw('brander','On' , 'Aan na = '.$aanna*0.5.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-1.2&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.6&&$d['n']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.6.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-0.9&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.7&&$d['n']>-500&&$d['buiten_temp']['s']<=3) sw('brander','On' , 'Aan na = '.$aanna*0.7.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-0.6&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.8&&$d['n']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna*0.8.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=-0.3&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.9&&$d['n']>-500&&$d['buiten_temp']['s']<=1) sw('brander','On' , 'Aan na = '.$aanna*0.9.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=0) sw('brander','On' , 'Aan na = '.$aanna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas>=0   &&$d['brander']['s']=="On" &&$pastbrander>$uitna)     sw('brander','Off', 'Uit na = '.$uitna.' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas>=-0.1&&$d['brander']['s']=="On" &&$pastbrander>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6 .' '.basename(__FILE__).':'.__LINE__);
-elseif ($difgas>=-0.2 &&$d['brander']['s']=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12 .' '.basename(__FILE__).':'.__LINE__);
+if (	$difgas<=-1.5&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.5&&$d['n']>-500&&$d['buiten_temp']['s']<=5) sw('brander','On' , 'Aan na = '.$aanna*0.5);
+elseif ($difgas<=-1.2&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.6&&$d['n']>-500&&$d['buiten_temp']['s']<=4) sw('brander','On' , 'Aan na = '.$aanna*0.6);
+elseif ($difgas<=-0.9&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.7&&$d['n']>-500&&$d['buiten_temp']['s']<=3) sw('brander','On' , 'Aan na = '.$aanna*0.7);
+elseif ($difgas<=-0.6&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.8&&$d['n']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'Aan na = '.$aanna*0.8);
+elseif ($difgas<=-0.3&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.9&&$d['n']>-500&&$d['buiten_temp']['s']<=1) sw('brander','On' , 'Aan na = '.$aanna*0.9);
+elseif ($difgas<=0   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=0) sw('brander','On' , 'Aan na = '.$aanna);
+elseif ($difgas>=0   &&$d['brander']['s']=="On" &&$pastbrander>$uitna)     sw('brander','Off', 'Uit na = '.$uitna);
+elseif ($difgas>=-0.1&&$d['brander']['s']=="On" &&$pastbrander>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6);
+elseif ($difgas>=-0.2 &&$d['brander']['s']=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12);
 
 if ($d['daikin']['m']==1) {
 	$totalmin=0;
@@ -95,12 +95,12 @@ if ($d['daikin']['m']==1) {
 					$data['maxpow']=($maxpow>40?$maxpow:'');
 					$data=json_encode($data);
 					if ($d[$k.'_set']['icon']!=$data) {
-						storeicon($k.'_set', $data, basename(__FILE__).':'.__LINE__, true);
+						storeicon($k.'_set', $data);
 						$d[$k.'_set']['icon']=$data;
 					}
 					daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate, $spmode, $maxpow);
 				}
-			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On');
 		} else {
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				$daikin=json_decode($d['daikin'.$k]['s']);
@@ -112,7 +112,7 @@ if ($d['daikin']['m']==1) {
 					$data['set']=10;
 					if (isset($daikin->spmode)) $data['spmode']=$daikin->spmode; else $data['spmode']=$spmode;
 					if (isset($daikin->maxpow)) $data['maxpow']=$daikin->maxpow; else $data['maxpow']=$maxpow;
-					storeicon($k.'_set', json_encode($data), basename(__FILE__).':'.__LINE__, true);
+					storeicon($k.'_set', json_encode($data));
 					daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
 				}
 			}
@@ -120,5 +120,5 @@ if ($d['daikin']['m']==1) {
 		unset($power);
 	}
 }
-if ($difgas>=0&&$d['brander']['s']=='On'&&$d['badkamer_temp']['s']>12&&past('brander')>=595) sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
-elseif ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<12&&past('brander')>=595) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+if ($difgas>=0&&$d['brander']['s']=='On'&&$d['badkamer_temp']['s']>12&&past('brander')>=595) sw('brander', 'Off');
+elseif ($d['brander']['s']=='Off'&&$d['badkamer_temp']['s']<12&&past('brander')>=595) sw('brander', 'On');
