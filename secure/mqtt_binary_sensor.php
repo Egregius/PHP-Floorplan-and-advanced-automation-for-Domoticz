@@ -39,7 +39,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 		$path = explode('/', $topic);
 		$device = $path[2];
 		if (isset($validDevices[$device])) {
-			if(isset($d[$device]['dt'])&&$d[$device]['dt']!='pir') {
+			if(isset($d[$device]['dt'])/*&&$d[$device]['dt']!='pir'*/) {
 				$d['time']=microtime(true);
 				if (($d['time'] - $startloop) <= 5) return;
 				if ($status=='unavailable') return;

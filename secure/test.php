@@ -2,13 +2,36 @@
 header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
-require 'functions.php';
-require '/var/www/authentication.php';
-$d=fetchdata(0,'test.php');
-$startloop=microtime(true);
-$d['time']=$startloop;
-$db = dbconnect();
-echo daikinset('living', 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, 40);
+//require 'functions.php';
+//require '/var/www/authentication.php';
+//$d=fetchdata(0,'test.php');
+//$startloop=microtime(true);
+//$d['time']=$startloop;
+//$db = dbconnect();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 echo '</pre>';

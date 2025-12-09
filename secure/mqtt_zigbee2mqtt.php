@@ -21,7 +21,7 @@ define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(300,600);
-//$d['rand']=5;
+$d['rand']=5;
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
@@ -112,7 +112,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					lg('🔥 ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
 			} else lg('🔥 ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
-		} // else lg('🔥 Z2M '.$device.' '.$status);
+		} else lg('🔥 Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
