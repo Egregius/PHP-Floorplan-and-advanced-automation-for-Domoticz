@@ -50,6 +50,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			$d['lastfetch']=$d['time'] - 300;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
+				$GLOBALS['current_device_file'] = $device;
 				if ($d[$device]['dt']=='8knop') {
 					if(isset($path[4])&&$path[4]=='scene') {
 						$knop=(int)$path[5];

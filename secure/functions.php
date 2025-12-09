@@ -1126,12 +1126,9 @@ function getCacheFast(string $key, $default = false) {
     if (isset($localCache[$key])) {
         return $localCache[$key];
     }
-
     $file = '/dev/shm/cache/' . $key . '.txt';
     $data = @file_get_contents($file);
     if ($data === false) return $default;
-
-    // populate memory for later
     $localCache[$key] = $data;
     return $data;
 }

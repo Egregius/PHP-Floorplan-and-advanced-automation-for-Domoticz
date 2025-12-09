@@ -49,6 +49,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			$d['lastfetch']=$d['time'] - 300;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
+				$current_device_file = $device;
 				if ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					lg('📲 '.$device.' '.$status);
