@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='Zigbee ';
+$user='Zwave ';
 lg('🟢 Starting '.$user.' loop ',-1);
 $time=time();
 $lastcheck=$time;
@@ -35,21 +35,37 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[1];
+		
 		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
 			$time=$d['time'];
 			if (($d['time'] - $startloop) <= 3) return;
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
-			$d=fetchdata($d['lastfetch'],'mqtt_zigbee:'.__LINE__);
+			$d=fetchdata($d['lastfetch'],'mqtt_zwave:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
-				if ($d[$device]['dt']=='remote') {
+				if ($d[$device]['dt']=='8knop') {
+					if(isset($path[4])&&$path[4]=='scene') {
+						$knop=(int)$path[5];
+						if ($status===0) {
+							$status='enkel';
+							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'.php';
+						} elseif ($status===3) {
+							$status='dubbel';
+							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'d.php';
+						} elseif ($status===2) {
+							$status='lang';
+							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'l.php';
+						}
+						lg('🌊 '.$device.'	'.$knop.'	=> '.$status);
+					}
+				} elseif ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='c') {
@@ -94,9 +110,8 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='t') {
-					global $dbname,$dbuser,$dbpass;
 					$hum=$status->humidity;
-					$temp=$status->temperature;
+					$temp=$status-temperature;
 					$status=$temp;
 					if ($d[$device]['s']!=$temp&&$d[$device]['m']!=$hum) {
 						storesm($device,$temp,$hum);
@@ -107,12 +122,12 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 Zigbee ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('🔥 Zwave ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
-			} else lg('🔥 Zigbee [!dt!] '.$device.' '.print_r($status,true));
+			} else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
 		} // else lg('🔥 Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in Zigbee MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in Zwave MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -122,7 +137,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=10000;
-$maxSleep=100000;
+$maxSleep=50000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
@@ -134,7 +149,7 @@ while (true) {
 }
 
 $mqtt->disconnect();
-lg('Zigbee MQTT loop stopped '.__FILE__,1);
+lg('Zwave MQTT loop stopped '.__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;

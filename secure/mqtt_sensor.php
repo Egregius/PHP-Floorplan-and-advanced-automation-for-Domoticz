@@ -47,11 +47,13 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,-4) === '_hum') {
+				return;
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
 				if ($status==0) return;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
 			} elseif (substr($device,-5) === '_temp') {
+				return;
 				$st=(float)$status;
 				if ($status==0) return;
 				if ($d[$device]['s']!=$st) store($device,$st,'',1);
