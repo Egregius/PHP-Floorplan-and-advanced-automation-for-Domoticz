@@ -1,4 +1,4 @@
 <?php
 if ($status=='On') {
-	setCache('8inkom8', time());
+	setCache('8inkom8', $time);
 }

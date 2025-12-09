@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='Zigbee ';
+$user='ZIGBEE';
 lg('🟢 Starting '.$user.' loop ',-1);
 $time=time();
 $lastcheck=$time;
@@ -51,6 +51,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			if (isset($d[$device]['dt'])) {
 				if ($d[$device]['dt']=='remote') {
 					$status=$status->action;
+					lg('📲 '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='c') {
 					if ($status->contact==1) $status='Closed';
@@ -107,12 +108,12 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 Zigbee ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('🔥 ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
-			} else lg('🔥 Zigbee [!dt!] '.$device.' '.print_r($status,true));
+			} else lg('🔥 ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
 		} // else lg('🔥 Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in Zigbee MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];

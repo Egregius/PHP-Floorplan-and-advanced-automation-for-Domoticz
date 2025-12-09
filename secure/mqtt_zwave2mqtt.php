@@ -8,7 +8,7 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='Zwave ';
+$user='ZWAVE';
 lg('🟢 Starting '.$user.' loop ',-1);
 $time=time();
 $lastcheck=$time;
@@ -54,20 +54,25 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					if(isset($path[4])&&$path[4]=='scene') {
 						$knop=(int)$path[5];
 						if ($status===0) {
-							$status='enkel';
-							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'.php';
+							$file=$device.'_'.$knop;
 						} elseif ($status===3) {
-							$status='dubbel';
-							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'d.php';
+							$file=$device.'_'.$knop.'d';
 						} elseif ($status===2) {
-							$status='lang';
-							include '/var/www/html/secure/pass2php/'.$device.'_'.$knop.'l.php';
-						}
-						lg('🌊 '.$device.'	'.$knop.'	=> '.$status);
+							$file=$device.'_'.$knop.'l';
+						} else return;
+						$status='On';
+						lg('📲 '.$file);
+						include '/var/www/html/secure/pass2php/'.$file.'.php';
+						if (isset($d[$file]['t'])) store($file,null,'',1);
 					}
 				} elseif ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				} elseif ($d[$device]['dt']=='d') {
+					if ($d[$device]['s']!=$status) {
+						store($device,$status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
 				} elseif ($d[$device]['dt']=='c') {
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
@@ -122,12 +127,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 Zwave ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('🔥 ZWAVE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
 			} else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
 		} // else lg('🔥 Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in Zwave MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];

@@ -45,10 +45,11 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
-			lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
+			
 			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,0,1) === '8') {
+				return;
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -63,6 +64,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 					store($device,$status,'',1);
 				}
 			} else {
+				lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status,'',1);
 			}

@@ -6,4 +6,5 @@ if ($status=='On') {
 		if ($new>100) $new=100;
 		sl('inkom', $new);
 	}
+	setCache('8inkom', $time);
 }

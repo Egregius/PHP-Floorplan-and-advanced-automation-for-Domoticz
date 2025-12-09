@@ -1,7 +1,8 @@
 <?php
 if ($status=='On') {
-	$last=mget('8weg');
-	if ($last>time()-5) {
+	$last=getCache('8weg8');
+	$other=getCache('8weg');
+	if ($last>$d['time']-5&&$other<$d['time']-600) {
 		huisthuis();
 		resetsecurity();
 	}

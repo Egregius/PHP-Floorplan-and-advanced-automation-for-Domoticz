@@ -8,4 +8,5 @@ if ($status=='On') {
 		else $level=27;
 	}
 	sl('inkom', $level, basename(__FILE__).':'.__LINE__);
+	setCache('8inkom', $time);
 }
