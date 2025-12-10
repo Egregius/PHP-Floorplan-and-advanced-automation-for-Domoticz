@@ -6,22 +6,34 @@ $verbruik=false;
 $d = array();
 $d['t'] = $time;
 $msg2='';
+
+$ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
+$map = [
+    '192.168.2.201' => 'Mac',
+    '192.168.4.2'   => 'Mac',
+    '192.168.2.203' => 'iPhoneGuy',
+    '192.168.4.3'   => 'iPhoneGuy',
+    '192.168.2.200' => 'iPadGuy',
+    '192.168.4.4'   => 'iPadGuy',
+];
+$id = $map[$ip] ?? $ip;
+
 if (isset($_GET['o'])) {
 	$type='o';
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	all';
+		$msg=$id.'	o	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1";
 	} else {
-		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		$t = apcu_fetch($id.$type) ?? 1;
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	expired';
+			$msg=$id.'	o	expired';
 		} else {
 			if ($t<$time-5) $t-=3600;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	o	'.$time - $t.' sec';
+			$msg=$id.'	o	'.$time - $t.' sec';
 		}
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
@@ -32,17 +44,17 @@ if (isset($_GET['o'])) {
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	all';
+		$msg=$id.'	h	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1";
 	} else {
-		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		$t = apcu_fetch($id.$type) ?? 1;
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	expired';
+			$msg=$id.'	h	expired';
 		} else {
 			if ($t<$time-5) $t-=3600;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	h	'.$time - $t.' sec';
+			$msg=$id.'	h	'.$time - $t.' sec';
 		}
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
@@ -52,17 +64,17 @@ if (isset($_GET['o'])) {
 		$t=0;
 		$extra=true;
 		$verbruik=true;
-		$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	all';
+		$msg=$id.'	f	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1";
 	} else {
-		$t = apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type) ?? 1;
+		$t = apcu_fetch($id.$type) ?? 1;
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	expired';
+			$msg=$id.'	f	expired';
 		} else {
 			if ($t<$time-5) $t-=3600;
-			$msg=$_SERVER['HTTP_X_FORWARDED_FOR'].'	f	'.$time - $t.' sec';
+			$msg=$id.'	f	'.$time - $t.' sec';
 		}
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1 AND `t`>=$t";
 	}
@@ -74,7 +86,7 @@ if (isset($_GET['o'])) {
 		$d['c'] = $en->c;
 		$d['z'] = $en->z;
 	} else lg("Can't fetch en");
-	$verbruiklast=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].'v');
+	$verbruiklast=apcu_fetch($id.'v');
 	if ($verbruiklast===false||$verbruik===true) {
 		$vandaag = json_decode(getCache('energy_vandaag'));
 		if ($vandaag) {
@@ -88,11 +100,11 @@ if (isset($_GET['o'])) {
 			$d['zonref'] = $vandaag->zonref;
 			$d['alwayson'] = $vandaag->alwayson;
 			$msg2.=' + verbruik';
-			apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].'v', $time, 600);
+			apcu_store($id.'v', $time, 600);
 		}
 	}
 }
-apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type, $time, 86400);
+apcu_store($id.$type, $time, 86400);
 $db = dbconnect();
 //try {
     $stmt = $db->query($sql);
@@ -101,7 +113,7 @@ $db = dbconnect();
 //    error_log("SQL QUERY: " . $sql);
 //    throw $e;
 //}
-$extralast=apcu_fetch($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e');
+$extralast=apcu_fetch($id.$type.'e');
 if ($extralast===false||$extra===true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
 	if ($sunrise) {
@@ -110,7 +122,7 @@ if ($extralast===false||$extra===true) {
 		$d['Sunset'] = $sunrise['Sunset'];
 		$d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
 		$d['playlist'] = boseplaylist();
-		apcu_store($_SERVER['HTTP_X_FORWARDED_FOR'].$type.'e', $time, 3600);
+		apcu_store($id.$type.'e', $time, 3600);
 	}
 	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
 	$msg2.=' + extra';
@@ -138,8 +150,8 @@ while ($row = $stmt->fetch()) {
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-//if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
-//else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
+if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
+else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;
