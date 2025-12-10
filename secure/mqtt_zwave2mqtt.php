@@ -65,6 +65,16 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						include '/var/www/html/secure/pass2php/'.$file.'.php';
 						if (isset($d[$file]['t'])) store($file,null,'',1);
 					}
+				} elseif ($d[$device]['dt']=='zbtn') {
+					if(isset($path[2])&&$path[2]=='sensor_binary') {
+						if ($status==1) {
+							$knop=substr($path[3],-1);
+							lg($device.' '.$knop.' '.$status);
+							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
+						}
+					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
+							include '/var/www/html/secure/pass2php/'.$device.'0.php';
+					}
 				} elseif ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
