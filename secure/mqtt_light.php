@@ -39,7 +39,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (isset($validDevices[$device],$d[$device]['dt'])&&$d[$device]['dt']!='hd') {
+		if (isset($validDevices[$device],$d[$device]['dt'])/*&&$d[$device]['dt']!='hd'*/) {
 			$d['time']=microtime(true);
 			if (($d['time'] - $startloop) <= 3) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;

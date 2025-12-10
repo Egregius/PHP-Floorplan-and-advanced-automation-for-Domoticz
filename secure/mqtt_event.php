@@ -49,7 +49,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,0,1) === '8') {
-				return;
+//				return;
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
