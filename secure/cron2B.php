@@ -61,7 +61,7 @@ foreach ($devices as $ip => $vol) {
 	}
 }
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
-	if ($d['bose101']['s'] == 'On' || $d['bose101']['m'] != 'Offline') storesm('bose101', 'Off', 'Offline');
+	if ($d['bose101']['s'] == 'On' || $d['bose101']['m'] != 'Offline') storesm('bose101', 'Off', 'Offline', null, true);
 }
 if ($d['bose101']['s']=='On'
 	&&$d['bose102']['s']=='Off'

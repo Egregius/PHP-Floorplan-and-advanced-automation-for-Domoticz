@@ -46,7 +46,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata($d['lastfetch'],'mqtt_switch:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
-			if (!is_null($status)&&strlen($status)>0/*&&($status=='on'||$status=='off')*/) {
+			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
 				if ($d[$device]['s']!=$status) {
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);

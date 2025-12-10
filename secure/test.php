@@ -2,23 +2,31 @@
 header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
-//require 'functions.php';
+require 'functions.php';
 //require '/var/www/authentication.php';
 //$d=fetchdata(0,'test.php');
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = dbconnect();
 
+/*
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+require '/var/www/vendor/autoload.php';
+$connectionSettings=(new ConnectionSettings)
+	->setUsername('mqtt')
+	->setPassword('mqtt');
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt->connect($connectionSettings,true);
 
 
 
 
+$mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
-
-
-
-
+*/
+sl('bureellinks',0);
 
 
 

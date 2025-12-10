@@ -1,6 +1,6 @@
 <?php
 $n='kamer';
-//if (!isset($db)) $db=new PDO("mysql:host=192.168.2.23;dbname=$dbname;",$dbuser,$dbpass);
+$db=dbconnect();
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,15) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];

@@ -50,7 +50,9 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				$current_device_file = $device;
-				if ($d[$device]['dt']=='remote') {
+				if ($d[$device]['dt']=='zbtn') {
+					lg('📲 '.$device.' '.print_r($status,true));
+				} elseif ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					lg('📲 '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -76,6 +78,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='hsw') {
+					return;
 					if ($status->state=='OFF') {
 						$status='Off';
 						$power=0;
@@ -95,7 +98,12 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						store($device,$power);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
+				} elseif ($d[$device]['dt']=='r') {
+					if ($device=='rbureel') $status=100-$status->position;
+					else $status=$status->position;
+					store($device,$status);
 				} elseif ($d[$device]['dt']=='t') {
+					return;
 					global $dbname,$dbuser,$dbpass;
 					$hum=$status->humidity;
 					$temp=$status->temperature;
