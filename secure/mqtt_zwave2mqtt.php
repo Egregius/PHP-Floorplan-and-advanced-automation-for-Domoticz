@@ -27,7 +27,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.26',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
 $validDevices = [];
@@ -91,7 +91,8 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='pir') {
-					if ($status->occupancy==1) $status='On';
+					lg(__LINE__.' '.$device.' '.$status);
+					if ($status==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
 						store($device,$status);
@@ -105,11 +106,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='hsw') {
+					lg(__LINE__.' '.$device.' '.$status.' '.print_r($path,true));
 					if ($status->state=='OFF') {
 						$status='Off';
 						$power=0;
 					} else {
-						$power=round($status->power);
+						$power=0;
 						$status='On';
 					}
 					if (isset($d[$device]['p'])) {
@@ -137,7 +139,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 ZWAVE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('🔥 ZWAVE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
 		} else lg('🔥 Z2M '.$device.' '.$status);
