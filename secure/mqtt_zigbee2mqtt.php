@@ -109,10 +109,10 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
-			} else lg('🔥 ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
-		} else lg('🔥 Z2M '.$device.' '.$status);
+			} else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
+		} else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

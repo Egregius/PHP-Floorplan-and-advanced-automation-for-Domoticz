@@ -1,5 +1,5 @@
 <?php
-$user='weather';
+$user='WEATHER';
 $prevwind=$d['wind']['s'];
 //lg ('Weather');
 $wind=$prevwind;

@@ -91,7 +91,6 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='pir') {
-					lg(__LINE__.' '.$device.' '.$status);
 					if ($status==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
@@ -106,14 +105,24 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='hsw') {
-					lg(__LINE__.' '.$device.' '.$status.' '.print_r($path,true));
-					if ($status->state=='OFF') {
+					if(isset($path[2],$path[4])) {
+						if ($path[2]=='meter') return;
+						elseif ($path[2]=='sensor_multilevel'&&$path[4]=='Power') {
+							$power=(int)$status;
+							if ($d[$device]['p']!=$power) {
+								storep($device,$power);
+								include '/var/www/html/secure/pass2php/'.$device.'.php';
+								return;
+							}
+						}
+					} elseif ($status->state=='OFF') {
 						$status='Off';
 						$power=0;
 					} else {
 						$power=0;
 						$status='On';
 					}
+					lg(basename(__FILE__).':'.__LINE__.' '.$device.' '.$status.' '.print_r($path,true));
 					if (isset($d[$device]['p'])) {
 						if ($d[$device]['s']!=$status&&$d[$device]['p']!=$power) {
 							storesp($device,$status,$power);
@@ -126,6 +135,13 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						store($device,$power);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
+				} elseif ($d[$device]['dt']=='r') {
+					if(isset($path[2],$path[4])) {
+						if ($path[2]=='meter') return;
+						elseif ($path[2]=='sensor_multilevel'&&$path[4]=='Power') $power=(int)$status;
+					}
+					lg(basename(__FILE__).':'.__LINE__.' '.$device.' '.$status.' '.print_r($path,true));
+				
 				} elseif ($d[$device]['dt']=='t') {
 					$hum=$status->humidity;
 					$temp=$status-temperature;
@@ -139,10 +155,10 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					}
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('🔥 ZWAVE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
-		} else lg('🔥 Z2M '.$device.' '.$status);
+		} else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
