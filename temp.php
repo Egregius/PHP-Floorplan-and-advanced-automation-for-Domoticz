@@ -41,7 +41,7 @@ else 	echo '
 		<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
 		<form action="/temp.php"><input type="submit" class="btn btna b3" value="Temperaturen"/></form>
 		<form action="/hum.php"><input type="submit" class="btn btn b3" value="Humidity"/></form>';
-$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+$db=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
 
 $sensors=array(

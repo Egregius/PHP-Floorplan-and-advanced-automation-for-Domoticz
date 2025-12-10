@@ -22,7 +22,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}</script>
 	</head>
 	<body style="width:100%">';
-$db=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+$db=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno>0) {
 	die('Unable to connect to database [' . $db->connect_error . ']');
 }

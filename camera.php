@@ -2,7 +2,7 @@
 require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$user='camera';
-	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
+	$mysqli=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
 	$result = $mysqli->query("select n,s,dt,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
 		$d[$row['n']]['s'] = $row['s'];

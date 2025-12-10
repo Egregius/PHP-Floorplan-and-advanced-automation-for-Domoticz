@@ -47,13 +47,16 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
 			$d['lastfetch']=$d['time'] - 300;
 			if (substr($device,-4) === '_hum') {
+				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
 				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
 			} elseif (substr($device,-5) === '_temp') {
+				if (!is_numeric($status)) return;
 				$st=(float)$status;
 				if ($d[$device]['s']!=$st) store($device,$st,'',1);
 			} elseif ($device=='daikin_kwh') {
+				if (!is_numeric($status)) return;
 				$val = (int)$status; // echte waarde
 				$old = (int)($d[$device]['s'] ?? 0);
 				$oldt = (int)($d[$device]['t'] ?? 0);
