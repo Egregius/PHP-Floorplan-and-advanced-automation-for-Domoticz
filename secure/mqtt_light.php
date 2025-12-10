@@ -39,7 +39,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (isset($validDevices[$device],$d[$device]['dt'])/*&&$d[$device]['dt']!='hd'*/) {
+		if (isset($validDevices[$device])) {
 			$d['time']=microtime(true);
 			if (($d['time'] - $startloop) <= 3) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
@@ -51,9 +51,9 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;
 				if ($d[$device]['s']!=$status) {
-					lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+//					lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status);
+					store($device,$status,'',1);
 				}
 			}
 		}
