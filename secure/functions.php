@@ -1015,7 +1015,7 @@ function dbconnect() {
             $db->query('SELECT 1');
             return $db;
         }
-        $db = new PDO("mysql:host=127.0.0.1;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
+        $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_TIMEOUT => 5,
