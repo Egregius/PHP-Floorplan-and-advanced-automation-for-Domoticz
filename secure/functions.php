@@ -129,6 +129,23 @@ function fhall() {
 	} else finkom();
 	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
+function fbadkamer($level) {
+	global $d,$t,$time;
+	if ($level==0) {
+		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off');
+	} else {
+		if ($d['badkamerpower']['s']=='Off') {
+			sw('badkamerpower', 'On');
+			usleep(500000);
+		}
+		sl('lichtbadkamer', $level);
+//		store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
+		if ($d['weg']['s']==1&&$d['time']>$t-7200) {
+			if ($d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On');
+			if ($d['time']<$t&&$d['living_set']['m']==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+		}
+	}
+}
 function huisslapen($weg=false) {
 	global $d;
 	sl(array('hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
@@ -289,6 +306,16 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			store($name, $action, $msg);
 		}
 	}
+}
+function zigbee($device,$action) {
+	global $mqtt;
+	lg("zigbee2mqtt/{$device}/set",$action);
+	$mqtt->publish("zigbee2mqtt/{$device}/set",$action);
+}
+function zwave($device,$type,$endpoint,$action) {
+	global $mqtt;
+	lg("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
+	$mqtt->publish("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$db;
