@@ -20,8 +20,7 @@ $startloop=microtime(true);
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
-$d['rand']=rand(300,600);
-$d['rand']=5;
+$d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
