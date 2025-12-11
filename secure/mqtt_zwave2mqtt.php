@@ -46,7 +46,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
 			$d=fetchdata($d['lastfetch'],'mqtt_zwave:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 300;
+			$d['lastfetch']=$d['time'] - 5;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				if ($d[$device]['dt']=='8knop') {
@@ -56,11 +56,9 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							$file=$device.'_'.$knop;
 						} elseif ($status===3) {
 							$file=$device.'_'.$knop.'d';
-						} elseif ($status===2) {
-							$file=$device.'_'.$knop.'l';
 						} else return;
 						$status='On';
-						lg('📲 '.$file);
+//						lg('📲 '.$file);
 						include '/var/www/html/secure/pass2php/'.$file.'.php';
 						if (isset($d[$file]['t'])) store($file,null,'',1);
 					}
@@ -68,15 +66,29 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					if(isset($path[2])&&$path[2]=='sensor_binary') {
 						if ($status==1) {
 							$knop=substr($path[3],-1);
-							lg($device.' '.$knop.' '.$status);
+//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							if ($device=='inputliving') {
+								if ($status==1) $status=='On';
+								else $status='Off';
+								$map=[
+									0=>1,
+									1=>2,
+									2=>3
+								];
+								$knop=$map[$knop];
+//								lg('🌊 '.$device.' '.$knop.' '.$status);
+							}
 							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
 						}
 					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-							include '/var/www/html/secure/pass2php/'.$device.'0.php';
+//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							include '/var/www/html/secure/pass2php/'.$device.'1.php';
 					}
 				} elseif ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				} elseif ($d[$device]['dt']=='pir') {
+					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				} else {
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
@@ -92,12 +104,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=10000;
-$maxSleep=50000;
+$sleepMicroseconds=5000;
+$maxSleep=40000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 10000,$maxSleep);
+		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
 		usleep($sleepMicroseconds);
 	} else {
 		$sleepMicroseconds=10000;

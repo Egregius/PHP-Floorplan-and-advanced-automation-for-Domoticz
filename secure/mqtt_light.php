@@ -46,12 +46,14 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata($d['lastfetch'],'mqtt_light:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 300;
+				$d['lastfetch']=$d['time'] - 5;
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;
 				if ($d[$device]['s']!=$status) {
-//					lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+					if ($device=='') {
+					}
+					lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status,'',1);
 				}

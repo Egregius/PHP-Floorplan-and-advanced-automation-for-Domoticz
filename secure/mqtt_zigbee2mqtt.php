@@ -45,30 +45,30 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
 			$d=fetchdata($d['lastfetch'],'mqtt_zigbee:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 300;
+			$d['lastfetch']=$d['time'] - 5;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				$current_device_file = $device;
 				if ($d[$device]['dt']=='zbtn') {
-					lg('ⓩ '.$device.' '.print_r($status,true));
+					lg('ⓩ ZBTN'.$device.' '.print_r($status,true));
 				} elseif ($d[$device]['dt']=='remote') {
-					lg('ⓩ '.$device.' '.print_r($status,true));
+					lg('ⓩ Remote '.$device.' '.print_r($status,true));
 					$status=$status->action;
-					lg('ⓩ '.$device.' '.$status);
+					lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='c') {
-					lg('ⓩ '.$device.' '.print_r($status,true));
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
 					if ($d[$device]['s']!=$status) {
+						lg('ⓩ Contact '.$device.' '.$status);
 						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='pir') {
-					lg('ⓩ '.$device.' '.print_r($status,true));
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
+						lg('ⓩ PIR '.$device.' '.$status);
 						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
@@ -87,12 +87,12 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=10000;
-$maxSleep=100000;
+$sleepMicroseconds=5000;
+$maxSleep=40000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 10000,$maxSleep);
+		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
 		usleep($sleepMicroseconds);
 	} else {
 		$sleepMicroseconds=10000;

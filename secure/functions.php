@@ -236,7 +236,7 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 			}
 		}
 	} else {
-		lg('💡 SL	'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
 			if ($temp>0||$d[$name]['dt']=='hd') {
 				if ($temp==0) {
@@ -288,13 +288,13 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			}
 		}
 	} else {
-		$msg=str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-			lg('💡 SW	'.$msg,4);
+			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
@@ -314,7 +314,7 @@ function zwave($device,$type,$endpoint,$action) {
 }
 function setpoint($name, $value,$msg='') {
 	global $d,$user,$db;
-	$msg='(SETPOINT)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
+	$msg='(SETPOINT)'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
