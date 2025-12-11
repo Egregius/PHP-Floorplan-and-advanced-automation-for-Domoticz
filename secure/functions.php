@@ -103,11 +103,11 @@ function fkeuken() {
 	} else {
 		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<0||$d['rkeukenl']['s']>80)) {
 			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) {
-				zwave('wasbak','multilevel',0,'{"brightness":10,"state":"ON"}');
-//				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+				zwave('wasbak','multilevel',0,10);
+				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			} else {
-				zwave('wasbak','multilevel',0,'{"brightness":6,"state":"ON"}');
-//				sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
+				zwave('wasbak','multilevel',0,6);
+				sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
 			}
 		}
 	}
@@ -117,11 +117,11 @@ function finkom($force=false) {
 	global $d,$time;
 	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) {
-			zwave('inkom','multilevel',0,'{"brightness":30,"state":"ON"}');
+			zwave('inkom','multilevel',0,30);
 			sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&$d['alexslaapt']['s']==0) {
-			zwave('hall','multilevel',0,'{"brightness":30,"state":"ON"}');
+			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	}
@@ -130,7 +130,7 @@ function fhall() {
 	global $d,$t,$time;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&$d['alexslaapt']['s']==0) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
-			zwave('hall','multilevel',0,'{"brightness":30,"state":"ON"}');
+			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
@@ -321,7 +321,7 @@ function zigbee($device,$action) {
 }
 function zwave($device,$type,$endpoint,$action) {
 	global $mqtt;
-	lg("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
+	lg("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set/".$action);
 	$mqtt->publish("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
 }
 function setpoint($name, $value,$msg='') {
