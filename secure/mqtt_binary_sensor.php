@@ -56,7 +56,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
-				store($device, $status,'',1);
+				store($device, $status);
 			}
 		}
 	} catch (Throwable $e) {

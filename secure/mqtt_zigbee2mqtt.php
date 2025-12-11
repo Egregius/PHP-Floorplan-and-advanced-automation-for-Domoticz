@@ -50,12 +50,14 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			if (isset($d[$device]['dt'])) {
 				$current_device_file = $device;
 				if ($d[$device]['dt']=='zbtn') {
-					lg('📲 '.$device.' '.print_r($status,true));
+					lg('ⓩ '.$device.' '.print_r($status,true));
 				} elseif ($d[$device]['dt']=='remote') {
+					lg('ⓩ '.$device.' '.print_r($status,true));
 					$status=$status->action;
-					lg('📲 '.$device.' '.$status);
+					lg('ⓩ '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='c') {
+					lg('ⓩ '.$device.' '.print_r($status,true));
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
 					if ($d[$device]['s']!=$status) {
@@ -63,63 +65,18 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='pir') {
+					lg('ⓩ '.$device.' '.print_r($status,true));
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
 						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
-				} elseif ($d[$device]['dt']=='hd') {
-					if ($status->state=='OFF') $status=0;
-					else $status=$status=round((float)$status->brightness / 2.55);
-					if ($d[$device]['s']!=$status) {
-						store($device,$status);
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
-					}
-				} elseif ($d[$device]['dt']=='hsw') {
-					return;
-					if ($status->state=='OFF') {
-						$status='Off';
-						$power=0;
-					} else {
-						$power=round($status->power);
-						$status='On';
-					}
-					if (isset($d[$device]['p'])) {
-						if ($d[$device]['s']!=$status&&$d[$device]['p']!=$power) {
-							storesp($device,$status,$power);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						} elseif ($d[$device]['p']!=$power) {
-							storep($device,$power);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						}
-					} elseif ($d[$device]['s']!=$status) {
-						store($device,$power);
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
-					}
-				} elseif ($d[$device]['dt']=='r') {
-					if ($device=='rbureel') $status=100-$status->position;
-					else $status=$status->position;
-					store($device,$status);
-				} elseif ($d[$device]['dt']=='t') {
-					return;
-					global $dbname,$dbuser,$dbpass;
-					$hum=$status->humidity;
-					$temp=$status->temperature;
-					$status=$temp;
-					if ($d[$device]['s']!=$temp&&$d[$device]['m']!=$hum) {
-						storesm($device,$temp,$hum);
-					} elseif ($d[$device]['s']!=$temp) {
-						store($device,$temp);
-					} elseif ($d[$device]['m']!=$hum) {
-						storemode($device,$hum);
-					}
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+//					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
-			} else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
-		} else lg('ⓩ Z2M '.$device.' '.$status);
+			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
+		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

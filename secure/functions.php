@@ -60,11 +60,6 @@ function check_en_slapen($locatie, $status, &$d) {
 	}
 	if ($x > 0) return;
 	if ($locatie === 'voordeur' || $locatie === 'poort') {
-		hassopts('xiaomi_aqara', 'play_ringtone', '', [
-			'gw_mac'		=> '34ce008d3f60',
-			'ringtone_id'	=> 8,
-			'ringtone_vol'	=> 60
-		]);
 		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
 	} elseif ($locatie === 'slaapkamer') {
@@ -195,9 +190,9 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 function waarschuwing($msg) {
 	hassnotify('Waarschuwing!', $msg, 'mobile_app_iphone_guy', true);
 	telegram($msg, false, 2);
-	sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	store('sirene', 'On', basename(__FILE__).':'.__LINE__);
-	hassopts('xiaomi_aqara', 'play_ringtone', '', ['gw_mac' => '34ce008d3f60','ringtone_id' => 2,'ringtone_vol' => 65]);
+	sw('sirene', 'On');
+	sleep(2);
+	sw('sirene', 'Off','',true);
 }
 function past($name,$lg='') {
 	global $d,$time;
