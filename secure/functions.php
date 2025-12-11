@@ -102,8 +102,13 @@ function fkeuken() {
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<0||$d['rkeukenl']['s']>80)) {
-			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			else sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
+			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) {
+				zwave('wasbak','multilevel',0,'{"brightness":10,"state":"ON"}');
+//				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			} else {
+				zwave('wasbak','multilevel',0,'{"brightness":6,"state":"ON"}');
+//				sl('wasbak', 6, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 //	hass('input_button','press','input_button.wakeipad');
@@ -111,14 +116,21 @@ function fkeuken() {
 function finkom($force=false) {
 	global $d,$time;
 	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
-		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) sl('inkom', 30, basename(__FILE__).':'.__LINE__);
-		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&$d['alexslaapt']['s']==0) sl('hall', 30, basename(__FILE__).':'.__LINE__);
+		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) {
+			zwave('inkom','multilevel',0,'{"brightness":30,"state":"ON"}');
+			sl('inkom', 30, basename(__FILE__).':'.__LINE__);
+		}
+		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&$d['alexslaapt']['s']==0) {
+			zwave('hall','multilevel',0,'{"brightness":30,"state":"ON"}');
+			sl('hall', 30, basename(__FILE__).':'.__LINE__);
+		}
 	}
 }
 function fhall() {
 	global $d,$t,$time;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&$d['alexslaapt']['s']==0) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
+			zwave('hall','multilevel',0,'{"brightness":30,"state":"ON"}');
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();

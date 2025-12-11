@@ -26,8 +26,7 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-sl('bureellinks',0);
-
+zwave('wasbak','multilevel',0,'{"brightness":10,"state":"ON"}');
 
 
 

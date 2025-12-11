@@ -77,17 +77,12 @@ function stoploop($d) {
 	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
 		lg('🛑 functions.php gewijzigd → restarting cron loop...');
-		exec("$script > /dev/null 2>&1 &");
+		exec("nice -n 15 php $script > /dev/null 2>&1 &");
 		exit;
 	}
 	if (filemtime(__DIR__ . '/cron.php') > LOOP_START) {
 		lg('🛑 cron.php gewijzigd → restarting cron loop...');
-		exec("$script > /dev/null 2>&1 &");
-		exit;
-	}
-	if ($d['weg']['m']==2) {
-		lg('🛑 Stopping CRON Loop...');
-		$db->query("UPDATE devices SET m=0 WHERE n ='weg';");
+		exec("nice -n 15 php $script > /dev/null 2>&1 &");
 		exit;
 	}
 }

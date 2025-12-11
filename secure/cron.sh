@@ -24,8 +24,8 @@ while [ $i -lt 6 ]; do
 		if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
 		echo "$(date '+%F %T') starting $s"
 		case "$s" in
-			*.php) /var/www/html/secure/$s >/dev/null 2>&1 & ;;
-			*.py)  /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
+			*.php) nice -n 15 php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
+			*.py)  nice -n 15 /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
 		esac
 	fi
 	done

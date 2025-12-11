@@ -88,6 +88,14 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='pir') {
+					if($path[2]=='sensor_binary') {
+						if($status==1) $status='On';
+						else $status='Off';
+						lg('🌊 PIR '.$device.' '.$status);
+						store($device, $status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					} else return;
+				} elseif ($d[$device]['dt']=='c') {
 					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				} else {
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
@@ -105,14 +113,14 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=5000;
-$maxSleep=40000;
+$maxSleep=30000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
 		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
 		usleep($sleepMicroseconds);
 	} else {
-		$sleepMicroseconds=10000;
+		$sleepMicroseconds=5000;
 	}
 }
 
@@ -131,13 +139,13 @@ function stoploop() {
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
-        exec("$script > /dev/null 2>&1 &");
+        exec("nice -n 15 php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
-        exec("$script > /dev/null 2>&1 &");
+        exec("nice -n 15 php $script > /dev/null 2>&1 &");
         exit;
     }
 }

@@ -109,7 +109,7 @@ if ($d['heating']['s']>=2) {
 }
 if ($d['weg']['s']<2) {
 	$difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-	if ($difbadkamer<=-0.3||($preheatbath==true&&$difbadkamer<=-0.1)) {
+	if ($difbadkamer<=-0.5||($preheatbath==true&&$difbadkamer<=-0.1)) {
 		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On', basename(__FILE__).':'.__LINE__);
 	}

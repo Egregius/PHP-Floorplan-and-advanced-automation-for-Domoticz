@@ -55,6 +55,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
+				lg('ⓗ  '.$d[$device]['dt'].' '.$device.' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
@@ -70,14 +71,14 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 $sleepMicroseconds=5000;
-$maxSleep=40000;
+$maxSleep=30000;
 while (true) {
 	$result=$mqtt->loop(true);
 	if ($result === 0) {
 		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
 		usleep($sleepMicroseconds);
 	} else {
-		$sleepMicroseconds=10000;
+		$sleepMicroseconds=5000;
 	}
 }
 
@@ -96,13 +97,13 @@ function stoploop() {
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
-        exec("$script > /dev/null 2>&1 &");
+        exec("nice -n 15 php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
-        exec("$script > /dev/null 2>&1 &");
+        exec("nice -n 15 php $script > /dev/null 2>&1 &");
         exit;
     }
 }
