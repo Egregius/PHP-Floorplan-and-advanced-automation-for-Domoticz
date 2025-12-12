@@ -1,10 +1,6 @@
 <?php
 require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
-$extra=false;
-$verbruik=false;
-$d = array();
-$d['t'] = $time;
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
 $map = [
     '192.168.2.201' => 'Mac',
@@ -15,134 +11,155 @@ $map = [
     '192.168.4.4'   => 'iPadGuy',
 ];
 $id = $map[$ip] ?? $ip;
+$extra = false;
+$verbruik = false;
+$d = ['t' => $time];
 if (isset($_GET['o'])) {
-	$type='o';
-	if (isset($_GET['all'])) {
-		$t=0;
-		$extra=true;
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1";
-	} else {
-		$t = apcu_fetch($id.$type) ?? 1;
-		if ($t === false) {
-			$t = 0;
-			$extra=true;
-		} else {
-			if ($t<$time-5) $t-=3600;
-		}
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1 AND `t`>=$t";
-	}
-	$ctx = stream_context_create(['http'=>['timeout'=>1],'ssl'=>['verify_peer'=>false,'verify_peer_name'=>false,'allow_self_signed'=> true]]);
-	$d['pf']=json_decode(@file_get_contents('https://192.168.2.254:44300/egregius.php', false, $ctx), true);
+    $type = 'o';
+    $filter = 'o';
 } elseif (isset($_GET['h'])) {
-	$type='h';
-	if (isset($_GET['all'])) {
-		$t=0;
-		$extra=true;
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1";
-	} else {
-		$t = apcu_fetch($id.$type) ?? 1;
-		if ($t === false) {
-			$t = 0;
-			$extra=true;
-		} else {
-			if ($t<$time-5) $t-=3600;
-		}
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1 AND `t`>=$t";
-	}
+    $type = 'h';
+    $filter = 'h';
 } else {
-	$type='f';
-	if (isset($_GET['all'])) {
-		$t=0;
-		$extra=true;
-		$verbruik=true;
-		$msg=$id.'	f	all';
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1";
-	} else {
-		$t = apcu_fetch($id.$type) ?? 1;
-		if ($t === false) {
-			$t = 0;
-			$extra=true;
-			$msg=$id.'	f	expired';
-		} else {
-			if ($t<$time-5) $t-=3600;
-			$msg=$id.'	f	'.$time - $t.' sec';
-		}
-		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `f`=1 AND `t`>=$t";
-	}
-	$en = json_decode(getCache('en'));
-	if ($en) {
-		$d['n'] = $en->n;
-		$d['a'] = $en->a;
-		$d['b'] = $en->b;
-		$d['c'] = $en->c;
-		$d['z'] = $en->z;
-	} else lg("Can't fetch en");
-	$verbruiklast=apcu_fetch($id.'v');
-	if ($verbruiklast===false||$verbruik===true) {
-		$vandaag = json_decode(getCache('energy_vandaag'));
-		if ($vandaag) {
-			$d['gas'] = $vandaag->gas;
-			$d['gasavg'] = $vandaag->gasavg;
-			$d['elec'] = $vandaag->elec;
-			$d['elecavg'] = $vandaag->elecavg;
-			$d['verbruik'] = $vandaag->verbruik;
-			$d['zon'] = $vandaag->zon;
-			$d['zonavg'] = $vandaag->zonavg;
-			$d['zonref'] = $vandaag->zonref;
-			$d['alwayson'] = $vandaag->alwayson;
-			$msg2.=' + verbruik';
-			apcu_store($id.'v', $time, 600);
-		}
-	}
+    $type = 'f';
+    $filter = 'f';
+    $verbruik = true;
+}
+if (isset($_GET['all'])) {
+    $t = 0;
+    $extra = true;
+} else {
+    $t = apcu_fetch($id.$type);
+    if ($t === false) {
+        $t = 0;
+        $extra = true;
+    } elseif ($t < $time - 5) {
+        $t -= 3600;
+    }
+}
+
+$sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1";
+if ($t > 0) {
+    $sql .= " AND `t`>=$t";
+}
+
+// Haal energy data op (alleen voor type 'f')
+if ($type === 'f') {
+    $en = getCache('en');
+    if ($en) {
+        $en = json_decode($en);
+        if ($en) {
+            $d['n'] = $en->n;
+            $d['a'] = $en->a;
+            $d['b'] = $en->b;
+            $d['c'] = $en->c;
+            $d['z'] = $en->z;
+        }
+    } else {
+        lg("Can't fetch en");
+    }
+    if ($extra === true) {
+        $vandaag = getCache('energy_vandaag');
+        if ($vandaag) {
+            $vandaag = json_decode($vandaag);
+            if ($vandaag) {
+                $d['gas'] = $vandaag->gas;
+                $d['gasavg'] = $vandaag->gasavg;
+                $d['elec'] = $vandaag->elec;
+                $d['elecavg'] = $vandaag->elecavg;
+                $d['verbruik'] = $vandaag->verbruik;
+                $d['zon'] = $vandaag->zon;
+                $d['zonavg'] = $vandaag->zonavg;
+                $d['zonref'] = $vandaag->zonref;
+                $d['alwayson'] = $vandaag->alwayson;
+            }
+        }
+    }
 }
 apcu_store($id.$type, $time, 86400);
+
 $db = dbconnect();
 $stmt = $db->query($sql);
-$extralast=apcu_fetch($id.$type.'e');
-if ($extralast===false||$extra===true) {
-	$sunrise = json_decode(getCache('sunrise'), true);
-	if ($sunrise) {
-		$d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
-		$d['Sunrise'] = $sunrise['Sunrise'];
-		$d['Sunset'] = $sunrise['Sunset'];
-		$d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
-		$d['playlist'] = boseplaylist();
-		apcu_store($id.$type.'e', $time, 3600);
-	}
-	$d['thermo_hist'] = json_decode(apcu_fetch('thermo_hist'), true);
-	$msg2.=' + extra';
+$rows = $stmt->fetchAll();
+
+$extralast = apcu_fetch($id.$type.'e');
+if ($extralast === false || $extra === true) {
+    $sunrise = apcu_fetch('cache_sunrise');
+    if ($sunrise === false) {
+        $sunrise = getCache('sunrise');
+        if ($sunrise) {
+            apcu_store('cache_sunrise', $sunrise, 300);
+        }
+    }
+    
+    if ($sunrise) {
+        $sunrise = json_decode($sunrise, true);
+        if ($sunrise) {
+            $d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
+            $d['Sunrise'] = $sunrise['Sunrise'];
+            $d['Sunset'] = $sunrise['Sunset'];
+            $d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
+            $d['playlist'] = boseplaylist($time);
+        }
+    }
+    
+    $thermo_hist = apcu_fetch('thermo_hist');
+    if ($thermo_hist !== false) {
+        $d['thermo_hist'] = json_decode($thermo_hist, true);
+    }
+    
+    apcu_store($id.$type.'e', $time, 3600);
 }
 
-while ($row = $stmt->fetch()) {
-	$d[$row['n']]['s'] = $row['s'];
-	if ($row['rt'] == 1) $d[$row['n']]['t'] = $row['t'];
-	if (!is_null($row['m'])) $d[$row['n']]['m'] = $row['m'];
-	if (!is_null($row['dt'])) {
-		$d[$row['n']]['dt'] = $row['dt'];
-		if ($row['dt']=='daikin') {
-			$d[$row['n']]['s'] = null;
-		}
-	} else $row['dt'] = null;
-	if (!is_null($row['icon'])) {
-		if ($row['dt']=='th'&&$row['n']!='badkamer_set') {
-			$d[$row['n']]['icon']=json_decode($row['icon'],true);
-			if (json_last_error() !== JSON_ERROR_NONE) echo "INVALID JSON FOR ICON: ".$row['n']." >> ".$row['icon'];
-		}
-		else $d[$row['n']]['icon']=$row['icon'];
-	}
-	if (!is_null($row['p'])) $d[$row['n']]['p'] = $row['p'];
+// Verwerk device data
+foreach ($rows as $row) {
+    $n = $row['n'];
+    $d[$n]['s'] = $row['s'];
+    
+    if ($row['rt'] == 1) {
+        $d[$n]['t'] = $row['t'];
+    }
+    
+    if (!is_null($row['m'])) {
+        $d[$n]['m'] = $row['m'];
+    }
+    
+    if (!is_null($row['dt'])) {
+        $d[$n]['dt'] = $row['dt'];
+        if ($row['dt'] === 'daikin') {
+            $d[$n]['s'] = null;
+        }
+    }
+    
+    if (!is_null($row['icon'])) {
+        if ($row['dt'] === 'th' && $n !== 'badkamer_set') {
+            $icon = json_decode($row['icon'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $d[$n]['icon'] = $icon;
+            } else {
+                lg("INVALID JSON FOR ICON: $n >> " . $row['icon']);
+            }
+        } else {
+            $d[$n]['icon'] = $row['icon'];
+        }
+    }
+    
+    if (!is_null($row['p'])) {
+        $d[$n]['p'] = $row['p'];
+    }
 }
 
-$data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-echo $data;
+echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;
+    
+    if ($db !== null) {
+        return $db;
+    }
+    
     try {
-        if ($db !== null) {
-            $db->query('SELECT 1');
-            return $db;
-        }
         $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -150,57 +167,33 @@ function dbconnect() {
             PDO::ATTR_PERSISTENT => true,
         ]);
         return $db;
-    }
-    catch (PDOException $e) {
-        if ($db !== null && (
-            $e->getCode() == 2006 || 
-            $e->getCode() == 'HY000' ||
-            strpos($e->getMessage(), 'server has gone away') !== false ||
-            strpos($e->getMessage(), 'MySQL server has gone away') !== false
-        )) {
-            lg('⚠️ Verbinding verbroken, opnieuw verbinden (PID: '.getmypid().')');
-            $db = null;
-            return dbconnect();
-        }
-        lg('‼️ PDO fout: '.$e->getMessage());
+    } catch (PDOException $e) {
+        lg('‼️ PDO fout: ' . $e->getMessage());
+        $db = null;
         throw $e;
     }
 }
-function boseplaylist() {
-	global $time;
-	$dag=floor($time/86400);
-	$dow=date("w");
-	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-	if ($weekend==true) {
-		if ($dag % 3 == 0) $preset='MIX-3';
-		elseif ($dag % 2 == 0) $preset='MIX-2';
-		else $preset='MIX-1';
-	} else {
-		if ($dag % 3 == 0) $preset='EDM-3';
-		elseif ($dag % 2 == 0) $preset='EDM-2';
-		else $preset='EDM-1';
-	}
-/*	$map = [
-		'EDM-1' => 'PRESET_1',
-		'EDM-2' => 'PRESET_2',
-		'EDM-3' => 'PRESET_3',
-		'MIX-1' => 'PRESET_4',
-		'MIX-2' => 'PRESET_5',
-		'MIX-3' => 'PRESET_6',
-	];
-	return $map[$preset];*/
-	return $preset;
+function boseplaylist($time) {
+    $dag = floor($time / 86400);
+    $dow = date("w", $time);
+    $weekend = ($dow == 0 || $dow == 6);
+    if ($weekend) {
+        if ($dag % 3 == 0) return 'MIX-3';
+        if ($dag % 2 == 0) return 'MIX-2';
+        return 'MIX-1';
+    } else {
+        if ($dag % 3 == 0) return 'EDM-3';
+        if ($dag % 2 == 0) return 'EDM-2';
+        return 'EDM-1';
+    }
 }
 function getCache(string $key, $default = false) {
-    $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
+    $data = @file_get_contents('/dev/shm/cache/' . $key . '.txt');
     return $data === false ? $default : $data;
 }
 function lg($msg) {
-	$fp = fopen('/temp/domoticz.log', "a+");
-	$time = microtime(true);
-	$dFormat = "d-m H:i:s";
-	$mSecs = $time - floor($time);
-	$mSecs = substr(number_format($mSecs, 3), 1);
-	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-	fclose($fp);
+    $time = microtime(true);
+    $mSecs = substr(number_format($time - floor($time), 3), 1);
+    $line = sprintf("%s%s %s\n", date("d-m H:i:s", $time), $mSecs, $msg);
+    file_put_contents('/temp/domoticz.log', $line, FILE_APPEND | LOCK_EX);
 }
