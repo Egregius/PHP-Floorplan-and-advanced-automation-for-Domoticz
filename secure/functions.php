@@ -1051,7 +1051,7 @@ function dbconnect() {
     if ($db !== null) return $db;
 //    try {
         $db = new PDO(
-            "mysql:host=192.168.2.23;dbname='domotica';",
+            "mysql:host=192.168.2.23;dbname=domotica;",
             'dbuser',
             'dbuser',
             [

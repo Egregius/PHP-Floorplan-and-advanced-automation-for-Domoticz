@@ -39,17 +39,12 @@ if (isset($_GET['all'])) {
         $t -= 3600;
     }
 }
-
 $sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1";
-if ($t > 0) {
-    $sql .= " AND `t`>=$t";
-}
+if ($t > 0) $sql .= " AND `t`>=$t";
 $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-
-// Haal energy data op (alleen voor type 'f')
 if ($type === 'f') {
     $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-$en = getCache('en');
+	$en = getCache('en');
     if ($en) {
         $en = json_decode($en);
         if ($en) {
@@ -85,12 +80,11 @@ $en = getCache('en');
 }
 apcu_store($id.$type, $time, 86400);
 $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-
 $db = dbconnect();
-$stmt = $db->query($sql);
-$rows = $stmt->fetchAll();
 $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-
+$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1 AND t >= :t");
+$stmt->execute([':t' => $t]);
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
     $sunrise = apcu_fetch('cache_sunrise');
@@ -122,7 +116,7 @@ if ($extralast === false || $extra === true) {
 $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 // Verwerk device data
-foreach ($rows as $row) {
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $n = $row['n'];
     $d[$n]['s'] = $row['s'];
     
@@ -144,11 +138,6 @@ foreach ($rows as $row) {
     if (!is_null($row['icon'])) {
         if ($row['dt'] === 'th' && $n !== 'badkamer_set') {
             $icon = json_decode($row['icon'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $d[$n]['icon'] = $icon;
-            } else {
-                lg("INVALID JSON FOR ICON: $n >> " . $row['icon']);
-            }
         } else {
             $d[$n]['icon'] = $row['icon'];
         }
@@ -163,26 +152,21 @@ $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 function dbconnect() {
-    global $dbname, $dbuser, $dbpass;
     static $db = null;
-    
-    if ($db !== null) {
-        return $db;
-    }
-    
-    try {
-        $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
+    if ($db !== null) return $db;
+//    try {
+        $db = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=utf8mb4", 'dbuser', 'dbuser', [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_TIMEOUT => 5,
             PDO::ATTR_PERSISTENT => true,
         ]);
         return $db;
-    } catch (PDOException $e) {
-        lg('‼️ PDO fout: ' . $e->getMessage());
-        $db = null;
-        throw $e;
-    }
+//    } catch (PDOException $e) {
+//        lg('‼️ PDO fout: ' . $e->getMessage());
+//        $db = null;
+//        throw $e;
+//    }
 }
 function boseplaylist($time) {
     $dag = floor($time / 86400);
