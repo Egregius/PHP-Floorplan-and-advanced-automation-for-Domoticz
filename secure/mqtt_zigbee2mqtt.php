@@ -52,10 +52,12 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				if ($d[$device]['dt']=='zbtn') {
 					lg('ⓩ ZBTN'.$device.' '.print_r($status,true));
 				} elseif ($d[$device]['dt']=='remote') {
-					lg('ⓩ Remote '.$device.' '.print_r($status,true));
-					$status=$status->$action;
-					lg('ⓩ Remote '.$device.' '.$status);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
+					if (isset($status->action)) {
+						lg('ⓩ Remote '.$device.' '.print_r($status,true));
+						$status=$status->action;
+						lg('ⓩ Remote '.$device.' '.$status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
 				} elseif ($d[$device]['dt']=='c') {
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';

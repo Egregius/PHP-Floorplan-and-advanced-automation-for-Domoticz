@@ -163,7 +163,7 @@ function huisslapen($weg=false) {
 	if ($weg===3) store('weg', 3, basename(__FILE__).':'.__LINE__);
 	elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
-		sw(array('badkamerpower'), 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 
 	} else store('weg', 1, basename(__FILE__).':'.__LINE__);
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
@@ -596,51 +596,52 @@ function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
 	if ($d['weg']['s']<=1) {
 		if ($d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-		if ($d['bose101']['s']=='Off'&&$time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
-			lg(basename(__FILE__).':'.__LINE__);
-			sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-			bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
-			lg('Bose zone time='.$time.'|'.$t+1800);
-			if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-			elseif ($d['alexslaapt']['s']==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
-			else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
-		}
-		if ($ip>101) {
-			if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
-			$mapip = [
-				102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
-				103 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
-				104 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>',
-				105 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
-				106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
-				107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
-			];
-			if ($d['bose101']['s']=='On'&&$d['bose'.$ip]['s']=='Off') {
+		if ($time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
+			if ($d['bose101']['s']=='Off') {
 				lg(basename(__FILE__).':'.__LINE__);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				//bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
+				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
+				lg('Bose zone time='.$time.'|'.$t+1800);
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif ($d['alexslaapt']['s']==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
+				elseif ($d['alexslaapt']['s']==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
-				usleep(100000);
-				bosepost('setZone', $mapip[$ip], 101);
-				if ($vol=='') {
-					if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
-					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
-				} else {
-					if ($d['alexslaapt']['s']==1) $vol-=10;
-					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
-				}
-			} else /*if ($d['bose'.$ip]['s']=='Off') */{
-				bosepost('setZone',  $mapip[$ip], 101);
-				store('bose'.$ip, 'On');
-				if ($vol=='') {
-					if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
-					else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
-				} else {
-					
-					if ($d['alexslaapt']['s']==1) $vol-=10;
-					bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
+			}		
+			if ($ip>101) {
+				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+				$mapip = [
+					102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
+					103 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
+					104 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.104">C4F312DCE637</member></zone>',
+					105 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
+					106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
+					107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
+				];
+				if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
+					lg(basename(__FILE__).':'.__LINE__);
+					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+					if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+					elseif ($d['alexslaapt']['s']==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
+					else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
+					usleep(100000);
+					bosepost('setZone', $mapip[$ip], 101);
+					if ($vol=='') {
+						if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+						else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
+					} else {
+						if ($d['alexslaapt']['s']==1) $vol-=10;
+						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
+					}
+				} else /*if ($d['bose'.$ip]['s']=='Off') */{
+					bosepost('setZone',  $mapip[$ip], 101);
+					store('bose'.$ip, 'On');
+					if ($vol=='') {
+						if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+						else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
+					} else {
+						
+						if ($d['alexslaapt']['s']==1) $vol-=10;
+						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
+					}
 				}
 			}
 		}
