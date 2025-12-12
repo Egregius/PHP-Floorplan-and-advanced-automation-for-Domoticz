@@ -1086,8 +1086,8 @@ function fetchdata($t=0,$lg='') {
 		if(!is_null($row['p']))$d[$row['n']]['p']=$row['p'];
 	}
 
-	if ($t==0) lg('⬆️  FETCHDATA ALL '.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
-	else lg('⬆️  FETCHDATA '.$time.' '.$t.'	'.$time-$t.'	'.$lg.(strlen($lg)<15?'		':'	').$stmt->rowCount().' rows',99);
+	if ($t==0) lg('⬆️  FETCHDATA	ALL	'.$stmt->rowCount().' items	'.$lg,99);
+	else lg('⬆️  FETCHDATA	'.$time-$t.'	'.$stmt->rowCount().' items	'.$lg,99);
 	$en=json_decode(getCache('en'));
 	if ($en) {
 		$d['n']=$en->n;
