@@ -28,19 +28,20 @@ $boses=array(
 	107=>'Keuken',
 );
 while (1) {
-    $start = microtime(true);
-    $d['time'] = (int)$start;
-    $d = fetchdata($time - 60, basename(__FILE__) . ':' . __LINE__);
+    $time = time();
+    $d['time'] = $time;
+    $d = fetchdata($lastcheck, basename(__FILE__) . ':' . __LINE__);
+    $lastcheck=$time;
     include 'cron2B.php';
-    $time_elapsed_secs = microtime(true) - $start;
+    $time_elapsed_secs = microtime(true) - $time;
     $sleep = 10 - $time_elapsed_secs;
     if ($sleep > 0) {
         $sleep = round($sleep * 1000000);
         usleep($sleep);
     }
     
-    if ($lastcheck < $d['time'] - 300) {
-        $lastcheck = $d['time'];
+    if ($lastcheck < $time - 300) {
+        $lastcheck = $time;
         stoploop();
         $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
     }

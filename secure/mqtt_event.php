@@ -16,7 +16,7 @@ $t = null;
 $weekend = null;
 $dow = null;
 $d=fetchdata(0,'mqtt_event:'.__LINE__);
-$startloop=microtime(true);
+$startloop=time();
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
@@ -39,9 +39,9 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			$time=$d['time'];
-			if (($d['time'] - $startloop) <= 3) return;
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];

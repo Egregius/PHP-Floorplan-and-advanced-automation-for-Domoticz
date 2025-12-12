@@ -16,7 +16,7 @@ $t = null;
 $weekend = null;
 $dow = null;
 $d=fetchdata(0,'mqtt_light:'.__LINE__);
-$startloop=microtime(true);
+$startloop=time();
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
@@ -40,8 +40,9 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			if (($d['time'] - $startloop) <= 3) return;
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {

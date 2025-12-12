@@ -16,7 +16,7 @@ $t = null;
 $weekend = null;
 $dow = null;
 $d=fetchdata(0,'mqtt_binary:'.__LINE__);
-$startloop=microtime(true);
+$startloop=time();
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
@@ -39,8 +39,9 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 		$path = explode('/', $topic);
 		$device = $path[2];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			if (($d['time'] - $startloop) <= 5) return;
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);

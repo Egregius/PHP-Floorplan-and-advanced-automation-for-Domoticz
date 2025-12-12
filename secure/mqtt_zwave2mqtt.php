@@ -15,8 +15,8 @@ $lastcheck=$time;
 $t = null;
 $weekend = null;
 $dow = null;
-$d=fetchdata(0,'mqtt_event:'.__LINE__);
-$startloop=microtime(true);
+$d=fetchdata(0,'mqtt_zwave2mqtt');
+$startloop=time();
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
@@ -34,19 +34,18 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[1];
-		
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			$time=$d['time'];
-			if (($d['time'] - $startloop) <= 3) return;
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
 			$d=fetchdata($d['lastfetch'],'mqtt_zwave:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 5;
+			$d['lastfetch']=$time;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				if ($d[$device]['dt']=='8knop') {

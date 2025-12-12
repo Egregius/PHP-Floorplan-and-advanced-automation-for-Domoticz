@@ -15,8 +15,8 @@ $lastcheck=$time;
 $t = null;
 $weekend = null;
 $dow = null;
-$d=fetchdata(0,'mqtt_event:'.__LINE__);
-$startloop=microtime(true);
+$d=fetchdata(0,'mqtt_zigbee2mqtt');
+$startloop=time();
 define('LOOP_START', $startloop);
 $d['lastfetch']=$startloop;
 $d['time']=$startloop;
@@ -39,13 +39,13 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 		$path=explode('/',$topic);
 		$device=$path[1];
 		if (isset($validDevices[$device])) {
-			$d['time']=microtime(true);
-			$time=$d['time'];
-			if (($d['time'] - $startloop) <= 3) return;
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
 			$d=fetchdata($d['lastfetch'],'mqtt_zigbee:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 5;
+			$d['lastfetch']=$time;
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				$current_device_file = $device;
