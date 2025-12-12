@@ -26,8 +26,23 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-zwave('wasbak','multilevel',0,'{"brightness":10,"state":"ON"}');
+for ($i = 1; $i <= 10; $i++) {
+    $t = time() - 300; // of jouw $d['lastfetch'], maakt niet uit
 
+    // TEST: full fetch (fetchdata(0))
+    $startFull = microtime(true);
+    fetchdata(0);
+    $durationFull = microtime(true) - $startFull;
+
+    // TEST: incremental fetch (fetchdata($t))
+    $startInc = microtime(true);
+    fetchdata($t);
+    $durationInc = microtime(true) - $startInc;
+
+    echo "Run $i: full=" . round($durationFull*1000, 3) . "ms  , inc=" . round($durationInc*1000, 3) . "ms\n";
+
+    usleep(200000); // 0.2s pauze zodat DB tijd heeft (optioneel)
+}
 
 
 

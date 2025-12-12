@@ -5,8 +5,6 @@ $extra=false;
 $verbruik=false;
 $d = array();
 $d['t'] = $time;
-$msg2='';
-
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
 $map = [
     '192.168.2.201' => 'Mac',
@@ -17,23 +15,19 @@ $map = [
     '192.168.4.4'   => 'iPadGuy',
 ];
 $id = $map[$ip] ?? $ip;
-
 if (isset($_GET['o'])) {
 	$type='o';
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$msg=$id.'	o	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1";
 	} else {
 		$t = apcu_fetch($id.$type) ?? 1;
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$id.'	o	expired';
 		} else {
 			if ($t<$time-5) $t-=3600;
-			$msg=$id.'	o	'.$time - $t.' sec';
 		}
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `o`=1 AND `t`>=$t";
 	}
@@ -44,17 +38,14 @@ if (isset($_GET['o'])) {
 	if (isset($_GET['all'])) {
 		$t=0;
 		$extra=true;
-		$msg=$id.'	h	all';
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1";
 	} else {
 		$t = apcu_fetch($id.$type) ?? 1;
 		if ($t === false) {
 			$t = 0;
 			$extra=true;
-			$msg=$id.'	h	expired';
 		} else {
 			if ($t<$time-5) $t-=3600;
-			$msg=$id.'	h	'.$time - $t.' sec';
 		}
 		$sql="SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `h`=1 AND `t`>=$t";
 	}
@@ -106,13 +97,7 @@ if (isset($_GET['o'])) {
 }
 apcu_store($id.$type, $time, 86400);
 $db = dbconnect();
-//try {
-    $stmt = $db->query($sql);
-//} catch (PDOException $e) {
-//    error_log("SQL ERROR: " . $e->getMessage());
-//    error_log("SQL QUERY: " . $sql);
-//    throw $e;
-//}
+$stmt = $db->query($sql);
 $extralast=apcu_fetch($id.$type.'e');
 if ($extralast===false||$extra===true) {
 	$sunrise = json_decode(getCache('sunrise'), true);
@@ -150,8 +135,6 @@ while ($row = $stmt->fetch()) {
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
-//if ($type=='f') lg($msg.'	'.count($d)-6 .' updates	'.strlen($data).' bytes'.$msg2);
-//else lg($msg.'	'.count($d)-1 .' updates	'.strlen($data).' bytes'.$msg2);
 function dbconnect() {
     global $dbname, $dbuser, $dbpass;
     static $db = null;

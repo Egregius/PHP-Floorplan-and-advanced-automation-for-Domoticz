@@ -334,7 +334,6 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
     $caller = $backtrace[0];
     $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-    
     if (!empty($msg)) {
         $msg = $callerLocation . ' - ' . $msg;
     } else {
@@ -343,19 +342,18 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
     $db=dbconnect();
 	$time=time();
 	if ($force==true||$status!=$d[$name]['s']) {
+		$d[$name]['s']=$status;
 		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-		if ($name=='') lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($idx??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
-		else {
-			if(endswith($name, '_kWh')) return;
-			elseif(endswith($name, '_hum')) return;
-			else lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
-		}
+		if(endswith($name, '_kWh')) return;
+		elseif(endswith($name, '_hum')) return;
+		else lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	
 }
 function storemode($name,$mode,$msg='',$update=null) {
 	global $user, $time;
+	$d[$name]['m']=$mode;
 	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
     $caller = $backtrace[0];
     $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
@@ -373,6 +371,8 @@ function storemode($name,$mode,$msg='',$update=null) {
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$time;
+	$d[$name]['s']=$s;
+	$d[$name]['m']=$m;
 	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
     $caller = $backtrace[0];
     $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
@@ -1074,33 +1074,49 @@ function dbconnect() {
         throw $e;
     }
 }
-function fetchdata($t=0,$lg='') {
-	global $d,$time;
-	$db=dbconnect();
-	if ($t==0) $stmt=$db->query("select n,s,t,m,dt,icon,p from devices;");
-	else $stmt=$db->query("select n,s,t,m,dt,icon,p from devices WHERE t>=$t;");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		if(!is_null($row['s']))$d[$row['n']]['s']=$row['s'];
-		if(!is_null($row['t']))$d[$row['n']]['t']=$row['t'];
-		if(!is_null($row['m']))$d[$row['n']]['m']=$row['m'];
-		if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
-		if(!is_null($row['icon']))$d[$row['n']]['icon']=$row['icon'];
-		if(!is_null($row['p']))$d[$row['n']]['p']=$row['p'];
-	}
-
-	if ($t==0) lg('⬆️  FETCHDATA	ALL	'.$stmt->rowCount().' items	'.$lg,99);
-	else lg('⬆️  FETCHDATA	'.$time-$t.'	'.$stmt->rowCount().' items	'.$lg,99);
-	$en=json_decode(getCache('en'));
-	if ($en) {
-		$d['n']=$en->n;
-		$d['a']=$en->a;
-		$d['b']=$en->b;
-		$d['c']=$en->c;
-		$d['z']=$en->z;
-	}
-	return $d;
-	
+function fetchdata($t = 0, $lg = '') {
+    global $d, $time;
+    $db = dbconnect();
+    static $stmtFull = null;
+    static $stmtInc  = null;
+    if ($stmtFull === null) {
+        $stmtFull = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices");
+    }
+    if ($stmtInc === null) {
+        $stmtInc = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices WHERE t >= ?");
+    }
+    if ($t == 0) {
+        $stmtFull->execute();
+        $stmt = $stmtFull;
+    } else {
+        $stmtInc->execute([$t-10]);
+        $stmt = $stmtInc;
+    }
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $n = $row['n'];
+        if (!is_null($row['s']))   $d[$n]['s']   = $row['s'];
+        if (!is_null($row['t']))   $d[$n]['t']   = $row['t'];
+        if (!is_null($row['m']))   $d[$n]['m']   = $row['m'];
+        if (!is_null($row['dt']))  $d[$n]['dt']  = $row['dt'];
+        if (!is_null($row['icon']))$d[$n]['icon']= $row['icon'];
+        if (!is_null($row['p']))   $d[$n]['p']   = $row['p'];
+    }
+    if ($t == 0) {
+        lg('⬆️  FETCHDATA  ALL   '.$stmt->rowCount().' items  '.$lg, 99);
+    } else {
+        lg('⬆️  FETCHDATA  '.($time-$t).'   '.$stmt->rowCount().' items  '.$lg, 99);
+    }
+    $en = json_decode(getCache('en'));
+    if ($en) {
+        $d['n'] = $en->n;
+        $d['a'] = $en->a;
+        $d['b'] = $en->b;
+        $d['c'] = $en->c;
+        $d['z'] = $en->z;
+    }
+    return $d;
 }
+
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
 }
