@@ -1047,26 +1047,35 @@ function curl($url) {
 	return $data;
 }
 function dbconnect() {
+    global $dbname, $dbuser, $dbpass;
     static $db = null;
-    if ($db !== null) return $db;
-//    try {
-        $db = new PDO(
-            "mysql:host=192.168.2.23;dbname=domotica;",
-            'dbuser',
-            'dbuser',
-            [
-//                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_PERSISTENT         => true,
-                PDO::ATTR_TIMEOUT            => 2,
-            ]
-        );
+    try {
+        if ($db !== null) {
+            $db->query('SELECT 1');
+            return $db;
+        }
+        $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_TIMEOUT => 5,
+            PDO::ATTR_PERSISTENT => true,
+        ]);
         return $db;
-//    }
-//    catch (PDOException $e) {
-//        lg("‼️ PDO fout bij init: " . $e->getMessage());
-//        throw $e;
-//    }
+    }
+    catch (PDOException $e) {
+        if ($db !== null && (
+            $e->getCode() == 2006 || 
+            $e->getCode() == 'HY000' ||
+            strpos($e->getMessage(), 'server has gone away') !== false ||
+            strpos($e->getMessage(), 'MySQL server has gone away') !== false
+        )) {
+            lg('⚠️ Verbinding verbroken, opnieuw verbinden (PID: '.getmypid().')');
+            $db = null;
+            return dbconnect();
+        }
+        lg('‼️ PDO fout: '.$e->getMessage());
+        throw $e;
+    }
 }
 
 function fetchdata() {
