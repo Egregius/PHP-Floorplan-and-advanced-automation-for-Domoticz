@@ -53,7 +53,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					lg('ⓩ ZBTN'.$device.' '.print_r($status,true));
 				} elseif ($d[$device]['dt']=='remote') {
 					lg('ⓩ Remote '.$device.' '.print_r($status,true));
-					$status=$status->action;
+					$status=$status->$action;
 					lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='c') {
