@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_media_player:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -35,9 +34,9 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$device=$path[2];
 		$time=time();
 		$d['time']=$time;
-		$d=fetchdata($d['lastfetch'],'mqtt_media_player:'.__LINE__);
+		$d=fetchdata();
 		$d['lastfetch']=$time;
-		$status = ucfirst(strtolower(trim($status, '"')));
+		$status = ucfirst(strtolower($status));
 		if ($d[$device]['s']!=$status) {
 //			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 			include '/var/www/html/secure/pass2php/'.$device.'.php';

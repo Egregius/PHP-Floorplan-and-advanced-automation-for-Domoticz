@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_event:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -46,8 +45,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
 //			lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
-			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
-			$d['lastfetch']=$time;
+			$d=fetchdata();
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';

@@ -88,10 +88,13 @@ function fliving() {
 function fgarage() {
 	global $d;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') {
-		if ($d['z']<260) sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['z']<260) {
+			zwave('poort','binary',2,'ON');
+			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
+		}
 		if ($d['garageled']['m']!=1) {
 			storemode('garageled',1);
-			setBatterijLedBrightness(30);
+			setBatterijLedBrightness(40);
 		}
 	}
 }
@@ -1044,54 +1047,36 @@ function curl($url) {
 	return $data;
 }
 function dbconnect() {
-    global $dbname, $dbuser, $dbpass;
     static $db = null;
-    try {
-        if ($db !== null) {
-            $db->query('SELECT 1');
-            return $db;
-        }
-        $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_TIMEOUT => 5,
-            PDO::ATTR_PERSISTENT => true,
-        ]);
+    if ($db !== null) return $db;
+//    try {
+        $db = new PDO(
+            "mysql:host=192.168.2.23;dbname='domotica';",
+            'dbuser',
+            'dbuser',
+            [
+//                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_PERSISTENT         => true,
+                PDO::ATTR_TIMEOUT            => 2,
+            ]
+        );
         return $db;
-    }
-    catch (PDOException $e) {
-        if ($db !== null && (
-            $e->getCode() == 2006 || 
-            $e->getCode() == 'HY000' ||
-            strpos($e->getMessage(), 'server has gone away') !== false ||
-            strpos($e->getMessage(), 'MySQL server has gone away') !== false
-        )) {
-            lg('⚠️ Verbinding verbroken, opnieuw verbinden (PID: '.getmypid().')');
-            $db = null;
-            return dbconnect();
-        }
-        lg('‼️ PDO fout: '.$e->getMessage());
-        throw $e;
-    }
+//    }
+//    catch (PDOException $e) {
+//        lg("‼️ PDO fout bij init: " . $e->getMessage());
+//        throw $e;
+//    }
 }
-function fetchdata($t = 0, $lg = '') {
-    global $d, $time;
+
+function fetchdata() {
+    global $d;
     $db = dbconnect();
-    static $stmtFull = null;
-    static $stmtInc  = null;
-    if ($stmtFull === null) {
-        $stmtFull = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices");
+    static $stmt = null;
+    if ($stmt === null) {
+        $stmt = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices_mem");
     }
-    if ($stmtInc === null) {
-        $stmtInc = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices WHERE t >= ?");
-    }
-    if ($t == 0) {
-        $stmtFull->execute();
-        $stmt = $stmtFull;
-    } else {
-        $stmtInc->execute([$t-10]);
-        $stmt = $stmtInc;
-    }
+    $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $n = $row['n'];
         if (!is_null($row['s']))   $d[$n]['s']   = $row['s'];
@@ -1100,11 +1085,6 @@ function fetchdata($t = 0, $lg = '') {
         if (!is_null($row['dt']))  $d[$n]['dt']  = $row['dt'];
         if (!is_null($row['icon']))$d[$n]['icon']= $row['icon'];
         if (!is_null($row['p']))   $d[$n]['p']   = $row['p'];
-    }
-    if ($t == 0) {
-        lg('⬆️  FETCHDATA  ALL   '.$stmt->rowCount().' items  '.$lg, 99);
-    } else {
-        lg('⬆️  FETCHDATA  '.($time-$t).'   '.$stmt->rowCount().' items  '.$lg, 99);
     }
     $en = json_decode(getCache('en'));
     if ($en) {

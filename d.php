@@ -1,4 +1,5 @@
 <?php
+$start=microtime(true);
 require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
@@ -14,6 +15,7 @@ $id = $map[$ip] ?? $ip;
 $extra = false;
 $verbruik = false;
 $d = ['t' => $time];
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 if (isset($_GET['o'])) {
     $type = 'o';
     $filter = 'o';
@@ -38,14 +40,16 @@ if (isset($_GET['all'])) {
     }
 }
 
-$sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1";
+$sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1";
 if ($t > 0) {
     $sql .= " AND `t`>=$t";
 }
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 // Haal energy data op (alleen voor type 'f')
 if ($type === 'f') {
-    $en = getCache('en');
+    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
+$en = getCache('en');
     if ($en) {
         $en = json_decode($en);
         if ($en) {
@@ -58,7 +62,8 @@ if ($type === 'f') {
     } else {
         lg("Can't fetch en");
     }
-    if ($extra === true) {
+    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
+	if ($extra === true) {
         $vandaag = getCache('energy_vandaag');
         if ($vandaag) {
             $vandaag = json_decode($vandaag);
@@ -75,12 +80,16 @@ if ($type === 'f') {
             }
         }
     }
+    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
+
 }
 apcu_store($id.$type, $time, 86400);
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 $db = dbconnect();
 $stmt = $db->query($sql);
 $rows = $stmt->fetchAll();
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
@@ -110,6 +119,7 @@ if ($extralast === false || $extra === true) {
     
     apcu_store($id.$type.'e', $time, 3600);
 }
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 // Verwerk device data
 foreach ($rows as $row) {
@@ -148,6 +158,7 @@ foreach ($rows as $row) {
         $d[$n]['p'] = $row['p'];
     }
 }
+$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_binary:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -44,8 +43,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if (($time - $startloop) <= 2) return;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
-			$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);
-			$d['lastfetch']=$time;
+			$d = fetchdata();
 			if ($device === 'achterdeur') {
 				if ($status=='Off') $status='Open';
 				elseif ($status=='On') $status='Closed';

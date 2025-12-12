@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_sensor:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -44,8 +43,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if (($time - $startloop) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-			$d=fetchdata($d['lastfetch'],'mqtt_sensor:'.__LINE__);
-			$d['lastfetch']=$time;
+			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);

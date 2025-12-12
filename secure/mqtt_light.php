@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_light:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -46,8 +45,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
-				$d=fetchdata($d['lastfetch'],'mqtt_light:'.__LINE__);
-				$d['lastfetch']=$time;
+				$d=fetchdata();
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;

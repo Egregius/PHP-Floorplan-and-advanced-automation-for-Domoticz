@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_zigbee2mqtt');
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -44,8 +43,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			if (($time - $startloop) <= 2) return;
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
-			$d=fetchdata($d['lastfetch'],'mqtt_zigbee:'.__LINE__);
-			$d['lastfetch']=$time;
+			$d=fetchdata();
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
 				$current_device_file = $device;

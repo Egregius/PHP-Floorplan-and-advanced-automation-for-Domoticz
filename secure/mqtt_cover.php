@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_cover:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -44,12 +43,11 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$time=time();
 				$d['time']=$time;
 				if (($time - $startloop) <= 2) return;
-				$d=fetchdata($d['lastfetch'],'mqtt_cover:'.__LINE__);
-				$d['lastfetch']=$time;
 				if ($status === 'null') $status=0;
 				elseif($status==1) $status=0;
 				elseif($status==99) $status=100;
 				if ($device=='rbureel') $status=100-$status;
+				$d=fetchdata();
 				if ($d[$device]['s']!=$status) {
 					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,$status,'',1);

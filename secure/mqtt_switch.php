@@ -18,7 +18,6 @@ $dow = null;
 $d=fetchdata(0,'mqtt_switch:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['lastfetch']=$startloop;
 $d['time']=$startloop;
 $d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
@@ -45,8 +44,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (($time - $startloop) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-			$d=fetchdata($d['lastfetch'],'mqtt_switch:'.__LINE__);
-			$d['lastfetch']=$time;
+			$d=fetchdata();
 			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
 				if ($d[$device]['s']!=$status) {
