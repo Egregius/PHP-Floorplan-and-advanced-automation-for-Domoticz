@@ -35,7 +35,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 
-$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck) {
+$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -45,7 +45,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$d['time']=$time;
 				if (($time - $startloop) <= 2) return;
 				$d=fetchdata($d['lastfetch'],'mqtt_cover:'.__LINE__);
-				$d['lastfetch']=$d['time'] - 300;
+				$d['lastfetch']=$time;
 				if ($status === 'null') $status=0;
 				elseif($status==1) $status=0;
 				elseif($status==99) $status=100;

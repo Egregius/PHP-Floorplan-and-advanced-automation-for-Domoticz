@@ -34,7 +34,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time) {
 	try {
 		$path = explode('/', $topic);
 		$device = $path[2];
@@ -45,7 +45,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			$d = fetchdata($d['lastfetch'], 'mqtt_binary:' . __LINE__);
-			$d['lastfetch'] = $d['time'] - 5;
+			$d['lastfetch']=$time;
 			if ($device === 'achterdeur') {
 				if ($status=='Off') $status='Open';
 				elseif ($status=='On') $status='Closed';

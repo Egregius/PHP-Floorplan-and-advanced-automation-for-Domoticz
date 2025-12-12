@@ -43,7 +43,7 @@ while (true) {
 	$d['time'] = $time;
 	if ($time % 10 === 0 && $time !== $last10) {
 		$last10 = $time;
-		$d = fetchdata($lastfetch - 60, basename(__FILE__).':'.__LINE__);
+		$d = fetchdata($lastfetch, basename(__FILE__).':'.__LINE__);
 		$lastfetch=$time;
 		include '_cron10.php';
 		$user = 'HEATING';

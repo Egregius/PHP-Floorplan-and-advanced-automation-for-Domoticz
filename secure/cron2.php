@@ -2,9 +2,10 @@
 <?php
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting cron2 loop...');
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $time=time();
+$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
 $lastcheck=$time;
+$lastfetch=$time;
 define('LOOP_START', $time);
 $invalidcounter=0;
 $ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
@@ -30,8 +31,8 @@ $boses=array(
 while (1) {
     $time = time();
     $d['time'] = $time;
-    $d = fetchdata($lastcheck, basename(__FILE__) . ':' . __LINE__);
-    $lastcheck=$time;
+    $d = fetchdata($lastfetch, basename(__FILE__) . ':' . __LINE__);
+    $lastfetch=$time;
     include 'cron2B.php';
     $time_elapsed_secs = microtime(true) - $time;
     $sleep = 10 - $time_elapsed_secs;

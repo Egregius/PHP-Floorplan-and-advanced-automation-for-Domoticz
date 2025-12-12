@@ -34,7 +34,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -47,7 +47,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			$lastEvent = $d['time'];
 //			lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
 			$d=fetchdata($d['lastfetch'],'mqtt_event:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 5;
+			$d['lastfetch']=$time;
 			if (substr($device,0,1) === '8') {
 				if ($status === 'Keypressed') {
 					$status='On';
