@@ -90,9 +90,11 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					if($path[2]=='sensor_binary') {
 						if($status==1) $status='On';
 						else $status='Off';
-						lg('🌊 PIR '.$device.' '.$status);
-						store($device, $status);
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
+						if ($d[$device]['s']!=$status) {
+							lg('🌊 PIR '.$device.' '.$status);
+							store($device, $status);
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+						}
 					} else return;
 				} elseif ($d[$device]['dt']=='c') {
 					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
