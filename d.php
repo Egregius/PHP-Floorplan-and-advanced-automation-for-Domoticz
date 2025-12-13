@@ -9,10 +9,14 @@ $map = [
     '192.168.2.200' => 'iPadGuy',
     '192.168.4.4'   => 'iPadGuy',
 ];
+if(substr($ip,0,10)=='192.168.2.')$local=true;
+else $local=false;
+
 $id = $map[$ip] ?? $ip;
 $extra = false;
 $verbruik = false;
 $d = ['t' => $time];
+if ($local==true) $d['l']=1;
 if (isset($_GET['o'])) {
     $type = 'o';
     $filter = 'o';
@@ -70,7 +74,6 @@ if ($type === 'f') {
 
 }
 apcu_store($id.$type, $time, 86400);
-//$db = dbconnect();
 $db = Database::getInstance();
 $stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1 AND t >= :t");
 $stmt->execute([':t' => $t]);
@@ -126,26 +129,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     }
 }
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-$aantal=count($d);
-if ($type=='f')$aantal-=6;
-lg($id.'	'.$type.'	'.$aantal.' updates');
-function dbconnect() {
-	global $d,$start;
-	static $db = null;
-    if ($db !== null) return $db;
-//    try {
-        $db = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=utf8mb4", 'dbuser', 'dbuser', [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_TIMEOUT => 5,
-            PDO::ATTR_PERSISTENT => true,
-        ]);
-        return $db;
-//    } catch (PDOException $e) {
-//        lg('‼️ PDO fout: ' . $e->getMessage());
-//        $db = null;
-//        throw $e;
-//    }
+if ($id!='Mac') {
+	$aantal=count($d);
+	if ($type=='f')$aantal-=6;
+	if ($t==0) $msg=($id.'	'.$type.'	'.$aantal.' updates');
+	else $msg=($id.'	'.$type.'	'.$aantal.' updates		'.($time-$t));
+	if ($local==false) $msg.=' remote';
+	lg($msg);
 }
 function boseplaylist($time) {
     $dag = floor($time / 86400);
@@ -180,9 +170,9 @@ class Database {
 //            try {
                 self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
                     [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                        PDO::ATTR_PERSISTENT => true
+//                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+//                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+//                        PDO::ATTR_PERSISTENT => true
                     ]
                 );
 //            } catch (PDOException $e) {
