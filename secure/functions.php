@@ -1053,16 +1053,9 @@ class Database {
         if (self::$instance === null) {
             try {
             	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-            	lg(print_r($backtrace,true));
 				$caller = $backtrace[1];
-				$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-				
-				if (!empty($msg)) {
-					$msg = $callerLocation . ' - ' . $msg;
-				} else {
-					$msg = $callerLocation;
-				}
-				lg('⌗ '.$msg.' New DB connection');
+				$msg = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+				lg(' ⌗ '.$msg.' New DB connection');
                 self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
