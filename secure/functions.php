@@ -1047,14 +1047,13 @@ function curl($url) {
 	return $data;
 }
 function dbconnect() {
-    global $dbname, $dbuser, $dbpass;
     static $db = null;
     try {
         if ($db !== null) {
-            $db->query('SELECT 1');
+           // $db->query('SELECT 1');
             return $db;
         }
-        $db = new PDO("mysql:host=192.168.2.23;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass, [
+        $db = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=utf8mb4", 'dbuser', 'dbuser', [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_TIMEOUT => 5,
@@ -1063,6 +1062,7 @@ function dbconnect() {
         return $db;
     }
     catch (PDOException $e) {
+    	lg($e->getCode);
         if ($db !== null && (
             $e->getCode() == 2006 || 
             $e->getCode() == 'HY000' ||

@@ -189,6 +189,6 @@ function getCache(string $key, $default = false) {
 function lg($msg) {
     $time = microtime(true);
     $mSecs = substr(number_format($time - floor($time), 3), 1);
-    $line = sprintf("%s%s %s\n", date("d-m H:i:s", $time), $mSecs, $msg);
+    $line = sprintf("%s%s %s\n", date("d-m H:i:s", (int)$time), $mSecs, $msg);
     file_put_contents('/temp/domoticz.log', $line, FILE_APPEND | LOCK_EX);
 }
