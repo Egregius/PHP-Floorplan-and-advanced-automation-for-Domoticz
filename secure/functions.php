@@ -334,26 +334,53 @@ function setpoint($name, $value,$msg='') {
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
 	global $d,$user;
+
 	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $caller = $backtrace[0];
-    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-    if (!empty($msg)) {
-        $msg = $callerLocation . ' - ' . $msg;
-    } else {
-        $msg = $callerLocation;
-    }
-    $db = Database::getInstance();
-	$time=time();
-	if ($force==true||$status!=$d[$name]['s']) {
-		$d[$name]['s']=$status;
-		if ($update>0) $db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
-		else $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time';");
-		if(endswith($name, '_kWh')) return;
-		elseif(endswith($name, '_hum')) return;
-		else lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg>0)?'	('.$msg.')':''),10);
+	$caller = $backtrace[0];
+	$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+	$msg = !empty($msg) ? $callerLocation.' - '.$msg : $callerLocation;
+
+	if (!($force==true || $status!=$d[$name]['s'])) return;
+
+	$d[$name]['s'] = $status;
+	$time = time();
+
+	$sql = ($update > 0)
+		? "UPDATE devices SET s='$status',t='$time' WHERE n='$name'"
+		: "INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time')
+		   ON DUPLICATE KEY UPDATE s='$status',t='$time'";
+
+	for ($attempt = 1; $attempt <= 2; $attempt++) {
+
+		try {
+			$db = Database::getInstance();
+			$db->query($sql);
+			break; // succes → eruit
+
+		} catch (PDOException $e) {
+
+			if ($e->getCode() == 2006 && $attempt === 1) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();   // kill oude persistent
+				continue;           // retry met nieuwe
+			}
+
+			throw $e; // alles anders: hard falen
+		}
 	}
-	
+
+	if (endswith($name, '_kWh') || endswith($name, '_hum')) return;
+
+	lg(
+		'💾 STORE     '
+		.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '
+		.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '
+		.$status
+		.(strlen($msg)>0 ? ' ('.$msg.')' : ''),
+		10
+	);
 }
+
 function storemode($name,$mode,$msg='',$update=null) {
 	global $user, $time;
 	$d[$name]['m']=$mode;
@@ -1069,6 +1096,9 @@ class Database {
         }
         return self::$instance;
     }
+    public static function reset(): void {
+		self::$instance = null;
+	}
 }
 
 function fetchdata() {

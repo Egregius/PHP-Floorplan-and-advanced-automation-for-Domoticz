@@ -109,6 +109,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
+        $db->query('SELECT 1');
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
