@@ -41,21 +41,17 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+			if (($time - $startloop) <= 2 && in_array($device,['inputliving1'])) return;
+//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+//			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata();
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;
-				if ($d[$device]['s']!=$status) {
-					if ($device=='') {
-					}
-					lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
-				}
+				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				store($device,$status);
 			}
 		}
 	} catch (Throwable $e) {
@@ -87,13 +83,13 @@ function stoploop() {
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
-        exec("nice -n 15 php $script > /dev/null 2>&1 &");
+        exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
-        exec("nice -n 15 php $script > /dev/null 2>&1 &");
+        exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
 }

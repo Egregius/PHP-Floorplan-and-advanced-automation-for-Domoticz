@@ -252,27 +252,25 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 		}
 	} else {
 		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
-		if ($temp>0||$d[$name]['s']!=$level||$force==true) {
-			if ($temp>0||$d[$name]['dt']=='hd') {
-				if ($temp==0) {
-					if ($d['dag']['s']>12) $temp=3400;
-					elseif ($d['dag']['s']>8) $temp=3200;
-					elseif ($d['dag']['s']>6) $temp=3000;
-					elseif ($d['dag']['s']>2) $temp=2850;
-					else $temp=2750;
-				}				
-				if ($level>0&&$temp==0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level/*,"color_temp_kelvin"=>$temp*/));
-				elseif ($level>0&&$temp>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
-				elseif ($level==0) hass('light','turn_off','light.'.$name);
-			} elseif ($d[$name]['dt']=='d') {
-				if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
-				elseif ($level==0) hass('light','turn_off','light.'.$name);
-			} elseif ($d[$name]['dt']=='r') {
-				if($name=='rbureel') $level=100-$level;
-				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-			} elseif ($d[$name]['dt']=='luifel') {
-				hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-			}
+		if ($temp>0||$d[$name]['dt']=='hd') {
+			if ($temp==0) {
+				if ($d['dag']['s']>12) $temp=3400;
+				elseif ($d['dag']['s']>8) $temp=3200;
+				elseif ($d['dag']['s']>6) $temp=3000;
+				elseif ($d['dag']['s']>2) $temp=2850;
+				else $temp=2750;
+			}				
+			if ($level>0&&$temp==0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level/*,"color_temp_kelvin"=>$temp*/));
+			elseif ($level>0&&$temp>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
+			elseif ($level==0) hass('light','turn_off','light.'.$name);
+		} elseif ($d[$name]['dt']=='d') {
+			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
+			elseif ($level==0) hass('light','turn_off','light.'.$name);
+		} elseif ($d[$name]['dt']=='r') {
+			if($name=='rbureel') $level=100-$level;
+			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
+		} elseif ($d[$name]['dt']=='luifel') {
+			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
 		}
 	}
 }
@@ -299,7 +297,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg, $force);
-				usleep(300000);
+				usleep(200000);
 			}
 		}
 	} else {
@@ -340,7 +338,6 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
 	$msg = !empty($msg) ? $callerLocation.' - '.$msg : $callerLocation;
 
-	if (!($force==true || $status!=$d[$name]['s'])) return;
 	$d[$name]['s'] = $status;
 	$time = time();
 	$sql = ($update > 0)
@@ -353,7 +350,7 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 			$db->query($sql);
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt <4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
 				Database::reset();
 				sleep($attempt);
@@ -388,7 +385,7 @@ function storemode($name,$mode,$msg='',$update=null) {
 			$db->query($sql);
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt <4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
 				Database::reset();
 				sleep($attempt);
@@ -420,7 +417,7 @@ function storesm($name,$s,$m,$msg='') {
 			$db->query($sql);
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt <4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
 				Database::reset();
 				sleep($attempt);
@@ -450,7 +447,7 @@ function storesp($name,$s,$p,$msg='') {
 			$db->query($sql);
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt <4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
 				Database::reset();
 				sleep($attempt);
@@ -480,7 +477,7 @@ function storep($name,$p,$msg='') {
 			$db->query($sql);
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt <4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
 				Database::reset();
 				sleep($attempt);
@@ -513,7 +510,7 @@ function storeicon($name,$icon,$msg='',$update=null) {
 				$db->query($sql);
 				break;
 			} catch (PDOException $e) {
-				if ($e->getCode() == 2006 && $attempt <4) {
+				if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 					lg('♻ DB gone away → reconnect & retry', 5);
 					Database::reset();
 					sleep($attempt);
@@ -1180,7 +1177,7 @@ function fetchdata() {
 			}
 			break;
 		} catch (PDOException $e) {
-			if (($e->getCode() == 2006 || $e->getCode() == 'HY000') && $attempt < 4) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
 				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
 				Database::reset();
 				$stmt = null;

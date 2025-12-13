@@ -73,7 +73,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(5000);
+	usleep(4000);
 }
 $mqtt->disconnect();
 lg('MQTT loop stopped '.__FILE__,1);
@@ -90,13 +90,13 @@ function stoploop() {
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
-        exec("nice -n 15 php $script > /dev/null 2>&1 &");
+        exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
-        exec("nice -n 15 php $script > /dev/null 2>&1 &");
+        exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
 }
