@@ -1,7 +1,6 @@
 <?php
-//require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
-$ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
+$ip = $_SERVER['REMOTE_ADDR'] ?? '';
 $map = [
     '192.168.2.201' => 'Mac',
     '192.168.4.2'   => 'Mac',
@@ -37,8 +36,6 @@ if (isset($_GET['all'])) {
         $t -= 3600;
     }
 }
-$sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1";
-if ($t > 0) $sql .= " AND `t`>=$t";
 if ($type === 'f') {
 	$en = getCache('en');
     if ($en) {
@@ -96,33 +93,27 @@ if ($extralast === false || $extra === true) {
             $d['playlist'] = boseplaylist($time);
         }
     }
-    
     $thermo_hist = apcu_fetch('thermo_hist');
     if ($thermo_hist !== false) {
         $d['thermo_hist'] = json_decode($thermo_hist, true);
     }
-    
     apcu_store($id.$type.'e', $time, 3600);
 }
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $n = $row['n'];
     $d[$n]['s'] = $row['s'];
-    
     if ($row['rt'] == 1) {
         $d[$n]['t'] = $row['t'];
     }
-    
     if (!is_null($row['m'])) {
         $d[$n]['m'] = $row['m'];
     }
-    
     if (!is_null($row['dt'])) {
         $d[$n]['dt'] = $row['dt'];
         if ($row['dt'] === 'daikin') {
             $d[$n]['s'] = null;
         }
     }
-    
     if (!is_null($row['icon'])) {
         if ($row['dt'] === 'th' && $n !== 'badkamer_set') {
             $icon = json_decode($row['icon'], true);
@@ -130,14 +121,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $d[$n]['icon'] = $row['icon'];
         }
     }
-    
     if (!is_null($row['p'])) {
         $d[$n]['p'] = $row['p'];
     }
 }
-
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
+$aantal=count($d);
+if ($type=='f')$aantal-=6;
+lg($id.'	'.$type.'	'.$aantal.' updates');
 function dbconnect() {
 	global $d,$start;
 	static $db = null;
@@ -178,7 +169,7 @@ function lg($msg) {
     $time = microtime(true);
     $mSecs = substr(number_format($time - floor($time), 3), 1);
     $line = sprintf("%s%s %s\n", date("d-m H:i:s", (int)$time), $mSecs, $msg);
-    file_put_contents('/temp/domoticz.log', $line, FILE_APPEND | LOCK_EX);
+    file_put_contents('/temp/floorplan-access.log', $line, FILE_APPEND | LOCK_EX);
 }
 class Database {
     private static ?PDO $instance = null;

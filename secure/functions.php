@@ -333,7 +333,7 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='',$update=null,$force=true) {
-	global $d,$user;
+	global $d,$user,$time;
 
 	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 	$caller = $backtrace[0];
@@ -341,44 +341,29 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
 	$msg = !empty($msg) ? $callerLocation.' - '.$msg : $callerLocation;
 
 	if (!($force==true || $status!=$d[$name]['s'])) return;
-
 	$d[$name]['s'] = $status;
 	$time = time();
-
 	$sql = ($update > 0)
 		? "UPDATE devices SET s='$status',t='$time' WHERE n='$name'"
-		: "INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time')
-		   ON DUPLICATE KEY UPDATE s='$status',t='$time'";
+		: "INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time') ON DUPLICATE KEY UPDATE s='$status',t='$time'";
 
-	for ($attempt = 1; $attempt <= 2; $attempt++) {
-
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
 			$db->query($sql);
-			break; // succes → eruit
-
+			break;
 		} catch (PDOException $e) {
-
-			if ($e->getCode() == 2006 && $attempt === 1) {
+			if ($e->getCode() == 2006 && $attempt <4) {
 				lg('♻ DB gone away → reconnect & retry', 5);
-				Database::reset();   // kill oude persistent
-				continue;           // retry met nieuwe
+				Database::reset();
+				sleep($attempt);
+				continue;
 			}
-
-			throw $e; // alles anders: hard falen
+			throw $e;
 		}
 	}
-
 	if (endswith($name, '_kWh') || endswith($name, '_hum')) return;
-
-	lg(
-		'💾 STORE     '
-		.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '
-		.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '
-		.$status
-		.(strlen($msg)>0 ? ' ('.$msg.')' : ''),
-		10
-	);
+	lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg)>0 ? ' ('.$msg.')' : ''),10);
 }
 
 function storemode($name,$mode,$msg='',$update=null) {
@@ -393,10 +378,25 @@ function storemode($name,$mode,$msg='',$update=null) {
     } else {
         $msg = $callerLocation;
     }
-    $db = Database::getInstance();
 	$time=time();
-	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
-	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
+	$sql = ($update > 0)
+		? "UPDATE devices SET m='$mode',t='$time' WHERE n='$name'"
+		: "INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';";
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			$db->query($sql);
+			break;
+		} catch (PDOException $e) {
+			if ($e->getCode() == 2006 && $attempt <4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
 	lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesm($name,$s,$m,$msg='') {
@@ -412,9 +412,23 @@ function storesm($name,$s,$m,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-    $db = Database::getInstance();
-	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
-	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
+	if (isset($d[$name]['s'])) $sql="UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'";
+	else $sql="INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';";
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			$db->query($sql);
+			break;
+		} catch (PDOException $e) {
+			if ($e->getCode() == 2006 && $attempt <4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
 	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesp($name,$s,$p,$msg='') {
@@ -428,9 +442,23 @@ function storesp($name,$s,$p,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-	$db = Database::getInstance();
-	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
-	else $db->query("INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time') ON DUPLICATE KEY UPDATE s='$s',p='$p',t='$time';");
+	if (isset($d[$name]['s'])) $sql="UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'";
+	else $sql="INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time') ON DUPLICATE KEY UPDATE s='$s',p='$p',t='$time';";
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			$db->query($sql);
+			break;
+		} catch (PDOException $e) {
+			if ($e->getCode() == 2006 && $attempt <4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
 	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storep($name,$p,$msg='') {
@@ -444,9 +472,23 @@ function storep($name,$p,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-    $db = Database::getInstance();
-	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
-	else $db->query("INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time') ON DUPLICATE KEY UPDATE p='$p',t='$time';");
+	if (isset($d[$name]['s'])) $sql="UPDATE devices SET p='$p',t='$time' WHERE n='$name'";
+	else $sql="INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time') ON DUPLICATE KEY UPDATE p='$p',t='$time';";
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			$db->query($sql);
+			break;
+		} catch (PDOException $e) {
+			if ($e->getCode() == 2006 && $attempt <4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
 	lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='',$update=null) {
@@ -460,12 +502,26 @@ function storeicon($name,$icon,$msg='',$update=null) {
     } else {
         $msg = $callerLocation;
     }
-    $db = Database::getInstance();
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
 		if (isset($d['time'])) $time=$d['time'];
 		else $time=time();
-		if ($update>0) $db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
-		else $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';");
+		if ($update>0) $sql="UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'";
+		else $sql="INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time') ON DUPLICATE KEY UPDATE icon='$icon',t='$time';";
+		for ($attempt = 0; $attempt <= 4; $attempt++) {
+			try {
+				$db = Database::getInstance();
+				$db->query($sql);
+				break;
+			} catch (PDOException $e) {
+				if ($e->getCode() == 2006 && $attempt <4) {
+					lg('♻ DB gone away → reconnect & retry', 5);
+					Database::reset();
+					sleep($attempt);
+					continue;
+				}
+				throw $e;
+			}
+		}	
 		if (endswith($name, '_temp')) return;
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
@@ -1102,32 +1158,49 @@ class Database {
 }
 
 function fetchdata() {
-    global $d;
-    $db = Database::getInstance();
-    static $stmt = null;
-    if ($stmt === null) {
-        $stmt = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices_mem");
-    }
-    $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $n = $row['n'];
-        if (!is_null($row['s']))   $d[$n]['s']   = $row['s'];
-        if (!is_null($row['t']))   $d[$n]['t']   = $row['t'];
-        if (!is_null($row['m']))   $d[$n]['m']   = $row['m'];
-        if (!is_null($row['dt']))  $d[$n]['dt']  = $row['dt'];
-        if (!is_null($row['icon']))$d[$n]['icon']= $row['icon'];
-        if (!is_null($row['p']))   $d[$n]['p']   = $row['p'];
-    }
-    $en = json_decode(getCache('en'));
-    if ($en) {
-        $d['n'] = $en->n;
-        $d['a'] = $en->a;
-        $d['b'] = $en->b;
-        $d['c'] = $en->c;
-        $d['z'] = $en->z;
-    }
-    return $d;
+	global $d;
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			static $stmt = null;
+			if ($stmt === null) {
+				$stmt = $db->prepare(
+					"SELECT n,s,t,m,dt,icon,p FROM devices_mem"
+				);
+			}
+			$stmt->execute();
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$n = $row['n'];
+				if (!is_null($row['s']))    $d[$n]['s']    = $row['s'];
+				if (!is_null($row['t']))    $d[$n]['t']    = $row['t'];
+				if (!is_null($row['m']))    $d[$n]['m']    = $row['m'];
+				if (!is_null($row['dt']))   $d[$n]['dt']   = $row['dt'];
+				if (!is_null($row['icon'])) $d[$n]['icon'] = $row['icon'];
+				if (!is_null($row['p']))    $d[$n]['p']    = $row['p'];
+			}
+			break;
+		} catch (PDOException $e) {
+			if ($e->getCode() == 2006 && $attempt < 4) {
+				lg('♻ DB gone away → reconnect & retry fetchdata', 5);
+				Database::reset();
+				$stmt = null;
+				sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}
+	$en = json_decode(getCache('en'));
+	if ($en) {
+		$d['n'] = $en->n;
+		$d['a'] = $en->a;
+		$d['b'] = $en->b;
+		$d['c'] = $en->c;
+		$d['z'] = $en->z;
+	}
+	return $d;
 }
+
 
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;

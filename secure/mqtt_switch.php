@@ -38,7 +38,6 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
-		lg($device.' '.$topic.' '.$status);
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
