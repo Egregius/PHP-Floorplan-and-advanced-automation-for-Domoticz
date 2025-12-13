@@ -8,15 +8,13 @@ $map = [
     '192.168.4.3'   => 'iPhoneGuy',
     '192.168.2.200' => 'iPadGuy',
     '192.168.4.4'   => 'iPadGuy',
+    '192.168.2.55'   => 'iPhoneKirby',
+    '192.168.4.5'   => 'iPhoneKirby',
 ];
-if(substr($ip,0,10)=='192.168.2.')$local=true;
-else $local=false;
-
 $id = $map[$ip] ?? $ip;
 $extra = false;
 $verbruik = false;
 $d = ['t' => $time];
-if ($local==true) $d['l']=1;
 if (isset($_GET['o'])) {
     $type = 'o';
     $filter = 'o';
@@ -134,7 +132,6 @@ if ($id!='Mac') {
 	if ($type=='f')$aantal-=6;
 	if ($t==0) $msg=($id.'	'.$type.'	'.$aantal.' updates');
 	else $msg=($id.'	'.$type.'	'.$aantal.' updates		'.($time-$t));
-	if ($local==false) $msg.=' remote';
 	lg($msg);
 }
 function boseplaylist($time) {

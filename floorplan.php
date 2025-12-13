@@ -11,6 +11,7 @@ createheader('floorplan');
 				sessionStorage.removeItem('floorplanheating');
 				sessionStorage.removeItem('floorplanothers');
 				location.reload();
+				initview();
 				return false;
 			">
 				Loading...
