@@ -1,6 +1,5 @@
 <?php
-$start=microtime(true);
-require '/var/www/config.php';
+//require '/var/www/config.php';
 $time = $_SERVER['REQUEST_TIME'];
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
 $map = [
@@ -15,7 +14,6 @@ $id = $map[$ip] ?? $ip;
 $extra = false;
 $verbruik = false;
 $d = ['t' => $time];
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 if (isset($_GET['o'])) {
     $type = 'o';
     $filter = 'o';
@@ -41,9 +39,7 @@ if (isset($_GET['all'])) {
 }
 $sql = "SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1";
 if ($t > 0) $sql .= " AND `t`>=$t";
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 if ($type === 'f') {
-    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 	$en = getCache('en');
     if ($en) {
         $en = json_decode($en);
@@ -57,7 +53,6 @@ if ($type === 'f') {
     } else {
         lg("Can't fetch en");
     }
-    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 	if ($extra === true) {
         $vandaag = getCache('energy_vandaag');
         if ($vandaag) {
@@ -75,16 +70,13 @@ if ($type === 'f') {
             }
         }
     }
-    $d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 }
 apcu_store($id.$type, $time, 86400);
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-$db = dbconnect();
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
+//$db = dbconnect();
+$db = Database::getInstance();
 $stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1 AND t >= :t");
 $stmt->execute([':t' => $t]);
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
     $sunrise = apcu_fetch('cache_sunrise');
@@ -94,7 +86,6 @@ if ($extralast === false || $extra === true) {
             apcu_store('cache_sunrise', $sunrise, 300);
         }
     }
-    
     if ($sunrise) {
         $sunrise = json_decode($sunrise, true);
         if ($sunrise) {
@@ -113,9 +104,6 @@ if ($extralast === false || $extra === true) {
     
     apcu_store($id.$type.'e', $time, 3600);
 }
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
-
-// Verwerk device data
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $n = $row['n'];
     $d[$n]['s'] = $row['s'];
@@ -147,12 +135,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$n]['p'] = $row['p'];
     }
 }
-$d[__LINE__]=number_format(((microtime(true)-$start)*1000), 6);
 
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
 function dbconnect() {
-    static $db = null;
+	global $d,$start;
+	static $db = null;
     if ($db !== null) return $db;
 //    try {
         $db = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=utf8mb4", 'dbuser', 'dbuser', [
@@ -191,4 +179,26 @@ function lg($msg) {
     $mSecs = substr(number_format($time - floor($time), 3), 1);
     $line = sprintf("%s%s %s\n", date("d-m H:i:s", (int)$time), $mSecs, $msg);
     file_put_contents('/temp/domoticz.log', $line, FILE_APPEND | LOCK_EX);
+}
+class Database {
+    private static ?PDO $instance = null;
+    private function __construct() {}
+    public static function getInstance(): PDO {
+//        if (self::$instance === null) {
+//            lg(__LINE__);
+//            try {
+                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_PERSISTENT => true
+                    ]
+                );
+//            } catch (PDOException $e) {
+//                die('Database connection failed.');
+//            }
+//        }
+//        lg(__LINE__);
+        return self::$instance;
+    }
 }

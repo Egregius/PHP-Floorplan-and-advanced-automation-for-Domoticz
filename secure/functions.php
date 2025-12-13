@@ -6,7 +6,7 @@ if (!is_dir('/dev/shm/cache')) {
 }
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-$db=dbconnect();
+//$db = Database::getInstance();
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
@@ -342,7 +342,7 @@ function store($name='',$status='',$msg='',$update=null,$force=true) {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+    $db = Database::getInstance();
 	$time=time();
 	if ($force==true||$status!=$d[$name]['s']) {
 		$d[$name]['s']=$status;
@@ -366,7 +366,7 @@ function storemode($name,$mode,$msg='',$update=null) {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+    $db = Database::getInstance();
 	$time=time();
 	if ($update>0) $db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time') ON DUPLICATE KEY UPDATE m='$mode',t='$time';");
@@ -385,7 +385,7 @@ function storesm($name,$s,$m,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+    $db = Database::getInstance();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time') ON DUPLICATE KEY UPDATE s='$s',m='$m',t='$time';");
 	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
@@ -401,7 +401,7 @@ function storesp($name,$s,$p,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+	$db = Database::getInstance();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time') ON DUPLICATE KEY UPDATE s='$s',p='$p',t='$time';");
 	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
@@ -417,7 +417,7 @@ function storep($name,$p,$msg='') {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+    $db = Database::getInstance();
 	if (isset($d[$name]['s'])) $db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
 	else $db->query("INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time') ON DUPLICATE KEY UPDATE p='$p',t='$time';");
 	lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
@@ -433,7 +433,7 @@ function storeicon($name,$icon,$msg='',$update=null) {
     } else {
         $msg = $callerLocation;
     }
-    $db=dbconnect();
+    $db = Database::getInstance();
 	if (!isset($d[$name]['icon'])||(isset($d[$name]['icon'])&&$d[$name]['icon']!=$icon)) {
 		if (isset($d['time'])) $time=$d['time'];
 		else $time=time();
@@ -1046,41 +1046,41 @@ function curl($url) {
 	curl_close($ch);
 	return $data;
 }
-function dbconnect() {
-    static $db = null;
-    try {
-        if ($db !== null) {
-           // $db->query('SELECT 1');
-            return $db;
+class Database {
+    private static ?PDO $instance = null;
+    private function __construct() {}
+    public static function getInstance(): PDO {
+        if (self::$instance === null) {
+            try {
+            	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            	lg(print_r($backtrace,true));
+				$caller = $backtrace[1];
+				$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
+				
+				if (!empty($msg)) {
+					$msg = $callerLocation . ' - ' . $msg;
+				} else {
+					$msg = $callerLocation;
+				}
+				lg('⌗ '.$msg.' New DB connection');
+                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_PERSISTENT => true
+                    ]
+                );
+            } catch (PDOException $e) {
+                die('Database connection failed.');
+            }
         }
-        $db = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=utf8mb4", 'dbuser', 'dbuser', [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_TIMEOUT => 5,
-            PDO::ATTR_PERSISTENT => true,
-        ]);
-        return $db;
-    }
-    catch (PDOException $e) {
-    	lg($e->getCode);
-        if ($db !== null && (
-            $e->getCode() == 2006 || 
-            $e->getCode() == 'HY000' ||
-            strpos($e->getMessage(), 'server has gone away') !== false ||
-            strpos($e->getMessage(), 'MySQL server has gone away') !== false
-        )) {
-            lg('⚠️ Verbinding verbroken, opnieuw verbinden (PID: '.getmypid().')');
-            $db = null;
-            return dbconnect();
-        }
-        lg('‼️ PDO fout: '.$e->getMessage());
-        throw $e;
+        return self::$instance;
     }
 }
 
 function fetchdata() {
     global $d;
-    $db = dbconnect();
+    $db = Database::getInstance();
     static $stmt = null;
     if ($stmt === null) {
         $stmt = $db->prepare("SELECT n,s,t,m,dt,icon,p FROM devices_mem");
@@ -1111,14 +1111,6 @@ function roundUpToAny($n,$x=5) {
 }
 function roundDownToAny($n,$x=5) {
 	return floor($n/$x) * $x;
-}
-function isPDOConnectionAlive($pdo) {
-	try {
-		$pdo->query("SELECT 1");
-		return true;
-	} catch (PDOException $e) {
-		return false;
-	}
 }
 function isoToLocalTimestamp(string $isoTime): int {
 	$utc = new DateTime($isoTime, new DateTimeZone("UTC"));

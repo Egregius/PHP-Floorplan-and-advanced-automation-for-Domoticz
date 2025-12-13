@@ -38,12 +38,13 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
+		lg($device.' '.$topic.' '.$status);
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
 			if (($time - $startloop) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata();
 			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);

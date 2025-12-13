@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Performance Profiler</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .stats { background: #252526; padding: 15px; border-radius: 4px; margin: 10px 0; }
+        .fast { color: #4ec9b0; }
+        .slow { color: #f48771; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        #results { margin-top: 20px; }
+        .timing { display: flex; gap: 20px; margin: 5px 0; }
+        .bar { height: 20px; background: #0e639c; border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 AJAX Performance Profiler</h1>
+    
+    <div class="stats">
+        <div>Backend response tijd: <span class="fast">0.8ms</span> ✅</div>
+        <div>Probleem zit waarschijnlijk in: <strong>Frontend of netwerk</strong></div>
+    </div>
+
+    <button onclick="testSingleRequest()">Test 1 Request</button>
+    <button onclick="testParallelRequests()">Test 10 Parallelle Requests</button>
+    <button onclick="testSequentialRequests()">Test 10 Sequentiële Requests</button>
+    <button onclick="testBatchRequest()">Test 1 Batch Request (10 items)</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_URL = '/d.php'; // Pas aan naar jouw endpoint
+        
+        function log(msg, time = null, isGood = null) {
+            const div = document.createElement('div');
+            div.className = 'timing';
+            
+            let color = '';
+            if (isGood === true) color = 'fast';
+            if (isGood === false) color = 'slow';
+            
+            div.innerHTML = `
+                <span>${msg}</span>
+                ${time ? `<span class="${color}">${time}ms</span>` : ''}
+            `;
+            
+            if (time && time > 0) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.width = Math.min(time * 2, 500) + 'px';
+                div.appendChild(bar);
+            }
+            
+            document.getElementById('results').appendChild(div);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testSingleRequest() {
+            clearResults();
+            log('📡 Test: Enkele request...');
+            
+            const start = performance.now();
+            const response = await fetch(API_URL + '?id=1');
+            const networkTime = performance.now() - start;
+            
+            const parseStart = performance.now();
+            await response.json();
+            const parseTime = performance.now() - parseStart;
+            
+            const total = performance.now() - start;
+            
+            log('├─ Netwerk + server:', networkTime.toFixed(2), networkTime < 10);
+            log('├─ JSON parsing:', parseTime.toFixed(2), parseTime < 1);
+            log('└─ Totaal:', total.toFixed(2), total < 20);
+        }
+        
+        async function testParallelRequests() {
+            clearResults();
+            log('🚀 Test: 10 parallelle requests...');
+            
+            const start = performance.now();
+            const promises = [];
+            
+            for (let i = 1; i <= 10; i++) {
+                const reqStart = performance.now();
+                promises.push(
+                    fetch(API_URL + '?id=' + i)
+                        .then(r => r.json())
+                        .then(() => {
+                            const time = performance.now() - reqStart;
+                            return { id: i, time };
+                        })
+                );
+            }
+            
+            const results = await Promise.all(promises);
+            const total = performance.now() - start;
+            
+            results.forEach(r => {
+                log(`├─ Request ${r.id}:`, r.time.toFixed(2), r.time < 20);
+            });
+            
+            log('└─ Totaal parallel:', total.toFixed(2), total < 50);
+            log('');
+            log('💡 Als totaal >50ms: Browser limiet (max 6 parallel)', null, total > 50 ? false : true);
+        }
+        
+        async function testSequentialRequests() {
+            clearResults();
+            log('⏱️ Test: 10 sequentiële requests...');
+            
+            const start = performance.now();
+            
+            for (let i = 1; i <= 10; i++) {
+                const reqStart = performance.now();
+                await fetch(API_URL + '?id=' + i).then(r => r.json());
+                const time = performance.now() - reqStart;
+                log(`├─ Request ${i}:`, time.toFixed(2), time < 10);
+            }
+            
+            const total = performance.now() - start;
+            log('└─ Totaal sequentieel:', total.toFixed(2), total < 100);
+            log('');
+            log('💡 Als elke request >2ms: Netwerk latency probleem', null, null);
+        }
+        
+        async function testBatchRequest() {
+            clearResults();
+            log('📦 Test: Batch request (simulatie)...');
+            
+            const start = performance.now();
+            // Simuleer batch endpoint: /api/sensors.php?ids=1,2,3,4,5,6,7,8,9,10
+            await fetch(API_URL + '?id=1').then(r => r.json());
+            const total = performance.now() - start;
+            
+            log('└─ 1 request voor 10 items:', total.toFixed(2), total < 10);
+            log('');
+            log('✅ Batch requests = beste oplossing voor veel data', null, true);
+        }
+        
+        // Auto-run eerste test
+        setTimeout(testSingleRequest, 500);
+    </script>
+</body>
+</html>

@@ -163,7 +163,7 @@ if (count($rains)>=2) {
 //EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
 
-$db=dbconnect();
+$db = Database::getInstance();
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row['AVG'];
 if ($d['buiten_temp']['s']>$avg+0.5) {
