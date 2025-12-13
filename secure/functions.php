@@ -1138,7 +1138,7 @@ class Database {
             	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 				$caller = $backtrace[1];
 				$msg = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-				lg(' ⌗ '.$msg.' New DB connection');
+				lg(' ♻ '.$msg.' New DB connection');
                 self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -1180,8 +1180,8 @@ function fetchdata() {
 			}
 			break;
 		} catch (PDOException $e) {
-			if ($e->getCode() == 2006 && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry fetchdata', 5);
+			if (($e->getCode() == 2006 || $e->getCode() == 'HY000') && $attempt < 4) {
+				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
 				Database::reset();
 				$stmt = null;
 				sleep($attempt);
