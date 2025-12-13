@@ -87,19 +87,10 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
-
-$sleepMicroseconds=5000;
-$maxSleep=30000;
 while (true) {
 	$result=$mqtt->loop(true);
-	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
-		usleep($sleepMicroseconds);
-	} else {
-		$sleepMicroseconds=5000;
-	}
+	usleep(5000);
 }
-
 $mqtt->disconnect();
 lg('Zigbee MQTT loop stopped '.__FILE__,1);
 

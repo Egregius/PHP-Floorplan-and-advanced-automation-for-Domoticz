@@ -126,6 +126,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $d[$n]['p'] = $row['p'];
     }
 }
+$aantal=count($d);
+if ($type=='f')$aantal-=6;
+if($aantal>0) $d['x']=$aantal;
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 if ($id!='Mac') {
 	$aantal=count($d);

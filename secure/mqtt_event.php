@@ -71,18 +71,10 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=5000;
-$maxSleep=40000;
 while (true) {
 	$result=$mqtt->loop(true);
-	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 5000,$maxSleep);
-		usleep($sleepMicroseconds);
-	} else {
-		$sleepMicroseconds=5000;
-	}
+	usleep(5000);
 }
-
 $mqtt->disconnect();
 lg('MQTT loop stopped '.__FILE__,1);
 

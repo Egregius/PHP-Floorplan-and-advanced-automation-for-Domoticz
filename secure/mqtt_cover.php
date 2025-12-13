@@ -64,16 +64,9 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$sleepMicroseconds=10000;
-$maxSleep=100000;
 while (true) {
 	$result=$mqtt->loop(true);
-	if ($result === 0) {
-		$sleepMicroseconds=min($sleepMicroseconds + 10000,$maxSleep);
-		usleep($sleepMicroseconds);
-	} else {
-		$sleepMicroseconds=10000;
-	}
+	usleep(5000);
 }
 $mqtt->disconnect();
 lg('MQTT loop stopped '.__FILE__,1);

@@ -7,6 +7,7 @@ createheader('floorplan');
 	<body class="floorplan">
 		<div class="fix" id="clock">
 			<a href="#" id="time" onclick="
+				clearTimeout(ajaxTimer);
 				sessionStorage.removeItem('floorplan');
 				sessionStorage.removeItem('floorplanheating');
 				sessionStorage.removeItem('floorplanothers');
