@@ -1186,7 +1186,7 @@ function fetchdata() {
 				$stmt = null;
 				sleep($attempt);
 				continue;
-			}
+			} else lg('FETCHDATA ERROR! '.$e->getCode());
 			throw $e;
 		}
 	}
