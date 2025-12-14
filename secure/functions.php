@@ -214,24 +214,6 @@ function past($name,$lg='') {
 	$time=time();
 	return $time-$d[$name]['t'];
 }
-
-function recentste(array $names) {
-    global $d;
-    $now = time();
-    $minDiff = PHP_INT_MAX;
-    foreach ($names as $name) {
-		$diff = $now - $d[$name]['t'];
-		if ($diff < $minDiff) $minDiff = $diff;
-    }
-    return $minDiff;
-}
-
-
-function idx($name) {
-	global $d;
-	if ($d[$name]['i']>0) return $d[$name]['i'];
-	else return 0;
-}
 function sl($name,$level,$msg='',$force=false,$temp=0) {
 	global $d,$user;
 	if (is_array($name)) {
@@ -329,7 +311,6 @@ function store($name='',$status='',$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,s,t) VALUES ('$name','$status','$time')");
 			$d[$name]['s']=$status;
 			break;
 		} catch (PDOException $e) {
@@ -357,7 +338,6 @@ function storemode($name,$mode,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,m,t) VALUES ('$name','$mode','$time');");
 			$d[$name]['m']=$mode;
 			break;
 		} catch (PDOException $e) {
@@ -382,7 +362,6 @@ function storesm($name,$s,$m,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,s,m,t) VALUES ('$name','$s','$m','$time')");
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			break;
@@ -409,7 +388,6 @@ function storesp($name,$s,$p,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,s,p,t) VALUES ('$name','$s','$p','$time')");
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -434,7 +412,6 @@ function storep($name,$p,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,p,t) VALUES ('$name','$p','$time')");
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -459,7 +436,6 @@ function storeicon($name,$icon,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
-			if ($stmt->rowCount() === 0) $db->query("INSERT INTO devices (n,icon,t) VALUES ('$name','$icon','$time')");
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {

@@ -68,7 +68,6 @@ unset(
 	$dbuser,
 	$dbpass,
 	$_SESSION,
-	$zwaveidx,
 	$db,
 	$nasip,
 	$kodiurl,
