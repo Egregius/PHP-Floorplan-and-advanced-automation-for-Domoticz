@@ -96,8 +96,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					} else return;
 				} elseif ($d[$device]['dt']=='c') {
 					if (isset($path[2])&&$path[2]=='sensor_binary') {
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
-						lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+						if ($status==1) $status='Open';
+						else $status='Closed';
+						if ($d[$device]['s']!=$status) {
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+							lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.$status);
+						}
 					}
 				} else {
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));

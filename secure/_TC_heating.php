@@ -64,10 +64,11 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m']==2) $weg=0;
 	$prevSet   = $d['living_start_temp']['m'] ?? 0;
+	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
 	
-	$avgMinPerDeg = !empty($leadDataLiving[$mode])
-		? round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1)
+	$avgMinPerDeg = !empty($leadDataLiving[$mode][$buitenTempStart])
+		? round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]), 1)
 		: 20;
 	
 	$baseSet = [
@@ -127,14 +128,15 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	
 	if ($prevSet == 1/*$time >= $comfortAfternoon && $time < $t_end && $weg == 0*/ && $living >= $target && past('leadDataLiving') > 43200) {
 		$startTemp = $d['living_start_temp']['s'];
+		$buitenTempStart = $d['badkamer_start_temp']['icon'];
 		if ($startTemp && $living > $startTemp) {
 			$tempRise    = $living - $startTemp;
 			$minutesUsed = round(past('living_start_temp') / 60, 1);
 			$minPerDeg   = ceil($minutesUsed / $tempRise);
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
-			$leadDataLiving[$mode][] = round($minPerDeg,1);
-			$leadDataLiving[$mode] = array_slice($leadDataLiving[$mode], -14);
+			$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
 //			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
