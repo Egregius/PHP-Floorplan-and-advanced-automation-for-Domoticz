@@ -26,11 +26,10 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-$db->exec("TRUNCATE TABLE devices_mem");
-$db->exec("INSERT INTO devices_mem SELECT * FROM devices");
-
-
-
+for ($x=0.1;$x<=10;$x+=0.1) {
+	$y=(floor($x / 2)) * 2;
+	echo $x.' > '.$y.'<br>';
+}
 
 
 

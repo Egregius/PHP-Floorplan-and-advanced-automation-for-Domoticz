@@ -37,8 +37,8 @@ if (getCache('sunrise')==false) {
 	}
 }
 $db = Database::getInstance();
-$db->exec("TRUNCATE TABLE devices_mem");
-$db->exec("INSERT INTO devices_mem SELECT * FROM devices");
+//$db->exec("TRUNCATE TABLE devices");
+//$db->exec("INSERT INTO devices SELECT * FROM devices_mem");
 
 while (true) {
 	$time = time();

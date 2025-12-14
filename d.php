@@ -73,7 +73,7 @@ if ($type === 'f') {
 }
 apcu_store($id.$type, $time, 86400);
 $db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices_mem WHERE `$filter`=1 AND t >= :t");
+$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
 $stmt->execute([':t' => $t]);
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
@@ -168,7 +168,7 @@ class Database {
 //        if (self::$instance === null) {
 //            lg(__LINE__);
 //            try {
-                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
+                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
                     [
 //                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 //                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

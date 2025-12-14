@@ -1136,7 +1136,7 @@ class Database {
 				$caller = $backtrace[1];
 				$msg = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
 				lg(' ♻ '.$msg.' New DB connection');
-                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica",'dbuser','dbuser',
+                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
