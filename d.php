@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json; charset=ISO-8859-1');
 $time = $_SERVER['REQUEST_TIME'];
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
 $map = [
