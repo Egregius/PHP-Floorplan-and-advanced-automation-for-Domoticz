@@ -214,15 +214,16 @@ function past($name,$lg='') {
 	$time=time();
 	return $time-$d[$name]['t'];
 }
-function sl($name,$level,$msg='',$force=false,$temp=0) {
+function sl($name,$level,$msg='') {
 	global $d,$user;
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
-				sl($i, $level, $msg, $force);
+				sl($i, $level, $msg);
 			}
 		}
 	} else {
+		if(!isset($d)) $d=fetchdata();
 		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 		$caller = $backtrace[0];
 		$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
@@ -230,16 +231,8 @@ function sl($name,$level,$msg='',$force=false,$temp=0) {
 		else $msg = $callerLocation;
 
 		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
-		if ($temp>0||$d[$name]['dt']=='hd') {
-			if ($temp==0) {
-				if ($d['dag']['s']>12) $temp=3400;
-				elseif ($d['dag']['s']>8) $temp=3200;
-				elseif ($d['dag']['s']>6) $temp=3000;
-				elseif ($d['dag']['s']>2) $temp=2850;
-				else $temp=2750;
-			}				
-			if ($level>0&&$temp==0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level/*,"color_temp_kelvin"=>$temp*/));
-			elseif ($level>0&&$temp>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level,"color_temp_kelvin"=>$temp));
+		if ($d[$name]['dt']=='hd') {
+			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level));
 			elseif ($level==0) hass('light','turn_off','light.'.$name);
 		} elseif ($d[$name]['dt']=='d') {
 			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
@@ -269,6 +262,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			}
 		}
 	} else {
+		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
 			if ($action=='Toggle') {
@@ -280,7 +274,6 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 			$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
 			if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
 			else $msg = $callerLocation;
-
 			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
@@ -291,12 +284,12 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 }
 function zigbee($device,$action) {
 	global $mqtt;
-	lg("zigbee2mqtt/{$device}/set",$action);
+	lg(" ☠️ zigbee2mqtt/{$device}/set",$action);
 	$mqtt->publish("zigbee2mqtt/{$device}/set",$action);
 }
 function zwave($device,$type,$endpoint,$action) {
 	global $mqtt;
-	lg("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set/".$action);
+	lg(" ☠️ zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set/".$action);
 	$mqtt->publish("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
 }
 function setpoint($name, $value,$msg='') {
