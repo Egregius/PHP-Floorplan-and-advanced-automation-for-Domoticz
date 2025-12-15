@@ -72,9 +72,14 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$data = $leadDataLiving[$mode][$buitenTempStart];
 		} else {
 			$temps = array_keys($leadDataLiving[$mode]);
-			usort($temps, fn($a, $b) =>
-				abs($a - $buitenTempStart) <=> abs($b - $buitenTempStart)
-			);
+			usort($temps, function ($a, $b) use ($buitenTempStart) {
+				$da = abs($a - $buitenTempStart);
+				$db = abs($b - $buitenTempStart);
+				if ($da !== $db) {
+					return $da <=> $db;
+				}
+				return $a <=> $b;
+			});
 			$closestTemp = $temps[0];
 			$data = $leadDataLiving[$mode][$closestTemp];
 		}
@@ -149,7 +154,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			if (!isset($leadDataLiving[$mode])) $leadDataLiving[$mode] = [];
 			$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
-			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]), 1);
+			$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode]) / count($leadDataLiving[$mode]));
 			store('leadDataLiving', json_encode($leadDataLiving), basename(__FILE__) . ':' . __LINE__);
 //			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";

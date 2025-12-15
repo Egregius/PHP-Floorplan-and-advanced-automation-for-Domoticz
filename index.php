@@ -4,7 +4,7 @@ require '/var/www/authentication.php';
 createheader('floorplan');
 ?>
 	<body class="floorplan">
-		<div class="fix" id="clock">
+		<div class="abs" id="clock">
 			<a href="#" id="time" onclick="
 				clearTimeout(ajaxTimer);
 				sessionStorage.removeItem('floorplan');

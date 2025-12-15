@@ -36,9 +36,14 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$data = $leadDataBath[$mode][$buitenTempStart];
 		} else {
 			$temps = array_keys($leadDataBath[$mode]);
-			usort($temps, fn($a, $b) =>
-				abs($a - $buitenTempStart) <=> abs($b - $buitenTempStart)
-			);
+			usort($temps, function ($a, $b) use ($buitenTempStart) {
+				$da = abs($a - $buitenTempStart);
+				$db = abs($b - $buitenTempStart);
+				if ($da !== $db) {
+					return $da <=> $db;
+				}
+				return $a <=> $b;
+			});
 			$closestTemp = $temps[0];
 			$data = $leadDataBath[$mode][$closestTemp];
 		}
@@ -83,7 +88,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 				$leadDataBath[$mode][$buitenTempStart][] = $minPerDeg;
 				$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -7);
-				$avgMinPerDeg = round(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]),1);
+				$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
 				store('leadDataBath', json_encode($leadDataBath));
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);

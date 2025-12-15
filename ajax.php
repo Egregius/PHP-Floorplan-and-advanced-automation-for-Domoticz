@@ -221,7 +221,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		} elseif ($_REQUEST['device']=='grohered') {
 			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} else {
-			if (endswith($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action']);
+			if (str_ends_with($_REQUEST['device'], '_set')) call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action']);
 			else call_user_func($_REQUEST['command'],$_REQUEST['device'],$_REQUEST['action']);
 		}
 	}

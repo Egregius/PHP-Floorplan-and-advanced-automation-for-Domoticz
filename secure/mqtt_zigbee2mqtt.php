@@ -76,16 +76,30 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					if (isset($d[$device]['p'])) {
 						$p=$status->power;
 						$status=ucfirst(strtolower($status->state));
-						lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
-						if ($d[$device]['p']!=$p&&$d[$device]['s']!=$status) storesp($device,$status,$p);
-						elseif ($d[$device]['s']!=$status) store($device,$status);
-						elseif ($d[$device]['p']!=$p) storep($device,$p);
+						
+						if ($d[$device]['p']!=$p&&$d[$device]['s']!=$status) {
+							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+							storesp($device,$status,$p);
+						} elseif ($d[$device]['s']!=$status) {
+							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+							store($device,$status);
+						} elseif ($d[$device]['p']!=$p) {
+							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+							storep($device,$p);
+						}
 					} else {
 						$status=ucfirst(strtolower($status->state));
 						if ($d[$device]['s']!=$status) {
 							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
 							store($device,$status);
 						}
+					}
+				} elseif ($d[$device]['dt']=='hd') {
+					if($status->state=='OFF') $status=0;
+					else $status=$status=round((float)$status->brightness / 2.55);
+					if ($d[$device]['s']!=$status) {
+						lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
+						store($device,$status);
 					}
 				} elseif ($d[$device]['dt']=='t') {
 					$h=round($status->humidity);
