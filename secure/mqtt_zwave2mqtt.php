@@ -99,7 +99,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						if ($status==1) $status='Open';
 						else $status='Closed';
 						if ($d[$device]['s']!=$status) {
-							lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.$status);
+//							lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.$status);
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
@@ -110,7 +110,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							if ($status==1) $status='On';
 							else $status='Off';
 							if ($d[$device]['s']!=$status) {
-								lg('🌊 Z2M [HSW]	'.$device.'	'.$status);
+//								lg('🌊 Z2M [HSW]	'.$device.'	'.$status);
 								store($device, $status);
 								include '/var/www/html/secure/pass2php/'.$device.'.php';
 							}
@@ -119,14 +119,20 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							if($d[$device]['p']!=$status) {
 //								lg('🌊 Z2M Power '.$device.'	'.$status);
 								storep($device,$status);
+								if ($device=='dysonlader'&&$status<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 							}
 						} else lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 					} else lg(print_r($path,true).'	'.print_r($status,true));
+				} elseif ($d[$device]['dt']=='z') {
+					if($path[2]=='battery'&&$path[4]=='level') {
+						if ($status<40) alert('bat'.$device,"Batterij {$device} bijna leeg: {$status}",1440);
+					}
+//					lg('🌊 Z2M Z ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} else {
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
-			} else lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
-		} else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
+			}// else lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
+		}// else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

@@ -49,7 +49,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;
-				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
+//				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);

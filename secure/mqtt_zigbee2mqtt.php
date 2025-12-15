@@ -52,14 +52,14 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} elseif ($d[$device]['dt']=='remote') {
 					if (isset($status->action)) {
 						$status=$status->action;
-						lg('ⓩ Remote '.$device.' '.$status);
+//						lg('ⓩ Remote '.$device.' '.$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
 				} elseif ($d[$device]['dt']=='c') {
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
 					if ($d[$device]['s']!=$status) {
-						lg('ⓩ Contact '.$device.' '.$status);
+//						lg('ⓩ Contact '.$device.' '.$status);
 						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 					}
@@ -67,7 +67,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
-						lg('ⓩ PIR '.$device.' '.$status);
+//						lg('ⓩ PIR '.$device.' '.$status);
 						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 						
@@ -76,21 +76,32 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					if (isset($d[$device]['p'])) {
 						$p=$status->power;
 						$status=ucfirst(strtolower($status->state));
+						$val = (int)$p; // echte waarde
+						$old = (int)($d[$device]['p'] ?? 0);
+						$oldt = (int)($d[$device]['t'] ?? 0);
+						if ($oldt === 0) {
+							store($device, $val, '', 1);
+							return;
+						}
+						$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
+						$time_passed = ($time - $oldt) >= 30;
+						if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) $upd=true;
+						else $upd=false;
 						
-						if ($d[$device]['p']!=$p&&$d[$device]['s']!=$status) {
-							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+						if ($d[$device]['s']!=$status&&$upd==true) {
+//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
 							storesp($device,$status,$p);
 						} elseif ($d[$device]['s']!=$status) {
-							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
 							store($device,$status);
-						} elseif ($d[$device]['p']!=$p) {
-							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
+						} elseif ($upd==true) {
+//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
 							storep($device,$p);
 						}
 					} else {
 						$status=ucfirst(strtolower($status->state));
 						if ($d[$device]['s']!=$status) {
-							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
+//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
 							store($device,$status);
 						}
 					}
@@ -98,7 +109,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					if($status->state=='OFF') $status=0;
 					else $status=$status=round((float)$status->brightness / 2.55);
 					if ($d[$device]['s']!=$status) {
-						lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
+//						lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
 						store($device,$status);
 					}
 				} elseif ($d[$device]['dt']=='t') {

@@ -26,11 +26,14 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-for ($x=0.1;$x<=10;$x+=0.1) {
-	$y=(floor($x / 2)) * 2;
-	echo $x.' > '.$y.'<br>';
+$t=array();
+for ($x=1;$x<=3;$x+=1) {
+	for($y=-20;$y<=20;$y+=2) {
+		$t[$x][$y]=[11,12,13,14,15,16,17];
+	}
 }
-
+$t=json_encode($t);
+echo '<hr>'.strlen($t).'<hr>'.$t;
 
 
 

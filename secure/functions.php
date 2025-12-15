@@ -195,10 +195,16 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	}
 	if ($last < $time-$ttl) {
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
-		if ($to==1) hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
-		else {
-			hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
-			telegram($msg, $silent, 2);
+		if ($to==1) {
+			if ($silent==true) telegram($msg, $silent, 1);
+			else hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
+		} else {
+			if ($silent==true) {
+				telegram($msg, $silent, 3);
+			} else {
+				hassnotify('Alert!', $msg, 'mobile_app_iphone_guy', false);
+				telegram($msg, $silent, 2);
+			}
 		}
 	}
 }
@@ -291,7 +297,8 @@ function store($name='',$status='',$msg='') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
-			$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+			$stmt=$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			$d[$name]['s']=$status;
 			break;
 		} catch (PDOException $e) {
@@ -304,8 +311,9 @@ function store($name='',$status='',$msg='') {
 			throw $e;
 		}
 	}
-	if (str_ends_with($name,'_kWh') || str_ends_with($name,'_hum')) return;
-	lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+//	if (str_ends_with($name,'_kWh') || str_ends_with($name,'_hum')) return;
+	if($affected>0&&!in_array($name,['dag'])) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 
 function storemode($name,$mode,$msg='') {
@@ -315,6 +323,7 @@ function storemode($name,$mode,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			$d[$name]['m']=$mode;
 			break;
 		} catch (PDOException $e) {
@@ -327,7 +336,8 @@ function storemode($name,$mode,$msg='') {
 			throw $e;
 		}
 	}	
-	lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0&&!in_array($name,['dag'])) lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$time;
@@ -335,6 +345,7 @@ function storesm($name,$s,$m,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			break;
@@ -348,7 +359,8 @@ function storesm($name,$s,$m,$msg='') {
 			throw $e;
 		}
 	}	
-	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$time;
@@ -356,6 +368,7 @@ function storesp($name,$s,$p,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -367,7 +380,8 @@ function storesp($name,$s,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 function storep($name,$p,$msg='') {
 	global $d,$user,$time;
@@ -375,6 +389,7 @@ function storep($name,$p,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -386,7 +401,8 @@ function storep($name,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 function storeicon($name,$icon,$msg='') {
 	global $d, $user, $time;
@@ -394,6 +410,7 @@ function storeicon($name,$icon,$msg='') {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -406,7 +423,8 @@ function storeicon($name,$icon,$msg='') {
 		}
 	}	
 	if (str_ends_with($name, '_temp')) return;
-	lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
 }
 
 function kodi($json) {
