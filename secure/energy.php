@@ -1,5 +1,13 @@
 #!/usr/bin/php
 <?php
+$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
+$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
+if ($lock_file === false || (!$got_lock && !$wouldblock)) {
+    throw new Exception("Unexpected error opening or locking lock file.");
+} else if (!$got_lock && $wouldblock) {
+    exit("Another instance is already running; terminating.\n");
+}
+
 date_default_timezone_set('Europe/Brussels');
 $startloop=microtime(true);
 define('LOOP_START', $startloop);
@@ -377,14 +385,19 @@ function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_im
     return $updateNeeded;
 }
 function stoploop() {
-    $script = __FILE__;
+    global $lock_file;
+	$script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
         exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
         exec("$script > /dev/null 2>&1 &");
         exit;
     }

@@ -279,12 +279,12 @@ function sw($name,$action='Toggle',$msg='') {
 }
 function zigbee($device,$action) {
 	global $mqtt;
-	lg(" ☠️ zigbee2mqtt/{$device}/set",$action);
+//	lg(" ☠️ zigbee2mqtt/{$device}/set",$action);
 	$mqtt->publish("zigbee2mqtt/{$device}/set",$action);
 }
 function zwave($device,$type,$endpoint,$action) {
 	global $mqtt;
-	lg(" ☠️ zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set/".$action);
+//	lg(" ☠️ zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set/".$action);
 	$mqtt->publish("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
 }
 function setpoint($name, $value,$msg='') {

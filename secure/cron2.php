@@ -1,5 +1,12 @@
 #!/usr/bin/php
 <?php
+$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
+$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
+if ($lock_file === false || (!$got_lock && !$wouldblock)) {
+    throw new Exception("Unexpected error opening or locking lock file.");
+} else if (!$got_lock && $wouldblock) {
+    exit("Another instance is already running; terminating.\n");
+}
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting cron2 loop...');
 $time=time();
@@ -52,12 +59,16 @@ function stoploop() {
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting cron2 loop...');
-        exec("$script > /dev/null 2>&1 &");
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
+		exec("$script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
         lg('🛑 cron2.php gewijzigd → restarting cron2 loop...');
-        exec("$script > /dev/null 2>&1 &");
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
+		exec("$script > /dev/null 2>&1 &");
         exit;
     }
 }
