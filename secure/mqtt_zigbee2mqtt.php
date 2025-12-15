@@ -92,7 +92,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						}
 						$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 						$time_passed = ($time - $oldt) >= 30;
-						if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) $upd=true;
+						if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || ($time_passed&&$d[$device]['s']!=$status)) $upd=true;
 						else $upd=false;
 						
 						if ($d[$device]['s']!=$status&&$upd==true) {
@@ -101,7 +101,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						} elseif ($d[$device]['s']!=$status) {
 //							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
 							store($device,$status);
-						} elseif ($upd==true) {
+						} elseif ($d[$device]['p']!=$p&&$upd==true) {
 //							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
 							storep($device,$p);
 						}
