@@ -104,7 +104,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						}
 					}
 				} else {
-//					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			}// else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
 		}// else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
