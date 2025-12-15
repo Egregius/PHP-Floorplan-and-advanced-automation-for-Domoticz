@@ -150,7 +150,7 @@ if ($d['auto']['s']=='On') {
 	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
 
 	if ($d['pirliving']['s']=='Off') {
-		if ($d['dag']['s']>1) {
+		if ($d['dag']['s']>2) {
 			if ($d['rbureel']['s']<40&&$d['rliving']['s']<40) {
 				if ($time>strtotime('5:00')&&$time<strtotime('10:00')) {
 //					if ($d['lampkast']['s']=='On'&&$d['eettafel']['s']<=14) sw('lampkast', 'Off', basename(__FILE__).':'.__LINE__);
