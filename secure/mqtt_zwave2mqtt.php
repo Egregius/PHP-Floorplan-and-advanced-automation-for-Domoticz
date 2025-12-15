@@ -103,6 +103,13 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.$status);
 						}
 					}
+				} elseif ($d[$device]['dt']=='hsw') {
+					if(isset($d[$device]['p'])) {
+						if($path[2]=='meter') {
+							lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+							storep($device,$status);
+						}
+					}
 				} else {
 					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}

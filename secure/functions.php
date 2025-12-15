@@ -288,11 +288,10 @@ function setpoint($name, $value,$msg='') {
 }
 function store($name='',$status='',$msg='') {
 	global $d,$user,$time;
-//	$time = time();
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
+			$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
 			$d[$name]['s']=$status;
 			break;
 		} catch (PDOException $e) {
@@ -305,8 +304,8 @@ function store($name='',$status='',$msg='') {
 			throw $e;
 		}
 	}
-	if (endswith($name, '_kWh') || endswith($name, '_hum')) return;
-	lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg)>0 ? ' ('.$msg.')' : ''),10);
+	if (str_ends_with($name,'_kWh') || str_ends_with($name,'_hum')) return;
+	lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 }
 
 function storemode($name,$mode,$msg='') {
@@ -1048,14 +1047,14 @@ function fetchdata() {
 				);
 			}
 			$stmt->execute();
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-				$n = $row['n'];
-				if (!is_null($row['s']))    $d[$n]['s']    = $row['s'];
-				if (!is_null($row['t']))    $d[$n]['t']    = $row['t'];
-				if (!is_null($row['m']))    $d[$n]['m']    = $row['m'];
-				if (!is_null($row['dt']))   $d[$n]['dt']   = $row['dt'];
-				if (!is_null($row['icon'])) $d[$n]['icon'] = $row['icon'];
-				if (!is_null($row['p']))    $d[$n]['p']    = $row['p'];
+			while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+				$n=$row[0];
+				if(!is_null($row[1])) $d[$n]['s']=$row[1];
+				if(!is_null($row[2])) $d[$n]['t']=$row[2];
+				if(!is_null($row[3])) $d[$n]['m']=$row[3];
+				if(!is_null($row[4])) $d[$n]['dt']=$row[4];
+				if(!is_null($row[5])) $d[$n]['icon']=$row[5];
+				if(!is_null($row[6])) $d[$n]['p']=$row[6];
 			}
 			break;
 		} catch (PDOException $e) {

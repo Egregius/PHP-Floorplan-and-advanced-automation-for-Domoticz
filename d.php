@@ -50,8 +50,6 @@ if ($type === 'f') {
             $d['c'] = $en->c;
             $d['z'] = $en->z;
         }
-    } else {
-        lg("Can't fetch en");
     }
 	if ($extra === true) {
         $vandaag = getCache('energy_vandaag');
@@ -73,9 +71,7 @@ if ($type === 'f') {
 
 }
 apcu_store($id.$type, $time, 86400);
-$db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
-$stmt->execute([':t' => $t]);
+
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
     $sunrise = apcu_fetch('cache_sunrise');
@@ -101,43 +97,36 @@ if ($extralast === false || $extra === true) {
     }
     apcu_store($id.$type.'e', $time, 3600);
 }
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $n = $row['n'];
-    $d[$n]['s'] = $row['s'];
-    if ($row['rt'] == 1) {
-        $d[$n]['t'] = $row['t'];
+$db = Database::getInstance();
+$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
+$stmt->execute([':t' => $t]);
+while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+    $n = $row[0];
+    $d[$n]['s'] = $row[1];
+    if ($row[6] == 1) {
+        $d[$n]['t'] = $row[2];
     }
-    if (!is_null($row['m'])) {
-        $d[$n]['m'] = $row['m'];
+    if (!is_null($row[3])) {
+        $d[$n]['m'] = $row[3];
     }
-    if (!is_null($row['dt'])) {
-        $d[$n]['dt'] = $row['dt'];
-        if ($row['dt'] === 'daikin') {
+    if (!is_null($row[4])) {
+        $d[$n]['dt'] = $row[4];
+        if ($row[4] === 'daikin') {
             $d[$n]['s'] = null;
         }
     }
-    if (!is_null($row['icon'])) {
-        if ($row['dt'] === 'th' && $n !== 'badkamer_set') {
-            $icon = json_decode($row['icon'], true);
+    if (!is_null($row[5])) {
+        if ($row[4] === 'th' && $n !== 'badkamer_set') {
+            $icon = json_decode($row[5], true);
         } else {
-            $d[$n]['icon'] = $row['icon'];
+            $d[$n]['icon'] = $row[5];
         }
     }
-    if (!is_null($row['p'])) {
-        $d[$n]['p'] = $row['p'];
+    if (!is_null($row[7])) {
+        $d[$n]['p'] = $row[7];
     }
 }
-$aantal=count($d);
-if ($type=='f')$aantal-=6;
-if($aantal>0) $d['x']=$aantal;
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-if ($id!='Mac') {
-	$aantal=count($d);
-	if ($type=='f')$aantal-=6;
-	if ($t==0) $msg=($id.'	'.$type.'	'.$aantal.' updates');
-	else $msg=($id.'	'.$type.'	'.$aantal.' updates		'.($time-$t));
-	lg($msg);
-}
 function boseplaylist($time) {
     $dag = floor($time / 86400);
     $dow = date("w", $time);
@@ -156,31 +145,17 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key . '.txt');
     return $data === false ? $default : $data;
 }
-function lg($msg) {
-    $time = microtime(true);
-    $mSecs = substr(number_format($time - floor($time), 3), 1);
-    $line = sprintf("%s%s %s\n", date("d-m H:i:s", (int)$time), $mSecs, $msg);
-    file_put_contents('/temp/floorplan-access.log', $line, FILE_APPEND | LOCK_EX);
-}
 class Database {
     private static ?PDO $instance = null;
     private function __construct() {}
     public static function getInstance(): PDO {
-//        if (self::$instance === null) {
-//            lg(__LINE__);
-//            try {
-                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
-                    [
+    self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
+        [
 //                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 //                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//                        PDO::ATTR_PERSISTENT => true
-                    ]
-                );
-//            } catch (PDOException $e) {
-//                die('Database connection failed.');
-//            }
-//        }
-//        lg(__LINE__);
+            PDO::ATTR_PERSISTENT => true
+        ]
+        );
         return self::$instance;
     }
 }
