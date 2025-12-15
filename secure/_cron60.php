@@ -6,7 +6,7 @@ foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') 
 foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
 
-//$db=dbconnect();
+$db = Database::getInstance();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
 $avg=$sum/6;

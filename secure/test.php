@@ -7,7 +7,7 @@ require 'functions.php';
 //$d=fetchdata(0,'test.php');
 //$startloop=microtime(true);
 //$d['time']=$startloop;
-//$db = dbconnect();
+//$db = Database::getInstance();
 
 /*
 use PhpMqtt\Client\MqttClient;

@@ -7,7 +7,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['comm
 	lg('Starting Eufy stream');
 	shell_exec('/var/www/html/secure/eufystartstream.php > /dev/null 2>/dev/null &');
 	$d=array();
-	$db=dbconnect();
+	$db = Database::getInstance();
 	$stmt=$db->query("SELECT n,s FROM devices WHERE n IN ('voordeur','dag');");
 	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 		$d[$row['n']]['s']=$row['s'];
@@ -15,7 +15,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['comm
 	if ($d['dag']['s']<-5) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 }
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
-	$db=dbconnect();
+	$db = Database::getInstance();
 	$time=time();
 	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='weg';");
 }
@@ -234,7 +234,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skip') {
-		$db=dbconnect();
+		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 			$bose=$row['s'];

@@ -2,7 +2,7 @@
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-$db=dbconnect();
+$db = Database::getInstance();
 echo '
 <html>
 	<head>

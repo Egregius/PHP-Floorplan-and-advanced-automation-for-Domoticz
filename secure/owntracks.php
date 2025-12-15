@@ -6,7 +6,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 			if (isset($_GET['event'])) {
 				if ($_GET['event']=='enter') {
 					$user=$_GET['user'];
-					$db=dbconnect();
+					$db = Database::getInstance();
 					$stmt=$db->query("SELECT n,s,t,dt FROM devices WHERE n IN ('weg','voordeur','dag');");
 					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
 						$d[$row['n']]['s']=$row['s'];

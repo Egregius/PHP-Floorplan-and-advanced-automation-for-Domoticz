@@ -224,12 +224,6 @@ function sl($name,$level,$msg='') {
 		}
 	} else {
 		if(!isset($d)) $d=fetchdata();
-		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-		$caller = $backtrace[0];
-		$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-		if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-		else $msg = $callerLocation;
-
 		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
 		if ($d[$name]['dt']=='hd') {
 			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level));
@@ -252,12 +246,12 @@ function resetsecurity() {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 	}
 }
-function sw($name,$action='Toggle',$msg='',$force=false) {
+function sw($name,$action='Toggle',$msg='') {
 	global $d,$user,$db;
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
-				sw($i, $action, $msg, $force);
+				sw($i, $action, $msg);
 				usleep(200000);
 			}
 		}
@@ -269,11 +263,6 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-			$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-			$caller = $backtrace[0];
-			$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-			if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-			else $msg = $callerLocation;
 			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
@@ -317,10 +306,6 @@ function store($name='',$status='',$msg='') {
 		}
 	}
 	if (endswith($name, '_kWh') || endswith($name, '_hum')) return;
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-	$caller = $backtrace[0];
-	$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-	$msg = !empty($msg) ? $callerLocation.' - '.$msg : $callerLocation;
 	lg('💾 STORE     '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name??'', 13, ' ', STR_PAD_RIGHT).' '.$status.(strlen($msg)>0 ? ' ('.$msg.')' : ''),10);
 }
 
@@ -343,10 +328,6 @@ function storemode($name,$mode,$msg='') {
 			throw $e;
 		}
 	}	
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-	$caller = $backtrace[0];
-	$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-	$msg = !empty($msg) ? $callerLocation.' - '.$msg : $callerLocation;
 	lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesm($name,$s,$m,$msg='') {
@@ -368,11 +349,6 @@ function storesm($name,$s,$m,$msg='') {
 			throw $e;
 		}
 	}	
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $caller = $backtrace[0];
-    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-    if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-    else $msg = $callerLocation;
 	lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storesp($name,$s,$p,$msg='') {
@@ -392,11 +368,6 @@ function storesp($name,$s,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $caller = $backtrace[0];
-    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-    if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-    else $msg = $callerLocation;
 	lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storep($name,$p,$msg='') {
@@ -416,11 +387,6 @@ function storep($name,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-    $caller = $backtrace[0];
-    $callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-    if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-    else $msg = $callerLocation;
 	lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 function storeicon($name,$icon,$msg='') {
@@ -441,11 +407,6 @@ function storeicon($name,$icon,$msg='') {
 		}
 	}	
 	if (endswith($name, '_temp')) return;
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-	$caller = $backtrace[0];
-	$callerLocation = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-	if (!empty($msg)) $msg = $callerLocation . ' - ' . $msg;
-	else $msg = $callerLocation;
 	lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 
@@ -1057,10 +1018,6 @@ class Database {
     public static function getInstance(): PDO {
         if (self::$instance === null) {
             try {
-            	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-				$caller = $backtrace[1];
-				$msg = str_replace('.php','',basename($caller['file'])) . ':' . $caller['line'];
-				lg(' ♻ '.$msg.' New DB connection');
                 self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
