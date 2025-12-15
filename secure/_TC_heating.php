@@ -62,15 +62,27 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
-	if ($d['living_set']['m']==2) $weg=0;
+	if ($d['living_set']['m'] == 2) $weg = 0;
 	$prevSet   = $d['living_start_temp']['m'] ?? 0;
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
-	
-	$avgMinPerDeg = !empty($leadDataLiving[$mode][$buitenTempStart])
-		? round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]), 1)
-		: 20;
-	
+	$avgMinPerDeg = null;
+	if (!empty($leadDataLiving[$mode])) {
+		if (!empty($leadDataLiving[$mode][$buitenTempStart])) {
+			$data = $leadDataLiving[$mode][$buitenTempStart];
+		} else {
+			$temps = array_keys($leadDataLiving[$mode]);
+			usort($temps, fn($a, $b) =>
+				abs($a - $buitenTempStart) <=> abs($b - $buitenTempStart)
+			);
+			$closestTemp = $temps[0];
+			$data = $leadDataLiving[$mode][$closestTemp];
+		}
+		if (!empty($data)) {
+			$avgMinPerDeg = round(array_sum($data) / count($data), 1);
+		}
+	}
+	$avgMinPerDeg ??= 20;
 	$baseSet = [
 		0 => 19,
 		1 => 16,

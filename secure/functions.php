@@ -405,7 +405,7 @@ function storeicon($name,$icon,$msg='') {
 			throw $e;
 		}
 	}	
-	if (endswith($name, '_temp')) return;
+	if (str_ends_with($name, '_temp')) return;
 	lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
 }
 
@@ -498,14 +498,6 @@ Levels:
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
-}
-function startsWith($haystack,$needle) {
-	return $needle===""||strrpos($haystack, $needle, -strlen($haystack))!==false;
-}
-function endswith($string,$test) {
-	$strlen=strlen($string);$testlen=strlen($test);
-	if ($testlen>$strlen) return false;
-	return substr_compare($string, $test, $strlen-$testlen, $testlen)===0;
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	lg('bosekey '.$ip.' '.$key.' '.$msg);
@@ -733,17 +725,7 @@ function daikinstatus($device,$log='') {
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
 	global $d, $time, $lastfetch;
 	$lastfetch = $time;
-
 	$ips = daikin_ips();
-	if (!isset($ips[$device])) return FALSE;
-
-	if ($maxpow === false) {
-		$maxpow = $d['daikin_kwh']['icon'];
-	} else {
-		if ($maxpow != $d['daikin_kwh']['icon']) {
-			storeicon('daikin_kwh', $maxpow);
-		}
-	}
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 //	if ($d['heating']['s']>=0) lg("🔥 daikinset($device): $url");

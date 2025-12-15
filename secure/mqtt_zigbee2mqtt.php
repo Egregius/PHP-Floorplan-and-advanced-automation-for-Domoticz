@@ -72,8 +72,29 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 						
 					}
+				} elseif ($d[$device]['dt']=='hsw') {
+					if (isset($d[$device]['p'])) {
+						$p=$status->power;
+						$status=ucfirst(strtolower($status->state));
+						lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
+						if ($d[$device]['p']!=$p&&$d[$device]['s']!=$status) storesp($device,$status,$p);
+						elseif ($d[$device]['s']!=$status) store($device,$status);
+						elseif ($d[$device]['p']!=$p) storep($device,$p);
+					} else {
+						$status=ucfirst(strtolower($status->state));
+						if ($d[$device]['s']!=$status) {
+							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status);
+							store($device,$status);
+						}
+					}
+				} elseif ($d[$device]['dt']=='t') {
+					$h=round($status->humidity);
+					$t=$status->temperature;
+					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h) storesm($device,$t,$h);
+					elseif($d[$device]['s']!=$t) store($device,$t);
+					elseif($d[$device]['m']!=$h) storemode($device,$h);
 				} else {
-//					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
 			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);

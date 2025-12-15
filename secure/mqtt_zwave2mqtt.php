@@ -105,16 +105,19 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					}
 				} elseif ($d[$device]['dt']=='hsw') {
 					if(isset($d[$device]['p'])) {
-						if($path[2]=='meter') {
-							lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
-							storep($device,$status);
-						}
-					}
+						if($path[2]=='sensor_multilevel'&&$path[4]=='Power') {
+							$status=round($status);
+							if($d[$device]['p']!=$status) {
+								lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
+								storep($device,$status);
+							}
+						} else lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
+					} else lg(print_r($path,true).'	'.print_r($status,true));
 				} else {
 					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
-			}// else lg('🌊 '.$device.'	'.$topic.'	=> '.$status);
-		}// else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
+			} else lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
+		} else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

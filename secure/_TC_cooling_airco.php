@@ -13,8 +13,7 @@ if ($d['daikin']['m']==1) {
 	elseif ($bigdif>=0.5) $maxpow=60;
 	else $maxpow=40;
 	$maxpow=floor($maxpow/5)*5;
-	if ($d['daikin_kwh']['m']!='Auto') $maxpow=$d['daikin_kwh']['m'];
-	elseif ($d['weg']['s']>0) $maxpow=40;
+	if ($d['weg']['s']>0) $maxpow=40;
 	if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 	elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
 	else $spmode=-1;
