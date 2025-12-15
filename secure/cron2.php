@@ -10,9 +10,8 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting cron2 loop...');
 $time=time();
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$d=fetchdata();
 $lastcheck=$time;
-$lastfetch=$time;
 define('LOOP_START', $time);
 $invalidcounter=0;
 $ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
@@ -38,8 +37,7 @@ $boses=array(
 while (1) {
     $time = time();
     $d['time'] = $time;
-    $d = fetchdata($lastfetch);
-    $lastfetch=$time;
+    $d = fetchdata();
     include 'cron2B.php';
     $time_elapsed_secs = microtime(true) - $time;
     $sleep = 10 - $time_elapsed_secs;
@@ -47,7 +45,6 @@ while (1) {
         $sleep = round($sleep * 1000000);
         usleep($sleep);
     }
-    
     if ($lastcheck < $time - 300) {
         $lastcheck = $time;
         stoploop();
@@ -56,6 +53,7 @@ while (1) {
 }
 
 function stoploop() {
+    global $lock_file;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting cron2 loop...');

@@ -13,7 +13,7 @@ $t = null;
 $weekend = null;
 $dow = null;
 $time=time();
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
+$d=fetchdata();
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
@@ -79,7 +79,7 @@ function checkInterval(&$last, $interval, $time) {
 	return false;
 }
 function stoploop($d) {
-	global $db;
+	global $db,$lock_file;
 	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
 		lg('🛑 functions.php gewijzigd → restarting cron loop...');

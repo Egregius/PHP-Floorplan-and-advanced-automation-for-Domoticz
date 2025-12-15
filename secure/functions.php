@@ -142,16 +142,16 @@ function fhall() {
 function fbadkamer($level) {
 	global $d,$t,$time;
 	if ($level==0) {
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off');
+		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['badkamerpower']['s']=='Off') {
-			sw('badkamerpower', 'On');
+			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 			usleep(500000);
 		}
 		sl('lichtbadkamer', $level);
 //		store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
 		if ($d['weg']['s']==1&&$d['time']>$t-7200) {
-			if ($d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On');
+			if ($d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['time']<$t&&$d['living_set']['m']==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
