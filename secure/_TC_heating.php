@@ -65,8 +65,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	if ($d['living_set']['m'] == 2) $weg = 0;
 	$prevSet   = $d['living_start_temp']['m'] ?? 0;
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
-	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataBath.json'),true);
-	if(!isset($lastWriteleadDataLiving)) $lastWriteleadDataLiving=filemtime('/var/www/html/secure/leadDataBath.json');
+	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
+	if(!isset($lastWriteleadDataLiving)) $lastWriteleadDataLiving=filemtime('/var/www/html/secure/leadDataLiving.json');
 	$avgMinPerDeg = null;
 	if (!empty($leadDataLiving[$mode])) {
 		if (!empty($leadDataLiving[$mode][$buitenTempStart])) {
@@ -122,6 +122,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	
 	if ($time >= strtotime('19:30') || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
 	else $Setliving = $baseSet[$weg];
+	
 	if ($prevSet == 1) {
 		$Setliving = $target;
 		if ($time > $t_end) {
@@ -133,6 +134,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
+		storeicon('living_start_temp', $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
 	}
@@ -143,27 +145,21 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-	lg($buitenTempStart.' '.$avgMinPerDeg);
-	if ($prevSet == 1&&$living>=$target && $lastWriteleadDataLiving > $time-43200) {
+	if ($prevSet == 1 && $living>=$target && $lastWriteleadDataLiving > $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		if ($startTemp && $living > $startTemp) {
 			$tempRise    = $living - $startTemp;
-			if ($tempRise>1) {
-				$buitenTempStart = $d['badkamer_start_temp']['icon'];
+			if ($tempRise>0) {
+				$buitenTempStart = $d['living_start_temp']['icon'];
 				$minutesUsed = round(past('living_start_temp') / 60, 1);
 				$minPerDeg   = ceil($minutesUsed / $tempRise);
 				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
-				lg(print_r($leadDataLiving,true));
-				if (!isset($leadDataLiving[$mode][$buitenTempStart])) $leadDataLiving[$mode][$buitenTempStart] = [];
-				lg(print_r($leadDataLiving,true));
 				$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
-				lg(print_r($leadDataLiving,true));
 				$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
-				lg(print_r($leadDataLiving,true));
 				$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
 				file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 				$lastWriteleadDataLiving=$time;
-	//			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+				storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 				$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
 			}

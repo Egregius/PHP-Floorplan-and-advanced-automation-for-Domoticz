@@ -48,6 +48,7 @@ if ($d['daikin']['m']==1) {
 		$daikin->$k ??= (object)$daikinDefaults;
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
+			lg($k.'='.$dif);
 			if ($dif>2) $power=0;
 			elseif ($dif<=0) $power=1;
 			else $power=$daikin->$k->power;
