@@ -339,16 +339,16 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					else $status='Open';
 					if ($d[$device]['s']!=$status) {
 //						lg('ⓩ Contact '.$device.' '.$status);
-						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
+						store($device,$status);
 					}
 				} elseif ($d[$device]['dt']=='pir') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
 //						lg('ⓩ PIR '.$device.' '.$status);
-						store($device,$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
+						store($device,$status);
 						
 					}
 				} elseif ($d[$device]['dt']=='hsw') {
