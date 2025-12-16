@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+declare(strict_types=1);
 $lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
 $got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
 if ($lock_file === false || (!$got_lock && !$wouldblock)) {

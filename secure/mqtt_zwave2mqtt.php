@@ -92,13 +92,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							}
 						} else lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 					} else lg(print_r($path,true).'	'.print_r($status,true));
-				} elseif ($d[$device]['dt']=='z') {
-					if($path[2]=='battery'&&$path[4]=='level') {
-						if ($status<40) alert('bat'.$device,"Batterij {$device} bijna leeg: {$status}",1440);
-					}
-//					lg('🌊 Z2M Z ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} else {
-					
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else { // Devices die niet in tabel bestaan
@@ -140,6 +134,10 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 				} elseif ($device=='remotealex') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				} elseif ($device=='zbadkamer') {
+					if($path[2]=='battery'&&$path[4]=='level') {
+						if ($status<40) alert('bat'.$device,"Batterij {$device} bijna leeg: {$status}",1440);
+					}
 				} else {
 //					lg('🌊 NO DT '.$device.'	'.$topic.'	=> '.$status);
 				}

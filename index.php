@@ -7,9 +7,7 @@ createheader('floorplan');
 		<div class="abs" id="clock">
 			<a href="#" id="time" onclick="
 				clearTimeout(ajaxTimer);
-				sessionStorage.removeItem('floorplan');
-				sessionStorage.removeItem('floorplanheating');
-				sessionStorage.removeItem('floorplanothers');
+				sessionStorage.clear();
 				location.reload();
 				initview();
 				return false;

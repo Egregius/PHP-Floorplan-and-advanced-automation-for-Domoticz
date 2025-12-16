@@ -72,7 +72,6 @@ if ($type === 'f') {
 
 }
 apcu_store($id.$type, $time, 86400);
-
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
     $sunrise = apcu_fetch('cache_sunrise');
@@ -91,10 +90,6 @@ if ($extralast === false || $extra === true) {
             $d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
             $d['playlist'] = boseplaylist($time);
         }
-    }
-    $thermo_hist = apcu_fetch('thermo_hist');
-    if ($thermo_hist !== false) {
-        $d['thermo_hist'] = json_decode($thermo_hist, true);
     }
     apcu_store($id.$type.'e', $time, 3600);
 }
