@@ -20,18 +20,15 @@ elseif ($bigdif>=-0.1&&$d['brander']['s']=="On"&&(past('brander')>$uitna*1.25||$
 elseif ($bigdif>=-0.2&&$d['brander']['s']=="On"&&(past('brander')>$uitna*1.5||$d['living_temp']['icon']>=0.3)) sw('brander','Off', 'Uit na = '.$uitna*4 );
 
 if ($d['daikin']['m']==1) {
+	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
+	$daikin ??= new stdClass();
 	foreach (array('living', 'kamer', 'alex') as $k) {
-		$daikin=json_decode($d['daikin'.$k]['s']);
-		if ($daikin->power!=0||$daikin->mode!=4) {
-			daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__);
-			$data=json_decode($d[$k.'_set']['icon'], true);
-			$data['power']=0;
-			$data['mode']=4;
-			$data['fan']='A';
-			$data['set']=10;
-			$data['spmode']=$daikin->spmode;
-			$data['maxpow']=$daikin->maxpow;
-			storeicon($k.'_set', json_encode($data));
+		$daikin->$k ??= (object)$daikinDefaults;
+		if ($daikin->$k->power!=0||$daikin->$k->mode!=4) {
+			if(daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__)) {
+				$daikin->$k->power=0;
+				$daikin->$k->mode=4;
+			}
 		}
 	}
 }

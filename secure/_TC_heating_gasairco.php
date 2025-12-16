@@ -86,7 +86,6 @@ if ($d['daikin']['m']==1) {
 						$daikin->$k->fan=$fan;
 						$daikin->$k->set=$set;
 						$daikin->$k->spmode=$spmode;
-						lg(print_r($daikin,true));
 					}
 				}
 			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On');

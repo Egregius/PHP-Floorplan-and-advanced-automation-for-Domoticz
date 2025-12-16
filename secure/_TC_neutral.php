@@ -3,12 +3,15 @@
 if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
 if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
+	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
+	$daikin ??= new stdClass();
 	foreach (array('living', 'kamer', 'alex') as $k) {
-		$daikin=json_decode($d['daikin'.$k]['s']);
-		if ($daikin->power!=0&&$daikin->mode!=3) {
-			daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__);
-			storemode('daikin'.$k, 0);
-			storeicon($k.'_set', 'Off');
+		$daikin->$k ??= (object)$daikinDefaults;
+		if ($daikin->$k->power!=0&&$daikin->$k->mode!=3) {
+			if(daikinset($k, 0, 3, 20, basename(__FILE__).':'.__LINE__)) {
+				$daikin->$k->power=0;
+				$daikin->$k->mode=3;
+			}
 		}
 	}
 }

@@ -747,8 +747,8 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	if(!http_get($url)) return false;
-	if ($d['heating']['s']>=0) lg("🔥 daikinset($device): $url");
-	else  lg("❄️ daikinset($device): $url");
+	if ($d['heating']['s']>=0) lg("🔥 daikinset [$device] power=$power mode=$mode temp=$temp fan=$fan");
+	else  lg("❄️ daikinset [$device] power=$power mode=$mode temp=$temp fan=$fan");
 //	usleep(500000); 
 //	$status = daikinstatus($device, basename(__FILE__).":".__LINE__.":$msg");
 //	if ($status) {
