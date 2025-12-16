@@ -7,7 +7,7 @@ $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` 
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
-$diff=$status-$avg;
+$diff=round($status-$avg,2);
 if ($d[$n.'_temp']['icon']!=$diff) {
 	storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 }
