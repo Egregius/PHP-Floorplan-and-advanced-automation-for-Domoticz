@@ -143,7 +143,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-	
+	lg($buitenTempStart.' '.$avgMinPerDeg);
 	if ($prevSet == 1&&$living>=$target && $lastWriteleadDataLiving > $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		if ($startTemp && $living > $startTemp) {
@@ -153,11 +153,15 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 				$minutesUsed = round(past('living_start_temp') / 60, 1);
 				$minPerDeg   = ceil($minutesUsed / $tempRise);
 				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+				lg(print_r($leadDataLiving,true));
 				if (!isset($leadDataLiving[$mode][$buitenTempStart])) $leadDataLiving[$mode][$buitenTempStart] = [];
+				lg(print_r($leadDataLiving,true));
 				$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
+				lg(print_r($leadDataLiving,true));
 				$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
+				lg(print_r($leadDataLiving,true));
 				$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
-				file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataBath), LOCK_EX);
+				file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 				$lastWriteleadDataLiving=$time;
 	//			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 				$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
@@ -165,7 +169,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			}
 		}
 	}
-	
 	// --- starttemp enkel bij echte start ---
 	if (abs($time - $t_start) < 10) {
 		store('living_start_temp', $living, basename(__FILE__) . ':' . __LINE__, 1);
