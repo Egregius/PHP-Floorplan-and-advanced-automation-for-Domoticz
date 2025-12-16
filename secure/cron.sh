@@ -2,6 +2,7 @@
 cd /var/www/html/secure
 
 SCRIPTS=(
+  mqtt_all.php
   mqtt_binary_sensor.php
   mqtt_cover.php
   mqtt_event.php

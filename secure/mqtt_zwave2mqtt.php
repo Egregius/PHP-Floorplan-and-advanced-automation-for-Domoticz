@@ -53,10 +53,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			$d=fetchdata();
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
-				if ($d[$device]['dt']=='remote') {
-					$status=$status->action;
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
-				} elseif ($d[$device]['dt']=='pir') {
+				if ($d[$device]['dt']=='pir') {
 					if($path[2]=='sensor_binary') {
 						if($status==1) $status='On';
 						else $status='Off';
@@ -122,7 +119,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					if(isset($path[2])&&$path[2]=='sensor_binary') {
 						if ($status==1) {
 							$knop=substr($path[3],-1);
-//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							lg('🌊 '.$device.' '.$knop.' '.$status);
 							if ($device=='inputliving') {
 								if ($status==1) $status=='On';
 								else $status='Off';
@@ -132,19 +129,22 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 									2=>3
 								];
 								$knop=$map[$knop];
-//								lg('🌊 '.$device.' '.$knop.' '.$status);
+								lg('🌊 '.$device.' '.$knop.' '.$status);
 							}
 							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
 						}
 					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							lg('🌊 '.$device.' '.$knop.' '.$status);
 							include '/var/www/html/secure/pass2php/'.$device.'1.php';
 					}
+				} elseif ($device=='remotealex') {
+					$status=$status->action;
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} else {
-//					lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
+//					lg('🌊 NO DT '.$device.'	'.$topic.'	=> '.$status);
 				}
 			}
-		} else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
+		}// else lg('🌊 Z2M NO FILE '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
