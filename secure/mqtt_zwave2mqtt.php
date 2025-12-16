@@ -53,42 +53,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			$d=fetchdata();
 			$status=json_decode($status);
 			if (isset($d[$device]['dt'])) {
-				if ($d[$device]['dt']=='8knop') {
-					if(isset($path[4])&&$path[4]=='scene') {
-						$knop=(int)$path[5];
-						if ($status===0) {
-							$file=$device.'_'.$knop;
-						} elseif ($status===3) {
-							$file=$device.'_'.$knop.'d';
-						} else return;
-						$status='On';
-//						lg('📲 '.$file);
-						include '/var/www/html/secure/pass2php/'.$file.'.php';
-						if (isset($d[$file]['t'])) store($file,null,'',1);
-					}
-				} elseif ($d[$device]['dt']=='zbtn') {
-					if(isset($path[2])&&$path[2]=='sensor_binary') {
-						if ($status==1) {
-							$knop=substr($path[3],-1);
-//							lg('🌊 '.$device.' '.$knop.' '.$status);
-							if ($device=='inputliving') {
-								if ($status==1) $status=='On';
-								else $status='Off';
-								$map=[
-									0=>1,
-									1=>2,
-									2=>3
-								];
-								$knop=$map[$knop];
-//								lg('🌊 '.$device.' '.$knop.' '.$status);
-							}
-							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
-						}
-					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-//							lg('🌊 '.$device.' '.$knop.' '.$status);
-							include '/var/www/html/secure/pass2php/'.$device.'1.php';
-					}
-				} elseif ($d[$device]['dt']=='remote') {
+				if ($d[$device]['dt']=='remote') {
 					$status=$status->action;
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				} elseif ($d[$device]['dt']=='pir') {
@@ -136,10 +101,50 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					}
 //					lg('🌊 Z2M Z ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} else {
+					
 //					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
-			}// else lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
-		}// else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
+			} else { // Devices die niet in tabel bestaan
+				if(str_starts_with($device, '8')) {
+					if(isset($path[4])&&$path[4]=='scene') {
+						$knop=(int)$path[5];
+						if ($status===0) {
+							$file=$device.'_'.$knop;
+						} elseif ($status===3) {
+							$file=$device.'_'.$knop.'d';
+						} else return;
+						$status='On';
+//						lg('📲 '.$file);
+						include '/var/www/html/secure/pass2php/'.$file.'.php';
+						if (isset($d[$file]['t'])) store($file,null,'',1);
+					}
+				} elseif ($device=='inputliving') {
+					if(isset($path[2])&&$path[2]=='sensor_binary') {
+						if ($status==1) {
+							$knop=substr($path[3],-1);
+//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							if ($device=='inputliving') {
+								if ($status==1) $status=='On';
+								else $status='Off';
+								$map=[
+									0=>1,
+									1=>2,
+									2=>3
+								];
+								$knop=$map[$knop];
+//								lg('🌊 '.$device.' '.$knop.' '.$status);
+							}
+							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
+						}
+					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
+//							lg('🌊 '.$device.' '.$knop.' '.$status);
+							include '/var/www/html/secure/pass2php/'.$device.'1.php';
+					}
+				} else {
+//					lg('🌊 !dt '.$device.'	'.$topic.'	=> '.$status);
+				}
+			}
+		} else lg('🌊 Z2M '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}

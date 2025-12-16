@@ -187,23 +187,24 @@ if ($d['auto']['s']=='On') {
 		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }*/
-/*if (
-	  $d['daikinliving']['m']==0
-	&&$d['daikinkamer']['m']==0
-	&&$d['daikinalex']['m']==0
-	&&$d['living_set']['s']!='D'
-	&&$d['kamer_set']['s']!='D'
-	&&$d['alex_set']['s']!='D'
-	&&$d['daikin']['s']=='On'
-	&&$d['daikin']['p']<25
-	&&past('daikin')>3600
-) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);*/
+
+if (
+		$daikin->living->power==0
+	&&	$daikin->kamer->power==0
+	&&	$daikin->alex->power==0
+	&&	$d['living_set']['s']!='D'
+	&&	$d['kamer_set']['s']!='D'
+	&&	$d['alex_set']['s']!='D'
+	&&	$d['daikin']['s']=='On'
+	&&	$d['daikin']['p']<25
+	&&	past('daikin')>1800
+) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 $stamp=date('Y-m-d H:i:s', $time-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
 $result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
 foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
-	$diff=$d[$i.'_temp']['s']-$avg[$i];
+	$diff=round($d[$i.'_temp']['s']-$avg[$i],2);
 	if ($d[$i.'_temp']['icon']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 //	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
 }
