@@ -65,7 +65,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	if ($d['living_set']['m'] == 2) $weg = 0;
 	$prevSet   = $d['living_start_temp']['m'] ?? 0;
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
-	$leadDataLiving = json_decode($d['leadDataLiving']['s'] ?? '{}', true) ?: [];
+	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataBath.json'),true);
+	if(!isset($lastWriteleadDataLiving)) $lastWriteleadDataLiving=filemtime('/var/www/html/secure/leadDataBath.json');
 	$avgMinPerDeg = null;
 	if (!empty($leadDataLiving[$mode])) {
 		if (!empty($leadDataLiving[$mode][$buitenTempStart])) {
@@ -143,7 +144,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	
-	if ($prevSet == 1/*$time >= $comfortAfternoon && $time < $t_end && $weg == 0*/ && $living >= $target && past('leadDataLiving') > 43200) {
+	if ($prevSet == 1&&$living>=$target && $lastWriteleadDataLiving > $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		if ($startTemp && $living > $startTemp) {
 			$tempRise    = $living - $startTemp;
@@ -156,7 +157,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 				$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
 				$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
 				$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
-				store('leadDataLiving', json_encode($leadDataLiving));
+				file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataBath), LOCK_EX);
+				$lastWriteleadDataLiving=$time;
 	//			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 				$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);

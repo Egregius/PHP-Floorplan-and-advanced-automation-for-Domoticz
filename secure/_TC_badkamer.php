@@ -29,7 +29,8 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	$mode      = $d['heating']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
-	$leadDataBath = json_decode($d['leadDataBath']['s'] ?? '{}', true) ?: [];
+	if(!isset($leadDataBath)) $leadDataBath=json_decode(file_get_contents('/var/www/html/secure/leadDataBath.json'),true);
+	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=filemtime('/var/www/html/secure/leadDataBath.json');
 	$avgMinPerDeg = null;
 	if (!empty($leadDataBath[$mode])) {
 		if (!empty($leadDataBath[$mode][$buitenTempStart])) {
@@ -75,20 +76,21 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($prevSet != 0) storemode('badkamer_start_temp', 0);
 		$preheatbath=false;
 	}
-	if ($prevSet == 1 && $badkamer >= $target && past('leadDataBath') > 43200) {
+	if ($prevSet == 1 && $badkamer >= $target && $lastWriteleadDataBath > $time-43200) {
 		$startTemp = $d['badkamer_start_temp']['s'];
 		if ($startTemp && $badkamer >= $startTemp) {
 			$tempRise    = $badkamer - $startTemp;
 			if ($tempRise>1) {
 				$buitenTempStart = $d['badkamer_start_temp']['icon'];
 				$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
-				$minPerDeg   = ceil($minutesUsed / $tempRise);
+				$minPerDeg = ceil($minutesUsed / $tempRise);
 				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 				if (!isset($leadDataBath[$mode][$buitenTempStart])) $leadDataBath[$mode][$buitenTempStart] = [];
 				$leadDataBath[$mode][$buitenTempStart][] = $minPerDeg;
 				$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -7);
 				$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
-				store('leadDataBath', json_encode($leadDataBath));
+				file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
+				$lastWriteleadDataBath=$time;
 				$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
 				lg($msg);
 			}

@@ -89,14 +89,14 @@ if ($d['auto']['s']=='On') {
 				);
 			}
 		}
-		if ($d['wasdroger']['s']=='On') {
-			if (past('wasdroger_kWh')>600) {
-				if ($d['wasdroger_kWh']['s']<10) {
-					alert('wasdrogervol','Wasdroger vol',60,false,2);
-					sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
-				}
-			}
-		}
+//		if ($d['wasdroger']['s']=='On') {
+//			if (past('wasdroger_kWh')>600) {
+//				if ($d['wasdroger_kWh']['s']<10) {
+//					alert('wasdrogervol','Wasdroger vol',60,false,2);
+//					sw('wasdroger', 'Off', basename(__FILE__).':'.__LINE__);
+//				}
+//			}
+//		}
 	} elseif ($d['weg']['s']>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
 		foreach (array('pirhall') as $i) {
