@@ -746,7 +746,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	$ips = daikin_ips();
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-	http_get($url);
+	if(!http_get($url)) return false;
 	if ($d['heating']['s']>=0) lg("🔥 daikinset($device): $url");
 	else  lg("❄️ daikinset($device): $url");
 //	usleep(500000); 
@@ -761,11 +761,11 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 //			storemode('daikin'.$device, $mode, basename(__FILE__).":".__LINE__.":$msg");
 //		}
 		if ($spmode==-1) {
-			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2");
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
 		} elseif ($spmode==0) {
-			http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1");
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
 		} elseif ($spmode==1) {
-			http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1");
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
 		}
 		sleep(2);
 		foreach($ips as $k=>$ip) {
@@ -775,10 +775,11 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 				} else {
 					$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
 				}
-				http_get($url);
+				if(!http_get($url)) return false;
 			}
 		}
 //	}
+	return true;
 }
 function hasstoken() {
 	global $user;

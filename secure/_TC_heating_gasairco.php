@@ -42,17 +42,17 @@ if ($d['daikin']['m']==1) {
 	elseif ($d['n']>2500&&$maxpow>80) $maxpow=80;
 	if ($preheating==true) {$maxpow=40;$spmode=-1;}
 	$pastdaikin=past('daikin');
-	$daikinDefaults = ['power'=>99,'mode'=>99,'adv'=>99,'set'=>99,'fan'=>99];
+	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 	$daikin ??= new stdClass();
-	lg(print_r($daikin,true));
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin->$k ??= (object)$daikinDefaults;
 		if ($d[$k.'_set']['s']>10) {
 			$dif=$d[$k.'_temp']['s']-$d[$k.'_set']['s'];
 			if ($dif>2) $power=0;
 			elseif ($dif<=0) $power=1;
-			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
-				$rate='A';
+			else $power=$daikin->$k->power;
+			if ($d['daikin']['s']=='On') {
+				$fan='A';
 					if ($dif >=  3.2) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
 				elseif ($dif >=  2.4) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
 				elseif ($dif >=  1.6) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
@@ -68,41 +68,41 @@ if ($d['daikin']['m']==1) {
 				if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				if ($k=='living') {
 					$set+=-2.5;
-					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $rate='B';
+					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $fan='B';
 				} elseif ($k=='kamer') {
 					$set+=-1.5;
-					if ($time<strtotime('10:00')||$d['weg']['s']==1) $rate='B';
+					if ($time<strtotime('10:00')||$d['weg']['s']==1) $fan='B';
 				} elseif ($k=='alex') {
 					$set+=-1.5;
-					if ($d['alexslaapt']['s']==1) $rate='B';
+					if ($d['alexslaapt']['s']==1) $fan='B';
 				}
 				$set=ceil($set * 2) / 2;
 				if ($set>30) $set=30;
 				elseif ($set<10) $set=10;
-				if (!isset($power)) $power=$daikin->$k->power;
-				if ($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->fan!=$rate) {
-					if ($spmode==1) $spmodetxt='POWER';
-					elseif ($spmode==0) $spmodetxt='';
-					elseif ($spmode==-1) $spmodetxt='eco';
-					$daikin->$k->power=$power;
-					$daikin->$k->mode=4;
-					$daikin->$k->fan=$rate;
-					$daikin->$k->set=$set;
-					$daikin->$k->spmode=$spmodetxt;
-					daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $rate, $spmode, $maxpow);
+				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode) {
+					if(daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
+						$daikin->$k->power=$power;
+						$daikin->$k->mode=4;
+						$daikin->$k->fan=$fan;
+						$daikin->$k->set=$set;
+						$daikin->$k->spmode=$spmode;
+						lg(print_r($daikin,true));
+					}
 				}
 			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On');
 		} else {
 			if ($d['daikin']['s']=='On'&&$pastdaikin>70) {
 				if ($daikin->$k->power!=0||$daikin->$k->mode!=4) {
-					daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow);
-					$daikin->$k->power=0;
+					if(daikinset($k, 0, 4, 10, basename(__FILE__).':'.__LINE__, 'A', -1, $maxpow)) {
+						$daikin->$k->power=0;
+						$daikin->$k->mode=4;
+					}
 				}
 			}
 		}
 		unset($power);
 	}
-	lg(print_r($daikin,true));
+	
 //	unset($daikin);
 }
 if ($difgas>=0&&$d['brander']['s']=='On'&&$d['badkamer_temp']['s']>12&&past('brander')>=595) sw('brander', 'Off');

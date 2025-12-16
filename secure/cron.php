@@ -59,9 +59,10 @@ while (true) {
 		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
 		elseif ($d['heating']['s'] == 0) include '_TC_neutral.php';
 		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
+		stoploop();
 	}
 	if (checkInterval($last60, 60, $time)) include '_cron60.php' ;
-	if (checkInterval($last300, 300, $time)) {include '_cron300.php';stoploop($d);updateWekker($t, $weekend, $dow, $d);}
+	if (checkInterval($last300, 300, $time)) {include '_cron300.php';stoploop();updateWekker($t, $weekend, $dow, $d);}
 	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
 	if (checkInterval($last90, 90, $time)) include '_weather.php';
 	
@@ -78,7 +79,7 @@ function checkInterval(&$last, $interval, $time) {
 	}
 	return false;
 }
-function stoploop($d) {
+function stoploop() {
 	global $db,$lock_file;
 	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {

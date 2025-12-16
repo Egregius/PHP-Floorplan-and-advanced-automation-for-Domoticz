@@ -187,7 +187,7 @@ if ($d['auto']['s']=='On') {
 		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
 	}
 }*/
-if (
+/*if (
 	  $d['daikinliving']['m']==0
 	&&$d['daikinkamer']['m']==0
 	&&$d['daikinalex']['m']==0
@@ -197,7 +197,7 @@ if (
 	&&$d['daikin']['s']=='On'
 	&&$d['daikin']['p']<25
 	&&past('daikin')>3600
-) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
+) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);*/
 $stamp=date('Y-m-d H:i:s', $time-900);
 $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
 $result=$db->query($sql);

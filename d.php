@@ -36,7 +36,8 @@ if (isset($_GET['all'])) {
         $t = 0;
         $extra = true;
     } elseif ($t < $time - 5) {
-        $t -= 60;
+        $t -= 600;
+        $extra = true;
     }
 }
 if ($type === 'f') {
