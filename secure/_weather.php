@@ -142,8 +142,9 @@ $ref = (int)$d['buiten_temp']['m'];
 $hum = max($ref - 1, min($hum, $ref + 1));
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
 
-if ($d['buiten_temp']['s']!=$temp||$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
-
+if ($d['buiten_temp']['s']!=$temp&&$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
+elseif ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
+elseif ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
 //storemode('buiten_temp',85);
 
 
@@ -163,32 +164,8 @@ if (count($rains)>=2) {
 //EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
 
-$db = Database::getInstance();
-$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT buiten as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,20) as A");
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row['AVG'];
-if ($d['buiten_temp']['s']>$avg+0.5) {
-	if ($d['buiten_temp']['icon']!='red5') storeicon('buiten_temp', 'red5');
-} elseif ($d['buiten_temp']['s']>$avg+0.4) {
-	if ($d['buiten_temp']['icon']!='red4') storeicon('buiten_temp', 'red4');
-} elseif ($d['buiten_temp']['s']>$avg+0.3) {
-	if ($d['buiten_temp']['icon']!='red3') storeicon('buiten_temp', 'red3');
-} elseif ($d['buiten_temp']['s']>$avg+0.2) {
-	if ($d['buiten_temp']['icon']!='red') storeicon('buiten_temp', 'red');
-} elseif ($d['buiten_temp']['s']>$avg+0.1) {
-	if ($d['buiten_temp']['icon']!='up') storeicon('buiten_temp', 'up');
-} elseif ($d['buiten_temp']['s']<$avg-0.5) {
-	if ($d['buiten_temp']['icon']!='blue5') storeicon('buiten_temp', 'blue5');
-} elseif ($d['buiten_temp']['s']<$avg-0.4) {
-	if ($d['buiten_temp']['icon']!='blue4') storeicon('buiten_temp', 'blue4');
-} elseif ($d['buiten_temp']['s']<$avg-0.3) {
-	if ($d['buiten_temp']['icon']!='blue3') storeicon('buiten_temp', 'blue3');
-} elseif ($d['buiten_temp']['s']<$avg-0.2) {
-	if ($d['buiten_temp']['icon']!='blue') storeicon('buiten_temp', 'blue');
-} elseif ($d['buiten_temp']['s']<$avg-0.1) {
-	if ($d['buiten_temp']['icon']!='down') storeicon('buiten_temp', 'down');
-} else {
-	if ($d['buiten_temp']['icon']!='') storeicon('buiten_temp', '');
-}
+//$avg=null;
+//if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']['s']=='On') {
 	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>117&&$rain<5) { // Airco Cooling
 		if ($wind>=40) 	 $luifel=0;
