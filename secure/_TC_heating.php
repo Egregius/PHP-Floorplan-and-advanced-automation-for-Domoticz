@@ -147,22 +147,21 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	}
 	if ($prevSet == 1 && $living>=$target && $lastWriteleadDataLiving < $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
-		if ($startTemp && $living > $startTemp) {
-			$tempRise    = $living - $startTemp;
-			if ($tempRise>0) {
-				$buitenTempStart = $d['living_start_temp']['icon'];
-				$minutesUsed = round(past('living_start_temp') / 60, 1);
-				$minPerDeg   = ceil($minutesUsed / $tempRise);
-				$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
-				$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
-				$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
-				$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
-				file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
-				$lastWriteleadDataLiving=$time;
-				storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
-				$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
-				lg($msg);
-			}
+		$tempRise    = $living - $startTemp;
+		if ($tempRise>0.5) {
+			$buitenTempStart = $d['living_start_temp']['icon'];
+			$minutesUsed = round(past('living_start_temp') / 60, 1);
+			$minPerDeg   = ceil($minutesUsed / $tempRise);
+			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+			$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
+			$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
+			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
+			$lastWriteleadDataLiving=$time;
+			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
+			lg($msg);
+			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
 		}
 	}
 	// --- starttemp enkel bij echte start ---
