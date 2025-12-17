@@ -69,7 +69,7 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
         $d[$n]['p'] = $row[7];
     }
 }
-if ($t>0&&count($d)>1) lg(json_encode($d));
+//if ($t>0&&count($d)>1) lg(json_encode($d));
 if ($type === 'f') {
 	$en = getCache('en');
     if ($en) {
@@ -108,7 +108,7 @@ if ($extralast === false || $extra === true) {
     if ($sunrise === false) {
         $sunrise = getCache('sunrise');
         if ($sunrise) {
-            apcu_store('cache_sunrise', $sunrise, 300);
+            apcu_store('cache_sunrise', $sunrise, 14400);
         }
     }
     if ($sunrise) {
@@ -121,7 +121,8 @@ if ($extralast === false || $extra === true) {
             $d['playlist'] = boseplaylist($time);
         }
     }
-    apcu_store($id.$type.'e', $time, 3600);
+    $d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
+    apcu_store($id.$type.'e', $time, 14400);
 }
 
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
