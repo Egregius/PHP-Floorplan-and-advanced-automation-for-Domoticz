@@ -76,7 +76,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($prevSet != 0) storemode('badkamer_start_temp', 0);
 		$preheatbath=false;
 	}
-	if ($prevSet == 1 && $badkamer >= $target && $lastWriteleadDataBath > $time-43200) {
+	if ($prevSet == 1 && $badkamer >= $target && $lastWriteleadDataBath < $time-43200) {
 		$startTemp = $d['badkamer_start_temp']['s'];
 		if ($startTemp && $badkamer >= $startTemp) {
 			$tempRise    = $badkamer - $startTemp;

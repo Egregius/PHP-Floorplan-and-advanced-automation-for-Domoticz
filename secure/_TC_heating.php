@@ -145,7 +145,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-	if ($prevSet == 1 && $living>=$target && $lastWriteleadDataLiving > $time-43200) {
+	if ($prevSet == 1 && $living>=$target && $lastWriteleadDataLiving < $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		if ($startTemp && $living > $startTemp) {
 			$tempRise    = $living - $startTemp;

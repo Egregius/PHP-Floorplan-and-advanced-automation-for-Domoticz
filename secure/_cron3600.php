@@ -45,7 +45,7 @@ if (isset($data['results'])) {
 
 
 
-$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*14);
+$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*7);
 $cols = [
     'buiten' => 'buiten_temp',
 ];
