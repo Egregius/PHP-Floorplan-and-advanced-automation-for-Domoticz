@@ -88,6 +88,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$avgMinPerDeg = round(array_sum($data) / count($data), 1);
 		}
 	}
+	
+	
 	$avgMinPerDeg ??= 20;
 	$baseSet = [
 		0 => 19,
@@ -155,6 +157,11 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
 			$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));
+			ksort($leadDataLiving, SORT_NUMERIC);
+			foreach ($leadDataLiving as &$innerArray) {
+				ksort($innerArray, SORT_NUMERIC);
+			}
+			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);

@@ -75,6 +75,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($prevSet != 0) storemode('badkamer_start_temp', 0);
 		$preheatbath=false;
 	}
+//	lg(print_r($leadDataBath,true));
+//	lg(print_r($temps,true));
+
 	if ($prevSet == 1 && $badkamer >= $target && $lastWriteleadDataBath < $time-43200) {
 		$startTemp = $d['badkamer_start_temp']['s'];
 		$tempRise    = $badkamer - $startTemp;
@@ -86,6 +89,11 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -7);
 			$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
+			ksort($leadDataBath, SORT_NUMERIC);
+			foreach ($leadDataBath as &$innerArray) {
+				ksort($innerArray, SORT_NUMERIC);
+			}
+			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
 			$lastWriteleadDataBath=$time;
 			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C)";
