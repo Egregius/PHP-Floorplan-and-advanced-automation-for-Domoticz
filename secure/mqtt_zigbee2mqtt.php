@@ -131,7 +131,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -144,7 +144,7 @@ while (true) {
 	usleep(4000);
 }
 $mqtt->disconnect();
-lg('Zigbee MQTT loop stopped '.__FILE__,1);
+lg("MQTT {$user} loop stopped ".__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;

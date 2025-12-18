@@ -67,7 +67,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -97,7 +97,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -135,7 +135,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -167,7 +167,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -191,7 +191,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			store($device,$status,'',1);
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -214,7 +214,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
@@ -273,7 +273,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -303,7 +303,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -403,7 +403,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in ZIGBEE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -516,7 +516,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			}
 		}// else lg('🌊 Z2M NO FILE '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];

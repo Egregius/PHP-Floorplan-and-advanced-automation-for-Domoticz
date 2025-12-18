@@ -362,6 +362,30 @@ function storesm($name,$s,$m,$msg='') {
 	if($affected>0) lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 	return $affected ?? 0;
 }
+function storesmi($name,$s,$m,$i,$msg='') {
+	global $d,$user,$time;
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',icon='$i',t='$time' WHERE n='$name'");
+			$affected = $stmt->rowCount();
+			$d[$name]['s']=$s;
+			$d[$name]['m']=$m;
+			$d[$name]['icon']=$i;
+			break;
+		} catch (PDOException $e) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				if($attempt>0) sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
+	if($affected>0) lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	return $affected ?? 0;
+}
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {

@@ -133,8 +133,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
-		storemode('living_start_temp', 1, basename(__FILE__) . ':' . __LINE__);
-		storeicon('living_start_temp', $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
+		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__, 1);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
 	}
@@ -163,10 +162,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
 		}
-	}
-	// --- starttemp enkel bij echte start ---
-	if (abs($time - $t_start) < 10) {
-		store('living_start_temp', $living, basename(__FILE__) . ':' . __LINE__, 1);
 	}
 }
 if ($d['living_set']['m']==1) $Setliving=$d['living_set']['s'];

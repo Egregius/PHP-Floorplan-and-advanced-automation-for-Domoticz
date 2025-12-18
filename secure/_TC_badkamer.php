@@ -62,12 +62,11 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($time > $t_end) storemode('badkamer_start_temp', 0);
 		$preheatbath=true;
 	} elseif ($time >= $t_start && $time < $t) {
+		$preheatbath=true;
 		$set = $target;
+		storesmi('badkamer_start_temp', $badkamer, 1, $buitenTempStart);
 		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
-		storemode('badkamer_start_temp', 1);
-		storeicon('badkamer_start_temp', $buitenTempStart);
-		$preheatbath=true;
 	} elseif ($time >= $t && $time <= $t_end) {
 		$set = $target;
 		$preheatbath=false;
@@ -93,9 +92,6 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataBath,true));
 		}
-	}
-	if (abs($time - $t_start) < 10) {
-		store('badkamer_start_temp', $badkamer);
 	}
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {
