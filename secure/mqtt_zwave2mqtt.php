@@ -152,7 +152,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			}
 		}// else lg('🌊 Z2M NO FILE '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . print_r($status,true) . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
