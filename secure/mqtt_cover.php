@@ -64,8 +64,8 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }

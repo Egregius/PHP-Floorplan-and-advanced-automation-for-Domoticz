@@ -94,12 +94,14 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 					} else lg(print_r($path,true).'	'.print_r($status,true));
 				} elseif ($d[$device]['dt']=='d') {
 					if($path[2]=='switch_multilevel') {
-						if($status>40)$status+=1;
-						store($device, $status);
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
+						if($status>40&&$status<100)$status+=1;
+						if($d[$device]['s']!=$status) {
+							store($device, $status);
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+						}
 					}
 				} else {
-					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+//					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else { // Devices die niet in tabel bestaan
 				if(str_starts_with($device, '8')) {
@@ -152,8 +154,8 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }

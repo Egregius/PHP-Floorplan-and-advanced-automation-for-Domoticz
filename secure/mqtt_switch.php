@@ -64,11 +64,11 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
-   }
+    }
 },MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
 	$result=$mqtt->loop(true);

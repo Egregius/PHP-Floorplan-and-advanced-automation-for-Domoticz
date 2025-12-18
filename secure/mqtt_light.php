@@ -56,18 +56,19 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((float)$status / 2.55);
 				else $status=0;
+				if($status>40&&$status<100)$status+=1;
 //				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
 				if ($d[$device]['s']!=$status) {
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
 			}
 		}
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
