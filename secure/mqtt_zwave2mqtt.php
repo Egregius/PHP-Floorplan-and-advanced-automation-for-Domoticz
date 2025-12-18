@@ -40,7 +40,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time) {
+$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[1];
@@ -92,8 +92,14 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							}
 						} else lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 					} else lg(print_r($path,true).'	'.print_r($status,true));
+				} elseif ($d[$device]['dt']=='d') {
+					if($path[2]=='switch_multilevel') {
+						if($status>40)$status+=1;
+						store($device, $status);
+						include '/var/www/html/secure/pass2php/'.$device.'.php';
+					}
 				} else {
-//					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+					lg('🌊 Z2M ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else { // Devices die niet in tabel bestaan
 				if(str_starts_with($device, '8')) {
@@ -144,7 +150,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			}
 		}// else lg('🌊 Z2M NO FILE '.$device.' '.$topic.'	=> '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in ZWAVE MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -157,7 +163,7 @@ while (true) {
 	usleep(4000);
 }
 $mqtt->disconnect();
-lg('Zwave MQTT loop stopped '.__FILE__,1);
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;

@@ -40,7 +40,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time) {
+$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[1];
@@ -56,12 +56,6 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				$current_device_file = $device;
 				if ($d[$device]['dt']=='zbtn') {
 					lg('ⓩ ZBTN'.$device.' '.print_r($status,true));
-				} elseif ($d[$device]['dt']=='remote') {
-					if (isset($status->action)) {
-						$status=$status->action;
-//						lg('ⓩ Remote '.$device.' '.$status);
-						include '/var/www/html/secure/pass2php/'.$device.'.php';
-					}
 				} elseif ($d[$device]['dt']=='c') {
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
@@ -128,10 +122,16 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} else {
 //					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
 				}
+			} elseif ($device=='remotealex') {
+				if (isset($status->action)) {
+					$status=$status->action;
+//						lg('ⓩ Remote '.$device.' '.$status);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				}
 			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
-		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -144,7 +144,7 @@ while (true) {
 	usleep(4000);
 }
 $mqtt->disconnect();
-lg("MQTT {$user} loop stopped ".__FILE__,1);
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;

@@ -40,7 +40,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time) {
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path = explode('/', $topic);
 		$device = $path[2];

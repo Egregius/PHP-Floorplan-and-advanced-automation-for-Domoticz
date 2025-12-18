@@ -40,7 +40,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -69,7 +69,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -83,7 +83,7 @@ while (true) {
 	usleep(4000);
 }
 $mqtt->disconnect();
-lg('MQTT loop stopped '.__FILE__,1);
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;
