@@ -61,13 +61,13 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-				lg('ⓗ		'.$device.' '.$status);
+				lg("ⓗ	{$user}	".$device.' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $d['time'] - $d['rand']) {
         $lastcheck = $d['time'];
@@ -82,7 +82,7 @@ while (true) {
 }
 
 $mqtt->disconnect();
-lg('MQTT loop stopped '.__FILE__,1);
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;

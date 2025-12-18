@@ -220,7 +220,7 @@ function past($name,$lg='') {
 	$time=time();
 	return $time-$d[$name]['t'];
 }
-function sl($name,$level,$msg='') {
+function sl($name,$level,$msg=null) {
 	global $d,$user;
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -230,7 +230,7 @@ function sl($name,$level,$msg='') {
 		}
 	} else {
 		if(!isset($d)) $d=fetchdata();
-		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.' ('.$msg.')',4);
+		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.($msg?' ('.$msg.')':''),4);
 		if ($d[$name]['dt']=='hd') {
 			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level));
 			elseif ($level==0) hass('light','turn_off','light.'.$name);
@@ -252,7 +252,7 @@ function resetsecurity() {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 	}
 }
-function sw($name,$action='Toggle',$msg='') {
+function sw($name,$action='Toggle',$msg=null) {
 	global $d,$user,$db;
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -263,7 +263,7 @@ function sw($name,$action='Toggle',$msg='') {
 		}
 	} else {
 		if(!isset($d)) $d=fetchdata();
-		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
+		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
 		if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
