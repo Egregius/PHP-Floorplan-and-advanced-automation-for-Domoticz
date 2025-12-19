@@ -69,9 +69,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	<div class="fix" id="bose">
 		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.$boses[$bose].'</a> 
 	</div>
-	<div class="fix z1" style="bottom:14px;left:14px;">
-		<a href=\'javascript:navigator_Go("floorplan.php");\'><img src="/images/close.png" width="72px" height="72px" alt="close"></a>
-	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
 			<div id="art"></div>
@@ -82,5 +79,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 			<br>
 			<div id="power"></div>
 	</div>
+	<button class="close-btn" onclick="javascript:navigator_Go(\'floorplan.php\');">✕</button>
 </body>
 </html>';

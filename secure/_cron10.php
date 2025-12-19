@@ -82,7 +82,7 @@ if ($d['auto']['s']=='On') {
 
 	if($d['weg']['s']==0&&$d['dag']['s']<1) {
 		if($d['rliving']['s']==0&&$d['tuintafel']['s']=='Off') sw('tuintafel','On');
-	//	if($d['lampkast']['s']=='Off') sw('lampkast','On');
+		if($d['lampkast']['s']=='Off'&&$d['media']['s']=='Off'&&$time>=strtotime('7:00')&&$time<=strtotime('20:00')) sw('lampkast','On');
 	} elseif($d['dag']['s']>1&&$d['tuintafel']['s']=='On') sw('tuintafel','Off');
 
 /*	if ($d['kookplaat']['s']=='On'&&$d['wasbak']['s']==0&&$d['snijplank']['s']==0) {

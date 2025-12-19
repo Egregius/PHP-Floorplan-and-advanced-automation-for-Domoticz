@@ -1,7 +1,7 @@
 <?php
 if ($d['auto']['s']=='On') {
 	if ($status=='Playing'&&$d['eettafel']['s']==0) {
-		if ($d['wasbak']['s']>0) sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']['s']>0&&past('wasbak')>30) sl('wasbak', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['zithoek']['s']>0) sl('zithoek', 0, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']>0) sl('snijplank', 0, basename(__FILE__).':'.__LINE__);
 	}/* elseif ($status=='Paused'||$status=='Idle') {

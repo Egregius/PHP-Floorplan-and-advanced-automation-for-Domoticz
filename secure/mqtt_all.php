@@ -464,7 +464,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 								if ($device=='dysonlader'&&$status<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 							}
 						} else lg('🌊 Z2M METER ['.$d[$device]['dt'].']	'.$device.'	'.print_r($path,true).'	'.$status);
-					} else lg(print_r($path,true).'	'.print_r($status,true));
+					}// else lg(print_r($path,true).'	'.print_r($status,true));
 				} elseif ($d[$device]['dt']=='d') {
 					if($path[2]=='switch_multilevel') {
 						if($status>40&&$status<100)$status+=1;
