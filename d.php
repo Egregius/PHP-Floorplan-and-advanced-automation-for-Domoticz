@@ -40,36 +40,6 @@ if (isset($_GET['all'])) {
         $extra = true;
     }
 }
-$db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
-$stmt->execute([':t' => $t]);
-while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-    $n = $row[0];
-    $d[$n]['s'] = $row[1];
-    if ($row[6] == 1) {
-        $d[$n]['t'] = $row[2];
-    }
-    if (!is_null($row[3])) {
-        $d[$n]['m'] = $row[3];
-    }
-    if (!is_null($row[4])) {
-        $d[$n]['dt'] = $row[4];
-        if ($row[4] === 'daikin') {
-            $d[$n]['s'] = null;
-        }
-    }
-    if (!is_null($row[5])) {
-        if ($row[4] === 'th' && $n !== 'badkamer_set') {
-            $icon = json_decode($row[5], true);
-        } else {
-            $d[$n]['icon'] = $row[5];
-        }
-    }
-    if (!is_null($row[7])) {
-        $d[$n]['p'] = $row[7];
-    }
-}
-//if ($t>0&&count($d)>1) lg(json_encode($d));
 if ($type === 'f') {
 	$en = getCache('en');
     if ($en) {
@@ -124,6 +94,36 @@ if ($extralast === false || $extra === true) {
     $d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
     apcu_store($id.$type.'e', $time, 14400);
 }
+$db = Database::getInstance();
+$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
+$stmt->execute([':t' => $t]);
+while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+    $n = $row[0];
+    $d[$n]['s'] = $row[1];
+    if ($row[6] == 1) {
+        $d[$n]['t'] = $row[2];
+    }
+    if (!is_null($row[3])) {
+        $d[$n]['m'] = $row[3];
+    }
+    if (!is_null($row[4])) {
+        $d[$n]['dt'] = $row[4];
+        if ($row[4] === 'daikin') {
+            $d[$n]['s'] = null;
+        }
+    }
+    if (!is_null($row[5])) {
+        if ($row[4] === 'th' && $n !== 'badkamer_set') {
+            $icon = json_decode($row[5], true);
+        } else {
+            $d[$n]['icon'] = $row[5];
+        }
+    }
+    if (!is_null($row[7])) {
+        $d[$n]['p'] = $row[7];
+    }
+}
+
 
 echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 function boseplaylist($time) {
