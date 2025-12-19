@@ -83,6 +83,7 @@ $cols = [
     'kamer' => 'kamer_temp',
     'waskamer' => 'waskamer_temp',
     'alex' => 'alex_temp',
+    'zolder' => 'zolder_temp',
 ];
 foreach($cols as $col => $jsonKey) {
     $thermo_hist[$jsonKey] = [
