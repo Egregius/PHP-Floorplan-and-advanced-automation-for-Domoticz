@@ -8,8 +8,8 @@ createheader('floorplan');
 			<a href="#" id="time" onclick="
 				clearTimeout(ajaxTimer);
 				sessionStorage.clear();
+				d.firstRun=true;
 				location.reload();
-				initview();
 				return false;
 			">
 				Loading...
