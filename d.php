@@ -124,8 +124,9 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
     }
 }
 
-
-echo json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+//lg($data);
+echo $data;
 function boseplaylist($time) {
     $dag = floor($time / 86400);
     $dow = date("w", $time);

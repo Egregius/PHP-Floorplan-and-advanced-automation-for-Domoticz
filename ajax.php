@@ -51,9 +51,10 @@ elseif (isset($_REQUEST['media'])) {
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
+	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
 		if ($_REQUEST['device']=='badkamer') {
-			$d=fetchdata(0);
+			
 			$s=date('s');
 			$dow=date("w");
 			if($dow==0||$dow==6) $t=strtotime('7:30');
@@ -67,7 +68,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		} else {
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
-				$d=fetchdata(0);
 				if ($d['heating']['s']==-2) {//airco cooling
 					if ($d['daikin']['s']=='Off'&&$_REQUEST['action']!='D'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 				} elseif ($d['heating']['s']==-1) {//passive cooling
@@ -103,22 +103,18 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
-			$d=fetchdata(0);
 			foreach(array('rliving', 'rbureel', 'rkeukenl', 'rkeukenr') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='rkeukenl') {
-			$d=fetchdata(0);
 			foreach(array('rkeukenl', 'rkeukenr') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Boven') {
-			$d=fetchdata(0);
 			foreach(array('rkamerl', 'rkamerr', 'rwaskamer', 'ralex') as $i) {
 				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='tv') {
-			$d=fetchdata(0);
 			if ($d['rliving']['s']<30) sl('rliving', 30, basename(__FILE__).':'.__LINE__);
 			if ($d['rbureel']['s']<70) sl('rbureel', 69, basename(__FILE__).':'.__LINE__);
 			if ($d['rkeukenl']['s']<55) sl('rkeukenl', 55, basename(__FILE__).':'.__LINE__);
@@ -148,7 +144,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		$data['powermode']=$_REQUEST['action'];
 		storeicon($_REQUEST['device'], json_encode($data));
 		if ($_REQUEST['action']=='Normal') {
-			$d=fetchdata(0);
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=0&spmode_kind=1');
 			if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 				$low=40;
@@ -160,7 +155,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			sleep(1);
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_demand_control?type=1&en_demand=1&mode=2&max_pow='.$low.'&scdl_per_day=4&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0');
 		} elseif ($_REQUEST['action']=='Eco') {
-			$d=fetchdata(0);
 			file_get_contents('http://192.168.2.'.$ip.'/aircon/set_special_mode?set_spmode=1&spmode_kind=2');
 			if ($d['buiten_temp']['s']>2&&$d['buiten_temp']['s']<30) {
 				$low=40;
