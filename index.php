@@ -7,8 +7,8 @@ createheader('floorplan');
 		<div class="abs" id="clock">
 			<a href="#" id="time" onclick="
 				clearTimeout(ajaxTimer);
-				sessionStorage.clear();
-				d.firstRun=true;
+//				localStorage.clear();
+//				sessionStorage.clear();
 				location.reload();
 				return false;
 			">
