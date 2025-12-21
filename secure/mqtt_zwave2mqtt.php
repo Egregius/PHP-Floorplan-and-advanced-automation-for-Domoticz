@@ -141,7 +141,8 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
 						}
 					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-							lg('🌊 '.$device.' '.$knop.' '.$status);
+							
+							lg('🌊 '.$device.' '.$knop.' '.$status.' '.print_r($path,true));
 							include '/var/www/html/secure/pass2php/'.$device.'1.php';
 					}
 				} elseif ($device=='remotealex') {
