@@ -27,7 +27,7 @@ if (isset($_GET['all'])) {
     if ($t === false) {
         $t = 0;
         $extra = true;
-    } elseif ($t < $time - 60) {
+    } elseif ($t < $time - 600) {
         $t -= 120;
         $extra = true;
     }
@@ -120,6 +120,7 @@ $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 echo $data;
 $aantal=count($d);
 if($aantal>6) {
+	if($type=='f')$aantal-=6;
 	$msg=$id.'	'.$type.' '.$aantal;
 	if($t==0) $msg.=' ALL';
 	if($extra) $msg.=' + extra';
