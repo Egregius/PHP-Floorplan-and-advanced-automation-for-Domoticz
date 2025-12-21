@@ -14,19 +14,11 @@ $map = [
 ];
 $id = $map[$ip] ?? $ip;
 $extra = false;
-$verbruik = false;
 $d = ['t' => $time];
-if (isset($_GET['o'])) {
-    $type = 'o';
-    $filter = 'o';
-} elseif (isset($_GET['h'])) {
-    $type = 'h';
-    $filter = 'h';
-} else {
-    $type = 'f';
-    $filter = 'f';
-    $verbruik = true;
-}
+if (isset($_GET['o'])) $type = 'o';
+elseif (isset($_GET['h'])) $type = 'h';
+else $type = 'f';
+
 if (isset($_GET['all'])) {
     $t = 0;
     $extra = true;
@@ -35,8 +27,8 @@ if (isset($_GET['all'])) {
     if ($t === false) {
         $t = 0;
         $extra = true;
-    } elseif ($t < $time - 5) {
-        $t -= 600;
+    } elseif ($t < $time - 60) {
+        $t -= 120;
         $extra = true;
     }
 }
@@ -95,7 +87,7 @@ if ($extralast === false || $extra === true) {
     apcu_store($id.$type.'e', $time, 14400);
 }
 $db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$filter`=1 AND t >= :t");
+$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$type`=1 AND t >= :t");
 $stmt->execute([':t' => $t]);
 while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
     $n = $row[0];
@@ -125,8 +117,15 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 }
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-//lg($data);
 echo $data;
+$aantal=count($d);
+if($aantal>6) {
+	$msg=$id.'	'.$type.' '.$aantal;
+	if($t==0) $msg.=' ALL';
+	if($extra) $msg.=' + extra';
+	$msg.=' '.$data;
+	lg($msg);
+}
 function boseplaylist($time) {
     $dag = floor($time / 86400);
     $dow = date("w", $time);
