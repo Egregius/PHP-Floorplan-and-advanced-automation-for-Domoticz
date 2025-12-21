@@ -30,8 +30,8 @@ if (isset($_GET['all'])) {
         $t = 0;
         $en=true;
         $extra = true;
-    } elseif ($t < $time - 600) {
-        $t -= 120;
+    } elseif ($t < $time - 10) {
+        $t -= 600;
         $en=true;
         $extra = true;
     } elseif ($t!=$time) {
