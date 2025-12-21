@@ -14,6 +14,7 @@ $map = [
 ];
 $id = $map[$ip] ?? $ip;
 $extra = false;
+$en=false;
 $d = ['t' => $time];
 if (isset($_GET['o'])) $type = 'o';
 elseif (isset($_GET['h'])) $type = 'h';
@@ -21,29 +22,36 @@ else $type = 'f';
 
 if (isset($_GET['all'])) {
     $t = 0;
+    $en=true;
     $extra = true;
 } else {
     $t = apcu_fetch($id.$type);
     if ($t === false) {
         $t = 0;
+        $en=true;
         $extra = true;
     } elseif ($t < $time - 600) {
         $t -= 120;
+        $en=true;
         $extra = true;
+    } elseif ($t!=$time) {
+    	$en=true;
     }
 }
 if ($type === 'f') {
-	$en = getCache('en');
-    if ($en) {
-        $en = json_decode($en);
-        if ($en) {
-            $d['n'] = $en->n;
-            $d['a'] = $en->a;
-            $d['b'] = $en->b;
-            $d['c'] = $en->c;
-            $d['z'] = $en->z;
-        }
-    }
+	if($en==true){
+		$en = getCache('en');
+		if ($en) {
+			$en = json_decode($en);
+			if ($en) {
+				$d['n'] = $en->n;
+				$d['a'] = $en->a;
+				$d['b'] = $en->b;
+				$d['c'] = $en->c;
+				$d['z'] = $en->z;
+			}
+		}
+	}
 	if ($extra === true) {
         $vandaag = getCache('energy_vandaag');
         if ($vandaag) {

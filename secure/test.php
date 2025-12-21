@@ -21,13 +21,11 @@ $mqtt->connect($connectionSettings,true);
 
 
 
-
 $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-	sl(array('hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
-
+if('opgeruimder'=='opgeruimd') echo 'JA';else echo 'NEE';
 
 
 
