@@ -91,7 +91,7 @@ if ($extralast === false || $extra === true) {
             $d['playlist'] = boseplaylist($time);
         }
     }
-    $d['thermo_hist'] = json_decode(getCache('thermo_hist'), true);
+    $d['b_hist'] = json_decode(getCache('b_hist'), true);
     apcu_store($id.$type.'e', $time, 14400);
 }
 $db = Database::getInstance();

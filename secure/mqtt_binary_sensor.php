@@ -55,7 +55,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($status=='Off') $status='Open';
 				elseif ($status=='On') $status='Closed';
 				else unset($status);
-			} elseif (isset($d[$device]['dt']) && $d[$device]['dt'] === 'c') {
+			} elseif (isset($d[$device]['d']) && $d[$device]['d'] === 'c') {
 				if ($status=='On') $status='Open';
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);

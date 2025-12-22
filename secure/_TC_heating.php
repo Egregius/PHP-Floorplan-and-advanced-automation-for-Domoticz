@@ -98,7 +98,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		3 => 14
 	];
 	$comfortStart = [
-		1 => '12:50',
+		1 => '11:00',
 		2 => '16:00',
 		3 => '12:10',
 		4 => '16:00',
@@ -150,7 +150,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
 		if ($tempRise>0.5) {
-			$buitenTempStart = $d['living_start_temp']['icon'];
+			$buitenTempStart = $d['living_start_temp']['i'];
 			$minutesUsed = round(past('living_start_temp') / 60, 1);
 			$minPerDeg   = ceil($minutesUsed / $tempRise);
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);

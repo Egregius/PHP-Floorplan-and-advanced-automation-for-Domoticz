@@ -231,16 +231,16 @@ function sl($name,$level,$msg=null) {
 	} else {
 		if(!isset($d)) $d=fetchdata();
 		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.($msg?' ('.$msg.')':''),4);
-		if ($d[$name]['dt']=='hd') {
+		if ($d[$name]['d']=='hd') {
 			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level));
 			elseif ($level==0) hass('light','turn_off','light.'.$name);
-		} elseif ($d[$name]['dt']=='d') {
+		} elseif ($d[$name]['d']=='d') {
 			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
 			elseif ($level==0) hass('light','turn_off','light.'.$name);
-		} elseif ($d[$name]['dt']=='r') {
+		} elseif ($d[$name]['d']=='r') {
 			if($name=='rbureel') $level=100-$level;
 			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-		} elseif ($d[$name]['dt']=='luifel') {
+		} elseif ($d[$name]['d']=='luifel') {
 			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
 		}
 	}
@@ -264,7 +264,7 @@ function sw($name,$action='Toggle',$msg=null) {
 	} else {
 		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
-		if (isset($d[$name]['dt'])&&$d[$name]['dt']=='hsw') {
+		if (isset($d[$name]['d'])&&$d[$name]['d']=='hsw') {
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
@@ -367,11 +367,11 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',icon='$i',t='$time' WHERE n='$name'");
+			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',i='$i',t='$time' WHERE n='$name'");
 			$affected = $stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
-			$d[$name]['icon']=$i;
+			$d[$name]['i']=$i;
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -393,6 +393,8 @@ function storesp($name,$s,$p,$msg='') {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
 			$affected = $stmt->rowCount();
+			$d[$name]['s']=$s;
+			$d[$name]['p']=$p;
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -414,6 +416,7 @@ function storep($name,$p,$msg='') {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
 			$affected = $stmt->rowCount();
+			$d[$name]['p']=$p;
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -433,8 +436,9 @@ function storeicon($name,$icon,$msg='') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET icon='$icon',t='$time' WHERE n='$name'");
+			$stmt=$db->query("UPDATE devices SET i='$icon',t='$time' WHERE n='$name'");
 			$affected = $stmt->rowCount();
+			$d[$name]['i']=$icon;
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -771,8 +775,8 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	if(!http_get($url)) return false;
-	if ($d['heating']['s']>=0) lg("🔥 daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan");
-	else  lg("❄️ daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan");
+	if ($d['heating']['s']>=0) lg("🔥 daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | maxpow=$maxpow");
+	else  lg("❄️ daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | maxpow=$maxpow");
 	usleep(100000);
 	if ($spmode==-1) {
 		if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
@@ -1056,7 +1060,7 @@ function fetchdata() {
 			static $stmt = null;
 			if ($stmt === null) {
 				$stmt = $db->prepare(
-					"SELECT n,s,t,m,dt,icon,p FROM devices"
+					"SELECT n,s,t,m,d,i,p FROM devices"
 				);
 			}
 			$stmt->execute();
@@ -1065,8 +1069,8 @@ function fetchdata() {
 				if(!is_null($row[1])) $d[$n]['s']=$row[1];
 				if(!is_null($row[2])) $d[$n]['t']=$row[2];
 				if(!is_null($row[3])) $d[$n]['m']=$row[3];
-				if(!is_null($row[4])) $d[$n]['dt']=$row[4];
-				if(!is_null($row[5])) $d[$n]['icon']=$row[5];
+				if(!is_null($row[4])) $d[$n]['d']=$row[4];
+				if(!is_null($row[5])) $d[$n]['i']=$row[5];
 				if(!is_null($row[6])) $d[$n]['p']=$row[6];
 			}
 			break;
@@ -1110,10 +1114,10 @@ function republishmqtt() {
 	$ha_token = 'Bearer '.hasstoken();
 	$base_topic = 'homeassistant';
 	foreach ($d as $device => $i) {
-		if (!isset($i['dt'])) continue;
+		if (!isset($i['d'])) continue;
 		$entity_id = null;
 		$to_publish = [];
-		if ($i['dt'] === 'hsw') {
+		if ($i['d'] === 'hsw') {
 			$entity_id = "switch.$device";
 			$url = "$ha_url/api/states/$entity_id";
 			$ch = curl_init($url);
@@ -1132,7 +1136,7 @@ function republishmqtt() {
 				'topic' => "$base_topic/$domain/$object_id/state",
 				'payload' => $state
 			];
-		} elseif ($i['dt'] === 'hd') {
+		} elseif ($i['d'] === 'hd') {
 			$entity_id = "light.$device";
 			$url = "$ha_url/api/states/$entity_id";
 			$ch = curl_init($url);

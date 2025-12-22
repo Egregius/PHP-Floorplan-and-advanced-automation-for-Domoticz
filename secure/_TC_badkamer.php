@@ -82,7 +82,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$startTemp = $d['badkamer_start_temp']['s'];
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1) {
-			$buitenTempStart = $d['badkamer_start_temp']['icon'];
+			$buitenTempStart = $d['badkamer_start_temp']['i'];
 			$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
 			$minPerDeg = ceil($minutesUsed / $tempRise);
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
@@ -113,18 +113,18 @@ if (isset($set)&&$d['heating']['s']>=0) {
 }
 if ($d['heating']['s']>=2) {
 	if ($d['weg']['s']<=1&&$d['badkamer_temp']['s']<14) {
-		if ($d['badkamer_set']['icon']!=true) {
+		if ($d['badkamer_set']['i']!=true) {
 			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
 		if ($d['brander']['s']=='Off'&&past('brander')>900) sw('brander', 'On');
 	} elseif (($set>13&&$d['weg']['s']<=1)||$d['living_set']['s']<=17) {
-		if ($d['badkamer_set']['icon']!=true) {
+		if ($d['badkamer_set']['i']!=true) {
 			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
 	} else {
-		if($d['badkamer_set']['icon']!=false&&$d['living_set']['s']>17&&$d['brander']['s']=='On') {
+		if($d['badkamer_set']['i']!=false&&$d['living_set']['s']>17&&$d['brander']['s']=='On') {
 			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
 			storeicon('badkamer_set',false);
 		}

@@ -3,10 +3,10 @@ require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$user='camera';
 	$mysqli=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
-	$result = $mysqli->query("select n,s,dt,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
+	$result = $mysqli->query("select n,s,d,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
 		$d[$row['n']]['s'] = $row['s'];
-		$d[$row['n']]['dt'] = $row['dt'];
+		$d[$row['n']]['d'] = $row['d'];
 		$d[$row['n']]['t'] = $row['t'];
 		$d[$row['n']]['m'] = $row['m'];
 	}
@@ -49,7 +49,7 @@ function sw($name,$action='Toggle',$msg='',$force=false) {
 	} else {
 		$msg='(SWITCH)'.str_pad($user, 13, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.' ('.$msg.')';
 		if ($d[$name]['s']!=$action||$force==true) {
-			if ($d[$name]['dt']=='hsw'||$d[$name]['dt']=='sw') {
+			if ($d[$name]['d']=='hsw'||$d[$name]['d']=='sw') {
 				lg('[hsw] '.$msg,4);
 				if ($action=='On') hass('switch','turn_on','switch.'.$name);
 				elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);

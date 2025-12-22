@@ -52,11 +52,11 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 //			$lastEvent = $d['time'];
 			$d=fetchdata();
 			$status=json_decode($status);
-			if (isset($d[$device]['dt'])) {
+			if (isset($d[$device]['d'])) {
 				$current_device_file = $device;
-				if ($d[$device]['dt']=='zbtn') {
+				if ($d[$device]['d']=='zbtn') {
 					lg('ⓩ ZBTN'.$device.' '.print_r($status,true));
-				} elseif ($d[$device]['dt']=='c') {
+				} elseif ($d[$device]['d']=='c') {
 					if ($status->contact==1) $status='Closed';
 					else $status='Open';
 					if ($d[$device]['s']!=$status) {
@@ -64,7 +64,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 						store($device,$status);
 					}
-				} elseif ($d[$device]['dt']=='pir') {
+				} elseif ($d[$device]['d']=='pir') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
@@ -73,7 +73,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						store($device,$status);
 						
 					}
-				} elseif ($d[$device]['dt']=='hsw') {
+				} elseif ($d[$device]['d']=='hsw') {
 					if (isset($d[$device]['p'])) {
 						$p=$status->power;
 						$status=ucfirst(strtolower($status->state));
@@ -106,21 +106,21 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 							store($device,$status);
 						}
 					}
-				} elseif ($d[$device]['dt']=='hd') {
+				} elseif ($d[$device]['d']=='hd') {
 					if($status->state=='OFF') $status=0;
 					else $status=$status=round((float)$status->brightness / 2.55);
 					if ($d[$device]['s']!=$status) {
 //						lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
 						store($device,$status);
 					}
-				} elseif ($d[$device]['dt']=='t') {
+				} elseif ($d[$device]['d']=='t') {
 					$h=round($status->humidity);
 					$t=$status->temperature;
 					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h) storesm($device,$t,$h);
 					elseif($d[$device]['s']!=$t) store($device,$t);
 					elseif($d[$device]['m']!=$h) storemode($device,$h);
 				} else {
-//					lg('ⓩ ZIGBEE ['.$d[$device]['dt'].']	'.$device.'	'.print_r($status,true));
+//					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
 				}
 			} elseif ($device=='remotealex') {
 				if (isset($status->action)) {
