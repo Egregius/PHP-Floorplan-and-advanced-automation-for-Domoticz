@@ -15,7 +15,7 @@ $map = [
 $id = $map[$ip] ?? $ip;
 $extra = false;
 $en=false;
-$d = ['t' => $time];
+$d=[];
 if (isset($_GET['o'])) $type = 'o';
 elseif (isset($_GET['h'])) $type = 'h';
 else $type = 'f';
@@ -34,9 +34,11 @@ if (isset($_GET['all'])) {
         $t -= 600;
         $en=true;
         $extra = true;
-    } elseif ($t!=$time) {
-    	$en=true;
     }
+}
+if ($t!=$time) {
+	$d = ['t' => $time];
+	$en=true;
 }
 if ($type === 'f') {
 	if($en==true){

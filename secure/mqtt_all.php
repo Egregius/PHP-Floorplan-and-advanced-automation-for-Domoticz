@@ -61,7 +61,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-				lg("ⓗ	{$user}	".$device.' '.$status);
+				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
@@ -69,8 +69,8 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
@@ -348,29 +348,32 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					}
 				} elseif ($d[$device]['d']=='hsw') {
 					if (isset($d[$device]['p'])) {
-						$p=$status->power;
-						$status=ucfirst(strtolower($status->state));
-						$val = (int)$p; // echte waarde
-						$old = (int)($d[$device]['p'] ?? 0);
+						$p = $status->power;
+						$status = ucfirst(strtolower($status->state));
+						$val  = (int)$p;
+						$old  = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
 						if ($oldt === 0) {
 							store($device, $val, '', 1);
 							return;
 						}
-						$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
-						$time_passed = ($time - $oldt) >= 30;
-						if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || ($time_passed&&$d[$device]['s']!=$status)) $upd=true;
-						else $upd=false;
-						
-						if ($d[$device]['s']!=$status&&$upd==true) {
-//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
-							storesp($device,$status,$p);
-						} elseif ($d[$device]['s']!=$status) {
-//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
-							store($device,$status);
-						} elseif ($d[$device]['p']!=$p&&$upd==true) {
-//							lg('ⓩ ZIGBEE [HSW]	'.$device.'	'.$status.' '.$p);
-							storep($device,$p);
+						$time_passed    = ($time - $oldt) >= 30;
+						$status_changed = ($d[$device]['s'] !== $status);
+						$upd_power = false;
+						if ($old > 0) {
+							$abs_diff = abs($val - $old);
+							$rel_diff = ($val - $old) / $old;
+							if (abs($rel_diff) >= 0.40 && $abs_diff >= 50) {
+								$upd_power = true;
+							}
+						}
+						$upd_status = ($status_changed && $time_passed);
+						if ($upd_status && $upd_power) {
+							storesp($device, $status, $p);
+						} elseif ($upd_status) {
+							store($device, $status);
+						} elseif ($upd_power) {
+							storep($device, $p);
 						}
 					} else {
 						$status=ucfirst(strtolower($status->state));
@@ -406,8 +409,8 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
