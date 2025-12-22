@@ -95,7 +95,7 @@ if ($extralast === false || $extra === true) {
     apcu_store($id.$type.'e', $time, 14400);
 }
 $db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,dt,icon,rt,p FROM devices WHERE `$type`=1 AND t >= :t");
+$stmt = $db->prepare("SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= :t");
 $stmt->execute([':t' => $t]);
 while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
     $n = $row[0];
@@ -107,7 +107,7 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
         $d[$n]['m'] = $row[3];
     }
     if (!is_null($row[4])) {
-        $d[$n]['dt'] = $row[4];
+        $d[$n]['d'] = $row[4];
         if ($row[4] === 'daikin') {
             $d[$n]['s'] = null;
         }
@@ -116,7 +116,7 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
         if ($row[4] === 'th' && $n !== 'badkamer_set') {
             $icon = json_decode($row[5], true);
         } else {
-            $d[$n]['icon'] = $row[5];
+            $d[$n]['i'] = $row[5];
         }
     }
     if (!is_null($row[7])) {
@@ -125,6 +125,8 @@ while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 }
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+header('Content-Type: application/json');
+header('Content-Length: '.strlen($data));
 echo $data;
 $aantal=count($d);
 if($aantal>6) {

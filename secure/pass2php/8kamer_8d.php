@@ -1,4 +1,4 @@
 <?php
 if ($status=='On') {
-	sw('kamer', 'Off', basename(__FILE__).':'.__LINE__,true);
+	sl('kamer', 0, basename(__FILE__).':'.__LINE__,true);
 }

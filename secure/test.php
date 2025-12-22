@@ -25,7 +25,6 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-if('opgeruimder'=='opgeruimd') echo 'JA';else echo 'NEE';
 
 
 
