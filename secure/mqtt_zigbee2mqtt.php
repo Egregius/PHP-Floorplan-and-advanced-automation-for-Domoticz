@@ -81,7 +81,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						$old  = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
 						if ($oldt === 0) {
-							store($device, $val, '', 1);
+							storep($device, $val, '', 1);
 							return;
 						}
 						$time_passed    = ($time - $oldt) >= 30;
@@ -89,9 +89,19 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						$upd_power = false;
 						if ($old > 0) {
 							$abs_diff = abs($val - $old);
-							$rel_diff = ($val - $old) / $old;
-							if (abs($rel_diff) >= 0.40 && $abs_diff >= 50) {
-								$upd_power = true;
+							if ($old < 10) {
+								if ($abs_diff >= 2) {
+									$upd_power = true;
+								}
+							} elseif ($old < 100) {
+								if ($abs_diff >= 10) {
+									$upd_power = true;
+								}
+							} else {
+								$rel_diff = abs(($val - $old) / $old);
+								if ($rel_diff >= 0.40 && $abs_diff >= 50) {
+									$upd_power = true;
+								}
 							}
 						}
 						$upd_status = ($status_changed && $time_passed);

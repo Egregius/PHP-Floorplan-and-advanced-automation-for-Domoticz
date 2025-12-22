@@ -86,11 +86,11 @@ if ($extralast === false || $extra === true) {
     if ($sunrise) {
         $sunrise = json_decode($sunrise, true);
         if ($sunrise) {
-            $d['CivTwilightStart'] = $sunrise['CivTwilightStart'];
-            $d['Sunrise'] = $sunrise['Sunrise'];
-            $d['Sunset'] = $sunrise['Sunset'];
-            $d['CivTwilightEnd'] = $sunrise['CivTwilightEnd'];
-            $d['playlist'] = boseplaylist($time);
+            $d['Tstart'] = $sunrise['CivTwilightStart'];
+            $d['Srise'] = $sunrise['Sunrise'];
+            $d['Sset'] = $sunrise['Sunset'];
+            $d['Tend'] = $sunrise['CivTwilightEnd'];
+            $d['pl'] = boseplaylist($time);
         }
     }
     $d['b_hist'] = json_decode(getCache('b_hist'), true);

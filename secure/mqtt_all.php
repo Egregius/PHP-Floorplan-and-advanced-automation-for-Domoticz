@@ -61,7 +61,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				else unset($status);
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
+//				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
@@ -354,7 +354,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						$old  = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
 						if ($oldt === 0) {
-							store($device, $val, '', 1);
+							storep($device, $val, '', 1);
 							return;
 						}
 						$time_passed    = ($time - $oldt) >= 30;
@@ -362,9 +362,19 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						$upd_power = false;
 						if ($old > 0) {
 							$abs_diff = abs($val - $old);
-							$rel_diff = ($val - $old) / $old;
-							if (abs($rel_diff) >= 0.40 && $abs_diff >= 50) {
-								$upd_power = true;
+							if ($old < 10) {
+								if ($abs_diff >= 2) {
+									$upd_power = true;
+								}
+							} elseif ($old < 100) {
+								if ($abs_diff >= 10) {
+									$upd_power = true;
+								}
+							} else {
+								$rel_diff = abs(($val - $old) / $old);
+								if ($rel_diff >= 0.40 && $abs_diff >= 50) {
+									$upd_power = true;
+								}
 							}
 						}
 						$upd_status = ($status_changed && $time_passed);
@@ -465,11 +475,35 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 								include '/var/www/html/secure/pass2php/'.$device.'.php';
 							}
 						} elseif($path[2]=='sensor_multilevel'&&$path[4]=='Power') {
-							$status=round($status);
-							if($d[$device]['p']!=$status) {
+							$val = (int)$status;
+							$old = (int)($d[$device]['p'] ?? 0);
+							$oldt = (int)($d[$device]['t'] ?? 0);
+							if ($oldt === 0) {
+								store($device, $val, '', 1);
+								return;
+							}
+							$upd_power = false;
+							if ($old > 0) {
+								$abs_diff = abs($val - $old);
+								if ($old < 10) {
+									if ($abs_diff >= 2) {
+										$upd_power = true;
+									}
+								} elseif ($old < 100) {
+									if ($abs_diff >= 10) {
+										$upd_power = true;
+									}
+								} else {
+									$rel_diff = abs(($val - $old) / $old);
+									if ($rel_diff >= 0.40 && $abs_diff >= 50) {
+										$upd_power = true;
+									}
+								}
+							}
+							if($upd_power==true) {
 //								lg('🌊 Z2M Power '.$device.'	'.$status);
-								storep($device,$status);
-								if ($device=='dysonlader'&&$status<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
+								storep($device,$val);
+								if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 							}
 						} else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 					}// else lg(print_r($path,true).'	'.print_r($status,true));
@@ -517,7 +551,8 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
 						}
 					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-							lg('🌊 '.$device.' '.$knop.' '.$status);
+							
+							lg('🌊 '.$device.' '.$knop.' '.$status.' '.print_r($path,true));
 							include '/var/www/html/secure/pass2php/'.$device.'1.php';
 					}
 				} elseif ($device=='remotealex') {

@@ -67,7 +67,7 @@ if ($d['daikin']['m']==1) {
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				if ($k=='living') {
-					$set+=-2;
+					if($prevSet==0) $set+=-2;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $fan='B';
 				} elseif ($k=='kamer') {
 					$set+=-1.5;
