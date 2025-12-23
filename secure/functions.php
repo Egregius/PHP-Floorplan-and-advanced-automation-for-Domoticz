@@ -683,35 +683,6 @@ function sirene($msg) {
 	}
 	setCache('sirene', $time);
 }
-function createheader($page='') {
-	global $scale;
-	echo '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<title>Floorplan</title>
-		<meta name="viewport" content="width=device-width,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
-		<meta name="HandheldFriendly" content="true">
-		<meta name="mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="theme-color" content="#000">
-		<link rel="manifest" href="/manifest.json">
-		<link rel="shortcut icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
-		<script src="/scripts/floorplanjs.js?v=3"></script>';
-	if ($page!='') {
-		echo '
-		<script type=\'text/javascript\'>
-			$(document).ready(function(){initview();});
-		</script>';
-	}
-	echo '
-	</head>';
-}
 function daikin_ips() {
 	return [
 		'living' => 161,

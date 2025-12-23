@@ -1,8 +1,4 @@
-<?php
-require 'secure/functions.php';
-require '/var/www/authentication.php';
-//createheader('floorplan');
-?>
+<?php require '/var/www/authentication.php'; ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -20,36 +16,16 @@ require '/var/www/authentication.php';
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<script src="/scripts/floorplanjs.js"></script>
-		<script type="text/javascript">
-			document.addEventListener('DOMContentLoaded', function() {
-				setView('floorplan')
-			});
-		</script>
+		<script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock">
-			<a href="#" id="time" onclick="
-				clearTimeout(ajaxTimer);
-				location.reload();
-				return false;
-			">
-				Loading...
-			</a>
-		</div>
+		<div class="abs" id="clock"><a href="#" id="time" onclick="clearTimeout(ajaxTimer);location.reload();return false;">Loading...</a></div>
 		<div id="placeholder">
 			<div id="floorplan" class="view active">
-				<div class="abs leftbuttons" id="heatingbutton" onclick="floorplanheating()">
-					<img src="/images/arrowdown.png" class="i60" alt="Open">
-				</div>
-				
-				<div class="fix floorplan2icon" onclick="floorplanothers()">
-					<img src="/images/plus.png" class="i60" alt="plus">
-				</div>
-				
+				<div class="abs leftbuttons" id="heatingbutton" onclick="floorplanheating()"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
+				<div class="fix floorplan2icon" onclick="floorplanothers()"><img src="/images/plus.png" class="i60" alt="plus"></div>
 				<div class="abs weg" id="weg"></div>
 				<div class="abs z2" id="sirene"></div>
-				
-				<!-- yellow -->
 				<div class="abs yellow" id="rbureel"></div>
 				<div class="abs yellow" id="rkeukenl"></div>
 				<div class="abs yellow" id="rkeukenr"></div>
@@ -58,8 +34,6 @@ require '/var/www/authentication.php';
 				<div class="abs yellow" id="rkamerr"></div>
 				<div class="abs yellow" id="rwaskamer"></div>
 				<div class="abs yellow" id="ralex"></div>
-				
-				<!-- z0 -->
 				<div class="abs z0" id="raamalex"></div>
 				<div class="abs z0" id="raamwaskamer"></div>
 				<div class="abs z0" id="raamliving"></div>
@@ -85,55 +59,56 @@ require '/var/www/authentication.php';
 				<div class="abs z0" id="zalex"></div>
 				<div class="abs z0" id="alwayson"></div>
 				<div class="abs z0" id="daikin_kwh"></div>
-				
-				<!-- z1 -->
 				<div class="abs z1" id="dysonlader"></div>
-				
-				<!-- temp links -->
 				<div class="abs" id="living_temp" onclick="location.href='temp.php?living=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="living_temp_mercury" class="thermometer-mercury"></div>
+					<div id="living_temp_avg" class="average-line"></div>
+					<div id="living_temp_display" class="temp-display"></div>
+					<div id="living_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs" id="badkamer_temp" onclick="location.href='temp.php?badkamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="badkamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="badkamer_temp_avg" class="average-line"></div>
+					<div id="badkamer_temp_display" class="temp-display"></div>
+					<div id="badkamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs" id="kamer_temp" onclick="location.href='temp.php?kamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="kamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="kamer_temp_avg" class="average-line"></div>
+					<div id="kamer_temp_display" class="temp-display"></div>
+					<div id="kamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs" id="waskamer_temp" onclick="location.href='temp.php?waskamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="waskamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="waskamer_temp_avg" class="average-line"></div>
+					<div id="waskamer_temp_display" class="temp-display"></div>
+					<div id="waskamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs" id="alex_temp" onclick="location.href='temp.php?alex=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="alex_temp_mercury" class="thermometer-mercury"></div>
+					<div id="alex_temp_avg" class="average-line"></div>
+					<div id="alex_temp_display" class="temp-display"></div>
+					<div id="alex_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
-					<div class="thermometer-mercury"></div>
-					<div class="average-line"></div>
-					<div class="temp-display"></div>
-					<div class="trend-arrow-container"></div>
+					<div id="buiten_temp_mercury" class="thermometer-mercury"></div>
+					<div id="buiten_temp_avg" class="average-line"></div>
+					<div id="buiten_temp_display" class="temp-display"></div>
+					<div id="buiten_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				
-				<!-- stamps -->
+				<div class="abs" id="zolder_temp" onclick="location.href='temp.php?zolder=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="zolder_temp_mercury" class="thermometer-mercury"></div>
+					<div id="zolder_temp_avg" class="average-line"></div>
+					<div id="zolder_temp_display" class="temp-display"></div>
+					<div id="zolder_temp_trend" class="trend-arrow-container"></div>
+				</div>
 				<div class="abs stamp" id="tpirliving"></div>
 				<div class="abs stamp" id="tpirkeuken"></div>
 				<div class="abs stamp" id="tpirgarage"></div>
@@ -154,8 +129,6 @@ require '/var/www/authentication.php';
 				<div class="abs stamp" id="tdeuralex"></div>
 				<div class="abs stamp" id="tdeurwc"></div>
 				<div class="abs stamp" id="talexslaapt"></div>
-				
-				<!-- bose -->
 				<div class="abs" id="bose101"></div>
 				<div class="abs" id="bose102"></div>
 				<div class="abs" id="bose103"></div>
@@ -163,8 +136,6 @@ require '/var/www/authentication.php';
 				<div class="abs" id="bose105"></div>
 				<div class="abs" id="bose106"></div>
 				<div class="abs" id="bose107"></div>
-				
-				<!-- dimmers -->
 				<div class="abs z" id="alex" onclick="dimmer('alex')"></div>
 				<div class="abs z" id="eettafel" onclick="dimmer('eettafel')"></div>
 				<div class="abs z" id="bureellinks" onclick="dimmer('bureellinks')"></div>
@@ -177,8 +148,6 @@ require '/var/www/authentication.php';
 				<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
 				<div class="abs z" id="wasbak" onclick="dimmer('wasbak')"></div>
 				<div class="abs z" id="snijplank" onclick="dimmer('snijplank')"></div>
-				
-				<!-- icons -->
 				<div class="abs z1 i48" id="lampkast"></div>
 				<div class="abs z1 i48" id="tuin"></div>
 				<div class="abs z1 i48" id="tuintafel"></div>
@@ -193,8 +162,6 @@ require '/var/www/authentication.php';
 				<div class="abs z1 i48" id="daikin"></div>
 				<div class="abs z1 i48" id="badkamervuur1"></div>
 				<div class="abs z1 i48" id="badkamervuur2"></div>
-				
-				<!-- verbruik -->
 				<div class="abs verbruik">
 					<a href="https://verbruik.egregius.be/kwartierpiek.php">
 						<div id="avg">
@@ -204,31 +171,26 @@ require '/var/www/authentication.php';
 							<canvas id="avgcircle" width="120" height="120"></canvas>
 						</div>
 					</a>
-				
 					<div id="net">
 						<span id="nettitle">Net</span>
 						<span id="netvalue"></span>
 						<canvas id="netcircle" width="120" height="120"></canvas>
 					</div>
-				
 					<div id="total">
 						<span id="totaltitle">Verbruik</span>
 						<span id="totalvalue"></span>
 						<canvas id="totalcircle" width="120" height="120"></canvas>
 					</div>
-				
 					<div id="elec">
 						<span id="electitle">Elec</span>
 						<span id="elecvalue"></span>
 						<canvas id="eleccircle" width="120" height="120"></canvas>
 					</div>
-				
 					<div id="gas">
 						<span id="gastitle">Gas</span>
 						<span id="gasvalue"></span>
 						<canvas id="gascircle" width="120" height="120"></canvas>
 					</div>
-				
 					<div id="bat">
 						<span id="battitle">Bat</span>
 						<span id="batvalue"></span>
@@ -236,32 +198,23 @@ require '/var/www/authentication.php';
 						<canvas id="chargecircle" width="120" height="120"></canvas>
 					</div>
 				</div>
-				
-				<!-- zon -->
 				<div class="abs zonurl" onclick="location.href='https://zon.egregius.be'">
 					<div id="zon">
 						<span id="zontitle">Zon</span>
 						<span id="zonvalue"></span>
 						<canvas id="zoncircle" width="120" height="120"></canvas>
 					</div>
-				
 					<div id="zonv">
 						<span id="zonvtitle">Zon</span>
 						<span id="zonvvalue"></span>
 						<canvas id="zonvcircle" width="120" height="120"></canvas>
 					</div>
 				</div>
-				
 				<div id="playlist" class="abs"></div>
 			</div>
 			<div id="floorplanothers" class="view">
-				<div class="abs floorplan2icon" onclick="floorplan()">
-					<img src="/images/close.png" class="i60" alt="close">
-				</div>
-				
+				<div class="abs floorplan2icon" onclick="setview('floorplan')"><img src="/images/close.png" class="i60" alt="close"></div>
 				<div class="fix z2" id="osirene"></div>
-				
-				<!-- icons -->
 				<div class="abs z1 i48" id="ogrohered"></div>
 				<div class="abs z1 i48" id="okookplaat"></div>
 				<div class="abs z1 i48" id="onas"></div>
@@ -269,117 +222,67 @@ require '/var/www/authentication.php';
 				<div class="abs z1 i48" id="ozetel"></div>
 				<div class="abs z1 i48" id="oboseliving"></div>
 				<div class="abs z1 i48" id="obosekeuken"></div>
-				
-				<!-- yellow rooms -->
 				<div class="abs yellow" id="orbureel"></div>
 				<div class="abs yellow" id="orkeukenl"></div>
 				<div class="abs yellow" id="orkeukenr"></div>
 				<div class="abs yellow" id="orliving"></div>
-				
-				<!-- z0 -->
 				<div class="abs z0" id="ozliving"></div>
 				<div class="abs z0" id="ozlivingb"></div>
 				<div class="abs z0" id="ozkeuken"></div>
 				<div class="abs z0" id="ozinkom"></div>
-				
-				<!-- doors / windows -->
 				<div class="abs" id="oraamliving"></div>
 				<div class="abs" id="oraamkeuken"></div>
 				<div class="abs" id="odeurvoordeur"></div>
 				<div class="abs" id="odeurinkom"></div>
 				<div class="abs" id="odeurgarage"></div>
 				<div class="abs" id="odeurwc"></div>
-				
-				<!-- temp -->
-				<div class="abs" id="obuiten_temp"
-					 onclick="location.href='temp.php?buiten=On'"></div>
-				
-				<!-- misc -->
+				<div class="abs" id="obuiten_temp" onclick="location.href='temp.php?buiten=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="obuiten_temp_mercury" class="thermometer-mercury"></div>
+					<div id="obuiten_temp_avg" class="average-line"></div>
+					<div id="obuiten_temp_display" class="temp-display"></div>
+					<div id="obuiten_temp_trend" class="trend-arrow-container"></div>
+				</div>
 				<div class="abs z1 i48" style="width:70px;" id="oauto"></div>
 				<div class="abs z1 i48" style="width:70px;" id="oregenpomp"></div>
 				<div class="abs z1 i48" style="width:70px;" id="omac"></div>
 				<div class="abs z1 i48" style="width:70px;" id="oipaddock"></div>
-				
-				<!-- links -->
-				<div class="fix z1 center" style="top:880px;left:320px;">
-					<a href="javascript:navigator_Go('log.php');">
-						<img src="/images/log.png" width="40" height="40"><br>Log
-					</a>
+				<div class="abs blackmedia">
+					<div class="fix z1 center" style="top:880px;left:320px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40"><br>Log</a></div>
+					<div class="fix z1 center" style="top:880px;left:400px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40"><br>Cache</a></div>
+					<div class="fix z1 center" style="top:310px;left:100px;width:215px;">
+						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setview('floorplan');" class="btn b1">Google myMaps</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setview('floorplan');" class="btn b1">Garmin GPX</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setview('floorplan');" class="btn b1">Garmin Badges</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setview('floorplan');" class="btn b1">Weegschaal</button><br><br>
+					</div>
+					<div class="fix z1 center" style="top:310px;left:330px;width:150px;">
+						<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');setview('floorplan');" class="btn b1">MQTT&CRON</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','splitwise');setview('floorplan');" class="btn b1">Splitwise</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','keyplan');setview('floorplan');" class="btn b1">Keyplan</button><br><br>
+						<button class="btn b1" id="overlof" onclick="verlof();">Verlof</button>
+					</div>
 				</div>
-				
-				<div class="fix z1 center" style="top:880px;left:400px;">
-					<a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');">
-						<img src="/images/log.png" width="40" height="40"><br>Cache
-					</a>
-				</div>
-				
-				<!-- sync buttons -->
-				<div class="fix z1 center" style="top:310px;left:100px;width:215px;">
-					<button onclick="ajaxcontrol('runsync','runsync','googlemaps');floorplan();" class="btn b1">Google myMaps</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','garmingpx');floorplan();" class="btn b1">Garmin GPX</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','garminbadges');floorplan();" class="btn b1">Garmin Badges</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','weegschaal');floorplan();" class="btn b1">Weegschaal</button><br><br>
-				</div>
-				
-				<div class="fix z1 center" style="top:310px;left:330px;width:150px;">
-					<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');floorplan();" class="btn b1">MQTT&CRON</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','splitwise');floorplan();" class="btn b1">Splitwise</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','keyplan');floorplan();" class="btn b1">Keyplan</button><br><br>
-					<button class="btn b1" id="overlof" onclick="verlof();">Verlof</button>
-				</div>
-				
-				<!-- media sidebar -->
 				<div class="fix" id="omediasidebar">
 					<br><br><br><br>
-					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');">
-						<img src="/images/kodi.png" class="i48"><br>Films
-					</a><br><br><br>
-				
-					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');">
-						<img src="/images/kodi.png" class="i48"><br>Series
-					</a><br><br><br>
-				
-					<a href="javascript:navigator_Go('kodicontrol.php');">
-						<img src="/images/kodi.png" class="i48"><br>Kodi<br>Control
-					</a><br><br><br>
-				
-					<a href="javascript:navigator_Go('kodi.php');">
-						<img src="/images/kodi.png" class="i48"><br>Kodi
-					</a><br><br><br>
-				
-					<div class="fix z1 splitbill">
-						<a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');">
-							<img src="/images/euro.png" width="48" height="48" alt="Euro">
-						</a>
-					</div>
+					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48"><br>Films</a><br><br><br>
+					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48"><br>Series</a><br><br><br>
+					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48"><br>Kodi<br>Control</a><br><br><br>
+					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48"><br>Kodi</a><br><br><br>
+					<div class="fix z1 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a>					</div>
 				</div>
 			</div>
 			<div id="floorplanheating" class="view">
-				<div class="abs floorplan2icon" onclick="floorplan();">
-					<img src="/images/close.png" class="i60" alt="plus">
-				</div>
-				
-				<div class="abs leftbuttons" id="hheatingbutton">
-					<img src="/images/arrowdown.png" class="i60" alt="Open">
-				</div>
-				
+				<div class="abs floorplan2icon" onclick="setview('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
+				<div class="abs leftbuttons" id="hheatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="fix z2" id="hsirene"></div>
-				
-				<div class="abs z1" style="top:343px;left:415px;">
-					<a href="javascript:navigator_Go('floorplan.doorsensors.php');">
-						<img src="/images/close.png" width="72" height="72" alt="Close">
-					</a>
-				</div>
-				
-				<!-- i48 devices -->
+				<div class="abs z1" style="top:343px;left:415px;"><a href="javascript:navigator_Go('floorplan.doorsensors.php');"><img src="/images/close.png" width="72" height="72" alt="Close"></a></div>
 				<div class="abs z1 i48" id="hgrohered"></div>
 				<div class="abs z1 i48" id="hkookplaat"></div>
 				<div class="abs z1 i48" id="hdaikin"></div>
 				<div class="abs z1 i48" id="hbadkamervuur1"></div>
 				<div class="abs z1 i48" id="hbadkamervuur2"></div>
 				<div class="abs z1 i48" id="hwasdroger"></div>
-				
-				<!-- yellow -->
 				<div class="abs yellow" id="hrbureel"></div>
 				<div class="abs yellow" id="hrkeukenl"></div>
 				<div class="abs yellow" id="hrkeukenr"></div>
@@ -388,8 +291,6 @@ require '/var/www/authentication.php';
 				<div class="abs yellow" id="hrkamerr"></div>
 				<div class="abs yellow" id="hrwaskamer"></div>
 				<div class="abs yellow" id="hralex"></div>
-				
-				<!-- z0 -->
 				<div class="abs z0" id="hraamalex"></div>
 				<div class="abs z0" id="hraamwaskamer"></div>
 				<div class="abs z0" id="hraamliving"></div>
@@ -414,17 +315,55 @@ require '/var/www/authentication.php';
 				<div class="abs z0" id="hzhallb"></div>
 				<div class="abs z0" id="halwayson"></div>
 				<div class="abs z0" id="hdaikin_kwh"></div>
-				
-				<!-- temperature links -->
-				<div class="abs" id="hliving_temp" onclick="location.href='temp.php?living=On';"></div>
-				<div class="abs" id="hbadkamer_temp" onclick="location.href='temp.php?badkamer=On';"></div>
-				<div class="abs" id="hkamer_temp" onclick="location.href='temp.php?kamer=On';"></div>
-				<div class="abs" id="hwaskamer_temp" onclick="location.href='temp.php?waskamer=On';"></div>
-				<div class="abs" id="halex_temp" onclick="location.href='temp.php?alex=On';"></div>
-				<div class="abs" id="hzolder_temp" onclick="location.href='temp.php?zolder=On';"></div>
-				<div class="abs" id="hbuiten_temp" onclick="location.href='temp.php?buiten=On';"></div>
-				
-				<!-- rollers -->
+				<div class="abs" id="hliving_temp" onclick="location.href='temp.php?living=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hliving_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hliving_temp_avg" class="average-line"></div>
+					<div id="hliving_temp_display" class="temp-display"></div>
+					<div id="hliving_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="hbadkamer_temp" onclick="location.href='temp.php?badkamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hbadkamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hbadkamer_temp_avg" class="average-line"></div>
+					<div id="hbadkamer_temp_display" class="temp-display"></div>
+					<div id="hbadkamer_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="hkamer_temp" onclick="location.href='temp.php?kamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hkamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hkamer_temp_avg" class="average-line"></div>
+					<div id="hkamer_temp_display" class="temp-display"></div>
+					<div id="hkamer_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="hwaskamer_temp" onclick="location.href='temp.php?waskamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hwaskamer_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hwaskamer_temp_avg" class="average-line"></div>
+					<div id="hwaskamer_temp_display" class="temp-display"></div>
+					<div id="hwaskamer_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="halex_temp" onclick="location.href='temp.php?alex=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="halex_temp_mercury" class="thermometer-mercury"></div>
+					<div id="halex_temp_avg" class="average-line"></div>
+					<div id="halex_temp_display" class="temp-display"></div>
+					<div id="halex_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="hbuiten_temp" onclick="location.href='temp.php?buiten=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hbuiten_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hbuiten_temp_avg" class="average-line"></div>
+					<div id="hbuiten_temp_display" class="temp-display"></div>
+					<div id="hbuiten_temp_trend" class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="hzolder_temp" onclick="location.href='temp.php?zolder=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hzolder_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hzolder_temp_avg" class="average-line"></div>
+					<div id="hzolder_temp_display" class="temp-display"></div>
+					<div id="hzolder_temp_trend" class="trend-arrow-container"></div>
+				</div>
 				<div class="abs z" id="hRrliving" onclick="roller('rliving');"></div>
 				<div class="abs z" id="hRrbureel" onclick="roller('rbureel');"></div>
 				<div class="abs z" id="hRrkeukenl" onclick="roller('rkeukenl');"></div>
@@ -432,8 +371,6 @@ require '/var/www/authentication.php';
 				<div class="abs z" id="hRrkamerr" onclick="roller('rkamerr');"></div>
 				<div class="abs z" id="hRrwaskamer" onclick="roller('rwaskamer');"></div>
 				<div class="abs z" id="hRralex" onclick="roller('ralex');"></div>
-				
-				<!-- stamps -->
 				<div class="abs stamp" id="htpirliving"></div>
 				<div class="abs stamp" id="htpirkeuken"></div>
 				<div class="abs stamp" id="htpirgarage"></div>
@@ -469,12 +406,9 @@ require '/var/www/authentication.php';
 						<tr id="htrheating"></tr>
 					</table>
 				</div>
-				<div class="abs z1 HUM">
-					<a href="javascript:navigator_Go('/hum.php');">HUM</a>
-				</div>
+				<div class="abs z1 HUM"><a href="javascript:navigator_Go('/hum.php');">HUM</a></div>
 			</div>
-			<div id="floorplantemp" class="view">
-			</div>
+			<div id="floorplantemp" class="view"></div>
 		</div>
 		<div class="abs center zon">
 			<img src="images/sunrise.png" alt="sunrise">
