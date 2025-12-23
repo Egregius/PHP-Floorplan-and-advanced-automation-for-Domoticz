@@ -133,7 +133,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					elseif($d[$device]['s']!=$t) store($device,$t);
 					elseif($d[$device]['m']!=$h) storemode($device,$h);
 				} else {
-//					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
+					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
 				}
 			} elseif ($device=='remotealex') {
 				if (isset($status->action)) {
