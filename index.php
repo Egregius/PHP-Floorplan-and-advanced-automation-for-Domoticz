@@ -1,8 +1,31 @@
 <?php
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-createheader('floorplan');
+//createheader('floorplan');
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<title>Floorplan</title>
+		<meta name="viewport" content="width=device-width,initial-scale=<?= $scale ?>,user-scalable=yes,minimal-ui">
+		<meta name="HandheldFriendly" content="true">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="theme-color" content="#000">
+		<link rel="manifest" href="/manifest.json">
+		<link rel="shortcut icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
+		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
+		<script src="/scripts/floorplanjs.js"></script>
+		<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', function() {
+				setView('floorplan')
+			});
+		</script>
+	</head>
 	<body class="floorplan">
 		<div class="abs" id="clock">
 			<a href="#" id="time" onclick="
@@ -294,10 +317,6 @@ createheader('floorplan');
 						</a>
 					</div>
 				</div>
-				
-				<div id="orefresh" class="abs"></div>
-				<div id="oupdated" class="abs"></div>
-
 			</div>
 			<div id="floorplanheating" class="view">
 				<div class="abs floorplan2icon" onclick="floorplan();">
@@ -398,15 +417,11 @@ createheader('floorplan');
 				<div class="abs stamp" id="htdeurwaskamer"></div>
 				<div class="abs stamp" id="htdeuralex"></div>
 				<div class="abs stamp" id="htdeurwc"></div>
-				
-				<!-- setpoints (voorbeeld: living/badkamer/kamer/alex) -->
 				<div class="abs z2 living_set" id="hliving_set" onclick="setpoint('living');"></div>
 				<div class="abs z2 badkamer_set" id="hbadkamer_set" onclick="setpoint('badkamer');"></div>
 				<div class="abs z2 kamer_set" id="hkamer_set" onclick="setpoint('kamer');"></div>
 				<div class="abs z2 alex_set" id="halex_set" onclick="setpoint('alex');"></div>
-				
 				<div class="abs z" id="hluifel" onclick="roller('luifel');"></div>
-				
 				<div class="abs divsetpoints z">
 					<table class="tablesetpoints">
 						<tr>
@@ -418,14 +433,9 @@ createheader('floorplan');
 						<tr id="htrheating"></tr>
 					</table>
 				</div>
-				
 				<div class="abs z1 HUM">
 					<a href="javascript:navigator_Go('/hum.php');">HUM</a>
 				</div>
-				
-				<div id="hrefresh" class="abs"></div>
-				<div id="hupdated" class="abs"></div>
-
 			</div>
 			<div id="floorplantemp" class="view">
 			</div>

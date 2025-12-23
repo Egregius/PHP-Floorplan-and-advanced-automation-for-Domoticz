@@ -18,7 +18,8 @@ $boses=array(
 	106=>'Buiten20',
 	107=>'Keuken',
 );
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<title>Floorplan</title>
@@ -28,14 +29,14 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale='<?= $scale ?>',user-scalable=yes,minimal-ui">
 	<meta name="msapplication-TileColor" content="#000000">
 	<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 	<link rel="icon" type="image/png" href="images/domoticzphp48.png">
 	<link rel="shortcut icon" href="images/domoticzphp48.png">
 	<link rel="apple-touch-startup-image" href="images/domoticzphp450.png">
 	<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=2">
+	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 	<style type="text/css">
 		.btn{height:5vh;margin:3px;}
 		.b1{max-width:98vw;}
@@ -49,25 +50,25 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 		#playlist{font-size:33px;top:4px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
 	</style>
-	<script type="text/javascript" src="/scripts/jQuery.js"></script>
-	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
+	<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 	<script type="text/javascript">
-		function navigator_Go(url){window.location.assign(url)}
-		$(document).ready(function() {
-			ajaxbose('.$bose.')
-			myAjaxMedia=setInterval(function(){ajaxbose('.$bose.')},500)
+		document.addEventListener('DOMContentLoaded', function() {
+			ajaxbose('<?= $bose ?>');  // of gewoon de waarde van $bose als string
+			myAjaxMedia = setInterval(function() {
+				ajaxbose('<?= $bose ?>');
+			}, 1000);
 		});
 	</script>
 </head>
 <body>
 	<div class="fix" id="clock">
-		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\' id="time"></a> 
+		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');" id="time"></a> 
 	</div>
 	<div class="fix" id="playlist">
-		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.boseplaylist().'</a> 
+		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= boseplaylist();?></a> 
 	</div>
 	<div class="fix" id="bose">
-		<a href=\'javascript:navigator_Go("floorplan.bose.php?ip='.$bose.'");\'>'.$boses[$bose].'</a> 
+		<a href="avascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= $boses[$bose] ?></a> 
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
@@ -79,6 +80,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
 			<br>
 			<div id="power"></div>
 	</div>
-	<button class="close-btn" onclick="javascript:navigator_Go(\'floorplan.php\');">✕</button>
+	<button class="close-btn" onclick="javascript:navigator_Go('floorplan.php');">✕</button>
 </body>
 </html>';
