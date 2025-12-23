@@ -14,16 +14,16 @@
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
-		<script src="/scripts/floorplanjs.js"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=2">
+		<script src="/scripts/floorplanjs.js?v=2"></script>
 		<script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock"><a href="#" id="time" onclick="clearTimeout(ajaxTimer);location.reload();return false;">Loading...</a></div>
+		<div class="abs" id="clock"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
 		<div id="placeholder">
 			<div id="floorplan" class="view active">
-				<div class="abs leftbuttons" id="heatingbutton" onclick="floorplanheating()"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
-				<div class="fix floorplan2icon" onclick="floorplanothers()"><img src="/images/plus.png" class="i60" alt="plus"></div>
+				<div class="abs leftbuttons" id="heatingbutton" onclick="setView('floorplanheating')"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
+				<div class="fix floorplan2icon" onclick="setView('floorplanothers')"><img src="/images/plus.png" class="i60" alt="plus"></div>
 				<div class="abs weg" id="weg"></div>
 				<div class="abs z2" id="sirene"></div>
 				<div class="abs yellow" id="rbureel"></div>
@@ -213,7 +213,7 @@
 				<div id="playlist" class="abs"></div>
 			</div>
 			<div id="floorplanothers" class="view">
-				<div class="abs floorplan2icon" onclick="setview('floorplan')"><img src="/images/close.png" class="i60" alt="close"></div>
+				<div class="abs floorplan2icon" onclick="setView('floorplan')"><img src="/images/close.png" class="i60" alt="close"></div>
 				<div class="fix z2" id="osirene"></div>
 				<div class="abs z1 i48" id="ogrohered"></div>
 				<div class="abs z1 i48" id="okookplaat"></div>
@@ -247,19 +247,20 @@
 				<div class="abs z1 i48" style="width:70px;" id="oregenpomp"></div>
 				<div class="abs z1 i48" style="width:70px;" id="omac"></div>
 				<div class="abs z1 i48" style="width:70px;" id="oipaddock"></div>
+				<div class="abs z1 i48" style="width:70px;" id="owater"></div>
 				<div class="abs blackmedia">
 					<div class="fix z1 center" style="top:880px;left:320px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40"><br>Log</a></div>
 					<div class="fix z1 center" style="top:880px;left:400px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40"><br>Cache</a></div>
 					<div class="fix z1 center" style="top:310px;left:100px;width:215px;">
-						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setview('floorplan');" class="btn b1">Google myMaps</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setview('floorplan');" class="btn b1">Garmin GPX</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setview('floorplan');" class="btn b1">Garmin Badges</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setview('floorplan');" class="btn b1">Weegschaal</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b1">Google myMaps</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b1">Garmin GPX</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b1">Garmin Badges</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b1">Weegschaal</button><br><br>
 					</div>
 					<div class="fix z1 center" style="top:310px;left:330px;width:150px;">
-						<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');setview('floorplan');" class="btn b1">MQTT&CRON</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','splitwise');setview('floorplan');" class="btn b1">Splitwise</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','keyplan');setview('floorplan');" class="btn b1">Keyplan</button><br><br>
+						<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');setView('floorplan');" class="btn b1">MQTT&CRON</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','splitwise');setView('floorplan');" class="btn b1">Splitwise</button><br><br>
+						<button onclick="ajaxcontrol('runsync','runsync','keyplan');setView('floorplan');" class="btn b1">Keyplan</button><br><br>
 						<button class="btn b1" id="overlof" onclick="verlof();">Verlof</button>
 					</div>
 				</div>
@@ -273,12 +274,10 @@
 				</div>
 			</div>
 			<div id="floorplanheating" class="view">
-				<div class="abs floorplan2icon" onclick="setview('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
+				<div class="abs floorplan2icon" onclick="setView('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
 				<div class="abs leftbuttons" id="hheatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="fix z2" id="hsirene"></div>
 				<div class="abs z1" style="top:343px;left:415px;"><a href="javascript:navigator_Go('floorplan.doorsensors.php');"><img src="/images/close.png" width="72" height="72" alt="Close"></a></div>
-				<div class="abs z1 i48" id="hgrohered"></div>
-				<div class="abs z1 i48" id="hkookplaat"></div>
 				<div class="abs z1 i48" id="hdaikin"></div>
 				<div class="abs z1 i48" id="hbadkamervuur1"></div>
 				<div class="abs z1 i48" id="hbadkamervuur2"></div>
