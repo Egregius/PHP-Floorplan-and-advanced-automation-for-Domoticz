@@ -349,7 +349,7 @@ function processEnergyData($dbverbruik, $dbzonphp, $force) {
 	}
 	setCache('energy_prevavg', $newavg);
 }
-function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.2,'energy_export'=>1,'gas'=>0.1,'water'=>0.01]) {
+function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.001,'energy_export'=>1,'gas'=>0.1,'water'=>0.01]) {
     $cacheFile = '/dev/shm/cache/verbruik.json';
     $cache = [];
     if (file_exists($cacheFile)) {
