@@ -90,12 +90,48 @@ require '/var/www/authentication.php';
 				<div class="abs z1" id="dysonlader"></div>
 				
 				<!-- temp links -->
-				<div class="abs" id="living_temp" onclick="location.href='temp.php?living=On'"></div>
-				<div class="abs" id="badkamer_temp" onclick="location.href='temp.php?badkamer=On'"></div>
-				<div class="abs" id="kamer_temp" onclick="location.href='temp.php?kamer=On'"></div>
-				<div class="abs" id="waskamer_temp" onclick="location.href='temp.php?waskamer=On'"></div>
-				<div class="abs" id="alex_temp" onclick="location.href='temp.php?alex=On'"></div>
-				<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'"></div>
+				<div class="abs" id="living_temp" onclick="location.href='temp.php?living=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="badkamer_temp" onclick="location.href='temp.php?badkamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="kamer_temp" onclick="location.href='temp.php?kamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="waskamer_temp" onclick="location.href='temp.php?waskamer=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="alex_temp" onclick="location.href='temp.php?alex=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
+				<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div class="thermometer-mercury"></div>
+					<div class="average-line"></div>
+					<div class="temp-display"></div>
+					<div class="trend-arrow-container"></div>
+				</div>
 				
 				<!-- stamps -->
 				<div class="abs stamp" id="tpirliving"></div>
