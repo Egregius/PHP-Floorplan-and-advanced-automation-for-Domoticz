@@ -32,8 +32,6 @@ if (isset($_GET['all'])) {
         $extra = true;
     } elseif ($t < $time - 2) {
         $t -= 5;
-    } elseif ($t < $time - 60) {
-        $t -= 120;
         $en=true;
         $extra = true;
     }
