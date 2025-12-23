@@ -13,7 +13,7 @@ createheader('floorplan');
 				Loading...
 			</a>
 		</div>
-		<div id="placeholder"><div id="placeholder">
+		<div id="placeholder">
 			<div id="floorplan" class="view active">
 				<div class="abs leftbuttons" id="heatingbutton" onclick="floorplanheating()">
 					<img src="/images/arrowdown.png" class="i60" alt="Open">
@@ -194,9 +194,6 @@ createheader('floorplan');
 				</div>
 				
 				<div id="playlist" class="abs"></div>
-				<div id="refresh" class="abs"></div>
-				<div id="updated" class="abs"></div>
-
 			</div>
 			<div id="floorplanothers" class="view">
 				<div class="abs floorplan2icon" onclick="floorplan()">
@@ -259,33 +256,17 @@ createheader('floorplan');
 				
 				<!-- sync buttons -->
 				<div class="fix z1 center" style="top:310px;left:100px;width:215px;">
-					<button onclick="ajaxcontrol('runsync','runsync','googlemaps');floorplan();" class="btn b1">
-						Google myMaps
-					</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','garmingpx');floorplan();" class="btn b1">
-						Garmin GPX
-					</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','garminbadges');floorplan();" class="btn b1">
-						Garmin Badges
-					</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','weegschaal');floorplan();" class="btn b1">
-						Weegschaal
-					</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','googlemaps');floorplan();" class="btn b1">Google myMaps</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','garmingpx');floorplan();" class="btn b1">Garmin GPX</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','garminbadges');floorplan();" class="btn b1">Garmin Badges</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','weegschaal');floorplan();" class="btn b1">Weegschaal</button><br><br>
 				</div>
 				
 				<div class="fix z1 center" style="top:310px;left:330px;width:150px;">
-					<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');floorplan();" class="btn b1">
-						MQTT&CRON
-					</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','splitwise');floorplan();" class="btn b1">
-						Splitwise
-					</button><br><br>
-					<button onclick="ajaxcontrol('runsync','runsync','keyplan');floorplan();" class="btn b1">
-						Keyplan
-					</button><br><br>
-					<button class="btn b1" id="overlof" onclick="verlof();">
-						Verlof
-					</button>
+					<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');floorplan();" class="btn b1">MQTT&CRON</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','splitwise');floorplan();" class="btn b1">Splitwise</button><br><br>
+					<button onclick="ajaxcontrol('runsync','runsync','keyplan');floorplan();" class="btn b1">Keyplan</button><br><br>
+					<button class="btn b1" id="overlof" onclick="verlof();">Verlof</button>
 				</div>
 				
 				<!-- media sidebar -->
@@ -446,7 +427,8 @@ createheader('floorplan');
 				<div id="hupdated" class="abs"></div>
 
 			</div>
-		</div>
+			<div id="floorplantemp" class="view">
+			</div>
 		</div>
 		<div class="abs center zon">
 			<img src="images/sunrise.png" alt="sunrise">
