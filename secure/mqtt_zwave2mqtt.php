@@ -88,6 +88,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
 					} elseif(isset($d[$device]['p'])&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
+						lg($device.' '.__LINE__.' '.$status);
 						$val = (int)$status;
 						$old = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
@@ -96,6 +97,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							return;
 						}
 						$upd_power = false;
+						lg($device.' '.__LINE__.' '.$status);
 						if ($old > 0) {
 							$abs_diff = abs($val - $old);
 							if ($old < 10) {
@@ -112,9 +114,11 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 									$upd_power = true;
 								}
 							}
+							lg($device.' '.__LINE__.' '.$status);
 						}
 						if($upd_power==true) {
-//								lg('🌊 Z2M Power '.$device.'	'.$status);
+							lg($device.' '.__LINE__.' '.$status);
+							lg('🌊 Z2M Power '.$device.'	'.$status);
 							storep($device,$val);
 							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 						}
