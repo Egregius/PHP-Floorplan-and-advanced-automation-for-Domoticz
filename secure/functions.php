@@ -383,7 +383,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0) lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	return $affected ?? 0;
 }
 function storesp($name,$s,$p,$msg='') {

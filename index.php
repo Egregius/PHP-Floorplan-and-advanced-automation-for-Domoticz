@@ -171,27 +171,27 @@
 							<canvas id="avgcircle" width="120" height="120"></canvas>
 						</div>
 					</a>
-					<div id="net">
+					<div id="net" onclick="location.href='https://hwenergy.app/dashboard?dashboard=6310D647-E7B5-4280-8D07-F829707D2D12'">
 						<span id="nettitle">Net</span>
 						<span id="netvalue"></span>
 						<canvas id="netcircle" width="120" height="120"></canvas>
 					</div>
-					<div id="total">
+					<div id="total" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#elec'">
 						<span id="totaltitle">Verbruik</span>
 						<span id="totalvalue"></span>
 						<canvas id="totalcircle" width="120" height="120"></canvas>
 					</div>
-					<div id="elec">
+					<div id="elec" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#elec'">
 						<span id="electitle">Elec</span>
 						<span id="elecvalue"></span>
 						<canvas id="eleccircle" width="120" height="120"></canvas>
 					</div>
-					<div id="gas">
+					<div id="gas" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#gas'">
 						<span id="gastitle">Gas</span>
 						<span id="gasvalue"></span>
 						<canvas id="gascircle" width="120" height="120"></canvas>
 					</div>
-					<div id="bat">
+					<div id="bat" onclick="location.href='https://hwenergy.app/dashboard?dashboard=48AE6FA2-2D9E-486D-8AC5-9E14A2A1D391'">
 						<span id="battitle">Bat</span>
 						<span id="batvalue"></span>
 						<canvas id="batcircle" width="120" height="120"></canvas>
@@ -251,25 +251,20 @@
 				<div class="abs blackmedia">
 					<div class="fix z1 center" style="top:880px;left:320px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40"><br>Log</a></div>
 					<div class="fix z1 center" style="top:880px;left:400px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40"><br>Cache</a></div>
-					<div class="fix z1 center" style="top:310px;left:100px;width:215px;">
-						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b1">Google myMaps</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b1">Garmin GPX</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b1">Garmin Badges</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b1">Weegschaal</button><br><br>
+					<div class="fix z1 center" style="top:300px;left:70px;width:424px;">
+						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b3">Google myMaps</button>
+						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b3">Garmin GPX</button>
+						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b3">Garmin Badges</button>
+						<button class="btn b2" id="overlof" onclick="verlof();">Verlof</button>
+						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b2">Weegschaal</button>
 					</div>
-					<div class="fix z1 center" style="top:310px;left:330px;width:150px;">
-						<button onclick="ajaxcontrol('MQTT','MQTT','MQTT');setView('floorplan');" class="btn b1">MQTT&CRON</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','splitwise');setView('floorplan');" class="btn b1">Splitwise</button><br><br>
-						<button onclick="ajaxcontrol('runsync','runsync','keyplan');setView('floorplan');" class="btn b1">Keyplan</button><br><br>
-						<button class="btn b1" id="overlof" onclick="verlof();">Verlof</button>
-					</div>
+					<div class="abs" id="log"></div>
 				</div>
 				<div class="fix" id="omediasidebar">
-					<br><br><br><br>
-					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48"><br>Films</a><br><br><br>
-					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48"><br>Series</a><br><br><br>
-					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48"><br>Kodi<br>Control</a><br><br><br>
-					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48"><br>Kodi</a><br><br><br>
+					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48"><br>Films</a><br><br>
+					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48"><br>Series</a><br><br>
+					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48"><br>Kodi<br>Control</a><br><br>
+					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48"><br>Kodi</a><br><br>
 					<div class="fix z1 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a>					</div>
 				</div>
 			</div>
