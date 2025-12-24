@@ -337,7 +337,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 						store($device,$status);
 					}
-				} elseif ($d[$device]['d']=='pir') {
+				} elseif ($d[$device]['d']=='p') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
@@ -439,7 +439,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 			$d=fetchdata();
 			$status=json_decode($status);
 			if (isset($d[$device]['d'])) {
-				if ($d[$device]['d']=='pir') {
+				if ($d[$device]['d']=='p') {
 					if($path[2]=='sensor_binary') {
 						if($status==1) $status='On';
 						else $status='Off';

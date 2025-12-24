@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json; charset=ISO-8859-1');
+$log=true;
 $time = $_SERVER['REQUEST_TIME'];
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
 $map = [
@@ -22,24 +23,29 @@ else $type = 'f';
 
 if (isset($_GET['all'])) {
     $t = 0;
+    $delta=86399;
     $en=true;
     $extra = true;
 } else {
     $t = apcu_fetch($id.$type);
     if ($t === false) {
+    	$delta=86398;
         $t = 0;
         $en=true;
         $extra = true;
-    } elseif ($t < $time - 2) {
-			  $delta=$time-$t;
-        $t -= $delta*3;
+    } elseif ($t < $time - 60) {
+		$delta=$time-$t;
+//        $t-=$delta;
         $en=true;
         $extra = true;
-    }
+    } else $delta=$time-$t;
 }
+apcu_store($id.$type, $time, 86400);
+
 if ($t!=$time) {
 	$d = ['t' => $time];
 	$en=true;
+	if($t%60==0)$extra=true;
 }
 if ($type === 'f') {
 	if($en==true){
@@ -72,9 +78,7 @@ if ($type === 'f') {
             }
         }
     }
-
 }
-apcu_store($id.$type, $time, 86400);
 $extralast = apcu_fetch($id.$type.'e');
 if ($extralast === false || $extra === true) {
     $sunrise = apcu_fetch('cache_sunrise');
@@ -131,14 +135,15 @@ $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 header('Content-Type: application/json');
 header('Content-Length: '.strlen($data));
 echo $data;
-$aantal=count($d);
-if($aantal>6) {
-	if($type=='f')$aantal-=6;
-	$msg=$id.'	'.$type.' '.$aantal;
-	if($t==0) $msg.=' ALL';
-	if($extra) $msg.=' + extra';
-	$msg.=' '.$data;
-	lg($msg);
+if($log===true) {
+	unset($d['t'],$d['n'],$d['a'],$d['b'],$d['c'],$d['z']);
+	$aantal=count($d);
+	if($aantal>0) {
+		$msg=$id.'	'.$type.' '.gmdate("H:i:s",$delta).' ('.$aantal.') ';
+		$msg.=implode(',',array_keys($d));
+		if($extra) $msg.=' + extra';
+		lg($msg);
+	}
 }
 function boseplaylist($time) {
     $dag = floor($time / 86400);

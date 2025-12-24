@@ -64,7 +64,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
 						store($device,$status);
 					}
-				} elseif ($d[$device]['d']=='pir') {
+				} elseif ($d[$device]['d']=='p') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
 					if ($d[$device]['s']!=$status) {
