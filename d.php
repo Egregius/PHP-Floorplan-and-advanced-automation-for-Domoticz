@@ -31,7 +31,8 @@ if (isset($_GET['all'])) {
         $en=true;
         $extra = true;
     } elseif ($t < $time - 2) {
-        $t -= 5;
+			  $delta=$time-$t;
+        $t -= $delta*3;
         $en=true;
         $extra = true;
     }
