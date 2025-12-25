@@ -33,7 +33,7 @@ if (isset($_GET['all'])) {
         $t = 0;
         $en=true;
         $extra = true;
-    } elseif ($t < $time - 60) {
+    } elseif ($t < $time - 59) {
 		$delta=$time-$t;
         $t-=$delta;
         $en=true;
@@ -47,8 +47,8 @@ if ($t!=$time) {
 	$en=true;
 	if($t%60==0){
 		$extra=true;
-		$t-=60;
-		$delta+=60;
+		$t-=59;
+		$delta+=59;
 	}
 }
 if ($type === 'f') {
@@ -168,13 +168,20 @@ function getCache(string $key, $default = false) {
     return $data === false ? $default : $data;
 }
 function lg($msg) {
-	$fp = fopen('/temp/floorplan-access.log', "a+");
-	$time = microtime(true);
-	$dFormat = "d-m H:i:s";
-	$mSecs = $time - floor($time);
-	$mSecs = substr(number_format($mSecs, 3), 1);
-	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-	fclose($fp);
+    $logFile = '/temp/floorplan-access.log';
+    $fp = fopen($logFile, 'a');
+    if ($fp === false) {
+        error_log("Failed to open log file");
+        return;
+    }
+    if (flock($fp, LOCK_EX)) {
+        $now = microtime(true);
+        $micro = sprintf("%03d", ($now - floor($now)) * 1000);
+        $timestamp = date('d-m H:i:s', (int)$now) . '.' . $micro;
+        fwrite($fp, "$timestamp $msg\n");
+        flock($fp, LOCK_UN);
+    }
+    fclose($fp);
 }
 class Database {
     private static ?PDO $instance = null;
