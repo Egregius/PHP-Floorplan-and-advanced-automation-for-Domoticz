@@ -35,7 +35,7 @@ if (isset($_GET['all'])) {
         $extra = true;
     } elseif ($t < $time - 59) {
 		$delta=$time-$t;
-        $t-=$delta;
+        $t=0;
         $en=true;
         $extra = true;
     } else $delta=$time-$t;
