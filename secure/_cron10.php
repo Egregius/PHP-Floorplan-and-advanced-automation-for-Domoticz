@@ -32,7 +32,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-	if (1==1) { // Lichten aan laten bij feestjes
+	if (1==2) { // Lichten aan laten bij feestjes
 		$i=29;
 		if ($d['pirkeuken']['s']=='Off'&&$d['wasbak']['s']>0&&$d['wasbak']['s']<=25&&past('wasbak')>$i) {
 			foreach (array(8,7,6,5,4,3,2,1) as $i) {

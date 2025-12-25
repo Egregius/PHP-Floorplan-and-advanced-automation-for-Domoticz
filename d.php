@@ -35,7 +35,7 @@ if (isset($_GET['all'])) {
         $extra = true;
     } elseif ($t < $time - 60) {
 		$delta=$time-$t;
-//        $t-=$delta;
+        $t-=$delta;
         $en=true;
         $extra = true;
     } else $delta=$time-$t;
@@ -45,7 +45,11 @@ apcu_store($id.$type, $time, 86400);
 if ($t!=$time) {
 	$d = ['t' => $time];
 	$en=true;
-	if($t%60==0)$extra=true;
+	if($t%60==0){
+		$extra=true;
+		$t-=60;
+		$delta+=60;
+	}
 }
 if ($type === 'f') {
 	if($en==true){
