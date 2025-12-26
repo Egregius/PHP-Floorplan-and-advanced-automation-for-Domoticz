@@ -465,48 +465,45 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						}
 					}
 				} elseif ($d[$device]['d']=='hsw') {
-					if(isset($d[$device]['p'])) {
-						if($path[2]=='switch_binary'&&$path[4]=='currentValue') {
-							if ($status==1) $status='On';
-							else $status='Off';
-							if ($d[$device]['s']!=$status) {
+					if($path[2]=='switch_binary'&&$path[4]=='currentValue') {
+						if ($status==1) $status='On';
+						else $status='Off';
+						if ($d[$device]['s']!=$status) {
 //								lg('🌊 Z2M [HSW]	'.$device.'	'.$status);
-								store($device, $status);
-								include '/var/www/html/secure/pass2php/'.$device.'.php';
+							store($device, $status);
+							include '/var/www/html/secure/pass2php/'.$device.'.php';
+						}
+					} elseif(isset($d[$device]['p'])&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
+						$val = (int)$status;
+						$old = (int)($d[$device]['p'] ?? 0);
+						$oldt = (int)($d[$device]['t'] ?? 0);
+						if ($oldt === 0) {
+							store($device, $val, '', 1);
+							return;
+						}
+						$upd_power = false;
+						$abs_diff = abs($val - $old);
+						if ($old < 10) {
+							if ($abs_diff >= 2) {
+								$upd_power = true;
 							}
-						} elseif($path[2]=='sensor_multilevel'&&$path[4]=='Power') {
-							$val = (int)$status;
-							$old = (int)($d[$device]['p'] ?? 0);
-							$oldt = (int)($d[$device]['t'] ?? 0);
-							if ($oldt === 0) {
-								store($device, $val, '', 1);
-								return;
+						} elseif ($old < 100) {
+							if ($abs_diff >= 10) {
+								$upd_power = true;
 							}
-							$upd_power = false;
-							if ($old > 0) {
-								$abs_diff = abs($val - $old);
-								if ($old < 10) {
-									if ($abs_diff >= 2) {
-										$upd_power = true;
-									}
-								} elseif ($old < 100) {
-									if ($abs_diff >= 10) {
-										$upd_power = true;
-									}
-								} else {
-									$rel_diff = abs(($val - $old) / $old);
-									if ($rel_diff >= 0.40 && $abs_diff >= 50) {
-										$upd_power = true;
-									}
-								}
+						} else {
+							$rel_diff = abs(($val - $old) / $old);
+							if ($rel_diff >= 0.40 && $abs_diff >= 50) {
+								$upd_power = true;
 							}
-							if($upd_power==true) {
-//								lg('🌊 Z2M Power '.$device.'	'.$status);
-								storep($device,$val);
-								if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
-							}
-						} else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
-					}// else lg(print_r($path,true).'	'.print_r($status,true));
+						}
+						if($upd_power==true) {
+//							lg($device.' '.__LINE__.' '.$status);
+//							lg('🌊 Z2M Power '.$device.'	'.$status);
+							storep($device,$val);
+							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
+						}
+					} //else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} elseif ($d[$device]['d']=='d') {
 					if($path[2]=='switch_multilevel') {
 						if($status>40&&$status<100)$status+=1;
@@ -579,7 +576,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(2000);
+	usleep(5000);
 }
 
 $mqtt->disconnect();

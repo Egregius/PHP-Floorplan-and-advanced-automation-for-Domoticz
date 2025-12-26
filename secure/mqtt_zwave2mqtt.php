@@ -112,12 +112,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							}
 						}
 						if($upd_power==true) {
-							lg($device.' '.__LINE__.' '.$status);
-							lg('🌊 Z2M Power '.$device.'	'.$status);
+//							lg($device.' '.__LINE__.' '.$status);
+//							lg('🌊 Z2M Power '.$device.'	'.$status);
 							storep($device,$val);
 							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 						}
-					} else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
+					} //else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} elseif ($d[$device]['d']=='d') {
 					if($path[2]=='switch_multilevel') {
 						if($status>40&&$status<100)$status+=1;
@@ -189,7 +189,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 },MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(4000);
+	usleep(5000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
