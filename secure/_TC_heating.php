@@ -21,7 +21,7 @@ if ($d['weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setkamer=12;
+			$Setkamer=6;
 		}
 	} else $Setkamer=$d['kamer_set']['s'];
 	if ($d['alex_set']['m']==0) {
@@ -41,7 +41,7 @@ if ($d['weg']['s']<=2&&$d['heating']['s']>=1) {
 					)
 				)
 		) {
-			$Setalex=12;
+			$Setalex=6;
 		}
 	} else $Setalex=$d['alex_set']['s'];
 }
@@ -151,9 +151,9 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$tempRise    = $living - $startTemp;
 		if ($tempRise>0.5) {
 			$buitenTempStart = $d['living_start_temp']['i'];
-			$minutesUsed = round(past('living_start_temp') / 60, 1);
-			$minPerDeg   = ceil($minutesUsed / $tempRise);
-			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+			$minutesUsed = past('living_start_temp') / 60;
+			$minPerDeg   = $minutesUsed / $tempRise;
+			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 			$leadDataLiving[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
 			$avgMinPerDeg = floor(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]));

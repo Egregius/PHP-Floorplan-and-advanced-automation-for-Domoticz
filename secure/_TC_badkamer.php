@@ -83,9 +83,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1) {
 			$buitenTempStart = $d['badkamer_start_temp']['i'];
-			$minutesUsed = round(past('badkamer_start_temp') / 60, 1);
-			$minPerDeg = ceil($minutesUsed / $tempRise);
-			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+			$minutesUsed = past('badkamer_start_temp') / 60;
+			$minPerDeg = $minutesUsed / $tempRise;
+			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -7);
 			$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
