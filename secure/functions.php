@@ -190,8 +190,8 @@ function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	global $db,$time;
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		if (isset($row['t'])) $last=$row['t'];
+	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
+		if (isset($row[0])) $last=$row[0];
 	}
 	if ($last < $time-$ttl) {
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");

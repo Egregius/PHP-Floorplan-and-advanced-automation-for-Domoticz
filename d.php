@@ -20,7 +20,7 @@ $d=[];
 if (isset($_GET['o'])) $type = 'o';
 elseif (isset($_GET['h'])) $type = 'h';
 else $type = 'f';
-
+$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 if (isset($_GET['all'])) {
     $t = 0;
     $delta=86399;
@@ -33,14 +33,16 @@ if (isset($_GET['all'])) {
         $t = 0;
         $en=true;
         $extra = true;
-    } elseif ($t < $time - 59) {
-		$delta=$time-$t;
-        $t=0;
+    } elseif ($t < $time - 1) {
+    	lg(__LINE__);
+		$delta=($time-$t)*5;
+		$t-=$delta;
         $en=true;
         $extra = true;
     } else $delta=$time-$t;
+    $sql.=" AND t >= $t";
 }
-apcu_store($id.$type, $time, 86400);
+apcu_store($id.$type, $time, 14400);
 
 if ($t!=$time) {
 	$d = ['t' => $time];
@@ -106,8 +108,8 @@ if ($extralast === false || $extra === true) {
     apcu_store($id.$type.'e', $time, 14400);
 }
 $db = Database::getInstance();
-$stmt = $db->prepare("SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= :t");
-$stmt->execute([':t' => $t]);
+$stmt = $db->query($sql);
+//$stmt->execute([':t' => $t]);
 while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
     $n = $row[0];
     $d[$n]['s'] = $row[1];

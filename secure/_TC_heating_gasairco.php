@@ -68,6 +68,7 @@ if ($d['daikin']['m']==1) {
 				if ($preheating==true) {$maxpow=40;$spmode=-1;}
 				if ($k=='living') {
 					if($prevSet==0) $set+=-0.5;
+					else $set+=5;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $fan='B';
 				} elseif ($k=='kamer') {
 					$set+=-1.5;
@@ -77,7 +78,7 @@ if ($d['daikin']['m']==1) {
 					if ($d['alexslaapt']['s']==1) $fan='B';
 				}
 				$set=ceil($set * 2) / 2;
-				if ($set>30) $set=30;
+				if ($set>28) $set=28;
 				elseif ($set<10) $set=10;
 				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode) {
 					if(daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
