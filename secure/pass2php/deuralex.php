@@ -17,7 +17,7 @@ if ($status=='Open') {
 	}
 	if ($d['alexslaapt']['s']==1) store('alexslaapt', 0);
 } else {
-	if ($d['alexslaapt']['s']==0&&$d['alex']['s']==0&&($d['time']>=strtotime('19:30')||$d['time']<strtotime('6:00'))) store('alexslaapt', 1);
+	if ($d['alexslaapt']['s']==0&&$d['alex']['s']==0&&($d['time']>=strtotime('19:30')||$d['time']<strtotime('7:00'))) store('alexslaapt', 1);
 }
 if ($d['weg']['s']>1) {
 	if ($status=='Open') sirene('Deur Alex open');
