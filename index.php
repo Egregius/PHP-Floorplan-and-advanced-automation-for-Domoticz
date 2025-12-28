@@ -226,7 +226,7 @@
 				<div class="abs yellow" id="orkeukenl"></div>
 				<div class="abs yellow" id="orkeukenr"></div>
 				<div class="abs yellow" id="orliving"></div>
-				<div class="abs z0" id="ozliving"></div>
+				<div class="abs z0" id="ozlivinga"></div>
 				<div class="abs z0" id="ozlivingb"></div>
 				<div class="abs z0" id="ozkeuken"></div>
 				<div class="abs z0" id="ozinkom"></div>
@@ -300,7 +300,7 @@
 				<div class="abs z0" id="hdeurkamer"></div>
 				<div class="abs z0" id="hdeurwaskamer"></div>
 				<div class="abs z0" id="hdeuralex"></div>
-				<div class="abs z0" id="hzliving"></div>
+				<div class="abs z0" id="hzlivinga"></div>
 				<div class="abs z0" id="hzlivingb"></div>
 				<div class="abs z0" id="hzkeuken"></div>
 				<div class="abs z0" id="hzinkom"></div>
