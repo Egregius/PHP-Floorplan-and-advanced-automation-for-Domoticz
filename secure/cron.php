@@ -24,7 +24,7 @@ foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
 if ($d['weg']['s']>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off',null,true);
 }
-$last10 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
+$last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 if (getCache('sunrise')==false) {
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
@@ -55,6 +55,8 @@ while (true) {
 		$last10 = $time;
 		$d = fetchdata();
 		include '_cron10.php';
+	}
+	if ($time % 20 === 0 && $time !== $last20) {
 		$user = 'HEATING';
 		if ($d['heating']['s'] == -2) include '_TC_cooling_airco.php';
 		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
