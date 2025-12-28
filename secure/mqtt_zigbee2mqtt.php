@@ -67,6 +67,13 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} elseif ($d[$device]['d']=='p') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
+					if ($device=='pirgarage') {
+						if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
+					} elseif ($device=='pirgarage2') {
+						if ($d[$device]['s']!=$status) store($device,$status);
+						if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
+						$device='pirgarage';
+					}
 					if ($d[$device]['s']!=$status) {
 //						lg('ⓩ PIR '.$device.' '.$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -141,7 +148,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 //						lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
-			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
+			}// else lg('ⓩ ZIGBEE [!d!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());

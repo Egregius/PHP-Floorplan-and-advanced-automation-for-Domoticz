@@ -7,11 +7,10 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 				if ($_GET['event']=='enter') {
 					$user=$_GET['user'];
 					$db = Database::getInstance();
-					$stmt=$db->query("SELECT n,s,t,dt FROM devices WHERE n IN ('weg','voordeur','dag');");
-					while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-						$d[$row['n']]['s']=$row['s'];
-						$d[$row['n']]['t']=$row['t'];
-						if(!is_null($row['dt']))$d[$row['n']]['dt']=$row['dt'];
+					$stmt=$db->query("SELECT n,s,t FROM devices WHERE n IN ('weg','voordeur','dag');");
+					while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
+						$d[$row[0]]['s']=$row[1];
+						$d[$row[0]]['t']=$row[2];
 					}
 //					telegram(print_r($d,true).PHP_EOL.past('weg'));
 					if (past('weg')>120) {
@@ -27,7 +26,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 							huisthuis('Huis thuis door '.$user);
 							if ($d['dag']['s']>0) {
 								telegram('Domoticz owntracks.php:'.__LINE__);
-								sleep(2);
+								sleep(5);
 								sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 							}
 						} elseif($d['weg']['s']==0) {

@@ -59,6 +59,12 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($status=='On') $status='Open';
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);
+			} elseif ($device=='pirgarage') {
+				if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
+			} elseif ($device=='pirgarage2') {
+				store($device, $status);
+				if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
+				$device='pirgarage';
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
 //				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
@@ -341,6 +347,13 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} elseif ($d[$device]['d']=='p') {
 					if ($status->occupancy==1) $status='On';
 					else $status='Off';
+					if ($device=='pirgarage') {
+						if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
+					} elseif ($device=='pirgarage2') {
+						if ($d[$device]['s']!=$status) store($device,$status);
+						if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
+						$device='pirgarage';
+					}
 					if ($d[$device]['s']!=$status) {
 //						lg('ⓩ PIR '.$device.' '.$status);
 						include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -407,7 +420,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					elseif($d[$device]['s']!=$t) store($device,$t);
 					elseif($d[$device]['m']!=$h) storemode($device,$h);
 				} else {
-//					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
+					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
 				}
 			} elseif ($device=='remotealex') {
 				if (isset($status->action)) {

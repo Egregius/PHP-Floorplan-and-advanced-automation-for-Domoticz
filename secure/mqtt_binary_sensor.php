@@ -59,6 +59,12 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($status=='On') $status='Open';
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);
+			} elseif ($device=='pirgarage') {
+				if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
+			} elseif ($device=='pirgarage2') {
+				if($d[$device]['s']!=$status) store($device, $status);
+				if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
+				$device='pirgarage';
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
 //				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
