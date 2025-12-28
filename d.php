@@ -35,14 +35,14 @@ if (isset($_GET['all'])) {
         $extra = true;
     } elseif ($t < $time - 1) {
     	lg(__LINE__);
-		$delta=($time-$t)*5;
+		$delta=($time-$t)*10;
 		$t-=$delta;
         $en=true;
         $extra = true;
     } else $delta=$time-$t;
     $sql.=" AND t >= $t";
 }
-apcu_store($id.$type, $time, 14400);
+apcu_store($id.$type, $time, 3600);
 
 if ($t!=$time) {
 	$d = ['t' => $time];
