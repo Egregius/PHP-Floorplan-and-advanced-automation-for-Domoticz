@@ -358,6 +358,13 @@
 					<div id="hzolder_temp_display" class="temp-display"></div>
 					<div id="hzolder_temp_trend" class="trend-arrow-container"></div>
 				</div>
+				<div class="abs" id="hgarage_temp" onclick="location.href='temp.php?garage=On'">
+					<img src="/images/temp.png" class="thermometer-bg">
+					<div id="hgarage_temp_mercury" class="thermometer-mercury"></div>
+					<div id="hgarage_temp_avg" class="average-line"></div>
+					<div id="hgarage_temp_display" class="temp-display"></div>
+					<div id="hgarage_temp_trend" class="trend-arrow-container"></div>
+				</div>
 				<div class="abs z" id="hRrliving" onclick="roller('rliving');"></div>
 				<div class="abs z" id="hRrbureel" onclick="roller('rbureel');"></div>
 				<div class="abs z" id="hRrkeukenl" onclick="roller('rkeukenl');"></div>
