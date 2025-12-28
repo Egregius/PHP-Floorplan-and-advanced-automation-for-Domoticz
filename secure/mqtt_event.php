@@ -80,7 +80,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(4000);
+	usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

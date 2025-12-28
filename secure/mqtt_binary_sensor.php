@@ -78,7 +78,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(4000);
+	usleep(100000);
 }
 
 $mqtt->disconnect();

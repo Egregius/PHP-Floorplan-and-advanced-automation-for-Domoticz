@@ -154,7 +154,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 },MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(4000);
+	usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

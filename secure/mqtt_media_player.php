@@ -39,18 +39,19 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
-		$time=time();
-		$d['time']=$time;
-		$d=fetchdata();
-		$d['lastfetch']=$time;
-		$status = ucfirst(strtolower($status));
-		if ($d[$device]['s']!=$status) {
-//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
-			include '/var/www/html/secure/pass2php/'.$device.'.php';
-			store($device,$status,'',1);
+		if (isset($validDevices[$device])) {
+			$time=time();
+			$d['time']=$time;
+			$d=fetchdata();
+			$status = ucfirst(strtolower($status));
+			if ($d[$device]['s']!=$status) {
+	//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
+				include '/var/www/html/secure/pass2php/'.$device.'.php';
+				store($device,$status,'',1);
+			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -64,9 +65,9 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if ($device=='nvidia') {
-			$d['time']=microtime(true);
-			$d=fetchdata($d['lastfetch'],'mqtt_media_player:'.__LINE__);
-			$d['lastfetch']=$d['time'] - 300;
+			$time=time();
+			$d['time']=$time;
+			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if ($d[$device]['m']!=$status) {
 				storemode($device,$status,'',1);
@@ -79,7 +80,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(50000);
+	usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
