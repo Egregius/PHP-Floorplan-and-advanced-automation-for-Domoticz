@@ -21,7 +21,36 @@ if (isset($_GET['o'])) $type = 'o';
 elseif (isset($_GET['h'])) $type = 'h';
 else $type = 'f';
 $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
-if (isset($_GET['all'])) {
+
+
+if (isset($_GET['f'])) {
+	$type='f';
+	if($_GET['f']>0) {
+		$t=$_GET['f'];
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
+	} else {
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+		$en=true;
+		$extra=true;
+		$d = ['t' => $time];
+	}
+} elseif (isset($_GET['h'])) {
+	$type='h';
+	if($_GET['h']>0) {
+		$t=$_GET['h'];
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
+	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+} elseif (isset($_GET['o'])) {
+	$type='o';
+	if($_GET['o']>0) {
+		$t=$_GET['o'];
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
+	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+}
+
+
+
+/*if (isset($_GET['all'])) {
     $t = 0;
     $delta=86399;
     $en=true;
@@ -41,18 +70,10 @@ if (isset($_GET['all'])) {
         $extra = true;
     } else $delta=$time-$t;
     $sql.=" AND t >= $t";
-}
-apcu_store($id.$type, $time, 3600);
+}*/
 
-if ($t!=$time) {
-	$d = ['t' => $time];
-	$en=true;
-	if($t%60==0){
-		$extra=true;
-		$t-=59;
-		$delta+=59;
-	}
-}
+$last=apcu_fetch($id.$type);
+apcu_store($id.$type, $time, 900);
 if ($type === 'f') {
 	if($en==true){
 		$en = getCache('en');
@@ -67,7 +88,8 @@ if ($type === 'f') {
 			}
 		}
 	}
-	if ($extra === true) {
+	
+	if($last===false||$extra===true||$last<$time-900) {
         $vandaag = getCache('energy_vandaag');
         if ($vandaag) {
             $vandaag = json_decode($vandaag);
@@ -83,30 +105,27 @@ if ($type === 'f') {
                 $d['alwayson'] = $vandaag->alwayson;
             }
         }
+        $sunrise = apcu_fetch('cache_sunrise');
+		if ($sunrise === false) {
+			$sunrise = getCache('sunrise');
+			if ($sunrise) {
+				apcu_store('cache_sunrise', $sunrise, 14400);
+			}
+		}
+		if ($sunrise) {
+			$sunrise = json_decode($sunrise, true);
+			if ($sunrise) {
+				$d['Tstart'] = $sunrise['CivTwilightStart'];
+				$d['Srise'] = $sunrise['Sunrise'];
+				$d['Sset'] = $sunrise['Sunset'];
+				$d['Tend'] = $sunrise['CivTwilightEnd'];
+				$d['pl'] = boseplaylist($time);
+			}
+		}
+		$d['b_hist'] = json_decode(getCache('b_hist'), true);
     }
 }
-$extralast = apcu_fetch($id.$type.'e');
-if ($extralast === false || $extra === true) {
-    $sunrise = apcu_fetch('cache_sunrise');
-    if ($sunrise === false) {
-        $sunrise = getCache('sunrise');
-        if ($sunrise) {
-            apcu_store('cache_sunrise', $sunrise, 14400);
-        }
-    }
-    if ($sunrise) {
-        $sunrise = json_decode($sunrise, true);
-        if ($sunrise) {
-            $d['Tstart'] = $sunrise['CivTwilightStart'];
-            $d['Srise'] = $sunrise['Sunrise'];
-            $d['Sset'] = $sunrise['Sunset'];
-            $d['Tend'] = $sunrise['CivTwilightEnd'];
-            $d['pl'] = boseplaylist($time);
-        }
-    }
-    $d['b_hist'] = json_decode(getCache('b_hist'), true);
-    apcu_store($id.$type.'e', $time, 14400);
-}
+if ($last!=$time) $d = ['t' => $time];
 $db = Database::getInstance();
 $stmt = $db->query($sql);
 //$stmt->execute([':t' => $t]);
@@ -145,7 +164,7 @@ if($log===true) {
 	unset($d['t'],$d['n'],$d['a'],$d['b'],$d['c'],$d['z']);
 	$aantal=count($d);
 	if($aantal>0) {
-		$msg=$id.'	'.$type.' '.gmdate("H:i:s",$delta).' ('.$aantal.') ';
+		$msg=$id.'	'.$type.' ('.$aantal.') ';
 		$msg.=implode(',',array_keys($d));
 		if($extra) $msg.=' + extra';
 		lg($msg);

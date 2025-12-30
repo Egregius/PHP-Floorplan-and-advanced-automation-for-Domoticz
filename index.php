@@ -95,13 +95,6 @@
 					<div id="alex_temp_display" class="temp-display"></div>
 					<div id="alex_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
-					<img src="/images/temp.png" class="thermometer-bg">
-					<div id="buiten_temp_mercury" class="thermometer-mercury"></div>
-					<div id="buiten_temp_avg" class="average-line"></div>
-					<div id="buiten_temp_display" class="temp-display"></div>
-					<div id="buiten_temp_trend" class="trend-arrow-container"></div>
-				</div>
 				<div class="abs" id="zolder_temp" onclick="location.href='temp.php?zolder=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="zolder_temp_mercury" class="thermometer-mercury"></div>
@@ -236,13 +229,6 @@
 				<div class="abs" id="odeurinkom"></div>
 				<div class="abs" id="odeurgarage"></div>
 				<div class="abs" id="odeurwc"></div>
-				<div class="abs" id="obuiten_temp" onclick="location.href='temp.php?buiten=On'">
-					<img src="/images/temp.png" class="thermometer-bg">
-					<div id="obuiten_temp_mercury" class="thermometer-mercury"></div>
-					<div id="obuiten_temp_avg" class="average-line"></div>
-					<div id="obuiten_temp_display" class="temp-display"></div>
-					<div id="obuiten_temp_trend" class="trend-arrow-container"></div>
-				</div>
 				<div class="abs z1 i48" style="width:70px;" id="oauto"></div>
 				<div class="abs z1 i48" style="width:70px;" id="oregenpomp"></div>
 				<div class="abs z1 i48" style="width:70px;" id="omac"></div>
@@ -344,13 +330,7 @@
 					<div id="halex_temp_display" class="temp-display"></div>
 					<div id="halex_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="hbuiten_temp" onclick="location.href='temp.php?buiten=On'">
-					<img src="/images/temp.png" class="thermometer-bg">
-					<div id="hbuiten_temp_mercury" class="thermometer-mercury"></div>
-					<div id="hbuiten_temp_avg" class="average-line"></div>
-					<div id="hbuiten_temp_display" class="temp-display"></div>
-					<div id="hbuiten_temp_trend" class="trend-arrow-container"></div>
-				</div>
+				
 				<div class="abs" id="hzolder_temp" onclick="location.href='temp.php?zolder=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hzolder_temp_mercury" class="thermometer-mercury"></div>
@@ -420,6 +400,13 @@
 			<a href=\'javascript:navigator_Go("https://www.buienradar.be/weer/beitem/be/2802384/14daagse");\'><img src="" id="icon"></a>
 			<span id="maxtemp"></span>
 			<span id="mintemp"></span><br>
+			<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
+				<img src="/images/temp.png" class="thermometer-bg">
+				<div id="buiten_temp_mercury" class="thermometer-mercury"></div>
+				<div id="buiten_temp_avg" class="average-line"></div>
+				<div id="buiten_temp_display" class="temp-display"></div>
+				<div id="buiten_temp_trend" class="trend-arrow-container"></div>
+			</div>
 		</div>
 </body>
 </html>
