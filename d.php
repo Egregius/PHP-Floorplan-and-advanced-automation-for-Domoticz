@@ -17,12 +17,6 @@ $id = $map[$ip] ?? $ip;
 $extra = false;
 $en=false;
 $d=[];
-if (isset($_GET['o'])) $type = 'o';
-elseif (isset($_GET['h'])) $type = 'h';
-else $type = 'f';
-$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
-
-
 if (isset($_GET['f'])) {
 	$type='f';
 	if($_GET['f']>0) {
@@ -48,30 +42,6 @@ if (isset($_GET['f'])) {
 	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 }
 
-
-
-/*if (isset($_GET['all'])) {
-    $t = 0;
-    $delta=86399;
-    $en=true;
-    $extra = true;
-} else {
-    $t = apcu_fetch($id.$type);
-    if ($t === false) {
-    	$delta=86398;
-        $t = 0;
-        $en=true;
-        $extra = true;
-    } elseif ($t < $time - 1) {
-    	lg(__LINE__);
-		$delta=($time-$t)*10;
-		$t-=$delta;
-        $en=true;
-        $extra = true;
-    } else $delta=$time-$t;
-    $sql.=" AND t >= $t";
-}*/
-
 $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 900);
 if ($last!=$time) $d = ['t' => $time];
@@ -89,8 +59,9 @@ if ($type === 'f') {
 			}
 		}
 	}
-	
-	if($last===false||$extra===true||$last<$time-900) {
+	$lastenergy_vandaag=apcu_fetch($id.$type.'energy_vandaag');
+	$lastupd=filemtime('/dev/shm/cache/energy_vandaag.txt');
+	if($last===false||$extra===true||$lastenergy_vandaag<$lastupd) {
         $vandaag = getCache('energy_vandaag');
         if ($vandaag) {
             $vandaag = json_decode($vandaag);
@@ -104,16 +75,18 @@ if ($type === 'f') {
                 $d['zonavg'] = $vandaag->zonavg;
                 $d['zonref'] = $vandaag->zonref;
                 $d['alwayson'] = $vandaag->alwayson;
+                apcu_store($id.$type.'energy_vandaag',$lastupd);
             }
         }
+    }
+	if($last===false||$extra===true||$last<$time-900) {
         $sunrise = apcu_fetch('cache_sunrise');
 		if ($sunrise === false) {
 			$sunrise = getCache('sunrise');
 			if ($sunrise) {
 				apcu_store('cache_sunrise', $sunrise, 14400);
 			}
-		}
-		if ($sunrise) {
+		} else {
 			$sunrise = json_decode($sunrise, true);
 			if ($sunrise) {
 				$d['Tstart'] = $sunrise['CivTwilightStart'];

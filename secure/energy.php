@@ -121,7 +121,7 @@ lg("🟢 energy.php started");
 // Main loop
 while (true) {
     $startTime = time();
-    $force = in_array('--force', $argv);
+    $force = in_array('--force', $argv)??true;
     
     // Check if we need to force update at 23:59
     $currentMin = date('i');
@@ -346,6 +346,7 @@ function processEnergyData($dbverbruik, $dbzonphp, $force) {
 		echo $data . PHP_EOL;
 		setCache('energy_vandaag', $data);
 		setCache('energy_lastupdate', $time);
+		$force=false;
 	}
 	setCache('energy_prevavg', $newavg);
 }

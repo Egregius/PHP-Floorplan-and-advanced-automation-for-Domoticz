@@ -205,7 +205,7 @@ $sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badk
 $result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
 foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
-	$diff=round($d[$i.'_temp']['s']-$avg[$i],2);
+	$diff=round($d[$i.'_temp']['s']-$avg[$i],1);
 	if (!isset($d[$i.'_temp']['i'])||$d[$i.'_temp']['i']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 //	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
 }
