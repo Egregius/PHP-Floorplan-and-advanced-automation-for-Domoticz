@@ -258,7 +258,7 @@ function sw($name,$action='Toggle',$msg=null) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
-				usleep(200000);
+	//			usleep(200000);
 			}
 		}
 	} else {
