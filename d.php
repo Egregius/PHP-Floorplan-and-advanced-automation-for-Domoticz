@@ -43,7 +43,7 @@ if (isset($_GET['f'])) {
 }
 
 $last=apcu_fetch($id.$type);
-apcu_store($id.$type, $time, 900);
+apcu_store($id.$type, $time, 7200);
 if ($last!=$time) $d = ['t' => $time];
 if ($type === 'f') {
 	if($en==true||$last!=$time){

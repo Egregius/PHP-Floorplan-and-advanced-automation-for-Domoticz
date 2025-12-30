@@ -117,13 +117,10 @@ class Database {
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
 lg("🟢 energy.php started");
+$force=true;
 
-// Main loop
 while (true) {
     $startTime = time();
-    $force = in_array('--force', $argv)??true;
-    
-    // Check if we need to force update at 23:59
     $currentMin = date('i');
     $currentHour = date('H');
     $currentDay = date('Y-m-d');
@@ -144,8 +141,7 @@ while (true) {
     $sleepTime = max(1, $loopInterval - $elapsed);
     sleep($sleepTime);
 }
-
-function processEnergyData($dbverbruik, $dbzonphp, $force) {
+function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 	$kwartierpiek = 2500;
 	$q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
 	try {
@@ -350,7 +346,7 @@ function processEnergyData($dbverbruik, $dbzonphp, $force) {
 	}
 	setCache('energy_prevavg', $newavg);
 }
-function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.1,'energy_export'=>0.1,'gas'=>0.1,'water'=>0.01]) {
+function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.1,'energy_export'=>0.1,'gas'=>0.1,'water'=>0.1]) {
     $cacheFile = '/dev/shm/cache/verbruik.json';
     $cache = [];
     if (file_exists($cacheFile)) {
@@ -376,13 +372,11 @@ function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_im
             break;
         }
     }
-    
     if ($updateNeeded || $force) {
         $cache['previous'] = $newData;
         $cache['current'] = $newData;
         file_put_contents($cacheFile, json_encode($cache));
     }
-    
     return $updateNeeded;
 }
 function stoploop() {
@@ -415,7 +409,6 @@ function lg($msg) {
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
-
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
