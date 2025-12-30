@@ -74,8 +74,9 @@ if (isset($_GET['f'])) {
 
 $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 900);
+if ($last!=$time) $d = ['t' => $time];
 if ($type === 'f') {
-	if($en==true){
+	if($en==true||$last!=$time){
 		$en = getCache('en');
 		if ($en) {
 			$en = json_decode($en);
@@ -125,7 +126,6 @@ if ($type === 'f') {
 		$d['b_hist'] = json_decode(getCache('b_hist'), true);
     }
 }
-if ($last!=$time) $d = ['t' => $time];
 $db = Database::getInstance();
 $stmt = $db->query($sql);
 //$stmt->execute([':t' => $t]);
