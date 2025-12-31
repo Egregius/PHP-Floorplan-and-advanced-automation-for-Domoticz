@@ -40,7 +40,7 @@ if (isset($_GET['f'])) {
 		$t=$_GET['o'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
-}
+} else exit;
 
 $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 7200);
