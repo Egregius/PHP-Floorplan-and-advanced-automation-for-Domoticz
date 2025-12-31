@@ -144,7 +144,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 					if(isset($status->position)) {
 						$status=$status->position;
 						if ($d[$device]['s']!=$status) {
-							lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
+							lg('ⓩ ZIGBEE [r]	'.$device.'	'.$status);
 							store($device,$status);
 						}
 					}
