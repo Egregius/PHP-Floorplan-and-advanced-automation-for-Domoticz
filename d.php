@@ -137,7 +137,7 @@ if($log===true) {
 	unset($d['t'],$d['n'],$d['a'],$d['b'],$d['c'],$d['z']);
 	$aantal=count($d);
 	if($aantal>0) {
-		$msg=$id.'	'.$type.' ('.$aantal.') ';
+		$msg=str_pad($id??'',10).' '.$type.' ('.$aantal.') ';
 		$msg.=implode(',',array_keys($d));
 		if($extra) $msg.=' + extra';
 		lg($msg);

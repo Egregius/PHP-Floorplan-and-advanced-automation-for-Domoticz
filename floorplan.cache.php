@@ -93,7 +93,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	echo '
 				<tr class="border_bottom">';
 	if (isset($_REQUEST['nicestatus'])) {
-		if (endswith($row['n'], '_set')) {
+		if (str_ends_with($row['n'], '_set')) {
 			echo '
 					<td>'.$row['n'].'</td>';
 			if ($row['s']=='D') echo '
@@ -107,12 +107,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>Manueel</td>';
 			}
-		} elseif (endswith($row['n'], 'Z')) {
+		} elseif (str_ends_with($row['n'], 'Z')) {
 			echo '
 					<td>'.$row['n'].'</td>
 					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
 					<td></td>';
-		} elseif (endswith($row['n'], '_temp')) {
+		} elseif (str_ends_with($row['n'], '_temp')) {
 			if ($row['n']=='buiten_temp') {
 				echo  '
 					<td>'.$row['n'].'</td>
@@ -124,7 +124,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
 					<td>'.$row['m'].'</td>';
 			}
-		} elseif (startswith($row['n'], 'R')) {
+		} elseif (str_starts_with($row['n'], 'R')) {
 			echo '
 					<td>'.$row['n'].'</td>';
 			if ($row['s']==0) {
@@ -147,12 +147,12 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>Slapen</td>';
 			}
-		} elseif (startswith($row['n'], '8')) {
+		} elseif (str_starts_with($row['n'], '8')) {
 			echo '
 					<td>'.$row['n'].'</td>
 					<td></td>
 					<td></td>';
-		} elseif (startswith($row['n'], 'mini')) {
+		} elseif (str_starts_with($row['n'], 'mini')) {
 			echo '
 					<td>'.$row['n'].'</td>
 					<td></td>
