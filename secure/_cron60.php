@@ -5,7 +5,15 @@ $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']['s'];
 foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']['m'];
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
-
+$stamp=date('Y-m-d H:i:s', $time-900);
+$sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
+$result=$db->query($sql);
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
+foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
+	$diff=round($d[$i.'_temp']['s']-$avg[$i],1);
+	if (!isset($d[$i.'_temp']['i'])||$d[$i.'_temp']['i']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
+//	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
+}
 $db = Database::getInstance();
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']['s'];
@@ -200,12 +208,4 @@ if (isset($daikin)) {
 		&&	past('daikin')>1800
 	) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 }
-$stamp=date('Y-m-d H:i:s', $time-900);
-$sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
-$result=$db->query($sql);
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
-foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
-	$diff=round($d[$i.'_temp']['s']-$avg[$i],1);
-	if (!isset($d[$i.'_temp']['i'])||$d[$i.'_temp']['i']!=$diff) storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
-//	if ($d[$i.'_temp']['m']==1&&past($i.'_temp')>21600) storemode($i.'_temp', 0, basename(__FILE__).':'.__LINE__);
-}
+

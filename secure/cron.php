@@ -62,7 +62,6 @@ while (true) {
 		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
 		elseif ($d['heating']['s'] == 0) include '_TC_neutral.php';
 		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
-		stoploop();
 	}
 	if (checkInterval($last60, 60, $time)) include '_cron60.php' ;
 	if (checkInterval($last300, 300, $time)) {include '_cron300.php';stoploop();updateWekker($t, $weekend, $dow, $d);}

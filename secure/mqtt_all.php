@@ -41,35 +41,57 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$validDevices[$basename] = true;
 }
 $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	try {
-		$path = explode('/', $topic);
-		$device = $path[2];
+	try {	
+		$path=explode('/',$topic);
+		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
 			if (($time - $startloop) <= 2) return;
-			if ($status=='unavailable') return;
-			$status = ucfirst(strtolower(trim($status, '"')));
-			$d = fetchdata();
-			if ($device === 'achterdeur') {
-				if ($status=='Off') $status='Open';
-				elseif ($status=='On') $status='Closed';
-				else unset($status);
-			} elseif (isset($d[$device]['d']) && $d[$device]['d'] === 'c') {
-				if ($status=='On') $status='Open';
-				elseif ($status=='Off') $status='Closed';
-				else unset($status);
-			} elseif ($device=='pirgarage') {
-				if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
-			} elseif ($device=='pirgarage2') {
-				store($device, $status);
-				if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
-				$device='pirgarage';
+			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+			if (($d[$device]['s'] ?? null) === $status) return;
+			$d=fetchdata();
+			if (substr($device,-4) === '_hum') {
+				if (!is_numeric($status)) return;
+				$tdevice=str_replace('_hum','_temp',$device);
+				$hum=(int)$status;
+				if ($hum !== $d[$tdevice]['m']&&abs($hum-$d[$tdevice]['m'])>1) storemode($tdevice,$hum); 
+			} elseif (substr($device,-5) === '_temp') {
+				if (!is_numeric($status)) return;
+				$st=(float)$status;
+				if ($d[$device]['s']!=$st) store($device,$st);
+			} elseif ($device=='daikin_kwh') {
+				return;
+			} else {
+				if ($d[$device]['s']!=$status) {
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+					store($device,$status,'',1);
+				}
 			}
-			if (isset($status)&&$d[$device]['s']!=$status) {
-//				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
-				include '/var/www/html/secure/pass2php/' . $device . '.php';
-				store($device, $status);
+		} elseif ($device === 'sun_solar_elevation') {
+			$status=(float)$status;
+			if ($status>=10) $status=round($status,0);
+			elseif ($status<=-10) $status=round($status,0);
+			else $status=round($status,1);
+			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
+			stoploop($d);
+			updateWekker($t, $weekend, $dow, $d);
+		} elseif ($device === 'sun_solar_azimuth') {
+			$status=(int)$status;
+			if ($d['dag']['m']!=$status) {
+				storemode('dag',$status,'',1);
+				setCache('dag',$status);
+			}
+		} elseif ($device === 'weg') {
+			if ($status==0) {
+				store('weg',0,'',1);
+				huisthuis();
+			} elseif ($status==2) {
+				store('weg',2,'',1);
+				huisslapen(true);
+			} elseif ($status==3) {
+				store('weg',3,'',1);
+				huisslapen(3);
 			}
 		}
 	} catch (Throwable $e) {
@@ -82,7 +104,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topic,string $status) use ($startloop,$validDevices,&$d,/*&$alreadyProcessed, */&$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -112,7 +134,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, */&$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -180,7 +202,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
    }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,string $status) use ($startloop,$validDevices,&$d,/*&$alreadyProcessed, */&$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -416,9 +438,18 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} elseif ($d[$device]['d']=='t') {
 					$h=round($status->humidity);
 					$t=$status->temperature;
-					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h) storesm($device,$t,$h);
+					$hdif=abs($h-$d[$device]['m']);
+					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h&&$hdif>1) storesm($device,$t,$h);
 					elseif($d[$device]['s']!=$t) store($device,$t);
-					elseif($d[$device]['m']!=$h) storemode($device,$h);
+					elseif($d[$device]['m']!=$h&&$hdif>1) storemode($device,$h);
+				} elseif ($d[$device]['d']=='r') {
+					if(isset($status->position)) {
+						$status=$status->position;
+						if ($d[$device]['s']!=$status) {
+							lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
+							store($device,$status);
+						}
+					}
 				} else {
 					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
 				}
@@ -428,7 +459,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 //						lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
-			}// else lg('ⓩ ZIGBEE [!dt!] '.$device.' '.print_r($status,true));
+			}// else lg('ⓩ ZIGBEE [!d!] '.$device.' '.print_r($status,true));
 		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());

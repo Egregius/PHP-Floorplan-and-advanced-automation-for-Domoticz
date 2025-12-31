@@ -136,9 +136,18 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 				} elseif ($d[$device]['d']=='t') {
 					$h=round($status->humidity);
 					$t=$status->temperature;
-					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h) storesm($device,$t,$h);
+					$hdif=abs($h-$d[$device]['m']);
+					if($d[$device]['s']!=$t&&$d[$device]['m']!=$h&&$hdif>1) storesm($device,$t,$h);
 					elseif($d[$device]['s']!=$t) store($device,$t);
-					elseif($d[$device]['m']!=$h) storemode($device,$h);
+					elseif($d[$device]['m']!=$h&&$hdif>1) storemode($device,$h);
+				} elseif ($d[$device]['d']=='r') {
+					if(isset($status->position)) {
+						$status=$status->position;
+						if ($d[$device]['s']!=$status) {
+							lg('ⓩ ZIGBEE [HD]	'.$device.'	'.$status);
+							store($device,$status);
+						}
+					}
 				} else {
 					lg('ⓩ ZIGBEE ['.$d[$device]['d'].']	'.$device.'	'.print_r($status,true));
 				}
