@@ -26,7 +26,7 @@ $d=fetchdata(0,'mqtt_sensor:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
 $d['time']=$startloop;
-$d['rand']=rand(10,20);
+$d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
@@ -106,7 +106,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(100000);
+	usleep(50000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

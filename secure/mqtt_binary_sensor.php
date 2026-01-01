@@ -26,7 +26,7 @@ $d=fetchdata(0,'mqtt_binary:'.__LINE__);
 $startloop=time();
 define('LOOP_START', $startloop);
 $d['time']=$startloop;
-$d['rand']=rand(10,20);
+$d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
@@ -67,7 +67,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				$device='pirgarage';
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-//				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
+				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
@@ -84,7 +84,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(100000);
+	usleep(50000);
 }
 
 $mqtt->disconnect();

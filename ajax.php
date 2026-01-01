@@ -80,6 +80,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 					if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 				}
 				if ($d['daikin']['s']=='Off'&&$_REQUEST['action']=='D') sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['living_start_temp']['m']!=0) storemode('living_start_temp',0);
 			}
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
