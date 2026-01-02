@@ -450,10 +450,6 @@ function storeicon($name,$i,$msg='') {
 	global $d, $user, $time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET i='$icon',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
-			
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);

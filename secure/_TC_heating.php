@@ -58,12 +58,12 @@ if ($d['alex_set']['s']!=$Setalex) {
 	$d['alex_set']['s']=$Setalex;
 }
 $Setliving = 14;
+$prevSet   = $d['living_start_temp']['m'] ?? 0;
 if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d['weg']['s']<=1)) {
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m'] == 2) $weg = 0;
-	$prevSet   = $d['living_start_temp']['m'] ?? 0;
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
 	if(!isset($lastWriteleadDataLiving)) $lastWriteleadDataLiving=filemtime('/var/www/html/secure/leadDataLiving.json');
