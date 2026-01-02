@@ -20,9 +20,12 @@ $d=[];
 if (isset($_GET['f'])) {
 	$type='f';
 	if($_GET['f']>0) {
+		$msg=__LINE__;
 		$t=$_GET['f'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
+		$msg=__LINE__;
+
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 		$en=true;
 		$extra=true;
@@ -31,15 +34,24 @@ if (isset($_GET['f'])) {
 } elseif (isset($_GET['h'])) {
 	$type='h';
 	if($_GET['h']>0) {
+		$msg=__LINE__;
 		$t=$_GET['h'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
-	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+	} else {
+				$msg=__LINE__;
+		
+		 $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+	}
 } elseif (isset($_GET['o'])) {
 	$type='o';
 	if($_GET['o']>0) {
+				$msg=__LINE__;
 		$t=$_GET['o'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
-	} else $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+	} else {
+				$msg=__LINE__;
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+	}
 } else exit;
 
 $last=apcu_fetch($id.$type);
@@ -137,7 +149,7 @@ if($log===true) {
 	unset($d['t'],$d['n'],$d['a'],$d['b'],$d['c'],$d['z']);
 	$aantal=count($d);
 	if($aantal>0) {
-		$msg=str_pad($id??'',10).' '.$type.' ('.$aantal.') ';
+		$msg.=' '.str_pad($id??'',10).' '.$type.' ('.$aantal.') ';
 		$msg.=implode(',',array_keys($d));
 		if($extra) $msg.=' + extra';
 		lg($msg);
