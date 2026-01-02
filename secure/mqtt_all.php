@@ -320,6 +320,36 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+	try {
+		$path=explode('/',$topic);
+		$device=$path[1];
+		if (isset($validDevices[$device])) {
+			$time=time();
+			$d['time']=$time;
+			if (($time - $startloop) <= 2) return;
+//			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
+//			$lastEvent = $d['time'];
+			$d=fetchdata();
+			$status=json_decode($status);
+			if ($device=='remotealex') {
+				if (isset($status->action)) {
+					$status=$status->action;
+//						lg('ⓩ Remote '.$device.' '.$status);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
+				}
+			}// else lg('ⓩ ZIGBEE [!d!] '.$device.' '.print_r($status,true));
+		}// else lg('ⓩ Z2M '.$device.' '.$status);
+	} catch (Throwable $e) {
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+	}
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
+        stoploop();
+        updateWekker($t, $weekend, $dow, $d);
+    }
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(33333);

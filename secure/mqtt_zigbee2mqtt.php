@@ -15,18 +15,18 @@ use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
-$user='SENSOR';
+$user='ZIGBEE';
 lg('🟢 Starting '.$user.' loop ',-1);
 $time=time();
 $lastcheck=$time;
 $t = null;
 $weekend = null;
 $dow = null;
-$d=fetchdata(0,'mqtt_sensor:'.__LINE__);
+$d=fetchdata(0,'mqtt_zigbee2mqtt');
 $startloop=time();
 define('LOOP_START', $startloop);
 $d['time']=$startloop;
-$d['rand']=rand(100,200);
+$d['rand']=rand(10,20);
 updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
@@ -40,69 +40,26 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	try {	
+$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+	try {
 		$path=explode('/',$topic);
-		$device=$path[2];
+		$device=$path[1];
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
 			if (($time - $startloop) <= 2) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
+//			$lastEvent = $d['time'];
 			$d=fetchdata();
-			if (substr($device,-4) === '_hum') {
-				if (!is_numeric($status)) return;
-				$tdevice=str_replace('_hum','_temp',$device);
-				$hum=(int)$status;
-				if ($hum !== $d[$tdevice]['m']&&abs($hum-$d[$tdevice]['m'])>1) storemode($tdevice,$hum); 
-			} elseif (substr($device,-5) === '_temp') {
-				if (!is_numeric($status)) return;
-				$st=(float)$status;
-				if ($d[$device]['s']!=$st) store($device,$st);
-			} elseif ($device=='daikin_kwh') {
-				$val = (int)$status;
-				$old = (int)($d[$device]['s'] ?? 0);
-				$oldt = (int)($d[$device]['t'] ?? 0);
-				if ($oldt === 0) {
-					store($device, $val, '', 1);
-					return;
-				}
-				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
-				$time_passed = ($time - $oldt) >= 30;
-				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
-			} else {
-				if ($d[$device]['s']!=$status) {
+			$status=json_decode($status);
+			if ($device=='remotealex') {
+				if (isset($status->action)) {
+					$status=$status->action;
+//						lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
 				}
-			}
-		} elseif ($device === 'sun_solar_elevation') {
-			$status=(float)$status;
-			if ($status>=10) $status=round($status,0);
-			elseif ($status<=-10) $status=round($status,0);
-			else $status=round($status,1);
-			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
-			stoploop($d);
-			updateWekker($t, $weekend, $dow, $d);
-		} elseif ($device === 'sun_solar_azimuth') {
-			$status=(int)$status;
-			if ($d['dag']['m']!=$status) {
-				storemode('dag',$status,'',1);
-				setCache('dag',$status);
-			}
-		} elseif ($device === 'weg') {
-			if ($status==0) {
-				store('weg',0,'',1);
-				huisthuis();
-			} elseif ($status==2) {
-				store('weg',2,'',1);
-				huisslapen(true);
-			} elseif ($status==3) {
-				store('weg',3,'',1);
-				huisslapen(3);
-			}
-		}
+			}// else lg('ⓩ ZIGBEE [!d!] '.$device.' '.print_r($status,true));
+		}// else lg('ⓩ Z2M '.$device.' '.$status);
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
@@ -112,10 +69,9 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
-
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(50000);
+	usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

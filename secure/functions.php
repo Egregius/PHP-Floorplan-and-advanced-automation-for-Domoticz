@@ -73,11 +73,11 @@ function check_en_slapen($locatie, $status, &$d) {
 }
 
 function fliving() {
-	global $d,$time,$t;
+	global $d,$t;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureellinks']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
 		if (($d['z']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
 			$am=strtotime('10:00');
-			if ($d['wasbak']['s']<10&&$time<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']['s']<10&&$d['time']<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			if ($d['zithoek']['s']<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
 			if ($d['eettafel']['s']<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
 			if ($d['bureellinks']['s']<14) sl('bureellinks', 14, basename(__FILE__).':'.__LINE__);
@@ -99,13 +99,13 @@ function fgarage() {
 	}
 }
 function fkeuken() {
-	global $d,$time;
+	global $d;
 	if (1==2) {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<0||$d['rkeukenl']['s']>80)) {
-			if ($time>strtotime('7:00')&&$time<strtotime('20:00')) {
+			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('20:00')) {
 				zwave('wasbak','multilevel',0,10);
 				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 			} else {
@@ -117,41 +117,41 @@ function fkeuken() {
 //	hass('input_button','press','input_button.wakeipad');
 }
 function finkom($force=false) {
-	global $d,$time;
+	global $d;
 	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
 		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) {
 			zwave('inkom','multilevel',0,30);
 			sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$time>=strtotime('19:45')&&$time<=strtotime('21:30')&&$d['alexslaapt']['s']==0) {
+		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$d['time']>=strtotime('19:45')&&$d['time']<=strtotime('21:30')&&$d['alexslaapt']['s']==0) {
 			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
 function fhall() {
-	global $d,$t,$time;
+	global $d,$t;
 	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&$d['alexslaapt']['s']==0) {
 		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
 			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$time>=strtotime('21:30')&&$time<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
-function fbadkamer($level) {
-	global $d,$t,$time;
+function fbadkamer($level,$power=false) {
+	global $d,$t;
 	if ($level==0) {
 		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['badkamerpower']['s']=='Off') {
+		if ($power===true&&$d['badkamerpower']['s']=='Off') {
 			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 			usleep(500000);
 		}
 		sl('lichtbadkamer', $level);
 //		store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
 		if ($d['weg']['s']==1&&$d['time']>$t-7200) {
-			if ($d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 			if ($d['time']<$t&&$d['living_set']['m']==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
@@ -187,13 +187,14 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
-	global $db,$time;
+	global $db;
 	$last=0;
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
 		if (isset($row[0])) $last=$row[0];
 	}
-	if ($last < $time-$ttl) {
+	if ($last < $d['time']-$ttl) {
+		$time=$d['time'];
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
 		if ($to==1) {
 			if ($silent==true) telegram($msg, $silent, 1);
@@ -216,9 +217,9 @@ function waarschuwing($msg) {
 	sw('sirene', 'Off','',true);
 }
 function past($name,$lg='') {
-	global $d,$time;
-	$time=time();
-	return $time-$d[$name]['t'];
+	global $d;
+	$d['time']=time();
+	return $d['time']-$d[$name]['t'];
 }
 function sl($name,$level,$msg=null) {
 	global $d,$user;
@@ -226,6 +227,10 @@ function sl($name,$level,$msg=null) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$level) {
 				sl($i, $level, $msg);
+				$now = time();
+				if ($d['time'] !== $now) {
+					$d['time'] = $now;
+				}
 			}
 		}
 	} else {
@@ -259,6 +264,10 @@ function sw($name,$action='Toggle',$msg=null) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
 	//			usleep(200000);
+				$now = time();
+				if ($d['time'] !== $now) {
+					$d['time'] = $now;
+				}
 			}
 		}
 	} else {
@@ -293,12 +302,13 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='') {
-	global $d,$user,$time;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$status',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
+			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
 			$d[$name]['s']=$status;
 			break;
 		} catch (PDOException $e) {
@@ -317,13 +327,13 @@ function store($name='',$status='',$msg='') {
 }
 
 function storemode($name,$mode,$msg='') {
-	global $user, $time;
-//	$time=time();
+	global $d, $user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET m='$mode',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
+			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
 			$d[$name]['m']=$mode;
 			break;
 		} catch (PDOException $e) {
@@ -340,12 +350,13 @@ function storemode($name,$mode,$msg='') {
 	return $affected ?? 0;
 }
 function storesm($name,$s,$m,$msg='') {
-	global $d,$user,$time;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
+			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			break;
@@ -366,9 +377,11 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user,$time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$s', m='$m',i='$i',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
+			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
+			
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
@@ -390,9 +403,10 @@ function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET s='$s', p='$p',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
+			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
 			break;
@@ -413,9 +427,10 @@ function storep($name,$p,$msg='') {
 	global $d,$user,$time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$db = Database::getInstance();
-			$stmt=$db->query("UPDATE devices SET p='$p',t='$time' WHERE n='$name'");
-			$affected = $stmt->rowCount();
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
+			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
 			$d[$name]['p']=$p;
 			break;
 		} catch (PDOException $e) {
@@ -431,14 +446,19 @@ function storep($name,$p,$msg='') {
 	if($affected>0) lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	return $affected ?? 0;
 }
-function storeicon($name,$icon,$msg='') {
+function storeicon($name,$i,$msg='') {
 	global $d, $user, $time;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
 			$stmt=$db->query("UPDATE devices SET i='$icon',t='$time' WHERE n='$name'");
 			$affected = $stmt->rowCount();
-			$d[$name]['i']=$icon;
+			
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
+			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
+			$d[$name]['i']=$i;
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -451,7 +471,7 @@ function storeicon($name,$icon,$msg='') {
 		}
 	}	
 	if (str_ends_with($name, '_temp')) return;
-	if($affected>0) lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$icon.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	return $affected ?? 0;
 }
 
