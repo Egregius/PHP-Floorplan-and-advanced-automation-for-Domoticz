@@ -15,6 +15,7 @@ function updateWekker(&$t, &$weekend, &$dow, &$d) {
     if ($d['verlof']['s']==2) $weekend=true;
     else $weekend = ($dow == 0 || $dow == 6);
     $t = ($weekend||$d['verlof']['s']==2) ? strtotime('7:45') : strtotime('7:00');
+		$t=strtotime('6:20');
 }
 function check_en_slapen($locatie, $status, &$d) {
 	$x = 0;
