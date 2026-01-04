@@ -19,10 +19,10 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 //							telegram('Domoticz owntracks.php='.__LINE__);
 							hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
 							setCache('remoteauto', time());
-							if ($d['voordeur']['s']=='Off') {
+//							if ($d['voordeur']['s']=='Off') {
 								sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 								telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
-							}
+//							}
 							huisthuis('Huis thuis door '.$user);
 							if ($d['dag']['s']>0) {
 								telegram('Domoticz owntracks.php:'.__LINE__);

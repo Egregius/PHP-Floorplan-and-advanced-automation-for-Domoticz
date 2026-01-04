@@ -188,8 +188,9 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	}
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
-	global $db;
+	global $d;
 	$last=0;
+	$db = Database::getInstance();
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
 		if (isset($row[0])) $last=$row[0];

@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
+$user='test';
 require 'functions.php';
 //require '/var/www/authentication.php';
 $d=fetchdata();
@@ -25,7 +26,7 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 
 */
-
+sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 
 
 echo '</pre>';

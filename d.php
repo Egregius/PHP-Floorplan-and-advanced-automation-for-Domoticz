@@ -92,26 +92,26 @@ if ($type === 'f') {
         }
     }
 	if($last===false||$extra===true||$last<$time-900) {
-			$msg.=':'.__LINE__;
+		$msg.=':'.__LINE__;
         $sunrise = apcu_fetch('cache_sunrise');
 		if ($sunrise === false) {
 			$msg.=':'.__LINE__;
 			$sunrise = getCache('sunrise');
+			lg(print_r($sunrise,true));
 			if ($sunrise) {
 				apcu_store('cache_sunrise', $sunrise, 14400);
 			}
-		} else {
-			$msg.=':'.__LINE__;
-			$sunrise = json_decode($sunrise, true);
-			if ($sunrise) {
-				$msg.=':'.__LINE__;
-				$d['Tstart'] = $sunrise['CivTwilightStart'];
-				$d['Srise'] = $sunrise['Sunrise'];
-				$d['Sset'] = $sunrise['Sunset'];
-				$d['Tend'] = $sunrise['CivTwilightEnd'];
-				$d['pl'] = boseplaylist($time);
-			}
-		}
+			$sunrise=json_decode($sunrise,true);
+		} 
+		$msg.=':'.__LINE__;
+		if(!is_array($sunrise)) $sunrise = json_decode($sunrise, true);
+		lg(print_r($sunrise,true));
+		$msg.=':'.__LINE__;
+		$d['Tstart'] = $sunrise['CivTwilightStart'];
+		$d['Srise'] = $sunrise['Sunrise'];
+		$d['Sset'] = $sunrise['Sunset'];
+		$d['Tend'] = $sunrise['CivTwilightEnd'];
+		$d['pl'] = boseplaylist($time);
 		$d['b_hist'] = json_decode(getCache('b_hist'), true);
     }
 }
