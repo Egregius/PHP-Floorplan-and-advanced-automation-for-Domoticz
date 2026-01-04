@@ -3,11 +3,6 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 session_write_close();
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
-elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
-	$db = Database::getInstance();
-	$time=time();
-	$db->query("UPDATE devices SET m=3,t=$time WHERE n ='weg';");
-}
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107) {
 	$bose=$_REQUEST['bose'];
