@@ -3,17 +3,6 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 session_write_close();
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') exec('curl -s http://192.168.2.20/secure/runsync.php?sync='.$_REQUEST['action'].' &');
-elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='eufy'&&$_REQUEST['command']=='eufy') {
-	lg('Starting Eufy stream');
-	shell_exec('/var/www/html/secure/eufystartstream.php > /dev/null 2>/dev/null &');
-	$d=array();
-	$db = Database::getInstance();
-	$stmt=$db->query("SELECT n,s FROM devices WHERE n IN ('voordeur','dag');");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-		$d[$row['n']]['s']=$row['s'];
-	}
-	if ($d['dag']['s']<-5) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-}
 elseif (isset($_REQUEST['device'])&&($_REQUEST['device']=='MQTT'||$_REQUEST['device']=='CRON')) {
 	$db = Database::getInstance();
 	$time=time();
