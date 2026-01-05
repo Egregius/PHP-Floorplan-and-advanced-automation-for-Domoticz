@@ -7,6 +7,20 @@ from datetime import datetime
 from pathlib import Path
 import requests
 import websockets
+import paho.mqtt.client as mqtt
+
+
+MQTT_HOST = "192.168.2.22"
+MQTT_PORT = 1883
+MQTT_USER = "mqtt"
+MQTT_PASS = "mqtt"
+MQTT_BASE = "d"
+
+mqtt_client = mqtt.Client(client_id="homewizard_bridge")
+mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
+mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
+mqtt_client.loop_start()
+
 
 # Tokens JSON
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
@@ -66,9 +80,12 @@ def flush_teller_state():
 def update_state(key, value):
     if value is None:
         return
+
     if state.get(key) != value:
         state[key] = value
         flush_state()
+        mqtt_publish_state()
+
 
 def update_teller(import_kwh, export_kwh, gas, water):
     changed = False
@@ -112,6 +129,14 @@ def process_measurement(name, data):
         update_state("c", int(round(data.get("state_of_charge_pct", 0))))
     else:
         update_state("z", -int(round(data.get("power_w", 0))))
+
+def mqtt_publish_state():
+    try:
+        payload = dict(state)
+        payload["t"] = int(time.time())
+        mqtt_client.publish("d/en", json.dumps(payload), retain=True)
+    except Exception as e:
+        log("MQTT fout:", e)
 
 async def handle_device(device, token, ssl_context):
     name, host = device["name"], device["host"]

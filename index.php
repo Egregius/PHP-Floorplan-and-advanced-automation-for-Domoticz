@@ -15,6 +15,7 @@
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=2">
+		<script src="/scripts/mqtt.min.js"></script>
 		<script src="/scripts/floorplanjs.js?v=2"></script>
 		<script type="text/javascript">document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>

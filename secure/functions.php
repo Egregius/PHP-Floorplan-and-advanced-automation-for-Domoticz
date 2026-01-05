@@ -254,12 +254,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if ($mqtt) {
-        $mqtt->publish("d/$name/s", $level);
-        if (isset($d[$name]['t'])) {
-            $mqtt->publish("d/$name/t", $d['time']);
-        }
-    }
+    if ($mqtt) $mqtt->publish("d/$name", json_encode($d[$name]));
 }
 function resetsecurity() {
 	global $d;
@@ -295,9 +290,9 @@ function sw($name,$action='Toggle',$msg=null) {
 			store($name, $action, $msg);
 		}
 		if ($mqtt) {
-			lg("d/{$name}/s = {$action}");
-			$mqtt->publish("d/{$name}/s",$action);
-			if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			$x['t']=$d['time'];
+			$x[$name]=$d[$name];
+			$mqtt->publish("d/{$user}", json_encode($x));
 		}
 	}
 }
@@ -326,9 +321,10 @@ function store($name='',$status='',$msg='') {
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$status;
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}/s",$status);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			if ($affected>0&&$mqtt) {
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
@@ -356,9 +352,10 @@ function storemode($name,$mode,$msg='') {
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['m']=$mode;
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}/m",$mode);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			if ($affected>0&&$mqtt) {
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
@@ -386,11 +383,10 @@ function storesm($name,$s,$m,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			if ($affected>0&&$mqtt) {
-				$mqtt->publish("d/{$name}/s",$s);
-				$mqtt->publish("d/{$name}/m",$m);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
-
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -418,10 +414,9 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
 			if ($affected>0&&$mqtt) {
-				$mqtt->publish("d/{$name}/s",$s);
-				$mqtt->publish("d/{$name}/m",$m);
-				$mqtt->publish("d/{$name}/i",$i);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
@@ -449,9 +444,9 @@ function storesp($name,$s,$p,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
 			if ($affected>0&&$mqtt) {
-				$mqtt->publish("d/{$name}/s",$s);
-				$mqtt->publish("d/{$name}/p",$p);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
@@ -478,8 +473,9 @@ function storep($name,$p,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['p']=$p;
 			if ($affected>0&&$mqtt) {
-				$mqtt->publish("d/{$name}/p",$p);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
@@ -506,8 +502,9 @@ function storeicon($name,$i,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['i']=$i;
 			if ($affected>0&&$mqtt) {
-				$mqtt->publish("d/{$name}/i",$i);
-				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+				$x['t']=$d['time'];
+				$x[$name]=$d[$name];
+				$mqtt->publish("d/{$user}", json_encode($x));
 			}
 			break;
 		} catch (PDOException $e) {
