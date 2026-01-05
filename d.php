@@ -117,33 +117,32 @@ if ($type === 'f') {
 }
 $db = Database::getInstance();
 $stmt = $db->query($sql);
-//$stmt->execute([':t' => $t]);
-while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-    $n = $row[0];
-    $d[$n]['s'] = $row[1];
-    if ($row[6] == 1) {
-        $d[$n]['t'] = $row[2];
+$rows = $stmt->fetchAll(PDO::FETCH_NUM);
+
+foreach ($rows as [$n, $s, $t_val, $m, $device, $i, $rt, $p]) {
+    // Bouw device array efficient op
+    $d[$n] = ['s' => $s];
+    
+    // Conditionals geoptimaliseerd
+    $rt === 1 && $d[$n]['t'] = $t_val;
+    $m !== null && $d[$n]['m'] = $m;
+    
+    if ($device !== null) {
+        $d[$n]['d'] = $device;
+        $device === 'daikin' && $d[$n]['s'] = null;
     }
-    if (!is_null($row[3])) {
-        $d[$n]['m'] = $row[3];
-    }
-    if (!is_null($row[4])) {
-        $d[$n]['d'] = $row[4];
-        if ($row[4] === 'daikin') {
-            $d[$n]['s'] = null;
-        }
-    }
-    if (!is_null($row[5])) {
-        if ($row[4] === 'th' && $n !== 'badkamer_set') {
-            $icon = json_decode($row[5], true);
+    
+    if ($i !== null) {
+        if ($device === 'th' && $n !== 'badkamer_set') {
+            $icon = json_decode($i, true);
         } else {
-            $d[$n]['i'] = $row[5];
+            $d[$n]['i'] = $i;
         }
     }
-    if (!is_null($row[7])) {
-        $d[$n]['p'] = $row[7];
-    }
+    
+    $p !== null && $d[$n]['p'] = $p;
 }
+
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 header('Content-Type: application/json');
@@ -193,17 +192,44 @@ function lg($msg) {
     }
     fclose($fp);
 }
-class Database {
+final class Database {
     private static ?PDO $instance = null;
+    
     private function __construct() {}
+    private function __clone(): void {}
+    
     public static function getInstance(): PDO {
-    self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
-        [
-//                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-//                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_PERSISTENT => true
-        ]
-        );
-        return self::$instance;
+        return self::$instance ??= self::createConnection();
+    }
+    
+    private static function createConnection(): PDO {
+        try {
+            return new PDO(
+                dsn: "mysql:host=192.168.2.23;dbname=domotica;charset=latin1",
+                username: 'dbuser',
+                password: 'dbuser',
+                options: [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES latin1",
+                    PDO::ATTR_TIMEOUT => 5,
+                    PDO::MYSQL_ATTR_FOUND_ROWS => true
+                ]
+            );
+        } catch (PDOException $e) {
+            error_log('Database connection failed: ' . $e->getMessage());
+            throw new RuntimeException('Database connection failed.', 0, $e);
+        }
+    }
+    
+    public static function reset(): void {
+        self::$instance = null;
+    }
+    
+    public static function isConnected(): bool {
+        return self::$instance !== null;
     }
 }

@@ -225,7 +225,6 @@ function past($name,$lg='') {
 }
 function sl(string|array $name, int $level, ?string $msg = null): void {
     global $d, $user, $mqtt;
-    
     if (is_array($name)) {
         foreach ($name as $i) {
             if ($d[$i]['s'] !== $level) {
@@ -235,17 +234,11 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         }
         return;
     }
-    
     $d ??= fetchdata();
-    
     lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
-    
     $device = $d[$name]['d'] ?? null;
-    
-    // Cover entities gebruiken 'cover.' prefix, niet 'light.'
     $entityPrefix = in_array($device, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
-    
     match($device) {
         'hd' => $level > 0 
             ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
@@ -258,12 +251,9 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'r' => hass('cover', 'set_cover_position', $entity, [
             'position' => $name === 'rbureel' ? 100 - $level : $level
         ]),
-        
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
-        
         default => null
     };
-    
     if ($mqtt) {
         $mqtt->publish("d/$name/s", $level);
         if (isset($d[$name]['t'])) {
@@ -853,16 +843,14 @@ function hasstoken() {
 		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 	}
 }
-// Fire-and-forget versie (snelst, geen response)
-// Fire-and-forget versie (snelst, geen response)
+
 function hass(string $domain, string $service, string $entity = '', array $data = []): void {
+    global $d;
     static $socket = null;
     static $lastUse = 0;
-    
-    $now = microtime(true);
-    
-    // Hergebruik socket als recent gebruikt (binnen 1 sec) en nog open
-    if ($socket === null || ($now - $lastUse) >= 1.0 || @feof($socket)) {
+    $d['time'] ??= time();
+    $keepAliveTime = 300;
+    if ($socket === null || ($d['time'] - $lastUse) >= $keepAliveTime || @feof($socket)) {
         $socket && @fclose($socket);
         $socket = @stream_socket_client(
             'tcp://192.168.2.26:8123',
@@ -871,21 +859,17 @@ function hass(string $domain, string $service, string $entity = '', array $data 
             0.2,
             STREAM_CLIENT_CONNECT
         );
-        
         if (!$socket) {
             lg("❌ HASS socket fout: $errstr ($errno)");
             return;
         }
-        
         stream_set_blocking($socket, true);
         stream_set_write_buffer($socket, 0);
+        stream_set_timeout($socket, 30);
     }
-    
-    // Voeg entity_id toe aan data als entity opgegeven
     if ($entity !== '') {
         $data['entity_id'] = $entity;
     }
-    
     $payload = json_encode($data);
     $request = sprintf(
         "POST /api/services/%s/%s HTTP/1.1\r\n" .
@@ -893,15 +877,15 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         "Content-Type: application/json\r\n" .
         "Authorization: Bearer %s\r\n" .
         "Content-Length: %d\r\n" .
-        "Connection: keep-alive\r\n\r\n%s",
+        "Connection: keep-alive\r\n" .
+        "Keep-Alive: timeout=300\r\n\r\n%s",
         $domain, $service, hasstoken(), strlen($payload), $payload
     );
     
     fwrite($socket, $request);
     fflush($socket);
-    $lastUse = $now;
+    $lastUse = $d['time'];
 }
-
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
 	$ch=curl_init();
