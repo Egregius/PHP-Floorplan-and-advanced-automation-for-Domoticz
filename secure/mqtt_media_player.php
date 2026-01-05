@@ -60,6 +60,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+
 $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,&$d, &$lastcheck, $user) {
 	try {	
 		$path=explode('/',$topic);
@@ -76,6 +77,11 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
+},MqttClient::QOS_AT_LEAST_ONCE);
+
+$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	$d[$path[1]][$path[2]]=$status;
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {

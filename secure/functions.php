@@ -259,7 +259,7 @@ function resetsecurity() {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 	}
 }
-function sw($name,$action='Toggle',$msg=null,$publish=false) {
+function sw($name,$action='Toggle',$msg=null) {
 	global $d,$user,$db,$mqtt;
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -286,7 +286,7 @@ function sw($name,$action='Toggle',$msg=null,$publish=false) {
 		} else {
 			store($name, $action, $msg);
 		}
-		if ($publish===true) {
+		if ($mqtt) {
 			lg("d/{$name}/s = {$action}");
 			$mqtt->publish("d/{$name}/s",$action);
 		}

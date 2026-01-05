@@ -494,6 +494,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
+
+$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	$d[$path[1]][$path[2]]=$status;
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(33333);

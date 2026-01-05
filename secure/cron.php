@@ -19,10 +19,10 @@ $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
 foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
-	sw($i,'Off',null,true);
+	sw($i,'Off');
 }
 if ($d['weg']['s']>0) {
-	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off',null,true);
+	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);

@@ -71,6 +71,11 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	$d[$path[1]][$path[2]]=$status;
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(50000);

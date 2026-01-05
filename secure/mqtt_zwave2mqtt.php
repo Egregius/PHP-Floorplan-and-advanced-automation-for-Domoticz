@@ -185,9 +185,10 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/+',function (string $topic,string $status) use (&$d) {
+$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
 	$path=explode('/',$topic);
-	lg(print_r($path,true));
+	$d[$path[1]][$path[2]]=$status;
+	lg(print_r($d[$path[1]],true));
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {

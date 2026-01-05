@@ -70,6 +70,12 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
+
+$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	$d[$path[1]][$path[2]]=$status;
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(50000);
