@@ -83,26 +83,35 @@ def update_state(key, value):
 
     if state.get(key) != value:
         state[key] = value
+
+        # tmpfs: volledige state
         flush_state()
-        mqtt_publish_state()
+
+        # MQTT: enkel deze key
+        mqtt_publish_key(key, value)
+
 
 
 def update_teller(import_kwh, export_kwh, gas, water):
-    changed = False
     if import_kwh is not None and teller_state["import"] != import_kwh:
         teller_state["import"] = import_kwh
-        changed = True
+        mqtt_publish_teller("import", import_kwh)
+
     if export_kwh is not None and teller_state["export"] != export_kwh:
         teller_state["export"] = export_kwh
-        changed = True
+        mqtt_publish_teller("export", export_kwh)
+
     if gas is not None and teller_state["gas"] != gas:
         teller_state["gas"] = gas
-        changed = True
+        mqtt_publish_teller("gas", gas)
+
     if water is not None and teller_state["water"] != water:
         teller_state["water"] = water
-        changed = True
-    if changed:
-        flush_teller_state()
+        mqtt_publish_teller("water", water)
+
+    # tmpfs blijft altijd volledige teller-state
+    flush_teller_state()
+
 
 def process_measurement(name, data):
     if name == "p":
@@ -130,11 +139,19 @@ def process_measurement(name, data):
     else:
         update_state("z", -int(round(data.get("power_w", 0))))
 
-def mqtt_publish_state():
+def mqtt_publish_key(key, value):
     try:
-        payload = dict(state)
-        payload["t"] = int(time.time())
-        mqtt_client.publish("d/en", json.dumps(payload), retain=True)
+        topic = f"d/{key}"
+        payload = {key: value}
+        mqtt_client.publish(topic, json.dumps(payload))
+    except Exception as e:
+        log("MQTT fout:", e)
+
+def mqtt_publish_teller(key, value):
+    try:
+        topic = f"teller/{key}"
+        payload = {key: value}
+        mqtt_client.publish(topic, json.dumps(payload))
     except Exception as e:
         log("MQTT fout:", e)
 
