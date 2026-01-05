@@ -143,6 +143,8 @@ def mqtt_publish_key(key, value):
     try:
         topic = f"d/{key}"
         payload = {key: value}
+        if key == "n":
+            payload["t"] = int(time.time())
         mqtt_client.publish(topic, json.dumps(payload))
     except Exception as e:
         log("MQTT fout:", e)

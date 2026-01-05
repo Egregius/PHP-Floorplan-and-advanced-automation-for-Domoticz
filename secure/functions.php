@@ -254,7 +254,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if ($mqtt) $mqtt->publish("d/$name", json_encode($d[$name]));
+    if ($mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 }
 function resetsecurity() {
 	global $d;
@@ -289,11 +289,7 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
-		if ($mqtt) {
-			$x['t']=$d['time'];
-			$x[$name]=$d[$name];
-			$mqtt->publish("d/{$user}", json_encode($x));
-		}
+		if ($mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 	}
 }
 function zigbee($device,$action) {
@@ -321,11 +317,7 @@ function store($name='',$status='',$msg='') {
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$status;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -352,11 +344,7 @@ function storemode($name,$mode,$msg='') {
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['m']=$mode;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -382,11 +370,7 @@ function storesm($name,$s,$m,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -413,11 +397,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -443,11 +423,7 @@ function storesp($name,$s,$p,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -472,11 +448,7 @@ function storep($name,$p,$msg='') {
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['p']=$p;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -501,11 +473,7 @@ function storeicon($name,$i,$msg='') {
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['i']=$i;
-			if ($affected>0&&$mqtt) {
-				$x['t']=$d['time'];
-				$x[$name]=$d[$name];
-				$mqtt->publish("d/{$user}", json_encode($x));
-			}
+			if ($affected>0&&$mqtt) $mqtt->publish("d/{$user}", json_encode([$name=>$d[$name]]));
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
