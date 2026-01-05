@@ -223,36 +223,54 @@ function past($name,$lg='') {
 	$d['time']=time();
 	return $d['time']-$d[$name]['t'];
 }
-function sl($name,$level,$msg=null) {
-	global $d,$user;
-	if (is_array($name)) {
-		foreach ($name as $i) {
-			if ($d[$i]['s']!=$level) {
-				sl($i, $level, $msg);
-				$now = time();
-				if ($d['time'] !== $now) {
-					$d['time'] = $now;
-				}
-			}
-		}
-	} else {
-		if(!isset($d)) $d=fetchdata();
-		lg('💡 SL	'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$level.($msg?' ('.$msg.')':''),4);
-		if ($d[$name]['d']=='hd') {
-			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness_pct"=>$level));
-			elseif ($level==0) hass('light','turn_off','light.'.$name);
-		} elseif ($d[$name]['d']=='d') {
-			if ($level>0) hassopts('light','turn_on','light.'.$name,array("brightness"=>$level*2.55));
-			elseif ($level==0) hass('light','turn_off','light.'.$name);
-		} elseif ($d[$name]['d']=='r') {
-			if($name=='rbureel') $level=100-$level;
-			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-		} elseif ($d[$name]['d']=='luifel') {
-			hassopts('cover','set_cover_position','cover.'.$name,array("position"=>$level));
-		}
-	}
+function sl(string|array $name, int $level, ?string $msg = null): void {
+    global $d, $user, $mqtt;
+    
+    if (is_array($name)) {
+        foreach ($name as $i) {
+            if ($d[$i]['s'] !== $level) {
+                sl($i, $level, $msg);
+                $d['time'] = time();
+            }
+        }
+        return;
+    }
+    
+    $d ??= fetchdata();
+    
+    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
+    
+    $device = $d[$name]['d'] ?? null;
+    
+    // Cover entities gebruiken 'cover.' prefix, niet 'light.'
+    $entityPrefix = in_array($device, ['r', 'luifel']) ? 'cover' : 'light';
+    $entity = "$entityPrefix.$name";
+    
+    match($device) {
+        'hd' => $level > 0 
+            ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
+            : hass('light', 'turn_off', $entity),
+        
+        'd' => $level > 0
+            ? hass('light', 'turn_on', $entity, ['brightness' => (int)($level * 2.55)])
+            : hass('light', 'turn_off', $entity),
+        
+        'r' => hass('cover', 'set_cover_position', $entity, [
+            'position' => $name === 'rbureel' ? 100 - $level : $level
+        ]),
+        
+        'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
+        
+        default => null
+    };
+    
+    if ($mqtt) {
+        $mqtt->publish("d/$name/s", $level);
+        if (isset($d[$name]['t'])) {
+            $mqtt->publish("d/$name/t", $d['time']);
+        }
+    }
 }
-
 function resetsecurity() {
 	global $d;
 	if ($d['sirene']['s']!='Off') {
@@ -289,6 +307,7 @@ function sw($name,$action='Toggle',$msg=null) {
 		if ($mqtt) {
 			lg("d/{$name}/s = {$action}");
 			$mqtt->publish("d/{$name}/s",$action);
+			if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
 		}
 	}
 }
@@ -308,7 +327,7 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='') {
-	global $d,$user;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -316,7 +335,10 @@ function store($name='',$status='',$msg='') {
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$status;
-			
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}/s",$status);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -334,7 +356,7 @@ function store($name='',$status='',$msg='') {
 }
 
 function storemode($name,$mode,$msg='') {
-	global $d,$user;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -342,6 +364,10 @@ function storemode($name,$mode,$msg='') {
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['m']=$mode;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}/m",$mode);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -357,7 +383,7 @@ function storemode($name,$mode,$msg='') {
 	return $affected ?? 0;
 }
 function storesm($name,$s,$m,$msg='') {
-	global $d,$user;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -366,6 +392,12 @@ function storesm($name,$s,$m,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
+			if ($affected>0&&$mqtt) {
+				$mqtt->publish("d/{$name}/s",$s);
+				$mqtt->publish("d/{$name}/m",$m);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
+
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -381,17 +413,22 @@ function storesm($name,$s,$m,$msg='') {
 	return $affected ?? 0;
 }
 function storesmi($name,$s,$m,$i,$msg='') {
-	global $d,$user,$time;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
+			if ($affected>0&&$mqtt) {
+				$mqtt->publish("d/{$name}/s",$s);
+				$mqtt->publish("d/{$name}/m",$m);
+				$mqtt->publish("d/{$name}/i",$i);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -407,7 +444,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	return $affected ?? 0;
 }
 function storesp($name,$s,$p,$msg='') {
-	global $d,$user,$time;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -416,6 +453,11 @@ function storesp($name,$s,$p,$msg='') {
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
+			if ($affected>0&&$mqtt) {
+				$mqtt->publish("d/{$name}/s",$s);
+				$mqtt->publish("d/{$name}/p",$p);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -431,7 +473,7 @@ function storesp($name,$s,$p,$msg='') {
 	return $affected ?? 0;
 }
 function storep($name,$p,$msg='') {
-	global $d,$user,$time;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -439,6 +481,10 @@ function storep($name,$p,$msg='') {
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['p']=$p;
+			if ($affected>0&&$mqtt) {
+				$mqtt->publish("d/{$name}/p",$p);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -454,7 +500,7 @@ function storep($name,$p,$msg='') {
 	return $affected ?? 0;
 }
 function storeicon($name,$i,$msg='') {
-	global $d, $user, $time;
+	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();
@@ -462,6 +508,10 @@ function storeicon($name,$i,$msg='') {
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['i']=$i;
+			if ($affected>0&&$mqtt) {
+				$mqtt->publish("d/{$name}/i",$i);
+				if(isset($d[$name]['t'])) $mqtt->publish("d/{$name}/t",$d['time']);
+			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -803,121 +853,54 @@ function hasstoken() {
 		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 	}
 }
-function hass($domain, $service, $entity = '', $target = []) {
-//    lg('💡 HASS '.$domain.' '.$service.' '.$entity,4);
-    $host = '192.168.2.26';
-    $port = 8123;
-    $path = "/api/services/$domain/$service";
-    $data = [];
-    if ($entity != '') $data['entity_id'] = $entity;
-    if (!empty($target)) $data['target'] = $target;
-    $payload = json_encode($data);
-    $headers = "POST $path HTTP/1.1\r\n";
-    $headers .= "Host: $host\r\n";
-    $headers .= "Content-Type: application/json\r\n";
-    $headers .= "Authorization: Bearer ".hasstoken()."\r\n";
-    $headers .= "Content-Length: ".strlen($payload)."\r\n";
-    $headers .= "Connection: Close\r\n\r\n";
-    $fp = @fsockopen($host, $port, $errno, $errstr, 0.05);
-    if ($fp) {
-        fwrite($fp, $headers.$payload);
-        fclose($fp);
-    } else {
-        lg("❌ HASS socket fout: $errstr ($errno)");
-    }
-}
-
-function hassopts($domain, $service, $entity = '', $data = []) {
-    $host = '192.168.2.26';
-    $port = 8123;
-    $path = "/api/services/$domain/$service";
-
-    if (!empty($entity)) $data['entity_id'] = $entity;
-    $payload = json_encode($data);
-
-    $request  = "POST $path HTTP/1.1\r\n";
-    $request .= "Host: $host\r\n";
-    $request .= "Content-Type: application/json\r\n";
-    $request .= "Authorization: Bearer " . hasstoken() . "\r\n";
-    $request .= "Content-Length: " . strlen($payload) . "\r\n";
-    $request .= "Connection: close\r\n\r\n";
-    $request .= $payload;
-
-    // connect and read response
-    $timeout = 2.0; // seconden - pas aan als nodig
-    $fp = @stream_socket_client("tcp://{$host}:{$port}", $errno, $errstr, $timeout);
-    if (!$fp) {
-        lg("❌ HASS socket fout: $errstr ($errno)");
-        return [
-            'ok' => false,
-            'error' => "socket_error",
-            'errno' => $errno,
-            'errstr' => $errstr
-        ];
-    }
-
-    stream_set_timeout($fp, (int)$timeout);
-    fwrite($fp, $request);
-
-    // lees volledige response
-    $raw = '';
-    while (!feof($fp)) {
-        $raw .= fgets($fp, 1024);
-    }
-    $meta = stream_get_meta_data($fp);
-    fclose($fp);
-
-    // split headers en body
-    $parts = preg_split("/\r\n\r\n/", $raw, 2);
-    $header_text = $parts[0] ?? '';
-    $body = $parts[1] ?? '';
-
-    // status code uit eerste headerregel
-    $status = 0;
-    $lines = preg_split("/\r\n/", $header_text);
-    if (!empty($lines[0]) && preg_match('#HTTP/\d\.\d\s+(\d{3})#', $lines[0], $m)) {
-        $status = (int)$m[1];
-    }
-
-    // headers parsen
-    $headers = [];
-    for ($i = 1; $i < count($lines); $i++) {
-        $line = $lines[$i];
-        if (strpos($line, ':') !== false) {
-            list($k, $v) = explode(':', $line, 2);
-            $headers[trim($k)] = trim($v);
+// Fire-and-forget versie (snelst, geen response)
+// Fire-and-forget versie (snelst, geen response)
+function hass(string $domain, string $service, string $entity = '', array $data = []): void {
+    static $socket = null;
+    static $lastUse = 0;
+    
+    $now = microtime(true);
+    
+    // Hergebruik socket als recent gebruikt (binnen 1 sec) en nog open
+    if ($socket === null || ($now - $lastUse) >= 1.0 || @feof($socket)) {
+        $socket && @fclose($socket);
+        $socket = @stream_socket_client(
+            'tcp://192.168.2.26:8123',
+            $errno,
+            $errstr,
+            0.2,
+            STREAM_CLIENT_CONNECT
+        );
+        
+        if (!$socket) {
+            lg("❌ HASS socket fout: $errstr ($errno)");
+            return;
         }
+        
+        stream_set_blocking($socket, true);
+        stream_set_write_buffer($socket, 0);
     }
-
-    $json = null;
-    $jsonError = null;
-    if ($body !== '') {
-        $json = json_decode($body, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $jsonError = json_last_error_msg();
-        }
+    
+    // Voeg entity_id toe aan data als entity opgegeven
+    if ($entity !== '') {
+        $data['entity_id'] = $entity;
     }
-
-    $result = [
-        'ok' => ($status >= 200 && $status < 300),
-        'status' => $status,
-        'headers' => $headers,
-        'body' => $body,
-        'json' => $json,
-        'json_error' => $jsonError,
-        'meta' => $meta,
-        'raw' => $raw
-    ];
-
-    if (!$result['ok']) {
-        lg("❌ HASS response niet-OK: HTTP {$status}, json_error: {$jsonError}");
-    } else {
-        lg("✅ HASS response OK: HTTP {$status}",99);
-    }
-
-    return $result;
+    
+    $payload = json_encode($data);
+    $request = sprintf(
+        "POST /api/services/%s/%s HTTP/1.1\r\n" .
+        "Host: 192.168.2.26\r\n" .
+        "Content-Type: application/json\r\n" .
+        "Authorization: Bearer %s\r\n" .
+        "Content-Length: %d\r\n" .
+        "Connection: keep-alive\r\n\r\n%s",
+        $domain, $service, hasstoken(), strlen($payload), $payload
+    );
+    
+    fwrite($socket, $request);
+    fflush($socket);
+    $lastUse = $now;
 }
-
 
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
@@ -1021,74 +1004,88 @@ function curl($url) {
 	curl_close($ch);
 	return $data;
 }
-class Database {
+final class Database {
     private static ?PDO $instance = null;
+    
     private function __construct() {}
+    private function __clone(): void {}
+    
     public static function getInstance(): PDO {
-        if (self::$instance === null) {
-            try {
-                self::$instance = new PDO("mysql:host=192.168.2.23;dbname=domotica;charset=latin1",'dbuser','dbuser',
-                    [
-                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                        PDO::ATTR_PERSISTENT => true
-                    ]
-                );
-            } catch (PDOException $e) {
-                die('Database connection failed.');
-            }
-        }
-        return self::$instance;
+        return self::$instance ??= self::createConnection();
     }
+    
+    private static function createConnection(): PDO {
+        try {
+            return new PDO(
+                dsn: "mysql:host=192.168.2.23;dbname=domotica;charset=latin1",
+                username: 'dbuser',
+                password: 'dbuser',
+                options: [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES latin1",
+                    PDO::ATTR_TIMEOUT => 5,
+                    PDO::MYSQL_ATTR_FOUND_ROWS => true
+                ]
+            );
+        } catch (PDOException $e) {
+            error_log('Database connection failed: ' . $e->getMessage());
+            throw new RuntimeException('Database connection failed.', 0, $e);
+        }
+    }
+    
     public static function reset(): void {
-		self::$instance = null;
-	}
+        self::$instance = null;
+    }
+    
+    public static function isConnected(): bool {
+        return self::$instance !== null;
+    }
 }
-
-function fetchdata() {
+function fetchdata(): array {
 	global $d;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db = Database::getInstance();
 			static $stmt = null;
-			if ($stmt === null) {
-				$stmt = $db->prepare(
-					"SELECT n,s,t,m,d,i,p FROM devices"
-				);
-			}
+			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p FROM devices");
 			$stmt->execute();
-			while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-				$n=$row[0];
-				if(!is_null($row[1])) $d[$n]['s']=$row[1];
-				if(!is_null($row[2])) $d[$n]['t']=$row[2];
-				if(!is_null($row[3])) $d[$n]['m']=$row[3];
-				if(!is_null($row[4])) $d[$n]['d']=$row[4];
-				if(!is_null($row[5])) $d[$n]['i']=$row[5];
-				if(!is_null($row[6])) $d[$n]['p']=$row[6];
+			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p]) {
+				$d[$n] = array_filter(
+					compact('s', 't', 'm', 'deviceD', 'i', 'p'),
+					static fn($v) => $v !== null
+				);
+				if (isset($d[$n]['deviceD'])) {
+					$d[$n]['d'] = $d[$n]['deviceD'];
+					unset($d[$n]['deviceD']);
+				}
 			}
-			break;
+			break;	
 		} catch (PDOException $e) {
-			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
+			$isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
+			if ($isRecoverable) {
 				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
 				Database::reset();
 				$stmt = null;
-				if($attempt>0) sleep($attempt);
+				$attempt > 0 && sleep($attempt);
 				continue;
-			} else lg('FETCHDATA ERROR! '.$e->getCode());
+			}
+			lg('FETCHDATA ERROR! ' . $e->getCode());
 			throw $e;
 		}
 	}
-	$en = json_decode(getCache('en'));
-	if ($en) {
-		$d['n'] = $en->n;
-		$d['a'] = $en->a;
-		$d['b'] = $en->b;
-		$d['c'] = $en->c;
-		$d['z'] = $en->z;
+	if ($en = json_decode(getCache('en'))) {
+		$d['n'] = $en->n ?? null;
+		$d['a'] = $en->a ?? null;
+		$d['b'] = $en->b ?? null;
+		$d['c'] = $en->c ?? null;
+		$d['z'] = $en->z ?? null;
 	}
 	return $d;
 }
-
 
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;

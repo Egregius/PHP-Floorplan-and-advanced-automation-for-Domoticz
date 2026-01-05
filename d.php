@@ -97,7 +97,7 @@ if ($type === 'f') {
 		if ($sunrise === false) {
 			$msg.=':'.__LINE__;
 			$sunrise = getCache('sunrise');
-			lg(print_r($sunrise,true));
+//			lg(print_r($sunrise,true));
 			if ($sunrise) {
 				apcu_store('cache_sunrise', $sunrise, 14400);
 			}
@@ -105,7 +105,7 @@ if ($type === 'f') {
 		} 
 		$msg.=':'.__LINE__;
 		if(!is_array($sunrise)) $sunrise = json_decode($sunrise, true);
-		lg(print_r($sunrise,true));
+//		lg(print_r($sunrise,true));
 		$msg.=':'.__LINE__;
 		$d['Tstart'] = $sunrise['CivTwilightStart'];
 		$d['Srise'] = $sunrise['Sunrise'];
