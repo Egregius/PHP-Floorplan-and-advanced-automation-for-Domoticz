@@ -1,4 +1,4 @@
 <?php
 if ($status=='On') {
-	sw('lampkast', 'On');
+	sw('lampkast', 'On','',true);
 }

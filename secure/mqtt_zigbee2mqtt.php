@@ -69,6 +69,11 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
+
+$mqtt->subscribe('d/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	lg(print_r($path,true));
+},MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(100000);

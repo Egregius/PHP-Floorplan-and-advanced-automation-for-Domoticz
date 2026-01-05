@@ -259,8 +259,8 @@ function resetsecurity() {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 	}
 }
-function sw($name,$action='Toggle',$msg=null) {
-	global $d,$user,$db;
+function sw($name,$action='Toggle',$msg=null,$publish=false) {
+	global $d,$user,$db,$mqtt;
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
@@ -285,6 +285,10 @@ function sw($name,$action='Toggle',$msg=null) {
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
 			store($name, $action, $msg);
+		}
+		if ($publish===true) {
+			lg("d/{$name}/s = {$action}");
+			$mqtt->publish("d/{$name}/s",$action);
 		}
 	}
 }
@@ -312,6 +316,7 @@ function store($name='',$status='',$msg='') {
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
 			$d[$name]['s']=$status;
+			
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -329,7 +334,7 @@ function store($name='',$status='',$msg='') {
 }
 
 function storemode($name,$mode,$msg='') {
-	global $d, $user;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$db=Database::getInstance();

@@ -141,7 +141,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						$status='On';
 //						lg('📲 '.$file);
 						include '/var/www/html/secure/pass2php/'.$file.'.php';
-						if (isset($d[$file]['t'])) store($file,null,'',1);
+//						if (isset($d[$file]['t'])) store($file,null,'',1);
 					}
 				} elseif ($device=='inputliving') {
 					if(isset($path[2])&&$path[2]=='sensor_binary') {
@@ -184,6 +184,12 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
+
+$mqtt->subscribe('d/+',function (string $topic,string $status) use (&$d) {
+	$path=explode('/',$topic);
+	lg(print_r($path,true));
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(50000);
