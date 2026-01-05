@@ -47,7 +47,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			if ($d[$device]['s']!=$status) {
 	//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				store($device,$status,'',1);
+				store($device,$status);
 			}
 		}
 	} catch (Throwable $e) {
@@ -71,7 +71,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if ($d[$device]['m']!=$status) {
-				storemode($device,$status,'',1);
+				storemode($device,$status);
 			}
 		}
 	} catch (Throwable $e) {

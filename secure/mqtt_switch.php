@@ -57,7 +57,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				if ($d[$device]['s']!=$status) {
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',true);
+					store($device,$status);
 				}
 			}
 		}

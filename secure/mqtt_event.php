@@ -40,7 +40,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, */&$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -57,15 +57,15 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					if (isset($d[$device]['t'])) store($device,$status,'',1);
+					if (isset($d[$device]['t'])) store($device,$status);
 				} elseif ($status === 'Keypressed2x') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					if (isset($d[$device]['t'])) store($device,$status,'',1);
+					if (isset($d[$device]['t'])) store($device,$status);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if (isset($d[$device]['t'])) store($device,$status,'',1);
+				if (isset($d[$device]['t'])) store($device,$status);
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {

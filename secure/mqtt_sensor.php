@@ -65,7 +65,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$old = (int)($d[$device]['s'] ?? 0);
 				$oldt = (int)($d[$device]['t'] ?? 0);
 				if ($oldt === 0) {
-					store($device, $val, '', 1);
+					store($device, $val);
 					return;
 				}
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
@@ -74,7 +74,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
+					store($device,$status);
 				}
 			}
 		} elseif ($device === 'sun_solar_elevation') {
@@ -88,7 +88,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
 			if ($d['dag']['m']!=$status) {
-				storemode('dag',$status,'',1);
+				storemode('dag',$status);
 				setCache('dag',$status);
 			}
 		} elseif ($device === 'weg') {

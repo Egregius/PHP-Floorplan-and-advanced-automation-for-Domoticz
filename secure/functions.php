@@ -320,6 +320,7 @@ function store($name='',$status='',$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
@@ -349,6 +350,7 @@ function storemode($name,$mode,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
@@ -376,6 +378,7 @@ function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
@@ -406,6 +409,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -437,6 +441,7 @@ function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -466,6 +471,7 @@ function storep($name,$p,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -493,6 +499,7 @@ function storeicon($name,$i,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);

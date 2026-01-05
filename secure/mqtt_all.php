@@ -67,7 +67,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				$device='pirgarage';
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
+//				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}
@@ -97,22 +97,22 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				if ($device=='rbureel') $status=100-$status;
 				$d=fetchdata();
 				if ($d[$device]['s']!=$status) {
-					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
-					store($device,$status,'',1);
+//					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
+					store($device,$status);
 				}
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, */&$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -129,22 +129,22 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					if (isset($d[$device]['t'])) store($device,$status,'',1);
+					if (isset($d[$device]['t'])) store($device,$status);
 				} elseif ($status === 'Keypressed2x') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					if (isset($d[$device]['t'])) store($device,$status,'',1);
+					if (isset($d[$device]['t'])) store($device,$status);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if (isset($d[$device]['t'])) store($device,$status,'',1);
+				if (isset($d[$device]['t'])) store($device,$status);
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
-		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
@@ -166,7 +166,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				if ($d[$device]['s']!=$status) {
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',true);
+					store($device,$status);
 				}
 			}
 		}
@@ -225,7 +225,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			if ($d[$device]['s']!=$status) {
 	//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				store($device,$status,'',1);
+				store($device,$status);
 			}
 		}
 	} catch (Throwable $e) {
@@ -248,7 +248,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if ($d[$device]['m']!=$status) {
-				storemode($device,$status,'',1);
+				storemode($device,$status);
 			}
 		}
 	} catch (Throwable $e) {
@@ -271,17 +271,26 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
-				if ($hum !== $d[$tdevice]['m']) storemode($tdevice,$hum,'',1); 
+				if ($hum !== $d[$tdevice]['m']&&abs($hum-$d[$tdevice]['m'])>1) storemode($tdevice,$hum); 
 			} elseif (substr($device,-5) === '_temp') {
 				if (!is_numeric($status)) return;
 				$st=(float)$status;
-				if ($d[$device]['s']!=$st) store($device,$st,'',1);
+				if ($d[$device]['s']!=$st) store($device,$st);
 			} elseif ($device=='daikin_kwh') {
-				return;
+				$val = (int)$status;
+				$old = (int)($d[$device]['s'] ?? 0);
+				$oldt = (int)($d[$device]['t'] ?? 0);
+				if ($oldt === 0) {
+					store($device, $val);
+					return;
+				}
+				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
+				$time_passed = ($time - $oldt) >= 30;
+				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status,'',1);
+					store($device,$status);
 				}
 			}
 		} elseif ($device === 'sun_solar_elevation') {
@@ -295,7 +304,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
 			if ($d['dag']['m']!=$status) {
-				storemode('dag',$status,'',1);
+				storemode('dag',$status);
 				setCache('dag',$status);
 			}
 		} elseif ($device === 'weg') {
@@ -311,10 +320,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
-	if ($lastcheck < $d['time'] - $d['rand']) {
-        $lastcheck = $d['time'];
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
         stoploop();
         updateWekker($t, $weekend, $dow, $d);
     }
