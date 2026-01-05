@@ -114,18 +114,18 @@ if (isset($set)&&$d['heating']['s']>=0) {
 if ($d['heating']['s']>=2) {
 	if ($d['weg']['s']<=1&&$d['badkamer_temp']['s']<14) {
 		if ($d['badkamer_set']['i']!=true) {
-			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
+			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
 		if ($d['brander']['s']=='Off'&&past('brander')>900) sw('brander', 'On');
 	} elseif (($set>13&&$d['weg']['s']<=1)||$d['living_set']['s']<=17) {
 		if ($d['badkamer_set']['i']!=true) {
-			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
+			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
 	} else {
 		if($d['badkamer_set']['i']!=false&&$d['living_set']['s']>17&&$d['brander']['s']=='On') {
-			hassopts('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
+			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
 			storeicon('badkamer_set',false);
 		}
 	}

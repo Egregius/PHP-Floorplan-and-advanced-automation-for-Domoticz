@@ -6,3 +6,11 @@ exec(
   "-m '{$_GET['action']}-$uniq'"
 );
 echo 'ok';
+
+/*
+telegram('Kodi '.$_GET['action']);
+function telegram($msg,$silent=true,$to=1) {
+	if ($silent==true) $silent='true';
+	else $silent='false';
+	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
+}*/

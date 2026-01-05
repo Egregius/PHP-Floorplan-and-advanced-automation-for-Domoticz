@@ -84,6 +84,16 @@ $mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
 	$d[$path[1]][$path[2]]=$status;
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->publish(
+    'homeassistant/sensor/kodi/last_action/config',
+    json_encode([
+        'name'        => 'Kodi Last Action',
+        'state_topic' => 'kodi/last_action',
+        'unique_id'   => 'kodi_last_action',
+    ], JSON_UNESCAPED_SLASHES),
+    0,
+    true
+);
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(50000);

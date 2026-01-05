@@ -104,9 +104,12 @@ if ($d['bose101']['s']=='On'
 }	*/
 if ($d['weg']['s']==0&&$d['auto']['s']=='On') {
 	if ($d['nas']['s']=='Off') {
+		lg(basename(__FILE__).':'.__LINE__);
 		if ($d['lgtv']['s']=='On') {
+			lg(basename(__FILE__).':'.__LINE__);
 			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
 			if (isset($kodi['result'])) {
+				lg(basename(__FILE__).':'.__LINE__);
 				lg('Waking NAS for Kodi...');
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
