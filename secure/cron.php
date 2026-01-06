@@ -18,6 +18,16 @@ $d=fetchdata();
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
+// Using https://github.com/php-mqtt/client
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+require '/var/www/vendor/autoload.php';
+$connectionSettings=(new ConnectionSettings)
+	->setUsername('mqtt')
+	->setPassword('mqtt')
+	->setKeepAliveInterval(60);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt->connect($connectionSettings,true);
 foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
 	sw($i,'Off');
 }
@@ -62,9 +72,10 @@ while (true) {
 		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
 		elseif ($d['heating']['s'] == 0) include '_TC_neutral.php';
 		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
+		$mqtt->publish('p', 'p');
 	}
-	if (checkInterval($last60, 60, $time)) include '_cron60.php' ;
-	if (checkInterval($last300, 300, $time)) {include '_cron300.php';stoploop();updateWekker($t, $weekend, $dow, $d);}
+	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
+	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
 	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
 	if (checkInterval($last90, 90, $time)) include '_weather.php';
 	
