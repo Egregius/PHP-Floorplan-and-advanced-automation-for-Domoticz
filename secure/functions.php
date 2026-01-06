@@ -255,7 +255,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         default => null
     };
     if ($mqtt) {
-		$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
+		$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
 	}
 }
 function resetsecurity() {
@@ -292,7 +292,7 @@ function sw($name,$action='Toggle',$msg=null) {
 			store($name, $action, $msg);
 		}
 		if ($mqtt) {
-			$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
+			$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
 		}
 	}
 }
@@ -315,15 +315,15 @@ function store($name='',$status='',$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['s']=$status;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['s']=$status;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -344,15 +344,15 @@ function storemode($name,$mode,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['m']=$mode;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['m']=$mode;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -371,16 +371,16 @@ function storesm($name,$s,$m,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['s']=$s;
+			$d[$name]['m']=$m;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['s']=$s;
-			$d[$name]['m']=$m;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -399,17 +399,17 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['s']=$s;
+			$d[$name]['m']=$m;
+			$d[$name]['i']=$i;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['s']=$s;
-			$d[$name]['m']=$m;
-			$d[$name]['i']=$i;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -428,16 +428,16 @@ function storesp($name,$s,$p,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['s']=$s;
+			$d[$name]['p']=$p;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['s']=$s;
-			$d[$name]['p']=$p;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -456,15 +456,15 @@ function storep($name,$p,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['p']=$p;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['p']=$p;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -483,15 +483,15 @@ function storeicon($name,$i,$msg='') {
 	global $d,$user,$mqtt;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+			$d[$name]['i']=$i;
+			if ($mqtt) {
+				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+			}
 			$d['time']??=time();
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			$d[$name]['i']=$i;
-			if ($affected > 0 && $mqtt) {
-				$mqtt->publish("d/{$user}",json_encode([$name => (($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))]),1,true);
-			}
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {

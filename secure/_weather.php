@@ -130,7 +130,7 @@ foreach ($temps as $i) {
 if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10;
 $maxtemp=ceil($maxtemp*10)/10;
 $ref = (float)$d['buiten_temp']['s'];
-$temp = max($ref - 0.1, min($temp, $ref + 0.1));
+$temp = round(max($ref - 0.1, min($temp, $ref + 0.1)),1);
 
 
 if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('minmaxtemp', $mintemp, $maxtemp);
@@ -139,7 +139,7 @@ if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('m
 //lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']['m']);
 $ref = (int)$d['buiten_temp']['m'];
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$ref);
-$hum = max($ref - 1, min($hum, $ref + 1));
+$hum = (int)max($ref - 1, min($hum, $ref + 1));
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
 
 if ($d['buiten_temp']['s']!=$temp&&$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);

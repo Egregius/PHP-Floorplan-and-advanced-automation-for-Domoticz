@@ -30,11 +30,11 @@ def publish_all_retained():
     if not mqtt_connected:
         return
     now=int(time.time())
-    mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
+    mqtt_client.publish("d/t", now, retain=True, qos=1)
     for k, v in state.items():
-        mqtt_client.publish(f"d/en/{k}", json.dumps({k: v}), retain=True, qos=1)
+        mqtt_client.publish(f"d/en/{k}", v, retain=True, qos=1)
     for k, v in teller_state.items():
-        mqtt_client.publish(f"teller/{k}", json.dumps({k: v}), retain=True, qos=1)
+        mqtt_client.publish(f"teller/{k}", v, retain=True, qos=1)
     log("📡 Alle retained topics gepubliceerd")
 
 def on_connect(client, userdata, flags, rc):
@@ -135,14 +135,14 @@ def step_for_value(value):
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"d/en/{key}", json.dumps({key: value}), retain=True, qos=1)
+        result = mqtt_client.publish(f"d/en/{key}", value, retain=True, qos=1)
 #        log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"teller/{key}", json.dumps({key: value}), retain=True, qos=1)
+        result = mqtt_client.publish(f"teller/{key}", value, retain=True, qos=1)
 #        log(f"📤 Publish teller/{key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan teller/{key} niet publiceren: niet verbonden")  # DEBUG
@@ -222,17 +222,6 @@ async def handle_device(device, token, ssl_context):
 
 # --- Time loop ---
 def time_loop():
-    last=0
-    while True:
-        now=int(time.time())
-        if now != last:
-            last=now
-            if mqtt_connected:
-                mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
-        time.sleep(1)
-
-
-def time_loop():
     last = 0
     while True:
         if mqtt_connected:
@@ -241,10 +230,16 @@ def time_loop():
 
             if sec != last:
                 last = sec
-                mqtt_client.publish("d/t", json.dumps({"t": sec}), retain=True, qos=1)
+                mqtt_client.publish(
+                    "d/t",
+                    sec,  # enkel het getal
+                    retain=True,
+                    qos=1
+                )
 
-            time.sleep(1 - (now - sec))
-        
+            sleep_time = max(0, 1 - (now - sec))
+            time.sleep(sleep_time)
+
 # --- Main ---
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
