@@ -27,7 +27,7 @@ if (isset($_GET['f'])) {
 		$msg=__LINE__;
 
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
-		$en=true;
+	//	$en=true;
 		$extra=true;
 		$d = ['t' => $time];
 	}

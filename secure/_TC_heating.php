@@ -111,9 +111,13 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$comfortEnd = strtotime('19:30');
 	} else {
 	 	if ($d['verlof']['s']>0) $comfortAfternoon = strtotime($comfortStart[0]);
-		else $comfortAfternoon = strtotime($comfortStart[$dow]);
-		$comfortEnd = strtotime('19:00');
+		else {
+			$comfortAfternoon = strtotime($comfortStart[$dow]);
+			$comfortAfternoon = strtotime('7:45');
+		}
+			$comfortEnd = strtotime('19:00');
 	}
+
 	
 	$target = 21;
 	$tempDelta   = max(0, $target - $living);
