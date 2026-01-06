@@ -25,6 +25,17 @@ _pending_retained_publish = True  # flag voor eerste connect en reconnect
 
 def log(*args):
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
+def publish_all_retained():
+    """Publiceer alles naar MQTT met retain=True als broker verbonden"""
+    if not mqtt_connected:
+        return
+    now=int(time.time())
+    mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
+    for k, v in state.items():
+        mqtt_client.publish(f"d/en/{k}", json.dumps({k: v}), retain=True, qos=1)
+    for k, v in teller_state.items():
+        mqtt_client.publish(f"teller/{k}", json.dumps({k: v}), retain=True, qos=1)
+    log("📡 Alle retained topics gepubliceerd")
 
 def on_connect(client, userdata, flags, rc):
     global mqtt_connected, _pending_retained_publish
@@ -73,17 +84,6 @@ if TELLER_FILE.exists():
         teller_publish_state.update(teller_state)
     except: pass
 
-def publish_all_retained():
-    """Publiceer alles naar MQTT met retain=True als broker verbonden"""
-    if not mqtt_connected:
-        return
-    now=int(time.time())
-    mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
-    for k, v in state.items():
-        mqtt_client.publish(f"d/en/{k}", json.dumps({k: v}), retain=True, qos=1)
-    for k, v in teller_state.items():
-        mqtt_client.publish(f"teller/{k}", json.dumps({k: v}), retain=True, qos=1)
-    log("📡 Alle retained topics gepubliceerd")
 
 # --- Tokens ---
 def load_tokens():
@@ -126,20 +126,24 @@ def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
-    if v < 50: return 2
-    elif v < 100: return 5
-    else: return 10
+    if v < 50: return 5
+    elif v < 100: return 10
+    elif v < 500: return 20
+    elif v < 1000: return 50
+    else: return 100
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/en/{key}", json.dumps({key: value}), retain=True, qos=1)
+#        log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"teller/{key}", json.dumps({key: value}), retain=True, qos=1)
+#        log(f"📤 Publish teller/{key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan teller/{key} niet publiceren: niet verbonden")  # DEBUG
 
@@ -227,6 +231,20 @@ def time_loop():
                 mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
         time.sleep(1)
 
+
+def time_loop():
+    last = 0
+    while True:
+        if mqtt_connected:
+            now = time.time()
+            sec = int(now)
+
+            if sec != last:
+                last = sec
+                mqtt_client.publish("d/t", json.dumps({"t": sec}), retain=True, qos=1)
+
+            time.sleep(1 - (now - sec))
+        
 # --- Main ---
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
