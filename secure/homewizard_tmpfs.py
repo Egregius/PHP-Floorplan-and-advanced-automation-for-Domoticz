@@ -19,18 +19,32 @@ MQTT_BASE = "d"
 
 mqtt_client = mqtt.Client(client_id="homewizard_bridge")
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
+
+mqtt_connected = False
+_pending_retained_publish = True  # flag voor eerste connect en reconnect
+
+def log(*args):
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
+
+def on_connect(client, userdata, flags, rc):
+    global mqtt_connected, _pending_retained_publish
+    if rc == 0:
+        mqtt_connected = True
+        log("✅ MQTT verbonden")
+        if _pending_retained_publish:
+            _pending_retained_publish = False
+            publish_all_retained()
+    else:
+        log(f"❌ MQTT connect fout: rc={rc}")
+
+mqtt_client.on_connect = on_connect
 mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
 mqtt_client.loop_start()
 
-
-# Tokens JSON
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
-
-# Cache bestanden (tmpfs)
 CACHE_FILE = Path("/dev/shm/cache/en.txt")
 TELLER_FILE = Path("/dev/shm/cache/teller.txt")
 
-# Devices configuratie
 DEVICES = [
     {"name": "p", "host": "p1dongle"},
     {"name": "z", "host": "energymeter"},
@@ -45,9 +59,18 @@ state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
 state_publish = {}
 teller_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
 teller_publish_state = {"import": 0,"export": 0,"gas": 0,"water": 0}
-def log(*args):
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
 
+def publish_all_retained():
+    """Publiceer alles naar MQTT met retain=True als broker verbonden"""
+    if not mqtt_connected:
+        return
+    for k, v in state.items():
+        mqtt_client.publish(f"d/en/{k}", json.dumps({k: v}), retain=True, qos=1)
+    for k, v in teller_state.items():
+        mqtt_client.publish(f"teller/{k}", json.dumps({k: v}), retain=True, qos=1)
+    log("📡 Alle retained topics gepubliceerd")
+
+# --- Tokens ---
 def load_tokens():
     return json.loads(TOKEN_FILE.read_text()) if TOKEN_FILE.exists() else {}
 
@@ -70,6 +93,7 @@ def request_token(host, timeout=60):
         time.sleep(1)
     raise TimeoutError(f"❌ Timeout na {timeout}s")
 
+# --- Cache ---
 def flush_state():
     try:
         CACHE_FILE.write_text(json.dumps(state))
@@ -82,47 +106,32 @@ def flush_teller_state():
     except Exception as e:
         log("Fout bij schrijven teller cache:", e)
 
-def quantize_0_01(value):
-    return floor(value * 100) / 100
-
-def quantize_step(value, step):
-    return (value // step) * step
-
+# --- Quantization ---
+def quantize_0_01(value): return floor(value*100)/100
+def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
-    if v < 50:
-        return 2
-    elif v < 100:
-        return 5
-    else:
-        return 10
-def mqtt_publish_time():
-    global _last_time_published
+    if v < 50: return 2
+    elif v < 100: return 5
+    else: return 10
 
-    now = int(time.time())
+# --- MQTT ---
+def mqtt_publish_key(key, value):
+    if mqtt_connected:
+        mqtt_client.publish(f"d/en/{key}", json.dumps({key: value}), retain=True, qos=1)
 
-    if _last_time_published != now:
-        _last_time_published = now
-        try:
-            mqtt_client.publish(
-                "d/t",
-                json.dumps({"t": now}),
-                retain=True
-            )
-        except Exception as e:
-            log("MQTT tijd fout:", e)
+def mqtt_publish_teller(key, value):
+    if mqtt_connected:
+        mqtt_client.publish(f"teller/{key}", json.dumps({key: value}), retain=True, qos=1)
 
+# --- State updates ---
 def publish_step(key, value):
-    if key in NO_STEP_KEYS:
-        q = value
-    else:
-        step = step_for_value(value)
-        q = quantize_step(value, step)
-
+    q = value if key in NO_STEP_KEYS else quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
-
     if last is None or q != last:
         state_publish[key] = q
+        state[key] = q
+        flush_state()
         mqtt_publish_key(key, q)
 
 def publish_quantized(key, value):
@@ -130,70 +139,38 @@ def publish_quantized(key, value):
     last = teller_publish_state.get(key)
     if last is None or q > last:
         teller_publish_state[key] = q
+        teller_state[key] = q
+        flush_teller_state()
         mqtt_publish_teller(key, q)
 
-
 def update_state(key, value):
-    if value is None:
-        return
-
-    if state.get(key) != value:
-        state[key] = value
-        flush_state()
+    if value is not None:
         publish_step(key, value)
 
-
 def update_teller(import_kwh, export_kwh, gas, water):
-    if import_kwh is not None:
-        teller_state["import"] = import_kwh
-        publish_quantized("import", import_kwh)
-    if export_kwh is not None:
-        teller_state["export"] = export_kwh
-        publish_quantized("export", export_kwh)
-    if gas is not None:
-        teller_state["gas"] = gas
-        publish_quantized("gas", gas)
-    if water is not None:
-        teller_state["water"] = water
-        publish_quantized("water", water)
-    flush_teller_state()
+    if import_kwh is not None: publish_quantized("import", import_kwh)
+    if export_kwh is not None: publish_quantized("export", export_kwh)
+    if gas is not None: publish_quantized("gas", gas)
+    if water is not None: publish_quantized("water", water)
 
 def process_measurement(name, data):
-    if name == "p":
-        update_state("n", int(round(data.get("power_w", 0))))
-        update_state("a", int(round(data.get("average_power_15m_w", 0))))
+    if name=="p":
+        update_state("n", int(round(data.get("power_w",0))))
+        update_state("a", int(round(data.get("average_power_15m_w",0))))
         import_kwh = data.get("energy_import_kwh")
         export_kwh = data.get("energy_export_kwh")
-        gas = None
-        water = None
-        for ext in data.get("external", []):
-            if ext.get("type") == "gas_meter":
-                gas = ext.get("value")
-            elif ext.get("type") == "water_meter":
-                water = ext.get("value")
+        gas = water = None
+        for ext in data.get("external",[]):
+            if ext.get("type")=="gas_meter": gas=ext.get("value")
+            if ext.get("type")=="water_meter": water=ext.get("value")
         update_teller(import_kwh, export_kwh, gas, water)
-    elif name == "b":
-        update_state("b", int(round(data.get("power_w", 0))))
-        update_state("c", int(round(data.get("state_of_charge_pct", 0))))
+    elif name=="b":
+        update_state("b", int(round(data.get("power_w",0))))
+        update_state("c", int(round(data.get("state_of_charge_pct",0))))
     else:
-        update_state("z", -int(round(data.get("power_w", 0))))
+        update_state("z", -int(round(data.get("power_w",0))))
 
-def mqtt_publish_key(key, value):
-    try:
-        topic = f"d/en/{key}"
-        payload = {key: value}
-        mqtt_client.publish(topic, json.dumps(payload),retain=True)
-    except Exception as e:
-        log("MQTT fout:", e)
-
-def mqtt_publish_teller(key, value):
-    try:
-        topic = f"teller/{key}"
-        payload = {key: value}
-        mqtt_client.publish(topic, json.dumps(payload),retain=True)
-    except Exception as e:
-        log("MQTT fout:", e)
-
+# --- WebSocket handler ---
 async def handle_device(device, token, ssl_context):
     name, host = device["name"], device["host"]
     url = f"wss://{host}/api/ws"
@@ -206,36 +183,42 @@ async def handle_device(device, token, ssl_context):
                     try:
                         data = json.loads(message)
                         msg_type = data.get("type")
-                        if msg_type == "authorization_requested":
-                            await ws.send(json.dumps({"type": "authorization", "data": token}))
-                            await ws.send(json.dumps({"type": "subscribe", "data": "measurement"}))
+                        if msg_type=="authorization_requested":
+                            await ws.send(json.dumps({"type":"authorization","data":token}))
+                            await ws.send(json.dumps({"type":"subscribe","data":"measurement"}))
                             log(f"🔐 {name}: Geautoriseerd")
-                        elif msg_type == "measurement":
-                            process_measurement(name, data.get("data", {}))
-                        elif msg_type == "error":
-                            log(f"❌ {name}: {data.get('message', data)}")
+                        elif msg_type=="measurement":
+                            process_measurement(name,data.get("data",{}))
+                        elif msg_type=="error":
+                            log(f"❌ {name}: {data.get('message',data)}")
                     except Exception as e:
-                        log(f"⚠️  {name}: {e}")
+                        log(f"⚠️ {name}: {e}")
         except Exception as e:
             log(f"❌ {name}: {e}")
         await asyncio.sleep(RECONNECT_DELAY)
+
+# --- Time loop ---
 def time_loop():
+    last=0
     while True:
-        mqtt_publish_time()
-        time.sleep(0.2)
-        
+        now=int(time.time())
+        if now != last:
+            last=now
+            if mqtt_connected:
+                mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
+        time.sleep(1)
+
+# --- Main ---
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
-
     ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
+    ssl_context.check_hostname=False
+    ssl_context.verify_mode=ssl.CERT_NONE
 
     try:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    except:
-        pass
+    except: pass
 
     tokens = load_tokens()
     for dev in DEVICES:
@@ -246,24 +229,16 @@ async def main():
             except Exception as e:
                 log(f"❌ {dev['name']}: {e}")
 
-    # 🔹 START TIME THREAD HIER (exact 1x)
-    threading.Thread(
-        target=time_loop,
-        daemon=True
-    ).start()
-
-    tasks = [
-        asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
-        for dev in DEVICES if dev["name"] in tokens
-    ]
+    tasks = [asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
+             for dev in DEVICES if dev["name"] in tokens]
 
     if tasks:
         await asyncio.gather(*tasks)
     else:
         log("❌ Geen devices beschikbaar")
 
-
-if __name__ == "__main__":
+if __name__=="__main__":
+    threading.Thread(target=time_loop, daemon=True).start()
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

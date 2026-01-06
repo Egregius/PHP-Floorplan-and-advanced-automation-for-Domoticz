@@ -25,11 +25,9 @@ if (isset($_GET['f'])) {
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
 		$msg=__LINE__;
-
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 	//	$en=true;
 		$extra=true;
-		$d = ['t' => $time];
 	}
 } elseif (isset($_GET['h'])) {
 	$type='h';
@@ -38,9 +36,8 @@ if (isset($_GET['f'])) {
 		$t=$_GET['h'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
-				$msg=__LINE__;
-		
-		 $sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
+		$msg=__LINE__;
+		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 	}
 } elseif (isset($_GET['o'])) {
 	$type='o';
@@ -58,7 +55,7 @@ $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 7200);
 if ($last!=$time) $d = ['t' => $time];
 if ($type === 'f') {
-	if($en==true||$last!=$time){
+/*	if($en==true||$last!=$time){
 		$en = getCache('en');
 		if ($en) {
 			$en = json_decode($en);
@@ -70,7 +67,7 @@ if ($type === 'f') {
 				$d['z'] = $en->z;
 			}
 		}
-	}
+	}*/
 	$lastenergy_vandaag=apcu_fetch($id.$type.'energy_vandaag');
 	$lastupd=filemtime('/dev/shm/cache/energy_vandaag.txt');
 	if($last===false||$extra===true||$lastenergy_vandaag<$lastupd) {
