@@ -60,10 +60,25 @@ state_publish = {}
 teller_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
 teller_publish_state = {"import": 0,"export": 0,"gas": 0,"water": 0}
 
+# NIEUW: Lees cache bij opstarten
+if CACHE_FILE.exists():
+    try:
+        state.update(json.loads(CACHE_FILE.read_text()))
+        state_publish.update(state)
+    except: pass
+
+if TELLER_FILE.exists():
+    try:
+        teller_state.update(json.loads(TELLER_FILE.read_text()))
+        teller_publish_state.update(teller_state)
+    except: pass
+
 def publish_all_retained():
     """Publiceer alles naar MQTT met retain=True als broker verbonden"""
     if not mqtt_connected:
         return
+    now=int(time.time())
+    mqtt_client.publish("d/t", json.dumps({"t": now}), retain=True, qos=1)
     for k, v in state.items():
         mqtt_client.publish(f"d/en/{k}", json.dumps({k: v}), retain=True, qos=1)
     for k, v in teller_state.items():
@@ -118,11 +133,15 @@ def step_for_value(value):
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
-        mqtt_client.publish(f"d/en/{key}", json.dumps({key: value}), retain=True, qos=1)
+        result = mqtt_client.publish(f"d/en/{key}", json.dumps({key: value}), retain=True, qos=1)
+    else:
+        log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
-        mqtt_client.publish(f"teller/{key}", json.dumps({key: value}), retain=True, qos=1)
+        result = mqtt_client.publish(f"teller/{key}", json.dumps({key: value}), retain=True, qos=1)
+    else:
+        log(f"⚠️ Kan teller/{key} niet publiceren: niet verbonden")  # DEBUG
 
 # --- State updates ---
 def publish_step(key, value):
