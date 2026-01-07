@@ -22,7 +22,9 @@ $boses=array(
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Floorplan</title>
+	<link rel="preconnect" href="ws://192.168.2.22:9001">
+	<link rel="dns-prefetch" href="//192.168.2.22">
+	<title>Floorplan Bose</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<meta name="HandheldFriendly" content="true">
 	<meta name="mobile-web-app-capable" content="yes">
@@ -50,6 +52,7 @@ $boses=array(
 		#playlist{font-size:33px;top:4px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
 	</style>
+	<script src="/scripts/mqtt.min.js"></script>
 	<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
 	<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
