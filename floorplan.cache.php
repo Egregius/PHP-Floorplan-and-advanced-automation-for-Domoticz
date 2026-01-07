@@ -12,15 +12,8 @@ echo '
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="theme-color" content="#000">';
-if ($udevice=='iPhone') {
-	echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.655,user-scalable=yes,minimal-ui"/>';
-} elseif ($udevice=='iPad') {
-	echo '
-		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.2,user-scalable=yes,minimal-ui"/>';
-}
-echo '
+		<meta name="theme-color" content="#000">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale='.$scale.',user-scalable=yes,minimal-ui"/>
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
@@ -31,15 +24,42 @@ echo '
 		
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
-			html{width:320px!important;}
-			body{width:320px!important;}
-			td{font-size:0.8em;text-align:left;}
+			html{width:100%!important;}
+			body{width:100%!important;overflow:auto;}
+			td{font-size:1em;text-align:left;white-space:nowrap;}
+			th{text-align:left;}
 			.fix{width:320px;padding:0}
 			.btn{width:300px;}
 			.btnd{width:236px;}
 			.b4{max-width:155px!important;}
 			.b3{max-width:320px!important;}
 			tr.border_bottom td {border-bottom:1pt dotted #777;color:#FFF;font-size:0.9em}
+			#table {
+				width: 100% !important;
+				table-layout: fixed;
+			}
+			#table th:nth-child(1),
+			#table td:nth-child(1) { width: 18%; }
+			
+			#table th:nth-child(2),
+			#table td:nth-child(2) { width: 15%; }
+			
+			#table th:nth-child(3),
+			#table td:nth-child(3) { width: 10%; }
+			
+			#table th:nth-child(4),
+			#table td:nth-child(4) {
+				width: 12%;
+				white-space: nowrap;
+			}
+			.table-wrapper {
+				width: 100%;
+				overflow-x: auto;
+			}
+			
+			.table-wrapper table {
+				width: 100% !important;
+			}
 		</style>
 	</head>
 	<body>';
@@ -73,7 +93,7 @@ echo '
 		<br>
 		<br>
 		<br>
-		<div class="fix" style="top:82px;left:0px">
+		<div class="table-wrapper">
 		<table  id="table" cellpadding="2" cellspacing="0">
 			<thead>
 				<tr class="border_bottom">
@@ -97,9 +117,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			echo '
 					<td>'.$row['n'].'</td>';
 			if ($row['s']=='D') echo '
-					<td class="center">Drogen</td>';
+					<td>Drogen</td>';
 			else echo '
-					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>';
+					<td>'.number_format($row['s'], 1, ',', '').' °C</td>';
 			if ($row['m']==0) {
 				echo '
 					<td>Auto</td>';
@@ -110,18 +130,18 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		} elseif (str_ends_with($row['n'], 'Z')) {
 			echo '
 					<td>'.$row['n'].'</td>
-					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td>'.number_format($row['s'], 1, ',', '').' °C</td>
 					<td></td>';
 		} elseif (str_ends_with($row['n'], '_temp')) {
 			if ($row['n']=='buiten_temp') {
 				echo  '
 					<td>'.$row['n'].'</td>
-					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td>'.number_format($row['s'], 1, ',', '').' °C</td>
 					<td>'.number_format($row['m'], 0, ',', '').' % Buien</td>';
 			} else {
 				echo '
 					<td>'.$row['n'].'</td>
-					<td class="right">'.number_format($row['s'], 1, ',', '').' °C</td>
+					<td>'.number_format($row['s'], 1, ',', '').' °C</td>
 					<td>'.$row['m'].'</td>';
 			}
 		} elseif (str_starts_with($row['n'], 'R')) {
@@ -215,13 +235,13 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		} elseif ($row['n']=='zon') {
 			echo '
 					<td>Zon</td>
-					<td class="right">'.number_format($row['s'], 0, ',', '').' W</td>
+					<td>'.number_format($row['s'], 0, ',', '').' W</td>
 					<td></td>';
 		} elseif ($row['n']=='elec') {
 			echo '
 					<td>Elec</td>
-					<td class="right">'.number_format($row['s'], 0).' W</td>
-					<td class="right">'.number_format($row['m'], 1, ',', '').' kWh</td>';
+					<td>'.number_format($row['s'], 0).' W</td>
+					<td>'.number_format($row['m'], 1, ',', '').' kWh</td>';
 		} elseif ($row['n']=='icon') {
 			echo '
 					<td>icon</td>
@@ -268,7 +288,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					<td></td>';
 		} elseif ($row['n']=='minmaxtemp') {
 			echo '
-					<td>Temp < 6u</td>
+					<td>Temp &lt; 6u</td>
 					<td>min '.number_format($row['s'], 1, ',', '') .' °C</td>
 					<td>max '.number_format($row['m'], 1, ',', '').' °C</td>';
 		} elseif ($row['n']=='heating') {
@@ -319,6 +339,7 @@ echo '
 		</tbody>
 	</table>
 	<br>
+	</div>
 	<br>';
 ?>
 	<script type="text/javascript" charset="utf-8">
