@@ -245,7 +245,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
             : hass('light', 'turn_off', $entity),
         
         'd' => $level > 0
-            ? hass('light', 'turn_on', $entity, ['brightness' => (int)($level * 2.55)])
+            ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
             : hass('light', 'turn_off', $entity),
         
         'r' => hass('cover', 'set_cover_position', $entity, [
@@ -254,6 +254,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
+    $d[$name]['s']=$level;
     $d[$name]['t']=$d['time'];
 	if ($mqtt) {
 		$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
@@ -266,6 +267,7 @@ function resetsecurity() {
 	}
 }
 function sw($name,$action='Toggle',$msg=null) {
+	lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 	global $d,$user,$db,$mqtt;
 	if (is_array($name)) {
 		foreach ($name as $i) {
@@ -279,9 +281,12 @@ function sw($name,$action='Toggle',$msg=null) {
 			}
 		}
 	} else {
+		lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
+		lg(basename(__FILE__).':'.__LINE__.' > '.print_r($d[$name],true));
 		if (isset($d[$name]['d'])&&$d[$name]['d']=='hsw') {
+			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
@@ -289,7 +294,9 @@ function sw($name,$action='Toggle',$msg=null) {
 			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
+			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 		} else {
+			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 			store($name, $action, $msg);
 		}
 		$d[$name]['t']=$d['time'];
@@ -1125,7 +1132,7 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
-			$brightness=round((float)$brightness / 2.55);
+//			$brightness=round((float)$brightness / 2.55);
 			if ($brightness!=$i['s']) {
 				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i['s']);
 				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i['s']);
