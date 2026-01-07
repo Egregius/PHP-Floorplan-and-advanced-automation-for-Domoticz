@@ -34,8 +34,7 @@ foreach ($devices as $ip => $vol) {
 //					lg(basename(__FILE__).':'.__LINE__);
 	//				sw('boseliving', 'On');
 				} elseif ($d['bose'.$ip]['m'] != 'Online') {
-//					lg(basename(__FILE__).':'.__LINE__);
-					storemode('bose'.$ip, 'Online');
+					storemode('bose'.$ip, 'Online',basename(__FILE__).':'.__LINE__);
 					$d['bose'.$ip]['m']='Online';
 //					if ($ip>101&&$d['boseliving']['s']=='Off'&&$d['time']<strtotime('18:00')) sw('boseliving', 'On');
 				}
@@ -50,18 +49,18 @@ foreach ($devices as $ip => $vol) {
 					if ($invalidcounter > 0) $invalidcounter = 0;
 				}
 			} else {
-				if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline');
+				if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline',basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline');
+			if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline',basename(__FILE__).':'.__LINE__);
 		}
 		unset($status);
 	} else {
-		if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline');
+		if ($d['bose'.$ip]['s'] == 'On' || $d['bose'.$ip]['m'] != 'Offline') storesm('bose'.$ip, 'Off', 'Offline',basename(__FILE__).':'.__LINE__);
 	}
 }
 if($d['boseliving']['s']!='On'&&$d['boseliving']['s']!='Playing') {
-	if ($d['bose101']['s'] == 'On' || $d['bose101']['m'] != 'Offline') storesm('bose101', 'Off', 'Offline', null, true);
+	if ($d['bose101']['s'] == 'On' || $d['bose101']['m'] != 'Offline') storesm('bose101', 'Off', 'Offline',basename(__FILE__).':'.__LINE__);
 }
 if ($d['bose101']['s']=='On'
 	&&$d['bose102']['s']=='Off'

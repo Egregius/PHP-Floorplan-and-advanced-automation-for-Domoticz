@@ -157,21 +157,26 @@ function fbadkamer($level,$power=false) {
 		}
 	}
 }
+
 function huisslapen($weg=false) {
 	global $d;
-	if ($weg===3) store('weg', 3, basename(__FILE__).':'.__LINE__);
-	elseif ($weg===true) {
+	if ($weg===3) {
+		store('weg', 3, basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
-
-	} else store('weg', 1, basename(__FILE__).':'.__LINE__);
-	sl(array('hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'), 0, basename(__FILE__).':'.__LINE__);
-	sw(array('lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken',/*'boseliving','mac',*/'ipaddock','zetel'), 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {
+	} else {
+		store('weg', 1, basename(__FILE__).':'.__LINE__);
+	}
+	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
+	sw(['lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken',/*'boseliving','mac',*/'ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
+	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
 		if ($d[$i]['m']!=0&&$d[$i]['s']!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
+
 function huisthuis($msg='') {
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
@@ -267,13 +272,12 @@ function resetsecurity() {
 	}
 }
 function sw($name,$action='Toggle',$msg=null) {
-	lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 	global $d,$user,$db,$mqtt;
 	if (is_array($name)) {
 		foreach ($name as $i) {
 			if ($d[$i]['s']!=$action) {
 				sw($i, $action, $msg);
-	//			usleep(200000);
+				usleep(200000);
 				$now = time();
 				if ($d['time'] !== $now) {
 					$d['time'] = $now;
@@ -281,10 +285,8 @@ function sw($name,$action='Toggle',$msg=null) {
 			}
 		}
 	} else {
-		lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
-		lg(basename(__FILE__).':'.__LINE__.' > '.print_r($d[$name],true));
 		if (isset($d[$name]['d'])&&$d[$name]['d']=='hsw') {
 			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 			if ($action=='Toggle') {
@@ -294,9 +296,7 @@ function sw($name,$action='Toggle',$msg=null) {
 			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
-			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 		} else {
-			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 			store($name, $action, $msg);
 		}
 		$d[$name]['t']=$d['time'];

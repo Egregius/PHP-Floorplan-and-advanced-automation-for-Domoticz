@@ -80,8 +80,11 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		} elseif ($_REQUEST['action']==1) {
 			lg('huisslapen...');
 			huisslapen();
-		} elseif ($_REQUEST['action']>=2) {
-			lg('huisslapen...');
+		} elseif ($_REQUEST['action']==2) {
+			lg('huisslapen weg...');
+			huisslapen(true);
+		} elseif ($_REQUEST['action']==3) {
+			lg('huisslapen vakantie...');
 			huisslapen(3);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {

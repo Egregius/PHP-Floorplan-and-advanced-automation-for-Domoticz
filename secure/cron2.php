@@ -12,6 +12,7 @@ lg('🟢 Starting cron2 loop...');
 $time=time();
 $d=fetchdata();
 $lastcheck=$time;
+$lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=0;
 $ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
@@ -34,6 +35,17 @@ $boses=array(
 	106=>'Buiten20',
 	107=>'Keuken',
 );
+// Using https://github.com/php-mqtt/client
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+require '/var/www/vendor/autoload.php';
+$connectionSettings=(new ConnectionSettings)
+	->setUsername('mqtt')
+	->setPassword('mqtt')
+	->setKeepAliveInterval(60);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt->connect($connectionSettings,true);
+
 while (1) {
     $time = time();
     $d['time'] = $time;
@@ -44,6 +56,10 @@ while (1) {
     if ($sleep > 0) {
         $sleep = round($sleep * 1000000);
         usleep($sleep);
+    }
+    if ($lastping < $time - 60) {
+        $lastping = $time;
+        $mqtt->publish('p', 'p');
     }
     if ($lastcheck < $time - 300) {
         $lastcheck = $time;
