@@ -22,11 +22,11 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 							setCache('remoteauto', time());
 //							if ($d['voordeur']['s']=='Off') {
 								sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-								telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
+//								telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
 //							}
 							huisthuis('Huis thuis door '.$user);
 							if ($d['dag']['s']>0) {
-								telegram('Domoticz owntracks.php:'.__LINE__);
+//								telegram('Domoticz owntracks.php:'.__LINE__);
 								sleep(5);
 								sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 							}
@@ -37,7 +37,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2
 							telegram('🏠 Huis thuis licht voordeur aan '.__LINE__);
 							huisthuis('🏠 Huis thuis door '.$user);
 							if ($d['dag']['s']>0) {
-								telegram('Domoticz owntracks.php:'.__LINE__);
+//								telegram('Domoticz owntracks.php:'.__LINE__);
 								sleep(5);
 								sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 							}
