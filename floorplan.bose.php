@@ -31,7 +31,7 @@ $boses=array(
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
-	<meta name="viewport" content="width=device-width,height=device-height,initial-scale='<?= $scale ?>',user-scalable=yes,minimal-ui">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=<?= $scale ?>,user-scalable=yes,minimal-ui">
 	<meta name="msapplication-TileColor" content="#000000">
 	<meta name="msapplication-TileImage" content="images/domoticzphp48.png">
 	<link rel="icon" type="image/png" href="images/domoticzphp48.png">
