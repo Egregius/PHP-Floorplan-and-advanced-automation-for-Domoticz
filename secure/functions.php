@@ -288,7 +288,6 @@ function sw($name,$action='Toggle',$msg=null) {
 		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
 		if (isset($d[$name]['d'])&&$d[$name]['d']=='hsw') {
-			lg(basename(__FILE__).':'.__LINE__.' > '.$name.' '.$action.' '.$msg);
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';

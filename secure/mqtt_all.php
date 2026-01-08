@@ -213,7 +213,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,&$d, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, &$time, $user) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -238,7 +238,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,&$d, &$lastcheck, $user) {
+$mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, $user) {
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];

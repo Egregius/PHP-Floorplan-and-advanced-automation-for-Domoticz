@@ -53,9 +53,8 @@ if ($d['auto']['s']=='On') {
 		}
 	} else {
 		$i=25;
-		if ($d['lgtv']['s']=='On'&&$d['nvidia']['s']=='Playing') {
-			if (in_array($d['nvidia']['m'],['Com.spocky.projengmenu'])) $i=5;
-		}
+		if ($d['lgtv']['s']=='On'&&$d['nvidia']['s']=='Playing'&&$time>strtotime('20:30')&&!in_array($d['nvidia']['m'],['De.ozerov.fully']))  $i=5;
+
 //		lg($d['wasbak']['s']);
 		if ($d['wasbak']['s']>25) {
 			if ($d['pirkeuken']['s']=='On') $i=300;
