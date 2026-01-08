@@ -40,7 +40,7 @@ $boses=array(
 	<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 	<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 	<style type="text/css">
-		.btn{height:5vh;margin:3px;}
+		.btn{height:5vh;margin:3px;font-size:1.4em;}
 		.b1{max-width:98vw;}
 		.b2{margin:1px;}
 		.input{width:78px;}
@@ -51,6 +51,8 @@ $boses=array(
 		.volume{width:8.4%;height:50px;padding:0!important;margin:0 0.3%;}
 		#playlist{font-size:33px;top:4px;left:4px;font-weight:500;}
 		#bose{font-size:33px;right:4px;font-weight:500;}
+		#artist{font-size:1.2em;}
+		#track{font-size:1.2em;}
 	</style>
 	<script src="/scripts/mqtt.min.js"></script>
 	<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
@@ -75,7 +77,10 @@ $boses=array(
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">
-			<div id="art"></div>
+			<div id="art"></div><br>
+			<br>
+			<br>
+			<br>
 			<h4 id="artist"></h4>
 			<span id="track"></span><br>
 			<div id="volume"></div>
