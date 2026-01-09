@@ -181,7 +181,7 @@ if (count($rains) >= 2) {
     $past = ($sum > 0) ? max(500, round((1 / $avg) * 30000,0)) : 86400;
 //    lg('$rainhist = ' . $past . ' = ' . print_r($rainhist, true));
     if ($d['regenpomp']['s'] === 'Off' && past('regenpomp') > $past) {
-        sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__);
+        sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
 }
 

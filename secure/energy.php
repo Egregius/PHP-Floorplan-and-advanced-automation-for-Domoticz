@@ -7,6 +7,10 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 } else if (!$got_lock && $wouldblock) {
     exit("Another instance is already running; terminating.\n");
 }
+// Using https://github.com/php-mqtt/client
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+require_once '/var/www/vendor/autoload.php';
 
 date_default_timezone_set('Europe/Brussels');
 $startloop=microtime(true);
@@ -338,15 +342,26 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			'zonavg' => $zonavg,
 			'alwayson' => $alwayson
 		]);
+		
 		lg('⚡️ '.$data);
 		echo $data . PHP_EOL;
 		setCache('energy_vandaag', $data);
 		setCache('energy_lastupdate', $time);
+		$data = json_decode($data, true);
+		static $mqttcache = [];
+		
+		foreach($data as $k => $v) {
+			// Alleen publishen als waarde veranderd is of nog niet bestaat
+			if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
+				publishmqtt('d/'.$k, $v);
+				$mqttcache[$k] = $v;
+			}
+		}
 		$force=false;
 	}
 	setCache('energy_prevavg', $newavg);
 }
-function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.1,'energy_export'=>0.1,'gas'=>0.1,'water'=>0.1]) {
+function updateVerbruikCache($newData, $force = false, $thresholds = ['energy_import'=>0.01,'energy_export'=>0.01,'gas'=>0.01,'water'=>0.01]) {
     $cacheFile = '/dev/shm/cache/verbruik.json';
     $cache = [];
     if (file_exists($cacheFile)) {
@@ -412,4 +427,79 @@ function setCache(string $key, $value): bool {
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
+}
+function publishmqtt($topic, $msg) {
+    static $mqtt = null;
+    static $lastPublish = 0;
+    
+    // Check of we moeten reconnecten
+    $needsReconnect = $mqtt === null || (time() - $lastPublish > 300);
+    
+    if (!$needsReconnect && $mqtt !== null) {
+        // Test of verbinding nog werkt
+        try {
+            $mqtt->loop(true, true); // Process messages, non-blocking
+        } catch(Exception $e) {
+            lg("⚠️ Loop failed, reconnecting: " . $e->getMessage());
+            $needsReconnect = true;
+        }
+    }
+    
+    if ($needsReconnect) {
+        if($mqtt !== null) {
+            try { 
+                $mqtt->disconnect(); 
+            } catch(Exception $e) {
+                // Ignore disconnect errors
+            }
+        }
+        
+        lg("🔌 Nieuwe MQTT verbinding maken...");
+        $connectionSettings = (new ConnectionSettings)
+            ->setUsername('mqtt')
+            ->setPassword('mqtt')
+            ->setKeepAliveInterval(60)
+            ->setConnectTimeout(5)
+            ->setSocketTimeout(5)
+            ->setResendTimeout(10);
+        
+        $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
+        
+        try {
+            $mqtt->connect($connectionSettings, true);
+            lg("✅ MQTT verbonden");
+        } catch(Exception $e) {
+            lg("❌ Connect failed: " . $e->getMessage());
+            $mqtt = null;
+            throw $e;
+        }
+    }
+    
+    try {
+        $mqtt->publish($topic, $msg, 1, true);
+        $lastPublish = time();
+        lg("🟢 {$topic} {$msg}");
+    } catch(Exception $e) {
+        lg("❌ MQTT publish failed: " . $e->getMessage());
+        $mqtt = null; // Force reconnect bij volgende call
+        
+        // Probeer één keer opnieuw met nieuwe connectie
+        try {
+            lg("🔄 Retry met nieuwe connectie...");
+            $connectionSettings = (new ConnectionSettings)
+                ->setUsername('mqtt')
+                ->setPassword('mqtt')
+                ->setKeepAliveInterval(60);
+            
+            $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
+            $mqtt->connect($connectionSettings, true);
+            $mqtt->publish($topic, $msg, 1, true);
+            $lastPublish = time();
+            lg("✅ Retry geslaagd: {$topic} {$msg}");
+        } catch(Exception $e2) {
+            lg("❌ Retry ook gefaald: " . $e2->getMessage());
+            $mqtt = null;
+            throw $e2;
+        }
+    }
 }

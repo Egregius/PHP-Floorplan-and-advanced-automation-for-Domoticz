@@ -3,6 +3,7 @@ header('Content-Type: application/json; charset=ISO-8859-1');
 $log=true;
 $time = $_SERVER['REQUEST_TIME'];
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+$msg='';
 $map = [
     '192.168.2.201' => 'Mac',
     '192.168.4.2'   => 'Mac',
@@ -20,33 +21,26 @@ $d=[];
 if (isset($_GET['f'])) {
 	$type='f';
 	if($_GET['f']>0) {
-		$msg=__LINE__;
 		$t=$_GET['f'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
-		$msg=__LINE__;
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
-	//	$en=true;
 		$extra=true;
 	}
 } elseif (isset($_GET['h'])) {
 	$type='h';
 	if($_GET['h']>0) {
-		$msg=__LINE__;
 		$t=$_GET['h'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
-		$msg=__LINE__;
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 	}
 } elseif (isset($_GET['o'])) {
 	$type='o';
 	if($_GET['o']>0) {
-				$msg=__LINE__;
 		$t=$_GET['o'];
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
-				$msg=__LINE__;
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
 	}
 } else exit;
@@ -55,19 +49,6 @@ $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 7200);
 if ($last!=$time) $d = ['t' => $time];
 if ($type === 'f') {
-/*	if($en==true||$last!=$time){
-		$en = getCache('en');
-		if ($en) {
-			$en = json_decode($en);
-			if ($en) {
-				$d['n'] = $en->n;
-				$d['a'] = $en->a;
-				$d['b'] = $en->b;
-				$d['c'] = $en->c;
-				$d['z'] = $en->z;
-			}
-		}
-	}*/
 	$lastenergy_vandaag=apcu_fetch($id.$type.'energy_vandaag');
 	$lastupd=filemtime('/dev/shm/cache/energy_vandaag.txt');
 	if($last===false||$extra===true||$lastenergy_vandaag<$lastupd) {
@@ -89,10 +70,8 @@ if ($type === 'f') {
         }
     }
 	if($last===false||$extra===true||$last<$time-900) {
-		$msg.=':'.__LINE__;
         $sunrise = apcu_fetch('cache_sunrise');
 		if ($sunrise === false) {
-			$msg.=':'.__LINE__;
 			$sunrise = getCache('sunrise');
 //			lg(print_r($sunrise,true));
 			if ($sunrise) {
@@ -100,10 +79,8 @@ if ($type === 'f') {
 			}
 			$sunrise=json_decode($sunrise,true);
 		} 
-		$msg.=':'.__LINE__;
 		if(!is_array($sunrise)) $sunrise = json_decode($sunrise, true);
 //		lg(print_r($sunrise,true));
-		$msg.=':'.__LINE__;
 		$d['Tstart'] = $sunrise['CivTwilightStart'];
 		$d['Srise'] = $sunrise['Sunrise'];
 		$d['Sset'] = $sunrise['Sunset'];
@@ -115,20 +92,14 @@ if ($type === 'f') {
 $db = Database::getInstance();
 $stmt = $db->query($sql);
 $rows = $stmt->fetchAll(PDO::FETCH_NUM);
-
 foreach ($rows as [$n, $s, $t_val, $m, $device, $i, $rt, $p]) {
-    // Bouw device array efficient op
     $d[$n] = ['s' => $s];
-    
-    // Conditionals geoptimaliseerd
     $rt === 1 && $d[$n]['t'] = $t_val;
     $m !== null && $d[$n]['m'] = $m;
-    
     if ($device !== null) {
         $d[$n]['d'] = $device;
         $device === 'daikin' && $d[$n]['s'] = null;
     }
-    
     if ($i !== null) {
         if ($device === 'th' && $n !== 'badkamer_set') {
             $icon = json_decode($i, true);
@@ -136,10 +107,8 @@ foreach ($rows as [$n, $s, $t_val, $m, $device, $i, $rt, $p]) {
             $d[$n]['i'] = $i;
         }
     }
-    
     $p !== null && $d[$n]['p'] = $p;
 }
-
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 header('Content-Type: application/json');
@@ -191,14 +160,11 @@ function lg($msg) {
 }
 final class Database {
     private static ?PDO $instance = null;
-    
     private function __construct() {}
     private function __clone(): void {}
-    
     public static function getInstance(): PDO {
         return self::$instance ??= self::createConnection();
     }
-    
     private static function createConnection(): PDO {
         try {
             return new PDO(
@@ -221,11 +187,9 @@ final class Database {
             throw new RuntimeException('Database connection failed.', 0, $e);
         }
     }
-    
     public static function reset(): void {
         self::$instance = null;
     }
-    
     public static function isConnected(): bool {
         return self::$instance !== null;
     }
