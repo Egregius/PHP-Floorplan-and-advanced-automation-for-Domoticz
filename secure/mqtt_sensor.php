@@ -113,9 +113,12 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
+$mqtt->subscribe('d/#',function (string $topic,string $status) use (&$d) {
 	$path=explode('/',$topic);
-	$d[$path[1]][$path[2]]=$status;
+	if(!in_array($path[1],['t','en'])) {
+//		$d[$path[1]][$path[2]]=$status;
+		lg('upd:'.$path[1].'==>'.print_r($d[$path[1]],true).'=='.$status);
+	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
