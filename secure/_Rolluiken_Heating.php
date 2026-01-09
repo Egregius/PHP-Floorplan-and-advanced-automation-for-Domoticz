@@ -42,7 +42,6 @@ if ($d['auto']['s']=='On') {
 				foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]['s']<50) sl($i, 100);
 			} else {
 				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]['s']<50) {
-					lg($i.' '.$d[$i]['s']);
 					sl($i, 100);
 				}
 			}
