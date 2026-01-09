@@ -349,7 +349,7 @@ function store($name='',$status='',$msg='') {
 		}
 	}
 //	if (str_ends_with($name,'_kWh') || str_ends_with($name,'_hum')) return;
-	if($affected>0&&!in_array($name,['dag'])) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+	if($affected>0/*&&!in_array($name,['dag'])*/) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 	return $affected ?? 0;
 }
 function isCli(): bool {
@@ -359,6 +359,7 @@ function isCli(): bool {
 function publishmqtt($topic,$msg) {
 	global $mqtt;
 	if($mqtt&&$mqtt->isConnected()) {
+		lg("🟢 {$topic} {$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
@@ -366,6 +367,7 @@ function publishmqtt($topic,$msg) {
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
+		lg("🛑 {$topic} {$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}

@@ -136,14 +136,14 @@ def step_for_value(value):
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/en/{key}", value, retain=True, qos=1)
-#        log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
+        log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"teller/{key}", value, retain=True, qos=1)
-#        log(f"📤 Publish teller/{key}={value}, rc={result.rc}")  # DEBUG
+        log(f"📤 Publish teller/{key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan teller/{key} niet publiceren: niet verbonden")  # DEBUG
 

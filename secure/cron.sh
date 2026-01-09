@@ -25,8 +25,8 @@ while [ $i -lt 6 ]; do
 		if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
 		echo "$(date '+%F %T') starting $s"
 		case "$s" in
-			*.php) nice -n 10 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
-			*.py)  nice -n 10 /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
+			*.php) /usr/bin/nice -n 5 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
+			*.py)  /usr/bin/nice -n 5 /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
 		esac
 	fi
 	done
@@ -63,9 +63,9 @@ if [ "$MIN" -eq 0 ] ; then
 	if [ "$LAST" != "$PREV" ]
 	then
 		cd /var/www/html/
-		/usr/bin/nice -n20 git add .
-		/usr/bin/nice -n20 git commit -am "Update"
-		/usr/bin/nice -n20 git push origin master --force
+		/usr/bin/nice -n 10 git add .
+		/usr/bin/nice -n 10 git commit -am "Update"
+		/usr/bin/nice -n 10 git push origin master --force
 	fi
 fi
 # END Github

@@ -55,7 +55,7 @@ $boses=array(
 		#track{font-size:1.2em;}
 	</style>
 	<script src="/scripts/mqtt.min.js"></script>
-	<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
+	<script type="text/javascript" src="/scripts/floorplanjs.js?v=2"></script>
 	<script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			ajaxbose('<?= $bose ?>');  // of gewoon de waarde van $bose als string

@@ -104,7 +104,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
@@ -112,7 +112,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 10 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
 }
