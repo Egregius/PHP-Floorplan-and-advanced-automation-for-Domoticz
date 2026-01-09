@@ -4,6 +4,7 @@ $user='cron3600';
 
 if (date('G')==0) {
 	apcu_store('alwayson',9999);
+	setCache('alwayson', 9999);
 //	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 //	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 }
@@ -41,6 +42,10 @@ if (isset($data['results'])) {
 		'Sunrise' => date('G:i', $Sunrise),
 		'Sunset' => date('G:i', $Sunset),
 	)));
+	publishmqtt('d/Tstart',date('G:i', $CivTwilightStart));
+	publishmqtt('d/Srise',date('G:i', $Sunrise));
+	publishmqtt('d/Sset',date('G:i', $Sunset));
+	publishmqtt('d/Tend',date('G:i', $CivTwilightEnd));
 }
 
 

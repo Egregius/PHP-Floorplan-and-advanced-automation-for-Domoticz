@@ -27,7 +27,9 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 */
 //sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-republishmqtt();
+setCache('alwayson', 9999);
+
+
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

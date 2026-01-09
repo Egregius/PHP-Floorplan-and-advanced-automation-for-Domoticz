@@ -49,7 +49,7 @@ $last=apcu_fetch($id.$type);
 apcu_store($id.$type, $time, 7200);
 if ($last!=$time) $d = ['t' => $time];
 if ($type === 'f') {
-	$lastenergy_vandaag=apcu_fetch($id.$type.'energy_vandaag');
+/*	$lastenergy_vandaag=apcu_fetch($id.$type.'energy_vandaag');
 	$lastupd=filemtime('/dev/shm/cache/energy_vandaag.txt');
 	if($last===false||$extra===true||$lastenergy_vandaag<$lastupd) {
         $vandaag = getCache('energy_vandaag');
@@ -68,9 +68,9 @@ if ($type === 'f') {
                 apcu_store($id.$type.'energy_vandaag',$lastupd);
             }
         }
-    }
+    }*/
 	if($last===false||$extra===true||$last<$time-900) {
-        $sunrise = apcu_fetch('cache_sunrise');
+ /*       $sunrise = apcu_fetch('cache_sunrise');
 		if ($sunrise === false) {
 			$sunrise = getCache('sunrise');
 //			lg(print_r($sunrise,true));
@@ -84,7 +84,7 @@ if ($type === 'f') {
 		$d['Tstart'] = $sunrise['CivTwilightStart'];
 		$d['Srise'] = $sunrise['Sunrise'];
 		$d['Sset'] = $sunrise['Sunset'];
-		$d['Tend'] = $sunrise['CivTwilightEnd'];
+		$d['Tend'] = $sunrise['CivTwilightEnd'];*/
 		$d['pl'] = boseplaylist($time);
 		$d['b_hist'] = json_decode(getCache('b_hist'), true);
     }

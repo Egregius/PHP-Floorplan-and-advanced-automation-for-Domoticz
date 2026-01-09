@@ -179,13 +179,13 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 	$alwayson = (int)getCache('alwayson');
 	$newavg = $en->a;
 	$prevavg = getCache('energy_prevavg');
-	if ($zon == 0) {
+	if ($zon == 0 || empty($alwayson)) {
 		if ($en->b < 0) {
 			$power = $en->n - $en->b;
 		} else {
 			$power = $en->n;
 		}
-		if ($power >= 30 && $power <= 300 && ($power < $alwayson || empty($alwayson))) {
+		if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
 			setCache('alwayson', $power);
 			$alwayson = $power;
 			$force = true;
@@ -299,8 +299,16 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 		}
 		$since = date("Y-m-d", $time - (86400 * 30));
 		$avg = ['gas' => 0, 'elec' => 0];
+		
 		try {
-			$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date > :since";
+			$q = "
+				SELECT 
+					AVG(gas)  AS gas,
+					AVG(elec) AS elec
+				FROM `Guydag`
+				WHERE date >= :since
+				  AND date < CURRENT_DATE()
+			";
 			$stmt = $dbverbruik->query($q, [':since' => $since]);
 			if ($row = $stmt->fetch()) {
 				$avg = $row;
@@ -332,14 +340,14 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			lg("Error fetching zonavg: " . $e->getMessage());
 		}
 		$data = json_encode([
-			'gas' => $gas,
-			'gasavg' => round($avg['gas'], 3),
-			'elec' => $elec,
-			'elecavg' => round($avg['elec'], 3),
+			'gas' => round($gas,2),
+			'gasavg' => round($avg['gas'], 2),
+			'elec' => round($elec,2),
+			'elecavg' => round($avg['elec'], 2),
 			'verbruik' => $verbruik,
-			'zon' => $zonvandaag,
-			'zonref' => $zonref,
-			'zonavg' => $zonavg,
+			'zon' => round($zonvandaag,2),
+			'zonref' => round($zonref,2),
+			'zonavg' => round($zonavg),
 			'alwayson' => $alwayson
 		]);
 		
@@ -348,8 +356,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 		setCache('energy_vandaag', $data);
 		setCache('energy_lastupdate', $time);
 		$data = json_decode($data, true);
+		unset($data['verbruik']);
 		static $mqttcache = [];
-		
 		foreach($data as $k => $v) {
 			// Alleen publishen als waarde veranderd is of nog niet bestaat
 			if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
