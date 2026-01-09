@@ -22,12 +22,8 @@ $lastcheck=$time;
 $t = null;
 $weekend = null;
 $dow = null;
-$d=fetchdata(0,'mqtt_zigbee2mqtt');
 $startloop=time();
 define('LOOP_START', $startloop);
-$d['time']=$startloop;
-$d['rand']=rand(10,20);
-updateWekker($t, $weekend, $dow, $d);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
@@ -40,6 +36,9 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
 }
+$d=fetchdata();
+$d['rand']=rand(100,200);
+updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
@@ -50,7 +49,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			if (($time - $startloop) <= 2) return;
 //			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 //			$lastEvent = $d['time'];
-			$d=fetchdata();
+//			$d=fetchdata();
 			$status=json_decode($status);
 			if ($device=='remotealex') {
 				if (isset($status->action)) {
@@ -70,10 +69,19 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/+/+',function (string $topic,string $status) use (&$d) {
-	$path=explode('/',$topic);
-	$d[$path[1]][$path[2]]=$status;
-},MqttClient::QOS_AT_LEAST_ONCE);
+$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
+    $path = explode('/', $topic, 3);
+    $n = $path[1];
+    if ($n === 'en') {
+        $d[$path[2]] = $status;
+    } elseif ($n !== 't') {
+        $status = json_decode($status);
+        foreach (['s', 't', 'm', 'i'] as $key) {
+            if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
+        }
+        if (isset($status->p)) $d[$n]['s'] = $status->p;
+    }
+}, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
 	$result=$mqtt->loop(true);

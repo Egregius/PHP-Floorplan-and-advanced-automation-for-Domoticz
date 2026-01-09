@@ -154,15 +154,17 @@ if (count($winds)>=4) {
 }
 
 if (count($rains)>=2) {
-	$rain=floor(array_sum($rains)/count($rains));
-	if ($d['buien']['s']!=$rain) store('buien', $rain);
-	if ($rain>0) {
-		$past=(86400/$rain)*2;
-		setCache('buien',$time);
-	} else $past=86400;
-	if ($past<1200) $past=1200;
-//EGREGIUS	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
+	$rain=array_sum($rains)/count($rains);
+	if ($d['buien']['s']!=floor($rain)) store('buien', floor($rain));
+	if (!isset($rainhist)) $rainhist=array();
+	$rainhist[]=$rain;
+	$rainhist=array_slice($rainhist,-480);
+	$past=min(500,(1/array_sum($rainhist)/count($rainhist))*30000);
+	lg('$rainhist='.$past.'='.print_r($rainhist,true));
+	if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>$past) sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
 }
+
+
 
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);

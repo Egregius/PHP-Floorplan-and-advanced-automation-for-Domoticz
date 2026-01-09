@@ -15,8 +15,8 @@ if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
-	$now = (int)$d['time'] ?? time();
-    $dow = ($d['dag']['m'] > 180) ? date("w", $now + 43200) : date("w");
+	$d['time'] = $d['time'] ?? time();
+    $dow = ($d['dag']['m'] > 180) ? date("w", $d['time'] + 43200) : date("w");
     if ($d['verlof']['s']==2) $weekend=true;
     else $weekend = ($dow == 0 || $dow == 6);
     $t = ($weekend||$d['verlof']['s']==2) ? strtotime('7:45') : strtotime('7:00');

@@ -76,10 +76,4 @@ if ($d['z']>0) {
 	if ($d['uv']['s']>0||$d['uv']['m']>0) storesm('uv', 0, 0, basename(__FILE__).':'.__LINE__);
 }
 
-
-if ($d['regenpomp']['s']=='Off'&&past('regenpomp')>1700&&getCache('buien')>$time-14400) {
-	sw('regenpomp', 'On', basename(__FILE__).':'.__LINE__);
-	sleep(2);
-}
-
 republishmqtt();
