@@ -484,7 +484,7 @@ function publishmqtt($topic, $msg) {
     }
     
     try {
-        $mqtt->publish($topic, (string)$msg, 1, true);
+        $mqtt->publish($topic, $msg, 1, true);
         $lastPublish = time();
         lg("🟢 {$topic} {$msg}");
     } catch(Exception $e) {

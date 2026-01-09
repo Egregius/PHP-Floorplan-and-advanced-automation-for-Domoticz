@@ -69,7 +69,7 @@ if ($type === 'f') {
             }
         }
     }*/
-	if($last===false||$extra===true||$last<$time-900) {
+	if($last===false||$extra===true||$last<$time-14400) {
  /*       $sunrise = apcu_fetch('cache_sunrise');
 		if ($sunrise === false) {
 			$sunrise = getCache('sunrise');
