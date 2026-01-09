@@ -3,15 +3,15 @@ cd /var/www/html/secure
 
 SCRIPTS=(
   mqtt_all.php
-  mqtt_binary_sensor.php
-  mqtt_cover.php
-  mqtt_event.php
-  mqtt_light.php
-  mqtt_media_player.php
-  mqtt_sensor.php
-  mqtt_switch.php
-  mqtt_zigbee2mqtt.php
-  mqtt_zwave2mqtt.php
+#  mqtt_binary_sensor.php
+#  mqtt_cover.php
+#  mqtt_event.php
+#  mqtt_light.php
+#  mqtt_media_player.php
+#  mqtt_sensor.php
+#  mqtt_switch.php
+#  mqtt_zigbee2mqtt.php
+#  mqtt_zwave2mqtt.php
   cron.php
   cron2.php
   energy.php
