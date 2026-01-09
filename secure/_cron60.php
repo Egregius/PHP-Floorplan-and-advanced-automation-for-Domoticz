@@ -218,14 +218,20 @@ if (isset($data['results'])) {
 	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 	$Sunrise = isoToLocalTimestamp($results['sunrise']);
 	$Sunset = isoToLocalTimestamp($results['sunset']);
+	$Tstart=date('G:i', $CivTwilightStart);
+	$Srise=date('G:i', $Sunrise);
+	$Sset=date('G:i', $Sunset);
+	$Tend=date('G:i', $CivTwilightEnd);
 	setCache('sunrise', json_encode(array(
-		'CivTwilightStart' => date('G:i', $CivTwilightStart),
-		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
-		'Sunrise' => date('G:i', $Sunrise),
-		'Sunset' => date('G:i', $Sunset),
+		'CivTwilightStart' => $Tstart,
+		'CivTwilightEnd' => $Tend,
+		'Sunrise' => $Srise,
+		'Sunset' => $Sset,
 	)));
-	publishmqtt('d/Tstart',date('G:i', $CivTwilightStart));
-	publishmqtt('d/Srise',date('G:i', $Sunrise));
-	publishmqtt('d/Sset',date('G:i', $Sunset));
-	publishmqtt('d/Tend',date('G:i', $CivTwilightEnd));
+	foreach(['Tstart','Tend','Srise','Sset'] as $i) {
+		if(!isset($mqttcache[$i]) || $mqttcache[$i] !== ${$i}) {
+			publishmqtt('d/'.$i, ${$i});
+			$mqttcache[$i] = ${$i};
+		}
+	}
 }
