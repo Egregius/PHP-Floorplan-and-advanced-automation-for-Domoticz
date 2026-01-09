@@ -326,9 +326,11 @@ function setpoint($name, $value,$msg='') {
 }
 function store($name='',$status='',$msg='') {
 	global $d,$user;
+	if (is_numeric($status)) {
+        $status = $status + 0;
+    }
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-//			lg($name.' ='.print_r($d[$name],true));
 			$d['time']??=time();
 			$d[$name]['s']=$status;
 			$d[$name]['t']=$d['time'];
@@ -348,7 +350,6 @@ function store($name='',$status='',$msg='') {
 			throw $e;
 		}
 	}
-//	if (str_ends_with($name,'_kWh') || str_ends_with($name,'_hum')) return;
 	if($affected>0/*&&!in_array($name,['dag'])*/) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 	return $affected ?? 0;
 }
@@ -374,7 +375,10 @@ function publishmqtt($topic,$msg) {
 }
 function storemode($name,$mode,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($mode)) {
+        $mode = $mode + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['m']=$mode;
@@ -400,7 +404,13 @@ function storemode($name,$mode,$msg='') {
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($s)) {
+        $s = $s + 0;
+    }
+    if (is_numeric($m)) {
+        $m = $m + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$s;
@@ -427,7 +437,16 @@ function storesm($name,$s,$m,$msg='') {
 }
 function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($s)) {
+        $s = $s + 0;
+    }
+    if (is_numeric($m)) {
+        $m = $m + 0;
+    }
+    if (is_numeric($i)) {
+        $i = $i + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$s;
@@ -455,7 +474,13 @@ function storesmi($name,$s,$m,$i,$msg='') {
 }
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($s)) {
+        $s = $s + 0;
+    }
+    if (is_numeric($p)) {
+        $p = $p + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$s;
@@ -482,7 +507,10 @@ function storesp($name,$s,$p,$msg='') {
 }
 function storep($name,$p,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($p)) {
+        $p = $p + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['p']=$p;
@@ -508,7 +536,10 @@ function storep($name,$p,$msg='') {
 }
 function storeicon($name,$i,$msg='') {
 	global $d,$user;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
+	if (is_numeric($i)) {
+        $i = $i + 0;
+    }
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['i']=$i;

@@ -193,7 +193,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (isset($status)) {
 				$d=fetchdata();
 				if ($status === 'null') $status=0;
-				elseif ($status > 0 ) $status=round((float)$status / 2.55);
+				elseif ($status > 0 ) $status=round((int)$status / 2.55);
 				else $status=0;
 //				if($status>40&&$status<100)$status+=1;
 //				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
@@ -298,7 +298,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if ($status>=10) $status=round($status,0);
 			elseif ($status<=-10) $status=round($status,0);
 			else $status=round($status,1);
-			if ($d['dag']['s']!=$status) store('dag',$status,'',1);
+			if ($d['dag']['s']!=$status) store('dag',$status);
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
@@ -309,13 +309,13 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		} elseif ($device === 'weg') {
 			if ($status==0) {
-				store('weg',0,'',1);
+				store('weg',0);
 				huisthuis();
 			} elseif ($status==2) {
-				store('weg',2,'',1);
+				store('weg',2);
 				huisslapen(true);
 			} elseif ($status==3) {
-				store('weg',3,'',1);
+				store('weg',3);
 				huisslapen(3);
 			}
 		}

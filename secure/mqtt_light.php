@@ -54,7 +54,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			if (isset($status)) {
 				$d=fetchdata();
 				if ($status === 'null') $status=0;
-				elseif ($status > 0 ) $status=round((float)$status / 2.55);
+				elseif ($status > 0 ) $status=round((int)$status / 2.55);
 				else $status=0;
 //				if($status>40&&$status<100)$status+=1;
 //				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
