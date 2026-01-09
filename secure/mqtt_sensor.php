@@ -13,7 +13,7 @@ ini_set('display_errors',true);
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
-require '/var/www/vendor/autoload.php';
+require_once '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='SENSOR';
 lg('🟢 Starting '.$user.' loop ',-1);

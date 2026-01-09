@@ -13,7 +13,7 @@ ini_set('display_errors',true);
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
-require '/var/www/vendor/autoload.php';
+require_once '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='MEDIA';
 lg('🟢 Starting '.$user.' loop ',-1);
@@ -32,9 +32,13 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
-
+$validDevices = [];
+foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
+	$basename = basename($file, '.php');
+	$validDevices[$basename] = true;
+}
 $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, &$time, $user) {
 	try {	
 		$path=explode('/',$topic);

@@ -64,7 +64,7 @@ while (true) {
 	if ($time % 10 === 0 && $time !== $last10) {
 		$last10 = $time;
 		$d = fetchdata();
-		include '_cron10.php';
+//		include '_cron10.php';
 	}
 	if ($time % 20 === 0 && $time !== $last20) {
 		$user = 'HEATING';
@@ -74,10 +74,10 @@ while (true) {
 		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
 		$mqtt->publish('p', 'p');
 	}
-	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
-	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
-	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
-	if (checkInterval($last90, 90, $time)) include '_weather.php';
+//	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
+//	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
+//	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
+//	if (checkInterval($last90, 90, $time)) include '_weather.php';
 	
 	$next = floor($time / 10) * 10 + 10;
 	$sleep = $next - microtime(true);

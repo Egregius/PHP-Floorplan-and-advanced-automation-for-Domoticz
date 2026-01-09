@@ -1,4 +1,9 @@
 <?php
+// Using https://github.com/php-mqtt/client
+use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
+require_once '/var/www/vendor/autoload.php';
+
 require '/var/www/config.php';
 if (!is_dir('/dev/shm/cache')) {
     mkdir('/dev/shm/cache', 0777, true);
@@ -162,19 +167,19 @@ function huisslapen($weg=false) {
 	global $d;
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+//		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+//		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
 	}
-	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
-	sw(['lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken',/*'boseliving','mac',*/'ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
-		if ($d[$i]['m']!=0&&$d[$i]['s']!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-	}
-	hass('script', 'turn_on', 'script.alles_uitschakelen');
+//	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
+//	sw(['lampkast','kristal','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','kerstboom','bosekeuken',/*'boseliving','mac',*/'ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
+//	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
+//		if ($d[$i]['m']!=0&&$d[$i]['s']!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+//	}
+//	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 
 function huisthuis($msg='') {
@@ -320,15 +325,14 @@ function setpoint($name, $value,$msg='') {
 	store($name, $value, $msg);
 }
 function store($name='',$status='',$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
+//			lg($name.' ='.print_r($d[$name],true));
 			$d['time']??=time();
 			$d[$name]['s']=$status;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
@@ -348,17 +352,32 @@ function store($name='',$status='',$msg='') {
 	if($affected>0&&!in_array($name,['dag'])) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 	return $affected ?? 0;
 }
+function isCli(): bool {
+    return PHP_SAPI === 'cli';
+}
 
+function publishmqtt($topic,$msg) {
+	global $mqtt;
+	if($mqtt&&$mqtt->isConnected()) {
+		$mqtt->publish($topic,$msg,1,true);
+	} else {
+		$connectionSettings=(new ConnectionSettings)
+		->setUsername('mqtt')
+		->setPassword('mqtt');
+		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
+		$mqtt->connect($connectionSettings,true);
+		$mqtt->publish($topic,$msg,1,true);
+		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
+	}
+}
 function storemode($name,$mode,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['m']=$mode;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
@@ -378,16 +397,14 @@ function storemode($name,$mode,$msg='') {
 	return $affected ?? 0;
 }
 function storesm($name,$s,$m,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
@@ -407,7 +424,7 @@ function storesm($name,$s,$m,$msg='') {
 	return $affected ?? 0;
 }
 function storesmi($name,$s,$m,$i,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -415,9 +432,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -437,16 +452,14 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	return $affected ?? 0;
 }
 function storesp($name,$s,$p,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -466,15 +479,13 @@ function storesp($name,$s,$p,$msg='') {
 	return $affected ?? 0;
 }
 function storep($name,$p,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -494,15 +505,13 @@ function storep($name,$p,$msg='') {
 	return $affected ?? 0;
 }
 function storeicon($name,$i,$msg='') {
-	global $d,$user,$mqtt;
+	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if ($mqtt) {
-				$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-			}
+			publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -1131,7 +1140,7 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
-//			$brightness=round((float)$brightness / 2.55);
+			$brightness=round((int)$brightness / 2.55);
 			if ($brightness!=$i['s']) {
 				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i['s']);
 				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i['s']);
