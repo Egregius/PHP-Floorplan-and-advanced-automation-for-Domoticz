@@ -41,7 +41,6 @@ def on_connect(client, userdata, flags, rc):
     global mqtt_connected, _pending_retained_publish
     if rc == 0:
         mqtt_connected = True
-        log("✅ MQTT verbonden")
         if _pending_retained_publish:
             _pending_retained_publish = False
             publish_all_retained()

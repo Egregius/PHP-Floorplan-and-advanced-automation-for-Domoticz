@@ -12,11 +12,11 @@ SCRIPTS=(
 #  mqtt_switch.php
 #  mqtt_zigbee2mqtt.php
 #  mqtt_zwave2mqtt.php
-#  mqtt__energy.php
   cron.php
   cron2.php
 #  energy.php
-  homewizard_tmpfs.py
+  mqtt__energy.php
+  mqtt__homewizard.py
 )
 
 i=1
@@ -27,7 +27,7 @@ while [ $i -lt 6 ]; do
 		echo "$(date '+%F %T') starting $s"
 		case "$s" in
 			*.php) /usr/bin/nice -n 5 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
-			*.py)  /usr/bin/nice -n 5 /usr/bin/python3 "$s" >/dev/null 2>&1 & ;;
+			*.py)  /usr/bin/nice -n 5 /usr/bin/python3 /var/www/html/secure/$s >/dev/null 2>&1 & ;;
 		esac
 	fi
 	done

@@ -28,14 +28,12 @@ $connectionSettings=(new ConnectionSettings)
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
-
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
 $force=true;
 $newData = json_decode(getCache('teller'),true);
 $mqtt->subscribe('teller/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
 	$time=time();
-	lg($topic.'=>'.$status);
 	if($topic=='teller/import') $newData['import']=$status;
     elseif($topic=='teller/export') $newData['export']=$status;
     elseif($topic=='teller/gas') $newData['gas']=$status;
@@ -55,7 +53,6 @@ $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
 function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
-//	lg('processEnergyData $newData='.print_r($newData,true));
 	$kwartierpiek = 2500;
 	$q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
 	$stmt = $dbverbruik->query($q, [':date' => date('Y-m') . '-%']);
@@ -116,173 +113,129 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 			}
 		}
 	}
-	if (updateVerbruikCache($newData, $force)) {
-		$prevwater = getCache('water_meter');
-		if ($prevwater != $water && getCache('weg') > 2) {
-			setCache('water_meter', $water);
-			alert('water_meter', 'Water verbruik gedetecteerd!', 300, true);
-			lg("Waterteller: prev=$prevwater, nu=$water");
-		}
-		$time = time();
-		$vandaag = date("Y-m-d", $time);
-		$zonvandaag = 0;
-		$zontotaal = 0;
-		$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
-		$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
-		if ($row = $stmt->fetch()) {
-			$zonvandaag = $row['Geg_Maand'];
-		}
-		$q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
-		$stmt = $dbzonphp->query($q);
-		if ($row = $stmt->fetch()) {
-			$zontotaal = $row['Geg_Maand'];
-		}
+	$prevwater = getCache('water_meter');
+	if ($prevwater != $water && getCache('weg') > 2) {
+		setCache('water_meter', $water);
+		alert('water_meter', 'Water verbruik gedetecteerd!', 300, true);
+		lg("Waterteller: prev=$prevwater, nu=$water");
+	}
+	$time = time();
+	$vandaag = date("Y-m-d", $time);
+	$zonvandaag = 0;
+	$zontotaal = 0;
+	$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
+	$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
+	if ($row = $stmt->fetch()) {
+		$zonvandaag = $row['Geg_Maand'];
+	}
+	$q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
+	$stmt = $dbzonphp->query($q);
+	if ($row = $stmt->fetch()) {
+		$zontotaal = $row['Geg_Maand'];
+	}
 
-		$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
-			  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
-			  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
+	$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
+		  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
+		  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
+	$dbverbruik->query($q, [
+		':date' => $vandaag,
+		':gas' => $gas,
+		':elec' => $elec,
+		':injectie' => $injectie,
+		':zon' => $zontotaal,
+		':water' => $water,
+		':gas2' => $gas,
+		':elec2' => $elec,
+		':injectie2' => $injectie,
+		':zon2' => $zontotaal,
+		':water2' => $water
+	]);
+
+	$gisteren = null;
+	$q = "SELECT `date`, `gas`, `elec`, `injectie`, `water` FROM `Guy` ORDER BY `date` DESC LIMIT 1,1";
+	$stmt = $dbverbruik->query($q);
+	$gisteren = $stmt->fetch();
+
+	if ($gisteren) {
+		$gas = round($gas - $gisteren['gas'], 3);
+		$elec = round($elec - $gisteren['elec'], 3);
+		$water = round($water - $gisteren['water'], 3);
+		$injectie = round($injectie - $gisteren['injectie'], 3);
+		$verbruik = round($zonvandaag - $injectie + $elec, 3);
+		$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
+			  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+			  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
 		$dbverbruik->query($q, [
 			':date' => $vandaag,
 			':gas' => $gas,
 			':elec' => $elec,
-			':injectie' => $injectie,
-			':zon' => $zontotaal,
+			':verbruik' => $verbruik,
+			':zon' => $zonvandaag,
 			':water' => $water,
 			':gas2' => $gas,
 			':elec2' => $elec,
-			':injectie2' => $injectie,
-			':zon2' => $zontotaal,
+			':verbruik2' => $verbruik,
+			':zon2' => $zonvandaag,
 			':water2' => $water
 		]);
 
-		$gisteren = null;
-		$q = "SELECT `date`, `gas`, `elec`, `injectie`, `water` FROM `Guy` ORDER BY `date` DESC LIMIT 1,1";
-		$stmt = $dbverbruik->query($q);
-		$gisteren = $stmt->fetch();
+	}
+	$since = date("Y-m-d", $time - (86400 * 30));
+	$avg = ['gas' => 0, 'elec' => 0];
+	$q = "
+		SELECT 
+			AVG(gas)  AS gas,
+			AVG(elec) AS elec
+		FROM `Guydag`
+		WHERE date >= :since
+		  AND date < CURRENT_DATE()
+	";
+	$stmt = $dbverbruik->query($q, [':since' => $since]);
+	if ($row = $stmt->fetch()) {
+		$avg = $row;
+	}
 
-		if ($gisteren) {
-			$gas = round($gas - $gisteren['gas'], 3);
-			$elec = round($elec - $gisteren['elec'], 3);
-			$water = round($water - $gisteren['water'], 3);
-			$injectie = round($injectie - $gisteren['injectie'], 3);
-			$verbruik = round($zonvandaag - $injectie + $elec, 3);
-			$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
-				  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-				  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
-			$dbverbruik->query($q, [
-				':date' => $vandaag,
-				':gas' => $gas,
-				':elec' => $elec,
-				':verbruik' => $verbruik,
-				':zon' => $zonvandaag,
-				':water' => $water,
-				':gas2' => $gas,
-				':elec2' => $elec,
-				':verbruik2' => $verbruik,
-				':zon2' => $zonvandaag,
-				':water2' => $water
-			]);
+	$maand = date('m');
+	$zonref = 0;
+	$zonavg = 0;
 
+	$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
+	$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
+	if ($row = $stmt->fetch()) {
+		$zonref = round($row['Dag_Refer'], 1);
+	}
+
+	$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
+		  WHERE Datum_Dag LIKE :maand 
+		  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
+	$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
+	if ($row = $stmt->fetch()) {
+		$zonavg = round($row['AVG'], 0);
+	}
+
+	$data = json_encode([
+		'gas' => round($gas,2),
+		'gasavg' => round((float)$avg['gas'], 2),
+		'elec' => round($elec,2),
+		'elecavg' => round((float)$avg['elec'], 2),
+		'verbruik' => $verbruik,
+		'zon' => round($zonvandaag,2),
+		'zonref' => round($zonref,2),
+		'zonavg' => round($zonavg),
+		'alwayson' => $alwayson
+	]);
+	setCache('energy_vandaag', $data);
+	setCache('energy_lastupdate', $time);
+	$data = json_decode($data, true);
+	unset($data['verbruik']);
+	static $mqttcache = [];
+	foreach($data as $k => $v) {
+		if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
+			publishmqtt('d/'.$k,$v);
+			$mqttcache[$k] = $v;
 		}
-		$since = date("Y-m-d", $time - (86400 * 30));
-		$avg = ['gas' => 0, 'elec' => 0];
-		
-		$q = "
-			SELECT 
-				AVG(gas)  AS gas,
-				AVG(elec) AS elec
-			FROM `Guydag`
-			WHERE date >= :since
-			  AND date < CURRENT_DATE()
-		";
-		$stmt = $dbverbruik->query($q, [':since' => $since]);
-		if ($row = $stmt->fetch()) {
-			$avg = $row;
-		}
-
-		$maand = date('m');
-		$zonref = 0;
-		$zonavg = 0;
-
-		$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
-		$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
-		if ($row = $stmt->fetch()) {
-			$zonref = round($row['Dag_Refer'], 1);
-		}
-
-		$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
-			  WHERE Datum_Dag LIKE :maand 
-			  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
-		$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
-		if ($row = $stmt->fetch()) {
-			$zonavg = round($row['AVG'], 0);
-		}
-
-		$data = json_encode([
-			'gas' => round($gas,2),
-			'gasavg' => round((float)$avg['gas'], 2),
-			'elec' => round($elec,2),
-			'elecavg' => round((float)$avg['elec'], 2),
-			'verbruik' => $verbruik,
-			'zon' => round($zonvandaag,2),
-			'zonref' => round($zonref,2),
-			'zonavg' => round($zonavg),
-			'alwayson' => $alwayson
-		]);
-		setCache('energy_vandaag', $data);
-		setCache('energy_lastupdate', $time);
-		$data = json_decode($data, true);
-		unset($data['verbruik']);
-		static $mqttcache = [];
-		foreach($data as $k => $v) {
-			if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
-				publishmqtt('d/'.$k,$v);
-				$mqttcache[$k] = $v;
-			}
-		}
-//		$force=false;
 	}
 	setCache('energy_prevavg', $newavg);
-}
-function updateVerbruikCache($newData, $force = true, $thresholds = ['import'=>0.001,'export'=>0.001,'gas'=>0.001,'water'=>0.001]) {
-	return true;
-    lg('mqtt__energy:'.__LINE__);
-    $cacheFile = '/dev/shm/cache/verbruik.json';
-    $cache = [];
-    if (file_exists($cacheFile)) {
-        lg('mqtt__energy:'.__LINE__);
-        $cache = json_decode(file_get_contents($cacheFile), true) ?: [];
-    }
-    if (!isset($cache['previous'])) {
-        lg('mqtt__energy:'.__LINE__);
-        $cache['previous'] = $newData;
-        $cache['current'] = $newData;
-        file_put_contents($cacheFile, json_encode($cache));
-        return true;
-    }
-    if ($force) {
-        lg('mqtt__energy:'.__LINE__);
-        $cache['current'] = $newData;
-        file_put_contents($cacheFile, json_encode($cache));
-        return true;
-    }
-    $updateNeeded = false;
-    foreach ($newData as $key => $value) {
-        $prevValue = $cache['previous'][$key] ?? 0;
-        $dif = round(abs($value - $prevValue), 3);
-        if ($dif >= ($thresholds[$key] ?? 0)) {
-            $updateNeeded = true;
-            break;
-        }
-    }
-    if ($updateNeeded || $force) {
-        lg('mqtt__energy:'.__LINE__);
-        $cache['previous'] = $newData;
-        $cache['current'] = $newData;
-        file_put_contents($cacheFile, json_encode($cache));
-    }
-    lg('mqtt__energy:'.__LINE__.' $updateNeeded='.$updateNeeded.' $force='.$force);
-    return $updateNeeded;
 }
 function lg($msg) {
 	$fp = fopen('/temp/domoticz.log', "a+");
@@ -302,7 +255,6 @@ function getCache(string $key, $default = false) {
 }
 function publishmqtt($topic,$msg) {
 	global $mqtt;
-	lg("🟢 {$topic} {$msg}");
 	$mqtt->publish($topic,(string)$msg,1,true);
 	lg("🟢 {$topic} {$msg}");
 	return;
