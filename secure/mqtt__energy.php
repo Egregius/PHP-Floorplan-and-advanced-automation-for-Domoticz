@@ -28,24 +28,19 @@ $connectionSettings=(new ConnectionSettings)
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
+
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
-
 $force=true;
-
 $newData = json_decode(getCache('teller'),true);
-$mqtt->subscribe('teller/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp) {
+$mqtt->subscribe('teller/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
 	$time=time();
 	lg($topic.'=>'.$status);
 	if($topic=='teller/import') $newData['import']=$status;
     elseif($topic=='teller/export') $newData['export']=$status;
     elseif($topic=='teller/gas') $newData['gas']=$status;
     elseif($topic=='teller/water') $newData['water']=$status;
-    try {
-        processEnergyData($dbverbruik, $dbzonphp, $force, $newData);
-    } catch (Exception $e) {
-        lg("Error in main loop: " . $e->getMessage());
-    }
+    processEnergyData($dbverbruik, $dbzonphp, $force, $newData,$mqtt);
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
         stoploop();
@@ -59,17 +54,13 @@ while (true) {
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
-function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData) {
-	lg('processEnergyData $newData='.print_r($newData,true));
+function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
+//	lg('processEnergyData $newData='.print_r($newData,true));
 	$kwartierpiek = 2500;
 	$q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
-	try {
-		$stmt = $dbverbruik->query($q, [':date' => date('Y-m') . '-%']);
-		if ($row = $stmt->fetch()) {
-			$kwartierpiek = $row['wH'] ?? 2500;
-		}
-	} catch (Exception $e) {
-		lg("Error fetching kwartierpiek: " . $e->getMessage());
+	$stmt = $dbverbruik->query($q, [':date' => date('Y-m') . '-%']);
+	if ($row = $stmt->fetch()) {
+		$kwartierpiek = $row['wH'] ?? 2500;
 	}
 	for ($x=1; $x<=5; $x++) {
 		$en = json_decode(getCache('en'));
@@ -125,9 +116,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData) {
 			}
 		}
 	}
-	lg('mqtt__energy:'.__LINE__);
 	if (updateVerbruikCache($newData, $force)) {
-		lg('mqtt__energy:'.__LINE__);
 		$prevwater = getCache('water_meter');
 		if ($prevwater != $water && getCache('weg') > 2) {
 			setCache('water_meter', $water);
@@ -138,141 +127,116 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData) {
 		$vandaag = date("Y-m-d", $time);
 		$zonvandaag = 0;
 		$zontotaal = 0;
-		try {
-			$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
-			$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
-			if ($row = $stmt->fetch()) {
-				$zonvandaag = $row['Geg_Maand'];
-			}
-			$q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
-			$stmt = $dbzonphp->query($q);
-			if ($row = $stmt->fetch()) {
-				$zontotaal = $row['Geg_Maand'];
-			}
-		} catch (Exception $e) {
-			lg("Error fetching zon data: " . $e->getMessage());
+		$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
+		$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
+		if ($row = $stmt->fetch()) {
+			$zonvandaag = $row['Geg_Maand'];
 		}
-		try {
-			$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
-				  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
-				  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
-			$dbverbruik->query($q, [
-				':date' => $vandaag,
-				':gas' => $gas,
-				':elec' => $elec,
-				':injectie' => $injectie,
-				':zon' => $zontotaal,
-				':water' => $water,
-				':gas2' => $gas,
-				':elec2' => $elec,
-				':injectie2' => $injectie,
-				':zon2' => $zontotaal,
-				':water2' => $water
-			]);
-		} catch (Exception $e) {
-			lg("Error updating Guy: " . $e->getMessage());
+		$q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
+		$stmt = $dbzonphp->query($q);
+		if ($row = $stmt->fetch()) {
+			$zontotaal = $row['Geg_Maand'];
 		}
+
+		$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
+			  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
+			  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
+		$dbverbruik->query($q, [
+			':date' => $vandaag,
+			':gas' => $gas,
+			':elec' => $elec,
+			':injectie' => $injectie,
+			':zon' => $zontotaal,
+			':water' => $water,
+			':gas2' => $gas,
+			':elec2' => $elec,
+			':injectie2' => $injectie,
+			':zon2' => $zontotaal,
+			':water2' => $water
+		]);
+
 		$gisteren = null;
-		try {
-			$q = "SELECT `date`, `gas`, `elec`, `injectie`, `water` FROM `Guy` ORDER BY `date` DESC LIMIT 1,1";
-			$stmt = $dbverbruik->query($q);
-			$gisteren = $stmt->fetch();
-		} catch (Exception $e) {
-			lg("Error fetching gisteren: " . $e->getMessage());
-		}
+		$q = "SELECT `date`, `gas`, `elec`, `injectie`, `water` FROM `Guy` ORDER BY `date` DESC LIMIT 1,1";
+		$stmt = $dbverbruik->query($q);
+		$gisteren = $stmt->fetch();
+
 		if ($gisteren) {
-			lg('mqtt__energy:'.__LINE__);
 			$gas = round($gas - $gisteren['gas'], 3);
 			$elec = round($elec - $gisteren['elec'], 3);
 			$water = round($water - $gisteren['water'], 3);
 			$injectie = round($injectie - $gisteren['injectie'], 3);
 			$verbruik = round($zonvandaag - $injectie + $elec, 3);
-			try {
-				$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
-					  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-					  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
-				$dbverbruik->query($q, [
-					':date' => $vandaag,
-					':gas' => $gas,
-					':elec' => $elec,
-					':verbruik' => $verbruik,
-					':zon' => $zonvandaag,
-					':water' => $water,
-					':gas2' => $gas,
-					':elec2' => $elec,
-					':verbruik2' => $verbruik,
-					':zon2' => $zonvandaag,
-					':water2' => $water
-				]);
-			} catch (Exception $e) {
-				lg("Error updating Guydag: " . $e->getMessage());
-			}
+			$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
+				  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+				  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
+			$dbverbruik->query($q, [
+				':date' => $vandaag,
+				':gas' => $gas,
+				':elec' => $elec,
+				':verbruik' => $verbruik,
+				':zon' => $zonvandaag,
+				':water' => $water,
+				':gas2' => $gas,
+				':elec2' => $elec,
+				':verbruik2' => $verbruik,
+				':zon2' => $zonvandaag,
+				':water2' => $water
+			]);
+
 		}
 		$since = date("Y-m-d", $time - (86400 * 30));
 		$avg = ['gas' => 0, 'elec' => 0];
 		
-		try {
-			$q = "
-				SELECT 
-					AVG(gas)  AS gas,
-					AVG(elec) AS elec
-				FROM `Guydag`
-				WHERE date >= :since
-				  AND date < CURRENT_DATE()
-			";
-			$stmt = $dbverbruik->query($q, [':since' => $since]);
-			if ($row = $stmt->fetch()) {
-				$avg = $row;
-			}
-		} catch (Exception $e) {
-			lg("Error fetching avg: " . $e->getMessage());
+		$q = "
+			SELECT 
+				AVG(gas)  AS gas,
+				AVG(elec) AS elec
+			FROM `Guydag`
+			WHERE date >= :since
+			  AND date < CURRENT_DATE()
+		";
+		$stmt = $dbverbruik->query($q, [':since' => $since]);
+		if ($row = $stmt->fetch()) {
+			$avg = $row;
 		}
+
 		$maand = date('m');
 		$zonref = 0;
 		$zonavg = 0;
-		try {
-			$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
-			$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
-			if ($row = $stmt->fetch()) {
-				$zonref = round($row['Dag_Refer'], 1);
-			}
-		} catch (Exception $e) {
-			lg("Error fetching zonref: " . $e->getMessage());
+
+		$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
+		$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
+		if ($row = $stmt->fetch()) {
+			$zonref = round($row['Dag_Refer'], 1);
 		}
-		try {
-			$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
-				  WHERE Datum_Dag LIKE :maand 
-				  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
-			$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
-			if ($row = $stmt->fetch()) {
-				$zonavg = round($row['AVG'], 0);
-			}
-		} catch (Exception $e) {
-			lg("Error fetching zonavg: " . $e->getMessage());
+
+		$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
+			  WHERE Datum_Dag LIKE :maand 
+			  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
+		$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
+		if ($row = $stmt->fetch()) {
+			$zonavg = round($row['AVG'], 0);
 		}
+
 		$data = json_encode([
 			'gas' => round($gas,2),
-			'gasavg' => round($avg['gas'], 2),
+			'gasavg' => round((float)$avg['gas'], 2),
 			'elec' => round($elec,2),
-			'elecavg' => round($avg['elec'], 2),
+			'elecavg' => round((float)$avg['elec'], 2),
 			'verbruik' => $verbruik,
 			'zon' => round($zonvandaag,2),
 			'zonref' => round($zonref,2),
 			'zonavg' => round($zonavg),
 			'alwayson' => $alwayson
 		]);
-		
-		lg('⚡️ '.$data);
-		echo $data . PHP_EOL;
 		setCache('energy_vandaag', $data);
 		setCache('energy_lastupdate', $time);
 		$data = json_decode($data, true);
 		unset($data['verbruik']);
 		static $mqttcache = [];
 		foreach($data as $k => $v) {
-			// Alleen publishen als waarde veranderd is of nog niet bestaat
 			if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
-				publishmqtt('d/'.$k, $v);
+				publishmqtt('d/'.$k,$v);
 				$mqttcache[$k] = $v;
 			}
 		}
@@ -280,7 +244,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData) {
 	}
 	setCache('energy_prevavg', $newavg);
 }
-function updateVerbruikCache($newData, $force = true, $thresholds = ['import'=>0.01,'export'=>0.01,'gas'=>0.01,'water'=>0.01]) {
+function updateVerbruikCache($newData, $force = true, $thresholds = ['import'=>0.001,'export'=>0.001,'gas'=>0.001,'water'=>0.001]) {
+	return true;
     lg('mqtt__energy:'.__LINE__);
     $cacheFile = '/dev/shm/cache/verbruik.json';
     $cache = [];
@@ -335,80 +300,12 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
-function publishmqtt($topic, $msg) {
-    static $mqtt = null;
-    static $lastPublish = 0;
-    
-    // Check of we moeten reconnecten
-    $needsReconnect = $mqtt === null || (time() - $lastPublish > 300);
-    
-    if (!$needsReconnect && $mqtt !== null) {
-        // Test of verbinding nog werkt
-        try {
-            $mqtt->loop(true, true); // Process messages, non-blocking
-        } catch(Exception $e) {
-            lg("⚠️ mqtt__energy Loop failed, reconnecting: " . $e->getMessage());
-            $needsReconnect = true;
-        }
-    }
-    
-    if ($needsReconnect) {
-        if($mqtt !== null) {
-            try { 
-                $mqtt->disconnect(); 
-            } catch(Exception $e) {
-                // Ignore disconnect errors
-            }
-        }
-        
-        lg("🔌 mqtt__energy Nieuwe MQTT verbinding maken...");
-        $connectionSettings = (new ConnectionSettings)
-            ->setUsername('mqtt')
-            ->setPassword('mqtt')
-            ->setKeepAliveInterval(60)
-            ->setConnectTimeout(5)
-            ->setSocketTimeout(5)
-            ->setResendTimeout(10);
-        
-        $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
-        
-        try {
-            $mqtt->connect($connectionSettings, true);
-            lg("✅ MQTT verbonden");
-        } catch(Exception $e) {
-            lg("❌ Connect failed: " . $e->getMessage());
-            $mqtt = null;
-            throw $e;
-        }
-    }
-    
-    try {
-        $mqtt->publish($topic, $msg, 1, true);
-        $lastPublish = time();
-        lg("🟢 mqtt__energy {$topic} {$msg}");
-    } catch(Exception $e) {
-        lg("❌ mqtt__energy publish failed: " . $e->getMessage());
-        $mqtt = null; // Force reconnect bij volgende call
-        
-        // Probeer één keer opnieuw met nieuwe connectie
-        try {
-            lg("🔄 Retry met nieuwe connectie...");
-            $connectionSettings = (new ConnectionSettings)
-                ->setUsername('mqtt')
-                ->setPassword('mqtt')
-                ->setKeepAliveInterval(60);
-            
-            $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
-            $mqtt->connect($connectionSettings, true);
-            $mqtt->publish($topic, $msg, 1, true);
-            $lastPublish = time();
-            lg("✅ mqtt__energy etry geslaagd: {$topic} {$msg}");
-        } catch(Exception $e2) {
-            lg("❌ mqtt__energy Retry ook gefaald: " . $e2->getMessage());
-            $mqtt = null;
-            throw $e2;
-        }
-    }
+function publishmqtt($topic,$msg) {
+	global $mqtt;
+	lg("🟢 {$topic} {$msg}");
+	$mqtt->publish($topic,(string)$msg,1,true);
+	lg("🟢 {$topic} {$msg}");
+	return;
 }
 class Database {
     private $host;
