@@ -256,7 +256,7 @@ function getCache(string $key, $default = false) {
 function publishmqtt($topic,$msg) {
 	global $mqtt;
 	$mqtt->publish($topic,(string)$msg,1,true);
-	lg("🟢 {$topic} {$msg}");
+//	lg("🟢 {$topic} {$msg}");
 	return;
 }
 class Database {

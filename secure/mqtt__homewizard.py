@@ -148,7 +148,10 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    q = value if key in NO_STEP_KEYS else quantize_step(value, step_for_value(value))
+    if key == 'a':
+	    q = quantize_step(value, 10)
+    else:
+        q = value if key in NO_STEP_KEYS else quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     if last is None or q != last:
         state_publish[key] = q
