@@ -122,7 +122,8 @@ def flush_teller_state():
         log("Fout bij schrijven teller cache:", e)
 
 # --- Quantization ---
-def quantize_0_01(value): return floor(value*100)/100
+#def quantize_0_01(value): return floor(value*100)/100
+def quantize_0_01(value): return value
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
