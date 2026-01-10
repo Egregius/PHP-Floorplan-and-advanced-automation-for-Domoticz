@@ -351,7 +351,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			'alwayson' => $alwayson
 		]);
 		
-		lg('⚡️ '.$data);
+//		lg('⚡️ '.$data);
 		echo $data . PHP_EOL;
 		setCache('energy_vandaag', $data);
 		setCache('energy_lastupdate', $time);

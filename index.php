@@ -63,47 +63,40 @@
 				<div class="abs z0" id="alwayson"></div>
 				<div class="abs z0" id="daikin_kwh"></div>
 				<div class="abs z1" id="dysonlader"></div>
-				<div class="abs" id="living_temp" onclick="location.href='temp.php?living=On'">
+				<div class="abs z1" id="living_temp" onclick="location.href='temp.php?living=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="living_temp_mercury" class="thermometer-mercury"></div>
 					<div id="living_temp_avg" class="average-line"></div>
 					<div id="living_temp_display" class="temp-display"></div>
 					<div id="living_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="badkamer_temp" onclick="location.href='temp.php?badkamer=On'">
+				<div class="abs z1" id="badkamer_temp" onclick="location.href='temp.php?badkamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="badkamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="badkamer_temp_avg" class="average-line"></div>
 					<div id="badkamer_temp_display" class="temp-display"></div>
 					<div id="badkamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="kamer_temp" onclick="location.href='temp.php?kamer=On'">
+				<div class="abs z1" id="kamer_temp" onclick="location.href='temp.php?kamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="kamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="kamer_temp_avg" class="average-line"></div>
 					<div id="kamer_temp_display" class="temp-display"></div>
 					<div id="kamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="waskamer_temp" onclick="location.href='temp.php?waskamer=On'">
+				<div class="abs z1" id="waskamer_temp" onclick="location.href='temp.php?waskamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="waskamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="waskamer_temp_avg" class="average-line"></div>
 					<div id="waskamer_temp_display" class="temp-display"></div>
 					<div id="waskamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="alex_temp" onclick="location.href='temp.php?alex=On'">
+				<div class="abs z1" id="alex_temp" onclick="location.href='temp.php?alex=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="alex_temp_mercury" class="thermometer-mercury"></div>
 					<div id="alex_temp_avg" class="average-line"></div>
 					<div id="alex_temp_display" class="temp-display"></div>
 					<div id="alex_temp_trend" class="trend-arrow-container"></div>
-				</div>
-				<div class="abs" id="zolder_temp" onclick="location.href='temp.php?zolder=On'">
-					<img src="/images/temp.png" class="thermometer-bg">
-					<div id="zolder_temp_mercury" class="thermometer-mercury"></div>
-					<div id="zolder_temp_avg" class="average-line"></div>
-					<div id="zolder_temp_display" class="temp-display"></div>
-					<div id="zolder_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				<div class="abs stamp" id="tpirliving"></div>
 				<div class="abs stamp" id="tpirkeuken"></div>
@@ -298,35 +291,35 @@
 				<div class="abs z0" id="hzhallb"></div>
 				<div class="abs z0" id="halwayson"></div>
 				<div class="abs z0" id="hdaikin_kwh"></div>
-				<div class="abs" id="hliving_temp" onclick="location.href='temp.php?living=On'">
+				<div class="abs z1" id="hliving_temp" onclick="location.href='temp.php?living=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hliving_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hliving_temp_avg" class="average-line"></div>
 					<div id="hliving_temp_display" class="temp-display"></div>
 					<div id="hliving_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="hbadkamer_temp" onclick="location.href='temp.php?badkamer=On'">
+				<div class="abs z1" id="hbadkamer_temp" onclick="location.href='temp.php?badkamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hbadkamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hbadkamer_temp_avg" class="average-line"></div>
 					<div id="hbadkamer_temp_display" class="temp-display"></div>
 					<div id="hbadkamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="hkamer_temp" onclick="location.href='temp.php?kamer=On'">
+				<div class="abs z1" id="hkamer_temp" onclick="location.href='temp.php?kamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hkamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hkamer_temp_avg" class="average-line"></div>
 					<div id="hkamer_temp_display" class="temp-display"></div>
 					<div id="hkamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="hwaskamer_temp" onclick="location.href='temp.php?waskamer=On'">
+				<div class="abs z1" id="hwaskamer_temp" onclick="location.href='temp.php?waskamer=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hwaskamer_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hwaskamer_temp_avg" class="average-line"></div>
 					<div id="hwaskamer_temp_display" class="temp-display"></div>
 					<div id="hwaskamer_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="halex_temp" onclick="location.href='temp.php?alex=On'">
+				<div class="abs z1" id="halex_temp" onclick="location.href='temp.php?alex=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="halex_temp_mercury" class="thermometer-mercury"></div>
 					<div id="halex_temp_avg" class="average-line"></div>
@@ -334,14 +327,14 @@
 					<div id="halex_temp_trend" class="trend-arrow-container"></div>
 				</div>
 				
-				<div class="abs" id="hzolder_temp" onclick="location.href='temp.php?zolder=On'">
+				<div class="abs z1" id="hzolder_temp" onclick="location.href='temp.php?zolder=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hzolder_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hzolder_temp_avg" class="average-line"></div>
 					<div id="hzolder_temp_display" class="temp-display"></div>
 					<div id="hzolder_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs" id="hgarage_temp" onclick="location.href='temp.php?garage=On'">
+				<div class="abs z1" id="hgarage_temp" onclick="location.href='temp.php?garage=On'">
 					<img src="/images/temp.png" class="thermometer-bg">
 					<div id="hgarage_temp_mercury" class="thermometer-mercury"></div>
 					<div id="hgarage_temp_avg" class="average-line"></div>
@@ -403,7 +396,7 @@
 			<a href=\'javascript:navigator_Go("https://www.buienradar.be/weer/beitem/be/2802384/14daagse");\'><img src="" id="icon"></a>
 			<span id="maxtemp"></span>
 			<span id="mintemp"></span><br>
-			<div class="abs" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
+			<div class="abs z1" id="buiten_temp" onclick="location.href='temp.php?buiten=On'">
 				<img src="/images/temp.png" class="thermometer-bg">
 				<div id="buiten_temp_mercury" class="thermometer-mercury"></div>
 				<div id="buiten_temp_avg" class="average-line"></div>

@@ -138,8 +138,9 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$preheating = true;
-		$Setliving = max($Setliving, $target);
-		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__, 1);
+//		$Setliving = max($Setliving, $target);
+		$Setliving = $target;
+		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
 	}
@@ -150,7 +151,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-	if ($prevSet == 1 && $living>=$target && $lastWriteleadDataLiving < $time-43200) {
+	if ($prevSet == 1 && $living>=$target && $time >= $t_start && $time < $comfortAfternoon+7200 && $lastWriteleadDataLiving < $time-43200) {
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
 		if ($tempRise>0.5) {
