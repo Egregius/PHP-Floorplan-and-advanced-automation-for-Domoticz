@@ -304,9 +304,7 @@ function sw($name,$action='Toggle',$msg=null) {
 			store($name, $action, $msg);
 		}
 		$d[$name]['t']=$d['time'];
-		if ($mqtt) {
-			$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
-		}
+		publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
 	}
 }
 function zigbee($device,$action) {
