@@ -247,7 +247,7 @@
 					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48"><br>Series</a><br><br>
 					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48"><br>Kodi<br>Control</a><br><br>
 					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48"><br>Kodi</a><br><br>
-					<div class="fix z1 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a>					</div>
+					<div class="fix z2 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a>					</div>
 				</div>
 			</div>
 			<div id="floorplanheating" class="view">

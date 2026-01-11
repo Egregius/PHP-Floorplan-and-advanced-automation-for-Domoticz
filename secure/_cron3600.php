@@ -57,3 +57,5 @@ $stmt->execute([':stamp' => $stamp]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $b_hist=$row;
 echo setCache('b_hist',json_encode($b_hist));
+publishmqtt('b_hist',json_encode($b_hist));
+publishmqtt('pl',boseplaylist($time));
