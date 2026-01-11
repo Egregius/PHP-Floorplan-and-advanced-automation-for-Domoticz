@@ -24,25 +24,8 @@ elseif (isset($_POST['Imgdown'])) kodi('{"jsonrpc":"2.0","id":1,"method":"Input.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<meta name="HandheldFriendly" content="true"/>
-<?php
-	if ($ipaddress=='192.168.2.203'||$ipaddress=='192.168.4.3')  { //Aarde
-		echo '
-		<meta name="viewport" content="width=300,height=500,initial-scale=0.84,user-scalable=no,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.204'||$ipaddress=='192.168.4.4'||$udevice=='iPad')  { //iPad
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=1.15,user-scalable=no,minimal-ui">';
-	} elseif ($ipaddress=='192.168.2.23'||$ipaddress=='192.168.4.5')  { //iPhone Kirby
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=no,minimal-ui">';
-	} elseif ($udevice=='iPhone') {
-		echo '
-		<meta name="viewport" content="width=device-width,initial-scale=0.755,user-scalable=no,minimal-ui">';
-	} else {
-		echo '
-		<meta name="viewport" content="width=device-width,user-scalable=yes,minimal-ui">';
-	}
-?>
+	<meta name="HandheldFriendly" content="true"/>
+	<meta name="viewport" content="width=300,height=500,initial-scale=<? $scale,?>,user-scalable=no,minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="theme-color" content="#000">
