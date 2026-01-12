@@ -110,7 +110,7 @@ function fkeuken() {
 		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
 		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<0||$d['rkeukenl']['s']>80)) {
+		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<1||$d['rkeukenl']['s']>80)) {
 			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('20:00')) {
 				zwave('wasbak','multilevel',0,10);
 				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
