@@ -53,10 +53,10 @@ if ($d['daikin']['m']==1) {
 			else $power=$daikin->$k->power;
 			if ($d['daikin']['s']=='On') {
 				$fan='A';
-					if ($dif >=  3.2) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  2.4) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  1.6) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.8) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
+					if ($dif >=  2.4) {$set=$d[$k.'_set']['s']-2.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.8) {$set=$d[$k.'_set']['s']-1.5;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  1.2) {$set=$d[$k.'_set']['s']-1.0;$spmode=-1;$line=__LINE__;}
+				elseif ($dif >=  0.6) {$set=$d[$k.'_set']['s']-0.5;$spmode=-1;$line=__LINE__;}
 				
 				elseif ($dif <= -4) {$set=$d[$k.'_set']['s']+2.5;$spmode=1;$line=__LINE__;}
 				elseif ($dif <= -3.2) {$set=$d[$k.'_set']['s']+2.0;$spmode=1;$line=__LINE__;}

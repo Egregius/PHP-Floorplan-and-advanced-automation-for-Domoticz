@@ -225,6 +225,7 @@
 			</div>
 
 			<div id="floorplanothers" class="view">
+				<div class="abs leftbuttons" id="oheatingbutton" onclick="setView('floorplanheating')"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="abs floorplan2icon" onclick="setView('floorplan')"><img src="/images/close.png" class="i60" alt="close"></div>
 				<div class="abs z1 i48" id="grohered"></div>
 				<div class="abs z1 i48" id="kookplaat"></div>
