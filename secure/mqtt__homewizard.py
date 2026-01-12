@@ -125,11 +125,12 @@ def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
-    if v < 50: return 5
-    elif v < 100: return 10
-    elif v < 500: return 20
-    elif v < 1000: return 50
-    else: return 100
+    if v < 10: return 1
+    elif v < 50: return 2
+    elif v < 100: return 5
+    elif v < 500: return 10
+    elif v < 1000: return 20
+    else: return 50
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):
