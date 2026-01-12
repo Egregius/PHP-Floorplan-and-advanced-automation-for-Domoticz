@@ -36,12 +36,7 @@ if (isset($data['results'])) {
 	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
 	$Sunrise = isoToLocalTimestamp($results['sunrise']);
 	$Sunset = isoToLocalTimestamp($results['sunset']);
-	setCache('sunrise', json_encode(array(
-		'CivTwilightStart' => date('G:i', $CivTwilightStart),
-		'CivTwilightEnd' => date('G:i', $CivTwilightEnd),
-		'Sunrise' => date('G:i', $Sunrise),
-		'Sunset' => date('G:i', $Sunset),
-	)));
+	
 	publishmqtt('d/Tstart',date('G:i', $CivTwilightStart));
 	publishmqtt('d/Srise',date('G:i', $Sunrise));
 	publishmqtt('d/Sset',date('G:i', $Sunset));
@@ -56,6 +51,13 @@ $stmt = $db->prepare($query);
 $stmt->execute([':stamp' => $stamp]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $b_hist=$row;
-echo setCache('b_hist',json_encode($b_hist));
-publishmqtt('b_hist',json_encode($b_hist));
-publishmqtt('pl',boseplaylist($time));
+publishmqtt('d/b_hist',json_encode($b_hist));
+$map = [
+		'PRESET_1' => 'EDM-1',
+		'PRESET_2' => 'EDM-2',
+		'PRESET_3' => 'EDM-3',
+		'PRESET_4' => 'MIX-1',
+		'PRESET_5' => 'MIX-2',
+		'PRESET_6' => 'MIX-3',
+	];
+publishmqtt('d/pl',$map[boseplaylist($time)]);

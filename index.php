@@ -136,19 +136,19 @@
 					</div>
 					<div class="abs z2" id="log"></div>
 				</div>
-				<div class="fix" id="omediasidebar">
+				<div class="fix" id="mediasidebar">
 					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48" alt="Films"><br>Films</a><br><br>
 					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48" alt="Series"><br>Series</a><br><br>
 					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48" alt="Kodi Control"><br>Kodi<br>Control</a><br><br>
 					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48" alt="Kodi"><br>Kodi</a><br><br>
-					<div class="fix z2 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a>					</div>
 				</div>
+					<div class="fix z2 splitbill"><a href="javascript:navigator_Go('https://finance.egregius.be/splitbill/index.php');"><img src="/images/euro.png" width="48" height="48" alt="Euro"></a></div>
 			</div>
 
 
 			<div id="floorplanheating" class="view">
 				<div class="abs floorplan2icon" onclick="setView('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
-				<div class="abs leftbuttons" id="hheatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
+				<div class="abs leftbuttons" id="heatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="abs z1" style="top:343px;left:415px;"><a href="javascript:navigator_Go('floorplan.doorsensors.php');"><img src="/images/close.png" width="72" height="72" alt="Close"></a></div>
 				<div class="abs z1 i48" id="wasdroger"></div>
 				<div class="abs z1" id="zolder_temp" onclick="location.href='temp.php?zolder=On'">
@@ -158,6 +158,7 @@
 					<div id="zolder_temp_display" class="temp-display"></div>
 					<div id="zolder_temp_trend" class="trend-arrow-container"></div>
 				</div>
+				<!--
 				<div class="abs z1" id="garage_temp" onclick="location.href='temp.php?garage=On'">
 					<img src="/images/temp.png" class="thermometer-bg" alt="garage">
 					<div id="garage_temp_mercury" class="thermometer-mercury"></div>
@@ -165,6 +166,7 @@
 					<div id="garage_temp_display" class="temp-display"></div>
 					<div id="garage_temp_trend" class="trend-arrow-container"></div>
 				</div>
+				-->
 				<div class="abs z" id="Rrliving" onclick="roller('rliving');"></div>
 				<div class="abs z" id="Rrbureel" onclick="roller('rbureel');"></div>
 				<div class="abs z" id="Rrkeukenl" onclick="roller('rkeukenl');"></div>
@@ -181,7 +183,7 @@
 				<div class="abs divsetpoints z">
 					<table class="tablesetpoints">
 						<tr><td id="brander"></td><td class="tbrander">Brander<br><span id="tbrander"></span></td></tr>
-						<tr id="trheating"><td></td><td></td></tr>
+						<tr id="trheating"></tr>
 					</table>
 				</div>
 				<div class="abs z1 HUM"><a href="javascript:navigator_Go('/hum.php');">HUM</a></div>

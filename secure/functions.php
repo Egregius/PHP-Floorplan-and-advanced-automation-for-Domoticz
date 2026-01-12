@@ -1080,11 +1080,11 @@ function fetchdata(): array {
 		try {
 			$db = Database::getInstance();
 			static $stmt = null;
-			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt FROM devices");
+			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
 			$stmt->execute();
-			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt]) {
+			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
 				$d[$n] = array_filter(
-					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt'),
+					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt', 'f'),
 					static fn($v) => $v !== null
 				);
 				if (isset($d[$n]['deviceD'])) {
