@@ -192,7 +192,13 @@
 		</div>
 		<div class="abs center zon">
 			<img src="images/sunrise.png" alt="sunrise">
-			<div id="dag"></div><br><small>&#x21e7;</small><span id="zonop"></span><br><small>&#x21e7;</small><span id="sunop"></span><br><small>&#x21e9;</small><span id="sunonder"></span><br><small>&#x21e9;</small><span id="zononder"></span><br>
+			<div id="dag"></div><br>
+			<div class="sun-times">
+				⬆️ <span id="Tstart"></span><br>
+				☀️⬆️ <span id="Srise"></span><br>
+				☀️⬇️ <span id="Sset"></span><br>
+				⬇️ <span id="Tend"></span>
+			</div><br>
 			<div id="uv"></div>
 			<a href='javascript:navigator_Go("https://www.buienradar.be/weer/Beitem/BE/2802384");'><span id="buien"></span></a><br>
 			<span id="wind"></span><br>
