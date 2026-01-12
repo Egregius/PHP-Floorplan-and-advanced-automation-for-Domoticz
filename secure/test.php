@@ -27,8 +27,7 @@ $mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
 
 */
 //sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-setCache('alwayson', 9999);
-
+store('weg',0);
 
 
 echo '</pre>';
