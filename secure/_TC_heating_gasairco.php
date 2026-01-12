@@ -15,7 +15,7 @@ elseif ($difgas<=-1.5&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.6&&$d['n
 elseif ($difgas<=-1.2&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.7&&$d['n']>-500&&$d['buiten_temp']['s']<=3) sw('brander','On' , 'difgas = '.$difgas.' Aan na = '.$aanna*0.7);
 elseif ($difgas<=-0.9&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.8&&$d['n']>-500&&$d['buiten_temp']['s']<=2) sw('brander','On' , 'difgas = '.$difgas.' Aan na = '.$aanna*0.8);
 elseif ($difgas<=-0.6&&$d['brander']['s']=="Off"&&$pastbrander>$aanna*0.9&&$d['n']>-500&&$d['buiten_temp']['s']<=1) sw('brander','On' , 'difgas = '.$difgas.' Aan na = '.$aanna*0.9);
-elseif ($difgas<=-0.3   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=0) sw('brander','On' , 'difgas = '.$difgas.' Aan na = '.$aanna);
+elseif ($difgas<=-0.4   &&$d['brander']['s']=="Off"&&$pastbrander>$aanna    &&$d['n']>-500&&$d['buiten_temp']['s']<=0) sw('brander','On' , 'difgas = '.$difgas.' Aan na = '.$aanna);
 elseif ($difgas>=0   &&$d['brander']['s']=="On" &&$pastbrander>$uitna)     sw('brander','Off', 'Uit na = '.$uitna);
 elseif ($difgas>=-0.1&&$d['brander']['s']=="On" &&$pastbrander>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6);
 elseif ($difgas>=-0.2 &&$d['brander']['s']=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12);
