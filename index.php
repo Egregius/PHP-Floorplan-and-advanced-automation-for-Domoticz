@@ -16,28 +16,27 @@
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=2">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=3">
 		<script src="/scripts/mqtt.min.js"></script>
 		<script src="/scripts/floorplanjs.js?v=2"></script>
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
+		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
 		<div class="abs center zon">
 			<div class="sun-times" style="text-align:left;padding-left:6px;">
 				<img src="images/sunrise.png" alt="sunrise"> <span id="dag"></span><br>
 				🌅 <span id="Tstart"></span><br>
 				🌄 <span id="Srise"></span><br>
 				🌇 <span id="Sset"></span><br>
-				🌃 <span id="Tend"></span>
+				🌃 <span id="Tend"></span><br>
+				🧴 <span id="uv"></span><br>
+				<a href='javascript:navigator_Go("https://www.buienradar.be/weer/Beitem/BE/2802384");'>☔️ <span id="buien"></span></a><br>
+				💨  <span id="wind"></span><br>
+				🥵 <span id="maxtemp"></span><br>
+				🥶 <span id="mintemp"></span><br>
+				<a href='javascript:navigator_Go("https://www.buienradar.be/weer/beitem/be/2802384/14daagse");'><img src="/images/03d.png" id="icon" alt="icon"></a>
 			</div>
-			<div id="uv"></div>
-			<a href='javascript:navigator_Go("https://www.buienradar.be/weer/Beitem/BE/2802384");'><span id="buien"></span></a><br>
-			<span id="wind"></span><br>
-			<a href='javascript:navigator_Go("https://www.buienradar.be/weer/beitem/be/2802384/14daagse");'><img src="/images/03d.png" id="icon" alt="icon"></a>
-			<span id="maxtemp"></span>
-			<span id="mintemp"></span><br>
-			
 			<div class="abs z2" id="sirene"></div>
 			<div class="abs yellow" id="rbureel"></div>
 			<div class="abs yellow" id="rkeukenl"></div>

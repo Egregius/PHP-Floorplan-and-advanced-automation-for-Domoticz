@@ -14,6 +14,7 @@ $t = null;
 $weekend = null;
 $dow = null;
 $time=time();
+$db = Database::getInstance();
 $d=fetchdata();
 $d['time'] = $time;
 define('LOOP_START', $time);
@@ -37,12 +38,12 @@ if ($d['weg']['s']>0) {
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 
-$db = Database::getInstance();
 foreach ($d as $k=>$v) {
-	if (isset($v['f'])) {
-		unset($v['f']);
-		if(!isset($v['rt'])) unset($v['t']);
-		publishmqtt('d/'.$k,json_encode($v));
+	$x=$v;
+	if (isset($x['f'])) {
+		unset($x['f']);
+		if(!isset($x['rt'])) unset($x['t']);
+		publishmqtt('d/'.$k,json_encode($x));
 	}
 }
 
