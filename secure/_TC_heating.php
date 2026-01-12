@@ -158,7 +158,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 //	if ($time >= $t_start) lg(basename(__FILE__) . ':' . __LINE__);
 //	if ($time < $comfortAfternoon+7200) lg(basename(__FILE__) . ':' . __LINE__);
 //	if ($lastWriteleadDataLiving < $time-43200) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($prevSet == 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
+	if ($prevSet == 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) && $lastWriteleadDataLiving < $time-43200) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;

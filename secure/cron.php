@@ -36,29 +36,12 @@ if ($d['weg']['s']>0) {
 }
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
-$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
-$response = @file_get_contents($url);
-$data = json_decode($response, true);
-if (isset($data['results'])) {
-	$results = $data['results'];
-	$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
-	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
-	$Sunrise = isoToLocalTimestamp($results['sunrise']);
-	$Sunset = isoToLocalTimestamp($results['sunset']);
-	
-	publishmqtt('d/Tstart',date('G:i', $CivTwilightStart));
-	publishmqtt('d/Srise',date('G:i', $Sunrise));
-	publishmqtt('d/Sset',date('G:i', $Sunset));
-	publishmqtt('d/Tend',date('G:i', $CivTwilightEnd));
-}
+
 $db = Database::getInstance();
-//$db->exec("TRUNCATE TABLE devices");
-//$db->exec("INSERT INTO devices SELECT * FROM devices_mem");
 foreach ($d as $k=>$v) {
 	if (isset($v['f'])) {
 		unset($v['f']);
 		if(!isset($v['rt'])) unset($v['t']);
-//		lg ($k.' ==> '.print_r($v,true));
 		publishmqtt('d/'.$k,json_encode($v));
 	}
 }
