@@ -24,20 +24,28 @@
 	<body class="floorplan">
 		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
 		<div class="abs center zon">
-			<div class="sun-times" style="text-align:left;padding-left:6px;">
-				<img src="images/sunrise.png" alt="sunrise"> <span id="dag"></span><br>
+			<div class="sun-times">
 				🌅 <span id="Tstart"></span><br>
 				🌄 <span id="Srise"></span><br>
 				🌇 <span id="Sset"></span><br>
 				🌃 <span id="Tend"></span><br>
+				☀️ <span id="dag"></span><br>
 				🧴 <span id="uv"></span><br>
-				<a href='javascript:navigator_Go("https://www.buienradar.be/weer/Beitem/BE/2802384");'>☔️ <span id="buien"></span></a><br>
-				💨  <span id="wind"></span><br>
 				🥵 <span id="maxtemp"></span><br>
 				🥶 <span id="mintemp"></span><br>
-				<a href='javascript:navigator_Go("https://www.buienradar.be/weer/beitem/be/2802384/14daagse");'><img src="/images/03d.png" id="icon" alt="icon"></a>
+				💨  <span id="wind"></span><br>
+				☔️ <span id="buien"></span><br>
+				<img src="/images/03d.png" id="icon" alt="icon">
 			</div>
 			<div class="abs z2" id="sirene"></div>
+			<div class="abs z1 i48" id="voordeur"></div>
+			<div class="abs z1 i48" id="wc"></div>
+				<div class="abs z1 i48" id="garage"></div>
+				<div class="abs z1 i48" id="garageled"></div>
+				<div class="abs z1 i48" id="zolderg"></div>
+				<div class="abs z1 i48" id="poortrf"></div>
+				<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
+				<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
 			<div class="abs yellow" id="rbureel"></div>
 			<div class="abs yellow" id="rkeukenl"></div>
 			<div class="abs yellow" id="rkeukenr"></div>
@@ -158,21 +166,13 @@
 				<div class="abs z" id="lichtbadkamer" onclick="dimmer('lichtbadkamer')"></div>
 				<div class="abs z" id="terras" onclick="dimmer('terras')"></div>
 				<div class="abs z" id="zithoek" onclick="dimmer('zithoek')"></div>
-				<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
-				<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
 				<div class="abs z" id="wasbak" onclick="dimmer('wasbak')"></div>
 				<div class="abs z" id="snijplank" onclick="dimmer('snijplank')"></div>
 				<div class="abs z1 i48" id="lampkast"></div>
 				<div class="abs z1 i48" id="tuin"></div>
 				<div class="abs z1 i48" id="tuintafel"></div>
 				<div class="abs z1 i48" id="kristal"></div>
-				<div class="abs z1 i48" id="voordeur"></div>
-				<div class="abs z1 i48" id="wc"></div>
-				<div class="abs z1 i48" id="garage"></div>
-				<div class="abs z1 i48" id="garageled"></div>
-				<div class="abs z1 i48" id="zolderg"></div>
 				<div class="abs z1 i48" id="steenterras"></div>
-				<div class="abs z1 i48" id="poortrf"></div>
 				<div class="abs verbruik">
 					<a href="https://verbruik.egregius.be/kwartierpiek.php">
 						<div id="avg">

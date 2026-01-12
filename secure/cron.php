@@ -10,9 +10,7 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 }
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting CRON loop...');
-$t = null;
-$weekend = null;
-$dow = null;
+$t = $weekend = $dow = null;
 $time=time();
 $db = Database::getInstance();
 $d=fetchdata();
@@ -29,15 +27,12 @@ $connectionSettings=(new ConnectionSettings)
 	->setKeepAliveInterval(60);
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
-foreach (['badkamervuur2','badkamervuur1','water'] as $i) {
-	sw($i,'Off');
-}
+foreach (['badkamervuur2','badkamervuur1','water'] as $i) sw($i,'Off');
 if ($d['weg']['s']>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
-
 foreach ($d as $k=>$v) {
 	$x=$v;
 	if (isset($x['f'])) {

@@ -2,9 +2,12 @@
 $user='cron3600';
 //lg($user);
 
-if (date('G')==0) {
-	apcu_store('alwayson',9999);
-	setCache('alwayson', 9999);
+if (date('G')==0||LOOP_START>$time-60) {
+	lg($user);
+	if(if (date('G')==0)) {
+		apcu_store('alwayson',9999);
+		setCache('alwayson', 9999);
+	}
 //	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
 //	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
 
@@ -46,8 +49,7 @@ if (date('G')==0) {
 	$stmt = $db->prepare($query);
 	$stmt->execute([':stamp' => $stamp]);
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	$b_hist=$row;
-	publishmqtt('d/b_hist',json_encode($b_hist));
+	publishmqtt('d/b_hist',json_encode($row));
 	$map = [
 			'PRESET_1' => 'EDM-1',
 			'PRESET_2' => 'EDM-2',
