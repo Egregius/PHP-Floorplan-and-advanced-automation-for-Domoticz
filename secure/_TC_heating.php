@@ -139,8 +139,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$preheating = true;
-//		$Setliving = max($Setliving, $target);
-		$Setliving = $target;
+		$Setliving = max($Setliving, $target);
 		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
@@ -152,14 +151,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-//	lg(date("G:i",$t_start));
-//	if($prevSet == 1) lg(basename(__FILE__) . ':' . __LINE__);
-//	if ($living>=$target ) lg(basename(__FILE__) . ':' . __LINE__.' '.$living.' '.$target); else lg("$living>=$target");
-//	if ($time >= $t_start) lg(basename(__FILE__) . ':' . __LINE__);
-//	if ($time < $comfortAfternoon+7200) lg(basename(__FILE__) . ':' . __LINE__);
-//	if ($lastWriteleadDataLiving < $time-43200) lg(basename(__FILE__) . ':' . __LINE__);
-	if ($prevSet == 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) && $lastWriteleadDataLiving < $time-43200) {
-//		lg(basename(__FILE__) . ':' . __LINE__);
+
+	if ($prevSet == 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
 		if ($tempRise>0.5) {
@@ -177,10 +170,13 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
-			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			if ($time >= $t_end) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
+			unset($t_start);
+		} else {
+			if ($time >= $t_end) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			unset($t_start);
 		}
 	}
