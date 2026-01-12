@@ -15,6 +15,7 @@ if (isset($_REQUEST['zon'])) {
 		if ($_REQUEST['m']=='auto'&&$d['auto']['m']==0) echo 0;
 		else echo $d[$_REQUEST['m']]['m'];
 	} elseif (isset($_REQUEST['store'])&&isset($_REQUEST['value'])) {
+		$d=fetchdata();
 		$d['time']=time();
 		echo $_REQUEST['store'], $_REQUEST['value'];
 		store($_REQUEST['store'], $_REQUEST['value'], basename(__FILE__).':'.__LINE__);
