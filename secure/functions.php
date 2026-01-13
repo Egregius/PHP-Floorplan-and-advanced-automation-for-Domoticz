@@ -263,6 +263,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
+    if($d[$name]['s']==$action) return;
     $d[$name]['s']=$level;
     $d[$name]['t']=$d['time'];
 	if(isset($d[$name]['f'])) {
@@ -270,7 +271,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
 		unset($x['f']);
 		if(!isset($x['rt'])) unset($x['t'],$x['rt']);
 		else unset($x['rt']);
-		publishmqtt('d/'.$name,json_encode($x));
+		publishmqtt('d/'.$name,json_encode($x),$msg);
 	}
 }
 function resetsecurity() {
@@ -306,6 +307,7 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
+		if($d[$name]['s']==$action) return;
 		$d[$name]['t']=$d['time'];
 		$d[$name]['s']=$action;
 		if(isset($d[$name]['f'])) {
@@ -313,7 +315,7 @@ function sw($name,$action='Toggle',$msg=null) {
 			unset($x['f']);
 			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
 			else unset($x['rt']);
-			publishmqtt('d/'.$name,json_encode($x));
+			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}	
 	}
 }
@@ -353,13 +355,6 @@ function store($name='',$status='',$msg='') {
 			$d['time']??=time();
 			$d[$name]['s']=$status;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x),$msg);
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
@@ -375,7 +370,16 @@ function store($name='',$status='',$msg='') {
 			throw $e;
 		}
 	}
-	if($affected>0/*&&!in_array($name,['dag'])*/) lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+	if($affected>0/*&&!in_array($name,['dag'])*/){
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function isCli(): bool {
@@ -409,13 +413,6 @@ function storemode($name,$mode,$msg='') {
 			$d['time']??=time();
 			$d[$name]['m']=$mode;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
@@ -431,7 +428,16 @@ function storemode($name,$mode,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0&&!in_array($name,['dag'])) lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0&&!in_array($name,['dag'])) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function storesm($name,$s,$m,$msg='') {
@@ -449,13 +455,6 @@ function storesm($name,$s,$m,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
@@ -471,7 +470,16 @@ function storesm($name,$s,$m,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0) lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function storesmi($name,$s,$m,$i,$msg='') {
@@ -493,13 +501,6 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -515,7 +516,16 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0) lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function storesp($name,$s,$p,$msg='') {
@@ -533,13 +543,6 @@ function storesp($name,$s,$p,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -555,7 +558,16 @@ function storesp($name,$s,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0) lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function storep($name,$p,$msg='') {
@@ -570,13 +582,6 @@ function storep($name,$p,$msg='') {
 			if ($p>20) $d[$name]['s']=='On';
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -592,7 +597,16 @@ function storep($name,$p,$msg='') {
 			throw $e;
 		}
 	}	
-	if($affected>0) lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function storeicon($name,$i,$msg='') {
@@ -606,13 +620,6 @@ function storeicon($name,$i,$msg='') {
 			$d['time']??=time();
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) {
-				$x=$d[$name];
-				unset($x['f']);
-				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
-			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -629,7 +636,16 @@ function storeicon($name,$i,$msg='') {
 		}
 	}	
 	if (str_ends_with($name, '_temp')) return;
-	if($affected>0) lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+	if($affected>0) {
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 

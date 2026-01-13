@@ -89,7 +89,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user)
     if ($n === 'e') {
         $d[$path[2]] = $status;
     } elseif ($n !== 't') {
-    	lg("🔙 {$user}	{$n}	{$status}");
+//    	lgmqtt("🔙 {$user}	{$n}	{$status}");
         $status = json_decode($status);
         foreach (['s', 't', 'm', 'i'] as $key) {
             if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
@@ -110,7 +110,7 @@ $mqtt->publish(
 );
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(20000);
+//	usleep(2000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

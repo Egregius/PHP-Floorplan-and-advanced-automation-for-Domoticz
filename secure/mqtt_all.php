@@ -330,14 +330,15 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
+$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user) {
     $time=time();
-		if (($time - LOOP_START) <= 2) return;
-		$path = explode('/', $topic, 3);
+	if (($time - LOOP_START) <= 2) return;
+	$path = explode('/', $topic, 3);
     $n = $path[1];
     if ($n === 'e') {
         $d[$path[2]] = $status;
     } elseif ($n !== 't') {
+//        lgmqtt("🔙 {$user}	{$n}	{$status}");
         $status = json_decode($status);
         foreach (['s', 't', 'm', 'i'] as $key) {
             if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
@@ -348,7 +349,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(20000);
+//	usleep(2000);
 }
 
 $mqtt->disconnect();
