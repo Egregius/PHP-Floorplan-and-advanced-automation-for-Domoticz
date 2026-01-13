@@ -3,15 +3,14 @@
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require_once '/var/www/vendor/autoload.php';
-
 require '/var/www/config.php';
 if (!is_dir('/dev/shm/cache')) {
     mkdir('/dev/shm/cache', 0777, true);
     chmod('/dev/shm/cache', 0777);
 }
+define('VERSIE', 4);
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-//$db = Database::getInstance();
 date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
@@ -358,7 +357,7 @@ function isCli(): bool {
 function publishmqtt($topic,$msg) {
 	global $mqtt;
 	if($mqtt&&$mqtt->isConnected()) {
-//		lg("🟢 {$topic} {$msg}");
+		lgmqtt("🟢 {$topic} {$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
@@ -366,7 +365,7 @@ function publishmqtt($topic,$msg) {
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-//		lg("🛑 {$topic} {$msg}");
+		lgmqtt("🛑 {$topic} {$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
@@ -511,6 +510,7 @@ function storep($name,$p,$msg='') {
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
+			if ($p>20) $d[$name]['s']=='On';
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
 			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
@@ -652,6 +652,15 @@ Levels:
 		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 		fclose($fp);
 	}
+}
+function lgmqtt($msg) {
+	$fp = fopen('/temp/mqttpublish.log', "a+");
+	$time = microtime(true);
+	$dFormat = "d-m H:i:s";
+	$mSecs = $time - floor($time);
+	$mSecs = substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	lg('bosekey '.$ip.' '.$key.' '.$msg);

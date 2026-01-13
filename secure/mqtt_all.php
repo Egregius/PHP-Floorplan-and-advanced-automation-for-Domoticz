@@ -28,7 +28,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
 $validDevices = [];
@@ -502,7 +502,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
-/*
+
 $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
     $path = explode('/', $topic, 3);
     $n = $path[1];
@@ -516,7 +516,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
         if (isset($status->p)) $d[$n]['s'] = $status->p;
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
-*/
+
 while (true) {
 	$result=$mqtt->loop(true);
 	usleep(5000);

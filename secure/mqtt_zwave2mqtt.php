@@ -29,7 +29,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
 $validDevices = [];

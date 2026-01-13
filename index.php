@@ -1,4 +1,7 @@
-<?php require '/var/www/authentication.php'; ?>
+<?php 
+require '/var/www/authentication.php';
+define('VERSIE', 4);
+?>
 <!DOCTYPE HTML>
 <html lang="nl">
 	<head>
@@ -16,9 +19,9 @@
 		<link rel="shortcut icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
 		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
-		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=3">
+		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=<?php echo VERSIE; ?>">
 		<script src="/scripts/mqtt.min.js"></script>
-		<script src="/scripts/floorplanjs.js?v=2"></script>
+		<script src="/scripts/floorplanjs.js?v=<?php echo VERSIE; ?>"></script>
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">

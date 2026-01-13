@@ -30,27 +30,13 @@ if (date('G')==0||LOOP_START>$time-60) {
 	$response = @file_get_contents($url);
 	$data = json_decode($response, true);
 	if (isset($data['results'])) {
+		$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*7);
+		$query = "SELECT MIN(buiten) AS min, ROUND(AVG(buiten), 2) AS avg, MAX(buiten) AS max FROM temp WHERE stamp > :stamp";
+		$stmt = $db->prepare($query);
+		$stmt->execute([':stamp' => $stamp]);
+		$b_hist = $stmt->fetch(PDO::FETCH_ASSOC);
 		$results = $data['results'];
-		$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
-		$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
-		$Sunrise = isoToLocalTimestamp($results['sunrise']);
-		$Sunset = isoToLocalTimestamp($results['sunset']);
-		
-		publishmqtt('d/Tstart',date('G:i', $CivTwilightStart));
-		publishmqtt('d/Srise',date('G:i', $Sunrise));
-		publishmqtt('d/Sset',date('G:i', $Sunset));
-		publishmqtt('d/Tend',date('G:i', $CivTwilightEnd));
-	}
-	
-	
-	
-	$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*7);
-	$query = "SELECT MIN(buiten) AS min, ROUND(AVG(buiten), 2) AS avg, MAX(buiten) AS max FROM temp WHERE stamp > :stamp";
-	$stmt = $db->prepare($query);
-	$stmt->execute([':stamp' => $stamp]);
-	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	publishmqtt('d/b_hist',json_encode($row));
-	$map = [
+		$map = [
 			'PRESET_1' => 'EDM-1',
 			'PRESET_2' => 'EDM-2',
 			'PRESET_3' => 'EDM-3',
@@ -58,7 +44,20 @@ if (date('G')==0||LOOP_START>$time-60) {
 			'PRESET_5' => 'MIX-2',
 			'PRESET_6' => 'MIX-3',
 		];
-	publishmqtt('d/pl',$map[boseplaylist($time)]);
+		$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
+		$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
+		$Sunrise = isoToLocalTimestamp($results['sunrise']);
+		$Sunset = isoToLocalTimestamp($results['sunset']);
+		$data=[
+			'Tstart'=>date('G:i', $CivTwilightStart),
+			'Srise'=>date('G:i', $Sunrise),
+			'Sset'=>date('G:i', $Sunset),
+			'Tend'=>date('G:i', $CivTwilightEnd),
+			'b_hist'=>json_encode($b_hist),
+			'pl'=>$map[boseplaylist($time)],
+		];
+		publishmqtt('d/daily',json_encode($data));
+	}
 }
 
 if ($d['weg']['s']==0) {
