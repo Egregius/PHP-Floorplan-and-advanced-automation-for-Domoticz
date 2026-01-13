@@ -37,7 +37,8 @@ foreach ($d as $k=>$v) {
 	$x=$v;
 	if (isset($x['f'])) {
 		unset($x['f']);
-		if(!isset($x['rt'])) unset($x['t']);
+		if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+		else unset($x['rt']);
 		publishmqtt('d/'.$k,json_encode($x));
 	}
 }

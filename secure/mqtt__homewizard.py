@@ -32,9 +32,9 @@ def publish_all_retained():
     now=int(time.time())
     mqtt_client.publish("d/t", now, retain=True, qos=1)
     for k, v in state.items():
-        mqtt_client.publish(f"d/en/{k}", v, retain=True, qos=1)
+        mqtt_client.publish(f"d/e/{k}", v, retain=True, qos=1)
     for k, v in teller_state.items():
-        mqtt_client.publish(f"teller/{k}", v, retain=True, qos=1)
+        mqtt_client.publish(f"t/{k}", v, retain=True, qos=1)
     log("📡 Alle retained topics gepubliceerd")
 
 def on_connect(client, userdata, flags, rc):
@@ -135,17 +135,17 @@ def step_for_value(value):
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"d/en/{key}", value, retain=True, qos=1)
+        result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
         log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"teller/{key}", value, retain=True, qos=1)
-        log(f"📤 Publish teller/{key}={value}, rc={result.rc}")  # DEBUG
+        result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
+        log(f"📤 Publish t/{key}={value}, rc={result.rc}")  # DEBUG
     else:
-        log(f"⚠️ Kan teller/{key} niet publiceren: niet verbonden")  # DEBUG
+        log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")  # DEBUG
 
 # --- State updates ---
 def publish_step(key, value):

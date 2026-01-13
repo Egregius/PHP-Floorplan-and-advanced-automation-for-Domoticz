@@ -291,7 +291,7 @@ function sw($name,$action='Toggle',$msg=null) {
 	} else {
 		if(!isset($d)) $d=fetchdata();
 		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
-		if (isset($d[$name]['d'])&&$d[$name]['d']=='hsw') {
+		if (isset($d[$name]['d'])&&$d[$name]['d']=='s') {
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
@@ -303,7 +303,14 @@ function sw($name,$action='Toggle',$msg=null) {
 			store($name, $action, $msg);
 		}
 		$d[$name]['t']=$d['time'];
-		if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x));
+		}
+			
 	}
 }
 function zigbee($device,$action) {
@@ -331,7 +338,13 @@ function store($name='',$status='',$msg='') {
 			$d['time']??=time();
 			$d[$name]['s']=$status;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
@@ -380,7 +393,13 @@ function storemode($name,$mode,$msg='') {
 			$d['time']??=time();
 			$d[$name]['m']=$mode;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
@@ -413,7 +432,13 @@ function storesm($name,$s,$m,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['m']=$m;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
@@ -450,7 +475,13 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			$d[$name]['m']=$m;
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -483,7 +514,13 @@ function storesp($name,$s,$p,$msg='') {
 			$d[$name]['s']=$s;
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -513,7 +550,13 @@ function storep($name,$p,$msg='') {
 			if ($p>20) $d[$name]['s']=='On';
 			$d[$name]['p']=$p;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -542,7 +585,13 @@ function storeicon($name,$i,$msg='') {
 			$d['time']??=time();
 			$d[$name]['i']=$i;
 			$d[$name]['t']=$d['time'];
-			if(isset($d[$name]['f'])) publishmqtt("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))));
+			if(isset($d[$name]['f'])) {
+				$x=$d[$name];
+				unset($x['f']);
+				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+				else unset($x['rt']);
+				publishmqtt('d/'.$name,json_encode($x));
+			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);

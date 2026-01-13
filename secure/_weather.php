@@ -184,7 +184,19 @@ if (count($rains) >= 2) {
         sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
 }
-
+$weather=[
+	'b'=>$d['buien']['s'],
+	'i'=>$d['icon']['s'],
+	'w'=>$d['wind']['s'],
+	'uv'=>$d['uv']['s'],
+	'uvm'=>$d['uv']['m'],
+	'mint'=>$d['minmaxtemp']['s'],
+	'maxt'=>$d['minmaxtemp']['m'],
+];
+if (!isset($weathercache)||$weathercache!==$weather) {
+	publishmqtt('d/w',json_encode($weather));
+	$weathercache=$weather;
+}
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']['s']=='On') {

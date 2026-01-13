@@ -32,7 +32,7 @@ $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
 $force=true;
 $newData = json_decode(getCache('teller'),true);
-$mqtt->subscribe('teller/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
+$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
 	$time=time();
 	if($topic=='teller/import') $newData['import']=$status;
     elseif($topic=='teller/export') $newData['export']=$status;
