@@ -69,7 +69,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				}
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 				$time_passed = ($time - $oldt) >= 30;
-				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
+				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device,$val);
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -128,7 +128,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(50000);
+	usleep(20000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

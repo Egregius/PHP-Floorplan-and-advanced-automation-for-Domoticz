@@ -97,7 +97,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(50000);
+	usleep(20000);
 }
 
 $mqtt->disconnect();

@@ -68,7 +68,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if (isset($status)&&$d[$device]['s']!=$status) {
 //				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
-				store($device, $status);
+				store($device, (string)$status);
 			}
 		}
 	} catch (Throwable $e) {
@@ -97,7 +97,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				$d=fetchdata();
 				if ($d[$device]['s']!=$status) {
 //					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
-					store($device,$status);
+					store($device,(string)$status);
 				}
 			}
 		}
@@ -128,15 +128,15 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					if (isset($d[$device]['t'])) store($device,$status);
+					if (isset($d[$device]['t'])) store($device,(string)$status);
 				} elseif ($status === 'Keypressed2x') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					if (isset($d[$device]['t'])) store($device,$status);
+					if (isset($d[$device]['t'])) store($device,(string)$status);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if (isset($d[$device]['t'])) store($device,$status);
+				if (isset($d[$device]['t'])) store($device,(string)$status);
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
@@ -165,7 +165,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				if ($d[$device]['s']!=$status) {
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status);
+					store($device,(string)$status);
 				}
 			}
 		}
@@ -328,181 +328,6 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	try {
-		$path=explode('/',$topic);
-		$device=$path[1];
-		if (isset($validDevices[$device])) {
-			$time=time();
-			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
-//			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-//			$lastEvent = $d['time'];
-			$d=fetchdata();
-			$status=json_decode($status);
-			if ($device=='remotealex') {
-				if (isset($status->action)) {
-					$status=$status->action;
-//						lg('ⓩ Remote '.$device.' '.$status);
-					include '/var/www/html/secure/pass2php/'.$device.'.php';
-				}
-			}// else lg('ⓩ ZIGBEE [!d!] '.$device.' '.print_r($status,true));
-		}// else lg('ⓩ Z2M '.$device.' '.$status);
-	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
-	}
-	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
-},MqttClient::QOS_AT_LEAST_ONCE);
-
-$mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	try {
-		$path=explode('/',$topic);
-		$device=$path[1];
-		if (isset($validDevices[$device])) {
-			$time=time();
-			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
-//			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-//			$lastEvent = $d['time'];
-			$d=fetchdata();
-			$status=json_decode($status);
-			if (isset($d[$device]['d'])) {
-				if ($d[$device]['d']=='p') {
-					if($path[2]=='sensor_binary') {
-						if($status==1) $status='On';
-						else $status='Off';
-						if ($d[$device]['s']!=$status) {
-//							lg('🌊 PIR '.$device.' '.$status);
-							store($device, $status);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						}
-					} else return;
-				} elseif ($d[$device]['d']=='c') {
-					if (isset($path[2])&&$path[2]=='sensor_binary') {
-						if ($status==1) {
-							if($device=='achterdeur') $status='Closed';
-							else $status='Open';
-						} else {
-							if($device=='achterdeur') $status='Open';
-							else $status='Closed';
-						}
-						if ($d[$device]['s']!=$status) {
-//							lg('🌊 Z2M ['.$d[$device]['d'].']	'.$device.'	'.$status);
-							store($device, $status);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						}
-					}
-				} elseif ($d[$device]['d']=='hsw') {
-					if($path[2]=='switch_binary'&&$path[4]=='currentValue') {
-						if ($status==1) $status='On';
-						else $status='Off';
-						if ($d[$device]['s']!=$status) {
-//								lg('🌊 Z2M [HSW]	'.$device.'	'.$status);
-							store($device, $status);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						}
-					} elseif(isset($d[$device]['p'])&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
-						$val = (int)$status;
-						$old = (int)($d[$device]['p'] ?? 0);
-						$oldt = (int)($d[$device]['t'] ?? 0);
-						if ($oldt === 0) {
-							store($device, $val, '', 1);
-							return;
-						}
-						$upd_power = false;
-						$abs_diff = abs($val - $old);
-						if ($old < 10) {
-							if ($abs_diff >= 2) {
-								$upd_power = true;
-							}
-						} elseif ($old < 100) {
-							if ($abs_diff >= 10) {
-								$upd_power = true;
-							}
-						} else {
-							$rel_diff = abs(($val - $old) / $old);
-							if ($rel_diff >= 0.40 && $abs_diff >= 50) {
-								$upd_power = true;
-							}
-						}
-						if($upd_power==true) {
-//							lg($device.' '.__LINE__.' '.$status);
-//							lg('🌊 Z2M Power '.$device.'	'.$status);
-							storep($device,$val);
-							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
-						}
-					} //else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
-				} elseif ($d[$device]['d']=='d') {
-					if($path[2]=='switch_multilevel') {
-						if($status>40&&$status<100)$status+=1;
-						if($d[$device]['s']!=$status) {
-							store($device, $status);
-							include '/var/www/html/secure/pass2php/'.$device.'.php';
-						}
-					}
-				} else {
-//					lg('🌊 Z2M ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
-				}
-			} else { // Devices die niet in tabel bestaan
-				if(str_starts_with($device, '8')) {
-					if(isset($path[4])&&$path[4]=='scene') {
-						$knop=(int)$path[5];
-						if ($status===0) {
-							$file=$device.'_'.$knop;
-						} elseif ($status===3) {
-							$file=$device.'_'.$knop.'d';
-						} else return;
-						$status='On';
-//						lg('📲 '.$file);
-						include '/var/www/html/secure/pass2php/'.$file.'.php';
-						if (isset($d[$file]['t'])) store($file,null,'',1);
-					}
-				} elseif ($device=='inputliving') {
-					if(isset($path[2])&&$path[2]=='sensor_binary') {
-						if ($status==1) {
-							$knop=substr($path[3],-1);
-							lg('🌊 '.$device.' '.$knop.' '.$status);
-							if ($device=='inputliving') {
-								if ($status==1) $status=='On';
-								else $status='Off';
-								$map=[
-									0=>1,
-									1=>2,
-									2=>3
-								];
-								$knop=$map[$knop];
-								lg('🌊 '.$device.' '.$knop.' '.$status);
-							}
-							include '/var/www/html/secure/pass2php/'.$device.$knop.'.php';
-						}
-					} elseif(isset($path[2])&&$path[2]=='switch_multilevel') {
-							
-							lg('🌊 '.$device.' '.$knop.' '.$status.' '.print_r($path,true));
-							include '/var/www/html/secure/pass2php/'.$device.'1.php';
-					}
-				} elseif ($device=='zbadkamer') {
-					if($path[2]=='battery'&&$path[4]=='level') {
-						if ($status<40) alert('bat'.$device,"Batterij {$device} bijna leeg: {$status}",1440);
-					}
-				} else {
-//					lg('🌊 NO DT '.$device.'	'.$topic.'	=> '.$status);
-				}
-			}
-		}// else lg('🌊 Z2M NO FILE '.$device.' '.$topic.'	=> '.$status);
-	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . print_r($status,true) . ' ' . $e->getMessage());
-	}
-	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
-},MqttClient::QOS_AT_LEAST_ONCE);
-
 $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
     $path = explode('/', $topic, 3);
     $n = $path[1];
@@ -519,7 +344,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
 
 while (true) {
 	$result=$mqtt->loop(true);
-	usleep(5000);
+	usleep(20000);
 }
 
 $mqtt->disconnect();

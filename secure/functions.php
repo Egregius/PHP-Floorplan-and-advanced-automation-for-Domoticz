@@ -373,9 +373,9 @@ function isCli(): bool {
 }
 
 function publishmqtt($topic,$msg) {
-	global $mqtt;
+	global $mqtt,$user;
 	if($mqtt&&$mqtt->isConnected()) {
-		lgmqtt("🟢 {$topic} {$msg}");
+		lgmqtt("🟢 {$user}	{$topic}	{$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
@@ -383,7 +383,7 @@ function publishmqtt($topic,$msg) {
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-		lgmqtt("🛑 {$topic} {$msg}");
+		lgmqtt("🛑 {$user}	{$topic}	{$msg}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
