@@ -42,7 +42,6 @@ foreach ($d as $k=>$v) {
 		publishmqtt('d/'.$k,json_encode($x));
 	}
 }
-
 while (true) {
 	$time = time();
 	$d['time'] = $time;

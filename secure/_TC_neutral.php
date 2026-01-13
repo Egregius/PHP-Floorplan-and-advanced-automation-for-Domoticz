@@ -19,8 +19,6 @@ if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
 $boven=array('rwaskamer','ralex','rkamerl','rkamerr');
 $beneden=array('rbureel','rkeukenl','rkeukenr');
 $benedenall=array('rliving','rbureel','rkeukenl','rkeukenr');
-if ($d['minmaxtemp']['s']>20||$d['minmaxtemp']['m']>22) $warm=true; else $warm=false;
-if ($d['minmaxtemp']['s']<5&&$d['minmaxtemp']['m']<5) $koud=true; else $koud=false;
 
 require('_Rolluiken_Neutral.php');
 require('_TC_badkamer.php');

@@ -1,8 +1,6 @@
 <?php
 $user='WEATHER';
-$prevwind=$d['wind']['s'];
 //lg ('Weather');
-$wind=$prevwind;
 $maxtemp=-100;
 $mintemp=100;
 $temps=array();
@@ -11,8 +9,19 @@ $rains=array();
 $hums=array();
 $temps['buiten_temp']=$d['buiten_temp']['s'];
 $hums['buiten_temp']=$d['buiten_temp']['m'];
-$winds['prev_wind']=$d['wind']['s'];
-
+if(!isset($weather)) {
+	$weather=[
+		'b'=>0,
+		'i'=>'',
+		'w'=>0,
+		'uv'=>0,
+		'uvm'=>0,
+		'mint'=>10,
+		'maxt'=>15,
+	];
+}
+$wind=$weather['w'];
+$winds['prev_wind']=$wind;
 //lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
 if (isset($ow['current'])) {
@@ -21,7 +30,7 @@ if (isset($ow['current'])) {
 	$hums['ow3']=$ow['current']['humidity'];
 	$winds['ow_speed']=$ow['current']['wind_speed'] * 3.6;
 	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=$ow['current']['wind_gust'] * 3.6;
-	if ($d['icon']['s']!=$ow['current']['weather'][0]['icon']) store('icon', $ow['current']['weather'][0]['icon']);
+	$weather['i']=$ow['current']['weather'][0]['icon'];
 	if (isset($ow['current']['rain']['1h'])) $rains['ow']=$ow['current']['rain']['1h']*100;
 	foreach ($ow['hourly'] as $i) {
 		if ($i['dt']<$time+(12*3600)) {
@@ -141,9 +150,9 @@ if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10
 $maxtemp=ceil($maxtemp*10)/10;
 $ref = (float)$d['buiten_temp']['s'];
 $temp = round(max($ref - 0.1, min($temp, $ref + 0.1)),1);
+$weather['mint']=$mintemp;
+$weather['maxt']=$maxtemp;
 
-
-if ($d['minmaxtemp']['s']!=$mintemp||$d['minmaxtemp']['m']!=$maxtemp) storesm('minmaxtemp', $mintemp, $maxtemp);
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 
 //lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']['m']);
@@ -160,15 +169,13 @@ elseif ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
 
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 1);
-	if ($d['wind']['s']!=$wind) store('wind', $wind);
+	$weather['w']=$wind;
 }
-
 if (count($rains) >= 2) {
 //	lg('$rains='.print_r($rains,true));
     $rain = min(100,array_sum($rains) / count($rains));
-    if ($d['buien']['s'] != floor($rain)) {
-        store('buien', floor($rain));
-    }
+    $weather['b']= floor($rain);
+
     if (!isset($rainhist)) {
         $rainhistJson = getCache('rainhist');
         $rainhist = $rainhistJson ? json_decode($rainhistJson, true) : array();
@@ -184,15 +191,7 @@ if (count($rains) >= 2) {
         sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
 }
-$weather=[
-	'b'=>$d['buien']['s'],
-	'i'=>$d['icon']['s'],
-	'w'=>$d['wind']['s'],
-	'uv'=>$d['uv']['s'],
-	'uvm'=>$d['uv']['m'],
-	'mint'=>$d['minmaxtemp']['s'],
-	'maxt'=>$d['minmaxtemp']['m'],
-];
+
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));
 	$weathercache=$weather;

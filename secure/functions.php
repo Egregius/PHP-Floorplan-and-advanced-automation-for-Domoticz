@@ -58,7 +58,7 @@ function check_en_slapen($locatie, $status, &$d) {
 		106 => 'Buiten20',
 	];
 	foreach ($boses as $k => $v) {
-		if ($d['bose'.$k]['m'] == 'Online') {
+		if ($d['bose'.$k]['m'] === 1) {
 			waarschuwing('Bose '.$v, 55);
 			$x++;
 		}
@@ -265,8 +265,12 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
     };
     $d[$name]['s']=$level;
     $d[$name]['t']=$d['time'];
-	if ($mqtt) {
-		$mqtt->publish("d/{$name}",json_encode((($d[$name]['rt'] ?? 0) === 1 ? $d[$name] : array_diff_key($d[$name], ['t'=>1]))),1,true);
+	if(isset($d[$name]['f'])) {
+		$x=$d[$name];
+		unset($x['f']);
+		if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+		else unset($x['rt']);
+		publishmqtt('d/'.$name,json_encode($x));
 	}
 }
 function resetsecurity() {
@@ -303,14 +307,14 @@ function sw($name,$action='Toggle',$msg=null) {
 			store($name, $action, $msg);
 		}
 		$d[$name]['t']=$d['time'];
+		$d[$name]['s']=$action;
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
 			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x));
-		}
-			
+		}	
 	}
 }
 function zigbee($device,$action) {

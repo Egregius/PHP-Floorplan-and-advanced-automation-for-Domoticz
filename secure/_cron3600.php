@@ -31,7 +31,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 	$data = json_decode($response, true);
 	if (isset($data['results'])) {
 		$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*7);
-		$query = "SELECT MIN(buiten) AS min, ROUND(AVG(buiten), 2) AS avg, MAX(buiten) AS max FROM temp WHERE stamp > :stamp";
+		$query = "SELECT MIN(buiten) AS m, ROUND(AVG(buiten), 2) AS a, MAX(buiten) AS x FROM temp WHERE stamp > :stamp";
 		$stmt = $db->prepare($query);
 		$stmt->execute([':stamp' => $stamp]);
 		$b_hist = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,14 +49,17 @@ if (date('G')==0||LOOP_START>$time-60) {
 		$Sunrise = isoToLocalTimestamp($results['sunrise']);
 		$Sunset = isoToLocalTimestamp($results['sunset']);
 		$data=[
-			'Tstart'=>date('G:i', $CivTwilightStart),
-			'Srise'=>date('G:i', $Sunrise),
-			'Sset'=>date('G:i', $Sunset),
-			'Tend'=>date('G:i', $CivTwilightEnd),
-			'b_hist'=>$b_hist,
+			'Ts'=>date('G:i', $CivTwilightStart),
+			'Sr'=>date('G:i', $Sunrise),
+			'Ss'=>date('G:i', $Sunset),
+			'Te'=>date('G:i', $CivTwilightEnd),
+			'b'=>$b_hist,
 			'pl'=>$map[boseplaylist($time)],
 		];
-		publishmqtt('d/daily',json_encode($data));
+		if(!isset($ddcache)||$ddcache!=$data) {
+			publishmqtt('d/d',json_encode($data));
+			$ddcache=$data;
+		}
 	}
 }
 
