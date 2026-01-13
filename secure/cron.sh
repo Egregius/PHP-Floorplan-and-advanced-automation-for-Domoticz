@@ -2,11 +2,11 @@
 cd /var/www/html/secure
 
 SCRIPTS=(
-  mqtt_all.php
+#  mqtt_all.php
   mqtt_binary_sensor.php
   mqtt_cover.php
   mqtt_event.php
-   mqtt_light.php
+  mqtt_light.php
   mqtt_media_player.php
   mqtt_sensor.php
   mqtt_switch.php
@@ -14,7 +14,6 @@ SCRIPTS=(
   mqtt_zwave2mqtt.php
   cron.php
   cron2.php
-#  energy.php
   mqtt__energy.php
   mqtt__homewizard.py
 )

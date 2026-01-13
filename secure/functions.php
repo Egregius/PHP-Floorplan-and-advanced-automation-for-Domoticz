@@ -263,20 +263,9 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if((int)$d[$name]['s']==(int)$level) {
-		lg(basename(__FILE__).':'.__LINE__.' Skipping switch command publish for '.$name);
-		return;
-	}
+    if($d[$name]['s']==$level) return;
     $d[$name]['s']=$level;
     $d[$name]['t']=$d['time'];
-	if(isset($d[$name]['f'])) {
-		$x=$d[$name];
-		unset($x['f']);
-		if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-		else unset($x['rt']);
-		lg(basename(__FILE__).':'.__LINE__);
-		publishmqtt('d/'.$name,json_encode($x),$msg);
-	}
 }
 function resetsecurity() {
 	global $d;
@@ -311,20 +300,9 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
-		if($d[$name]['s']==$action) {
-			lg(basename(__FILE__).':'.__LINE__.' Skipping switch command publish for '.$name);
-			return;
-		}
+		if($d[$name]['s']==$action) return;
 		$d[$name]['t']=$d['time'];
 		$d[$name]['s']=$action;
-		if(isset($d[$name]['f'])) {
-			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
-			lg(basename(__FILE__).':'.__LINE__);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}	
 	}
 }
 function zigbee($device,$action) {
@@ -338,7 +316,7 @@ function zwave($device,$type,$endpoint,$action) {
 	$mqtt->publish("zwave2mqtt/{$device}/switch_{$type}/endpoint_{$endpoint}/targetValue/set",$action);
 }
 function setpoint($name, $value,$msg='') {
-	global $user;
+	global $d,$user,$db;
 	$msg='(SETPOINT)'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
@@ -347,29 +325,15 @@ function store($name='',$status='',$msg='') {
 	if (is_numeric($status)) {
         $status = $status + 0;
     }
-    
-    if((string)$d[$name]['s']==(string)$status) {
-    	lg("Skipped store {$name} {$status}, not changed");
-    	return;
-    } else lg('CMP '.json_encode([
-		'name' => $name,
-		'old'  => $d[$name]['s'],
-		'oldt' => gettype($d[$name]['s']),
-		'new'  => $status,
-		'newt' => gettype($status),
-	]));
-	lg(basename(__FILE__).':'.__LINE__);
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
 			$d[$name]['s']=$status;
 			$d[$name]['t']=$d['time'];
 			$db=Database::getInstance();
-			lg('Updating mySQL');
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
 			$affected=$stmt->rowCount();
-			lg('$affected='.$affected);
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
@@ -381,20 +345,16 @@ function store($name='',$status='',$msg='') {
 			throw $e;
 		}
 	}
-	lg(basename(__FILE__).':'.__LINE__);
-
 	if($affected>0/*&&!in_array($name,['dag'])*/){
-		lg(basename(__FILE__).':'.__LINE__);
 		if(isset($d[$name]['f'])) {
-			lg(basename(__FILE__).':'.__LINE__);
 			$x=$d[$name];
 			unset($x['f']);
 			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),9);
-	} else lg('💾 STORE 000 '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),9);
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+	}
 	return $affected ?? 0;
 }
 function isCli(): bool {
@@ -406,7 +366,6 @@ function publishmqtt($topic,$msg,$log='') {
 	if($mqtt&&$mqtt->isConnected()) {
 		lgmqtt("🟢 {$user}	{$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
-		$mqtt->loop(true, true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
 		->setUsername('mqtt')
@@ -415,7 +374,6 @@ function publishmqtt($topic,$msg,$log='') {
 		$mqtt->connect($connectionSettings,true);
 		lgmqtt("🛑 {$user}	{$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
-		$mqtt->loop(true, true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
 }
