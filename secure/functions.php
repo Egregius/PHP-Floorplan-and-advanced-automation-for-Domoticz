@@ -1206,7 +1206,7 @@ function republishmqtt() {
 		if (!isset($i['d'])) continue;
 		$entity_id = null;
 		$to_publish = [];
-		if ($i['d'] === 'hsw') {
+		if ($i['d'] === 's') {
 			$entity_id = "switch.$device";
 			$url = "$ha_url/api/states/$entity_id";
 			$ch = curl_init($url);

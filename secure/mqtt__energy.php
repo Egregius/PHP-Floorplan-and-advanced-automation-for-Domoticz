@@ -34,10 +34,10 @@ $force=true;
 $newData = json_decode(getCache('teller'),true);
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
 	$time=time();
-	if($topic=='teller/import') $newData['import']=$status;
-    elseif($topic=='teller/export') $newData['export']=$status;
-    elseif($topic=='teller/gas') $newData['gas']=$status;
-    elseif($topic=='teller/water') $newData['water']=$status;
+	if($topic=='t/import') $newData['import']=$status;
+    elseif($topic=='t/export') $newData['export']=$status;
+    elseif($topic=='t/gas') $newData['gas']=$status;
+    elseif($topic=='t/water') $newData['water']=$status;
     processEnergyData($dbverbruik, $dbzonphp, $force, $newData,$mqtt);
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -46,7 +46,7 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d,&$time
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,100000);
+	$mqtt->loop(true,false,null,50000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
@@ -242,6 +242,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		'zon' => $data['zon'],
 		'alwayson' => $data['alwayson'],
 	];
+	
 	static $mqttcache = [];
 	foreach($den as $k => $v) {
 		if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
