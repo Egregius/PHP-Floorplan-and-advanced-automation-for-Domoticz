@@ -155,7 +155,7 @@ if ($d['auto']['s']=='On') {
 	foreach (array('kamer_set','alex_set') as $i) {
 		if ($d[$i]['m']!=0&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
-	if ($d['poortrf']['s']=='On'&&past('poortrf')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poortrf', 'Off', basename(__FILE__).':'.__LINE__);
+	if ($d['poort']['s']=='On'&&past('poort')>600&&past('pirgarage')>600&&past('deurgarage')>600) sw('poort', 'Off', basename(__FILE__).':'.__LINE__);
 
 	if ($d['pirliving']['s']=='Off') {
 		if ($d['dag']['s']>2) {

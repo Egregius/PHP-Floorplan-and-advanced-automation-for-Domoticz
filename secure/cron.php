@@ -62,13 +62,11 @@ while (true) {
 	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
 	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
 	if (checkInterval($last90, 90, $time)) include '_weather.php';
-	
 	$next = floor($time / 10) * 10 + 10;
 	$sleep = $next - microtime(true);
 	$sleep = (int)round($sleep * 1e6)-1800;
 	if ($sleep > 0) usleep($sleep);
 }
-
 function checkInterval(&$last, $interval, $time) {
 	if (($time % $interval === 0 && $last !== $time) || $last <= $time - $interval) {
 		$last = $time;

@@ -43,12 +43,12 @@ define('VERSIE', 4);
 			<div class="abs z2" id="sirene"></div>
 			<div class="abs z1 i48" id="voordeur"></div>
 			<div class="abs z1 i48" id="wc"></div>
-				<div class="abs z1 i48" id="garage"></div>
-				<div class="abs z1 i48" id="garageled"></div>
-				<div class="abs z1 i48" id="zolderg"></div>
-				<div class="abs z1 i48" id="poortrf"></div>
-				<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
-				<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
+			<div class="abs z1 i48" id="garage"></div>
+			<div class="abs z1 i48" id="garageled"></div>
+			<div class="abs z1 i48" id="zolderg"></div>
+			<div class="abs z1 i48" id="poort"></div>
+			<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
+			<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
 			<div class="abs yellow" id="rbureel"></div>
 			<div class="abs yellow" id="rkeukenl"></div>
 			<div class="abs yellow" id="rkeukenr"></div>
@@ -238,10 +238,8 @@ define('VERSIE', 4);
 				<div class="abs z1 i48" id="boseliving"></div>
 				<div class="abs z1 i48" id="bosekeuken"></div>
 				<div class="abs z1 i48" style="width:70px;" id="auto"></div>
-				<div class="abs z1 i48" style="width:70px;" id="regenpomp"></div>
 				<div class="abs z1 i48" style="width:70px;" id="mac"></div>
 				<div class="abs z1 i48" style="width:70px;" id="ipaddock"></div>
-				<div class="abs z1 i48" style="width:70px;" id="water"></div>
 				<div class="abs blackmedia">
 					<div class="fix z1 center" style="top:880px;left:320px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40" alt="Log"><br>Log</a></div>
 					<div class="fix z1 center" style="top:880px;left:400px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
@@ -268,6 +266,8 @@ define('VERSIE', 4);
 				<div class="abs leftbuttons" id="heatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="abs z1" style="top:343px;left:415px;"><a href="javascript:navigator_Go('floorplan.doorsensors.php');"><img src="/images/close.png" width="72" height="72" alt="Close"></a></div>
 				<div class="abs z1 i48" id="wasdroger"></div>
+				<div class="abs z1 i48" style="width:70px;" id="water"></div>
+				<div class="abs z1 i48" style="width:70px;" id="regenpomp"></div>
 				<div class="abs z1" id="zolder_temp" onclick="location.href='temp.php?zolder=On'">
 					<img src="/images/temp.png" class="thermometer-bg" alt="zolder">
 					<div id="zolder_temp_mercury" class="thermometer-mercury"></div>

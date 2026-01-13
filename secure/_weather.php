@@ -3,12 +3,13 @@ $user='WEATHER';
 //lg ('Weather');
 $maxtemp=-100;
 $mintemp=100;
-$temps=array();
-$winds=array();
-$rains=array();
-$hums=array();
-$temps['buiten_temp']=$d['buiten_temp']['s'];
-$hums['buiten_temp']=$d['buiten_temp']['m'];
+$temps=[];
+$winds=[];
+$rains=[];
+$hums=[];
+$uvs=[];
+$temps['prev']=$d['buiten_temp']['s'];
+$hums['prev']=$d['buiten_temp']['m'];
 if(!isset($weather)) {
 	$weather=[
 		'b'=>0,
@@ -19,32 +20,41 @@ if(!isset($weather)) {
 		'mint'=>10,
 		'maxt'=>15,
 	];
+	$wind=0;
+} else {
+	$wind=$weather['w'];
+	$winds['prev']=$wind;
+	$uvs['prev']=$weather['uv'];
 }
-$wind=$weather['w'];
-$winds['prev_wind']=$wind;
 //lg(__LINE__.' https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid);
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
+//lg('$ow='.print_r($ow,true));
 if (isset($ow['current'])) {
 	$temps['ow3']=$ow['current']['temp'];
 	$temps['ow_feel3']=$ow['current']['feels_like'];
 	$hums['ow3']=$ow['current']['humidity'];
+	$uvs['ow3']=$ow['current']['uvi'];
+	if($uvs['ow3']>$weather['uvm'])$weather['uvm']=$uvs['ow3'];
 	$winds['ow_speed']=$ow['current']['wind_speed'] * 3.6;
 	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=$ow['current']['wind_gust'] * 3.6;
 	$weather['i']=$ow['current']['weather'][0]['icon'];
 	if (isset($ow['current']['rain']['1h'])) $rains['ow']=$ow['current']['rain']['1h']*100;
 	foreach ($ow['hourly'] as $i) {
+//		lg(print_r($i,true));
 		if ($i['dt']<$time+(12*3600)) {
 			if ($i['temp']<$mintemp) $mintemp=$i['temp'];
 			elseif ($i['temp']>$maxtemp) $maxtemp=$i['temp'];
 			if ($i['dt']<$time+3600) {
 				if(isset($i['rain']['1h'])) $rains['ow1h']=$i['rain']['1h']*100;
 			}
+			if($i['uvi']>$weather['uvm'])$weather['uvm']=$i['uvi'];
 		} else break;
 	}
 }
 
 //lg(__LINE__.' https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid);
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
+//lg('$wa='.print_r($wa,true));
 if (isset($wa['current']['temp_c'])) {
 	$temps['wa']=$wa['current']['temp_c'];
 	$temps['wa_feel']=$wa['current']['feelslike_c'];
@@ -52,6 +62,8 @@ if (isset($wa['current']['temp_c'])) {
 	$winds['wa_speed']=$wa['current']['wind_kph'];
 	$winds['wa_gust']=$wa['current']['gust_kph'];
 	$rains['wa']=$wa['current']['precip_mm']*100;
+	$uvs['wa']=$wa['current']['uv'];
+	if($uvs['wa']>$weather['uvm'])$weather['uvm']=$uvs['wa'];
 }
 
 //lg(__LINE__.' https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
@@ -89,6 +101,7 @@ $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServic
 if (isset($vc['currentConditions']['temp'])) {
 	$temps['vc']=$vc['currentConditions']['temp'];
 	$hums['vc']=$vc['currentConditions']['humidity'];
+	$uvs['vc']=$vc['currentConditions']['uvindex'];
 	$winds['vc_wind']=$vc['currentConditions']['windgust'];
 	$rains['vc']=$vc['currentConditions']['precip']*100;
 }
@@ -137,8 +150,24 @@ if (isset($data['forecasts'])) {
 //lg(__LINE__.print_r($hums,true));
 //lg($mintemp.' '.$maxtemp);
 
+if ($d['z']>100&&$d['dag']['s']>10) {
+	if (!isset($lastuv)||$lastuv<$time-1100) {
+		$lastuv=$time;
+		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
+		echo 'UV=';print_r($uv);
+		if (isset($uv['result'])) {
+			$uvs['openuv']=round($uv['result']['uv'], 1);
+			$uvm=round($uv['result']['uv_max'], 1);
+			if($uvm>$weather['uvm'])$weather['uvm']=$uvm;
+		}
+	}
+} 
+
+
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
 if (count($hums)>=2) $hum=round(array_sum($hums)/count($hums), 0);
+if (count($uvs)>=2) $uv=round(array_sum($uvs)/count($uvs), 1);
+$weather['uv']=$uv??0;
 //lg(print_r($temps, true). ' => temp = '.$temp);
 foreach ($temps as $i) {
 	if ($i>-30&&$i<50) {
@@ -191,6 +220,10 @@ if (count($rains) >= 2) {
         sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
 }
+if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
+$weather['uv']=round($weather['uv'],1);
+$weather['uvm']=round($weather['uvm'],1);
+lg(print_r($uvs,true));
 
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));

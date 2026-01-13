@@ -64,16 +64,6 @@ if (past('weg')>18000&& $d['weg']['s']==0&& past('pirliving')>18000&& past('pirk
 }
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['z']>0) {
-	if (past('uv')>1100) {
-		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
-		echo 'UV=';print_r($uv);
-		if (isset($uv['result'])) {
-			if (round($uv['result']['uv'], 1)!=$d['uv']['s']||round($uv['result']['uv_max'], 1)!=$d['uv']['m']) storesm('uv', round($uv['result']['uv'], 1), round($uv['result']['uv_max'], 1), basename(__FILE__).':'.__LINE__);
-		}
-	}
-} else {
-	if ($d['uv']['s']>0||$d['uv']['m']>0) storesm('uv', 0, 0, basename(__FILE__).':'.__LINE__);
-}
+
 
 republishmqtt();

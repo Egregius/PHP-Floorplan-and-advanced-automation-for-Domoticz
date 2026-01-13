@@ -27,8 +27,8 @@ function check_en_slapen($locatie, $status, &$d) {
 		if ($d['deurvoordeur']['s'] !== 'Open' || $status !== 'On') return;
 	} elseif ($locatie === 'poort') {
 		if ($status !== 'On') return;
-		if ($d['poortrf']['s'] !== 'On') {
-			sw('poortrf', 'On', basename(__FILE__).':'.__LINE__);
+		if ($d['poort']['s'] !== 'On') {
+			sw('poort', 'On', basename(__FILE__).':'.__LINE__);
 			return;
 		}
 	} elseif ($locatie === 'slaapkamer') {
