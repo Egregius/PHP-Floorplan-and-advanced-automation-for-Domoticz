@@ -26,7 +26,7 @@ $d['rand']=rand(10,20);
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
@@ -227,28 +227,26 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 	setCache('energy_vandaag', $data);
 	setCache('energy_lastupdate', $time);
 	$data = json_decode($data, true);
-	unset($data['verbruik']);
-	static $mqttcache = [];
-	$daily=json_encode([
-		'gasavg' => round((float)$avg['gas'], 2),
-		'elecavg' => round((float)$avg['elec'], 2),
-		'zonref' => round($zonref,2),
-		'zonavg' => round($zonavg),
+	$dailyen=json_encode([
+		'gasavg' => $data['gasavg'],
+		'elecavg' => $data['elecavg'],
+		'zonref' => $data['zonref'],
+		'zonavg' => $data['zonavg'],
 	]);
-	if(!isset($dailycache)||$daily!==$dailycache) {
-		publishmqtt('d/en/dailyen',$daily);
-		$dailycache=$daily;
+	if(!isset($dailyencache)||$dailyencache!==$dailyen) {
+		publishmqtt('d/e/dailyen',$dailyen);
+		$dailyencache=$dailyen;
 	}
 	$den=[
-		'gas' => round($gas,2),
-		'elec' => round($elec,2),
-		'verbruik' => $verbruik,
-		'zon' => round($zonvandaag,2),
-		'alwayson' => $alwayson
+		'gas' => $data['gas'],
+		'elec' => $data['elec'],
+		'zon' => $data['zon'],
+		'alwayson' => $data['alwayson'],
 	];
+	static $mqttcache = [];
 	foreach($den as $k => $v) {
 		if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
-			publishmqtt('d/en/'.$k,$v);
+			publishmqtt('d/e/'.$k,$v);
 			$mqttcache[$k] = $v;
 		}
 	}

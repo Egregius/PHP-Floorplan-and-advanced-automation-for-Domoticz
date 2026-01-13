@@ -175,9 +175,7 @@ if ($d['auto']['s']=='On') {
 			}
 		}
 	}
-
 	if ($d['wc']['s']=='On' && past('wc')>590 && past('deurwc')>590) sw('wc', 'Off', basename(__FILE__).':'.__LINE__);
-
 	if ($d['rliving']['s']>60&&$d['achterdeur']['s']=='Closed') {
 		if ($d['tuin']['s']=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['tuintafel']['s']=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
@@ -207,31 +205,4 @@ if (isset($daikin)) {
 		&&	$d['daikin']['p']<25
 		&&	past('daikin')>1800
 	) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
-}
-
-$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
-$response = @file_get_contents($url);
-$data = json_decode($response, true);
-if (isset($data['results'])) {
-	$results = $data['results'];
-	$CivTwilightStart = isoToLocalTimestamp($results['civil_twilight_begin']);
-	$CivTwilightEnd = isoToLocalTimestamp($results['civil_twilight_end']);
-	$Sunrise = isoToLocalTimestamp($results['sunrise']);
-	$Sunset = isoToLocalTimestamp($results['sunset']);
-	$Tstart=date('G:i', $CivTwilightStart);
-	$Srise=date('G:i', $Sunrise);
-	$Sset=date('G:i', $Sunset);
-	$Tend=date('G:i', $CivTwilightEnd);
-	setCache('sunrise', json_encode(array(
-		'CivTwilightStart' => $Tstart,
-		'CivTwilightEnd' => $Tend,
-		'Sunrise' => $Srise,
-		'Sunset' => $Sset,
-	)));
-	foreach(['Tstart','Tend','Srise','Sset'] as $i) {
-		if(!isset($mqttcache[$i]) || $mqttcache[$i] !== ${$i}) {
-			publishmqtt('d/'.$i, ${$i});
-			$mqttcache[$i] = ${$i};
-		}
-	}
 }

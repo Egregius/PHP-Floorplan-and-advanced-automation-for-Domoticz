@@ -53,7 +53,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 			'Srise'=>date('G:i', $Sunrise),
 			'Sset'=>date('G:i', $Sunset),
 			'Tend'=>date('G:i', $CivTwilightEnd),
-			'b_hist'=>json_encode($b_hist),
+			'b_hist'=>$b_hist,
 			'pl'=>$map[boseplaylist($time)],
 		];
 		publishmqtt('d/daily',json_encode($data));

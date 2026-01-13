@@ -8,7 +8,7 @@ if (!is_dir('/dev/shm/cache')) {
     mkdir('/dev/shm/cache', 0777, true);
     chmod('/dev/shm/cache', 0777);
 }
-define('VERSIE', 4);
+define('VERSIE', 5);
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 date_default_timezone_set('Europe/Brussels');
