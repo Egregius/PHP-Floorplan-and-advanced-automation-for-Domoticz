@@ -102,6 +102,7 @@ if (isset($vc['currentConditions']['temp'])) {
 	$temps['vc']=$vc['currentConditions']['temp'];
 	$hums['vc']=$vc['currentConditions']['humidity'];
 	$uvs['vc']=$vc['currentConditions']['uvindex'];
+	if($uvs['vc']>$weather['uvm'])$weather['uvm']=$uvs['vc'];
 	$winds['vc_wind']=$vc['currentConditions']['windgust'];
 	$rains['vc']=$vc['currentConditions']['precip']*100;
 }
@@ -156,6 +157,7 @@ if ($d['z']>100&&$d['dag']['s']>10) {
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
 		echo 'UV=';print_r($uv);
 		if (isset($uv['result'])) {
+			lg(print_r($uv,true));
 			$uvs['openuv']=round($uv['result']['uv'], 1);
 			$uvm=round($uv['result']['uv_max'], 1);
 			if($uvm>$weather['uvm'])$weather['uvm']=$uvm;
@@ -223,7 +225,7 @@ if (count($rains) >= 2) {
 if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
-lg(print_r($uvs,true));
+//lg(print_r($uvs,true));
 
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));

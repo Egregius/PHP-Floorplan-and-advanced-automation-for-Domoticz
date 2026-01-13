@@ -337,6 +337,7 @@ function store($name='',$status='',$msg='') {
 	if (is_numeric($status)) {
         $status = $status + 0;
     }
+    if($d[$name]['s']==$status) return;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -392,6 +393,7 @@ function storemode($name,$mode,$msg='') {
 	if (is_numeric($mode)) {
         $mode = $mode + 0;
     }
+    if($d[$name]['m']==$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -430,6 +432,7 @@ function storesm($name,$s,$m,$msg='') {
     if (is_numeric($m)) {
         $m = $m + 0;
     }
+    if($d[$name]['s']==$s&&$d[$name]['m']==$m) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -472,6 +475,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
     if (is_numeric($i)) {
         $i = $i + 0;
     }
+    if($d[$name]['s']==$s&&$d[$name]['m']==$m&&$d[$name]['i']==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -512,6 +516,7 @@ function storesp($name,$s,$p,$msg='') {
     if (is_numeric($p)) {
         $p = $p + 0;
     }
+    if($d[$name]['s']==$s&&$d[$name]['p']==$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -548,6 +553,7 @@ function storep($name,$p,$msg='') {
 	if (is_numeric($p)) {
         $p = $p + 0;
     }
+    if($d[$name]['p']==$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -584,6 +590,7 @@ function storeicon($name,$i,$msg='') {
 	if (is_numeric($i)) {
         $i = $i + 0;
     }
+    if($d[$name]['i']==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();

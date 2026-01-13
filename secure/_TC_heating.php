@@ -123,7 +123,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start ??= $comfortAfternoon - ($leadMinutes * 60);
-	$t_start=strtotime('5:42');
 	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
 	$t_end = $comfortEnd;
 	
