@@ -127,7 +127,7 @@ if ($d['auto']['s']=='On') {
 		}
 	} elseif ($d['weg']['s']>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		$uit=600;
-		foreach (array('lampkast','kristal','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
+		foreach (array('lampkast','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
 			if ($d[$i]['s']=='On') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
