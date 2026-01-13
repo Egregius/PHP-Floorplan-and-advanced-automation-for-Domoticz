@@ -28,7 +28,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $validDevices = [];
 foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
@@ -44,6 +44,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
 //			$d=fetchdata();
 			$status = ucfirst(strtolower($status));
@@ -82,17 +83,18 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
+$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user) {
     $path = explode('/', $topic, 3);
     $n = $path[1];
-    if ($n === 'en') {
+    if ($n === 'e') {
         $d[$path[2]] = $status;
     } elseif ($n !== 't') {
+    	lg("🔙 {$user}	{$n}	{$status}");
         $status = json_decode($status);
         foreach (['s', 't', 'm', 'i'] as $key) {
             if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
         }
-        if (isset($status->p)) $d[$n]['s'] = $status->p;
+        if (isset($status->p)) $d[$n]['p'] = $status->p;
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 

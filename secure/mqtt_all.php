@@ -28,7 +28,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
 $validDevices = [];
@@ -45,8 +45,8 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 		$device = $path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			$d = fetchdata();
@@ -88,8 +88,8 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 		if (isset($validDevices[$device])) {
 			if (isset($status)) {
 				$time=time();
+				if (($time - LOOP_START) <= 2) return;
 				$d['time']=$time;
-				if (($time - $startloop) <= 2) return;
 				if ($status === 'null') $status=0;
 				elseif($status==1) $status=0;
 				elseif($status==99) $status=100;
@@ -117,8 +117,8 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
@@ -155,8 +155,8 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 //			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata();
@@ -218,6 +218,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower($status));
@@ -243,6 +244,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 		$device=$path[2];
 		if ($device=='nvidia') {
 			$time=time();
+			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
@@ -262,10 +264,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
+			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-			$d=fetchdata();
+//			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);
@@ -285,7 +287,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				}
 				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 				$time_passed = ($time - $oldt) >= 30;
-				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device, $val, '', 1);
+				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device,$val);
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -297,13 +299,13 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if ($status>=10) $status=round($status,0);
 			elseif ($status<=-10) $status=round($status,0);
 			else $status=round($status,1);
-			if ($d['dag']['s']!=$status) store('dag',$status);
+			if ((string)$d['dag']['s']!=(string)$status) store('dag',(string)$status);
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
-			if ($d['dag']['m']!=$status) {
-				storemode('dag',$status);
+			if ((string)$d['dag']['m']!=(string)$status) {
+				storemode('dag',(string)$status);
 				setCache('dag',$status);
 			}
 		} elseif ($device === 'weg') {
@@ -329,9 +331,11 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
-    $path = explode('/', $topic, 3);
+    $time=time();
+		if (($time - LOOP_START) <= 2) return;
+		$path = explode('/', $topic, 3);
     $n = $path[1];
-    if ($n === 'en') {
+    if ($n === 'e') {
         $d[$path[2]] = $status;
     } elseif ($n !== 't') {
         $status = json_decode($status);

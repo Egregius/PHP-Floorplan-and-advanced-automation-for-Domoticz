@@ -244,7 +244,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         return;
     }
     $d ??= fetchdata();
-    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
+//    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
     $device = $d[$name]['d'] ?? null;
     $entityPrefix = in_array($device, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
@@ -300,7 +300,7 @@ function sw($name,$action='Toggle',$msg=null) {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-			lg('💡 SW '.$msg,4);
+//			lg('💡 SW '.$msg,4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
@@ -337,7 +337,17 @@ function store($name='',$status='',$msg='') {
 	if (is_numeric($status)) {
         $status = $status + 0;
     }
-    if($d[$name]['s']==$status) return;
+    
+    if((string)$d[$name]['s']==(string)$status) {
+    	lg("skipped store {$name} {$status}");
+    	return;
+    } else lg('CMP '.json_encode([
+		'name' => $name,
+		'old'  => $d[$name]['s'],
+		'oldt' => gettype($d[$name]['s']),
+		'new'  => $status,
+		'newt' => gettype($status),
+	]));
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -348,7 +358,7 @@ function store($name='',$status='',$msg='') {
 				unset($x['f']);
 				if(!isset($x['rt'])) unset($x['t'],$x['rt']);
 				else unset($x['rt']);
-				publishmqtt('d/'.$name,json_encode($x));
+				publishmqtt('d/'.$name,json_encode($x),$msg);
 			}
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
@@ -372,18 +382,18 @@ function isCli(): bool {
     return PHP_SAPI === 'cli';
 }
 
-function publishmqtt($topic,$msg) {
+function publishmqtt($topic,$msg,$log='') {
 	global $mqtt,$user;
 	if($mqtt&&$mqtt->isConnected()) {
-		lgmqtt("🟢 {$user}	{$topic}	{$msg}");
+		lgmqtt("🟢 {$user}	{$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
 		->setUsername('mqtt')
 		->setPassword('mqtt');
-		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
+		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-		lgmqtt("🛑 {$user}	{$topic}	{$msg}");
+		lgmqtt("🛑 {$user}	{$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
@@ -393,7 +403,7 @@ function storemode($name,$mode,$msg='') {
 	if (is_numeric($mode)) {
         $mode = $mode + 0;
     }
-    if($d[$name]['m']==$mode) return;
+    if((string)$d[$name]['m']==(string)$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -432,7 +442,7 @@ function storesm($name,$s,$m,$msg='') {
     if (is_numeric($m)) {
         $m = $m + 0;
     }
-    if($d[$name]['s']==$s&&$d[$name]['m']==$m) return;
+    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -475,7 +485,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
     if (is_numeric($i)) {
         $i = $i + 0;
     }
-    if($d[$name]['s']==$s&&$d[$name]['m']==$m&&$d[$name]['i']==$i) return;
+    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m&&(string)$d[$name]['i']==(string)$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -516,7 +526,7 @@ function storesp($name,$s,$p,$msg='') {
     if (is_numeric($p)) {
         $p = $p + 0;
     }
-    if($d[$name]['s']==$s&&$d[$name]['p']==$p) return;
+    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['p']==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -553,7 +563,7 @@ function storep($name,$p,$msg='') {
 	if (is_numeric($p)) {
         $p = $p + 0;
     }
-    if($d[$name]['p']==$p) return;
+    if((string)$d[$name]['p']==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();

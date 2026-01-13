@@ -28,7 +28,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__).VERSIE,MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
 $validDevices = [];
@@ -46,7 +46,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		if (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
+			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
 //			$d=fetchdata();
@@ -81,13 +81,13 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if ($status>=10) $status=round($status,0);
 			elseif ($status<=-10) $status=round($status,0);
 			else $status=round($status,1);
-			if ($d['dag']['s']!=$status) store('dag',$status);
+			if ((string)$d['dag']['s']!=(string)$status) store('dag',(string)$status);
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
-			if ($d['dag']['m']!=$status) {
-				storemode('dag',$status);
+			if ((string)$d['dag']['m']!=(string)$status) {
+				storemode('dag',(string)$status);
 				setCache('dag',$status);
 			}
 		} elseif ($device === 'weg') {
@@ -112,17 +112,18 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d) {
+$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user) {
     $path = explode('/', $topic, 3);
     $n = $path[1];
-    if ($n === 'en') {
+    if ($n === 'e') {
         $d[$path[2]] = $status;
     } elseif ($n !== 't') {
+    	lg("🔙 {$user}	{$n}	{$status}");
         $status = json_decode($status);
         foreach (['s', 't', 'm', 'i'] as $key) {
             if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
         }
-        if (isset($status->p)) $d[$n]['s'] = $status->p;
+        if (isset($status->p)) $d[$n]['p'] = $status->p;
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
