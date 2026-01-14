@@ -36,7 +36,6 @@ if ($d['daikin']['m']==1) {
 	else $maxpow=40;
 
 //	$daikin->living->fan=4;
-
 	if ($d['n']>3500&&$maxpow>40) $maxpow=40;
 	elseif ($d['n']>3000&&$maxpow>60) $maxpow=60;
 	elseif ($d['n']>2500&&$maxpow>80) $maxpow=80;
@@ -66,6 +65,7 @@ if ($d['daikin']['m']==1) {
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
 				if ($preheating==true) {$maxpow=40;$spmode=-1;$set+=10;}
+				if ($preheating==true||$prevSet==1) {$set+=10;}
 				if ($k=='living') {
 					$set+=-2;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $fan='B';

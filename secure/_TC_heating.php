@@ -1,4 +1,5 @@
 <?php
+//lg($user);
 $preheating=false;
 $Setkamer=4;
 $Setwaskamer=4;
@@ -128,7 +129,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	
 	if ($time >= strtotime('19:30') || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
 	else $Setliving = $baseSet[$weg];
-	
 	// Hoofdlogica voor temperatuur instelling
 	// $prevSet: 0 = inactief, 1 = preheating actief, 2 = preheating voltooid
 	if ($prevSet == 1 || $prevSet == 2) {
@@ -156,12 +156,15 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
+//	lg($prevSet.' '.$preheating);
 
 	// Lead data opslaan wanneer target bereikt is
-	if ($prevSet == 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
+	if ($prevSet >= 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
+		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
 		if ($tempRise>1) {
+			lg(basename(__FILE__) . ':' . __LINE__);
 			$buitenTempStart = $d['living_start_temp']['i'];
 			$minutesUsed = round(past('living_start_temp') / 60,1);
 			$minPerDeg   = $minutesUsed / $tempRise;
