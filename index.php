@@ -38,6 +38,8 @@
 				<img src="/images/03d.png" id="icon" alt="icon">
 				<span id="maxtemp"></span>
 				<span id="mintemp"></span>
+				<span id="maxt"></span>
+				<span id="mint"></span>
 			</div>
 			<div class="abs z2" id="sirene"></div>
 			<div class="abs z1 i48" id="voordeur"></div>
