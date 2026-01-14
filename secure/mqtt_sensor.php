@@ -60,6 +60,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$st=(float)$status;
 				if ($d[$device]['s']!=$st) store($device,$st);
 			} elseif ($device=='daikin_kwh') {
+				return;
 				$val = (int)$status;
 				$old = (int)($d[$device]['s'] ?? 0);
 				$oldt = (int)($d[$device]['t'] ?? 0);

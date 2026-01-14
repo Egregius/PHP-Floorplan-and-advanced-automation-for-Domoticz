@@ -99,6 +99,10 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						$upd_power = false;
 						$abs_diff = abs($val - $old);
 						if ($old < 10) {
+							if ($abs_diff >= 1) {
+								$upd_power = true;
+							}
+						} elseif ($old < 20) {
 							if ($abs_diff >= 2) {
 								$upd_power = true;
 							}
@@ -108,7 +112,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							}
 						} else {
 							$rel_diff = abs(($val - $old) / $old);
-							if ($rel_diff >= 0.40 && $abs_diff >= 50) {
+							if ($rel_diff >= 0.25 && $abs_diff >= 50) {
 								$upd_power = true;
 							}
 						}
