@@ -348,7 +348,7 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user)
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,5000);
+	$mqtt->loop(true,false,null,100000);
 }
 
 $mqtt->disconnect();

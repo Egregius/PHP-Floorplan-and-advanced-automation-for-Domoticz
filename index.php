@@ -28,17 +28,19 @@ define('VERSIE', 4);
 		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
 		<div class="abs center zon">
 			<div class="sun-times">
-				🌅 <span id="Tstart"></span><br>
-				🌄 <span id="Srise"></span><br>
-				🌇 <span id="Sset"></span><br>
-				🌃 <span id="Tend"></span><br>
 				☀️ <span id="dag"></span><br>
-				🧴 <span id="uv"></span><br>
-				🥵 <span id="maxtemp"></span><br>
-				🥶 <span id="mintemp"></span><br>
-				💨  <span id="wind"></span><br>
-				☔️ <span id="buien"></span><br>
+				<span id="Tstart"></span><br>
+				<span id="Srise"></span><br>
+				<span id="Sset"></span><br>
+				<span id="Tend"></span><br>
+				<span id="uv"></span><br>
+				<div class="left">
+				<span style="font-size:1.5em">💨</span> <span id="wind"></span><br>
+				<span style="font-size:1.5em">☔️</span> <span id="buien"></span><br>
+				</div>
 				<img src="/images/03d.png" id="icon" alt="icon">
+				<span id="maxtemp"></span>
+				<span id="mintemp"></span>
 			</div>
 			<div class="abs z2" id="sirene"></div>
 			<div class="abs z1 i48" id="voordeur"></div>
@@ -225,6 +227,7 @@ define('VERSIE', 4);
 					</div>
 				</div>
 				<div id="playlist" class="abs"></div>
+				<div id="info"><?php echo $ip.' '.$udevice.' '.$scale; ?></div>
 			</div>
 
 			<div id="floorplanothers" class="view">

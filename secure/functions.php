@@ -346,6 +346,7 @@ function store($name='',$status='',$msg='') {
 		}
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -353,7 +354,6 @@ function store($name='',$status='',$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -404,6 +404,7 @@ function storemode($name,$mode,$msg='') {
 		}
 	}	
 	if($affected>0&&!in_array($name,['dag'])) {
+		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -411,7 +412,6 @@ function storemode($name,$mode,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -446,6 +446,7 @@ function storesm($name,$s,$m,$msg='') {
 		}
 	}	
 	if($affected>0) {
+		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -453,7 +454,6 @@ function storesm($name,$s,$m,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -492,6 +492,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 		}
 	}	
 	if($affected>0) {
+		lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -499,7 +500,6 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -534,6 +534,7 @@ function storesp($name,$s,$p,$msg='') {
 		}
 	}	
 	if($affected>0) {
+		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -541,7 +542,6 @@ function storesp($name,$s,$p,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -573,6 +573,7 @@ function storep($name,$p,$msg='') {
 		}
 	}	
 	if($affected>0) {
+		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -580,7 +581,6 @@ function storep($name,$p,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -612,6 +612,7 @@ function storeicon($name,$i,$msg='') {
 	}	
 	if (str_ends_with($name, '_temp')) return;
 	if($affected>0) {
+		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -619,7 +620,6 @@ function storeicon($name,$i,$msg='') {
 			else unset($x['rt']);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
-		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }

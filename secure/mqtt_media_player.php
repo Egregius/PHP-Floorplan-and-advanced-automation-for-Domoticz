@@ -109,7 +109,7 @@ $mqtt->publish(
     true
 );
 while (true) {
-	$mqtt->loop(true,false,null,100000);
+	$mqtt->loop(true,false,null,10000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

@@ -92,7 +92,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						$old = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
 						if ($oldt === 0) {
-							//store($device, $val, '', 1);
+							store($device, $val, '', 1);
 							return;
 						}
 						$upd_power = false;
