@@ -52,13 +52,19 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
-				$tdevice=str_replace('_hum','_temp',$device);
-				$hum=(int)$status;
-				if ($hum !== $d[$tdevice]['m']&&abs($hum-$d[$tdevice]['m'])>1) storemode($tdevice,$hum); 
+				$tdevice = str_replace('_hum','_temp',$device);
+				$hum = (int)$status;
+				$hum = max($d[$tdevice]['m'] - 5, min($hum, $d[$tdevice]['m'] + 5));
+				if ($hum !== $d[$tdevice]['m'] && abs($hum - $d[$tdevice]['m']) >= 1) {
+					storemode($tdevice, $hum);
+				}
 			} elseif (substr($device,-5) === '_temp') {
 				if (!is_numeric($status)) return;
-				$st=(float)$status;
-				if ($d[$device]['s']!=$st) store($device,$st);
+				$st = (float)$status;
+				$st = max($d[$device]['s'] - 0.5, min($st, $d[$device]['s'] + 0.5));
+				if ($d[$device]['s'] != $st && abs($st - $d[$device]['s']) >= 0.1) {
+					store($device, $st);
+				}
 			} elseif ($device=='daikin_kwh') {
 				return;
 				$val = (int)$status;
@@ -78,18 +84,24 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				}
 			}
 		} elseif ($device === 'sun_solar_elevation') {
-			$status=(float)$status;
-			if ($status>=10) $status=round($status,0);
-			elseif ($status<=-10) $status=round($status,0);
-			else $status=round($status,1);
-			if ((string)$d['dag']['s']!=(string)$status) store('dag',(string)$status);
+			$status = (float)$status;
+			if ($status >= 10 || $status <= -10) {
+				$status = round($status, 0);
+			} else {
+				$status = round($status, 1);
+			}
+			$diff_limit = ($status >= -10 && $status <= 10) ? 0.2 : 2;
+			if (abs($status - (float)$d['dag']['s']) >= $diff_limit) {
+				store('dag', (string)$status);
+			}
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
-			$status=(int)$status;
-			if ((string)$d['dag']['m']!=(string)$status) {
-				storemode('dag',(string)$status);
-				setCache('dag',$status);
+			$status = (int)$status;
+			$status = round($status / 5) * 5;
+			if ((string)$d['dag']['m'] != (string)$status) {
+				storemode('dag', (string)$status);
+				setCache('dag', $status);
 			}
 		} elseif ($device === 'weg') {
 			if ($status==0) {

@@ -137,6 +137,9 @@ def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
         log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
+        if result.rc != 0:  # MQTT publish result code 0 = OK
+            print(f"Publish failed with code {result.rc}, script stopt.")
+            sys.exit(1)
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
 
@@ -144,6 +147,9 @@ def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
         log(f"📤 Publish t/{key}={value}, rc={result.rc}")  # DEBUG
+        if result.rc != 0:  # MQTT publish result code 0 = OK
+            print(f"Publish failed with code {result.rc}, script stopt.")
+            sys.exit(1)
     else:
         log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")  # DEBUG
 
@@ -227,21 +233,32 @@ async def handle_device(device, token, ssl_context):
 def time_loop():
     last = 0
     while True:
-        if mqtt_connected:
-            now = time.time()
-            sec = int(now)
+        if not mqtt_connected:  # stop als er geen verbinding is
+            print("MQTT niet verbonden, script stopt.")
+            sys.exit(1)
 
-            if sec != last:
-                last = sec
-                mqtt_client.publish(
+        now = time.time()
+        sec = int(now)
+
+        if sec != last:
+            last = sec
+            try:
+                result = mqtt_client.publish(
                     "d/t",
                     sec,  # enkel het getal
                     retain=True,
                     qos=1
                 )
+                # check of publish succesvol was
+                if result.rc != 0:  # MQTT publish result code 0 = OK
+                    print(f"Publish failed with code {result.rc}, script stopt.")
+                    sys.exit(1)
+            except Exception as e:
+                print(f"Fout bij publish: {e}, script stopt.")
+                sys.exit(1)
 
-            sleep_time = max(0, 1 - (now - sec))
-            time.sleep(sleep_time)
+        sleep_time = max(0, 1 - (now - sec))
+        time.sleep(sleep_time)
 
 # --- Main ---
 async def main():
