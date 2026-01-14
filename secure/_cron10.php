@@ -1,6 +1,6 @@
 <?php
 $user='cron10';
-//lg($user);
+//lg('🕒 '.$user);
 if ($d['auto']['s']=='On') {
 	$i=39;
 	if ($d['pirgarage']['s']=='Off'&&$d['pirgarage2']['s']=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garageled')>$i) {

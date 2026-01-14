@@ -3,7 +3,7 @@ $user='cron3600';
 //lg($user);
 
 if (date('G')==0||LOOP_START>$time-60) {
-	lg($user);
+	lg('🕒 '.$user);
 	if (date('G')==0) {
 		apcu_store('alwayson',9999);
 		setCache('alwayson', 9999);

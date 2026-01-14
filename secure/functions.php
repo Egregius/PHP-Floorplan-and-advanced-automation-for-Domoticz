@@ -364,15 +364,15 @@ function isCli(): bool {
 function publishmqtt($topic,$msg,$log='') {
 	global $mqtt,$user;
 	if($mqtt&&$mqtt->isConnected()) {
-		lgmqtt("🟢 {$user}	{$topic}	{$msg}	{$log}");
-		$mqtt->publish($topic,$msg,1,true);
+		lgmqtt("🟢 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
+	$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
 		->setUsername('mqtt')
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-		lgmqtt("🛑 {$user}	{$topic}	{$msg}	{$log}");
+		lgmqtt("🛑 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}

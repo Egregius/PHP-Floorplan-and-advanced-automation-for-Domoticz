@@ -199,7 +199,7 @@ elseif ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
 
 
 if (count($winds)>=4) {
-	$wind=round(array_sum($winds)/count($winds), 1);
+	$wind=round(array_sum($winds)/count($winds), 0);
 	$weather['w']=$wind;
 }
 if (count($rains) >= 2) {

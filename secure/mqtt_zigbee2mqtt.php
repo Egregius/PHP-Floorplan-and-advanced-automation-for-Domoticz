@@ -69,20 +69,6 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user) {
-    $path = explode('/', $topic, 3);
-    $n = $path[1];
-    if ($n === 'e') {
-        $d[$path[2]] = $status;
-    } elseif ($n !== 't') {
-//    	lgmqtt("🔙 {$user}	{$n}	{$status}");
-        $status = json_decode($status);
-        foreach (['s', 't', 'm', 'i'] as $key) {
-            if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
-        }
-        if (isset($status->p)) $d[$n]['p'] = $status->p;
-    }
-}, MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
 	$mqtt->loop(true,false,null,10000);
 }

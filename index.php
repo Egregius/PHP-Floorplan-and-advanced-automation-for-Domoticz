@@ -33,8 +33,8 @@ define('VERSIE', 4);
 				<span id="Srise"></span><br>
 				<span id="Sset"></span><br>
 				<span id="Tend"></span><br>
-				<span id="uv"></span><br>
-				<div class="left">
+				<span id="uv"></span>-<span id="uvm"></span><br>
+				<div class="left windbuien">
 				<span style="font-size:1.5em">💨</span> <span id="wind"></span><br>
 				<span style="font-size:1.5em">☔️</span> <span id="buien"></span><br>
 				</div>

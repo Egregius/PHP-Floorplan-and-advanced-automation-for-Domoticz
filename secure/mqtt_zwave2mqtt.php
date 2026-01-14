@@ -78,7 +78,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
 					}
-				} elseif ($d[$device]['d']=='hsw') {
+				} elseif ($d[$device]['d']=='s') {
 					if($path[2]=='switch_binary'&&$path[4]=='currentValue') {
 						if ($status==1) $status='On';
 						else $status='Off';
@@ -89,6 +89,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						}
 					} elseif(isset($d[$device]['p'])&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
 						$val = (int)$status;
+						
 						$old = (int)($d[$device]['p'] ?? 0);
 						$oldt = (int)($d[$device]['t'] ?? 0);
 						if ($oldt === 0) {
@@ -116,7 +117,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 //							lg('🌊 Z2M Power '.$device.'	'.$status);
 							storep($device,$val);
 							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
-						}
+						}// else lg('🌊 Z2M Power ignore '.$device.'	'.$status);
 					} //else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
 				} elseif ($d[$device]['d']=='d') {
 					if($path[2]=='switch_multilevel') {
@@ -184,21 +185,6 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
         updateWekker($t, $weekend, $dow, $d);
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
-
-$mqtt->subscribe('d/#', function (string $topic, string $status) use (&$d,$user) {
-    $path = explode('/', $topic, 3);
-    $n = $path[1];
-    if ($n === 'e') {
-        $d[$path[2]] = $status;
-    } elseif ($n !== 't') {
- //   	lgmqtt("🔙 {$user}	{$n}	{$status}");
-        $status = json_decode($status);
-        foreach (['s', 't', 'm', 'i'] as $key) {
-            if (isset($status->{$key})) $d[$n][$key] = $status->{$key};
-        }
-        if (isset($status->p)) $d[$n]['p'] = $status->p;
-    }
-}, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
 	$mqtt->loop(true,false,null,10000);
