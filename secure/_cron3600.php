@@ -1,36 +1,23 @@
 <?php
 $user='cron3600';
 //lg($user);
-
-if (date('G')==0||LOOP_START>$time-60) {
+$uur=date('G');
+if ($uur==0||LOOP_START>$time-60) {
 	lg('🕒 '.$user);
-	if (date('G')==0) {
+	if ($uur==0) {
 		apcu_store('alwayson',9999);
 		setCache('alwayson', 9999);
 	}
-//	store('gasvandaag', 0, basename(__FILE__).':'.__LINE__);
-//	store('watervandaag', 0, basename(__FILE__).':'.__LINE__);
-
-
-
-
-	
-	
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
 	$response = @file_get_contents($url);
 	$data = json_decode($response, true);
 	if (isset($data['results'])) {
 		$today = date('Y-m-d');
-		$dy = (int)date('z', strtotime($today)); // dagnummer 0–365 (0 = 1 jan)
+		$dy = (int)date('z', strtotime($today));
 		$range = 15;
-		
-		// begin- en einddag
 		$start = $dy - $range;
 		$end   = $dy + $range;
-		
-		// SQL
 		if ($start < 0 || $end > 365) {
-			// overloop jaargrens
 			$stmt = $db->prepare("
 				SELECT 
 					ROUND(AVG(min_buiten),1) AS m,
@@ -54,9 +41,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 			");
 			$stmt->execute([':start' => $start, ':end' => $end]);
 		}
-		
 		$b_hist = $stmt->fetch(PDO::FETCH_ASSOC);
-
 		$results = $data['results'];
 		$map = [
 			'PRESET_1' => 'EDM-1',
@@ -83,10 +68,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 			$ddcache=$data;
 		}
 	}
-	
 	$yesterday = date('Y-m-d', strtotime('-1 day'));
-
-	// Controleer of het al in temp_hist staat
 	$stmt = $db->prepare("SELECT 1 FROM temp_hist WHERE datum = :datum");
 	$stmt->execute([':datum' => $yesterday]);
 	if ($stmt->fetchColumn()) {
@@ -100,7 +82,6 @@ if (date('G')==0||LOOP_START>$time-60) {
 		$remove=date('Y-m-d H:i:s', $time-(86400*100));
 		$stmt=$db->query("delete from temp where stamp < '$remove'");
 	} else {
-		// Haal min, avg, max van buiten voor gisteren
 		$stmt = $db->prepare("
 			SELECT 
 				MIN(buiten) AS min_buiten,
@@ -111,9 +92,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 		");
 		$stmt->execute([':datum' => $yesterday]);
 		$data = $stmt->fetch(PDO::FETCH_ASSOC);
-		
 		if ($data && $data['min_buiten'] !== null) {
-			// Insert in temp_hist
 			$insert = $db->prepare("
 				INSERT INTO temp_hist (datum, min_buiten, avg_buiten, max_buiten)
 				VALUES (:datum, :min_buiten, :avg_buiten, :max_buiten)
@@ -129,10 +108,7 @@ if (date('G')==0||LOOP_START>$time-60) {
 			lg("Geen temperatuurdata voor $yesterday gevonden.");
 		}
 	}
-
-
 }
-
 if ($d['weg']['s']==0) {
 	foreach (array('living_temp','kamer_temp','alex_temp','badkamer_temp') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]['t']),7200);

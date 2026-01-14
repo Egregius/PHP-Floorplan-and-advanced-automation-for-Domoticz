@@ -85,14 +85,15 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		} elseif ($device === 'sun_solar_elevation') {
 			$status = (float)$status;
-			if ($status >= 10 || $status <= -10) {
-				$status = round($status, 0);
-			} else {
+			if ($status >= -10 && $status <= 10) {
+				$status = round($status / 0.2) * 0.2;
 				$status = round($status, 1);
+			} else {
+				$status = round($status / 2) * 2;
 			}
-			$diff_limit = ($status >= -10 && $status <= 10) ? 0.2 : 2;
-			if (abs($status - (float)$d['dag']['s']) >= $diff_limit) {
+			if ((float)$d['dag']['s'] != $status) {
 				store('dag', (string)$status);
+				setCache('dag', $status);
 			}
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
@@ -101,7 +102,6 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$status = round($status / 5) * 5;
 			if ((string)$d['dag']['m'] != (string)$status) {
 				storemode('dag', (string)$status);
-				setCache('dag', $status);
 			}
 		} elseif ($device === 'weg') {
 			if ($status==0) {
