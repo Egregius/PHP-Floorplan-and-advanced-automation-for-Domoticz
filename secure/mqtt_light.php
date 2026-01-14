@@ -47,11 +47,8 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			$time=time();
 			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-			if (($time - $startloop) <= 2 && in_array($device,['inputliving1'])) return;
-//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
 			if (isset($status)) {
-//				$d=fetchdata();
+				$d=fetchdata();
 				if ($status === 'null') $status=0;
 				elseif ($status > 0 ) $status=round((int)$status / 2.55);
 				else $status=0;

@@ -49,7 +49,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			if (($d[$device]['s'] ?? null) === $status) return;
-//			$d=fetchdata();
+			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);
@@ -114,7 +114,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,10000);
+	$mqtt->loop(true,false,null,50000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

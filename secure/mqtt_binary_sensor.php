@@ -50,7 +50,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			if (($time - $startloop) <= 2) return;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
-//			$d = fetchdata();
+			$d = fetchdata();
 			if ($device === 'achterdeur') {
 				if ($status=='Off') $status='Open';
 				elseif ($status=='On') $status='Closed';
@@ -67,7 +67,6 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				$device='pirgarage';
 			}
 			if (isset($status)&&$d[$device]['s']!=$status) {
-//				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
 			}

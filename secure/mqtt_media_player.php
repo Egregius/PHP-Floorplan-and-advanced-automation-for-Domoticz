@@ -46,10 +46,9 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			$time=time();
 			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-//			$d=fetchdata();
+			$d=fetchdata();
 			$status = ucfirst(strtolower($status));
 			if ($d[$device]['s']!=$status) {
-	//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status);
 			}
@@ -64,7 +63,6 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-
 $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, $user) {
 	try {	
 		$path=explode('/',$topic);
@@ -72,7 +70,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 		if ($device=='nvidia') {
 			$time=time();
 			$d['time']=$time;
-//			$d=fetchdata();
+			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if ($d[$device]['m']!=$status) {
 				storemode($device,$status);
@@ -93,8 +91,9 @@ $mqtt->publish(
     0,
     true
 );
+
 while (true) {
-	$mqtt->loop(true,false,null,10000);
+	$mqtt->loop(true,false,null,50000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

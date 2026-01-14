@@ -14,27 +14,49 @@ if (date('G')==0||LOOP_START>$time-60) {
 
 
 
-	$since=date("Y-m-d G:i:s", $time-86400);
-	foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59) as $x) {
-		$query="DELETE FROM `temp` WHERE `stamp` LIKE '%:$x:00' AND `stamp` < '$since'";
-		echo $query.PHP_EOL;
-		$db->query($query);
-	}
 	
-	/* Clean old database records */
-	
-	$remove=date('Y-m-d H:i:s', $time-(86400*100));
-	$stmt=$db->query("delete from temp where stamp < '$remove'");
 	
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
 	$response = @file_get_contents($url);
 	$data = json_decode($response, true);
 	if (isset($data['results'])) {
-		$stamp = date("Y-m-d H:i:s", (int)$d['time'] - 86400*7);
-		$query = "SELECT MIN(buiten) AS m, ROUND(AVG(buiten), 2) AS a, MAX(buiten) AS x FROM temp WHERE stamp > :stamp";
-		$stmt = $db->prepare($query);
-		$stmt->execute([':stamp' => $stamp]);
+		$today = date('Y-m-d');
+		$dy = (int)date('z', strtotime($today)); // dagnummer 0–365 (0 = 1 jan)
+		$range = 15;
+		
+		// begin- en einddag
+		$start = $dy - $range;
+		$end   = $dy + $range;
+		
+		// SQL
+		if ($start < 0 || $end > 365) {
+			// overloop jaargrens
+			$stmt = $db->prepare("
+				SELECT 
+					ROUND(AVG(min_buiten),1) AS m,
+					ROUND(AVG(avg_buiten),2) AS a,
+					ROUND(AVG(max_buiten),1) AS x
+				FROM temp_hist
+				WHERE (DAYOFYEAR(datum) >= :start OR DAYOFYEAR(datum) <= :end)
+			");
+			$stmt->execute([
+				':start' => $start < 0 ? 365 + $start : $start,
+				':end'   => $end > 365 ? $end - 365 : $end
+			]);
+		} else {
+			$stmt = $db->prepare("
+				SELECT 
+					ROUND(AVG(min_buiten),1) AS m,
+					ROUND(AVG(avg_buiten),2) AS a,
+					ROUND(AVG(max_buiten),1) AS x
+				FROM temp_hist
+				WHERE DAYOFYEAR(datum) BETWEEN :start AND :end
+			");
+			$stmt->execute([':start' => $start, ':end' => $end]);
+		}
+		
 		$b_hist = $stmt->fetch(PDO::FETCH_ASSOC);
+
 		$results = $data['results'];
 		$map = [
 			'PRESET_1' => 'EDM-1',
@@ -61,6 +83,54 @@ if (date('G')==0||LOOP_START>$time-60) {
 			$ddcache=$data;
 		}
 	}
+	
+	$yesterday = date('Y-m-d', strtotime('-1 day'));
+
+	// Controleer of het al in temp_hist staat
+	$stmt = $db->prepare("SELECT 1 FROM temp_hist WHERE datum = :datum");
+	$stmt->execute([':datum' => $yesterday]);
+	if ($stmt->fetchColumn()) {
+		lg( "Data voor $yesterday bestaat al.");
+		$since=date("Y-m-d G:i:s", $time-86400);
+		foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59) as $x) {
+			$query="DELETE FROM `temp` WHERE `stamp` LIKE '%:$x:00' AND `stamp` < '$since'";
+			echo $query.PHP_EOL;
+			$db->query($query);
+		}
+		$remove=date('Y-m-d H:i:s', $time-(86400*100));
+		$stmt=$db->query("delete from temp where stamp < '$remove'");
+	} else {
+		// Haal min, avg, max van buiten voor gisteren
+		$stmt = $db->prepare("
+			SELECT 
+				MIN(buiten) AS min_buiten,
+				ROUND(AVG(buiten), 2) AS avg_buiten,
+				MAX(buiten) AS max_buiten
+			FROM temp
+			WHERE DATE(stamp) = :datum
+		");
+		$stmt->execute([':datum' => $yesterday]);
+		$data = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if ($data && $data['min_buiten'] !== null) {
+			// Insert in temp_hist
+			$insert = $db->prepare("
+				INSERT INTO temp_hist (datum, min_buiten, avg_buiten, max_buiten)
+				VALUES (:datum, :min_buiten, :avg_buiten, :max_buiten)
+			");
+			$insert->execute([
+				':datum' => $yesterday,
+				':min_buiten' => $data['min_buiten'],
+				':avg_buiten' => $data['avg_buiten'],
+				':max_buiten' => $data['max_buiten']
+			]);
+			lg("Dagdata voor $yesterday toegevoegd.");
+		} else {
+			lg("Geen temperatuurdata voor $yesterday gevonden.");
+		}
+	}
+
+
 }
 
 if ($d['weg']['s']==0) {

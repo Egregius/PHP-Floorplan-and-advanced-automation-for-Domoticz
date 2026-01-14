@@ -245,10 +245,10 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
     }
     $d ??= fetchdata();
     lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
-    $device = $d[$name]['d'] ?? null;
-    $entityPrefix = in_array($device, ['r', 'luifel']) ? 'cover' : 'light';
+    $deviceType = $d[$name]['d'] ?? null;
+    $entityPrefix = in_array($deviceType, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
-    match($device) {
+    match($deviceType) {
         'hd' => $level > 0 
             ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
             : hass('light', 'turn_off', $entity),
@@ -263,9 +263,8 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if($d[$name]['s']==$level) return;
-    $d[$name]['s']=$level;
-    $d[$name]['t']=$d['time'];
+//    $d[$name]['s']=$level;
+//    $d[$name]['t']=$d['time'];
 }
 function resetsecurity() {
 	global $d;
@@ -299,9 +298,9 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
-		if($d[$name]['s']==$action) return;
-		$d[$name]['t']=$d['time'];
-		$d[$name]['s']=$action;
+//		if($d[$name]['s']==$action) return;
+//		$d[$name]['t']=$d['time'];
+//		$d[$name]['s']=$action;
 	}
 }
 function zigbee($device,$action) {

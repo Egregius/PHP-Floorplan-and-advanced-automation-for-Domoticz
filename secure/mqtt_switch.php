@@ -48,12 +48,10 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			$d['time']=$time;
 			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
-//			$d=fetchdata();
+			$d=fetchdata();
 			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
 				if ($d[$device]['s']!=$status) {
-//					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
 				}
@@ -70,7 +68,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,10000);
+	$mqtt->loop(true,false,null,50000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

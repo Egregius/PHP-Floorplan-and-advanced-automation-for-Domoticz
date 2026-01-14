@@ -47,12 +47,10 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			$time=time();
 			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
-//			lg('👉🏻 mqtt '.__LINE__.' |event |e_type |'.$device.'|'.$status.'|');
-//			$d=fetchdata();
+			$d=fetchdata();
 			if (str_starts_with($device,'8')) {
 				if ($status === 'Keypressed') {
 					$status='On';
