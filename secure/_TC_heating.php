@@ -159,7 +159,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 //	lg($prevSet.' '.$preheating);
 
 	// Lead data opslaan wanneer target bereikt is
-	if ($prevSet >= 1 && ($living>=$target||($preheating===true&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
+	if ($prevSet >= 1 && ($living>=$target||(($preheating===true||$prevSet==1)&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
 		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
@@ -170,7 +170,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
-			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -7);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -3);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);
 			ksort($leadDataLiving, SORT_NUMERIC);
 			foreach ($leadDataLiving as &$innerArray) {

@@ -176,11 +176,11 @@ foreach ($temps as $i) {
 		elseif ($i<$mintemp) $mintemp=$i;
 	}
 }
-if ($mintemp>-30&&$mintemp<50) $mintemp=floor($mintemp*10)/10; else $mintemp=-10;
-$maxtemp=ceil($maxtemp*10)/10;
+$mintemp=round($mintemp,1);
+$maxtemp=round($maxtemp,1);
 $ref = round((float)$d['buiten_temp']['s'],1);
 $temp = round($temp,1);
-$temp = max($ref - 0.1, min($temp, $ref + 0.1));
+$temp = round(max($ref - 0.1, min($temp, $ref + 0.1)),1);
 $weather['mint']=$mintemp;
 $weather['maxt']=$maxtemp;
 
