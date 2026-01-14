@@ -151,13 +151,12 @@ if (isset($data['forecasts'])) {
 //lg(__LINE__.print_r($hums,true));
 //lg($mintemp.' '.$maxtemp);
 
-if ($d['z']>100&&$d['dag']['s']>10) {
+if ($d['z']>100&&$d['dag']['s']>12) {
 	if (!isset($lastuv)||$lastuv<$time-1100) {
 		$lastuv=$time;
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
-		echo 'UV=';print_r($uv);
 		if (isset($uv['result'])) {
-			lg(print_r($uv,true));
+//			lg(print_r($uv,true));
 			$uvs['openuv']=round($uv['result']['uv'], 1);
 			$uvm=round($uv['result']['uv_max'], 1);
 			if($uvm>$weather['uvm'])$weather['uvm']=$uvm;

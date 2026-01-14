@@ -244,7 +244,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         return;
     }
     $d ??= fetchdata();
-//    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
+    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
     $device = $d[$name]['d'] ?? null;
     $entityPrefix = in_array($device, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
@@ -287,14 +287,13 @@ function sw($name,$action='Toggle',$msg=null) {
 			}
 		}
 	} else {
-		if(!isset($d)) $d=fetchdata();
-		$msg=str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$action.($msg?' ('.$msg.')':'');
+		$d ??= fetchdata();
 		if (isset($d[$name]['d'])&&$d[$name]['d']=='s') {
 			if ($action=='Toggle') {
 				if ($d[$name]['s']=='On') $action='Off';
 				else $action='On';
 			}
-//			lg('💡 SW '.$msg,4);
+			lg('💡 SW ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $action . ($msg ? " ($msg)" : ''), 4);
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {

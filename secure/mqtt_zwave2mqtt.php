@@ -72,7 +72,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							if($device=='achterdeur') $status='Open';
 							else $status='Closed';
 						}
-						if ($d[$device]['s']!=$status) {
+						if ($d[$device]['s']!=$status&&!in_array($device,['inputliving'])) {
 //							lg('🌊 Z2M ['.$d[$device]['d'].']	'.$device.'	'.$status);
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
