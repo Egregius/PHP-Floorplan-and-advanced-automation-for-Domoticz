@@ -65,7 +65,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m'] == 2) $weg = 0;
-	$buitenTempStart = round($d['buiten_temp']['s'] / 0.2) * 0.2;
+	$buitenTempStart = round($d['buiten_temp']['s'] / 0.5) * 0.5;
 	if(!isset($leadDataLiving)) {
 		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
 		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
@@ -117,7 +117,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		1 => '13:00',
 		2 => '16:05',
 		3 => '12:15',
-		4 => '16:05',//16:05
+		4 => '13:25',//16:05
 		5 => '15:05',
 		6 => '08:00',
 		0 => '08:00'
@@ -151,9 +151,9 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$Setliving = max($Setliving, $target);
 		if ($daikin->living->power!=1) {
-			storesmi('living_start_temp', $living, 1, $buitenTempStart, 300, basename(__FILE__) . ':' . __LINE__);
+			storesmip('living_start_temp', $living, 1, $buitenTempStart, 300, basename(__FILE__) . ':' . __LINE__);
 		} else {
-			storesmi('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
+			storesmip('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
 		}
 		$prevSet=1;
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
@@ -170,10 +170,11 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	if($prevt_start!=$t_start) {
 		$prevt_start=$t_start;
 		lg('prevSet='.$prevSet.
-			' comfortAfternoon='.date("G:i",$comfortAfternoon).
+			' Afternoon='.date("G:i",$comfortAfternoon).
 			' t_start='.date("G:i:s",$t_start).
-			' comfortEnd='.date("G:i",$comfortEnd).
+			' End='.date("G:i",$comfortEnd).
 			' Setliving='.$Setliving.
+			' TempStart='.$buitenTempStart.
 			' living='.$living.
 			' target='.$target.
 			' tempDelta='.$tempDelta.
@@ -191,7 +192,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			$startupDelay = $d['living_start_temp']['p'] ?? 0;
 			$minutesUsed = round((past('living_start_temp') - $startupDelay) / 60, 1);
 			$minPerDeg   = $minutesUsed / $tempRise;
-			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
+			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
 			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -5);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);

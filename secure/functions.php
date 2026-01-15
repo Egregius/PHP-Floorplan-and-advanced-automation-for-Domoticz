@@ -469,7 +469,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 		}
 	}	
 	if($affected>0) {
-		lg('💾 STORESMI   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
@@ -507,7 +507,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 		}
 	}	
 	if($affected>0) {
-		lg('💾 STORESMIP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
 			$x=$d[$name];
 			unset($x['f']);
