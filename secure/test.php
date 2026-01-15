@@ -10,24 +10,37 @@ $d=fetchdata();
 //$d['time']=$startloop;
 $db = Database::getInstance();
 
-/*
-use PhpMqtt\Client\MqttClient;
-use PhpMqtt\Client\ConnectionSettings;
-require '/var/www/vendor/autoload.php';
-$connectionSettings=(new ConnectionSettings)
-	->setUsername('mqtt')
-	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
-$mqtt->connect($connectionSettings,true);
-
-
-
-$mqtt->publish('zigbee2mqtt/bureel1/set','{"state":"OFF"}');
-
-
-*/
-//sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
-store('weg',0);
+if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
+$mode=2;
+$buitenTempStart = 1;
+$avgMinPerDeg = null;
+if (!empty($leadDataLiving[$mode])) {
+    $temps = array_keys($leadDataLiving[$mode]);
+    sort($temps);
+    $closestIndex = null;
+    $smallestDiff = PHP_INT_MAX;
+    foreach ($temps as $index => $temp) {
+        $diff = abs($temp - $buitenTempStart);
+        if ($diff < $smallestDiff || ($diff === $smallestDiff && $temp < $temps[$closestIndex])) {
+            $smallestDiff = $diff;
+            $closestIndex = $index;
+        }
+    }
+    $allData = [];
+    if ($closestIndex > 0) {
+        $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$closestIndex - 1]]);
+    }
+    $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$closestIndex]]);
+    if ($closestIndex < count($temps) - 1) {
+        $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$closestIndex + 1]]);
+    }
+    if (!empty($allData)) {
+        $avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
+    }
+}
+$avgMinPerDeg ??= 20;
+print_r($leadDataLiving[$mode]);
+print_r($allData);
 
 
 echo '</pre>';

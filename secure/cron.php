@@ -42,6 +42,12 @@ foreach ($d as $k=>$v) {
 		publishmqtt('d/'.$k,json_encode($x));
 	}
 }
+
+$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99];
+$daikin ??= new stdClass();
+foreach (array('living', 'kamer', 'alex') as $k) {
+	$daikin->$k ??= (object)$daikinDefaults;
+}
 while (true) {
 	$time = time();
 	$d['time'] = $time;

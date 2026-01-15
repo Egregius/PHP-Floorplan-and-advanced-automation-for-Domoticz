@@ -1,6 +1,6 @@
 <?php
 //lg($user);
-$preheating=false;
+$prevt_start??=0;
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
@@ -67,7 +67,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	if ($d['living_set']['m'] == 2) $weg = 0;
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
-	if(!isset($lastWriteleadDataLiving)) $lastWriteleadDataLiving=filemtime('/var/www/html/secure/leadDataLiving.json');
 	$avgMinPerDeg = null;
 	if (!empty($leadDataLiving[$mode])) {
 		if (!empty($leadDataLiving[$mode][$buitenTempStart])) {
@@ -86,7 +85,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$data = $leadDataLiving[$mode][$closestTemp];
 		}
 		if (!empty($data)) {
-			$avgMinPerDeg = round(array_sum($data) / count($data), 1);
+			$avgMinPerDeg = round(array_sum($data) / count($data), 2);
 		}
 	}
 	$avgMinPerDeg ??= 20;
@@ -118,47 +117,47 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	}
 	$target = 21;
 	$tempDelta   = max(0, $target - $living);
-	$leadMinutes = round($avgMinPerDeg * $tempDelta);
-	$t_start = $comfortAfternoon - ($leadMinutes * 60);
-	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
-	$t_end = $comfortEnd;
-	if ($time >= strtotime('19:30') || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
+	$leadMinutes = $avgMinPerDeg * $tempDelta;
+	$t_start = round($comfortAfternoon - ($leadMinutes * 60));
+	if ($daikin->living->power!=1) $t_start -= 300;
+	if ($time >= $comfortEnd || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
 	else $Setliving = $baseSet[$weg];
 	if ($prevSet >= 1) {
 		$Setliving = $target;
-		if ($time > $t_end) {
+		if ($time > $comfortEnd) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 		}
 		if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
-		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
 		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
 	}
-	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
+	elseif ($time >= $comfortAfternoon && $time < $comfortEnd && $weg == 0) {
 		$Setliving = max($Setliving, $target);
 	}
 	else {
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-	lg('prevSet='.$prevSet.
-		' preheating:'.$preheating.
-		' comfortAfternoon='.date("G:i",$comfortAfternoon).
-		' t_start='.date("G:i",$t_start).
-		' t_end='.date("G:i",$t_end).
-		' Setliving='.$Setliving.
-		' living='.$living.
-		' target='.$target.
-		' tempDelta='.$tempDelta.
-		' leadMinutes='.$leadMinutes.
-		' avgMinPerDeg='.$avgMinPerDeg
-	);
-	if ($prevSet >= 1 && ($living>=$target||(($preheating===true||$prevSet==1)&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
+	if($prevt_start!=$t_start) {
+		$prevt_start=$t_start;
+		lg('prevSet='.$prevSet.
+			' comfortAfternoon='.date("G:i",$comfortAfternoon).
+			' t_start='.date("G:i:s",$t_start).
+			' comfortEnd='.date("G:i",$comfortEnd).
+			' Setliving='.$Setliving.
+			' living='.$living.
+			' target='.$target.
+			' tempDelta='.$tempDelta.
+			' avgMinPerDeg='.$avgMinPerDeg.
+			' leadMinutes='.$leadMinutes
+		);
+	}
+	if ($prevSet >= 1 && $living>=$target) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
