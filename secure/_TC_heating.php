@@ -89,8 +89,6 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$avgMinPerDeg = round(array_sum($data) / count($data), 1);
 		}
 	}
-	
-	
 	$avgMinPerDeg ??= 20;
 	$baseSet = [
 		0 => 19,
@@ -99,11 +97,11 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		3 => 14
 	];
 	$comfortStart = [
-		1 => '11:00',
-		2 => '16:00',
-		3 => '12:10',
-		4 => '16:00',
-		5 => '15:00',
+		1 => '13:00',
+		2 => '16:05',
+		3 => '12:15',
+		4 => '16:05',//16:05
+		5 => '15:05',
 		6 => '08:00',
 		0 => '08:00'
 	];
@@ -118,21 +116,15 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		}
 			$comfortEnd = strtotime('19:00');
 	}
-
-	
 	$target = 21;
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
-	$t_start ??= $comfortAfternoon - ($leadMinutes * 60);
+	$t_start = $comfortAfternoon - ($leadMinutes * 60);
 	if ($d['daikin']['s'] == 'Off' || ($d['daikin']['s'] == 'On' && past('daikin') < 70)) $t_start -= 300;
 	$t_end = $comfortEnd;
-	
 	if ($time >= strtotime('19:30') || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
 	else $Setliving = $baseSet[$weg];
-	// Hoofdlogica voor temperatuur instelling
-	// $prevSet: 0 = inactief, 1 = preheating actief, 2 = preheating voltooid
-	if ($prevSet == 1 || $prevSet == 2) {
-		// Preheating actief of voltooid, houd target aan
+	if ($prevSet >= 1) {
 		$Setliving = $target;
 		if ($time > $t_end) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
@@ -140,31 +132,38 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
-		// Preheating fase: start opwarmen (alleen als nog niet actief/voltooid)
 		$preheating = true;
 		$Setliving = max($Setliving, $target);
 		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
+		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
 	}
 	elseif ($time >= $comfortAfternoon && $time < $t_end && $weg == 0) {
-		// Comfort periode: target aanhouden
 		$Setliving = max($Setliving, $target);
 	}
 	else {
-		// Buiten comfort/preheating periode: basis temperatuur
 		$Setliving = $Setliving;
 		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 	}
-//	lg($prevSet.' '.$preheating);
-
-	// Lead data opslaan wanneer target bereikt is
+	lg('prevSet='.$prevSet.
+		' preheating:'.$preheating.
+		' comfortAfternoon='.date("G:i",$comfortAfternoon).
+		' t_start='.date("G:i",$t_start).
+		' t_end='.date("G:i",$t_end).
+		' Setliving='.$Setliving.
+		' living='.$living.
+		' target='.$target.
+		' tempDelta='.$tempDelta.
+		' leadMinutes='.$leadMinutes.
+		' avgMinPerDeg='.$avgMinPerDeg
+	);
 	if ($prevSet >= 1 && ($living>=$target||(($preheating===true||$prevSet==1)&&$living>=$target-0.1)) /*&& $lastWriteleadDataLiving < $time-43200*/) {
-		lg(basename(__FILE__) . ':' . __LINE__);
+//		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
-		if ($tempRise>1) {
-			lg(basename(__FILE__) . ':' . __LINE__);
+		if ($tempRise>1&&$prevSet == 1) {
+//			lg(basename(__FILE__) . ':' . __LINE__);
 			$buitenTempStart = $d['living_start_temp']['i'];
 			$minutesUsed = round(past('living_start_temp') / 60,1);
 			$minPerDeg   = $minutesUsed / $tempRise;
@@ -179,17 +178,12 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
-			// Zet status naar 2 (voltooid) in plaats van 0, zodat target aangehouden blijft
-			storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
 			unset($t_start);
-		} else {
-			// Zet status naar 2 (voltooid) ook bij kleine tempstijging
-			storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
-			unset($t_start);
 		}
+		storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
 	}
 }
 if ($d['living_set']['m']==1) $Setliving=$d['living_set']['s'];

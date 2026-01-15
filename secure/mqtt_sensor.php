@@ -43,12 +43,38 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 	try {	
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if (isset($validDevices[$device])) {
+		if ($device === 'daikin_kwh') {
+			$val = (int)$status;
+			$old = (int)($d[$device]['s'] ?? 0);
+			$oldt = (int)($d[$device]['t'] ?? 0);
+			$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
+			$time_passed = ($time - $oldt) >= 30;
+			if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) storep('daikin',$val);
+		} elseif ($device === 'sun_solar_elevation') {
+			$status = (float)$status;
+			if ($status >= -10 && $status <= 10) {
+				$status = round($status / 0.2) * 0.2;
+				$status = round($status, 1);
+			} else {
+				$status = round($status / 2) * 2;
+			}
+			if ((float)$d['dag']['s'] != $status) {
+				store('dag', $status);
+				setCache('dag', $status);
+			}
+			stoploop($d);
+		} elseif ($device === 'sun_solar_azimuth') {
+			$status = (int)$status;
+			$status = round($status / 5) * 5;
+			if ((int)$d['dag']['m'] != $status) {
+				storemode('dag', $status);
+				updateWekker($t, $weekend, $dow, $d);
+			}
+		} elseif (isset($validDevices[$device])) {
 			$time=time();
 			$d['time']=$time;
-			if (($time - LOOP_START) <= 2) return;
-			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (isProcessed($topic,$status,$alreadyProcessed)) return;
+//			if (($d[$device]['s'] ?? null) === $status) return;
 			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
@@ -65,45 +91,14 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if ($d[$device]['s'] != $st && abs($st - $d[$device]['s']) >= 0.1) {
 					store($device, $st);
 				}
-			} elseif ($device=='daikin_kwh') {
-				return;
-				$val = (int)$status;
-				$old = (int)($d[$device]['s'] ?? 0);
-				$oldt = (int)($d[$device]['t'] ?? 0);
-				if ($oldt === 0) {
-					store($device, $val);
-					return;
-				}
-				$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
-				$time_passed = ($time - $oldt) >= 30;
-				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device,$val);
 			} else {
 				if ($d[$device]['s']!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
 				}
 			}
-		} elseif ($device === 'sun_solar_elevation') {
-			$status = (float)$status;
-			if ($status >= -10 && $status <= 10) {
-				$status = round($status / 0.2) * 0.2;
-				$status = round($status, 1);
-			} else {
-				$status = round($status / 2) * 2;
-			}
-			if ((float)$d['dag']['s'] != $status) {
-				store('dag', (string)$status);
-				setCache('dag', $status);
-			}
-			stoploop($d);
-			updateWekker($t, $weekend, $dow, $d);
-		} elseif ($device === 'sun_solar_azimuth') {
-			$status = (int)$status;
-			$status = round($status / 5) * 5;
-			if ((string)$d['dag']['m'] != (string)$status) {
-				storemode('dag', (string)$status);
-			}
 		} elseif ($device === 'weg') {
+			if (($time - LOOP_START) <= 2) return;
 			if ($status==0) {
 				store('weg',0);
 				huisthuis();

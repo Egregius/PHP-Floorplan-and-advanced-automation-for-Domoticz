@@ -41,7 +41,7 @@ if ($d['daikin']['m']==1) {
 	elseif ($d['n']>2500&&$maxpow>80) $maxpow=80;
 	if ($preheating==true) {$maxpow=40;$spmode=-1;}
 	$pastdaikin=past('daikin');
-	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
+	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99];
 	$daikin ??= new stdClass();
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		$daikin->$k ??= (object)$daikinDefaults;
@@ -64,8 +64,7 @@ if ($d['daikin']['m']==1) {
 				elseif ($dif <= -0.8) {$set=$d[$k.'_set']['s']+0.5;$spmode=-1;$line=__LINE__;}
 				else {$set=$d[$k.'_set']['s'];$spmode=-1;$line=__LINE__;}
 				if ($d['weg']['s']>0) $spmode=-1;
-				if ($preheating==true) {$maxpow=40;$spmode=-1;$set+=10;}
-				if ($preheating==true||$prevSet==1) {$set+=10;}
+				if ($preheating==true||$prevSet==1) {$maxpow=100;$spmode=1;$set+=10;}
 				if ($k=='living') {
 					$set+=-2;
 					if ($time>strtotime('19:00')&&$d['media']['s']=='On') $fan='B';
@@ -79,13 +78,14 @@ if ($d['daikin']['m']==1) {
 				$set=ceil($set * 2) / 2;
 				if ($set>28) $set=28;
 				elseif ($set<10) $set=10;
-				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode) {
+				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode||$daikin->$k->maxpow!=$maxpow) {
 					if(daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 						$daikin->$k->power=$power;
 						$daikin->$k->mode=4;
 						$daikin->$k->fan=$fan;
 						$daikin->$k->set=$set;
 						$daikin->$k->spmode=$spmode;
+						$daikin->$k->maxpow=$maxpow;
 					}
 				}
 			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On');

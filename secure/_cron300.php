@@ -1,7 +1,7 @@
 <?php
 $user='cron300';
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-lg('🕒 '.$user);
+lg('🕒 '.$user.' ----------------------------------------------------------------------------------------------------------------------------------------------');
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']['s']=='On') {
 	if (past('steenterras')>10700
@@ -53,13 +53,16 @@ if ($d['weg']['s']>0) {
 } 
 
 
-if ($d['auto']['s']!='On'&&past('auto')>86400) sw('auto', 'On', basename(__FILE__).':'.__LINE__);
+if ($d['auto']['s']!='On'&&past('auto')>43200) {
+	sw('auto', 'On', basename(__FILE__).':'.__LINE__);
+	alert('AUTO','AUTO ingeschakeld na 12 uur',60,false,3);
+}
 if (past('weg')>18000&& $d['weg']['s']==0&& past('pirliving')>18000&& past('pirkeuken')>18000&& past('pirinkom')>18000&& past('pirhall')>18000&& past('pirgarage')>18000) {
 	store('weg', 1, basename(__FILE__).':'.__LINE__);
-	telegram('Slapen ingeschakeld na 5 uur geen beweging', false, 2);
+	alert('WEG','Slapen ingeschakeld na 5 uur geen beweging',60,false,3);
 } elseif (past('weg')>36000&& $d['weg']['s']==1&& past('pirliving')>36000&& past('pirkeuken')>36000&& past('pirinkom')>36000&& past('pirhall')>36000&& past('pirgarage')>36000) {
 	store('weg', 2, basename(__FILE__).':'.__LINE__);
-	telegram('weg ingeschakeld na 10 uur geen beweging', false, 2);
+	alert('WEG','Weg ingeschakeld na 10 uur geen beweging',60,false,3);
 }
 if ($d['zolderg']['s']=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 

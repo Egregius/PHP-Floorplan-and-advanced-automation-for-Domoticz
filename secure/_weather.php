@@ -231,6 +231,7 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));
 	$weathercache=$weather;
 }
+unset($ow,$wa,$ob,$om,$vc,$yr);
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']['s']=='On') {
