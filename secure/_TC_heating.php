@@ -166,7 +166,10 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	}
 	else {
 		$Setliving = $Setliving;
-		if ($prevSet != 0) storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+		if ($prevSet != 0) {
+			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			$prevSet=0;
+		}
 	}
 	if($prevt_start!=$t_start) {
 		$prevt_start=$t_start;
@@ -183,15 +186,15 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			' leadMinutes='.$leadMinutes
 		);
 	}
-	if ($prevSet >= 1 && $living>=$target-0.2) {
+	if ($prevSet >= 1 && $living >= $target-0.2) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
-		if ($tempRise>1&&$prevSet == 1) {
+		if ($tempRise > 1 && $prevSet == 1) {
 //			lg(basename(__FILE__) . ':' . __LINE__);
 			$buitenTempStart = $d['living_start_temp']['i'];
 			$startupDelay = $d['living_start_temp']['p'] ?? 0;
-			$minutesUsed = round((past('living_start_temp') - $startupDelay) / 60, 1);
+			$minutesUsed = (past('living_start_temp') - $startupDelay) / 60;
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
@@ -204,6 +207,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
+			$minutesUsed=round($minutesUsed,1);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));

@@ -10,61 +10,7 @@ $d=fetchdata();
 //$d['time']=$startloop;
 $db = Database::getInstance();
 
-$mode=2;
-$buitenTempStart = 1;
-
-
-if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
-
-
-$avgMinPerDeg = null;
-if (!empty($leadDataLiving[$mode])) {
-    $temps = array_keys($leadDataLiving[$mode]);
-    sort($temps); // Sorteer de temperaturen
-    
-    $allData = [];
-    $keyExists = in_array($buitenTempStart, $temps);
-    
-    if ($keyExists) {
-        // Key bestaat: gebruik vorige, huidige en volgende
-        $currentIndex = array_search($buitenTempStart, $temps);
-        
-        if ($currentIndex > 0) {
-            $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex - 1]]);
-        }
-        $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex]]);
-        if ($currentIndex < count($temps) - 1) {
-            $allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex + 1]]);
-        }
-    } else {
-        // Key bestaat niet: gebruik alleen dichtstbijzijnde lager en hoger
-        $lower = null;
-        $higher = null;
-        
-        foreach ($temps as $temp) {
-            if ($temp < $buitenTempStart) {
-                $lower = $temp;
-            } elseif ($temp > $buitenTempStart && $higher === null) {
-                $higher = $temp;
-                break;
-            }
-        }
-        
-        if ($lower !== null) {
-            $allData = array_merge($allData, $leadDataLiving[$mode][$lower]);
-        }
-        if ($higher !== null) {
-            $allData = array_merge($allData, $leadDataLiving[$mode][$higher]);
-        }
-    }
-    
-    if (!empty($allData)) {
-        $avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
-    }
-}
-$avgMinPerDeg ??= 20;
-print_r($leadDataLiving[$mode]);
-print_r($allData);
+print_r($_SERVER);
 
 
 echo '</pre>';

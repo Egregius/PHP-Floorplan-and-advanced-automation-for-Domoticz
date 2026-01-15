@@ -2,33 +2,33 @@
 $user='TC_badkamer';
 $m='';$m2='';
 $preheatbath=false;
-if ($d['badkamer_set']['m']==0) {$set=13;$m2.=__LINE__.' ';}
-else {$set=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
+if ($d['badkamer_set']['m']==0) {$setBath=13;$m2.=__LINE__.' ';}
+else {$setBath=$d['badkamer_set']['s'];$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
-if ($d['weg']['s']>=2) $set=10;
+if ($d['weg']['s']>=2) $setBath=10;
 elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']['s']=='Open'||$d['raamwaskamer']['s']=='Open'||$d['raamalex']['s']=='Open')) {
-	$set=5;$m2.=__LINE__.' ';
+	$setBath=5;$m2.=__LINE__.' ';
 } elseif ($d['badkamer_set']['m']==0&&($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer<57))&&$d['badkamer_set']['m']>0) {
 	if (past('badkamer_set')>=14400&&$d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<21&&$d['weg']['s']<2) {
 		if ($d['badkamer_set']['s']>13) {
-			$set=13;$m2.=__LINE__.' ';
+			$setBath=13;$m2.=__LINE__.' ';
 			if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0);
 		}
 	} elseif (past('badkamer_set')>=14400&&($d['lichtbadkamer']['s']==0&&$d['badkamer_set']['s']!=13) || ($d['weg']['s']>=2&&$d['badkamer_set']['s']!=13)) {
 		setpoint('badkamer_set', 13);
-		$set=13;$m2.=__LINE__.' ';
+		$setBath=13;$m2.=__LINE__.' ';
 		if ($d['badkamer_set']['m']>0) storemode('badkamer_set', 0);
 	}
 } elseif (($d['deurbadkamer']['s']=='Closed'||($d['deurbadkamer']['s']=='Open'&&$pastdeurbadkamer<57))&&$d['badkamer_set']['m']==0&&$d['heating']['s']>=0) {
 	if ($d['lichtbadkamer']['s']==0&&$d['buiten_temp']['s']<20&&$d['weg']['s']<2) {
-		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
+		if ($d['badkamer_set']['s']!=13) {$setBath=13;$m2.=__LINE__.' ';}
 	}
-	$set       = 13;
+	$setBath       = 13;
 	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']['s'];
 	$buitenTempStart = round($d['buiten_temp']['s'] / 0.5) * 0.5;
 	$mode      = $d['heating']['s'];
-	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
+	$prevSetbath   = $d['badkamer_start_temp']['m'] ?? 0;
 	if(!isset($leadDataBath)) {
 		$content = @file_get_contents('/var/www/html/secure/leadDataBath.json');
 		$leadDataBath = $content ? json_decode($content, true) ?? [] : [];
@@ -71,40 +71,46 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDeg ??= 10;
+	$avgMinPerDeg ??= 20;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = $avgMinPerDeg * $tempDelta;
 	$t_start     = round($t - ($leadMinutes * 60));
 	$t_end       = $t + 1800;
-	if ($prevSet == 1) {
-		$set = $target;
-		if ($time > $t_end) storemode('badkamer_start_temp', 0);
+	if ($prevSetbath >= 1) {
+		$setBath = $target;
+		if ($time > $t_end) {
+			storemode('badkamer_start_temp', 0);
+			$prevSetbath=0;
+		}
 		$preheatbath=true;
 	} elseif ($time >= $t_start && $time < $t) {
 		$preheatbath=true;
-		$set = $target;
-		storesmi('badkamer_start_temp', $badkamer, 1, $buitenTempStart);
+		$setBath = $target;
+		storesmi('badkamer_start_temp', $badkamer, 2, $buitenTempStart);
 		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
 		lg($msg);
 	} elseif ($time >= $t && $time <= $t_end) {
-		$set = $target;
+		$setBath = $target;
 		$preheatbath=false;
 	} else {
-		$set = 13;
-		if ($prevSet != 0) storemode('badkamer_start_temp', 0);
+		$setBath = 13;
+		if ($prevSetbath != 0) {
+			storemode('badkamer_start_temp', 0);
+			$prevSetbath=0;
+		}
 		$preheatbath=false;
 	}
 //	lg(print_r($leadDataBath,true));
 //	lg(print_r($temps,true));
 
-	if ($prevSet == 1 && $badkamer >= $target && $lastWriteleadDataBath < $time-43200) {
+	if ($prevSetbath <= 1 && $badkamer >= $target-0.2 && $lastWriteleadDataBath < $time-43200) {
 		$startTemp = $d['badkamer_start_temp']['s'];
 		$tempRise    = $badkamer - $startTemp;
-		if ($tempRise>1) {
+		if ($tempRise>1&&$prevSetbath == 1) {
 			$buitenTempStart = $d['badkamer_start_temp']['i'];
 			$minutesUsed = past('badkamer_start_temp') / 60;
 			$minPerDeg = $minutesUsed / $tempRise;
-			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
+			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -5);
 			$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
@@ -115,19 +121,22 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			unset($innerArray); 
 			file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
 			$lastWriteleadDataBath=$time;
+			$minutesUsed=round($minutesUsed,1);
 			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataBath,true));
 		}
+		storemode('badkamer_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
+		$prevSetbath=2;
 	}
 } elseif ($d['deurbadkamer']['s']=='Closed'&&$d['badkamer_set']['m']==0&&$d['heating']['s']<0) {
 	if ($d['badkamer_set']['s']!=5) {
 		setpoint('badkamer_set', 5);
 	}
 }
-if (isset($set)&&$d['heating']['s']>=0) {
-	if ($set!=$d['badkamer_set']['s']) {
-		setpoint('badkamer_set', $set, $m2);
+if (isset($setBath)&&$d['heating']['s']>=0) {
+	if ($setBath!=$d['badkamer_set']['s']) {
+		setpoint('badkamer_set', $setBath, $m2);
 	}
 }
 if ($d['heating']['s']>=2) {
@@ -137,7 +146,7 @@ if ($d['heating']['s']>=2) {
 			storeicon('badkamer_set',true);
 		}
 		if ($d['brander']['s']=='Off'&&past('brander')>900) sw('brander', 'On');
-	} elseif (($set>13&&$d['weg']['s']<=1)||$d['living_set']['s']<=17) {
+	} elseif (($setBath>13&&$d['weg']['s']<=1)||$d['living_set']['s']<=17) {
 		if ($d['badkamer_set']['i']!=true) {
 			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
