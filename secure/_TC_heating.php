@@ -65,27 +65,42 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m'] == 2) $weg = 0;
-	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
-	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(file_get_contents('/var/www/html/secure/leadDataLiving.json'),true);
-	$avgMinPerDeg = null;
+	$buitenTempStart = $d['buiten_temp']['s'];
+	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(@file_get_contents('/var/www/html/secure/leadDataLiving.json'),true)??[];
 	if (!empty($leadDataLiving[$mode])) {
-		if (!empty($leadDataLiving[$mode][$buitenTempStart])) {
-			$data = $leadDataLiving[$mode][$buitenTempStart];
+		$temps = array_keys($leadDataLiving[$mode]);
+		sort($temps);
+		$allData = [];
+		$keyExists = in_array($buitenTempStart, $temps);
+		if ($keyExists) {
+			$currentIndex = array_search($buitenTempStart, $temps);
+			if ($currentIndex > 0) {
+				$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex - 1]]);
+			}
+			$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex]]);
+			if ($currentIndex < count($temps) - 1) {
+				$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex + 1]]);
+			}
 		} else {
-			$temps = array_keys($leadDataLiving[$mode]);
-			usort($temps, function ($a, $b) use ($buitenTempStart) {
-				$da = abs($a - $buitenTempStart);
-				$db = abs($b - $buitenTempStart);
-				if ($da !== $db) {
-					return $da <=> $db;
+			$lower = null;
+			$higher = null;
+			foreach ($temps as $temp) {
+				if ($temp < $buitenTempStart) {
+					$lower = $temp;
+				} elseif ($temp > $buitenTempStart && $higher === null) {
+					$higher = $temp;
+					break;
 				}
-				return $a <=> $b;
-			});
-			$closestTemp = $temps[0];
-			$data = $leadDataLiving[$mode][$closestTemp];
+			}
+			if ($lower !== null) {
+				$allData = array_merge($allData, $leadDataLiving[$mode][$lower]);
+			}
+			if ($higher !== null) {
+				$allData = array_merge($allData, $leadDataLiving[$mode][$higher]);
+			}
 		}
-		if (!empty($data)) {
-			$avgMinPerDeg = round(array_sum($data) / count($data), 2);
+		if (!empty($allData)) {
+			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
 	$avgMinPerDeg ??= 20;
@@ -99,7 +114,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		1 => '13:00',
 		2 => '16:05',
 		3 => '12:15',
-		4 => '16:05',//16:05
+		4 => '9:20',//16:05
 		5 => '15:05',
 		6 => '08:00',
 		0 => '08:00'
@@ -134,7 +149,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
-		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
+//		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
 	}
 	elseif ($time >= $comfortAfternoon && $time < $comfortEnd && $weg == 0) {
 		$Setliving = max($Setliving, $target);
@@ -168,7 +183,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
-			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -3);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -5);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);
 			ksort($leadDataLiving, SORT_NUMERIC);
 			foreach ($leadDataLiving as &$innerArray) {

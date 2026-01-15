@@ -29,30 +29,44 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
 	$mode      = $d['heating']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
-	if(!isset($leadDataBath)) $leadDataBath=json_decode(file_get_contents('/var/www/html/secure/leadDataBath.json'),true);
-	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=filemtime('/var/www/html/secure/leadDataBath.json');
-	$avgMinPerDeg = null;
+	if(!isset($leadDataBath)) $leadDataBath=json_decode(@file_get_contents('/var/www/html/secure/leadDataBath.json'),true)??[];
+	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=@filemtime('/var/www/html/secure/leadDataBath.json')??0;
 	if (!empty($leadDataBath[$mode])) {
-		if (!empty($leadDataBath[$mode][$buitenTempStart])) {
-			$data = $leadDataBath[$mode][$buitenTempStart];
+		$temps = array_keys($leadDataBath[$mode]);
+		sort($temps);
+		$allData = [];
+		$keyExists = in_array($buitenTempStart, $temps);
+		if ($keyExists) {
+			$currentIndex = array_search($buitenTempStart, $temps);
+			if ($currentIndex > 0) {
+				$allData = array_merge($allData, $leadDataBath[$mode][$temps[$currentIndex - 1]]);
+			}
+			$allData = array_merge($allData, $leadDataBath[$mode][$temps[$currentIndex]]);
+			if ($currentIndex < count($temps) - 1) {
+				$allData = array_merge($allData, $leadDataBath[$mode][$temps[$currentIndex + 1]]);
+			}
 		} else {
-			$temps = array_keys($leadDataBath[$mode]);
-			usort($temps, function ($a, $b) use ($buitenTempStart) {
-				$da = abs($a - $buitenTempStart);
-				$db = abs($b - $buitenTempStart);
-				if ($da !== $db) {
-					return $da <=> $db;
+			$lower = null;
+			$higher = null;
+			foreach ($temps as $temp) {
+				if ($temp < $buitenTempStart) {
+					$lower = $temp;
+				} elseif ($temp > $buitenTempStart && $higher === null) {
+					$higher = $temp;
+					break;
 				}
-				return $a <=> $b;
-			});
-			$closestTemp = $temps[0];
-			$data = $leadDataBath[$mode][$closestTemp];
+			}
+			if ($lower !== null) {
+				$allData = array_merge($allData, $leadDataBath[$mode][$lower]);
+			}
+			if ($higher !== null) {
+				$allData = array_merge($allData, $leadDataBath[$mode][$higher]);
+			}
 		}
-		if (!empty($data)) {
-			$avgMinPerDeg = round(array_sum($data) / count($data), 1);
+		if (!empty($allData)) {
+			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDeg ??= 20;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = round($avgMinPerDeg * $tempDelta);
 	$t_start     = $t - ($leadMinutes * 60);
@@ -87,7 +101,7 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$minPerDeg = $minutesUsed / $tempRise;
 			$minPerDeg = max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg));
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
-			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -3);
+			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -5);
 			$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
 			ksort($leadDataBath, SORT_NUMERIC);
 			foreach ($leadDataBath as &$innerArray) {
