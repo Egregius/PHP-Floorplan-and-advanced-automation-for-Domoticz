@@ -69,6 +69,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	if(!isset($leadDataLiving)) {
 		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
 		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
+		lg('leadDataLiving read from file');
 	}
 	if (!empty($leadDataLiving[$mode])) {
 		$temps = array_keys($leadDataLiving[$mode]);
@@ -106,7 +107,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDeg ??= 20;
+	$avgMinPerDeg ??= 10;
 	$baseSet = [
 		0 => 19,
 		1 => 16,
@@ -117,7 +118,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		1 => '13:00',
 		2 => '16:05',
 		3 => '12:15',
-		4 => '13:25',//16:05
+		4 => '16:05',//16:05
 		5 => '15:05',
 		6 => '08:00',
 		0 => '08:00'
