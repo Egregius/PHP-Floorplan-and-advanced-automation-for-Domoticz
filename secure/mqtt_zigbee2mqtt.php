@@ -53,6 +53,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 			$status=json_decode($status);
 			if ($device=='remotealex') {
 				if (isset($status->action)) {
+					$d=fetchdata();
 					$status=$status->action;
 //						lg('ⓩ Remote '.$device.' '.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
@@ -70,7 +71,7 @@ $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($s
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,10000);
+	$mqtt->loop(true,false,null,100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

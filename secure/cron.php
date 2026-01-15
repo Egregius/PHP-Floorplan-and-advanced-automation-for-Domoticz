@@ -43,7 +43,7 @@ foreach ($d as $k=>$v) {
 	}
 }
 
-$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99];
+$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>0];
 $daikin ??= new stdClass();
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$daikin->$k ??= (object)$daikinDefaults;

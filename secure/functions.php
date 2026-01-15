@@ -638,11 +638,6 @@ function kodi($json) {
 	curl_close($ch);
 	return $result;
 }
-function convertToHours($time) {
-	if ($time<600) return substr(date('i:s', $time-3600), 1);
-	elseif ($time>=600&&$time<3600) return date('i:s', $time-3600);
-	else return date('G:i:s', $time-3600);
-}
 function ping($ip) {
     if (!filter_var($ip, FILTER_VALIDATE_IP)) {
         return false;
@@ -651,12 +646,6 @@ function ping($ip) {
     exec("ping -c 1 -w 1 " . escapeshellarg($ip), $output, $result);
     return $result === 0;
 }
-function double($name, $action, $msg='') {
-	sw($name, $action, $msg);
-	usleep(2000000);
-	sw($name, $action, $msg);
-}
-
 function rookmelder($msg) {
 	global $d,$device;
 	resetsecurity();
@@ -675,10 +664,6 @@ function rookmelder($msg) {
 //			}
 //		}
 //	}
-}
-function koekje($user,$expirytime) {
-	global $cookie,$domainname;
-	setcookie($cookie, $user, $expirytime, '/', $domainname, true, true);
 }
 function telegram($msg,$silent=true,$to=1) {
 	if ($silent==true) $silent='true';
@@ -703,9 +688,7 @@ Levels:
 99:	SQL Fetchdata
 */
 	global $d;
-	if (isset($d['auto']['m'])) {
-		$loglevel = $d['auto']['m'];
-	} else $loglevel = 0;
+	$loglevel = $d['auto']['m'] ?? 0;
 
 	if ($level <= $loglevel) {
 		$fp = fopen('/temp/domoticz.log', "a+");
@@ -864,14 +847,6 @@ function sirene($msg) {
 	}
 	setCache('sirene', $time);
 }
-function daikin_ips() {
-	return [
-		'living' => 161,
-		'kamer'  => 162,
-		'alex'	=> 163,
-	];
-}
-
 function http_get($url, $retries = 2, $timeout = 2) {
 	$ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
 	for ($i=0; $i <= $retries; $i++) {
@@ -881,70 +856,44 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	}
 	return FALSE;
 }
-function daikinstatus($device,$log='') {
-	$ips = daikin_ips();
-	if (!isset($ips[$device])) return FALSE;
-	$url = "http://192.168.2.{$ips[$device]}/aircon/get_control_info";
-	$data = http_get($url);
-	if ($data === FALSE) {
-		if (strlen($log)>0) $msg="daikinstatus: geen antwoord van $device ($url)	| ".$log;
-		else $msg="daikinstatus: geen antwoord van $device ($url)";
-		alert('daikinstatus', $msg, 1800);
-		return FALSE;
-	}
-	if (stripos($data, "SERIAL IF FAILURE") !== false) {
-		alert('daikinstatus', "daikinstatus: SERIAL IF FAILURE van $device ($url) → power cycle",1800);
-//		sw('daikin', 'Off', $user.':'.__LINE__);
-//		sleep(5);
-//		sw('daikin', 'On',  $user.':'.__LINE__);
-		return FALSE;
-	}
-	$array = explode(",", $data);
-	$ci = [
-		'power' => null,
-		'mode'  => null,
-		'adv'	=> 'default', 
-		'set'	=> null,
-		'fan'	=> null
-	];
-	foreach ($array as $value){
-		$pair = explode("=", $value, 2);
-		if (count($pair) !== 2) continue;
-		list($key, $val) = $pair;
-		if	 ($key=='pow') $ci['power'] = $val;
-		elseif ($key=='mode') $ci['mode']  = $val;
-		elseif ($key=='adv') $ci['adv']	= $val;
-		elseif ($key=='stemp') $ci['set']	= $val;
-		elseif ($key=='f_rate') $ci['fan']	= $val;
-	}
-	return json_encode($ci);
-}
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
 	global $d, $time, $lastfetch,$daikin;
+	static $prevspmode=null;
+	static $prevmaxpow=null;
 	$lastfetch = $time;
-	$ips = daikin_ips();
+	$ips = [
+		'living' => 161,
+		'kamer'  => 162,
+		'alex'	=> 163,
+	];
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	if(!http_get($url)) return false;
 	if ($d['heating']['s']>=0) lg("🔥 daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow");
 	else  lg("❄️ daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow");
-	usleep(100000);
-	if ($spmode==-1) {
-		if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
-	} elseif ($spmode==0) {
-		if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
-	} elseif ($spmode==1) {
-		if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
+	if($prevspmode!==$spmode) {
+		usleep(100000);
+		if ($spmode===-1) {
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
+		} elseif ($spmode===0) {
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
+		} elseif ($spmode===1) {
+			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
+		} else return false;
+		$prevspmode=$spmode;
 	}
-	usleep(100000);
-	foreach($ips as $k=>$ip) {
-		if ($maxpow==100) {
-			$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
-		} else {
-			$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+	if($prevmaxpow!==$maxpow) {
+		usleep(100000);
+		foreach($ips as $k=>$ip) {
+			if ($maxpow===100) {
+				$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+			} else {
+				$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+			}
+			if(!http_get($url)) return false;
+			usleep(50000);
 		}
-		if(!http_get($url)) return false;
-		usleep(50000);
+		$prevmaxpow=$maxpow;
 	}
 	return true;
 }
@@ -1300,20 +1249,4 @@ function setCache(string $key, $value): bool {
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
-}
-static $localCache = [];
-function setCacheFast(string $key, $value) {
-    global $localCache;
-    $localCache[$key] = $value;
-}
-function getCacheFast(string $key, $default = false) {
-    global $localCache;
-    if (isset($localCache[$key])) {
-        return $localCache[$key];
-    }
-    $file = '/dev/shm/cache/' . $key . '.txt';
-    $data = @file_get_contents($file);
-    if ($data === false) return $default;
-    $localCache[$key] = $data;
-    return $data;
 }

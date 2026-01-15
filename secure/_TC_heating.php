@@ -65,7 +65,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m'] == 2) $weg = 0;
-	$buitenTempStart = $d['buiten_temp']['s'];
+	$buitenTempStart = round($d['buiten_temp']['s'] / 0.2) * 0.2;
 	if(!isset($leadDataLiving)) {
 		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
 		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
@@ -144,6 +144,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		$Setliving = $target;
 		if ($time > $comfortEnd) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			$prevSet=0;
 		}
 		if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
@@ -154,6 +155,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		} else {
 			storesmi('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
 		}
+		$prevSet=1;
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
 //		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
@@ -179,7 +181,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			' leadMinutes='.$leadMinutes
 		);
 	}
-	if ($prevSet >= 1 && $living>=$target) {
+	if ($prevSet >= 1 && $living>=$target-0.2) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']['s'];
 		$tempRise    = $living - $startTemp;
@@ -206,6 +208,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			unset($t_start);
 		}
 		storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
+		$prevSet=2;
 	}
 }
 if ($d['living_set']['m']==1) $Setliving=$d['living_set']['s'];

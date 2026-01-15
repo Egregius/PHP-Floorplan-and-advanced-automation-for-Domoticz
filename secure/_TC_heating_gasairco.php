@@ -74,7 +74,7 @@ if ($d['daikin']['m']==1) {
 				$set=ceil($set * 2) / 2;
 				if ($set>28) $set=28;
 				elseif ($set<10) $set=10;
-				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode||$daikin->$k->maxpow!=$maxpow) {
+				if ($daikin->$k->power!=$power||$daikin->$k->mode!=4||$daikin->$k->set!=$set||$daikin->$k->fan!=$fan||$daikin->$k->spmode!=$spmode||$daikin->$k->maxpow!=$maxpow||$daikin->$k->lastset<=$time-300) {
 					if(daikinset($k, $power, 4, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 						$daikin->$k->power=$power;
 						$daikin->$k->mode=4;
@@ -82,6 +82,7 @@ if ($d['daikin']['m']==1) {
 						$daikin->$k->set=$set;
 						$daikin->$k->spmode=$spmode;
 						$daikin->$k->maxpow=$maxpow;
+						$daikin->$k->lastset=$time;
 					}
 				}
 			} elseif (isset($power)&&$power==1&&$d['daikin']['s']=='Off'&&$pastdaikin>900) sw('daikin', 'On');
