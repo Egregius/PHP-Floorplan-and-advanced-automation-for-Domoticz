@@ -60,13 +60,16 @@ if ($d['alex_set']['s']!=$Setalex) {
 }
 $Setliving = 14;
 $prevSet   = $d['living_start_temp']['m'] ?? 0;
-if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d['weg']['s']<=1)) {
+if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1) {
 	$living    = $d['living_temp']['s'];
 	$mode      = $d['heating']['s'];
 	$weg       = $d['weg']['s'];
 	if ($d['living_set']['m'] == 2) $weg = 0;
 	$buitenTempStart = $d['buiten_temp']['s'];
-	if(!isset($leadDataLiving)) $leadDataLiving=json_decode(@file_get_contents('/var/www/html/secure/leadDataLiving.json'),true)??[];
+	if(!isset($leadDataLiving)) {
+		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
+		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
+	}
 	if (!empty($leadDataLiving[$mode])) {
 		$temps = array_keys($leadDataLiving[$mode]);
 		sort($temps);
@@ -114,7 +117,7 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		1 => '13:00',
 		2 => '16:05',
 		3 => '12:15',
-		4 => '9:20',//16:05
+		4 => '16:05',//16:05
 		5 => '15:05',
 		6 => '08:00',
 		0 => '08:00'
@@ -146,7 +149,11 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$Setliving = max($Setliving, $target);
-		storesmi('living_start_temp', $living, 1, $buitenTempStart, basename(__FILE__) . ':' . __LINE__);
+		if ($daikin->living->power!=1) {
+			storesmi('living_start_temp', $living, 1, $buitenTempStart, 300, basename(__FILE__) . ':' . __LINE__);
+		} else {
+			storesmi('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
+		}
 		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
 		lg($msg);
 //		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
@@ -179,7 +186,8 @@ if (($d['living_set']['m']==0&&$d['weg']['s']<=1)||($d['living_set']['m']==2&&$d
 		if ($tempRise>1&&$prevSet == 1) {
 //			lg(basename(__FILE__) . ':' . __LINE__);
 			$buitenTempStart = $d['living_start_temp']['i'];
-			$minutesUsed = round(past('living_start_temp') / 60,1);
+			$startupDelay = $d['living_start_temp']['p'] ?? 0;
+			$minutesUsed = round((past('living_start_temp') - $startupDelay) / 60, 1);
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 20, $minPerDeg)),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;

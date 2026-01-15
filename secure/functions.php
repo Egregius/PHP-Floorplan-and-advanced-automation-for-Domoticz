@@ -320,9 +320,6 @@ function setpoint($name, $value,$msg='') {
 }
 function store($name='',$status='',$msg='') {
 	global $d,$user;
-	if (is_numeric($status)) {
-        $status = $status + 0;
-    }
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
@@ -377,9 +374,6 @@ function publishmqtt($topic,$msg,$log='') {
 }
 function storemode($name,$mode,$msg='') {
 	global $d,$user;
-	if (is_numeric($mode)) {
-        $mode = $mode + 0;
-    }
     if((string)$d[$name]['m']==(string)$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -415,12 +409,6 @@ function storemode($name,$mode,$msg='') {
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user;
-	if (is_numeric($s)) {
-        $s = $s + 0;
-    }
-    if (is_numeric($m)) {
-        $m = $m + 0;
-    }
     if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -457,15 +445,6 @@ function storesm($name,$s,$m,$msg='') {
 }
 function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user;
-	if (is_numeric($s)) {
-        $s = $s + 0;
-    }
-    if (is_numeric($m)) {
-        $m = $m + 0;
-    }
-    if (is_numeric($i)) {
-        $i = $i + 0;
-    }
     if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m&&(string)$d[$name]['i']==(string)$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -501,14 +480,46 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	return $affected ?? 0;
 }
+function storesmip($name,$s,$m,$i,$p,$msg='') {
+	global $d,$user;
+    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m&&(string)$d[$name]['i']==(string)$i&&(string)$d[$name]['p']==(string)$p) return;
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$d['time']??=time();
+			$d[$name]['s']=$s;
+			$d[$name]['m']=$m;
+			$d[$name]['i']=$i;
+			$d[$name]['p']=$p;
+			$d[$name]['t']=$d['time'];
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t, p = :p WHERE n = :n");
+			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':p'=>$p,':n'=>$name]);
+			$affected=$stmt->rowCount();
+			break;
+		} catch (PDOException $e) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
+				lg('♻ DB gone away → reconnect & retry', 5);
+				Database::reset();
+				if($attempt>0) sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}	
+	if($affected>0) {
+		lg('💾 STORESMIP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		if(isset($d[$name]['f'])) {
+			$x=$d[$name];
+			unset($x['f']);
+			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
+			else unset($x['rt']);
+			publishmqtt('d/'.$name,json_encode($x),$msg);
+		}
+	}
+	return $affected ?? 0;
+}
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user;
-	if (is_numeric($s)) {
-        $s = $s + 0;
-    }
-    if (is_numeric($p)) {
-        $p = $p + 0;
-    }
     if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['p']==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -545,9 +556,6 @@ function storesp($name,$s,$p,$msg='') {
 }
 function storep($name,$p,$msg='') {
 	global $d,$user;
-	if (is_numeric($p)) {
-        $p = $p + 0;
-    }
     if((string)$d[$name]['p']==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -584,9 +592,6 @@ function storep($name,$p,$msg='') {
 }
 function storeicon($name,$i,$msg='') {
 	global $d,$user;
-	if (is_numeric($i)) {
-        $i = $i + 0;
-    }
     if($d[$name]['i']==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
