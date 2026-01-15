@@ -24,12 +24,16 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 		if ($d['badkamer_set']['s']!=13) {$set=13;$m2.=__LINE__.' ';}
 	}
 	$set       = 13;
-	$target    = 21;
+	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']['s'];
-	$buitenTempStart = (floor($d['buiten_temp']['s'] / 2)) * 2;
+	$buitenTempStart = round($d['buiten_temp']['s'] / 0.5) * 0.5;
 	$mode      = $d['heating']['s'];
 	$prevSet   = $d['badkamer_start_temp']['m'] ?? 0;
-	if(!isset($leadDataBath)) $leadDataBath=json_decode(@file_get_contents('/var/www/html/secure/leadDataBath.json'),true)??[];
+	if(!isset($leadDataBath)) {
+		$content = @file_get_contents('/var/www/html/secure/leadDataBath.json');
+		$leadDataBath = $content ? json_decode($content, true) ?? [] : [];
+		lg('leadDataLiving read from file');
+	}
 	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=@filemtime('/var/www/html/secure/leadDataBath.json')??0;
 	if (!empty($leadDataBath[$mode])) {
 		$temps = array_keys($leadDataBath[$mode]);
@@ -67,9 +71,10 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
+	$avgMinPerDeg ??= 10;
 	$tempDelta   = max(0, $target - $badkamer);
-	$leadMinutes = round($avgMinPerDeg * $tempDelta);
-	$t_start     = $t - ($leadMinutes * 60);
+	$leadMinutes = $avgMinPerDeg * $tempDelta;
+	$t_start     = round($t - ($leadMinutes * 60));
 	$t_end       = $t + 1800;
 	if ($prevSet == 1) {
 		$set = $target;

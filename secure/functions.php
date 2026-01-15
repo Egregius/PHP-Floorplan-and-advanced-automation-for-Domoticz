@@ -869,9 +869,11 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	if(!http_get($url)) return false;
-	if ($d['heating']['s']>=0) lg("🔥 daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow");
-	else  lg("❄️ daikinset [$device] power=$power | mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow");
+	if ($d['heating']['s']>=0) $msg="🔥 ";
+	else  $msg="❄️ ";
+	$msg.="daikinset [$device]	power=$power	| mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow";
 	if($prevspmode!==$spmode) {
+		$msg.=' + spmode';
 		usleep(100000);
 		if ($spmode===-1) {
 			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
@@ -883,6 +885,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 		$prevspmode=$spmode;
 	}
 	if($prevmaxpow!==$maxpow) {
+		$msg.=' + maxpow';
 		usleep(100000);
 		foreach($ips as $k=>$ip) {
 			if ($maxpow===100) {
@@ -895,6 +898,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 		}
 		$prevmaxpow=$maxpow;
 	}
+	lg($msg);
 	return true;
 }
 function hasstoken() {
