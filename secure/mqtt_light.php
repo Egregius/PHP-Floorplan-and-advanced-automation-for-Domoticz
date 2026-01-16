@@ -54,7 +54,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				else $status=0;
 //				if($status>40&&$status<100)$status+=1;
 //				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 					store($device,$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}

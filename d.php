@@ -18,10 +18,10 @@ $id = $map[$ip] ?? $ip;
 $extra = false;
 $en=false;
 $d=[];
-if (isset($_GET['f'])) {
+if (isset($_GET->f)) {
 	$type='f';
-	if($_GET['f']>0) {
-		$t=$_GET['f'];
+	if($_GET->f>0) {
+		$t=$_GET->f;
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1 AND t >= $t";
 	} else {
 		$sql="SELECT n,s,t,m,d,i,rt,p FROM devices WHERE `$type`=1";
@@ -94,20 +94,20 @@ $stmt = $db->query($sql);
 $rows = $stmt->fetchAll(PDO::FETCH_NUM);
 foreach ($rows as [$n, $s, $t_val, $m, $device, $i, $rt, $p]) {
     $d[$n] = ['s' => $s];
-    $rt === 1 && $d[$n]['t'] = $t_val;
-    $m !== null && $d[$n]['m'] = $m;
+    $rt === 1 && $d[$n]->t = $t_val;
+    $m !== null && $d[$n]->m = $m;
     if ($device !== null) {
-        $d[$n]['d'] = $device;
-        $device === 'daikin' && $d[$n]['s'] = null;
+        $d[$n]->d = $device;
+        $device === 'daikin' && $d[$n]->s = null;
     }
     if ($i !== null) {
         if ($device === 'th' && $n !== 'badkamer_set') {
             $icon = json_decode($i, true);
         } else {
-            $d[$n]['i'] = $i;
+            $d[$n]->i = $i;
         }
     }
-    $p !== null && $d[$n]['p'] = $p;
+    $p !== null && $d[$n]->p = $p;
 }
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -115,7 +115,7 @@ header('Content-Type: application/json');
 header('Content-Length: '.strlen($data));
 echo $data;
 if($log===true) {
-	unset($d['t'],$d['n'],$d['a'],$d['b'],$d['c'],$d['z']);
+	unset($d->t,$d->n,$d['a'],$d['b'],$d['c'],$d['z']);
 	$aantal=count($d);
 	if($aantal>0) {
 		$msg.=' '.str_pad($id??'',10).' '.$type.' ('.$aantal.') ';

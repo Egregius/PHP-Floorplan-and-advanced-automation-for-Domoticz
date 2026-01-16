@@ -55,15 +55,15 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					if (isset($d[$device]['t'])) store($device,$status);
+					if (isset($d[$device]->t)) store($device,$status);
 				} elseif ($status === 'Keypressed2x') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					if (isset($d[$device]['t'])) store($device,$status);
+					if (isset($d[$device]->t)) store($device,$status);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if (isset($d[$device]['t'])) store($device,$status);
+				if (isset($d[$device]->t)) store($device,$status);
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {

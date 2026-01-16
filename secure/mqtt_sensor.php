@@ -40,13 +40,13 @@ $d=fetchdata();
 $d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	try {	
+	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if ($device === 'daikin_kwh') {
 			$val = (int)$status;
-			$old = (int)($d['daikin']['p'] ?? 0);
-			$oldt = (int)($d['daikin']['t'] ?? 0);
+			$old = (int)($d['daikin']->p ?? 0);
+			$oldt = (int)($d['daikin']->t ?? 0);
 			$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 			$time_passed = ($time - $oldt) >= 60;
 			if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) storep('daikin',$val);
@@ -58,7 +58,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			} else {
 				$status = round($status / 2) * 2;
 			}
-			if ((float)$d['dag']['s'] != $status) {
+			if ((float)$d['dag']->s != $status) {
 				store('dag', $status);
 				setCache('dag', $status);
 			}
@@ -66,7 +66,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status = (int)$status;
 			$status = round($status / 5) * 5;
-			if ((int)$d['dag']['m'] != $status) {
+			if ((int)$d['dag']->m != $status) {
 				storemode('dag', $status);
 				updateWekker($t, $weekend, $dow, $d);
 			}
@@ -74,25 +74,25 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$time=time();
 			$d['time']=$time;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d[$device]->s ?? null) === $status) return;
 			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
 				$tdevice = str_replace('_hum','_temp',$device);
 				$hum = (int)$status;
-				$hum = max($d[$tdevice]['m'] - 5, min($hum, $d[$tdevice]['m'] + 5));
-				if ($hum !== $d[$tdevice]['m'] && abs($hum - $d[$tdevice]['m']) >= 1) {
+				$hum = max($d[$tdevice]->m - 5, min($hum, $d[$tdevice]->m + 5));
+				if ($hum !== $d[$tdevice]->m && abs($hum - $d[$tdevice]->m) >= 1) {
 					storemode($tdevice, $hum);
 				}
 			} elseif (substr($device,-5) === '_temp') {
 				if (!is_numeric($status)) return;
 				$st = (float)$status;
-				$st = max($d[$device]['s'] - 0.5, min($st, $d[$device]['s'] + 0.5));
-				if ($d[$device]['s'] != $st && abs($st - $d[$device]['s']) >= 0.1) {
+				$st = max($d[$device]->s - 0.5, min($st, $d[$device]->s + 0.5));
+				if ($d[$device]->s != $st && abs($st - $d[$device]->s) >= 0.1) {
 					store($device, $st);
 				}
 			} else {
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
 				}

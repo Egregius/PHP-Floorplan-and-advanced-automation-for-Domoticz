@@ -54,7 +54,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				elseif($status==99) $status=100;
 				if ($device=='rbureel') $status=100-$status;
 				$d=fetchdata();
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 //					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,$status);
 				}

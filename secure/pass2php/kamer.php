@@ -1,7 +1,7 @@
 <?php
 if ($status==0) {
 	if ($d['time']<strtotime('20:00')) {
-		if ($d['bose103']['s']=='On') {
+		if ($d['bose103']->s=='On') {
 			$status=json_decode(
 				json_encode(
 					simplexml_load_string(

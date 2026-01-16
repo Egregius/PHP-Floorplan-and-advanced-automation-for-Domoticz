@@ -1,7 +1,7 @@
 <?php
 $n='badkamer';
-if ($status>$d[$n.'_temp']['s']+2) $status=$d[$n.'_temp']['s']+2;
-elseif ($status<$d[$n.'_temp']['s']-2) $status=$d[$n.'_temp']['s']-2;
+if ($status>$d[$n.'_temp']->s+2) $status=$d[$n.'_temp']->s+2;
+elseif ($status<$d[$n.'_temp']->s-2) $status=$d[$n.'_temp']->s-2;
 /*$db = Database::getInstance();
 $result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,15) as A");
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

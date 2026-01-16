@@ -45,26 +45,26 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			elseif($dow==2||$dow==5) $t=strtotime('6:45');
 			else $t=strtotime('7:00');
 			if (TIME<$t+900||TIME>strtotime('12:00')||$user=='Guy') {
-				if ($d['badkamervuur1']['s']=='Off'&&$d['badkamer_temp']['s']<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['badkamervuur1']->s=='Off'&&$d['badkamer_temp']->s<$_REQUEST['action']) sw('badkamervuur1', 'On', basename(__FILE__).':'.__LINE__);
 				setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
-				if ($d['heating']['s']==-2) {//airco cooling
-					if ($d['daikin']['s']=='Off'&&$_REQUEST['action']!='D'&&$d['living_temp']['s']>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				} elseif ($d['heating']['s']==-1) {//passive cooling
-				} elseif ($d['heating']['s']==0) {// Neutral
-				} elseif ($d['heating']['s']==1) {//heating airco
-					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				} elseif ($d['heating']['s']==2) {//heating gas airco
-//					if ($d['daikin']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				} elseif ($d['heating']['s']==3) {//heating gas
-					if ($d['brander']['s']=='Off'&&$d['living_temp']['s']<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['heating']->s==-2) {//airco cooling
+					if ($d['daikin']->s=='Off'&&$_REQUEST['action']!='D'&&$d['living_temp']->s>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']->s==-1) {//passive cooling
+				} elseif ($d['heating']->s==0) {// Neutral
+				} elseif ($d['heating']->s==1) {//heating airco
+					if ($d['daikin']->s=='Off'&&$d['living_temp']->s<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']->s==2) {//heating gas airco
+//					if ($d['daikin']->s=='Off'&&$d['living_temp']->s<$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				} elseif ($d['heating']->s==3) {//heating gas
+					if ($d['brander']->s=='Off'&&$d['living_temp']->s<$_REQUEST['action']) sw('brander', 'On', basename(__FILE__).':'.__LINE__);
 				}
-				if ($d['daikin']['s']=='Off'&&$_REQUEST['action']=='D') sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
-				if ($d['living_start_temp']['m']!=0) storemode('living_start_temp',0);
+				if ($d['daikin']->s=='Off'&&$_REQUEST['action']=='D') sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['living_start_temp']->m!=0) storemode('living_start_temp',0);
 			}
 			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
@@ -92,21 +92,21 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='Beneden') {
 			foreach(array('rliving', 'rbureel', 'rkeukenl', 'rkeukenr') as $i) {
-				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='rkeukenl') {
 			foreach(array('rkeukenl', 'rkeukenr') as $i) {
-				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Boven') {
 			foreach(array('rkamerl', 'rkamerr', 'rwaskamer', 'ralex') as $i) {
-				if ($d[$i]['s']!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='tv') {
-			if ($d['rliving']['s']<30) sl('rliving', 30, basename(__FILE__).':'.__LINE__);
-			if ($d['rbureel']['s']<70) sl('rbureel', 69, basename(__FILE__).':'.__LINE__);
-			if ($d['rkeukenl']['s']<55) sl('rkeukenl', 55, basename(__FILE__).':'.__LINE__);
-			if ($d['rkeukenr']['s']<55) sl('rkeukenr', 55, basename(__FILE__).':'.__LINE__);
+			if ($d['rliving']->s<30) sl('rliving', 30, basename(__FILE__).':'.__LINE__);
+			if ($d['rbureel']->s<70) sl('rbureel', 69, basename(__FILE__).':'.__LINE__);
+			if ($d['rkeukenl']->s<55) sl('rkeukenl', 55, basename(__FILE__).':'.__LINE__);
+			if ($d['rkeukenr']->s<55) sl('rkeukenr', 55, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['device']=='rkamerl') {
 			sl('rkamerl', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 			sl('rkamerr', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
@@ -167,7 +167,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
 		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-			$bose=$row['s'];
+			$bose=$row->s;
 		}
 		if ($bose=='On') $_REQUEST['boseip']=101;
 		if ($_REQUEST['action']=='prev') {
@@ -183,16 +183,16 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			bosekey("POWER", 0, $_REQUEST['boseip']);
 			sw('bose'.$_REQUEST['boseip'], 'Off');
 			if ($_REQUEST['boseip']==101) {
-				if ($d['bose102']['s']=='On') {
+				if ($d['bose102']->s=='On') {
 					sw('bose102', 'Off');
 				}
-				if ($d['bose103']['s']=='On') {
+				if ($d['bose103']->s=='On') {
 					sw('bose103', 'Off');
 				}
-				if ($d['bose104']['s']=='On') {
+				if ($d['bose104']->s=='On') {
 					sw('bose104', 'Off');
 				}
-				if ($d['bose105']['s']=='On') {
+				if ($d['bose105']->s=='On') {
 					sw('bose105', 'Off');
 				}
 			}
@@ -201,7 +201,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		storeicon('bose'.$_REQUEST['boseip'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	}
 }
-if (!isset($_REQUEST['t'])&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
+if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!isset($_REQUEST['media'])&&!isset($_REQUEST['daikin'])) {
 	$msg='';
 	foreach($_REQUEST as $k=>$v) {
 		$msg.='	'.$k.'	'.$v;

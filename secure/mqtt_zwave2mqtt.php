@@ -52,18 +52,18 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 //			$lastEvent = $d['time'];
 //			$d=fetchdata();
 			$status=json_decode($status);
-			if (isset($d[$device]['d'])) {
-				if ($d[$device]['d']=='p') {
+			if (isset($d[$device]->d)) {
+				if ($d[$device]->d=='p') {
 					if($path[2]=='sensor_binary') {
 						if($status==1) $status='On';
 						else $status='Off';
-						if ($d[$device]['s']!=$status) {
+						if ($d[$device]->s!=$status) {
 //							lg('🌊 PIR '.$device.' '.$status);
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
 					} else return;
-				} elseif ($d[$device]['d']=='c') {
+				} elseif ($d[$device]->d=='c') {
 					if (isset($path[2])&&$path[2]=='sensor_binary') {
 						if ($status==1) {
 							if($device=='achterdeur') $status='Closed';
@@ -72,26 +72,26 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 							if($device=='achterdeur') $status='Open';
 							else $status='Closed';
 						}
-						if ($d[$device]['s']!=$status&&!in_array($device,['inputliving'])) {
-//							lg('🌊 Z2M ['.$d[$device]['d'].']	'.$device.'	'.$status);
+						if ($d[$device]->s!=$status&&!in_array($device,['inputliving'])) {
+//							lg('🌊 Z2M ['.$d[$device]->d.']	'.$device.'	'.$status);
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
 					}
-				} elseif ($d[$device]['d']=='s') {
+				} elseif ($d[$device]->d=='s') {
 					if($path[2]=='switch_binary'&&$path[4]=='currentValue') {
 						if ($status==1) $status='On';
 						else $status='Off';
-						if ($d[$device]['s']!=$status) {
+						if ($d[$device]->s!=$status) {
 //								lg('🌊 Z2M [HSW]	'.$device.'	'.$status);
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
-					} elseif(isset($d[$device]['p'])&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
+					} elseif(isset($d[$device]->p)&&$path[2]=='sensor_multilevel'&&$path[4]=='Power') {
 						$val = (int)$status;
 						
-						$old = (int)($d[$device]['p'] ?? 0);
-						$oldt = (int)($d[$device]['t'] ?? 0);
+						$old = (int)($d[$device]->p ?? 0);
+						$oldt = (int)($d[$device]->t ?? 0);
 						if ($oldt === 0) {
 							store($device, $val, '', 1);
 							return;
@@ -120,19 +120,19 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 //							lg($device.' '.__LINE__.' '.$status);
 //							lg('🌊 Z2M Power '.$device.'	'.$status);
 							storep($device,$val);
-							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']['s']=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
+							if ($device=='dysonlader'&&$val<10&&$d['dysonlader']->s=='On'&&past('dysonlader')>600) sw('dysonlader','Off',basename(__FILE__).':'.__LINE__);
 						}// else lg('🌊 Z2M Power ignore '.$device.'	'.$status);
-					} //else lg('🌊 Z2M METER ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.$status);
-				} elseif ($d[$device]['d']=='d') {
+					} //else lg('🌊 Z2M METER ['.$d[$device]->d.']	'.$device.'	'.print_r($path,true).'	'.$status);
+				} elseif ($d[$device]->d=='d') {
 					if($path[2]=='switch_multilevel') {
 						if($status>40&&$status<100)$status+=1;
-						if($d[$device]['s']!=$status) {
+						if($d[$device]->s!=$status) {
 							store($device, $status);
 							include '/var/www/html/secure/pass2php/'.$device.'.php';
 						}
 					}
 				} else {
-//					lg('🌊 Z2M ['.$d[$device]['d'].']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
+//					lg('🌊 Z2M ['.$d[$device]->d.']	'.$device.'	'.print_r($path,true).'	'.print_r($status,true));
 				}
 			} else { // Devices die niet in tabel bestaan
 				if(str_starts_with($device, '8')) {
@@ -146,7 +146,7 @@ $mqtt->subscribe('zwave2mqtt/#',function (string $topic,string $status) use ($st
 						$status='On';
 //						lg('📲 '.$file);
 						include '/var/www/html/secure/pass2php/'.$file.'.php';
-//						if (isset($d[$file]['t'])) store($file,null,'',1);
+//						if (isset($d[$file]->t)) store($file,null,'',1);
 					}
 				} elseif ($device=='inputliving') {
 					if(isset($path[2])&&$path[2]=='sensor_binary') {

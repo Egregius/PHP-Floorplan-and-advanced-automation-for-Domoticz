@@ -110,7 +110,7 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 <?php
 	$db = Database::getInstance();
 	$stmt=$db->query("select m from devices WHERE n='auto';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row['m'];
+	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row->m;
 	$levels=array(
 		0=>'Default / Undefined',
 		1=>'Loop starts',

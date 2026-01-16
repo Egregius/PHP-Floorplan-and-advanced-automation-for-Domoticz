@@ -28,17 +28,17 @@ $connectionSettings=(new ConnectionSettings)
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
 foreach (['badkamervuur2','badkamervuur1','water'] as $i) sw($i,'Off');
-if ($d['weg']['s']>0) {
+if ($d['weg']->s>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
 	$x=$v;
-	if (isset($x['f'])) {
-		unset($x['f']);
-		if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-		else unset($x['rt']);
+	if (isset($x->f)) {
+		unset($x->f);
+		if(!isset($x->rt)) unset($x->t,$x->rt);
+		else unset($x->rt);
 		publishmqtt('d/'.$k,json_encode($x));
 	}
 }
@@ -58,10 +58,10 @@ while (true) {
 	}
 	if ($time % 20 === 0 && $time !== $last20) {
 		$user = 'HEATING';
-		if ($d['heating']['s'] == -2) include '_TC_cooling_airco.php';
-		elseif ($d['heating']['s'] == -1) include '_TC_cooling_passive.php';
-		elseif ($d['heating']['s'] == 0) include '_TC_neutral.php';
-		elseif ($d['heating']['s'] > 0)  include '_TC_heating.php';
+		if ($d['heating']->s == -2) include '_TC_cooling_airco.php';
+		elseif ($d['heating']->s == -1) include '_TC_cooling_passive.php';
+		elseif ($d['heating']->s == 0) include '_TC_neutral.php';
+		elseif ($d['heating']->s > 0)  include '_TC_heating.php';
 		$mqtt->publish('p', 'p');
 	}
 	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}

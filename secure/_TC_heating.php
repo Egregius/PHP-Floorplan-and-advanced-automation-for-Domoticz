@@ -4,68 +4,68 @@ $prevt_start??=0;
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
-if ($d['weg']['s']<=2&&$d['heating']['s']>=1) {
-	if ($d['kamer_set']['m']==0) {
+if ($d['weg']->s<=2&&$d['heating']->s>=1) {
+	if ($d['kamer_set']->m==0) {
 		if (
-				($d['raamkamer']['s']=='Closed'||$d['rkamerr']['s']==100)
+				($d['raamkamer']->s=='Closed'||$d['rkamerr']->s==100)
 			&&
 				(past('raamkamer')>2700||$time>strtotime('19:00'))
 			&&
 				(
-					($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900))
+					($d['deurkamer']->s=='Closed'||($d['deurkamer']->s=='Open'&&past('deurkamer')<900))
 				||
 					(
-						($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900)||$d['raamalex']['s']=='Closed'||$d['ralex']['s']==100)
+						($d['deuralex']->s=='Closed'||($d['deuralex']->s=='Open'&&past('deuralex')<900)||$d['raamalex']->s=='Closed'||$d['ralex']->s==100)
 					&&
-						($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']['s']=='Closed'||$d['rwaskamer']['s']==100)
-					&&	$d['raamhall']['s']=='Closed'
+						($d['deurwaskamer']->s=='Closed'||($d['deurwaskamer']->s=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
+					&&	$d['raamhall']->s=='Closed'
 					)
 				)
 		) {
 			$Setkamer=6;
 		}
-	} else $Setkamer=$d['kamer_set']['s'];
-	if ($d['alex_set']['m']==0) {
+	} else $Setkamer=$d['kamer_set']->s;
+	if ($d['alex_set']->m==0) {
 		if (
-				($d['raamalex']['s']=='Closed'||$d['ralex']['s']==100)
+				($d['raamalex']->s=='Closed'||$d['ralex']->s==100)
 			&&
 				(past('raamalex')>2700|| $time>strtotime('19:00'))
 			&&
 				(
-					($d['deuralex']['s']=='Closed'||($d['deuralex']['s']=='Open'&&past('deuralex')<900))
+					($d['deuralex']->s=='Closed'||($d['deuralex']->s=='Open'&&past('deuralex')<900))
 				||
 					(
-						($d['deurkamer']['s']=='Closed'||($d['deurkamer']['s']=='Open'&&past('deurkamer')<900)||$d['raamkamer']['s']=='Closed'||$d['rkamerr']['s']==100)
+						($d['deurkamer']->s=='Closed'||($d['deurkamer']->s=='Open'&&past('deurkamer')<900)||$d['raamkamer']->s=='Closed'||$d['rkamerr']->s==100)
 					&&
-						($d['deurwaskamer']['s']=='Closed'||($d['deurwaskamer']['s']=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']['s']=='Closed'||$d['rwaskamer']['s']==100)
-					&& $d['raamhall']['s']=='Closed'
+						($d['deurwaskamer']->s=='Closed'||($d['deurwaskamer']->s=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
+					&& $d['raamhall']->s=='Closed'
 					)
 				)
 		) {
 			$Setalex=6;
 		}
-	} else $Setalex=$d['alex_set']['s'];
+	} else $Setalex=$d['alex_set']->s;
 }
-if ($d['kamer_set']['m']==1) $Setkamer=$d['kamer_set']['s'];
-if ($d['alex_set']['m']==1) $Setalex=$d['alex_set']['s'];
+if ($d['kamer_set']->m==1) $Setkamer=$d['kamer_set']->s;
+if ($d['alex_set']->m==1) $Setalex=$d['alex_set']->s;
 
-if ($d['kamer_set']['s']!=$Setkamer) {
+if ($d['kamer_set']->s!=$Setkamer) {
 	setpoint('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
-	$d['kamer_set']['s']=$Setkamer;
+	$d['kamer_set']->s=$Setkamer;
 }
-if ($d['alex_set']['s']!=$Setalex) {
+if ($d['alex_set']->s!=$Setalex) {
 	setpoint('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
 	$alex_set=$Setalex;
-	$d['alex_set']['s']=$Setalex;
+	$d['alex_set']->s=$Setalex;
 }
 $Setliving = 14;
-$prevSet   = $d['living_start_temp']['m'] ?? 0;
-if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1) {
-	$living    = $d['living_temp']['s'];
-	$mode      = $d['heating']['s'];
-	$weg       = $d['weg']['s'];
-	if ($d['living_set']['m'] == 2) $weg = 0;
-	$buitenTempStart = round($d['buiten_temp']['s'] / 0.5) * 0.5;
+$prevSet   = $d['living_start_temp']->m ?? 0;
+if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
+	$living    = $d['living_temp']->s;
+	$mode      = $d['heating']->s;
+	$weg       = $d['weg']->s;
+	if ($d['living_set']->m == 2) $weg = 0;
+	$buitenTempStart = round($d['buiten_temp']->s / 0.5) * 0.5;
 	if(!isset($leadDataLiving)) {
 		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
 		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
@@ -127,7 +127,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		$comfortAfternoon = strtotime($comfortStart[0]);
 		$comfortEnd = strtotime('19:30');
 	} else {
-	 	if ($d['verlof']['s']>0) $comfortAfternoon = strtotime($comfortStart[0]);
+	 	if ($d['verlof']->s>0) $comfortAfternoon = strtotime($comfortStart[0]);
 		else {
 			$comfortAfternoon = strtotime($comfortStart[$dow]);
 //			$comfortAfternoon = strtotime('7:45');
@@ -147,7 +147,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$prevSet=0;
 		}
-		if ($d['living_set']['m']==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
+		if ($d['living_set']->m==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$Setliving = max($Setliving, $target);
@@ -198,12 +198,12 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 	}
 	if ($prevSet >= 1 && $living >= $target-0.2) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
-		$startTemp = $d['living_start_temp']['s'];
+		$startTemp = $d['living_start_temp']->s;
 		$tempRise    = $living - $startTemp;
 		if ($tempRise > 1 && $prevSet == 1) {
 //			lg(basename(__FILE__) . ':' . __LINE__);
-			$buitenTempStart = $d['living_start_temp']['i'];
-			$startupDelay = $d['living_start_temp']['p'] ?? 0;
+			$buitenTempStart = $d['living_start_temp']->i;
+			$startupDelay = $d['living_start_temp']->p ?? 0;
 			$minutesUsed = (past('living_start_temp') - $startupDelay) / 60;
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
@@ -227,20 +227,20 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 		$prevSet=2;
 	}
 }
-if ($d['living_set']['m']==1) $Setliving=$d['living_set']['s'];
-if ($d['living_set']['s']!=$Setliving) {
+if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
+if ($d['living_set']->s!=$Setliving) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
-	$d['living_set']['s']=$Setliving;
+	$d['living_set']->s=$Setliving;
 }
 
 require('_Rolluiken_Heating.php');
 $bigdif=100;
 $difgas=100;
 $user = 'heating';
-if ($d['heating']['s']==1) require ('_TC_heating_airco.php');
-elseif ($d['heating']['s']==2) require ('_TC_heating_gasairco.php');
-elseif ($d['heating']['s']==3) require ('_TC_heating_gas.php');
+if ($d['heating']->s==1) require ('_TC_heating_airco.php');
+elseif ($d['heating']->s==2) require ('_TC_heating_gasairco.php');
+elseif ($d['heating']->s==3) require ('_TC_heating_gas.php');
 require('_TC_badkamer.php');
 
-if ($d['heating']['s']<=1&&$d['brander']['s']=='On'&&past('brander')>1195) sw('brander', 'Off');
+if ($d['heating']->s<=1&&$d['brander']->s=='On'&&past('brander')>1195) sw('brander', 'Off');

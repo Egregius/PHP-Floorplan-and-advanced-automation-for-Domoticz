@@ -54,18 +54,18 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($status=='Off') $status='Open';
 				elseif ($status=='On') $status='Closed';
 				else unset($status);
-			} elseif (isset($d[$device]['d']) && $d[$device]['d'] === 'c') {
+			} elseif (isset($d[$device]->d) && $d[$device]->d === 'c') {
 				if ($status=='On') $status='Open';
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);
 			} elseif ($device=='pirgarage') {
-				if ($status=='Off'&&$d['pirgarage2']['s']=='On') $status='On';
+				if ($status=='Off'&&$d['pirgarage2']->s=='On') $status='On';
 			} elseif ($device=='pirgarage2') {
-				if($d[$device]['s']!=$status) store($device, $status);
-				if ($status=='Off'&&$d['pirgarage']['s']=='On') $status='On';
+				if($d[$device]->s!=$status) store($device, $status);
+				if ($status=='Off'&&$d['pirgarage']->s=='On') $status='On';
 				$device='pirgarage';
 			}
-			if (isset($status)&&$d[$device]['s']!=$status) {
+			if (isset($status)&&$d[$device]->s!=$status) {
 //				lg('ⓗ		'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($device, 13, ' ', STR_PAD_RIGHT).' '.$status);
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, (string)$status);
@@ -95,7 +95,7 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 				elseif($status==99) $status=100;
 				if ($device=='rbureel') $status=100-$status;
 				$d=fetchdata();
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 //					lg('📜 mqtt '.__LINE__.' |cover |pos |'.$device.'|'.$status);
 					store($device,(string)$status);
 				}
@@ -128,15 +128,15 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				if ($status === 'Keypressed') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					if (isset($d[$device]['t'])) store($device,(string)$status);
+					if (isset($d[$device]->t)) store($device,(string)$status);
 				} elseif ($status === 'Keypressed2x') {
 					$status='On';
 					include '/var/www/html/secure/pass2php/'.$device.'d.php';
-					if (isset($d[$device]['t'])) store($device,(string)$status);
+					if (isset($d[$device]->t)) store($device,(string)$status);
 				}
 			} else {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
-				if (isset($d[$device]['t'])) store($device,(string)$status);
+				if (isset($d[$device]->t)) store($device,(string)$status);
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
@@ -158,11 +158,11 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d[$device]->s ?? null) === $status) return;
 			$d=fetchdata();
 			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 //					lg('💡 mqtt '.__LINE__.' |switch |state |'.$device.'|'.$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,(string)$status);
@@ -188,7 +188,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			$d['time']=$time;
 			if (($time - $startloop) <= 2 && in_array($device,['inputliving1'])) return;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-//			if (($d[$device]['s'] ?? null) === $status) return;
+//			if (($d[$device]->s ?? null) === $status) return;
 			if (isset($status)) {
 				$d=fetchdata();
 				if ($status === 'null') $status=0;
@@ -196,7 +196,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 				else $status=0;
 //				if($status>40&&$status<100)$status+=1;
 //				lg('💡 mqtt '.__LINE__.' |bright |state |'.$device.'|'.$status);
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 					store($device,$status);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
@@ -222,7 +222,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower($status));
-			if ($d[$device]['s']!=$status) {
+			if ($d[$device]->s!=$status) {
 	//			lg('mqtt '.__LINE__.' |media |state |'.$device.'|'.$status.'|');
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status);
@@ -248,7 +248,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
-			if ($d[$device]['m']!=$status) {
+			if ($d[$device]->m!=$status) {
 				storemode($device,$status);
 			}
 		}
@@ -266,21 +266,21 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$d['time']=$time;
 			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
-			if (($d[$device]['s'] ?? null) === $status) return;
+			if (($d[$device]->s ?? null) === $status) return;
 //			$d=fetchdata();
 			if (substr($device,-4) === '_hum') {
 				if (!is_numeric($status)) return;
 				$tdevice=str_replace('_hum','_temp',$device);
 				$hum=(int)$status;
-				if ($hum !== $d[$tdevice]['m']&&abs($hum-$d[$tdevice]['m'])>1) storemode($tdevice,$hum); 
+				if ($hum !== $d[$tdevice]->m&&abs($hum-$d[$tdevice]->m)>1) storemode($tdevice,$hum); 
 			} elseif (substr($device,-5) === '_temp') {
 				if (!is_numeric($status)) return;
 				$st=(float)$status;
-				if ($d[$device]['s']!=$st) store($device,$st);
+				if ($d[$device]->s!=$st) store($device,$st);
 			} elseif ($device=='daikin_kwh') {
 				$val = (int)$status;
-				$old = (int)($d[$device]['s'] ?? 0);
-				$oldt = (int)($d[$device]['t'] ?? 0);
+				$old = (int)($d[$device]->s ?? 0);
+				$oldt = (int)($d[$device]->t ?? 0);
 				if ($oldt === 0) {
 					store($device, $val);
 					return;
@@ -289,7 +289,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$time_passed = ($time - $oldt) >= 30;
 				if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) store($device,$val);
 			} else {
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
 				}
@@ -299,12 +299,12 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			if ($status>=10) $status=round($status,0);
 			elseif ($status<=-10) $status=round($status,0);
 			else $status=round($status,1);
-			if ((string)$d['dag']['s']!=(string)$status) store('dag',(string)$status);
+			if ((string)$d['dag']->s!=(string)$status) store('dag',(string)$status);
 			stoploop($d);
 			updateWekker($t, $weekend, $dow, $d);
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status=(int)$status;
-			if ((string)$d['dag']['m']!=(string)$status) {
+			if ((string)$d['dag']->m!=(string)$status) {
 				storemode('dag',(string)$status);
 				setCache('dag',$status);
 			}

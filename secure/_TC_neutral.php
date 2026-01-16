@@ -1,8 +1,8 @@
 <?php
 
-if ($d['brander']['s']!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['brander']->s!='Off') sw('brander', 'Off', basename(__FILE__).':'.__LINE__);
 
-if ($d['daikin']['s']=='On'&&$d['daikin']['m']==1) {
+if ($d['daikin']->s=='On'&&$d['daikin']->m==1) {
 	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 	$daikin ??= new stdClass();
 	foreach (array('living', 'kamer', 'alex') as $k) {

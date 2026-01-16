@@ -51,7 +51,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			$d=fetchdata();
 			if (!is_null($status)&&strlen($status)>0&&$status!='Uknown'/*&&($status=='on'||$status=='off')*/) {
 				$status=ucfirst($status);
-				if ($d[$device]['s']!=$status) {
+				if ($d[$device]->s!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 					store($device,$status);
 				}

@@ -48,7 +48,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower($status));
-			if ($d[$device]['s']!=$status) {
+			if ($d[$device]->s!=$status) {
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				store($device,$status);
 			}
@@ -72,7 +72,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			$d['time']=$time;
 			$d=fetchdata();
 			$status = ucfirst(strtolower(trim($status, '"')));
-			if ($d[$device]['m']!=$status) {
+			if ($d[$device]->m!=$status) {
 				storemode($device,$status);
 			}
 		}

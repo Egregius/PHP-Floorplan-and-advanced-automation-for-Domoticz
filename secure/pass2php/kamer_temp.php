@@ -9,4 +9,4 @@ $diff=round($status-$avg,2);
 if ($d[$n.'_temp']['icon']!=$diff) {
 	storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 }*/
-$d[$n.'_temp']['s']=$status;
+$d[$n.'_temp']->s=$status;

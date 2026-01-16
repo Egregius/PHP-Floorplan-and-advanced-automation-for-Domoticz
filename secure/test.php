@@ -10,14 +10,73 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-$data=curl('https://gadgets.buienradar.nl/data/raintext/?lat=51&lon=3');
-$data=explode("\n",$data);
-print_r($data);
-echo '<hr>';
-foreach($data as $k=>$i) {
-	$i=substr($i,0,3);
-	echo $k.'='.(int)$i.'='. 10 ** (((int)$i - 109) / 32).'<br>';
+function randomValue() {
+    return rand(0, 1000);
 }
+$keys=[];
+$l='aaaa';
+for($x=0;$x<1000;$x++) {
+	$keys[]=$l;
+	$l++;
+}
+
+// ----------------------------
+// 1️⃣ Array-model
+// ----------------------------
+$arrayData = [];
+foreach ($keys as $k) {
+    $arrayData[$k] = [
+        'n'  => 'dev_'.$k,
+        's'  => randomValue(),
+        't'  => randomValue(),
+        'd'  => randomValue(),
+        'm'  => 'meta'.$k,
+        'i'  => randomValue(),
+        'p'  => randomValue(),
+        'rt' => randomValue(),
+        'f'  => randomValue(),
+    ];
+}
+
+// Benchmark array reads
+$start = microtime(true);
+for ($i=0; $i<10000; $i++) {
+    foreach ($keys as $k) {
+        $val = $arrayData[$k]['s']; // voorbeeld toegang
+        $val2 = $arrayData[$k]['t'];
+    }
+}
+$end = microtime(true);
+echo "Array model: ".(($end-$start)*1000)." ms\n";
+
+// ----------------------------
+// 2️⃣ Object-model
+// ----------------------------
+$objectData = [];
+foreach ($keys as $k) {
+    $dev = new Device();
+    $dev->n  = 'dev_'.$k;
+    $dev->s  = randomValue();
+    $dev->t  = randomValue();
+    $dev->d  = randomValue();
+    $dev->m  = 'meta'.$k;
+    $dev->i  = randomValue();
+    $dev->p  = randomValue();
+    $dev->rt = randomValue();
+    $dev->f  = randomValue();
+    $objectData[$k] = $dev;
+}
+
+// Benchmark object reads
+$start = microtime(true);
+for ($i=0; $i<10000; $i++) {
+    foreach ($keys as $k) {
+        $val = $objectData[$k]->s; // voorbeeld toegang
+        $val2 = $objectData[$k]->t;
+    }
+}
+$end = microtime(true);
+echo "Object model: ".(($end-$start)*1000)." ms\n";
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

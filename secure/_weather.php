@@ -8,8 +8,8 @@ $winds=[];
 $rains=[];
 $hums=[];
 $uvs=[];
-$temps['prev']=$d['buiten_temp']['s'];
-$hums['prev']=$d['buiten_temp']['m'];
+$temps['prev']=$d['buiten_temp']->s;
+$hums['prev']=$d['buiten_temp']->m;
 if(!isset($weather)) {
 	$weather=[
 		'b'=>0,
@@ -35,7 +35,7 @@ if (isset($ow['current'])) {
 	$temps['ow_f']=$ow['current']['feels_like'];
 	$hums['ow']=$ow['current']['humidity'];
 	$uvs['ow']=$ow['current']['uvi'];
-	if($uvs['ow']>$weather['uvm'])$weather['uvm']=$uvs['ow3'];
+	if($uvs['ow']>$weather['uvm'])$weather['uvm']=$uvs['ow'];
 	$winds['ow']=round($ow['current']['wind_speed'] * 3.6,1);
 	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=round($ow['current']['wind_gust'] * 3.6,1);
 	$weather['i']=$ow['current']['weather'][0]['icon'];
@@ -173,7 +173,7 @@ unset($data);
 //lg(__LINE__.print_r($hums,true));
 //lg($mintemp.' '.$maxtemp);
 
-if ($d['z']>100&&$d['dag']['s']>12) {
+if ((int)$d['z']>100&&$d['dag']->s>12) {
 	if (!isset($lastuv)||$lastuv<$time-1100) {
 		$lastuv=$time;
 		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
@@ -200,7 +200,7 @@ foreach ($temps as $i) {
 }
 $mintemp=round($mintemp,1);
 $maxtemp=round($maxtemp,1);
-$ref = round((float)$d['buiten_temp']['s'],1);
+$ref = round((float)$d['buiten_temp']->s,1);
 $temp = round($temp,1);
 $temp = round(max($ref - 0.1, min($temp, $ref + 0.1)),1);
 $weather['mint']=$mintemp;
@@ -208,15 +208,15 @@ $weather['maxt']=$maxtemp;
 
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 
-//lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']['m']);
-$ref = (int)$d['buiten_temp']['m'];
+//lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']->m);
+$ref = (int)$d['buiten_temp']->m;
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$ref);
 $hum = (int)max($ref - 1, min($hum, $ref + 1));
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
 
-if ($d['buiten_temp']['s']!=$temp&&$d['buiten_temp']['m']!=$hum) storesm('buiten_temp', $temp, $hum);
-elseif ($d['buiten_temp']['s']!=$temp) store('buiten_temp', $temp);
-elseif ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
+if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) storesm('buiten_temp', $temp, $hum);
+elseif ($d['buiten_temp']->s!=$temp) store('buiten_temp', $temp);
+elseif ($d['buiten_temp']->m!=$hum) storemode('buiten_temp', $hum);
 //storemode('buiten_temp',85);
 
 
@@ -240,7 +240,7 @@ if (count($rains) >= 2) {
     $avg = count($rainhist) > 0 ? $sum / count($rainhist) : 0;
     $past = ($sum > 0) ? max(500, round((1 / $avg) * 30000,0)) : 86400;
 //    lg('$rainhist = ' . $past . ' = ' . print_r($rainhist, true));
-    if ($d['regenpomp']['s'] === 'Off' && past('regenpomp') > $past) {
+    if ($d['regenpomp']->s === 'Off' && past('regenpomp') > $past) {
         sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
 
@@ -249,60 +249,62 @@ if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
 //lg(print_r($uvs,true));
-lg('T='.json_encode($temps).'='.$temp);
-lg('R='.json_encode($rains).'='.$rain);
-lg('W='.json_encode($winds).'='.$wind);
+if ($time % 300 === 0) {
+	lg('T='.json_encode($temps).'='.$temp);
+	lg('R='.json_encode($rains).'='.$rain);
+	lg('W='.json_encode($winds).'='.$wind);
+}
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));
 	$weathercache=$weather;
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
-if ($d['auto']['s']=='On') {
-	if ($d['heating']['s']==-2&&$d['living_temp']['s']>=19&&$d['dag']['m']>117&&$rain<5) { // Airco Cooling
+if ($d['auto']->s=='On') {
+	if ($d['heating']->s==-2&&$d['living_temp']->s>=19&&$d['dag']->m>117&&$rain<5) { // Airco Cooling
 		if ($wind>=40) 	 $luifel=0;
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
 		$luifel=0; // In comment zetten om luifel te activeren.
-		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
-			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		if ($d['luifel']->m==0) {
+			if ($d['luifel']->s<$luifel&&$d['zon']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==-1	&&$d['living_temp']['s']>=20 &&$d['dag']['m']>117&&$rain<5) { // Passive Cooling
+	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=20 &&$d['dag']->m>117&&$rain<5) { // Passive Cooling
 		if ($wind>=40) 	 $luifel=0;
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
 		$luifel=0; // In comment zetten om luifel te activeren.
-		if ($d['luifel']['m']==0) {
-			lg(basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']['s'].' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
-			if ($d['luifel']['s']<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
-			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+		if ($d['luifel']->m==0) {
+			lg(basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
+			if ($d['luifel']->s<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']['s']==0&&$d['living_temp']['s']>=21&&$d['dag']['m']>117&&$rain<5) { // Neutral
+	} elseif ($d['heating']->s==0&&$d['living_temp']->s>=21&&$d['dag']->m>117&&$rain<5) { // Neutral
 		if ($wind>=40) 	 $luifel=0;
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
 		else $luifel=55;
 		$luifel=0; // In comment zetten om luifel te activeren.
-//		lg ('luifel $d='.$d['luifel']['s'].' $luifel='.$luifel);
-		if ($d['luifel']['m']==0) {
-			if ($d['luifel']['s']<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__, true);
-			elseif ($d['luifel']['s']>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+//		lg ('luifel $d='.$d['luifel']->s.' $luifel='.$luifel);
+		if ($d['luifel']->m==0) {
+			if ($d['luifel']->s<$luifel&&$d['zon']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__, true);
+			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} else {
 		$luifel=0;
-//		lg('luifel='.$luifel.'|$d[luifel][s]='.$d['luifel']['s']);
-		if ($d['luifel']['s']>$luifel&&$d['luifel']['m']==0) {
+//		lg('luifel='.$luifel.'|$d[luifel][s]='.$d['luifel']->s);
+		if ($d['luifel']->s>$luifel&&$d['luifel']->m==0) {
 			sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	}
 
-	if (isset($rain)&&($rain>=15||$d['weg']['s']==1||$time>=strtotime("20:30"))&&$d['achterdeur']['s']=='Closed'&&$d['luifel']['s']>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
+	if (isset($rain)&&($rain>=15||$d['weg']->s==1||$time>=strtotime("20:30"))&&$d['achterdeur']->s=='Closed'&&$d['luifel']->s>0) sl('luifel', 0, basename(__FILE__).':'.__LINE__);
 
-	if ($d['luifel']['m']==1) {
-		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']['s']=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
+	if ($d['luifel']->m==1) {
+		if (past('luifel')>3600&&$luifel<30&&$d['achterdeur']->s=='Closed') storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
 		elseif (past('luifel')>43200) storemode('luifel', 0, basename(__FILE__).':'.__LINE__);
 	}
 }

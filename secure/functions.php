@@ -15,25 +15,25 @@ date_default_timezone_set('Europe/Brussels');
 
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
 	$d['time'] = $d['time'] ?? time();
-    $dow = ($d['dag']['m'] >= 250) ? date("w", $d['time'] + 43200) : date("w");
-    if ($d['verlof']['s']==2) $weekend=true;
+    $dow = ($d['dag']->m >= 250) ? date("w", $d['time'] + 43200) : date("w");
+    if ($d['verlof']->s==2) $weekend=true;
     else $weekend = ($dow == 0 || $dow == 6);
-    $t = ($weekend||$d['verlof']['s']==2) ? strtotime('7:45') : strtotime('7:00');
+    $t = ($weekend||$d['verlof']->s==2) ? strtotime('7:45') : strtotime('7:00');
 //		$t=strtotime('6:20');
 }
 function check_en_slapen($locatie, $status, &$d) {
 	$x = 0;
 	if ($locatie === 'voordeur') {
-		if ($d['deurvoordeur']['s'] !== 'Open' || $status !== 'On') return;
+		if ($d['deurvoordeur']->s !== 'Open' || $status !== 'On') return;
 	} elseif ($locatie === 'poort') {
 		if ($status !== 'On') return;
-		if ($d['poort']['s'] !== 'On') {
+		if ($d['poort']->s !== 'On') {
 			sw('poort', 'On', basename(__FILE__).':'.__LINE__);
 			return;
 		}
 	} elseif ($locatie === 'slaapkamer') {
 		if ($status !== 'On') return;
-		if ($d['weg']['s'] != 0) return;
+		if ($d['weg']->s != 0) return;
 		if (!($d['time'] > strtotime('21:00') || $d['time'] < strtotime('4:00'))) return;
 	}
 	$ramen_deuren = [
@@ -45,7 +45,7 @@ function check_en_slapen($locatie, $status, &$d) {
 		$ramen_deuren['deurvoordeur'] = 'Voordeur open';
 	}
 	foreach ($ramen_deuren as $k => $msg) {
-		if ($d[$k]['s'] != 'Closed') {
+		if ($d[$k]->s != 'Closed') {
 			waarschuwing($msg, 55);
 			$x++;
 		}
@@ -58,7 +58,7 @@ function check_en_slapen($locatie, $status, &$d) {
 		106 => 'Buiten20',
 	];
 	foreach ($boses as $k => $v) {
-		if ($d['bose'.$k]['m'] === 1) {
+		if ($d['bose'.$k]->m === 1) {
 			waarschuwing('Bose '.$v, 55);
 			$x++;
 		}
@@ -68,9 +68,9 @@ function check_en_slapen($locatie, $status, &$d) {
 		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
 	} elseif ($locatie === 'slaapkamer') {
-		if ($d['kamer']['s'] > 5) {
+		if ($d['kamer']->s > 5) {
 			sl('kamer', 5, basename(__FILE__).':'.__LINE__);
-		} elseif (($d['dag']['s']<-4||$d['rkamerr']['s']>90)&&past('kamer')>7200&&$d['time'] > strtotime('21:00')&&$d['time'] < strtotime('23:00')) {
+		} elseif (($d['dag']->s<-4||$d['rkamerr']->s>90)&&past('kamer')>7200&&$d['time'] > strtotime('21:00')&&$d['time'] < strtotime('23:00')) {
 			sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		}
 		huisslapen();
@@ -79,25 +79,25 @@ function check_en_slapen($locatie, $status, &$d) {
 
 function fliving() {
 	global $d,$t;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['media']['s']=='Off'&&$d['bureellinks']['s']==0&&$d['lampkast']['s']!='On'&&$d['eettafel']['s']==0&&$d['zithoek']['s']==0) {
-		if (($d['z']==0&&$d['dag']['s']<0)||($d['rkeukenl']['s']>80&&$d['rkeukenr']['s']>80&&$d['rbureel']['s']>80&&$d['rliving']['s']>80)) {
+	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['media']->s=='Off'&&$d['bureellinks']->s==0&&$d['lampkast']->s!='On'&&$d['eettafel']->s==0&&$d['zithoek']->s==0) {
+		if (($d['z']==0&&$d['dag']->s<0)||($d['rkeukenl']->s>80&&$d['rkeukenr']->s>80&&$d['rbureel']->s>80&&$d['rliving']->s>80)) {
 			$am=strtotime('10:00');
-			if ($d['wasbak']['s']<10&&$d['time']<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']['s']<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['eettafel']['s']<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['bureellinks']['s']<14) sl('bureellinks', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['bureelrechts']['s']<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['wasbak']->s<10&&$d['time']<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['bureellinks']->s<14) sl('bureellinks', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
 function fgarage() {
 	global $d;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['garage']['s']!='On'&&$d['garageled']['s']!='On') {
+	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['garage']->s!='On'&&$d['garageled']->s!='On') {
 		if ($d['z']<260) {
 			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['garageled']['m']!=1) {
+		if ($d['garageled']->m!=1) {
 			storemode('garageled',1);
 			setBatterijLedBrightness(40);
 		}
@@ -106,10 +106,10 @@ function fgarage() {
 function fkeuken() {
 	global $d;
 	if (1==2) {
-		if ($d['wasbak']['s']<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
-		if ($d['snijplank']['s']<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
+		if ($d['wasbak']->s<12) sl('wasbak', 12, basename(__FILE__).':'.__LINE__);
+		if ($d['snijplank']->s<12) sl('snijplank', 12, basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['wasbak']['s']<10&&$d['snijplank']['s']==0&&($d['dag']['s']<1||$d['rkeukenl']['s']>80)) {
+		if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['wasbak']->s<10&&$d['snijplank']->s==0&&($d['dag']->s<1||$d['rkeukenl']->s>80)) {
 			if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('20:00')) {
 				zwave('wasbak','multilevel',0,10);
 				sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
@@ -123,12 +123,12 @@ function fkeuken() {
 }
 function finkom($force=false) {
 	global $d;
-	if (($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-1.4)||$force==true) {
-		if ($d['inkom']['s']<30&&$d['dag']['s']<-1.4) {
+	if (($d['auto']->s=='On'&&$d['weg']->s==0&&$d['dag']->s<-1.4)||$force==true) {
+		if ($d['inkom']->s<30&&$d['dag']->s<-1.4) {
 			zwave('inkom','multilevel',0,30);
 			sl('inkom', 30, basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['hall']['s']<30&&$d['deuralex']['s']=='Open'&&$d['deurkamer']['s']=='Open'&&$d['time']>=strtotime('19:45')&&$d['time']<=strtotime('21:30')&&$d['alexslaapt']['s']==0) {
+		if ($d['hall']->s<30&&$d['deuralex']->s=='Open'&&$d['deurkamer']->s=='Open'&&$d['time']>=strtotime('19:45')&&$d['time']<=strtotime('21:30')&&$d['alexslaapt']->s==0) {
 			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
@@ -136,28 +136,28 @@ function finkom($force=false) {
 }
 function fhall() {
 	global $d,$t;
-	if ($d['auto']['s']=='On'&&$d['weg']['s']==0&&$d['dag']['s']<-2&&$d['alexslaapt']['s']==0) {
-		if ($d['hall']['s']<30&&$d['weg']['s']==0) {
+	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['dag']->s<-2&&$d['alexslaapt']->s==0) {
+		if ($d['hall']->s<30&&$d['weg']->s==0) {
 			zwave('hall','multilevel',0,30);
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']['s']==0&&$d['rkamerl']['s']>70&&$d['rkamerr']['s']>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']['s']==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+	if ($d['weg']->s==0&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
 	if ($level==0) {
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
-		if ($power===true&&$d['badkamerpower']['s']=='Off') {
+		if ($power===true&&$d['badkamerpower']->s=='Off') {
 			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 			usleep(500000);
 		}
 		sl('lichtbadkamer', $level);
-//		store('deurbadkamer', $d['deurbadkamer']['s'], basename(__FILE__).':'.__LINE__);
-		if ($d['weg']['s']==1&&$d['time']>$t-7200) {
-			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['time']<$t&&$d['living_set']['m']==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+//		store('deurbadkamer', $d['deurbadkamer']->s, basename(__FILE__).':'.__LINE__);
+		if ($d['weg']->s==1&&$d['time']>$t-7200) {
+			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+			if ($d['time']<$t&&$d['living_set']->m==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
 }
@@ -166,17 +166,17 @@ function huisslapen($weg=false) {
 	global $d;
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
-		if ($d['badkamerpower']['s']=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
+		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
 	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
 	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
-		if ($d[$i]['m']!=0&&$d[$i]['s']!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>180) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 	}
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
@@ -230,13 +230,13 @@ function waarschuwing($msg) {
 function past($name,$lg='') {
 	global $d;
 	$d['time']=time();
-	return $d['time']-$d[$name]['t'];
+	return $d['time']-$d[$name]->t;
 }
 function sl(string|array $name, int $level, ?string $msg = null): void {
     global $d, $user, $mqtt;
     if (is_array($name)) {
         foreach ($name as $i) {
-            if ($d[$i]['s'] !== $level) {
+            if ($d[$i]->s !== $level) {
                 sl($i, $level, $msg);
                 $d['time'] = time();
             }
@@ -245,7 +245,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
     }
     $d ??= fetchdata();
     lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
-    $deviceType = $d[$name]['d'] ?? null;
+    $deviceType = $d[$name]->d ?? null;
     $entityPrefix = in_array($deviceType, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
     match($deviceType) {
@@ -263,12 +263,12 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-//    $d[$name]['s']=$level;
-//    $d[$name]['t']=$d['time'];
+//    $d[$name]->s=$level;
+//    $d[$name]->t=$d['time'];
 }
 function resetsecurity() {
 	global $d;
-	if ($d['sirene']['s']!='Off') {
+	if ($d['sirene']->s!='Off') {
 		sw('sirene', 'Off', basename(__FILE__).':'.__LINE__,true);
 	}
 }
@@ -276,7 +276,7 @@ function sw($name,$action='Toggle',$msg=null) {
 	global $d,$user,$db,$mqtt;
 	if (is_array($name)) {
 		foreach ($name as $i) {
-			if ($d[$i]['s']!=$action) {
+			if ($d[$i]->s!=$action) {
 				sw($i, $action, $msg);
 				usleep(200000);
 				$now = time();
@@ -287,9 +287,9 @@ function sw($name,$action='Toggle',$msg=null) {
 		}
 	} else {
 		$d ??= fetchdata();
-		if (isset($d[$name]['d'])&&$d[$name]['d']=='s') {
+		if (isset($d[$name]->d)&&$d[$name]->d=='s') {
 			if ($action=='Toggle') {
-				if ($d[$name]['s']=='On') $action='Off';
+				if ($d[$name]->s=='On') $action='Off';
 				else $action='On';
 			}
 			lg('💡 SW ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $action . ($msg ? " ($msg)" : ''), 4);
@@ -298,9 +298,9 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
-//		if($d[$name]['s']==$action) return;
-//		$d[$name]['t']=$d['time'];
-//		$d[$name]['s']=$action;
+//		if($d[$name]->s==$action) return;
+//		$d[$name]->t=$d['time'];
+//		$d[$name]->s=$action;
 	}
 }
 function zigbee($device,$action) {
@@ -323,8 +323,8 @@ function store($name='',$status='',$msg='') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['s']=$status;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->s=$status;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
@@ -342,11 +342,11 @@ function store($name='',$status='',$msg='') {
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
 		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -374,12 +374,12 @@ function publishmqtt($topic,$msg,$log='') {
 }
 function storemode($name,$mode,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['m']==(string)$mode) return;
+    if((string)$d[$name]->m==(string)$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['m']=$mode;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->m=$mode;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
@@ -397,11 +397,11 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -409,13 +409,13 @@ function storemode($name,$mode,$msg='') {
 }
 function storesm($name,$s,$m,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m) return;
+    if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['s']=$s;
-			$d[$name]['m']=$m;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->s=$s;
+			$d[$name]->m=$m;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
@@ -433,11 +433,11 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -445,14 +445,14 @@ function storesm($name,$s,$m,$msg='') {
 }
 function storesmi($name,$s,$m,$i,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m&&(string)$d[$name]['i']==(string)$i) return;
+    if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m&&(string)$d[$name]->i==(string)$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['s']=$s;
-			$d[$name]['m']=$m;
-			$d[$name]['i']=$i;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->s=$s;
+			$d[$name]->m=$m;
+			$d[$name]->i=$i;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -470,11 +470,11 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -482,15 +482,15 @@ function storesmi($name,$s,$m,$i,$msg='') {
 }
 function storesmip($name,$s,$m,$i,$p,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['m']==(string)$m&&(string)$d[$name]['i']==(string)$i&&(string)$d[$name]['p']==(string)$p) return;
+    if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m&&(string)$d[$name]->i==(string)$i&&(string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['s']=$s;
-			$d[$name]['m']=$m;
-			$d[$name]['i']=$i;
-			$d[$name]['p']=$p;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->s=$s;
+			$d[$name]->m=$m;
+			$d[$name]->i=$i;
+			$d[$name]->p=$p;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, i = :i, t = :t, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':m'=>$m,':i'=>$i,':t'=>$d['time'],':p'=>$p,':n'=>$name]);
@@ -508,11 +508,11 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -520,13 +520,13 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 }
 function storesp($name,$s,$p,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['s']==(string)$s&&(string)$d[$name]['p']==(string)$p) return;
+    if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['s']=$s;
-			$d[$name]['p']=$p;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->s=$s;
+			$d[$name]->p=$p;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, p = :p WHERE n = :n");
 			$stmt->execute([':s'=>$s,':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -544,11 +544,11 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -556,13 +556,13 @@ function storesp($name,$s,$p,$msg='') {
 }
 function storep($name,$p,$msg='') {
 	global $d,$user;
-    if((string)$d[$name]['p']==(string)$p) return;
+    if((string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			if ($p>20) $d[$name]['s']=='On';
-			$d[$name]['p']=$p;
-			$d[$name]['t']=$d['time'];
+			if ($p>20) $d[$name]->s=='On';
+			$d[$name]->p=$p;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
 			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
@@ -580,11 +580,11 @@ function storep($name,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -592,12 +592,12 @@ function storep($name,$p,$msg='') {
 }
 function storeicon($name,$i,$msg='') {
 	global $d,$user;
-    if($d[$name]['i']==$i) return;
+    if($d[$name]->i==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]['i']=$i;
-			$d[$name]['t']=$d['time'];
+			$d[$name]->i=$i;
+			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET i = :i, t = :t WHERE n = :n");
 			$stmt->execute([':i'=>$i,':t'=>$d['time'],':n'=>$name]);
@@ -616,11 +616,11 @@ function storeicon($name,$i,$msg='') {
 	if (str_ends_with($name, '_temp')) return;
 	if($affected>0) {
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]['f'])) {
+		if(isset($d[$name]->f)) {
 			$x=$d[$name];
-			unset($x['f']);
-			if(!isset($x['rt'])) unset($x['t'],$x['rt']);
-			else unset($x['rt']);
+			unset($x->f);
+			if(!isset($x->rt)) unset($x->t,$x->rt);
+			else unset($x->rt);
 			publishmqtt('d/'.$name,json_encode($x),$msg);
 		}
 	}
@@ -650,17 +650,17 @@ function rookmelder($msg) {
 	global $d,$device;
 	resetsecurity();
 	alert($device,	$msg,	300, false, 2, true);
-//	if ($d['weg']['s']<=1) {
+//	if ($d['weg']->s<=1) {
 
 //		foreach (array(/*'ralex',*/'rkamerl','rkeukenl','rkamerr','rwaskamer','rliving','rkeukenr','rbureel') as $i) {
-//			if ($d[$i]['s']>0) sl($i, 1, basename(__FILE__).':'.__LINE__);
+//			if ($d[$i]->s>0) sl($i, 1, basename(__FILE__).':'.__LINE__);
 //		}
 //		if ($d['z']<200) {
 //			foreach (array('hall','inkom','kamer','waskamer',/*'alex',*/'eettafel','zithoek','lichtbadkamer','wasbak','terras') as $i) {
-//				if ($d[$i]['s']<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
+//				if ($d[$i]->s<100) sl($i, 100, basename(__FILE__).':'.__LINE__);
 //			}
 //			foreach (array('snijplank','garage','lampkast','bureel', 'tuin') as $i) {
-//				if ($d[$i]['s']!='On') sw($i, 'On', basename(__FILE__).':'.__LINE__);
+//				if ($d[$i]->s!='On') sw($i, 'On', basename(__FILE__).':'.__LINE__);
 //			}
 //		}
 //	}
@@ -688,7 +688,7 @@ Levels:
 99:	SQL Fetchdata
 */
 	global $d;
-	$loglevel = $d['auto']['m'] ?? 0;
+	$loglevel = $d['auto']->m ?? 0;
 
 	if ($level <= $loglevel) {
 		$fp = fopen('/temp/domoticz.log', "a+");
@@ -764,20 +764,20 @@ function boseplaylist() {
 }
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
-	if ($d['weg']['s']<=1) {
-		if ($d['boseliving']['s']=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-		if ($time<strtotime('21:00')&&$d['boseliving']['s']=='On'&&past('boseliving')>60) {
-			if ($d['bose101']['s']=='Off') {
+	if ($d['weg']->s<=1) {
+		if ($d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+		if ($time<strtotime('21:00')&&$d['boseliving']->s=='On'&&past('boseliving')>60) {
+			if ($d['bose101']->s=='Off') {
 				lg(basename(__FILE__).':'.__LINE__);
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
 				lg('Bose zone time='.$time.'|'.$t+1800);
-				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-				elseif ($d['alexslaapt']['s']==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
+				if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+				elseif ($d['alexslaapt']->s==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 			}
 			if ($ip>101) {
-				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
+				if ($d['bose'.$ip]->s=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 				$mapip = [
 					102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
 					103 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.103">C4F312F65070</member></zone>',
@@ -786,30 +786,30 @@ function bosezone($ip,$vol='') {
 					106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
 					107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
 				];
-				if ($d['bose101']['s']=='Off'&&$d['bose'.$ip]['s']=='Off') {
+				if ($d['bose101']->s=='Off'&&$d['bose'.$ip]->s=='Off') {
 					lg(basename(__FILE__).':'.__LINE__);
 					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-					if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-					elseif ($d['alexslaapt']['s']==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
+					if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
+					elseif ($d['alexslaapt']->s==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
 					else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 					usleep(100000);
 					bosepost('setZone', $mapip[$ip], 101);
 					if ($vol=='') {
-						if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+						if ($d['alexslaapt']->s==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
-						if ($d['alexslaapt']['s']==1) $vol-=10;
+						if ($d['alexslaapt']->s==1) $vol-=10;
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}
-				} else /*if ($d['bose'.$ip]['s']=='Off') */{
+				} else /*if ($d['bose'.$ip]->s=='Off') */{
 					bosepost('setZone',  $mapip[$ip], 101);
 					store('bose'.$ip, 'On');
 					if ($vol=='') {
-						if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
+						if ($d['alexslaapt']->s==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
 
-						if ($d['alexslaapt']['s']==1) $vol-=10;
+						if ($d['alexslaapt']->s==1) $vol-=10;
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}
 				}
@@ -869,7 +869,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	$base = "http://192.168.2.{$ips[$device]}";
 	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 	if(!http_get($url)) return false;
-	if ($d['heating']['s']>=0) $msg="🔥 ";
+	if ($d['heating']->s>=0) $msg="🔥 ";
 	else  $msg="❄️ ";
 	$msg.="daikinset [$device]	power=$power	| mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow";
 	if($prevspmode!==$spmode) {
@@ -1101,45 +1101,65 @@ final class Database {
     }
 }
 function fetchdata(): array {
-	global $d;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
-		try {
-			$db = Database::getInstance();
-			static $stmt = null;
-			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
-			$stmt->execute();
-			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
-				$d[$n] = array_filter(
-					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt', 'f'),
-					static fn($v) => $v !== null
-				);
-				if (isset($d[$n]['deviceD'])) {
-					$d[$n]['d'] = $d[$n]['deviceD'];
-					unset($d[$n]['deviceD']);
-				}
-			}
-			break;
-		} catch (PDOException $e) {
-			$isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
-			if ($isRecoverable) {
-				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
-				Database::reset();
-				$stmt = null;
-				$attempt > 0 && sleep($attempt);
-				continue;
-			}
-			lg('FETCHDATA ERROR! ' . $e->getCode());
-			throw $e;
+    global $d;
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
+        try {
+            $db = Database::getInstance();
+            static $stmt = null;
+            $stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
+            $stmt->execute();
+
+            foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
+                $dev = new Device($n, $deviceD, $rt, $f);
+				$dev->s  = (float)$s;
+				$dev->t  = $t;
+				$dev->m  = $m;
+				$dev->i  = $i;
+				$dev->p  = $p;
+
+				$d[$n] = $dev;
+            }
+            break;
+
+        } catch (PDOException $e) {
+            $isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
+            if ($isRecoverable) {
+                lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
+                Database::reset();
+                $stmt = null;
+                $attempt > 0 && sleep($attempt);
+                continue;
+            }
+            lg('FETCHDATA ERROR! ' . $e->getCode());
+            throw $e;
+        }
+    }
+
+    if ($en = json_decode(getCache('en'))) {
+		foreach (['n','a','b','c','z'] as $key) {
+			$d[$key] = $en->$key ?? 0;
 		}
 	}
-	if ($en = json_decode(getCache('en'))) {
-		$d['n'] = $en->n ?? null;
-		$d['a'] = $en->a ?? null;
-		$d['b'] = $en->b ?? null;
-		$d['c'] = $en->c ?? null;
-		$d['z'] = $en->z ?? null;
-	}
-	return $d;
+
+    return $d;
+}
+final class Device {
+    public readonly string $n;
+    public mixed $s;
+    public ?int $t;
+    public ?string $m;
+    public readonly mixed $d;
+    public mixed $i;
+    public mixed $p;
+    public readonly mixed $rt;
+    public readonly mixed $f;
+
+    public function __construct(string $name, mixed $d, mixed $rt, mixed $f) {
+        $this->n  = $name;
+        $this->d  = $d;
+        $this->rt = $rt;
+        $this->f  = $f;
+    }
 }
 
 function roundUpToAny($n,$x=5) {
@@ -1159,10 +1179,10 @@ function republishmqtt() {
 	$ha_token = 'Bearer '.hasstoken();
 	$base_topic = 'homeassistant';
 	foreach ($d as $device => $i) {
-		if (!isset($i['d'])) continue;
+		if (!isset($i->d)) continue;
 		$entity_id = null;
 		$to_publish = [];
-		if ($i['d'] === 's') {
+		if ($i->d === 's') {
 			$entity_id = "switch.$device";
 			$url = "$ha_url/api/states/$entity_id";
 			$ch = curl_init($url);
@@ -1177,11 +1197,11 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$state = ucfirst($data['state']);
-			if ($state!=$i['s']) $to_publish[] = [
+			if ($state!=$i->s) $to_publish[] = [
 				'topic' => "$base_topic/$domain/$object_id/state",
 				'payload' => $state
 			];
-		} elseif ($i['d'] === 'hd') {
+		} elseif ($i->d === 'hd') {
 			$entity_id = "light.$device";
 			$url = "$ha_url/api/states/$entity_id";
 			$ch = curl_init($url);
@@ -1198,9 +1218,9 @@ function republishmqtt() {
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
 			$brightness=round((int)$brightness / 2.55);
-			if ($brightness!=$i['s']) {
-				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i['s']);
-				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i['s']);
+			if ($brightness!=$i->s) {
+				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i->s);
+				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i->s);
 				$to_publish[] = [
 					'topic' => "$base_topic/$domain/$object_id/brightness",
 					'payload' => $brightness
