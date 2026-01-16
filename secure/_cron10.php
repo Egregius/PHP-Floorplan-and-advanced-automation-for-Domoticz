@@ -1,5 +1,6 @@
 <?php
 $user='cron10';
+
 //lg('🕒 '.$user);
 if ($d['auto']->s=='On') {
 	$i=39;

@@ -34,13 +34,7 @@ if ($d['weg']->s>0) {
 $last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
-	$x=$v;
-	if (isset($x->f)) {
-		unset($x->f);
-		if(!isset($x->rt)) unset($x->t,$x->rt);
-		else unset($x->rt);
-		publishmqtt('d/'.$k,json_encode($x));
-	}
+	if (isset($v->f)&&$v->f===1) publishmqtt('d/'.$k,toJsonClean($v));
 }
 
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>0];

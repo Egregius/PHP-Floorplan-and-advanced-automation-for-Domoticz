@@ -342,13 +342,7 @@ function store($name='',$status='',$msg='') {
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
 		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -368,7 +362,7 @@ function publishmqtt($topic,$msg,$log='') {
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
 		lgmqtt("🛑 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
-		$mqtt->publish($topic,$msg,1,true);
+		$mqtt->publish($topic,$msg,0,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
 }
@@ -397,7 +391,7 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -427,7 +421,7 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -490,7 +484,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -520,7 +514,7 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -550,7 +544,7 @@ function storep($name,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -580,25 +574,18 @@ function storeicon($name,$i,$msg='') {
 	if (str_ends_with($name, '_temp')) return;
 	if($affected>0) {
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	}
 	return $affected ?? 0;
 }
 function toJsonClean(object $obj): string {
     $clone = clone $obj;
-    unset($clone->f);
-	if ($clone->rt===1) {
-		unset($clone->rt);
-	} else {
-		unset($clone->t, $clone->rt);
-	}
-    return json_encode(
-        array_filter(
-            get_object_vars($clone),
-            fn($v) => $v !== null
-        ),
-        JSON_UNESCAPED_SLASHES
-    );
+    unset($clone->n,$clone->f);
+    if ($clone->rt === 1) unset($clone->rt);
+    else unset($clone->t, $clone->rt);
+    $vars = get_object_vars($clone);
+	$filtered = array_filter($vars, fn($v) => $v !== null);
+    return json_encode($filtered, JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 }
 function kodi($json) {
 	global $kodiurl;

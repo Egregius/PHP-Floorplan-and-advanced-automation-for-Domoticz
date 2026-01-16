@@ -59,8 +59,9 @@ foreach ($devices as $ip => $vol) {
 		if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__);
 	}
 }
-if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing') {
+if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
 	if ($d['bose101']->s == 'On' || $d['bose101']->m != 0) storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__);
+
 }
 if ($d['bose101']->s=='On'
 	&&$d['bose102']->s=='Off'

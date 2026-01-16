@@ -115,13 +115,13 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		3 => 14
 	];
 	$comfortStart = [
-		1 => '13:00',
-		2 => '16:05',
-		3 => '12:15',
-		4 => '16:05',//16:05
-		5 => '15:05',
-		6 => '08:00',
-		0 => '08:00'
+		1 => '13:00',// 13:00
+		2 => '16:05',// 16:05
+		3 => '12:15',// 12:15
+		4 => '16:05',// 16:05
+		5 => '13:35',// 15:05
+		6 => '08:00',// 8:00
+		0 => '08:00' // 8:00
 	];
 	if ($weekend==true) {
 		$comfortAfternoon = strtotime($comfortStart[0]);
@@ -181,7 +181,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$prevSet=0;
 		}
 	}
-	if($prevt_start!=$t_start&&1==2) {
+	if($prevt_start!=$t_start && $time >= $t_start -3600 && $prevSet < 2 && $time < $comfortAfternoon && 1==1) {
 		$prevt_start=$t_start;
 		lg('prevSet='.$prevSet.
 			' Afternoon='.date("G:i",$comfortAfternoon).
