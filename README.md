@@ -7,6 +7,16 @@ https://github.com/Egregius/LUA-Pass2PHP-for-Domoticz<br>
 The repository is automatically updated so all the changes I made are reflected instantly here.<br>
 <br>
 <br>
+<br>
+<br>
+# Important update:<br>
+This repository isn't for Domoticz anymore.<br>
+It's now a completely independent piece of code to connect to a MQTT broker.<br>
+It can handle messages from Home Assistant, Zwave2MQTT and Zigbee2MQTT.<br>
+Also the GUI dashboard is completely changed to use websocket instead of fetch.<br>
+<br>
+<br>
+<br>
 Follow the Domoticz forum topic for information at https://www.domoticz.com/forum/viewtopic.php?f=64&t=12343&start=680#p211279<br>
 <br>
 @gimic wrote his installation steps in https://www.domoticz.com/forum/viewtopic.php?f=64&t=12343&start=740#p211699<br>

@@ -157,8 +157,18 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			storesmip('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
 		}
 		$prevSet=1;
-		$msg="🔥 _TC_living: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg} | buitenTempStart={$buitenTempStart}";
-		lg($msg);
+		lg('🔥 _TC_living: '.
+			' Afternoon='.date("G:i",$comfortAfternoon).
+			' t_start='.date("G:i:s",$t_start).
+			' End='.date("G:i",$comfortEnd).
+			' Setliving='.$Setliving.
+			' bTempStart='.$buitenTempStart.
+			' living='.$living.
+			' target='.$target.
+			' tempDelta='.$tempDelta.
+			' avgMinPerDeg='.$avgMinPerDeg.
+			' leadMinutes='.$leadMinutes
+		);
 //		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
 	}
 	elseif ($time >= $comfortAfternoon && $time < $comfortEnd && $weg == 0) {
@@ -171,14 +181,14 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			$prevSet=0;
 		}
 	}
-	if($prevt_start!=$t_start) {
+	if($prevt_start!=$t_start&&1==2) {
 		$prevt_start=$t_start;
 		lg('prevSet='.$prevSet.
 			' Afternoon='.date("G:i",$comfortAfternoon).
 			' t_start='.date("G:i:s",$t_start).
 			' End='.date("G:i",$comfortEnd).
 			' Setliving='.$Setliving.
-			' TempStart='.$buitenTempStart.
+			' bTempStart='.$buitenTempStart.
 			' living='.$living.
 			' target='.$target.
 			' tempDelta='.$tempDelta.
@@ -204,7 +214,7 @@ if (($d['living_set']['m']==0 || $d['living_set']['m']==2) && $d['weg']['s']<=1)
 			foreach ($leadDataLiving as &$innerArray) {
 				ksort($innerArray, SORT_NUMERIC);
 			}
-			unset($innerArray); 
+			unset($innerArray);
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
 			$minutesUsed=round($minutesUsed,1);
@@ -223,6 +233,7 @@ if ($d['living_set']['s']!=$Setliving) {
 	$living_set=$Setliving;
 	$d['living_set']['s']=$Setliving;
 }
+
 require('_Rolluiken_Heating.php');
 $bigdif=100;
 $difgas=100;

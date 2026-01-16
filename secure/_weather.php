@@ -30,15 +30,15 @@ if(!isset($weather)) {
 $ow=json_decode(curl('https://api.openweathermap.org/data/3.0/onecall?lat='.$lat.'&lon='.$lon.'&exclude=minutely,daily,alerts&units=metric&appid='.$owappid),true);
 //lg('$ow='.print_r($ow,true));
 if (isset($ow['current'])) {
-	$temps['ow3']=$ow['current']['temp'];
-	$temps['ow_feel3']=$ow['current']['feels_like'];
-	$hums['ow3']=$ow['current']['humidity'];
-	$uvs['ow3']=$ow['current']['uvi'];
-	if($uvs['ow3']>$weather['uvm'])$weather['uvm']=$uvs['ow3'];
-	$winds['ow_speed']=$ow['current']['wind_speed'] * 3.6;
-	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=$ow['current']['wind_gust'] * 3.6;
+	$temps['openweathermap']=$ow['current']['temp'];
+	$temps['openweathermap_feel']=$ow['current']['feels_like'];
+	$hums['openweathermap']=$ow['current']['humidity'];
+	$uvs['openweathermap']=$ow['current']['uvi'];
+	if($uvs['openweathermap']>$weather['uvm'])$weather['uvm']=$uvs['ow3'];
+	$winds['openweathermap_speed']=$ow['current']['wind_speed'] * 3.6;
+	if (isset($ow['current']['wind_gust'])) $winds['openweathermap_gust']=$ow['current']['wind_gust'] * 3.6;
 	$weather['i']=$ow['current']['weather'][0]['icon'];
-	if (isset($ow['current']['rain']['1h'])) $rains['ow']=$ow['current']['rain']['1h']*100;
+	if (isset($ow['current']['rain']['1h'])) $rains['openweathermap']=$ow['current']['rain']['1h']*100;
 	foreach ($ow['hourly'] as $i) {
 //		lg(print_r($i,true));
 		if ($i['dt']<$time+(12*3600)) {
@@ -162,7 +162,7 @@ if ($d['z']>100&&$d['dag']['s']>12) {
 			if($uvm>$weather['uvm'])$weather['uvm']=$uvm;
 		}
 	}
-} 
+}
 
 
 if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
@@ -221,6 +221,8 @@ if (count($rains) >= 2) {
     if ($d['regenpomp']['s'] === 'Off' && past('regenpomp') > $past) {
         sw('regenpomp', 'On', basename(__FILE__) . ':' . __LINE__.' $past='.$past.' $rain='.$rain.' $avg='.$avg);
     }
+    if($rain>0) lg('Rains='.json_encode($rains));
+
 }
 if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);

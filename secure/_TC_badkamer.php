@@ -30,9 +30,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	$mode      = $d['heating']['s'];
 	$prevSetbath   = $d['badkamer_start_temp']['m'] ?? 0;
 	if(!isset($leadDataBath)) {
-		$content = @file_get_contents('/var/www/html/secure/leadDataBath.json');
-		$leadDataBath = $content ? json_decode($content, true) ?? [] : [];
-		lg('leadDataLiving read from file');
+		$contentBath = @file_get_contents('/var/www/html/secure/leadDataBath.json');
+		$leadDataBath = $contentBath ? json_decode($contentBath, true) ?? [] : [];
+		lg('leadDataBath read from file');
 	}
 	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=@filemtime('/var/www/html/secure/leadDataBath.json')??0;
 	if (!empty($leadDataBath[$mode])) {
@@ -68,12 +68,12 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 			}
 		}
 		if (!empty($allData)) {
-			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
+			$avgMinPerDegBath = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDeg ??= 20;
+	$avgMinPerDegBath = 50;
 	$tempDelta   = max(0, $target - $badkamer);
-	$leadMinutes = $avgMinPerDeg * $tempDelta;
+	$leadMinutes = $avgMinPerDegBath * $tempDelta;
 	$t_start     = round($t - ($leadMinutes * 60));
 	$t_end       = $t + 1800;
 	if ($prevSetbath >= 1) {
@@ -86,8 +86,9 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 	} elseif ($time >= $t_start && $time < $t) {
 		$preheatbath=true;
 		$setBath = $target;
-		storesmi('badkamer_start_temp', $badkamer, 2, $buitenTempStart);
-		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDeg={$avgMinPerDeg}";
+		storesmi('badkamer_start_temp', $badkamer, 1, $buitenTempStart);
+		$prevSetbath=1;
+		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDegBath={$avgMinPerDegBath}";
 		lg($msg);
 	} elseif ($time >= $t && $time <= $t_end) {
 		$setBath = $target;
@@ -103,26 +104,26 @@ elseif ($d['badkamer_set']['m']==0&&$d['deurbadkamer']['s']=='Open'&&$pastdeurba
 //	lg(print_r($leadDataBath,true));
 //	lg(print_r($temps,true));
 
-	if ($prevSetbath <= 1 && $badkamer >= $target-0.2 && $lastWriteleadDataBath < $time-43200) {
+	if ($prevSetbath >= 1 && $badkamer >= $target-0.2 && $lastWriteleadDataBath < $time-43200) {
 		$startTemp = $d['badkamer_start_temp']['s'];
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1&&$prevSetbath == 1) {
 			$buitenTempStart = $d['badkamer_start_temp']['i'];
 			$minutesUsed = past('badkamer_start_temp') / 60;
 			$minPerDeg = $minutesUsed / $tempRise;
-			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
+			$minPerDeg = round(max($avgMinPerDegBath - 10, min($avgMinPerDegBath + 10, $minPerDeg)),1);
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
 			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -5);
-			$avgMinPerDeg = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
+			$avgMinPerDegBath = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
 			ksort($leadDataBath, SORT_NUMERIC);
 			foreach ($leadDataBath as &$innerArray) {
 				ksort($innerArray, SORT_NUMERIC);
 			}
-			unset($innerArray); 
+			unset($innerArray);
 			file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
 			$lastWriteleadDataBath=$time;
 			$minutesUsed=round($minutesUsed,1);
-			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
+			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDegBath} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataBath,true));
 		}
@@ -160,7 +161,7 @@ if ($d['heating']['s']>=2) {
 }
 if ($d['weg']['s']<2) {
 	$difbadkamer=$d['badkamer_temp']['s']-$d['badkamer_set']['s'];
-	if ($difbadkamer<=-0.5||($preheatbath==true&&$difbadkamer<=-0.1)) {
+	if ($difbadkamer<=-0.5||($preheatbath==true&&$difbadkamer<=0)) {
 		if ($d['badkamervuur1']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur1', 'On');
 		if ($d['badkamervuur1']['s']=='On'&&$d['badkamervuur2']['s']=='Off'&&$d['deurbadkamer']['s']=='Closed') sw('badkamervuur2', 'On');
 	}
