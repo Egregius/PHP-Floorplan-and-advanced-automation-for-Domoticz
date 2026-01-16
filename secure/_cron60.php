@@ -146,7 +146,7 @@ if ($d['auto']['s']=='On') {
 	}
 
 	/* -------------------------------------------- ALTIJD BIJ AUT0 ------------------------------------------*/
-	
+
 	if ($d['living_set']['m']!=0&&$d['eettafel']['s']==0&&past('living_set')>28800) storemode('living_set', 0, basename(__FILE__).':'.__LINE__);
 	if($d['lichtbadkamer']['s']==0) {
 		if ($d['badkamer_set']['m']!=0&&past('badkamer_set')>7200) storemode('badkamer_set', 0, basename(__FILE__).':'.__LINE__);
@@ -182,8 +182,8 @@ if ($d['auto']['s']=='On') {
 		if ($d['steenterras']['s']=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['terras']['s']>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
-	
-	
+
+
 	if ($d['weg']['s']>=1&&$d['media']['s']=='On'&&past('weg')>900) sw('media', 'Off', basename(__FILE__).':'.__LINE__);
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/

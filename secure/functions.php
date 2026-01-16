@@ -249,14 +249,14 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
     $entityPrefix = in_array($deviceType, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
     match($deviceType) {
-        'hd' => $level > 0 
+        'hd' => $level > 0
             ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
             : hass('light', 'turn_off', $entity),
-        
+
         'd' => $level > 0
             ? hass('light', 'turn_on', $entity, ['brightness_pct' => $level])
             : hass('light', 'turn_off', $entity),
-        
+
         'r' => hass('cover', 'set_cover_position', $entity, [
             'position' => $name === 'rbureel' ? 100 - $level : $level
         ]),
@@ -394,7 +394,7 @@ function storemode($name,$mode,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -430,7 +430,7 @@ function storesm($name,$s,$m,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0) {
 		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -467,7 +467,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0) {
 		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -505,7 +505,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0) {
 		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -541,7 +541,7 @@ function storesp($name,$s,$p,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0) {
 		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -577,7 +577,7 @@ function storep($name,$p,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if($affected>0) {
 		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if(isset($d[$name]['f'])) {
@@ -612,7 +612,7 @@ function storeicon($name,$i,$msg='') {
 			}
 			throw $e;
 		}
-	}	
+	}
 	if (str_ends_with($name, '_temp')) return;
 	if($affected>0) {
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
@@ -676,12 +676,12 @@ function lg($msg,$level=0) {
 Levels:
 0:	Default / Undefined
 1:	Loop starts
-2:	
-3:	
+2:
+3:
 4:	Switch commands
 5:	Setpoints
 6:	OwnTracks
-7:	
+7:
 8:	Update kWh devices
 9:	Update temperatures
 10: Store/Storemode
@@ -775,7 +775,7 @@ function bosezone($ip,$vol='') {
 				if ($d['lgtv']['s']=='On'&&$d['eettafel']['s']==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($d['alexslaapt']['s']==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
-			}		
+			}
 			if ($ip>101) {
 				if ($d['bose'.$ip]['s']=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 				$mapip = [
@@ -808,7 +808,7 @@ function bosezone($ip,$vol='') {
 						if ($d['alexslaapt']['s']==1) bosevolume(15, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
-						
+
 						if ($d['alexslaapt']['s']==1) $vol-=10;
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}
@@ -952,7 +952,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         "Keep-Alive: timeout=300\r\n\r\n%s",
         $domain, $service, hasstoken(), strlen($payload), $payload
     );
-    
+
     fwrite($socket, $request);
     fflush($socket);
     $lastUse = $d['time'];
@@ -1061,14 +1061,14 @@ function curl($url) {
 }
 final class Database {
     private static ?PDO $instance = null;
-    
+
     private function __construct() {}
     private function __clone(): void {}
-    
+
     public static function getInstance(): PDO {
         return self::$instance ??= self::createConnection();
     }
-    
+
     private static function createConnection(): PDO {
         try {
             return new PDO(
@@ -1091,11 +1091,11 @@ final class Database {
             throw new RuntimeException('Database connection failed.', 0, $e);
         }
     }
-    
+
     public static function reset(): void {
         self::$instance = null;
     }
-    
+
     public static function isConnected(): bool {
         return self::$instance !== null;
     }
@@ -1228,7 +1228,7 @@ function republishmqtt() {
 		}
 	}
 }
-function setBatterijLedBrightness(int $brightness) { 
+function setBatterijLedBrightness(int $brightness) {
 	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
 	$ch = curl_init("https://battery/api/system");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1254,3 +1254,7 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
+function convertbytes($size) {
+    $unit=array('b','kb','mb','gb','tb','pb');
+    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+ }

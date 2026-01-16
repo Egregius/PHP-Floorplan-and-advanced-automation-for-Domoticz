@@ -8,10 +8,16 @@ require 'functions.php';
 $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
-$db = Database::getInstance();
+//$db = Database::getInstance();
 
-print_r($_SERVER);
-
+$data=curl('https://gadgets.buienradar.nl/data/raintext/?lat=51&lon=3');
+$data=explode("\n",$data);
+print_r($data);
+echo '<hr>';
+foreach($data as $k=>$i) {
+	$i=substr($i,0,3);
+	echo $k.'='.(int)$i.'='. 10 ** (((int)$i - 109) / 32).'<br>';
+}
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
@@ -59,7 +65,7 @@ unset(
 	$memcache,
 	$homes,
 	$cameratoken,
-	
+
 );
 echo '<hr><hr><hr><pre>';print_r(GET_DEFINED_VARS());echo '</pre>';
 
