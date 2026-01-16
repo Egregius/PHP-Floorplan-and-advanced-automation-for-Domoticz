@@ -249,11 +249,9 @@ if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
 //lg(print_r($uvs,true));
-if ($time % 300 === 0) {
-	lg('T='.json_encode($temps).'='.$temp);
-	lg('R='.json_encode($rains).'='.$rain);
-	lg('W='.json_encode($winds).'='.$wind);
-}
+if($temp!=$temps['prev']) lg('T='.json_encode($temps).'='.$temp);
+if($rain!=$rains['prev']) lg('R='.json_encode($rains).'='.$rain);
+if($wind!=$winds['prev']) lg('W='.json_encode($winds).'='.$wind);
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));
 	$weathercache=$weather;

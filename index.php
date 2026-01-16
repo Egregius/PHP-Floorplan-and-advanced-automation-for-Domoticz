@@ -211,6 +211,7 @@
 					<div id="bat" onclick="location.href='https://hwenergy.app/dashboard?dashboard=48AE6FA2-2D9E-486D-8AC5-9E14A2A1D391'">
 						<span id="battitle">Bat</span>
 						<span id="batvalue"></span>
+						<span id="batcharge"></span>
 						<canvas id="batcircle" width="120" height="120"></canvas>
 						<canvas id="chargecircle" width="120" height="120"></canvas>
 					</div>
@@ -295,7 +296,7 @@
 				<div class="abs z" id="Rrkamerr" onclick="roller('rkamerr');"></div>
 				<div class="abs z" id="Rrwaskamer" onclick="roller('rwaskamer');"></div>
 				<div class="abs z" id="Rralex" onclick="roller('ralex');"></div>
-			
+
 				<div class="abs z2 living_set" id="living_set" onclick="setpoint('living');"></div>
 				<div class="abs z2 badkamer_set" id="badkamer_set" onclick="setpoint('badkamer');"></div>
 				<div class="abs z2 kamer_set" id="kamer_set" onclick="setpoint('kamer');"></div>
