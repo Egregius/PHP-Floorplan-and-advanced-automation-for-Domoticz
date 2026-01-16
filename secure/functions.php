@@ -397,13 +397,7 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -433,13 +427,7 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -470,13 +458,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -508,13 +490,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -544,13 +520,7 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -580,13 +550,7 @@ function storep($name,$p,$msg='') {
 	}
 	if($affected>0) {
 		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
@@ -616,17 +580,26 @@ function storeicon($name,$i,$msg='') {
 	if (str_ends_with($name, '_temp')) return;
 	if($affected>0) {
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
-		if(isset($d[$name]->f)) {
-			$x=$d[$name];
-			unset($x->f);
-			if(!isset($x->rt)) unset($x->t,$x->rt);
-			else unset($x->rt);
-			publishmqtt('d/'.$name,json_encode($x),$msg);
-		}
+		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	}
 	return $affected ?? 0;
 }
-
+function toJsonClean(object $obj): string {
+    $clone = clone $obj;
+    unset($clone->f);
+	if ($clone->rt===1) {
+		unset($clone->rt);
+	} else {
+		unset($clone->t, $clone->rt);
+	}
+    return json_encode(
+        array_filter(
+            get_object_vars($clone),
+            fn($v) => $v !== null
+        ),
+        JSON_UNESCAPED_SLASHES
+    );
+}
 function kodi($json) {
 	global $kodiurl;
 	$ch=curl_init($kodiurl.'/jsonrpc');
@@ -1110,14 +1083,18 @@ function fetchdata(): array {
             $stmt->execute();
 
             foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
-                $dev = new Device($n, $deviceD, $rt, $f);
-				$dev->s  = (float)$s;
-				$dev->t  = $t;
-				$dev->m  = $m;
-				$dev->i  = $i;
-				$dev->p  = $p;
+                $dev = new Device();
+                $dev->n  = $n;
+                $dev->s  = $s;
+                $dev->t  = $t;
+                $dev->m  = $m;
+                $dev->d  = $deviceD;
+                $dev->i  = $i;
+                $dev->p  = $p;
+                $dev->rt = $rt;
+                $dev->f  = $f;
 
-				$d[$n] = $dev;
+                $d[$n] = $dev;
             }
             break;
 
@@ -1143,23 +1120,58 @@ function fetchdata(): array {
 
     return $d;
 }
+function fetchdataold(): array {
+	global $d;
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			static $stmt = null;
+			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
+			$stmt->execute();
+			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
+				$d[$n] = array_filter(
+					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt', 'f'),
+					static fn($v) => $v !== null
+				);
+				if (isset($d[$n]['deviceD'])) {
+					$d[$n]['d'] = $d[$n]['deviceD'];
+					unset($d[$n]['deviceD']);
+				}
+			}
+			break;
+		} catch (PDOException $e) {
+			$isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
+			if ($isRecoverable) {
+				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
+				Database::reset();
+				$stmt = null;
+				$attempt > 0 && sleep($attempt);
+				continue;
+			}
+			lg('FETCHDATA ERROR! ' . $e->getCode());
+			throw $e;
+		}
+	}
+	if ($en = json_decode(getCache('en'))) {
+		$d['n'] = $en->n ?? null;
+		$d['a'] = $en->a ?? null;
+		$d['b'] = $en->b ?? null;
+		$d['c'] = $en->c ?? null;
+		$d['z'] = $en->z ?? null;
+	}
+	return $d;
+}
+
 final class Device {
-    public readonly string $n;
-    public mixed $s;
+    public string $n;
+    public mixed  $s;
     public ?int $t;
     public ?string $m;
-    public readonly mixed $d;
-    public mixed $i;
-    public mixed $p;
-    public readonly mixed $rt;
-    public readonly mixed $f;
-
-    public function __construct(string $name, mixed $d, mixed $rt, mixed $f) {
-        $this->n  = $name;
-        $this->d  = $d;
-        $this->rt = $rt;
-        $this->f  = $f;
-    }
+    public mixed  $d;
+    public mixed  $i;
+    public ?int  $p;
+    public ?int  $rt;
+    public ?int  $f;
 }
 
 function roundUpToAny($n,$x=5) {

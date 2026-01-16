@@ -10,73 +10,45 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-function randomValue() {
-    return rand(0, 1000);
-}
-$keys=[];
-$l='aaaa';
-for($x=0;$x<1000;$x++) {
-	$keys[]=$l;
-	$l++;
-}
+$iterations = 1000000; // veel genoeg
 
-// ----------------------------
-// 1️⃣ Array-model
-// ----------------------------
-$arrayData = [];
-foreach ($keys as $k) {
-    $arrayData[$k] = [
-        'n'  => 'dev_'.$k,
-        's'  => randomValue(),
-        't'  => randomValue(),
-        'd'  => randomValue(),
-        'm'  => 'meta'.$k,
-        'i'  => randomValue(),
-        'p'  => randomValue(),
-        'rt' => randomValue(),
-        'f'  => randomValue(),
-    ];
-}
-
-// Benchmark array reads
+// string check
+$sum = 0;
 $start = microtime(true);
-for ($i=0; $i<10000; $i++) {
-    foreach ($keys as $k) {
-        $val = $arrayData[$k]['s']; // voorbeeld toegang
-        $val2 = $arrayData[$k]['t'];
-    }
+for($x=0;$x<$iterations;$x++) {
+    if($d['poort']->s == 'Off') $sum++;
 }
 $end = microtime(true);
-echo "Array model: ".(($end-$start)*1000)." ms\n";
+echo "String == check: ".(($end-$start)*1000)." ms, sum=$sum\n";
 
-// ----------------------------
-// 2️⃣ Object-model
-// ----------------------------
-$objectData = [];
-foreach ($keys as $k) {
-    $dev = new Device();
-    $dev->n  = 'dev_'.$k;
-    $dev->s  = randomValue();
-    $dev->t  = randomValue();
-    $dev->d  = randomValue();
-    $dev->m  = 'meta'.$k;
-    $dev->i  = randomValue();
-    $dev->p  = randomValue();
-    $dev->rt = randomValue();
-    $dev->f  = randomValue();
-    $objectData[$k] = $dev;
-}
-
-// Benchmark object reads
+// string check
+$sum = 0;
 $start = microtime(true);
-for ($i=0; $i<10000; $i++) {
-    foreach ($keys as $k) {
-        $val = $objectData[$k]->s; // voorbeeld toegang
-        $val2 = $objectData[$k]->t;
-    }
+for($x=0;$x<$iterations;$x++) {
+    if($d['poort']->s === 'Off') $sum++;
 }
 $end = microtime(true);
-echo "Object model: ".(($end-$start)*1000)." ms\n";
+echo "String === check: ".(($end-$start)*1000)." ms, sum=$sum\n";
+
+// int check
+$sum = 0;
+$start = microtime(true);
+for($x=0;$x<$iterations;$x++) {
+    if($d['poort']->rt == 1) $sum++;
+}
+$end = microtime(true);
+echo "Int == check: ".(($end-$start)*1000)." ms, sum=$sum\n";
+
+// int check
+$sum = 0;
+
+$start = microtime(true);
+for($x=0;$x<$iterations;$x++) {
+    if($d['poort']->rt === 1) $sum++;
+}
+$end = microtime(true);
+echo "Int === check: ".(($end-$start)*1000)." ms, sum=$sum\n";
+
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
