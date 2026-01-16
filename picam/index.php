@@ -56,9 +56,8 @@ echo '<html>
 <meta name="mobile-web-app-capable" content="yes"/>
 <link href="/styles/picam1.css?v=2" rel="stylesheet" type="text/css"/>
 </head>
-<body>';
-
-echo '<div class="navbar" role="navigation">
+<body>
+	<div class="navbar" role="navigation">
 	<form method="POST" action="../floorplan.php">
 	  <input type="submit" value="Plan" class="btn b7" />
 	</form>
@@ -82,8 +81,6 @@ echo '<div class="navbar" role="navigation">
 	 <div class="camera2">
 		<img class="camerai" id="mjpeg_camera2" src="jpg.php"/>
 	</div>
-	
-	
 	<script type="text/javascript" src="/scripts/m4q.min.js"></script>
 	<script type="text/javascript">
 		function navigator_Go(url) {window.location.assign(url);}

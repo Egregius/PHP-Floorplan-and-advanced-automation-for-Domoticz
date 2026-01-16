@@ -86,7 +86,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 		}
 	</script>
 	<link href="/styles/kodi.css?v=6" rel="stylesheet" type="text/css"/>
-	<script language="javascript" type="text/javascript" src="/scripts/jquery.2.0.0.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/scripts/jquery-3.5.1.min.js"></script>
 	</head>
 	<body>
 		<div class="navbar">
@@ -160,7 +160,7 @@ if (isset($current['result']['item']['file'])) {
 				if (isset($item['streamdetails']['video'][0])) {
 					echo $item['streamdetails']['video'][0]['codec'].' @ '.$item['streamdetails']['video'][0]['width'].' x '.$item['streamdetails']['video'][0]['height'];
 				}
-				
+
 				echo '
 							</td>
 						</tr>

@@ -38,14 +38,14 @@ if (isset($ow['current'])) {
 	$winds['openweathermap_speed']=$ow['current']['wind_speed'] * 3.6;
 	if (isset($ow['current']['wind_gust'])) $winds['openweathermap_gust']=$ow['current']['wind_gust'] * 3.6;
 	$weather['i']=$ow['current']['weather'][0]['icon'];
-	if (isset($ow['current']['rain']['1h'])) $rains['openweathermap']=$ow['current']['rain']['1h']*100;
+	$rains['openweathermap'] = ($ow['current']['rain']['1h'] ?? 0) * 100;
 	foreach ($ow['hourly'] as $i) {
 //		lg(print_r($i,true));
 		if ($i['dt']<$time+(12*3600)) {
 			if ($i['temp']<$mintemp) $mintemp=$i['temp'];
 			elseif ($i['temp']>$maxtemp) $maxtemp=$i['temp'];
 			if ($i['dt']<$time+3600) {
-				if(isset($i['rain']['1h'])) $rains['ow1h']=$i['rain']['1h']*100;
+				if(isset($i['rain']['1h'])) $rains['openweathermap_1h']=$i['rain']['1h']*100;
 			}
 			if($i['uvi']>$weather['uvm'])$weather['uvm']=$i['uvi'];
 		} else break;
@@ -56,34 +56,34 @@ if (isset($ow['current'])) {
 $wa=json_decode(curl('https://api.weatherapi.com/v1/current.json?q='.$lat.','.$lon.'&key='.$waappid),true);
 //lg('$wa='.print_r($wa,true));
 if (isset($wa['current']['temp_c'])) {
-	$temps['wa']=$wa['current']['temp_c'];
-	$temps['wa_feel']=$wa['current']['feelslike_c'];
-	$hums['wa']=$ow['current']['humidity'];
-	$winds['wa_speed']=$wa['current']['wind_kph'];
-	$winds['wa_gust']=$wa['current']['gust_kph'];
-	$rains['wa']=$wa['current']['precip_mm']*100;
-	$uvs['wa']=$wa['current']['uv'];
-	if($uvs['wa']>$weather['uvm'])$weather['uvm']=$uvs['wa'];
+	$temps['weatherapi']=$wa['current']['temp_c'];
+	$temps['weatherapi_feel']=$wa['current']['feelslike_c'];
+	$hums['weatherapi']=$ow['current']['humidity'];
+	$winds['weatherapi_speed']=$wa['current']['wind_kph'];
+	$winds['weatherapi_gust']=$wa['current']['gust_kph'];
+	$rains['weatherapi']=$wa['current']['precip_mm']*100;
+	$uvs['weatherapi']=$wa['current']['uv'];
+	if($uvs['weatherapi']>$weather['uvm'])$weather['weatherapim']=$uvs['wa'];
 }
 
 //lg(__LINE__.' https://observations.buienradar.nl/1.0/actual/weatherstation/10006414');
 $ob=json_decode(curl('https://observations.buienradar.nl/1.0/actual/weatherstation/10006414'), true);
 //lg('$ob='.print_r($ob,true));
 if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
-	$temps['ob']=$ob['temperature'];
-	$temps['ob_feel']=$ob['feeltemperature'];
-	$hums['ob']=$ob['humidity'];
-	$rains['ob']=min(100,$ob['rainFallLastHour']*10);
-	$winds['ob_wind']=$ob['windspeed'] * 1.609344;
-	if (isset($ob['windgusts'])) $winds['ob_gust']=$ob['windgusts'] * 1.609344;
+	$temps['observations']=$ob['temperature'];
+	$temps['observations_feel']=$ob['feeltemperature'];
+	$hums['observations']=$ob['humidity'];
+	$rains['observations']=min(100,$ob['rainFallLastHour']*10);
+	$winds['observations_wind']=$ob['windspeed'] * 1.609344;
+	if (isset($ob['windgusts'])) $winds['observations_gust']=$ob['windgusts'] * 1.609344;
 }
 
 //lg(__LINE__.' https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true');
 $om=json_decode(curl('https://api.open-meteo.com/v1/forecast?latitude='.$lat.'&longitude='.$lon.'&current_weather=true'), true);
 //lg('$om='.print_r($om,true));
 if (isset($om['current_weather']['temperature'])) {
-	$temps['om']=$om['current_weather']['temperature'];
-	$winds['om_wind']=$om['current_weather']['windspeed'];
+	$temps['open-meteo']=$om['current_weather']['temperature'];
+	$winds['open-meteo']=$om['current_weather']['windspeed'];
 }
 if (isset($om['hourly']['temperature_2m'])) {
 	$x=1;
@@ -99,12 +99,12 @@ if (isset($om['hourly']['temperature_2m'])) {
 $vc=json_decode(curl('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'.$lat.'%2C%20'.$lon.'?unitGroup=metric&include=current&key='.$visualcrossing.'&contentType=json'), true);
 //lg('$vc='.print_r($vc,true));
 if (isset($vc['currentConditions']['temp'])) {
-	$temps['vc']=$vc['currentConditions']['temp'];
-	$hums['vc']=$vc['currentConditions']['humidity'];
-	$uvs['vc']=$vc['currentConditions']['uvindex'];
-	if($uvs['vc']>$weather['uvm'])$weather['uvm']=$uvs['vc'];
-	$winds['vc_wind']=$vc['currentConditions']['windgust'];
-	$rains['vc']=$vc['currentConditions']['precip']*100;
+	$temps['visualcrossing']=$vc['currentConditions']['temp'];
+	$hums['visualcrossing']=$vc['currentConditions']['humidity'];
+	$uvs['visualcrossing']=$vc['currentConditions']['uvindex'];
+	if($uvs['visualcrossing']>$weather['uvm'])$weather['uvm']=$uvs['vc'];
+	$winds['visualcrossing']=$vc['currentConditions']['windgust'];
+	$rains['visualcrossing']=$vc['currentConditions']['precip']*100;
 }
 
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour');
@@ -113,7 +113,7 @@ $yr=json_decode(curl('https://www.yr.no/api/v0/locations/2-2787889/forecast/curr
 if (isset($yr['temperature']['value'])) {
 	$temps['yr']=$yr['temperature']['value'];
 	$temps['yr_feels']=$yr['temperature']['feelsLike'];
-	$winds['yr_wind']=$yr['wind']['speed'] * 1.609344;
+	$winds['yr']=$yr['wind']['speed'] * 1.609344;
 	$rains['yr']=$yr['precipitation']['value']*100;
 }
 
@@ -201,6 +201,7 @@ elseif ($d['buiten_temp']['m']!=$hum) storemode('buiten_temp', $hum);
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 0);
 	$weather['w']=$wind;
+	if($wind>0) lg('Winds='.json_encode($winds));
 }
 if (count($rains) >= 2) {
 //	lg('$rains='.print_r($rains,true));

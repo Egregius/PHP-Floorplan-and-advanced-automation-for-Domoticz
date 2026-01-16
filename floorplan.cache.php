@@ -17,11 +17,11 @@ echo '
 		<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
 		<link rel="shortcut icon" href="images/domoticzphp48.png"/>
 		<link rel="apple-touch-icon" href="images/domoticzphp48.png"/>
-		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.js"></script>
+		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jquery-3.5.1.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-		
+
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 			html{width:100%!important;}
@@ -40,13 +40,13 @@ echo '
 			}
 			#table th:nth-child(1),
 			#table td:nth-child(1) { width: 18%; }
-			
+
 			#table th:nth-child(2),
 			#table td:nth-child(2) { width: 15%; }
-			
+
 			#table th:nth-child(3),
 			#table td:nth-child(3) { width: 10%; }
-			
+
 			#table th:nth-child(4),
 			#table td:nth-child(4) {
 				width: 12%;
@@ -56,7 +56,7 @@ echo '
 				width: 100%;
 				overflow-x: auto;
 			}
-			
+
 			.table-wrapper table {
 				width: 100% !important;
 			}

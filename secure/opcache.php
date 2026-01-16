@@ -242,7 +242,7 @@ function getStringFromPropertyAndValue($property, $value)
 
 </div>
 <script type="text/javascript">setTimeout('window.location.href=window.location.href;',19963);function navigator_Go(url){window.location.assign(url);}</script>
-<script src="/scripts/jquery-2.1.4.min.js"></script>
+<script src="/scripts/jquery-3.5.1.min.js"></script>
 <script src="/scripts/bootstrap.min.js"></script>
 </body>
 </html>

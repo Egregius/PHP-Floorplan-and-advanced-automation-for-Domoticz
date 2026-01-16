@@ -55,7 +55,7 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 .btn{background-color:#333;color:#ccc;text-align:center;display:inline-block;border:0px solid transparent;padding:2px;margin:1px 0px 1px 1px;-webkit-appearance:none;white-space:nowrap;overflow:hidden;}
 .b1{width:100%;margin:0;padding:0;height:48px;font-size:1.4em;}
 </style>
-<script src="/scripts/jquery.2.0.0.min.js"></script>
+<script src="/scripts/jquery-3.5.1.min.js"></script>
 <script src="/scripts/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	/* <![CDATA[ */
@@ -127,7 +127,7 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 				<option value="'.$k.'" selected>'.$k.' '.$v.'</option>';
 		else echo '
 				<option value="'.$k.'">'.$k.' '.$v.'</option>';
-				
+
 	}
 ?>
 			</select>

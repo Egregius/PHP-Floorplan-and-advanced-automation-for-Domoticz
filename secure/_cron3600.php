@@ -5,7 +5,6 @@ $uur=date('G');
 if ($uur==0||LOOP_START>$time-60) {
 	lg('🕒 '.$user.' ===================================================================================================================================================');
 	if ($uur==0) {
-		apcu_store('alwayson',9999);
 		setCache('alwayson', 9999);
 	}
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
@@ -19,7 +18,7 @@ if ($uur==0||LOOP_START>$time-60) {
 		$end   = $dy + $range;
 		if ($start < 0 || $end > 365) {
 			$stmt = $db->prepare("
-				SELECT 
+				SELECT
 					ROUND(AVG(min_buiten),1) AS m,
 					ROUND(AVG(avg_buiten),2) AS a,
 					ROUND(AVG(max_buiten),1) AS x
@@ -32,7 +31,7 @@ if ($uur==0||LOOP_START>$time-60) {
 			]);
 		} else {
 			$stmt = $db->prepare("
-				SELECT 
+				SELECT
 					ROUND(AVG(min_buiten),1) AS m,
 					ROUND(AVG(avg_buiten),2) AS a,
 					ROUND(AVG(max_buiten),1) AS x
@@ -83,7 +82,7 @@ if ($uur==0||LOOP_START>$time-60) {
 		$stmt=$db->query("delete from temp where stamp < '$remove'");
 	} else {
 		$stmt = $db->prepare("
-			SELECT 
+			SELECT
 				MIN(buiten) AS min_buiten,
 				ROUND(AVG(buiten), 2) AS avg_buiten,
 				MAX(buiten) AS max_buiten
