@@ -110,11 +110,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 //						if($prevSetTime < $time - 18)lg(__LINE__);
 //						if($daikin->living->power == 1)lg(__LINE__);
 					$stable_mode = (
-						$time%60 == 0 &&
+//						$time%60 == 0 &&
 						$daikin->living->power == 1	&&
-						$daikin->$k->powerontime<$time-36 &&
-						$prevSetTime > $time - 57600 &&
-						$prevSetTime < $time - 180
+						$daikin->$k->powerontime<$time-360 //&&
+//						$prevSetTime > $time - 57600 &&
+//						$prevSetTime < $time - 180
 					);
 					if ($stable_mode) {
 						$log_entry['l']  = $line;
