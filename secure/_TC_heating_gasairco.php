@@ -21,6 +21,14 @@ elseif ($difgas>=-0.1&&$d['brander']->s=="On" &&$pastbrander>$uitna*1.5) sw('bra
 elseif ($difgas>=-0.2 &&$d['brander']->s=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12);
 
 if ($d['daikin']->m==1) {
+	$log_file = '/var/www/html/secure/daikin_learn.json';
+	$config_file = '/var/www/html/secure/daikin_config.json';
+	if (file_exists($config_file)) {
+		$config = json_decode(file_get_contents($config_file), true);
+		$trend_factor = $config['trend_factor'];
+	} else {
+		$trend_factor = ['living' => 2, 'kamer' => 2.5, 'alex' => 2.5];
+	}
 	$totalmin=0;
 	foreach (array('living','kamer','alex') as $k) {
 		${'dif'.$k}=$d[$k.'_temp']->s-$d[$k.'_set']->s;
@@ -40,30 +48,74 @@ if ($d['daikin']->m==1) {
 	elseif ($d['n']>3000&&$maxpow>60) $maxpow=60;
 	elseif ($d['n']>2500&&$maxpow>80) $maxpow=80;
 	$pastdaikin=past('daikin');
+//	lg(print_r($daikin,true));
+	$trend_factor = ['living' => 2, 'kamer' => 2.5, 'alex' => 2.5];
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']->s>10) {
-			$dif=$d[$k.'_temp']->s-$d[$k.'_set']->s;
+			$trend = $d[$k.'_temp']->i;
+			$target = $d[$k.'_set']->s;
+			$dif=$d[$k.'_temp']->s-$target;
+			$effective_dif = $dif + ($trend * $trend_factor[$k]);
 			if ($dif>2) $power=0;
 			elseif ($dif<=0) $power=1;
 			else $power=$daikin->$k->power;
 			if ($d['daikin']->s=='On') {
 				$fan='A';
-					if ($dif >=  2.4) {$set=$d[$k.'_set']->s-2.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  1.8) {$set=$d[$k.'_set']->s-1.5;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  1.2) {$set=$d[$k.'_set']->s-1.0;$spmode=-1;$line=__LINE__;}
-				elseif ($dif >=  0.6) {$set=$d[$k.'_set']->s-0.5;$spmode=-1;$line=__LINE__;}
-
-				elseif ($dif <= -4) {$set=$d[$k.'_set']->s+2.5;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -3.2) {$set=$d[$k.'_set']->s+2.0;$spmode=1;$line=__LINE__;}
-				elseif ($dif <= -2.4) {$set=$d[$k.'_set']->s+1.5;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -1.6) {$set=$d[$k.'_set']->s+1.0;$spmode=0;$line=__LINE__;}
-				elseif ($dif <= -0.8) {$set=$d[$k.'_set']->s+0.5;$spmode=-1;$line=__LINE__;}
-				else {$set=$d[$k.'_set']->s;$spmode=-1;$line=__LINE__;}
+				if ($k=='living') {
+					$log_entry = [
+						't' => $time,                           // timestamp
+						'a' => round($d[$k.'_temp']->s, 1),    // actual temp
+						'tg' => round($target, 1),              // target
+						'd' => round($dif, 2),                  // dif
+						'tr' => round($trend, 2),               // trend
+						'ed' => round($effective_dif, 2),       // effective_dif
+						'sb' => $daikin->$k->set,               // set_before
+						'sa' => null,                           // set_after (later gevuld)
+						'sp' => null,                           // spmode
+						'p' => $power,                          // power
+						'l' => $line,                           // line
+						'tf' => $trend_factor[$k]               // trend_factor
+					];
+				}
+				if ($effective_dif >= 1.5) {$line=__LINE__;
+					$set = $target - 1.0;
+					$spmode = -1;
+				} elseif ($effective_dif >= 0.8) {$line=__LINE__;
+					$set = $target - 0.5;
+					$spmode = -1;
+				} elseif ($effective_dif >= 0.3) {$line=__LINE__;
+					$set = $target;
+					$spmode = -1;
+				} elseif ($effective_dif <= -2.5) {$line=__LINE__;
+					$set = $target + 1.5;
+					$spmode = 1;
+				} elseif ($effective_dif <= -1.5) {$line=__LINE__;
+					$set = $target + 1.0;
+					$spmode = 0;
+				} elseif ($effective_dif <= -0.8) {$line=__LINE__;
+					$set = $target + 0.5;
+					$spmode = 0;
+				} elseif ($effective_dif <= -0.3) {$line=__LINE__;
+					$set = $target;
+					$spmode = 0;
+				} else {$line=__LINE__;
+					$set = $target;
+					$spmode = -1;
+				}
 				if ($d['weg']->s>0) $spmode=-1;
 				if ($k=='living') {
-					if ($prevSet==1) {$maxpow=100;$spmode=1;$set+=10;}
-					$set+=-2;
+					if ($prevSet==1) {
+						$maxpow=100;$spmode=1;$set+=10;
+					} else {
+						$set+=-2;
+						if ($prevSet==0&&$prevSetTime<$time-1800) {
+							$log_entry['sa'] = $set;
+							$log_entry['sp'] = $spmode;
+							file_put_contents($log_file, json_encode($log_entry) . "\n", FILE_APPEND);
+						}
+					}
 					if ($time>strtotime('19:00')&&$d['media']->s=='On') $fan='B';
+//					lg(sprintf("DAIKIN %s: dif=%.2f trend=%.2f eff_dif=%.2f set=%.1f->%.1f spmode=%d line=%d", $k, $dif, $trend, $effective_dif, $target, $set, $spmode, $line));
 				} elseif ($k=='kamer') {
 					$set+=-1.5;
 					if ($time<strtotime('10:00')||$d['weg']->s==1) $fan='B';
