@@ -583,6 +583,11 @@ function toJsonClean(object $obj): string {
     unset($clone->n,$clone->f);
     if ($clone->rt === 1) unset($clone->rt);
     else unset($clone->t, $clone->rt);
+    $clone->s = match($clone->s) {
+		'On', 'Open' => 1,
+		'Off', 'Closed' => 0,
+		default => $clone->s
+	};
     $vars = get_object_vars($clone);
 	$filtered = array_filter($vars, fn($v) => $v !== null);
     return json_encode($filtered, JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);

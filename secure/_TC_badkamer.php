@@ -71,7 +71,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 			$avgMinPerDegBath = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDegBath = 50;
+	$avgMinPerDegBath ??= 14;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = $avgMinPerDegBath * $tempDelta;
 	$t_start     = round($t - ($leadMinutes * 60));
@@ -104,7 +104,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 //	lg(print_r($leadDataBath,true));
 //	lg(print_r($temps,true));
 
-	if ($prevSetbath >= 1 && $badkamer >= $target-0.2 && $lastWriteleadDataBath < $time-43200) {
+	if ($prevSetbath >= 1 && $badkamer >= $target-0.2 /*&& $lastWriteleadDataBath < $time-43200*/) {
 		$startTemp = $d['badkamer_start_temp']->s;
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1&&$prevSetbath == 1) {
@@ -123,7 +123,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 			file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
 			$lastWriteleadDataBath=$time;
 			$minutesUsed=round($minutesUsed,1);
-			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDegBath} min/°C | buitenTempStart={$buitenTempStart})";
+			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDegBath} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataBath,true));
 		}
@@ -161,20 +161,17 @@ if ($d['heating']->s>=2) {
 }
 if ($d['weg']->s<2) {
 	$difbadkamer=$d['badkamer_temp']->s-$d['badkamer_set']->s;
-	if ($difbadkamer<=-0.5||($preheatbath==true&&$difbadkamer<=0)) {
+	if ($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1)) {
 		if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On');
 		if ($d['badkamervuur1']->s=='On'&&$d['badkamervuur2']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur2', 'On');
-	}
-	elseif ($difbadkamer<=0||($preheatbath==true&&$difbadkamer<=+0.1)) {
+	} elseif ($difbadkamer<=0||($prevSetbath==1&&$difbadkamer<=0)) {
 		if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On');
 		if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
-	}
-	else {
+	} else {
 		if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
 		if ($d['badkamervuur2']->s=='Off'&&$d['badkamervuur1']->s=='On') sw('badkamervuur1', 'Off');
 	}
-}
-else {
+} else {
 	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
 	if ($d['badkamervuur2']->s=='Off'&&$d['badkamervuur1']->s=='On') sw('badkamervuur1', 'Off');
 }

@@ -107,7 +107,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
 		}
 	}
-	$avgMinPerDeg ??= 10;
+	$avgMinPerDeg ??= 14;
 	$baseSet = [
 		0 => 19,
 		1 => 16,
@@ -158,7 +158,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		}
 		$prevSet=1;
 		lg('🔥 _TC_living: '.
-			' Afternoon='.date("G:i",$comfortAfternoon).
+			' Cstart='.date("G:i",$comfortAfternoon).
 			' t_start='.date("G:i:s",$t_start).
 			' End='.date("G:i",$comfortEnd).
 			' Setliving='.$Setliving.
@@ -218,7 +218,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
 			$minutesUsed=round($minutesUsed,1);
-			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → {$minPerDeg} min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
+			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
 			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
 			unset($t_start);
