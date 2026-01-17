@@ -156,7 +156,7 @@
 			<div id="floorplan" class="view active">
 				<div class="abs leftbuttons" id="heatingbutton" onclick="setView('floorplanheating')"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="fix floorplan2icon" onclick="setView('floorplanothers')"><img src="/images/plus.png" class="i60" alt="plus"></div>
-				<div class="abs weg" id="weg"></div>
+				<div class="abs weg z" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
 				<div class="abs" id="bose101"></div>
 				<div class="abs" id="bose102"></div>
 				<div class="abs" id="bose103"></div>
