@@ -43,13 +43,11 @@ if ($d['daikin']->m==1) {
 	elseif ($totalmin>=0.4) $maxpow=50;
 	else $maxpow=40;
 
-//	$daikin->living->fan=4;
 	if ($d['n']>3500&&$maxpow>40) $maxpow=40;
 	elseif ($d['n']>3000&&$maxpow>60) $maxpow=60;
 	elseif ($d['n']>2500&&$maxpow>80) $maxpow=80;
 	$pastdaikin=past('daikin');
 //	lg(print_r($daikin,true));
-	$trend_factor = ['living' => 2, 'kamer' => 2.5, 'alex' => 2.5];
 	foreach (array('living', 'kamer', 'alex') as $k) {
 		if ($d[$k.'_set']->s>10) {
 			$trend = $d[$k.'_temp']->i;
@@ -64,7 +62,7 @@ if ($d['daikin']->m==1) {
 				if ($k=='living') {
 					$log_entry = [
 						't' => $time,                           // timestamp
-						'a' => round($d[$k.'_temp']->s, 1),    // actual temp
+						'a' => round($d[$k.'_temp']->s, 1),     // actual temp
 						'tg' => round($target, 1),              // target
 						'd' => round($dif, 2),                  // dif
 						'tr' => round($trend, 2),               // trend
@@ -73,7 +71,7 @@ if ($d['daikin']->m==1) {
 						'sa' => null,                           // set_after (later gevuld)
 						'sp' => null,                           // spmode
 						'p' => $power,                          // power
-						'l' => $line,                           // line
+						'l' => null,                           // line
 						'tf' => $trend_factor[$k]               // trend_factor
 					];
 				}
@@ -107,8 +105,15 @@ if ($d['daikin']->m==1) {
 					if ($prevSet==1) {
 						$maxpow=100;$spmode=1;$set+=10;
 					} else {
-						$set+=-2;
-						if ($prevSet==0&&$prevSetTime<$time-1800) {
+						//$set+=-1;
+						$stable_mode = (
+							$prevSet == 2 &&
+							$prevSetTime > $time - 57600 &&
+							$prevSetTime < $time - 18 &&
+							$daikin->living->power == 1
+						);
+						if ($stable_mode) {
+							$log_entry['l']  = $line;
 							$log_entry['sa'] = $set;
 							$log_entry['sp'] = $spmode;
 							file_put_contents($log_file, json_encode($log_entry) . "\n", FILE_APPEND);

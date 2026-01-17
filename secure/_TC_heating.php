@@ -147,7 +147,6 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		if ($time > $comfortEnd) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$prevSet=0;
-			$$prevSetTime=$time;
 		}
 		if ($d['living_set']->m==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
 	}
@@ -181,7 +180,6 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		if ($prevSet != 0) {
 			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
 			$prevSet=0;
-			$prevSetTime=$time;
 		}
 	}
 	if($prevt_start!=$t_start && $time >= $t_start -3600 && $prevSet < 2 && $time < $comfortAfternoon && 1==1) {
@@ -199,7 +197,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			' leadMinutes='.$leadMinutes
 		);
 	}
-	if ($prevSet >= 1 && $living >= $target-0.2) {
+	if ($prevSet == 1 && $living >= $target-0.2) {
 //		lg(basename(__FILE__) . ':' . __LINE__);
 		$startTemp = $d['living_start_temp']->s;
 		$tempRise    = $living - $startTemp;
@@ -228,6 +226,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		}
 		storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
 		$prevSet=2;
+		$$prevSetTime=$time;
 	}
 }
 if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
