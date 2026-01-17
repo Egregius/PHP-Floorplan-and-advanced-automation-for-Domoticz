@@ -38,7 +38,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	$d=fetchdata();
 	if ($_REQUEST['command']=='setpoint') {
 		if ($_REQUEST['device']=='badkamer') {
-			
+
 			$s=date('s');
 			$dow=date("w");
 			if($dow==0||$dow==6) $t=strtotime('7:30');
@@ -211,6 +211,7 @@ if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!is
 	}
 	lg('👉🏻 '.$user.$msg);
 }
+echo 'ok';
 function boseplaylisttoday() {
 	global $time;
 	$dag=floor($time/86400);
