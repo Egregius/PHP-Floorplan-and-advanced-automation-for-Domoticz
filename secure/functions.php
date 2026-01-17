@@ -362,7 +362,7 @@ function publishmqtt($topic,$msg,$log='') {
 		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
 		lgmqtt("🛑 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
-		$mqtt->publish($topic,$msg,0,true);
+		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
 }

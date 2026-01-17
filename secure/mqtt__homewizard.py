@@ -30,11 +30,11 @@ def publish_all_retained():
     if not mqtt_connected:
         return
     now=int(time.time())
-    mqtt_client.publish("d/t", now, retain=True, qos=0)
+    mqtt_client.publish("d/t", now, retain=True, qos=1)
     for k, v in state.items():
-        mqtt_client.publish(f"d/e/{k}", v, retain=True, qos=0)
+        mqtt_client.publish(f"d/e/{k}", v, retain=True, qos=1)
     for k, v in teller_state.items():
-        mqtt_client.publish(f"t/{k}", v, retain=True, qos=0)
+        mqtt_client.publish(f"t/{k}", v, retain=True, qos=1)
     log("📡 Alle retained topics gepubliceerd")
 
 def on_connect(client, userdata, flags, rc):
@@ -135,7 +135,7 @@ def step_for_value(value):
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=0)
+        result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
         log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
         if result.rc != 0:  # MQTT publish result code 0 = OK
             print(f"Publish failed with code {result.rc}, script stopt.")
@@ -145,7 +145,7 @@ def mqtt_publish_key(key, value):
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
-        result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=0)
+        result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
         log(f"📤 Publish t/{key}={value}, rc={result.rc}")  # DEBUG
         if result.rc != 0:  # MQTT publish result code 0 = OK
             print(f"Publish failed with code {result.rc}, script stopt.")
