@@ -1,6 +1,6 @@
 {
     "trend_factor": {
-        "living": 2,
+        "living": 2.5,
         "kamer": 2.5,
         "alex": 2.5
     },
