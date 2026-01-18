@@ -1,8 +1,23 @@
 #!/bin/bash
-tail -n 5000 /temp/domoticz.log > /temp/domoticz.tmp && mv /temp/domoticz.tmp /temp/domoticz.log
-chmod 766 /temp/domoticz.log
-tail -n 5000 /temp/mqttpublish.log > /temp/mqttpublish.tmp && mv /temp/mqttpublish.tmp /temp/mqttpublish.log
-chmod 766 /temp/mqttpublish.log
-tail -n 500 /temp/floorplan-access.log > /temp/floorplan-access.tmp && mv /temp/floorplan-access.tmp /temp/floorplan-access.log
-chmod 766 /temp/floorplan-access.log
+#!/usr/bin/env bash
+
+declare -A LOGS=(
+  ["/temp/domoticz.log"]=5000
+  ["/temp/mqttpublish.log"]=1000
+  ["/temp/floorplan-access.log"]=500
+  ["/temp/Temps.log"]=500
+  ["/temp/Rains.log"]=500
+  ["/temp/Winds.log"]=500
+  ["/temp/opcache.log"]=500
+  ["/temp/phperror.log"]=500
+)
+
+for file in "${!LOGS[@]}"; do
+	lines=$(( LOGS[$file] * 9 / 10 ))
+	tmp="${file}.tmp"
+	if [ "$(wc -l < "$file")" -gt "$lines" ]; then
+		tail -n "$lines" "$file" > "$tmp" && mv "$tmp" "$file"
+		chmod 766 "$file"
+	fi
+done
 exit 0

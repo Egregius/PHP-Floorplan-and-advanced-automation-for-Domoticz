@@ -1,6 +1,6 @@
 <?php
 $user='cron10';
-
+apcu_store('d',$time);
 //lg('🕒 '.$user);
 if ($d['auto']->s=='On') {
 	$i=39;

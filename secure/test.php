@@ -10,45 +10,7 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-$iterations = 1000000; // veel genoeg
-
-// string check
-$sum = 0;
-$start = microtime(true);
-for($x=0;$x<$iterations;$x++) {
-    if($d['poort']->s == 'Off') $sum++;
-}
-$end = microtime(true);
-echo "String == check: ".(($end-$start)*1000)." ms, sum=$sum\n";
-
-// string check
-$sum = 0;
-$start = microtime(true);
-for($x=0;$x<$iterations;$x++) {
-    if($d['poort']->s === 'Off') $sum++;
-}
-$end = microtime(true);
-echo "String === check: ".(($end-$start)*1000)." ms, sum=$sum\n";
-
-// int check
-$sum = 0;
-$start = microtime(true);
-for($x=0;$x<$iterations;$x++) {
-    if($d['poort']->rt == 1) $sum++;
-}
-$end = microtime(true);
-echo "Int == check: ".(($end-$start)*1000)." ms, sum=$sum\n";
-
-// int check
-$sum = 0;
-
-$start = microtime(true);
-for($x=0;$x<$iterations;$x++) {
-    if($d['poort']->rt === 1) $sum++;
-}
-$end = microtime(true);
-echo "Int === check: ".(($end-$start)*1000)." ms, sum=$sum\n";
-
+echo apcu_fetch('d');
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

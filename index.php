@@ -24,7 +24,7 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();">Loading...</a></div>
+		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();"><?= date("G:i:s");?></a></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>

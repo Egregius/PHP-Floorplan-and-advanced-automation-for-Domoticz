@@ -677,6 +677,15 @@ function lgmqtt($msg) {
 	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 	fclose($fp);
 }
+function lgtype($type,$msg) {
+	$fp = fopen("/temp/$type.log", "a+");
+	$time = microtime(true);
+	$dFormat = "d-m H:i:s";
+	$mSecs = $time - floor($time);
+	$mSecs = substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
+}
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	lg('bosekey '.$ip.' '.$key.' '.$msg);
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
