@@ -103,7 +103,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if ($prevSet==1) {
 					$maxpow=100;$spmode=1;$set+=10;
 				} else {
-					//$set+=-1;
+					$set+=-1;
 //						if($daikin->$k->powerontime<$time-36)lg(__LINE__);
 //						if($prevSetTime > $time - 57600)lg(__LINE__);
 //						else lg(date("G:i:s",$prevSetTime));
