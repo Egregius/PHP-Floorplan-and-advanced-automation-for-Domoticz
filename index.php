@@ -9,6 +9,13 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Floorplan</title>
 		<meta name="viewport" content="width=device-width,initial-scale=<?= $scale ?>,user-scalable=yes,minimal-ui">
+		<meta name="viewport"
+      		content="width=device-width,
+               initial-scale=<?= $scale ?>,
+               minimum-scale=<?= $scale ?>,
+               maximum-scale=1.5,
+               user-scalable=yes">
+
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -246,9 +253,9 @@
 				<div class="abs z1 i48" style="width:70px;" id="mac"></div>
 				<div class="abs z1 i48" style="width:70px;" id="ipaddock"></div>
 				<div class="abs blackmedia">
-					<div class="fix z1 center" style="top:880px;left:320px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40" alt="Log"><br>Log</a></div>
-					<div class="fix z1 center" style="top:880px;left:400px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
-					<div class="fix z1 center" style="top:300px;left:70px;width:424px;">
+					<div class="abs z1 center" style="top:590px;left:250px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40" alt="Log"><br>Log</a></div>
+					<div class="abs z1 center" style="top:590px;left:320px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
+					<div class="abs z1 center" style="top:0px;left:0px;width:100%;">
 						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b3">Google myMaps</button>
 						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b3">Garmin GPX</button>
 						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b3">Garmin Badges</button>
