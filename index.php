@@ -2,8 +2,6 @@
 <!DOCTYPE HTML>
 <html lang="nl">
 	<head>
-		<!-- <link rel="dns-prefetch" href="//mqtt.egregius.be">
-		<link rel="preconnect" href="ws://mqtt.egregius.be:9001"> -->
 		<link rel="dns-prefetch" href="//192.168.2.22">
 		<link rel="preconnect" href="ws://192.168.2.22:9001">
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">

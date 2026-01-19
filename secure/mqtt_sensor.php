@@ -49,7 +49,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$oldt = (int)($d['daikin']->t ?? 0);
 			$rel_increase = ($old > 0) ? (($val - $old) / $old) : 1;
 			$time_passed = ($time - $oldt) >= 60;
-			if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) storep('daikin',$val);
+			if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) {
+				if($val===0) storesp('daikin','Off',0);
+				else storep('daikin',$val);
+			}
 		} elseif ($device === 'sun_solar_elevation') {
 			$status = (float)$status;
 			if ($status >= -10 && $status <= 10) {

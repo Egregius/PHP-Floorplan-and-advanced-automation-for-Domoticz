@@ -263,9 +263,12 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if($name=='rbureel') hass('cover', 'set_cover_position', $entity, [
+    if($name=='rbureel') {
+    	usleep(50000);
+    	hass('cover', 'set_cover_position', $entity, [
             'position' => $name === 'rbureel' ? 100 - $level : $level
         ]);
+    }
 //    $d[$name]->s=$level;
 //    $d[$name]->t=$d['time'];
 }

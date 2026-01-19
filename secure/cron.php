@@ -36,7 +36,6 @@ updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
 	if (isset($v->f)&&$v->f===1) publishmqtt('d/'.$k,toJsonClean($v));
 }
-
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>0];
 $daikin ??= new stdClass();
 foreach (array('living', 'kamer', 'alex') as $k) {

@@ -24,6 +24,7 @@ if ($uur==0||LOOP_START>$time-60) {
 					ROUND(AVG(max_buiten),1) AS x
 				FROM temp_hist
 				WHERE (DAYOFYEAR(datum) >= :start OR DAYOFYEAR(datum) <= :end)
+					AND HOUR(datum) BETWEEN 9 AND 20
 			");
 			$stmt->execute([
 				':start' => $start < 0 ? 365 + $start : $start,
@@ -37,6 +38,7 @@ if ($uur==0||LOOP_START>$time-60) {
 					ROUND(AVG(max_buiten),1) AS x
 				FROM temp_hist
 				WHERE DAYOFYEAR(datum) BETWEEN :start AND :end
+					AND HOUR(datum) BETWEEN 9 AND 20
 			");
 			$stmt->execute([':start' => $start, ':end' => $end]);
 		}
