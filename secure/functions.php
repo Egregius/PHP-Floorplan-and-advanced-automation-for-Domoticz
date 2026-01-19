@@ -642,34 +642,14 @@ function telegram($msg,$silent=true,$to=1) {
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
 	lg('✉️  Telegram sent: '.$msg);
 }
-function lg($msg,$level=0) {
-/*
-Levels:
-0:	Default / Undefined
-1:	Loop starts
-2:
-3:
-4:	Switch commands
-5:	Setpoints
-6:	OwnTracks
-7:
-8:	Update kWh devices
-9:	Update temperatures
-10: Store/Storemode
-99:	SQL Fetchdata
-*/
-	global $d;
-	$loglevel = $d['auto']->m ?? 0;
-
-	if ($level <= $loglevel) {
-		$fp = fopen('/temp/domoticz.log', "a+");
-		$time = microtime(true);
-		$dFormat = "d-m H:i:s";
-		$mSecs = $time - floor($time);
-		$mSecs = substr(number_format($mSecs, 3), 1);
-		fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-		fclose($fp);
-	}
+function lg($msg) {
+	$fp = fopen('/temp/domoticz.log', "a+");
+	$time = microtime(true);
+	$dFormat = "d-m H:i:s";
+	$mSecs = $time - floor($time);
+	$mSecs = substr(number_format($mSecs, 3), 1);
+	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
+	fclose($fp);
 }
 function lgmqtt($msg) {
 	$fp = fopen('/temp/mqttpublish.log', "a+");

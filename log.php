@@ -58,7 +58,6 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 <script src="/scripts/jquery-3.5.1.min.js"></script>
 <script src="/scripts/jquery-ui.min.js"></script>
 <script type="text/javascript">
-	/* <![CDATA[ */
 	lastSize=0
 	documentHeight=0
 	scrollPosition=0
@@ -91,48 +90,16 @@ input[type=select]{cursor:pointer;-webkit-appearance:none;border-radius:0;-moz-b
 			if (scroll) scrollToBottom()
 		})
 	}
-	function setLoglevel(level){
-		$.getJSON('/ajax.php?device=auto&command=mode&action='+level.value)
-	}
-	/* ]]> */
 	function navigator_Go(url){window.location.assign(url)}
 </script>
 </head>
 <body>
-	<div class="fix z1" style="position:fixed;top:0px;left:0px;">
+	<div class="fix z1" style="position:fixed;bottom:5px;left:5px;">
 		<a href="javascript:navigator_Go('floorplan.php');">
 			<img src="/images/close.png" width="48px" height="48px"/>
 		</a>
 	</div>
-	<div class="fix z1" style="position:fixed;top:0px;left:50px;width:300px;">
-		<form>
-			<select name="loglevel" class="button btn b1" onchange="setLoglevel(this)">
-<?php
-	$db = Database::getInstance();
-	$stmt=$db->query("select m from devices WHERE n='auto';");
-	while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) $loglevel = $row->m;
-	$levels=array(
-		0=>'Default / Undefined',
-		1=>'Loop starts',
-		3=>'Setpoints',
-		4=>'Switch commands',
-		6=>'OwnTracks',
-		8=>'Update kWh devices',
-		9=>'Update temperatures',
-		10=>'Store/Storemode',
-		99=>'SQL Fetchdata'
-	);
-	foreach ($levels as $k=>$v) {
-		if ($k==$loglevel) echo '
-				<option value="'.$k.'" selected>'.$k.' '.$v.'</option>';
-		else echo '
-				<option value="'.$k.'">'.$k.' '.$v.'</option>';
 
-	}
-?>
-			</select>
-		</form>
-	</div>
 	<div class="contents">
 		<div id="results" class="results"></div>
 	</div>

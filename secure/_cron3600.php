@@ -24,7 +24,6 @@ if ($uur==0||LOOP_START>$time-60) {
 					ROUND(AVG(max_buiten),1) AS x
 				FROM temp_hist
 				WHERE (DAYOFYEAR(datum) >= :start OR DAYOFYEAR(datum) <= :end)
-					AND HOUR(datum) BETWEEN 10 AND 20
 			");
 			$stmt->execute([
 				':start' => $start < 0 ? 365 + $start : $start,
@@ -38,7 +37,6 @@ if ($uur==0||LOOP_START>$time-60) {
 					ROUND(AVG(max_buiten),1) AS x
 				FROM temp_hist
 				WHERE DAYOFYEAR(datum) BETWEEN :start AND :end
-					AND HOUR(datum) BETWEEN 10 AND 20
 			");
 			$stmt->execute([':start' => $start, ':end' => $end]);
 		}
@@ -89,7 +87,7 @@ if ($uur==0||LOOP_START>$time-60) {
 				ROUND(AVG(buiten), 2) AS avg_buiten,
 				MAX(buiten) AS max_buiten
 			FROM temp
-			WHERE DATE(stamp) = :datum
+			WHERE DATE(stamp) = :datum AND HOUR(stamp) BETWEEN 8 AND 20
 		");
 		$stmt->execute([':datum' => $yesterday]);
 		$data = $stmt->fetch(PDO::FETCH_ASSOC);

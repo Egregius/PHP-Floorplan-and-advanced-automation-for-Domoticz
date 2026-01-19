@@ -2,7 +2,7 @@
 $start=microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-$db = Database::getInstance();
+//$db = Database::getInstance();
 echo '
 <html>
 	<head>
@@ -21,7 +21,6 @@ echo '
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 		<script type="text/javascript" language="javascript" src="https://mynetpay.be/js/jQuery.dataTables.columnFilter.js"></script>
 		<script type="text/javascript" src="/scripts/floorplanjs.js"></script>
-
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css">
 		<style>
 			html{width:100%!important;}
@@ -62,36 +61,12 @@ echo '
 			}
 		</style>
 	</head>
-	<body>';
-if (isset($_REQUEST['nicestatus'])) {
-	echo '
-		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
-			<a href=\'javascript:navigator_Go("floorplan.cache.php?nicestatus");\'>
-				<img src="/images/restart.png" width="50px" height="50px"/>
-			</a>
-		</div>
-		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.cache.php'.(isset($_REQUEST['page'])?'?page='.$_REQUEST['page']:'').'\';">
-			Real status
-		</div>';
-} else {
-	echo '
-		<div class="fix" style="top:0px;left:0px;height:50px;width:50px;background-color:#CCC">
-			<a href=\'javascript:navigator_Go("floorplan.cache.php");\'>
-				<img src="/images/restart.png" width="50px" height="50px"/>
-			</a>
-		</div>
-		<div class="fix btn" style="top:0px;left:55px;height:50px;width:150px;" onclick="location.href=\'floorplan.cache.php?nicestatus'.(isset($_REQUEST['page'])?'&page='.$_REQUEST['page']:'').'\';">
-			Nice status
-		</div>';
-}
-echo '
-		<div class="fix" style="top:0px;right:0px;">
+	<body>
+		<div class="fix" style="bottom:5px;left:5px;">
 			<a href=\'javascript:navigator_Go("floorplan.php");\'>
 				<img src="/images/close.png" width="50px" height="50px"/>
 			</a>
 		</div>
-		<br>
-		<br>
 		<br>
 		<div class="table-wrapper">
 		<table  id="table" cellpadding="2" cellspacing="0">
@@ -105,17 +80,20 @@ echo '
 			</thead>
 			<tbody>';
 $d=fetchdata(0, basename(__FILE__).':'.__LINE__);
-$sql="SELECT *  FROM `devices` ORDER BY t DESC";
-if (!$result=$db->query($sql)) {
-	die('There was an error running the query ['.$sql.' - '.$db->error.']');
-}
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+uasort($d, function ($a, $b) {
+    if (!isset($a->t) && !isset($b->t)) return 0;
+    if (!isset($a->t)) return 1;
+    if (!isset($b->t)) return -1;
+
+    return $b->t <=> $a->t;
+});
+
+foreach($d as $n=>$row) {
 	echo '
 				<tr class="border_bottom">';
-	if (isset($_REQUEST['nicestatus'])) {
-		if (str_ends_with($row->n, '_set')) {
+		if (str_ends_with($n, '_set')) {
 			echo '
-					<td>'.$row->n.'</td>';
+					<td>'.$n.'</td>';
 			if ($row->s=='D') echo '
 					<td>Drogen</td>';
 			else echo '
@@ -127,26 +105,21 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>Manueel</td>';
 			}
-		} elseif (str_ends_with($row->n, 'Z')) {
-			echo '
-					<td>'.$row->n.'</td>
+		} elseif (str_ends_with($n, '_temp')) {
+			if ($n=='waskamer_temp'||$n=='zolder_temp') {
+				echo  '
+					<td>'.$n.'</td>
 					<td>'.number_format($row->s, 1, ',', '').' °C</td>
 					<td></td>';
-		} elseif (str_ends_with($row->n, '_temp')) {
-			if ($row->n=='buiten_temp') {
-				echo  '
-					<td>'.$row->n.'</td>
-					<td>'.number_format($row->s, 1, ',', '').' °C</td>
-					<td>'.number_format($row->m, 0, ',', '').' % Buien</td>';
 			} else {
 				echo '
-					<td>'.$row->n.'</td>
+					<td>'.$n.'</td>
 					<td>'.number_format($row->s, 1, ',', '').' °C</td>
-					<td>'.$row->m.'</td>';
+					<td>'.$row->m.' %</td>';
 			}
-		} elseif (str_starts_with($row->n, 'R')) {
+		} elseif (str_starts_with($n, 'r')) {
 			echo '
-					<td>'.$row->n.'</td>';
+					<td>'.$n.'</td>';
 			if ($row->s==0) {
 				echo '
 					<td>Open</td>';
@@ -157,29 +130,16 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>'.$row->s.' % Toe</td>';
 			}
-			if ($row->m==0) {
-				echo '
-					<td>Auto</td>';
-			} elseif ($row->m==1) {
-				echo '
-					<td>Manueel</td>';
-			} elseif ($row->m==2) {
-				echo '
-					<td>Slapen</td>';
-			}
-		} elseif (str_starts_with($row->n, '8')) {
 			echo '
-					<td>'.$row->n.'</td>
+					<td></td>';
+		} elseif (str_starts_with($n, '8')) {
+			echo '
+					<td>'.$n.'</td>
 					<td></td>
 					<td></td>';
-		} elseif (str_starts_with($row->n, 'mini')) {
+		} elseif($n=='luifel') {
 			echo '
-					<td>'.$row->n.'</td>
-					<td></td>
-					<td></td>';
-		} elseif($row->n=='luifel') {
-			echo '
-					<td>'.$row->n.'</td>';
+					<td>'.$n.'</td>';
 			if ($row->s==0) {
 				echo '
 					<td>Gesloten</td>';
@@ -197,9 +157,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>Manueel</td>';
 			}
-		} elseif (in_array($row->n, array('eettafel','zithoek','kamer','waskamer','alex','lichtbadkamer'))) {
+		} elseif (in_array($n, array('eettafel','zithoek','kamer','waskamer','alex','lichtbadkamer'))) {
 			echo '
-					<td>'.$row->n.'</td>';
+					<td>'.$n.'</td>';
 			if ($row->s==0) {
 				echo '
 					<td>Off</td>';
@@ -217,37 +177,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 				echo '
 					<td>Sleep</td>';
 			}
-		} elseif ($row->n=='zonvandaag') {
-			echo '
-					<td>'.$row->n.'</td>
-					<td>'.number_format($row->s, 1, ',', '').' kWh</td>
-					<td>'.($row->m>0?number_format($row->m, 1, ',', ''):0).' % Ref</td>';
-		} elseif ($row->n=='max') {
-			echo '
-					<td>Max voorspeld</td>
-					<td></td>
-					<td>'.number_format($row->m*100, 0).' % Regen</td>';
-		} elseif ($row->n=='uv') {
-			echo '
-					<td>UV</td>
-					<td>Nu '.number_format($row->s, 1, ',', '').'</td>
-					<td>Max '.number_format($row->m, 1, ',', '').'</td>';
-		} elseif ($row->n=='zon') {
-			echo '
-					<td>Zon</td>
-					<td>'.number_format($row->s, 0, ',', '').' W</td>
-					<td></td>';
-		} elseif ($row->n=='elec') {
-			echo '
-					<td>Elec</td>
-					<td>'.number_format($row->s, 0).' W</td>
-					<td>'.number_format($row->m, 1, ',', '').' kWh</td>';
-		} elseif ($row->n=='icon') {
-			echo '
-					<td>icon</td>
-					<td><img src="/images/'.$d['icon']->s.'.png" alt="icon"></td>
-					<td>'.$row->m.'% Humidity</td>';
-		} elseif ($row->n=='Weg') {
+		} elseif ($n=='Weg') {
 			echo '
 					<td>Weg</td>';
 			if ($row->s==0) {
@@ -262,15 +192,9 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			}
 			echo '
 					<td nowrap>Laatste beweging:<br>'.date("d-m G:i:s", $row->m).'</td>';
-		} elseif ($row->n=='wind') {
+		} elseif ($n=='auto') {
 			echo '
-					<td>'.$row->n.'</td>
-					<td>'.number_format($row->s, 1, ',', '').' km/u</td>';
-			echo '
-					<td></td>';
-		} elseif ($row->n=='auto') {
-			echo '
-					<td>'.$row->n.'</td>';
+					<td>'.$n.'</td>';
 			if ($row->s=='Off') {
 				echo '
 					<td>Lichten manueel</td>';
@@ -286,12 +210,7 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 					<td>Dag</td>';
 			} else echo '
 					<td></td>';
-		} elseif ($row->n=='minmaxtemp') {
-			echo '
-					<td>Temp &lt; 6u</td>
-					<td>min '.number_format($row->s, 1, ',', '') .' °C</td>
-					<td>max '.number_format($row->m, 1, ',', '').' °C</td>';
-		} elseif ($row->n=='heating') {
+		} elseif ($n=='heating') {
 			echo '
 					<td>Heating</td>
 					<td>';
@@ -304,34 +223,35 @@ while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 			} elseif ($row->s==1) {
 				echo '1 Airco heating';
 			} elseif ($row->s==2) {
+				echo '2 Gas/Airco heating';
+			} elseif ($row->s==3) {
 				echo '2 Gas heating';
 			}
 			echo '</td>
-					<td>Big diff '.number_format($row->m??0, 1, ',', '').' °C</td>';
-		} elseif ($row->n=='jaarteller') {
-			echo '
-					<td>Teller jaar</td>
-					<td>'.number_format($row->s, 2, ',', '').' kWh/dag</td>
 					<td></td>';
 		} else {
 			echo '
-					<td>'.$row->n.'</td>
+					<td>'.$n.'</td>
 					<td>'.substr($row->s ?? '', 0, 20).'</td>
 					<td>'.substr($row->m ?? '', 0, 20).'</td>';
 		}
-	} else {
-		echo '
-					<td>'.$row->n.'</td>
-					<td>'.substr($row->s ?? '', 0, 20).'</td>
-					<td>'.substr($row->m ?? '', 0, 20).'</td>';
-	}
-	if ($row->t<TIME - (86400*7*4)) {
-		echo '
+	if (isset($row->t)) {
+		if ($row->t<TIME - (86400*7*4)) {
+			echo '
 					<td nowrap>'.date('d-m-Y', $row->t).'</td>
 				</tr>';
+		} elseif ($row->t<TIME - 82800) {
+			echo '
+					<td nowrap>'.date('d-m-Y G:i', $row->t).'</td>
+				</tr>';
+		} else {
+			echo '
+					<td nowrap>'.date("G:i:s", $row->t).'</td>
+				</tr>';
+		}
 	} else {
 		echo '
-					<td nowrap>'.date("d-m G:i:s", $row->t).'</td>
+					<td></td>
 				</tr>';
 	}
 }
