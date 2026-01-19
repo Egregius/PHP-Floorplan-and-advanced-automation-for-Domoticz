@@ -3,11 +3,14 @@ $n='living';
 if ($status>$d[$n.'_temp']->s+2) $status=$d[$n.'_temp']->s+2;
 elseif ($status<$d[$n.'_temp']->s-2) $status=$d[$n.'_temp']->s-2;
 $db = Database::getInstance();
-$result=$db->query("SELECT AVG(temp) as AVG FROM (SELECT $n as temp FROM `temp` ORDER BY `temp`.`stamp` DESC LIMIT 0,15) as A");
+$stamp=date('Y-m-d H:i:s', $time-600);
+$sql="SELECT AVG(".$n.") AS AVG FROM `temp` WHERE stamp>='$stamp'";
+$result=$db->query($sql);
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	$avg=$row['AVG'];
 }
-$diff=round($status-$avg,2);
+$diff=round($status-$avg,4);
 if ($d[$n.'_temp']['icon']!=$diff) {
 	storeicon($n.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 }
+lgtype('trend_living','temp='.$status.'	trend='.$diff.'	thermometer');

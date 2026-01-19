@@ -347,8 +347,8 @@ function store($name='',$status='',$msg='') {
 		}
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -396,8 +396,8 @@ function storemode($name,$mode,$msg='') {
 		}
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
-		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -426,8 +426,8 @@ function storesm($name,$s,$m,$msg='') {
 		}
 	}
 	if($affected>0) {
-		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -457,8 +457,8 @@ function storesmi($name,$s,$m,$i,$msg='') {
 		}
 	}
 	if($affected>0) {
-		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
+		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -489,8 +489,8 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 		}
 	}
 	if($affected>0) {
-		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -519,8 +519,8 @@ function storesp($name,$s,$p,$msg='') {
 		}
 	}
 	if($affected>0) {
-		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -549,8 +549,8 @@ function storep($name,$p,$msg='') {
 		}
 	}
 	if($affected>0) {
-		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -577,10 +577,11 @@ function storeicon($name,$i,$msg='') {
 			throw $e;
 		}
 	}
-	if (str_ends_with($name, '_temp')) return;
+
 	if($affected>0) {
-		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		if (str_ends_with($name, '_temp')) return;
+		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -1277,3 +1278,4 @@ function convertbytes($size) {
     $unit=array('b','kb','mb','gb','tb','pb');
     return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
  }
+function clamp($v,$min,$max){return max($min,min($max,$v));}
