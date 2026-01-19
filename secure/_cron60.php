@@ -15,7 +15,7 @@ foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zol
 	if (!isset($d[$i.'_temp']->i)||$d[$i.'_temp']->i!=$diff) {
 		storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
 	}
-	if ($i=='living') lgtype('trend_living','temp='.$d[$i.'_temp']->s.'	trend='.$diff.'	cron');
+	if ($i=='living') lgtype('trend_living','cron60	temp='.$d[$i.'_temp']->s.'	trend='.$diff.'	zon='.$d['z'].'W	daikinpower='.$d['daikin']->p.'W');
 }
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']->s;

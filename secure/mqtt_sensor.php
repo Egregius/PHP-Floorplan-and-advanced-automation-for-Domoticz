@@ -94,6 +94,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$st = max($d[$device]->s - 0.5, min($st, $d[$device]->s + 0.5));
 				if ($d[$device]->s != $st && abs($st - $d[$device]->s) >= 0.1) {
 					store($device, $st);
+					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
 			} else {
 				if ($d[$device]->s!=$status) {

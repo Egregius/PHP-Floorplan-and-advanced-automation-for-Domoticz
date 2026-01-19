@@ -47,6 +47,7 @@ elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 // --- Daikin regeling per kamer ---
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
+    $target=$set;
     $dif = $d[$k.'_temp']->s - $set;
     $trend = $d[$k.'_temp']->i;
 
@@ -68,8 +69,19 @@ foreach (array('living','kamer','alex') as $k) {
             else $set -= 1; // standaard temperatuurdaling
 
             // formule voor set adjustment op basis van dif en trend
-            $adj = ($dif - $trend*10) / 2.0; // kan nog tunen
-            $set += clamp($adj, -1.5, 1.5);
+            // schaalfactoren voor tuning
+			$k_factor = 0.6;       // invloed van dif
+			$trend_factor = 8.0;   // invloed van trend
+
+			// combineer dif en trend
+			// trend telt negatief mee bij stijging (te warm) en positief bij daling (te koud)
+			$adj = ($dif - $trend * $trend_factor) * $k_factor;
+
+			// limiet op bijstelling per stap
+			$adj = clamp($adj, -1.5, 1.0);  // negatief iets groter → sneller afkoelen dan opwarmen
+
+			// setpoint bijstellen
+			$set += $adj;
 
             if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -87,7 +99,7 @@ foreach (array('living','kamer','alex') as $k) {
 
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$set ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode ||
-            $daikin->$k->lastset <= $time-581) {
+            ($power!=0&&$daikin->$k->lastset <= $time-581)) {
 
             if (daikinset($k,$power,4,$set,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
                 $daikin->$k->power = $power;
@@ -97,7 +109,7 @@ foreach (array('living','kamer','alex') as $k) {
                 $daikin->$k->spmode= $spmode;
                 $daikin->$k->lastset=$time;
                 publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
-                if ($k=='living') lgtype('trend_living', "Daikin	set={$set}	spm={$spm[$spmode]}	maxpow={$maxpow}");
+                if ($k=='living') lgtype('trend_living', "Daikin	target={$target}	set={$set}	dif={$dif}	trend={$trend}	adj={$adj}	spm={$spm[$spmode]}	maxpow={$maxpow}	zon=".$d['z'].'W	daikinpower='.$d['daikin']->p.'W	maxpow='.$maxpow);
             }
         }
 
