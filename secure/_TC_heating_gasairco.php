@@ -68,24 +68,26 @@ foreach (array('living','kamer','alex') as $k) {
             if ($prevSet==1) { $maxpow=100; $spmode=1; $set+=10; }
             else $set -= 1; // standaard temperatuurdaling
 
-            // formule voor set adjustment op basis van dif en trend
-            // schaalfactoren voor tuning
-			$k_factor = 0.6;       // invloed van dif
+           $k_factor = 0.6;       // invloed van dif
 			$trend_factor = 8.0;   // invloed van trend
 
+			// adaptief: hogere dif → grotere bijstelling
+			$scale = 1.0;
+			if ($dif > 1.5) $scale = 1.5;
+			elseif ($dif > 1.0) $scale = 1.2;
+
 			// combineer dif en trend
-			// trend telt negatief mee bij stijging (te warm) en positief bij daling (te koud)
-			$adj = ($dif - $trend * $trend_factor) * $k_factor;
+			$adj = ($dif - $trend * $trend_factor) * $k_factor * $scale;
 
-			// limiet op bijstelling per stap
-			$adj = clamp($adj, -1.5, 1.0);  // negatief iets groter → sneller afkoelen dan opwarmen
+			// limiet op bijstelling per stap (asymmetrisch)
+			$adj = clamp($adj, -1.5, 1.0);
 
-			// setpoint bijstellen
+			// apply
 			$set += $adj;
 
             if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
-            $set -= 1;
+            $set -= 1.5;
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
@@ -109,7 +111,7 @@ foreach (array('living','kamer','alex') as $k) {
                 $daikin->$k->spmode= $spmode;
                 $daikin->$k->lastset=$time;
                 publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
-                if ($k=='living') lgtype('trend_living', "Daikin	target={$target}	set={$set}	dif={$dif}	trend={$trend}	adj={$adj}	spm={$spm[$spmode]}	maxpow={$maxpow}	zon=".$d['z'].'W	daikinpower='.$d['daikin']->p.'W	maxpow='.$maxpow);
+                if ($k=='living') lgtype('trend_living', "Daikin	target={$target}	set={$set}	dif={$dif}	trend={$trend}	adj={$adj}	scale={$scale}	spm={$spm[$spmode]}	maxpow={$maxpow}	zon=".$d['z'].'W	daikinpower='.$d['daikin']->p.'W	maxpow='.$maxpow);
             }
         }
 

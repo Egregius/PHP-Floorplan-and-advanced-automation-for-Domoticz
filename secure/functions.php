@@ -832,7 +832,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	if(!http_get($url)) return false;
 	if ($d['heating']->s>=0) $msg="🔥 ";
 	else  $msg="❄️ ";
-	$msg.="daikinset [$device]	power=$power	| mode=$mode | temp=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
+	$msg.="daikinset [$device]	power=$power	| mode=$mode | set=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
 	if($prevspmode!==$spmode) {
 		$msg.=' + spmode';
 		usleep(100000);
