@@ -69,7 +69,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 	if ($d['living_set']->m == 2) $weg = 0;
 	$buitenTempStart = round($d['buiten_temp']->s / 0.5) * 0.5;
 	if(!isset($leadDataLiving)) {
-		$content = @file_get_contents('/var/www/html/secure/leadDataLiving.json');
+		$content = @file_get_contents('/var/www/leadDataLiving.json');
 		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
 		lg('leadDataLiving read from file');
 	}
@@ -217,7 +217,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 				ksort($innerArray, SORT_NUMERIC);
 			}
 			unset($innerArray);
-			file_put_contents('/var/www/html/secure/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
+			file_put_contents('/var/www/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
 			$lastWriteleadDataLiving=$time;
 			$minutesUsed=round($minutesUsed,1);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";

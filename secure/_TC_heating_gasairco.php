@@ -20,8 +20,8 @@ elseif ($difgas>=0   &&$d['brander']->s=="On" &&$pastbrander>$uitna)     sw('bra
 elseif ($difgas>=-0.1&&$d['brander']->s=="On" &&$pastbrander>$uitna*1.5) sw('brander','Off', 'Uit na = '.$uitna*6);
 elseif ($difgas>=-0.2 &&$d['brander']->s=="On" &&$pastbrander>$uitna*2)   sw('brander','Off', 'Uit na = '.$uitna*12);
 
-$log_file = '/var/www/html/secure/daikin_learn.json';
-$config_file = '/var/www/html/secure/daikin_config.json';
+$log_file = '/var/www/daikin_learn.json';
+$config_file = '/var/www/daikin_config.json';
 //if (file_exists($config_file)) {
 	$config = json_decode(file_get_contents($config_file), true);
 	$trend_factor = $config['trend_factor'];
@@ -105,9 +105,11 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				} else {
 					$set+=-1;
 					if (past('living_set')>3600) {
-						$log_entry['l']  = $line;
 						$log_entry['sa'] = $set;
 						$log_entry['sp'] = $spmode;
+						$log_entry['mp'] = $maxpow;
+						$log_entry['w'] = (int)$d['daikin']->p ?? null;  // Watt momenteel
+						$log_entry['kwh'] = (float)$d['daikin_cons']->s ?? null;
 						file_put_contents($log_file, json_encode($log_entry) . "\n", FILE_APPEND);
 					}
 				}

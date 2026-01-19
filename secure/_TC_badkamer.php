@@ -30,11 +30,11 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 	$mode      = $d['heating']->s;
 	$prevSetbath   = $d['badkamer_start_temp']->m ?? 0;
 	if(!isset($leadDataBath)) {
-		$contentBath = @file_get_contents('/var/www/html/secure/leadDataBath.json');
+		$contentBath = @file_get_contents('/var/www/leadDataBath.json');
 		$leadDataBath = $contentBath ? json_decode($contentBath, true) ?? [] : [];
 		lg('leadDataBath read from file');
 	}
-	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=@filemtime('/var/www/html/secure/leadDataBath.json')??0;
+	if(!isset($lastWriteleadDataBath)) $lastWriteleadDataBath=@filemtime('/var/www/leadDataBath.json')??0;
 	if (!empty($leadDataBath[$mode])) {
 		$temps = array_keys($leadDataBath[$mode]);
 		sort($temps);
@@ -120,7 +120,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 				ksort($innerArray, SORT_NUMERIC);
 			}
 			unset($innerArray);
-			file_put_contents('/var/www/html/secure/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
+			file_put_contents('/var/www/leadDataBath.json', json_encode($leadDataBath), LOCK_EX);
 			$lastWriteleadDataBath=$time;
 			$minutesUsed=round($minutesUsed,1);
 			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDegBath} min/°C | buitenTempStart={$buitenTempStart})";

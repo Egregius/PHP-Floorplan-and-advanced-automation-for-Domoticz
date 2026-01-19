@@ -1,8 +1,8 @@
 <?php
 // auto_tune_daikin.php - Draai dit bijvoorbeeld dagelijks via cron
 
-$log_file = '/var/www/html/secure/daikin_learn.json';
-$config_file = '/var/www/html/secure/daikin_config.json';
+$log_file = '/var/www/daikin_learn.json';
+$config_file = '/var/www/daikin_config.json';
 echo "=== DAIKIN AUTO-TUNE ===\n";
 echo date('Y-m-d H:i:s') . "\n\n";
 

@@ -1,8 +1,8 @@
 <?php
 // analyze_daikin.php
 
-$log_file = '/var/www/html/secure/daikin_learn.json';
-$config_file = '/var/www/html/secure/daikin_config.json';
+$log_file = '/var/www/daikin_learn.json';
+$config_file = '/var/www/daikin_config.json';
 
 // Lees alle log entries
 $lines = file($log_file, FILE_IGNORE_NEW_LINES);

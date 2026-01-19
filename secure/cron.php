@@ -32,12 +32,12 @@ foreach (['badkamervuur2','badkamervuur1','water'] as $i) sw($i,'Off');
 if ($d['weg']->s>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
-$last10 = $last20 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
+$last10 = $last30 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
 	if (isset($v->f)&&$v->f===1) publishmqtt('d/'.$k,toJsonClean($v));
 }
-$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>0];
+$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>$time-300];
 $daikin ??= new stdClass();
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$daikin->$k ??= (object)$daikinDefaults;
@@ -50,7 +50,7 @@ while (true) {
 		$d = fetchdata();
 		include '_cron10.php';
 	}
-	if ($time % 20 === 0 && $time !== $last20) {
+	if ($time % 30 === 0 && $time !== $last30) {
 		$user = 'HEATING';
 		if ($d['heating']->s == -2) include '_TC_cooling_airco.php';
 		elseif ($d['heating']->s == -1) include '_TC_cooling_passive.php';
