@@ -12,7 +12,7 @@ define('VERSIE', 5);
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 date_default_timezone_set('Europe/Brussels');
-
+$spm=[-1=>'Eco',0=>'',1=>'Power'];
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
 	$d['time'] = $d['time'] ?? time();
     $dow = ($d['dag']->m >= 250) ? date("w", $d['time'] + 43200) : date("w");
@@ -834,7 +834,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	return FALSE;
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-	global $d, $time, $lastfetch,$daikin;
+	global $d, $time, $lastfetch,$daikin,$spm;
 	static $prevspmode=null;
 	static $prevmaxpow=null;
 	$lastfetch = $time;
@@ -848,7 +848,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	if(!http_get($url)) return false;
 	if ($d['heating']->s>=0) $msg="🔥 ";
 	else  $msg="❄️ ";
-	$msg.="daikinset [$device]	power=$power	| mode=$mode | temp=$stemp | fan=$fan | spmode=$spmode | maxpow=$maxpow";
+	$msg.="daikinset [$device]	power=$power	| mode=$mode | temp=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
 	if($prevspmode!==$spmode) {
 		$msg.=' + spmode';
 		usleep(100000);

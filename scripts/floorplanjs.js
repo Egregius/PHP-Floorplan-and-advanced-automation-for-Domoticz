@@ -1,5 +1,5 @@
 var isSubmitting=!1,euroelec=.2698,eurogas=.092,eurowater=4.8166;const ucfirst=e=>e[0].toUpperCase()+e.slice(1);
-let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,d={time:0},view=null,deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000)
+let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000)
 keys = ['n','c','b','a','z'];
 for (const k of keys) {
     d[k] = 0;
@@ -10,11 +10,10 @@ for (const k of keys) {
     d[k] = v !== null ? Number(v) : 0;
 }
 window.addEventListener('error', (e) => {
-    appendLog('JS ERROR', e.message);
+    log('JS ERROR '+ e.message);
 });
-
 window.addEventListener('unhandledrejection', (e) => {
-    appendLog('PROMISE REJECT', e.reason);
+    log('PROMISE REJECT '+ e.reason);
 });
 function getElem(id){
     let vid=id
@@ -111,30 +110,6 @@ function removeClass(id,cls){
         }
     })
 }
-function appendLog(id,text){
-    if (lastLog[id] === text) return;
-    lastLog[id] = text;
-
-    schedule(() => {
-        const el = getElem('log');
-        if (!el) return;
-        let ts = Date.now();
-        const d  = new Date(ts);
-        const hh = d.getHours().toString().padStart(2,'0');
-        const mm = d.getMinutes().toString().padStart(2,'0');
-        const ss = d.getSeconds().toString().padStart(2,'0');
-
-        const idCol =
-            id.length > 16
-                ? id.slice(0,15) + '…'
-                : id.padEnd(16);
-
-        el.textContent +=
-            `${hh}:${mm}:${ss}  ${idCol} ${text}\n`;
-
-        el.scrollTop = el.scrollHeight;
-    });
-}
 async function ajaxJSON(url){
     const controller=new AbortController()
     try {
@@ -161,7 +136,6 @@ function setView(newView){
     const newEl=getElem(newView)
     if(newEl) newEl.classList.add('active')
 }
-
 function formatDate(t){return date=new Date(1e3*t),date.getDate()+"/"+(date.getMonth()+1)}
 function handleResponse(device,v){
 	d[device]=v
@@ -189,21 +163,19 @@ function handleResponse(device,v){
 					offsetDifference = proposedOffset - avgTimeOffset;
 					if (Math.abs(offsetDifference) <= 3) {
 						avgTimeOffset = proposedOffset;
-						appendLog('offset', `Offset aangepast naar ${avgTimeOffset}s`);
+						log(`Offset aangepast naar ${avgTimeOffset}s`);
 					} else {
 						avgTimeOffset += Math.sign(offsetDifference) * 3;
-						appendLog('offset', `Offset stapsgewijs aangepast naar ${avgTimeOffset}s (doel: ${proposedOffset}s)`);
+						log(`Offset stapsgewijs aangepast naar ${avgTimeOffset}s (doel: ${proposedOffset}s)`);
 					}
 					localStorage.setItem('avgTimeOffset', avgTimeOffset);
 				}
 			}
 			lastAvgValue = d.a;
-			
-			 correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
+			correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
 			if (correctedSeconds % 5 == 0 || forceTimes) {
 				drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
 			}
-		
 			if (d.time === undefined || newTime > d.time) {
 				const date = new Date(newTime * 1000);
 				const hours = date.getHours();
@@ -211,7 +183,7 @@ function handleResponse(device,v){
 				const seconds = ("0" + date.getSeconds()).slice(-2);
 				setTime(`${hours}:${minutes}:${seconds}`);
 				d.time = newTime;
-				if (d.timestamps === undefined || newTime >= d.timestamps + 5 || forceTimes === true) {
+				if (d.timestamps === undefined || (newTime >= d.timestamps + 5 && newTime % 10 == 0) || forceTimes === true) {
 					const items = [
 						...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
 						...['deurgarage','deurinkom','achterdeur','deurvoordeur','deurbadkamer','deurkamer','deurwaskamer','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamwaskamer','raamalex'],
@@ -317,13 +289,10 @@ function handleResponse(device,v){
 			setText('verlof',html)
 			return
 		case 'weg':
-			html='<div class="abs z" onclick="weg();">'
-			if(v.s==0)html+='<img src="/images/Thuis.png" id="weg" onclick="weg();">'
-			else if(v.s==1)html+='<img src="/images/Slapen.png" id="weg" onclick="weg();">'
-			else if(v.s==2)html+='<img src="/images/weg.png" id="weg" onclick="weg();">'
-			else if(v.s==3)html+='<img src="/images/Vacation.png" id="weg" onclick="weg();">'
-			html+='</div>'
-			setHTML('weg',html)
+			if(v.s==0)setAttr('wegimg','src',"/images/Thuis.png")
+			else if(v.s==1)setAttr('wegimg','src',"/images/Slapen.png")
+			else if(v.s==2)setAttr('wegimg','src',"/images/weg.png")
+			else if(v.s==3)setAttr('wegimg','src',"/images/Vacation.png")
 			if(v.s==0){
 				removeClass('zlivinga','secured')
 				removeClass('zlivingb','secured')
@@ -349,7 +318,6 @@ function handleResponse(device,v){
 				addClass('zhalla','secured')
 				addClass('zhallb','secured')
 			}
-			appendLog('weg',v.s)
 			return
 		case 'alexslaapt':
 			if(v.s==1) {
@@ -393,31 +361,30 @@ function handleResponse(device,v){
 			setHTML('trheating',html)
 			return
 		case 'sirene':
-			if(v.s!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
+			if(v.s==1)html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
 			else html=""
 			setHTML('sirene',html)
 			return
 		case 'brander':
 			const heatingmode=d.heating?.s ?? 0;
-			if(v.s=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
+			if(v.s==0)html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
 			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
 			setHTML('brander',html)
-			
 			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
 			if(heatingmode==0)html+=''
 			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
 			else if(heatingmode==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
 			else if(heatingmode==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
 			else if(heatingmode==4){
-				if(v.s=='On')html+='<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
+				if(v.s==1)html+='<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
 				else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">'
 			}
 			setHTML('heating',html)
 			if(heatingmode>=1){
-				if(v.s=="Off") setAttr('branderfloorplan','src',"/images/fire_Off.png")
+				if(v.s==0) setAttr('branderfloorplan','src',"/images/fire_Off.png")
 				else setAttr('branderfloorplan','src',"/images/fire_On.png")
 			} else if(heatingmode>0){
-				if(v.s=="Off")setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
+				if(v.s==0)setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
 				else setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
 			} else setAttr('branderfloorplan','src',"")
 			return
@@ -426,15 +393,19 @@ function handleResponse(device,v){
 			else if(v.s==100)html='<img src="/images/arrowgreendown.png" class="i60">'
 			else html='<img src="/images/arrowdown.png" class="i60"><div class="fix center dimmerlevel" style="position:absolute;top:10px;left:-2px;width:70px;letter-spacing:4;"><font size="5" color="#CCC">'+v.s+'</font> </div>'
 			if(v.m==1)html+='<div class="abs" style="top:2px;left:2px;z-index:-100;background:#fff7d8;width:56px;height:56px;border-radius:45px;"></div>'
-			html+='<br>luifel<br><span id="tluifel"></span>'
+			html+='<br>luifel<br>'
 			setHTML(device,html)
+			updateDeviceTime(device)
+			return
+		case 'l':
+			log('💬 '+v)
 			return
 		default:
 			switch(v?.d) {
 				case 's':
 	            case 'sc':
 	            	html='';
-					const isOn=(v.s == "On"||v.s > 0);
+					const isOn=(v.s > 0);
 					const iconName=v.i || 'l';
 					const specialDevices=["water","regenpomp","steenterras","tuintafel","terras","tuin","auto","media","nas","zetel","grohered","kookplaat","boseliving","bosekeuken","ipaddock","mac","poort"];
 					const confirmDevices=["ipaddcok","mac","daikin","grohered","kookplaat","media","boseliving","bosekeuken","poort"];
@@ -449,9 +420,9 @@ function handleResponse(device,v){
 					}
 			//			if (device == "water"){
 			//				prev=localStorage.getItem('water');
-			//				if (prev!==v.s) localStorage.setItem('water',v.s);  
+			//				if (prev!==v.s) localStorage.setItem('water',v.s);
 			//				prev=localStorage.getItem('watermode');
-			//				if (prev!==v.m) localStorage.setItem('watermode',v.m);  
+			//				if (prev!==v.m) localStorage.setItem('watermode',v.m);
 			//			}
 					onclickHandler='';
 					if (confirmDevices.includes(device)){
@@ -489,20 +460,19 @@ function handleResponse(device,v){
 								setStyle(device,'color','#CCC')
 							} else {
 								html += '<br>' + formatDate(v.t);
-								setStyle(device,'color','#888')
+								setStyle(device,'color','#777')
 							}
 						}
 					}
 					setHTML(device,html);
 					if (device=="poort"&&d.weg?.s>0) setStyle('poort','display','none')
 					else if (device=="weg"&&d.weg.s==0) setStyle('poort','display','block')
-					appendLog(device,v.s)
 					return
 				case 'd':
 	            case 'hd':
 	            	html='';
 					level=parseInt(v.s) || 0;
-					if (level == 0 || v.s == "Off"){
+					if (level == 0){
 						html='<img src="/images/l_Off.png" class="img100">';
 					} else {
 						html='<img src="/images/l_On.png" class="img100">';
@@ -518,24 +488,22 @@ function handleResponse(device,v){
 						html += 'terras';
 					}
 					setHTML(device,html);
-					appendLog(device,v.s)
 					return
 				case 'b':
 					if(device==="bose101"||device==="bose106"){
 						if(v.m==0)html=''
 						else{
-							if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
+							if(v.s==1)html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
 							else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
 						}
 					}else{
 						if(v.m==0)html=''
 						else{
-							if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
+							if(v.s==1)html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
 							else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
 						}
 					}
 					setHTML(device,html)
-					appendLog(device,v.s)
 					return
 				case 'r':
 					status=100 - v.s;
@@ -589,13 +557,12 @@ function handleResponse(device,v){
 						html += '<br><div id="t' + device + '">' + formatDate(v.t) + '</div>';
 					}
 					setHTML('R'+device,html)
-					appendLog(device,v.s)
 				case 'p':
 					d[device]=v
 					temp=device.toString().replace("pir","")
 					updateDeviceTime(device)
 					if(temp=="hall"||temp=="living"){
-						if(v.s=="On"){
+						if(v.s==1){
 							addClass('z'+temp+'a','motion')
 							addClass('z'+temp+'b','motion')
 						}else{
@@ -603,18 +570,16 @@ function handleResponse(device,v){
 							removeClass('z'+temp+'b','motion')
 						}
 					}else{
-						if(v.s=="On") addClass('z'+temp,'motion')
+						if(v.s==1) addClass('z'+temp,'motion')
 						else removeClass('z'+temp,'motion')
 					}
-					appendLog(device,v.s)
 					return
 				case 'c':
 					if(device!=='raamhall') {
 						d[device]=v
 						updateDeviceTime(device)
-						if(v.s=="Open") addClass(device,'red')
+						if(v.s==1) addClass(device,'red')
 						else removeClass(device,'red')
-						appendLog(device,v.s)
 					}
 					return
 				case 't':
@@ -645,43 +610,52 @@ function handleResponse(device,v){
 						html+='<br><div id="t'+device+'">'+hours+':'+minutes.substr(-2)+'</div>'
 					}else html+='<br><div id="t'+device+'">'+formatDate(v.t)+'</div>';
 					setHTML(device,html)
-					appendLog(device,v.s)
 					return
 			}
 	}
 	if (device==='n') {
-		setText('netvalue', d.n, false);
-		if (d.net > 0) setStyle('net', 'color', berekenKleurRood(d.n, 5000), false);
-		else setStyle('net', 'color', berekenKleurGroen(-d.n, 5000), false);
-		drawCircle('netcircle', d.n, 2500, 90, 'purple');
+		if(setText('netvalue', d.n)){
+			if (d.n < 0) kleur=berekenKleurGroen(-d.n, 5000)
+			else kleur=berekenKleurRood(d.n, 5000)
+			setStyle('net', 'color', kleur);
+			setStyle('nettitle', 'color', kleur);
+			drawCircle('netcircle', d.n, 2500, 90, 'purple');
+		}
 	}
 	if (device==='c') {
-		drawCircle('chargecircle', d.c, 100, 82, 'gray');
-
+		if(setText('batcharge',d.c+' %')) {
+			drawCircle('chargecircle', d.c, 100, 82, 'gray');
+			setStyle('batcharge', 'color', berekenKleurGroen(d.c, 100));
+		}
+		return
 	}
 	if (device==='z') {
-		setText('zonvalue', d.z, false);
-		setStyle('zonvalue', 'color', berekenKleurGroen(d.z, d.zonavg * 2), false);
-		drawCircle('zoncircle', -d.z, d.zonavg, 90, 'green');
+		if(setText('zonvalue', d.z)){
+			setStyle('zonvalue', 'color', berekenKleurGroen(d.z, d.zonavg * 2));
+			drawCircle('zoncircle', -d.z, d.zonavg, 90, 'green');
+		}
 	}
-	if (device==='b'||device==='c') {
+	if (device==='b') {
 		batDisplay = d.b
 		if (batDisplay < -800) batDisplay = -800;
 		else if (batDisplay > 800) batDisplay = 800;
-		setHTML('batvalue', batDisplay + `<br><span class="units">${d.c} %</span>`);
-		if (batDisplay > 0) setStyle('bat', 'color', berekenKleurRood(batDisplay, 2000));
-		else setStyle('bat', 'color', berekenKleurGroen(-batDisplay, 1000));
-		drawCircle('batcircle', batDisplay, 800, 90, 'purple');
+		if(setText('batvalue', batDisplay)) {
+			if (batDisplay > 0) setStyle('bat', 'color', berekenKleurRood(batDisplay, 2000));
+			else setStyle('bat', 'color', berekenKleurGroen(-batDisplay, 1000));
+			drawCircle('batcircle', batDisplay, 800, 90, 'purple');
+		}
 		return
 	}
 	total = d.n + d.z - d.b;
 	if (device==='n'||device==='z'||device==='b'){
-		setText('totalvalue', total, false);
-		setStyle('totalvalue', 'color', berekenKleurRood(d.n, 5000));
-		drawCircle('totalcircle', total, 2500 + d.z, 90, 'purple');
+		if(setText('totalvalue', total)){
+			kleur=berekenKleurRood(d.n, 5000)
+			setStyle('totaltitle', 'color', kleur);
+			setStyle('totalvalue', 'color', kleur);
+			drawCircle('totalcircle', total, 2500 + d.z, 90, 'purple');
+		}
 		return
 	}
-	console.log(device,v)
 }
 async function ajaxbose(ip){
 	cleanup('bose')
@@ -730,7 +704,7 @@ async function ajaxbose(ip){
             else if (img==='None') html='';
             else if (img.startsWith('http')) html=`<img src="${img}" class="spotify" alt="Art">`;
             else html='';
-            setHTML('art',html); 
+            setHTML('art',html);
             html='';
             if (data.source==="SPOTIFY"){
                 html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev')">Prev</button>`;
@@ -843,7 +817,7 @@ function setpoint(device){
 		let btnClass='level-btn';
 		let levelNum=parseFloat(level);
 		let tempNum=(t==='D') ? t : parseFloat(t);
-		
+
 		if(level == t || (t==='D'&&level==='D')){
 			btnClass += ' active';
 		} else if(t!=='D'&&level!=='D'&&levelNum > tempNum){
@@ -1028,11 +1002,11 @@ function weg(){
 	if(d.raamliving.s==='Open') warnings.push('Raam Living OPEN')
 	if(d.raamhall.s==='Open') warnings.push('Raam Hall OPEN')
 	if(d.raamkeuken.s==='Open') warnings.push('Raam Keuken OPEN')
-	if(d.bose103.s==='On') warnings.push('Bose kamer aan')
-	if(d.bose104.s==='On') warnings.push('Bose garage aan')
-	if(d.bose105.s==='On') warnings.push('Bose keuken aan')
-	if(d.bose106.s==='On') warnings.push('Bose Buiten20 aan')
-	if(d.bose107.s==='On') warnings.push('Bose Buiten10 aan')
+	if(d.bose103.s===1) warnings.push('Bose kamer aan')
+	if(d.bose104.s===1) warnings.push('Bose garage aan')
+	if(d.bose105.s===1) warnings.push('Bose keuken aan')
+	if(d.bose106.s===1) warnings.push('Bose Buiten20 aan')
+	if(d.bose107.s===1) warnings.push('Bose Buiten10 aan')
 	if(warnings.length > 0){
 		html += '<h1 style="font-size:4em">OPGELET!<br>'
 		html += warnings.join('<br>')
@@ -1043,8 +1017,9 @@ function weg(){
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/weg.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','2');setView(\'floorplan\');">Weg</button>`
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Slapen.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','1');setView(\'floorplan\');">Slapen</button>`
 	} else if(d.weg.s == 1){
+		setView('floorplan')
 		ajaxcontrol('weg','weg',0)
-		window.location.reload(true)
+		return
 	} else if(d.weg.s == 2){
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','0');setView(\'floorplan\');">Thuis</button>`
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Vacation.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','3');setView(\'floorplan\');">Vakantie</button>`
@@ -1076,7 +1051,7 @@ function heating(){
 }
 function confirmSwitch(device){
 	html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br>'
-	if (d[device].s=='On'){
+	if (d[device].s==1){
 		html+='<button class="btn btna huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
 		html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
 	} else {
@@ -1089,14 +1064,13 @@ function confirmSwitch(device){
 	setHTML('floorplantemp',html);
 	setView('floorplantemp')
 }
-
 const circleStates={};
 function navigator_Go(n){
 	if(socket) socket.end(true);
 	window.location.assign(n)
 }
-function ajaxcontrol(a,o,n){fetch(`/ajax.php?device=${encodeURIComponent(a)}&command=${encodeURIComponent(o)}&action=${encodeURIComponent(n)}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
-function ajaxcontrolbose(a,o,n){fetch(`/ajax.php?boseip=${encodeURIComponent(a)}&command=${encodeURIComponent(o)}&action=${encodeURIComponent(n)}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
+function ajaxcontrol(a,o,n){fetch(`http://192.168.2.2/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
+function ajaxcontrolbose(a,o,n){fetch(`http://192.168.2.2/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
 function floorplanbose(){ajaxbose($ip)(),myAjaxmedia=$.setInterval((function(){ajaxbose($ip)}),1e3)}
 function pad(e,n){return len=n-(""+e).length,(len>0?new Array(++len).join("0"):"")+e}
 function fix(){var e=this,n=e.parentNode,i=e.nextSibling;n.removeChild(e),setTimeout((function(){n.insertBefore(e,i)}),0)}
@@ -1115,7 +1089,6 @@ function initDimmerSlider(e){
 function interp(c1, c2, f) {
     return Math.round(c1 + (c2 - c1) * f);
 }
-
 function clamp(v, min, max) {
     return Math.max(min, Math.min(max, v));
 }
@@ -1126,54 +1099,50 @@ function norm(t, start, end) {
 }
 function berekenKleurBlauw(t, end, start = 0) {
     const f = norm(t, start, end);
-
     if (f <= 0) return '#CCCCCC';
     if (f >= 1) return '#3399FF';
-
     const r = interp(204,  51, f);
     const g = interp(204, 153, f);
     const b = interp(204, 255, f);
-
     return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
 }
 function berekenKleurGroen(t, end, start = 0) {
     const f = norm(t, start, end);
-
     if (f <= 0) return '#CCCCCC';
     if (f >= 1) return '#33FF66';
-
     const r = interp(204,  51, f);
     const g = interp(204, 255, f);
     const b = interp(204, 102, f);
-
     return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
 }
 function berekenKleurRood(t, end, start = 0) {
     const f = norm(t, start, end);
 
     if (f <= 0) return '#CCCCCC';
-    if (f >= 1) return '#FF4444';
+    if (f >= 1) return '#FF0000';
 
-    let r, g, b;
+    let r, g, b, k;
 
     if (f < 0.33) {
-        // grijs → geel
-        const k = f / 0.33;
+        // grijs -> geel
+        k = f / 0.33;
         r = interp(204, 255, k);
         g = interp(204, 255, k);
         b = interp(204, 102, k);
+
     } else if (f < 0.66) {
-        // geel → oranje
-        const k = (f - 0.33) / 0.33;
+        // geel -> oranje
+        k = (f - 0.33) / 0.33;
         r = 255;
         g = interp(255, 153, k);
         b = interp(102, 0, k);
+
     } else {
-        // oranje → rood
-        const k = (f - 0.66) / 0.34;
+        // oranje -> rood
+        k = (f - 0.66) / 0.34;
         r = 255;
-        g = interp(153, 68, k);
-        b = interp(0, 68, k);
+        g = interp(153, 0, k);
+        b = 0;
     }
 
     return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
@@ -1191,7 +1160,11 @@ function drawCircle(id,value,color,radius,angle) {
     state.targetValue = value
     drawCircleFrame(ctx,cx,cy,r,value,color,angle,id)
 }
-function drawCircleFrame(e,t,r,l,f,a,s,o){const k=Math.abs(f)/a;let y;y=k>2?k-2:k>1?k-1:k;const S=2*Math.PI,c=y*S;e.clearRect(0,0,e.canvas.width,e.canvas.height),e.beginPath(),e.arc(t,r,l,-Math.PI/2,-Math.PI/2+S),e.lineWidth=10,k>2?f>=0?"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#66ff66":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff"):"purple"==s?e.strokeStyle="#0f3d0f":"green"==s?e.strokeStyle="#66ff66":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#000080"):k>1?f>=0?"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff"):"purple"==s?e.strokeStyle="#0f3d0f":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#000080"):f>=0?"purple"==s?e.strokeStyle="#3b0066":"green"==s?e.strokeStyle="#0f3d0f":"red"==s?e.strokeStyle="#805300":"blue"==s?e.strokeStyle="#000080":"gray"==s&&(e.strokeStyle="#000000"):"purple"==s||"green"==s?e.strokeStyle="#0f3d0f":"red"==s?e.strokeStyle="#805300":"blue"==s&&(e.strokeStyle="#000080"),e.stroke(),e.beginPath(),k>2?f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#ff0000":"green"==s?e.strokeStyle="#f0ff05":("red"==s||"blue"==s)&&(e.strokeStyle="#ff0000")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s?e.strokeStyle="#33cc33":"green"==s?e.strokeStyle="#e6ff00":"red"==s?e.strokeStyle="#ff1a1a":"blue"==s&&(e.strokeStyle="#ff0000")):k>1?f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#ff0000":"green"==s?e.strokeStyle="#66ff66":("red"==s||"blue"==s)&&(e.strokeStyle="#ff0000")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s?e.strokeStyle="#33cc33":"green"==s?e.strokeStyle="#e6ff00":"red"==s?e.strokeStyle="#ff1a1a":"blue"==s&&(e.strokeStyle="#ff0000")):f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s?e.strokeStyle="#3333ff":"gray"==s&&(e.strokeStyle="#aaaaaa")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s||"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff")),e.lineWidth=10,e.stroke()}
+function drawCircleFrame(e,t,r,l,f,a,s,o){
+	const k=Math.abs(f)/a;
+	let y;y=k>2?k-2:k>1?k-1:k;
+	const S=2*Math.PI,c=y*S;
+	e.clearRect(0,0,e.canvas.width,e.canvas.height),e.beginPath(),e.arc(t,r,l,-Math.PI/2,-Math.PI/2+S),e.lineWidth=10,k>2?f>=0?"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#66ff66":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff"):"purple"==s?e.strokeStyle="#0f3d0f":"green"==s?e.strokeStyle="#66ff66":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#000080"):k>1?f>=0?"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff"):"purple"==s?e.strokeStyle="#0f3d0f":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#000080"):f>=0?"purple"==s?e.strokeStyle="#3b0066":"green"==s?e.strokeStyle="#0f3d0f":"red"==s?e.strokeStyle="#805300":"blue"==s?e.strokeStyle="#000080":"gray"==s&&(e.strokeStyle="#000000"):"purple"==s||"green"==s?e.strokeStyle="#0f3d0f":"red"==s?e.strokeStyle="#805300":"blue"==s&&(e.strokeStyle="#000080"),e.stroke(),e.beginPath(),k>2?f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#ff0000":"green"==s?e.strokeStyle="#f0ff05":("red"==s||"blue"==s)&&(e.strokeStyle="#ff0000")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s?e.strokeStyle="#33cc33":"green"==s?e.strokeStyle="#e6ff00":"red"==s?e.strokeStyle="#ff1a1a":"blue"==s&&(e.strokeStyle="#ff0000")):k>1?f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#ff0000":"green"==s?e.strokeStyle="#66ff66":("red"==s||"blue"==s)&&(e.strokeStyle="#ff0000")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s?e.strokeStyle="#33cc33":"green"==s?e.strokeStyle="#e6ff00":"red"==s?e.strokeStyle="#ff1a1a":"blue"==s&&(e.strokeStyle="#ff0000")):f>=0?("green"==s?e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0):e.arc(t,r,l,-Math.PI/2,-Math.PI/2+c),"purple"==s?e.strokeStyle="#b54dff":"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s?e.strokeStyle="#3333ff":"gray"==s&&(e.strokeStyle="#aaaaaa")):(e.arc(t,r,l,-Math.PI/2,-Math.PI/2-c,!0),"purple"==s||"green"==s?e.strokeStyle="#33cc33":"red"==s?e.strokeStyle="#ffb833":"blue"==s&&(e.strokeStyle="#3333ff")),e.lineWidth=10,e.stroke()}
 function updateSecondsInQuarter(e){let t=new Date(1e3*e);return Math.floor(t.getTime()/1e3)%900}
 function renderThermometer(id,data) {
     const container = getElem(id)
@@ -1226,7 +1199,6 @@ function renderThermometer(id,data) {
     setHTML(id + '_display',`${value.toFixed(1).replace('.',',')}${showLabel ? `<br>${label}%` : ''}`)
     setHTML(id + '_trend',getTrendArrow(trend) || '')
     setStyle(id,'opacity','1')
-    appendLog(id,`${value.toFixed(1).replace('.',',')}°${showLabel ? ` ${label}%` : ''}`)
 }
 function getTemperatureColor(r,min,avg,max){
 	r=Math.max(min,Math.min(max,r))
@@ -1257,7 +1229,7 @@ function updateDeviceTime(id) {
     tijd = d[id]?.t ?? 0
     status = d[id]?.s
     delta = newTime - tijd
-    if (delta>0) {
+    if (delta>=0) {
 		let kleur
 		if (delta < 600) {
 			const ratio = delta / 600
@@ -1275,7 +1247,7 @@ function updateDeviceTime(id) {
 			kleur = "#666"
 		}
 		if (status !== undefined){
-			if (status !== "Closed" && status !== "Off" && status !== 0){
+			if (status > 0){
 				kleur = "#FFF"
 			}
 		}
@@ -1292,38 +1264,52 @@ function updateDeviceTime(id) {
 		lastState[id] = tijd+kleur
 	}
 }
-function updateAllDeviceTimes(deviceList) {
-    deviceList.forEach(id => updateDeviceTime(id))
+function updateAllDeviceTimes(deviceList){deviceList.forEach(id=>updateDeviceTime(id))}
+function log(msg) {
+    schedule(() => {
+        const el = getElem('log');
+        if (!el) return;
+        let ts = Date.now();
+        const d  = new Date(ts);
+        const hh = d.getHours().toString().padStart(2,'0');
+        const mm = d.getMinutes().toString().padStart(2,'0');
+        const ss = d.getSeconds().toString().padStart(2,'0');
+        el.textContent +=
+            `${hh}:${mm}:${ss} ${msg}\n`;
+
+        el.scrollTop = el.scrollHeight;
+    });
 }
 let socket = null
 let monitorTimer = null
 let lastMessageReceived = 0
 let isConnecting = false
 let initialConnectDone = false  // ← NIEUW
-const DEAD_TIMEOUT = 1100
-const MONITOR_INTERVAL = 300
+const DEAD_TIMEOUT = 2499
+const MONITOR_INTERVAL = 500
 
-function log(msg) {
-    appendLog("WS", msg)
-}
-
-function connect(reason = "") {
+function connect() {
     if (socket || isConnecting) return;
+	ajax()
     isConnecting = true;
-    log("🔌 "+reason);
+    log("🔌 MQTT connect...");
+
     const doConnect = () => {
         socket = mqtt.connect("ws://192.168.2.22:9001/mqtt", {
             protocolVersion: 4,
             reconnectPeriod: 0,
-            connectTimeout: 1000,
+            connectTimeout: 1200,
             clean: false,
             clientId: getClientId()
         });
+
         socket.on("connect", onConnect);
         socket.on("message", onMessage);
-        socket.on("close", () => hardReconnect("on.close"));
-        socket.on("error", () => hardReconnect("on.error"));
+        socket.on("close", () => hardReconnect("close"));
+        socket.on("error", () => hardReconnect("error"));
     };
+
+    // iPad WebKit workaround
     if (isIPad()) {
         requestAnimationFrame(() =>
             setTimeout(doConnect, 50)
@@ -1341,7 +1327,7 @@ function isIPad() {
 }
 
 function cleanup(reason = "") {
-    log("🧹 " + reason)
+    log("🧹 Cleanup " + reason)
     stopMonitor()
     if (socket) {
         try {
@@ -1356,7 +1342,7 @@ function cleanup(reason = "") {
 function hardReconnect(reason = "") {
     log("💀 " + reason)
     cleanup(reason)
-    connect(reason)
+    connect()
 }
 
 function getClientId() {
@@ -1368,17 +1354,16 @@ function getClientId() {
     return id
 }
 
-function onConnect(reason = "") {
+function onConnect() {
     log("✅ Verbonden")
-    console.log(reason)
     isConnecting = false
-    initialConnectDone = true
+    initialConnectDone = true  // ← MARKEER als gedaan
     lastMessageReceived = Date.now()
 
     socket.subscribe("d/#", { qos: 0 }, err => {
         if (err) {
             log("✗ Subscribe fout")
-            hardReconnect("subscribe error")
+            hardReconnect("subscribe")
             return
         }
         log("📡 Subscribed")
@@ -1430,47 +1415,260 @@ function stopMonitor() {
     }
 }
 
-/* -------------------- BROWSER LIFECYCLE -------------------- */
-
 document.addEventListener("DOMContentLoaded", () => {
-	log('📄 DOMContentLoaded')
     lastMessageReceived = Date.now()
-    connect('DOMContentLoaded')
+    connect()
 })
+
 window.addEventListener("pageshow", e => {
+    // ← BLOKKEER tijdens initiële connect op iPad
     if (!initialConnectDone && isIPad()) {
         log("📄 Pageshow genegeerd (initiële connect bezig)")
-        hardReconnect("pageshow iPad")
+        hardReconnect("pageshow")
         return
     }
+
     if (e.persisted) {
         log("📄 bfcache restore")
         hardReconnect("bfcache")
     } else {
         const ua = navigator.userAgent || navigator.vendor || window.opera
         const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
-        if (!initialConnectDone && isiOS) {
-        	log("📄 pageshow iOS")
-        	hardReconnect("pageshow iOS")
+        if (isiOS) {
+            log("📄 Pageshow iOS")
+            hardReconnect("pageshow")
         }
     }
 })
-/*window.addEventListener("offline", () => {
+
+window.addEventListener("offline", () => {
     log("🌐 Offline")
     cleanup("offline")
-})*/
+    fetchajax=true
+})
+
 window.addEventListener("online", () => {
     log("🌐 Online")
     hardReconnect("online")
 })
-/*
+
 window.addEventListener("pagehide", () => {
     log("📄 Pagehide")
     cleanup("pagehide")
-})*/
-/* -------------------- START -------------------- */
-window.onload = () => {
-    log('📄 onload')
-    lastMessageReceived = Date.now()
- //   connect();
+    fetchajax=true
+})
+
+
+function ajax(){
+	if(!fetchajax) return
+   	fetchajax=false
+	log("🅰️ Ajax")
+    ajaxJSON('d.php').then(e=>{
+        if (!e || e.aborted){
+	        setTimeout(()=>ajax(),1000)
+	        return
+	    }
+		handleAjaxResponse(e);
+    })
+    .catch(err=>{
+        if (err.name==='AbortError'){
+	        setTimeout(()=>ajax(),1000);
+            return;
+        }
+        console.warn('ajax error',err);
+        setTimeout(()=>ajax(),1000);
+    });
+}
+function handleAjaxResponse(response){
+	newTime = response.t ?? newTime;
+	Object.entries(response).forEach(([device,v])=>{
+		if(device=="heating"){
+			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
+			if(v.s==0)html+=''
+			else if(v.s==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
+			else if(v.s==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
+			else if(v.s==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
+			else if(v.s==2)html+='<img src="/images/AircoGas.png" class="i40" alt="AircoGas">'
+			else if(v.s==3)html+='<img src="/images/GasAirco.png" class="i40" alt="GasAirco">'
+			else if(v.s==4)html+='<img src="/images/Gas.png" class="i40" alt="Gas">'
+			setHTML('heatingbutton',html)
+			if(v.s==0)html='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>'
+			else if(v.s==-2)html='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>cooling</td>'
+			else if(v.s==-1)html='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive<br>cooling</td>'
+			else if(v.s==1)html='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>heating</td>'
+			else if(v.s==2)html='<img src="images/GasAirco.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco<br>heating</td>'
+			else if(v.s==3)html='<img src="images/Gas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>'
+			setHTML('trheating',html)
+		}else if(device=="sirene"){
+			if(v.s!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
+			else html=""
+			setHTML('sirene',html)
+		}else if(device=="brander"){
+			const heatingmode=d.heating?.s ?? 0;
+			if(v.s=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
+			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
+			setHTML('brander',html)
+
+			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
+			if(heatingmode==0)html+=''
+			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
+			else if(heatingmode==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
+			else if(heatingmode==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
+			else if(heatingmode==4){
+				if(v.s=='On')html+='<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
+				else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">'
+			}
+			setHTML('heating',html)
+			if(heatingmode>=1){
+				if(v.s=="Off") setAttr('branderfloorplan','src',"/images/fire_Off.png")
+				else setAttr('branderfloorplan','src',"/images/fire_On.png")
+			} else if(heatingmode>0){
+				if(v.s=="Off")setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
+				else setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
+			} else setAttr('branderfloorplan','src',"")
+		} else if (["s","sc"].includes(v?.d)){
+			if (lastState[view+device] === v) return
+			lastState[view+device] = v
+			let html='';
+			const isOn=(v.s == "On");
+			const iconName=v.i || 'l';
+			const specialDevices=["water","regenpomp","steenterras","tuintafel","terras","tuin","auto","media","nas","zetel","grohered","kookplaat","boseliving","bosekeuken","ipaddock","mac"];
+			const confirmDevices=["ipaddcok","mac","daikin","grohered","kookplaat","media","boseliving","bosekeuken"];
+			const directControlDevices=["regenpomp","nas"];
+			let onclickHandler='';
+			if (confirmDevices.includes(device)){
+				onclickHandler=`confirmSwitch('${device}')`;
+			} else if (directControlDevices.includes(device)){
+				const newState=isOn ? 'Off' : 'On';
+				onclickHandler=`ajaxcontrol('${device}','sw','${newState}');setView('floorplan');`;
+			} else {
+				const newState=isOn ? 'Off' : 'On';
+				onclickHandler=`ajaxcontrol('${device}','sw','${newState}')`;
+			}
+			if (isOn){
+				if (iconName == 'l'){
+					html='<img src="/images/l_On.png" id="' + device + '" class="img100" />';
+					html += '<div class="dimmercircle" onclick="' + onclickHandler + '">';
+					html += '<svg viewBox="0 0 36 36">';
+					html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
+					html += '<path class="circle" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
+					html += '</svg>';
+					html += '</div>';
+				} else {
+					html='<img src="/images/' + iconName + '_On.png" id="' + device + '" onclick="' + onclickHandler + '" />';
+				}
+			} else {
+				html='<img src="/images/' + iconName + '_Off.png" id="' + device + '" onclick="' + onclickHandler + '" />';
+			}
+			setHTML(device,html);
+		} else if (["d","hd"].includes(v?.d)){
+			let html='';
+			const level=parseInt(v.s) || 0;
+			if (level == 0){
+				html='<img src="/images/l_Off.png" class="img100">';
+			} else {
+				html='<img src="/images/l_On.png" class="img100">';
+				html += '<div class="dimmercircle">';
+				html += '<svg viewBox="0 0 36 36">';
+				html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
+				html += '<path class="circle" stroke-dasharray="' + level + ',100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
+				html += '</svg>';
+				html += '<div class="dimmer-percentage">' + level + '%</div>';
+				html += '</div>';
+			}
+			if (device == "terras"){
+				html += 'terras';
+			}
+			setHTML(device,html);
+		} else if (v.d==["b"]){
+			if(device=="bose101"||device=="bose106"){
+				if(v.m==0)html=''
+				else{
+					if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
+					else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
+				}
+			}else{
+				if(v.m==0)html=''
+				else{
+					if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
+					else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
+				}
+			}
+			setHTML(device,html)
+		} else if (v.d==["r"]){
+			const opts=v.i.split(",");
+			const status=100 - v.s;
+			let perc=(status < 100) ? (status / 100) * 0.7 : 1;
+			let rollerTop=parseInt(opts[0]);
+			let indicatorSize=0;
+			if (status == 0){
+				indicatorSize=0;
+			} else if (status > 0){
+				indicatorSize=(parseFloat(opts[2]) * perc) + 8;
+				if (indicatorSize > parseFloat(opts[2])){
+					indicatorSize=parseFloat(opts[2]);
+				}
+				rollerTop=parseInt(opts[0]) + parseInt(opts[2]) - indicatorSize;
+				addClass(device,'yellow')
+			} else {
+				indicatorSize=parseFloat(opts[2]);
+			}
+			if (opts[3] == "P"){
+				setStyle(device,'top',rollerTop + 'px')
+				setStyle(device,'left',opts[1] + 'px')
+				setStyle(device,'width','8px')
+				setStyle(device,'height',indicatorSize + 'px')
+			} else if (opts[3] == "L"){
+				setStyle(device,'top',opts[0] + 'px')
+				setStyle(device,'left',opts[1] + 'px')
+				setStyle(device,'width',indicatorSize + 'px')
+				setStyle(device,'height','9px')
+			}
+			let html='';
+			if (v.s == 100){
+				html='<img src="/images/arrowgreendown.png" class="i48">';
+			} else if (v.s == 0){
+				html='<img src="/images/arrowgreenup.png" class="i48">';
+			} else {
+				html='<img src="/images/circlegrey.png" class="i48">';
+				html += '<div class="fix center dimmerlevel" style="position:absolute;top:19px;left:1px;width:46px;letter-spacing:6px;">';
+				html += '<font size="5" color="#CCC">' + v.s + '</font>';
+				html += '</div>';
+			}
+			html += '</div>';
+			if (v.t > (newTime - 82800)){
+				const date=new Date(v.t * 1000);
+				const hours=date.getHours();
+				const minutes=("0" + date.getMinutes()).substr(-2);
+				html += '<br><div id="t' + device + '">' + hours + ':' + minutes + '</div>';
+			} else {
+				html += '<br><div id="t' + device + '">' + formatDate(v.t) + '</div>';
+			}
+			setHTML('R'+device,html)
+		} else if (v.d==["p"]){
+			temp=device.toString().replace("pir","")
+			if(temp=="hall"||temp=="living"){
+				if(v.s=="On"){
+					addClass('z'+temp+'a','motion')
+					addClass('z'+temp+'b','motion')
+				}else{
+					removeClass('z'+temp+'a','motion')
+					removeClass('z'+temp+'b','motion')
+				}
+			}else{
+				if(v.s=="On") addClass('z'+temp,'motion')
+				else removeClass('z'+temp,'motion')
+			}
+			updateDeviceTime(device)
+		} else if (v.d=='c'&&device!='raamhall'){
+			if (lastState[view+device+'C'] === v) return
+			lastState[view+device+'C'] = v
+			if(v.s=="Open") addClass(device,'red')
+			else removeClass(device,'red')
+			updateDeviceTime(device)
+		} else if (v.d=="t"){
+			renderThermometer(device,v);
+		}
+		d[device]=v
+	})
 }

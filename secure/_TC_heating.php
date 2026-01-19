@@ -5,6 +5,7 @@ $prevSetTime??=0;
 $Setkamer=4;
 $Setwaskamer=4;
 $Setalex=4;
+$spm=[-1=>'Eco',0=>'',1=>'Power'];
 if ($d['weg']->s<=2&&$d['heating']->s>=1) {
 	if ($d['kamer_set']->m==0) {
 		if (
@@ -23,7 +24,7 @@ if ($d['weg']->s<=2&&$d['heating']->s>=1) {
 					)
 				)
 		) {
-			$Setkamer=6;
+			$Setkamer=4;
 		}
 	} else $Setkamer=$d['kamer_set']->s;
 	if ($d['alex_set']->m==0) {
@@ -43,7 +44,7 @@ if ($d['weg']->s<=2&&$d['heating']->s>=1) {
 					)
 				)
 		) {
-			$Setalex=6;
+			$Setalex=4;
 		}
 	} else $Setalex=$d['alex_set']->s;
 }

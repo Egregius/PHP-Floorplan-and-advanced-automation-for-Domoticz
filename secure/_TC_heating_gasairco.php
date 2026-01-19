@@ -104,19 +104,7 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 					$maxpow=100;$spmode=1;$set+=10;
 				} else {
 					$set+=-1;
-//						if($daikin->$k->powerontime<$time-36)lg(__LINE__);
-//						if($prevSetTime > $time - 57600)lg(__LINE__);
-//						else lg(date("G:i:s",$prevSetTime));
-//						if($prevSetTime < $time - 18)lg(__LINE__);
-//						if($daikin->living->power == 1)lg(__LINE__);
-					$stable_mode = (
-//						$time%60 == 0 &&
-						$daikin->living->power == 1	&&
-						$daikin->$k->powerontime<$time-360 //&&
-//						$prevSetTime > $time - 57600 &&
-//						$prevSetTime < $time - 180
-					);
-					if ($stable_mode) {
+					if (past('living_set')>3600) {
 						$log_entry['l']  = $line;
 						$log_entry['sa'] = $set;
 						$log_entry['sp'] = $spmode;
@@ -126,10 +114,10 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 				if ($time>strtotime('19:00')&&$d['media']->s=='On') $fan='B';
 //					lg(sprintf("DAIKIN %s: dif=%.2f trend=%.2f eff_dif=%.2f set=%.1f->%.1f spmode=%d line=%d", $k, $dif, $trend, $effective_dif, $target, $set, $spmode, $line));
 			} elseif ($k=='kamer') {
-				$set+=-1.5;
+				$set+=-1;
 				if ($time<strtotime('10:00')||$d['weg']->s==1) $fan='B';
 			} elseif ($k=='alex') {
-				$set+=-1.5;
+				$set+=-1;
 				if ($d['alexslaapt']->s==1) $fan='B';
 			}
 			$set=ceil($set * 2) / 2;
@@ -144,10 +132,13 @@ foreach (array('living', 'kamer', 'alex') as $k) {
 					$daikin->$k->spmode=$spmode;
 					$daikin->$k->maxpow=$maxpow;
 					$daikin->$k->lastset=$time;
-					if($power!=0&&$daikin->$k->power!=$power) $daikin->$k->powerontime=$time;
+					publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
 				}
 			}
-		} elseif (isset($power)&&$power==1&&$d['daikin']->s=='Off'&&past('daikin')>900) sw('daikin', 'On');
+		} elseif (isset($power)&&$power==1&&$d['daikin']->s=='Off'&&past('daikin')>900) {
+			publishmqtt('d/l',"Daikin On");
+			sw('daikin', 'On');
+		}
 	} else {
 		if ($d['daikin']->s=='On') {
 			if ($daikin->$k->power!=0||$daikin->$k->mode!=4) {
