@@ -56,6 +56,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$maxpow=100;
             	$spmode=1;
             	$set=28;
+            	$fan=7;
             } else {
 				/*$k_factor = 0.4;
 				$trend_factor = 1.5;
