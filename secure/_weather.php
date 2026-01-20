@@ -200,7 +200,7 @@ $mintemp=round($mintemp,1);
 $maxtemp=round($maxtemp,1);
 $ref = round((float)$d['buiten_temp']->s,1);
 $temp = round($temp,1);
-$temp = round(max($ref - 0.1, min($temp, $ref + 0.1)),1);
+$temp=clamp($temp, $ref - 0.1, $ref + 0.1);
 $weather['mint']=$mintemp;
 $weather['maxt']=$maxtemp;
 
@@ -209,7 +209,7 @@ $weather['maxt']=$maxtemp;
 //lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']->m);
 $ref = (int)$d['buiten_temp']->m;
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$ref);
-$hum = (int)max($ref - 1, min($hum, $ref + 1));
+$hum=clamp($hum, $ref - 1, $ref + 1);
 //lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
 
 if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) storesm('buiten_temp', $temp, $hum);

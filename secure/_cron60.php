@@ -6,17 +6,59 @@ $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']->s;
 foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']->m;
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
-$stamp=date('Y-m-d H:i:s', $time-600);
-$sql="SELECT AVG(buiten) AS buiten, AVG(living) AS living, AVG(badkamer) AS badkamer, AVG(kamer) AS kamer, AVG(waskamer) AS waskamer, AVG(alex) AS alex, AVG(zolder) AS zolder FROM `temp` WHERE stamp>='$stamp'";
-$result=$db->query($sql);
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) $avg=$row;
-foreach (array('buiten', 'living', 'badkamer', 'kamer', 'waskamer', 'alex', 'zolder') as $i) {
-	$diff=(float)round($d[$i.'_temp']->s-$avg[$i],4);
-	if (!isset($d[$i.'_temp']->i)||$d[$i.'_temp']->i!=$diff) {
-		storeicon($i.'_temp', $diff, basename(__FILE__).':'.__LINE__);
-	}
-	if ($i=='living') lgtype('trend_living','cron60	temp='.$d[$i.'_temp']->s.'	trend='.$diff.'	zon='.$d['z'].'W	daikinpower='.$d['daikin']->p.'W');
+$stamp = date('Y-m-d H:i:s', $time - 600);
+
+// eerste en laatste waarde per sensor in het venster
+$sql = "
+SELECT
+    MIN(stamp) AS first_stamp,
+    MAX(stamp) AS last_stamp,
+    SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp ASC),  ',', 1) AS buiten_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp DESC), ',', 1) AS buiten_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS living_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS living_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(badkamer ORDER BY stamp ASC),  ',', 1) AS badkamer_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(badkamer ORDER BY stamp DESC), ',', 1) AS badkamer_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(kamer   ORDER BY stamp ASC),  ',', 1) AS kamer_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(kamer   ORDER BY stamp DESC), ',', 1) AS kamer_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(waskamer ORDER BY stamp ASC), ',', 1) AS waskamer_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(waskamer ORDER BY stamp DESC),',', 1) AS waskamer_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(alex    ORDER BY stamp ASC),  ',', 1) AS alex_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(alex    ORDER BY stamp DESC), ',', 1) AS alex_last,
+    SUBSTRING_INDEX(GROUP_CONCAT(zolder  ORDER BY stamp ASC),  ',', 1) AS zolder_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(zolder  ORDER BY stamp DESC), ',', 1) AS zolder_last
+FROM temp
+WHERE stamp >= '$stamp'
+";
+
+$row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
+
+// trend per sensor berekenen
+foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
+
+    if (!isset($row[$i.'_first'], $row[$i.'_last'])) continue;
+
+    // trend over 10 minuten (°C)
+    $trend = round((float)$row[$i.'_last'] - (float)$row[$i.'_first'], 4);
+
+    // deadband tegen sensorruis (0.2°C stappen)
+    //if (abs($trend) < 0.05) $trend = 0.0;
+
+    if (!isset($d[$i.'_temp']->i) || $d[$i.'_temp']->i != $trend) {
+        storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
+    }
+
+    if ($i == 'living' && isset($prevSet) && $prevSet != 1 && past('living_set') > 3600) {
+        lgtype(
+            'trend_living',
+            'cron60	temp='.$d[$i.'_temp']->s.
+            '	trend='.$trend.
+            '	zon='.$d['z'].'W'.
+            '	daikinpower='.$d['daikin']->p.'W'
+        );
+    }
 }
+
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 foreach (array('living','badkamer','kamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']->s;
 $avg=$sum/6;
