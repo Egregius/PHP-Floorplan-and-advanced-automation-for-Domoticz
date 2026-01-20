@@ -681,9 +681,9 @@ function lgcsv($type, array $data) {
     $row = array_merge(['timestamp' => $timestamp], $data);
     $fp = fopen($file, "a+");
     if (!$exists) {
-        fputcsv($fp, array_keys($row), "\t");
+        fputcsv($fp, array_keys($row), ";");
     }
-    fputcsv($fp, array_values($row), "\t");
+    fputcsv($fp, array_values($row), ";");
     fclose($fp);
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {

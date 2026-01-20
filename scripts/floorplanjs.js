@@ -1172,7 +1172,7 @@ function renderThermometer(id,data) {
     const { s: rawValue,i: trendIcon,m: label,t: time } = data
     const value = parseFloat(rawValue)
     if (isNaN(value)) return
-    const trend = id !== 'buiten_temp' ? parseFloat(trendIcon) : 0
+    const trend = parseFloat(trendIcon) ?? 0
     const showLabel = !['zolder_temp','waskamer_temp'].includes(id)
     let min,avg,max
     if (id === 'buiten_temp') {
@@ -1224,7 +1224,9 @@ function getTemperatureColorTxt(r,min,avg,max){
 		else return "#FF3300"
 	}
 }
-function getTrendArrow(t){const n=Math.min(Math.abs(t),1),r=Math.round(14+42*n);return t>.05?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<-.05?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
+function getTrendArrow(t){
+	const n=Math.min(Math.abs(t),1),r=Math.round(14+5*n);
+	return t>0?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<0?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
 function updateDeviceTime(id) {
     tijd = d[id]?.t ?? 0
     status = d[id]?.s

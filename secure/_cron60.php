@@ -30,23 +30,10 @@ SELECT
 FROM temp
 WHERE stamp >= '$stamp'
 ";
-
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
-
-// trend per sensor berekenen
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
-
-    if (!isset($row[$i.'_first'], $row[$i.'_last'])) continue;
-
-    // trend over 10 minuten (°C)
-    $trend = round((float)$row[$i.'_last'] - (float)$row[$i.'_first'], 4);
-
-    // deadband tegen sensorruis (0.2°C stappen)
-    //if (abs($trend) < 0.05) $trend = 0.0;
-
-    if (!isset($d[$i.'_temp']->i) || $d[$i.'_temp']->i != $trend) {
-        storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
-    }
+    $trend = ($row[$i.'_last'] - $row[$i.'_first']) *10;
+    if ((int)$d[$i.'_temp']->i != (int)$trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
 }
 
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
