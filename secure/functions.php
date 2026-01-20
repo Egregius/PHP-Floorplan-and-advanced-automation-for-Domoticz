@@ -263,14 +263,10 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
-    if($name=='rbureel') {
-    	usleep(50000);
-    	hass('cover', 'set_cover_position', $entity, [
-            'position' => $name === 'rbureel' ? 100 - $level : $level
-        ]);
-    }
-//    $d[$name]->s=$level;
-//    $d[$name]->t=$d['time'];
+	$d['time']??=time();
+	$d[$name]->s=level;
+	$d[$name]->t=$d['time'];
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 }
 function resetsecurity() {
 	global $d;
@@ -304,6 +300,10 @@ function sw($name,$action='Toggle',$msg=null) {
 		} else {
 			store($name, $action, $msg);
 		}
+		$d['time']??=time();
+		$d[$name]->s=$action;
+		$d[$name]->t=$d['time'];
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 //		if($d[$name]->s==$action) return;
 //		$d[$name]->t=$d['time'];
 //		$d[$name]->s=$action;
@@ -669,6 +669,22 @@ function lgtype($type,$msg) {
 	$mSecs = substr(number_format($mSecs, 3), 1);
 	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 	fclose($fp);
+}
+function lgcsv($type, array $data) {
+    $file = "/temp/$type.csv";
+    $exists = file_exists($file);
+    $time = microtime(true);
+    $dFormat = "d-m H:i:s";
+    $mSecs = $time - floor($time);
+    $mSecs = substr(number_format($mSecs, 3), 1);
+    $timestamp = date($dFormat) . $mSecs;
+    $row = array_merge(['timestamp' => $timestamp], $data);
+    $fp = fopen($file, "a+");
+    if (!$exists) {
+        fputcsv($fp, array_keys($row), "\t");
+    }
+    fputcsv($fp, array_values($row), "\t");
+    fclose($fp);
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	lg('bosekey '.$ip.' '.$key.' '.$msg);

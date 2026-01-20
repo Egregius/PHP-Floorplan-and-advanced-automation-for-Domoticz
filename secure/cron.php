@@ -32,6 +32,8 @@ foreach (['badkamervuur2','badkamervuur1','water'] as $i) sw($i,'Off');
 if ($d['weg']->s>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
+
+$accumAdjLiving = 0;
 $last10 = $last30 = $last60 = $last300 = $last3600 = $last90 = $time-3600;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {

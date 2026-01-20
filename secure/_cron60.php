@@ -47,16 +47,6 @@ foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') 
     if (!isset($d[$i.'_temp']->i) || $d[$i.'_temp']->i != $trend) {
         storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
     }
-
-    if ($i == 'living' && isset($prevSet) && $prevSet != 1 && past('living_set') > 3600) {
-        lgtype(
-            'trend_living',
-            'cron60	temp='.$d[$i.'_temp']->s.
-            '	trend='.$trend.
-            '	zon='.$d['z'].'W'.
-            '	daikinpower='.$d['daikin']->p.'W'
-        );
-    }
 }
 
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');

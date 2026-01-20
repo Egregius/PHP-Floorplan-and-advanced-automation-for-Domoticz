@@ -65,30 +65,87 @@ foreach (array('living','kamer','alex') as $k) {
 
         // living regeling dynamisch
         if ($k=='living') {
-            if ($prevSet==1) { $maxpow=100; $spmode=1; $set=28; }
-            else {
+			if ($prevSet==1) {
+				$maxpow=100;
+				$spmode=1;
+				$set=28;
+			} else {
 				$k_factor = 0.6;       // invloed van dif
 				$trend_factor = 8.0;   // invloed van trend
-
-				// adaptief: hogere dif → grotere bijstelling
 				$scale = 1.0;
 				if ($dif > 1.5) $scale = 1.5;
 				elseif ($dif > 1.0) $scale = 1.2;
 
+				// --- calculate real trend from last 10 minutes ---
+				$trend = 0.0;
+				$stmt = $db->query("
+					SELECT stamp, living FROM temp
+					WHERE stamp >= NOW() - INTERVAL 10 MINUTE
+					ORDER BY stamp ASC
+				");
+				$points = [];
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$points[] = [
+						't' => strtotime($row['stamp']),
+						'v' => (float)$row['living']
+					];
+				}
+				if (count($points) > 1) {
+					// simple linear regression: trend = slope (°C/sec)
+					$n = count($points);
+					$sumX = $sumY = $sumXY = $sumX2 = 0;
+					foreach ($points as $p) {
+						$x = $p['t'];
+						$y = $p['v'];
+						$sumX += $x;
+						$sumY += $y;
+						$sumXY += $x*$y;
+						$sumX2 += $x*$x;
+					}
+					$trend = ($n*$sumXY - $sumX*$sumY) / ($n*$sumX2 - $sumX*$sumX);
+				}
+				// --- end trend calculation ---
+
 				if ($dif > 0) {
 					// te warm → agressief naar beneden
-					$adj = -($dif * 0.8 + max(0, $trend) * 4) * $scale;
+					$adj = -($dif * 0.8 + max(0, $trend*600) * 4) * $scale;
+					// *600: trend naar °C/10min
 				} else {
 					// te koud → rustiger omhoog
-					$adj = -($dif * 0.4 + min(0, $trend) * 2) * $scale;
+					$adj = -($dif * 0.4 + min(0, $trend*600) * 2) * $scale;
 				}
+
 				$adj = clamp($adj, -1.5, 0.6);
-				$set += $adj;
+				$step = 0.1;
+				if ($adj > 0) {
+					$accumAdjLiving += min($adj, $step);
+				} else {
+					$accumAdjLiving += max($adj, -$step);
+				}
+
+				$set += $accumAdjLiving;
 				$set -= 1;
 				$set = min($set, $target);
 			}
-            if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
-        } elseif ($k=='kamer' || $k=='alex') {
+
+			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
+			if (past('living_set')>3600) lgcsv('trend_living', [
+				"Living	target"=>$target,
+				"Living	temp"=>$d['living_temp']->s,
+				"dif"=>$dif,
+				"trend"=>$trend,
+				"adj"=>$adj,
+				"accumAdjLiving"=>$accumAdjLiving,
+				"scale"=>$scale,
+				"set"=>$set,
+				"spm"=>$spm[$spmode],
+				"maxpow"=>$maxpow,
+				"zon"=>$d['z'],
+				"daikinpower"=>$d['daikin']->p,
+				"fan"=>$fan,
+			]);
+		}
+ 		elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
@@ -113,7 +170,6 @@ foreach (array('living','kamer','alex') as $k) {
                 $daikin->$k->spmode= $spmode;
                 $daikin->$k->lastset=$time;
                 publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
-                if ($k=='living'&&$prevSet!=1&&past('living_set')>3600) lgtype('trend_living', "Daikin	target={$target}	set={$set}	dif={$dif}	trend={$trend}	adj={$adj}	scale={$scale}	spm={$spm[$spmode]}	maxpow={$maxpow}	zon=".$d['z'].'W	daikinpower='.$d['daikin']->p.'W	maxpow='.$maxpow);
             }
         }
 
