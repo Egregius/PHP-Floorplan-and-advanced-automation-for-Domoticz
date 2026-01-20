@@ -153,10 +153,10 @@ new Chart(document.getElementById('chartTemp'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Living target', data:livingTarget, borderColor:'yellow', fill:false, tension:0.2},
-            {label:'Living temp', data:livingTemp, borderColor:'red', fill:false, tension:0.2},
-            {label:'Set', data:set, borderColor:'blue', borderDash:[5,5], fill:false, tension:0.2},
-            {label:'Set rounded', data:setRounded, borderColor:'green', borderDash:[2,2], fill:false, tension:0.2},
+            {label:'Living target', data:livingTarget, borderColor:'yellow', fill:false, tension:0.1},
+            {label:'Living temp', data:livingTemp, borderColor:'red', fill:false, tension:0.1},
+            {label:'Set', data:set, borderColor:'blue', borderDash:[5,5], fill:false, tension:0.1},
+            {label:'Set rounded', data:setRounded, borderColor:'green', borderDash:[2,2], fill:true, tension:0.1},
         ]
     },
     options:{responsive:true, interaction:{mode:'index', intersect:false}}
