@@ -49,11 +49,11 @@ if ($d['auto']->s=='On') {
 		if ($d['pirliving']->s=='Off') {
 			$uit=6300;
 			if (past('pirliving')>$uit) {
-				foreach (array('bureellinks','bureelrechts','zithoek','eettafel') as $i) if ($d[$i]->s>0&&past($i)>$uit) sl($i, 0, basename(__FILE__).':'.__LINE__);
+				foreach (['bureellinks','bureelrechts','zithoek','eettafel'] as $i) if ($d[$i]->s>0&&past($i)>$uit) sl($i, 0, basename(__FILE__).':'.__LINE__);
 			}
 			$uit=10800;
 			if (past('pirliving')>$uit) {
-				foreach (array('kristal','lampkast') as $i) if ($d[$i]->s=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
+				foreach (['lampkast'] as $i) if ($d[$i]->s=='On'&&past($i)>$uit) sw($i, 'Off', basename(__FILE__).':'.__LINE__);
 			}
 		}
 		$avg=0;

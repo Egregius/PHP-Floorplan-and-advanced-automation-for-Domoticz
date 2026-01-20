@@ -92,7 +92,9 @@ foreach (array('living','kamer','alex') as $k) {
 				if ($dif > 0) $adj = -($dif * 0.8 + max(0, $trend*600) * 4) * $scale;
 				else $adj = -($dif * 0.4 + min(0, $trend*600) * 2) * $scale;
 				$adj = clamp($adj, -1.5, 0.6);
-				$step = 0.1;
+				$elapsed=$time-$lastSetLiving;
+				$stepPerLoop = 0.1;
+				$step = $stepPerLoop * max(1, $elapsed / 30);
 				if ($adj > 0) $accumAdjLiving += min($adj, $step);
 				else $accumAdjLiving += max($adj, -$step);
 				$set += $accumAdjLiving;
@@ -107,30 +109,54 @@ foreach (array('living','kamer','alex') as $k) {
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
         $setrounded = clamp(ceil($set*2)/2, 10, 28);
-		if ($k=='living'&&past('living_set')>3600) lgcsv('trend_living', [
-			"Living	target"=>number_format($target,1,',',''),
-			"Living	temp"=>number_format($d['living_temp']->s,1,',',''),
-			"dif"=>number_format($dif,1,',',''),
-			"trend"=>number_format($trend,6,',',''),
-			"trend_10min"=>number_format($trend*600,6,',',''),
-			"adj"=>number_format($adj,3,',',''),
-			"accumAdjLiving"=>number_format($accumAdjLiving,3,',',''),
-			"scale"=>number_format($scale,1,',',''),
-			"trend_factor"=>number_format($trend_factor,1,',',''),
-			"k_factor"=>number_format($trend_factor,1,',',''),
-			"set"=>number_format($set,1,',',''),
-			"setrounded"=>number_format($setrounded,1,',',''),
-			"spm"=>$spm[$spmode],
-			"maxpow"=>$maxpow,
-			"zon"=>$d['z'],
-			"daikinpower"=>$d['daikin']->p,
-			"fan"=>$fan,
-			"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
-			"daikinset"=>($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded || $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ? 'set new values':''),
-		]);
-        if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
-            $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
-            ($k=='living'&&$power!=0&&$daikin->$k->lastset <= $time-581)) {
+
+		/* --- wijzigingsdetectie --- */
+		$setChanged = ($daikin->$k->set != $setrounded);
+
+		$stateChanged =
+			$daikin->$k->power  != $power  ||
+			$daikin->$k->fan    != $fan    ||
+			$daikin->$k->spmode != $spmode ||
+			$daikin->$k->maxpow != $maxpow;
+
+		/* set-rate-limit: alleen living */
+		$setAllowed = true;
+		if ($k === 'living' && $setChanged) {
+			$setAllowed = ($time - $lastSetLiving >= 150); // 2,5 min
+		}
+
+		if ($k=='living'&&past('living_set')>3600) {
+			lgcsv('trend_living', [
+				"Living target"=>number_format($target,1,',',''),
+				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
+				"dif"=>number_format($dif,1,',',''),
+				"trend"=>number_format($trend,6,',',''),
+				"trend_10min"=>number_format($trend*600,6,',',''),
+				"adj"=>number_format($adj,3,',',''),
+				"accumAdjLiving"=>number_format($accumAdjLiving,3,',',''),
+				"scale"=>number_format($scale,1,',',''),
+				"step"=>number_format($step,1,',',''),
+				"trend_factor"=>number_format($trend_factor,1,',',''),
+				"k_factor"=>number_format($k_factor,1,',',''),
+				"set"=>number_format($set,1,',',''),
+				"setrounded"=>number_format($setrounded,1,',',''),
+				"spm"=>$spm[$spmode],
+				"maxpow"=>$maxpow,
+				"zon"=>$d['z'],
+				"daikinpower"=>$d['daikin']->p,
+				"fan"=>$fan,
+				"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
+				"daikinset"=>(
+					($setChanged && $setAllowed) ? 'SET' :
+					($stateChanged ? 'STATE' : '')
+				),
+
+			]);
+		}
+        if (
+			($setChanged && $setAllowed) ||
+			$stateChanged
+		) {
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
                 $daikin->$k->power = $power;
                 $daikin->$k->mode  = 4;
@@ -140,7 +166,10 @@ foreach (array('living','kamer','alex') as $k) {
                 $daikin->$k->maxpow = $maxpow;
                 $daikin->$k->lastset=$time;
                 publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
-                $accumAdjLiving = 0;
+                if ($k === 'living' && $setChanged && $setAllowed) {
+					$lastSetLiving   = $time;
+					$accumAdjLiving  = 0;
+				}
             }
         }
 
