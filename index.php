@@ -234,7 +234,7 @@
 					</div>
 				</div>
 				<div id="playlist" class="abs"></div>
-				<div id="info"><?php echo $ip.' '.$udevice.' '.$scale; ?></div>
+				<div id="info"><?php // echo $ip.' '.$udevice.' '.$scale; ?></div>
 			</div>
 
 			<div id="floorplanothers" class="view">

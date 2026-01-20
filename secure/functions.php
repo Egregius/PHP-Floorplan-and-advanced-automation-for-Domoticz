@@ -264,7 +264,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         default => null
     };
 	$d['time']??=time();
-	$d[$name]->s=level;
+	$d[$name]->s=$level;
 	$d[$name]->t=$d['time'];
 	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 }
