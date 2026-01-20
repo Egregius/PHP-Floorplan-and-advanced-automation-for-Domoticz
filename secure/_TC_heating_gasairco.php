@@ -62,16 +62,50 @@ foreach (array('living','kamer','alex') as $k) {
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
-            if ($prevSet==1) { $maxpow=100; $spmode=1; $set=28; }
-            else $set -= 1; // standaard temperatuurdaling
-			$k_factor = 0.4;       // invloed van dif
-			$trend_factor = 4.0;   // invloed van trend
-			$scale = 1.0;
-			if ($dif > 1.0) $scale*=$dif;
-			$adj = ($dif - $trend * $trend_factor) * $k_factor * $scale;
-			$adj = clamp($adj, -1.5, 1.0);
-			$set += $adj;
-            if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
+            if ($prevSet==1) {
+            	$maxpow=100;
+            	$spmode=1;
+            	$set=28;
+            } else {
+				$k_factor = 0.4;
+				$trend_factor = 1.5;
+				$scale = 1.0;
+				if ($dif > 1.0) $scale*=$dif;
+				elseif ($dif < -1.0) $scale*=-$dif;
+				$trend = 0.0;
+				$stmt = $db->query("
+					SELECT stamp, living FROM temp
+					WHERE stamp >= NOW() - INTERVAL 10 MINUTE
+					ORDER BY stamp ASC
+				");
+				$points = [];
+				while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+					$points[] = [
+						't' => strtotime($row[0]),
+						'v' => (float)$row[1]
+					];
+				}
+				if (count($points) > 1) {
+					$n = count($points);
+					$sumX = $sumY = $sumXY = $sumX2 = 0;
+					foreach ($points as $p) {
+						$x = $p['t'];
+						$y = $p['v'];
+						$sumX += $x;
+						$sumY += $y;
+						$sumXY += $x*$y;
+						$sumX2 += $x*$x;
+					}
+					$trend = number_format((($n*$sumXY - $sumX*$sumY) / ($n*$sumX2 - $sumX*$sumX))*600,7);
+				}
+				if ($dif > 0) $adj = -($dif * $k_factor + max(0, $trend) * $trend_factor ) * $scale;
+				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
+				$adj = clamp($adj, -1.5, 0.6);
+				$set+=$adj;
+				$set-=1;
+				$set=min($set, $target);
+			}
+			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
@@ -79,14 +113,13 @@ foreach (array('living','kamer','alex') as $k) {
         }
         $setrounded = min(max(ceil($set*2)/2,10),28);
 		if ($k=='living'&&past('living_set')>3600) {
+			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj");
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
 				"dif"=>number_format($dif,1,',',''),
 				"trend"=>number_format($trend,6,',',''),
-				"trend_10min"=>number_format($trend*600,6,',',''),
 				"adj"=>number_format($adj,3,',',''),
-				"accumAdjLiving"=>number_format($accumAdjLiving,3,',',''),
 				"scale"=>number_format($scale,1,',',''),
 				"trend_factor"=>number_format($trend_factor,1,',',''),
 				"k_factor"=>number_format($k_factor,1,',',''),

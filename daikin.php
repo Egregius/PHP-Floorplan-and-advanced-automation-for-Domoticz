@@ -32,8 +32,7 @@ $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
-$adj          = array_map(fn($d)=>$d['adj']??0,$data);
-$accumAdj     = array_map(fn($d)=>$d['accumAdjLiving']??0,$data);
+$adj          = array_map(fn($d)=>$d['adj']+$d['set']??0,$data);
 $daikinSet    = array_map(fn($d)=>($d['daikinset']=='set new values')?1:0,$data);
 
 // Analyse overshoot: Living temp tov gewenste target
@@ -47,7 +46,6 @@ for($i=0;$i<count($data);$i++){
     $overshootTarget[] = $diffTarget;
     $overshootSet[] = $diffSet;
     $avgAdj[] = abs($adj[$i]);
-    if($i>0 && $accumAdj[$i]*$accumAdj[$i-1]<0) $oscillations++;
 }
 
 // Statistieken
@@ -96,7 +94,7 @@ $daikinMarkers = array_filter($daikinMarkers);
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Living Trend Dashboard - Correct & Fancy</title>
+<title>Living Trend</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body {font-family:sans-serif; background:#f5f5f5; margin:20px;}
@@ -106,8 +104,6 @@ h1,h2{margin-top:30px;}
 </style>
 </head>
 <body>
-<h1>Living Trend Dashboard - Correct & Fancy Edition</h1>
-
 <div class="info-box">
 <h2>Parameter Aanbevelingen</h2>
 <p><b>k_factor:</b> <?php echo $recommended['k_factor']; ?></p>
@@ -120,7 +116,6 @@ h1,h2{margin-top:30px;}
 <p><b>Overshoot >0.5°C:</b> <?php echo $percentOvershootGT05Target; ?>%</p>
 <p><b>Overshoot >1°C:</b> <?php echo $percentOvershootGT1Target; ?>%</p>
 <p><b>Gemiddelde adj per loop:</b> <?php echo round($avgAdjVal,3); ?></p>
-<p><b>Oscillaties accumAdjLiving:</b> <?php echo $oscillations; ?></p>
 <h3>Extra aanbevelingen:</h3>
 <ul>
 <?php foreach($smartAdvice as $a) echo "<li>$a</li>"; ?>
@@ -129,9 +124,6 @@ h1,h2{margin-top:30px;}
 
 <h2>Temperatuur & Setpoints</h2>
 <canvas id="chartTemp" height="150"></canvas>
-
-<h2>Adj & Accumulated Adjustment</h2>
-<canvas id="chartAdj" height="150"></canvas>
 
 <h2>Daikin set acties & Overshoot markers</h2>
 <canvas id="chartSet" height="120"></canvas>
@@ -143,7 +135,6 @@ const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const adj          = <?php echo json_encode($adj); ?>;
-const accumAdj     = <?php echo json_encode($accumAdj); ?>;
 const overshootMarkers = <?php echo json_encode(array_values($overshootMarkers)); ?>;
 const daikinMarkers = <?php echo json_encode(array_values($daikinMarkers)); ?>;
 
@@ -153,27 +144,16 @@ new Chart(document.getElementById('chartTemp'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Living target', data:livingTarget, borderColor:'yellow', fill:false, tension:0.1},
-            {label:'Living temp', data:livingTemp, borderColor:'red', fill:false, tension:0.1},
-            {label:'Set', data:set, borderColor:'blue', borderDash:[5,5], fill:false, tension:0.1},
-            {label:'Set rounded', data:setRounded, borderColor:'green', borderDash:[2,2], fill:true, tension:0.1},
+            {label:'Living target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1},
+            {label:'Living temp', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1},
+            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,2], fill:false, tension:0.1},
+            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,2], fill:false, tension:0.2},
+            {label:'Set rounded', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1},
         ]
     },
     options:{responsive:true, interaction:{mode:'index', intersect:false}}
 });
 
-// Adj & Accumulated
-new Chart(document.getElementById('chartAdj'),{
-    type:'line',
-    data:{
-        labels:labels,
-        datasets:[
-            {label:'Adj', data:adj, borderColor:'orange', fill:false, tension:0.2},
-            {label:'AccumAdjLiving', data:accumAdj, borderColor:'purple', fill:false, tension:0.2}
-        ]
-    },
-    options:{responsive:true, interaction:{mode:'index', intersect:false}}
-});
 
 // Daikin acties & overshoot markers
 new Chart(document.getElementById('chartSet'),{
