@@ -1,11 +1,9 @@
 <?php
-// --- bereken verschil gas voor brander ---
 foreach (array('living','badkamer') as $kamer) {
     ${'dif'.$kamer}=number_format($d[$kamer.'_temp']->s-$d[$kamer.'_set']->s,1);
     if (${'dif'.$kamer}<$difgas) $difgas=${'dif'.$kamer};
 }
 
-// --- bereken aan/uit tijden brander ---
 $aanna = (1/(21-$d['buiten_temp']->s))*6000; if ($aanna<1000) $aanna=1000;
 $uitna  = (21-$d['buiten_temp']->s)*60; if ($uitna<595) $uitna=595; elseif ($uitna>1795) $uitna=1795;
 $pastbrander = past('brander');
@@ -20,7 +18,6 @@ elseif ($difgas >= 0 && $d['brander']->s=="On" && $pastbrander>$uitna) sw('brand
 elseif ($difgas >= -0.1 && $d['brander']->s=="On" && $pastbrander>$uitna*1.5) sw('brander','Off');
 elseif ($difgas >= -0.2 && $d['brander']->s=="On" && $pastbrander>$uitna*2) sw('brander','Off');
 
-// --- bereken totaal min graden over kamers met gewicht ---
 $totalmin = 0;
 $weight = ['living'=>1.0,'kamer'=>0.3,'alex'=>0.3];
 
@@ -29,33 +26,26 @@ foreach (array('living','kamer','alex') as $k) {
     if (${'dif'.$k} < 0) $totalmin += -${'dif'.$k} * $weight[$k];
 }
 
-// --- bereken maxpow op basis van totaal min ---
-$maxpow = 40; // standaard
+$maxpow = 40;
 if ($d['weg']->s > 0)            $maxpow = 40;
-elseif ($totalmin >= 2.4)        $maxpow = 100;
-elseif ($totalmin >= 2.0)        $maxpow = 90;
-elseif ($totalmin >= 1.6)        $maxpow = 80;
-elseif ($totalmin >= 1.2)        $maxpow = 70;
-elseif ($totalmin >= 0.8)        $maxpow = 60;
-elseif ($totalmin >= 0.4)        $maxpow = 50;
+elseif ($totalmin >= 1.8)        $maxpow = 100;
+elseif ($totalmin >= 1.5)        $maxpow = 90;
+elseif ($totalmin >= 1.2)        $maxpow = 80;
+elseif ($totalmin >= 0.9)        $maxpow = 70;
+elseif ($totalmin >= 0.6)        $maxpow = 60;
+elseif ($totalmin >= 0.3)        $maxpow = 50;
 
-// --- netlimieten toepassen ---
 if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
 elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 
-// --- Daikin regeling per kamer ---
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
     $target=$set;
     $dif = $d[$k.'_temp']->s - $set;
-    $trend = $d[$k.'_temp']->i;
-
-    // bepaal power
     if ($dif > 2) $power = 0;
     elseif ($dif <= 0) $power = 1;
     else $power = $daikin->$k->power;
-
     if ($d['daikin']->s=='On') {
         $fan='A';
         $spmode=-1;
@@ -67,7 +57,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$spmode=1;
             	$set=28;
             } else {
-				$k_factor = 0.4;
+				/*$k_factor = 0.4;
 				$trend_factor = 1.5;
 				$scale = 1.0;
 				if ($dif > 1.0) $scale*=$dif;
@@ -101,7 +91,9 @@ foreach (array('living','kamer','alex') as $k) {
 				if ($dif > 0) $adj = -($dif * $k_factor + max(0, $trend) * $trend_factor ) * $scale;
 				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
 				$adj = clamp($adj, -1.5, 0.6);
-				$set+=$adj;
+				$set+=$adj;*/
+				if($dif<-0.1&&$d['daikin']->p<100)$set+=0.5;
+				elseif($dif>=0.5&&$d['daikin']->p>100)$set-=0.5;
 				$set-=1;
 				$set=min($set, $target);
 			}
@@ -111,9 +103,9 @@ foreach (array('living','kamer','alex') as $k) {
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
-        $setrounded = min(max(ceil($set*2)/2,10),28);
-		if ($k=='living'&&past('living_set')>3600) {
-			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj");
+        $setrounded = clamp(round($set*2)/2,10,28);
+/*		if ($k=='living'&&past('living_set')>3600) {
+			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj	difk=".$dif * $k_factor." trendf=".$trend*$trend_factor);
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
@@ -133,11 +125,10 @@ foreach (array('living','kamer','alex') as $k) {
 				"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
 				"daikinset"=>($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$set || $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode  || $daikin->$k->maxpow != $maxpow?'SET':''),
 			]);
-		}
+		}*/
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
             ($power!=0&&$daikin->$k->lastset <= $time-581)) {
-
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
@@ -146,15 +137,13 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-				publishmqtt('d/l',"Daikin {$set} {$spm[$spmode]} {$maxpow}");
+				publishmqtt('d/l',"Daikin {$setrounded} SET");
             }
         }
-
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
         publishmqtt('d/l',"Daikin On");
         sw('daikin','On');
     }
-
     unset($power);
 }
 

@@ -30,10 +30,10 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
-$set          = array_map(fn($d)=>$d['set']??0,$data);
-$setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
-$adj          = array_map(fn($d)=>$d['adj']+$d['set']??0,$data);
-$daikinSet    = array_map(fn($d)=>($d['daikinset']=='set new values')?1:0,$data);
+$set          = array_map(fn($d)=>$d['set']+1??0,$data);
+$setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
+$adj          = array_map(fn($d)=>$d['adj']+$d['set']+1??0,$data);
+$daikinpower    = array_map(fn($d)=>($d['daikinpower']<100?$d['Living target']-0.25:$d['Living target']+0.25),$data);
 
 // Analyse overshoot: Living temp tov gewenste target
 $overshootTarget = [];
@@ -87,8 +87,7 @@ if($oscillations>5) $smartAdvice[]="Pas trend_factor aan om oscillaties in accum
 // Markers voor grafieken
 $overshootMarkers = array_map(fn($v,$i)=>abs($v)>0.5?['x'=>$i,'y'=>$v]:null,$overshootTarget,array_keys($overshootTarget));
 $overshootMarkers = array_filter($overshootMarkers);
-$daikinMarkers = array_map(fn($v,$i)=>$v?['x'=>$i,'y'=>1]:null,$daikinSet,array_keys($daikinSet));
-$daikinMarkers = array_filter($daikinMarkers);
+
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -123,10 +122,7 @@ h1,h2{margin-top:30px;}
 </div>
 
 <h2>Temperatuur & Setpoints</h2>
-<canvas id="chartTemp" height="150"></canvas>
-
-<h2>Daikin set acties & Overshoot markers</h2>
-<canvas id="chartSet" height="120"></canvas>
+<canvas id="chartTemp" height="220"></canvas>
 
 <script>
 const labels = <?php echo json_encode($labels); ?>;
@@ -136,7 +132,7 @@ const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const adj          = <?php echo json_encode($adj); ?>;
 const overshootMarkers = <?php echo json_encode(array_values($overshootMarkers)); ?>;
-const daikinMarkers = <?php echo json_encode(array_values($daikinMarkers)); ?>;
+const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 
 // Temperatuur vs setpoints
 new Chart(document.getElementById('chartTemp'), {
@@ -144,34 +140,15 @@ new Chart(document.getElementById('chartTemp'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Living target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1},
-            {label:'Living temp', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1},
-            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,2], fill:false, tension:0.1},
-            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,2], fill:false, tension:0.2},
-            {label:'Set rounded', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1},
+            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
+            {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
+            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
+            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
+            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
         ]
     },
     options:{responsive:true, interaction:{mode:'index', intersect:false}}
-});
-
-
-// Daikin acties & overshoot markers
-new Chart(document.getElementById('chartSet'),{
-    type:'scatter',
-    data:{
-        datasets:[
-            {label:'Daikin set', data:daikinMarkers, backgroundColor:'black'},
-            {label:'Overshoot >0.5°C', data:overshootMarkers, backgroundColor:'red'}
-        ]
-    },
-    options:{
-        responsive:true,
-        scales:{
-            x:{ticks:{callback:i=>labels[i]}},
-            y:{min:0,max:2}
-        },
-        plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.label}}}
-    }
 });
 </script>
 </body>
