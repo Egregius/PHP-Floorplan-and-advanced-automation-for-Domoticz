@@ -38,7 +38,12 @@ elseif ($totalmin >= 0.3)        $maxpow = 50;
 if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
 elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
-
+$adjLiving??=0;
+$daikinrunning=$d['daikin']->p>100?true:false;
+if($daikinrunning!=$prevdaikinrunning) {
+	$prevdaikinrunning=$daikinrunning;
+	$adjLiving=0;
+}
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
     $target=$set;
@@ -58,7 +63,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				/*$k_factor = 0.4;
+				$k_factor = 0.4;
 				$trend_factor = 1.5;
 				$scale = 1.0;
 				if ($dif > 1.0) $scale*=$dif;
@@ -92,11 +97,12 @@ foreach (array('living','kamer','alex') as $k) {
 				if ($dif > 0) $adj = -($dif * $k_factor + max(0, $trend) * $trend_factor ) * $scale;
 				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
 				$adj = clamp($adj, -1.5, 0.6);
-				$set+=$adj;*/
-				if($dif<-0.1&&$d['daikin']->p<100)$set+=0.5;
-				elseif($dif>=0.5&&$d['daikin']->p>100)$set-=0.5;
-				$set-=1;
+				//$set+=$adj;
+				if($dif<-0.2&&!$daikinrunning&&$d['living_temp']->i<0)$adjLiving+=0.1;
+				elseif($dif>=0.2&&$daikinrunning&&$d['living_temp']->i>0)$adjLiving-=0.1;
+				$set+=$adjLiving-1;
 				$set=min($set, $target);
+				lg('$adjLiving='.$adjLiving);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -105,14 +111,15 @@ foreach (array('living','kamer','alex') as $k) {
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
         $setrounded = clamp(round($set*2)/2,10,28);
-/*		if ($k=='living'&&past('living_set')>3600) {
-			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj	difk=".$dif * $k_factor." trendf=".$trend*$trend_factor);
+		if ($k=='living'&&past('living_set')>3600) {
+//			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj	difk=".$dif * $k_factor." trendf=".$trend*$trend_factor);
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
 				"dif"=>number_format($dif,1,',',''),
 				"trend"=>number_format($trend,6,',',''),
 				"adj"=>number_format($adj,3,',',''),
+				"adjLiving"=>number_format($adjLiving,1,',',''),
 				"scale"=>number_format($scale,1,',',''),
 				"trend_factor"=>number_format($trend_factor,1,',',''),
 				"k_factor"=>number_format($k_factor,1,',',''),
@@ -126,11 +133,13 @@ foreach (array('living','kamer','alex') as $k) {
 				"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
 				"daikinset"=>($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$set || $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode  || $daikin->$k->maxpow != $maxpow?'SET':''),
 			]);
-		}*/
+		}
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
             ($power!=0&&$daikin->$k->lastset <= $time-581)) {
+            if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
+				if($daikin->$k->set!=$setrounded) $adjLiving=0;
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
 				$daikin->$k->fan   = $fan;
@@ -138,7 +147,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-				publishmqtt('d/l',"Daikin {$setrounded} SET");
+				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {

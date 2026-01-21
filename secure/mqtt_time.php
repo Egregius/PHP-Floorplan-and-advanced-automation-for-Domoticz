@@ -27,7 +27,7 @@ $connectionSettings=(new ConnectionSettings)
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 
-$rand=rand(10,20);
+$rand=rand(100,200);
 $mqtt->subscribe('d/#',function (string $topic,string $status) use ($rand,&$lastcheck, &$time, &$lastpub) {
 	$lastpub=$time;
 	if ($lastcheck < $time - $rand) {
@@ -41,7 +41,7 @@ while (true) {
 	$mqtt->loopOnce($time);
 
 	if($lastpub<$time-1) {
-		lg('-----------------------------------------------------> '.$time-$lasttimepub);
+//		lg('-----------------------------------------------------> '.$time-$lasttimepub);
 		$lasttimepub=$time;
 		$mqtt->publish('d/t',json_encode(1));
 	}

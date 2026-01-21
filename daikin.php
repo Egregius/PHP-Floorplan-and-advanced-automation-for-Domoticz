@@ -30,10 +30,11 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
-$set          = array_map(fn($d)=>$d['set']+1??0,$data);
-$setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
-$adj          = array_map(fn($d)=>$d['adj']+$d['set']+1??0,$data);
-$daikinpower    = array_map(fn($d)=>($d['daikinpower']<100?$d['Living target']-0.25:$d['Living target']+0.25),$data);
+$set          = array_map(fn($d)=>$d['set']??0,$data);
+$setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
+$adj          = array_map(fn($d)=>$d['adj']??0,$data);
+$adjLiving          = array_map(fn($d)=>$d['adjLiving']??0,$data);
+$daikinpower    = array_map(fn($d)=>($d['daikinpower']<100?0:1),$data);
 
 // Analyse overshoot: Living temp tov gewenste target
 $overshootTarget = [];
@@ -121,8 +122,8 @@ h1,h2{margin-top:30px;}
 </ul>
 </div>
 
-<h2>Temperatuur & Setpoints</h2>
-<canvas id="chartTemp" height="220"></canvas>
+<canvas id="chart1" height="100"></canvas>
+<canvas id="chart2" height="100"></canvas>
 
 <script>
 const labels = <?php echo json_encode($labels); ?>;
@@ -131,11 +132,11 @@ const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const adj          = <?php echo json_encode($adj); ?>;
+const adjLiving          = <?php echo json_encode($adjLiving); ?>;
 const overshootMarkers = <?php echo json_encode(array_values($overshootMarkers)); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 
-// Temperatuur vs setpoints
-new Chart(document.getElementById('chartTemp'), {
+new Chart(document.getElementById('chart1'), {
     type:'line',
     data:{
         labels:labels,
@@ -144,6 +145,23 @@ new Chart(document.getElementById('chartTemp'), {
             {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
             {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'AdjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
+            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
+        ]
+    },
+    options:{responsive:true, interaction:{mode:'index', intersect:false}}
+});
+new Chart(document.getElementById('chart2'), {
+    type:'line',
+    data:{
+        labels:labels,
+        datasets:[
+            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
+            {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
+            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
+            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'AdjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
             {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
         ]

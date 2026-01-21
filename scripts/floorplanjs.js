@@ -188,10 +188,10 @@ function setView(newView){
 }
 function formatDate(t){return date=new Date(1e3*t),date.getDate()+"/"+(date.getMonth()+1)}
 function handleResponse(device,v){
-	setTime()
 	d[device]=v
 	switch(device) {
 		case 't':
+			setTime()
 			return
 		case 'd':
 			setText('Tstart',v.Ts)
@@ -403,6 +403,7 @@ function handleResponse(device,v){
 			log('💬 '+v)
 			return
 		default:
+			setTime()
 			switch(v?.d) {
 				case 's':
 	            case 'sc':
@@ -1304,7 +1305,7 @@ let monitorTimer = null
 let lastMessageReceived = 0
 let isConnecting = false
 let initialConnectDone = false  // ← NIEUW
-const DEAD_TIMEOUT = 10000
+const DEAD_TIMEOUT = 2900
 const MONITOR_INTERVAL = 1000
 
 function connect() {

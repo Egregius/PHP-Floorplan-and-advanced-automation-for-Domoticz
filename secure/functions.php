@@ -673,12 +673,7 @@ function lgtype($type,$msg) {
 function lgcsv($type, array $data) {
     $file = "/temp/$type.csv";
     $exists = file_exists($file);
-    $time = microtime(true);
-    $dFormat = "d-m H:i:s";
-    $mSecs = $time - floor($time);
-    $mSecs = substr(number_format($mSecs, 3), 1);
-    $timestamp = date($dFormat) . $mSecs;
-    $row = array_merge(['timestamp' => $timestamp], $data);
+    $row = array_merge(['timestamp' => date("d-m H:i:s")], $data);
     $fp = fopen($file, "a+");
     if (!$exists) {
         fputcsv($fp, array_keys($row), ";");

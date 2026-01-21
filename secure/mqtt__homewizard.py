@@ -10,6 +10,7 @@ import requests
 import websockets
 import paho.mqtt.client as mqtt
 from math import floor
+from math import ceil
 import threading
 
 MQTT_HOST = "192.168.2.22"
@@ -61,7 +62,6 @@ DEVICES = [
 ]
 
 RECONNECT_DELAY = 5
-NO_STEP_KEYS = {"c"}
 _last_time_published = None
 
 state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
@@ -123,15 +123,7 @@ def flush_teller_state():
 def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
-    v = abs(value)
-    if v < 100: return 1
-    elif v < 200: return 2
-    elif v < 500: return 5
-    elif v < 1000: return 10
-    elif v < 2000: return 20
-    elif v < 3000: return 30
-    elif v < 4000: return 40
-    else: return math.floor(v / 100)
+    return ceil(abs(value) / 100)
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):
@@ -156,10 +148,7 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    if key == 'a':
-	    q = quantize_step(value, 5)
-    else:
-        q = value if key in NO_STEP_KEYS else quantize_step(value, step_for_value(value))
+    q = quantize_step(value, ceil(abs(value) / 100))
     last = state_publish.get(key)
     if last is None or q != last:
         state_publish[key] = q
