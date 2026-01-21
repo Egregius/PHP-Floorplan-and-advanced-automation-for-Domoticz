@@ -245,7 +245,7 @@ def time_loop():
             try:
                 result = mqtt_client.publish(
                     "d/t",
-                    sec,
+                    1,
                     retain=True,
                     qos=0
                 )

@@ -35,9 +35,13 @@ function schedule(fn){
         });
     }
 }
-function setTime(text){
-    const el = getElem('time');
-    if (el) el.textContent = text;
+function setTime(){
+    const date = new Date(Date.now());
+	const hours = date.getHours();
+	const minutes = ("0" + date.getMinutes()).slice(-2);
+	const seconds = ("0" + date.getSeconds()).slice(-2);
+	setText('time',`${hours}:${minutes}:${seconds}`);
+	newTime=date/1000
 }
 function setText(id,text){
     if (lastValues[id]===text) return false
@@ -138,11 +142,11 @@ function setView(newView){
 }
 function formatDate(t){return date=new Date(1e3*t),date.getDate()+"/"+(date.getMonth()+1)}
 function handleResponse(device,v){
+	setTime()
 	d[device]=v
 	switch(device) {
 		case 't':
-			newTime = v
-			rawSeconds = updateSecondsInQuarter(v);
+			rawSeconds = updateSecondsInQuarter(newTime);
 			avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
 			avgTimeOffset = Number(avgTimeOffsetRaw);
 			if (avgTimeOffsetRaw === null || avgTimeOffsetRaw === "null" || !Number.isFinite(avgTimeOffset)) {
@@ -176,13 +180,7 @@ function handleResponse(device,v){
 			if (correctedSeconds % 5 == 0 || forceTimes) {
 				drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
 			}
-			if (d.time === undefined || newTime > d.time) {
-				const date = new Date(newTime * 1000);
-				const hours = date.getHours();
-				const minutes = ("0" + date.getMinutes()).slice(-2);
-				const seconds = ("0" + date.getSeconds()).slice(-2);
-				setTime(`${hours}:${minutes}:${seconds}`);
-				d.time = newTime;
+
 				if (d.timestamps === undefined || (newTime >= d.timestamps + 5 && newTime % 10 == 0) || forceTimes === true) {
 					const items = [
 						...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
@@ -193,7 +191,6 @@ function handleResponse(device,v){
 					d.timestamps = newTime;
 					forceTimes = false;
 				}
-			}
 			return
 		case 'd':
 			setText('Tstart',v.Ts)
@@ -1330,6 +1327,7 @@ function isIPad() {
 
 function cleanup(reason = "") {
     log("🧹 Cleanup " + reason)
+    fetchajax=true
     stopMonitor()
     if (socket) {
         try {
@@ -1462,6 +1460,7 @@ window.addEventListener("pagehide", () => {
 
 
 function ajax(){
+	setTime()
 	if(!fetchajax) return
    	fetchajax=false
 	log("🅰️ Ajax")
