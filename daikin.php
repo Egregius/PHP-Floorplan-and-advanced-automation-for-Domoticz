@@ -30,10 +30,10 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
-$set          = array_map(fn($d)=>$d['set']??0,$data);
-$setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
+$set          = array_map(fn($d)=>$d['set']+1??0,$data);
+$setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
 $adj          = array_map(fn($d)=>$d['adj']/10??0,$data);
-$adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']/10??0,$data);
+$adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 
 
@@ -69,7 +69,7 @@ new Chart(document.getElementById('chart1'), {
         datasets:[
             {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:5},
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'adjLiving', data:adjLiving, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'adjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0},
             {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.2, pointRadius:0},
         ]

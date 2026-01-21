@@ -41,6 +41,7 @@ elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 $adjLiving??=0;
 $lastLivingSet??=0;
 $daikinrunning=$d['daikin']->p>100?true:false;
+$daikinpower=floor($d['daikin']->p/100);
 if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
 	$prevdaikinrunning=$daikinrunning;
 	$adjLiving=0;
@@ -106,18 +107,20 @@ foreach (array('living','kamer','alex') as $k) {
 						lg('🔥 $adjLiving to 0, $dif<0');
 					} elseif($adjLiving!=0) {
 						$adjLiving+=$dif/2;
+						$adjLiving = clamp($adjLiving, -1, 1);
 						lg('🔥 $adjLiving + = '.$adjLiving);
 					}
 				} elseif($dif>0&&$lastLivingSet<$time-170) {
 					if($daikinrunning) {
 						$adjLiving-=$dif/2;
+						$adjLiving = clamp($adjLiving, -2, 1);
 						lg('$adjLiving - = '.$adjLiving);
 					} elseif($adjLiving!=0) {
 						$adjLiving=0;
 						lg('🔥 $adjLiving to 0, $dif>0');
 					}
 				}
-				$adjLiving = clamp($adjLiving, -1, 1);
+
 				$set+=$adjLiving-1;
 				$adj=$adjLiving;
 				$set=min($set, $target);
@@ -137,7 +140,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"dif"=>number_format($dif,1,',',''),
 				"trend"=>number_format($trend,6,',',''),
 				"adj"=>number_format($adj,3,',',''),
-				"adjLiving"=>number_format($adjLiving,1,',',''),
+				"adjLiving"=>number_format($adjLiving,3,',',''),
 				"scale"=>number_format($scale,1,',',''),
 				"trend_factor"=>number_format($trend_factor,1,',',''),
 				"k_factor"=>number_format($k_factor,1,',',''),
