@@ -21,31 +21,50 @@ $time=time();
 $lastcheck=$time;
 $lasttimepub=$time;
 define('LOOP_START', $time);
+$rand = rand(10, 20);
+
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
-$mqtt->connect($connectionSettings,true);
+$lastMessageReceived = false;
 
-$rand=rand(100,200);
-$mqtt->subscribe('d/#',function (string $topic,string $status) use ($rand,&$lastcheck, &$time, &$lastpub) {
-	$lastpub=$time;
-	if ($lastcheck < $time - $rand) {
+$mqtt->subscribe('d/#', function (string $topic, string $status) use ($rand, &$lastcheck, &$time, &$lastpub, &$lastMessageReceived) {
+    $lastpub = $time;
+    $lastMessageReceived = true;
+    if ($lastcheck < $time - $rand) {
         $lastcheck = $time;
         stoploop();
     }
-},MqttClient::QOS_AT_LEAST_ONCE);
+}, MqttClient::QOS_AT_LEAST_ONCE);
+
+$lastSecond = time();
 
 while (true) {
-	$time=time();
-	$mqtt->loopOnce($time);
+    $time = time();
+    $mqtt->loopOnce($time);
 
-	if($lastpub<$time-1) {
-//		lg('-----------------------------------------------------> '.$time-$lasttimepub);
-		$lasttimepub=$time;
-		$mqtt->publish('d/t',json_encode(1));
-	}
-	usleep(333333);
+    // Check of we een nieuwe seconde zijn ingegaan
+    if ($time > $lastSecond) {
+        // Publish alleen als er GEEN bericht ontvangen was in de vorige seconde
+        if (!$lastMessageReceived) {
+            $lastpub = $time;
+			lg('-----------------------------------------------------> '.$time-$lasttimepub);
+
+            $mqtt->publish('d/t', json_encode(1));
+        }
+
+        // Reset voor de nieuwe seconde
+        $lastSecond = $time;
+        $lastMessageReceived = false;
+    }
+
+    // Bereken hoeveel microseconden er nog zijn tot de volgende seconde
+    $microtime = microtime(true);
+    $microsUntilNextSecond = (1 - ($microtime - floor($microtime))) * 1000000;
+
+    // Sleep maximaal 50ms, of tot vlak voor de volgende seconde
+    $sleepMicros = min(50000, max(1000, $microsUntilNextSecond - 5000)); // -5ms buffer
+    usleep((int)$sleepMicros);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

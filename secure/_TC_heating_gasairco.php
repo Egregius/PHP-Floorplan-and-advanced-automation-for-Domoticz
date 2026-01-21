@@ -42,7 +42,7 @@ $adjLiving??=0;
 $daikinrunning=$d['daikin']->p>100?true:false;
 if($daikinrunning!=$prevdaikinrunning) {
 	$prevdaikinrunning=$daikinrunning;
-	$adjLiving=0;
+//	$adjLiving=0;
 }
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
@@ -139,7 +139,7 @@ foreach (array('living','kamer','alex') as $k) {
             ($power!=0&&$daikin->$k->lastset <= $time-581)) {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
-				if($daikin->$k->set!=$setrounded) $adjLiving=0;
+//				if($daikin->$k->set!=$setrounded) $adjLiving=0;
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
 				$daikin->$k->fan   = $fan;
@@ -147,7 +147,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
+//				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {

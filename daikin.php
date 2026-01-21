@@ -34,7 +34,7 @@ $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $adj          = array_map(fn($d)=>$d['adj']??0,$data);
 $adjLiving          = array_map(fn($d)=>$d['adjLiving']??0,$data);
-$daikinpower    = array_map(fn($d)=>($d['daikinpower']<100?0:1),$data);
+$daikinpower    = array_map(fn($d)=>$d['daikinpower']/1000,$data);
 
 // Analyse overshoot: Living temp tov gewenste target
 $overshootTarget = [];
@@ -144,10 +144,7 @@ new Chart(document.getElementById('chart1'), {
             {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
             {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
-            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'AdjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
-            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
         ]
     },
     options:{responsive:true, interaction:{mode:'index', intersect:false}}
@@ -157,13 +154,9 @@ new Chart(document.getElementById('chart2'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
-            {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
-            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
-            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'AdjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
-            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
+            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', /*borderDash:[2,5], */fill:false, tension:0.2, pointRadius:0},
+            {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', /*borderDash:[2,5], */fill:false, tension:0.2, pointRadius:0},
+            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', /*borderDash:[2,5], */fill:false, tension:0.1, pointRadius:0},
         ]
     },
     options:{responsive:true, interaction:{mode:'index', intersect:false}}
