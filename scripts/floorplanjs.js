@@ -1293,7 +1293,7 @@ function log(msg) {
         el.textContent +=
             `${hh}:${mm}:${ss} ${msg}\n`;
 
-        el.scrollTop = el.scrollHeight;
+//        el.scrollTop = el.scrollHeight;
     });
 }
 function shouldRedraw(prev,curr,circleMax,degrees=2){

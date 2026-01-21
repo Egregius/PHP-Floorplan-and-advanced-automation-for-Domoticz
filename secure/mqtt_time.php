@@ -22,7 +22,7 @@ $lastcheck=$time;
 $lasttimepub=$time;
 $lastSecond=$time;
 define('LOOP_START', $time);
-$rand = rand(10, 20);
+$rand = rand(100, 200);
 $lastMessageReceived=true;
 
 $connectionSettings=(new ConnectionSettings)
@@ -47,10 +47,10 @@ while (true) {
     if ($time > $lastSecond) {
         if (!$lastMessageReceived) {
             $lastpub = $time;
-			lg('-----------------------------------------------------> '.$time-$lasttimepub);
+//			lg('🏓 '.$time-$lasttimepub);
             $lasttimepub = $time;
             $mqtt->publish('d/t', json_encode(1));
-        }
+        }// else lg('skip');
         $lastSecond = $time;
         $lastMessageReceived = false;
     }

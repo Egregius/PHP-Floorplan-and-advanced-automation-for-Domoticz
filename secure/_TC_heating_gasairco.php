@@ -98,10 +98,11 @@ foreach (array('living','kamer','alex') as $k) {
 				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
 				$adj = clamp($adj, -1.5, 0.6);
 				//$set+=$adj;
-				if($dif<-0.2&&!$daikinrunning&&$d['living_temp']->i<0)$adjLiving+=0.1;
-				elseif($dif>=0.2&&$daikinrunning&&$d['living_temp']->i>0)$adjLiving-=0.1;
-				else $adjLiving=0;
+				if($dif<0&&!$daikinrunning)$adjLiving+=0.1;
+				elseif($dif>0&&$daikinrunning)$adjLiving-=0.1;
+				$adjLiving = clamp($adjLiving, -1.5, 1);
 				$set+=$adjLiving-1;
+				$adj=$adjLiving;
 				$set=min($set, $target);
 				lg('$adjLiving='.$adjLiving);
 			}
@@ -112,7 +113,7 @@ foreach (array('living','kamer','alex') as $k) {
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
         $setrounded = clamp(round($set*2)/2,10,28);
-		if ($k=='living'&&past('living_set')>3600) {
+		if ($k=='living'&&past('living_set')>1800) {
 //			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj	difk=".$dif * $k_factor." trendf=".$trend*$trend_factor);
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),

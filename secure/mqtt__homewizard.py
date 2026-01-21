@@ -127,9 +127,7 @@ def step_for_value(value):
     if v<50:return 1
     elif v<100: return 2
     elif v<200: return 5
-    elif v<500: return 10
-    elif v<1000: return 20
-    else: return 50
+    else: return 10
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
@@ -153,10 +151,7 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    if key == 'a':
-        q = quantize_step(value, 10)
-    else:
-        q = quantize_step(value, step_for_value(value))
+    q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     if last is None or q != last:
         state_publish[key] = q
