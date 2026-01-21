@@ -71,7 +71,7 @@ new Chart(document.getElementById('chart1'), {
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'adjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0},
-            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.2, pointRadius:0},
+            {label:'Target', data:livingTarget, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
         ]
     },
     options:{

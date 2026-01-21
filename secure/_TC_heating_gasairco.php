@@ -105,15 +105,15 @@ foreach (array('living','kamer','alex') as $k) {
 					if($daikinrunning) {
 						$adjLiving=0;
 						lg('🔥 $adjLiving to 0, $dif<0');
-					} elseif($adjLiving!=0) {
+					} elseif($adjLiving!=0&&$d['living_temp']->i<0) {
 						$adjLiving+=$dif/2;
-						$adjLiving = clamp($adjLiving, -1, 1);
+						$adjLiving = clamp($adjLiving, 0, 1);
 						lg('🔥 $adjLiving + = '.$adjLiving);
 					}
 				} elseif($dif>0&&$lastLivingSet<$time-170) {
-					if($daikinrunning) {
+					if($daikinrunning&&$d['living_temp']->i>0) {
 						$adjLiving-=$dif/2;
-						$adjLiving = clamp($adjLiving, -2, 1);
+						$adjLiving = clamp($adjLiving, -1.5, 0);
 						lg('$adjLiving - = '.$adjLiving);
 					} elseif($adjLiving!=0) {
 						$adjLiving=0;
