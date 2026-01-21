@@ -1,5 +1,5 @@
 var isSubmitting=!1,euroelec=.2698,eurogas=.092,eurowater=4.8166;const ucfirst=e=>e[0].toUpperCase()+e.slice(1);
-let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000)
+let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000),prevnet=null,prevzon=-1,prevtotal=null,prevavg=-1
 keys = ['n','c','b','a','z'];
 for (const k of keys) {
     d[k] = 0;
@@ -40,8 +40,54 @@ function setTime(){
 	const hours = date.getHours();
 	const minutes = ("0" + date.getMinutes()).slice(-2);
 	const seconds = ("0" + date.getSeconds()).slice(-2);
-	setText('time',`${hours}:${minutes}:${seconds}`);
-	newTime=date/1000
+	if(setText('time',`${hours}:${minutes}:${seconds}`)) {
+		newTime=date/1000
+		rawSeconds = updateSecondsInQuarter(newTime);
+		avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
+		avgTimeOffset = Number(avgTimeOffsetRaw);
+		if (avgTimeOffsetRaw === null || avgTimeOffsetRaw === "null" || !Number.isFinite(avgTimeOffset)) {
+			avgTimeOffset = -10;
+		}
+		if (lastAvgValue !== null && lastAvgValue > 0 && d.avg < lastAvgValue) {
+			expectedResetTime = avgTimeOffset < 0 ? 900 + avgTimeOffset : avgTimeOffset;
+			minResetTime = (expectedResetTime - 10 + 900) % 900;
+			maxResetTime = (expectedResetTime + 10) % 900;
+			inWindow = false;
+			if (minResetTime < maxResetTime) {
+				inWindow = rawSeconds >= minResetTime && rawSeconds <= maxResetTime;
+			} else {
+				inWindow = rawSeconds >= minResetTime || rawSeconds <= maxResetTime;
+			}
+			if (inWindow) {
+				proposedOffset = rawSeconds <= 20 ? rawSeconds : rawSeconds - 900;
+				offsetDifference = proposedOffset - avgTimeOffset;
+				if (Math.abs(offsetDifference) <= 3) {
+					avgTimeOffset = proposedOffset;
+					log(`Offset aangepast naar ${avgTimeOffset}s`);
+				} else {
+					avgTimeOffset += Math.sign(offsetDifference) * 3;
+					log(`Offset stapsgewijs aangepast naar ${avgTimeOffset}s (doel: ${proposedOffset}s)`);
+				}
+				localStorage.setItem('avgTimeOffset', avgTimeOffset);
+			}
+		}
+		lastAvgValue = d.a;
+		correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
+		if (correctedSeconds % 5 == 0 || forceTimes) {
+			drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
+		}
+
+		if (d.timestamps === undefined || (newTime >= d.timestamps + 5 && newTime % 10 == 0) || forceTimes === true) {
+			const items = [
+				...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
+				...['deurgarage','deurinkom','achterdeur','deurvoordeur','deurbadkamer','deurkamer','deurwaskamer','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamwaskamer','raamalex'],
+				...['pirliving','pirinkom','pirhall','pirkeuken','pirgarage']
+			];
+			updateAllDeviceTimes(items);
+			d.timestamps = newTime;
+			forceTimes = false;
+		}
+	}
 }
 function setText(id,text){
     if (lastValues[id]===text) return false
@@ -146,51 +192,6 @@ function handleResponse(device,v){
 	d[device]=v
 	switch(device) {
 		case 't':
-			rawSeconds = updateSecondsInQuarter(newTime);
-			avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
-			avgTimeOffset = Number(avgTimeOffsetRaw);
-			if (avgTimeOffsetRaw === null || avgTimeOffsetRaw === "null" || !Number.isFinite(avgTimeOffset)) {
-				avgTimeOffset = -10;
-			}
-			if (lastAvgValue !== null && lastAvgValue > 0 && d.avg < lastAvgValue) {
-				expectedResetTime = avgTimeOffset < 0 ? 900 + avgTimeOffset : avgTimeOffset;
-				minResetTime = (expectedResetTime - 10 + 900) % 900;
-				maxResetTime = (expectedResetTime + 10) % 900;
-				inWindow = false;
-				if (minResetTime < maxResetTime) {
-					inWindow = rawSeconds >= minResetTime && rawSeconds <= maxResetTime;
-				} else {
-					inWindow = rawSeconds >= minResetTime || rawSeconds <= maxResetTime;
-				}
-				if (inWindow) {
-					proposedOffset = rawSeconds <= 20 ? rawSeconds : rawSeconds - 900;
-					offsetDifference = proposedOffset - avgTimeOffset;
-					if (Math.abs(offsetDifference) <= 3) {
-						avgTimeOffset = proposedOffset;
-						log(`Offset aangepast naar ${avgTimeOffset}s`);
-					} else {
-						avgTimeOffset += Math.sign(offsetDifference) * 3;
-						log(`Offset stapsgewijs aangepast naar ${avgTimeOffset}s (doel: ${proposedOffset}s)`);
-					}
-					localStorage.setItem('avgTimeOffset', avgTimeOffset);
-				}
-			}
-			lastAvgValue = d.a;
-			correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
-			if (correctedSeconds % 5 == 0 || forceTimes) {
-				drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
-			}
-
-				if (d.timestamps === undefined || (newTime >= d.timestamps + 5 && newTime % 10 == 0) || forceTimes === true) {
-					const items = [
-						...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
-						...['deurgarage','deurinkom','achterdeur','deurvoordeur','deurbadkamer','deurkamer','deurwaskamer','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamwaskamer','raamalex'],
-						...['pirliving','pirinkom','pirhall','pirkeuken','pirgarage']
-					];
-					updateAllDeviceTimes(items);
-					d.timestamps = newTime;
-					forceTimes = false;
-				}
 			return
 		case 'd':
 			setText('Tstart',v.Ts)
@@ -243,27 +244,30 @@ function handleResponse(device,v){
 			if(setText('buien',v.b)===true) setStyle('buien','color',berekenKleurBlauw(v.b,100))
 			return
 		case 'a':
-			setText('avgvalue', d.a, false);
-			setStyle('avgvalue', 'color', berekenKleurRood(d.a, 5000), false);
-			drawCircle('avgcircle', d.a, 2500, 90, 'purple');
+			if(setText('avgvalue',v)===true) {
+				if (shouldRedraw(prevavg,v,2500,5)) {
+					setStyle('avgvalue', 'color', berekenKleurRood(v, 5000));
+					drawCircle('avgcircle', v, 2500, 90, 'purple');
+				}
+			}
 			return
 		case 'elec':
-			val = parseFloat(d.elec);
+			val = parseFloat(v);
 			avg = parseFloat(d.elecavg);
 			euro = val * euroelec;
 			html = euro.toFixed(2).toString().replace(/[.]/, ",");
-			if (d.net > 0) setStyle('elecvalue', 'color', berekenKleurRood(d.elec, d.elecavg * 2));
-			else setStyle('elecvalue', 'color', berekenKleurGroen(-d.elec, d.elecavg * 2));
+			if (d.net > 0) setStyle('elecvalue', 'color', berekenKleurRood(v, d.elecavg * 2));
+			else setStyle('elecvalue', 'color', berekenKleurGroen(-v, d.elecavg * 2));
 			drawCircle('eleccircle', val, avg, 90, 'purple');
 			valStr = val.toFixed(2).toString().replace(/[.]/, ",");
 			setHTML('elecvalue', html + `<br><span class="units">${valStr}</span>`);
-			sessionStorage.setItem('elec', d.elec)
+			sessionStorage.setItem('elec', v)
 			return
 		case 'alwayson':
 			setText('alwayson', v + "W");
 			return
 		case 'zon':
-			val = parseFloat(d.zon);
+			val = parseFloat(v);
 			euro = val * (euroelec + 0.45);
 			html = euro.toFixed(2).toString().replace(/[.]/, ",");
 			setStyle('zonvvalue', 'color', berekenKleurGroen(-val, d.zonref / 10));
@@ -272,11 +276,11 @@ function handleResponse(device,v){
 			setHTML('zonvvalue', html + `<br><span class="units">${valStr}</span>`);
 			return
 		case 'gas':
-			euro = d.gas * 11.5 * eurogas;
+			euro = v * 11.5 * eurogas;
 			html = euro.toFixed(2).toString().replace(/[.]/, ",");
-			setStyle('gasvalue', 'color', berekenKleurRood(d.gas, d.gasavg * 2000));
-			drawCircle('gascircle', d.gas, d.gasavg, 90, 'red');
-			valStr = d.gas.toFixed(2).toString().replace(/[.]/, ",");
+			setStyle('gasvalue', 'color', berekenKleurRood(v, d.gasavg * 2000));
+			drawCircle('gascircle', v, d.gasavg, 90, 'red');
+			valStr = v.toFixed(2).toString().replace(/[.]/, ",");
 			setHTML('gasvalue', html + `<br><span class="units">${valStr}</span>`);
 			return
 		case 'verlof':
@@ -367,6 +371,7 @@ function handleResponse(device,v){
 			if(v.s==0)html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
 			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
 			setHTML('brander',html)
+			updateDeviceTime(device)
 			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
 			if(heatingmode==0)html+=''
 			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
@@ -611,45 +616,53 @@ function handleResponse(device,v){
 			}
 	}
 	if (device==='n') {
-		if(setText('netvalue', d.n)){
-			if (d.n < 0) kleur=berekenKleurGroen(-d.n, 5000)
-			else kleur=berekenKleurRood(d.n, 5000)
-			setStyle('net', 'color', kleur);
-			setStyle('nettitle', 'color', kleur);
-			drawCircle('netcircle', d.n, 2500, 90, 'purple');
+		if(setText('netvalue', v)){
+			if (shouldRedraw(prevnet,v,2500,5)) {
+				prevnet=v
+				if (v < 0) kleur=berekenKleurGroen(-v, 5000)
+				else kleur=berekenKleurRood(v, 5000)
+				setStyle('net', 'color', kleur);
+				setStyle('nettitle', 'color', kleur);
+				drawCircle('netcircle', v, 2500, 90, 'purple')
+			}
 		}
 	}
 	if (device==='c') {
-		if(setText('batcharge',d.c+' %')) {
-			drawCircle('chargecircle', d.c, 100, 82, 'gray');
-			setStyle('batcharge', 'color', berekenKleurGroen(d.c, 100));
+		if(setText('batcharge',v+' %')) {
+			drawCircle('chargecircle', v, 100, 82, 'gray');
+			setStyle('batcharge', 'color', berekenKleurGroen(v, 100));
 		}
 		return
 	}
 	if (device==='z') {
-		if(setText('zonvalue', d.z)){
-			setStyle('zonvalue', 'color', berekenKleurGroen(d.z, d.zonavg * 2));
-			drawCircle('zoncircle', -d.z, d.zonavg, 90, 'green');
+		if(setText('zonvalue', v)){
+			if (shouldRedraw(prevzon,v,90)) {
+				prevzon=v
+				setStyle('zonvalue', 'color', berekenKleurGroen(v, d.zonavg * 2));
+				drawCircle('zoncircle', -v, d.zonavg, 90, 'green');
+			}
 		}
 	}
 	if (device==='b') {
-		batDisplay = d.b
-		if (batDisplay < -800) batDisplay = -800;
-		else if (batDisplay > 800) batDisplay = 800;
-		if(setText('batvalue', batDisplay)) {
-			if (batDisplay > 0) setStyle('bat', 'color', berekenKleurRood(batDisplay, 2000));
-			else setStyle('bat', 'color', berekenKleurGroen(-batDisplay, 1000));
-			drawCircle('batcircle', batDisplay, 800, 90, 'purple');
+		if (v < -800) v = -800;
+		else if (v > 800) v = 800;
+		if(setText('batvalue', v)) {
+			if (v > 0) setStyle('bat', 'color', berekenKleurRood(v, 2000));
+			else setStyle('bat', 'color', berekenKleurGroen(-v, 1000));
+			drawCircle('batcircle', v, 800, 90, 'purple');
 		}
 		return
 	}
 	total = d.n + d.z - d.b;
 	if (device==='n'||device==='z'||device==='b'){
 		if(setText('totalvalue', total)){
-			kleur=berekenKleurRood(d.n, 5000)
-			setStyle('totaltitle', 'color', kleur);
-			setStyle('totalvalue', 'color', kleur);
-			drawCircle('totalcircle', total, 2500 + d.z, 90, 'purple');
+			if (shouldRedraw(prevtotal,total,2500)) {
+				prevtotal=total
+				kleur=berekenKleurRood(d.n, 5000)
+				setStyle('totaltitle', 'color', kleur);
+				setStyle('totalvalue', 'color', kleur);
+				drawCircle('totalcircle', total, 2500 + d.z, 90, 'purple');
+			}
 		}
 		return
 	}
@@ -1279,13 +1292,20 @@ function log(msg) {
         el.scrollTop = el.scrollHeight;
     });
 }
+function shouldRedraw(prev,curr,circleMax,degrees=2){
+//	if (forceRedraw) return true;
+	if (prev===undefined) return true;
+	if ((prev <= 0&&curr > 0) || (prev >= 0&&curr < 0)) return true;
+	const threshold=circleMax * (degrees / 360);
+	return Math.abs(curr - prev) >= threshold;
+}
 let socket = null
 let monitorTimer = null
 let lastMessageReceived = 0
 let isConnecting = false
 let initialConnectDone = false  // ← NIEUW
-const DEAD_TIMEOUT = 2499
-const MONITOR_INTERVAL = 500
+const DEAD_TIMEOUT = 10000
+const MONITOR_INTERVAL = 1000
 
 function connect() {
     if (socket || isConnecting) return;

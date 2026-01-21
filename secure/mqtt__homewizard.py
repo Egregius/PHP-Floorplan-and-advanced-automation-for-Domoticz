@@ -29,8 +29,6 @@ def publish_all_retained():
     """Publiceer alles naar MQTT met retain=True als broker verbonden"""
     if not mqtt_connected:
         return
-    now=int(time.time())
-    mqtt_client.publish("d/t", now, retain=True, qos=1)
     for k, v in state.items():
         mqtt_client.publish(f"d/e/{k}", v, retain=True, qos=1)
     for k, v in teller_state.items():
@@ -125,12 +123,9 @@ def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
-    if v < 10: return 1
-    elif v < 50: return 2
-    elif v < 100: return 5
-    elif v < 500: return 10
-    elif v < 1000: return 20
-    else: return 50
+    if v < 50: return 1
+    elif v < 100: return 2
+    else: return 5
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):
@@ -156,7 +151,7 @@ def mqtt_publish_teller(key, value):
 # --- State updates ---
 def publish_step(key, value):
     if key == 'a':
-	    q = quantize_step(value, 10)
+	    q = quantize_step(value, 5)
     else:
         q = value if key in NO_STEP_KEYS else quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
@@ -229,36 +224,6 @@ async def handle_device(device, token, ssl_context):
             log(f"❌ {name}: {e}")
         await asyncio.sleep(RECONNECT_DELAY)
 
-# --- Time loop ---
-def time_loop():
-    last = 0
-    while True:
-        if not mqtt_connected:
-            print("MQTT niet verbonden, script stopt.")
-            sys.exit(1)
-
-        now = time.time()
-        sec = int(now)
-
-        if sec != last:
-            last = sec
-            try:
-                result = mqtt_client.publish(
-                    "d/t",
-                    1,
-                    retain=True,
-                    qos=0
-                )
-                if result.rc != 0:
-                    print(f"Publish failed with code {result.rc}, script stopt.")
-                    sys.exit(1)
-            except Exception as e:
-                print(f"Fout bij publish: {e}, script stopt.")
-                sys.exit(1)
-
-        sleep_time = max(0, 1 - (now - sec))
-        time.sleep(sleep_time)
-
 # --- Main ---
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
@@ -289,7 +254,6 @@ async def main():
         log("❌ Geen devices beschikbaar")
 
 if __name__=="__main__":
-    threading.Thread(target=time_loop, daemon=True).start()
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

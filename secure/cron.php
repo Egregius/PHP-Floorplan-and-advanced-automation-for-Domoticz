@@ -57,7 +57,7 @@ while (true) {
 		elseif ($d['heating']->s == -1) include '_TC_cooling_passive.php';
 		elseif ($d['heating']->s == 0) include '_TC_neutral.php';
 		elseif ($d['heating']->s > 0)  include '_TC_heating.php';
-		$mqtt->publish('p', 'p');
+		$mqtt->publish('d/t',json_encode(1));
 	}
 	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
 	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
