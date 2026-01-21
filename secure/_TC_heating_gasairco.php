@@ -100,7 +100,7 @@ foreach (array('living','kamer','alex') as $k) {
 				//$set+=$adj;
 				if($dif<0&&!$daikinrunning)$adjLiving+=0.1;
 				elseif($dif>0&&$daikinrunning)$adjLiving-=0.1;
-				$adjLiving = clamp($adjLiving, -1.5, 1);
+				$adjLiving = clamp($adjLiving, -1, 1);
 				$set+=$adjLiving-1;
 				$adj=$adjLiving;
 				$set=min($set, $target);

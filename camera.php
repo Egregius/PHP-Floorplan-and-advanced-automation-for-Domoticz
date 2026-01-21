@@ -5,10 +5,10 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$mysqli=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
 	$result = $mysqli->query("select n,s,d,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
-		$d[$row->n]['s'] = $row['s'];
-		$d[$row->n]['d'] = $row['d'];
-		$d[$row->n]['t'] = $row['t'];
-		$d[$row->n]['m'] = $row['m'];
+		$d[$row['n']]['s'] = $row['s'];
+		$d[$row['n']]['d'] = $row['d'];
+		$d[$row['n']]['t'] = $row['t'];
+		$d[$row['n']]['m'] = $row['m'];
 	}
 	$data=array();
 	$data['w']=$d['weg']['s'];
@@ -29,7 +29,7 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$mysqli=new mysqli('localhost', $dbuser, $dbpass, $dbname);
 	$result = $mysqli->query("select n,s from devices WHERE n ='weg';") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
-		$d[$row->n]['s'] = $row['s'];
+		$d[$row['n']]['s'] = $row['s'];
 	}
 	$data=array();
 	$data['w']=$d['weg']['s'];
