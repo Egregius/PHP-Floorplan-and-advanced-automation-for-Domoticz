@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import asyncio
 import json
 import ssl
@@ -123,9 +124,14 @@ def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v = abs(value)
-    if v < 50: return 1
-    elif v < 100: return 2
-    else: return 5
+    if v < 100: return 1
+    elif v < 200: return 2
+    elif v < 500: return 5
+    elif v < 1000: return 10
+    elif v < 2000: return 20
+    elif v < 3000: return 30
+    elif v < 4000: return 40
+    else: return math.floor(v / 100)
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):

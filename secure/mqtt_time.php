@@ -19,38 +19,36 @@ $user='TIME';
 lg('🟢 Starting '.$user.' loop ',-1);
 $time=time();
 $lastcheck=$time;
-$t = null;
-$weekend = null;
-$dow = null;
-$startloop=time();
-define('LOOP_START', $startloop);
-$lastEvent=$startloop;
+$lasttimepub=$time;
+define('LOOP_START', $time);
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 
-$d['rand']=rand(100,200);
-$mqtt->subscribe('d/#',function (string $topic,string $status) use ($startloop,&$lastcheck, &$time, &$lastpub) {
-	lg($topic);
-	if ($lastcheck < $time - $d['rand']) {
+$rand=rand(10,20);
+$mqtt->subscribe('d/#',function (string $topic,string $status) use ($rand,&$lastcheck, &$time, &$lastpub) {
+	$lastpub=$time;
+	if ($lastcheck < $time - $rand) {
         $lastcheck = $time;
         stoploop();
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,500000);
+	$time=time();
+	$mqtt->loopOnce($time);
+
+	if($lastpub<$time-1) {
+		lg('-----------------------------------------------------> '.$time-$lasttimepub);
+		$lasttimepub=$time;
+		$mqtt->publish('d/t',json_encode(1));
+	}
+	usleep(333333);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
-
-function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
-	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;
-	$alreadyProcessed[$topic]=$status;
-	return false;
-}
 
 function stoploop() {
     global $mqtt,$lock_file;
