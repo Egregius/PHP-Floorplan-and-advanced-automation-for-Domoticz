@@ -33,7 +33,7 @@ $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $adj          = array_map(fn($d)=>$d['adj']/10??0,$data);
-$adjLiving          = array_map(fn($d)=>$d['adjLiving']/10??0,$data);
+$adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']/10??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 
 
@@ -59,7 +59,7 @@ const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
-const adj          = <?php echo json_encode($adj); ?>;
+/*const adj          = <?php echo json_encode($adj); ?>;*/
 const adjLiving    = <?php echo json_encode($adjLiving); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
@@ -67,10 +67,11 @@ new Chart(document.getElementById('chart1'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0,borderWidth:5},
-            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
-            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
-            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
+            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:5},
+            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'adjLiving', data:adjLiving, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
+            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0},
+            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.2, pointRadius:0},
         ]
     },
     options:{
