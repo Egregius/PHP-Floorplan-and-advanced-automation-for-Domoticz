@@ -453,7 +453,10 @@ function handleResponse(device,v){
 						html='<img src="/images/' + iconName + '_Off.png" id="' + device + '" onclick="' + onclickHandler + '" />';
 					}
 					if (specialDevices.includes(device)){
-						html += '<br>' + device;
+						if(device=='steenterras') naam='steen'
+						else if(device=='tuintafel') naam='hout'
+						else naam=device
+						html += '<br>' + naam;
 						if (["water","regenpomp","auto","media","nas","mac","ipaddock","boseliving","bosekeuken","grohered","kookplaat","zetel","poort"].includes(device)){
 							if (v.t > (newTime - 82800)){
 								const date=new Date(v.t * 1000);

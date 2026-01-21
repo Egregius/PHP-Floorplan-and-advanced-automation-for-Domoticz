@@ -28,12 +28,12 @@ foreach (array('living','kamer','alex') as $k) {
 
 $maxpow = 40;
 if ($d['weg']->s > 0)            $maxpow = 40;
-elseif ($totalmin >= 1.8)        $maxpow = 100;
-elseif ($totalmin >= 1.5)        $maxpow = 90;
-elseif ($totalmin >= 1.2)        $maxpow = 80;
-elseif ($totalmin >= 0.9)        $maxpow = 70;
+elseif ($totalmin >= 1.4)        $maxpow = 100;
+elseif ($totalmin >= 1.2)        $maxpow = 90;
+elseif ($totalmin >= 1.0)        $maxpow = 80;
+elseif ($totalmin >= 0.8)        $maxpow = 70;
 elseif ($totalmin >= 0.6)        $maxpow = 60;
-elseif ($totalmin >= 0.3)        $maxpow = 50;
+elseif ($totalmin >= 0.4)        $maxpow = 50;
 
 if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
@@ -100,6 +100,7 @@ foreach (array('living','kamer','alex') as $k) {
 				//$set+=$adj;
 				if($dif<-0.2&&!$daikinrunning&&$d['living_temp']->i<0)$adjLiving+=0.1;
 				elseif($dif>=0.2&&$daikinrunning&&$d['living_temp']->i>0)$adjLiving-=0.1;
+				else $adjLiving=0;
 				$set+=$adjLiving-1;
 				$set=min($set, $target);
 				lg('$adjLiving='.$adjLiving);

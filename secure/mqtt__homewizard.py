@@ -123,8 +123,13 @@ def flush_teller_state():
 def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
-    return ceil(abs(value) / 100)
-
+    v=abs(value)
+    if v<50:return 1
+    elif v<100: return 2
+    elif v<200: return 5
+    elif v<500: return 10
+    elif v<1000: return 20
+    else: return 50
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
@@ -148,7 +153,10 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    q = quantize_step(value, ceil(abs(value) / 100))
+    if key == 'a':
+        q = quantize_step(value, 10)
+    else:
+        q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     if last is None or q != last:
         state_publish[key] = q

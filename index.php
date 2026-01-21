@@ -169,20 +169,19 @@
 				<div class="abs" id="bose105"></div>
 				<div class="abs" id="bose106"></div>
 				<div class="abs" id="bose107"></div>
+				<div class="abs z1 i48" id="lampkast"></div>
 				<div class="abs z" id="alex" onclick="dimmer('alex')"></div>
 				<div class="abs z" id="eettafel" onclick="dimmer('eettafel')"></div>
 				<div class="abs z" id="bureellinks" onclick="dimmer('bureellinks')"></div>
 				<div class="abs z" id="bureelrechts" onclick="dimmer('bureelrechts')"></div>
 				<div class="abs z" id="kamer" onclick="dimmer('kamer')"></div>
 				<div class="abs z" id="lichtbadkamer" onclick="dimmer('lichtbadkamer')"></div>
-				<div class="abs z" id="terras" onclick="dimmer('terras')"></div>
 				<div class="abs z" id="zithoek" onclick="dimmer('zithoek')"></div>
 				<div class="abs z" id="wasbak" onclick="dimmer('wasbak')"></div>
 				<div class="abs z" id="snijplank" onclick="dimmer('snijplank')"></div>
-				<div class="abs z1 i48" id="lampkast"></div>
+				<div class="abs z" id="terras" onclick="dimmer('terras')"></div>
 				<div class="abs z1 i48" id="tuin"></div>
 				<div class="abs z1 i48" id="tuintafel"></div>
-				<div class="abs z1 i48" id="kristal"></div>
 				<div class="abs z1 i48" id="steenterras"></div>
 				<div class="abs verbruik">
 					<a href="https://verbruik.egregius.be/kwartierpiek.php">
