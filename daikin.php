@@ -34,7 +34,7 @@ $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $adj          = array_map(fn($d)=>$d['adj']/10??0,$data);
 $adjLiving          = array_map(fn($d)=>$d['adjLiving']/10??0,$data);
-$daikinpower    = array_map(fn($d)=>$d['daikinpower']/1000,$data);
+$daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 
 
 ?>
@@ -45,10 +45,8 @@ $daikinpower    = array_map(fn($d)=>$d['daikinpower']/1000,$data);
 <title>Living Trend</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body {font-family:sans-serif; background:#f5f5f5; margin:20px;}
-canvas{background:#fff;border:1px solid #ccc;margin-bottom:40px;}
-h1,h2{margin-top:30px;}
-.info-box{background:#fff;border:1px solid #999;padding:15px;margin-bottom:30px;}
+body {font-family:sans-serif; background:#FFF; margin:20px;color:#000;}
+canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
@@ -69,25 +67,44 @@ new Chart(document.getElementById('chart1'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
-            {label:'Termperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0},
+            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.1, pointRadius:0,borderWidth:5},
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.1, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.1, pointRadius:0},
+            {label:'Target', data:livingTarget, backgroundColor:'yellow', borderColor:'yellow', fill:false, tension:0.1, pointRadius:0},
         ]
     },
-    options:{responsive:true, interaction:{mode:'index', intersect:false}}
+    options:{
+    	responsive:true,
+    	animation: false,
+    	interaction:{
+    		mode:'index',
+    		intersect:false
+    	},
+    }
 });
 new Chart(document.getElementById('chart2'), {
     type:'line',
     data:{
         labels:labels,
         datasets:[
-            {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', /*borderDash:[2,5], */fill:false, tension:0.2, pointRadius:0},
-            {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', /*borderDash:[2,5], */fill:false, tension:0.2, pointRadius:0},
-            {label:'Power', data:daikinpower, backgroundColor:'black', borderColor:'black', /*borderDash:[2,5], */fill:false, tension:0.1, pointRadius:0},
+         /*   {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
+            {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0},*/
+            {label:'Power', data:daikinpower, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.1, pointRadius:0,borderWidth:5},
         ]
     },
-    options:{responsive:true, interaction:{mode:'index', intersect:false}}
+    options:{
+    	responsive:true,
+    	animation: false,
+    	interaction:{
+    		mode:'index',
+    		intersect:false
+    	},
+    	plugins: {
+            legend: {
+                display: false,
+            }
+        }
+    }
 });
 (() => {
     let lastReloadSecond = null;

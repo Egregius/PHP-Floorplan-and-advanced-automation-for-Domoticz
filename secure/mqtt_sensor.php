@@ -50,7 +50,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$oldt = (int)($d['daikin']->t ?? 0);
 			$rel_increase = ($old > 0) ? (($status - $old) / $old) : 1;
 			$time_passed = ($time - $oldt) >= 60;
-			if ($rel_increase >= 0.40 || $rel_increase <= -0.40 || $time_passed) {
+			if ($rel_increase > 0.1 || $rel_increase < -0.1 || $time_passed) {
 				if($status===0) storesp('daikin','Off',0);
 				else storep('daikin',$status);
 			}

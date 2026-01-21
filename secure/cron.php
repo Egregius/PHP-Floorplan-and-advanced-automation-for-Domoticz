@@ -52,7 +52,7 @@ while (true) {
 		$d = fetchdata();
 		include '_cron10.php';
 	}
-	if ($time % 30 === 0 && $time !== $last30) {
+	if (checkInterval($last30, 20, $time))  {
 		$user = 'HEATING';
 		if ($d['heating']->s == -2) include '_TC_cooling_airco.php';
 		elseif ($d['heating']->s == -1) include '_TC_cooling_passive.php';

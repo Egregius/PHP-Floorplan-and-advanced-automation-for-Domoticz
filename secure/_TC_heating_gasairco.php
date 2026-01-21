@@ -39,10 +39,12 @@ if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
 elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 $adjLiving??=0;
+$lastLivingSet??=0;
 $daikinrunning=$d['daikin']->p>100?true:false;
-if($daikinrunning!=$prevdaikinrunning) {
+if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
 	$prevdaikinrunning=$daikinrunning;
-//	$adjLiving=0;
+	$adjLiving=0;
+	lg('🔥 $adjLiving to 0, running cycle');
 }
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
@@ -98,13 +100,27 @@ foreach (array('living','kamer','alex') as $k) {
 				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
 				$adj = clamp($adj, -1.5, 0.6);
 				//$set+=$adj;
-				if($dif<0&&!$daikinrunning)$adjLiving+=0.1;
-				elseif($dif>0&&$daikinrunning)$adjLiving-=0.1;
+				if($dif<0&&$lastLivingSet<$time-170) {
+					if($daikinrunning) {
+						$adjLiving=0;
+						lg('🔥 $adjLiving to 0, $dif<0');
+					} elseif($adjLiving!=0) {
+						$adjLiving+=$dif/2;
+						lg('🔥 $adjLiving + = '.$adjLiving);
+					}
+				} elseif($dif>0&&$lastLivingSet<$time-170) {
+					if($daikinrunning) {
+						$adjLiving-=$dif/2;
+						lg('$adjLiving - = '.$adjLiving);
+					} elseif($adjLiving!=0) {
+						$adjLiving=0;
+						lg('🔥 $adjLiving to 0, $dif>0');
+					}
+				}
 				$adjLiving = clamp($adjLiving, -1, 1);
 				$set+=$adjLiving-1;
 				$adj=$adjLiving;
 				$set=min($set, $target);
-				lg('$adjLiving='.$adjLiving);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -141,7 +157,7 @@ foreach (array('living','kamer','alex') as $k) {
             ($power!=0&&$daikin->$k->lastset <= $time-581)) {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
-//				if($daikin->$k->set!=$setrounded) $adjLiving=0;
+				if($daikin->$k->set!=$setrounded) $lastLivingSet=$time;
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
 				$daikin->$k->fan   = $fan;
