@@ -4,12 +4,12 @@
 declare -A LOGS=(
   ["/temp/domoticz.log"]=5000
   ["/temp/mqttpublish.log"]=1000
-  ["/temp/floorplan-access.log"]=500
-  ["/temp/Temps.log"]=500
-  ["/temp/Rains.log"]=500
-  ["/temp/Winds.log"]=500
-  ["/temp/opcache.log"]=500
-  ["/temp/phperror.log"]=500
+#  ["/temp/floorplan-access.log"]=500
+  ["/temp/Temps.log"]=250
+  ["/temp/Rains.log"]=250
+  ["/temp/Winds.log"]=250
+  ["/temp/opcache.log"]=250
+  ["/temp/phperror.log"]=250
 )
 
 for file in "${!LOGS[@]}"; do

@@ -52,6 +52,7 @@ while (true) {
 		$d = fetchdata();
 		include '_cron10.php';
 	}
+	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
 	if (checkInterval($last30, 20, $time))  {
 		$user = 'HEATING';
 		if ($d['heating']->s == -2) include '_TC_cooling_airco.php';
@@ -60,7 +61,6 @@ while (true) {
 		elseif ($d['heating']->s > 0)  include '_TC_heating.php';
 		$mqtt->publish('d/t',json_encode(1));
 	}
-	if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
 	if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
 	if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
 	if (checkInterval($last90, 90, $time)) include '_weather.php';

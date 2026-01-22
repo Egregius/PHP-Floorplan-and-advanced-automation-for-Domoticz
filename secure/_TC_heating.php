@@ -208,7 +208,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$startupDelay = $d['living_start_temp']->p ?? 0;
 			$minutesUsed = (past('living_start_temp') - $startupDelay) / 60;
 			$minPerDeg   = $minutesUsed / $tempRise;
-			$minPerDeg = round(max($avgMinPerDeg - 10, min($avgMinPerDeg + 10, $minPerDeg)),1);
+			$minPerDeg = round(clamp($minPerDeg,$avgMinPerDeg - 5,$avgMinPerDeg +5),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
 			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -5);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);

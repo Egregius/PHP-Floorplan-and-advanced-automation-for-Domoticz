@@ -30,12 +30,9 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
-$livingTrend   = array_map(fn($d)=>$d['trend']/10+$d['Living target']??0,$data);
-$set          = array_map(fn($d)=>$d['set']+1??0,$data);
-$setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
-$adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']??0,$data);
+$set          = array_map(fn($d)=>$d['set']??0,$data);
+$setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
-$daikintargetpower    = array_map(fn($d)=>$d['daikinpower']-100,$data);
 
 
 ?>
@@ -71,13 +68,10 @@ function colorLerp(c1, c2, t) {
   ];
 }
 const labels = <?php echo json_encode($labels); ?>;
-const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const livingTemp   = <?php echo json_encode($livingTemp); ?>;
-/*const Trend   = <?php echo json_encode($livingTrend); ?>;*/
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
-const adjLiving    = <?php echo json_encode($adjLiving); ?>;
-const daikintargetpower = <?php echo json_encode(array_values($daikinpower)); ?>;
+const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
     type:'line',
@@ -85,20 +79,24 @@ new Chart(document.getElementById('chart1'), {
         labels:labels,
         datasets:[
             {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
-/*            {label:'Trend', data:Trend, backgroundColor:'tomato', borderColor:'tomato', fill:false, borderDash:[3,3], tension:0.2, pointRadius:0,borderWidth:4},*/
-            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
-            {label:'adjLiving', data:adjLiving, backgroundColor:'magenta', borderColor:'magenta', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
-            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
-            {label:'Target', data:livingTarget, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
+            {label:'Set', data:set, backgroundColor:'orange', borderColor:'orange', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
+            {label:'Setpoint', data:setRounded, backgroundColor:'orange', borderColor:'orange', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
+            {label:'Target', data:livingTarget, backgroundColor:'green', borderColor:'green', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
         ]
     },
     options:{
-    	responsive:true,
-    	animation: false,
-    	interaction:{
-    		mode:'index',
-    		intersect:false
-    	},
+        responsive: true,
+        animation: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+
     }
 });
 const ctx = document.getElementById('chart2').getContext('2d');

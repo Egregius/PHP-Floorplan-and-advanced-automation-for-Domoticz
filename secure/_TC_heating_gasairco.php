@@ -25,17 +25,6 @@ foreach (array('living','kamer','alex') as $k) {
     ${'dif'.$k} = $d[$k.'_temp']->s - $d[$k.'_set']->s;
     if (${'dif'.$k} < 0) $totalmin += -${'dif'.$k} * $weight[$k];
 }
-$stamp = date('Y-m-d H:i:s', $time - 600);
-$sql = "
-SELECT
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS first,
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS last
-FROM temp
-WHERE stamp >= '$stamp'
-";
-$row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
-$trend = (int) round(($row['last'] - $row['first']) * 10);
-if ((int)$d['living_temp']->i != $trend) storeicon('living_temp', $trend, basename(__FILE__).':'.__LINE__);
 $trend=$d['living_temp']->i;
 if($trend>=0) $maxpow=40;
 else {
@@ -53,7 +42,6 @@ else {
 	elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 }
 $adjLiving??=0;
-$lastLivingSet??=0;
 $daikinpower=floor($d['daikin']->p/100);
 $daikinrunning=$daikinpower>=1?true:false;
 //if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
@@ -81,70 +69,66 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				if($lastLivingSet>$time-170) $line='WAIT';
-				else {
-					if($dif==0) $line='NO DIF';
-					elseif($dif<0) {
-						if($daikinrunning) {
-							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
-							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.03;}
-							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.04;}
-							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
-							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.06;}
-							else $line=__LINE__;
-						} else {
-							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-							else $line=__LINE__;
-						}
-					} elseif($dif>0) {
-						if($daikinrunning) {
-							if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
-							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
-							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.04;}
-							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.03;}
-							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.02;}
-							elseif($trend==0){	$line=__LINE__;$adjLiving-=0.01;}
-							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-							else $line=__LINE__;
-						} else {
-							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-							else $line=__LINE__;
-						}
+				if($dif==0) $line='NO DIF';
+				elseif($dif<0) {
+					if($daikinrunning) {
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.005;}
+						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.06;}
+						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
+						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.04;}
+						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.03;}
+						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
+						else $line=__LINE__;
+					} else {
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.005;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+						else $line=__LINE__;
+					}
+				} elseif($dif>0) {
+					if($daikinrunning) {
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving-=0.01;}
+						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+						else $line=__LINE__;
+					} else {
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+						else $line=__LINE__;
 					}
 				}
-				$adjLiving = clamp($adjLiving, -1, 0.5);
+				$adjLiving = clamp($adjLiving, -2, 2);
 				$set+=$adjLiving-1;
-				$set=min($set, $target);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -152,9 +136,10 @@ foreach (array('living','kamer','alex') as $k) {
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
-        $setrounded = clamp(round($set*2)/2,10,28);
+        $setrounded = clamp(ceil($set*2)/2,10,28);
+        $setrounded=min($setrounded, $target);
 		if ($k=='living'&&past('living_set')>1800) {
-			$msg='🔥 set='.$set.'	rounded='.$setrounded.'	adj='.$adjLiving.(isset($line)?'	['.$line.']':'');
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,3,',','').' ⇉ adj = '.number_format($adjLiving,3,',','').'  ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
 //			if($msg!=$prevmsg) {
 				lg($msg);
 				$prevmsg=$msg;
@@ -166,7 +151,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"dif"=>number_format($dif,1,',',''),
 				"trend"=>$d['living_temp']->i,
 				"adjLiving"=>number_format($adjLiving,3,',',''),
-				"set"=>number_format($set,1,',',''),
+				"set"=>number_format($set,3,',',''),
 				"setrounded"=>number_format($setrounded,1,',',''),
 				"spm"=>$spm[$spmode],
 				"maxpow"=>$maxpow,
@@ -179,7 +164,6 @@ foreach (array('living','kamer','alex') as $k) {
             ($power!=0&&$daikin->$k->lastset <= $time-581)) {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
-				if($daikin->$k->set!=$setrounded) $lastLivingSet=$time;
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
 				$daikin->$k->fan   = $fan;
