@@ -193,6 +193,9 @@ function handleResponse(device,v){
 		case 't':
 			setTime()
 			return
+		case 'i':
+			setText('info',v)
+			return
 		case 'd':
 			setText('Tstart',v.Ts)
 			setText('Srise',v.Sr)

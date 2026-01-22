@@ -41,7 +41,8 @@ else {
 	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
 	elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 }
-$adjLiving??=0;
+$prevadjLiving??=0;
+$adjLiving??=getCache('adjLiving');
 $daikinpower=floor($d['daikin']->p/100);
 $daikinrunning=$daikinpower>=1?true:false;
 //if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
@@ -128,6 +129,7 @@ foreach (array('living','kamer','alex') as $k) {
 					}
 				}
 				$adjLiving = clamp($adjLiving, -2, 2);
+				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving-1;
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
@@ -139,24 +141,20 @@ foreach (array('living','kamer','alex') as $k) {
         $setrounded = clamp(ceil($set*2)/2,10,28);
         $setrounded=min($setrounded, $target);
 		if ($k=='living'&&past('living_set')>1800) {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,3,',','').' ⇉ adj = '.number_format($adjLiving,3,',','').'  ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
-//			if($msg!=$prevmsg) {
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ rounded = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
+			if($msg!=$prevmsg) {
 				lg($msg);
+				publishmqtt('d/i','set='.number_format($set,3,',','').' rounded='.number_format($setrounded,1,',','').(isset($line)?' ['.$line.']':''));
+				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
 				$prevmsg=$msg;
 				unset($line);
-//			}
+			}
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
-				"dif"=>number_format($dif,1,',',''),
-				"trend"=>$d['living_temp']->i,
-				"adjLiving"=>number_format($adjLiving,3,',',''),
 				"set"=>number_format($set,3,',',''),
 				"setrounded"=>number_format($setrounded,1,',',''),
-				"spm"=>$spm[$spmode],
-				"maxpow"=>$maxpow,
 				"daikinpower"=>$d['daikin']->p,
-				"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
 			]);
 		}
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
