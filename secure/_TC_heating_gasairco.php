@@ -44,8 +44,7 @@ $daikinrunning=$d['daikin']->p>100?true:false;
 $daikinpower=floor($d['daikin']->p/100);
 if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
 	$prevdaikinrunning=$daikinrunning;
-	$adjLiving=0;
-	lg('🔥 $adjLiving to 0, running cycle');
+//	$adjLiving=0;lg('🔥 $adjLiving to 0, running cycle');
 }
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
@@ -102,22 +101,20 @@ foreach (array('living','kamer','alex') as $k) {
 				$adj = clamp($adj, -1.5, 0.6);
 				//$set+=$adj;
 				if($dif<0&&$lastLivingSet<$time-170) {
-					if($daikinrunning) {
-						$adjLiving=0;
-						lg('🔥 $adjLiving to 0, $dif<0');
+					if($daikinrunning&&$d['living_temp']->i<0) {
+						$adjLiving+=0.1;
+						$adjLiving = clamp($adjLiving, -1, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
 					} elseif($adjLiving!=0&&$d['living_temp']->i<0) {
 						$adjLiving+=$dif/2;
-						$adjLiving = clamp($adjLiving, 0, 1);
-						lg('🔥 $adjLiving + = '.$adjLiving);
+						$adjLiving = clamp($adjLiving, 0, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
 					}
 				} elseif($dif>0&&$lastLivingSet<$time-170) {
 					if($daikinrunning&&$d['living_temp']->i>0) {
 						$adjLiving-=$dif/2;
-						$adjLiving = clamp($adjLiving, -1.5, 0);
-						lg('$adjLiving - = '.$adjLiving);
-					} elseif($adjLiving!=0) {
-						$adjLiving=0;
-						lg('🔥 $adjLiving to 0, $dif>0');
+						$adjLiving = clamp($adjLiving, -1.5, 0);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif($daikinrunning) {
+						$adjLiving-=0.1;
+						$adjLiving = clamp($adjLiving, -1.5, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
 					}
 				}
 

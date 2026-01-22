@@ -39,25 +39,21 @@ $mqtt->subscribe('d/#', function (string $topic, string $status) use ($rand, &$l
         stoploop();
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
-
-
 while (true) {
-    $time = time();
-    $mqtt->loopOnce($time);
-    if ($time > $lastSecond) {
-        if (!$lastMessageReceived) {
-            $lastpub = $time;
-//			lg('🏓 '.$time-$lasttimepub);
-            $lasttimepub = $time;
-            $mqtt->publish('d/t', json_encode(1));
-        }// else lg('skip');
-        $lastSecond = $time;
-        $lastMessageReceived = false;
-    }
     $microtime = microtime(true);
     $microsUntilNextSecond = (1 - ($microtime - floor($microtime))) * 1000000;
-    $sleepMicros = min(500000, max(100000, $microsUntilNextSecond - 5000)); // -5ms buffer
+    $sleepMicros = max(1000, $microsUntilNextSecond);
     usleep((int)$sleepMicros);
+    $time = time();
+    $mqtt->loopOnce($time);
+    if (!$lastMessageReceived) {
+        $lastpub = $time;
+//        lg('🏓 ' . ($time - $lasttimepub));
+        $lasttimepub = $time;
+        $mqtt->publish('d/t', json_encode(1));
+    }
+    $lastSecond = $time;
+    $lastMessageReceived = false;
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
