@@ -11,8 +11,6 @@ $stamp = date('Y-m-d H:i:s', $time - 600);
 // eerste en laatste waarde per sensor in het venster
 $sql = "
 SELECT
-    MIN(stamp) AS first_stamp,
-    MAX(stamp) AS last_stamp,
     SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp ASC),  ',', 1) AS buiten_first,
     SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp DESC), ',', 1) AS buiten_last,
     SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS living_first,

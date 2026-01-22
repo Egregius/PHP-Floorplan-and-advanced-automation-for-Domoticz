@@ -30,9 +30,9 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
+$livingTrend   = array_map(fn($d)=>$d['trend']/10+$d['Living target']??0,$data);
 $set          = array_map(fn($d)=>$d['set']+1??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
-$adj          = array_map(fn($d)=>$d['adj']/10??0,$data);
 $adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 
@@ -50,16 +50,16 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
-<canvas id="chart1" height="100"></canvas>
-<canvas id="chart2" height="100"></canvas>
+<canvas id="chart1" height="90"></canvas>
+<canvas id="chart2" height="80"></canvas>
 
 <script>
 const labels = <?php echo json_encode($labels); ?>;
 const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const livingTemp   = <?php echo json_encode($livingTemp); ?>;
+const Trend   = <?php echo json_encode($livingTrend); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
-/*const adj          = <?php echo json_encode($adj); ?>;*/
 const adjLiving    = <?php echo json_encode($adjLiving); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
@@ -68,6 +68,7 @@ new Chart(document.getElementById('chart1'), {
         labels:labels,
         datasets:[
             {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:5},
+            {label:'Trend', data:Trend, backgroundColor:'red', borderColor:'red', fill:false, borderDash:[3,3], tension:0.2, pointRadius:0,borderWidth:3},
             {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'adjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
             {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0},
@@ -112,7 +113,7 @@ new Chart(document.getElementById('chart2'), {
     function checkReload() {
         const now = new Date();
         const sec = now.getSeconds();
-        if ((sec === 1 || sec === 31) && sec !== lastReloadSecond) {
+        if ((sec === 1 || sec === 21 || sec === 42) && sec !== lastReloadSecond) {
             lastReloadSecond = sec;
             location.reload();
         }

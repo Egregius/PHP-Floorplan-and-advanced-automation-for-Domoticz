@@ -25,6 +25,19 @@ foreach (array('living','kamer','alex') as $k) {
     ${'dif'.$k} = $d[$k.'_temp']->s - $d[$k.'_set']->s;
     if (${'dif'.$k} < 0) $totalmin += -${'dif'.$k} * $weight[$k];
 }
+$stamp = date('Y-m-d H:i:s', $time - 600);
+$sql = "
+SELECT
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS living_first,
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS living_last
+FROM temp
+WHERE stamp >= '$stamp'
+";
+$row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
+foreach (array('living') as $i) {
+    $trend = (int) round(($row[$i.'_last'] - $row[$i.'_first']) * 10);
+    if ((int)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
+}
 
 $maxpow = 40;
 if ($d['weg']->s > 0)            $maxpow = 40;
@@ -65,61 +78,41 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				$k_factor = 0.4;
-				$trend_factor = 1.5;
-				$scale = 1.0;
-				if ($dif > 1.0) $scale*=$dif;
-				elseif ($dif < -1.0) $scale*=-$dif;
-				$trend = 0.0;
-				$stmt = $db->query("
-					SELECT stamp, living FROM temp
-					WHERE stamp >= NOW() - INTERVAL 10 MINUTE
-					ORDER BY stamp ASC
-				");
-				$points = [];
-				while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-					$points[] = [
-						't' => strtotime($row[0]),
-						'v' => (float)$row[1]
-					];
-				}
-				if (count($points) > 1) {
-					$n = count($points);
-					$sumX = $sumY = $sumXY = $sumX2 = 0;
-					foreach ($points as $p) {
-						$x = $p['t'];
-						$y = $p['v'];
-						$sumX += $x;
-						$sumY += $y;
-						$sumXY += $x*$y;
-						$sumX2 += $x*$x;
-					}
-					$trend = number_format((($n*$sumXY - $sumX*$sumY) / ($n*$sumX2 - $sumX*$sumX))*600,7);
-				}
-				if ($dif > 0) $adj = -($dif * $k_factor + max(0, $trend) * $trend_factor ) * $scale;
-				else $adj = -($dif * $k_factor + min(0, $trend) * $trend_factor) * $scale;
-				$adj = clamp($adj, -1.5, 0.6);
-				//$set+=$adj;
 				if($dif<0&&$lastLivingSet<$time-170) {
-					if($daikinrunning&&$d['living_temp']->i<0) {
+					if(!$daikinrunning&&$d['living_temp']->i<=-4) {
+						$adjLiving+=0.2;
+						$adjLiving = clamp($adjLiving, -1, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif(!$daikinrunning&&$d['living_temp']->i<0) {
 						$adjLiving+=0.1;
-						$adjLiving = clamp($adjLiving, -1, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
-					} elseif($adjLiving!=0&&$d['living_temp']->i<0) {
-						$adjLiving+=$dif/2;
-						$adjLiving = clamp($adjLiving, 0, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$adjLiving = clamp($adjLiving, -1, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif(!$daikinrunning) {
+						$adjLiving+=0.05;
+						$adjLiving = clamp($adjLiving, -1, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif ($daikinrunning&&$d['living_temp']->i>=8) {
+						$adjLiving-=0.05;
+						$adjLiving = clamp($adjLiving, -1, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
 					}
 				} elseif($dif>0&&$lastLivingSet<$time-170) {
-					if($daikinrunning&&$d['living_temp']->i>0) {
-						$adjLiving-=$dif/2;
-						$adjLiving = clamp($adjLiving, -1.5, 0);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
-					} elseif($daikinrunning) {
+					if($daikinrunning&&$d['living_temp']->i>=4) {
+						$adjLiving-=0.2;
+						$adjLiving = clamp($adjLiving, -2, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif($daikinrunning&&$d['living_temp']->i>0) {
 						$adjLiving-=0.1;
-						$adjLiving = clamp($adjLiving, -1.5, 1);lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$adjLiving = clamp($adjLiving, -2, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+					} elseif($daikinrunning) {
+						$adjLiving-=0.05;
+						$adjLiving = clamp($adjLiving, -2, 1);
+						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
 					}
 				}
 
 				$set+=$adjLiving-1;
-				$adj=$adjLiving;
 				$set=min($set, $target);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
@@ -130,26 +123,18 @@ foreach (array('living','kamer','alex') as $k) {
         }
         $setrounded = clamp(round($set*2)/2,10,28);
 		if ($k=='living'&&past('living_set')>1800) {
-//			lg("set=$set	rounded=$setrounded	dif=$dif	trend=".$trend ."	adj=$adj	difk=".$dif * $k_factor." trendf=".$trend*$trend_factor);
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
 				"dif"=>number_format($dif,1,',',''),
-				"trend"=>number_format($trend,6,',',''),
-				"adj"=>number_format($adj,3,',',''),
+				"trend"=>$d['living_temp']->i,
 				"adjLiving"=>number_format($adjLiving,3,',',''),
-				"scale"=>number_format($scale,1,',',''),
-				"trend_factor"=>number_format($trend_factor,1,',',''),
-				"k_factor"=>number_format($k_factor,1,',',''),
 				"set"=>number_format($set,1,',',''),
 				"setrounded"=>number_format($setrounded,1,',',''),
 				"spm"=>$spm[$spmode],
 				"maxpow"=>$maxpow,
-				"zon"=>$d['z'],
 				"daikinpower"=>$d['daikin']->p,
-				"fan"=>$fan,
 				"buiten temp"=>number_format($d['buiten_temp']->s,1,',',''),
-				"daikinset"=>($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$set || $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode  || $daikin->$k->maxpow != $maxpow?'SET':''),
 			]);
 		}
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
