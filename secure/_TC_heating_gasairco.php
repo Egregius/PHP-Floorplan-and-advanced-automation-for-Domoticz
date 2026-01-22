@@ -37,16 +37,16 @@ $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 $trend = (int) round(($row['last'] - $row['first']) * 10);
 if ((int)$d['living_temp']->i != $trend) storeicon('living_temp', $trend, basename(__FILE__).':'.__LINE__);
 $trend=$d['living_temp']->i;
-if($trend>0) $maxpow=40;
+if($trend>=0) $maxpow=40;
 else {
 	$maxpow = 40;
 	if ($d['weg']->s > 0)            $maxpow = 40;
-	elseif ($totalmin >= 1.4)        $maxpow = 100;
-	elseif ($totalmin >= 1.2)        $maxpow = 90;
-	elseif ($totalmin >= 1.0)        $maxpow = 80;
-	elseif ($totalmin >= 0.8)        $maxpow = 70;
-	elseif ($totalmin >= 0.6)        $maxpow = 60;
-	elseif ($totalmin >= 0.4)        $maxpow = 50;
+	elseif ($totalmin >= 1.5)        $maxpow = 100;
+	elseif ($totalmin >= 1.3)        $maxpow = 90;
+	elseif ($totalmin >= 1.1)        $maxpow = 80;
+	elseif ($totalmin >= 0.9)        $maxpow = 70;
+	elseif ($totalmin >= 0.7)        $maxpow = 60;
+	elseif ($totalmin >= 0.5)        $maxpow = 50;
 
 	if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
@@ -70,7 +70,7 @@ foreach (array('living','kamer','alex') as $k) {
     elseif ($dif <= 0) $power = 1;
     else $power = $daikin->$k->power;
     if ($d['daikin']->s=='On') {
-        $fan=6; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
+        $fan=7; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
         $spmode=-1;
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
@@ -142,7 +142,7 @@ foreach (array('living','kamer','alex') as $k) {
 						}
 					}
 				}
-				$adjLiving = clamp($adjLiving, -1, 1);
+				$adjLiving = clamp($adjLiving, -1, 0.5);
 				$set+=$adjLiving-1;
 				$set=min($set, $target);
 			}

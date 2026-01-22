@@ -51,10 +51,25 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
-<canvas id="chart1" height="110"></canvas>
-<canvas id="chart2" height="80"></canvas>
+<canvas id="chart1" height="90"></canvas>
+<canvas id="chart2" height="60"></canvas>
 
 <script>
+function clamp(v, min, max) {
+  return Math.min(max, Math.max(min, v));
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function colorLerp(c1, c2, t) {
+  return [
+    Math.round(lerp(c1[0], c2[0], t)),
+    Math.round(lerp(c1[1], c2[1], t)),
+    Math.round(lerp(c1[2], c2[2], t))
+  ];
+}
 const labels = <?php echo json_encode($labels); ?>;
 const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const livingTemp   = <?php echo json_encode($livingTemp); ?>;
@@ -86,29 +101,61 @@ new Chart(document.getElementById('chart1'), {
     	},
     }
 });
-new Chart(document.getElementById('chart2'), {
-    type:'line',
-    data:{
-        labels:labels,
-        datasets:[
-         /*   {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
-            {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0},*/
-            {label:'Power', data:daikinpower, backgroundColor:'tomato', borderColor:'red', fill:true, tension:0.2, pointRadius:0,borderWidth:6},
-            {fill: {value: 400}}
+const ctx = document.getElementById('chart2').getContext('2d');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+             {
+                label: 'Power',
+                data: daikinpower,
+                borderColor: 'red',
+                borderWidth: 0,
+                fill: true,
+                pointRadius: 0,
+                tension: 0.2,
+                segment: {
+					backgroundColor: ctx => {
+					  const v = ctx.p0.parsed.y;
+					  if (v == null) return 'rgba(0,0,0,0)';
+					  if (v < 50) return 'rgba(0,0,0,0.4)';
+					  const min = 350;
+					  const max = 1000;
+					  const t = clamp((v - min) / (max - min), 0, 1);
+					  const tc = Math.pow(t, 0.6);
+					  const GREEN  = [0, 180, 0];
+					  const YELLOW = [255, 190, 0];
+					  const RED    = [200, 0, 0];
+					  let rgb;
+					  if (tc < 0.5) {
+						rgb = colorLerp(GREEN, YELLOW, tc / 0.5);
+					  } else {
+						rgb = colorLerp(YELLOW, RED, (tc - 0.5) / 0.5);
+					  }
+					  const alpha = lerp(0.45, 0.95, tc);
+					  return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+					},
+					borderWidth: 0,
+					borderColor: 'red'
+				  }
+            }
         ]
     },
-    options:{
-    	responsive:true,
-    	animation: false,
-    	interaction:{
-    		mode:'index',
-    		intersect:false
-    	},
-    	plugins: {
+    options: {
+        responsive: true,
+        animation: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
             legend: {
-                display: false,
+                display: false
             }
-        }
+        },
+
     }
 });
 (() => {
