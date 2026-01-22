@@ -50,14 +50,14 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
-<canvas id="chart1" height="90"></canvas>
+<canvas id="chart1" height="110"></canvas>
 <canvas id="chart2" height="80"></canvas>
 
 <script>
 const labels = <?php echo json_encode($labels); ?>;
 const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const livingTemp   = <?php echo json_encode($livingTemp); ?>;
-const Trend   = <?php echo json_encode($livingTrend); ?>;
+/*const Trend   = <?php echo json_encode($livingTrend); ?>;*/
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const adjLiving    = <?php echo json_encode($adjLiving); ?>;
@@ -67,12 +67,12 @@ new Chart(document.getElementById('chart1'), {
     data:{
         labels:labels,
         datasets:[
-            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:5},
-            {label:'Trend', data:Trend, backgroundColor:'red', borderColor:'red', fill:false, borderDash:[3,3], tension:0.2, pointRadius:0,borderWidth:3},
-            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'adjLiving', data:adjLiving, backgroundColor:'orange', borderColor:'orange', borderDash:[2,5], fill:false, tension:0.2, pointRadius:0},
-            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0},
-            {label:'Target', data:livingTarget, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
+            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
+/*            {label:'Trend', data:Trend, backgroundColor:'tomato', borderColor:'tomato', fill:false, borderDash:[3,3], tension:0.2, pointRadius:0,borderWidth:4},*/
+            {label:'Set', data:set, backgroundColor:'blue', borderColor:'blue', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
+            {label:'adjLiving', data:adjLiving, backgroundColor:'magenta', borderColor:'magenta', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
+            {label:'Setpoint', data:setRounded, backgroundColor:'green', borderColor:'green', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
+            {label:'Target', data:livingTarget, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
         ]
     },
     options:{
@@ -91,7 +91,7 @@ new Chart(document.getElementById('chart2'), {
         datasets:[
          /*   {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
             {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0},*/
-            {label:'Power', data:daikinpower, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.1, pointRadius:0,borderWidth:5},
+            {label:'Power', data:daikinpower, backgroundColor:'tomato', borderColor:'red', fill:true, tension:0.2, pointRadius:0,borderWidth:6},
         ]
     },
     options:{

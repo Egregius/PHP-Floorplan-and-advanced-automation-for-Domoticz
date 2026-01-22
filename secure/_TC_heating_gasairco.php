@@ -28,29 +28,29 @@ foreach (array('living','kamer','alex') as $k) {
 $stamp = date('Y-m-d H:i:s', $time - 600);
 $sql = "
 SELECT
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS living_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS living_last
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS first,
+    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS last
 FROM temp
 WHERE stamp >= '$stamp'
 ";
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
-foreach (array('living') as $i) {
-    $trend = (int) round(($row[$i.'_last'] - $row[$i.'_first']) * 10);
-    if ((int)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
+$trend = (int) round(($row['last'] - $row['first']) * 10);
+if ((int)$d['living_temp']->i != $trend) storeicon('living_temp', $trend, basename(__FILE__).':'.__LINE__);
+if($d['living_temp']->i>0) $maxpow=40;
+else {
+	$maxpow = 40;
+	if ($d['weg']->s > 0)            $maxpow = 40;
+	elseif ($totalmin >= 1.4)        $maxpow = 100;
+	elseif ($totalmin >= 1.2)        $maxpow = 90;
+	elseif ($totalmin >= 1.0)        $maxpow = 80;
+	elseif ($totalmin >= 0.8)        $maxpow = 70;
+	elseif ($totalmin >= 0.6)        $maxpow = 60;
+	elseif ($totalmin >= 0.4)        $maxpow = 50;
+
+	if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
+	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
+	elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 }
-
-$maxpow = 40;
-if ($d['weg']->s > 0)            $maxpow = 40;
-elseif ($totalmin >= 1.4)        $maxpow = 100;
-elseif ($totalmin >= 1.2)        $maxpow = 90;
-elseif ($totalmin >= 1.0)        $maxpow = 80;
-elseif ($totalmin >= 0.8)        $maxpow = 70;
-elseif ($totalmin >= 0.6)        $maxpow = 60;
-elseif ($totalmin >= 0.4)        $maxpow = 50;
-
-if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
-elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
-elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
 $adjLiving??=0;
 $lastLivingSet??=0;
 $daikinrunning=$d['daikin']->p>100?true:false;
@@ -59,6 +59,8 @@ if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
 	$prevdaikinrunning=$daikinrunning;
 //	$adjLiving=0;lg('🔥 $adjLiving to 0, running cycle');
 }
+$prevmsg??='';
+$msg=$msg2='';
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
     $target=$set;
@@ -67,7 +69,7 @@ foreach (array('living','kamer','alex') as $k) {
     elseif ($dif <= 0) $power = 1;
     else $power = $daikin->$k->power;
     if ($d['daikin']->s=='On') {
-        $fan='A';
+        $fan=6; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
         $spmode=-1;
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
@@ -80,35 +82,43 @@ foreach (array('living','kamer','alex') as $k) {
             } else {
 				if($dif<0&&$lastLivingSet<$time-170) {
 					if(!$daikinrunning&&$d['living_temp']->i<=-4) {
-						$adjLiving+=0.2;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
-					} elseif(!$daikinrunning&&$d['living_temp']->i<0) {
 						$adjLiving+=0.1;
 						$adjLiving = clamp($adjLiving, -1, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
+					} elseif(!$daikinrunning&&$d['living_temp']->i<0) {
+						$adjLiving+=0.05;
+						$adjLiving = clamp($adjLiving, -1, 1);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
 					} elseif(!$daikinrunning) {
 						$adjLiving+=0.05;
 						$adjLiving = clamp($adjLiving, -1, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
 					} elseif ($daikinrunning&&$d['living_temp']->i>=8) {
 						$adjLiving-=0.05;
 						$adjLiving = clamp($adjLiving, -1, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
+					} elseif ($daikinrunning) {
+						$adjLiving-=0.01;
+						$adjLiving = clamp($adjLiving, -1, 1);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
 					}
 				} elseif($dif>0&&$lastLivingSet<$time-170) {
 					if($daikinrunning&&$d['living_temp']->i>=4) {
-						$adjLiving-=0.2;
-						$adjLiving = clamp($adjLiving, -2, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
-					} elseif($daikinrunning&&$d['living_temp']->i>0) {
 						$adjLiving-=0.1;
 						$adjLiving = clamp($adjLiving, -2, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
+					} elseif($daikinrunning&&$d['living_temp']->i>0) {
+						$adjLiving-=0.05;
+						$adjLiving = clamp($adjLiving, -2, 1);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
+					} elseif($daikinrunning&&$d['living_temp']->i<0) {
+						$adjLiving+=0.01;
+						$adjLiving = clamp($adjLiving, -2, 1);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
 					} elseif($daikinrunning) {
 						$adjLiving-=0.05;
 						$adjLiving = clamp($adjLiving, -2, 1);
-						lg('🔥 '.__LINE__.' $adjLiving to '.$adjLiving);
+						$msg2=__LINE__.' adj Living >= '.$adjLiving;
 					}
 				}
 
@@ -123,6 +133,11 @@ foreach (array('living','kamer','alex') as $k) {
         }
         $setrounded = clamp(round($set*2)/2,10,28);
 		if ($k=='living'&&past('living_set')>1800) {
+			$msg='🔥 set='.$set.'	rounded='.$setrounded.'	'.$msg2;
+//			if($msg!=$prevmsg) {
+				lg($msg);
+				$prevmsg=$msg;
+//			}
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),
 				"Living temp"=>number_format($d['living_temp']->s,1,',',''),
