@@ -36,7 +36,8 @@ WHERE stamp >= '$stamp'
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 $trend = (int) round(($row['last'] - $row['first']) * 10);
 if ((int)$d['living_temp']->i != $trend) storeicon('living_temp', $trend, basename(__FILE__).':'.__LINE__);
-if($d['living_temp']->i>0) $maxpow=40;
+$trend=$d['living_temp']->i;
+if($trend>0) $maxpow=40;
 else {
 	$maxpow = 40;
 	if ($d['weg']->s > 0)            $maxpow = 40;
@@ -53,14 +54,14 @@ else {
 }
 $adjLiving??=0;
 $lastLivingSet??=0;
-$daikinrunning=$d['daikin']->p>100?true:false;
 $daikinpower=floor($d['daikin']->p/100);
-if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
-	$prevdaikinrunning=$daikinrunning;
+$daikinrunning=$daikinpower>=1?true:false;
+//if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
+//	$prevdaikinrunning=$daikinrunning;
 //	$adjLiving=0;lg('🔥 $adjLiving to 0, running cycle');
-}
+//}
 $prevmsg??='';
-$msg=$msg2='';
+$msg='';
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
     $target=$set;
@@ -80,48 +81,68 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				if($dif<0&&$lastLivingSet<$time-170) {
-					if(!$daikinrunning&&$d['living_temp']->i<=-4) {
-						$adjLiving+=0.1;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif(!$daikinrunning&&$d['living_temp']->i<0) {
-						$adjLiving+=0.05;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif(!$daikinrunning) {
-						$adjLiving+=0.05;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif ($daikinrunning&&$d['living_temp']->i>=8) {
-						$adjLiving-=0.05;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif ($daikinrunning) {
-						$adjLiving-=0.01;
-						$adjLiving = clamp($adjLiving, -1, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					}
-				} elseif($dif>0&&$lastLivingSet<$time-170) {
-					if($daikinrunning&&$d['living_temp']->i>=4) {
-						$adjLiving-=0.1;
-						$adjLiving = clamp($adjLiving, -2, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif($daikinrunning&&$d['living_temp']->i>0) {
-						$adjLiving-=0.05;
-						$adjLiving = clamp($adjLiving, -2, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif($daikinrunning&&$d['living_temp']->i<0) {
-						$adjLiving+=0.01;
-						$adjLiving = clamp($adjLiving, -2, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
-					} elseif($daikinrunning) {
-						$adjLiving-=0.05;
-						$adjLiving = clamp($adjLiving, -2, 1);
-						$msg2=__LINE__.' adj Living >= '.$adjLiving;
+				if($lastLivingSet>$time-170) $line='WAIT';
+				else {
+					if($dif==0) $line='NO DIF';
+					elseif($dif<0) {
+						if($daikinrunning) {
+							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
+							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
+							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.03;}
+							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.04;}
+							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
+							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.06;}
+							else $line=__LINE__;
+						} else {
+							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
+							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+							else $line=__LINE__;
+						}
+					} elseif($dif>0) {
+						if($daikinrunning) {
+							if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
+							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
+							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.04;}
+							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.03;}
+							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.02;}
+							elseif($trend==0){	$line=__LINE__;$adjLiving-=0.01;}
+							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+							else $line=__LINE__;
+						} else {
+							if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+							elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+							elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+							elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+							elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
+							elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
+							elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
+							elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
+							elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
+							elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
+							else $line=__LINE__;
+						}
 					}
 				}
-
+				$adjLiving = clamp($adjLiving, -1, 1);
 				$set+=$adjLiving-1;
 				$set=min($set, $target);
 			}
@@ -133,10 +154,11 @@ foreach (array('living','kamer','alex') as $k) {
         }
         $setrounded = clamp(round($set*2)/2,10,28);
 		if ($k=='living'&&past('living_set')>1800) {
-			$msg='🔥 set='.$set.'	rounded='.$setrounded.'	'.$msg2;
+			$msg='🔥 set='.$set.'	rounded='.$setrounded.'	adj='.$adjLiving.(isset($line)?'	['.$line.']':'');
 //			if($msg!=$prevmsg) {
 				lg($msg);
 				$prevmsg=$msg;
+				unset($line);
 //			}
 			lgcsv('trend_living', [
 				"Living target"=>number_format($target,1,',',''),

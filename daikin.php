@@ -35,6 +35,7 @@ $set          = array_map(fn($d)=>$d['set']+1??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']+1??0,$data);
 $adjLiving          = array_map(fn($d)=>$d['Living target']+$d['adjLiving']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
+$daikintargetpower    = array_map(fn($d)=>$d['daikinpower']-100,$data);
 
 
 ?>
@@ -61,6 +62,7 @@ const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const adjLiving    = <?php echo json_encode($adjLiving); ?>;
+const daikintargetpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
     type:'line',
@@ -92,6 +94,7 @@ new Chart(document.getElementById('chart2'), {
          /*   {label:'Adj', data:adj, backgroundColor:'orange', borderColor:'orange', fill:false, tension:0.2, pointRadius:0},
             {label:'AdjLiving', data:adjLiving, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0},*/
             {label:'Power', data:daikinpower, backgroundColor:'tomato', borderColor:'red', fill:true, tension:0.2, pointRadius:0,borderWidth:6},
+            {fill: {value: 400}}
         ]
     },
     options:{
