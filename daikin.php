@@ -93,6 +93,21 @@ td{text-align:right;}
 <canvas id="chart1" height="90"></canvas>
 <canvas id="chart2" height="60"></canvas>
 <div class="stats">
+<?php
+// Gemiddeld vermogen in kW
+$avgPower = array_sum($daikinpower)/count($daikinpower)/1000; // W → kW
+// Dagverbruik (24 uur)
+$kWhPerDay = $avgPower * 24;
+
+// Gemiddelde temperatuur
+$avgTemp = array_sum($livingTemp)/count($livingTemp);
+// Gemiddelde target
+$avgTarget = array_sum($livingTarget)/count($livingTarget);
+
+// Score berekenen
+$score = $kWhPerDay + 2 * abs($avgTemp - $avgTarget);
+?>
+
 	<table>
 		<tbody>
 			<tr><th>Target</th><td><?= number_format((array_sum($livingTarget)/count($livingTarget)),2,',','');?> °C</td></tr>
@@ -105,8 +120,10 @@ td{text-align:right;}
 			<tr><th>Vermogen</th><td><?= number_format((array_sum($daikinpower)/count($daikinpower)),0,',','');?> W</td></tr>
 			<tr><th>Tijd aan</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v > 50))/3,1,',','');?> min</td></tr>
 			<tr><th>Tijd uit</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v < 50))/3,1,',','');?> min</td></tr>
+			<tr><th>Score</th><td><?= number_format($score,2,',','');?> kWh/24u</td></tr>
 		</tbody>
 	</table>
+
 
 </div>
 <script>
@@ -154,7 +171,7 @@ new Chart(document.getElementById('chart1'), {
         },
 		scales: {
 			y: {
-				min: 17,
+				/*min: 17,*/
 				max: 21
 			}
 		}

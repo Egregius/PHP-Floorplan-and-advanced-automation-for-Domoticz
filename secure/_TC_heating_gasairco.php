@@ -67,7 +67,7 @@ foreach (array('living','kamer','alex') as $k) {
             if ($prevSet==1) {
             	$maxpow=100;
             	$spmode=1;
-            	$set=28;
+            	$setrounded=28;
             	$fan=7;
             } else {
             	if($dif>0) $factor = ($daikinrunning) ? 2:0.8;
@@ -79,15 +79,18 @@ foreach (array('living','kamer','alex') as $k) {
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving;
+				 $setrounded = clamp(ceil($set*2)/2,10,28);
+		        $setrounded=min($setrounded, $target);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
+            $setrounded = clamp(ceil($set*2)/2,10,28);
+	        $setrounded=min($setrounded, $target);
             if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
-        $setrounded = clamp(ceil($set*2)/2,10,28);
-        $setrounded=min($setrounded, $target);
+
 		if ($k=='living') {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
@@ -108,7 +111,7 @@ foreach (array('living','kamer','alex') as $k) {
 		}
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
-            ($power!=0&&$daikin->$k->lastset <= $time-58100)) {
+            ($power!=0&&$daikin->$k->lastset <= $time-581)) {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
 				$daikin->$k->power = $power;
