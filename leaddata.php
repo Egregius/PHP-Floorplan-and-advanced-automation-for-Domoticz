@@ -11,7 +11,11 @@ function readJsonFile($path) {
     // Fallback voor demo/test als bestand niet bestaat
     return '{}';
 }
-
+$modes=[
+	1=>"Warmtepomp",
+	2=>"Hybride (WP + Gas)",
+	3=>"Gasbrander"
+];
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
 ?>
@@ -40,6 +44,15 @@ $jsonLiving = readJsonFile($pathLiving);
                     </div>
                     <hr>
                     <div class="table-scroll" id="tableBathContainer"></div>
+                    <div>
+<?php
+$data=json_decode($jsonBath,true);
+foreach($data as $mode=>$temp) {
+	$points=array_map("count", $temp);
+	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
+}
+?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -55,6 +68,15 @@ $jsonLiving = readJsonFile($pathLiving);
                     </div>
                     <hr>
                     <div class="table-scroll" id="tableLivingContainer"></div>
+                     <div>
+<?php
+$data=json_decode($jsonLiving,true);
+foreach($data as $mode=>$temp) {
+	$points=array_map("count", $temp);
+	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
+}
+?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,9 +90,9 @@ $jsonLiving = readJsonFile($pathLiving);
 
     // Mapping voor de verwarmingsmethodes
     const methods = {
-        "1": { label: "Warmtepomp (Alleen)", color: "#28a745", borderColor: "#1e7e34" }, // Groen
+        "1": { label: "Warmtepomp", color: "#28a745", borderColor: "#1e7e34" }, // Groen
         "2": { label: "Hybride (WP + Gas)", color: "#fd7e14", borderColor: "#e8590c" },  // Oranje
-        "3": { label: "Gasbrander (Alleen)", color: "#dc3545", borderColor: "#b02a37" }   // Rood
+        "3": { label: "Gasbrander", color: "#dc3545", borderColor: "#b02a37" }   // Rood
     };
 
     /**

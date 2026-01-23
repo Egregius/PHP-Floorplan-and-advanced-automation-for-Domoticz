@@ -159,7 +159,7 @@ foreach (array('living','kamer','alex') as $k) {
 		}
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
-            ($power!=0&&$daikin->$k->lastset <= $time-581)) {
+            ($power!=0&&$daikin->$k->lastset <= $time-58100)) {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
 				$daikin->$k->power = $power;
@@ -169,7 +169,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-//				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
+				publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i"));
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
