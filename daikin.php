@@ -70,6 +70,8 @@ $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 <style>
 body {font-family:sans-serif; background:#FFF; margin:20px;color:#000;}
 canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
+th{text-align:right;padding-right:8px;}
+td{text-align:right;}
 </style>
 </head>
 <body>
@@ -90,16 +92,30 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </form>
 <canvas id="chart1" height="90"></canvas>
 <canvas id="chart2" height="60"></canvas>
+<div class="stats">
+	<table>
+		<tbody>
+			<tr><th>Target</th><td><?= number_format((array_sum($livingTarget)/count($livingTarget)),2,',','');?> °C</td></tr>
+			<tr><th>Temperatuur</th><td><?= number_format((array_sum($livingTemp)/count($livingTemp)),2,',','');?> °C</td></tr>
+			<tr><th>Max temperatuur</th><td><?= number_format(max($livingTemp),1,',','');?> °C</td></tr>
+			<tr><th>Min temperatuur</th><td><?= number_format(min($livingTemp),1,',','');?> °C</td></tr>
+			<tr><th>Dif temperatuur</th><td><?= number_format(max($livingTemp)-min($livingTemp),1,',','');?> °C</td></tr>
+			<tr><th>Set</th><td><?= number_format((array_sum($set)/count($set)),2,',','');?> °C</td></tr>
+			<tr><th>SetRouned</th><td><?= number_format((array_sum($setRounded)/count($setRounded)),2,',','');?> °C</td></tr>
+			<tr><th>Vermogen</th><td><?= number_format((array_sum($daikinpower)/count($daikinpower)),0,',','');?> W</td></tr>
+			<tr><th>Tijd aan</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v > 50))/3,1,',','');?> min</td></tr>
+			<tr><th>Tijd uit</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v < 50))/3,1,',','');?> min</td></tr>
+		</tbody>
+	</table>
 
+</div>
 <script>
 function clamp(v, min, max) {
   return Math.min(max, Math.max(min, v));
 }
-
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
-
 function colorLerp(c1, c2, t) {
   return [
     Math.round(lerp(c1[0], c2[0], t)),
@@ -136,11 +152,16 @@ new Chart(document.getElementById('chart1'), {
                 display: false
             }
         },
+		scales: {
+			y: {
+				min: 17,
+				max: 21
+			}
+		}
 
     }
 });
 const ctx = document.getElementById('chart2').getContext('2d');
-
 new Chart(ctx, {
     type: 'line',
     data: {
@@ -192,8 +213,7 @@ new Chart(ctx, {
             legend: {
                 display: false
             }
-        },
-
+        }
     }
 });
 (() => {
@@ -201,7 +221,7 @@ new Chart(ctx, {
     function checkReload() {
         const now = new Date();
         const sec = now.getSeconds();
-        if ((sec === 1 || sec === 21 || sec === 42) && sec !== lastReloadSecond) {
+        if ((sec === 2 || sec === 22 || sec === 42) && sec !== lastReloadSecond) {
             lastReloadSecond = sec;
             location.reload();
         }

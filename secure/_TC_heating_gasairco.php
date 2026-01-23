@@ -70,53 +70,12 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				if($dif==0) $line='NO DIF';
-				elseif($dif<0) {
-					if($daikinrunning) {
-						$line=__LINE__;$adjLiving+=-$adjLiving/200;
-					} else {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
-						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.06;}
-						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
-						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.04;}
-						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.03;}
-						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
-						else $line=__LINE__;
-					}
-				} elseif($dif>0) {
-					if($daikinrunning) {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving-=0.001;}
-						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-						else $line=__LINE__;
-					} else {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.01;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.002;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.002;}
-						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-						else $line=__LINE__;
-					}
-				}
+            	if($dif>0) $factor = ($daikinrunning) ? 2:0.8;
+            	else $factor = ($daikinrunning) ? 0.8:2;
+            	$diffac = (-$dif / 50) * $factor;
+				$trendfac = (-$trend / 100) * $factor;
+
+				$adjLiving += ($diffac + $trendfac);
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving;
@@ -130,10 +89,11 @@ foreach (array('living','kamer','alex') as $k) {
         $setrounded = clamp(ceil($set*2)/2,10,28);
         $setrounded=min($setrounded, $target);
 		if ($k=='living') {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ rounded = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
-				publishmqtt('d/i','set='.number_format($set,3,',','').' rounded='.number_format($setrounded,1,',','').' trend='.$trend.(isset($line)?' ['.$line.']':''));
+				publishmqtt('d/i','');
+//				publishmqtt('d/i','set='.number_format($set,3,',','').' ceil='.number_format($setrounded,1,',','').' d_term='.$d_term.' change='.($$diffac + $trendfac).(isset($line)?' ['.$line.']':''));
 //				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
 				$prevmsg=$msg;
 				unset($line);
