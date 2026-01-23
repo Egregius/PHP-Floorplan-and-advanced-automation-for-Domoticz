@@ -671,7 +671,7 @@ function lgtype($type,$msg) {
 	fclose($fp);
 }
 function lgcsv($type, array $data) {
-    $file = "/var/www/log/$type-".date("Y-m-d").".csv";
+    $file = "/var/www/csv/$type-".date("Y-m-d").".csv";
     $exists = file_exists($file);
     $row = array_merge(['timestamp' => date("H:i:s")], $data);
     $fp = fopen($file, "a+");

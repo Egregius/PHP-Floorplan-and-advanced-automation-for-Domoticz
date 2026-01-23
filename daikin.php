@@ -1,5 +1,5 @@
 <?php
-$logDir = '/var/www/log';
+$logDir = '/var/www/csv';
 $pattern = $logDir . '/trend_living-*.csv';
 
 $files = glob($pattern);
@@ -73,6 +73,7 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
+
 <form method="get">
     <label for="datum">Datum:</label>
     <select name="datum" id="datum" onchange="this.form.submit()">
@@ -85,7 +86,7 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
             }
         }
         ?>
-    </select>
+    </select> 	&nbsp; 	<a href="/daikin.php">Vandaag</a>
 </form>
 <canvas id="chart1" height="90"></canvas>
 <canvas id="chart2" height="60"></canvas>
@@ -158,8 +159,8 @@ new Chart(ctx, {
 					  const v = ctx.p0.parsed.y;
 					  if (v == null) return 'rgba(0,0,0,0)';
 					  if (v < 50) return 'rgba(0,0,0,0.4)';
-					  const min = 350;
-					  const max = 1000;
+					  const min = 400;
+					  const max = 900;
 					  const t = clamp((v - min) / (max - min), 0, 1);
 					  const tc = Math.pow(t, 0.6);
 					  const GREEN  = [0, 180, 0];

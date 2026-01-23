@@ -70,21 +70,10 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$fan=7;
             } else {
-				/*if($dif==0) $line='NO DIF';
+				if($dif==0) $line='NO DIF';
 				elseif($dif<0) {
 					if($daikinrunning) {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.005;}
-						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.07;}
-						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
-						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-						else $line=__LINE__;
+						$line=__LINE__;$adjLiving+=-$adjLiving/200;
 					} else {
 						if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
 						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
@@ -101,11 +90,11 @@ foreach (array('living','kamer','alex') as $k) {
 					}
 				} elseif($dif>0) {
 					if($daikinrunning) {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.07;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.06;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.03;}
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
 						elseif($trend==0){	$line=__LINE__;$adjLiving-=0.001;}
 						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
 						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
@@ -130,7 +119,7 @@ foreach (array('living','kamer','alex') as $k) {
 				}
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
-				$set+=$adjLiving;*/
+				$set+=$adjLiving;
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -143,8 +132,8 @@ foreach (array('living','kamer','alex') as $k) {
 		if ($k=='living') {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ rounded = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
-//				lg($msg);
-				publishmqtt('d/i','set='.number_format($set,3,',','').' rounded='.number_format($setrounded,1,',','').(isset($line)?' ['.$line.']':''));
+				lg($msg);
+				publishmqtt('d/i','set='.number_format($set,3,',','').' rounded='.number_format($setrounded,1,',','').' trend='.$trend.(isset($line)?' ['.$line.']':''));
 //				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
 				$prevmsg=$msg;
 				unset($line);
