@@ -23,39 +23,15 @@ $jsonLiving = readJsonFile($pathLiving);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lead Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/styles/leaddata.css?v=<?=filemtime('styles/floorplan.css.gz')?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-		body {
-			background-color: #f8f9fa;
-			font-size: 1.4rem; /* Tekst 40% groter dan standaard */
-		}
-		h1 { font-size: 3rem; margin-bottom: 1.5rem !important; }
-		h5 { font-size: 1.8rem; font-weight: bold; }
-		.card {
-			margin-bottom: 30px;
-			box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-			border: none;
-		}
-		.container{max-width:100%;}
-		.card-header { padding: 1.5rem; }
-		.card-body { padding: 2rem; }
-
-		/* Tabel leesbaarder maken */
-		.table-scroll { max-height: 500px; overflow-y: auto; }
-		.table th, .table td { padding: 1rem; font-size: 1rem; }
-		.chart-wrapper {
-			position: relative;
-			height: 30vh; /* De grafiek pakt 60% van je schermhoogte */
-			width: 100%;
-			margin-bottom: 2rem;
-		}
-	</style>
 </head>
 <body>
-
-<div class="container-fluid px-5 py-5">
-    <div class="row g-5"> <div class="col-12 col-xl-6">
-            <div class="card h-100"> <div class="card-header bg-primary text-white">
+<div class="container-fluid">
+    <div class="row g-5">
+    	<div class="col-12 col-xl-6">
+            <div class="card h-100">
+            	<div class="card-header bg-primary text-white">
                     <h5>🚿 Badkamer</h5>
                 </div>
                 <div class="card-body">

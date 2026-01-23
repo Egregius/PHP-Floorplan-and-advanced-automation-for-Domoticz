@@ -86,27 +86,27 @@ foreach (array('living','kamer','alex') as $k) {
 						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
 						else $line=__LINE__;
 					} else {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.005;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
-						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
-						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
-						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
-						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.02;}
-						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
-						else $line=__LINE__;
-					}
-				} elseif($dif>0) {
-					if($daikinrunning) {
 						if($trend>=8){		$line=__LINE__;$adjLiving-=0.06;}
 						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.05;}
 						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.04;}
 						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.03;}
 						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving-=0.01;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.06;}
+						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.05;}
+						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.04;}
+						elseif($trend<=-2){	$line=__LINE__;$adjLiving+=0.03;}
+						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.02;}
+						else $line=__LINE__;
+					}
+				} elseif($dif>0) {
+					if($daikinrunning) {
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.07;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.06;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.05;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving-=0.001;}
 						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
 						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
 						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
@@ -114,12 +114,12 @@ foreach (array('living','kamer','alex') as $k) {
 						elseif($trend<0){	$line=__LINE__;$adjLiving+=0.01;}
 						else $line=__LINE__;
 					} else {
-						if($trend>=8){		$line=__LINE__;$adjLiving-=0.05;}
-						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.04;}
-						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.03;}
-						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.02;}
-						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.01;}
-						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.01;}
+						if($trend>=8){		$line=__LINE__;$adjLiving-=0.04;}
+						elseif($trend>=6){	$line=__LINE__;$adjLiving-=0.03;}
+						elseif($trend>=4){	$line=__LINE__;$adjLiving-=0.02;}
+						elseif($trend>=2){	$line=__LINE__;$adjLiving-=0.01;}
+						elseif($trend>0){	$line=__LINE__;$adjLiving-=0.002;}
+						elseif($trend==0){	$line=__LINE__;$adjLiving+=0.002;}
 						elseif($trend<=-8){	$line=__LINE__;$adjLiving+=0.05;}
 						elseif($trend<=-6){	$line=__LINE__;$adjLiving+=0.04;}
 						elseif($trend<=-4){	$line=__LINE__;$adjLiving+=0.03;}
@@ -130,7 +130,7 @@ foreach (array('living','kamer','alex') as $k) {
 				}
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
-				$set+=$adjLiving-1;
+				$set+=$adjLiving;
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
@@ -140,7 +140,7 @@ foreach (array('living','kamer','alex') as $k) {
         }
         $setrounded = clamp(ceil($set*2)/2,10,28);
         $setrounded=min($setrounded, $target);
-		if ($k=='living'&&past('living_set')>1800) {
+		if ($k=='living') {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ rounded = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
