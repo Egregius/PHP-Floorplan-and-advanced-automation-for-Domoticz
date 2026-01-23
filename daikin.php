@@ -172,7 +172,7 @@ new Chart(document.getElementById('chart1'), {
 		scales: {
 			y: {
 				/*min: 17,*/
-				max: 21
+				max: 21.5
 			}
 		}
 
