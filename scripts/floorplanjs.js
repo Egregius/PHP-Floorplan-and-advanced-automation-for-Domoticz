@@ -1242,7 +1242,7 @@ function getTemperatureColorTxt(r,min,avg,max){
 	}
 }
 function getTrendArrow(t){
-	const n=Math.min(Math.abs(t),1),r=Math.round(14+8*n);
+	const n=Math.min(Math.abs(t),1),r=Math.round(14+12*n);
 	return t>0?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<0?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
 function updateDeviceTime(id) {
     tijd = d[id]?.t ?? 0
