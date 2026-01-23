@@ -1,14 +1,10 @@
 <?php
-// Bestandspaden (Pas aan indien nodig)
 $pathBath = '/var/www/leadDataBath.json';
 $pathLiving = '/var/www/leadDataLiving.json';
-
-// Functie om JSON veilig in te lezen, of dummy data te geven als bestand mist
 function readJsonFile($path) {
     if (file_exists($path)) {
         return file_get_contents($path);
     }
-    // Fallback voor demo/test als bestand niet bestaat
     return '{}';
 }
 $modes=[
@@ -19,7 +15,6 @@ $modes=[
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
 ?>
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -46,8 +41,8 @@ $jsonLiving = readJsonFile($pathLiving);
                     <div class="table-scroll" id="tableBathContainer"></div>
                     <div>
 <?php
-$data=json_decode($jsonBath,true);
-foreach($data as $mode=>$temp) {
+$leadDataBath=json_decode($jsonBath,true);
+foreach($leadDataBath as $mode=>$temp) {
 	$points=array_map("count", $temp);
 	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
 }
@@ -70,8 +65,8 @@ foreach($data as $mode=>$temp) {
                     <div class="table-scroll" id="tableLivingContainer"></div>
                      <div>
 <?php
-$data=json_decode($jsonLiving,true);
-foreach($data as $mode=>$temp) {
+$leadDataLiving=json_decode($jsonLiving,true);
+foreach($leadDataLiving as $mode=>$temp) {
 	$points=array_map("count", $temp);
 	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
 }
@@ -82,76 +77,83 @@ foreach($data as $mode=>$temp) {
         </div>
     </div>
 </div>
-
 <script>
-    // Data injecteren vanuit PHP
     const rawDataBath = <?php echo $jsonBath; ?>;
     const rawDataLiving = <?php echo $jsonLiving; ?>;
-
-    // Mapping voor de verwarmingsmethodes
     const methods = {
-        "1": { label: "Warmtepomp", color: "#28a745", borderColor: "#1e7e34" }, // Groen
-        "2": { label: "Hybride (WP + Gas)", color: "#fd7e14", borderColor: "#e8590c" },  // Oranje
-        "3": { label: "Gasbrander", color: "#dc3545", borderColor: "#b02a37" }   // Rood
+        "1": { label: "Warmtepomp", color: "#28a745" },
+        "2": { label: "Hybride (WP + Gas)", color: "#fd7e14" },
+        "3": { label: "Gasbrander", color: "#dc3545" }
     };
-
-    /**
-     * Functie om data om te zetten naar Chart.js formaat en Tabel HTML
-     */
     function processData(jsonData) {
         let datasets = [];
-        let allPoints = []; // Voor de tabel
-
-        // Loop door de methodes (1, 2, 3)
+        let allPoints = [];
         for (const [methodKey, tempData] of Object.entries(jsonData)) {
-            let dataPoints = [];
-
-            // Loop door de temperaturen
-            for (const [temp, values] of Object.entries(tempData)) {
-                // Bereken gemiddelde als er meerdere waarden zijn (bv [7.2, 8])
+            let rawPoints = [];
+            let smoothPoints = [];
+            const sortedTemps = Object.keys(tempData).map(Number).sort((a, b) => a - b);
+            const methodInfo = methods[methodKey] || { label: `Methode ${methodKey}`, color: "#333" };
+            for (let i = 0; i < sortedTemps.length; i++) {
+                const temp = sortedTemps[i];
+                const tempKey = String(temp);
+                const values = tempData[tempKey];
                 const avg = values.reduce((a, b) => a + b, 0) / values.length;
-
-                dataPoints.push({ x: parseFloat(temp), y: avg });
-
-                // Data opslaan voor de tabel
+                rawPoints.push({ x: temp, y: avg });
+                let combinedValues = [...values];
+                if (i > 0) {
+                    combinedValues = combinedValues.concat(tempData[String(sortedTemps[i - 1])]);
+                }
+                if (i < sortedTemps.length - 1) {
+                    combinedValues = combinedValues.concat(tempData[String(sortedTemps[i + 1])]);
+                }
+                const smoothedAvg = combinedValues.reduce((a, b) => a + b, 0) / combinedValues.length;
+                smoothPoints.push({ x: temp, y: smoothedAvg });
                 allPoints.push({
-                    method: methods[methodKey] ? methods[methodKey].label : `Methode ${methodKey}`,
-                    temp: parseFloat(temp),
+                    method: methodInfo.label,
+                    temp: temp,
                     avg: avg.toFixed(2),
-                    raw: values.join(', ') // Toon ruwe data ook
+                    smoothed: smoothedAvg.toFixed(2),
+                    raw: values.join(', ')
                 });
             }
-
-            // Sorteer op buitentemperatuur (X-as)
-            dataPoints.sort((a, b) => a.x - b.x);
-
             datasets.push({
-                label: methods[methodKey] ? methods[methodKey].label : `Methode ${methodKey}`,
-                data: dataPoints,
-                borderColor: methods[methodKey] ? methods[methodKey].color : "#000",
-                backgroundColor: methods[methodKey] ? methods[methodKey].color : "#000",
-                tension: 0.3, // Maakt de lijn iets ronder
-                pointRadius: 4
+                label: methodInfo.label + " (+ buren)",
+                data: smoothPoints,
+                borderColor: methodInfo.color,
+                backgroundColor: methodInfo.color,
+                borderWidth: 5,
+                tension: 0.4,
+                pointRadius: 10,
+                pointHoverRadius: 15,
+                order: 1
+            });
+            datasets.push({
+                label: methodInfo.label,
+                data: rawPoints,
+                borderColor: methodInfo.color,
+                backgroundColor: methodInfo.color,
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                pointStyle: 'circle',
+                tension: 0,
+                order: 2,
+                hidden: false
             });
         }
-
-        // Sorteer tabel data op temperatuur
         allPoints.sort((a, b) => a.temp - b.temp);
-
         return { datasets, allPoints };
     }
-
-    /**
-     * Genereer HTML Tabel
-     */
     function createTable(points, containerId) {
         let html = `
-        <table class="table table-striped table-sm text-center">
+        <table class="table table-striped table-sm text-center align-middle">
             <thead>
                 <tr>
                     <th>Buiten (°C)</th>
                     <th>Methode</th>
-                    <th>Min/°C (Gem)</th>
+                    <th>Min/°C<br><small>(Gem)</small></th>
+                    <th>Min/°C<br><small>(Trend)</small></th>
                     <th>Metingen</th>
                 </tr>
             </thead>
@@ -160,40 +162,50 @@ foreach($data as $mode=>$temp) {
         points.forEach(p => {
             html += `<tr>
                 <td>${p.temp}</td>
-                <td>${p.method}</td>
-                <td><strong>${p.avg}</strong></td>
-                <td class="text-muted small">${p.raw}</td>
+                <td class="text-nowrap">${p.method}</td>
+                <td class="text-muted">${p.avg}</td>
+                <td class="fw-bold text-dark">${p.smoothed}</td>
+                <td class="text-muted small text-break" style="font-size: 0.85em;">${p.raw}</td>
             </tr>`;
         });
 
         html += `</tbody></table>`;
         document.getElementById(containerId).innerHTML = html;
     }
-
-    /**
-     * Initialiseer Grafiek
-     */
     function initChart(canvasId, processedData) {
-    new Chart(document.getElementById(canvasId), {
-        type: 'scatter',
-        data: {
-            datasets: processedData.datasets.map(ds => ({
-                ...ds,
-                showLine: true
-            }))
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true, // <--- VOEG DEZE REGEL TOE
-            plugins: {
+        new Chart(document.getElementById(canvasId), {
+            type: 'scatter',
+            data: {
+                datasets: processedData.datasets.map(ds => ({
+                    ...ds,
+                    showLine: true
+                }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.raw.y.toFixed(2) + ' min/°C bij ' + context.raw.x + '°C';
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2) + ' min/°C';
+                                }
+                                return label;
                             }
                         }
                     },
-                    legend: { position: 'bottom' }
+                    legend: {
+						display: false
+					}
                 },
                 scales: {
                     x: {
@@ -203,28 +215,18 @@ foreach($data as $mode=>$temp) {
                     },
                     y: {
                         title: { display: true, text: 'Minuten per °C opwarming' },
-                        beginAtZero: true
+                        beginAtZero: false
                     }
                 }
             }
         });
     }
-
-    // --- Uitvoeren ---
-
-    // 1. Verwerk data
     const bathData = processData(rawDataBath);
     const livingData = processData(rawDataLiving);
-
-    // 2. Render Grafieken
     initChart('chartBath', bathData);
     initChart('chartLiving', livingData);
-
-    // 3. Render Tabellen
     createTable(bathData.allPoints, 'tableBathContainer');
     createTable(livingData.allPoints, 'tableLivingContainer');
-
 </script>
-
 </body>
 </html>

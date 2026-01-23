@@ -1,9 +1,34 @@
 <?php
-// fancy_dashboard_correct.php
-$csvFile = '/temp/trend_living.csv';
-if (!file_exists($csvFile)) die("CSV file not found");
+$logDir = '/var/www/log';
+$pattern = $logDir . '/trend_living-*.csv';
 
-// Open CSV en detecteer separator
+$files = glob($pattern);
+if (!$files) {
+    die('Geen trend_living bestanden gevonden');
+}
+
+usort($files, function ($a, $b) {
+    return strcmp($a, $b);
+});
+
+if (!empty($_GET['datum'])) {
+    $selectedDate = $_GET['datum'];
+    $csvFile = $logDir . '/trend_living-' . $selectedDate . '.csv';
+
+    if (!is_readable($csvFile)) {
+        die('Geselecteerd bestand bestaat niet');
+    }
+} else {
+    /* laatste bestand nemen */
+    $csvFile = end($files);
+
+    /* datum extraheren voor formulier */
+    if (preg_match('/trend_living-(\d{4}-\d{2}-\d{2})\.csv$/', $csvFile, $m)) {
+        $selectedDate = $m[1];
+    }
+}
+
+
 $fh = fopen($csvFile,'r');
 $firstLine = fgets($fh);
 $separator = (strpos($firstLine,';')!==false)?';':"\t";
@@ -48,6 +73,20 @@ canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
 </style>
 </head>
 <body>
+<form method="get">
+    <label for="datum">Datum:</label>
+    <select name="datum" id="datum" onchange="this.form.submit()">
+        <?php
+        foreach ($files as $file) {
+            if (preg_match('/trend_living-(\d{4}-\d{2}-\d{2})\.csv$/', $file, $m)) {
+                $date = $m[1];
+                $sel  = ($date === $selectedDate) ? 'selected' : '';
+                echo "<option value=\"$date\" $sel>$date</option>";
+            }
+        }
+        ?>
+    </select>
+</form>
 <canvas id="chart1" height="90"></canvas>
 <canvas id="chart2" height="60"></canvas>
 
