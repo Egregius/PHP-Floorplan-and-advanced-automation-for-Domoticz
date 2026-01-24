@@ -59,7 +59,6 @@ $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 
-
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -171,8 +170,8 @@ new Chart(document.getElementById('chart1'), {
         },
 		scales: {
 			y: {
-				/*min: 17,*/
-				max: 21.5
+				min: 17,
+				max: 22
 			}
 		}
 

@@ -154,9 +154,10 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
 		$Setliving = max($Setliving, $target);
 		if ($daikin->living->power!=1) {
-			storesmip('living_start_temp', $living, 1, $buitenTempStart, 300, basename(__FILE__) . ':' . __LINE__);
+			storesmip('living_start_temp', $living, 1, $buitenTempStart, 200, basename(__FILE__) . ':' . __LINE__);
 		} else {
-			storesmip('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
+			if ($d['daikin']->p>100) storesmip('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
+			else storesmip('living_start_temp', $living, 1, $buitenTempStart, 60, basename(__FILE__) . ':' . __LINE__);
 		}
 		$prevSet=1;
 		lg('🔥 _TC_living: '.
@@ -210,7 +211,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(clamp($minPerDeg,$avgMinPerDeg - 5,$avgMinPerDeg +5),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
-			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -5);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -10);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);
 			ksort($leadDataLiving, SORT_NUMERIC);
 			foreach ($leadDataLiving as &$innerArray) {

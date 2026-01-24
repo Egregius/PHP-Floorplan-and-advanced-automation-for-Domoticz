@@ -113,7 +113,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 			$minPerDeg = $minutesUsed / $tempRise;
 			$minPerDeg = round(clamp($minPerDeg,$avgMinPerDegBath - 5,$avgMinPerDegBath +5),1);
 			$leadDataBath[$mode][$buitenTempStart][] = round($minPerDeg,1);
-			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -5);
+			$leadDataBath[$mode][$buitenTempStart] = array_slice($leadDataBath[$mode][$buitenTempStart], -10);
 			$avgMinPerDegBath = floor(array_sum($leadDataBath[$mode][$buitenTempStart]) / count($leadDataBath[$mode][$buitenTempStart]));
 			ksort($leadDataBath, SORT_NUMERIC);
 			foreach ($leadDataBath as &$innerArray) {

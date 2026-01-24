@@ -78,36 +78,61 @@ foreach($leadDataLiving as $mode=>$temp) {
     </div>
 </div>
 <script>
+    // Data injecteren vanuit PHP
     const rawDataBath = <?php echo $jsonBath; ?>;
     const rawDataLiving = <?php echo $jsonLiving; ?>;
+
+    // Mapping voor de verwarmingsmethodes
     const methods = {
-        "1": { label: "Warmtepomp", color: "#28a745" },
-        "2": { label: "Hybride (WP + Gas)", color: "#fd7e14" },
-        "3": { label: "Gasbrander", color: "#dc3545" }
+        "1": { label: "Warmtepomp", color: "#28a745" },       // Groen
+        "2": { label: "Hybride (WP + Gas)", color: "#fd7e14" }, // Oranje
+        "3": { label: "Gasbrander", color: "#dc3545" }          // Rood
     };
+
+    /**
+     * Verwerk data naar 3 datasets per methode:
+     * 1. Trend (Smoothed Line)
+     * 2. Average (Dashed Line)
+     * 3. Raw (Scatter Points)
+     */
     function processData(jsonData) {
         let datasets = [];
-        let allPoints = [];
+        let allPoints = []; // Voor de tabel
+
+        // Loop door de methodes (1, 2, 3)
         for (const [methodKey, tempData] of Object.entries(jsonData)) {
-            let rawPoints = [];
-            let smoothPoints = [];
+            let individualPoints = []; // Alle losse metingen
+            let avgPoints = [];        // Exacte gemiddelden
+            let smoothPoints = [];     // De berekende trendlijn (buren)
+
+            // 1. Sorteer temperaturen
             const sortedTemps = Object.keys(tempData).map(Number).sort((a, b) => a - b);
-            const methodInfo = methods[methodKey] || { label: `Methode ${methodKey}`, color: "#333" };
+            const methodInfo = methods[methodKey] || { label: `Methode ${methodKey}`, color: "#333333" };
+
+            // Loop door de gesorteerde temperaturen
             for (let i = 0; i < sortedTemps.length; i++) {
                 const temp = sortedTemps[i];
                 const tempKey = String(temp);
                 const values = tempData[tempKey];
+
+                // A. Alle losse punten (Scatter)
+                values.forEach(val => {
+                    individualPoints.push({ x: temp, y: val });
+                });
+
+                // B. Exact gemiddelde (Line)
                 const avg = values.reduce((a, b) => a + b, 0) / values.length;
-                rawPoints.push({ x: temp, y: avg });
+                avgPoints.push({ x: temp, y: avg });
+
+                // C. Gemiddelde met buren (Trend Line)
                 let combinedValues = [...values];
-                if (i > 0) {
-                    combinedValues = combinedValues.concat(tempData[String(sortedTemps[i - 1])]);
-                }
-                if (i < sortedTemps.length - 1) {
-                    combinedValues = combinedValues.concat(tempData[String(sortedTemps[i + 1])]);
-                }
+                if (i > 0) combinedValues = combinedValues.concat(tempData[String(sortedTemps[i - 1])]);
+                if (i < sortedTemps.length - 1) combinedValues = combinedValues.concat(tempData[String(sortedTemps[i + 1])]);
+
                 const smoothedAvg = combinedValues.reduce((a, b) => a + b, 0) / combinedValues.length;
                 smoothPoints.push({ x: temp, y: smoothedAvg });
+
+                // D. Data voor tabel
                 allPoints.push({
                     method: methodInfo.label,
                     temp: temp,
@@ -116,35 +141,57 @@ foreach($leadDataLiving as $mode=>$temp) {
                     raw: values.join(', ')
                 });
             }
+
+            // --- Dataset 1: De Trendlijn (Smoothed) ---
             datasets.push({
-                label: methodInfo.label + " (+ buren)",
+                type: 'line',
+                label: methodInfo.label + " (Trend)",
                 data: smoothPoints,
                 borderColor: methodInfo.color,
                 backgroundColor: methodInfo.color,
-                borderWidth: 5,
-                tension: 0.4,
-                pointRadius: 10,
-                pointHoverRadius: 15,
+                borderWidth: 8,             // Dikke lijn
+                tension: 0.4,               // Vloeiend
+                pointRadius: 8,             // Geen punten op de lijn
                 order: 1
             });
+
+            // --- Dataset 2: Het Exacte Gemiddelde (Average) ---
             datasets.push({
-                label: methodInfo.label,
-                data: rawPoints,
+                type: 'line',
+                label: methodInfo.label + " (Gem)",
+                data: avgPoints,
                 borderColor: methodInfo.color,
                 backgroundColor: methodInfo.color,
-                borderWidth: 2,
-                borderDash: [5, 5],
-                pointRadius: 2,
-                pointHoverRadius: 5,
-                pointStyle: 'circle',
-                tension: 0,
-                order: 2,
-                hidden: false
+                borderWidth: 2,             // Iets dunner
+                borderDash: [4,4],         // Stippellijn
+                tension: 0.2,                 // Rechte lijnen (minder vloeiend)
+                pointRadius: 6,             // Kleine puntjes op het gemiddelde
+                pointStyle: 'rectRot',      // Ruitjesvorm om te onderscheiden
+                fill: false,
+                order: 2
+            });
+
+            // --- Dataset 3: De Individuele Punten (Scatter) ---
+            datasets.push({
+                type: 'scatter',
+                label: methodInfo.label + " (Metingen)",
+                data: individualPoints,
+                borderColor: methodInfo.color,
+                backgroundColor: methodInfo.color + '50', // Transparant
+                pointRadius: 6,
+                order: 3
             });
         }
+
+        // Sorteer tabel data op temperatuur
         allPoints.sort((a, b) => a.temp - b.temp);
+
         return { datasets, allPoints };
     }
+
+    /**
+     * Genereer HTML Tabel (Ongewijzigd)
+     */
     function createTable(points, containerId) {
         let html = `
         <table class="table table-striped table-sm text-center align-middle">
@@ -163,8 +210,8 @@ foreach($leadDataLiving as $mode=>$temp) {
             html += `<tr>
                 <td>${p.temp}</td>
                 <td class="text-nowrap">${p.method}</td>
-                <td class="text-muted">${p.avg}</td>
-                <td class="fw-bold text-dark">${p.smoothed}</td>
+                <td class="text-dark">${p.avg}</td>
+                <td class="text-dark fw-bold">${p.smoothed}</td>
                 <td class="text-muted small text-break" style="font-size: 0.85em;">${p.raw}</td>
             </tr>`;
         });
@@ -172,20 +219,21 @@ foreach($leadDataLiving as $mode=>$temp) {
         html += `</tbody></table>`;
         document.getElementById(containerId).innerHTML = html;
     }
+
+    /**
+     * Initialiseer Grafiek
+     */
     function initChart(canvasId, processedData) {
         new Chart(document.getElementById(canvasId), {
-            type: 'scatter',
             data: {
-                datasets: processedData.datasets.map(ds => ({
-                    ...ds,
-                    showLine: true
-                }))
+                datasets: processedData.datasets
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: {
-                    mode: 'index',
+                    mode: 'nearest',
+                    axis: 'x',
                     intersect: false
                 },
                 plugins: {
@@ -193,25 +241,23 @@ foreach($leadDataLiving as $mode=>$temp) {
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y.toFixed(2) + ' min/°C';
-                                }
-                                return label;
+                                let val = context.parsed.y;
+                                if(val !== null) val = val.toFixed(2);
+                                return `${label}: ${val} min/°C`;
                             }
                         }
                     },
                     legend: {
-						display: false
-					}
+                    	display: false,
+                        position: 'bottom',
+                        labels: { usePointStyle: true, padding: 15 }
+                    }
                 },
                 scales: {
                     x: {
                         type: 'linear',
                         position: 'bottom',
-                        title: { display: true, text: 'Buitentemperatuur (°C)' }
+                        title: { display: false, text: 'Buitentemperatuur (°C)' }
                     },
                     y: {
                         title: { display: true, text: 'Minuten per °C opwarming' },
@@ -221,12 +267,17 @@ foreach($leadDataLiving as $mode=>$temp) {
             }
         });
     }
+
+    // --- Uitvoeren ---
     const bathData = processData(rawDataBath);
     const livingData = processData(rawDataLiving);
+
     initChart('chartBath', bathData);
     initChart('chartLiving', livingData);
+
     createTable(bathData.allPoints, 'tableBathContainer');
     createTable(livingData.allPoints, 'tableLivingContainer');
+
 </script>
 </body>
 </html>
