@@ -67,7 +67,8 @@ foreach (array('living','kamer','alex') as $k) {
             if ($prevSet==1) {
             	$maxpow=100;
             	$spmode=1;
-            	$setrounded=28;
+            	$set=28;
+            	$setrounded=$set;
             	$fan=7;
             } else {
             	if($dif>0) $factor = ($daikinrunning) ? 2:0.8;
@@ -79,7 +80,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving;
-				 $setrounded = clamp(ceil($set*2)/2,10,28);
+				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';

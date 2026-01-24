@@ -199,8 +199,8 @@ foreach($leadDataLiving as $mode=>$temp) {
                 <tr>
                     <th>Buiten (°C)</th>
                     <th>Methode</th>
-                    <th>Min/°C<br><small>(Gem)</small></th>
                     <th>Min/°C<br><small>(Trend)</small></th>
+                    <th>Min/°C<br><small>(Gem)</small></th>
                     <th>Metingen</th>
                 </tr>
             </thead>
@@ -210,9 +210,9 @@ foreach($leadDataLiving as $mode=>$temp) {
             html += `<tr>
                 <td>${p.temp}</td>
                 <td class="text-nowrap">${p.method}</td>
-                <td class="text-dark">${p.avg}</td>
                 <td class="text-dark fw-bold">${p.smoothed}</td>
-                <td class="text-muted small text-break" style="font-size: 0.85em;">${p.raw}</td>
+                <td class="text-muted">${p.avg}</td>
+                <td class="text-muted small text-break" style="font-size: 0.75em;">${p.raw}</td>
             </tr>`;
         });
 
