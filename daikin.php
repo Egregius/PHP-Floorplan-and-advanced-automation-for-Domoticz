@@ -55,6 +55,7 @@ fclose($fh);
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
 $livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
+$dif          = array_map(fn($d)=>$d['Living temp']-$d['Living target']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
@@ -69,7 +70,7 @@ $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
 <style>
 body {font-family:sans-serif; background:#FFF; margin:20px;color:#000;}
 canvas{background:#FFF;border:0px solid #000;margin-bottom:40px;}
-th{text-align:right;padding-right:8px;}
+th{text-align:right;padding-left:18px;padding-right:8px;}
 td{text-align:right;}
 </style>
 </head>
@@ -109,17 +110,12 @@ $score = $kWhPerDay + 2 * abs($avgTemp - $avgTarget);
 
 	<table>
 		<tbody>
-			<tr><th>Target</th><td><?= number_format((array_sum($livingTarget)/count($livingTarget)),2,',','');?> °C</td></tr>
-			<tr><th>Temperatuur</th><td><?= number_format((array_sum($livingTemp)/count($livingTemp)),2,',','');?> °C</td></tr>
-			<tr><th>Max temperatuur</th><td><?= number_format(max($livingTemp),1,',','');?> °C</td></tr>
-			<tr><th>Min temperatuur</th><td><?= number_format(min($livingTemp),1,',','');?> °C</td></tr>
-			<tr><th>Dif temperatuur</th><td><?= number_format(max($livingTemp)-min($livingTemp),1,',','');?> °C</td></tr>
-			<tr><th>Set</th><td><?= number_format((array_sum($set)/count($set)),2,',','');?> °C</td></tr>
-			<tr><th>SetRouned</th><td><?= number_format((array_sum($setRounded)/count($setRounded)),2,',','');?> °C</td></tr>
-			<tr><th>Vermogen</th><td><?= number_format((array_sum($daikinpower)/count($daikinpower)),0,',','');?> W</td></tr>
-			<tr><th>Tijd aan</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v > 50))/3,1,',','');?> min</td></tr>
-			<tr><th>Tijd uit</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v < 50))/3,1,',','');?> min</td></tr>
-			<tr><th>Score</th><td><?= number_format($score,2,',','');?> kWh/24u</td></tr>
+			<tr><th>Target</th><td><?= number_format((array_sum($livingTarget)/count($livingTarget)),2,',','');?> °C</td><th>Set</th><td><?= number_format((array_sum($set)/count($set)),2,',','');?> °C</td></tr>
+			<tr><th>Temperatuur</th><td><?= number_format((array_sum($livingTemp)/count($livingTemp)),2,',','');?> °C</td><th>SetRouned</th><td><?= number_format((array_sum($setRounded)/count($setRounded)),2,',','');?> °C</td></tr>
+			<tr><th>Max temperatuur</th><td><?= number_format(max($livingTemp),1,',','');?> °C</td><th>Vermogen</th><td><?= number_format((array_sum($daikinpower)/count($daikinpower)),0,',','');?> W</td></tr>
+			<tr><th>Min temperatuur</th><td><?= number_format(min($livingTemp),1,',','');?> °C</td><th>Tijd aan</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v > 50))/3,1,',','');?> min</td></tr>
+			<tr><th>Dif temperatuur</th><td><?= number_format(max($livingTemp)-min($livingTemp),1,',','');?> °C</td><th>Tijd uit</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v < 50))/3,1,',','');?> min</td></tr>
+			<tr><th>AVG Dif</th><td><?= number_format((array_sum($dif)/count($dif)),2,',','');?> °C</td><th>Score</th><td><?= number_format($score,2,',','');?> kWh/24u</td></tr>
 		</tbody>
 	</table>
 

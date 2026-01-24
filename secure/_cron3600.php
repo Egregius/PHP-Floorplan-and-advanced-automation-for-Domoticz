@@ -13,7 +13,7 @@ if ($uur==0||LOOP_START>$time-60) {
 	if (isset($data['results'])) {
 		$today = date('Y-m-d');
 		$dy = (int)date('z', strtotime($today));
-		$range = 15;
+		$range = 10;
 		$start = $dy - $range;
 		$end   = $dy + $range;
 		if ($start < 0 || $end > 365) {

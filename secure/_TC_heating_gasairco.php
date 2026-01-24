@@ -71,8 +71,8 @@ foreach (array('living','kamer','alex') as $k) {
             	$setrounded=$set;
             	$fan=7;
             } else {
-            	if($dif>0) $factor = ($daikinrunning) ? 2:0.8;
-            	else $factor = ($daikinrunning) ? 0.8:2;
+            	if($dif>0) $factor = ($daikinrunning) ? $daikinpower/3:0.5;
+            	else $factor = ($daikinrunning) ? 0.5:$daikinpower/3;
             	$diffac = (-$dif / 50) * $factor;
 				$trendfac = (-$trend / 100) * $factor;
 
@@ -93,7 +93,7 @@ foreach (array('living','kamer','alex') as $k) {
         }
 
 		if ($k=='living') {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).(isset($line)?'	['.$line.']':'');
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.$factor.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
 				publishmqtt('d/i','');
