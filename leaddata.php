@@ -8,9 +8,9 @@ function readJsonFile($path) {
     return '{}';
 }
 $modes=[
-	1=>"Warmtepomp",
-	2=>"Hybride (WP + Gas)",
-	3=>"Gasbrander"
+	1=>"Airco",
+	2=>"Airco + Gas",
+	3=>"Gas"
 ];
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
@@ -84,9 +84,9 @@ foreach($leadDataLiving as $mode=>$temp) {
 
     // Mapping voor de verwarmingsmethodes
     const methods = {
-        "1": { label: "Warmtepomp", color: "#28a745" },       // Groen
-        "2": { label: "Hybride (WP + Gas)", color: "#fd7e14" }, // Oranje
-        "3": { label: "Gasbrander", color: "#dc3545" }          // Rood
+        "1": { label: "Airco", color: "#28a745" },       // Groen
+        "2": { label: "Airco + gas", color: "#fd7e14" }, // Oranje
+        "3": { label: "Gas", color: "#dc3545" }          // Rood
     };
 
     /**
@@ -107,7 +107,7 @@ foreach($leadDataLiving as $mode=>$temp) {
 
             // 1. Sorteer temperaturen
             const sortedTemps = Object.keys(tempData).map(Number).sort((a, b) => a - b);
-            const methodInfo = methods[methodKey] || { label: `Methode ${methodKey}`, color: "#333333" };
+            const methodInfo = methods[methodKey] || { label: `Mode ${methodKey}`, color: "#333333" };
 
             // Loop door de gesorteerde temperaturen
             for (let i = 0; i < sortedTemps.length; i++) {
@@ -145,7 +145,7 @@ foreach($leadDataLiving as $mode=>$temp) {
             // --- Dataset 1: De Trendlijn (Smoothed) ---
             datasets.push({
                 type: 'line',
-                label: methodInfo.label + " (Trend)",
+                label: methodInfo.label + " (+buren)",
                 data: smoothPoints,
                 borderColor: methodInfo.color,
                 backgroundColor: methodInfo.color,
@@ -158,7 +158,7 @@ foreach($leadDataLiving as $mode=>$temp) {
             // --- Dataset 2: Het Exacte Gemiddelde (Average) ---
             datasets.push({
                 type: 'line',
-                label: methodInfo.label + " (Gem)",
+                label: methodInfo.label + " (avg)",
                 data: avgPoints,
                 borderColor: methodInfo.color,
                 backgroundColor: methodInfo.color,
@@ -199,8 +199,8 @@ foreach($leadDataLiving as $mode=>$temp) {
                 <tr>
                     <th>Buiten (°C)</th>
                     <th>Methode</th>
-                    <th>Min/°C<br><small>(Trend)</small></th>
-                    <th>Min/°C<br><small>(Gem)</small></th>
+                    <th>Min/°C<br><small>(+buren)</small></th>
+                    <th>Min/°C<br><small>(avg)</small></th>
                     <th>Metingen</th>
                 </tr>
             </thead>

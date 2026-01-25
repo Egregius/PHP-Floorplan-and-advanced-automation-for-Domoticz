@@ -12,11 +12,13 @@ if ($difgas <= -1.8 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.5 && $d[
 elseif ($difgas <= -1.5 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.6 && $d['n']>-500 && $d['buiten_temp']->s<=4) sw('brander','On','difgas='.$difgas);
 elseif ($difgas <= -1.2 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.7 && $d['n']>-500 && $d['buiten_temp']->s<=3) sw('brander','On','difgas='.$difgas);
 elseif ($difgas <= -0.9 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.8 && $d['n']>-500 && $d['buiten_temp']->s<=2) sw('brander','On','difgas='.$difgas);
-elseif ($difgas <= -0.6 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.9 && $d['n']>-500 && $d['buiten_temp']->s<=1) sw('brander','On','difgas='.$difgas);
-elseif ($difgas <= -0.4 && $d['brander']->s=="Off" && $pastbrander>$aanna && $d['n']>-500 && $d['buiten_temp']->s<=0) sw('brander','On','difgas='.$difgas);
+elseif ($difgas <= -0.7 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.9 && $d['n']>-500 && $d['buiten_temp']->s<=1) sw('brander','On','difgas='.$difgas);
+elseif ($difgas <= -0.5 && $d['brander']->s=="Off" && $pastbrander>$aanna && $d['n']>-500 && $d['buiten_temp']->s<=0) sw('brander','On','difgas='.$difgas);
 elseif ($difgas >= 0 && $d['brander']->s=="On" && $pastbrander>$uitna) sw('brander','Off');
 elseif ($difgas >= -0.1 && $d['brander']->s=="On" && $pastbrander>$uitna*1.5) sw('brander','Off');
 elseif ($difgas >= -0.2 && $d['brander']->s=="On" && $pastbrander>$uitna*2) sw('brander','Off');
+elseif ($difgas >= -0.4 && $d['brander']->s=="On" && $pastbrander>$uitna*3) sw('brander','Off');
+elseif ($difgas >= -0.6 && $d['brander']->s=="On" && $pastbrander>$uitna*4) sw('brander','Off');
 
 $totalmin = 0;
 $weight = ['living'=>1.0,'kamer'=>0.3,'alex'=>0.3];
@@ -65,8 +67,13 @@ foreach (array('living','kamer','alex') as $k) {
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
             if ($prevSet==1) {
-            	$maxpow=100;
+
+            	if($dif>=-0.2) $maxpow=70;
+            	elseif($dif>=-0.4) $maxpow=80;
+            	elseif($dif>=-0.6) $maxpow=90;
+            	else $maxpow=100;
             	$spmode=1;
+            	$diffac=$trendfac=$factor=0;
             	$set=28;
             	$setrounded=$set;
             	$fan=7;
@@ -81,7 +88,7 @@ foreach (array('living','kamer','alex') as $k) {
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving;
 				$setrounded = clamp(ceil($set*2)/2,10,28);
-		        $setrounded=min($setrounded, $target);
+		        $setrounded=min($setrounded, $target+0.5);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {

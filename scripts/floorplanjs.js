@@ -1250,12 +1250,12 @@ function updateDeviceTime(id) {
     delta = newTime - tijd
     if (delta>=0) {
 		let kleur
-		if (delta < 600) {
-			const ratio = delta / 600
+		if (delta < 300) {
+			const ratio = delta / 300
 			const green = Math.round(255 * ratio)
 			kleur = `rgb(255,${green},0)`
-		} else if (delta < 1800) {
-			const ratio = (delta - 600) / (1800 - 600)
+		} else if (delta < 1200) {
+			const ratio = (delta - 400) / (1200 - 400)
 			const blue = Math.round(255 * ratio)
 			kleur = `rgb(255,255,${blue})`
 		} else if (delta < 82800) {
