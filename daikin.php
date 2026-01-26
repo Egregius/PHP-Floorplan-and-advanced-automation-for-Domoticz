@@ -227,7 +227,10 @@ new Chart(ctx, {
             }
         }
     }
-});
+})
+<?php
+if (empty($_GET['datum'])) {
+?>
 (() => {
     let lastReloadSecond = null;
     function checkReload() {
@@ -243,6 +246,9 @@ new Chart(ctx, {
     }
     setInterval(checkReload, 1000);
 })();
+<?php
+}
+?>
 </script>
 </body>
 </html>

@@ -149,15 +149,20 @@ function fbadkamer($level,$power=false) {
 	if ($level==0) {
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 	} else {
+		$sleep=false;
 		if ($power===true&&$d['badkamerpower']->s=='Off') {
 			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
-			usleep(500000);
+			$sleep=true;
 		}
-		sl('lichtbadkamer', $level);
 		if ($d['weg']->s==1&&$d['time']>$t-7200) {
 			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['time']>$t-7200&$d['living_set']->m==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+			if ($d['time']>$t-7200&&$d['living_set']->m==0) {
+				storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+				if($d['heating']->s>0&&$d['living_temp']->s<19&&$d['daikin']->s=='Off') sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+			}
 		}
+		if($sleep===true) usleep(500000);
+		sl('lichtbadkamer', $level);
 	}
 }
 

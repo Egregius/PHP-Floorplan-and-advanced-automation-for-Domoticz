@@ -78,8 +78,8 @@ foreach (array('living','kamer','alex') as $k) {
             	$setrounded=$set;
             	$fan=7;
             } else {
-            	if($dif>0) $factor = ($daikinrunning) ? $daikinpower/3:0.5;
-            	else $factor = ($daikinrunning) ? 0.5:$daikinpower/3;
+            	if($dif>0) $factor = ($daikinrunning) ? $daikinpower/2:0.5;
+            	else $factor = ($daikinrunning) ? 0.5:$daikinpower/2;
             	$diffac = (-$dif / 50) * $factor;
 				$trendfac = (-$trend / 100) * $factor;
 
@@ -100,12 +100,10 @@ foreach (array('living','kamer','alex') as $k) {
         }
 
 		if ($k=='living') {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.$factor.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).(isset($line)?'	['.$line.']':'');
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.$factor.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
-				publishmqtt('d/i','');
-//				publishmqtt('d/i','set='.number_format($set,3,',','').' ceil='.number_format($setrounded,1,',','').' d_term='.$d_term.' change='.($$diffac + $trendfac).(isset($line)?' ['.$line.']':''));
-//				publishmqtt('d/l',"Daikin {$setrounded} {$adjLiving}");
+				publishmqtt('d/i',date("G:i:s").' ・ '.number_format($setrounded,1,',','').' ・ '.number_format($set,2,',','').' ・ '.number_format(($diffac + $trendfac),3,',','').' ・ '.$factor);
 				$prevmsg=$msg;
 				unset($line);
 			}
@@ -130,8 +128,8 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
 				if ($k=='living'&&$daikin->$k->set!=$setrounded) {
-					publishmqtt('d/i',"Daikin {$setrounded} om ".date("G:i"));
-					publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i"));
+//					publishmqtt('d/i',"Daikin {$setrounded} om ".date("G:i"));
+					publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i:s"));
 				}
             }
         }
