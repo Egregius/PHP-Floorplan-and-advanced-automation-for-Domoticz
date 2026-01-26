@@ -12,8 +12,8 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	}
 	$data=array();
 	$data['w']=$d['weg']['s'];
-	$data->p=$d['poortrf']['s'];
-	if ($d['auto']=='Off') $data->p='Open';
+	$data['p']=$d['poortrf']['s'];
+	if ($d['auto']=='Off') $data['p']='Open';
 	$data['d']=$d['deurvoordeur']['s'];
 	$times[]=TIME-$d['deurvoordeur']['t'];
 	$times[]=TIME-$d['poortrf']['t'];

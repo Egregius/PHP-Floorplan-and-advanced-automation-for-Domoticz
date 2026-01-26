@@ -154,10 +154,9 @@ function fbadkamer($level,$power=false) {
 			usleep(500000);
 		}
 		sl('lichtbadkamer', $level);
-//		store('deurbadkamer', $d['deurbadkamer']->s, basename(__FILE__).':'.__LINE__);
 		if ($d['weg']->s==1&&$d['time']>$t-7200) {
 			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['time']<$t&&$d['living_set']->m==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
+			if ($d['time']>$t-7200&$d['living_set']->m==0) storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
 		}
 	}
 }

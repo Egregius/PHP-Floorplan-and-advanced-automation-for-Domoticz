@@ -40,7 +40,7 @@ $d=fetchdata();
 $d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user) {
-	try {	
+	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
@@ -87,7 +87,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
@@ -95,7 +95,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
 }

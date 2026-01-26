@@ -83,14 +83,14 @@ function stoploop() {
 		lg('🛑 functions.php gewijzigd → restarting cron loop...');
 		ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 15 php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
 		exit;
 	}
 	if (filemtime(__DIR__ . '/cron.php') > LOOP_START) {
 		lg('🛑 cron.php gewijzigd → restarting cron loop...');
 		ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 15 php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
 		exit;
 	}
 }

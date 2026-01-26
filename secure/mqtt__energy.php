@@ -133,7 +133,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		$zontotaal = $row['Geg_Maand'];
 	}
 
-	$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
+	$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
 		  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
 		  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
 	$dbverbruik->query($q, [
@@ -161,7 +161,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		$water = round($water - $gisteren['water'], 3);
 		$injectie = round($injectie - $gisteren['injectie'], 3);
 		$verbruik = round($zonvandaag - $injectie + $elec, 3);
-		$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
+		$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
 			  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
 			  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
 		$dbverbruik->query($q, [
@@ -182,7 +182,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 	$since = date("Y-m-d", $time - (86400 * 30));
 	$avg = ['gas' => 0, 'elec' => 0];
 	$q = "
-		SELECT 
+		SELECT
 			AVG(gas)  AS gas,
 			AVG(elec) AS elec
 		FROM `Guydag`
@@ -204,8 +204,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		$zonref = round($row['Dag_Refer'], 1);
 	}
 
-	$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
-		  WHERE Datum_Dag LIKE :maand 
+	$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag`
+		  WHERE Datum_Dag LIKE :maand
 		  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
 	$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
 	if ($row = $stmt->fetch()) {
@@ -242,7 +242,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		'zon' => $data['zon'],
 		'alwayson' => $data['alwayson'],
 	];
-	
+
 	static $mqttcache = [];
 	foreach($den as $k => $v) {
 		if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
@@ -383,7 +383,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
@@ -391,7 +391,7 @@ function stoploop() {
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
 }

@@ -66,7 +66,7 @@ foreach (array('living','kamer','alex') as $k) {
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
-            if ($prevSet==1) {
+            if ($prevSet==1||($d['living_set']->m==1&&$dif<=0.4)) {
 
             	if($dif>=-0.2) $maxpow=70;
             	elseif($dif>=-0.4) $maxpow=80;
@@ -129,7 +129,10 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-				publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i"));
+				if ($k=='living'&&$daikin->$k->set!=$setrounded) {
+					publishmqtt('d/i',"Daikin {$setrounded} om ".date("G:i"));
+					publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i"));
+				}
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
