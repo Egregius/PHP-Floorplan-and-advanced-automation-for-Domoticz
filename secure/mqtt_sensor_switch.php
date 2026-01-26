@@ -40,16 +40,13 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 $d=fetchdata();
 $d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
-$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user, &$x) {
-	$x++;
-	lg($x.'	'.$topic);
+$mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-//			$time=time();
 			if (($time - LOOP_START) <= 2) return;
-			$d['time']=$time;
+//			$d['time']=$time;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
 			$lastEvent = $d['time'];
@@ -79,17 +76,13 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user, &$x) {
-	$x++;
-	lg($x.'	'.$topic);
+$mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path = explode('/', $topic);
 		$device = $path[2];
 		if (isset($validDevices[$device])) {
-//			$time=time();
 			if (($time - LOOP_START) <= 2) return;
-			$d['time']=$time;
-			if (($time - $startloop) <= 2) return;
+//			$d['time']=$time;
 			if ($status=='unavailable') return;
 			$status = ucfirst(strtolower(trim($status, '"')));
 			$d = fetchdata();
@@ -123,9 +116,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user, &$x) {
-	$x++;
-	lg($x.'	'.$topic);
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -163,8 +154,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				updateWekker($t, $weekend, $dow, $d);
 			}
 		} elseif (isset($validDevices[$device])) {
-//			$time=time();
-			$d['time']=$time;
+//			$d['time']=$time;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 //			if (($d[$device]->s ?? null) === $status) return;
 			$d=fetchdata();
@@ -213,15 +203,12 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
     }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user, &$x) {
-	$x++;
-	lg($x.'	'.$topic);
+$mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
-//			$time=time();
-			$d['time']=$time;
+//			$d['time']=$time;
 			if (($time - LOOP_START) <= 2) return;
 			if (isProcessed($topic,$status,$alreadyProcessed)) return;
 			$d=fetchdata();
@@ -244,11 +231,10 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$x=0;
-//	$mqtt->loop(true,false,null,50000);
 	$time = time();
+	$d['time']=$time;
     $mqtt->loopOnce($time);
-    usleep(5000000);
+    usleep(20000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

@@ -39,7 +39,7 @@ $d=fetchdata();
 $d['rand']=rand(100,200);
 updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, &$time, $user) {
-	try {	
+	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if (isset($validDevices[$device])) {
@@ -64,7 +64,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, $user) {
-	try {	
+	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
 		if ($device=='nvidia') {
@@ -93,7 +93,9 @@ $mqtt->publish(
 );
 
 while (true) {
-	$mqtt->loop(true,false,null,50000);
+	$time = time();
+    $mqtt->loopOnce($time);
+    usleep(500000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

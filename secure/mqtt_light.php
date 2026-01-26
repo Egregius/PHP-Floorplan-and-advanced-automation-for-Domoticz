@@ -71,7 +71,9 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,10000);
+	$time = time();
+    $mqtt->loopOnce($time);
+    usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);

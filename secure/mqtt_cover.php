@@ -71,7 +71,9 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,50000);
+	$time = time();
+    $mqtt->loopOnce($time);
+    usleep(500000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
