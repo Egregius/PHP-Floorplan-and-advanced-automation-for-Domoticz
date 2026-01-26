@@ -3,7 +3,7 @@ require '/var/www/config.php';
 if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	$user='camera';
 	$mysqli=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
-	$result = $mysqli->query("select n,s,d,t,m from devices WHERE n in ('weg', 'auto', 'poortrf', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
+	$result = $mysqli->query("select n,s,d,t,m from devices WHERE n in ('weg', 'auto', 'poort', 'deurvoordeur', 'voordeur');") or trigger_error($mysqli->error." [$sql]");
 	while ($row = $result->fetch_array()) {
 		$d[$row['n']]['s'] = $row['s'];
 		$d[$row['n']]['d'] = $row['d'];
@@ -12,11 +12,11 @@ if (isset($_GET['token'])&&$_GET['token']==$cameratoken) {
 	}
 	$data=array();
 	$data['w']=$d['weg']['s'];
-	$data['p']=$d['poortrf']['s'];
+	$data['p']=$d['poort']['s'];
 	if ($d['auto']=='Off') $data['p']='Open';
 	$data['d']=$d['deurvoordeur']['s'];
 	$times[]=TIME-$d['deurvoordeur']['t'];
-	$times[]=TIME-$d['poortrf']['t'];
+	$times[]=TIME-$d['poort']['t'];
 	$times[]=TIME-$d['weg']['t'];
 	$data['t']=min($times);
 	if (getCache('dag')<0) {
