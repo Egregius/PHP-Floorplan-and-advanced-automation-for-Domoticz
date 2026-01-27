@@ -584,7 +584,7 @@ function storeicon($name,$i,$msg='') {
 
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-//		if (str_ends_with($name, '_temp')) return;
+		if (str_ends_with($name, '_temp')) return;
 		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;

@@ -14,7 +14,7 @@ $t = $weekend = $dow = null;
 $time=time();
 $db = Database::getInstance();
 $d=fetchdata();
-
+$livingtemps=[];
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';

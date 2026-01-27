@@ -31,8 +31,7 @@ $connectionSettings=(new ConnectionSettings)
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
-$alreadyProcessed=[];
-$validDevices = [];
+$validDevices = $alreadyProcessed = $livingtemps = [];
 foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
@@ -116,7 +115,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user, &$livingtemps) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -133,6 +132,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				if($status===0&&past('daikin')>10) storesp('daikin','Off',0,$rel_increase.'	> '.$treshold);
 				else storep('daikin',$status,$rel_increase.'	> '.$treshold);
 			}
+			return;
 		} elseif ($device === 'sun_solar_elevation') {
 			$status = (float)$status;
 			if ($status >= -10 && $status <= 10) {
@@ -146,6 +146,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				setCache('dag', $status);
 			}
 			stoploop($d);
+			return;
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status = (int)$status;
 			$status = round($status / 5) * 5;
@@ -153,6 +154,20 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				storemode('dag', $status);
 				updateWekker($t, $weekend, $dow, $d);
 			}
+		} elseif ($device === 'living_zigbee_temp') {
+			$livingtemps[]=$status;
+			$livingtemps=array_slice($livingtemps,-8);
+			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
+			lg('livingtemps='.json_encode($livingtemps).'=>'.$temp);
+			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
+			return;
+		} elseif ($device === 'living_zwave_temp') {
+			$livingtemps[]=$status;
+			$livingtemps=array_slice($livingtemps,-8);
+			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
+			lg('livingtemps='.json_encode($livingtemps).'=>'.$temp);
+			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
+			return;
 		} elseif (isset($validDevices[$device])) {
 //			$d['time']=$time;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
@@ -180,6 +195,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 					store($device,$status);
 				}
 			}
+			return;
 		} elseif ($device === 'weg') {
 			if (($time - LOOP_START) <= 2) return;
 			if ($status==0) {
@@ -192,6 +208,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				store('weg',3);
 				huisslapen(3);
 			}
+			return;
 		}
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
