@@ -158,7 +158,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$raw = getCache('livingtemps');
 			$livingtemps = $raw ? json_decode($raw, true) : [];
 			$livingtemps[]=$status;
-			$livingtemps=array_slice($livingtemps,-8);
+			$livingtemps=array_slice($livingtemps,-4);
 			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
 			setCache('livingtemps',$data);
 			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
@@ -169,7 +169,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$raw = getCache('livingtemps');
 			$livingtemps = $raw ? json_decode($raw, true) : [];
 			$livingtemps[]=$status;
-			$livingtemps=array_slice($livingtemps,-8);
+			$livingtemps=array_slice($livingtemps,-4);
 			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
 			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
 			lg('livingtemps='.$data.'=>'.$temp);
