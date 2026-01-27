@@ -1,9 +1,16 @@
 <?php
 $user='cron60';
 //lg('🕒 '.$user);
-$db = Database::getInstance();
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']->s;
+/*$livingtemps = json_decode(getCache('livingtemps'),true)??[];
+$livingtemps[]=$living;
+$livingtemps=array_slice($livingtemps,-8);
+setCache('livingtemps',json_encode($livingtemps));
+$temp=round(array_sum($livingtemps)/count($livingtemps),2);
+$living=$temp;
+lg('livingtemps_cron60='.json_encode($livingtemps,JSON_NUMERIC_CHECK).'=>'.$temp);
+if ($temp!=$d['living_temp']->s) store('living_temp',$temp);*/
 foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']->m;
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
 $stamp = date('Y-m-d H:i:s', $time - 600);
@@ -28,6 +35,7 @@ SELECT
 FROM temp
 WHERE stamp >= '$stamp'
 ";
+$db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
     $trend = (int) round(($row[$i.'_last'] - $row[$i.'_first']) * 10);

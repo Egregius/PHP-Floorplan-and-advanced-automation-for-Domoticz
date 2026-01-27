@@ -31,7 +31,7 @@ $connectionSettings=(new ConnectionSettings)
 	->setPassword('mqtt');
 $mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
-$validDevices = $alreadyProcessed = $livingtemps = [];
+$validDevices = $alreadyProcessed = [];
 foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 	$basename = basename($file, '.php');
 	$validDevices[$basename] = true;
@@ -115,7 +115,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user, &$livingtemps) {
+$mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
@@ -155,17 +155,24 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				updateWekker($t, $weekend, $dow, $d);
 			}
 		} elseif ($device === 'living_zigbee_temp') {
+			$raw = getCache('livingtemps');
+			$livingtemps = $raw ? json_decode($raw, true) : [];
 			$livingtemps[]=$status;
 			$livingtemps=array_slice($livingtemps,-8);
+			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
+			setCache('livingtemps',$data);
 			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
-			lg('livingtemps='.json_encode($livingtemps).'=>'.$temp);
+			lg('livingtemps='.$data.'=>'.$temp);
 			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
 			return;
 		} elseif ($device === 'living_zwave_temp') {
+			$raw = getCache('livingtemps');
+			$livingtemps = $raw ? json_decode($raw, true) : [];
 			$livingtemps[]=$status;
 			$livingtemps=array_slice($livingtemps,-8);
+			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
 			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
-			lg('livingtemps='.json_encode($livingtemps).'=>'.$temp);
+			lg('livingtemps='.$data.'=>'.$temp);
 			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
 			return;
 		} elseif (isset($validDevices[$device])) {
