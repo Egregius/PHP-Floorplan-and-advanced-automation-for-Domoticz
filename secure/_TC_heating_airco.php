@@ -80,7 +80,7 @@ foreach (array('living','kamer','alex') as $k) {
 		if ($k=='living') {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.$factor.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
-				lg($msg);
+				//lg($msg);
 				publishmqtt('d/i',date("G:i:s").' ・ '.number_format($setrounded,1,',','').' ・ '.number_format($set,2,',','').' ・ '.number_format(($diffac + $trendfac),3,',','').' ・ '.$factor);
 				$prevmsg=$msg;
 				unset($line);

@@ -227,10 +227,11 @@ new Chart(ctx, {
             }
         }
     }
-})
+});
 <?php
 if (empty($_GET['datum'])) {
 ?>
+
 (() => {
     let lastReloadSecond = null;
     function checkReload() {

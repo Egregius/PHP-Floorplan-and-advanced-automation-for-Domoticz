@@ -1243,7 +1243,7 @@ function getTemperatureColorTxt(r,min,avg,max){
 }
 function getTrendArrow(t){
 	const n=Math.min(Math.abs(t),10),r=Math.round(6+60*n);
-	return t>=0.05?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<=-0.05?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
+	return t>=0.1?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<=-0.1?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
 function updateDeviceTime(id) {
     tijd = d[id]?.t ?? 0
     status = d[id]?.s
