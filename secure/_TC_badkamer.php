@@ -104,7 +104,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 //	lg(print_r($leadDataBath,true));
 //	lg(print_r($temps,true));
 
-	if ($prevSetbath >= 1 && $badkamer >= $target-0.2 /*&& $lastWriteleadDataBath < $time-43200*/) {
+	if ($prevSetbath >= 1 && ($badkamer >= $target-0.2 || ($time >= $t_end-5 && $time <= $t_end+5))) {
 		$startTemp = $d['badkamer_start_temp']->s;
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1&&$prevSetbath == 1) {

@@ -40,7 +40,7 @@ foreach (array('living','kamer','alex') as $k) {
     elseif ($dif <= 0) $power = 1;
     else $power = $daikin->$k->power;
     if ($d['daikin']->s=='On') {
-        $fan=6; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
+        $fan=7; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
         $spmode=-1;
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
@@ -56,8 +56,10 @@ foreach (array('living','kamer','alex') as $k) {
             	$setrounded=$set;
             	$fan=7;
             } else {
-            	if($dif>0) $factor = ($daikinrunning) ? $daikinpower/2:0.5;
-            	else $factor = ($daikinrunning) ? 0.5:5;
+            	if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/3:abs($dif);
+            	elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/10:abs($dif);
+            	elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif):8;
+				else $factor=0.001;
             	$diffac = (-$dif / 50) * $factor;
 				$trendfac = (-$trend / 10) * $factor;
 
@@ -77,11 +79,11 @@ foreach (array('living','kamer','alex') as $k) {
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
 
-		if ($k=='living') {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.$factor.' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
+		if ($k=='living'&&$target>16) {
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				//lg($msg);
-				publishmqtt('d/i',date("G:i:s").' ・ '.number_format($setrounded,1,',','').' ・ '.number_format($set,2,',','').' ・ '.number_format(($diffac + $trendfac),3,',','').' ・ '.$factor);
+				publishmqtt('d/i',date("G:i:s").' ・ '.number_format($setrounded,1,',','').' ・ '.number_format($set,2,',','').' ・ '.number_format(($diffac + $trendfac),3,',','').' ・ '.round($factor,3));
 				$prevmsg=$msg;
 				unset($line);
 			}
