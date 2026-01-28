@@ -87,7 +87,6 @@ $args=array(
 );
 if ($sensor=='alles') {
 	$args['colors']=array($buiten,$living,$badkamer,$kamer,$alex,$waskamer,$zolder,$living,$badkamer,$kamer,$waskamer,$alex);
-	$line_styles=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
 	$query="SELECT stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -125,7 +124,6 @@ if ($sensor=='alles') {
 	unset($chart);
 } elseif ($sensor=='binnen') {
 	$args['colors']=array($living,$badkamer,$kamer,$waskamer,$alex,$living,$badkamer,$kamer,$waskamer,$alex);
-	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[3,5]','lineDashStyle:[1,8]','lineDashStyle:[1,8]');
 	$query="SELECT stamp,living,badkamer,kamer,waskamer,alex from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
 	while ($row=$result->fetch_assoc()) $graph[]=$row;
@@ -156,28 +154,60 @@ if ($sensor=='alles') {
 	echo $chart['div'];
 	unset($chart);
 } else {
-	$line_styles=array('lineDashStyle:[0,0]','lineDashStyle:[3,5]','lineDashStyle:[1,8]');
 	if ($sensor=='badkamer') $args['colors']=array(${$sensornaam},${$sensornaam},'#ffb400');
+	elseif ($sensor=='buiten') $args['colors']=array(${$sensornaam},'#0000FF','#ffff00','#ff0000');
 	else $args['colors']=array(${$sensornaam},${$sensornaam},'#FFFF00');
 	$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp,$sensor AS temp from `temp` where stamp >= '$dag'";
 	if (!$result=$db->query($query)) die('There was an error running the query ['.$query .' - '.$db->error.']');
-	while ($row=$result->fetch_assoc())	$graph[]=$row;
+	while ($row=$result->fetch_assoc())	$temp[]=$row;
 	$result->free();
 	$min=99;
 	$max=0;
-	foreach ($graph as $i) {
-		if ($i['temp']<$min) $min=$i['temp'];
-		elseif ($i['temp']>$max) $max=$i['temp'];
-	}
-	$min=floor($min);
-	$max=ceil($max);
-	$args['raw_options']='
+	if ($sensor=='buiten') {
+		$b_hist=json_decode(getCache('b_hist'));
+		$m=$b_hist->m;
+		$a=$b_hist->a;
+		$x=$b_hist->x;
+		foreach ($temp as $i) {
+			if ($i['temp']<$min) $min=$i['temp'];
+			elseif ($i['temp']>$max) $max=$i['temp'];
+			$i['min']=$m;
+			$i['avg']=$a;
+			$i['max']=$x;
+			$graph[]=$i;
+		}
+		if($m<$min) $min=$m;
+		if($x>$max) $max=$x;
+		$args['raw_options']='
+		lineWidth:4,
+		crosshair:{trigger:"both"},
+		hAxis:{textPosition:"None"},
+		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{min:'.$min.',max:'.$max.'}},
+		theme:"maximized",
+		chartArea:{left:0,top:0,width:"100%",height:"100%"},
+		series:{
+			0:{lineWidth:5},
+			1:{lineDashStyle:[3,6],lineWidth:3},
+			2:{lineDashStyle:[3,6],lineWidth:3},
+			3:{lineDashStyle:[3,6],lineWidth:3},
+		}';
+	} else {
+		foreach ($temp as $i) {
+			if ($i['temp']<$min) $min=$i['temp'];
+			elseif ($i['temp']>$max) $max=$i['temp'];
+			$graph[]=$i;
+		}
+		$args['raw_options']='
 		lineWidth:4,
 		crosshair:{trigger:"both"},
 		hAxis:{textPosition:"None"},
 		vAxis:{format:"# °C",textStyle:{color:"#AAA",fontSize:14},gridlines: {multiple: 2, color: "#444"},minorGridlines: {multiple: 1, color: "#222"},viewWindow:{min:'.$min.',max:'.$max.'}},
 		theme:"maximized",
 		chartArea:{left:0,top:0,width:"100%",height:"100%"}';
+	}
+	$min=floor($min);
+	$max=ceil($max);
+
 	$chart=array_to_chart($graph, $args);
 	echo $chart['script'];
 	echo $chart['div'];

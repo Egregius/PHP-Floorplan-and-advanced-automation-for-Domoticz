@@ -38,8 +38,8 @@ WHERE stamp >= '$stamp'
 $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
-    $trend = (int) round(($row[$i.'_last'] - $row[$i.'_first']) * 10);
-    if ((int)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
+    $trend = round($row[$i.'_last'] - $row[$i.'_first'],2);
+    if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
 }
 
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');

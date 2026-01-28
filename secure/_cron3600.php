@@ -4,9 +4,9 @@ $user='cron3600';
 $uur=date('G');
 if ($uur==0||LOOP_START>$time-60) {
 	lg('🕒 '.$user.' ===================================================================================================================================================');
-	if ($uur==0) {
-		setCache('alwayson', 9999);
-	}
+//	if ($uur==0) {
+//		setCache('alwayson', 9999);
+//	}
 	$url = "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lon&formatted=0";
 	$response = @file_get_contents($url);
 	$data = json_decode($response, true);
@@ -41,6 +41,7 @@ if ($uur==0||LOOP_START>$time-60) {
 			$stmt->execute([':start' => $start, ':end' => $end]);
 		}
 		$b_hist = $stmt->fetch(PDO::FETCH_ASSOC);
+		setCache('b_hist',json_encode($b_hist, JSON_NUMERIC_CHECK));
 		$results = $data['results'];
 		$map = [
 			'PRESET_1' => 'EDM-1',

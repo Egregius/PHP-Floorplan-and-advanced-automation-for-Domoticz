@@ -59,14 +59,14 @@ foreach (array('living','kamer','alex') as $k) {
             	if($dif>0) $factor = ($daikinrunning) ? $daikinpower/2:0.5;
             	else $factor = ($daikinrunning) ? 0.5:5;
             	$diffac = (-$dif / 50) * $factor;
-				$trendfac = (-$trend / 100) * $factor;
+				$trendfac = (-$trend / 10) * $factor;
 
 				$adjLiving += ($diffac + $trendfac);
 				$adjLiving = clamp($adjLiving, -2, 2);
 				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 				$set+=$adjLiving;
 				$setrounded = clamp(ceil($set*2)/2,10,28);
-		        $setrounded=min($setrounded, $target+0.5);
+		        $setrounded=min($setrounded, $target+1);
 			}
 			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {

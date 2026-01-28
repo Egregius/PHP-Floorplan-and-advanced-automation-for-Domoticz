@@ -186,7 +186,7 @@ if ((int)$d['z']>100&&$d['dag']->s>12) {
 	}
 }
 
-if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 1);
+if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 2);
 if (count($hums)>=2) $hum=round(array_sum($hums)/count($hums), 0);
 if (count($uvs)>=2) $uv=round(array_sum($uvs)/count($uvs), 1);
 $weather['uv']=$uv??0;
@@ -199,23 +199,18 @@ foreach ($temps as $i) {
 $mintemp=round($mintemp,1);
 $maxtemp=round($maxtemp,1);
 $ref = round((float)$d['buiten_temp']->s,1);
-$temp = round($temp,1);
 $temp=clamp($temp, $ref - 0.1, $ref + 0.1);
 $weather['mint']=$mintemp;
 $weather['maxt']=$maxtemp;
 
 //lg('Updated weather data with '.count($temps).' temperature, '.count($winds).' wind and '.count($rains).' rain data');
 
-//lg(basename(__FILE__) . ':' . __LINE__. ' = '.$d['buiten_temp']->m);
 $ref = (int)$d['buiten_temp']->m;
-//lg(basename(__FILE__) . ':' . __LINE__.' = '.$ref);
 $hum=clamp($hum, $ref - 1, $ref + 1);
-//lg(basename(__FILE__) . ':' . __LINE__.' = '.$hum);
 
 if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) storesm('buiten_temp', $temp, $hum);
 elseif ($d['buiten_temp']->s!=$temp) store('buiten_temp', $temp);
 elseif ($d['buiten_temp']->m!=$hum) storemode('buiten_temp', $hum);
-//storemode('buiten_temp',85);
 
 
 if (count($winds)>=4) {
