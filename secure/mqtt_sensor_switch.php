@@ -160,7 +160,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$temp=round(($temp+$d['living_zwave_temp'])/2,2);
 				if ($temp!=$d['living_temp']->s) {
 					$diff = abs($temp-$d['living_temp']->s);
-					if($diff<=2) store('living_temp',$temp,basename(__FILE__).':'.__LINE__);
+					if($diff<=2) store('living_temp',$temp,'living_zigbee_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
 				}
 			}
 			return;
@@ -171,7 +171,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$temp=round(($temp+$d['living_zigbee_temp'])/2,2);
 				if ($temp!=$d['living_temp']->s) {
 					$diff = abs($temp-$d['living_temp']->s);
-					if($diff<=2) store('living_temp',$temp,basename(__FILE__).':'.__LINE__);
+					if($diff<=2) store('living_temp',$temp,'living_zwave_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
 				}
 			}
 			return;

@@ -162,10 +162,10 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		$prevSet=1;
 		lg('🔥 _TC_living: '.
 			' Cstart='.date("G:i",$comfortAfternoon).
-			' t_start='.date("G:i:s",$t_start).
+			' t_start='.date("G:i:s",$d['living_start_temp']->t).
 			' End='.date("G:i",$comfortEnd).
 			' Setliving='.$Setliving.
-			' bTempStart='.$buitenTempStart.
+			' bTempStart='.$d['living_start_temp']->i.
 			' living='.$living.
 			' target='.$target.
 			' tempDelta='.$tempDelta.
@@ -184,14 +184,14 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$prevSet=0;
 		}
 	}
-	if($prevt_start!=$t_start && $time >= $t_start -3600 && $prevSet < 2 && $time < $comfortAfternoon && 1==1) {
-		$prevt_start=$t_start;
+	if($prevt_start!=$d['living_start_temp']->t && $time >= $t_start -1800 && $prevSet < 2 && $time < $comfortAfternoon && 1==1) {
+		$prevt_start=$d['living_start_temp']->t;
 		lg('prevSet='.$prevSet.
 			' Afternoon='.date("G:i",$comfortAfternoon).
-			' t_start='.date("G:i:s",$t_start).
+			' t_start='.date("G:i:s",$d['living_start_temp']->t).
 			' End='.date("G:i",$comfortEnd).
 			' Setliving='.$Setliving.
-			' bTempStart='.$buitenTempStart.
+			' bTempStart='.$d['living_start_temp']->i.
 			' living='.$living.
 			' target='.$target.
 			' tempDelta='.$tempDelta.

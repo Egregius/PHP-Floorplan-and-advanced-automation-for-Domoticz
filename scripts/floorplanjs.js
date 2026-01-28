@@ -322,6 +322,8 @@ function handleResponse(device,v){
 				addClass('zhalla','secured')
 				addClass('zhallb','secured')
 			}
+			if(v.s==0) setStyle('poort','display','block')
+			else setStyle('poort','display','none')
 			return
 		case 'alexslaapt':
 			if(v.s==1) {
