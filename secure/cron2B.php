@@ -28,7 +28,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					}
 				}
-				if($status['playStatus'] == 'PLAY_STATE'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s!='Unavailable'))) {
+				if($status['playStatus'] == 'PLAY_STATE'&&$d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s!='Unavailable'))) {
 					 $vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 					 if (isset($vol)) {
 						$vol = json_decode(json_encode(simplexml_load_string($vol)), true);

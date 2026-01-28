@@ -1353,7 +1353,7 @@ function isIPad() {
 }
 
 function cleanup(reason = "") {
-    log("🧹 Cleanup " + reason)
+//    log("🧹 Cleanup " + reason)
     fetchajax=true
     stopMonitor()
     if (socket) {
@@ -1367,7 +1367,7 @@ function cleanup(reason = "") {
 }
 
 function hardReconnect(reason = "") {
-    log("💀 " + reason)
+//    log("💀 " + reason)
     cleanup(reason)
     connect()
 }
@@ -1382,7 +1382,7 @@ function getClientId() {
 }
 
 function onConnect() {
-    log("✅ Verbonden")
+
     isConnecting = false
     initialConnectDone = true  // ← MARKEER als gedaan
     lastMessageReceived = Date.now()
@@ -1393,7 +1393,7 @@ function onConnect() {
             hardReconnect("subscribe")
             return
         }
-        log("📡 Subscribed")
+        log("✅ Verbonden")
         startMonitor()
     })
 }
@@ -1450,19 +1450,19 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("pageshow", e => {
     // ← BLOKKEER tijdens initiële connect op iPad
     if (!initialConnectDone && isIPad()) {
-        log("📄 Pageshow genegeerd (initiële connect bezig)")
+//        log("📄 Pageshow genegeerd (initiële connect bezig)")
         hardReconnect("pageshow")
         return
     }
 
     if (e.persisted) {
-        log("📄 bfcache restore")
+//        log("📄 bfcache restore")
         hardReconnect("bfcache")
     } else {
         const ua = navigator.userAgent || navigator.vendor || window.opera
         const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
         if (isiOS) {
-            log("📄 Pageshow iOS")
+//            log("📄 Pageshow iOS")
             hardReconnect("pageshow")
         }
     }
