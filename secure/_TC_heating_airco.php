@@ -45,8 +45,7 @@ foreach (array('living','kamer','alex') as $k) {
         if ($dif<-2) $spmode=1;
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
-            if ($prevSet==1||($d['living_set']->m==1&&$dif<=0.4)) {
-
+            if ($prevSet==1||($d['weg']->s==0&&$d['living_set']->m==1&&$dif<=-0.4)) {
             	if($dif>=-0.2) $maxpow=70;
             	elseif($dif>=-0.4) $maxpow=80;
             	elseif($dif>=-0.6) $maxpow=90;

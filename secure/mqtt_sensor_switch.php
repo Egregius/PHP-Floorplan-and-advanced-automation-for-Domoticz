@@ -148,32 +148,32 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			stoploop($d);
 			return;
 		} elseif ($device === 'sun_solar_azimuth') {
-			$status = (int)$status;
-			$status = round($status / 5) * 5;
+			$status = round((int)$status / 5) * 5;
 			if ((int)$d['dag']->m != $status) {
 				storemode('dag', $status);
 				updateWekker($t, $weekend, $dow, $d);
 			}
 		} elseif ($device === 'living_zigbee_temp') {
-			$raw = getCache('livingtemps');
-			$livingtemps = $raw ? json_decode($raw, true) : [];
-			$livingtemps[]=$status;
-			$livingtemps=array_slice($livingtemps,-4);
-			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
-			setCache('livingtemps',$data);
-			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
-			lg('livingtemps='.$data.'=>'.$temp);
-			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
+			$temp=$status;
+			$d['living_zigbee_temp']=$temp;
+			if(isset($d['living_zwave_temp'])) {
+				$temp=round(($temp+$d['living_zwave_temp'])/2,2);
+				if ($temp!=$d['living_temp']->s) {
+					$diff = abs($temp-$d['living_temp']->s);
+					if($diff<=2) store('living_temp',$temp,basename(__FILE__).':'.__LINE__);
+				}
+			}
 			return;
 		} elseif ($device === 'living_zwave_temp') {
-			$raw = getCache('livingtemps');
-			$livingtemps = $raw ? json_decode($raw, true) : [];
-			$livingtemps[]=$status;
-			$livingtemps=array_slice($livingtemps,-4);
-			$data=json_encode($livingtemps,JSON_NUMERIC_CHECK);
-			$temp=round(array_sum($livingtemps)/count($livingtemps),2);
-			lg('livingtemps='.$data.'=>'.$temp);
-			if ($temp!=$d['living_temp']->s) store('living_temp',$temp);
+			$temp=$status;
+			$d['living_zwave_temp']=$temp;
+			if(isset($d['living_zigbee_temp'])) {
+				$temp=round(($temp+$d['living_zigbee_temp'])/2,2);
+				if ($temp!=$d['living_temp']->s) {
+					$diff = abs($temp-$d['living_temp']->s);
+					if($diff<=2) store('living_temp',$temp,basename(__FILE__).':'.__LINE__);
+				}
+			}
 			return;
 		} elseif (isset($validDevices[$device])) {
 //			$d['time']=$time;

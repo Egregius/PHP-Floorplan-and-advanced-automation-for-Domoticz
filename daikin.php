@@ -149,7 +149,7 @@ new Chart(document.getElementById('chart1'), {
             {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
             {label:'Set', data:set, backgroundColor:'orange', borderColor:'orange', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
             {label:'Setpoint', data:setRounded, backgroundColor:'orange', borderColor:'orange', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
-            {label:'Target', data:livingTarget, backgroundColor:'green', borderColor:'green', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
+            {label:'Target', data:livingTarget, backgroundColor:'green', borderColor:'green', fill:false, tension:0.2, pointRadius:0,borderWidth:12},
         ]
     },
     options:{
