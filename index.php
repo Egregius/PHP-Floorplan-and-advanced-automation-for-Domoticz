@@ -233,7 +233,7 @@
 					</div>
 				</div>
 				<div id="playlist" class="abs"></div>
-				<div id="info"><?php // echo $ip.' '.$udevice.' '.$scale; ?></div>
+				<div id="info"></div>
 			</div>
 
 			<div id="floorplanothers" class="view">
@@ -262,8 +262,9 @@
 					<div class="abs z2" id="log"></div>
 				</div>
 				<div class="fix" id="mediasidebar">
-					<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48" alt="Films"><br>Films</a><br><br>
-					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48" alt="Series"><br>Series</a><br><br>
+					<!--<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48" alt="Films"><br>Films</a><br><br>
+					<a href="javascript:navigator_Go('https://films.egregius.be/series.php');"><img src="/images/kodi.png" class="i48" alt="Series"><br>Series</a><br><br>-->
+					<br><br><br><br><br><br><br><br>
 					<a href="javascript:navigator_Go('kodicontrol.php');"><img src="/images/kodi.png" class="i48" alt="Kodi Control"><br>Kodi<br>Control</a><br><br>
 					<a href="javascript:navigator_Go('kodi.php');"><img src="/images/kodi.png" class="i48" alt="Kodi"><br>Kodi</a><br><br>
 				</div>

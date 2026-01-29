@@ -7,7 +7,7 @@ foreach (array('living','kamer','alex') as $k) {
     if (${'dif'.$k} < 0) $totalmin += -${'dif'.$k} * $weight[$k];
 }
 $trend=$d['living_temp']->i;
-if($trend>=0) $maxpow=40;
+if($trend>0.15) $maxpow=40;
 else {
 	$maxpow = 40;
 	if ($d['weg']->s > 0)            $maxpow = 40;
