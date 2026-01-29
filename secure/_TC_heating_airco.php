@@ -70,7 +70,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target+1);
 			}
-			if ($time>strtotime('19:00') && $d['media']->s=='On') $fan='B';
+			if ($time>strtotime('18:30') && $d['media']->s=='On') $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             $setrounded = clamp(ceil($set*2)/2,10,28);
@@ -83,7 +83,7 @@ foreach (array('living','kamer','alex') as $k) {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				//lg($msg);
-				publishmqtt('d/i',date("G:i:s").' ・ '.number_format($setrounded,1,',','').' ・ '.number_format($set,2,',','').' ・ '.number_format(($diffac + $trendfac),3,',','').' ・ '.round($factor,3).' ・ '.$maxpow);
+				publishmqtt('d/i',date("G:i:s").'|'.number_format($setrounded,1,',','').'|'.number_format($set,2,',','').'|'.number_format(($diffac + $trendfac),3,',','').'|'.round($factor,3).'|'.$maxpow.' '. $fan);
 				$prevmsg=$msg;
 				unset($line);
 			}

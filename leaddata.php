@@ -14,6 +14,17 @@ $modes=[
 ];
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
+if (isset($_GET['mode']) && in_array($_GET['mode'], ['1','2','3'], true)) {
+    $mode = $_GET['mode'];
+    foreach (['jsonLiving', 'jsonBath'] as $var) {
+        $data = json_decode($$var, true);
+        if (is_array($data) && isset($data[$mode])) {
+            $$var = json_encode([
+                $mode => $data[$mode]
+            ]);
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -27,6 +38,12 @@ $jsonLiving = readJsonFile($pathLiving);
 </head>
 <body>
 <div class="container-fluid">
+	<div class="mx-auto" style="width: 360;">
+		<a href="leaddata.php" class="btn btn-warning px-5">All</a>&nbsp;
+		<a href="leaddata.php?mode=1" class="btn btn-warning px-4">Airco</a>&nbsp;
+		<a href="leaddata.php?mode=2" class="btn btn-warning px-4">Airco + gas</a>&nbsp;
+		<!-- <a href="leaddata.php?mode=3">Gas</a> -->
+	</div>
     <div class="row g-5">
     	<div class="col-12 col-xl-6">
             <div class="card h-100">
