@@ -96,9 +96,9 @@ if ($d['bose101']->s=='On'
 }
 if ($d['weg']->s==0&&$d['auto']->s=='On') {
 	if ($d['nas']->s=='Off') {
-		$kodi=substr($d['kodi_last_action']->s,0,5);
-		if ($d['lgtv']->s=='On'||in_array($kodi,['GUI.O','windo'])) {
-			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+		$kodi_last_action=explode('-',$d['kodi_last_action']->s);
+		if ($d['lgtv']->s=='On'||in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','window_Beginscherm'])) {
+			$kodi=@json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping"}', false, $ctx), true);
 			if (isset($kodi['result'])) {
 				lg('Waking NAS for Kodi...');
 				shell_exec('/var/www/html/secure/wakenas.sh &');
@@ -107,12 +107,64 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 			if (past('lgtv')>=20&&past('lgtv')<=30) hassinput('media_player','select_source','media_player.lgtv','HDMI 4');
 		}
 		if (past('pirhall')<300) {
-			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping","id":1}', false, $ctx), true);
+			$kodi=@json_decode(@file_get_contents($kodiurl2.'/jsonrpc?request={"jsonrpc":"2.0","id":"1","method":"JSONRPC.Ping"}', false, $ctx), true);
 			if (isset($kodi['result'])) {
 				lg('Waking NAS for Kodi 2...');
 				shell_exec('/var/www/html/secure/wakenas.sh &');
 				unset($kodi);
 			}
+		}
+	} elseif ($d['nas']->s=='On') {
+		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-14400) {
+			$kodi_last_action=explode('-',$d['kodi_last_action']->s);
+			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
+				$lastlibraryupdate=$time;
+				$payload = json_encode([
+					"jsonrpc" => "2.0",
+					"id" => 1,
+					"method" => "VideoLibrary.Scan",
+					"params"=>[
+						"showdialogs" => false
+					]
+				]);
+				$opts = [
+					'http' => [
+						'method'  => 'POST',
+						'header'  => "Content-Type: application/json\r\n",
+						'content' => $payload,
+						'timeout' => 5
+					]
+				];
+				$ctx = stream_context_create($opts);
+				$result = file_get_contents($kodiurl.'/jsonrpc', false, $ctx);
+				lg('Kodi VideoLibrary.Scan '.$result);
+			}
+		}
+		if ((!isset($lastlibraryclean)||$lastlibraryclean<$time-90)&&$lastlibraryupdate<$time-90) {
+			$kodi_last_action=explode('-',$d['kodi_last_action']->s);
+			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
+				$lastlibraryclean=$time;
+				$payload = json_encode([
+					"jsonrpc" => "2.0",
+					"id" => 1,
+					"method" => "VideoLibrary.Clean",
+					"params"=>[
+						"showdialogs" => false
+					]
+				]);
+				$opts = [
+					'http' => [
+						'method'  => 'POST',
+						'header'  => "Content-Type: application/json\r\n",
+						'content' => $payload,
+						'timeout' => 60
+					]
+				];
+				$ctx = stream_context_create($opts);
+				$result = file_get_contents($kodiurl.'/jsonrpc', false, $ctx);
+				lg('Kodi VideoLibrary.Clean '.$result);
+			}
+
 		}
 	}
 }
