@@ -114,57 +114,24 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 				unset($kodi);
 			}
 		}
-	} elseif ($d['nas']->s=='On') {
-		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-14400) {
-			$kodi_last_action=explode('-',$d['kodi_last_action']->s);
+	} elseif ($d['nas']->s=='On'&&$d['nvidia']->m=='Kodi'&&past('nas')>90) {
+		$kodi_last_action=explode('-',$d['kodi_last_action']->s);
+		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-72000) {
 			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
 				$lastlibraryupdate=$time;
-				$payload = json_encode([
-					"jsonrpc" => "2.0",
-					"id" => 1,
-					"method" => "VideoLibrary.Scan",
-					"params"=>[
-						"showdialogs" => false
-					]
-				]);
-				$opts = [
-					'http' => [
-						'method'  => 'POST',
-						'header'  => "Content-Type: application/json\r\n",
-						'content' => $payload,
-						'timeout' => 5
-					]
-				];
-				$ctx = stream_context_create($opts);
-				$result = file_get_contents($kodiurl.'/jsonrpc', false, $ctx);
-				lg('Kodi VideoLibrary.Scan '.$result);
+				kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
 			}
 		}
-		if ((!isset($lastlibraryclean)||$lastlibraryclean<$time-90)&&$lastlibraryupdate<$time-90) {
-			$kodi_last_action=explode('-',$d['kodi_last_action']->s);
-			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
-				$lastlibraryclean=$time;
-				$payload = json_encode([
-					"jsonrpc" => "2.0",
-					"id" => 1,
-					"method" => "VideoLibrary.Clean",
-					"params"=>[
-						"showdialogs" => false
-					]
-				]);
-				$opts = [
-					'http' => [
-						'method'  => 'POST',
-						'header'  => "Content-Type: application/json\r\n",
-						'content' => $payload,
-						'timeout' => 60
-					]
-				];
-				$ctx = stream_context_create($opts);
-				$result = file_get_contents($kodiurl.'/jsonrpc', false, $ctx);
-				lg('Kodi VideoLibrary.Clean '.$result);
-			}
-
+		if (
+			(!isset($lastlibraryclean) || $lastlibraryclean < $time - 72000)
+			&& isset($lastlibraryupdate)
+			&& $lastlibraryupdate < $time - 60
+			&& ($d['kodi_last_action']->t < $lastlibraryupdate || $kodi_last_action[0]=='GUI.OnScreensaverActivated')
+		) {
+			$lastlibraryclean=$time;
+			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
 		}
 	}
 }

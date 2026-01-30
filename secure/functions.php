@@ -604,15 +604,16 @@ function toJsonClean(object $obj): string {
     return json_encode($filtered, JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 }
 function kodi($json) {
-	global $kodiurl;
-	$ch=curl_init($kodiurl.'/jsonrpc');
-	curl_setopt($ch, CURLOPT_POST, 1);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-	$result=curl_exec($ch);
-	curl_close($ch);
-	return $result;
+    global $kodiurl;
+    $ch = curl_init($kodiurl.'/jsonrpc');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return $result;
 }
 function ping($ip) {
     if (!filter_var($ip, FILTER_VALIDATE_IP)) {
