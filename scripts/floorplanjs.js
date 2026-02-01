@@ -1099,12 +1099,114 @@ function setThermostatTemp(t,o){ajaxcontrol(t,"setpoint",o),setView('floorplanhe
 function setRollerLevel(e,l){ajaxcontrol(e,"roller",l),setView('floorplanheating')}
 function setDimmerLevel(e,i){ajaxcontrol(e,"dimmer",i),setView('floorplan')}
 function initDimmerSlider(e){
-	const t=getElem("sliderTrack"),
-	n=getElem("sliderThumb"),
-	o=getElem("sliderFill"),
-	s=getElem("dimmerValue")
-	if(!t)return
-	let i=!1,d=parseInt(sessionStorage.getItem(e))||0,c=null;function r(e){const t=Math.round(e);return s&&(0===t?(s.textContent="Uit",s.classList.add("off")):(s.textContent=t+"%",s.classList.remove("off"))),document.querySelectorAll(".level-btn").forEach((e=>{const n=parseInt(e.dataset.level);e.classList.remove("active","below"),n===t?e.classList.add("active"):n<t&&e.classList.add("below")})),d=t,t}function l(t){window.dimmerLocked[e]=!0,ajaxcontrol(e,"dimmer",t),sessionStorage.setItem(e,t)}function a(e){e.cancelable&&e.preventDefault();const s=t.getBoundingClientRect(),d=(e.clientX||(e.touches&&e.touches[0]?e.touches[0].clientX:null))-s.left;if(null===d)return;const a=Math.max(0,Math.min(100,d/s.width*100)),u=(m=a)<=50?m/50*25:25+(m-50)/50*75;var m;const v=r(Math.round(u));return o.style.width=a+"%",n.style.left=a+"%",i&&(c&&clearTimeout(c),c=setTimeout((()=>l(v)),250)),v}function u(t){i=!0,window.dimmerLocked[e]=!0,n.style.cursor="grabbing"}function m(){i&&(i=!1,n.style.cursor="grab",c&&clearTimeout(c),l(d),setTimeout((()=>{window.dimmerLocked[e]=!1}),1e3))}n.addEventListener("mousedown",u),document.addEventListener("mousemove",(e=>{i&&a(e)})),document.addEventListener("mouseup",m),n.addEventListener("touchstart",(e=>{e.preventDefault(),u()}),{passive:!1}),document.addEventListener("touchmove",(e=>{i&&(e.preventDefault(),a(e))}),{passive:!1}),document.addEventListener("touchend",(e=>{i&&(e.preventDefault(),m())}),{passive:!1}),document.addEventListener("touchcancel",(e=>{i&&(e.preventDefault(),m())}),{passive:!1}),t.addEventListener("click",(function(e){if(!i){l(a(e))}}))}
+/*	const t = getElem("sliderTrack"),
+	      n = getElem("sliderThumb"),
+	      o = getElem("sliderFill"),
+	      s = getElem("dimmerValue");
+*/	const t = document.getElementById("sliderTrack");
+	const n = document.getElementById("sliderThumb");
+	const o = document.getElementById("sliderFill");
+	const s = document.getElementById("dimmerValue");
+
+	if (!t || !n || !o) return;
+
+	let i = false; // dragging
+	let d = parseInt(sessionStorage.getItem(e)) || 0;
+	let c = null;
+
+	function getClientX(ev){
+		if (ev.touches && ev.touches.length) return ev.touches[0].clientX;
+		if (ev.changedTouches && ev.changedTouches.length) return ev.changedTouches[0].clientX;
+		return ev.clientX ?? null;
+	}
+
+	function r(val){
+		const t = Math.round(val);
+		if (s){
+			if (t === 0){
+				s.textContent = "Uit";
+				s.classList.add("off");
+			} else {
+				s.textContent = t + "%";
+				s.classList.remove("off");
+			}
+		}
+		document.querySelectorAll(".level-btn").forEach(btn=>{
+			const n = parseInt(btn.dataset.level);
+			btn.classList.remove("active","below");
+			if (n === t) btn.classList.add("active");
+			else if (n < t) btn.classList.add("below");
+		});
+		d = t;
+		return t;
+	}
+
+	function l(val){
+		window.dimmerLocked[e] = true;
+		ajaxcontrol(e,"dimmer",val);
+		sessionStorage.setItem(e,val);
+	}
+
+	function a(ev){
+		if (ev.cancelable) ev.preventDefault();
+
+		const rect = t.getBoundingClientRect();
+		const x = getClientX(ev);
+		if (x === null) return;
+
+		const pos = x - rect.left;
+		const pct = Math.max(0, Math.min(100, pos / rect.width * 100));
+
+		let m;
+		const u = (m = pct) <= 50
+			? m / 50 * 25
+			: 25 + (m - 50) / 50 * 75;
+
+		const v = r(Math.round(u));
+
+		o.style.width = pct + "%";
+		n.style.left  = pct + "%";
+
+		if (i){
+			if (c) clearTimeout(c);
+			c = setTimeout(()=>l(v),250);
+		}
+		return v;
+	}
+
+	function start(ev){
+		if (ev.cancelable) ev.preventDefault();
+		i = true;
+		window.dimmerLocked[e] = true;
+		n.style.cursor = "grabbing";
+		a(ev); // CRUCIAAL voor iOS
+	}
+
+	function end(){
+		if (!i) return;
+		i = false;
+		n.style.cursor = "grab";
+		if (c) clearTimeout(c);
+		l(d);
+		setTimeout(()=>{ window.dimmerLocked[e] = false; },1000);
+	}
+
+	// mouse
+	n.addEventListener("mousedown", start);
+	document.addEventListener("mousemove", ev=>{ if (i) a(ev); });
+	document.addEventListener("mouseup", end);
+
+	// touch (iOS!)
+	n.addEventListener("touchstart", start, { passive:false });
+	document.addEventListener("touchmove", ev=>{ if (i) a(ev); }, { passive:false });
+	document.addEventListener("touchend", end, { passive:false });
+	document.addEventListener("touchcancel", end, { passive:false });
+
+	// click on track
+	t.addEventListener("click", ev=>{
+		if (!i) l(a(ev));
+	});
+}
 function interp(c1, c2, f) {
     return Math.round(c1 + (c2 - c1) * f);
 }
