@@ -68,7 +68,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 			}
 		}
 		if (!empty($allData)) {
-			$avgMinPerDegBath = round(array_sum($allData) / count($allData), 2);
+			$avgMinPerDegBath = array_sum($allData) / count($allData);
 		}
 	}
 	$avgMinPerDegBath ??= 20;
@@ -104,7 +104,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 //	lg(print_r($leadDataBath,true));
 //	lg(print_r($temps,true));
 
-	if ($prevSetbath >= 1 && ($badkamer >= $target-0.2 || ($time >= $t_end-5 && $time <= $t_end+5))) {
+	if ($prevSetbath >= 1 && ($badkamer >= $target-0.2 || ($time >= $t_end-20 && $time <= $t_end+20 && $lastWriteleadDataBath < $time-43200))) {
 		$startTemp = $d['badkamer_start_temp']->s;
 		$tempRise    = $badkamer - $startTemp;
 		if ($tempRise>1&&$prevSetbath == 1) {

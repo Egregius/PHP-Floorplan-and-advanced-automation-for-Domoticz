@@ -106,7 +106,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			}
 		}
 		if (!empty($allData)) {
-			$avgMinPerDeg = round(array_sum($allData) / count($allData), 2);
+			$avgMinPerDeg = array_sum($allData) / count($allData);
 		}
 	}
 	$avgMinPerDeg ??= 14;
@@ -118,24 +118,23 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 	];
 	$comfortStart = [
 		1 => '13:00',// 13:00
-		2 => '16:05',// 16:05
-		3 => '12:15',// 12:15
-		4 => '16:05',// 16:05
-		5 => '15:05',// 15:05
+		2 => '16:00',// 16:00
+		3 => '12:10',// 12:10
+		4 => '16:00',// 16:00
+		5 => '15:00',// 15:00
 		6 => '08:00',// 8:00
 		0 => '08:00' // 8:00
 	];
 	if ($weekend==true) {
 		$comfortAfternoon = strtotime($comfortStart[0]);
-		$comfortEnd = strtotime('19:30');
 	} else {
 	 	if ($d['verlof']->s>0) $comfortAfternoon = strtotime($comfortStart[0]);
 		else {
 			$comfortAfternoon = strtotime($comfortStart[$dow]);
-//			$comfortAfternoon = strtotime('7:45');
 		}
-			$comfortEnd = strtotime('19:00');
 	}
+ 	$comfortEnd = strtotime('20:00');
+//	$comfortAfternoon = strtotime('7:45');
 	$target = 21;
 	$tempDelta   = max(0, $target - $living);
 	$leadMinutes = $avgMinPerDeg * $tempDelta;
