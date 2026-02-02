@@ -56,10 +56,10 @@ foreach (array('living','kamer','alex') as $k) {
             	$setrounded=$set;
             	$fan=7;
             } else {
-            	if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/3:abs($dif);
-            	elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/10:abs($dif);
-            	elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif):8;
-				else $factor=0.001;
+            	if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/2:abs($dif)/2;
+            	elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/20:abs($dif)/2;
+            	elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif)/2:10;
+				else $factor=0.0001;
             	$diffac = (-$dif / 50) * $factor;
 				$trendfac = (-$trend / 10) * $factor;
 
@@ -70,7 +70,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target+1);
 			}
-			if ($time>strtotime('18:30') && $d['media']->s=='On') $fan='B';
+			if ($time>strtotime('18:30') && $d['media']->s=='On'&&$dif>=-0.6) $fan='B';
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             $setrounded = clamp(ceil($set*2)/2,10,28);
@@ -107,10 +107,6 @@ foreach (array('living','kamer','alex') as $k) {
 				$daikin->$k->spmode= $spmode;
 				$daikin->$k->lastset=$time;
 				$daikin->$k->maxpow = $maxpow;
-				if ($k=='living'&&$daikin->$k->set!=$setrounded) {
-//					publishmqtt('d/i',"Daikin {$setrounded} om ".date("G:i"));
-					publishmqtt('d/l',"Daikin {$setrounded} om ".date("G:i:s"));
-				}
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
