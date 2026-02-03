@@ -90,8 +90,8 @@ td{text-align:right;}
         ?>
     </select> 	&nbsp; 	<a href="/daikin.php">Vandaag</a>
 </form>
-<canvas id="chart1" height="90"></canvas>
-<canvas id="chart2" height="60"></canvas>
+<canvas id="chart1" height="110"></canvas>
+<canvas id="chart2" height="75"></canvas>
 <div class="stats">
 <?php
 // Gemiddeld vermogen in kW
