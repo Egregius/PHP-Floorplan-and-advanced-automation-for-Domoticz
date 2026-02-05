@@ -32,6 +32,14 @@ $daikinrunning=$daikinpower>=1?true:false;
 //}
 $prevmsg??='';
 $msg='';
+$fanspeeds=[
+	2=>'B',
+	1=>3,
+	0=>4,
+	-1=>5,
+	-2=>6,
+	-3=>7
+];
 foreach (array('living','kamer','alex') as $k) {
     $set = $d[$k.'_set']->s;
     $target=$set;
@@ -54,7 +62,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$diffac=$trendfac=$factor=0;
             	$set=28;
             	$setrounded=$set;
-            	$fan=7;
+            	$fan=$fanspeeds[clamp(round($dif*10)-2,-3,2)];
             } else {
             	if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/2:abs($dif)/2;
             	elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/20:abs($dif)/2;
@@ -70,7 +78,9 @@ foreach (array('living','kamer','alex') as $k) {
 				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target+1);
 			}
-			if ($time>strtotime('18:30') && $d['media']->s=='On'&&$dif>=-0.6) $fan='B';
+			if ($time>strtotime('18:30') && $d['media']->s=='On') $fan=$fanspeeds[clamp(round($dif*10)+1,-3,2)];
+			else $fan=$fanspeeds[clamp(round($dif*10),-3,2)];
+
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             $setrounded = clamp(ceil($set*2)/2,10,28);

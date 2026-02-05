@@ -53,7 +53,8 @@ fclose($fh);
 
 // Basis arrays
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
-$livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
+$livingTarget = array_map(fn($d)=>$d['Living target']-0.05??0,$data);
+$livingTarget2 = array_map(fn($d)=>$d['Living target']+0.05??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
 $dif          = array_map(fn($d)=>$d['Living temp']-$d['Living target']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
@@ -102,7 +103,7 @@ $kWhPerDay = $avgPower * 24;
 // Gemiddelde temperatuur
 $avgTemp = array_sum($livingTemp)/count($livingTemp);
 // Gemiddelde target
-$avgTarget = array_sum($livingTarget)/count($livingTarget);
+$avgTarget = array_sum($livingTarget)/count($livingTarget)+0.05;
 
 // Score berekenen
 $score = $kWhPerDay + 2 * abs($avgTemp - $avgTarget);
@@ -110,7 +111,7 @@ $score = $kWhPerDay + 2 * abs($avgTemp - $avgTarget);
 
 	<table>
 		<tbody>
-			<tr><th>Target</th><td><?= number_format((array_sum($livingTarget)/count($livingTarget)),2,',','');?> °C</td><th>Set</th><td><?= number_format((array_sum($set)/count($set)),2,',','');?> °C</td></tr>
+			<tr><th>Target</th><td><?= number_format($avgTarget,2,',','');?> °C</td><th>Set</th><td><?= number_format((array_sum($set)/count($set)),2,',','');?> °C</td></tr>
 			<tr><th>Temperatuur</th><td><?= number_format((array_sum($livingTemp)/count($livingTemp)),2,',','');?> °C</td><th>SetRouned</th><td><?= number_format((array_sum($setRounded)/count($setRounded)),2,',','');?> °C</td></tr>
 			<tr><th>Max temperatuur</th><td><?= number_format(max($livingTemp),1,',','');?> °C</td><th>Vermogen</th><td><?= number_format((array_sum($daikinpower)/count($daikinpower)),0,',','');?> W</td></tr>
 			<tr><th>Min temperatuur</th><td><?= number_format(min($livingTemp),1,',','');?> °C</td><th>Tijd aan</th><td><?= number_format(count(array_filter($daikinpower, fn($v) => $v > 50))/3,1,',','');?> min</td></tr>
@@ -140,6 +141,7 @@ const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const livingTarget = <?php echo json_encode($livingTarget); ?>;
+const livingTarget2 = <?php echo json_encode($livingTarget2); ?>;
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
     type:'line',
@@ -149,7 +151,8 @@ new Chart(document.getElementById('chart1'), {
             {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
             {label:'Set', data:set, backgroundColor:'orange', borderColor:'orange', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
             {label:'Setpoint', data:setRounded, backgroundColor:'orange', borderColor:'orange', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
-            {label:'Target', data:livingTarget, backgroundColor:'green', borderColor:'green', fill:false, tension:0.2, pointRadius:0,borderWidth:12},
+            {label:'Target', data:livingTarget, backgroundColor:'#66FF66', borderColor:'#66FF66', fill:false, tension:0.2, pointRadius:0,borderWidth:20},
+            {label:'Target2', data:livingTarget2, backgroundColor:'#66FF66', borderColor:'#66FF66', fill:false, tension:0.2, pointRadius:0,borderWidth:20},
         ]
     },
     options:{
@@ -162,7 +165,11 @@ new Chart(document.getElementById('chart1'), {
         plugins: {
             legend: {
                 display: false
-            }
+            },
+            tooltip: {
+			// Tooltip will only receive click events
+			events: ['click']
+		  }
         },
 		scales: {
 			y: {

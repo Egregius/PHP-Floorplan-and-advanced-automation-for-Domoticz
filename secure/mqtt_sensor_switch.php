@@ -47,8 +47,8 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			if (($time - LOOP_START) <= 2) return;
 //			$d['time']=$time;
 			$status = ucfirst(strtolower(trim($status, '"')));
-			if (isset($lastEvent) && ($d['time'] - $lastEvent) < 1) return;
-			$lastEvent = $d['time'];
+			if (isset($lastEvent) && (microtime(true) - $lastEvent) < 0.4) return;
+			$lastEvent = microtime(true);
 			$d=fetchdata();
 			if (str_starts_with($device,'8')) {
 				if ($status === 'Keypressed') {
@@ -76,7 +76,6 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
-	lg($topic.'='.$status);
 	try {
 		$path = explode('/', $topic);
 		$device = $path[2];
