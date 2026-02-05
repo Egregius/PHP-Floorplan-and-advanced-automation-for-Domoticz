@@ -53,8 +53,7 @@ fclose($fh);
 
 // Basis arrays
 $labels = array_map(fn($d)=>$d['timestamp']??'', $data);
-$livingTarget = array_map(fn($d)=>$d['Living target']-0.05??0,$data);
-$livingTarget2 = array_map(fn($d)=>$d['Living target']+0.05??0,$data);
+$livingTarget = array_map(fn($d)=>$d['Living target']??0,$data);
 $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
 $dif          = array_map(fn($d)=>$d['Living temp']-$d['Living target']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
@@ -92,7 +91,7 @@ td{text-align:right;}
     </select> 	&nbsp; 	<a href="/daikin.php">Vandaag</a>
 </form>
 <canvas id="chart1" height="110"></canvas>
-<canvas id="chart2" height="75"></canvas>
+<canvas id="chart2" height="65"></canvas>
 <div class="stats">
 <?php
 // Gemiddeld vermogen in kW
@@ -141,25 +140,43 @@ const livingTemp   = <?php echo json_encode($livingTemp); ?>;
 const set          = <?php echo json_encode($set); ?>;
 const setRounded   = <?php echo json_encode($setRounded); ?>;
 const livingTarget = <?php echo json_encode($livingTarget); ?>;
-const livingTarget2 = <?php echo json_encode($livingTarget2); ?>;
+const targetUpper = livingTarget.map(v => v + 0.125);
+const targetLower = livingTarget.map(v => v - 0.125);
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
 new Chart(document.getElementById('chart1'), {
     type:'line',
     data:{
         labels:labels,
         datasets:[
-            {label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
+    		{label:'Temperature', data:livingTemp, backgroundColor:'red', borderColor:'red', fill:false, tension:0.2, pointRadius:0,borderWidth:8},
             {label:'Set', data:set, backgroundColor:'orange', borderColor:'orange', borderDash:[4,4], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
             {label:'Setpoint', data:setRounded, backgroundColor:'orange', borderColor:'orange', /*borderDash:[1,1], */fill:false, tension:0.2, pointRadius:0,borderWidth:6},
-            {label:'Target', data:livingTarget, backgroundColor:'#66FF66', borderColor:'#66FF66', fill:false, tension:0.2, pointRadius:0,borderWidth:20},
-            {label:'Target2', data:livingTarget2, backgroundColor:'#66FF66', borderColor:'#66FF66', fill:false, tension:0.2, pointRadius:0,borderWidth:20},
+			{
+				label: 'Target upper',
+				data: targetUpper,
+				borderColor: 'rgba(144,238,144,1)',
+				borderWidth:3,
+				backgroundColor: 'rgba(144,238,144,0.5)',
+				pointRadius: 0,
+				fill: '+1'
+			},
+			{
+				label: 'Target lower',
+				data: targetLower,
+				borderColor: 'rgba(144,238,144,1)',
+				borderWidth:3,
+				pointRadius: 0,
+				fill: false
+			},
+            {label:'Target', data:livingTarget, backgroundColor:'#90EE90', borderColor:'#90EE90', fill:false, tension:0.2, pointRadius:0,borderWidth:0},
+
         ]
     },
     options:{
         responsive: true,
         animation: false,
         interaction: {
-            mode: 'index',
+            mode: 'nearest',
             intersect: false
         },
         plugins: {
@@ -167,14 +184,27 @@ new Chart(document.getElementById('chart1'), {
                 display: false
             },
             tooltip: {
-			// Tooltip will only receive click events
-			events: ['click']
-		  }
+				displayColors: false,
+				filter: ctx =>
+			        !['Target upper', 'Target lower'].includes(ctx.dataset.label)
+			}
         },
 		scales: {
 			y: {
-				min: 17,
-				max: 22
+				min: 18,
+				max: 22,
+				grid: {
+					color: 'rgba(0,0,0,0.05)'
+				}
+			},
+			x: {
+				ticks: {
+					autoSkip: true,
+					maxTicksLimit: 8
+				},
+				grid: {
+					display: false
+				}
 			}
 		}
 
@@ -231,8 +261,27 @@ new Chart(ctx, {
         plugins: {
             legend: {
                 display: false
-            }
-        }
+            },
+            tooltip: {
+				displayColors: false
+			}
+        },
+        scales: {
+			y: {
+				grid: {
+					color: 'rgba(0,0,0,0.05)'
+				}
+			},
+			x: {
+				ticks: {
+					autoSkip: true,
+					maxTicksLimit: 8
+				},
+				grid: {
+					display: false
+				}
+			}
+		}
     }
 });
 <?php

@@ -841,6 +841,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 	global $d, $time, $lastfetch,$daikin,$spm;
 	static $prevspmode=null;
 	static $prevmaxpow=null;
+	static $prevmsg=null;
 	$lastfetch = $time;
 	$ips = [
 		'living' => 161,
@@ -879,7 +880,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 		}
 		$prevmaxpow=$maxpow;
 	}
-	lg($msg);
+	if($prevmsg!==$msg)lg($msg);
 	return true;
 }
 function hasstoken() {

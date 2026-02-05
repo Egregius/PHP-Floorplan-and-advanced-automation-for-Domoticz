@@ -54,9 +54,11 @@ foreach (array('living','kamer','alex') as $k) {
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
             if ($prevSet==1||($d['weg']->s==0&&$d['living_set']->m==1&&$dif<=-0.4)) {
-            	if($dif>=-0.2) $maxpow=70;
-            	elseif($dif>=-0.4) $maxpow=80;
-            	elseif($dif>=-0.6) $maxpow=90;
+            	if($dif>=-0.3) $maxpow=50;
+            	elseif($dif>=-0.6) $maxpow=60;
+            	elseif($dif>=-0.8) $maxpow=70;
+            	elseif($dif>=-1) $maxpow=80;
+            	elseif($dif>=-1.2) $maxpow=90;
             	else $maxpow=100;
             	$spmode=1;
             	$diffac=$trendfac=$factor=0;
