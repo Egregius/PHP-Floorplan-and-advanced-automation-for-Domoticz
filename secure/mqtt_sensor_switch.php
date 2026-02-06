@@ -93,13 +93,13 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 				if ($status=='On') $status='Open';
 				elseif ($status=='Off') $status='Closed';
 				else unset($status);
-			} elseif ($device=='pirgarage') {
+			} /*elseif ($device=='pirgarage') {
 				if ($status=='Off'&&$d['pirgarage2']->s=='On') $status='On';
 			} elseif ($device=='pirgarage2') {
 				if($d[$device]->s!=$status) store($device, $status);
 				if ($status=='Off'&&$d['pirgarage']->s=='On') $status='On';
 				$device='pirgarage';
-			}
+			}*/
 			if (isset($status)&&$d[$device]->s!=$status) {
 				include '/var/www/html/secure/pass2php/' . $device . '.php';
 				store($device, $status);
