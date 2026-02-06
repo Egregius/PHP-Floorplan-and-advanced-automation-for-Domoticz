@@ -256,8 +256,9 @@
 						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b3">Google myMaps</button>
 						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b3">Garmin GPX</button>
 						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b3">Garmin Badges</button>
-						<button class="btn b2" id="verlof" onclick="verlof();">Verlof</button>
-						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b2">Weegschaal</button>
+						<button class="btn b3" id="verlof" onclick="verlof();">Verlof</button>
+						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3"">Weegschaal</button>
+						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
 					</div>
 					<div class="abs z2" id="log"></div>
 				</div>
