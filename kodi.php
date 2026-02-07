@@ -105,12 +105,12 @@ if (isset($current['result']['item']['file'])) {
 		$item=$current['result']['item'];
 	//	echo '<pre>';print_r($current);echo '</pre>';
 		//print_r($item);
+		apcu_store('test','ok');
+		echo apcu_fetch('test');
 		if ($item['episode']>0) {
-			$imdbdb = new PDO("mysql:host=192.168.2.20;dbname=imdb;charset=utf8mb4",'kodi','kodi',[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_EMULATE_PREPARES=>false,PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false]);
-			$trakt = $imdbdb->query("SELECT trakt_id FROM `collection_shows` WHERE imdb_id='".$item['imdbnumber']."'")->fetchAll(PDO::FETCH_COLUMN);
-			if(isset($trakt['trakt_id'])) echo '
-				<a href="https://trakt.tv/shows/'.$trakt['trakt_id'].'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
-			else echo '
+			echo '
+				<a href="https://trakt.tv/shows/'.$item['showtitle'].'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
+			echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 			echo '
 				<h1>'.$item['label'].'</h1>';
