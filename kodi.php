@@ -75,7 +75,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www
 	<link rel="icon" sizes="192x192" href="images/kodi.png">
 	<meta name="mobile-web-app-capable" content="yes">
 	<script type="text/javascript">
-		setTimeout(\'window.location.href=window.location.href;\', 14950);
+		setTimeout(\'window.location.href=window.location.href;\', 114950);
 		function navigator_Go(url) {window.location.assign(url);}
 		function exec(cmd, action=""){
 			$.post("kodi.php",
@@ -105,12 +105,27 @@ if (isset($current['result']['item']['file'])) {
 		$item=$current['result']['item'];
 	//	echo '<pre>';print_r($current);echo '</pre>';
 		//print_r($item);
-		apcu_store('test','ok');
-		echo apcu_fetch('test');
 		if ($item['episode']>0) {
-			echo '
+			echo getTraktUrl($item['imdbnumber'], 'tmdb');
+//			$url=apcu_fetch('url'.$item['imdbnumber']);
+//			if(!$url) {
+/*				$kodidb = new PDO(
+					"mysql:host=192.168.2.20;dbname=FilmsKodi131;charset=utf8mb4",
+					'kodi',
+					'kodi',
+					[
+						PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
+						PDO::ATTR_EMULATE_PREPARES=>false,
+						PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false
+					]
+				);
+				$url=traktUrlFromKodi($kodidb,$item['imdbnumber'],'episode');*/
+//			}
+			if($url) {
+				apcu_store('url'.$item['imdbnumber'],$url);
+				echo '
 				<a href="https://trakt.tv/shows/'.$item['showtitle'].'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
-			echo '
+			} else echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 			echo '
 				<h1>'.$item['label'].'</h1>';
@@ -274,4 +289,27 @@ function langu($lang) {
 	default: $taal=$lang;
 	}
 	return $taal;
+}
+function getTraktUrl($id, $idType = 'tvdb') {
+    // Trakt ondersteunt directe redirects via hun search pad
+    //return "https://trakt.tv/search/" . urlencode($idType) . "?query=" . urlencode($id);
+
+    $apiUrl = "https://api.trakt.tv/search/{$source}/{$showId}?type=show";
+    $ch = curl_init($apiUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'trakt-api-version: 2',
+            "trakt-api-key: {$clientId}",
+            'User-Agent: KodiTraktLinker/1.0'
+        ],
+        CURLOPT_TIMEOUT => 10,
+    ]);
+    $json = curl_exec($ch);
+    curl_close($ch);
+    echo $json;
+    $data = json_decode($json, true);
+
+
 }
