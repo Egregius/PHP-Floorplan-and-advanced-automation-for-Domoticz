@@ -106,12 +106,20 @@ if (isset($current['result']['item']['file'])) {
 	//	echo '<pre>';print_r($current);echo '</pre>';
 		//print_r($item);
 		if ($item['episode']>0) {
-			echo '
+			$imdbdb = new PDO("mysql:host=192.168.2.20;dbname=imdb;charset=utf8mb4",'kodi','kodi',[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_EMULATE_PREPARES=>false,PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false]);
+			$trakt = $imdbdb->query("SELECT trakt_id FROM `collection_shows` WHERE imdb_id='".$item['imdbnumber']."'")->fetchAll(PDO::FETCH_COLUMN);
+			if(isset($trakt['trakt_id'])) echo '
+				<a href="https://trakt.tv/shows/'.$trakt['trakt_id'].'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
+			else echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 			echo '
 				<h1>'.$item['label'].'</h1>';
 		} else {
-			echo '
+			$imdbdb = new PDO("mysql:host=192.168.2.20;dbname=imdb;charset=utf8mb4",'kodi','kodi',[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_EMULATE_PREPARES=>false,PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false]);
+			$trakt = $imdbdb->query("SELECT trakt_id FROM `collection_movies` WHERE imdb_id='".$item['imdbnumber']."'")->fetchAll(PDO::FETCH_COLUMN);
+			if(isset($trakt['trakt_id'])) echo '
+				<a href="https://trakt.tv/movies/'.$trakt['trakt_id'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
+			else echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
 		}
 		$properties=json_decode(@file_get_contents($kodiurl.'/jsonrpc?request={"jsonrpc":"2.0","method":"Player.GetProperties","id":1,"params":{"playerid":1,"properties":["playlistid","speed","position","totaltime","time","audiostreams","currentaudiostream","subtitleenabled","subtitles","currentsubtitle"]}}', false, $ctx), true);
