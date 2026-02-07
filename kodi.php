@@ -103,37 +103,26 @@ if (isset($current['result']['item']['file'])) {
 		echo '
 			<div class="title">';
 		$item=$current['result']['item'];
-	//	echo '<pre>';print_r($current);echo '</pre>';
-		//print_r($item);
 		if ($item['episode']>0) {
-			echo getTraktUrl($item['imdbnumber'], 'tmdb');
-//			$url=apcu_fetch('url'.$item['imdbnumber']);
-//			if(!$url) {
-/*				$kodidb = new PDO(
-					"mysql:host=192.168.2.20;dbname=FilmsKodi131;charset=utf8mb4",
-					'kodi',
-					'kodi',
-					[
-						PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
-						PDO::ATTR_EMULATE_PREPARES=>false,
-						PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false
-					]
-				);
-				$url=traktUrlFromKodi($kodidb,$item['imdbnumber'],'episode');*/
-//			}
-			if($url) {
-				apcu_store('url'.$item['imdbnumber'],$url);
-				echo '
-				<a href="https://trakt.tv/shows/'.$item['showtitle'].'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
+			$slug = apcu_fetch('slug'.$item['imdbnumber'], $success);
+			if (!$success) {
+				$slug = getTraktslug($item['imdbnumber'], 'episode');
+				apcu_store('slug'.$item['imdbnumber'], $slug);
+			}
+			if($slug) {echo '
+				<a href="https://trakt.tv/shows/'.$slug.'/seasons/'.$item['season'].'/episodes/'.$item['episode'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 			} else echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['showtitle'].' S '.$item['season'].' E '.$item['episode'].'</h1></a>';
 			echo '
 				<h1>'.$item['label'].'</h1>';
 		} else {
-			$imdbdb = new PDO("mysql:host=192.168.2.20;dbname=imdb;charset=utf8mb4",'kodi','kodi',[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_EMULATE_PREPARES=>false,PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>false]);
-			$trakt = $imdbdb->query("SELECT trakt_id FROM `collection_movies` WHERE imdb_id='".$item['imdbnumber']."'")->fetchAll(PDO::FETCH_COLUMN);
-			if(isset($trakt['trakt_id'])) echo '
-				<a href="https://trakt.tv/movies/'.$trakt['trakt_id'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
+			$slug = apcu_fetch('slug'.$item['imdbnumber'], $success);
+			if (!$success) {
+				$slug = getTraktslug($item['imdbnumber'], 'movie');
+				apcu_store('slug'.$item['imdbnumber'], $slug);
+			}
+			if($slug)  echo '
+				<a href="https://trakt.tv/movies/'.$slug.'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
 			else echo '
 				<a href="http://www.imdb.com/title/'.$item['imdbnumber'].'" style="color:#f5b324"><h1>'.$item['label'].'</h1></a>';
 		}
@@ -290,26 +279,28 @@ function langu($lang) {
 	}
 	return $taal;
 }
-function getTraktUrl($id, $idType = 'tvdb') {
-    // Trakt ondersteunt directe redirects via hun search pad
-    //return "https://trakt.tv/search/" . urlencode($idType) . "?query=" . urlencode($id);
-
-    $apiUrl = "https://api.trakt.tv/search/{$source}/{$showId}?type=show";
+function getTraktslug($id, $idType = 'episode') {
+	$source = str_starts_with($id, 'tt') ? 'imdb' : 'tmdb';
+    $apiUrl = "https://api.trakt.tv/search/{$source}/{$id}?type={$idType}";
     $ch = curl_init($apiUrl);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             'Content-Type: application/json',
             'trakt-api-version: 2',
-            "trakt-api-key: {$clientId}",
+            "trakt-api-key: 9a379e25bb718a783dae03324c0e2f270de2187aa9ada1a7d84071b4ec86073b",
             'User-Agent: KodiTraktLinker/1.0'
         ],
         CURLOPT_TIMEOUT => 10,
     ]);
     $json = curl_exec($ch);
     curl_close($ch);
-    echo $json;
     $data = json_decode($json, true);
-
+    if($idType=='episode') $key='show';
+    else $key='movie';
+	if (!is_array($data) || empty($data[0][$key]['ids']['slug'])) {
+        return null;
+    }
+    return $data[0][$key]['ids']['slug'];
 
 }
