@@ -222,7 +222,11 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$minutesUsed=round($minutesUsed,1);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
-			telegram($msg.PHP_EOL.print_r($leadDataLiving,true));
+			$adjLiving=0;
+			foreach($leadDataLiving[$mode] as $k=>$v) {
+				$msg.=$k.'='.implode(',',$v).PHP_EOL;
+			}
+			telegram($msg);
 			unset($t_start);
 		}
 		storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);

@@ -59,6 +59,8 @@ $dif          = array_map(fn($d)=>$d['Living temp']-$d['Living target']??0,$data
 $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
 $daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
+$maxpow    = array_map(fn($d)=>$d['maxpow']*10??0,$data);
+$fan    = array_map(fn($d)=>$d['fan']*100??0,$data);
 
 ?>
 <!DOCTYPE html>
@@ -143,6 +145,8 @@ const livingTarget = <?php echo json_encode($livingTarget); ?>;
 const targetUpper = livingTarget.map(v => v + 0.125);
 const targetLower = livingTarget.map(v => v - 0.125);
 const daikinpower = <?php echo json_encode(array_values($daikinpower)); ?>;
+const maxpow = <?php echo json_encode(array_values($maxpow)); ?>;
+const fan = <?php echo json_encode(array_values($fan)); ?>;
 new Chart(document.getElementById('chart1'), {
     type:'line',
     data:{
@@ -216,6 +220,8 @@ new Chart(ctx, {
     data: {
         labels: labels,
         datasets: [
+            {label:'maxpow', data:maxpow, backgroundColor:'#00BFFF', borderColor:'#00BFFF', borderDash:[3,9], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
+            {label:'fan', data:fan, backgroundColor:'#FF1493', borderColor:'#FF1493', borderDash:[4,12], fill:false, tension:0.2, pointRadius:0,borderWidth:4},
              {
                 label: 'Power',
                 data: daikinpower,
@@ -248,7 +254,7 @@ new Chart(ctx, {
 					borderWidth: 0,
 					borderColor: 'red'
 				  }
-            }
+            },
         ]
     },
     options: {

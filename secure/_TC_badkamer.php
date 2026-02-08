@@ -125,7 +125,10 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 			$minutesUsed=round($minutesUsed,1);
 			$msg="_TC_bath: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDegBath} min/°C | buitenTempStart={$buitenTempStart})";
 			lg($msg);
-			telegram($msg.PHP_EOL.print_r($leadDataBath,true));
+			foreach($leadDataBath[$mode] as $k=>$v) {
+				$msg.=$k.'='.implode(',',$v).PHP_EOL;
+			}
+			telegram($msg);
 		}
 		storemode('badkamer_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
 		$prevSetbath=2;
