@@ -280,6 +280,7 @@ function langu($lang) {
 	return $taal;
 }
 function getTraktslug($id, $idType = 'episode') {
+	global $traktapikey;
 	$source = str_starts_with($id, 'tt') ? 'imdb' : 'tmdb';
     $apiUrl = "https://api.trakt.tv/search/{$source}/{$id}?type={$idType}";
     $ch = curl_init($apiUrl);
@@ -288,7 +289,7 @@ function getTraktslug($id, $idType = 'episode') {
         CURLOPT_HTTPHEADER => [
             'Content-Type: application/json',
             'trakt-api-version: 2',
-            "trakt-api-key: 9a379e25bb718a783dae03324c0e2f270de2187aa9ada1a7d84071b4ec86073b",
+            "trakt-api-key: {$traktapikey}",
             'User-Agent: KodiTraktLinker/1.0'
         ],
         CURLOPT_TIMEOUT => 10,
