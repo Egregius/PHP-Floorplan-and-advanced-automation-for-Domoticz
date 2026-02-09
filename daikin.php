@@ -58,10 +58,9 @@ $livingTemp   = array_map(fn($d)=>$d['Living temp']??0,$data);
 $dif          = array_map(fn($d)=>$d['Living temp']-$d['Living target']??0,$data);
 $set          = array_map(fn($d)=>$d['set']??0,$data);
 $setRounded   = array_map(fn($d)=>$d['setrounded']??0,$data);
-$daikinpower    = array_map(fn($d)=>$d['daikinpower'],$data);
-$maxpow    = array_map(fn($d)=>$d['maxpow']*10??0,$data);
-$fan    = array_map(fn($d)=>$d['fan']*100??0,$data);
-
+$daikinpower  = array_map(fn($d)=>$d['daikinpower'],$data);
+$maxpow    	  = array_map(fn($d)=>$d['maxpow']*10??0,$data);
+$fan = array_map(function($d){$val=$d['fan']??null;if($val==='B'){return 100;}return is_numeric($val)?$val*100:0;},$data);
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -269,7 +268,25 @@ new Chart(ctx, {
                 display: false
             },
             tooltip: {
-				displayColors: false
+				displayColors: false,
+				callbacks: {
+					label: function(context) {
+						let label = context.dataset.label || '';
+						let value = context.parsed.y;
+
+						if (label === 'fan') {
+							// Als de waarde exact 100 is, was het oorspronkelijk 'B'
+							if (value === 100) {
+								return label + ': B';
+							}
+							// Anders delen door 100 om de originele waarde te tonen
+							return label + ': ' + (value / 100);
+						}
+
+						// Voor Power en maxpow tonen we gewoon de standaard waarde
+						return label + ': ' + value;
+					}
+				}
 			}
         },
         scales: {
