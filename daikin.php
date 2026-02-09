@@ -66,7 +66,7 @@ $fan = array_map(function($d){$val=$d['fan']??null;if($val==='B'){return 100;}re
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Living Trend</title>
+<title>Daikin Living</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body {font-family:sans-serif; background:#FFF; margin:20px;color:#000;}
@@ -179,7 +179,7 @@ new Chart(document.getElementById('chart1'), {
         responsive: true,
         animation: false,
         interaction: {
-            mode: 'nearest',
+            mode: 'index',
             intersect: false
         },
         plugins: {
@@ -291,6 +291,8 @@ new Chart(ctx, {
         },
         scales: {
 			y: {
+				min: 0,
+				max: 1000,
 				grid: {
 					color: 'rgba(0,0,0,0.05)'
 				}

@@ -211,14 +211,12 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 							$diff = abs($avgTemp - $currentStoredTemp);
 							if ($diff <= 5) {
 								$logMsg = sprintf(
-									"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (Source: %s) [%s:%d]",
+									"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (%s)",
 									$room,
 									$valZigbee,
 									$valZwave,
 									$avgTemp,
-									$device,
-									basename(__FILE__),
-									__LINE__
+									$device
 								);
 								store($targetKey, $avgTemp, $logMsg);
 							}
