@@ -175,6 +175,28 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				}
 			}
 			return;
+		} elseif ($device === 'badkamer_zigbee_temp') {
+			$temp=$status;
+			$d['badkamer_zigbee_temp']=$temp;
+			if(isset($d['badkamer_zwave_temp'])) {
+				$temp=round(($temp+$d['badkamer_zwave_temp'])/2,2);
+				if ($temp!=$d['badkamer_temp']->s) {
+					$diff = abs($temp-$d['badkamer_temp']->s);
+					if($diff<=2) store('badkamer_temp',$temp,'badkamer_zigbee_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
+				}
+			}
+			return;
+		} elseif ($device === 'badkamer_zwave_temp') {
+			$temp=$status;
+			$d['badkamer_zwave_temp']=$temp;
+			if(isset($d['badkamer_zigbee_temp'])) {
+				$temp=round(($temp+$d['badkamer_zigbee_temp'])/2,2);
+				if ($temp!=$d['badkamer_temp']->s) {
+					$diff = abs($temp-$d['badkamer_temp']->s);
+					if($diff<=2) store('badkamer_temp',$temp,'badkamer_zwave_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
+				}
+			}
+			return;
 		} elseif (isset($validDevices[$device])) {
 //			$d['time']=$time;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;

@@ -838,50 +838,62 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	return FALSE;
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-	global $d, $time, $lastfetch,$daikin,$spm;
-	static $prevspmode=null;
-	static $prevmaxpow=null;
-	static $prevmsg=null;
-	$lastfetch = $time;
-	$ips = [
-		'living' => 161,
-		'kamer'  => 162,
-		'alex'	=> 163,
-	];
-	$base = "http://192.168.2.{$ips[$device]}";
-	$url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-	if(!http_get($url)) return false;
-	if ($d['heating']->s>=0) $msg="🔥 ";
-	else  $msg="❄️ ";
-	$msg.="daikinset [$device]	power=$power	| mode=$mode | set=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
-	if($prevspmode!==$spmode) {
-		$msg.=' + spmode';
-		usleep(100000);
-		if ($spmode===-1) {
-			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
-		} elseif ($spmode===0) {
-			if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
-		} elseif ($spmode===1) {
-			if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
-		} else return false;
-		$prevspmode=$spmode;
-	}
-	if($prevmaxpow!==$maxpow) {
-		$msg.=' + maxpow';
-		usleep(100000);
-		foreach($ips as $k=>$ip) {
-			if ($maxpow===100) {
-				$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=0&mode=0&max_pow=100&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
-			} else {
-				$url="http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=1&mode=0&max_pow=$maxpow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
-			}
-			if(!http_get($url)) return false;
-			usleep(50000);
-		}
-		$prevmaxpow=$maxpow;
-	}
-	if($prevmsg!==$msg)lg($msg);
-	return true;
+    global $d, $time, $lastfetch, $daikin, $spm;
+    static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
+
+    $lastfetch = $time;
+    $ips = [
+        'living' => 161,
+        'kamer'  => 162,
+        'alex'   => 163,
+    ];
+
+    $base = "http://192.168.2.{$ips[$device]}";
+    $url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
+
+    if(!http_get($url)) return false;
+
+    // Bepaal icoon op basis van heating status
+    $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
+    $msg .= "daikinset [$device] power=$power | mode=$mode | set=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
+
+    // 1. Special Mode check (per device)
+    if(($prevspmode[$device] ?? null) !== $spmode) {
+        $msg .= ' + spmode';
+        usleep(100000);
+        if ($spmode === -1) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
+        } elseif ($spmode === 0) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
+        } elseif ($spmode === 1) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
+        } else return false;
+        $prevspmode[$device] = $spmode;
+    }
+
+    // 2. Max Power check (globaal voor alle units)
+    // We gebruiken 'all' als key zodat dit maar 1x per loop-ronde gebeurt
+    if(($prevmaxpow['all'] ?? null) !== $maxpow) {
+        $msg .= ' + maxpow (all)';
+        usleep(100000);
+        foreach($ips as $name => $ip) {
+            $en_demand = ($maxpow === 100) ? 0 : 1;
+            $m_pow = $maxpow;
+            $url = "http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+
+            if(!http_get($url)) return false;
+            usleep(50000); // Korte pauze tussen units om netwerk/Daikin-stack niet te overbelasten
+        }
+        $prevmaxpow['all'] = $maxpow;
+    }
+
+    // 3. Logging check (per device)
+    if(($prevmsg[$device] ?? null) !== $msg) {
+        lg($msg);
+        $prevmsg[$device] = $msg;
+    }
+
+    return true;
 }
 function hasstoken() {
 	global $user;
