@@ -142,7 +142,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$status = round($status / 2) * 2;
 			}
 			if ((float)$d['dag']->s != $status) {
-				store('dag', $status);
+				store('dag', $status,basename(__FILE__).':'.__LINE__);
 				setCache('dag', $status);
 			}
 			stoploop($d);
@@ -150,53 +150,9 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status = round((int)$status / 5) * 5;
 			if ((int)$d['dag']->m != $status) {
-				storemode('dag', $status);
+				storemode('dag', $status,basename(__FILE__).':'.__LINE__);
 				updateWekker($t, $weekend, $dow, $d);
 			}
-		} elseif ($device === 'living_zigbee_temp') {
-			$temp=$status;
-			$d['living_zigbee_temp']=$temp;
-			if(isset($d['living_zwave_temp'])) {
-				$temp=round(($temp+$d['living_zwave_temp'])/2,2);
-				if ($temp!=$d['living_temp']->s) {
-					$diff = abs($temp-$d['living_temp']->s);
-					if($diff<=2) store('living_temp',$temp,'living_zigbee_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
-				}
-			}
-			return;
-		} elseif ($device === 'living_zwave_temp') {
-			$temp=$status;
-			$d['living_zwave_temp']=$temp;
-			if(isset($d['living_zigbee_temp'])) {
-				$temp=round(($temp+$d['living_zigbee_temp'])/2,2);
-				if ($temp!=$d['living_temp']->s) {
-					$diff = abs($temp-$d['living_temp']->s);
-					if($diff<=2) store('living_temp',$temp,'living_zwave_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
-				}
-			}
-			return;
-		} elseif ($device === 'badkamer_zigbee_temp') {
-			$temp=$status;
-			$d['badkamer_zigbee_temp']=$temp;
-			if(isset($d['badkamer_zwave_temp'])) {
-				$temp=round(($temp+$d['badkamer_zwave_temp'])/2,2);
-				if ($temp!=$d['badkamer_temp']->s) {
-					$diff = abs($temp-$d['badkamer_temp']->s);
-					if($diff<=2) store('badkamer_temp',$temp,'badkamer_zigbee_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
-				}
-			}
-			return;
-		} elseif ($device === 'badkamer_zwave_temp') {
-			$temp=$status;
-			$d['badkamer_zwave_temp']=$temp;
-			if(isset($d['badkamer_zigbee_temp'])) {
-				$temp=round(($temp+$d['badkamer_zigbee_temp'])/2,2);
-				if ($temp!=$d['badkamer_temp']->s) {
-					$diff = abs($temp-$d['badkamer_temp']->s);
-					if($diff<=2) store('badkamer_temp',$temp,'badkamer_zwave_temp = '.$status.'	'.basename(__FILE__).':'.__LINE__);
-				}
-			}
-			return;
 		} elseif (isset($validDevices[$device])) {
 //			$d['time']=$time;
 //			if (isProcessed($topic,$status,$alreadyProcessed)) return;
@@ -208,36 +164,69 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$hum = (int)$status;
 				$hum = max($d[$tdevice]->m - 5, min($hum, $d[$tdevice]->m + 5));
 				if ($hum !== $d[$tdevice]->m && abs($hum - $d[$tdevice]->m) >= 1) {
-					storemode($tdevice, $hum);
+					storemode($tdevice, $hum,basename(__FILE__).':'.__LINE__);
 				}
 			} elseif (substr($device,-5) === '_temp') {
 				if (!is_numeric($status)) return;
 				$st = (float)$status;
 				$st = max($d[$device]->s - 0.5, min($st, $d[$device]->s + 0.5));
 				if ($d[$device]->s != $st && abs($st - $d[$device]->s) >= 0.1) {
-					store($device, $st);
+					store($device, $st,basename(__FILE__).':'.__LINE__);
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
 				}
 			} else {
 				if ($d[$device]->s!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status);
+					store($device,$status,basename(__FILE__).':'.__LINE__);
 				}
 			}
 			return;
 		} elseif ($device === 'weg') {
 			if (($time - LOOP_START) <= 2) return;
 			if ($status==0) {
-				store('weg',0);
+				store('weg',0,basename(__FILE__).':'.__LINE__);
 				huisthuis();
 			} elseif ($status==2) {
-				store('weg',2);
+				store('weg',2,basename(__FILE__).':'.__LINE__);
 				huisslapen(true);
 			} elseif ($status==3) {
-				store('weg',3);
+				store('weg',3,basename(__FILE__).':'.__LINE__);
 				huisslapen(3);
 			}
 			return;
+		} else {
+			$rooms = ['living', 'badkamer', 'kamer', 'alex'];
+			foreach ($rooms as $room) {
+				if ($device === "{$room}_zigbee_temp" || $device === "{$room}_zwave_temp") {
+					$d[$device] = (float)$status;
+					$zigbeeKey = "{$room}_zigbee_temp";
+					$zwaveKey  = "{$room}_zwave_temp";
+					$targetKey = "{$room}_temp";
+					if (isset($d[$zigbeeKey], $d[$zwaveKey])) {
+						$valZigbee = $d[$zigbeeKey];
+						$valZwave  = $d[$zwaveKey];
+						$avgTemp   = round(($valZigbee + $valZwave) / 2, 2);
+						$currentStoredTemp = $d[$targetKey]->s ?? null;
+						if ($avgTemp != $currentStoredTemp) {
+							$diff = abs($avgTemp - $currentStoredTemp);
+							if ($diff <= 5) {
+								$logMsg = sprintf(
+									"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (Source: %s) [%s:%d]",
+									$room,
+									$valZigbee,
+									$valZwave,
+									$avgTemp,
+									$device,
+									basename(__FILE__),
+									__LINE__
+								);
+								store($targetKey, $avgTemp, $logMsg);
+							}
+						}
+					}
+					return;
+				}
+			}
 		}
 	} catch (Throwable $e) {
 		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
@@ -262,7 +251,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 				$status=ucfirst($status);
 				if ($d[$device]->s!=$status) {
 					include '/var/www/html/secure/pass2php/'.$device.'.php';
-					store($device,$status);
+					store($device,$status,basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
