@@ -102,7 +102,12 @@ foreach($d as $n=>$row) {
 				echo '
 					<td>Auto</td>';
 			} else {
-				echo '
+				if($n==='living_set'||$n==='badkamer_set') {
+					if($row->m==1) echo '
+					<td>Pre-heating</td>';
+					elseif($row->m==2) echo '
+					<td>Pre-heating ready</td>';
+				} else echo '
 					<td>Manueel</td>';
 			}
 		} elseif (str_ends_with($n, '_temp')) {

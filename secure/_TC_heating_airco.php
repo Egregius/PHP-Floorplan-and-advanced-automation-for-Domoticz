@@ -66,17 +66,21 @@ foreach (array('living','kamer','alex') as $k) {
             	$setrounded=$set;
             	$fan=$fanspeeds[clamp(round($dif*10)-2,-3,2)];
             } else {
-            	if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/2:abs($dif)/2;
-            	elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/20:abs($dif)/2;
-            	elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif)/2:10;
-				else $factor=0.0001;
-            	$diffac = (-$dif / 50) * $factor;
-				$trendfac = (-$trend / 10) * $factor;
-
-				$adjLiving += ($diffac + $trendfac);
-				$adjLiving = clamp($adjLiving, -2, 2);
-				if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
-				$set+=$adjLiving;
+            	if(past('living_set')>300) {
+					if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/2:abs($dif)/2;
+					elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/20:abs($dif)/2;
+					elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif)/2:10;
+					else $factor=0.0001;
+					$diffac = (-$dif / 50) * $factor;
+					$trendfac = (-$trend / 10) * $factor;
+					$change=clamp(($diffac + $trendfac),-0.04,0.04);
+					$adjLiving += $change;
+					$adjLiving = clamp($adjLiving, -2, 2);
+					if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
+					$set+=$adjLiving;
+				} else {
+					$factor=$diffac=$trendfac=$change=$adjLiving=0;
+				}
 				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target+1);
 			}
@@ -94,7 +98,7 @@ foreach (array('living','kamer','alex') as $k) {
         }
 
 		if ($k=='living'&&$target>16) {
-			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.($diffac + $trendfac).' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
+			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.$change.' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 //				lg($msg);
 				publishmqtt('d/i',date("G:i:s").'|'.number_format($setrounded,1,',','').'|'.number_format($set,2,',','').'|'.number_format(($diffac + $trendfac),3,',','').'|'.round($factor,3).'|'.$maxpow.' '. $fan);
@@ -111,7 +115,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"factor"=>round($factor,3),
 				"diffac"=>$diffac,
 				"trendfac"=>$trendfac,
-				"change"=>($diffac + $trendfac),
+				"change"=>$change,
 				"adjLiving"=>$adjLiving,
 				"maxpow"=>$maxpow,
 				"fan"=>$fan
