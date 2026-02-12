@@ -1,350 +1,186 @@
 <?php
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-require 'scripts/chart.php';
-$dag=date("Y-m-d H:i:00", TIME-86400);
-//$dag='2022-12-05 16:24:00';
-$week=date("Y-m-d", TIME-86400*6);
-//$week='2022-12-05 16:24:00';
-$maand=date("Y-m-d", TIME-86400*100);
-//$maand='2022-12-05 16:24:00';
-//unset($_SESSION['sensors_hum']);
-echo '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<link rel="preconnect" href="https://www.gstatic.com/" crossorigin />
-		<link rel="dns-prefetch" href="https://www.gstatic.com/" />
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<meta name="HandheldFriendly" content="true"/>
-		<meta name="viewport" content="width=device-width,initial-scale='.$scale.',user-scalable=yes,minimal-ui">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="theme-color" content="#000">
-		<title>Humidity</title>
-		<link rel="icon" href="images/temperatures.png"/>
-		<link rel="shortcut icon" href="images/temperatures.png"/>
-		<link rel="apple-touch-icon" href="images/temperatures.png"/>
-		<link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
-	</head>';
-if ($udevice=='iPad') echo '
-	<body style="width:1010px">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btn b3" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btn btna b3" value="Humidity"/></form>';
-elseif ($udevice=='iPhone') echo '
-	<body style="width:450px">
-		<div style="position:fixed;bottom:0px;left:0px;z-index:10;width:100%;height:60px;background-color:#000;">
-		<form action="floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btn b3" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btn btna b3" value="Humidity"/></form>
-		</div>';
 
-else 	echo '
-	<body style="width:100%">
-		<form action="/floorplan.php"><input type="submit" class="btn b3" value="Plan"/></form>
-		<form action="/temp.php"><input type="submit" class="btn btn b3" value="Temperaturen"/></form>
-		<form action="/hum.php"><input type="submit" class="btna btn b3" value="Humidity"/></form>';
-$db=new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
-if ($db->connect_errno>0) die('Unable to connect to database ['.$db->connect_error.']');
-//unset($_SESSION['sensors_hum']);
-$sensors=array(
-	'living_hum'=>array('Naam'=>'Living','Color'=>'#FF1111'),
-	'kamer_hum'=>array('Naam'=>'Kamer','Color'=>'#44FF44'),
-	'alex_hum'=>array('Naam'=>'Alex','Color'=>'#00EEFF'),
-	'badkamer_hum'=>array('Naam'=>'Badk','Color'=>'#6666FF'),
+// Exacte tijdstippen voor 24u, week en 100 dagen
+$dag = date("Y-m-d H:i:s", strtotime("-24 hours"));
+$week = date("Y-m-d H:i:s", strtotime("-7 days"));
+$maand = date("Y-m-d H:i:s", strtotime("-100 days"));
+
+$db = new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
+if ($db->connect_errno > 0) die('Unable to connect to database [' . $db->connect_error . ']');
+
+$sensors = array(
+    'living_hum'   => array('Naam' => 'Living', 'Color' => '#FF1111'),
+    'kamer_hum'    => array('Naam' => 'Kamer', 'Color' => '#44FF44'),
+    'alex_hum'     => array('Naam' => 'Alex', 'Color' => '#00EEFF'),
+    'badkamer_hum' => array('Naam' => 'Badk', 'Color' => '#6666FF'),
 );
-foreach ($sensors as $k=>$v) {
-	if(isset($_GET[$k]))$_SESSION['sensors_hum'][$k]=true;else $_SESSION['sensors_hum'][$k]=false;
-}
-$aantalsensors=0;
-foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-	if ($v==1) $aantalsensors++;
+
+// --- LOGICA VOOR SENSOR SELECTIE ---
+if (!empty(array_intersect_key($_GET, $sensors))) {
+    foreach ($sensors as $k => $v) {
+        $_SESSION['sensors_hum'][$k] = isset($_GET[$k]);
+    }
+} elseif (!isset($_SESSION['sensors_hum'])) {
+    $_SESSION['sensors_hum'] = array('living_hum' => true, 'kamer_hum' => true, 'alex_hum' => true, 'badkamer_hum' => true);
 }
 
-
-echo '<div style="padding:16px 0px 20px 0px;">';
-if ($aantalsensors==6) echo '
-	<a href="/hum.php?living_hum=on" class="btn b4 Living">Living</a>
-	<a href="/hum.php?kamer_hum=on" class="btn b4 Kamer">Kamer</a>
-	<a href="/hum.php?alex_hum=on" class="btn b4 Alex">Alex</a>
-	<a href="/hum.php?badkamer_hum=on" class="btn b4 Kamer">Badk</a>';
-else foreach ($sensors as $k=>$v) {
-//	print_r($v);
-//	$v=ucfirst(str_replace('_hum', '', $k));
-	if(isset($_SESSION['sensors_hum'][$k])&&$_SESSION['sensors_hum'][$k]==1) echo '<a href="/hum.php?'.$k.'=on" class="btn b4 '.$k.'">'.$v['Naam'].'</a>';
-	else echo '<a href="/hum.php?'.$k.'=on" class="btn b4 '.$k.'">'.$v['Naam'].'</a>';
-}
-$args=array(
-		'width'=>1000,
-		'height'=>880,
-		'hide_legend'=>true,
-		'responsive'=>true,
-		'background_color'=>'#000',
-		'chart_div'=>'graph',
-		'margins'=>array(0,0,0,0),
-		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
-	);
-$argshour=array(
-		'width'=>1000,
-		'height'=>880,
-		'hide_legend'=>true,
-		'responsive'=>true,
-		'background_color'=>'#000',
-		'chart_div'=>'graphhour',
-		'margins'=>array(0,0,0,0),
-		'y_axis_text_style'=>array('fontSize'=>18,'color'=>'999999'),
-		'text_style'=>array('fontSize'=>12,'color'=>'FFFFFF')
-	);
-if ($udevice=='iPadGuy') {
-	$args['width']=1000;$args['height']=1320;
-	$argshour['width']=1000;$argshour['height']=1320;
-} elseif ($udevice=='iPhoneGuy') {
-	$args['width']=480;$args['height']=950;
-	$argshour['width']=480;$argshour['height']=950;
-} elseif ($udevice=='iPhoneKirby') {
-	$args['width']=420;$args['height']=710;
-	$argshour['width']=420;$argshour['height']=610;
-} elseif ($udevice=='Mac') {
-	$args['width']=490;$args['height']=780;
-	$argshour['width']=490;$argshour['height']=780;
-} else {
-	$args['width']=480;$args['height']=902;
-	$argshour['width']=480;$argshour['height']=900;
-}
-$args['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
-$argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600');
-if ($aantalsensors==1) $argshour['colors']=array('#FF6600','#FFFF33','#FFF','#FFFF33','#FF6600','#00F', '#0F0', '#F00');
-elseif ($aantalsensors==0) {
-	$_SESSION['sensors_hum']=array('living_hum'=>1,'badkamer_hum'=>1,'kamer_hum'=>1,'alex_hum'=>1);
-	$aantalsensors=6;
-}
-//echo '<pre>';print_r($sensors);echo '</pre>';
-//echo '<pre>';print_r($_SESSION['sensors_hum']);echo '</pre>';
-
-foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-//	echo $k.'<br>';
-	if ($v==1) {
-		if ($aantalsensors==1) {
-			array_push($args['colors'], $sensors[$k]['Color']);
-		} else {
-			array_push($args['colors'], $sensors[$k]['Color']);
-			array_push($argshour['colors'], $sensors[$k]['Color']);
-		}
-	}
-}
-//$args['line_styles']=array('lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [0, 0]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]','lineDashStyle: [1, 1]');
-$query="SELECT DATE_FORMAT(stamp, '%H:%i') as stamp";
-foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-	if ($v==1) $query.=', '.$k;
-}
-$query.=" from `temp` where stamp >= '$dag' AND living_hum is not null";
-//echo $query.'<br>';
-if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-if ($result->num_rows==0) {echo 'No data for dates '.$dag.' to '.$f_enddate.'<hr>';goto montha;}
-$min=9999;
-$max=-1000;
-$x=0;
-while ($row=$result->fetch_assoc()) {
-	$graph[$x]['stamp']=$row['stamp'];
-	$graph[$x][40]=40;
-	$graph[$x][45]=45;
-	$graph[$x][50]=50;
-	$graph[$x][55]=55;
-	$graph[$x][60]=60;
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($row[$k]>0) $graph[$x][$k]=$row[$k];
-			else $graph[$x][$k]=50;
-		}
-	}
-	$x++;
-}
-$result->free();
-foreach ($graph as $t) {
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($aantalsensors==1) {
-				if ($t[$k]<$min) $min=$t[$k];
-				if ($t[$k]>$max) $max=$t[$k];
-			} elseif ($aantalsensors==6) {
-				if ($k!='badkamer_hum'&&$k!='buiten_hum'&&$k!='waskamer_hum') {
-					if ($t[$k]<$min) $min=$t[$k];
-					if ($t[$k]>$max) $max=$t[$k];
-				}
-			}
-		}
-	}
-}
-$min=roundDownToAny($min);
-$max=roundUpToAny($max);
-if ($min>60) $min=60;
-if ($max>100) $max=100;
-
-$args['raw_options']='
-		lineWidth:3,
-		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
-		hAxis:{textPosition:"none"},
-		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
-//	vAxis:{viewWindowMode:"explicit",viewWindow:{max:'.ceil($max).',min:'.floor($min).'},gridlines:{count:0}}
-$chart=array_to_chart($graph, $args);
-echo $chart['script'];
-echo $chart['div'];
-unset($chart,$graph);
-montha:
-$query="SELECT DATE_FORMAT(stamp, '%W %k:%i') as stamp";
-foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-	if ($v==1) {
-		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
-		else $query.=", AVG($k) AS $k";
-	}
+$active_sensors = array_filter($_SESSION['sensors_hum']);
+if (count($active_sensors) == 0) {
+    $_SESSION['sensors_hum']['living_hum'] = true;
+    $active_sensors = array('living_hum' => true);
 }
 
-$query.=" from `temp` where stamp > '$week' AND living_hum is not null GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600";
-if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-if ($result->num_rows==0) {echo 'No data for last week.<hr>';goto enda;} else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek laatste week.';
-$x=0;
-while ($row=$result->fetch_assoc()) {
-	$graph[$x]['stamp']=$row['stamp'];
-	$graph[$x][40]=40;
-	$graph[$x][45]=45;
-	$graph[$x][50]=50;
-	$graph[$x][55]=55;
-	$graph[$x][60]=60;
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($aantalsensors==1) {
-				if ($row['MIN']>0) $graph[$x]['MIN']=$row['MIN'];
-				else $graph[$x]['MIN']=50;
-				if ($row['AVG']>0) $graph[$x]['AVG']=$row['AVG'];
-				else $graph[$x]['AVG']=50;
-				if ($row['MAX']>0) $graph[$x]['MAX']=$row['MAX'];
-				else $graph[$x]['MAX']=50;
-			} else {
-				if ($row[$k]>0) $graph[$x][$k]=$row[$k];
-				else $graph[$x][$k]=50;
-			}
-		}
-	}
-	$x++;
-}
-$result->free();
-$min=9999;
-$max=-1000;
-foreach ($graph as $t) {
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($aantalsensors==1) {
-				if ($t['MIN']<$min) $min=$t['MIN'];
-				if ($t['MAX']>$max) $max=$t['MAX'];
-			} else {
-				if ($k!='badkamer_hum'&&$k!='buiten_hum'&&$k!='waskamer_hum') {
-					if ($t[$k]<$min) $min=$t[$k];
-					if ($t[$k]>$max) $max=$t[$k];
-				}
-			}
-		}
-	}
-}
-$min=roundDownToAny($min);
-$max=roundUpToAny($max);
-if ($min>60) $min=60;
-if ($max>100) $max=100;
+echo '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Humidity</title>
+    <link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 10px; }
+        .header-nav { display: flex; width: 100%; gap: 5px; margin-bottom: 20px; }
+        .header-nav form { flex: 1; }
+        .header-nav .btn { width: 100%; padding: 8px 5px; font-size: 1.1em; text-align: center; cursor: pointer; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; }
+        .header-nav .btna { background: #ffba00;color:#000; }
+        .chart-container { width: 100%; margin-bottom: 30px; background: #000; height: 350px; }
+        .btn-container { margin: 20px 0; }
+        input[type=checkbox] { display: none; }
+        .sensor-label { display: inline-block; padding: 8px 7px; margin: 0 4px 8px 0; border-radius: 4px; border: 1px solid #444; cursor: pointer; font-size: 1em; }';
 
-$argshour['raw_options']='
-		lineWidth:3,
-		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
-		hAxis:{textPosition:"none"},
-		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
-
-$chart=array_to_chart($graph, $argshour);
-echo $chart['script'];
-echo $chart['div'];
-unset($chart,$graph);
-enda:
-$query="SELECT DATE_FORMAT(stamp, '%a %e/%m %k:%i') as stamp";
-foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-	if ($v==1) {
-		if ($aantalsensors==1) $query.=", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
-		else $query.=", AVG($k) AS $k";
-	}
+foreach ($sensors as $k => $v) {
+    echo "
+        #$k + label { color: $v[Color]; border-color: $v[Color]; opacity: 0.5; }
+        #$k:checked + label { opacity: 1; background-color: $v[Color]; color: #000;}";
 }
 
-$query.=" from `temp` where stamp > '$maand' AND living_hum is not null GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400";
-if (!$result=$db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-$x=0;
-while ($row=$result->fetch_assoc()) {
-	$graph[$x]['stamp']=$row['stamp'];
-	$graph[$x][40]=40;
-	$graph[$x][45]=45;
-	$graph[$x][50]=50;
-	$graph[$x][55]=55;
-	$graph[$x][60]=60;
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($aantalsensors==1) {
-				if ($row['MIN']>0) $graph[$x]['MIN']=$row['MIN'];
-				else $graph[$x]['MIN']=50;
-				if ($row['AVG']>0) $graph[$x]['AVG']=$row['AVG'];
-				else $graph[$x]['AVG']=50;
-				if ($row['MAX']>0) $graph[$x]['MAX']=$row['MAX'];
-				else $graph[$x]['MAX']=50;
-			} else {
-				if ($row[$k]>0) $graph[$x][$k]=$row[$k];
-				else $graph[$x][$k]=50;
-			}
-		}
-	}
-	$x++;
-}
-$result->free();
-$min=9999;
-$max=-1000;
-foreach ($graph as $t) {
-	foreach ($_SESSION['sensors_hum'] as $k=>$v) {
-		if ($v==1) {
-			if ($aantalsensors==1) {
-				if ($t['MIN']<$min) $min=$t['MIN'];
-				if ($t['MAX']>$max) $max=$t['MAX'];
-			} else {
-				if ($k!='badkamer_hum'&&$k!='buiten_hum'&&$k!='waskamer_hum') {
-					if ($t[$k]<$min) $min=$t[$k];
-					if ($t[$k]>$max) $max=$t[$k];
-				}
-			}
-		}
-	}
-}
-$min=roundDownToAny($min);
-$max=roundUpToAny($max);
-if ($min>60) $min=60;
-if ($max>100) $max=100;
+echo '
+        h3 { color: #888; font-weight: normal; font-size: 1.1em; margin: 10px 0; }
+    </style>
+</head>
+<body style="width: ' . ($udevice == 'iPad' ? '1010px' : ($udevice == 'iPhoneGuy' || $udevice == 'iPhoneKirby' ? '450px' : '100%')) . '">';
 
-$argshour['raw_options']='
-		lineWidth:3,
-		crosshair:{trigger:"both"},
-		vAxis: {format:"#",textStyle: {color: "#AAA", fontSize: 12},gridlines: {multiple: 10, color: "#444"},minorGridlines: {multiple: 10, color: "#333"},viewWindow:{max:'.ceil($max).',min:'.floor($min).'}},
-		hAxis:{textPosition:"none"},
-		theme:"maximized",
-		chartArea:{left:0,top:0,width:"100%",height:"100%"},
-		series:{0:{lineDashStyle:[5,15]},1:{lineDashStyle:[5,15]},2:{lineDashStyle:[5,15]},3:{lineDashStyle:[5,15]},4:{lineDashStyle:[5,15]},},';
-echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafiek voor laatste 100 dagen';
-$argshour['chart_div']='chart_div';
-$chart=array_to_chart($graph, $argshour);
-echo $chart['script'];
-echo $chart['div'];
-unset($chart,$graph);
+echo '<div class="header-nav">
+    <form action="floorplan.php"><input type="submit" class="btn" value="Plan"/></form>
+    <form action="/temp.php"><input type="submit" class="btn" value="Temp"/></form>
+    <form action="/hum.php"><input type="submit" class="btn btna" value="Hum"/></form>
+</div>';
 
-$togo=61-date("s");
-if ($togo<15) $togo=15;
-$togo=$togo*1000+62000;
-//echo "<br><br><br>refreshing in ".$togo/1000 ." seconds";
-echo '<script type="text/javascript">function navigator_Go(url) {window.location.assign(url);}setTimeout(\'window.location.href=window.location.href;\','.$togo.');</script>';
+echo '<div class="btn-container"><form method="GET" id="sensorform">';
+foreach ($sensors as $k => $v) {
+    $checked = ($_SESSION['sensors_hum'][$k] ? 'checked' : '');
+    echo '<input type="checkbox" name="' . $k . '" id="' . $k . '" onChange="this.form.submit()" ' . $checked . '><label for="' . $k . '" class="sensor-label">' . $v['Naam'] . '</label>';
+}
+echo '</form></div>';
+
+function getChartData($db, $query, $sensors, $active_sensors, $isSingle) {
+    $result = $db->query($query);
+    $data = ['labels' => [], 'datasets' => []];
+    if (!$result) return $data;
+
+    if ($isSingle && count($active_sensors) == 1) {
+        $data['datasets'][] = ['label' => 'Min', 'borderColor' => '#6666FF', 'data' => [], 'fill' => false, 'borderWidth' => 1, 'pointRadius' => 0, 'tension' => 0.1];
+        $data['datasets'][] = ['label' => 'Gem', 'borderColor' => '#00FF00', 'data' => [], 'fill' => false, 'borderWidth' => 3, 'pointRadius' => 0, 'tension' => 0.1];
+        $data['datasets'][] = ['label' => 'Max', 'borderColor' => '#FF3333', 'data' => [], 'fill' => false, 'borderWidth' => 1, 'pointRadius' => 0, 'tension' => 0.1];
+    } else {
+        foreach ($active_sensors as $k => $v) {
+            $data['datasets'][] = [
+                'label' => $sensors[$k]['Naam'],
+                'borderColor' => $sensors[$k]['Color'],
+                'data' => [],
+                'tension' => 0.1,
+                'pointRadius' => 0,
+                'borderWidth' => 2
+            ];
+        }
+    }
+
+    while ($row = $result->fetch_assoc()) {
+        $data['labels'][] = $row['tijdlabel'];
+        if ($isSingle && count($active_sensors) == 1) {
+            $data['datasets'][0]['data'][] = (float)$row['MIN'];
+            $data['datasets'][1]['data'][] = (float)$row['AVG'];
+            $data['datasets'][2]['data'][] = (float)$row['MAX'];
+        } else {
+            $idx = 0;
+            foreach ($active_sensors as $k => $v) {
+                $data['datasets'][$idx++]['data'][] = isset($row[$k]) ? (float)$row[$k] : null;
+            }
+        }
+    }
+    return $data;
+}
+
+$active_keys = array_keys($active_sensors);
+$dagData = getChartData($db, "SELECT stamp, DATE_FORMAT(stamp, '%H:%i') as tijdlabel, " . implode(',', $active_keys) . " FROM `temp` WHERE stamp >= '$dag' AND living_hum IS NOT NULL ORDER BY stamp ASC", $sensors, $active_sensors, false);
+
+$q_week = "SELECT MIN(stamp) as s, DATE_FORMAT(stamp, '%a %H:%i') as tijdlabel";
+foreach ($active_sensors as $k => $v) {
+    if (count($active_sensors) == 1) $q_week .= ", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
+    else $q_week .= ", AVG($k) AS $k";
+}
+$q_week .= " FROM `temp` WHERE stamp > '$week' AND living_hum IS NOT NULL GROUP BY UNIX_TIMESTAMP(stamp) DIV 3600 ORDER BY s ASC";
+$weekData = getChartData($db, $q_week, $sensors, $active_sensors, true);
+
+$q_maand = "SELECT MIN(stamp) as s, DATE_FORMAT(stamp, '%d/%m') as tijdlabel";
+foreach ($active_sensors as $k => $v) {
+    if (count($active_sensors) == 1) $q_maand .= ", MIN($k) AS MIN, AVG($k) AS AVG, MAX($k) AS MAX";
+    else $q_maand .= ", AVG($k) AS $k";
+}
+$q_maand .= " FROM `temp` WHERE stamp > '$maand' AND living_hum IS NOT NULL GROUP BY UNIX_TIMESTAMP(stamp) DIV 86400 ORDER BY s ASC";
+$maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
+?>
+
+<div class="chart-container"><h3>Luchtvochtigheid (24u)</h3><canvas id="chartDag"></canvas></div>
+<div class="chart-container"><h3>Luchtvochtigheid (Week)</h3><canvas id="chartWeek"></canvas></div>
+<div class="chart-container"><h3>Luchtvochtigheid (100d)</h3><canvas id="chartMaand"></canvas></div>
+
+<script>
+Chart.defaults.animation = false;
+
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        x: { ticks: { color: '#666', autoSkip: true, maxTicksLimit: 10 }, grid: { display: false } },
+        y: {
+            ticks: {
+                color: '#888',
+                stepSize: 1,
+                precision: 0,
+                callback: v => v + '%'
+            },
+            grid: { color: '#222' }
+        }
+    },
+    plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false }
+    }
+};
+
+function createChart(id, data) {
+    if (!data.labels || !data.labels.length) return;
+    new Chart(document.getElementById(id), {
+        type: 'line',
+        data: data,
+        options: commonOptions
+    });
+}
+
+createChart('chartDag', <?php echo json_encode($dagData); ?>);
+createChart('chartWeek', <?php echo json_encode($weekData); ?>);
+createChart('chartMaand', <?php echo json_encode($maandData); ?>);
+</script>
+
+<?php
+$ms = ((61 - date("s")) * 1000) + 62000;
+echo "<div style='padding:20px; color:#444; font-size: 0.8em;'>$udevice | Update in " . ($ms / 1000) . "s</div>";
+echo '<script>setTimeout(() => { window.location.reload(); }, ' . $ms . ');</script>';
 $db->close();
+?>
+</body>
+</html>

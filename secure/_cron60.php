@@ -35,10 +35,12 @@ SELECT
 FROM temp
 WHERE stamp >= '$stamp'
 ";
+$sql = "SELECT buiten,living,badkamer,kamer,waskamer,alex,zolder FROM temp ORDER BY stamp DESC LIMIT 10,1";
 $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
-    $trend = round($row[$i.'_last'] - $row[$i.'_first'],2);
+    $trend = round($d[$i.'_temp']->s - $row[$i],2);
+//    if ($trend<=0.05||$trend>=0.05) $trend=0;
     if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
 }
 
