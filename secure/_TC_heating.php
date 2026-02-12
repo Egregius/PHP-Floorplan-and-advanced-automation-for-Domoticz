@@ -224,7 +224,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			lg($msg);
 			$adjLiving=0;
 			foreach($leadDataLiving[$mode] as $k=>$v) {
-				$msg.=$k.'='.implode(',',$v).PHP_EOL;
+				$msg.=PHP_EOL.$k.'='.implode(',',$v);
 			}
 			telegram($msg);
 			unset($t_start);

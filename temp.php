@@ -12,10 +12,10 @@ if ($db->connect_errno > 0) die('Unable to connect to database [' . $db->connect
 
 $sensors = array(
     'living'   => array('id' => 147, 'Naam' => 'Living',  'Color' => '#FF1111'),
-    'badkamer' => array('id' => 246, 'Naam' => 'Badkamr', 'Color' => '#6666FF'),
+    'badkamer' => array('id' => 246, 'Naam' => 'Badkmr', 'Color' => '#6666FF'),
     'kamer'    => array('id' => 278, 'Naam' => 'Kamer',   'Color' => '#44FF44'),
     'alex'     => array('id' => 244, 'Naam' => 'Alex',    'Color' => '#00EEFF'),
-    'waskamer' => array('id' => 356, 'Naam' => 'Waskamr', 'Color' => '#EEEE00'),
+    'waskamer' => array('id' => 356, 'Naam' => 'Wask', 'Color' => '#EEEE00'),
     'zolder'   => array('id' => 293, 'Naam' => 'Zolder',  'Color' => '#EE33EE'),
     'buiten'   => array('id' => 329, 'Naam' => 'Buiten',  'Color' => '#FFFFFF'),
 );
@@ -107,15 +107,24 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
     <title>Temperaturen</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 10px; }
+        body {
+			background-color: #000;
+			color: #fff;
+			font-family: sans-serif;
+			margin: 0;
+			padding: 10px;
+			box-sizing: border-box;
+			overflow-x: hidden;
+			width: 100vw;
+		}
         .header-nav { display: flex; width: 100%; gap: 5px; margin-bottom: 20px; }
         .header-nav form { flex: 1; }
         .header-nav .btn { width: 100%; padding: 8px 5px; font-size: 1.1em; text-align: center; cursor: pointer; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; }
         .header-nav .btna { background: #ffba00;color:#000;}
-        .chart-container { width: 100%; margin-bottom: 30px; background: #000; height: 350px; }
+        .chart-container { width: 100%; margin-bottom: 30px; background: #000; height: 650px; }
         .btn-container { margin: 20px 0; }
         input[type=checkbox] { display: none; }
-        .sensor-label { display: inline-block; padding: 8px 7px; margin: 0 4px 8px 0; border-radius: 4px; border: 1px solid #444; cursor: pointer; font-size: 1em; }
+        .sensor-label { display: inline-block; padding: 8px 3px; margin: 0 2px 8px 0; border-radius: 6px; border: 1px solid #444; cursor: pointer; font-size: 1em; }
         <?php foreach ($sensors as $k => $v) {
             echo "#$k + label { color: $v[Color]; border-color: $v[Color]; opacity: 0.5; }
                   #$k:checked + label { opacity: 1; background-color: $v[Color]; color: #000; }";
@@ -123,8 +132,7 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
         h3 { color: #888; font-weight: normal; font-size: 1.1em; margin: 10px 0; }
     </style>
 </head>
-<body style="width: <?php echo ($udevice == 'iPad' ? '1010px' : ($udevice == 'iPhoneGuy' || $udevice == 'iPhoneKirby' ? '450px' : '100%')); ?>">
-
+<body style="width: 100%; max-width: 1000px; margin: 0 auto;">
 <div class="header-nav">
     <form action="floorplan.php"><input type="submit" class="btn" value="Plan"/></form>
     <form action="/temp.php"><input type="submit" class="btn btna" value="Temp"/></form>
@@ -140,9 +148,9 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
     </form>
 </div>
 
-<div class="chart-container"><h3>Laatste 24 uur</h3><canvas id="chartDag"></canvas></div>
-<div class="chart-container"><h3>Laatste week</h3><canvas id="chartWeek"></canvas></div>
-<div class="chart-container"><h3>Laatste 100 dagen</h3><canvas id="chartMaand"></canvas></div>
+<div class="chart-container"><canvas id="chartDag"></canvas></div>
+<div class="chart-container"><canvas id="chartWeek"></canvas></div>
+<div class="chart-container"><canvas id="chartMaand"></canvas></div>
 
 <script>
 Chart.defaults.animation = false;

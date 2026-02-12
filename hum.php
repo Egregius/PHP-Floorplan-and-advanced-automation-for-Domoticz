@@ -31,50 +31,57 @@ if (count($active_sensors) == 0) {
     $_SESSION['sensors_hum']['living_hum'] = true;
     $active_sensors = array('living_hum' => true);
 }
+?>
 
-echo '<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Humidity</title>
-    <link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
+    <title>Temperaturen</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; padding: 10px; }
+        body {
+			background-color: #000;
+			color: #fff;
+			font-family: sans-serif;
+			margin: 0;
+			padding: 10px;
+			box-sizing: border-box;
+			overflow-x: hidden;
+			width: 100vw;
+		}
         .header-nav { display: flex; width: 100%; gap: 5px; margin-bottom: 20px; }
         .header-nav form { flex: 1; }
         .header-nav .btn { width: 100%; padding: 8px 5px; font-size: 1.1em; text-align: center; cursor: pointer; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; }
-        .header-nav .btna { background: #ffba00;color:#000; }
-        .chart-container { width: 100%; margin-bottom: 30px; background: #000; height: 350px; }
+        .header-nav .btna { background: #ffba00;color:#000;}
+        .chart-container { width: 100%; margin-bottom: 30px; background: #000; height: 650px; }
         .btn-container { margin: 20px 0; }
         input[type=checkbox] { display: none; }
-        .sensor-label { display: inline-block; padding: 8px 7px; margin: 0 4px 8px 0; border-radius: 4px; border: 1px solid #444; cursor: pointer; font-size: 1em; }';
-
-foreach ($sensors as $k => $v) {
-    echo "
-        #$k + label { color: $v[Color]; border-color: $v[Color]; opacity: 0.5; }
-        #$k:checked + label { opacity: 1; background-color: $v[Color]; color: #000;}";
-}
-
-echo '
+        .sensor-label { display: inline-block; padding: 8px 26px; margin: 0 2px 8px 0; border-radius: 6px; border: 1px solid #444; cursor: pointer; font-size: 1em; }
+        <?php foreach ($sensors as $k => $v) {
+            echo "#$k + label { color: $v[Color]; border-color: $v[Color]; opacity: 0.5; }
+                  #$k:checked + label { opacity: 1; background-color: $v[Color]; color: #000; }";
+        } ?>
         h3 { color: #888; font-weight: normal; font-size: 1.1em; margin: 10px 0; }
     </style>
 </head>
-<body style="width: ' . ($udevice == 'iPad' ? '1010px' : ($udevice == 'iPhoneGuy' || $udevice == 'iPhoneKirby' ? '450px' : '100%')) . '">';
-
-echo '<div class="header-nav">
+<body style="width: 100%; max-width: 1000px; margin: 0 auto;">
+<div class="header-nav">
     <form action="floorplan.php"><input type="submit" class="btn" value="Plan"/></form>
     <form action="/temp.php"><input type="submit" class="btn" value="Temp"/></form>
     <form action="/hum.php"><input type="submit" class="btn btna" value="Hum"/></form>
-</div>';
+</div>
 
-echo '<div class="btn-container"><form method="GET" id="sensorform">';
-foreach ($sensors as $k => $v) {
-    $checked = ($_SESSION['sensors_hum'][$k] ? 'checked' : '');
-    echo '<input type="checkbox" name="' . $k . '" id="' . $k . '" onChange="this.form.submit()" ' . $checked . '><label for="' . $k . '" class="sensor-label">' . $v['Naam'] . '</label>';
-}
-echo '</form></div>';
+<div class="btn-container">
+    <form method="GET" id="sensorform">
+        <?php foreach ($sensors as $k => $v) {
+            $checked = (!empty($_SESSION['sensors_hum'][$k]) ? 'checked' : '');
+            echo '<input type="checkbox" name="'.$k.'" id="'.$k.'" onChange="this.form.submit()" '.$checked.'><label for="'.$k.'" class="sensor-label">'.$v['Naam'].'</label>';
+        } ?>
+    </form>
+</div>
+<?php
 
 function getChartData($db, $query, $sensors, $active_sensors, $isSingle) {
     $result = $db->query($query);
@@ -134,9 +141,9 @@ $q_maand .= " FROM `temp` WHERE stamp > '$maand' AND living_hum IS NOT NULL GROU
 $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
 ?>
 
-<div class="chart-container"><h3>Luchtvochtigheid (24u)</h3><canvas id="chartDag"></canvas></div>
-<div class="chart-container"><h3>Luchtvochtigheid (Week)</h3><canvas id="chartWeek"></canvas></div>
-<div class="chart-container"><h3>Luchtvochtigheid (100d)</h3><canvas id="chartMaand"></canvas></div>
+<div class="chart-container"><canvas id="chartDag"></canvas></div>
+<div class="chart-container"><canvas id="chartWeek"></canvas></div>
+<div class="chart-container"><canvas id="chartMaand"></canvas></div>
 
 <script>
 Chart.defaults.animation = false;
@@ -158,7 +165,7 @@ const commonOptions = {
     },
     plugins: {
         legend: { display: false },
-        tooltip: { mode: 'index', intersect: false }
+        tooltip: { enabled: false } // <-- Dit schakelt de tekstwolkjes volledig uit
     }
 };
 

@@ -1345,9 +1345,19 @@ function getTemperatureColorTxt(r,min,avg,max){
 		else return "#FF3300"
 	}
 }
-function getTrendArrow(t){
-	const n=Math.min(Math.abs(t),10),r=Math.round(6+60*n);
-	return t>=0.1?`<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`:t<=-0.1?`<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`:""}
+function getTrendArrow(t) {
+    if (t >= 0.1) {
+    	const n = Math.max(0, Math.min(Math.abs(t), 1));
+	    const r = Math.round(6 + 40 * n);
+        return `<div class="abs trend-arrow"><img src="/images/trendup.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(255,100,0,0.8));"></div>`;
+    } else if (t <= -0.1) {
+    	const n = Math.max(0, Math.min(Math.abs(t), 1));
+	    const r = Math.round(6 + 40 * n);
+        return `<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`;
+    }
+
+    return "";
+}
 function updateDeviceTime(id) {
     tijd = d[id]?.t ?? 0
     status = d[id]?.s
