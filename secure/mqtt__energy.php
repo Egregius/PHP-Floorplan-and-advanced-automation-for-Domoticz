@@ -120,8 +120,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 	}
 	$time = time();
 	$vandaag = date("Y-m-d", $time);
-	$zonvandaag = 0;
-	$zontotaal = 0;
+	$zonvandaag = null;
+	$zontotaal = null;
 	$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
 	$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
 	if ($row = $stmt->fetch()) {
