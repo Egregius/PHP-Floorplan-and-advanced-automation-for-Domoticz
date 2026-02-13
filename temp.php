@@ -155,6 +155,7 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
 <script>
 Chart.defaults.animation = false;
 const commonOptions = {
+    layout:{padding:{left:0,right:5,top:0,bottom:0}},
     responsive: true,
     maintainAspectRatio: false,
     scales: {
