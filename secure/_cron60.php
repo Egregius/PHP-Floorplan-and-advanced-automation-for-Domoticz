@@ -235,3 +235,31 @@ if (isset($daikin)) {
 		&&	past('daikin')>1800
 	) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 }
+
+
+
+$vars = get_defined_vars();
+$usage_report = [];
+
+$vars = get_defined_vars();
+
+foreach ($vars as $name => $value) {
+	if (in_array($name, ['GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV', 'memory_cache', 'name', 'vars', 'value'])) continue;
+	if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
+		$size = 0;
+	} else {
+		try {
+			$size = strlen(serialize($value));
+		} catch (Exception $e) {
+			$size = 0;
+		}
+	}
+	if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
+		$oldSize = $memory_cache[$name];
+		if ($size > ($oldSize * 1.01)) { // Meer dan 5% stijging
+			$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
+			lg("📈 \${$name}	+{$percent}%	(" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
+		}
+	}
+	$memory_cache[$name] = $size;
+}

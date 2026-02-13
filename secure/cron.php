@@ -15,6 +15,7 @@ $time=time();
 $db = Database::getInstance();
 $d=fetchdata();
 $livingtemps=[];
+$memory_cache = [];
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';

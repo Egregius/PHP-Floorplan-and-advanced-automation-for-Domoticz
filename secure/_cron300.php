@@ -1,7 +1,7 @@
 <?php
 $user='cron300';
 $d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-lg('🕒 '.$user.'  '.convertbytes(memory_get_usage(true)).'-----------------------------------------------------------------------------------------------------------------------------------------------');
+lg('🕒 '.$user.' 	Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' -----------------------------------------------------------------------------------------------------------------------------------------------');
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']->s=='On') {
 	if (past('steenterras')>10700
