@@ -101,8 +101,16 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		}
 		if ($newavg < $prevavg) {
 			try {
-				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
-				$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
+				// 1. Tijd afronden naar het dichtstbijzijnde kwartier
+				$rounded_seconds = round($time / 120) * 120;
+				$rounded_date = date('Y-m-d H:i:00', $rounded_seconds);
+				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`)
+					  VALUES (:date, :wh)
+					  ON DUPLICATE KEY UPDATE `wh` = VALUES(`wh`)";
+				$dbverbruik->query($q, [
+					':date' => $rounded_date,
+					':wh'   => $prevavg
+				]);
 				if ($prevavg > $kwartierpiek - 200) {
 					//alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 30, false);
 					$kwartierpiek = $prevavg;
