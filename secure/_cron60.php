@@ -14,27 +14,6 @@ if ($temp!=$d['living_temp']->s) store('living_temp',$temp);*/
 foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']->m;
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
 $stamp = date('Y-m-d H:i:s', $time - 600);
-
-// eerste en laatste waarde per sensor in het venster
-$sql = "
-SELECT
-    SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp ASC),  ',', 1) AS buiten_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(buiten  ORDER BY stamp DESC), ',', 1) AS buiten_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp ASC),  ',', 1) AS living_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(living  ORDER BY stamp DESC), ',', 1) AS living_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(badkamer ORDER BY stamp ASC),  ',', 1) AS badkamer_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(badkamer ORDER BY stamp DESC), ',', 1) AS badkamer_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(kamer   ORDER BY stamp ASC),  ',', 1) AS kamer_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(kamer   ORDER BY stamp DESC), ',', 1) AS kamer_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(waskamer ORDER BY stamp ASC), ',', 1) AS waskamer_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(waskamer ORDER BY stamp DESC),',', 1) AS waskamer_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(alex    ORDER BY stamp ASC),  ',', 1) AS alex_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(alex    ORDER BY stamp DESC), ',', 1) AS alex_last,
-    SUBSTRING_INDEX(GROUP_CONCAT(zolder  ORDER BY stamp ASC),  ',', 1) AS zolder_first,
-    SUBSTRING_INDEX(GROUP_CONCAT(zolder  ORDER BY stamp DESC), ',', 1) AS zolder_last
-FROM temp
-WHERE stamp >= '$stamp'
-";
 $sql = "SELECT buiten,living,badkamer,kamer,waskamer,alex,zolder FROM temp ORDER BY stamp DESC LIMIT 10,1";
 $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
@@ -236,30 +215,33 @@ if (isset($daikin)) {
 	) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
-
-
+$mqtt->loopOnce($time);
+unset($query, $row, $sql, $i, $result, $k, $v);
+gc_collect_cycles();
 $vars = get_defined_vars();
-$usage_report = [];
-
-$vars = get_defined_vars();
-
+$total_var_size=0;
 foreach ($vars as $name => $value) {
-	if (in_array($name, ['GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV', 'memory_cache', 'name', 'vars', 'value'])) continue;
-	if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
-		$size = 0;
-	} else {
-		try {
-			$size = strlen(serialize($value));
-		} catch (Exception $e) {
-			$size = 0;
-		}
-	}
-	if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
-		$oldSize = $memory_cache[$name];
-		if ($size > ($oldSize * 1.01)) { // Meer dan 5% stijging
-			$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
-			lg("📈 \${$name}	+{$percent}%	(" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
-		}
-	}
-	$memory_cache[$name] = $size;
+    if (in_array($name, [
+        'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
+        'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
+    ])) continue;
+    if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
+        $size = 0;
+    } else {
+        try {
+            $size = strlen(serialize($value));
+        } catch (Exception $e) {
+            $size = 0;
+        }
+    }
+    $total_var_size += $size;
+    if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
+        $oldSize = $memory_cache[$name];
+        if ($size > ($oldSize * 1.05)) {
+            $percent = round((($size - $oldSize) / $oldSize) * 100, 1);
+            lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
+            $memory_cache[$name] = $size;
+        }
+    } else $memory_cache[$name] = $size;
 }
+unset($vars, $name, $value, $size, $oldSize, $percent);

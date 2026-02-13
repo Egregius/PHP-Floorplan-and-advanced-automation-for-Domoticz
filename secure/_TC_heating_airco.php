@@ -63,6 +63,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$spmode=1;
             	$diffac=$trendfac=$factor=0;
             	$set=28;
+            	$change=0;
             	$setrounded=$set;
             	$fan=$fanspeeds[clamp(round($dif*10)-2,-3,2)];
             } else {

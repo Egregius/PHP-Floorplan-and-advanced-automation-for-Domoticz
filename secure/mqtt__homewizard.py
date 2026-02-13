@@ -159,6 +159,15 @@ def publish_step(key, value):
         flush_state()
         mqtt_publish_key(key, q)
 
+def publish_all(key, value):
+    q = valu)
+    last = teller_publish_state.get(key)
+    if last is None or q > last:
+        teller_publish_state[key] = q
+        teller_state[key] = q
+        flush_teller_state()
+        mqtt_publish_teller(key, q)
+
 def publish_quantized(key, value):
     q = quantize_0_01(value)
     last = teller_publish_state.get(key)
@@ -176,7 +185,7 @@ def update_teller(import_kwh, export_kwh, gas, water):
     if import_kwh is not None: publish_quantized("import", import_kwh)
     if export_kwh is not None: publish_quantized("export", export_kwh)
     if gas is not None: publish_quantized("gas", gas)
-    if water is not None: publish_quantized("water", water)
+    if water is not None: publish_all("water", water)
 
 def process_measurement(name, data):
     if name=="p":
