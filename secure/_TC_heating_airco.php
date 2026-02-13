@@ -65,6 +65,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$set=28;
             	$change=0;
             	$setrounded=$set;
+            	$adjLiving=1;
             	$fan=$fanspeeds[clamp(round($dif*10)-2,-3,2)];
             } else {
             	if(past('living_set')>300) {

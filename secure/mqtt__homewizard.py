@@ -160,7 +160,7 @@ def publish_step(key, value):
         mqtt_publish_key(key, q)
 
 def publish_all(key, value):
-    q = valu)
+    q = value
     last = teller_publish_state.get(key)
     if last is None or q > last:
         teller_publish_state[key] = q
