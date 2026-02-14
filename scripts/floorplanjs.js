@@ -248,7 +248,7 @@ function handleResponse(device,v){
 			return
 		case 'a':
 			if(setText('avgvalue',v)===true) {
-				if (shouldRedraw(prevavg,v,2500,5)) {
+				if (shouldRedraw(prevavg,v,2500,5)||v===0) {
 					setStyle('avgvalue', 'color', berekenKleurRood(v, 5000));
 					drawCircle('avgcircle', v, 2500, 90, 'purple');
 				}
@@ -626,7 +626,7 @@ function handleResponse(device,v){
 	}
 	if (device==='n') {
 		if(setText('netvalue', v)){
-			if (shouldRedraw(prevnet,v,2500,5)) {
+			if (shouldRedraw(prevnet,v,2500,5)||v===0) {
 				prevnet=v
 				if (v < 0) kleur=berekenKleurGroen(-v, 5000)
 				else kleur=berekenKleurRood(v, 5000)
@@ -645,7 +645,7 @@ function handleResponse(device,v){
 	}
 	if (device==='z') {
 		if(setText('zonvalue', v)){
-			if (shouldRedraw(prevzon,v,90)) {
+			if (shouldRedraw(prevzon,v,90)||v===0) {
 				prevzon=v
 				setStyle('zonvalue', 'color', berekenKleurGroen(v, d.zonavg * 2));
 				drawCircle('zoncircle', -v, d.zonavg, 90, 'green');
@@ -665,7 +665,7 @@ function handleResponse(device,v){
 	total = d.n + d.z - d.b;
 	if (device==='n'||device==='z'||device==='b'){
 		if(setText('totalvalue', total)){
-			if (shouldRedraw(prevtotal,total,2500)) {
+			if (shouldRedraw(prevtotal,total,2500)||v===0) {
 				prevtotal=total
 				kleur=berekenKleurRood(d.n, 5000)
 				setStyle('totaltitle', 'color', kleur);
