@@ -128,7 +128,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 	}
 	$time = time();
 	$vandaag = date("Y-m-d", $time);
-	$zonvandaag = null;
+	$zonvandaag = 0;
 	$zontotaal = null;
 	$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
 	$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
@@ -240,6 +240,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
 		'zonref' => $data['zonref'],
 		'zonavg' => $data['zonavg'],
 	]);
+	static $dailyencache=null;
 	if(!isset($dailyencache)||$dailyencache!==$dailyen) {
 		publishmqtt('d/e/dailyen',$dailyen);
 		$dailyencache=$dailyen;
@@ -279,7 +280,7 @@ function getCache(string $key, $default = false) {
 function publishmqtt($topic,$msg) {
 	global $mqtt;
 	$mqtt->publish($topic,(string)$msg,1,true);
-//	lg("🟢 {$topic} {$msg}");
+	lg("🟢 {$topic} {$msg}");
 	return;
 }
 class Database {
