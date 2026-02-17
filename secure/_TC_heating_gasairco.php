@@ -5,7 +5,7 @@ foreach (array('living','badkamer') as $kamer) {
 }
 
 $aanna = (1/(21-$d['buiten_temp']->s))*6000; if ($aanna<1000) $aanna=1000;
-$uitna  = (21-$d['buiten_temp']->s)*60; if ($uitna<595) $uitna=595; elseif ($uitna>1795) $uitna=1795;
+$uitna  = (21-$d['buiten_temp']->s)*60; if ($uitna<1195) $uitna=1195; elseif ($uitna>2395) $uitna=2395;
 $pastbrander = past('brander');
 
 if ($difgas <= -2.5 && $d['brander']->s=="Off" && $pastbrander>$aanna*0.5 && $d['n']>-500 && $d['buiten_temp']->s<=5) sw('brander','On','difgas='.$difgas);
