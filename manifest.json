@@ -9,11 +9,11 @@
     }
   ],
   "serviceworker": {
-      "src": "/floorplan.php",
-      "scope": "/floorplan.php",
+      "src": "/index.php",
+      "scope": "/index.php",
       "update_via_cache": "none"
     },
-  "start_url": "/floorplan.php",
+  "start_url": "/index.php",
   "display": "fullscreen",
   "orientation": "portrait"
 }
