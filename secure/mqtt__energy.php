@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 declare(strict_types=1);
+
 $lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
 $got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
 if ($lock_file === false || (!$got_lock && !$wouldblock)) {
@@ -8,258 +9,236 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 } else if (!$got_lock && $wouldblock) {
     exit("Another instance is already running; terminating.\n");
 }
-ini_set('error_reporting',E_ALL);
-ini_set('display_errors',true);
-// Using https://github.com/php-mqtt/client
+
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', true);
+
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
+
 require_once '/var/www/vendor/autoload.php';
-$user='ENERGY';
-lg('🟢 Starting '.$user.' loop ',-1);
-$time=time();
-$lastcheck=$time;
-$lastDayUpdate = null;
+
+$user = 'ENERGY';
+lg('🟢 Starting ' . $user . ' loop ', -1);
+
+$time = time();
+$lastcheck = $time;
 date_default_timezone_set('Europe/Brussels');
-$startloop=microtime(true);
+$startloop = microtime(true);
 define('LOOP_START', $startloop);
-$d['rand']=rand(10,20);
-$connectionSettings=(new ConnectionSettings)
-	->setUsername('mqtt')
-	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1);
-$mqtt->connect($connectionSettings,true);
+
+$d['rand'] = rand(10, 20);
+$connectionSettings = (new ConnectionSettings)
+    ->setUsername('mqtt')
+    ->setPassword('mqtt');
+
+$mqtt = new MqttClient('192.168.2.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
+$mqtt->connect($connectionSettings, true);
+
 $dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
 $dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
-$force=true;
-$newData = json_decode(getCache('teller'),true);
-$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d,&$time,&$lastcheck,&$newData,$dbverbruik,$dbzonphp,&$force,&$mqtt) {
-	$time=time();
-	if($topic=='t/import') $newData['import']=$status;
-    elseif($topic=='t/export') $newData['export']=$status;
-    elseif($topic=='t/gas') $newData['gas']=$status;
-    elseif($topic=='t/water') $newData['water']=$status;
-    processEnergyData($dbverbruik, $dbzonphp, $force, $newData,$mqtt);
-	if ($lastcheck < $time - $d['rand']) {
+
+$force = true;
+
+// CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
+$storedTeller = json_decode(getCache('teller'), true);
+$newData = [
+    'import' => $storedTeller['import'] ?? 0,
+    'export' => $storedTeller['export'] ?? 0,
+    'gas'    => $storedTeller['gas'] ?? 0,
+    'water'  => $storedTeller['water'] ?? 0
+];
+
+$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d, &$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+    $time = time();
+    $changed = false;
+
+    if ($topic == 't/import') { $newData['import'] = $status; $changed = true; }
+    elseif ($topic == 't/export') { $newData['export'] = $status; $changed = true; }
+    elseif ($topic == 't/gas') { $newData['gas'] = $status; $changed = true; }
+    elseif ($topic == 't/water') { $newData['water'] = $status; $changed = true; }
+
+    if ($changed) {
+        // Sla de laatste standen direct op in cache
+        setCache('teller', json_encode($newData));
+        processEnergyData($dbverbruik, $dbzonphp, $force, $newData, $mqtt, $time);
+    }
+
+    if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
         stoploop();
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$mqtt->loop(true,false,null,50000);
+    $mqtt->loop(true, false, null, 50000);
 }
+
 $mqtt->disconnect();
-lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
 
-function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt) {
-	$kwartierpiek = 2500;
-	$q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
-	$stmt = $dbverbruik->query($q, [':date' => date('Y-m') . '-%']);
-	if ($row = $stmt->fetch()) {
-		$kwartierpiek = $row['wH'] ?? 2500;
-	}
-	for ($x=1; $x<=5; $x++) {
-		$en = json_decode(getCache('en'));
-		if ($en) break;
-	}
-	if(count($newData)!=4) {
-		lg('Not enough data in $newData:'.print_r($newData,true));
-		return;
-	}
-	$zon = $en->z;
-	$gas = $newData['gas'];
-	$elec = $newData['import'];
-	$injectie = $newData['export'];
-	$water = $newData['water'];
-	$alwayson = (int)getCache('alwayson');
-	$newavg = $en->a;
-	$prevavg = getCache('energy_prevavg');
-	if ($zon == 0 || empty($alwayson)) {
-		if ($en->b < 0) {
-			$power = $en->n - $en->b;
-		} else {
-			$power = $en->n;
-		}
-		if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
-			setCache('alwayson', $power);
-			$alwayson = $power;
-			$force = true;
-			$time = time();
-			lg('New alwayson ' . $power . ' W');
-			$vandaag = date("Y-m-d", $time);
-			try {
-				$q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = :w2";
-				$dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson, ':w2' => $alwayson]);
-			} catch (Exception $e) {
-				lg("Error updating alwayson: " . $e->getMessage());
-			}
-		}
-	}
-	if ($prevavg > 2500) {
-		if ($newavg > $kwartierpiek - 200) {
-			//alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 120, false);
-		}
-		if ($newavg < $prevavg) {
-			try {
-				// 1. Tijd afronden naar het dichtstbijzijnde kwartier
-				$rounded_seconds = round($time / 120) * 120;
-				$rounded_date = date('Y-m-d H:i:00', $rounded_seconds);
-				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`)
-					  VALUES (:date, :wh)
-					  ON DUPLICATE KEY UPDATE `wh` = VALUES(`wh`)";
-				$dbverbruik->query($q, [
-					':date' => $rounded_date,
-					':wh'   => $prevavg
-				]);
-				if ($prevavg > $kwartierpiek - 200) {
-					//alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 30, false);
-					$kwartierpiek = $prevavg;
-				}
-			} catch (Exception $e) {
-				lg("Error updating kwartierpiek: " . $e->getMessage());
-			}
-		}
-	}
-	$prevwater = getCache('water_meter');
-	if ($prevwater != $water && getCache('weg') > 2) {
-		setCache('water_meter', $water);
-		alert('water_meter', 'Water verbruik gedetecteerd!', 300, true);
-		lg("Waterteller: prev=$prevwater, nu=$water");
-	}
-	$time = time();
-	$vandaag = date("Y-m-d", $time);
-	$zonvandaag = 0;
-	$zontotaal = null;
-	$q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
-	$stmt = $dbzonphp->query($q, [':datum' => $vandaag . '  0:00:00']);
-	if ($row = $stmt->fetch()) {
-		$zonvandaag = $row['Geg_Maand'];
-	}
-	$q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
-	$stmt = $dbzonphp->query($q);
-	if ($row = $stmt->fetch()) {
-		$zontotaal = $row['Geg_Maand'];
-	}
+// --- FUNCTIES ---
 
-	$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
-		  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
-		  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
-	$dbverbruik->query($q, [
-		':date' => $vandaag,
-		':gas' => $gas,
-		':elec' => $elec,
-		':injectie' => $injectie,
-		':zon' => $zontotaal,
-		':water' => $water,
-		':gas2' => $gas,
-		':elec2' => $elec,
-		':injectie2' => $injectie,
-		':zon2' => $zontotaal,
-		':water2' => $water
-	]);
+function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $time) {
+    $vandaag = date("Y-m-d", $time);
+    $gisterenDatum = date("Y-m-d", strtotime("-1 day", $time));
 
-	$gisteren = null;
-	$q = "SELECT `date`, `gas`, `elec`, `injectie`, `water` FROM `Guy` ORDER BY `date` DESC LIMIT 1,1";
-	$stmt = $dbverbruik->query($q);
-	$gisteren = $stmt->fetch();
+    // 1. Kwartierpiek ophalen
+    $kwartierpiek = 2500;
+    $q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
+    $stmt = $dbverbruik->query($q, [':date' => date('Y-m', $time) . '-%']);
+    if ($row = $stmt->fetch()) {
+        $kwartierpiek = $row['wH'] ?? 2500;
+    }
 
-	if ($gisteren) {
-		$gas = round($gas - $gisteren['gas'], 3);
-		$elec = round($elec - $gisteren['elec'], 3);
-		$water = round($water - $gisteren['water'], 3);
-		$injectie = round($injectie - $gisteren['injectie'], 3);
-		$verbruik = round($zonvandaag - $injectie + $elec, 3);
-		$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
-			  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-			  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
-		$dbverbruik->query($q, [
-			':date' => $vandaag,
-			':gas' => $gas,
-			':elec' => $elec,
-			':verbruik' => $verbruik,
-			':zon' => $zonvandaag,
-			':water' => $water,
-			':gas2' => $gas,
-			':elec2' => $elec,
-			':verbruik2' => $verbruik,
-			':zon2' => $zonvandaag,
-			':water2' => $water
-		]);
+    // 2. Cache 'en' ophalen (retry loop)
+    $en = null;
+    for ($x = 1; $x <= 5; $x++) {
+        $en = json_decode(getCache('en'));
+        if ($en) break;
+        usleep(100000);
+    }
 
-	}
-	$since = date("Y-m-d", $time - (86400 * 30));
-	$avg = ['gas' => 0, 'elec' => 0];
-	$q = "
-		SELECT
-			AVG(gas)  AS gas,
-			AVG(elec) AS elec
-		FROM `Guydag`
-		WHERE date >= :since
-		  AND date < CURRENT_DATE()
-	";
-	$stmt = $dbverbruik->query($q, [':since' => $since]);
-	if ($row = $stmt->fetch()) {
-		$avg = $row;
-	}
+    // DEBUG LOGGING voor data-integriteit
+    if (count($newData) != 4 || !$en) {
+        lg("⚠️ Onderbroken: newData count=" . count($newData) . " (G:" . ($newData['gas'] ?? 'N/A') . ") en=" . ($en ? 'OK' : 'FAIL'));
+        return;
+    }
 
-	$maand = date('m');
-	$zonref = 0;
-	$zonavg = 0;
+    $gasStand    = $newData['gas'];
+    $elecStand   = $newData['import'];
+    $injectie    = $newData['export'];
+    $waterStand  = $newData['water'];
+    $alwayson    = (int)getCache('alwayson');
+    $newavg      = $en->a;
+    $prevavg     = (float)getCache('energy_prevavg');
 
-	$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
-	$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
-	if ($row = $stmt->fetch()) {
-		$zonref = round($row['Dag_Refer'], 1);
-	}
+    // 3. Alwayson logica
+    if ($en->z == 0 || empty($alwayson)) {
+        $power = ($en->b < 0) ? ($en->n - $en->b) : $en->n;
+        if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
+            setCache('alwayson', $power);
+            $alwayson = $power;
+            $force = true;
+            lg('💡 New alwayson ' . $power . ' W');
+            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+            $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
+        }
+    }
 
-	$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag`
-		  WHERE Datum_Dag LIKE :maand
-		  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
-	$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
-	if ($row = $stmt->fetch()) {
-		$zonavg = round($row['AVG'], 0);
-	}
+    // 4. Zon data ophalen
+    $zonvandaag = 0; $zontotaal = 0;
+    $q = "SELECT Geg_Maand FROM `tgeg_maand` WHERE `Datum_Maand` = :datum";
+    $stmt = $dbzonphp->query($q, [':datum' => $vandaag . ' 0:00:00']);
+    if ($row = $stmt->fetch()) $zonvandaag = $row['Geg_Maand'];
 
-	$data = json_encode([
-		'gas' => round($gas,2),
-		'gasavg' => round((float)$avg['gas'], 2),
-		'elec' => round($elec,2),
-		'elecavg' => round((float)$avg['elec'], 2),
-		'verbruik' => $verbruik,
-		'zon' => round($zonvandaag,2),
-		'zonref' => round($zonref,2),
-		'zonavg' => round($zonavg),
-		'alwayson' => $alwayson
-	]);
-	setCache('energy_vandaag', $data);
-	setCache('energy_lastupdate', $time);
-	$data = json_decode($data, true);
-	$dailyen=json_encode([
-		'gasavg' => $data['gasavg'],
-		'elecavg' => $data['elecavg'],
-		'zonref' => $data['zonref'],
-		'zonavg' => $data['zonavg'],
-	]);
-	static $dailyencache=null;
-	if(!isset($dailyencache)||$dailyencache!==$dailyen) {
-		publishmqtt('d/e/dailyen',$dailyen);
-		$dailyencache=$dailyen;
-	}
-	$den=[
-		'gas' => $data['gas'],
-		'elec' => $data['elec'],
-		'zon' => $data['zon'],
-		'alwayson' => $data['alwayson'],
-	];
+    $q = "SELECT SUM(Geg_Maand) AS Geg_Maand FROM `tgeg_maand`";
+    $stmt = $dbzonphp->query($q);
+    if ($row = $stmt->fetch()) $zontotaal = $row['Geg_Maand'];
 
-	static $mqttcache = [];
-	foreach($den as $k => $v) {
-		if(!isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
-			publishmqtt('d/e/'.$k,$v);
-			$mqttcache[$k] = $v;
-		}
-	}
-	setCache('energy_prevavg', $newavg);
+    // 5. Tabel 'Guy' updaten (Totaalstanden)
+    $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
+          VALUES (:date, :gas, :elec, :injectie, :zon, :water)
+          ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
+
+    try {
+        $dbverbruik->query($q, [
+            ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
+            ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
+        ]);
+    } catch (Exception $e) {
+        lg("❌ Error Guy update: " . $e->getMessage());
+    }
+
+    // 6. Bereken Dagverbruik (Guydag)
+    $q = "SELECT gas, elec, injectie, water FROM `Guy` WHERE `date` = :gisteren";
+    $stmt = $dbverbruik->query($q, [':gisteren' => $gisterenDatum]);
+    $gisteren = $stmt->fetch();
+
+    $dagGas = 0; $dagElec = 0; $dagWater = 0; $dagVerbruik = 0;
+
+    if ($gisteren) {
+        $dagGas      = round((float)$gasStand - (float)$gisteren['gas'], 3);
+        $dagElec     = round((float)$elecStand - (float)$gisteren['elec'], 3);
+        $dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
+        $dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
+        $dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
+
+        $q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
+              VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+              ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
+
+        try {
+            $dbverbruik->query($q, [
+                ':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
+                ':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
+            ]);
+        } catch (Exception $e) {
+            lg("❌ Error Guydag update: " . $e->getMessage());
+        }
+    } else {
+        // Belangrijk: als gisteren niet gevonden wordt, log dit!
+        lg("⚠️ Geen gisteren data gevonden voor $gisterenDatum in tabel Guy.");
+    }
+
+    // 7. Statistieken & Gemiddelden
+    $since = date("Y-m-d", $time - (86400 * 30));
+    $avg = ['gas' => 0, 'elec' => 0];
+    $q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since AND date < CURRENT_DATE()";
+    $stmt = $dbverbruik->query($q, [':since' => $since]);
+    if ($row = $stmt->fetch()) $avg = $row;
+
+    $maand = date('m', $time);
+    $zonref = 0; $zonavg = 0;
+    $q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
+    $stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
+    if ($row = $stmt->fetch()) $zonref = round($row['Dag_Refer'], 1);
+
+    $q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag LIKE :maand
+          AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
+    $stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
+    if ($row = $stmt->fetch()) $zonavg = round($row['AVG'], 0);
+
+    // 8. MQTT & Cache
+    $dataArray = [
+        'gas' => round($dagGas, 2),
+        'gasavg' => round((float)$avg['gas'], 2),
+        'elec' => round($dagElec, 2),
+        'elecavg' => round((float)$avg['elec'], 2),
+        'verbruik' => $dagVerbruik,
+        'zon' => round($zonvandaag, 2),
+        'zonref' => round($zonref, 2),
+        'zonavg' => round($zonavg),
+        'alwayson' => $alwayson
+    ];
+
+    setCache('energy_vandaag', json_encode($dataArray));
+
+    static $mqttcache = [];
+    static $lastDate = null;
+
+    if ($lastDate !== $vandaag) {
+        $mqttcache = [];
+        $lastDate = $vandaag;
+        $force = true;
+        lg("📅 Dagwissel gedetecteerd ($vandaag), cache gereset.");
+    }
+
+    $den = [
+        'gas' => $dataArray['gas'],
+        'elec' => $dataArray['elec'],
+        'zon' => $dataArray['zon'],
+        'alwayson' => $dataArray['alwayson'],
+    ];
+
+    foreach ($den as $k => $v) {
+        if ($force || !isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
+            publishmqtt('d/e/' . $k, $v);
+            $mqttcache[$k] = $v;
+        }
+    }
+
+    $force = false;
+    setCache('energy_prevavg', $newavg);
 }
 function lg($msg) {
 	$fp = fopen('/temp/domoticz.log', "a+");
